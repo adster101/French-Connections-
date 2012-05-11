@@ -33,4 +33,17 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query->from('#__helloworld');
 		return $query;
 	}
+
+	function getLanguages()
+	{
+		$lang 	   =& JFactory::getLanguage();
+		$languages = $lang->getKnownLanguages(JPATH_SITE);
+		
+		$return = array();
+		foreach ($languages as $tag => $properties)
+			$return[] = JHTML::_('select.option', $tag, $properties['name']);
+		
+		return $return;
+	}
+
 }

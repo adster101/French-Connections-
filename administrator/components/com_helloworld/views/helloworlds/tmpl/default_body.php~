@@ -14,7 +14,8 @@ $groups = $user->getAuthorisedGroups();
 	$canEditOwn	= $user->authorise('core.edit.own',	'com_helloworld') && $item->created_by == $userId || in_array(8, $groups);
 
 ?>
-
+<span><?php echo $this->languages; ?></span>
+	<span><?php echo JText::sprintf('RSFP_YOU_ARE_EDITING_IN', $this->lang, ''); ?></span>
 <?php if ($canEditOwn) : ?>
 	<tr class="row<?php echo $i % 2; ?>">
 		<td>		

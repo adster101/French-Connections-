@@ -30,7 +30,10 @@ class HelloWorldViewHelloWorlds extends JView
 		$this->items = $items;
 		$this->pagination = $pagination;
 
-	
+		$this->assignRef('lang', $this->get('lang'));
+		print_r($this->get('languages'));
+		$lists['Languages'] = JHTML::_('select.genericlist', $this->get('languages'), 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $this->lang); 
+		$this->assignRef('lists', $lists);
 
 		// Set the toolbar
 		$this->addToolBar();

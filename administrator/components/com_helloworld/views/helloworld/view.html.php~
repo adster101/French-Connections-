@@ -29,7 +29,6 @@ class HelloWorldViewHelloWorld extends JView
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		}
-
 		// Assign the Data
 		$this->form = $form;
 		$this->item = $item;

@@ -29,7 +29,7 @@ RSFormProHelper::readConfig();
 $controller 		= JRequest::getWord('controller');
 $controller_exists  = false;
 $task				= JRequest::getCmd('task');
-
+print_r(JRequest::getWord('task'));die;
 if (!$controller && strpos($task, '.'))
 	list($controller, $controller_task) = explode('.', $task, 2);
 	

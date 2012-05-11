@@ -103,7 +103,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		if (empty($this->_property))
 			$this->getProperty();
 		
-		return $session->get('com_helloworld.property.'.$this->_propertyId.'.lang', !empty($this->_propertyId) ? $this->_propertyId : $lang->getDefault());
+		return $session->get('com_helloworld.form.'.$this->_propertyId.'.lang', !empty($this->_propertyId) ? $this->_propertyId : $lang->getDefault());
 	}
 
 	function getProperty()

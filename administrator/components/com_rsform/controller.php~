@@ -57,12 +57,12 @@ class RSFormController extends JController
 
 	function changeLanguage()
 	{
-	 //$trace = debug_backtrace();
-   	// $file   = $trace[1]['file'];
-   	// $line   = $trace[1]['line'];
-  	// $object = $trace[1]['object'];
-    	//if (is_object($object)) { $object = get_class($object); }
-	//echo "Where called: line $line of $object \n(in $file)";
+	 $trace = debug_backtrace();
+   	 $file   = $trace[1]['file'];
+   	 $line   = $trace[1]['line'];
+  	 $object = $trace[1]['object'];
+    	if (is_object($object)) { $object = get_class($object); }
+	echo "Where called: line $line of $object \n(in $file)";
 
 
 

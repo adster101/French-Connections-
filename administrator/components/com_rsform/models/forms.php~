@@ -582,7 +582,7 @@ class RSFormModelForms extends JModel
 		
 		if (empty($this->_form))
 			$this->getForm();
-		
+
 		return $session->get('com_rsform.form.'.$this->_form->FormId.'.lang', !empty($this->_form->Lang) ? $this->_form->Lang : $lang->getDefault());
 	}
 	
@@ -592,7 +592,7 @@ class RSFormModelForms extends JModel
 		$lang 	 =& JFactory::getLanguage();
 		$cid	 = JRequest::getInt('cid');
 		if (!is_null($id)) $cid = $id;
-		
+
 		return $session->get('com_rsform.emails.'.$cid.'.lang', $lang->getDefault());
 	}
 	

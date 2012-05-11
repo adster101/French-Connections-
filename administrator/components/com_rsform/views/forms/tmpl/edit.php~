@@ -15,8 +15,8 @@ JHTML::_('behavior.calendar');
 
 <form action="index.php?option=com_rsform&amp;task=forms.edit&amp;formId=<?php echo $this->form->FormId; ?>" method="post" name="adminForm" id="adminForm">
 
-<p><?php echo $this->lists['Languages']; ?>
-<?php echo JText::sprintf('RSFP_YOU_ARE_EDITING_IN', $this->lang, RSFormProHelper::translateIcon()); ?></p>
+<span><?php echo $this->lists['Languages']; ?></span>
+<span><?php echo JText::sprintf('RSFP_YOU_ARE_EDITING_IN', $this->lang, RSFormProHelper::translateIcon()); ?></span>
 
 <div id="rsform_container">
 	<div id="state"></div>

@@ -27,7 +27,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query->select('id,greeting,created_by');
 		if (!in_array(8, $groups)) 
 		{
-		$query->where('created_by='.int($userID));
+		$query->where('created_by='.$userId);
 		}
 		// From the hello table
 		$query->from('#__helloworld');
