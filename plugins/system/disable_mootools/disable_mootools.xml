@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="system">
+	<name>System - Disable Mootools</name>
+	<author>Union D</author>
+	<creationDate>Jan 2011</creationDate>
+	<copyright>Copyright (C) 2006 - 2011 Union D. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>v.galyanin@gmail.com</authorEmail>
+	<authorUrl>www.union-d.ru</authorUrl>
+	<version>1.0</version>
+	<description>Disable/enable loading mootools scripts</description>
+	<files>
+		<filename plugin="disable_mootools">disable_mootools.php</filename>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="enabled" type="radio" default="1" label="Enable or disable loading mootools script" description="If yes, the MooTools library will not be loaded. Plugin should be enabled">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
