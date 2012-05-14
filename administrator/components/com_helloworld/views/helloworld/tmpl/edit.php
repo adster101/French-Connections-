@@ -6,10 +6,13 @@ JHtml::_('behavior.formvalidation');
 $params = $this->form->getFieldsets('params');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="helloworld-form" class="form-validate">
+
+
+
 <p>
 <?php
 	echo JHTML::_('select.genericlist', $this->languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $this->lang);
-	echo JText::_('RSFP_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
+	echo JText::_('HELLOWORLD_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
 
 ?>
 </p>

@@ -19,11 +19,10 @@ class HelloWorldController extends JController
 	{
 		// set default view if not set
 		JRequest::setVar('view', JRequest::getCmd('view', 'HelloWorlds'));
- 
+
 		// call parent behavior
 		parent::display($cachable);
- 
-		// Set the submenu
-		HelloWorldHelper::addSubmenu('messages');
+		
+		$view = strtolower(JRequest::getVar('view')); 
 	}
 }

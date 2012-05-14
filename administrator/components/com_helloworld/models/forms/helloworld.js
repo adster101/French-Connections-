@@ -4,4 +4,10 @@ window.addEvent('domready', function() {
 			regex=/^[^0-9]+$/;
 			return regex.test(value);
 	});
+	
+	document.formvalidator.setHandler('occupancy',
+		function (value) {
+			regex=/^[^a-z]+$/;
+			return regex.test(value);
+	});
 });

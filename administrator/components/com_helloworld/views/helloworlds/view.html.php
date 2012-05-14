@@ -34,6 +34,8 @@ class HelloWorldViewHelloWorlds extends JView
 
 		// Set the toolbar
 		$this->addToolBar();
+		
+
  
 		// Display the template
 		parent::display($tpl);
@@ -42,11 +44,16 @@ class HelloWorldViewHelloWorlds extends JView
 		$this->setDocument();
 	}
  
+
+ 
 	/**
 	 * Setting the toolbar
 	 */
 	protected function addToolBar() 
-	{
+	{			
+		$document = JFactory::getDocument();
+		$document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
+
 		$canDo = HelloWorldHelper::getActions();
 		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
 		if ($canDo->get('core.create')) 

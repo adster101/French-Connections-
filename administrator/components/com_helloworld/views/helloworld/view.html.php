@@ -36,23 +36,28 @@ class HelloWorldViewHelloWorld extends JView
 		$this->script = $script;
 		$this->languages = $languages;
 		$this->lang = $lang;
-	
+		
 		// Set the toolbar
 		$this->addToolBar();
- 
+
 		// Display the template
 		parent::display($tpl);
  
 		// Set the document
 		$this->setDocument();
 	}
- 
+	
 	/**
 	 * Setting the toolbar
 	 */
 	protected function addToolBar() 
 	{
-		JRequest::setVar('hidemainmenu', true);
+	
+		$view = strtolower(JRequest::getVar('view'));
+		HelloWorldHelper::addSubmenu($view);
+
+		// Eventually figured out that the below hides the submenu on this view.
+		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;

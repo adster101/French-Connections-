@@ -22,7 +22,7 @@
 			name="catid"
 			type="category"
 			extension="com_helloworld"
-			class="inputbox"
+			class="list"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
@@ -30,22 +30,72 @@
 		>
 			<option value="0">JOPTION_SELECT_CATEGORY</option>
 		</field>
-	</fieldset>
+		<field
+			name="accommodation_type"
+			type="list"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATIONTYPE_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATIONTYPE_DESC"
+			class="inputbox"
+			required="true"
+			default=""
+			multiple="false"
+		>
+				<option value="0">JOPTION_SELECT_CATEGORY</option>
+				<option value="1">JOPTION_SELECT_CATEGORY</option>
+			</field>
+		
+		<field
+			name="occupancy"
+			type="text"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_DESC"
+			size="40"
+			class="inputbox validate-occupancy"
+			validate="occupancy"
+			required="true"
+			default=""
+		/>
+		<field
+			name="description"
+			type="editor"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+			size="40"
+			class="inputbox validate-description"
+			validate="description"
+			required="true"
+			default=""
+			filter="safehtml"
+		/>
+
+		</fieldset>
 	<fields name="params">
 		<fieldset
 			name="params"
 			label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS"
 		>
+				<field
+			name="catid"
+			type="category"
+			extension="com_helloworld"
+			class="list"
+			default=""
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
+			required="true"
+		>
+			<option value="0">JOPTION_SELECT_CATEGORY</option>
+		</field>
 			<field
-				name="show_category"
-				type="list"
+				name="accommodation_type"
+				type="checkbox"
 				label="COM_HELLOWORLD_HELLOWORLD_FIELD_SHOW_CATEGORY_LABEL"
 				description="COM_HELLOWORLD_HELLOWORLD_FIELD_SHOW_CATEGORY_DESC"
 				default=""
 			>
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="0">JHIDE</option>
-				<option value="1">JSHOW</option>
+				<option value="0">COM_HELLOWORLD_HELLOWORLD_FIELD_B&amp;B</option>
+				<option value="1">COM_HELLOWORLD_HELLOWORLD_FIELD_SELF_CATERING</option>
 			</field>
 		</fieldset>
 	</fields>

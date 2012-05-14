@@ -10,4 +10,5 @@ jimport('joomla.application.component.controllerform');
  */
 class HelloWorldControllerHelloWorld extends JControllerForm
 {
+	
 }
