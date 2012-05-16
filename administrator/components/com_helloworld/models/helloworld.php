@@ -10,7 +10,7 @@ jimport('joomla.application.component.modeladmin');
  */
 class HelloWorldModelHelloWorld extends JModelAdmin
 {
-	var $_propertyId = null;
+	var $_propertyId = '';
 	/**
 	 * Method override to check if you can edit an existing record.
 	 *
@@ -99,17 +99,17 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	{
 		$session =& JFactory::getSession();
 		$lang 	 =& JFactory::getLanguage();
+	
+		if (empty($this->_propertyId))
+			$this->_propertyId = $this->getProperty();
 
-		if (empty($this->_property))
-			$this->getProperty();
-		
 		return $session->get('com_helloworld.property.'.$this->_propertyId.'.lang', !empty($this->_propertyId) ? $this->_propertyId : $lang->getDefault());
 	}
 
 	function getProperty()
 	{
 		$propertyId = JRequest::getInt('id');
-		return $this->_propertyId;
+		return $propertyId;
 
 	}
 }

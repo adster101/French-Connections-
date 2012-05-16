@@ -31,9 +31,23 @@ class HelloWorldTableHelloWorld extends JTable
 	{
 		if (isset($array['params']) && is_array($array['params'])) 
 		{
+			// $this is an instance of HelloWorldTableHelloWorld (i.e. the record as it stands in the db)
+			// Loop over the $array['params']
+			// For each check that this key isn't already stored as attribute
+			// If it is delete it as there is a new one incoming
+			// merge the two sets of data
+			// so that both sets of params are preserved
+			foreach($array['params'] as $key=>$value) {
+				if ($this->params->getValue($key) !== null) {
+					$tmp = $this->params->set($key, '');
+				}
+			}			
 			// Convert the params field to a string.
 			$parameter = new JRegistry;
 			$parameter->loadArray($array['params']);
+		
+			$parameter->merge($this->params);
+
 			$array['params'] = (string)$parameter;
 		}
 		return parent::bind($array, $ignore);
@@ -132,15 +146,26 @@ class HelloWorldTableHelloWorld extends JTable
 		}
 		// Verify that the alias is unique
 		$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
+
 		if ($table->load(array('alias'=>$this->alias, 'catid'=>$this->catid)) && ($table->id != $this->id || $this->id==0)) {
 			$this->setError(JText::_('COM_CONTACT_ERROR_UNIQUE_ALIAS'));
 			return false;
 		}
+		
+		
 
 		// Attempt to store the data.
 		return parent::store($updateNulls);
 	}
-	
+
+	/*
+	 * An effort to preserve existing params that are set for an accommodation
+	 *
+	 */
+	public function getExistingParams ()
+	{
+		
+	}
 	
 	
 }

@@ -24,9 +24,9 @@ $groups = $user->getAuthorisedGroups();
 			<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 		</td>
 		<td>
-			<!--<a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&layout=edit&id='.(int) $item->id); ?>">-->
+			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=location.edit&id='.(int) $item->id); ?>">
 				<?php echo $item->greeting; ?>
-			<!--</a>-->
+			</a>
 		</td>
 	</tr>					
 	<?php else : ?>

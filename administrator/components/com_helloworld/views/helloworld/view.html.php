@@ -52,10 +52,11 @@ class HelloWorldViewHelloWorld extends JView
 	 */
 	protected function addToolBar() 
 	{
-	
+		// Determine the layout we are using. 
+		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
 		HelloWorldHelper::addSubmenu($view);
-
+		
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();

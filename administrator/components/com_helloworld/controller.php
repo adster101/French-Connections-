@@ -22,7 +22,26 @@ class HelloWorldController extends JController
 
 		// call parent behavior
 		parent::display($cachable);
-		
-		$view = strtolower(JRequest::getVar('view')); 
 	}
+
+	function changeLanguage()
+	{
+	 //$trace = debug_backtrace();
+   	// $file   = $trace[1]['file'];
+   	// $line   = $trace[1]['line'];
+  	// $object = $trace[1]['object'];
+    	//if (is_object($object)) { $object = get_class($object); }
+	//echo "Where called: line $line of $object \n(in $file)";
+
+
+
+		$id  	 = JRequest::getInt('id');
+		$tabposition = JRequest::getInt('tabposition');
+		$tab		 = JRequest::getInt('tab',0);
+		$tab 		 = $tabposition ? '&tab='.$tab : '';
+		$session 	 =& JFactory::getSession();
+		$session->set('com_helloworld.property.'.$id.'.lang', JRequest::getVar('Language'));
+
+		$this->setRedirect('index.php?option=com_helloworld&task=helloworld.edit&id='.$id);
+	}	
 }
