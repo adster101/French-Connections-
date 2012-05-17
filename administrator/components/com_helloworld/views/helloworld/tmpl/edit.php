@@ -5,7 +5,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 $params = $this->form->getFieldsets('params');
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="helloworld-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="helloworld-form" class="form-validate">
 
 
 
@@ -48,5 +48,7 @@ $params = $this->form->getFieldsets('params');
 	<div>
 		<input type="hidden" name="task" value="helloworld.edit" />
 		<?php echo JHtml::_('form.token'); ?>
+		<input type="hidden" name="lang" value="<?php echo HelloWorldHelper::getDefaultLanguage(); ?>" />
+
 	</div>
 </form>

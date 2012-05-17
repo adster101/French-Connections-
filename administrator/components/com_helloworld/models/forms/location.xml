@@ -2,6 +2,14 @@
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
 	<fieldset name="details">
 		<field
+			name="id"
+			type="hidden"
+		/>
+		<field
+			name="lang"
+			type="hidden"
+		/>		
+		<field
 			name="catid"
 			type="category"
 			extension="com_helloworld"
@@ -13,18 +21,7 @@
 		>
 			<option value="0">JOPTION_SELECT_CATEGORY</option>
 		</field>
-		<field
-			name="department"
-			type="department"
-			extension="com_helloworld"
-			class="list"
-			default="10"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
-			required="true"
-		>
-			<option value="0">JOPTION_SELECT_CATEGORY</option>
-		</field>			
+			
 		<field
 			name="latitude"
 			type="text"

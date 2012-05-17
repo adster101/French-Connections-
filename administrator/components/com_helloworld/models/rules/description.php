@@ -17,5 +17,5 @@ class JFormRuleDescription extends JFormRule
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-]+$';
+	protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-יאפך]+$';
 }

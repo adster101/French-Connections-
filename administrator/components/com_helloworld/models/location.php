@@ -82,34 +82,4 @@ class HelloWorldModelLocation extends JModelAdmin
 		}
 		return $data;
 	}
-
-	function getLanguages()
-	{
-		$lang 	   =& JFactory::getLanguage();
-		$languages = $lang->getKnownLanguages(JPATH_SITE);
-		
-		$return = array();
-		foreach ($languages as $tag => $properties)
-			$return[] = JHTML::_('select.option', $tag, $properties['name']);
-		
-		return $return;
-	}
-	
-	function getLang()
-	{
-		$session =& JFactory::getSession();
-		$lang 	 =& JFactory::getLanguage();
-	
-		if (empty($this->_propertyId))
-			$this->_propertyId = $this->getProperty();
-
-		return $session->get('com_helloworld.property.'.$this->_propertyId.'.lang', !empty($this->_propertyId) ? $this->_propertyId : $lang->getDefault());
-	}
-
-
-	function getProperty()
-	{
-		$propertyId = JRequest::getInt('id');
-		return $propertyId;
-	}
 }

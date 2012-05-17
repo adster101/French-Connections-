@@ -6,6 +6,10 @@
 			type="hidden"
 		/>
 		<field
+			name="lang"
+			type="hidden"
+		/>
+		<field
 			name="greeting"
 			type="text"
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
@@ -49,8 +53,6 @@
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
 			size="40"
 			class="inputbox validate-description"
-			validate="description"
-			required="true"
 			default=""
 			filter="safehtml"
 		/>

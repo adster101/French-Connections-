@@ -29,6 +29,9 @@ class HelloWorldTableHelloWorld extends JTable
 	 */
 	public function bind($array, $ignore = '') 
 	{
+		//print_r($array);
+		//print_r($this);
+		//die;
 		if (isset($array['params']) && is_array($array['params'])) 
 		{
 			// $this is an instance of HelloWorldTableHelloWorld (i.e. the record as it stands in the db)
@@ -65,6 +68,10 @@ class HelloWorldTableHelloWorld extends JTable
 	{
 		if (parent::load($pk, $reset)) 
 		{
+			// Get the current editing language for this property
+			$lang = HelloWorldHelper::getLang();
+			// Need to load any translations here if the editing language different from the property language
+			
 			// Convert the params field to a registry.
 			$params = new JRegistry;
 			$params->loadJSON($this->params);
@@ -115,7 +122,7 @@ class HelloWorldTableHelloWorld extends JTable
 	}
 
 		/**
-	 * Stores a contact
+	 * Stores a property
 	 *
 	 * @param	boolean	True to update fields even if they are null.
 	 * @return	boolean	True on success, false on failure.
@@ -129,9 +136,15 @@ class HelloWorldTableHelloWorld extends JTable
 			$registry->loadArray($this->params);
 			$this->params = (string)$registry;
 		}
-
+		// Get the current editing language for this property
+		$lang = HelloWorldHelper::getLang();
+		
+		// TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
+		$this->saveFormTranslation($lang);
+				
 		$date	= JFactory::getDate();
 		$user	= JFactory::getUser();
+		
 		if ($this->id) {
 			// Existing item
 			$this->modified		= $date->toSql();
@@ -144,6 +157,7 @@ class HelloWorldTableHelloWorld extends JTable
 				$this->created_by = $user->get('id');
 			}
 		}
+		
 		// Verify that the alias is unique
 		$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
 
@@ -159,13 +173,41 @@ class HelloWorldTableHelloWorld extends JTable
 	}
 
 	/*
-	 * An effort to preserve existing params that are set for an accommodation
-	 *
+	 * saveFormTranslation
+	 * Determines the fields to translate
 	 */
-	public function getExistingParams ()
+	function saveFormTranslation($lang='en-GB')
 	{
+		// If the language of the property (as when it was created) is the same as the editing language then we don't need to do anything.
+		if ($this->lang == $lang) return true;
 		
+		// Get an instance of the JTable for the HelloWorld_translations table
+		$existingTranslations = JTable::getInstance('HelloWorld_translations', 'HelloWorldTable');
+
+		// Load a copy of all the existing translations for this property, returns null if none found
+		$existingTranslations->load(array('property_id'=>$this->id));
+	
+		// An array of all the translatable fields
+		$value = array();
+		$value['greeting'] = $this->greeting;
+		$value['description'] = $this->description;
+		$value['property_id'] = $this->id;
+		
+		unset($this->greeting);
+		unset($this->description);
+			
+		// Bind the translated fields to the JTAble instance	
+		if (!$existingTranslations->bind($value))
+		{
+			JError::raiseWarning(500, $form->getError());
+			return false;
+		}	
+
+		// And update or create depending on whether any translations already exist
+		if (!$existingTranslations->store())
+		{
+			JError::raiseWarning(500, $existingTranslations->getError());
+			return false;
+		}	
 	}
-	
-	
 }

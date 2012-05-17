@@ -41,7 +41,7 @@ class HelloWorldController extends JController
 		$tab 		 = $tabposition ? '&tab='.$tab : '';
 		$session 	 =& JFactory::getSession();
 		$session->set('com_helloworld.property.'.$id.'.lang', JRequest::getVar('Language'));
-
-		$this->setRedirect('index.php?option=com_helloworld&task=helloworld.edit&id='.$id);
+		$view = JRequest::getVar('view');
+		$this->setRedirect('index.php?option=com_helloworld&task='.$view.'.edit&id='.$id);
 	}	
 }

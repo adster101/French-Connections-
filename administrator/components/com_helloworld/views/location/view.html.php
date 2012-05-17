@@ -20,8 +20,8 @@ class HelloWorldViewLocation extends JView
 		$form = $this->get('Form');
 		$item = $this->get('Item');
 		$script = $this->get('Script');
-		$languages = $this->get('Languages');
-		$lang = $this->get('Lang');
+		$languages = HelloWorldHelper::getLanguages();
+		$lang = HelloWorldHelper::getLang();
 	
 	
 		// Check for errors.

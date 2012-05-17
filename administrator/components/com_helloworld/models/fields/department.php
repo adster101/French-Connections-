@@ -26,8 +26,10 @@ class JFormFielddepartment extends JFormFieldList
 	 */
 	protected function getOptions() 
 	{
-		JTable::addIncludePath( JPATH_COMPONENT.'/tables' );
-		$table = JTable::getInstance( 'nestedsets', 'Table' );
+		// Add include path to table classes
+		//JTable::addIncludePath( JPATH_COMPONENT.'/tables' );
+		// get an instance of the nested sets 
+		//$table = JTable::getInstance( 'nestedsets', 'Table' );
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 		$query->select

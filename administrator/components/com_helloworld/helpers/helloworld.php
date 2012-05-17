@@ -57,4 +57,41 @@ abstract class HelloWorldHelper
  
 		return $result;
 	}
+	
+	/*
+	 * Get the default language 
+	 */
+	
+	public static function getDefaultLanguage()
+	{
+		$lang = & JFactory::getLanguage()->getTag();
+		return $lang;
+	}
+
+	public static function getLanguages()
+	{
+		$lang 	   =& JFactory::getLanguage();
+		$languages = $lang->getKnownLanguages(JPATH_SITE);
+		
+		$return = array();
+		foreach ($languages as $tag => $properties)
+			$return[] = JHTML::_('select.option', $tag, $properties['name']);
+		
+		return $return;
+	}
+	
+	public static function getLang()
+	{
+		$session =& JFactory::getSession();
+		$lang 	 =& JFactory::getLanguage();
+		$propertyId = JRequest::getInt('id');
+
+		return $session->get('com_helloworld.property.'.$propertyId.'.lang', $lang->getTag());
+	}
+
+	public static function getProperty()
+	{
+		return $propertyId;
+	}
+	
 }
