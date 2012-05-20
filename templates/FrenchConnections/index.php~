@@ -88,9 +88,7 @@ $siteName = $app->getCfg( 'sitename' );
 				<?php if ($menu->getActive() !== $menu->getDefault() && $this->countModules('breadcrumbs')) { // If not the homepage and module is published to breadcrumbs?>
 						<jdoc:include type="modules" name="breadcrumbs" />	
 				<?php } ?>
-				<?php if($this->countModules('sub-menu-horizontal')) : ?>
-					<jdoc:include type="modules" name="sub-menu-horizontal" style="xhtml" />
-				<?php endif; ?>
+				
 				<jdoc:include type="component" />
 			</div>
 			<?php 

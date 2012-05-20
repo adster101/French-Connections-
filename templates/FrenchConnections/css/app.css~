@@ -95,7 +95,7 @@ ul.tabs li:first-child { padding: 0 9px 0 0; }
 ul.tabs li { display: block; width: auto; height: 30px; padding: 0; float: left; }
 ul.tabs li a { display: block; width: auto; height: 29px; padding: 0 9px; line-height: 30px; border: solid 1px #ddd; margin: 0 -1px 0 0; color: #555; background: #eee; }
 ul.tabs li a.active { background: #fff; border-width: 1px 1px 0 1px; height: 30px; }		
-ul.nice.tabs { border-bottom: solid 1px #eee; margin: 0 0 18px 0; height:43px; }
+ul.nice.tabs { border-bottom: solid 1px #eee; margin: 0 0 30px 0; height:43px; }
 ul.nice.tabs li a { padding: 7px 18px 9px; font-size: 15px; font-size: 1.5rem; color: #555555; background: none; border: none; }
 ul.nice.tabs li.active a { font-weight: bold; color: #333; background: #fff; border-left: 1px solid #eee; border-right: 1px solid #eee; border-top: 3px solid #00a6fc; margin: 0 10px; position: relative; top: -5px; }
 ul.nice.tabs li.active:first-child a { margin-left: 0; }

@@ -219,8 +219,8 @@ class HelloWorldTableHelloWorld extends JTable
 	 */
 	function loadPropertyTranslation($lang='en-GB')
 	{
-		// If the language of the property (when it was created) is the same as the current editing language 
-		// then we don't need to do anything. That is, we just show the fields as they come
+		// If the language of the property (as when it was created) is the same as the editing language then we don't need to do anything
+		// That is, we just show the fields as they come
 		if ($this->lang == $lang) return true;
 		
 		// Get an instance of the JTable for the HelloWorld_translations table
@@ -228,8 +228,11 @@ class HelloWorldTableHelloWorld extends JTable
 
 		// Load a copy of all the existing translations for this property, returns null if none found
 		$existingTranslations->load(array('property_id'=>$this->id));
-		// Replace the loaded strings with the translated ones
+		
 		$this->greeting = $existingTranslations->greeting;
 		$this->description = $existingTranslations->description;
+			
+		
 	}
+
 }
