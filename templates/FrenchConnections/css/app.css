@@ -89,16 +89,56 @@ ul.breadcrumbs li:last-child span { padding-left:12px; }
 ul.sign-up-list{padding-left:3.5em;}
 ul.sign-up-list li{list-style-image:url('../images/sign-up-flower.png');}
 
-ul.tabs { display: block; margin: 0 0 20px 0; padding: 0; height: 30px; border-bottom: solid 1px #ddd; }
-ul.tabs li { display: block; width: auto; height: 30px; padding: 0 9px 0 20px; line-height: 30px; float: left; color: #999; font-size: 11px; ; cursor: default; }
-ul.tabs li:first-child { padding: 0 9px 0 0; }
-ul.tabs li { display: block; width: auto; height: 30px; padding: 0; float: left; }
-ul.tabs li a { display: block; width: auto; height: 29px; padding: 0 9px; line-height: 30px; border: solid 1px #ddd; margin: 0 -1px 0 0; color: #555; background: #eee; }
-ul.tabs li a.active { background: #fff; border-width: 1px 1px 0 1px; height: 30px; }		
+ul.tabs { display: block; margin: 0 0 20px 0; padding: 0 0 0 18px; height: 30px; border-bottom: solid 1px #94A5CD; }
+ul.tabs li { display: block; width: auto; height: 30px; padding: 0 8px 0 8px; float: left; color: #039; cursor: default; }
+ul.tabs li a { display: block; width: auto; height: 30px; padding: 0 9px; line-height: 30px; border-top: solid 1px #94A5CD; border-left: solid 1px #94A5CD; border-right: solid 1px #94A5CD; margin: 0 -1px 0 0; color: #039; background: #C0D0EB; font-weight:bold; }
+ul.tabs li a:hover { background: #ffffff; }
+ul.tabs li.active a {background: #fff; border-width: 1px 1px 0 1px; height: 30px; }	
+
+	
 ul.nice.tabs { border-bottom: solid 1px #eee; margin: 0 0 18px 0; height:43px; }
 ul.nice.tabs li a { padding: 7px 18px 9px; font-size: 15px; font-size: 1.5rem; color: #555555; background: none; border: none; }
 ul.nice.tabs li.active a { font-weight: bold; color: #333; background: #fff; border-left: 1px solid #eee; border-right: 1px solid #eee; border-top: 3px solid #00a6fc; margin: 0 10px; position: relative; top: -5px; }
 ul.nice.tabs li.active:first-child a { margin-left: 0; }
+
+
+/* Override the default blockquotes */
+blockquote{background:#f9f9f9;border-left:1em solid #eee;margin:1.5em 1em;padding:.5em 1em;quotes:"\201C""\201D";clear:both;font-style:italic;}
+blockquote:before{color:#808080;content:open-quote;font-size:4em;line-height:.1em;margin-right:.25em;vertical-align:-.4em;}
+blockquote :first-child{display:inline;}
+blockquote :last-child{margin-bottom:0;}
+blockquote:after{color:#808080;content:close-quote;font-size:4em;line-height:.1em;margin-left:.25em;vertical-align:-.5em;}
+
+div.panel {
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
+	-webkit-box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
+	-moz-box-shadow: 5px 5px 5px rgba(0,0,0,0.25);
+	border: solid 1px rgba(0,0,0,0.25);
+}
+
+.center {text-align:center;}
+
+.lead {font-style:italic;}
+
+.formError {display:block;font-size:13px;}
+
+.rsform-input-box.rsform-error,
+.rsform-text-box.rsform-error,
+.rsform-password-box.rsform-error,
+.rsform-calendar-box.rsform-error,
+.rsform-captcha-box.rsform-error,
+.rsform-select-box.rsform-error
+{
+	border: 1px solid #E1B2B3;
+	background: #FBE3E4;
+}
+
+.formField {
+	margin-bottom:18px;
+}
+
+form label {font-weight:bold;}
+
 
 
 /* -----------------------------------------

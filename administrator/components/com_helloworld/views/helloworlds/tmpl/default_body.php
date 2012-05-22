@@ -23,11 +23,15 @@ $groups = $user->getAuthorisedGroups();
 		<td>
 			<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 		</td>
+
 		<td>
 			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=location.edit&id='.(int) $item->id); ?>">
 				<?php echo $item->greeting; ?>
 			</a>
 		</td>
+		<td>
+			<?php echo JText::_($item->modified); ?>
+		</td>		
 	</tr>					
 	<?php else : ?>
 	<?php endif; ?>

@@ -24,7 +24,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 		// Select some fields
-		$query->select('id,greeting,created_by');
+		$query->select('id,greeting,created_by,modified');
 		if (!in_array(8, $groups)) 
 		{
 		$query->where('created_by='.$userId);

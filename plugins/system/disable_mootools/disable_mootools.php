@@ -37,7 +37,6 @@ class  plgSystemDisable_mootools extends JPlugin {
 					{
 						$headers['scripts'][$url] = $type;
 					}
-					
 				}
 				
 				//	set the new head data

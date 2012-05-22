@@ -66,7 +66,19 @@ class HelloWorldModelHelloWorld extends JModelItem
 			$this->_db->setQuery($this->_db->getQuery(true)
 				->from('#__helloworld as h')
 				->leftJoin('#__categories as c ON h.catid=c.id')
-				->select('h.greeting, h.params, c.title as category')
+				->select('
+						h.greeting, 
+						h.params, 
+						c.title as category,
+						h.description, 
+						h.lang,
+						h.occupancy,
+						h.swimming,
+						h.latitude,
+						h.longitude,
+						h.nearest_town,
+						h.distance_to_coast
+					')
 				->where('h.id=' . (int)$id));
 			if (!$this->item = $this->_db->loadObject()) 
 			{

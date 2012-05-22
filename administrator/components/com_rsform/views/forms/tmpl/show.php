@@ -7,6 +7,5 @@
 */
 
 defined('_JEXEC') or die('Restricted access');
-
 echo RSFormProHelper::displayForm($this->formId);
 ?>

@@ -5,8 +5,8 @@ defined('_JEXEC') or die;
 // import the list field type
 jimport('joomla.form.helper');
 
-
 JFormHelper::loadFieldClass('list');
+
 /**
  * HelloWorld Form Field class for the HelloWorld component
  */
@@ -26,26 +26,22 @@ class JFormFielddepartment extends JFormFieldList
 	 */
 	protected function getOptions() 
 	{
-		// Add include path to table classes
-		//JTable::addIncludePath( JPATH_COMPONENT.'/tables' );
-		// get an instance of the nested sets 
-		//$table = JTable::getInstance( 'nestedsets', 'Table' );
-		$db = JFactory::getDBO();
-		$query = $db->getQuery(true);
-		$query->select
-		(
-			'*'
-		);
-		$query->from('#__categories');
-		//$query->leftJoin('#__categories on catid=#__categories.id');
-		$db->setQuery((string)$query);
-		$messages = $db->loadObjectList();
+		// Get a nested sets table instance for the categories table.
+		// Note that here we are using the global Joomla categories not the component ones.
+		$table = JTable::getInstance('HelloWorld_categories', 'HelloWorldTable');
+		// Get the sub tree for node 11. I know this to be the root node I am interested in.
+		// To do: Add method to table class to retrieve the node via alias. May be more robust in the long run
+		$subTree = $table->getTree(11);
+		// Set up an array to hold the oprions
 		$options = array();
-		if ($messages)
+		if ($subTree)
 		{
-			foreach($messages as $message) 
+			// Loop over each subtree item
+			foreach($subTree as $item) 
 			{
-				$options[] = JHtml::_('select.option', $message->id, $message->greeting . ($message->catid ? ' (' . $message->category . ')' : ''));
+				if($table->isLeaf( $item->id )) {
+					$options[] = JHtml::_('select.option', $item->id, $item->title);
+				}
 			}
 		}
 		$options = array_merge(parent::getOptions(), $options);

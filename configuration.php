@@ -14,7 +14,7 @@ class JConfig {
 	public $dbtype = 'mysql';
 	public $host = 'localhost';
 	public $user = 'root';
-	public $password = 'password';
+	public $password = '';
 	public $db = 'password';
 	public $dbprefix = 'qitz3_';
 	public $live_site = '';
@@ -55,7 +55,7 @@ class JConfig {
 	public $unicodeslugs = '0';
 	public $feed_limit = '10';
 	public $log_path = '/home/adam/public_html/logs';
-	public $tmp_path = '/home/adam/public_html/tmp';
+	public $tmp_path = 'C:\\xampp\\htdocs\\tmp';
 	public $lifetime = '60';
 	public $session_handler = 'database';
 	public $MetaRights = '';

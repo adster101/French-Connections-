@@ -15,7 +15,6 @@ $menu 			= JSite::getMenu();
 $siteName = $app->getCfg( 'sitename' );
 ?>
 
-
 <!doctype html>
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="<?php echo $this->language; ?>"> <![endif]-->
@@ -24,6 +23,7 @@ $siteName = $app->getCfg( 'sitename' );
 <!--[if gt IE 8]><!--> 
 <html lang="<?php echo $this->language; ?>"> <!--<![endif]-->
 <head>	
+	<jdoc:include type="head" />
 	<meta charset="utf-8">
 	<!-- Use the .htaccess and remove these lines to avoid edge case issues. More info: h5bp.com/b/378 -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -40,7 +40,6 @@ $siteName = $app->getCfg( 'sitename' );
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<jdoc:include type="head" />
 </head>
 
 <body>

@@ -202,7 +202,7 @@ class RSFormProValidations
 		$formId = JRequest::getInt('formId');
 		$db = JFactory::getDBO();
 		$param = $db->getEscaped($email);
-		$db->setQuery("SELECT * FROM #__rsform_submission_values WHERE `FieldName`='Email' AND `FieldValue`='".$email."' AND `FormId`='".$formId."'");
+		$db->setQuery("SELECT * FROM #__users WHERE `email`='".$email."'");
 		$db->query();
 		$invalid = $db->getNumRows();
 		if ($invalid)

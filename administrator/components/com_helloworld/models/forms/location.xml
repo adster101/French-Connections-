@@ -21,11 +21,24 @@
 		>
 			<option value="0">JOPTION_SELECT_CATEGORY</option>
 		</field>
+
+		<field
+			name="catid"
+			type="department"
+			extension="com_helloworld"
+			class="list"
+			default="1"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
+			required="true"
+		>
+			<option value="0">JOPTION_SELECT_CATEGORY</option>
+		</field>		
 			
 		<field
 			name="latitude"
 			type="text"
-			extendion="com_helloworld"
+			extension="com_helloworld"
 			class="inputbox validate-latitude"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
@@ -35,7 +48,7 @@
 		<field
 			name="longitude"
 			type="text"
-			extendion="com_helloworld"
+			extension="com_helloworld"
 			class="inputbox validate-longitude"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
@@ -45,7 +58,7 @@
 		<field
 			name="nearest_town"
 			type="text"
-			extendion="com_helloworld"
+			extension="com_helloworld"
 			class="inputbox validate-nearest_town"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
@@ -55,7 +68,7 @@
 		<field
 			name="distance_to_coast"
 			type="text"
-			extendion="com_helloworld"
+			extension="com_helloworld"
 			class="inputbox validate-distance-to-coast"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
