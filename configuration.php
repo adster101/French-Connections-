@@ -14,7 +14,7 @@ class JConfig {
 	public $dbtype = 'mysql';
 	public $host = 'localhost';
 	public $user = 'root';
-	public $password = '';
+	public $password = 'password';
 	public $db = 'password';
 	public $dbprefix = 'qitz3_';
 	public $live_site = '';
@@ -35,8 +35,8 @@ class JConfig {
 	public $fromname = 'French Connections';
 	public $sendmail = '/usr/sbin/sendmail';
 	public $smtpauth = '0';
-	public $smtpuser = '';
-	public $smtppass = '';
+	public $smtpuser = 'admin';
+	public $smtppass = 'password';
 	public $smtphost = 'localhost';
 	public $smtpsecure = 'none';
 	public $smtpport = '25';

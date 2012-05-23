@@ -81,9 +81,35 @@ h6 { font-size: 13px; font-size: 1.3rem; font-weight: normal; }
 	
 }
 
+/* Sub nav */
+.sub-nav {
+	background: rgb(242,242,242); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(242,242,242,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,242,242,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(242,242,242,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(242,242,242,1) 0%,rgba(255,255,255,1) 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, rgba(242,242,242,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, rgba(242,242,242,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+}
+
+.sub-nav,
+.sub-nav ul {	margin-bottom:0; }
+.sub-nav li {	border-bottom:1px solid #efefef;	margin-bottom:0; }
+.sub-nav li a { display:block;	padding:6px;}
+.sub-nav li a:hover {	background:#efefef;	text-decoration:none; }
+.sub-nav ul li a { padding:6px 6px 6px 18px;}
+.sub-nav ul ul li a {	padding:6px 6px 6px 36px;}
+.sub-nav ul li:last-of-type { border-bottom:0; }
+.sub-nav ul li:first-of-type {border-top:1px solid #efefef; }
+
+
+
 /* Breadcrumb fix */
-ul.breadcrumbs { background:none;border:0;}
+ul.breadcrumbs { background:none;border:0;padding-left:0;}
 ul.breadcrumbs li:last-child span { padding-left:12px; }
+ul.breadcrumbs li:nth-child(2):before { content: " "; }
+ul.breadcrumbs li:nth-child(2) a { padding-left: 0; }
 
 /* Unordered lists for sign up page */
 ul.sign-up-list{padding-left:3.5em;}
@@ -139,7 +165,7 @@ div.panel {
 
 form label {font-weight:bold;}
 
-
+.bottom {margin-bottom:0;}
 
 /* -----------------------------------------
    Page Name 1

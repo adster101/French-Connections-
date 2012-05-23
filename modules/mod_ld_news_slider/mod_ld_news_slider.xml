@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.5.0" client="site">
+    <!-- Name of the Module -->
+        <name>LD News Slider</name> 
+ 
+    <!-- Name of the Author -->
+        <author>LD Web Solutions</author> 
+ 
+    <!-- Version Date of the Module -->
+        <creationDate>2010-06-21</creationDate> 
+ 
+    <!-- Copyright information -->
+        <copyright>All rights reserved by LD Web Solutions.</copyright> 
+ 
+    <!-- License Information -->
+        <license>GPL 2.0</license> 
+ 
+    <!-- Author's email address -->
+        <authorEmail>adam@littledonkey.net</authorEmail> 
+ 
+    <!-- Author's website -->
+        <authorUrl>www.littledonkey.net</authorUrl> 
+ 
+    <!-- Module version number -->
+        <version>0.0.1</version> 
+ 
+    <!-- Description of what the module does -->
+        <description>Provides a left to right scrolling news slider for use, e.g. on a homepage.</description>
+ 
+    <!-- Listing of all files that should be installed for the module to function -->
+        <files>
+        <!-- The "module" attribute signifies that this is the main controller file -->
+                <filename module="mod_ld_news_slider">mod_ld_news_slider.php</filename>
+                <filename>index.html</filename>
+                <filename>helper.php</filename>
+                <filename>tmpl/default.php</filename>
+                <filename>tmpl/index.html</filename>
+				<filename>scripts/slider.js</filename>
+				<filename>styles/slider.css</filename>
+		</files> 
+		
+		<languages>
+	<!-- Any language files included with the module -->
+			<language tag="en-GB">en-GB.mod_ld_news_slider.ini</language>
+		</languages>
+		
+	
+    <!-- Optional parameters -->
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<!-- parameter to allow placement of a module class suffix for the module table / xhtml display -->
+					<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		 
+				<!-- just gives us a little room between the previous parameter and the next -->
+					<field name="@spacer" type="spacer" default="" label="" description="" />
+		 
+				<!-- A parameter that allows an administrator to modify the number of users that this module will display -->
+					<field name="width" type="text" default="710" label="Slideshow width" description="Width of the slideshow in pixels" />
+
+				<!-- A parameter that allows an administrator to modify the number of users that this module will display -->
+					<field name="height" type="text" default="" label="Slideshow height" description="Height of the slideshow in pixels. If left blank will depend on content." />
+				
+					
+				<field name="order" type="list" default="id" label="Order by" description="Choose how you want the slides to be ordered.">
+					<option value="cn.id">Id</option>
+					<option value="cn.title">Title</option>
+					<option value="cn.created">Created</option>
+					<option value="cn.modified">Modified</option>
+					<option value="cn.ordering">Ordering</option>
+					<option value="random">Random</option>
+				</field>
+
+				<!-- A parameter that allows an administrator to modify the number of users that this module will display -->
+					<field name="panels" type="text" default="3" label="Number of panels" description="Number of panels to show within the slideshow area." />
+
+				<!-- A parameter that allows an administrator to modify the category from which articles will appear-->
+					<field name="category" type="category" label="Select a category" description="Choose a category from which to display articles" extension="com_content" default="-1" />
+
+					<field name="articles" type="text" default="" label="Article List" description="Supply a comma separated list of article ID to diaplay those articles."/>
+
+			  
+			  <!-- A parameter that allows an administrator to number of articles that will appear-->
+					<field name="count" type="text" label="Number of articles to display" description="Enter how many articles you wish to appear in the slideshow." default="1" />
+				
+			</fieldset>
+		</fields>
+	</config>
+</install>

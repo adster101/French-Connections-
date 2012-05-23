@@ -70,42 +70,44 @@ $siteName = $app->getCfg( 'sitename' );
 	</div>
 	<div class="container component">
 		<div class="row">
-			
-			<!-- TO DO - Sort this mess out -->
-			
-			<?php if (!$this->countModules('left') && !$this->countModules('right')) { ?>
+			<?php if (!$this->countModules('left') && !$this->countModules('right')) { // If no modules published left or right output a full width column ?>
 				<div class="twelve columns">
-			<?php } else if ($this->countModules('right')) { ?>
+			<?php } else if ($this->countModules('left') && $this->countModules('right')) { // If modules published to both side postions output a narrowish column?>
+				<div class="six columns push-three">
+			<?php } else if ($this->countModules('right')) { // If there is a module published only to the right output an eight column wide column ?>
 				<div class="eight columns">
-			<?php }?>
-			<?php if ($menu->getActive() == $menu->getDefault()) { ?>
-				<?php if($this->countModules('slider')) : ?>
-					<jdoc:include type="modules" name="slider" style="xhtml" />
-				<?php endif; ?>
+			<?php } else if ($this->countModules('left')) { // If there is a module published only to the left output an ten column wide column ?>
+				<div class="nine columns push-three">
 			<?php } ?>
-				
-				<?php if ($menu->getActive() !== $menu->getDefault() && $this->countModules('breadcrumbs')) { // If not the homepage and module is published to breadcrumbs?>
-						<jdoc:include type="modules" name="breadcrumbs" />	
-				<?php } ?>
-				<?php if($this->countModules('sub-menu-horizontal')) : ?>
-					<jdoc:include type="modules" name="sub-menu-horizontal" style="xhtml" />
-				<?php endif; ?>
+			<?php if($this->countModules('slider')) { ?>
+				<jdoc:include type="modules" name="slider" style="xhtml" />
+			<?php } // EOF is this homepage ?>		
+			<?php if ($menu->getActive() !== $menu->getDefault() && $this->countModules('breadcrumbs')) { // If not the homepage and module is published to breadcrumbs ?>
+					<jdoc:include type="modules" name="breadcrumbs" />	
+			<?php } ?>
+			<?php if($this->countModules('sub-menu-horizontal')) : ?>
+				<jdoc:include type="modules" name="sub-menu-horizontal" style="xhtml" />
+			<?php endif; ?>
 				<jdoc:include type="component" />
-			</div>
-			<?php 
-				// If this isn't the homepage and there is a module published to the left position
-				if ($menu->getActive() !== $menu->getDefault() && $this->countModules('left')) { ?>
-				<?php if($this->countModules('left')) : ?>
-					<div class="three columns pull-seven">
+				</div>
+			<?php if ($menu->getActive() !== $menu->getDefault()) { // If this isn't the homepage  ?>
+				<?php if ($this->countModules('left') && !$this->countModules('right')) { // and there is a module published to the left position only ?>			
+					<div class="three columns pull-nine">
 						<jdoc:include type="modules" name="left" style="xhtml" />
 					</div>
-				<?php endif; ?>
-			<?php } ?>		
-			<?php if($this->countModules('right')) : ?>
-				<div class="four columns">
-					<jdoc:include type="modules" name="right" style="xhtml" />
-				</div>
-			<?php endif; ?>
+				<?php } else if ($this->countModules('right') && !$this->countModules('left')) { // Only a module published to the right position ?>
+					<div class="four columns">
+						<jdoc:include type="modules" name="right" style="xhtml" />
+					</div>
+				<?php } else if ($this->countModules('right') && $this->countModules('left')) { ?>
+					<div class="three columns pull-six">
+						<jdoc:include type="modules" name="left" style="xhtml" />
+					</div>
+					<div class="three columns">
+						<jdoc:include type="modules" name="right" style="xhtml" />
+					</div>
+				<?php } ?>
+	 		<?php } ?>
 		</div>
 	</div>
 	
@@ -123,10 +125,6 @@ $siteName = $app->getCfg( 'sitename' );
 		<?php endif; ?>	
 		<a class="close-reveal-modal">×</a>
 	</div>
-	
-
-		
-
 <!-- JavaScript at the bottom for fast page loading -->
 
 <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/javascripts/modernizr.foundation.js"></script>
