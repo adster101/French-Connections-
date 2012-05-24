@@ -28,9 +28,9 @@ $siteName = $app->getCfg( 'sitename' );
 	<!-- Use the .htaccess and remove these lines to avoid edge case issues. More info: h5bp.com/b/378 -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<!-- Set the viewport width to device width for mobile -->
-	<meta name="viewport" content="width=device-width" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
-	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/foundation.css">
+	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/bootstrap.css">
 	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/app.css">
 	
 	<!--[if lt IE 9]>
@@ -45,39 +45,45 @@ $siteName = $app->getCfg( 'sitename' );
 <body>
 	<div class="container">
 		<div class="row">
-			<div class="twelve columns">
-				<span class="logo">
-					<a title="<?php echo htmlspecialchars($siteName); ?>" href="<?php echo $this->baseurl ?>">
+			<div class="span12">
+				<p class="logo pull-left">
+					<a class="brand " title="<?php echo htmlspecialchars($siteName); ?>" href="<?php echo $this->baseurl ?>">
 						<img 
 							alt="<?php echo htmlspecialchars($siteName); ?>"
 							src="<?php echo $this->baseurl ?>/<?php echo htmlSpecialChars($this->params->get('logo')); ?>" />
 					</a>	
-				</span>
+				</p>
 				<?php if($this->countModules('site-search')) : ?>
 					<jdoc:include type="modules" name="site-search" style="xhtml" />
-				<?php endif; ?>		
+				<?php endif; ?>	
 			</div>
-		</div>
-	</div>
-	<div id="navBar" class="container">
-		<div class="row">
-			<div class="twelve columns">
+		
+			<div class="span12">
 				<?php if($this->countModules('main-menu')) : ?>
-					<jdoc:include type="modules" name="main-menu" style="xhtml" />
+					<jdoc:include type="modules" name="main-menu" style="nav" />
 				<?php endif; ?>
 			</div>
-		</div>
-	</div>
-	<div class="container component">
-		<div class="row">
+	
+			<?php if ($menu->getActive() !== $menu->getDefault()) { // If this isn't the homepage  ?>
+				<?php if ($this->countModules('left') && !$this->countModules('right')) { // and there is a module published to the left position only ?>			
+					<div class="span2">
+						<jdoc:include type="modules" name="left" style="xhtml" />
+					</div>
+				<?php } else if ($this->countModules('right') && $this->countModules('left')) { ?>
+					<div class="span2">
+						<jdoc:include type="modules" name="left" style="xhtml" />
+					</div>
+				<?php } ?>		
+	 		<?php } ?>
+			
 			<?php if (!$this->countModules('left') && !$this->countModules('right')) { // If no modules published left or right output a full width column ?>
-				<div class="twelve columns">
+				<div class="span12">
 			<?php } else if ($this->countModules('left') && $this->countModules('right')) { // If modules published to both side postions output a narrowish column?>
-				<div class="six columns push-three">
+				<div class="span6">
 			<?php } else if ($this->countModules('right')) { // If there is a module published only to the right output an eight column wide column ?>
-				<div class="eight columns">
+				<div class="span8">
 			<?php } else if ($this->countModules('left')) { // If there is a module published only to the left output an ten column wide column ?>
-				<div class="nine columns push-three">
+				<div class="span10">
 			<?php } ?>
 			<?php if($this->countModules('slider')) { ?>
 				<jdoc:include type="modules" name="slider" style="xhtml" />
@@ -85,46 +91,34 @@ $siteName = $app->getCfg( 'sitename' );
 			<?php if ($menu->getActive() !== $menu->getDefault() && $this->countModules('breadcrumbs')) { // If not the homepage and module is published to breadcrumbs ?>
 					<jdoc:include type="modules" name="breadcrumbs" />	
 			<?php } ?>
-			<?php if($this->countModules('sub-menu-horizontal')) : ?>
+			<?php if($this->countModules('sub-menu-horizontal')) { ?>
 				<jdoc:include type="modules" name="sub-menu-horizontal" style="xhtml" />
-			<?php endif; ?>
+			<?php } ?>
 				<jdoc:include type="component" />
 				</div>
 			<?php if ($menu->getActive() !== $menu->getDefault()) { // If this isn't the homepage  ?>
 				<?php if ($this->countModules('left') && !$this->countModules('right')) { // and there is a module published to the left position only ?>			
-					<div class="three columns pull-nine">
-						<jdoc:include type="modules" name="left" style="xhtml" />
-					</div>
-				<?php } else if ($this->countModules('right') && !$this->countModules('left')) { // Only a module published to the right position ?>
-					<div class="four columns">
-						<jdoc:include type="modules" name="right" style="xhtml" />
-					</div>
+				
+
 				<?php } else if ($this->countModules('right') && $this->countModules('left')) { ?>
-					<div class="three columns pull-six">
-						<jdoc:include type="modules" name="left" style="xhtml" />
-					</div>
-					<div class="three columns">
+					<div class="span4">
 						<jdoc:include type="modules" name="right" style="xhtml" />
 					</div>
+				<?php } else if ($this->countModules('right')) { ?>
+					<div class="span4">
+						<jdoc:include type="modules" name="right" style="xhtml" />
+					</div>				
 				<?php } ?>
-	 		<?php } ?>
-		</div>
-	</div>
-	
-	<div id="footer" class="container">
-		<div class="row">
-			<hr />
-			<jdoc:include type="modules" name="footer" style="xhtml" />
-		</div>
+			<?php } ?>
+		
+	<div class="span12">
+		<jdoc:include type="modules" name="footer" style="xhtml" />
 	</div>
 	
 	
-	<div id="navModal" class="reveal-modal">
-		<?php if($this->countModules('main-menu-mobile')) : ?>
-			<jdoc:include type="modules" name="main-menu-mobile" style="xhtml" />
-		<?php endif; ?>	
-		<a class="close-reveal-modal">×</a>
+
 	</div>
+</div>
 <!-- JavaScript at the bottom for fast page loading -->
 
 <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/javascripts/modernizr.foundation.js"></script>

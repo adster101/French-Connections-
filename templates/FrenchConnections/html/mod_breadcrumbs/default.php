@@ -10,11 +10,10 @@
 defined('_JEXEC') or die;
 ?>
 
-<div class="<?php echo $moduleclass_sfx; ?>">
 <ul class="<?php echo $moduleclass_sfx; ?>">
 <?php if ($params->get('showHere', 1))
 	{
-		echo '<li class="showHere">' .JText::_('MOD_BREADCRUMBS_HERE').'</li>';
+		echo '<li>' .JText::_('MOD_BREADCRUMBS_HERE').'<span class="divider">/</span></li>';
 	}
 ?>
 <?php for ($i = 0; $i < $count; $i ++) :
@@ -22,18 +21,17 @@ defined('_JEXEC') or die;
 	// If not the last item in the breadcrumbs add the separator
 	if ($i < $count -1) {
 		if (!empty($list[$i]->link)) {
-			echo '<li><a href="'.$list[$i]->link.'" class="pathway">'.$list[$i]->name.'</a></li>';
+			echo '<li><a href="'.$list[$i]->link.'" class="pathway">'.$list[$i]->name.'</a><span class="divider">/</span></li>';
 		} else {
 			echo '<li>';
 			echo $list[$i]->name;
-			echo '</li>';
+			echo '<span class="divider">/</span></li>';
 		}
 	}  elseif ($params->get('showLast', 1)) { // when $i == $count -1 and 'showLast' is true
 
-		 echo '<li><span>';
+		 echo '<li class="active">';
 		echo $list[$i]->name;
-		  echo '</span></li>';
+		  echo '</li>';
 	}
 endfor; ?>
 </ul>
-</div>

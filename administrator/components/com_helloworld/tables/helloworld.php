@@ -30,7 +30,7 @@ class HelloWorldTableHelloWorld extends JTable
 	public function bind($array, $ignore = '') 
 	{
 		
-		if (isset($array['params']) && is_array($array['params'])) 
+		if (isset($array['params']) && is_array($array['params']) && $this->params) 
 		{
 			// $this is an instance of HelloWorldTableHelloWorld (and includes a copy of the record as it stands in the db)
 			// Loop over the $array['params']
@@ -67,9 +67,7 @@ class HelloWorldTableHelloWorld extends JTable
 		if (parent::load($pk, $reset)) 
 		{
 			// Get the current editing language for this property
-			$lang = HelloWorldHelper::getLang();
-			// Get the current editing language for this property
-			$lang = HelloWorldHelper::getLang();				
+			$lang = HelloWorldHelper::getLang();	
 			// Need to load any translations here if the editing language different from the property language
 			$this->loadPropertyTranslation($lang);
 
@@ -161,12 +159,12 @@ class HelloWorldTableHelloWorld extends JTable
 		}
 		
 		// Verify that the alias is unique
-		$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
+		//$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
 
-		if ($table->load(array('alias'=>$this->alias, 'catid'=>$this->catid)) && ($table->id != $this->id || $this->id==0)) {
-			$this->setError(JText::_('COM_CONTACT_ERROR_UNIQUE_ALIAS'));
-			return false;
-		}
+		//if ($table->load(array('alias'=>$this->alias, 'catid'=>$this->catid)) && ($table->id != $this->id || $this->id==0)) {
+			//$this->setError(JText::_('COM_CONTACT_ERROR_UNIQUE_ALIAS'));
+			//return false;
+		//}
 		
 		
 
@@ -181,7 +179,7 @@ class HelloWorldTableHelloWorld extends JTable
 	function savePropertyTranslation($lang='en-GB')
 	{
 		// If the language of the property (as when it was created) is the same as the editing language then we don't need to do anything.
-		if ($this->lang == $lang) return true;
+		if ($this->lang == $lang || !$this->lang) return true;
 		
 		// Get an instance of the JTable for the HelloWorld_translations table
 		$existingTranslations = JTable::getInstance('HelloWorld_translations', 'HelloWorldTable');
@@ -194,6 +192,7 @@ class HelloWorldTableHelloWorld extends JTable
 		$value['greeting'] = $this->greeting;
 		$value['description'] = $this->description;
 		$value['property_id'] = $this->id;
+		$value['lang_code'] = $lang;
 		
 		unset($this->greeting);
 		unset($this->description);
@@ -221,7 +220,7 @@ class HelloWorldTableHelloWorld extends JTable
 	{
 		// If the language of the property (when it was created) is the same as the current editing language 
 		// then we don't need to do anything. That is, we just show the fields as they come
-		if ($this->lang == $lang) return true;
+		if ($this->lang == $lang || !$this->lang) return true;
 		
 		// Get an instance of the JTable for the HelloWorld_translations table
 		$existingTranslations = JTable::getInstance('HelloWorld_translations', 'HelloWorldTable');

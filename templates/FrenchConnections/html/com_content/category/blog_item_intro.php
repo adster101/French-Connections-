@@ -23,6 +23,8 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 <div class="system-unpublished">
 <?php endif; ?>
 <?php if ($params->get('show_title')) : ?>
+	<hr />
+
 	<h2>
 		<?php if ($params->get('link_titles') && $params->get('access-view')) : ?>
 			<a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid)); ?>">
@@ -126,14 +128,14 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 <?php endif; ?>
 <?php  if (isset($images->image_intro) and !empty($images->image_intro)) : ?>
 	<?php $imgfloat = (empty($images->float_intro)) ? $params->get('float_intro') : $images->float_intro; ?>
-	<div class=""<?php echo htmlspecialchars($imgfloat); ?>">
-	<img
+<img class="pull-left" style="padding-right:9px"
 		<?php if ($images->image_intro_caption):
 			echo 'class="caption"'.' title="' .htmlspecialchars($images->image_intro_caption) .'"';
 		endif; ?>
 		src="<?php echo htmlspecialchars($images->image_intro); ?>" alt="<?php echo htmlspecialchars($images->image_intro_alt); ?>"/>
-		<div class="caption">
-			<?php echo $this->item->introtext; ?>
+
+
+		<?php echo $this->item->introtext; ?>
 			
 <?php if ($params->get('show_readmore') && $this->item->readmore) :
 	if ($params->get('access-view')) :
@@ -165,8 +167,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 					endif; ?></a>
 		</p>
 <?php endif; ?>			
-		</div>
-	</div>
 <?php endif; ?>
 
 
@@ -175,6 +175,5 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 </div>
 <?php endif; ?>
 
-<div class="item-separator"></div>
 <?php echo $this->item->event->afterDisplayContent; ?>
 

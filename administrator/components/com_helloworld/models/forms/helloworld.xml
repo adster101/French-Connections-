@@ -8,6 +8,8 @@
 		<field
 			name="lang"
 			type="hidden"
+			required="true"
+			default="en-GB"
 		/>
 		<field
 			name="greeting"

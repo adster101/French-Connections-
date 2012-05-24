@@ -109,5 +109,33 @@ function modChrome_beezTabs($module, $params, $attribs)
 		$temp->id = $module->id;
 		$modules[] = $temp;
 		$modulecount--;
-	}
+	}	
+}
+
+function modChrome_nav($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) : ?>
+		<?php if ($module->showtitle != 0) : ?>
+			<h3><?php echo $module->title; ?></h3>
+		<?php endif; ?>
+		<div class="navbar<?php echo htmlspecialchars($params->get('moduleclass_sfx')); ?>">
+			<div class="navbar-inner">
+				<div class="container">
+					<?php echo $module->content; ?>
+				</div>
+			</div>
+		</div>
+	<?php endif;
+}
+
+function modChrome_well($module, &$params, &$attribs)
+{
+	if (!empty ($module->content)) { ?>
+		<div class="well">
+			<?php if ($module->showtitle != 0) { ?>
+				<h3><?php echo $module->title; ?></h3>
+			<?php } ?>
+			<?php echo $module->content; ?>
+		</div>
+	<?php };
 }

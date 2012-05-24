@@ -46,16 +46,17 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 	</div>
 <?php endif; ?>
 </section>
-<?php if ($sidebarContent) { ?>
 <div class="row">
-	<div class="columns eight">
+
+<?php if ($sidebarContent) { ?>
+	<div class="span6">
+		<div class="row">
 <?php } ?>
 
 <?php $leadingcount=0 ; ?>
 <?php if (!empty($this->lead_items)) : ?>
-<div class="row items-leading">
 	<?php foreach ($this->lead_items as &$item) : ?>
-	<div class="columns six">
+	<div class="span3">
 		<article class="leading-<?php echo $leadingcount; ?><?php echo $item->state == 0 ? 'system-unpublished' : null; ?>">
 			<?php
 				$this->item = &$item;
@@ -67,7 +68,10 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 		?>
 	</div>
 	<?php endforeach; ?>
-</div>
+	<?php if ($sidebarContent) { ?>
+	</div>
+
+<?php } ?>
 <?php endif; ?>
 <?php
 	$introcount=(count($this->intro_items));
@@ -87,7 +91,7 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 	<article class="item column-<?php echo $rowcount;?><?php echo $item->state == 0 ? ' system-unpublished' : null; ?>">
 		<?php
 			$this->item = &$item;
-			echo $this->loadTemplate('item');
+			echo $this->loadTemplate('item_intro');
 		?>
 	</article>
 	<?php $counter++; ?>
@@ -134,11 +138,11 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 	</div>
 
 
-<div class="columns four">
+<div class="span4">
 <?php echo $sidebarContent; ?>
-</div></div>
+</div>
 
 
 <?php } ?>
-
+</div>
 

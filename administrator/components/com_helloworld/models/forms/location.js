@@ -1,12 +1,12 @@
 window.addEvent('domready', function() {	
 	document.formvalidator.setHandler('latitude',
 		function (value) {
-			regex=/^[0-9.]+$/;
+			regex=/^[0-9.-]+$/;
 			return regex.test(value);
 	});	
 	document.formvalidator.setHandler('longitude',
 		function (value) {
-			regex=/^[0-9.]+$/;
+			regex=/^[0-9.-]+$/;
 			return regex.test(value);
 	});	
 	document.formvalidator.setHandler('nearest_town',

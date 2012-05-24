@@ -15,11 +15,13 @@ class modFeaturedPropertyHelper
 	var $items;
 
   public function getFeaturedProperties() {
-
+		$document =& JFactory::getDocument();
+		$lang =& JFactory::getLanguage()->getTag();
+	 
 		$db = JFactory::getDBO();
 		$db->setQuery($db->getQuery(true)
-			->select("greeting, created_by")
-			->from("#__helloworld")
+			->select("id,params,greeting,description,lang,occupancy,swimming,latitude,longitude,nearest_town")
+			->from("#__helloworld"),0,4
 		);
 
    	$items = ($items = $db->loadObjectList())?$items:array();

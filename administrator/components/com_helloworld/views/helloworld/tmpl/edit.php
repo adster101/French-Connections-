@@ -48,7 +48,5 @@ $params = $this->form->getFieldsets('params');
 	<div>
 		<input type="hidden" name="task" value="helloworld.edit" />
 		<?php echo JHtml::_('form.token'); ?>
-		<input type="hidden" name="lang" value="<?php echo HelloWorldHelper::getDefaultLanguage(); ?>" />
-
 	</div>
 </form>
