@@ -10,19 +10,23 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-
 ?>
-<ul class="thumbnails">
-<?php foreach ($this->items as $item) { ?>
-	<li class="span2">
-		<div class="thumbnail">
-			<a href="#" class="">
-				<img src="/images/<?php echo $item->id ?>/thumbnail.jpg" />	
+<div class="row">
+<?php foreach ($this->items as $item) { 
+	if ($item->greeting) { ?>
+		<div class="span2">	
+			<?php	//print_r(json_decode($item->params)->access_options);die?>
+
+			<a href="index.php?option=com_helloworld&view=helloworld&id=<?php echo $item->id ?>&lang=en">
+				<img src="images/<?php echo $item->id ?>/thumb/thumbnail.jpg" />	
 			</a>
+		
+
 			<h4><?php echo $item->greeting ?></h4>
-			<p><?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'.$item->occupancy) ?></p>
+			<h5><?php echo $item->title ?></h5>		
+			<p><?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); echo $item->occupancy; ?></p>
 		</div>
-	</li>
-<?php } ?>
-</ul>
+	<?php } ?>
+<?php } ?>	
+</div>
 

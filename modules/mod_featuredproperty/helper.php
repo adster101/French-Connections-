@@ -17,14 +17,28 @@ class modFeaturedPropertyHelper
   public function getFeaturedProperties() {
 		$document =& JFactory::getDocument();
 		$lang =& JFactory::getLanguage()->getTag();
-	 
+		
+		if ($lang === 'fr-FR') {
+			$select = 'cat.title,catid,hel.id,hel.params,trans.greeting,trans.description,lang,occupancy,swimming,latitude,longitude,nearest_town';
+		} else {
+			$select = 'cat.title,catid,hel.id,hel.params,hel.greeting,hel.description,lang,occupancy,swimming,latitude,longitude,nearest_town';
+		}
+
 		$db = JFactory::getDBO();
 		$db->setQuery($db->getQuery(true)
-			->select("id,params,greeting,description,lang,occupancy,swimming,latitude,longitude,nearest_town")
-			->from("#__helloworld"),0,4
+			->select($select)
+			->from("#__helloworld as hel")
+			->leftJoin('#__categories AS cat ON hel.catid = cat.id')
+			->leftJoin('#__helloworld_translations AS trans ON hel.id = trans.property_id')
+			,0,4
 		);
 
-   	$items = ($items = $db->loadObjectList())?$items:array();
+		// Load the JSON string
+		//$params = new JRegistry;
+		//$params->loadJSON($this->item->params);
+		//$this->item->params = $params;
+
+   	$items = ($items = $db->loadObjectList())?$items:array();	
    	$this->items = $items;
 	}
 

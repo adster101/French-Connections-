@@ -132,9 +132,11 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 			echo 'class="caption"'.' title="' .htmlspecialchars($images->image_intro_caption) .'"';
 		endif; ?>
 		src="<?php echo htmlspecialchars($images->image_intro); ?>" alt="<?php echo htmlspecialchars($images->image_intro_alt); ?>"/>
-		<div class="caption">
-			<?php echo $this->item->introtext; ?>
-			
+	</div>
+<?php endif; ?> 	
+	<div class="caption">
+			<?php echo $this->item->introtext; ?>		
+		</div>
 <?php if ($params->get('show_readmore') && $this->item->readmore) :
 	if ($params->get('access-view')) :
 		$link = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid));
@@ -164,10 +166,10 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 						echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit'));
 					endif; ?></a>
 		</p>
-<?php endif; ?>			
-		</div>
-	</div>
-<?php endif; ?>
+<?php endif; ?>	
+
+
+
 
 
 

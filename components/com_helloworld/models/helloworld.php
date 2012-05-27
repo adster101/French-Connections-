@@ -32,7 +32,7 @@ class HelloWorldModelHelloWorld extends JModelItem
 		$app = JFactory::getApplication();
 		// Get the message id
 		$id = JRequest::getInt('id');
-		$this->setState('message.id', $id);
+		$this->setState('property.id', $id);
  
 		// Load the parameters.
 		$params = $app->getParams();
@@ -62,24 +62,24 @@ class HelloWorldModelHelloWorld extends JModelItem
 	{
 		if (!isset($this->item)) 
 		{
-			$id = $this->getState('message.id');
+			// Get the language for this request 
+			$lang = & JFactory::getLanguage()->getTag();
+			// Get the state for this property ID
+			$id = $this->getState('property.id');
+		
+			if ($lang === 'fr-FR') {
+				$select = 'cat.title,catid,hel.id,hel.params,trans.greeting,trans.description,lang,occupancy,swimming,latitude,longitude,nearest_town';
+			} else {
+				$select = 'cat.title,catid,hel.id,hel.params,hel.greeting,hel.description,lang,occupancy,swimming,latitude,longitude,nearest_town';
+			}
+
 			$this->_db->setQuery($this->_db->getQuery(true)
-				->from('#__helloworld as h')
-				->leftJoin('#__categories as c ON h.catid=c.id')
-				->select('
-						h.greeting, 
-						h.params, 
-						c.title as category,
-						h.description, 
-						h.lang,
-						h.occupancy,
-						h.swimming,
-						h.latitude,
-						h.longitude,
-						h.nearest_town,
-						h.distance_to_coast
-					')
-				->where('h.id=' . (int)$id));
+				->from('#__helloworld as hel')
+				->leftJoin('#__categories AS cat ON hel.catid = cat.id')
+				->select($select)
+				->leftJoin('#__helloworld_translations AS trans ON hel.id = trans.property_id')
+				->where('hel.id='. (int)$id));
+
 			if (!$this->item = $this->_db->loadObject()) 
 			{
 				$this->setError($this->_db->getError());

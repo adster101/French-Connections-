@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="2.5.0" method="upgrade">
- 
-        <name>Featured Property</name>
-        <!-- The following elements are optional and free of formatting constraints -->
-        <creationDate>23 May 2012</creationDate>
-        <author>Adam Rifat</author>
-        <authorEmail>adamrifat@frenchconnections.co.uk</authorEmail>
-        <authorUrl>http://www.frenchconnections.co.uk</authorUrl>
-        <copyright>Copyright Info</copyright>
-        <license>License Info</license>
-        <!--  The version string is stored in the extension table -->
-        <version>0.0.1</version>
-        <!-- The description is optional and defaults to the name -->
-        <description>Shows a list of featured properties.</description>
- 
-        <!-- Note the folder attribute: This attribute describes what to copy
-                into the module folder -->
-        <files>
-                <filename module="mod_featuredproperty">mod_featuredproperty.php</filename>
-                <filename>mod_featuredproperty.xml</filename>
-        </files>
+  <name>mod_featuredproperty</name>
+  <!-- The following elements are optional and free of formatting constraints -->
+  <creationDate>23 May 2012</creationDate>
+  <author>Adam Rifat</author>
+  <authorEmail>adamrifat@frenchconnections.co.uk</authorEmail>
+  <authorUrl>http://www.frenchconnections.co.uk</authorUrl>
+  <copyright>Copyright Info</copyright>
+  <license>License Info</license>
+  <!--  The version string is stored in the extension table -->
+  <version>1.0.0</version>
+  <!-- The description is optional and defaults to the name -->
+  <description>Shows a list of featured properties.</description>
+
+  <!-- Note the folder attribute: This attribute describes what to copy into the module folder -->
+  <files>
+		<filename module="mod_featuredproperty">mod_featuredproperty.php</filename>
+		<filename>mod_featuredproperty.xml</filename>
+		<folder>tmpl</folder>
+  </files>
+	<languages>
+		<language tag="en-GB">en-GB.mod_featuredproperty.ini</language>
+		<language tag="en-GB">en-GB.mod_featuredproperty.sys.ini</language>
+	</languages>
  
 </extension>

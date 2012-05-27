@@ -49,14 +49,18 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 <div class="row">
 
 <?php if ($sidebarContent) { ?>
-	<div class="span6">
+	<div class="span4">
 		<div class="row">
 <?php } ?>
 
 <?php $leadingcount=0 ; ?>
 <?php if (!empty($this->lead_items)) : ?>
 	<?php foreach ($this->lead_items as &$item) : ?>
-	<div class="span3">
+<?php if ($sidebarContent) { ?>
+	<div class="span2">
+<?php } else { ?>
+	<div class="span4">
+<?php } ?>
 		<article class="leading-<?php echo $leadingcount; ?><?php echo $item->state == 0 ? 'system-unpublished' : null; ?>">
 			<?php
 				$this->item = &$item;

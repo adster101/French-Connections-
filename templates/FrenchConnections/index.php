@@ -31,7 +31,6 @@ $siteName = $app->getCfg( 'sitename' );
 	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
 	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/bootstrap.css">
-	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/app.css">
 	
 	<!--[if lt IE 9]>
 		<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/ie.css">
@@ -40,6 +39,10 @@ $siteName = $app->getCfg( 'sitename' );
 	<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+
+<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/bootstrap-carousel.js"></script>
 </head>
 
 <body>
@@ -66,11 +69,11 @@ $siteName = $app->getCfg( 'sitename' );
 	
 			<?php if ($menu->getActive() !== $menu->getDefault()) { // If this isn't the homepage  ?>
 				<?php if ($this->countModules('left') && !$this->countModules('right')) { // and there is a module published to the left position only ?>			
-					<div class="span2">
+					<div class="span4">
 						<jdoc:include type="modules" name="left" style="xhtml" />
 					</div>
 				<?php } else if ($this->countModules('right') && $this->countModules('left')) { ?>
-					<div class="span2">
+					<div class="span4">
 						<jdoc:include type="modules" name="left" style="xhtml" />
 					</div>
 				<?php } ?>		
@@ -79,11 +82,11 @@ $siteName = $app->getCfg( 'sitename' );
 			<?php if (!$this->countModules('left') && !$this->countModules('right')) { // If no modules published left or right output a full width column ?>
 				<div class="span12">
 			<?php } else if ($this->countModules('left') && $this->countModules('right')) { // If modules published to both side postions output a narrowish column?>
-				<div class="span6">
+				<div class="span4">
 			<?php } else if ($this->countModules('right')) { // If there is a module published only to the right output an eight column wide column ?>
 				<div class="span8">
 			<?php } else if ($this->countModules('left')) { // If there is a module published only to the left output an ten column wide column ?>
-				<div class="span10">
+				<div class="span8">
 			<?php } ?>
 			<?php if($this->countModules('slider')) { ?>
 				<jdoc:include type="modules" name="slider" style="xhtml" />
@@ -121,32 +124,10 @@ $siteName = $app->getCfg( 'sitename' );
 </div>
 <!-- JavaScript at the bottom for fast page loading -->
 
-<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/javascripts/modernizr.foundation.js"></script>
-<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/javascripts/foundation.js"></script>
-
-<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/javascripts/app.js"></script>
 
 
 
-	
-<!-- Change UA-XXXXX-X to be your site's ID -->
-<script>
-	window._gaq = [['_setAccount','UA-31032891-1'],['_trackPageview'],['_trackPageLoadTime']];
-    Modernizr.load({
-      load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-    });
-  </script>
 
-
-  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
-       chromium.org/developers/how-tos/chrome-frame-getting-started -->
-  <!--[if lt IE 7 ]>
-    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
-    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
-  <![endif]-->
-	<jdoc:include type="modules" name="debug" />
 
 </body>
 </html>
