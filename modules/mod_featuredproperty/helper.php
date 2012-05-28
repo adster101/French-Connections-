@@ -40,6 +40,7 @@ class modFeaturedPropertyHelper
 
    	$items = ($items = $db->loadObjectList())?$items:array();	
    	$this->items = $items;
+		$this->lang = $lang;
 	}
 
 	function renderLayout(&$params) {

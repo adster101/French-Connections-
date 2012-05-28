@@ -49,7 +49,7 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 <div class="row">
 
 <?php if ($sidebarContent) { ?>
-	<div class="span4">
+	<div class="span6">
 		<div class="row">
 <?php } ?>
 
@@ -57,7 +57,7 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 <?php if (!empty($this->lead_items)) : ?>
 	<?php foreach ($this->lead_items as &$item) : ?>
 <?php if ($sidebarContent) { ?>
-	<div class="span2">
+	<div class="span3">
 <?php } else { ?>
 	<div class="span4">
 <?php } ?>
@@ -142,7 +142,7 @@ $sidebarContent = $renderer->render('accommodation-side-bar', $raw, null);
 	</div>
 
 
-<div class="span4">
+<div class="span3">
 <?php echo $sidebarContent; ?>
 </div>
 

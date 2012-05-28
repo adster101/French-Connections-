@@ -11,13 +11,15 @@
 defined('_JEXEC') or die;
 
 ?>
-<div class="row">
+<div class="row">	
+	<div class="span3">
+		<div class="well">
+
 <?php foreach ($this->items as $item) { 
 	if ($item->greeting) { ?>
-		<div class="span2">	
 			<?php	//print_r(json_decode($item->params)->access_options);die?>
 
-			<a href="index.php?option=com_helloworld&view=helloworld&id=<?php echo $item->id ?>&lang=en">
+			<a href="index.php?option=com_helloworld&view=helloworld&id=<?php echo $item->id ?>&lang=<?php echo $this->lang ?>">
 				<img src="images/<?php echo $item->id ?>/thumb/thumbnail.jpg" />	
 			</a>
 		
@@ -25,8 +27,9 @@ defined('_JEXEC') or die;
 			<h4><?php echo $item->greeting ?></h4>
 			<h5><?php echo $item->title ?></h5>		
 			<p><?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); echo $item->occupancy; ?></p>
-		</div>
 	<?php } ?>
 <?php } ?>	
+		</div>
+	</div>
 </div>
 

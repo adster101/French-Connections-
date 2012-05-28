@@ -2,7 +2,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 $language = JFactory::getLanguage();
-$language->load('com_helloworld', JPATH_ADMINISTRATOR, 'en-GB', true);
+$lang = $language->getTag();
+// Load the appropriate language file
+$language->load('com_helloworld', JPATH_ADMINISTRATOR, $lang, true);
+
 ?>
 <div class="page-header">
 	<h1><?php echo $this->item->greeting; ?>&nbsp;
@@ -44,7 +47,7 @@ $language->load('com_helloworld', JPATH_ADMINISTRATOR, 'en-GB', true);
 			<div class="span2">
 				<!-- AddThis Button BEGIN -->
 				<div class="addthis_toolbox addthis_default_style">	
-					<a class="addthis_button_preferred_4 addthis_button_print at300b" title="Print" href="#">
+					<p class="clearfix"><a class="addthis_button_preferred_4 addthis_button_print at300b" title="Print" href="#">
 						<span class="at16nc at300bs at15nc at15t_print at16t_print">
 							<span class="at_a11y">Share on print</span>
 						</span>
@@ -70,9 +73,9 @@ $language->load('com_helloworld', JPATH_ADMINISTRATOR, 'en-GB', true);
 						</span>
 					</a>
 					<a class="addthis_counter addthis_bubble_style" style="display: block; " href="#">
-					<a class="addthis_button_expanded" title="View more services" href="#">4</a>
+					<a class="addthis_button_expanded" title="View more services" href="#"></a>
 					<a class="atc_s addthis_button_compact">
-					<span></span></a></a>
+					<span></span></a></a></p>
 					<div class="atclear"></div></div>
 					<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections"></script>
 					<!-- AddThis Button END -->	
@@ -89,8 +92,8 @@ $language->load('com_helloworld', JPATH_ADMINISTRATOR, 'en-GB', true);
 		<?php echo $this->item->description; ?>
 	</div>
 	<div class="span4">
-		<h3>Where is it</h3>
-<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Finistere,+France&amp;aq=0&amp;oq=finis&amp;sll=53.800651,-4.042969&amp;sspn=22.541458,54.228516&amp;ie=UTF8&amp;hq=&amp;hnear=Finist%C3%A8re,+Brittany,+France&amp;t=m&amp;ll=48.414619,-4.125366&amp;spn=0.638052,1.167297&amp;z=9&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="http://maps.google.co.uk/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Finistere,+France&amp;aq=0&amp;oq=finis&amp;sll=53.800651,-4.042969&amp;sspn=22.541458,54.228516&amp;ie=UTF8&amp;hq=&amp;hnear=Finist%C3%A8re,+Brittany,+France&amp;t=m&amp;ll=48.414619,-4.125366&amp;spn=0.638052,1.167297&amp;z=9&amp;iwloc=A" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+		<h3><?php echo JText::_('COM_HELLOWORLD_SITE_WHERE_IS_IT'); ?></h3>
+    <div id="map_canvas" style="width:100%; height:370px"></div>
 	</div>
 </div>
 
@@ -98,8 +101,37 @@ $language->load('com_helloworld', JPATH_ADMINISTRATOR, 'en-GB', true);
 
 <script>
 $(document).ready(function() {
-$('.carousel').carousel({
-  interval: 2000
-})
+
+$('.carousel').carousel('pause');
+
+
+initialize();
+
 });
+
+function initialize() {
+	var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>,  <?php echo $this->item->longitude ?>);
+  var myOptions = {
+		center: myLatLng,
+    zoom: 8,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
+		zoomControl:true
+	};
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	var marker = new google.maps.Marker({
+		position: myLatLng,
+		map:map,
+		title:"<?php echo $this->item->greeting ?>"
+	});
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    // 3 seconds after the center of the map has changed, pan back to the
+    // marker.
+    window.setTimeout(function() {
+      map.panTo(marker.getPosition());
+    }, 3000);
+  });
+}      
+
+
 </script>

@@ -30,8 +30,9 @@ $siteName = $app->getCfg( 'sitename' );
 	<!-- Set the viewport width to device width for mobile -->
 	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
-	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/bootstrap.css">
-	
+	<link rel="stylesheet/less" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/less/bootstrap.less">
+	<link rel="stylesheet/less" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/less/responsive.less">
+
 	<!--[if lt IE 9]>
 		<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/ie.css">
 	<![endif]-->
@@ -43,6 +44,8 @@ $siteName = $app->getCfg( 'sitename' );
 <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/bootstrap-carousel.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/less-1.3.0.min.js"></script>
+
 </head>
 
 <body>
@@ -50,7 +53,7 @@ $siteName = $app->getCfg( 'sitename' );
 		<div class="row">
 			<div class="span12">
 				<p class="logo pull-left">
-					<a class="brand " title="<?php echo htmlspecialchars($siteName); ?>" href="<?php echo $this->baseurl ?>">
+					<a class="brand " title="<?php echo htmlspecialchars($siteName); ?>" href="<?php echo $this->baseurl ?>/">
 						<img 
 							alt="<?php echo htmlspecialchars($siteName); ?>"
 							src="<?php echo $this->baseurl ?>/<?php echo htmlSpecialChars($this->params->get('logo')); ?>" />
@@ -69,7 +72,7 @@ $siteName = $app->getCfg( 'sitename' );
 	
 			<?php if ($menu->getActive() !== $menu->getDefault()) { // If this isn't the homepage  ?>
 				<?php if ($this->countModules('left') && !$this->countModules('right')) { // and there is a module published to the left position only ?>			
-					<div class="span4">
+					<div class="span3">
 						<jdoc:include type="modules" name="left" style="xhtml" />
 					</div>
 				<?php } else if ($this->countModules('right') && $this->countModules('left')) { ?>
@@ -86,7 +89,7 @@ $siteName = $app->getCfg( 'sitename' );
 			<?php } else if ($this->countModules('right')) { // If there is a module published only to the right output an eight column wide column ?>
 				<div class="span8">
 			<?php } else if ($this->countModules('left')) { // If there is a module published only to the left output an ten column wide column ?>
-				<div class="span8">
+				<div class="span9">
 			<?php } ?>
 			<?php if($this->countModules('slider')) { ?>
 				<jdoc:include type="modules" name="slider" style="xhtml" />
@@ -104,10 +107,10 @@ $siteName = $app->getCfg( 'sitename' );
 				
 
 				<?php } else if ($this->countModules('right') && $this->countModules('left')) { ?>
-					<div class="span4">
+					<div class="span3">
 						<jdoc:include type="modules" name="right" style="xhtml" />
 					</div>
-				<?php } else if ($this->countModules('right')) { ?>
+				<?php } else if ($this->countModules('right') && !$this->countModules('left')) { ?>
 					<div class="span4">
 						<jdoc:include type="modules" name="right" style="xhtml" />
 					</div>				

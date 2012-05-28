@@ -16,6 +16,9 @@ class HelloWorldViewHelloWorld extends JView
 		// Assign data to the view
 		$this->item = $this->get('Item');
  
+ 		$script = $this->get('Script');
+
+ 
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -24,5 +27,19 @@ class HelloWorldViewHelloWorld extends JView
 		}
 		// Display the view
 		parent::display($tpl);
+		// Set the document
+		$this->setDocument();		
 	}
+
+	/**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_($this->item->greeting).' - '.JText::_('COM_HELLOWORLD_SITE_HOLIDAY_RENTAL_IN').$this->item->nearest_town);
+		$document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBYcwtxu1C9l9O3Th0W6W_X4UtJi9zh2i8&sensor=true");
+	}	
 }
