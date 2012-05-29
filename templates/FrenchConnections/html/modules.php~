@@ -135,18 +135,6 @@ function modChrome_nav($module, &$params, &$attribs)
 	<?php endif;
 }
 
-function modChrome_language($module, &$params, &$attribs)
-{
-	if (!empty ($module->content)) : ?>
-		<?php if ($module->showtitle != 0) : ?>
-			<h3><?php echo $module->title; ?></h3>
-		<?php endif; ?>
-		<div class="clearfix">
-				<?php echo $module->content; ?>
-		</div>
-	<?php endif;
-}
-
 function modChrome_well($module, &$params, &$attribs)
 {
 	if (!empty ($module->content)) { ?>

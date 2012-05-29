@@ -30,9 +30,9 @@ $siteName = $app->getCfg( 'sitename' );
 	<!-- Set the viewport width to device width for mobile -->
 	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
-	<link rel="stylesheet/less" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/less/bootstrap.less">
-	<link rel="stylesheet/less" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/less/responsive.less">
-
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap-responsive.css">
+	
 	<!--[if lt IE 9]>
 		<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/ie.css">
 	<![endif]-->
@@ -42,9 +42,9 @@ $siteName = $app->getCfg( 'sitename' );
 	<![endif]-->
 
 <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/javascripts/jquery.min.js"></script>
+<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/js/bootstrap-collapse.js"></script>
 <script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/bootstrap-carousel.js"></script>
-<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/js/less-1.3.0.min.js"></script>
 
 </head>
 
@@ -60,7 +60,7 @@ $siteName = $app->getCfg( 'sitename' );
 					</a>	
 				</p>
 				<?php if($this->countModules('site-search')) : ?>
-					<jdoc:include type="modules" name="site-search" style="xhtml" />
+					<jdoc:include type="modules" name="site-search" style="language" />
 				<?php endif; ?>	
 			</div>
 		

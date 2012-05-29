@@ -310,7 +310,7 @@
     width: 100%;
     min-height: 28px;
     margin-left: 2.762430939%;
-    *margin-left: 2.709239449638298%;
+    *margin-left: 2.705933763858757%;
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
         -ms-box-sizing: border-box;
@@ -321,51 +321,51 @@
   }
   .row-fluid .span12 {
     width: 99.999999993%;
-    *width: 99.9468085036383%;
+    *width: 99.94350281785876%;
   }
   .row-fluid .span11 {
     width: 91.436464082%;
-    *width: 91.38327259263829%;
+    *width: 91.37996690685875%;
   }
   .row-fluid .span10 {
     width: 82.87292817100001%;
-    *width: 82.8197366816383%;
+    *width: 82.81643099585877%;
   }
   .row-fluid .span9 {
     width: 74.30939226%;
-    *width: 74.25620077063829%;
+    *width: 74.25289508485875%;
   }
   .row-fluid .span8 {
     width: 65.74585634900001%;
-    *width: 65.6926648596383%;
+    *width: 65.68935917385876%;
   }
   .row-fluid .span7 {
     width: 57.182320438000005%;
-    *width: 57.129128948638304%;
+    *width: 57.12582326285876%;
   }
   .row-fluid .span6 {
     width: 48.618784527%;
-    *width: 48.5655930376383%;
+    *width: 48.56228735185876%;
   }
   .row-fluid .span5 {
     width: 40.055248616%;
-    *width: 40.0020571266383%;
+    *width: 39.998751440858754%;
   }
   .row-fluid .span4 {
     width: 31.491712705%;
-    *width: 31.4385212156383%;
+    *width: 31.43521552985876%;
   }
   .row-fluid .span3 {
     width: 22.928176794%;
-    *width: 22.874985304638297%;
+    *width: 22.871679618858757%;
   }
   .row-fluid .span2 {
     width: 14.364640883%;
-    *width: 14.311449393638298%;
+    *width: 14.308143707858758%;
   }
   .row-fluid .span1 {
     width: 5.801104972%;
-    *width: 5.747913482638298%;
+    *width: 5.744607796858757%;
   }
   input,
   textarea,
@@ -546,7 +546,7 @@
     width: 100%;
     min-height: 28px;
     margin-left: 2.564102564%;
-    *margin-left: 2.510911074638298%;
+    *margin-left: 2.507605388858757%;
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
         -ms-box-sizing: border-box;
@@ -557,51 +557,51 @@
   }
   .row-fluid .span12 {
     width: 100%;
-    *width: 99.94680851063829%;
+    *width: 99.94350282485875%;
   }
   .row-fluid .span11 {
     width: 91.45299145300001%;
-    *width: 91.3997999636383%;
+    *width: 91.39649427785876%;
   }
   .row-fluid .span10 {
     width: 82.905982906%;
-    *width: 82.8527914166383%;
+    *width: 82.84948573085876%;
   }
   .row-fluid .span9 {
     width: 74.358974359%;
-    *width: 74.30578286963829%;
+    *width: 74.30247718385876%;
   }
   .row-fluid .span8 {
     width: 65.81196581200001%;
-    *width: 65.7587743226383%;
+    *width: 65.75546863685877%;
   }
   .row-fluid .span7 {
     width: 57.264957265%;
-    *width: 57.2117657756383%;
+    *width: 57.208460089858754%;
   }
   .row-fluid .span6 {
     width: 48.717948718%;
-    *width: 48.6647572286383%;
+    *width: 48.66145154285876%;
   }
   .row-fluid .span5 {
     width: 40.170940171000005%;
-    *width: 40.117748681638304%;
+    *width: 40.11444299585876%;
   }
   .row-fluid .span4 {
     width: 31.623931624%;
-    *width: 31.5707401346383%;
+    *width: 31.56743444885876%;
   }
   .row-fluid .span3 {
     width: 23.076923077%;
-    *width: 23.0237315876383%;
+    *width: 23.020425901858758%;
   }
   .row-fluid .span2 {
     width: 14.529914530000001%;
-    *width: 14.4767230406383%;
+    *width: 14.473417354858759%;
   }
   .row-fluid .span1 {
     width: 5.982905983%;
-    *width: 5.929714493638298%;
+    *width: 5.926408807858757%;
   }
   input,
   textarea,
@@ -716,14 +716,14 @@
     display: none;
   }
   .nav-collapse .nav .nav-header {
-    color: #999999;
+    color: #807c46;
     text-shadow: none;
   }
   .nav-collapse .nav > li > a,
   .nav-collapse .dropdown-menu a {
     padding: 6px 15px;
     font-weight: bold;
-    color: #999999;
+    color: #807c46;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
             border-radius: 3px;
@@ -740,7 +740,7 @@
   }
   .nav-collapse .nav > li > a:hover,
   .nav-collapse .dropdown-menu a:hover {
-    background-color: #222222;
+    background-color: #fdd53d;
   }
   .nav-collapse.in .btn-group {
     padding: 0;
@@ -776,8 +776,8 @@
     float: none;
     padding: 9px 15px;
     margin: 9px 0;
-    border-top: 1px solid #222222;
-    border-bottom: 1px solid #222222;
+    border-top: 1px solid #fdd53d;
+    border-bottom: 1px solid #fdd53d;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
        -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
