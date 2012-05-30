@@ -31,7 +31,7 @@ $siteName = $app->getCfg( 'sitename' );
 	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap-responsive.css">
+	<!--<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap-responsive.css">-->
 	
 	<!--[if lt IE 9]>
 		<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/ie.css">

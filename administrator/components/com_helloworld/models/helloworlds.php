@@ -24,13 +24,15 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 		// Select some fields
-		$query->select('id,greeting,created_by,modified');
+		$query->select('a.id,a.greeting, a.title, a.modified, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name ');
+		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		if (!in_array(8, $groups)) 
 		{
 		$query->where('created_by='.$userId);
 		}
+		$query->where('created_by !=0');
 		// From the hello table
-		$query->from('#__helloworld');
+		$query->from('#__helloworld as a');
 		return $query;
 	}
 

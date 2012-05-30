@@ -32,7 +32,7 @@ class JFormFielddepartment extends JFormFieldList
 		// Get the sub tree for node 11. I know this to be the root node I am interested in.
 		// To do: Add method to table class to retrieve the node via alias. May be more robust in the long run
 		$subTree = $table->getTree(11);
-		// Set up an array to hold the oprions
+		// Set up an array to hold the options
 		$options = array();
 		if ($subTree)
 		{
