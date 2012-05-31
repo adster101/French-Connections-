@@ -3,8 +3,43 @@
 	<fieldset name="details">
 		<field
 			name="id"
+			type="text"
+			default="0"
+			label="JGLOBAL_FIELD_ID_LABEL"
+			description ="JGLOBAL_FIELD_ID_DESC"
+			class="readonly"
+			readonly="true"/>
+
+		<field
+			name="asset_id"
 			type="hidden"
-		/>
+			filter="unset"/>
+
+		
+		<field
+			name="parent_id"
+			type="UserProperties"
+			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
+			description="COM_CATEGORIES_FIELD_PARENT_DESC"
+			class="inputbox"
+			required="true">
+			<option value="1">JOPTION_SELECT_PROPERTY</option>
+		</field>	
+		<field
+			name="lft"
+			type="hidden"
+			filter="unset"/>
+
+		<field
+			name="rgt"
+			type="hidden"
+			filter="unset"/>
+
+		<field
+			name="level"
+			type="hidden"
+			filter="unset"/>	
+		
 		<field
 			name="lang"
 			type="hidden"

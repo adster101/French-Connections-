@@ -8,6 +8,48 @@ jimport('joomla.application.component.modellist');
  */
 class HelloWorldModelHelloWorlds extends JModelList
 {
+
+	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param	string	An optional ordering field.
+	 * @param	string	An optional direction (asc|desc).
+	 *
+	 * @return	void
+	 * @since	1.6
+	 */
+	protected function populateState($ordering = null, $direction = null)
+	{
+		// List state information.
+		parent::populateState('a.lft', 'asc');
+	}
+	
+	/**
+	 * Method to get a store id based on model configuration state.
+	 *
+	 * This is necessary because the model is used by the component and
+	 * different modules that might need different sets of data or different
+	 * ordering requirements.
+	 *
+	 * @param	string		$id	A prefix for the store id.
+	 *
+	 * @return	string		A store id.
+	 * @since	1.6
+	 */
+	protected function getStoreId($id = '')
+	{
+		// Compile the store id.
+		$id	.= ':'.$this->getState('filter.search');
+		$id	.= ':'.$this->getState('filter.extension');
+		$id	.= ':'.$this->getState('filter.published');
+		$id	.= ':'.$this->getState('filter.language');
+
+		return parent::getStoreId($id);
+	}
+	
+
 	/**
 	 * Method to build an SQL query to load the list data.
 	 *
@@ -28,11 +70,17 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		if (!in_array(8, $groups)) 
 		{
-		$query->where('created_by='.$userId);
+			$query->where('created_by='.$userId);
 		}
 		$query->where('created_by !=0');
 		// From the hello table
 		$query->from('#__helloworld as a');
+		
+		$listOrdering = $this->getState('list.ordering', 'a.lft');
+		$listDirn = $db->escape($this->getState('list.direction', 'ASC'));
+
+		$query->order($db->escape($listOrdering).' '.$listDirn);
+
 		return $query;
 	}
 

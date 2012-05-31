@@ -10,6 +10,8 @@ jimport('joomla.application.component.view');
  */
 class HelloWorldViewHelloWorlds extends JView
 {
+	protected $state;
+
 	/**
 	 * HelloWorlds view display method
 	 * @return void
@@ -19,16 +21,24 @@ class HelloWorldViewHelloWorlds extends JView
 		// Get data from the model
 		$items = $this->get('Items');
 		$pagination = $this->get('Pagination');
- 
+ 		$this->state		= $this->get('State');
+		
+		// Assign data to the view
+		$this->items = $items;
+		$this->pagination = $pagination;
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		}
-		// Assign data to the view
-		$this->items = $items;
-		$this->pagination = $pagination;
+		
+		// Preprocess the list of items to find ordering divisions.
+		foreach ($this->items as &$item) {
+			$this->ordering[$item->parent_id][] = $item->id;
+		}		
+		
 
 	
 

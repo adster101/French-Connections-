@@ -42,13 +42,6 @@ class HelloWorldTableHelloWorld_categories extends JTableNested
 	{
 		parent::__construct('#__categories', 'id', $db);
 	}
-	
-	/*
-	 * Function to get the category ID of a node given and alias
-	 */
-	public function getCategoryID () 
-	{
-		
-	}
+
 }
 

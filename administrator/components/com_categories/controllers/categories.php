@@ -71,6 +71,7 @@ class CategoriesControllerCategories extends JControllerAdmin
 
 		// Get the arrays from the Request
 		$order	= JRequest::getVar('order',	null, 'post', 'array');
+
 		$originalOrder = explode(',', JRequest::getString('original_order_values'));
 
 		// Make sure something has changed

@@ -2,13 +2,13 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
  
-// import Joomla table library
-jimport('joomla.database.table');
+// import Joomla nested table library
+jimport('joomla.database.tablenested');
  
 /**
  * Hello Table class
  */
-class HelloWorldTableHelloWorld extends JTable
+class HelloWorldTableHelloWorld extends JTableNested
 {
 	/**
 	 * Constructor
@@ -19,6 +19,7 @@ class HelloWorldTableHelloWorld extends JTable
 	{
 		parent::__construct('#__helloworld', 'id', $db);
 	}
+	
 	/**
 	 * Overloaded bind function
 	 *
@@ -28,8 +29,7 @@ class HelloWorldTableHelloWorld extends JTable
 	 * @since 1.5
 	 */
 	public function bind($array, $ignore = '') 
-	{
-		
+	{		
 		if (isset($array['params']) && is_array($array['params']) && $this->params) 
 		{
 			// $this is an instance of HelloWorldTableHelloWorld (and includes a copy of the record as it stands in the db)
@@ -46,9 +46,7 @@ class HelloWorldTableHelloWorld extends JTable
 			// Convert the params field to a string.
 			$parameter = new JRegistry;
 			$parameter->loadArray($array['params']);
-		
 			$parameter->merge($this->params);
-
 			$array['params'] = (string)$parameter;
 		}
 		return parent::bind($array, $ignore);
@@ -121,7 +119,7 @@ class HelloWorldTableHelloWorld extends JTable
 		return $asset->id;
 	}
 
-		/**
+	/**
 	 * Stores a property
 	 *
 	 * @param	boolean	True to update fields even if they are null.
@@ -166,6 +164,7 @@ class HelloWorldTableHelloWorld extends JTable
 			//return false;
 		//}
 		
+		$this->setLocation($this->parent_id, 'last-child');
 		
 
 		// Attempt to store the data.

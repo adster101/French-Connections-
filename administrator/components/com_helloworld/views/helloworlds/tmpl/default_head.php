@@ -12,6 +12,9 @@ defined('_JEXEC') or die('Restricted Access');
 	<th>
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
 	</th>
+	<th width="10%">
+		<?php echo JText::_('JGRID_HEADING_ORDERING'); ?>
+	</th>
 	<th>
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED'); ?>
 	</th>

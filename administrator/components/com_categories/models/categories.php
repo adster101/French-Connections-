@@ -47,7 +47,6 @@ class CategoriesModelCategories extends JModelList
 				'path', 'a.path',
 			);
 		}
-
 		parent::__construct($config);
 	}
 
