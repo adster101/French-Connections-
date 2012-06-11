@@ -9,12 +9,12 @@ class JConfig {
 	public $captcha = '0';
 	public $list_limit = '20';
 	public $access = '1';
-	public $debug = '0';
+	public $debug = '1';
 	public $debug_lang = '0';
 	public $dbtype = 'mysql';
 	public $host = 'localhost';
 	public $user = 'root';
-	public $password = '';
+	public $password = 'password';
 	public $db = 'password';
 	public $dbprefix = 'qitz3_';
 	public $live_site = '';

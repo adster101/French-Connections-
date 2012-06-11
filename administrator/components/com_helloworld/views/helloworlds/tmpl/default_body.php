@@ -49,7 +49,9 @@ foreach($this->items as $i => $item):
 			<?php endif; ?>
 		</td>		
 		<td>
-			<?php echo JText::_($item->modified); ?>
+			<a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id='.(int) $item->created_by); ?>">
+				<?php echo JText::_($item->created_by); ?>
+			</a>
 		</td>		
 	</tr>					
 	<?php else : ?>

@@ -19,7 +19,7 @@ JFormHelper::loadFieldClass('list');
 class JFormFieldUserProperties extends JFormFieldList
 {
 	/**
-	 * Returns a list of properties that are also owned by the created_id of the property being edited.
+	 * UserProperties fields - a list of properties
 	 *
 	 * @var		string
 	 * @since	1.6
@@ -27,47 +27,65 @@ class JFormFieldUserProperties extends JFormFieldList
 	public $type = 'UserProperties';
 	
 	/**
-	 * Based on the created_by field of the item being edited we pull out a list of other properties 
-	 * owned by this user. Note that we only show those at level 1 to prevent grand children 
+	 * Based on the created_by field of the property being edited we pull out a list of other properties 
+	 * owned/created by this user. 
 	 *
 	 * @return	array	The field option objects.
 	 * @since	1.6
 	 */
 	protected function getOptions()
 	{
+		$created_by = '';
+		$userId = '';
+
 		// Initialise variables.
-		$options = array();
-		$published = $this->element['published']? $this->element['published'] : array(0,1);
-		$name = (string) $this->element['name'];
+		$options 	= array();
+		//$published= $this->element['published']? $this->element['published'] : array(0,1);
+		//$name 		= (string) $this->element['name'];
 
-		// Let's get the id for the current property
-		$jinput = JFactory::getApplication()->input;
-		
-		// Get the database instance
-		$db		= JFactory::getDbo();
-		$query	= $db->getQuery(true);
+		$id  	 		= JRequest::getInt('id');		// Get the id for the current property
 
-		// Get current logged in user
-		// If this is super user then too bad if they've created loads of properties....
-		$user = JFactory::getUser();
-		
-		// Select all 
-		$query->select('a.id, a.greeting');
-		$query->from('#__helloworld AS a');
-		$query->where('created_by = '.$user->id);
-		$query->where('level = 1');
-		
-		// Get the options.
-		$db->setQuery($query);
+		$db				= JFactory::getDbo();		// Get the database instance
 
-		$properties = $db->loadObjectList();
-		// Loop over each subtree item
-		foreach($properties as $property) 
-		{		
+		$query		= $db->getQuery(true); 
 
-			$options[] = JHtml::_('select.option', $property->id, $property->greeting);
-		}
+		$user 		= JFactory::getUser();	// Get current logged in user
+
+		$groups = $user->getAuthorisedGroups();	// Get the list of user groups this user is assigned to		
+
+		// Need to get the userID for the user who created this property
+		// Use the HelloWorld table instance to do this
+		// Only needs to run if this is a property edit, otherwise created_by will null anyway
+		$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');			
+		$table->load(array('id'=>$id));	
+
+		// Get the ID of the user who created the property 			
+		$created_by = $table->created_by;	
 		
+		// Logic behind the following is as follows
+		// We only want properties that belong to the user who created the property currently being editied, where that user is a property owner or an admin
+		// We only want properties at level 1
+		// We don't want the property currently being edited
+	
+		if (in_array(10, $groups) || in_array(8,$groups)) { // This user is in the property owner user group (10) or a super user.
+			$query->select('a.id, a.greeting'); 
+			$query->from('#__helloworld AS a');
+			$query->where('created_by = '.$created_by);		// Select only the props created by the user that created this property
+			//$query->where('created_by = '.$user->id);		// Should do this if this is a new property as otherwise user will need to create and save and then re-edit to make a unit
+			$query->where('level = 1');	// Only show those that are at level 1 
+			if ($id !='') {
+				$query->where('id <>'.$id);	// Need to ignore the current property ID (as it cannot parent itself)
+			}	
+			// Get the options.
+			$db->setQuery($query);
+
+			$properties = $db->loadObjectList();
+			// Loop over each subtree item
+			foreach($properties as $property) 
+			{		
+				$options[] = JHtml::_('select.option', $property->id, $property->greeting);
+			}
+		} 
 		$options = array_merge(parent::getOptions(), $options);
 		
 		return $options;

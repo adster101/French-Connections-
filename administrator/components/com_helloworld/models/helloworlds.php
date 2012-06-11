@@ -73,6 +73,23 @@ class HelloWorldModelHelloWorlds extends JModelList
 			$query->where('created_by='.$userId);
 		}
 		$query->where('created_by !=0');
+		
+		// Filter by search in title
+		$search = $this->getState('filter.search');
+		print_r($search);die;
+		if (!empty($search)) {
+			if (stripos($search, 'id:') === 0) {
+				$query->where('a.id = '.(int) substr($search, 3));
+			}
+			elseif (stripos($search, 'author:') === 0) {
+				$search = $db->Quote('%'.$db->escape(substr($search, 7), true).'%');
+				$query->where('(ua.name LIKE '.$search.' OR ua.username LIKE '.$search.')');
+			}
+			else {
+				$search = $db->Quote('%'.$db->escape($search, true).'%');
+				$query->where('(a.title LIKE '.$search.' OR a.alias LIKE '.$search.' OR a.note LIKE '.$search.')');
+			}
+		}
 		// From the hello table
 		$query->from('#__helloworld as a');
 		
