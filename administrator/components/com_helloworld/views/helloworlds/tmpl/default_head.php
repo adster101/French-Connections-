@@ -11,19 +11,26 @@ defined('_JEXEC') or die('Restricted Access');
 		</div>
 </fieldset>
 <tr>
-	<th width="5">
+	<th width="2%">
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ID'); ?>
 	</th>
-	<th width="20">
+	<th width="2%">
 		<input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
 	</th>			
 	<th>
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
 	</th>
-	<th width="10%">
+	<th width="3%">
+		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
+	</th>	
+	<th width="">
+		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED'); ?>
+	</th>
+	<th width="3%">
 		<?php echo JText::_('JGRID_HEADING_ORDERING'); ?>
 	</th>
-	<th>
+	<th width="12%">
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
 	</th>
+
 </tr>

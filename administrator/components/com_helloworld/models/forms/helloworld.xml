@@ -95,9 +95,11 @@
 		/>
 		</fieldset>
 	<fields name="params">
+	
 		<fieldset
 			name="params"
 			label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_PARAMS">
+			
 			<field
 				name="internal_features"
 				type="checkboxes"

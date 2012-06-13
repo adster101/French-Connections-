@@ -31,28 +31,32 @@ foreach($this->items as $i => $item):
 
 		<td>
 			<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level-1) ?>
-
 			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=location.edit&id='.(int) $item->id); ?>">
 				<?php echo $this->escape($item->greeting); ?>
 			</a>
 		</td>
-		<td class="order">
+		<td class="center">
+			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canChange);?>
+		</td>
+		<td class="center">
+			<?php echo JText::_($item->modified); ?>
+		</td>
+		<td >
 			<?php
 				if ($canChange) : ?>
 					<span><?php if ($item->parent_id != 1) { echo $this->pagination->orderUpIcon($i, isset($this->ordering[$item->parent_id][$orderkey - 1]), 'helloworlds.orderup', 'JLIB_HTML_MOVE_UP', $ordering); } ?></span>
 					<span><?php if ($item->parent_id != 1) { echo $this->pagination->orderDownIcon($i, $this->pagination->total, isset($this->ordering[$item->parent_id][$orderkey + 1]), 'helloworlds.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); } ?></span>
-				<?php $disabled = $saveOrder ?  '' : 'disabled="disabled"'; ?>
-				<input type="text" name="order[]" size="5" value="<?php echo $orderkey + 1;?>" <?php echo $disabled ?> class="text-area-order" />
-				<?php $originalOrders[] = $orderkey + 1; ?>
+				
 			<?php else : ?>
 				<?php echo $orderkey + 1;?>
 			<?php endif; ?>
 		</td>		
-		<td>
+		<td class="center">
 			<a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id='.(int) $item->created_by); ?>">
-				<?php echo JText::_($item->created_by); ?>
+				<?php echo JText::_($item->author_name); ?>
 			</a>
-		</td>		
+		</td>	
+
 	</tr>					
 	<?php else : ?>
 	<?php endif; ?>

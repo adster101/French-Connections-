@@ -8,7 +8,35 @@ jimport('joomla.application.component.modellist');
  */
 class HelloWorldModelHelloWorlds extends JModelList
 {
-
+	/**
+	 * Constructor.
+	 *
+	 * @param	array	An optional associative array of configuration settings.
+	 * @see		JController
+	 * @since	1.6
+	 */
+	public function __construct($config = array())
+	{
+		if (empty($config['filter_fields'])) {
+			$config['filter_fields'] = array(
+				'id', 'a.id',
+				'title', 'a.title',
+				'alias', 'a.alias',
+				'published', 'a.published',
+				'access', 'a.access', 'access_level',
+				'language', 'a.language',
+				'checked_out', 'a.checked_out',
+				'checked_out_time', 'a.checked_out_time',
+				'created_time', 'a.created_time',
+				'created_user_id', 'a.created_user_id',
+				'lft', 'a.lft',
+				'rgt', 'a.rgt',
+				'level', 'a.level',
+				'path', 'a.path',
+			);
+		}
+		parent::__construct($config);
+	}
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -22,6 +50,21 @@ class HelloWorldModelHelloWorlds extends JModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
+		// Initialise variables
+		$app		= JFactory::getApplication();
+		$context	= $this->context;
+
+		$extension = $app->getUserStateFromRequest('com_helloworlds.helloworlds.filter.extension', 'extension', 'com_helloworlds', 'cmd');
+
+		$this->setState('filter.extension', $extension);
+		$parts = explode('.', $extension);
+		
+		// extract the component name
+		$this->setState('filter.component', $parts[0]);
+
+		$search = $this->getUserStateFromRequest($context.'.search', 'filter_search');
+		$this->setState('filter.search', $search);
+		
 		// List state information.
 		parent::populateState('a.lft', 'asc');
 	}
@@ -43,8 +86,6 @@ class HelloWorldModelHelloWorlds extends JModelList
 		// Compile the store id.
 		$id	.= ':'.$this->getState('filter.search');
 		$id	.= ':'.$this->getState('filter.extension');
-		$id	.= ':'.$this->getState('filter.published');
-		$id	.= ':'.$this->getState('filter.language');
 
 		return parent::getStoreId($id);
 	}
@@ -60,13 +101,16 @@ class HelloWorldModelHelloWorlds extends JModelList
 		// Get the user ID
 		$user		= JFactory::getUser();
 		$userId		= $user->get('id');
+		
 		// Get the list of user groups this user is assigned to		
 		$groups = $user->getAuthorisedGroups();
+		
 		// Create a new query object.		
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
+		
 		// Select some fields
-		$query->select('a.id,a.greeting, a.title, a.modified, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name ');
+		$query->select('a.id,a.greeting, a.title, a.modified, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published ');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		if (!in_array(8, $groups)) 
 		{
@@ -75,21 +119,56 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query->where('created_by !=0');
 		
 		// Filter by search in title
+		// TODO - Try and tidy up this logic a bit.
 		$search = $this->getState('filter.search');
-		print_r($search);die;
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
-				$query->where('a.id = '.(int) substr($search, 3));
+				$id = substr($search, 3);
+				// In order to show all properties relating to the one being searched on we need to check whether this is a leaf node or not
+				// Get an instance of the HelloWorldTable which is a nested set class
+				$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');			
+				// Only proceed if the id is available to load and check further
+				if ($table->load(array('id'=>$id))) {
+					// Is this a leaf node (e.g. has no children)
+					if($table->isLeaf($id)) {
+						// This node has no children
+						// Does it have a parent ID?
+						if ($table->parent_id == 1) {
+							// Is a leaf node and no parent so must be a single unit property
+							$query->where('a.id = '.(int) $id, 3);
+						} elseif ($table->parent_id != 1) {	
+							// This is a leaf node and has a parent so must be a unit
+							// Need to get the parent ID
+							$parent_id = $table->parent_id;
+							// This only pulls out the property with ID searched on and it's parent. 
+							// What about siblings?
+							$query->where('a.id = '.(int) $id OR 'a.id = '.(int) $parent_id OR 'a.parent_id = '.(int) $parent_id);
+						}
+					} else {						
+						// Not a leaf node, but might have some units assigned
+						$subtree = $table->getTree( $id );	
+						// If the subtree has more than one element then most likely it has one or more units
+						$property_ids = array();
+						foreach ($subtree as $property) {
+							$property_ids[] = $property->id;
+						}
+						$query->where('a.id in (' . implode(",",$property_ids) . ')');				
+					}
+				} else {
+					// Try a search for this ID but most likely it doesn't exists
+					$query->where('a.id = '.(int) substr($id, 3));
+				}
 			}
-			elseif (stripos($search, 'author:') === 0) {
-				$search = $db->Quote('%'.$db->escape(substr($search, 7), true).'%');
+			elseif (stripos($search, 'account:') === 0) {
+				$search = $db->Quote('%'.$db->escape(substr($search, 8), true).'%');
 				$query->where('(ua.name LIKE '.$search.' OR ua.username LIKE '.$search.')');
 			}
 			else {
 				$search = $db->Quote('%'.$db->escape($search, true).'%');
-				$query->where('(a.title LIKE '.$search.' OR a.alias LIKE '.$search.' OR a.note LIKE '.$search.')');
+				$query->where('(a.greeting LIKE '.$search.')');
 			}
 		}
+		
 		// From the hello table
 		$query->from('#__helloworld as a');
 		
