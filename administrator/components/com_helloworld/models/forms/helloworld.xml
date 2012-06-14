@@ -15,7 +15,6 @@
 			type="hidden"
 			filter="unset"/>
 
-		
 		<field
 			name="parent_id"
 			type="UserProperties"
@@ -25,6 +24,7 @@
 			required="true">
 			<option value="1">JOPTION_SELECT_PROPERTY</option>
 		</field>	
+		
 		<field
 			name="lft"
 			type="hidden"
@@ -46,6 +46,7 @@
 			required="true"
 			default="en-GB"
 		/>
+
 		<field
 			name="greeting"
 			type="text"
@@ -55,8 +56,7 @@
 			class="inputbox validate-greeting"
 			validate="greeting"
 			required="true"
-			default=""
-		/>
+			default=""/>
 		
 		<field
 			name="occupancy"
@@ -67,8 +67,8 @@
 			class="inputbox validate-occupancy"
 			validate="occupancy"
 			required="true"
-			default=""
-		/>
+			default=""/>
+			
 		<field
 			name="swimming"
 			type="list"
@@ -81,8 +81,8 @@
 			<option value="">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_CHOOSE</option>
 			<option value="1">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_YES</option>
 			<option value="0">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_NO</option>
-			
 		</field>
+		
 		<field
 			name="description"
 			type="editor"
@@ -91,13 +91,46 @@
 			size="40"
 			class="inputbox validate-description"
 			default=""
-			filter="safehtml"
-		/>
+			filter="safehtml"/>
 		</fieldset>
-	<fields name="params">
+		
+		<fieldset name="owner">
+			<field
+				name="created_by"
+				type="user"
+				label="JGLOBAL_FIELD_CREATED_BY_LABEL"
+				desc="JGLOBAL_FIELD_CREATED_BY_DESC"
+				/>
+
+			<field
+				name="created_time"
+				type="text"
+				label="JGLOBAL_CREATED_DATE"
+				class="readonly"
+				filter="unset"
+				readonly="true" />
+
+			<field
+				name="modified_by"
+				type="user"
+				label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+				class="readonly"
+				readonly="true"
+				filter="unset"/>
+
+			<field
+				name="modified"
+				type="text"
+				label="JGLOBAL_FIELD_MODIFIED_LABEL"
+				class="readonly"
+				filter="unset"
+				readonly="true" />		
+		</fieldset>
+		
+		<fields name="params">
 	
 		<fieldset
-			name="params"
+			name="Internal Facilities"
 			label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_PARAMS">
 			
 			<field

@@ -24,10 +24,25 @@ $params = $this->form->getFieldsets('params');
 				<li><?php echo $field->label;echo $field->input;?></li>
 <?php endforeach; ?>
 			</ul>
+		</fieldset>
 	</div>
  
 	<div class="width-40 fltrt">
-		<?php echo JHtml::_('sliders.start', 'helloworld-slider'); ?>
+	
+		
+		<?php echo JHtml::_('sliders.start', 'helloworld-slider'); ?>	
+		
+		<?php echo JHtml::_('sliders.panel', JText::_('Blah'), $name.'-params');?>
+<fieldset class="panelform">
+		<ul class="adminformlist">
+		<?php foreach($this->form->getFieldset('owner') as $field): ?>
+		
+			<li><?php echo $field->label;echo $field->input;?></li>
+			
+		<?php endforeach; ?>
+				</ul>
+	</fieldset>	
+
 <?php foreach ($params as $name => $fieldset): ?>
 		<?php echo JHtml::_('sliders.panel', JText::_($fieldset->label), $name.'-params');?>
 	<?php if (isset($fieldset->description) && trim($fieldset->description)): ?>

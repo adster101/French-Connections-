@@ -32,5 +32,4 @@ defined('_JEXEC') or die('Restricted Access');
 	<th width="12%">
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
 	</th>
-
 </tr>
