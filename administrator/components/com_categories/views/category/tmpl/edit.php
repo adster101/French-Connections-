@@ -78,7 +78,7 @@ JHtml::_('behavior.keepalive');
 	<div class="width-40 fltrt">
 
 		<?php echo JHtml::_('sliders.start', 'categories-sliders-'.$this->item->id, array('useCookie'=>1)); ?>
-			<?php echo $this->loadTemplate('options'); ?>
+			<?php echo $this->loadTemplate('options'); ?>Woot!
 			<div class="clr"></div>
 
 			<?php echo JHtml::_('sliders.panel', JText::_('JGLOBAL_FIELDSET_METADATA_OPTIONS'), 'meta-options'); ?>
@@ -99,6 +99,7 @@ JHtml::_('behavior.keepalive');
 			<fieldset class="panelform">
 				<?php echo $this->form->getLabel('rules'); ?>
 				<?php echo $this->form->getInput('rules'); ?>
+
 			</fieldset>
 
 			<?php echo JHtml::_('sliders.end'); ?>
