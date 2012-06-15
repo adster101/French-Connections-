@@ -355,6 +355,7 @@
 2012-06-01	16:33:44	INFO	127.0.0.1	-	Holding edit ID com_helloworld.edit.location.61 Array (     [0] => 68     [1] => 71     [2] => 70     [3] => 61     [4] => 60     [5] => 73 ) 
 2012-06-01	16:33:48	INFO	127.0.0.1	-	Checking edit ID com_helloworld.edit.helloworld.61: 0 Array ( ) 
 <<<<<<< HEAD
+<<<<<<< HEAD
 2012-06-11	20:54:52	INFO	127.0.0.1	-	Holding edit ID com_categories.edit.category.11 Array (     [0] => 11 ) 
 2012-06-11	20:54:52	INFO	127.0.0.1	-	Checking edit ID com_categories.edit.category.11: 1 Array (     [0] => 11 ) 
 2012-06-11	20:56:09	INFO	127.0.0.1	-	Checking edit ID com_categories.edit.category.11: 1 Array (     [0] => 11 ) 
@@ -371,6 +372,8 @@
 2012-06-11	21:03:23	INFO	127.0.0.1	-	Checking edit ID com_categories.edit.category.11: 1 Array (     [0] => 11 ) 
 2012-06-11	21:04:45	INFO	127.0.0.1	-	Checking edit ID com_categories.edit.category.11: 1 Array (     [0] => 11 ) 
 =======
+=======
+>>>>>>> a645870a8a545cae91abe2c166d8dc573205b36a
 2012-06-13	11:08:28	INFO	127.0.0.1	-	Holding edit ID com_helloworld.edit.location.61 Array (     [0] => 61 ) 
 2012-06-13	11:08:32	INFO	127.0.0.1	-	Holding edit ID com_helloworld.edit.helloworld.61 Array (     [0] => 61 ) 
 2012-06-13	11:08:46	INFO	127.0.0.1	-	Checking edit ID com_helloworld.edit.helloworld.61: 1 Array (     [0] => 61 ) 
@@ -499,4 +502,7 @@
 2012-06-14	15:22:45	INFO	127.0.0.1	-	Checking edit ID com_users.edit.user.102: 1 Array (     [0] => 102 ) 
 2012-06-14	15:22:45	INFO	127.0.0.1	-	Releasing edit ID com_users.edit.user.102 Array ( ) 
 2012-06-14	15:23:03	INFO	127.0.0.1	-	Holding edit ID com_helloworld.edit.location.75 Array (     [0] => 75     [1] => 61 ) 
+<<<<<<< HEAD
+>>>>>>> a645870a8a545cae91abe2c166d8dc573205b36a
+=======
 >>>>>>> a645870a8a545cae91abe2c166d8dc573205b36a
