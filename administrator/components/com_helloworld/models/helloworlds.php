@@ -121,13 +121,6 @@ class HelloWorldModelHelloWorlds extends JModelList
 		// Filter by search in title
 		// TODO - Try and tidy up this logic a bit.
 		$search = $this->getState('filter.search');
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> a645870a8a545cae91abe2c166d8dc573205b36a
-=======
->>>>>>> a645870a8a545cae91abe2c166d8dc573205b36a
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
 				$id = substr($search, 3);
