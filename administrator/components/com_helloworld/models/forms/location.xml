@@ -62,7 +62,7 @@
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
-			required="true">
+			required="false">
 		</field>		
 		
 		<field name="id" type="hidden" />
