@@ -54,6 +54,18 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		{
 			return false;
 		}
+
+		$parent_id = $form->getValue('parent_id');		
+
+
+		if($parent_id !== 1) {
+			
+ 			//foreach($form->getFieldSet('Location') as $field) {
+				//echo $field->name;die;
+				//$form->setFieldAttribute($field->name, 'disabled', 'true');
+			//}		
+			$form->removeGroup('Location');			
+		}
 		return $form;
 	}
 	/**
