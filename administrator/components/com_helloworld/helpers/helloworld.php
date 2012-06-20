@@ -15,7 +15,7 @@ abstract class HelloWorldHelper
 		// Get the ID of the item we are editing
 		$id = JRequest::getVar('id');
 
-		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id='.$id, $submenu == 'location');
+		//JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id='.$id, $submenu == 'location');
 		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id='.$id, $submenu == 'helloworld');	
 
@@ -72,7 +72,6 @@ abstract class HelloWorldHelper
 		$return = array();
 		foreach ($languages as $tag => $properties)
 			$return[] = JHTML::_('select.option', $tag, $properties['name']);
-		
 		return $return;
 	}
 	
@@ -89,5 +88,4 @@ abstract class HelloWorldHelper
 	{
 		return $propertyId;
 	}
-	
 }

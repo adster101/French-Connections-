@@ -31,7 +31,7 @@ foreach($this->items as $i => $item):
 
 		<td>
 			<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level-1) ?>
-			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=location.edit&id='.(int) $item->id); ?>">
+			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id); ?>">
 				<?php echo $this->escape($item->greeting); ?>
 			</a>
 		</td>
