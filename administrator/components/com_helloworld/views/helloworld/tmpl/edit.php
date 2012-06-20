@@ -7,8 +7,6 @@ $params = $this->form->getFieldsets('params');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="helloworld-form" class="form-validate">
 
-
-
 <p>
 <?php
 	echo JHTML::_('select.genericlist', $this->languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $this->lang);
@@ -26,19 +24,13 @@ $params = $this->form->getFieldsets('params');
 			</ul>
 		</fieldset>
 	</div>
- 
 	<div class="width-40 fltrt">
-	
-		
 		<?php echo JHtml::_('sliders.start', 'helloworld-slider'); ?>	
-		
 		<?php echo JHtml::_('sliders.panel', JText::_('Blah'), $name.'-params');?>
 <fieldset class="panelform">
 		<ul class="adminformlist">
 		<?php foreach($this->form->getFieldset('owner') as $field): ?>
-		
 			<li><?php echo $field->label;echo $field->input;?></li>
-			
 		<?php endforeach; ?>
 				</ul>
 	</fieldset>	
