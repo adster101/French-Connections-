@@ -59,9 +59,13 @@ class JFormFieldUserProperties extends JFormFieldList
 		$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');			
 		$table->load(array('id'=>$id));	
 
-		// Get the ID of the user who created the property 			
-		$created_by = $table->created_by;	
-		
+		// Get the ID of the user who created the property 	
+		if ($id == 0) {
+			// If no ID then must be a new property which means no created_by id exists so need to check against property owner
+			$created_by = $user->id;
+		} else {
+			$created_by = $table->created_by;	
+		}
 		// Logic behind the following is as follows
 		// We only want properties that belong to the user who created the property currently being editied, where that user is a property owner or an admin
 		// We only want properties at level 1

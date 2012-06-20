@@ -78,7 +78,7 @@
 			validate="swimming"
 			required="true"
 			default="">
-			<option value="">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_CHOOSE</option>
+			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 			<option value="1">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_YES</option>
 			<option value="0">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_NO</option>
 		</field>

@@ -112,6 +112,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		// Select some fields
 		$query->select('a.id,a.greeting, a.title, a.modified, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published ');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
+		// Check the user group this user belongs to.
 		if (!in_array(8, $groups)) 
 		{
 			$query->where('created_by='.$userId);
@@ -135,14 +136,13 @@ class HelloWorldModelHelloWorlds extends JModelList
 						// Does it have a parent ID?
 						if ($table->parent_id == 1) {
 							// Is a leaf node and no parent so must be a single unit property
-							$query->where('a.id = '.(int) $id, 3);
+							$query->where('a.id = '.(int) $id);
 						} elseif ($table->parent_id != 1) {	
 							// This is a leaf node and has a parent so must be a unit
 							// Need to get the parent ID
 							$parent_id = $table->parent_id;
-							// This only pulls out the property with ID searched on and it's parent. 
-							// What about siblings?
-							$query->where('a.id = '.(int) $id OR 'a.id = '.(int) $parent_id OR 'a.parent_id = '.(int) $parent_id);
+							// This pulls out the property with ID searched on, it's parent and any siblings. 
+							$query->where('a.id = '.(int) $id.' OR a.id = '.(int) $parent_id .' OR a.parent_id = '.(int) $parent_id);
 						}
 					} else {						
 						// Not a leaf node, but might have some units assigned
@@ -153,6 +153,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 							$property_ids[] = $property->id;
 						}
 						$query->where('a.id in (' . implode(",",$property_ids) . ')');				
+
 					}
 				} else {
 					// Try a search for this ID but most likely it doesn't exists

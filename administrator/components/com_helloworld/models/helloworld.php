@@ -54,17 +54,18 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		{
 			return false;
 		}
-
+		// Get the parent ID of this property
 		$parent_id = $form->getValue('parent_id');		
-
-
-		if($parent_id !== 1) {
-			
- 			//foreach($form->getFieldSet('Location') as $field) {
-				//echo $field->name;die;
-				//$form->setFieldAttribute($field->name, 'disabled', 'true');
-			//}		
-			$form->removeGroup('Location');			
+		// If the parent_id is not 1
+		// !== compares the type as well as the value
+		if($parent_id !=1 && $parent_id !='') {		
+			// Then this property must be designated as a unit
+ 			foreach($form->getFieldSet('Location') as $field) {
+				// So we loop over the fields disabling them and making them non-required in the form
+				// This ensure that they will not be editable by the user in this instance. 
+				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'disabled', 'true');
+				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'required', 'false');
+			}		
 		}
 		return $form;
 	}

@@ -11,11 +11,13 @@ jimport('joomla.form.formrule');
 class JFormRuleGreeting extends JFormRule
 {
 	/**
-	 * The regular expression.
-	 *
-	 * @access	protected
-	 * @var		string
-	 * @since	1.6
-	 */
-	protected $regex = '^[^0-9]+$';
+	* The regular expression.
+	*
+	* @access	protected
+	* @var		string
+	* @since	1.6
+	*/
+	// For some reason the regex doesn't like the 'french' characters...
+	//protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-יאפך]+$';
+	protected $regex = '^[\w .-]+$';
 }
