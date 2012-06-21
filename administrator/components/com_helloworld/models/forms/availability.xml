@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
 	<fieldset name="availability">
-		<field
-			name="id"
-			type="text"
-			default="0"
-			label="COM_HELLOWORLD_FIELD_ID_LABEL"
-			description ="COM_HELLOWORLD_FIELD_ID_DESC"
-			class="readonly"
-			readonly="true"/>
+
 		<field
 			name="start_date"
 			type="calendar"

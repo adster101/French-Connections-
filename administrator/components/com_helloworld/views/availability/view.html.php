@@ -4,23 +4,38 @@ defined('_JEXEC') or die('Restricted access');
  
 // import Joomla view library
 jimport('joomla.application.component.view');
- 
+
 /**
  * HelloWorld View
  */
 class HelloWorldViewAvailability extends JView
 {
 	/**
-	 * display method of Hello view
+	 * display method of Availability View
 	 * @return void
 	 */
 	public function display($tpl = null) 
 	{
-		// get the Data
-		$form = $this->get('Form');
-		$item = $this->get('Item');
-		$script = $this->get('Script');
-	
+		// Get the property ID we are editing.
+		$this->item->id = JRequest::getVar('id');
+		// Import the form class
+		jimport('joomla.application.component.modelform');
+		$models_path = JPATH_COMPONENT . DS . 'models';
+		// Set the form and field paths
+		JForm::addFormPath($models_path . DS . 'forms');
+		JForm::addFieldPath($models_path . DS . 'fields');
+		
+		// Get the form statically, for now not trying to load any form data as it's not needed here
+		$form = JForm::getInstance('com_helloworld.helloworld','availability', array('load_data' => 'false'));
+		
+		// get an instance of the availability table
+		$table = $this->get('Table');
+		
+		// Get the actual availability for this property 
+		$this->availability = $table->load($this->item->id);	
+		
+		// Build the calendar taking into account current availability...
+		
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -30,9 +45,6 @@ class HelloWorldViewAvailability extends JView
 
 		// Assign the Data
 		$this->form = $form;
-		$this->item = $item;
-		$this->script = $script;
-		
 		// Set the toolbar
 		$this->addToolBar();
 
@@ -74,7 +86,7 @@ class HelloWorldViewAvailability extends JView
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
-		$document->addScript(JURI::root() . $this->script);
+		//$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworld/submitbutton.js");
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}
