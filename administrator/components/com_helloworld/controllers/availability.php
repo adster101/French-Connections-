@@ -15,9 +15,4 @@ class HelloWorldControllerAvailability extends JControllerForm
 		// E.g. check that this user actually 'owns' this property and can hence edit availability
 		return true;  //always allow to edit record 
 	} 
-	
-	protected function getRedirectToItemAppend(	$recordId = null, $urlVar = 'id') { 
-		$append = parent::getRedirectToItemAppend(JRequest::getInt('id'), $urlVar ); 
-		return $append; 
-	} 
 }

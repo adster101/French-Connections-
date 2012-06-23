@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
 	<fieldset name="availability">
-
+	
 		<field
 			name="start_date"
 			type="calendar"
 			label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-			description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+			description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
 			size="40"
 			class="inputbox validate-start_date"
 			validate=""
@@ -15,8 +15,8 @@
 	<field
 		name="end_date"
 		type="calendar"
-		label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-		description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
+		label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+		description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
 		size="40"
 		class="inputbox validate-start_date"
 		validate=""

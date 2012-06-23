@@ -18,30 +18,29 @@ class HelloWorldViewAvailability extends JView
 	{
 		// Get the property ID we are editing.
 		$this->item->id = JRequest::getVar('id');
-		// Import the form class
-		jimport('joomla.application.component.modelform');
-		$models_path = JPATH_COMPONENT . DS . 'models';
-		// Set the form and field paths
-		JForm::addFormPath($models_path . DS . 'forms');
-		JForm::addFieldPath($models_path . DS . 'fields');
-		
-		// Get the form statically, for now not trying to load any form data as it's not needed here
-		$form = JForm::getInstance('com_helloworld.helloworld','availability', array('load_data' => 'false'));
-		
+	
+		// Get the availability form, for now not loading any form data as it will be presented in the calendar rather than in a form
+		$form = $this->get('Form');
+		//$item = $this->get('Item');
+
 		// get an instance of the availability table
 		$table = $this->get('Table');
 		
 		// Get the actual availability for this property 
 		$this->availability = $table->load($this->item->id);	
-		
-		// Build the calendar taking into account current availability...
-		
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		}
+
+		// Get availability as an array of days
+		$this->availability_array = HelloWorldHelper::getAvailabilityArray($availability = $this->availability);
+		
+		// Build the calendar taking into account current availability...
+		$this->calendar =	HelloWorldHelper::getAvailabilityCalendar($months=18, $availability = $this->availability_array);		
 
 		// Assign the Data
 		$this->form = $form;
@@ -68,9 +67,9 @@ class HelloWorldViewAvailability extends JView
 		
 		$user = JFactory::getUser();
 		$userId = $user->id;
-		$isNew = $this->item->id == 0;
+		$isNew = $this->item->id == "Woot!";
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'), 'availability');
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->id), 'helloworld');
 		// Built the actions for new and existing records.
 		
 		JToolBarHelper::apply('availability.apply', 'JTOOLBAR_APPLY');	

@@ -3,12 +3,12 @@
 defined('_JEXEC') or die('Restricted access');
  
 // import Joomla modelform library
-jimport('joomla.application.component.modellist');
+jimport('joomla.application.component.modeladmin');
 
 /**
  * HelloWorld Model
  */
-class HelloWorldModelAvailability extends JModelList
+class HelloWorldModelAvailability extends JModelAdmin
 {
 	/**
 	 * Returns a reference to the a Table object, always creating it.
@@ -23,6 +23,25 @@ class HelloWorldModelAvailability extends JModelList
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
+	/**
+	 * Method to get the record form.
+	 *
+	 * @param	array	$data		Data for the form.
+	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+	 * @return	mixed	A JForm object on success, false on failure
+	 * @since	2.5
+	 */
+	public function getForm($data = array(), $loadData = false) 
+	{
+		// Get the form.
+		$form = $this->loadForm('com_helloworld.helloworld', 'availability',
+		                        array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form)) 
+		{
+			return false;
+		}
+		return $form;
+	}
 
 	/**
 	 * Method to get the script that have to be included on the form
@@ -33,5 +52,4 @@ class HelloWorldModelAvailability extends JModelList
 	{
 		return 'administrator/components/com_helloworld/models/forms/availability.js';
 	}
-
 }

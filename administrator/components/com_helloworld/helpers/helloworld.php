@@ -88,69 +88,124 @@ abstract class HelloWorldHelper
 		return $propertyId;
 	}
 	
-	public static function getAvailabilityCalendar($month, $year) 
+	/*
+	 * Generates HTML to display an availability calendar. 
+	 *
+	 * PHP Calendar (version 2.3), written by Keith Devens (adapted here)
+	 * http://keithdevens.com/software/php_calendar
+	 *
+	 * @param   array $availability  	The availability for this ID as an array.
+	 * @param 	int $months 					The number of months to display the availability for 		
+	 * 
+	 * @return  string  False on failure or error, true otherwise.
+	 *
+	 * @since   1
+	 */
+
+	public static function getAvailabilityCalendar($months=12, $availability= array(), $days = array(), $day_name_length = 3, $month_href = NULL, $first_day = 0)
+	{ 
+		// Init calendar string
+		$calendar='';	
+		$calendar.='<table>';
+		// Get now
+		$now = time();
+
+		// Set the month and year as per now
+		$month = date("m", $now);
+		$year = date("y", $now);
+
+		// The loop loops over some code which outputs a calendar. It does this $months times 
+		for ($z=0;$z<=$months;$z++) {
+			if($z % 4 == 0) {
+				$calendar.="<tr>";	
+			}
+			$calendar.="<td>";
+	
+			$first_of_month = gmmktime(0,0,0,$month,1,$year); 
+		  #remember that mktime will automatically correct if invalid dates are entered 
+		  # for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998 
+		  # this provides a built in "rounding" feature to generate_calendar() 
+
+		  $day_names = array(); #generate all the day names according to the current locale 
+		  for($n=0,$t=(3+$first_day)*86400; $n<7; $n++,$t+=86400) #January 4, 1970 was a Sunday 
+		      $day_names[$n] = ucfirst(gmstrftime('%A',$t)); #%A means full textual day name 
+
+		  list($month, $year, $month_name, $weekday) = explode(',',gmstrftime('%m,%Y,%B,%w',$first_of_month)); 
+		  $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day 
+		  $title   = htmlentities(ucfirst($month_name)).'&nbsp;'.$year;  #note that some locales don't capitalize month and day names 
+			 
+		  $calendar .= '<p>'.$title.'</p>'."\n".'<table class="calendar">'."\n"; 
+
+		  if($day_name_length) { #if the day names should be shown ($day_name_length > 0) 
+		      #if day_name_length is >3, the full name of the day will be printed 
+		      foreach($day_names as $d) 
+		          $calendar .= '<th abbr="'.htmlentities($d).'">'.htmlentities($day_name_length < 4 ? substr($d,0,$day_name_length) : $d).'</th>'; 
+		      $calendar .= "</tr>\n<tr>"; 
+		  }
+
+		  if($weekday > 0) $calendar .= '<td colspan="'.$weekday.'">&nbsp;</td>'; #initial 'empty' days 
+		  for($day=1,$days_in_month=gmdate('t',$first_of_month); $day<=$days_in_month; $day++,$weekday++) { 
+		      if($weekday == 7){ 
+		          $weekday   = 0; #start a new week 
+		          $calendar .= "</tr>\n<tr>"; 
+		      } 
+		      if(isset($days[$day]) and is_array($days[$day])){ 
+		          @list($link, $classes, $content) = $days[$day]; 
+		          if(is_null($content))  $content  = $day; 
+		          $calendar .= '<td'.($classes ? ' class="'.htmlspecialchars($classes).'">' : '>'). 
+		              ($link ? '<a href="'.htmlspecialchars($link).'">'.$content.'</a>' : $content).'</td>'; 
+		      } 
+		      else $calendar .= "<td>$day". date('Y-m-d',gmmktime(0,0,0,$month,$day,$year))."</td>"; 
+		  } 
+		  if($weekday != 7) $calendar .= '<td colspan="'.(7-$weekday).'">&nbsp;</td>'; #remaining "empty" days 
+			
+			$calendar.="</table></td>";
+			if($z % 4 == 3) {
+				$calendar.="</tr>";			
+			}
+			$month++;
+
+		}
+		$calendar.="</table>";
+
+		return $calendar; 
+	} 
+
+	/*
+	 * Generates an array containing availability for each availability period stored for the property
+	 *
+	 * @param   array $availability  	The availability for this ID as an array.
+	 *
+	 * Returns an array of available days based on available periods
+	 *
+	 */
+	
+	public static function getAvailabilityArray ( $availability = array() ) 
 	{
-		/* draw table */
-		$calendar = '<table cellpadding="0" cellspacing="0" class="calendar">';
-
-		/* table headings */
-		$headings = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
-		$calendar.= '<tr class="calendar-row"><td class="calendar-day-head">'.implode('</td><td class="calendar-day-head">',$headings).'</td></tr>';
-
-		/* days and weeks vars now ... */
-		$running_day = date('w',mktime(0,0,0,$month,1,$year));
-		$days_in_month = date('t',mktime(0,0,0,$month,1,$year));
-		$days_in_this_week = 1;
-		$day_counter = 0;
-		$dates_array = array();
-
-		/* row for week one */
-		$calendar.= '<tr class="calendar-row">';
-
-		/* print "blank" days until the first of the current week */
-		for($x = 0; $x < $running_day; $x++):
-			$calendar.= '<td class="calendar-day-np">&nbsp;</td>';
-			$days_in_this_week++;
-		endfor;
-
-		/* keep going with days.... */
-		for($list_day = 1; $list_day <= $days_in_month; $list_day++):
-			$calendar.= '<td class="calendar-day">';
-				/* add in the day number */
-				$calendar.= '<div class="day-number">'.$list_day.'</div>';
-
-				/** QUERY THE DATABASE FOR AN ENTRY FOR THIS DAY !!  IF MATCHES FOUND, PRINT THEM !! **/
-				$calendar.= str_repeat('<p>&nbsp;</p>',2);
+		$raw_availability = array();
+		// Loop over the availability	
+		foreach ($availability as $availability_period) {
+			if ($availability_period->availability) {				
+				// Add this availability to the $raw_availability array
+	
+				// Convert the start date to a date 
+				$start_date = new DateTime($availability_period->start_date);
+	
+				// Convert the end date to a date 
+				$end_date = new DateTime($availability_period->end_date);
 				
-			$calendar.= '</td>';
-			if($running_day == 6):
-				$calendar.= '</tr>';
-				if(($day_counter+1) != $days_in_month):
-					$calendar.= '<tr class="calendar-row">';
-				endif;
-				$running_day = -1;
-				$days_in_this_week = 0;
-			endif;
-			$days_in_this_week++; $running_day++; $day_counter++;
-		endfor;
+				$availability_period_length =  date_diff($start_date, $end_date);
 
-		/* finish the rest of the days in the week */
-		if($days_in_this_week < 8):
-			for($x = 1; $x <= (8 - $days_in_this_week); $x++):
-				$calendar.= '<td class="calendar-day-np">&nbsp;</td>';
-			endfor;
-		endif;
-
-		/* final row */
-		$calendar.= '</tr>';
-
-		/* end the table */
-		$calendar.= '</table>';
-		
-		/* all done, return result */
-		return $calendar;
-
+				$raw_availability[date_format($start_date, 'Y-m-d')] = 'available';
+				// Loop from the start date to the end date adding an available day to the availability array for each availalable day
+				for ($i=1;$i<=$availability_period_length->days;$i++) {
+					// Add one day to the start date for each day of availability
+					$date = $start_date->add(new DateInterval('P1D'));
+					// And stash it in the array for safe keeping
+					$raw_availability[date_format($date, 'Y-m-d')] = 'available';
+				}
+			}		
+		}	
+		return $raw_availability;	
 	}
-	
-	
 }
