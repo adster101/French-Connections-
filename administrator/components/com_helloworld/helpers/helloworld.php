@@ -102,11 +102,11 @@ abstract class HelloWorldHelper
 	 * @since   1
 	 */
 
-	public static function getAvailabilityCalendar($months=12, $availability= array(), $days = array(), $day_name_length = 3, $month_href = NULL, $first_day = 0)
+	public static function getAvailabilityCalendar($months=12, $availability= array(), $days = array(), $day_name_length = 2, $month_href = NULL, $first_day = 0)
 	{ 
 		// Init calendar string
 		$calendar='';	
-		$calendar.='<table>';
+		$calendar.='<table class="avCalendar">';
 		// Get now
 		$now = time();
 
@@ -134,7 +134,7 @@ abstract class HelloWorldHelper
 		  $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day 
 		  $title   = htmlentities(ucfirst($month_name)).'&nbsp;'.$year;  #note that some locales don't capitalize month and day names 
 			 
-		  $calendar .= '<p>'.$title.'</p>'."\n".'<table class="calendar">'."\n"; 
+		  $calendar .= '<p class="month-year">'.$title.'</p>'."\n".'<table class="avCalendarMonth">'."\n"; 
 
 		  if($day_name_length) { #if the day names should be shown ($day_name_length > 0) 
 		      #if day_name_length is >3, the full name of the day will be printed 
@@ -149,13 +149,12 @@ abstract class HelloWorldHelper
 		          $weekday   = 0; #start a new week 
 		          $calendar .= "</tr>\n<tr>"; 
 		      } 
-		      if(isset($days[$day]) and is_array($days[$day])){ 
-		          @list($link, $classes, $content) = $days[$day]; 
-		          if(is_null($content))  $content  = $day; 
-		          $calendar .= '<td'.($classes ? ' class="'.htmlspecialchars($classes).'">' : '>'). 
-		              ($link ? '<a href="'.htmlspecialchars($link).'">'.$content.'</a>' : $content).'</td>'; 
+					$today = date('Y-m-d',gmmktime(0,0,0,$month,$day,$year));
+		      if(isset($availability[$today])){ 
+		         
+		          $calendar .= '<td class="available">'.$day.'</td>'; 
 		      } 
-		      else $calendar .= "<td>$day". date('Y-m-d',gmmktime(0,0,0,$month,$day,$year))."</td>"; 
+		      else $calendar .= '<td class="unavailable">'.$day.'</td>'; 
 		  } 
 		  if($weekday != 7) $calendar .= '<td colspan="'.(7-$weekday).'">&nbsp;</td>'; #remaining "empty" days 
 			

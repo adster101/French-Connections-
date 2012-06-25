@@ -19,6 +19,7 @@ class HelloWorldTableAvailability extends JTable
 	{
 		parent::__construct('#__availability', 'id', $db);
 	}
+	
 	/**
 	 * Overloaded load function
 	 *

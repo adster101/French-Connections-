@@ -1,0 +1,45 @@
+/* 
+	Availability calendar table styles 
+*/
+
+table.avCalendar td{
+	vertical-align:top;
+
+}
+
+table.avCalendarMonth {
+	border-collapse:collapse;
+	border: 1px solid #d7e1f2;	
+}
+
+table.avCalendarMonth th {
+	border-bottom: 1px solid #d7e1f2;
+	background-color: #f2f5f1;
+	padding:0 2px;
+	text-align:center;
+}
+
+.month-year {
+	background:#d7e1f2;
+	margin-bottom:0;
+	text-align:center;
+	font-weight:bold;
+}
+
+table.avCalendarMonth td {
+	padding:0 2px;
+	text-align:center;
+}
+
+table.avCalendarMonth td.unknown {
+	color:#d7e1f2;
+}
+
+td.unavailable {
+	color: #333; 
+	background-color: #ccc !important;
+	text-decoration:line-through;
+}
+
+ul.key li span.available{background: url(../_images/general/icons.gif) -24px -1213px no-repeat;}
+ul.key li span.unavailable{background: url(../_images/general/icons.gif) -24px -1236px no-repeat;}

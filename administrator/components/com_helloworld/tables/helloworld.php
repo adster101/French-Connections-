@@ -61,7 +61,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 * @see JTable:load
 	 */
 	public function load($pk = null, $reset = true) 
-	{
+	{		
 		if (parent::load($pk, $reset)) 
 		{
 			// Get the current editing language for this property
@@ -128,6 +128,12 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 */
 	public function store($updateNulls = false)
 	{
+		// Get the post data, mainly in case availability or tariff data is set.
+		// For availability would it be cleaner to move changeover day to tariffs?
+		// Maybe although this need to track an availability last update on....against the accommodation unit.
+
+		$POST = JRequest::getVar('jform');
+		
 		// Transform the params field
 		if (is_array($this->params)) {
 			$registry = new JRegistry();
@@ -139,6 +145,13 @@ class HelloWorldTableHelloWorld extends JTableNested
 		
 		// TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
 		$this->savePropertyTranslation($lang);
+		
+		// Do we have availability data to update?
+		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability
+			$existingAvailability = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
+			$availability = $existingAvailability->load($this->id);	
+			print_r($availability);die;
+		}
 				
 		$date	= JFactory::getDate();
 		$user	= JFactory::getUser();

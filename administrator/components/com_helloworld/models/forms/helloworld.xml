@@ -91,7 +91,9 @@
 			size="40"
 			class="inputbox validate-description"
 			default=""
-			filter="safehtml"/>
+			filter="safehtml"
+			buttons="false"
+		/>
 		</fieldset>
 		
 		<fieldset name="owner">

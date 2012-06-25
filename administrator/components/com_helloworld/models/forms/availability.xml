@@ -1,42 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
+	<fieldset name="additional-fields">
+		<field
+			name="id"
+			type="text"
+			default=""
+			label="JGLOBAL_FIELD_ID_LABEL"
+			description ="JGLOBAL_FIELD_ID_DESC"
+			class="readonly"
+			readonly="true"
+		/>
+		<field
+			name="changeover_day"
+			type="list"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
+			class="validate-changeover"
+			validate="changeover"
+			required="true"
+			default="asdasd">
+			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+			<option value="0">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_0</option>
+			<option value="1">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_1</option>
+			<option value="2">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_2</option>
+			<option value="3">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_3</option>
+			<option value="4">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_4</option>
+			<option value="5">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_5</option>
+			<option value="6">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_6</option>
+		</field>
+	</fieldset>
+
 	<fieldset name="availability">
-	
 		<field
 			name="start_date"
 			type="calendar"
 			label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
 			description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
 			size="40"
-			class="inputbox validate-start_date"
+			class="inputbox"
 			validate=""
-			required="true"
-			default=""/>
-	<field
-		name="end_date"
-		type="calendar"
-		label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
-		description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
-		size="40"
-		class="inputbox validate-start_date"
-		validate=""
-		required="true"
-		default=""/>
+			required="false"
+			default="2012-07-7"
+		/>
+				
+		<field
+			name="end_date"
+			type="calendar"
+			label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+			description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+			size="40"
+			class="inputbox"
+			validate=""
+			required="false"
+			default="2012-07-14"
+		/>
 
-	<field
-		name="status"
-		type="list"
-		label="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_LABEL"
-		description="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_DESC"
-		class="validate-status"
-		validate=""
-		required="true"
-		default="">
-			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-			<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
-			<option value="0">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>
-	</field>
-		
-		
-	</fieldset>
+		<field
+			name="availability"
+			type="list"
+			label="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_LABEL"
+			description="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_DESC"
+			class="validate-availability"
+			validate="availability"
+			required="true"
+			default="1">
+				<option value="-1">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
+				<option value="0">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>
+		</field>	
+	</fieldset>	
 </form>
