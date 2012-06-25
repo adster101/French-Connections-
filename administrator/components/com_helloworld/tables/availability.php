@@ -19,7 +19,6 @@ class HelloWorldTableAvailability extends JTable
 	{
 		parent::__construct('#__availability', 'id', $db);
 	}
-	
 	/**
 	 * Overloaded load function
 	 *
@@ -31,12 +30,10 @@ class HelloWorldTableAvailability extends JTable
 	public function load($id = null, $reset = true) 
 	{
 		$query = $this->_db->getQuery(true);
-		$query->select('id, start_date, end_date, status');
+		$query->select('id, start_date, end_date, availability');
 		$query->from($this->_tbl);
 		$query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
-	
 		$this->_db->setQuery($query);
-
 		try
 		{
 			$result = $this->_db->loadObjectList();
@@ -49,4 +46,6 @@ class HelloWorldTableAvailability extends JTable
 			return false;
 		}			
 	}
+
+	
 }
