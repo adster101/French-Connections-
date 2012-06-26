@@ -140,6 +140,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 			$registry->loadArray($this->params);
 			$this->params = (string)$registry;
 		}
+
 		// Get the current editing language for this property
 		$lang = HelloWorldHelper::getLang();
 		
@@ -147,10 +148,21 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$this->savePropertyTranslation($lang);
 		
 		// Do we have availability data to update?
-		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability
-			$existingAvailability = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-			$availability = $existingAvailability->load($this->id);	
-			print_r($availability);die;
+		// Convert the start date to a date 
+		$start_date = new DateTime($POST['start_date']);
+	
+		// Convert the end date to a date 
+		$end_date = new DateTime($POST['end_date']);
+	
+		$availability = $POST['availability'];
+		if ($start_date !='' && $end_date !='' ) { // We have some new availability to update
+			$availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
+			$existing_availability = $availabilityTable->load($this->id);	
+			$availability = $this->processAvailability( $start_date, $end_date, $availability, $existing_availability );
+			$other_availability = HelloWorldHelper::getAvailabilityArray($existing_availability);
+			print_r($availability);
+			print_r($other_availability);
+			die;
 		}
 				
 		$date	= JFactory::getDate();
@@ -243,4 +255,60 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$this->greeting = $existingTranslations->greeting;
 		$this->description = $existingTranslations->description;
 	}
+
+	/*
+	 *	Updates availability periods based on existing availability and dates entered by owner
+	 *
+	 *	@start_date 						date		Start date of new availability period
+	 *	@end_date 							date		End date of new availability period
+	 *	@availability 					boolean	Status of new availability period
+ 	 *	@existing_availability	array 	Current availability for the property
+	 *					
+	 */
+	function processAvailability ( $start_date = '', $end_date = '', $availability = '', $existing_availability = array() )
+	{
+
+		$availability_status_by_day = array();
+		
+		// Firstly we loop over existing availability and generate availability by day
+		foreach ($existing_availability as $existing_availability_period) {
+
+			// Convert dates from string to date time object for processing
+			$current_start_date = new DateTime($existing_availability_period->start_date);
+			$current_end_date = new DateTime($existing_availability_period->end_date);
+
+			// Set the status for this period
+			$current_availability_status = $existing_availability_period->availability;
+			
+			// Get the length of the availability period being processed 
+			$availability_period_length = date_diff($current_start_date, $current_end_date)->days;
+			
+			// Loop over the number of day recording the 		
+			for ($i=0;$i<=$availability_period_length;$i++) {
+				$availability_status_by_day[date_format($current_start_date, 'Y-m-d')] = $current_availability_status;
+				$current_start_date = $current_start_date->add(new DateInterval('P1D'));
+			}
+		}		
+			// Process the new availability
+			// Convert dates from string to date time object for processing
+			$current_start_date = $start_date;
+			$current_end_date = $end_date;
+
+			// Get the length of the availability period being processed 
+			$new_availability_period_length = date_diff($current_start_date, $current_end_date)->days;
+
+			// Set the status for this period
+			$current_availability_status = $availability;
+			
+			// Loop over the number of day recording the 		
+			for ($i=0;$i<=$new_availability_period_length;$i++) {
+				$availability_status_by_day[date_format($current_start_date, 'Y-m-d')] = $current_availability_status;
+				$current_start_date = $current_start_date->add(new DateInterval('P1D'));
+			}				
+		return $availability_status_by_day;
+	}
+
+
+
+
 }
