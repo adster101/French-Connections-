@@ -22,7 +22,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	
 	/**
 	 * Overloaded bind function
-	 *
+         *
 	 * @param       array           named array
 	 * @return      null|string     null is operation was satisfactory, otherwise returns an error
 	 * @see JTable:bind
@@ -148,9 +148,10 @@ class HelloWorldTableHelloWorld extends JTableNested
 		
 		// Do we have availability data to update?
 		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability
-			$existingAvailability = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-			$availability = $existingAvailability->load($this->id);	
-			print_r($availability);die;
+			$availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
+			$availability = $availabilityTable->load($this->id);	
+			$availability_by_day = HelloWorldHelper::getAvailabilityArray($availability);
+      print_r($$availability_by_day);
 		}
 				
 		$date	= JFactory::getDate();
