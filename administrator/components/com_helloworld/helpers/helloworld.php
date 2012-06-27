@@ -15,16 +15,16 @@ abstract class HelloWorldHelper
 		// Get the ID of the item we are editing
 		$id = JRequest::getVar('id');
 		//JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id='.$id, $submenu == 'location');
-		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id='.$id, $submenu == 'helloworld');	
-
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id='.$id, $submenu == 'availability');		
-		
+		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id='.$id, $submenu == 'tariffs');		
+
 		// set some global property
 		$document = JFactory::getDocument();
 		$document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 		$document->addStyleDeclaration('.icon-48-location {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 		$document->addStyleDeclaration('.icon-48-availability {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
+		$document->addStyleDeclaration('.icon-48-tariffs {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 	}
 	
 	/**
@@ -83,10 +83,6 @@ abstract class HelloWorldHelper
 		return $session->get('com_helloworld.property.'.$propertyId.'.lang', $lang->getTag());
 	}
 
-	public static function getProperty()
-	{
-		return $propertyId;
-	}
 	
 	/**
 	 * Generates HTML to display an availability calendar. 
@@ -94,13 +90,12 @@ abstract class HelloWorldHelper
 	 * PHP Calendar (version 2.3), written by Keith Devens (adapted here)
 	 * http://keithdevens.com/software/php_calendar
 	 *
-	 * @param   array $availability  	The availability for this ID as an array.
-	 * @param 	int $months 					The number of months to display the availability for 		
-	 * 
-	 * @return  string  False on failure or error, true otherwise.
-	 *
-	 * @since   1
-	 */
+   * @param int $months The number of months to display the availability for 
+   * @param array $availability The availability for this ID as an array.
+   * @param type $day_name_length
+   * @param type $first_day
+   * @return string False on failure or error, true otherwise.
+   */
 
 	public static function getAvailabilityCalendar($months=12, $availability= array(), $day_name_length = 2, $first_day = 0)
 	{ 
@@ -181,8 +176,6 @@ abstract class HelloWorldHelper
    *  Generates an array containing availability for each availability period stored for the property
 	 *
 	 * Returns an array of available days based on available periods.
-   * TO DO: Extend or edit this function so that passing in a start and end date new availability is incorporated 
-   * into the returned raw availability. This can be used when saving new availability.
    * 
    * @param array $availability An array of availability periods as stored against a property
    * @param Date $new_start_date The start date of a new availability period 
@@ -191,33 +184,95 @@ abstract class HelloWorldHelper
    * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
    * 
    */
-	public static function getAvailabilityArray ( $availability = array(), $new_start_date = '', $new_end_date= '', $new_availability_status = false ) 
+	public static function getAvailabilityByDay ( $availability_by_day = array(), $start_date = '', $end_date= '', $availability = false ) 
 	{
-    // Array to hold the availability
+    // Array to hold availability per day for each day that availability has been set for.
+    // This is needed as availability is stored by period, but displayed by day.
     $raw_availability = array();
-    
-		// Loop over the availability	
-		foreach ($availability as $availability_period) {
-				// Add this availability to the $raw_availability array
-	
-				// Convert the start date to a date 
-				$start_date = new DateTime($availability_period->start_date);
-	
-				// Convert the end date to a date 
-				$end_date = new DateTime($availability_period->end_date);
-				
-				$availability_period_length =  date_diff($start_date, $end_date);
 
-				$raw_availability[date_format($start_date, 'Y-m-d')] = $availability_period->availability;
-				// Loop from the start date to the end date adding an available day to the availability array for each availalable day
-				for ($i=1;$i<=$availability_period_length->days;$i++) {
-					// Add one day to the start date for each day of availability
-					$date = $start_date->add(new DateInterval('P1D'));
-					// And stash it in the array for safe keeping
-					$raw_availability[date_format($date, 'Y-m-d')] = $availability_period->availability;
-				}
-			}		
-		
-		return $raw_availability;	
-	}
+    // Generate a DateInterval object which is re-used in the below loop
+    $DateInterval = new DateInterval('P1D');
+      
+    // For each availability period passed in 	
+    foreach ($availability_by_day as $availability_period) {
+
+      // Convert the availability period start date to a PHP date object
+      $availability_period_start_date = new DateTime($availability_period->start_date);
+
+      // Convert the availability period end date to a date 
+      $availability_period_end_date = new DateTime($availability_period->end_date);
+
+      // Calculate the length of the availability period in days
+      $availability_period_length = date_diff($availability_period_start_date, $availability_period_end_date);
+
+      // Set the first day of the availability period to available/unavailable
+      $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_period->availability;
+          
+      // Loop from the start date to the end date adding an available day to the availability array for each availalable day
+      for ($i = 1; $i <= $availability_period_length->days; $i++) {
+       
+        // Add one day to the start date for each day of availability
+        $date = $availability_period_start_date->add($DateInterval);
+        
+        // Add the day as an array key storing the availability status as the value
+        $raw_availability[date_format($date, 'Y-m-d')] = $availability_period->availability;
+      }
+    }
+    
+    // If additional availability has been added then we need to add that to the array as well.
+    if ($start_date && $end_date) {
+      // Convert the availability period start date to a PHP date object
+      $availability_period_start_date = new DateTime($start_date);
+
+      // Convert the availability period end date to a date 
+      $availability_period_end_date = new DateTime($end_date);
+     
+      // Calculate the length of the availability period in days
+      $availability_period_length = date_diff($availability_period_start_date, $availability_period_end_date);
+    
+      // Loop from the start date to the end date adding an available day to the availability array for each availalable day
+      for ($i = 0; $i <= $availability_period_length->days; $i++) {
+        
+        $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability;
+     
+        // Add one day to the start date for each day of availability
+        $date = $availability_period_start_date->add($DateInterval);
+      }  
+      
+    }
+
+    return $raw_availability;
+  }
+  
+  /**
+   * Given an array of availability by day returns an array of availability periods, ready for insert into the db
+   *  
+   * @param array $availability_by_day An array of days containing the availability status
+   * @return array An array of availability periods
+   * 
+   */
+  public static function getAvailabilityByPeriod ( $availability_by_day = array() ) 
+  {
+    $current_status = '';
+    $availability_by_period = array(); 
+    $counter = 0;
+    
+    $last_date = key(array_slice($availability_by_day, -1,1, TRUE));
+    
+    foreach ($availability_by_day as $day => $status) {
+      if (($status !== $current_status) || ( date_diff(new DateTime($last_date), new DateTime($day))->days > 1 )) {
+        $counter++;
+        $availability_by_period[$counter]['start_date'] = $day;
+        $availability_by_period[$counter]['end_date'] = $day;
+        $availability_by_period[$counter]['status'] = $status;
+      } else {
+        $availability_by_period[$counter]['end_date'] = $day;
+
+      }
+      
+      $current_status = $status;
+      $last_date = $day;
+    }
+    return $availability_by_period;
+  }
 }

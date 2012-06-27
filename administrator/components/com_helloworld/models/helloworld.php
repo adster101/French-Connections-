@@ -4,7 +4,6 @@ defined('_JEXEC') or die('Restricted access');
  
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
- 
 /**
  * HelloWorld Model
  */
@@ -63,8 +62,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin
  			foreach($form->getFieldSet('Location') as $field) {
 				// So we loop over the fields disabling them and making them non-required in the form
 				// This ensure that they will not be editable by the user in this instance. 
-				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'disabled', 'true');
-				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'required', 'false');
+				//$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'disabled', 'true');
+				//$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'required', 'false');
 			}		
 		}
 		return $form;

@@ -41,7 +41,7 @@ class HelloWorldViewAvailability extends JView
 		}
 
 		// Get availability as an array of days
-		$this->availability_array = HelloWorldHelper::getAvailabilityArray($availability = $this->availability);
+		$this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability = $this->availability);
 		
 		// Build the calendar taking into account current availability...
 		$this->calendar =	HelloWorldHelper::getAvailabilityCalendar($months=18, $availability = $this->availability_array);		
@@ -77,11 +77,12 @@ class HelloWorldViewAvailability extends JView
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->id), 'helloworld');
-		// Built the actions for new and existing records.
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->form->getValue('greeting')), 'helloworld');
 		
+    // Built the actions for new and existing records.
 		JToolBarHelper::apply('availability.apply', 'JTOOLBAR_APPLY');	
-		JToolBarHelper::cancel('availability.cancel', 'JTOOLBAR_CANCEL');
+    // Cancel out to the helloworld(s) default view rather than the availabilities view...??
+		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
 
 	}
 	/**

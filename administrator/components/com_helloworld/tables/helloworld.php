@@ -4,7 +4,6 @@ defined('_JEXEC') or die('Restricted access');
  
 // import Joomla nested table library
 jimport('joomla.database.tablenested');
- 
 /**
  * Hello Table class
  */
@@ -130,7 +129,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	{
 		// Get the post data, mainly in case availability or tariff data is set.
 		// For availability would it be cleaner to move changeover day to tariffs?
-		// Maybe although this need to track an availability last update on....against the accommodation unit.
+		// Maybe although we need to track availability last updated on...against the accommodation unit.
 
 		$POST = JRequest::getVar('jform');
 		
@@ -140,6 +139,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 			$registry->loadArray($this->params);
 			$this->params = (string)$registry;
 		}
+    
 		// Get the current editing language for this property
 		$lang = HelloWorldHelper::getLang();
 		
@@ -147,11 +147,34 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$this->savePropertyTranslation($lang);
 		
 		// Do we have availability data to update?
-		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability
-			$availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-			$availability = $availabilityTable->load($this->id);	
-			$availability_by_day = HelloWorldHelper::getAvailabilityArray($availability);
-      print_r($$availability_by_day);
+		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
+      
+      // TO DO: Tidy this up a bit - new method?
+      // E.g. $this->saveAvailability();
+      $start_date = $POST['start_date'];
+      $end_date = $POST['end_date'];
+      $availability_status = $POST['availability'];
+      
+      if ($start_date && $end_date) {
+      
+        $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
+        $availability = $availabilityTable->load($this->id);
+
+        $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $start_date, $end_date, $availability_status);
+        $availability_by_period = HelloWorldHelper::getAvailabilityByPeriod($availability_by_day);
+
+        // Delete existing availability
+        // Need to wrap this in some logic
+        $availabilityTable->delete($this->id);
+
+        // Bind the translated fields to the JTAble instance	
+        if (!$availabilityTable->save($this->id, $availability_by_period))
+        {
+          JError::raiseWarning(500, $availabilityTable->getError());
+          return false;
+        }	
+      }
+
 		}
 				
 		$date	= JFactory::getDate();
@@ -210,10 +233,10 @@ class HelloWorldTableHelloWorld extends JTableNested
 		unset($this->greeting);
 		unset($this->description);
 			
-		// Bind the translated fields to the JTAble instance	
+		// Bind the translated fields to the JTable instance	
 		if (!$existingTranslations->bind($value))
 		{
-			JError::raiseWarning(500, $form->getError());
+			JError::raiseWarning(500, $existingTranslations->getError());
 			return false;
 		}	
 
@@ -240,6 +263,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 
 		// Load a copy of all the existing translations for this property, returns null if none found
 		$existingTranslations->load(array('property_id'=>$this->id));
+    
 		// Replace the loaded strings with the translated ones
 		$this->greeting = $existingTranslations->greeting;
 		$this->description = $existingTranslations->description;
