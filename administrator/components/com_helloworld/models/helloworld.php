@@ -68,6 +68,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		}
 		return $form;
 	}
+  
 	/**
 	 * Method to get the script that have to be included on the form
 	 *
@@ -77,6 +78,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	{
 		return 'administrator/components/com_helloworld/models/forms/helloworld.js';
 	}
+  
 	/**
 	 * Method to get the data that should be injected in the form.
 	 *

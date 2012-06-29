@@ -7,7 +7,10 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.database.table');
 
 class HelloWorldTableHelloWorld_translations extends JTable {
-  /*
+  
+  /**
+   * 
+   * 
    * Woot! Access the HelloWorld_translations table, baby
    * Since, I wrote it.
    */

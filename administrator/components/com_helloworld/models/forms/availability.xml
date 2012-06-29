@@ -4,8 +4,7 @@
     <field 
       name="id"
       type="hidden"
-     >
-      
+      default="">
     </field>
     <field 
       name="parent_id"
@@ -36,7 +35,6 @@
 			<option value="6">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_6</option>
 		</field>
 	</fieldset>
-
 	<fieldset name="availability">
 		<field
 			name="start_date"
@@ -47,9 +45,8 @@
 			class="inputbox"
 			validate=""
 			required="false"
-			default=""
-		/>
-				
+			default="">
+    </field>
 		<field
 			name="end_date"
 			type="calendar"
@@ -59,9 +56,8 @@
 			class="inputbox"
 			validate=""
 			required="false"
-			default=""
-		/>
-
+			default="">
+    </field>
 		<field
 			name="availability"
 			type="list"
