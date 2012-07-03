@@ -4,6 +4,10 @@ defined('_JEXEC') or die('Restricted access');
  
 // import Joomla nested table library
 jimport('joomla.database.tablenested');
+
+// import the model helper lib
+jimport('joomla.application.component.model');
+
 /**
  * Hello Table class
  */
@@ -132,7 +136,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// Maybe although we need to track availability last updated on...against the accommodation unit.
 
 		$POST = JRequest::getVar('jform');
-		
+    
 		// Transform the params field
 		if (is_array($this->params)) {
 			$registry = new JRegistry();
@@ -146,6 +150,9 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
 		$this->savePropertyTranslation($lang);
 		
+    // Save the tariff details. Pass $POST to save function to determine if we have any or not
+    $this->savePropertyTariffs($POST);
+    
 		// Do we have availability data to update?
 		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
       
@@ -268,4 +275,25 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$this->greeting = $existingTranslations->greeting;
 		$this->description = $existingTranslations->description;
 	}
+  
+  
+  /**
+   * save property tariffs, if there are any tariffs available in the POST data then we process them and save them.
+   * 
+   *  
+   */
+  function savePropertyTariffs($POST = array()) {
+    
+    // If the POST array is empty then there aren't any tariffs to update
+    if (!count($POST)) { return true; }    
+    
+    foreach ($POST as $item) {
+      if (is_array($item)){
+        if (array_key_exists('start_date', $item )) {
+         print_r($item['start_date'][0]);echo "<br />";
+        }
+      }
+    }
+    die;
+  }
 }

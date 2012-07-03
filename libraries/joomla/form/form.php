@@ -879,7 +879,6 @@ class JForm
 		if (!($this->xml instanceof SimpleXMLElement))
 		{
 			// TODO: throw exception.
-
 			return false;
 		}
 
@@ -887,7 +886,6 @@ class JForm
 		if (!($element instanceof SimpleXMLElement))
 		{
 			// TODO: throw exception.
-
 			return false;
 		}
 
