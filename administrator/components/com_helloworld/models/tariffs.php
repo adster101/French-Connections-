@@ -118,7 +118,6 @@ class HelloWorldModelTariffs extends JModelAdmin
         return false;
       }
     }
-       
     
     $properties['tariffs'] = $tariffs;
  
@@ -133,6 +132,7 @@ class HelloWorldModelTariffs extends JModelAdmin
 
 		return $item;
 	}  
+  
 	/**
 	 * Method to get the script that have to be included on the form
 	 *
@@ -142,6 +142,7 @@ class HelloWorldModelTariffs extends JModelAdmin
 	{
 		return 'administrator/components/com_helloworld/models/forms/tariffs.js';
 	}
+  
 	/**
 	 * Method to allow derived classes to preprocess the form.
 	 *
@@ -151,26 +152,132 @@ class HelloWorldModelTariffs extends JModelAdmin
 	 * @throws	Exception if there is an error in the form event.
 	 * @since	1.6
 	 */
-	protected function preprocessForm(JForm $form, $data, $group = 'letting')
+	protected function preprocessForm(JForm $form, $data)
 	{
-		// Import the approriate plugin group.
-		JPluginHelper::importPlugin($group);
-
-		// Get the dispatcher.
-		$dispatcher	= JDispatcher::getInstance();
-
-		// Trigger the form preparation event.
-		$results = $dispatcher->trigger('onContentPrepareForm', array($form, $data));
-
-		// Check for errors encountered while preparing the form.
-		if (count($results) && in_array(false, $results, true)) {
-			// Get the last error.
-			$error = $dispatcher->getError();
-
-			// Convert to a JException if necessary.
-			if (!($error instanceof Exception)) {
-				throw new Exception($error);
-			}
-		}
+    
+    // Generate the XML to inject into the form
+    $XmlStr = $this->getTariffXml($form, $data);
+    $form->load($XmlStr);
+    
 	}
+  
+  /**
+   * getTariffXml - This function takes a form and some data to generate a set of XML form field definitions. These 
+   * definitions are then injected into the form so they are displayed on the tariffs admin screen.
+   * 
+   * @param type $form
+   * @param type $data
+   * @return string 
+   */
+  protected function getTariffXml ($form, $data) 
+  {
+    // Build an XML string to inject additional fields into the form
+    $XmlStr = '<form>';
+    $counter=0;
+    $XmlStr.='<fields name="tariffs">';
+    
+    // Loop over the existing availability first
+    foreach ($data->tariffs as $tariff) {
+      
+      // Ignore the first 'tariff' as it is an error counter added by the load db table instance
+      if(count($tariff)) {
+        
+        $XmlStr.= '
+        <fieldset name="tariffs_'.$counter.'">
+        <field
+          id="start_date_tariff_'.$counter.'"
+          name="start_date"
+          type="calendar"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
+          size="20"
+          class="inputbox"
+          validate=""
+          required="false"
+          multiple="true"
+          default="'.$tariff->start_date.'">
+        </field>
+        <field
+          id="end_date_tariff_'.$counter.'"
+          name="end_date"
+          type="calendar"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+          size="20"
+          class="inputbox"
+          validate=""
+          required="false"
+          default="'.$tariff->end_date.'"
+          multiple="true">
+        </field>
+        <field       
+          id="tariff_'.$counter.'"
+          name="tariff"
+          type="text"
+          label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
+          description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
+          size="20"
+          class="inputbox"
+          validate=""
+          required="false"
+          default="'.$tariff->tariff.'"
+          multiple="true"/>
+        </fieldset>';
+        $counter++;
+      }
+    }
+
+    // Add some empty tariff fields (3 by default)
+    for ($i = $counter; $i <= $counter + 2; $i++) {
+      $XmlStr.= '
+      <fieldset name="tariffs_' . $i . '">
+        <field
+          id="start_date_tariff_'. $i .'" 
+          name="start_date"
+          type="calendar"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
+          size="20"
+          class="inputbox"
+          validate=""
+          required="false"
+          multiple="true"
+          default="">
+        </field>
+        <field
+          id="end_date_tariff_'. $i .'"        
+          name="end_date"
+          type="calendar"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+          size="20"
+          class="inputbox"
+          validate=""
+          required="false"
+          default=""
+          multiple="true">
+        </field>
+        <field  
+          id="tariff_'. $i .'"
+          name="tariff"
+          type="text"
+          label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
+          description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
+          size="20"
+          class="inputbox"
+          validate=""
+          required="false"
+          default=""
+          multiple="true">
+        </field>
+      </fieldset>';
+    }    
+
+    
+    $XmlStr.='</fields></form>';   
+    
+    return $XmlStr;
+    
+  }
+  
 }

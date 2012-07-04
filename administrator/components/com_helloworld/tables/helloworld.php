@@ -136,8 +136,8 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// Maybe although we need to track availability last updated on...against the accommodation unit.
 
 		$POST = JRequest::getVar('jform');
-    
-		// Transform the params field
+
+    // Transform the params field
 		if (is_array($this->params)) {
 			$registry = new JRegistry();
 			$registry->loadArray($this->params);
@@ -284,16 +284,14 @@ class HelloWorldTableHelloWorld extends JTableNested
    */
   function savePropertyTariffs($POST = array()) {
     
-    // If the POST array is empty then there aren't any tariffs to update
-    if (!count($POST)) { return true; }    
+    // Check for a tariffs array in the POST structure
+    if (!array_key_exists('tariffs', $POST)) { return true; }    
     
-    foreach ($POST as $item) {
-      if (is_array($item)){
-        if (array_key_exists('start_date', $item )) {
-         print_r($item['start_date'][0]);echo "<br />";
-        }
+      foreach ($POST['tariffs'] as $key => $tariff ) {
+        print_r($key);echo "<br />";
       }
-    }
-    die;
+    
+      die;
   }
+  
 }
