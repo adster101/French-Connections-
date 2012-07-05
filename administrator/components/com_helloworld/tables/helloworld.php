@@ -219,7 +219,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 * saveFormTranslation
 	 * Determines the fields to translate
 	 */
-	function savePropertyTranslation($lang='en-GB')
+	protected function savePropertyTranslation($lang='en-GB')
 	{
 		// If the language of the property (as when it was created) is the same as the editing language then we don't need to do anything.
 		if ($this->lang == $lang || !$this->lang) return true;
@@ -259,7 +259,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 * loadFormTranslations
 	 * Determines the translated fields to load depentent on the current editing language
 	 */
-	function loadPropertyTranslation($lang='en-GB')
+	protected function loadPropertyTranslation($lang='en-GB')
 	{
 		// If the language of the property (when it was created) is the same as the current editing language 
 		// then we don't need to do anything. That is, we just show the fields as they come
@@ -282,16 +282,114 @@ class HelloWorldTableHelloWorld extends JTableNested
    * 
    *  
    */
-  function savePropertyTariffs($POST = array()) {
+  protected function savePropertyTariffs($POST = array()) {
     
     // Check for a tariffs array in the POST structure
-    if (!array_key_exists('tariffs', $POST)) { return true; }    
-    
-      foreach ($POST['tariffs'] as $key => $tariff ) {
-        print_r($key);echo "<br />";
-      }
-    
-      die;
+    if (!array_key_exists('tariffs', $POST)) {
+      return true;
+    }
+
+    $tariffs_by_day = $this->getTariffsByDay($POST['tariffs']);
+    $tariff_periods = $this->getAvailabilityByPeriod($tariffs_by_day);
+
+    // Get instance of the tariffs table
+    $tariffsTable = $availabilityTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
+
+    // Delete existing availability
+    // Need to wrap this in some logic
+    $tariffsTable->delete($this->id);
+
+    // Bind the translated fields to the JTAble instance	
+    if (!$tariffsTable->save($this->id, $tariff_periods)) {
+      JError::raiseWarning(500, $tariffsTable->getError());
+      return false;
+    }
   }
+
+  /**
+   * Generates an array containing a day for each tariff period passed in via the form. Ensure that any new periods are
+   * merged into the data before saving.
+	 *
+	 * Returns an array of tariffs per days based on tariff periods.
+   * 
+   * @param array $tariffs An array of tariffs periods as passed in via the tariffs admin screen
+   * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
+   * 
+   */
+	protected function getTariffsByDay ( $tariffs = array() ) 
+	{
+    // Array to hold availability per day for each day that availability has been set for.
+    // This is needed as availability is stored by period, but displayed by day.
+    $raw_tariffs = array();
+
+    // Generate a DateInterval object which is re-used in the below loop
+    $DateInterval = new DateInterval('P1D');
+
+    // For each tariff period passed in first need to determine how many tariff periods there are
+    $tariff_periods = count($tariffs['start_date']);
+
+    for ($k = 0; $k < $tariff_periods; $k++) {
+
+      $tariff_period_start_date = '';
+      $tariff_period_end_date = '';
+      $tariff_period_length = '';
+
+      // Check that availability period is set for this loop. Possible that empty array elements exists as additional
+      // tariff fields are added to the form in case owner wants to add additional tariffs etc
+
+      if ($tariffs['start_date'][$k] != '' && $tariffs['end_date'][$k] != '' && $tariffs['tariff'][$k] != '') {
+
+        // Convert the availability period start date to a PHP date object
+        $tariff_period_start_date = new DateTime($tariffs['start_date'][$k]);
+
+        // Convert the availability period end date to a date 
+        $tariff_period_end_date = new DateTime($tariffs['end_date'][$k]);
+
+        // Calculate the length of the availability period in days
+        $tariff_period_length = date_diff($tariff_period_start_date, $tariff_period_end_date);
+
+        // Loop from the start date to the end date adding an available day to the availability array for each availalable day
+        for ($i = 0; $i <= $tariff_period_length->days; $i++) {
+
+          // Add the day as an array key storing the availability status as the value
+          $raw_tariffs[date_format($tariff_period_start_date, 'Y-m-d')] = $tariffs['tariff'][$k];
+
+          // Add one day to the start date for each day of availability
+          $date = $tariff_period_start_date->add($DateInterval);
+        }
+      }
+    }
+    return $raw_tariffs;
+  } 
   
+  /**
+   * Given an array of availability by day returns an array of availability periods, ready for insert into the db
+   *  
+   * @param array $availability_by_day An array of days containing the availability status
+   * @return array An array of availability periods
+   * 
+   */
+  public function getAvailabilityByPeriod($availability_by_day = array()) {
+    $current_status = '';
+    $availability_by_period = array();
+    $counter = 0;
+
+    $last_date = key(array_slice($availability_by_day, -1, 1, TRUE));
+
+    foreach ($availability_by_day as $day => $status) {
+      if (($status !== $current_status) || ( date_diff(new DateTime($last_date), new DateTime($day))->days > 1 )) {
+        $counter++;
+        $availability_by_period[$counter]['start_date'] = $day;
+        $availability_by_period[$counter]['end_date'] = $day;
+        $availability_by_period[$counter]['status'] = $status;
+      } else {
+        $availability_by_period[$counter]['end_date'] = $day;
+      }
+
+      $current_status = $status;
+      $last_date = $day;
+    }
+    return $availability_by_period;
+  }
+
 }
