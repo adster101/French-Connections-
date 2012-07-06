@@ -25,8 +25,17 @@ class JFormFieldAjaxUpload extends JFormField
   
   public function getInput () {
     // Define the HTML to output
-    $html = '<div id="upload"><div style="display: none; " class="drop-upload">Drop files here</div></div>';
-    
+    $html = '
+			<div class="formRow">
+
+				<input type="file" id="url" name="url[]" multiple><br>
+			</div>
+
+			<div class="formRow">
+				<input type="submit" id="_submit" name="_submit" value="Upload">
+			</div>
+    ';
+   
     return $html;
   }
 

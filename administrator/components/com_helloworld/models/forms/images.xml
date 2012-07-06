@@ -3,7 +3,9 @@
   <fields name="upload">
     <fieldset name="upload">
       <field 
-        type="ajaxupload">
+        type="ajaxupload"
+        label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
+				description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC">
 
       </field>
     </fieldset>
