@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
 	<fieldset name="additional-fields">
-		<field
-			name="id"
-			type="text"
-			default=""
-			label="JGLOBAL_FIELD_ID_LABEL"
-			description ="JGLOBAL_FIELD_ID_DESC"
-			class="readonly"
-			readonly="true"
-		/>
-		<field
+    <field 
+      name="id"
+      type="hidden"
+      default="">
+    </field>
+    <field 
+      name="parent_id"
+      type="hidden"
+      default="">      
+    </field>
+    <field 
+      name="greeting"
+      type="hidden"
+      default="">      
+    </field>
+    <field
 			name="changeover_day"
 			type="list"
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
@@ -29,7 +35,6 @@
 			<option value="6">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_6</option>
 		</field>
 	</fieldset>
-
 	<fieldset name="availability">
 		<field
 			name="start_date"
@@ -40,9 +45,8 @@
 			class="inputbox"
 			validate=""
 			required="false"
-			default="2012-07-7"
-		/>
-				
+			default="">
+    </field>
 		<field
 			name="end_date"
 			type="calendar"
@@ -52,18 +56,17 @@
 			class="inputbox"
 			validate=""
 			required="false"
-			default="2012-07-14"
-		/>
-
+			default="">
+    </field>
 		<field
 			name="availability"
 			type="list"
 			label="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_LABEL"
 			description="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_DESC"
-			class="validate-availability"
-			validate="availability"
-			required="true"
-			default="1">
+			class=""
+			validate=""
+			required="false"
+			default="-1">
 				<option value="-1">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
 				<option value="0">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>

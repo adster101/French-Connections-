@@ -1,0 +1,64 @@
+#upload {
+	border: 1px solid #ccc;
+	max-width: 500px;
+	min-height: 100px;
+	position: relative;
+}
+a {
+
+	text-decoration: none;
+}
+
+/*
+
+	cancel upload button
+*/
+.pause-upload, .cancel-upload, .browse-upload, .resume-upload  {
+
+	background:#ccc;
+	border: 1px solid #999999;
+	color: #000000;
+	display: inline-block;
+	margin: 5px 5px 0 3px;
+	padding: 2px 5px;
+}
+.pause-upload:hover, .cancel-upload:hover, .pause-upload:hover, .resume-upload:hover {
+
+	background: #aaa;
+	color: #fff;
+}
+
+/*
+
+	browse button style: currently supported only by Firexox 4+
+*/
+
+.browse-upload {
+
+	background:#ccc;
+	border: 1px solid #999999;
+	color: #000000;
+	display: inline-block;
+	margin: 5px 5px 0 0;
+	padding: 2px 5px;
+}
+.browse-upload:hover {
+
+	background: #aaa;
+	color: #fff;
+}
+
+.message {
+
+	border: 1px solid #000;
+	background: #ccc;
+	font-size: 90%;
+	padding: 10px;
+	display: inline-block;
+	margin: 10px 0;
+}
+
+.upload-link {
+
+	margin-top: 10px;
+}

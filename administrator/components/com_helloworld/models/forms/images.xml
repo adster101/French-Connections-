@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fields name="upload">
+    <fieldset name="upload">
+      <field 
+        type="ajaxupload">
+
+      </field>
+    </fieldset>
+  </fields>
+</form>
+

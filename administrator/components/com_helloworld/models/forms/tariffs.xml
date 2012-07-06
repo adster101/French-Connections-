@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This document describes the tariff form on the property manager screen.
+  The actual tariff fields are injected via a plugin hook.
+-->
+<form	addrulepath="/administrator/components/com_helloworld/models/rules">
+  <fieldset name="additional-fields">
+    <field 
+      name="id"
+      type="text"
+      disabled="true"
+      default=""
+      label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
+      class="readonly"
+      description="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"/>
+    <field 
+      name="parent_id"
+      type="hidden"
+      default="">      
+    </field>
+    <field 
+      name="greeting"
+      type="hidden"
+      default="">      
+    </field>
+    <field 
+      name="base_currency"
+      type="list"
+      label="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_LABEL"
+      description="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_DESC"
+      required="true">
+      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+			<option value="0">COM_HELLOWORLD_TARIFFS_BASE_CURRENCY_GBP</option>
+			<option value="1">COM_HELLOWORLD_TARIFFS_BASE_CURRENCY_EUR</option>      
+    </field>
+    <field 
+      name="tariff_based_on"
+      type="list"
+      label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_LABEL"
+      description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_DESC"
+      required="true">
+      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+			<option value="0">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_PROPERTY_PER_WEEK</option>
+			<option value="1">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_PROPERTY_PER_NIGHT</option>      
+			<option value="2">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_ROOM_PER_NIGHT</option>      
+			<option value="3">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_ROOM_PER_WEEK</option>      
+    </field>
+    <field
+			name="linen_costs"
+			type="text"
+			label="COM_HELLOWORLD_TARIFFS_FIELD_LINEN_COSTS_LABEL"
+			description="COM_HELLOWORLD_TARIFFS_FIELD_LINEN_COSTS_LABEL"
+			size="40"
+			class="inputbox validate-linen"
+			validate=""
+			required="false"
+			default=""/>
+    <field
+			name="additional_price_notes"
+			type="editor"
+			label="COM_HELLOWORLD_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
+			size="40"
+			class="inputbox validate-description"
+			default=""
+			filter="safehtml"
+			buttons="false"
+      validation="addition-price-notes"/>
+	</fieldset>
+
+</form>
+
+
+

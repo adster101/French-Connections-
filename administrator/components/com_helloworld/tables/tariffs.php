@@ -8,20 +8,25 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableAvailability extends JTable
+class HelloWorldTableTariffs extends JTable
 {
-	/**
+  public $id = ''; 
+  public $start_date = ''; 
+  public $end_date = ''; 
+  public $tariff = ''; 
+
+  /**
 	 * Constructor
 	 *
 	 * @param object Database connector object
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__availability', 'id', $db);
+		parent::__construct('#__tariffs', 'id', $db);
 	}
-	
-	/**
-	 * Overloaded load function
+
+  /**
+	 * Overloaded load function. This load the tariffs for the given property ID.
 	 *
 	 * @param       int $id property id, not primary key in this case
 	 * @param       boolean $reset reset data
@@ -31,7 +36,7 @@ class HelloWorldTableAvailability extends JTable
 	public function load($id = null, $reset = true) 
 	{
 		$query = $this->_db->getQuery(true);
-		$query->select('id, start_date, end_date, availability');
+		$query->select('id, start_date, end_date, tariff');
 		$query->from($this->_tbl);
 		$query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
 		$this->_db->setQuery($query);
@@ -47,14 +52,14 @@ class HelloWorldTableAvailability extends JTable
 			return false;
 		}			
 	}
-  
+
   /**
    * Overloaded save function
    * Takes the availability periods and saves them into the availability table.
    *  
    * 
    */
-  public function save ($id = null, $availability_periods = array() ) 
+  public function save ($id = null, $tariff_periods = array() ) 
   {
     
     if (!$this->check()) {
@@ -65,11 +70,11 @@ class HelloWorldTableAvailability extends JTable
       
       $query = $this->_db->getQuery(true);
       
-      $query->insert('#__availability');
+      $query->insert('#__tariffs');
       
-			$query->columns(array('id','start_date','end_date','availability'));
+			$query->columns(array('id','start_date','end_date','tariff'));
       
-      foreach ($availability_periods as $period) {
+      foreach ($tariff_periods as $period) {
         $insert_string = "$id,'" .$period['start_date']."','" . $period['end_date'] . "',". $period['status'] ."";
         $query->values($insert_string);
       }
@@ -94,5 +99,6 @@ class HelloWorldTableAvailability extends JTable
    */
   public function check() {
     return true;
-  }
+  }  
+  
 }

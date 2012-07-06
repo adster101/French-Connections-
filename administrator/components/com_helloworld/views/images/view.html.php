@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewAvailability extends JView
+class HelloWorldViewImages extends JView
 {
 	/**
 	 * display method of Availability View
@@ -25,26 +25,6 @@ class HelloWorldViewAvailability extends JView
 		// Get the availability form, for now not loading any form data as it will be presented in the calendar rather than in a form
 		// Need to take into account the additional price notes 
 		$form = $this->get('Form');
-
-		// get an instance of the availability table
-		$table = $this->get('AvailabilityTable');
-		
-		// Get the actual availability for this property 
-		$this->availability = $table->load($this->item->id);	
-
-		
-		// Check for errors.
-		if (count($errors = $this->get('Errors'))) 
-		{
-			JError::raiseError(500, implode('<br />', $errors));
-			return false;
-		}
-
-		// Get availability as an array of days
-		$this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability = $this->availability);
-		
-		// Build the calendar taking into account current availability...
-		$this->calendar =	HelloWorldHelper::getAvailabilityCalendar($months=18, $availability = $this->availability_array);		
 
 		// Assign the Data
 		$this->form = $form;
@@ -77,14 +57,14 @@ class HelloWorldViewAvailability extends JView
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->form->getValue('greeting')), 'helloworld');
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_TARIFFS_AND_PRICING_EDIT', $this->form->getValue('greeting')), 'helloworld');
 		
     // Built the actions for new and existing records.
-		JToolBarHelper::apply('availability.apply', 'JTOOLBAR_APPLY');	
+		JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');	
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
-
 	}
+  
 	/**
 	 * Method to set up the document properties
 	 *
@@ -97,7 +77,13 @@ class HelloWorldViewAvailability extends JView
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworld/submitbutton.js");
-		$document->addStyleSheet("/public_html/French-Connections-/administrator/components/com_helloworld/css/availability.css",'text/css',"screen");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/number.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/progressbar.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Languages/Locale.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Languages/Locale.en-US.uploadManager.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/upload.js");
+
+    $document->addStyleSheet("/administrator/components/com_helloworld/css/upload.css",'text/css',"screen");
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}
 }
