@@ -96,29 +96,29 @@ window.addEvent('domready', function() {
 	if(uploadManager.multiple) {
 	
 		mu = function () { options.multiple = this.checked };
-		$('multiple').addEvents({click: mu, change: mu, checked: true}).disabled = false;
+		//$('multiple').addEvents({click: mu, change: mu, checked: true}).disabled = false;
 	}
 	
 	if(uploadManager.xmlhttpupload) {
 	
 		mu = function () { options.iframe = this.checked };
-		$('iframe').addEvents({click: mu, change: mu}).disabled = false;
+		//$('iframe').addEvents({click: mu, change: mu}).disabled = false;
 	}
 	
 	if(uploadManager.xmlhttpupload) {
 	
 		pr = function () { options.progressbar = this.checked ? progressbarOptions : false };
-		$('progressbar').addEvents({click: pr, change: pr}).set({disabled: false, checked: true});
+		//$('progressbar').addEvents({click: pr, change: pr}).set({disabled: false, checked: true});
 	}
 	
 	//Modernizr.draganddrop && window.FileReader - see https://github.com/Modernizr/Modernizr/issues/57
-	dd.set('text', dd.get('text') + (window.DataTransfer ? ' (Yes!)' : ' ... don\'t know :('));
-	dd.getPrevious().disabled = true;
+	//dd.set('text', dd.get('text') + (window.DataTransfer ? ' (Yes!)' : ' ... don\'t know :('));
+	//dd.getPrevious().disabled = true;
 	
 	//enable/disable queue
-	uploadManager.enqueue = $('queue').addEvents({click: fn, change: fn}).checked;
-	uploadManager.iframe = $('iframe').set({events: {click: fr, change: fr}, disabled: !uploadManager.xmlhttpupload, checked: !uploadManager.xmlhttpupload }).checked;
-	$('pa').checked = uploadManager.resume;
+	//uploadManager.enqueue = $('queue').addEvents({click: fn, change: fn}).checked;
+	//uploadManager.iframe = $('iframe').set({events: {click: fr, change: fr}, disabled: !uploadManager.xmlhttpupload, checked: !uploadManager.xmlhttpupload }).checked;
+//	$('pa').checked = uploadManager.resume;
 	
 	uploadManager.attachDragEvents('upload', options);
 	

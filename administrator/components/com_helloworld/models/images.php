@@ -111,7 +111,7 @@ class HelloWorldModelImages extends JModelAdmin
 	 */
 	public function getScript() 
 	{
-		return 'administrator/components/com_helloworld/js/images.js';
+		return '/administrator/components/com_helloworld/js/images.js';
 	}
   
 }
