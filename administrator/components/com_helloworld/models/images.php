@@ -54,7 +54,7 @@ class HelloWorldModelImages extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.tariffs.data', array());
+		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.imagess.data', array());
 		if (empty($data)) 
 		{
 			$data = $this->getItem();
@@ -71,39 +71,7 @@ class HelloWorldModelImages extends JModelAdmin
    * @return boolean 
    */
   
-	public function getItem($pk = null)
-	{
-		// Initialise variables.
-		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
-		$table = $this->getTable();
 
-		if ($pk > 0)
-		{
-			// Attempt to load the row.
-			$return = $table->load($pk);
-
-			// Check for a table object error.
-			if ($return === false && $table->getError())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
-		}
-		// Convert to the JObject before adding other data.
-		$properties = $table->getProperties(1);
-    
-		$item = JArrayHelper::toObject($properties, 'JObject');
-
-		if (property_exists($item, 'params'))
-		{
-			$registry = new JRegistry;
-			$registry->loadString($item->params);
-			$item->params = $registry->toArray();
-		}
-
-		return $item;
-	}  
-  
 	/**
 	 * Method to get the script that have to be included on the form
 	 *

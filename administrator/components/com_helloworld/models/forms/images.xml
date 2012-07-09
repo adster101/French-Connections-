@@ -6,9 +6,19 @@
         type="ajaxupload"
         label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
 				description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC">
-
       </field>
     </fieldset>
+  </fields>
+  <fields name="gallery">
+    <fieldset name="image-gallery">
+      <field
+        type="hidden"
+        name="images">
+      </field>
+      
+    </fieldset>
+      
+    
   </fields>
 </form>
 

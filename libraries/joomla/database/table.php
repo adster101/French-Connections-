@@ -431,6 +431,7 @@ abstract class JTable extends JObject
 		// If the source value is not an array or object return false.
 		if (!is_object($src) && !is_array($src))
 		{
+      print_r($src);die;
 			$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_BIND_FAILED_INVALID_SOURCE_ARGUMENT', get_class($this)));
 			$this->setError($e);
 			return false;

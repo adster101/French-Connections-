@@ -28,7 +28,7 @@ class JFormFieldAjaxUpload extends JFormField
     $html = '
 			<div class="formRow">
 
-				<input type="file" id="url" name="url[]" multiple><br>
+				<input type="file" id="url" name="images[]" multiple><br>
 			</div>
 
 			<div class="formRow">
