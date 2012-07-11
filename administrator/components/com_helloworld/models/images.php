@@ -45,6 +45,17 @@ class HelloWorldModelImages extends JModelAdmin
 		return $form;
 	}
 	
+  public function getItem($pk = null) 
+  {
+ 		if ($item = parent::getItem($pk)) {    
+  		// Convert the images field to an array.
+			$item->images = json_decode(($item->images)); 
+    }     
+
+    return $item;
+
+  }
+  
 	/**
 	 * Method to get the data that should be injected in the form.
 	 *
@@ -54,7 +65,7 @@ class HelloWorldModelImages extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.imagess.data', array());
+		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.images.data', array());
 		if (empty($data)) 
 		{
 			$data = $this->getItem();
@@ -81,5 +92,50 @@ class HelloWorldModelImages extends JModelAdmin
 	{
 		return '/administrator/components/com_helloworld/js/images.js';
 	}
+  
+	/**
+	 * Method to allow derived classes to preprocess the form.
+	 *
+	 * @param	object	A form object.
+	 * @param	mixed	The data expected for the form.
+	 * @param	string	The name of the plugin group to import (defaults to "content").
+	 * @throws	Exception if there is an error in the form event.
+	 * @since	1.6
+	 */
+	protected function preprocessForm(JForm $form, $data)
+	{
+    // Generate the XML to inject into the form
+    $XmlStr = $this->getImagesXml($form, $data->images);    
+    $form->load($XmlStr);
+	}
+  
+  protected function getImagesXml ($form, $data) 
+  {
+    // Build an XML string to inject additional fields into the form
+    $XmlStr = '<form>';
+    $counter=0;
+    $XmlStr.='<fields name="images">';
+
+    // Loop over the existing availability first
+    foreach ($data as $image) {
+
+        
+        $XmlStr.= '
+        <fieldset name="image_'.$counter.'">
+          <field
+            id="image_'.$counter.'"
+            name="image"
+            type="hidden"
+            multiple="true"
+            default="'. $image->path .'">
+          </field>
+       
+
+        </fieldset>';
+        $counter++;
+      }
+    $XmlStr.="</fields></form>";
+    return $XmlStr;
+  }
   
 }

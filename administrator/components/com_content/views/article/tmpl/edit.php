@@ -20,7 +20,7 @@ JHtml::_('behavior.keepalive');
 // Create shortcut to parameters.
 	$params = $this->state->get('params');
 
-	$params = $params->toArray();
+  $params = $params->toArray();
 
 // This checks if the config options have ever been saved. If they haven't they will fall back to the original settings.
 $editoroptions = isset($params['show_publishing_options']);

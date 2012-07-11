@@ -134,7 +134,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// Get the post data, mainly in case availability or tariff data is set.
 		// For availability would it be cleaner to move changeover day to tariffs?
 		// Maybe although we need to track availability last updated on...against the accommodation unit.
-		$POST = JRequest::getVar('jform');
+		$POST = JRequest::getVar('jform', $default = array() );
 
     // Transform the params field
 		if (is_array($this->params)) {
@@ -150,9 +150,8 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$this->savePropertyTranslation($lang);
 		
     // Save the tariff details. Pass $POST to save function to determine if we have any or not
-    if ($POST !=''){
-      $this->savePropertyTariffs($POST);
-    }
+    $this->savePropertyTariffs($POST);
+    
     
 		// Do we have availability data to update?
 		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?

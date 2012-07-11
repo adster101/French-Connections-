@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
-  <fields name="upload">
     <fieldset name="upload">
       <field 
         type="ajaxupload"
         label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
-				description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC">
+				description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC"
+        name="upload-images">
       </field>
     </fieldset>
-  </fields>
-  <fields name="gallery">
-    <fieldset name="image-gallery">
-      <field
-        type="hidden"
-        name="images">
-      </field>
-      
-    </fieldset>
-      
-    
-  </fields>
 </form>
 

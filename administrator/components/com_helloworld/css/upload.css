@@ -22,18 +22,20 @@
 /* Drag & Drop file uploading */
 
 .droppable {
-	border: #121a3f 1px solid;
+	border: #000 5px dashed;
 	border-radius: 3px;
-	background: #545A74;
-	color: white;
+	background: #fff;
+	color: #000;
 	padding: 20px;
 	margin: 10px;
 	clear: both;
 	text-align: center;
+  font-size: 150%;
+  font-weight: bold;
 }
 
 .droppable.hover {
-	background: #121a3f;
+	background: #efefef;
 }
 
 .uploadList {
@@ -42,7 +44,9 @@
 	list-style: none;
 }
 
-.uploadItem {
+
+
+ul.uploadList .uploadItem {
 	overflow: hidden;
 	border-bottom: #BCBCBC 1px solid;
 	margin: 0 20px;
@@ -79,7 +83,35 @@ a.delInputRow {
 
 .progress {
 	margin: 5px 0;
-	height: 15px;
+	height: 25px;
 	border-radius: 3px;
-	background: #545A74;
+	background: #bbb;
+}
+
+
+
+#draggable-image-list li {
+  float:left;
+  margin-bottom:1.5em;
+  margin-right:25px;
+  width:140px;
+  min-height:175px;
+  border:1px solid #efefef;
+  padding:3px;
+}
+
+#draggable-image-list img {
+  margin:0;
+}
+
+.drag-handle {
+  display:block;
+  padding:6px 0;
+  background:#efefef;
+}
+
+.image-control-bar p {
+  padding:6px 0;
+  clear:both;
+  
 }
