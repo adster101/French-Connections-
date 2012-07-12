@@ -50,10 +50,9 @@ class HelloWorldModelImages extends JModelAdmin
  		if ($item = parent::getItem($pk)) {    
   		// Convert the images field to an array.
 			$item->images = json_decode(($item->images)); 
-    }     
-
+    }
+    
     return $item;
-
   }
   
 	/**
@@ -115,7 +114,6 @@ class HelloWorldModelImages extends JModelAdmin
     $XmlStr = '<form>';
     $counter=0;
     $XmlStr.='<fields name="images">';
-
     // Loop over the existing availability first
     foreach ($data as $image) {
 
@@ -127,7 +125,7 @@ class HelloWorldModelImages extends JModelAdmin
             name="image"
             type="hidden"
             multiple="true"
-            default="'. $image->path .'">
+            default="'. $image->filepath .'">
           </field>
        
 

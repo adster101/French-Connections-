@@ -8,6 +8,14 @@ jimport('joomla.application.component.controllerform');
 // Import file lib for checking file types of files being uploaded
 jimport('joomla.filesystem.file');
 
+// require helper file
+require_once('/administrator/components/com_media/helpers/media.php');
+
+class HelloWorldUpload extends MediaHelper {
+  
+}
+
+
 /**
  * HelloWorld Controller
  */
@@ -26,7 +34,10 @@ class HelloWorldControllerImages extends JControllerForm
 	}
 
   function upload () {
-
+    
+    // An array to hold the
+    $images = array();
+    
     // Check that this is a valid call from a logged in user.
     JSession::checkToken( 'get' ) or die( 'Invalid Token' );
     
@@ -34,15 +45,18 @@ class HelloWorldControllerImages extends JControllerForm
     $this->allowEdit();
     
     // Get the component parameters
- 		$params = JComponentHelper::getParams('com_helloworld');
+ 		$params = JComponentHelper::getParams('com_media');
 
  		// Get some data from the request
 		$files			= JRequest::getVar('jform_upload_images', '', 'files', 'array');
     
+   
+    $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
+    
     // Create the folder path into which we are uploading the images to 
     $this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-
     
+    // Check the total size of files being uploaded. If it's too large we just exit?
     if (
 			$_SERVER['CONTENT_LENGTH']>($params->get('upload_maxsize', 0) * 1024 * 1024) ||
 			$_SERVER['CONTENT_LENGTH']>(int)(ini_get('upload_max_filesize'))* 1024 * 1024 ||
@@ -51,10 +65,10 @@ class HelloWorldControllerImages extends JControllerForm
 		)
 		{
       // Not acceptable. Too large a total file size.
-			// return an error object somehow...
-		}
+			// return an error message and ...
+      jexit();
+    }
     
-
     // Input is in the form of an associative array containing numerically indexed arrays
 		// We want a numerically indexed array containing associative arrays
 		// Cast each item as array in case the Filedata parameter was not sent as such
@@ -62,99 +76,93 @@ class HelloWorldControllerImages extends JControllerForm
 			(array) $files['name'], (array) $files['type'], (array) $files['tmp_name'], (array) $files['error'], (array) $files['size']
 		);
     
-   
-    
-  
+		// Set FTP credentials, if given
+		JClientHelper::setCredentialsFromRequest('ftp');
+		JPluginHelper::importPlugin('content');
+		$dispatcher	= JDispatcher::getInstance(); 
 
-   
-
-    
-    
-    
+    // Loop over each file in the files array and do some checking, if the file checks out we proceed to transfer it to the relevant folder
     foreach ($files as &$file)
 		{
       
-			// The request is valid
-			$err = null;
-
-    // Merge this into a custom canUpload function here incorporating any other checks we think we need (XSS check, dimensions etc)
-    // Have it return false on any one error and set an error message or run through all the checks first and then spit out all errors?
-		foreach ($files as &$file)
-		{ 
-			if ($file['size']>((int)(ini_get('post_max_size')) * 1024 * 1024))
-			{
-        $file['error'][] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_TOO_LARGE');
-			}
-			
+      // Firstly check if the image already exists...if it does we don't want to upload it agin
 			if (JFile::exists($file['filepath']))
 			{
 				// A file with this name already exists
         $file['error'][] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_ALREADY_EXISTS');
       }
 
+      // Check that it has a valid name
 			if (!isset($file['name']))
 			{
 				// This file doesn't have a filename after running through make path safe
 				$file['error'][] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_NAME_NOT_VALID');
-      }
-		}
-      // As per the media helper need to check file type
-      if (!$this->canUpload($file, $err))
+      }      
+      
+			// The file is valid at this point
+			$err = null;
+
+      // canUpload does a further raft of checks to ensure that the image is 'safe' (i.e. checks mime type and that it is an image file etc
+			if (!MediaHelper::canUpload($file, $err))
 			{
 				// The file can't be upload
-				$file['error'][] = $err;
-        die;
+        $file['error'][] = JText::_($err);
+			
 			}
+      
+      // If there are no errors recorded for this file, we move it to the relevant folder for this property
+      if (count($file['error']) == 0) {
+        
+        // Create a new JObject to 
+        $object_file = new JObject($file);
+        
+        // Trigger the onContentBeforeSave event.
+        //$result = $dispatcher->trigger('onContentBeforeSave', array('com_helloworld.images', &$object_file));
+        //if (in_array(false, $result, true))
+        //{
+          // There are some errors in the plugins
+          //JError::raiseWarning(100, JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors)));
+          //return false;
+        //}
 
-			// Trigger the onContentBeforeSave event.
-			$object_file = new JObject($file);
-
-      $dispatcher	= JDispatcher::getInstance();
-
-			$result = $dispatcher->trigger('onContentBeforeSave', array('com_media.file', &$object_file));
-			if (in_array(false, $result, true))
-			{
-				// There are some errors in the plugins
-				$error[$file['name']][] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_PROBLEM_WITH_UPLOAD');
-			}
-
-			if (!JFile::upload($file['tmp_name'], $file['filepath']))
-			{
-				// Error in upload
-				$error[$file['name']][] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_UNSPECIFIED_ERROR');
-			}
-			else
-			{
-				// Trigger the onContentAfterSave event.
-				$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file, true));
-				$this->setMessage(JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($file['filepath'], strlen(1))));
-			}
-		}
-    
-    print_r($files);
-    die;
-    // At this point we have an array of images 
+        if (!JFile::upload($file['tmp_name'], $file['filepath']))
+        {
+          // Error in upload
+          $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE');
+        }
+        else
+        {
+          // Trigger the onContentAfterSave event.
+          $dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file, true));
+        }
+        
+        // Add the url to the files array
+        $file['url'] = '/images/'. $id . '/' . $file['name'];
+        
+      }
+    } 
     
     // Load the relevant table model(s) so we can save the data back to the db
-    $images = $this->getModel('images');
+    $images_model = $this->getModel('images');
     
     // Get an instance of the helloworld table
-    $table = $images->getTable();
+    $table = $images_model->getTable();
     
-    // Get the ID of the property being edited and set the table instance to that.
-    $table->id = JRequest::getVar( 'id' );
+    // Load the existing image data for this property
+    $table->load ( $id ); 
+    
+    // 
+    
+    
+    
+
     
     // Bind images to table object
     $array = array();
+     
+    print_r($files);
     
-    $poop['images'][0]['path'] = 'path/to/image';
-    $poop['images'][0]['en-GB'] = 'English caption';
-    $poop['images'][0]['fr-FR'] = 'French caption';
-    $poop['images'][1]['path'] = 'path/to/image';
-    $poop['images'][1]['en-GB'] = 'English caption';
-    $poop['images'][1]['fr-FR'] = 'French caption';  
-    
-    $array['images'] = json_encode($poop);
+    $array['images'] = json_encode($files);
     
     // Bind the translated fields to the JTAble instance	
     if (!$table->bind($array))
@@ -170,9 +178,8 @@ class HelloWorldControllerImages extends JControllerForm
 			return false;
 		}	
     
-    //$table->save($id);
     
-    
+    //print_r(json_encode($files));
     
     
     jexit(); // Exit this request now as results passed back to client via xhr transport.
@@ -200,34 +207,9 @@ class HelloWorldControllerImages extends JControllerForm
 			'tmp_name'	=> $tmp_name,
 			'error'		=> array(),
 			'size'		=> $size,
-			'filepath'	=> JPath::clean(implode(DS, array($this->folder, $name)))
+			'filepath'	=> JPath::clean(implode(DS, array($this->folder, $name))),
+      'url'       => ''
 		);
 	}  
-  
-  
-	function canUpload($file, &$err)
-	{
-    echo "Woot!";die;
-		$params = JComponentHelper::getParams('com_media');
-
-		$format = JFile::getExt($file['name']);
-
-		$allowable = explode(',', $params->get('upload_extensions'));
-
-		if (!in_array($format, $allowable)) {
-			$err = JText('COM_MEDIA_ERROR_WARNFILETYPE');
-			return false;
-		}
-
-		$maxSize = (int) ($params->get('upload_maxsize', 0) * 1024 * 1024);
-
-		if ($maxSize > 0 && (int) $file['size'] > $maxSize) {
-			$err = JText('COM_MEDIA_ERROR_WARNFILETOOLARGE');
-
-			return false;
-		}
-
-		return true;
-	}
   
 }

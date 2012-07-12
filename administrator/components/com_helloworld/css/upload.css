@@ -55,9 +55,10 @@ ul.uploadList .uploadItem {
 
 .uploadItem span {
 	overflow: hidden;
-	width: 150px;
 	float: left;
 	display: block;
+  padding-right:15px;
+  
 }
 
 a.addInputRow,

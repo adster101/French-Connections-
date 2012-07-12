@@ -69,7 +69,15 @@ Form.Upload = new Class({
 				onComplete: function(){
 					progress.setStyle('width', '100%');
 					self.fireEvent('complete', arguments);
-				}
+        
+          this.formData = new FormData();		
+          // Remove the file elements from the HTML node
+          list.empty();
+          // Hide the progress-o-meter
+          progress.setStyle('display', 'none');
+          // Remove the files from the inputFiles array otherwise they persist
+          inputFiles.emptyFiles();
+        }
 			}),
 
 			inputname = input.get('name');

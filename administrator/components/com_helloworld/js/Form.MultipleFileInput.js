@@ -100,7 +100,7 @@ Form.MultipleFileInput = new Class({
 		return this;
 	},
 
-	remove: function(file){
+	remove: function(file) {
 		var index = this._files.indexOf(file);
 		if (index == -1) return this;
 		this._files.splice(index, 1);
@@ -109,7 +109,9 @@ Form.MultipleFileInput = new Class({
 		if (!this._files.length) this.fireEvent('empty');
 		return this;
 	},
-
+  unsetFiles: function() {
+    return this._files = [];
+  },
 	getFiles: function(){
 		return this._files;
 	}
