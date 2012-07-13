@@ -35,7 +35,7 @@ class HelloWorldControllerImages extends JControllerForm
 
   function upload () {
     
-    // An array to hold the
+    // An array to hold the that are good to save against the property
     $images = array();
     
     // Check that this is a valid call from a logged in user.
@@ -50,7 +50,7 @@ class HelloWorldControllerImages extends JControllerForm
  		// Get some data from the request
 		$files			= JRequest::getVar('jform_upload_images', '', 'files', 'array');
     
-   
+    // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
     
     // Create the folder path into which we are uploading the images to 
@@ -115,15 +115,6 @@ class HelloWorldControllerImages extends JControllerForm
         
         // Create a new JObject to 
         $object_file = new JObject($file);
-        
-        // Trigger the onContentBeforeSave event.
-        //$result = $dispatcher->trigger('onContentBeforeSave', array('com_helloworld.images', &$object_file));
-        //if (in_array(false, $result, true))
-        //{
-          // There are some errors in the plugins
-          //JError::raiseWarning(100, JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors)));
-          //return false;
-        //}
 
         if (!JFile::upload($file['tmp_name'], $file['filepath']))
         {
@@ -133,12 +124,15 @@ class HelloWorldControllerImages extends JControllerForm
         else
         {
           // Trigger the onContentAfterSave event.
+          // Should trigger this after the files have been done into the database? e.g. post process uploaded files
           $dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file, true));
         }
         
-        // Add the url to the files array
+        // Add the url to the uploaded files array
         $file['url'] = '/images/'. $id . '/' . $file['name'];
         
+        $file['en-GB'] = '';
+        $file['fr-FR'] = '';
       }
     } 
     
@@ -149,25 +143,37 @@ class HelloWorldControllerImages extends JControllerForm
     $table = $images_model->getTable();
     
     // Load the existing image data for this property
-    $table->load ( $id ); 
+    $table->load ( $id );
     
-    // 
+    // Get the existing images as an array...
+    $existing_images = json_decode($table->images, $assoc = true);
     
+    // Initialise $existing_images as an array if there are none assigned.
+    if(!$existing_images) {
+      $existing_images = array();
+    }
     
-    
-
+    // Lastly, loop over the $files array (again) and add any new images to the existing ones
+    foreach ($files as &$file) {
+      // If the image uploaded correctly there won't be any errors
+      if (count($file['error']) == 0) {
+        unset($file['error']);
+        unset($file['tmp_name']);
+        $images[] = $file;
+      }
+    }
     
     // Bind images to table object
     $array = array();
-     
-    print_r($files);
-    
-    $array['images'] = json_encode($files);
+
+    // Merge and encode it all into JSON, baby
+    $array['images'] = json_encode(array_merge($existing_images, $images));
     
     // Bind the translated fields to the JTAble instance	
     if (!$table->bind($array))
     {
       JError::raiseWarning(500, $table->getError());
+      
       return false;
     }	
  
@@ -179,7 +185,7 @@ class HelloWorldControllerImages extends JControllerForm
 		}	
     
     
-    //print_r(json_encode($files));
+    print_r(json_encode($files));
     
     
     jexit(); // Exit this request now as results passed back to client via xhr transport.

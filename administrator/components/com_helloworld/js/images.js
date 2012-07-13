@@ -4,11 +4,26 @@ window.addEvent('domready', function(){
 		onComplete: function(arguments){
       //alert('Completed uploading the Files');
       //window.location.reload();
-      //console.log(arguments);
+      console.log(arguments);
       // Need to take the list of arguments and append this to the gallery/library view
-      console.log(this);
     }
 	});
+  
+  //convert this to MooTools style code?
+  var fileSelect = document.getElementById("droppable"),
+    fileElem = document.getElementById("url");
+
+  fileSelect.addEventListener("click", function (e) {
+    if (fileElem) {
+      fileElem.click();
+    }
+    e.preventDefault(); // prevent navigation to "#"
+  }, false);
+
+
+
+
+
 
 	if (!upload.isModern()){
 		// Use something like

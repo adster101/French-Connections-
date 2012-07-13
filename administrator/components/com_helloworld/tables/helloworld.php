@@ -135,6 +135,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// For availability would it be cleaner to move changeover day to tariffs?
 		// Maybe although we need to track availability last updated on...against the accommodation unit.
 		$POST = JRequest::getVar('jform', $default = array() );
+    
 
     // Transform the params field
 		if (is_array($this->params)) {

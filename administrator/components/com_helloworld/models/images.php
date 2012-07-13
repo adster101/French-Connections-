@@ -49,7 +49,7 @@ class HelloWorldModelImages extends JModelAdmin
   {
  		if ($item = parent::getItem($pk)) {    
   		// Convert the images field to an array.
-			$item->images = json_decode(($item->images)); 
+			$item->images = json_decode( $item->images, $assoc = true ); 
     }
     
     return $item;
@@ -116,22 +116,48 @@ class HelloWorldModelImages extends JModelAdmin
     $XmlStr.='<fields name="images">';
     // Loop over the existing availability first
     foreach ($data as $image) {
-
-        
+      
         $XmlStr.= '
         <fieldset name="image_'.$counter.'">
-          <field
-            id="image_'.$counter.'"
-            name="image"
+         <field
+            id="url_' . $counter . '"
+            name="url"
             type="hidden"
             multiple="true"
-            default="'. $image->filepath .'">
-          </field>
+            default="'. $image['url'] .'">
+          </field> 
+          <field
+            id="caption_' . $counter . '"
+            name="caption"
+            label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+            description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
+            type="text"
+            multiple="true"
+            maxlength="50"
+            size="30"
+            default="'. $image['en-GB'] .'">
+          </field>        
+          <field
+            id="filepath_'.$counter.'"
+            name="filepath"
+            type="hidden"
+            multiple="true"
+            default="'. $image['filepath'] .'">
+          </field> 
+          <field
+            id="name'.$counter.'"
+            name="name"
+            type="hidden"
+            multiple="true"
+            default="'. $image['name'] .'">
+          </field>           
+          
        
 
         </fieldset>';
         $counter++;
       }
+      
     $XmlStr.="</fields></form>";
     return $XmlStr;
   }

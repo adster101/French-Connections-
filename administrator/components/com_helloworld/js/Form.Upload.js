@@ -18,7 +18,7 @@ Form.Upload = new Class({
 	Implements: [Options, Events],
 
 	options: {
-		dropMsg: 'Please drop your files here',
+		dropMsg: 'Click here to browse for files on your computer. Or drag and drop images here to queue them for upload.',
 		onComplete: function(){
 			// reload
 			window.location.href = window.location.href;
@@ -44,7 +44,7 @@ Form.Upload = new Class({
 
 		var self = this,
 
-			drop = new Element('div.droppable', {
+			drop = new Element('div.droppable#droppable', {
 				text: this.options.dropMsg
 			}).inject(input, 'after'),
 
@@ -76,7 +76,7 @@ Form.Upload = new Class({
           // Hide the progress-o-meter
           progress.setStyle('display', 'none');
           // Remove the files from the inputFiles array otherwise they persist
-          inputFiles.emptyFiles();
+          inputFiles.unsetFiles();
         }
 			}),
 

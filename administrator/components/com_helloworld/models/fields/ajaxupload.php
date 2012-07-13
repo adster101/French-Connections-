@@ -26,13 +26,7 @@ class JFormFieldAjaxUpload extends JFormField
   public function getInput () {
     // Define the HTML to output
     $html = '
-			<div class="formRow">
-
-				<!--<input type="file" id="url" name="images[]" multiple>-->
-  			<input type="file" id="url" name="'. $this->id .'" multiple>
-
-			</div>
-
+  		<input type="file" id="url" name="'. $this->id .'" multiple style="display:none" />
 			<div class="clearfix fltrt">
 				<input type="submit" id="_submit" name="_submit" value="Upload images">
 			</div>

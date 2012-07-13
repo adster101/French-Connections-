@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
-    <fieldset name="upload">
-      <field 
-        type="ajaxupload"
-        label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
-				description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC"
-        name="upload-images">
-      </field>
-    </fieldset>
+  <fieldset name="upload">
+    <field 
+      type="ajaxupload"
+      label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
+      description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC"
+      name="upload-images">
+    </field>
+  </fieldset>
+
+  <fieldset name="details">
+    <field 
+      name="id"
+      type="hidden"
+      default="">
+    </field>
+    <field 
+      name="parent_id"
+      type="hidden"
+      default="">      
+    </field>
+    <field 
+      name="greeting"
+      type="hidden"
+      default="">      
+    </field>
+  </fieldset>
 </form>
 

@@ -6,11 +6,9 @@ JHtml::_('behavior.formvalidation');
 
 
 $image_field_sets = $this->form->getFieldSets('images');
-
 ?>
 
-
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&'. JUtility::getToken() .'=1&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JUtility::getToken() . '=1&id=' . (int) $this->item->id); ?>" method="post" name="inageUpload" id="tariffs-form">
   <div class="width-100">
     <fieldset class="adminform">		
       <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'); ?></legend>
@@ -18,8 +16,8 @@ $image_field_sets = $this->form->getFieldSets('images');
         <?php foreach ($this->form->getFieldset('upload') as $field) { ?>
           <li>
             <?php
-              //echo $field->label;
-              echo $field->input;
+            //echo $field->label;
+            echo $field->input;
             ?>
           </li>
         <?php } ?>
@@ -35,65 +33,51 @@ $image_field_sets = $this->form->getFieldSets('images');
   <div class="width-100 fltrt">
     <fieldset class="adminform">
       <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_GALLERY'); ?></legend>
-        <?php foreach ($image_field_sets as $fieldset) { ?>
-          
-              <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>
-                 
-                  <?php
-                    echo $field->label;
-                    echo $field->input;
-                  ?>
-      
-              <?php } // End of foreach getFieldSet fieldset name ?>
-		
-        <?php } // End of foreach image field sets ?>
-      
       <ul class="adminformlist clearfix" id="draggable-image-list">
-        <?php foreach ($this->form->getFieldset('image-gallery') as $field) { ?>
+
+        <?php foreach ($image_field_sets as $fieldset) { ?> 
           <li>
-            <?php
-              echo $field->label;
-              echo $field->input;
-            ?>
-          </li>
-        <?php } ?>
-          
-        <li>
-          <div class="image-container handle">
-            <span class="drag-handle">+-</span>
-            <img src="/images/44/Lighthouse.jpg" style="width:100%" />
-          </div>  
-          <div class="image-control-bar">
-            <label id="jform_tariffs_start_date_tariff_1-lbl" for="jform_tariffs_start_date_tariff_1" title="" aria-invalid="false">Start date</label>
-            <input type="text" title="Wednesday, 01 August 2012" name="jform[tariffs][start_date][]" id="jform_tariffs_start_date_tariff_1" value="" class="inputbox" aria-invalid="false">
-          </div>
-        </li>  
-        <li>
-          <div class="image-container handle">
-            <span class="drag-handle">+-</span>
-            <img src="/images/44/105713-22.jpg" style="width:100%" /> 
+            <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
+              <?php
+              // If this is the image URL then output it, duh.
+              if (strpos($field->name, 'url')) {
+                ?> 
+                <div class="image-container handle">
+                  <span class="drag-handle">+-+-+-+-+-+-+-+</span>
+                  <img src="<?php echo $field->value; ?>" /> 
+                </div>
+
+                <?php } 
+                
+                if (strpos($field->name, 'caption')) { ?>
+                <div class="image-control-bar">
+                  <?php
+                  echo $field->label;
+                  echo $field->input;
+                  ?>
+                </div>
+              <?php } 
+                if(strpos($field->name, 'filepath') || strpos($field->name, 'url') || strpos($field->name, 'name')) { 
+                  echo $field->label;
+                  echo $field->input;
+                }
+              ?>
             
-          </div> 
-          <div class="image-control-bar">
-            <p><a href="#">Bar</a></p>
-          </div>
+            
+            <?php } // End of foreach getFieldSet fieldset name  ?>		
+
+<?php } // End of foreach image field sets   ?>
         </li>
-        <li>
-          <div class="image-container handle">
-            <span class="drag-handle">+-</span>
-            <img src="/images/44/4399-24.jpg" style="width:100%" />
-          </div>
-          <div class="image-control-bar">
-            <p><a href="#">Bar</a></p>
-          </div>
-        </li>  
-       
-      
       </ul>	
     </fieldset>
     <input type="hidden" name="task" value="images.edit" />
-    <?php echo JHtml::_('form.token'); ?>
+    <?php foreach ($this->form->getFieldset('details') as $field) { ?>
+      <?php
+      echo $field->input;
+      ?>
+    <?php } ?>    
+<?php echo JHtml::_('form.token'); ?>
   </div>
-  
 </form>	
+
 

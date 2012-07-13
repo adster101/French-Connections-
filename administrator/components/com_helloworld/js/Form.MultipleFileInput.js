@@ -87,7 +87,7 @@ Form.MultipleFileInput = new Class({
 		new Element('li', {
 			'class': this.options.itemClass
 		}).grab(new Element('span', {
-			text: file.name
+			text: file.name + ' (' + file.size + ' Bytes)'
 		})).grab(new Element('a', {
 			text: 'x',
 			href: '#',

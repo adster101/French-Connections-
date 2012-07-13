@@ -60,10 +60,10 @@ class HelloWorldViewImages extends JView
 		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_TARIFFS_AND_PRICING_EDIT', $this->form->getValue('greeting')), 'helloworld');
 
     // Add an upload button?
-    JToolBarHelper::media_manager( '44' );
+    //JToolBarHelper::media_manager( '44' );
 
     // Built the actions for new and existing records.
-		JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');	
+		JToolBarHelper::apply('images.apply', 'JTOOLBAR_APPLY');	
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
 
@@ -80,7 +80,7 @@ class HelloWorldViewImages extends JView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworld/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/images/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Request.File.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Form.MultipleFileInput.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Form.Upload.js");
