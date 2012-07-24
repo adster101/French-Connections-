@@ -153,6 +153,8 @@ class HelloWorldTableHelloWorld extends JTableNested
     // Save the tariff details. Pass $POST to save function to determine if we have any or not
     $this->savePropertyTariffs($POST);
     
+    // Save the image details, if any are passed in, baby
+    $this->saveImageDetails($POST);
     
 		// Do we have availability data to update?
 		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
@@ -298,7 +300,7 @@ class HelloWorldTableHelloWorld extends JTableNested
     $tariff_periods = $this->getAvailabilityByPeriod($tariffs_by_day);
 
     // Get instance of the tariffs table
-    $tariffsTable = $availabilityTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
+    $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
 
     // Delete existing availability
     // Need to wrap this in some logic
@@ -397,4 +399,34 @@ class HelloWorldTableHelloWorld extends JTableNested
     return $availability_by_period;
   }
 
+  public function saveImageDetails( $POST = array() ) {
+    
+    if(!array($POST)) {
+      return true;
+    }
+    
+    // Check for a images array in the POST structure
+    if (!array_key_exists('images', $POST)) {
+      return true;
+    }    
+    
+    $image_detail = $POST['images'];
+    
+     // Get instance of the images table
+    $imagesTable = JTable::getInstance($type = 'Images', $prefix = 'HelloWorldTable', $config = array());
+
+    // Delete existing images
+    // Need to wrap this in some logic
+    
+    $imagesTable->delete($this->id);
+    
+    // Save the images to the JTable instance	
+    if (!$imagesTable->save($this->id, $image_detail, $this->parent_id, true)) {
+      JError::raiseWarning(500, $imagesTable->getError());
+      return false;
+    }
+    
+  }
+  
+  
 }

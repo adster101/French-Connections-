@@ -4,7 +4,6 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
-
 $image_field_sets = $this->form->getFieldSets('images');
 ?>
 

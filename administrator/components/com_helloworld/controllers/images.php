@@ -49,7 +49,7 @@ class HelloWorldControllerImages extends JControllerForm
 
  		// Get some data from the request
 		$files			= JRequest::getVar('jform_upload_images', '', 'files', 'array');
-    
+
     // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
     
@@ -129,30 +129,20 @@ class HelloWorldControllerImages extends JControllerForm
         }
         
         // Add the url to the uploaded files array
-        $file['url'] = '/images/'. $id . '/' . $file['name'];
-        
-        $file['en-GB'] = '';
-        $file['fr-FR'] = '';
+        $file['image_url'] = '/images/'. $id . '/' . $file['name'];
+        $file['caption'] = '';
+        $file['image_file_name'] = $file['name'];
       }
     } 
     
+
     // Load the relevant table model(s) so we can save the data back to the db
     $images_model = $this->getModel('images');
     
     // Get an instance of the helloworld table
-    $table = $images_model->getTable();
+    $table = $images_model->getImagesTable();
     
-    // Load the existing image data for this property
-    $table->load ( $id );
-    
-    // Get the existing images as an array...
-    $existing_images = json_decode($table->images, $assoc = true);
-    
-    // Initialise $existing_images as an array if there are none assigned.
-    if(!$existing_images) {
-      $existing_images = array();
-    }
-    
+      
     // Lastly, loop over the $files array (again) and add any new images to the existing ones
     foreach ($files as &$file) {
       // If the image uploaded correctly there won't be any errors
@@ -163,30 +153,13 @@ class HelloWorldControllerImages extends JControllerForm
       }
     }
     
-    // Bind images to table object
-    $array = array();
 
-    // Merge and encode it all into JSON, baby
-    $array['images'] = json_encode(array_merge($existing_images, $images));
-    
-    // Bind the translated fields to the JTAble instance	
-    if (!$table->bind($array))
-    {
-      JError::raiseWarning(500, $table->getError());
-      
-      return false;
-    }	
- 
     // And update or create depending on whether any translations already exist
-		if (!$table->store())
+		if (!$table->save($id, $files))
 		{
 			JError::raiseWarning(500, $table->getError());
 			return false;
-		}	
-    
-    
-    print_r(json_encode($files));
-    
+		}
     
     jexit(); // Exit this request now as results passed back to client via xhr transport.
   }
@@ -214,7 +187,6 @@ class HelloWorldControllerImages extends JControllerForm
 			'error'		=> array(),
 			'size'		=> $size,
 			'filepath'	=> JPath::clean(implode(DS, array($this->folder, $name))),
-      'url'       => ''
 		);
 	}  
   
