@@ -35,7 +35,8 @@ class HelloWorldTableImages extends JTable
 		$query = $this->_db->getQuery(true);
 		$query->select('id, property_id, parent_property_id, image_url, image_file_name, caption');
 		$query->from($this->_tbl);
-        
+    
+    // For a parent property we pass in id and parent_id the same so we can select those images assigned to the gallery    
     if ($id == $parent_id) {
       $query->where('property_id = ' . $this->_db->quote($id) . ' AND parent_property_id' . ' = ' . $this->_db->quote($parent_id));
     } else {
