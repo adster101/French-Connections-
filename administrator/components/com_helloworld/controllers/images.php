@@ -129,7 +129,7 @@ class HelloWorldControllerImages extends JControllerForm
         }
         
         // Add the url to the uploaded files array
-        $file['image_url'] = JURI::root . 'images/'. $id . '/' . $file['name'];
+        $file['image_url'] = JURI::root() . 'images/'. $id . '/' . $file['name'];
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
       }
