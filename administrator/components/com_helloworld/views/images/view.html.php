@@ -80,11 +80,11 @@ class HelloWorldViewImages extends JView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/images/submitbutton.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Request.File.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Form.MultipleFileInput.js");
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Form.Upload.js");
-    $document->addStyleSheet("/administrator/components/com_helloworld/css/upload.css",'text/css',"screen");
+		$document->addScript(JURI::root() . "administrator/components/com_helloworld/views/images/submitbutton.js");
+		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Request.File.js");
+		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.MultipleFileInput.js");
+		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.Upload.js");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/upload.css",'text/css',"screen");
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}
 }
