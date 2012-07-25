@@ -53,9 +53,9 @@ class HelloWorldControllerImages extends JControllerForm
     // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
     
-    // Create the folder path into which we are uploading the images to 
-    $this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-    
+    // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
+    //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    $this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
     // Check the total size of files being uploaded. If it's too large we just exit?
     if (
 			$_SERVER['CONTENT_LENGTH']>($params->get('upload_maxsize', 0) * 1024 * 1024) ||
@@ -69,7 +69,7 @@ class HelloWorldControllerImages extends JControllerForm
       jexit();
     }
     
-    // Input is in the form of an associative array containing numerically indexed arrays
+    // Input is in the form of an associative array containing numerically indexed arrays - passed in from PHP/Apache in this format?
 		// We want a numerically indexed array containing associative arrays
 		// Cast each item as array in case the Filedata parameter was not sent as such
 		$files = array_map( array($this, 'reformatFilesArray'),
