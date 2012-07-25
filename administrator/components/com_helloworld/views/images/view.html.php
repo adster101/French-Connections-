@@ -57,7 +57,7 @@ class HelloWorldViewImages extends JView
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_TARIFFS_AND_PRICING_EDIT', $this->form->getValue('greeting')), 'helloworld');
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', $this->form->getValue('greeting')), 'helloworld');
 
     // Add an upload button?
     //JToolBarHelper::media_manager( '44' );
