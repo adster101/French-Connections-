@@ -98,6 +98,7 @@ class HelloWorldModelImages extends JModelAdmin
     {
   
       // We first need to determine what type of node we are looking at. E.g. single unit prop, a unit, or parent of a multi unit property
+      // TODO: Abstract this to a utility function? Or use the level as an indicator
       
       // Get the subtree for this property
       $subtree = $table->getTree( $pk );	
@@ -105,7 +106,7 @@ class HelloWorldModelImages extends JModelAdmin
       if (count($subtree) == 1 && $table->isLeaf( $pk ) && $table->parent_id == 1) {
         
         // This is a single unit property, no?
-        $images = $imagesTable->load( $pk );
+        $images['gallery'] = $imagesTable->load( $pk );
        
         // Check for a table object error.
         if ($images === false && $imagesTable->getError())
@@ -118,14 +119,23 @@ class HelloWorldModelImages extends JModelAdmin
       if (count($subtree) > 1 && $table->parent_id == 1) {
         
         // This is a parent node as subtree is gt 1 and parent id is 1 (e.g. root)
-        $images = $imagesTable->load( $pk );
+      
+        // As such we need to get a library 
+        $images['library'] = $imagesTable->load( $pk );
         
+        // And gallery of images to show in the image manager
         $images['gallery'] = $imagesTable->load( $pk, $pk );
         
       }
       
       if ($table->isLeaf( $pk ) && $table->parent_id != 1) {
-        echo "Child unit node";
+        // This is a child node as isLeaf returns true and parent_id not root (1)
+      
+        // As such we need to get a library 
+        $images['library'] = $imagesTable->load( $table->parent_id );
+        
+        // And gallery of images to show in the image manager
+        $images['gallery'] = $imagesTable->load( $pk );       
       }
 
     }
@@ -173,9 +183,8 @@ class HelloWorldModelImages extends JModelAdmin
 	 */
 	protected function preprocessForm(JForm $form, $data)
 	{
-    //print_r($data);die;
     // Generate the XML to inject into the form
-    $XmlStr = $this->getImagesXml($form, $data->images);    
+    $XmlStr = $this->getImagesXml($form, $data);    
     $form->load($XmlStr);
 	}
   
@@ -184,46 +193,91 @@ class HelloWorldModelImages extends JModelAdmin
     // Build an XML string to inject additional fields into the form
     $XmlStr = '<form>';
     $counter=0;
-    $XmlStr.='<fields name="images">';
-    // Loop over the existing availability first
-    foreach ($data as $image) {
-      if( count($image) > 0 ) {
-      $XmlStr.= '
-        <fieldset name="image_'.$counter.'">
-         <field
-            id="url_' . $counter . '"
-            name="image_url"
-            type="hidden"
-            multiple="true"
-            default="'. $image->image_url . '">
-          </field> 
-          <field
-            id="caption_' . $counter . '"
-            name="caption"
-            label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
-            description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
-            type="text"
-            multiple="true"
-            maxlength="50"
-            size="30"
-            default="'. $image->caption .'">
-          </field>        
+    // Only do the library part library array exists in data
+    if (array_key_exists('library', $data->images)) {
+      $XmlStr.='<fields name="library-images">';
+      // Loop over the existing availability first
+      foreach ($data->images->library as $key => $image) {
+        if( count($image) > 0 && !array_key_exists($key, $data->images->gallery) ) {
          
+        $XmlStr.= '
+          <fieldset name="library_image_'.$counter.'">
           <field
-            id="name'.$counter.'"
-            name="image_file_name"
-            type="hidden"
-            multiple="true"
-            default="'. $image->image_file_name .'">
-          </field>           
-          
-       
+              id="url_' . $counter . '"
+              name="image_url"
+              type="hidden"
+              multiple="true"
+              default="'. $image->image_url . '">
+            </field> 
+            <field
+              id="caption_' . $counter . '"
+              name="caption"
+              label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+              description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
+              type="text"
+              multiple="true"
+              maxlength="50"
+              size="30"
+              default="'. $image->caption .'">
+            </field>        
 
-        </fieldset>';
-        $counter++;
+            <field
+              id="name'.$counter.'"
+              name="image_file_name"
+              type="hidden"
+              multiple="true"
+              default="'. $image->image_file_name .'">
+            </field>           
+          </fieldset>';
+          $counter++;
+          }
         }
+        $XmlStr.="</fields>";
       }
       
+      
+      // Reset the counter
+      $counter=0;
+
+      // Build the fields for the image gallery...
+      $XmlStr.='<fields name="gallery-images">';
+      // Loop over the existing availability first
+      foreach ($data->images->gallery as $image) {
+
+        if( count($image) > 0 ) {
+          $XmlStr.= '
+          <fieldset name="gallery_image_'.$counter.'">
+          <field
+              id="url_' . $counter . '"
+              name="image_url"
+              type="hidden"
+              multiple="true"
+              default="'. $image->image_url . '">
+            </field> 
+            <field
+              id="caption_' . $counter . '"
+              name="caption"
+              label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+              description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
+              type="text"
+              multiple="true"
+              maxlength="50"
+              size="30"
+              default="'. $image->caption .'">
+            </field>        
+
+            <field
+              id="name'.$counter.'"
+              name="image_file_name"
+              type="hidden"
+              multiple="true"
+              default="'. $image->image_file_name .'">
+            </field>           
+          </fieldset>';
+          $counter++;
+        }
+      }
+        
     $XmlStr.="</fields></form>";
     return $XmlStr;
   }

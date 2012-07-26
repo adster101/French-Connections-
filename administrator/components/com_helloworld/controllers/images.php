@@ -52,10 +52,14 @@ class HelloWorldControllerImages extends JControllerForm
 
     // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
+
+    // Get the parent property ID from the GET variable
+    $parent_id = JRequest::getVar( 'parent_id', '', 'GET', 'int' );  
     
     // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
-    //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-    $this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    $this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    
     // Check the total size of files being uploaded. If it's too large we just exit?
     if (
 			$_SERVER['CONTENT_LENGTH']>($params->get('upload_maxsize', 0) * 1024 * 1024) ||
@@ -105,7 +109,7 @@ class HelloWorldControllerImages extends JControllerForm
       // canUpload does a further raft of checks to ensure that the image is 'safe' (i.e. checks mime type and that it is an image file etc
 			if (!MediaHelper::canUpload($file, $err))
 			{
-				// The file can't be upload
+				// The file can't be uploaded
         $file['error'][] = JText::_($err);
 			
 			}
@@ -154,12 +158,26 @@ class HelloWorldControllerImages extends JControllerForm
     }
     
 
-    // And update or create depending on whether any translations already exist
-		if (!$table->save($id, $files))
-		{
-			JError::raiseWarning(500, $table->getError());
-			return false;
-		}
+    // Save the file details back to the database.
+    // Need to ensure that the images are always stored against the parent property ID if this is a leaf node
+    if ($parent_id == 1) {
+      if (!$table->save($id, $files))
+      {
+        // TODO: This won't return to the user
+        JError::raiseWarning(500, $table->getError());
+        return false;
+      }      
+    } else {
+      
+      // Store the image against the parent property
+      if (!$table->save($parent_id, $files))
+      {
+        // TODO: This won't return to the user
+        JError::raiseWarning(500, $table->getError());
+        return false;
+      }
+    }
+
     
     jexit(); // Exit this request now as results passed back to client via xhr transport.
   }

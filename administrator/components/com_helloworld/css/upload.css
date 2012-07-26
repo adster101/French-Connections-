@@ -84,7 +84,13 @@ a.delInputRow {
 	background: #bbb;
 }
 
-#draggable-image-list li {
+.draggable-image-list {
+  overflow:hidden;
+  width:100%;
+  min-height:150px;
+}
+
+.draggable-image-list li,.adminformlist.draggable-image-list li {
   float:left;
   margin-bottom:1.5em;
   margin-right:25px;
@@ -94,7 +100,7 @@ a.delInputRow {
   padding:3px;
 }
 
-#draggable-image-list img {
+.draggable-image-list img {
   margin:0;
   width:100%;
   max-width:100%;

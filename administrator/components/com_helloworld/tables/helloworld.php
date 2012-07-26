@@ -401,32 +401,53 @@ class HelloWorldTableHelloWorld extends JTableNested
 
   public function saveImageDetails( $POST = array() ) {
     
+    /*
+     * Declare some variables
+     * 
+     */
+    $library_images = array();
+    $gallery_images = array();
+    
+    
+    
     if(!array($POST)) {
       return true;
     }
     
     // Check for a images array in the POST structure
-    if (!array_key_exists('images', $POST)) {
+    if (!array_key_exists('gallery-images', $POST)) {
       return true;
     }    
-    
-    $image_detail = $POST['images'];
-    
-     // Get instance of the images table
+
+    // Get instance of the images table
     $imagesTable = JTable::getInstance($type = 'Images', $prefix = 'HelloWorldTable', $config = array());
+    
+    // Check for library images. This could be empty in several scenarios
+    // 1. The property has no units
+    // 2. It is a multi unit property but all images are assign to the gallery
+    // 3. No images have been uploaded
+    // 4. 
+
+    if (array_key_exists('library-images', $POST)) {
+      $library_images = $POST['library-images'];  
+      //$imagesTable->delete($this->id);
+    
+    }
+    
+    
+    $gallery_images = $POST['gallery-images'];
+    
+   
 
     // Delete existing images
     // Need to wrap this in some logic
-    
     $imagesTable->delete($this->id);
     
     // Save the images to the JTable instance	
-    if (!$imagesTable->save($this->id, $image_detail, $this->parent_id, true)) {
+    if (!$imagesTable->save($this->id, $gallery_images, $this->parent_id, true)) {
       JError::raiseWarning(500, $imagesTable->getError());
       return false;
-    }
+    } 
     
   }
-  
-  
 }

@@ -47,7 +47,7 @@ class HelloWorldTableImages extends JTable
     $this->_db->setQuery($query);
     try
     {
-      $result = $this->_db->loadObjectList();
+      $result = $this->_db->loadObjectList($key='image_file_name');
       return $result;
     }
     catch (RuntimeException $e)

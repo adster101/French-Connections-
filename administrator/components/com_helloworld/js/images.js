@@ -29,12 +29,57 @@ window.addEvent('domready', function(){
 		// Use something like
 	}
   
-  var draggable = $('draggable-image-list');
 
-  new Sortables(draggable, {
+  new Sortables('#library, #gallery', {
       clone:true,
       revert:true,
       opacity:0.7,
-      handle:'.handle'
+      handle:'.handle',
+      
+    /* once an item is selected */
+    onStart: function(el) { 
+      
+    },
+    onComplete: function(el) {
+      // Need to add a notice to inform user changes have been made and not saved...
+      // Can we trigger an onChange event for the form at the same time?
+      
+      // Determine what is happening here. Scenarios are as follows
+      // 1. No library exists and just sorting between gallery images
+      // 2. Image is just sorted within either a library or gallery
+      // 3. Image is moved between gallery and library and vice versa
+      
+      // Image area the drop target (e.g. gallery or library)
+      image_drop_area = '';
+      // The input fields we are interested in 
+      inputs = '';
+      
+      
+      
+      image_drop_area = el.getParent('ul').getProperty('id');
+      
+      
+      // Get the input values for this li item
+      inputs = el.getElements('input');
+      
+      inputs.each(function(e){
+        element_name = e.getProperty('name');
+        
+        if (element_name.indexOf(image_drop_area) == -1) {
+          if (image_drop_area == 'gallery') {
+            new_element_name = element_name.replace("[library", "[gallery"); 
+            e.setProperty('name', new_element_name)
+          } else {
+            new_element_name = element_name.replace('gallery', 'library'); 
+            e.setProperty('name', new_element_name)
+          }
+        }
+      });
+
+
+      
+      
+    }
+    
   });
 });
