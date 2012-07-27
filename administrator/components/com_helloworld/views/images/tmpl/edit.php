@@ -6,7 +6,6 @@ JHtml::_('behavior.formvalidation');
 
 $image_library_field_sets = $this->form->getFieldSets('library-images');
 $image_gallery_field_sets = $this->form->getFieldSets('gallery-images');
-
 // Get the parent ID from the form data
 $parent_id = $this->form->getValue('parent_id');
 
@@ -33,48 +32,56 @@ $parent_id = $this->form->getValue('parent_id');
 
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate">
-  <div class="width-100 fltrt">
-    <fieldset class="adminform">
-      <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_GALLERY'); ?></legend>
-      <ul class="adminformlist clearfix draggable-image-list" id="library">
+    <?php if(count($image_library_field_sets)) { ?>
+    <div class="width-50 fltlft">
+      <fieldset class="adminform">
+        <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_LIBRARY'); ?></legend>
+        <ul class="adminformlist clearfix draggable-image-list" id="library">
 
-        <?php foreach ($image_library_field_sets as $fieldset) { ?> 
-          <li>
-            <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
-              <?php
-              // If this is the image URL then output it, duh.
-              if (strpos($field->name, 'url')) {
-                ?> 
-                <div class="image-container handle">
-                  <span class="drag-handle">+-+-+-+-+-+-+-+</span>
-                  <img src="<?php echo $field->value; ?>" /> 
-                </div>
+          <?php foreach ($image_library_field_sets as $fieldset) { ?> 
+            <li>
+              <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
+                <?php
+                // If this is the image URL then output it, duh.
+                if (strpos($field->name, 'url')) {
+                  ?> 
+                  <div class="image-container handle">
+                    <span class="drag-handle">+-+-+-+-+-+-+-+</span>
+                    <img src="<?php echo $field->value; ?>" /> 
+                  </div>
 
-              <?php }
+                <?php }
 
-              if (strpos($field->name, 'caption')) {
-                ?>
-                <div class="image-control-bar">
-                  <?php
+                if (strpos($field->name, 'caption')) {
+                  ?>
+                  <div class="image-control-bar">
+                    <?php
+                    echo $field->label;
+                    echo $field->input;
+                    ?>
+                  </div>
+                <?php
+                }
+                if (strpos($field->name, 'filepath') || strpos($field->name, 'url') || strpos($field->name, 'name')) {
                   echo $field->label;
                   echo $field->input;
-                  ?>
-                </div>
-              <?php
-              }
-              if (strpos($field->name, 'filepath') || strpos($field->name, 'url') || strpos($field->name, 'name')) {
-                echo $field->label;
-                echo $field->input;
-              }
-              ?>
+                }
+                ?>
 
 
-            <?php } // End of foreach getFieldSet fieldset name  ?>		
+              <?php } // End of foreach getFieldSet fieldset name  ?>		
 
-<?php } // End of foreach image field sets    ?>
-        </li>
-      </ul>	
-    </fieldset>
+  <?php } // End of foreach image field sets    ?>
+          </li>
+        </ul>	
+      </fieldset>
+    </div>
+    <?php } ?>
+    <?php if(count($image_library_field_sets)) { ?>
+  <div class="width-50 fltrt">
+    <?php } else { ?>
+      <div class="width-100 fltrt"> 
+    <?php } ?>
 
     <fieldset class="adminform">
       <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_GALLERY'); ?></legend>

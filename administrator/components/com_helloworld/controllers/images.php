@@ -9,7 +9,7 @@ jimport('joomla.application.component.controllerform');
 jimport('joomla.filesystem.file');
 
 // require helper file
-require_once('/administrator/components/com_media/helpers/media.php');
+require_once('administrator/components/com_media/helpers/media.php');
 
 class HelloWorldUpload extends MediaHelper {
   
@@ -56,9 +56,14 @@ class HelloWorldControllerImages extends JControllerForm
     // Get the parent property ID from the GET variable
     $parent_id = JRequest::getVar( 'parent_id', '', 'GET', 'int' );  
     
+    // Need to ensure that images are always uploaded into the parent property folder.
+
     // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
-    $this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
     //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    $this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+
     
     // Check the total size of files being uploaded. If it's too large we just exit?
     if (
@@ -70,6 +75,8 @@ class HelloWorldControllerImages extends JControllerForm
 		{
       // Not acceptable. Too large a total file size.
 			// return an error message and ...
+      $general_error[]['error'][] = JText::_('COM_HELLOWORLD_IMAGES_TOTAL_FILE_SIZE_TOO_LARGE');
+      echo json_encode($general_error);
       jexit();
     }
     
@@ -111,7 +118,6 @@ class HelloWorldControllerImages extends JControllerForm
 			{
 				// The file can't be uploaded
         $file['error'][] = JText::_($err);
-			
 			}
       
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
@@ -151,33 +157,33 @@ class HelloWorldControllerImages extends JControllerForm
     foreach ($files as &$file) {
       // If the image uploaded correctly there won't be any errors
       if (count($file['error']) == 0) {
-        unset($file['error']);
-        unset($file['tmp_name']);
+        
         $images[] = $file;
-      }
+      } 
     }
     
 
     // Save the file details back to the database.
     // Need to ensure that the images are always stored against the parent property ID if this is a leaf node
     if ($parent_id == 1) {
-      if (!$table->save($id, $files))
+      if (!$table->save($id, $images))
       {
         // TODO: This won't return to the user
         JError::raiseWarning(500, $table->getError());
-        return false;
+        //return false;
       }      
     } else {
       
       // Store the image against the parent property
-      if (!$table->save($parent_id, $files))
+      if (!$table->save($parent_id, $images))
       {
         // TODO: This won't return to the user
         JError::raiseWarning(500, $table->getError());
-        return false;
+        //return false;
       }
     }
-
+    
+    echo json_encode($files);
     
     jexit(); // Exit this request now as results passed back to client via xhr transport.
   }

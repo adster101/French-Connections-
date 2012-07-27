@@ -76,7 +76,7 @@ class HelloWorldTableImages extends JTable
   public function save ($id = null, $images = array(), $parent_id = 1, $map_array = false ) 
   {
 
-    if (!$this->check()) {
+    if (!$this->check($images)) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
       
@@ -109,10 +109,8 @@ class HelloWorldTableImages extends JTable
 			}
       return true;
     }
-
   }
-    
-
+  
 	/**
 	 * Used as a callback for array_map, turns the multi-file input array into a sensible array of files
 	 * Also, removes illegal characters from the 'name' and sets a 'filepath' as the final destination of the file
@@ -143,7 +141,11 @@ class HelloWorldTableImages extends JTable
    * 
    * @return boolean 
    */
-  public function check() {
+  public function check($images= array()) {
+    if (!count($images)) {
+      return false;
+      
+    }
     return true;
   }
   

@@ -4,9 +4,22 @@ window.addEvent('domready', function(){
 		onComplete: function(arguments){
       //alert('Completed uploading the Files');
       //window.location.reload();
-      console.log(arguments);
-      // Need to take the list of arguments and append this to the gallery/library view
+      var systemMessage = new Element('dl#system-message').inject('system-message-container');
+      
+      var messageList = new Element('ul#message').inject('system-message');
+      
+      // Decode the files json struct returned from the ajax query...
+      var files = JSON.decode( arguments ); // decodes the response into an array
+      
+      files.each(function( file ) {
+        // Loop over error object and show the error (s)
+        file.error.each(function( error ){
+          var message = new Element('li', {
+            text: error } ).inject('message');
+        })
+      })
     }
+    
 	});
   
   //convert this to MooTools style code?
