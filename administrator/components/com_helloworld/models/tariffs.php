@@ -110,7 +110,6 @@ class HelloWorldModelTariffs extends JModelAdmin
     {
       $tariffsTable = $this->getTariffsTable();
       $tariffs = $tariffsTable->load($pk);
-      
       // Check for a table object error.
       if ($tariffs === false && $table->getError())
       {
@@ -129,7 +128,6 @@ class HelloWorldModelTariffs extends JModelAdmin
 			$registry->loadString($item->params);
 			$item->params = $registry->toArray();
 		}
-
 		return $item;
 	}  
   
@@ -154,11 +152,11 @@ class HelloWorldModelTariffs extends JModelAdmin
 	 */
 	protected function preprocessForm(JForm $form, $data)
 	{
-    
-    // Generate the XML to inject into the form
-    $XmlStr = $this->getTariffXml($form, $data);
-    $form->load($XmlStr);
-    
+    if (!empty($data)) {
+      // Generate the XML to inject into the form
+      $XmlStr = $this->getTariffXml($form, $data);
+      $form->load($XmlStr);
+    }
 	}
   
   /**

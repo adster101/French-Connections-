@@ -408,8 +408,6 @@ class HelloWorldTableHelloWorld extends JTableNested
     $library_images = array();
     $gallery_images = array();
     
-    
-    
     if(!array($POST)) {
       return true;
     }
@@ -433,14 +431,9 @@ class HelloWorldTableHelloWorld extends JTableNested
     // 3. No images have been uploaded
     // 4. We are editing the parent property. In this case we don't want to delete all the associated images before inserting into the gallery...
     
-    
-    
     if (array_key_exists('library-images', $POST)) {
       $library_images = $POST['library-images'];      
     }
-    
-
-
     // Delete existing images
     // Need to wrap this in some logic
     // Only ever need to delete all images from the gallery library (because library needs to be maintained). Gallery is 
@@ -449,26 +442,37 @@ class HelloWorldTableHelloWorld extends JTableNested
     $subtree = $this->getTree( $this->id );	
       
     // This deletes the existing images for a gallery 
-    if (count($subtree) == 1 && $this->isLeaf( $this->id )) {
+    if (count($subtree) == 1 && $this->isLeaf( $this->id ) && $parent_id == 1) { // This must be a single unit property...
+      
+      // The only time we need to delete and reinsert into the library images table
       $imagesTable->delete($this->id);
-    }
-    
-    // If it is a parent node 
-    if (count($subtree) > 1 && $parent_id == 1) {
+      
+      // Save the images back to the library table (as this must be a single unit property without units).
+      // TO DO - Check the above more thorougly, with a function?
+      if (count($gallery_images)) {
+        if (!$imagesTable->save($this->id, $gallery_images, true)) {
+          JError::raiseWarning(500, $imagesTable->getError());
+          return false;
+        }
+      }          
+    } else {
       // Set the $parent_id to the property ID so images are assigned to the gallery...this would be neater
       // and more logical with two separate tables...
-      $parent_id = $this->id;
-    }
-
-    
-    
-    
-    // Save the images to the JTable instance	
-    if (count($gallery_images)) {
-      if (!$imagesTable->save($this->id, $gallery_images, $parent_id, true)) {
-        JError::raiseWarning(500, $imagesTable->getError());
-        return false;
-      }
-    }
+      
+      // Note that here we are using the global Joomla categories not the component ones.
+      $image_gallery_table = JTable::getInstance('Gallery_images', 'HelloWorldTable');
+      
+      // Delete any existing assigned gallery images
+      $image_gallery_table->delete($this->id);
+     
+      // Save the images back to the library table (as this must be a single unit property without units).
+      // TO DO - Check the above more thorougly, with a function?
+      if (count($gallery_images)) {
+        if (!$image_gallery_table->save($this->id, $gallery_images, true )) {
+          JError::raiseWarning(500, $imagesTable->getError());
+          return false;
+        }
+      }  
+    }  
   }
 }

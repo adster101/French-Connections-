@@ -55,14 +55,20 @@ $parent_id = $this->form->getValue('parent_id');
                 if (strpos($field->name, 'caption')) {
                   ?>
                   <div class="image-control-bar">
+                    <button class="btn btn-danger btn-mini">x</button>
                     <?php
-                    echo $field->label;
-                    echo $field->input;
+                    //echo $field->label;
+                    //echo $field->input;
                     ?>
                   </div>
                 <?php
                 }
-                if (strpos($field->name, 'filepath') || strpos($field->name, 'url') || strpos($field->name, 'name')) {
+                if (strpos($field->name, 'image_file_id')) {
+                  echo $field->label;
+                  echo $field->input;
+                }                
+                
+                if (strpos($field->name, 'image_file_name')) {
                   echo $field->label;
                   echo $field->input;
                 }
@@ -105,13 +111,13 @@ $parent_id = $this->form->getValue('parent_id');
                 ?>
                 <div class="image-control-bar">
                   <?php
-                  echo $field->label;
-                  echo $field->input;
+                  //echo $field->label;
+                  //echo $field->input;
                   ?>
                 </div>
               <?php
               }
-              if (strpos($field->name, 'filepath') || strpos($field->name, 'url') || strpos($field->name, 'name')) {
+              if (strpos($field->name, 'caption') || strpos($field->name, 'image_file_id') || strpos($field->name, 'image_file_name') || strpos($field->name, 'image_url') ) {
                 echo $field->label;
                 echo $field->input;
               }

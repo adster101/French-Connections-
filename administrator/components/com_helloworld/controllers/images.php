@@ -57,13 +57,15 @@ class HelloWorldControllerImages extends JControllerForm
     $parent_id = JRequest::getVar( 'parent_id', '', 'GET', 'int' );  
     
     // Need to ensure that images are always uploaded into the parent property folder.
-
-    // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
-    //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-    //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-    //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-    $this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-
+    if ($parent_id == 1) {
+      // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
+      //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+      //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+      $this->folder = 'C:XAMPP/htdocs/images/' . $id;
+      //$this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+    } else {
+      $this->folder = 'C:XAMPP/htdocs/images/' . $parent_id;
+    }
     
     // Check the total size of files being uploaded. If it's too large we just exit?
     if (
@@ -139,7 +141,12 @@ class HelloWorldControllerImages extends JControllerForm
         }
         
         // Add the url to the uploaded files array
-        $file['image_url'] = JURI::root() . 'images/'. $id . '/' . $file['name'];
+        if ($parent_id == 1) {
+          $file['image_url'] = JURI::root() . 'images/'. $id . '/' . $file['name'];
+        } else {
+          $file['image_url'] = JURI::root() . 'images/'. $parent_id . '/' . $file['name'];
+          
+        }
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
       }
@@ -149,20 +156,19 @@ class HelloWorldControllerImages extends JControllerForm
     // Load the relevant table model(s) so we can save the data back to the db
     $images_model = $this->getModel('images');
     
-    // Get an instance of the helloworld table
-    $table = $images_model->getImagesTable();
+    // Get an instance of the images table
+    $table = $images_model->getImagesTable(); 
     
-      
     // Lastly, loop over the $files array (again) and add any new images to the existing ones
     foreach ($files as &$file) {
       // If the image uploaded correctly there won't be any errors
       if (count($file['error']) == 0) {
         
+        $file['message'] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED');
         $images[] = $file;
       } 
     }
     
-
     // Save the file details back to the database.
     // Need to ensure that the images are always stored against the parent property ID if this is a leaf node
     if ($parent_id == 1) {

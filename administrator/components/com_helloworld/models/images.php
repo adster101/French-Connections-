@@ -23,6 +23,7 @@ class HelloWorldModelImages extends JModelAdmin
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}  
+  
 	/**
 	 * Returns a reference to the a Table object, always creating it.
 	 *
@@ -37,6 +38,19 @@ class HelloWorldModelImages extends JModelAdmin
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
+	/**
+	 * Returns a reference to the a Gallery Images Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getGalleryImagesTable($type = 'Gallery_images', $prefix = 'HelloWorldTable', $config = array()) 
+	{
+		return JTable::getInstance($type, $prefix, $config);
+	}
   
 	/**
 	 * Method to get the record form. 
@@ -119,23 +133,29 @@ class HelloWorldModelImages extends JModelAdmin
       if (count($subtree) > 1 && $table->parent_id == 1) {
         
         // This is a parent node as subtree is gt 1 and parent id is 1 (e.g. root)
-      
+        
+        // Get an instance of the gallery_images table
+        $gallery_images = $this->getGalleryImagesTable();
+       
         // As such we need to get a library 
         $images['library'] = $imagesTable->load( $pk );
         
         // And gallery of images to show in the image manager
-        $images['gallery'] = $imagesTable->load( $pk, $pk );
+        $images['gallery'] = $gallery_images->load( $pk );
         
       }
       
       if ($table->isLeaf( $pk ) && $table->parent_id != 1) {
         // This is a child node as isLeaf returns true and parent_id not root (1)
-      
+        
+        // Get an instance of the gallery_images table
+        $gallery_images = $this->getGalleryImagesTable(); 
+        
         // As such we need to get a library 
         $images['library'] = $imagesTable->load( $table->parent_id );
         
         // And gallery of images to show in the image manager
-        $images['gallery'] = $imagesTable->load( $pk );       
+        $images['gallery'] = $gallery_images->load( $pk );       
       }
 
     }
@@ -183,13 +203,16 @@ class HelloWorldModelImages extends JModelAdmin
 	 */
 	protected function preprocessForm(JForm $form, $data)
 	{
-    // Generate the XML to inject into the form
-    $XmlStr = $this->getImagesXml($form, $data);    
-    $form->load($XmlStr);
+    if(!empty($data)){
+      // Generate the XML to inject into the form
+      $XmlStr = $this->getImagesXml($data);    
+      $form->load($XmlStr);     
+    }
 	}
   
-  protected function getImagesXml ($form, $data) 
+  protected function getImagesXml ($data) 
   {
+  
     // Build an XML string to inject additional fields into the form
     $XmlStr = '<form>';
     $counter=0;
@@ -198,8 +221,9 @@ class HelloWorldModelImages extends JModelAdmin
       $XmlStr.='<fields name="library-images">';
       // Loop over the existing availability first
       foreach ($data->images->library as $key => $image) {
+
         if( count($image) > 0 && !array_key_exists($key, $data->images->gallery) ) {
-         
+              
         $XmlStr.= '
           <fieldset name="library_image_'.$counter.'">
           <field
@@ -214,20 +238,26 @@ class HelloWorldModelImages extends JModelAdmin
               name="caption"
               label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
               description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
-              type="text"
+              type="hidden"
               multiple="true"
               maxlength="50"
               size="30"
               default="'. $image->caption .'">
             </field>        
-
             <field
-              id="name'.$counter.'"
+              id="image_file_name_'.$counter.'"
               name="image_file_name"
               type="hidden"
               multiple="true"
               default="'. $image->image_file_name .'">
-            </field>           
+            </field>      
+           <field
+              id="name'.$counter.'"
+              name="image_file_id"
+              type="hidden"
+              multiple="true"
+              default="'. $image->id .'">
+            </field>                  
           </fieldset>';
           $counter++;
           }
@@ -243,7 +273,6 @@ class HelloWorldModelImages extends JModelAdmin
       $XmlStr.='<fields name="gallery-images">';
       // Loop over the existing availability first
       foreach ($data->images->gallery as $image) {
-
         if( count($image) > 0 ) {
           $XmlStr.= '
           <fieldset name="gallery_image_'.$counter.'">
@@ -259,7 +288,7 @@ class HelloWorldModelImages extends JModelAdmin
               name="caption"
               label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
               description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
-              type="text"
+              type="hidden"
               multiple="true"
               maxlength="50"
               size="30"
@@ -267,13 +296,20 @@ class HelloWorldModelImages extends JModelAdmin
             </field>        
 
             <field
-              id="name'.$counter.'"
+              id="file_name_'.$counter.'"
               name="image_file_name"
               type="hidden"
               multiple="true"
               default="'. $image->image_file_name .'">
             </field>           
-          </fieldset>';
+            <field
+              id="name_'.$counter.'"
+              name="image_file_id"
+              type="hidden"
+              multiple="true"
+              default="'. $image->id .'">
+            </field>    
+        </fieldset>';
           $counter++;
         }
       }

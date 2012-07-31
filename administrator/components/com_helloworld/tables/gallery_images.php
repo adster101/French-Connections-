@@ -9,7 +9,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableImages extends JTable
+class HelloWorldTableGallery_images extends JTable
 {
 	/**
 	 * Constructor
@@ -18,7 +18,7 @@ class HelloWorldTableImages extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__images_property_library', 'id', $db);
+		parent::__construct('#__images_property_gallery', 'property_id', $db);
 	}
 	
 	/**
@@ -29,17 +29,18 @@ class HelloWorldTableImages extends JTable
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function load($id = null, $parent_id = 1) 
+	public function load($id = null) 
 	{
 
 		$query = $this->_db->getQuery(true);
-		$query->select('id, property_id, image_url, image_file_name, caption');
-		$query->from($this->_tbl);
+		$query->select('ipg.id, ipg.property_id, ipg.property_library_id, ipl.caption, ipl.image_url, ipl.id, ipl.image_file_name');
+		$query->from('#__images_property_gallery as ipg');
     
-   
-    $query->where('property_id = ' . $this->_db->quote($id));
     
+    $query->where('ipg.property_id = ' . $this->_db->quote($id));
+    $query->join('left', '#__images_property_library as ipl on ipg.property_library_id = ipl.id');
     // Select the images for this property. No need to worry about lib/gall
+    // Need to add a join here to select the image details for the property...or does the array key exists work on the image ID?
     $this->_db->setQuery($query);
     try
     {
@@ -51,10 +52,7 @@ class HelloWorldTableImages extends JTable
       $je = new JException($e->getMessage());
       $this->setError($je);
       return false;
-    }			     
-   
-
-
+    }
 	}
   
   /**
@@ -70,7 +68,8 @@ class HelloWorldTableImages extends JTable
   
   
   public function save ($id = null, $images = array(), $map_array = false ) 
-  {
+  {      
+    
 
     if (!$this->check($images)) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
@@ -79,18 +78,20 @@ class HelloWorldTableImages extends JTable
     } else {
       
       if ($map_array) {
-        $images = array_map( array($this, 'reformatFilesArray'), (array) $images['image_url'], (array) $images['caption'], (array) $images['image_file_name'] );
+        $images = array_map( array($this, 'reformatFilesArray'), (array) $images['caption'], (array) $images['image_file_id'] );
       }
+      
       $query = $this->_db->getQuery(true);
 
-      $query->insert('#__images_property_library');
+      $query->insert('#__images_property_gallery');
       
-			$query->columns(array('property_id','image_url','image_file_name','caption'));
-
+			$query->columns(array('property_id','property_library_id'));
+      
       foreach ($images as $image) {
         // Only insert if there are some images 
-        if ($image['image_file_name'] !='') {
-          $insert_string = "$id, '" . $image['image_url'] . "','" . $image['image_file_name'] . "','". $image['caption'] . "'";
+        if ($image['image_file_id'] !='') {
+          $image_to_insert = $image['image_file_id'];
+          $insert_string = "$id" . ',' . "$image_to_insert";
           $query->values($insert_string);
         }
       }
@@ -120,13 +121,12 @@ class HelloWorldTableImages extends JTable
 	 * @return	array
 	 * @access	protected
 	 */
-	protected function reformatFilesArray($url, $caption, $name)
+	protected function reformatFilesArray($caption, $name)
 	{
 		$name = JFile::makeSafe($name);
 		return array(
-			'image_url'		=> $url,
       'caption' => $caption,
-      'image_file_name'       => $name
+      'image_file_id'       => $name
 		);
 	}  
   
@@ -148,7 +148,7 @@ class HelloWorldTableImages extends JTable
   /* 
    * Delete function, used to delete images from the images table prior to resinsertion
    */
-  public function delete($property_id = null, $parent_property_id = null) {
+  public function delete( $property_id = null ) {
     // Delete images
     // Delete the row by primary key.
     $query = $this->_db->getQuery(true);
@@ -157,8 +157,7 @@ class HelloWorldTableImages extends JTable
     $query->where(' property_id = ' . $this->_db->quote($property_id));
     $this->_db->setQuery($query);
     
-    // Check for a database error.
-    
+    // TO DO -Check for a database error.
     $this->_db->execute();
     return true;
   }

@@ -26,25 +26,7 @@ class HelloWorldViewTariffs extends JView
 		// Need to take into account the additional price notes 
 		$form = $this->get('Form');
 
-    // get an instance of the availability table
-		//$table = $this->get('AvailabilityTable');
-		
-		// Get the actual availability for this property 
-		//$this->availability = $table->load($this->item->id);	
-
-		
-		// Check for errors.
-		//if (count($errors = $this->get('Errors'))) 
-		//{
-			//JError::raiseError(500, implode('<br />', $errors));
-			//return false;
-		//}
-
-		// Get availability as an array of days
-		//$this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability = $this->availability);
-		
-		// Build the calendar taking into account current availability...
-		//$this->calendar =	HelloWorldHelper::getAvailabilityCalendar($months=18, $availability = $this->availability_array);		
+  
 
 		// Assign the Data
 		$this->form = $form;
