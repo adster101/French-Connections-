@@ -192,6 +192,7 @@ class MediaControllerFile extends JController
 	 */
 	public function delete()
 	{
+    echo COM_MEDIA_BASE;die;
 		JSession::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get some data from the request

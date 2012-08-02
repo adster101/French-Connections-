@@ -13,7 +13,11 @@ JLoader::register('HelloWorldHelper', dirname(__FILE__) . DS . 'helpers' . DS . 
  
 // import joomla controller library
 jimport('joomla.application.component.controller');
- 
+
+// Define some global paths
+define('COM_IMAGE_BASE',	JPATH_ROOT.'/'.'images');
+define('COM_IMAGE_BASEURL', JURI::root().'images');
+
 // Get an instance of the controller prefixed by HelloWorld
 $controller = JController::getInstance('HelloWorld');
  

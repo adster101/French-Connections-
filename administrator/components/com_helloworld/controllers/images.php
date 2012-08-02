@@ -32,6 +32,101 @@ class HelloWorldControllerImages extends JControllerForm
 		// E.g. check that this user actually 'owns' this property and can hence edit availability
 		return true;  //always allow to edit record 
 	}
+  
+  function updatecaption() {
+    
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken( 'get' ) or die( 'Invalid Token' );
+   
+    $app = JFactory::getApplication();
+    
+    // Check that this user is authorised to edit (i.e. owns) this this property
+    if (!$this->allowEdit()) {
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld' . $this->getRedirectToListAppend(), false));
+      return false;
+    }   
+    
+    // Get the property ID from the GET variable
+    $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
+    
+    // Get the image file ID of which we need to delete
+    $file_id = JRequest::getVar ('file_id','','GET','int');
+    
+    // Let's delete this puppy...
+    
+    
+    $app = JFactory::getApplication();
+    $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_CAPTION_SUCCESSFULLY_UPDATED'), 'message');
+    
+    // Set the redirection once the delete has completed...
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=images.edit' . $this->getRedirectToItemAppend($id, 'id'), false));
+
+  }
+  
+  function delete() {
+    
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken( 'get' ) or die( 'Invalid Token' );
+   
+    $app = JFactory::getApplication();
+    
+    // Check that this user is authorised to edit (i.e. owns) this this property
+    if (!$this->allowEdit()) {
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld' . $this->getRedirectToListAppend(), false));
+      return false;
+    }   
+    
+    // Get the property ID from the GET variable
+    $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
+     
+    // Get the image file ID of which we need to delete
+    $file_id = JRequest::getVar ('file','','GET','int');
+    
+    // Let's delete this puppy...first we need to get the file details
+    JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR.'/tables');	
+    $table = JTable::getInstance('Images', 'HelloWorldTable');
+    
+    // Get the image details
+    $table->load($file_id);
+    
+    // Name of the image to remove
+    $file = $table->image_file_name;
+
+    if ($file !== JFile::makeSafe($file))
+		{
+      // filename is not safe
+			$filename = htmlspecialchars($path, ENT_COMPAT, 'UTF-8');
+			Error::raiseWarning(100, JText::sprintf('COM_MEDIA_ERROR_UNABLE_TO_DELETE_FILE_WARNFILENAME', substr($filename, strlen(COM_IMAGE_BASE))));
+    }
+    
+    $fullPaths = array();
+    // Create a path to delete the image and each of the profile images that would've been created
+  	$fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, $file)));
+ 	  $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, 'gallery', $file)));
+ 	  $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, 'thumbs', $file)));
+ 	  $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, 'thumb', $file)));
+
+    // Loop over each file path
+    foreach ($fullPaths as $path) {
+      if (is_file($path))
+      {
+        JFile::delete($path);
+        $app = JFactory::getApplication();
+      }        
+    }
+    // Set the message
+    $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
+   
+
+        
+ 
+    
+    // Set the redirection once the delete has completed...
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=images.edit' . $this->getRedirectToItemAppend($id, 'id'), false));
+
+  }
 
   function upload () {
     
@@ -172,7 +267,7 @@ class HelloWorldControllerImages extends JControllerForm
     // Save the file details back to the database.
     // Need to ensure that the images are always stored against the parent property ID if this is a leaf node
     if ($parent_id == 1) {
-      if (!$table->save($id, $images))
+      if (!$table->save_images($id, $images))
       {
         // TODO: This won't return to the user
         JError::raiseWarning(500, $table->getError());
@@ -181,7 +276,7 @@ class HelloWorldControllerImages extends JControllerForm
     } else {
       
       // Store the image against the parent property
-      if (!$table->save($parent_id, $images))
+      if (!$table->save_images($parent_id, $images))
       {
         // TODO: This won't return to the user
         JError::raiseWarning(500, $table->getError());

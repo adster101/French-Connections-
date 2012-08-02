@@ -450,7 +450,7 @@ class HelloWorldTableHelloWorld extends JTableNested
       // Save the images back to the library table (as this must be a single unit property without units).
       // TO DO - Check the above more thorougly, with a function?
       if (count($gallery_images)) {
-        if (!$imagesTable->save($this->id, $gallery_images, true)) {
+        if (!$imagesTable->save_images($this->id, $gallery_images, true)) {
           JError::raiseWarning(500, $imagesTable->getError());
           return false;
         }
@@ -468,7 +468,7 @@ class HelloWorldTableHelloWorld extends JTableNested
       // Save the images back to the library table (as this must be a single unit property without units).
       // TO DO - Check the above more thorougly, with a function?
       if (count($gallery_images)) {
-        if (!$image_gallery_table->save($this->id, $gallery_images, true )) {
+        if (!$image_gallery_table->save_images($this->id, $gallery_images, true )) {
           JError::raiseWarning(500, $imagesTable->getError());
           return false;
         }

@@ -94,7 +94,6 @@ a.delInputRow {
   float:left;
   margin-bottom:1.5em;
   margin-right:25px;
-  width:20%;
   min-height:175px;
   border:1px solid #efefef;
   padding:3px;
@@ -102,8 +101,7 @@ a.delInputRow {
 
 .draggable-image-list img {
   margin:0;
-  width:100%;
-  max-width:100%;
+  max-width:210px;
 }
 
 .drag-handle {
@@ -116,7 +114,18 @@ a.delInputRow {
   cursor:move;
 
 }
+
+.image-control-bar {
+  clear:left;
+  padding:3px 0;
+}
+
 .image-control-bar p {
   padding:6px 0;
   clear:both;
 }
+
+.sbox-content-ajax a {
+  color:white !important;
+}
+

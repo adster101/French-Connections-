@@ -8,9 +8,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class HelloWorldModelLocation extends JModelAdmin
+class HelloWorldModelCaption extends JModelAdmin
 {
-	var $_propertyId = null;
 	/**
 	 * Method override to check if you can edit an existing record.
 	 *
@@ -34,7 +33,7 @@ class HelloWorldModelLocation extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'Images', $prefix = 'HelloWorldTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -50,23 +49,15 @@ class HelloWorldModelLocation extends JModelAdmin
 	{	
 
 		// Get the form.
-		$form = $this->loadForm('com_helloworld.helloworld', 'location', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_helloworld.caption', 'caption', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) 
 		{
 			return false;
 		}
+		
 		return $form;
 	}
-	/**
-	 * Method to get the script that have to be included on the form
-	 *
-	 * @return string	Script files
-	 */
-	public function getScript() 
-	{
-		return 'administrator/components/com_helloworld/models/forms/location.js';
-	}
-	/**
+  	/**
 	 * Method to get the data that should be injected in the form.
 	 *
 	 * @return	mixed	The data for the form.
@@ -81,5 +72,5 @@ class HelloWorldModelLocation extends JModelAdmin
 			$data = $this->getItem();
 		}
 		return $data;
-	}
+	}	
 }

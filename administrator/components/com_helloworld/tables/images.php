@@ -29,14 +29,12 @@ class HelloWorldTableImages extends JTable
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function load($id = null, $parent_id = 1) 
+	public function load_images($id = null, $parent_id = 1) 
 	{
 
 		$query = $this->_db->getQuery(true);
 		$query->select('id, property_id, image_url, image_file_name, caption');
 		$query->from($this->_tbl);
-    
-   
     $query->where('property_id = ' . $this->_db->quote($id));
     
     // Select the images for this property. No need to worry about lib/gall
@@ -51,10 +49,7 @@ class HelloWorldTableImages extends JTable
       $je = new JException($e->getMessage());
       $this->setError($je);
       return false;
-    }			     
-   
-
-
+    }
 	}
   
   /**
@@ -69,7 +64,7 @@ class HelloWorldTableImages extends JTable
    */
   
   
-  public function save ($id = null, $images = array(), $map_array = false ) 
+  public function save_images($id = null, $images = array(), $map_array = false ) 
   {
 
     if (!$this->check($images)) {

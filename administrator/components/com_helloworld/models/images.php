@@ -120,7 +120,7 @@ class HelloWorldModelImages extends JModelAdmin
       if (count($subtree) == 1 && $table->isLeaf( $pk ) && $table->parent_id == 1) {
         
         // This is a single unit property, no?
-        $images['gallery'] = $imagesTable->load( $pk );
+        $images['gallery'] = $imagesTable->load_images( $pk );
        
         // Check for a table object error.
         if ($images === false && $imagesTable->getError())
@@ -138,7 +138,7 @@ class HelloWorldModelImages extends JModelAdmin
         $gallery_images = $this->getGalleryImagesTable();
        
         // As such we need to get a library 
-        $images['library'] = $imagesTable->load( $pk );
+        $images['library'] = $imagesTable->load_images( $pk );
         
         // And gallery of images to show in the image manager
         $images['gallery'] = $gallery_images->load( $pk );
@@ -152,10 +152,10 @@ class HelloWorldModelImages extends JModelAdmin
         $gallery_images = $this->getGalleryImagesTable(); 
         
         // As such we need to get a library 
-        $images['library'] = $imagesTable->load( $table->parent_id );
+        $images['library'] = $imagesTable->load_images( $table->parent_id );
         
         // And gallery of images to show in the image manager
-        $images['gallery'] = $gallery_images->load( $pk );       
+        $images['gallery'] = $gallery_images->load_images( $pk );       
       }
 
     }
@@ -226,33 +226,34 @@ class HelloWorldModelImages extends JModelAdmin
               
         $XmlStr.= '
           <fieldset name="library_image_'.$counter.'">
-          <field
-              id="url_' . $counter . '"
-              name="image_url"
-              type="hidden"
-              multiple="true"
-              default="'. $image->image_url . '">
-            </field> 
-            <field
-              id="caption_' . $counter . '"
-              name="caption"
-              label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
-              description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
-              type="hidden"
-              multiple="true"
-              maxlength="50"
-              size="30"
-              default="'. $image->caption .'">
-            </field>        
             <field
               id="image_file_name_'.$counter.'"
               name="image_file_name"
               type="hidden"
               multiple="true"
               default="'. $image->image_file_name .'">
-            </field>      
+            </field>
+            <field
+              id="caption_' . $counter . '"
+              name="caption"
+              label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+              description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
+              type="text"
+              readonly="true"
+              multiple="true"
+              maxlength="50"
+              size="30"
+              default="'. $image->caption .'">
+            </field>        
            <field
-              id="name'.$counter.'"
+              id="url_' . $counter . '"
+              name="image_url"
+              type="hidden"
+              multiple="true"
+              default="'. $image->image_url . '">
+            </field>       
+           <field
+              id="image_file_id_'.$counter.'"
               name="image_file_id"
               type="hidden"
               multiple="true"
@@ -276,32 +277,31 @@ class HelloWorldModelImages extends JModelAdmin
         if( count($image) > 0 ) {
           $XmlStr.= '
           <fieldset name="gallery_image_'.$counter.'">
-          <field
-              id="url_' . $counter . '"
-              name="image_url"
-              type="hidden"
-              multiple="true"
-              default="'. $image->image_url . '">
-            </field> 
-            <field
-              id="caption_' . $counter . '"
-              name="caption"
-              label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
-              description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
-              type="hidden"
-              multiple="true"
-              maxlength="50"
-              size="30"
-              default="'. $image->caption .'">
-            </field>        
-
             <field
               id="file_name_'.$counter.'"
               name="image_file_name"
               type="hidden"
               multiple="true"
               default="'. $image->image_file_name .'">
-            </field>           
+            </field>    
+            <field
+              id="caption_' . $counter . '"
+              name="caption"
+              label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+              description="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_DESC"
+              type="text"
+              readonly="true"
+              multiple="true"
+              size="30"
+              default="'. $image->caption .'">
+            </field>     
+            <field
+              id="url_' . $counter . '"
+              name="image_url"
+              type="hidden"
+              multiple="true"
+              default="'. $image->image_url . '">
+            </field> 
             <field
               id="name_'.$counter.'"
               name="image_file_id"

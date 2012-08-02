@@ -67,7 +67,7 @@ class HelloWorldTableGallery_images extends JTable
    */
   
   
-  public function save ($id = null, $images = array(), $map_array = false ) 
+  public function save_images($id = null, $images = array(), $map_array = false ) 
   {      
     
 
