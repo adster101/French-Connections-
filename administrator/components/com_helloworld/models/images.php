@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.modeladmin');
 
 /**
- * HelloWorld Model
+ * Images Model
  */
 class HelloWorldModelImages extends JModelAdmin
 {
@@ -155,7 +155,7 @@ class HelloWorldModelImages extends JModelAdmin
         $images['library'] = $imagesTable->load_images( $table->parent_id );
         
         // And gallery of images to show in the image manager
-        $images['gallery'] = $gallery_images->load_images( $pk );       
+        $images['gallery'] = $gallery_images->load( $pk );       
       }
 
     }
@@ -316,6 +316,95 @@ class HelloWorldModelImages extends JModelAdmin
         
     $XmlStr.="</fields></form>";
     return $XmlStr;
+  }
+  
+  /*
+   * Method to generate a set of profile images for images being uploaded via the image manager
+   * 
+   * 
+   */
+  public function generateImageProfiles( $images = array(), $property_id = null ) {
+    
+    if (empty($images)) {
+      return false;
+    }
+    
+    
+    foreach ($images as $image) {
+ 			      
+      $imgObj = new JImage($image['filepath']);
+      
+      $baseDir[] = COM_IMAGE_BASE.'/'.$property_id.'/gallery/';
+      $baseDir[] = COM_IMAGE_BASE.'/'.$property_id.'/thumbs/';
+      $baseDir[] = COM_IMAGE_BASE.'/'.$property_id.'/thumb/';
+      
+      // Create folders for each of the profiles for the property, if they don't exist
+      foreach ($baseDir as $dir) {
+        if (!file_exists($dir))
+        {
+          jimport('joomla.filesystem.folder');
+          JFolder::create($dir);
+        }        
+      }
+      
+      // Firstly create the main gallery image
+      // If the width is greater than the height just create an 
+      if (($imgObj->getWidth() > $imgObj->getHeight()) && $imgObj->getWidth() > 500 ) {
+        
+        // This image is roughly landscape orientated with a width greater than 500px
+        $gallery_profile = $imgObj->resize(500,375,true,3);
+        $thumbnail_profile = $imgObj->resize(230,150,true,3);
+
+        // Need to generate a small square thumbnail as well here for gallery...
+        
+        // Write out the gallery file
+        $gallery_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/gallery/'.$image['image_file_name'] );
+        
+        //Scope here to further crop the images. E.g. If height more than 375 crop out center portion, keeping the width
+        $thumbnail_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/thumb/'.$image['image_file_name'] );
+        
+      } else if (($imgObj->getWidth() < $imgObj->getHeight()) && $imgObj->getWidth() > 500) {
+        
+        // This image is roughly portrait orientated with a width greater than 500px
+        $gallery_profile = $imgObj->resize(500,375,true,2);
+        $thumbnail_profile = $imgObj->resize(230,150,true,2);
+
+        // Write out the gallery file
+        $gallery_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/gallery/'.$image['image_file_name'] );
+        $thumbnail_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/thumb/'.$image['image_file_name'] );
+        
+      } else if (($imgObj->getWidth() > $imgObj->getHeight()) && $imgObj->getWidth() < 500) {
+        
+        // This image is roughly landscape orientated with a width less than 500px
+        // In this case we know the width is less than 500 so we let this one through, as is, for now.
+        
+        // Write out the gallery file
+        $imgObj->tofile(COM_IMAGE_BASE.'/'.$property_id.'/gallery/'.$image['image_file_name'] );
+
+        //Scope here to further crop the images. E.g. If height more than 150 crop out center portion, keeping the width
+        $thumbnail_profile = $imgObj->resize(230,150,true,3);
+        $thumbnail_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/thumb/'.$image['image_file_name'] );
+
+        
+      } else if (($imgObj->getWidth() < $imgObj->getHeight()) && $imgObj->getHeight() < 375) {
+        
+        // This image is roughly portrait orientated with a width less than 500px
+        // In this case we know the height is less than 375 and the width is less than height 
+        // so we let this one through, as is, for now.
+        // Write out the gallery file
+        $imgObj->tofile(COM_IMAGE_BASE.'/'.$property_id.'/gallery/'.$image['image_file_name'] );       
+    
+        $thumbnail_profile = $imgObj->resize(230,150,true,2);
+        $thumbnail_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/thumb/'.$image['image_file_name'] );
+       
+      }
+      
+      
+      
+      
+      
+
+    }
   }
   
 }

@@ -445,7 +445,7 @@ class HelloWorldTableHelloWorld extends JTableNested
     if (count($subtree) == 1 && $this->isLeaf( $this->id ) && $parent_id == 1) { // This must be a single unit property...
       
       // The only time we need to delete and reinsert into the library images table
-      $imagesTable->delete($this->id);
+      $imagesTable->delete_images($this->id);
       
       // Save the images back to the library table (as this must be a single unit property without units).
       // TO DO - Check the above more thorougly, with a function?
@@ -463,7 +463,7 @@ class HelloWorldTableHelloWorld extends JTableNested
       $image_gallery_table = JTable::getInstance('Gallery_images', 'HelloWorldTable');
       
       // Delete any existing assigned gallery images
-      $image_gallery_table->delete($this->id);
+      $image_gallery_table->delete_images($this->id);
      
       // Save the images back to the library table (as this must be a single unit property without units).
       // TO DO - Check the above more thorougly, with a function?

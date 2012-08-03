@@ -15,5 +15,15 @@
       type="hidden"
       default="">
     </field>
+    <field 
+      name="property_id"
+      type="hidden"
+      default="">
+    </field>
+    <field 
+      name="image_url"
+      type="hidden"
+      default="">
+    </field>    
   </fieldset>
 </form>

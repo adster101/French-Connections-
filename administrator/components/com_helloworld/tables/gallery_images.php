@@ -18,7 +18,7 @@ class HelloWorldTableGallery_images extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__images_property_gallery', 'property_id', $db);
+		parent::__construct('#__images_property_gallery', 'id', $db);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ class HelloWorldTableGallery_images extends JTable
   /* 
    * Delete function, used to delete images from the images table prior to resinsertion
    */
-  public function delete( $property_id = null ) {
+  public function delete_images( $property_id = null ) {
     // Delete images
     // Delete the row by primary key.
     $query = $this->_db->getQuery(true);

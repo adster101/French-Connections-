@@ -143,7 +143,7 @@ class HelloWorldTableImages extends JTable
   /* 
    * Delete function, used to delete images from the images table prior to resinsertion
    */
-  public function delete($property_id = null, $parent_property_id = null) {
+  public function delete_images($property_id = null, $parent_property_id = null) {
     // Delete images
     // Delete the row by primary key.
     $query = $this->_db->getQuery(true);

@@ -97,11 +97,15 @@ a.delInputRow {
   min-height:175px;
   border:1px solid #efefef;
   padding:3px;
+  background:#fff;
 }
 
 .draggable-image-list img {
-  margin:0;
+  margin:0pt auto;
   max-width:210px;
+  max-height:150px;
+  float:none;
+  display:block;
 }
 
 .drag-handle {

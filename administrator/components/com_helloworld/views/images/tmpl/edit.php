@@ -56,9 +56,9 @@ $parent_id = $this->form->getValue('parent_id');
                     <span class="drag-handle">+-+-+-+-+-+-+-+</span>
                     <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                   <?php if ($parent_id != 1) { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/gallery/' . $field->value; ?>" />
+                      <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
                   <?php } else { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . $field->value; ?>" />
+                      <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumb/' . $field->value; ?>" />
         <?php } ?>
                   </div>
                   <?php }
@@ -79,13 +79,14 @@ $parent_id = $this->form->getValue('parent_id');
                       echo $field->input;
                       ?>
                   <div class="width-20 fltrt">
-                    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.delete&id=' . (int) $this->item->id) . '&file=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>"
+                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>"
                        class="btn btn-danger btn-mini fltrt delete">
                       <i class="boot-icon-trash boot-icon-white"></i>
                     </a>
                   </div>
                   <div class="width-20 fltrt">
-                    <a href="#" class="btn btn-primary btn-mini fltrt edit">
+                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
+                       class="btn btn-primary btn-mini fltrt edit" title="<?php echo JText::_('COM_HELLOWORLD_IMAGES_EDIT_CAPTION') ?>">
                       <i class="boot-icon-edit boot-icon-white"></i>
                     </a>
                   </div>
@@ -117,13 +118,14 @@ $parent_id = $this->form->getValue('parent_id');
             <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
               <?php if ($field->fieldname == 'image_file_name') { ?> 
                   <div class="image-container handle">
+                   
                     <span class="drag-handle">+-+-+-+-+-+-+-+</span>
                     <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                   <?php if ($parent_id != 1) { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/gallery/' . $field->value; ?>" />
+                      <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
       <?php } else { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . $field->value; ?>" />
-                    <?php } ?>
+                      <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumb/' . $field->value; ?>" />
+                    <?php } ?></span>
                   </div>
                   <?php }
                   if ($field->fieldname == 'caption') {
