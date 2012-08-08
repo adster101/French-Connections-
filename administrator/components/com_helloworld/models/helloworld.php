@@ -88,7 +88,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.data', array());
+		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.83', array());
 		if (empty($data)) 
 		{
 			$data = $this->getItem();

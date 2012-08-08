@@ -53,7 +53,7 @@ $parent_id = $this->form->getValue('parent_id');
     <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
       <?php if ($field->fieldname == 'image_file_name') { ?> 
                   <div class="image-container handle">
-                    <span class="drag-handle">+-+-+-+-+-+-+-+</span>
+                    <span class="drag-handle clearfix bottom"><i class="boot-icon-move"></i></span>
                     <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                   <?php if ($parent_id != 1) { ?>
                       <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
@@ -119,7 +119,7 @@ $parent_id = $this->form->getValue('parent_id');
               <?php if ($field->fieldname == 'image_file_name') { ?> 
                   <div class="image-container handle">
                    
-                    <span class="drag-handle">+-+-+-+-+-+-+-+</span>
+                    <span class="drag-handle clearfix bottom"><i class="boot-icon-move"></i></span>
                     <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                   <?php if ($parent_id != 1) { ?>
                       <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />

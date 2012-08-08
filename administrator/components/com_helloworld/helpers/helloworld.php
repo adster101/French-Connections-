@@ -19,6 +19,7 @@ abstract class HelloWorldHelper
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id='.$id, $submenu == 'availability');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id='.$id, $submenu == 'tariffs');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id='.$id, $submenu == 'images');		
+		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		
 
     
 		// set some global property
@@ -28,6 +29,7 @@ abstract class HelloWorldHelper
 		$document->addStyleDeclaration('.icon-48-availability {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 		$document->addStyleDeclaration('.icon-48-tariffs {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 		$document->addStyleDeclaration('.icon-48-images {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
+		$document->addStyleDeclaration('.icon-48-offers {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 
   }
 	

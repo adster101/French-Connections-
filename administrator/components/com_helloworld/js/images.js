@@ -10,8 +10,6 @@ window.addEvent('domready', function(){
     
   });
 
- 
-
 	var upload = new Form.Upload('url', {
 		onComplete: function(arguments) {   
       // Clear any old messages that may be showing
