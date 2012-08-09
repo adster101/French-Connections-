@@ -31,7 +31,7 @@ $siteName = $app->getCfg( 'sitename' );
 	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap-responsive.css">-->
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap-responsive.css">
 	
 	<!--[if lt IE 9]>
 		<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/ie.css">
@@ -100,7 +100,9 @@ $siteName = $app->getCfg( 'sitename' );
 			<?php if($this->countModules('sub-menu-horizontal')) { ?>
 				<jdoc:include type="modules" name="sub-menu-horizontal" style="xhtml" />
 			<?php } ?>
-				<jdoc:include type="component" />
+				<jdoc:include type="message" />
+
+        <jdoc:include type="component" />
 				</div>
 			<?php if ($menu->getActive() !== $menu->getDefault()) { // If this isn't the homepage  ?>
 				<?php if ($this->countModules('left') && !$this->countModules('right')) { // and there is a module published to the left position only ?>			
