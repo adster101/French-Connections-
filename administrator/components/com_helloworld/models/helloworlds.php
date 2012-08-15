@@ -104,7 +104,6 @@ class HelloWorldModelHelloWorlds extends JModelList
 		
 		// Get the list of user groups this user is assigned to		
 		$groups = $user->getAuthorisedGroups();
-		
 		// Create a new query object.		
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
@@ -113,7 +112,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query->select('a.id,a.greeting, a.title, a.modified, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published ');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		// Check the user group this user belongs to.
-		if (!in_array(8, $groups)) 
+		if (!(in_array(8, $groups) || in_array(11, $groups))) 
 		{
 			$query->where('created_by='.$userId);
 		}
@@ -164,6 +163,10 @@ class HelloWorldModelHelloWorlds extends JModelList
 				$search = $db->Quote('%'.$db->escape(substr($search, 8), true).'%');
 				$query->where('(ua.name LIKE '.$search.' OR ua.username LIKE '.$search.')');
 			}
+      elseif (stripos($search, 'accountid:') === 0) {
+				$search = substr($search, 10);
+				$query->where('(ua.id = '.$search . ')');        
+      }
 			else {
 				$search = $db->Quote('%'.$db->escape($search, true).'%');
 				$query->where('(a.greeting LIKE '.$search.')');

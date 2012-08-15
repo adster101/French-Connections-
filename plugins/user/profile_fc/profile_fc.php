@@ -43,9 +43,10 @@ class plgUserProfile_fc extends JPlugin
 	function onContentPrepareData($context, $data)
 	{
 		// Check we are manipulating a valid form.
-		if (!in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')))
+		if (in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')))
 		{
-			return true;
+
+      return true;
 		}
 
 		if (is_object($data))
@@ -153,9 +154,12 @@ class plgUserProfile_fc extends JPlugin
 	 * @since	1.6
 	 */
 	function onContentPrepareForm($form, $data)
-	{    
-    print_r($form);die;
+	{ 
+    // Require the helloworld helper class
+    require_once(JPATH_ADMINISTRATOR.'/components/com_helloworld/helpers/helloworld.php');
 
+    $isOwner = HelloWorldHelper::isOwner();
+    
 		if (!($form instanceof JForm))
 		{
 			$this->_subject->setError('JERROR_NOT_A_FORM');
@@ -169,6 +173,22 @@ class plgUserProfile_fc extends JPlugin
 			return true;
 		}
 
+
+
+    
+    // Check which form we are manipulating, we are only interested in the com_admin.profile form
+    // just now as this is the one we want the owner/public to fill out. 
+    if (in_array($name, array('com_admin.profile'))){
+      
+      // If this user is in the owner user group 
+      if($isOwner){
+        
+        $name = $form->setFieldAttribute('name','readonly','true');
+      } 
+     
+
+    }
+    
 		// Add the registration fields to the form.
 		JForm::addFormPath(dirname(__FILE__) . '/profiles');
 		$form->loadFile('profile', false);
@@ -186,6 +206,7 @@ class plgUserProfile_fc extends JPlugin
 			'aboutme',
 			'dob',
 		);
+    
 		
 		$tosarticle = $this->params->get('register_tos_article');
 		$tosenabled = $this->params->get('register-require_tos', 0);
@@ -202,6 +223,8 @@ class plgUserProfile_fc extends JPlugin
 			$form->setFieldAttribute('tos', 'article', $tosarticle, 'profile');
 		}
 
+
+    
 		foreach ($fields as $field)
 		{	
 			// Case using the users manager in admin
@@ -213,7 +236,7 @@ class plgUserProfile_fc extends JPlugin
 				{
 					$form->removeField($field, 'profile');
 				}
-			}
+			} 
 			// Case registration
 			elseif ($name == 'com_users.registration')
 			{
@@ -230,18 +253,31 @@ class plgUserProfile_fc extends JPlugin
 			// Case profile in site or admin
 			elseif ($name == 'com_users.profile' || $name == 'com_admin.profile')
 			{
-				// Toggle whether the field is required.
-				if ($this->params->get('profile-require_' . $field, 1) > 0)
-				{
-					$form->setFieldAttribute($field, 'required', ($this->params->get('profile-require_' . $field) == 2) ? 'required' : '', 'profile');
-				}
-				else
-				{
-					$form->removeField($field, 'profile');
-				}
+
+        // Toggle whether the field is required.
+        if ($this->params->get('profile-require_' . $field, 1) > 0)
+        {
+          $form->setFieldAttribute($field, 'required', ($this->params->get('profile-require_' . $field) == 2) ? 'required' : '', 'profile');
+        }
+        else
+        {
+          $form->removeField($field, 'profile');
+        }
+       
 			}
 		}
-
+    
+    // After all that we only want to show these additional fields to owners when they are updating their profile
+    // or when an admin is editing an owners profile. 
+    if (in_array($name, array('com_admin.profile','com_users.user')) && !$isOwner) {
+      // Is the admin user editing a user in the owners user group?
+      $editUserID = JRequest::getVar('id', null, 'GET', 'int'); 
+      if (!HelloWorldHelper::isOwner($editUserID)) {
+        $form->removeGroup('profile');
+      }
+    } 
+      
+    
 		return true;
 	}
 

@@ -59,6 +59,32 @@ abstract class HelloWorldHelper
 		return $result;
 	}
 	
+  /* Method to determine whether the currently logged in user is an 'owner' or an admin or something else...
+   * 
+   * 
+   */
+  
+  public static function isOwner($editUserID = null) {
+    
+    // Get the user object and assign the userID to a var
+    $user		= JFactory::getUser($editUserID);
+    
+    
+    // Get a list of the groups that the user is assigned to
+    $groups = $user->getAuthorisedGroups();
+    
+    $group = array_pop($groups);
+    
+    if ($group === 10)
+		{
+			return true;
+      
+    } else {
+      
+      return false;
+      
+    }   
+  }  
 	/*
 	 * Get the default language 
 	 */

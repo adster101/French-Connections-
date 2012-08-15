@@ -13,4 +13,4 @@ require_once dirname(__FILE__).'/helper.php';
 
 $buttons = modQuickIconHelper::getButtons($params);
 
-require JModuleHelper::getLayoutPath('mod_quickicon', $params->get('layout', 'default'));
+require JModuleHelper::getLayoutPath('mod_quickicon_fc', $params->get('layout', 'default'));

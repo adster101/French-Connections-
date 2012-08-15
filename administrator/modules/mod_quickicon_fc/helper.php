@@ -38,13 +38,24 @@ abstract class modQuickIconHelper
 	{
 		$key = (string)$params;
 		if (!isset(self::$buttons[$key])) {
-			$context = $params->get('context', 'mod_quickicon');
-			if ($context == 'mod_quickicon')
+			$context = $params->get('context', 'mod_quickicon_fc');
+			if ($context == 'mod_quickicon_fc')
 			{
 				// Load mod_quickicon language file in case this method is called before rendering the module
-			JFactory::getLanguage()->load('mod_quickicon');
-
+			JFactory::getLanguage()->load('mod_quickicon_fc');
 				self::$buttons[$key] = array(
+					array(
+						'link' => JRoute::_('index.php?option=com_admin&task=profile.edit&id='.JFactory::getUser()->id),
+						'image' => 'header/icon-48-user-profile.png',
+						'text' => JText::_('MOD_QUICKICON_PROFILE'),
+						'access' => true
+					),
+					array(
+						'link' => JRoute::_('index.php?option=com_helloworld'),
+						'image' => 'header/icon-fc-logo-48x48.png',
+						'text' => JText::_('MOD_QUICK_ICON_FC_PROPERTY_MANAGER'),
+						'access' => array('core.manage','com_helloworld')
+					),
 					array(
 						'link' => JRoute::_('index.php?option=com_content&task=article.add'),
 						'image' => 'header/icon-48-article-add.png',
@@ -112,12 +123,12 @@ abstract class modQuickIconHelper
 						'access' => array('core.manage', 'com_templates')
 					),
 					array(
-						'link' => JRoute::_('index.php?option=com_admin&task=profile.edit&id='.JFactory::getUser()->id),
-						'image' => 'header/icon-48-user-profile.png',
-						'text' => JText::_('MOD_QUICKICON_PROFILE'),
+						'link' => JRoute::_('index.php?option=com_messages'),
+						'image' => 'header/icon-48-inbox.png',
+						'text' => JText::_('MOD_QUICKICON_FC_MESSAGES'),
 						'access' => true
 					),
-				);
+        );
 			}
 			else
 			{
@@ -144,7 +155,7 @@ abstract class modQuickIconHelper
 				}
 			}
 		}
-
+    
 		return self::$buttons[$key];
 	}
 
