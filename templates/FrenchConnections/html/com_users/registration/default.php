@@ -9,9 +9,11 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+// The following default behaviours rely on mootools. As this is a front end form we need to 
+// incorporate jQuery equivalents. I.e. form validation. Tooltips included in bootstrap...
+//JHtml::_('behavior.keepalive');
+//JHtml::_('behavior.tooltip');
+//JHtml::_('behavior.formvalidation');
 ?>
 <div class="registration<?php echo $this->pageclass_sfx?>">
 <?php if ($this->params->get('show_page_heading')) : ?>
@@ -32,14 +34,19 @@ JHtml::_('behavior.formvalidation');
 				<?php echo $field->input;?>
 			<?php else:?>
         <div class="control-group">
-					<?php echo $field->label; ?>
+					<?php 
+            print_r($this->form->getLabel('tos'));
+            echo $field->label; 
+          
+          ?>
           <div class="controls">
 					<?php if (!$field->required && $field->type!='Spacer'): ?>
-						<span class="optional"><?php echo JText::_('COM_USERS_OPTIONAL'); ?></span>
+						<span class="optional"><?php echo JText::_('COM_USERS_OPTIONAL'); ?></span><br />
 					<?php endif; ?>
+            				  <?php echo ($field->type!='Spacer') ? $field->input : "&#160;"; ?>
+
           </div>
         </div>
-				  <?php echo ($field->type!='Spacer') ? $field->input : "&#160;"; ?>
 			<?php endif;?>
 		<?php endforeach;?>
 		</fieldset>

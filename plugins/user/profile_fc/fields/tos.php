@@ -57,7 +57,7 @@ class JFormFieldTos extends JFormFieldRadio
 		$css = "#jform_profile_tos {width: 18em; margin: 0 !important; padding: 0 2px !important;}
 				#jform_profile_tos input {margin:0 5px 0 0 !important; width:10px !important;}";
 		$doc->addStyleDeclaration($css);
-		JHtml::_('behavior.modal');
+		//JHtml::_('behavior.modal');
 
 		// Build the class for the label.
 		$class = !empty($this->description) ? 'hasTip' : '';
@@ -78,7 +78,7 @@ class JFormFieldTos extends JFormFieldRadio
 		}
 		
 		$tosarticle = $this->element['article'] ? (int) $this->element['article'] : 1;
-		$link = '<a class="modal" title="" href="index.php?option=com_content&amp;view=article&amp;layout=modal&amp;id=' . $tosarticle . '&amp;tmpl=component" rel="{handler: \'iframe\', size: {x:800, y:500}}">' . $text . '</a>';
+		$link = '<a class="" title="" href="/index.php?option=com_content&amp;view=article&amp;layout=modal&amp;id=' . $tosarticle . '&amp;tmpl=component" rel="{handler: \'iframe\', size: {x:800, y:500}}">' . $text . '</a>';
 
 		// Add the label text and closing tag.
 		$label .= '>' . $link . '<span class="star">&#160;*</span></label>';

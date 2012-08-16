@@ -43,7 +43,7 @@ class plgUserProfile_fc extends JPlugin
 	function onContentPrepareData($context, $data)
 	{
 		// Check we are manipulating a valid form.
-		if (in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')))
+		if (!in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')))
 		{
 
       return true;
@@ -62,8 +62,11 @@ class plgUserProfile_fc extends JPlugin
 					' WHERE user_id = '.(int) $userId." AND profile_key LIKE 'profile.%'" .
 					' ORDER BY ordering'
 				);
+       
+// $db->setQuery('SHOW FULL COLUMNS FROM #__users');
 				$results = $db->loadRowList();
-
+      
+        
 				// Check for a database error.
 				if ($db->getErrorNum())
 				{
@@ -99,7 +102,7 @@ class plgUserProfile_fc extends JPlugin
 			}
 		}
 
-		return true;
+    return true;
 	}
 
 	public static function url($value)
@@ -168,7 +171,8 @@ class plgUserProfile_fc extends JPlugin
 
 		// Check we are manipulating a valid form.
 		$name = $form->getName();
-		if (!in_array($name, array('com_admin.profile', 'com_users.user', 'com_users.profile', 'com_users.registration')))
+
+    if (!in_array($name, array('com_admin.profile', 'com_users.user', 'com_users.profile', 'com_users.registration')))
 		{
 			return true;
 		}
@@ -183,7 +187,7 @@ class plgUserProfile_fc extends JPlugin
       // If this user is in the owner user group 
       if($isOwner){
         
-        $name = $form->setFieldAttribute('name','readonly','true');
+        $form->setFieldAttribute('name','readonly','true');
       } 
      
 
@@ -200,19 +204,22 @@ class plgUserProfile_fc extends JPlugin
 			'region',
 			'country',
 			'postal_code',
-			'phone',
+			'phone_1',
+			'phone_2',
+			'phone_3',
 			'website',
-			'favoritebook',
 			'aboutme',
-			'dob',
-		);
+      'tos',
+      'vat_status'
+    );
     
 		
-		$tosarticle = $this->params->get('register_tos_article');
+		$tosarticle = $this->params->get('register-tos_article');
 		$tosenabled = $this->params->get('register-require_tos', 0);
+    
 
 		// We need to be in the registration form, field needs to be enabled and we need an article ID
-		if ($name != 'com_users.registration' || !$tosenabled || !$tosarticle)
+		if (!in_array($name, array('com_users.registration', 'com_admin.profile')) || !$tosenabled || !$tosarticle)
 		{
 			// We only want the TOS in the registration form
 			$form->removeField('tos', 'profile');
@@ -223,11 +230,11 @@ class plgUserProfile_fc extends JPlugin
 			$form->setFieldAttribute('tos', 'article', $tosarticle, 'profile');
 		}
 
-
     
 		foreach ($fields as $field)
 		{	
-			// Case using the users manager in admin
+ 
+      // Case using the users manager in admin
 			if ($name == 'com_users.user')
 			{
 				// Remove the field if it is disabled in registration and profile
@@ -253,19 +260,22 @@ class plgUserProfile_fc extends JPlugin
 			// Case profile in site or admin
 			elseif ($name == 'com_users.profile' || $name == 'com_admin.profile')
 			{
-
         // Toggle whether the field is required.
-        if ($this->params->get('profile-require_' . $field, 1) > 0)
+        if ($this->params->get('profile-require_' . $field, 1) == 2)
         {
           $form->setFieldAttribute($field, 'required', ($this->params->get('profile-require_' . $field) == 2) ? 'required' : '', 'profile');
+        }
+        elseif ($this->params->get('profile-require_' . $field, 1) == 1)
+        {
+          $form->setFieldAttribute($field, 'optional', ($this->params->get('profile-require_' . $field) == 1) ? 'required' : '', 'profile');
         }
         else
         {
           $form->removeField($field, 'profile');
         }
-       
 			}
 		}
+    
     
     // After all that we only want to show these additional fields to owners when they are updating their profile
     // or when an admin is editing an owners profile. 

@@ -31,7 +31,7 @@
 				<field name="register-require_address1" type="list"
 
 					description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
-					label="PLG_WOOT_USER_PROFILE_FIELD_ADDRESS1_LABEL"
+					label="PLG_USER_PROFILE_FIELD_ADDRESS1_LABEL"
 				>
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
@@ -88,30 +88,30 @@
 					<option value="0">JDISABLED</option>
 				</field>
 
-				<field name="register-require_phone" type="list"
+				<field name="register-require_phone_1" type="list"
 
-					description="PLG_USER_PROFILE_FIELD_PHONE_DESC"
-					label="PLG_USER_PROFILE_FIELD_PHONE_LABEL"
+					description="PLG_USER_PROFILE_FIELD_PHONE_1_DESC"
+					label="PLG_USER_PROFILE_FIELD_PHONE_1_LABEL"
 				>
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
 					<option value="0">JDISABLED</option>
 				</field>
 
-				<field name="register-require_website" type="list"
+				<field name="register-require_phone_2" type="list"
 
-					description="PLG_USER_PROFILE_FIELD_WEB_SITE_DESC"
-					label="PLG_USER_PROFILE_FIELD_WEB_SITE_LABEL"
+					description="PLG_USER_PROFILE_FIELD_PHONE_2_DESC"
+					label="PLG_USER_PROFILE_FIELD_PHONE_2_LABEL"
 				>
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
 					<option value="0">JDISABLED</option>
 				</field>
-				<field 	name="register-require_favoritebook"
-					type="list"
 
-					label="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_LABEL"
-					description="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_DESC"
+				<field name="register-require_phone_3" type="list"
+
+					description="PLG_USER_PROFILE_FIELD_PHONE_3_DESC"
+					label="PLG_USER_PROFILE_FIELD_PHONE_3_LABEL"
 				>
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
@@ -129,6 +129,15 @@
 					<option	value="1">JOPTION_OPTIONAL</option>
 					<option	value="0">JDISABLED</option>
 				</field>
+        <field name="register-require_website" type="list"
+
+					description="PLG_USER_PROFILE_FIELD_WEB_SITE_DESC"
+					label="PLG_USER_PROFILE_FIELD_WEB_SITE_LABEL"
+				>
+					<option value="2">JOPTION_REQUIRED</option>
+					<option value="1">JOPTION_OPTIONAL</option>
+					<option value="0">JDISABLED</option>
+				</field>        
 				<field
 					name="register-require_tos"
 					type="list"
@@ -140,22 +149,21 @@
 					<option	value="0">JDISABLED</option>
 				</field>
 				<field
-					name="register_tos_article"
+					name="register-tos_article"
 					type="modal_article"
 
 					label="PLG_USER_PROFILE_FIELD_TOS_ARTICLE_LABEL"
 					description="PLG_USER_PROFILE_FIELD_TOS_ARTICLE_DESC"
 				/>
 				<field
-					name="register-require_dob"
+					name="register-require_vat_status"
 					type="list"
-
-					label="PLG_USER_PROFILE_FIELD_DOB_LABEL"
-					description="PLG_USER_PROFILE_FIELD_DOB_DESC">
-					<option	value="2">JOPTION_REQUIRED</option>
-					<option	value="1">JOPTION_OPTIONAL</option>
-					<option	value="0">JDISABLED</option>
-				</field>
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
+					description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+            <option	value="0">JDISABLED</option>
+        </field>
 
 				<field name="spacer1" type="spacer"
 					hr="true"
@@ -224,30 +232,31 @@
 					<option value="0">JDISABLED</option>
 				</field>
 
-				<field name="profile-require_phone" type="list"
 
-					description="PLG_USER_PROFILE_FIELD_PHONE_DESC"
-					label="PLG_USER_PROFILE_FIELD_PHONE_LABEL"
+				<field name="profile-require_phone_1" type="list"
+
+					description="PLG_USER_PROFILE_FIELD_PHONE_1_DESC"
+					label="PLG_USER_PROFILE_FIELD_PHONE_1_LABEL"
 				>
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
 					<option value="0">JDISABLED</option>
 				</field>
 
-				<field name="profile-require_website" type="list"
+				<field name="profile-require_phone_2" type="list"
 
-					description="PLG_USER_PROFILE_FIELD_WEB_SITE_DESC"
-					label="PLG_USER_PROFILE_FIELD_WEB_SITE_LABEL"
+					description="PLG_USER_PROFILE_FIELD_PHONE_2_DESC"
+					label="PLG_USER_PROFILE_FIELD_PHONE_2_LABEL"
 				>
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
 					<option value="0">JDISABLED</option>
 				</field>
-				<field 	name="profile-require_favoritebook"
-					type="list"
 
-					label="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_LABEL"
-					description="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_DESC">
+				<field name="profile-require_phone_3" type="list"
+
+					description="PLG_USER_PROFILE_FIELD_PHONE_3_DESC"
+					label="PLG_USER_PROFILE_FIELD_PHONE_3_LABEL">
 					<option value="2">JOPTION_REQUIRED</option>
 					<option value="1">JOPTION_OPTIONAL</option>
 					<option value="0">JDISABLED</option>
@@ -263,18 +272,42 @@
 					<option	value="1">JOPTION_OPTIONAL</option>
 					<option	value="0">JDISABLED</option>
 				</field>
-				<field
-					name="profile-require_dob"
-					type="list"
+				<field name="profile-require_website" type="list"
 
-					label="PLG_USER_PROFILE_FIELD_DOB_LABEL"
-					description="PLG_USER_PROFILE_FIELD_DOB_DESC"
-				 >
+					description="PLG_USER_PROFILE_FIELD_WEB_SITE_DESC"
+					label="PLG_USER_PROFILE_FIELD_WEB_SITE_LABEL"
+				>
+					<option value="2">JOPTION_REQUIRED</option>
+					<option value="1">JOPTION_OPTIONAL</option>
+					<option value="0">JDISABLED</option>
+				</field>
+ 				<field
+					name="profile-require_tos"
+					type="list"
+					default="0"
+					label="PLG_USER_PROFILE_FIELD_TOS_LABEL"
+					description="PLG_USER_PROFILE_FIELD_TOS_DESC"
+				>
 					<option	value="2">JOPTION_REQUIRED</option>
-					<option	value="1">JOPTION_OPTIONAL</option>
 					<option	value="0">JDISABLED</option>
 				</field>
-			</fieldset>
+				<field
+					name="profile-tos_article"
+					type="modal_article"
+					label="PLG_USER_PROFILE_FIELD_TOS_ARTICLE_LABEL"
+					description="PLG_USER_PROFILE_FIELD_TOS_ARTICLE_DESC"
+				/>       
+				<field
+					name="profile-require_vat_status"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
+					description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+            <option	value="0">JDISABLED</option>
+        </field>
+      </fieldset>
+				
 
 		</fields>
 	</config>

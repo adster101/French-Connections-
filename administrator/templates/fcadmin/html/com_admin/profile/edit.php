@@ -32,7 +32,7 @@ $fieldsets = $this->form->getFieldsets();
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id='.$this->item->id); ?>" method="post" name="adminForm" id="profile-form" class="form-validate" enctype="multipart/form-data">
-	<div class="width-60 fltlft">
+	<div class="width-50 fltlft">
 		<fieldset class="adminform">
 			<legend><?php echo JText::_('COM_ADMIN_USER_ACCOUNT_DETAILS'); ?></legend>
 			<ul class="adminformlist">
@@ -44,7 +44,7 @@ $fieldsets = $this->form->getFieldsets();
 		</fieldset>
 	</div>
 
-	<div class="width-40 fltrt">
+	<div class="width-50 fltrt">
 		<?php
           echo JHtml::_('sliders.start');   
 

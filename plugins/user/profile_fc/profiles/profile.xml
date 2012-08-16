@@ -2,19 +2,17 @@
 <form>
 	<fields name="profile">
 		<fieldset name="profile"
-			label="PLG_USER_PROFILE_SLIDER_LABEL"
-		>
+			label="PLG_USER_PROFILE_SLIDER_LABEL">
 			<field
 				name="address1"
 				type="text"
 				id="address1"
 				description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
 				filter="string"
-				label="PLG_WOOT_USER_PROFILE_FIELD_ADDRESS1_LABEL"
+				label="PLG_USER_PROFILE_FIELD_ADDRESS1_LABEL"
 				message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
 				size="30"
 			/>
-
 			<field
 				name="address2"
 				type="text"
@@ -22,7 +20,7 @@
 				description="PLG_USER_PROFILE_FIELD_ADDRESS2_DESC"
 				filter="string"
 				label="PLG_USER_PROFILE_FIELD_ADDRESS2_LABEL"
-				message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
+				message="PLG_USER_PROFILE_FIELD_ADDRESS2_MESSAGE"
 				size="30"
 			/>
 
@@ -71,16 +69,51 @@
 			/>
 
 			<field
-				name="phone"
+				name="phone_1"
 				type="tel"
-				id="phone"
-				description="PLG_USER_PROFILE_FIELD_PHONE_DESC"
+				id="phone_1"
+				description="PLG_USER_PROFILE_FIELD_PHONE_1_DESC"
 				filter="string"
-				label="PLG_USER_PROFILE_FIELD_PHONE_LABEL"
-				message="PLG_USER_PROFILE_FIELD_PHONE_MESSAGE"
+				label="PLG_USER_PROFILE_FIELD_PHONE_1_LABEL"
+				message="PLG_USER_PROFILE_FIELD_PHONE_1_MESSAGE"
 				size="30"
 			/>
+      <field
+				name="phone_2"
+				type="tel"
+				id="phone_2"
+				description="PLG_USER_PROFILE_FIELD_PHONE_2_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_PHONE_2_LABEL"
+				message="PLG_USER_PROFILE_FIELD_PHONE_2_MESSAGE"
+				size="30"
+			/>
+      <field
+				name="phone_3"
+				type="tel"
+				id="phone_3"
+				description="PLG_USER_PROFILE_FIELD_PHONE_3_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_PHONE_3_LABEL"
+				message="PLG_USER_PROFILE_FIELD_PHONE_3_MESSAGE"
+				size="30"
+			/>
+      <field
+        name="vat_status"
+        required="true"
+        type="list"
+        default=""
+        class="vat_status width-45"
+        label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
+        description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
+        	<option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
+          <option	value="s2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
+          <option	value="s2a">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
+          <option	value="z">PLG_USER_PROFILE_FIELD_VAT_STATUS_Z</option>
+          <option	value="za">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>
+          <option	value="ecs">PLG_USER_PROFILE_FIELD_VAT_STATUS_ECS</option>
 
+      </field>
 			<field
 				name="website"
 				type="url"
@@ -91,15 +124,7 @@
 				message="PLG_USER_PROFILE_FIELD_WEB_SITE_MESSAGE"
 				size="30"
 			/>
-			<field
-				name="favoritebook"
-				type="text"
-				description="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_DESC"
-				filter="string"
-				label="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_LABEL"
-				message="PLG_USER_PROFILE_FIELD_FAVORITE_BOOK_MESSAGE"
-				size="30"
-			/>
+			
 			<field
 				name="aboutme"
 				type="textarea"
@@ -110,12 +135,7 @@
 				rows="5"
 				filter="safehtml"
 			/>
-			<field
-				name="dob"
-				type="calendar"
-				label="PLG_USER_PROFILE_FIELD_DOB_LABEL"
-				description="PLG_USER_PROFILE_FIELD_DOB_DESC"
-			/>
+
 			<field
 				name="tos"
 				type="tos"
@@ -123,6 +143,7 @@
 				description="PLG_USER_PROFILE_FIELD_TOS_DESC">
 				<option value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
 			</field>
+      
 		</fieldset>
 	</fields>
 </form>

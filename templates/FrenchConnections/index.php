@@ -30,8 +30,10 @@ $siteName = $app->getCfg( 'sitename' );
 	<!-- Set the viewport width to device width for mobile -->
 	<meta name="viewport" content="width=device-width initial-scale=1.0" />
 	<!-- CSS: implied media=all -->
+	<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/system/css/system.css" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/less/docs/assets/css/bootstrap-responsive.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/general.css">
 	
 	<!--[if lt IE 9]>
 		<link rel="stylesheet" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template ?>/css/ie.css">

@@ -75,7 +75,7 @@ class HelloWorldViewHelloWorld extends JView
 			{
 				JToolBarHelper::apply('helloworld.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('helloworld.save', 'JTOOLBAR_SAVE');
-				JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
 		}
@@ -86,7 +86,7 @@ class HelloWorldViewHelloWorld extends JView
 				// We can save the new record
 				JToolBarHelper::apply('helloworld.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('helloworld.save', 'JTOOLBAR_SAVE');
-				JToolBarHelper::custom('helloworld.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+				//JToolBarHelper::custom('helloworld.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
  
 				// We can save this record, but check the create permission to see if we can return to make a new one.
 				if ($canDo->get('core.create')) 
