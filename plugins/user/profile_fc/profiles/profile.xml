@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
+<form addrulepath="/administrator/components/com_helloworld/models/rules">
 	<fields name="profile">
 		<fieldset name="profile"
 			label="PLG_USER_PROFILE_SLIDER_LABEL">
@@ -23,7 +23,6 @@
 				message="PLG_USER_PROFILE_FIELD_ADDRESS2_MESSAGE"
 				size="30"
 			/>
-
 			<field
 				name="city"
 				type="text"
@@ -34,7 +33,6 @@
 				message="PLG_USER_PROFILE_FIELD_CITY_MESSAGE"
 				size="30"
 			/>
-
 			<field
 				name="region"
 				type="text"
@@ -99,22 +97,6 @@
 				size="30"
 			/>
       <field
-        name="vat_status"
-        required="true"
-        type="list"
-        default=""
-        class="vat_status width-45"
-        label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
-        description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
-        	<option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
-          <option	value="s2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
-          <option	value="s2a">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
-          <option	value="z">PLG_USER_PROFILE_FIELD_VAT_STATUS_Z</option>
-          <option	value="za">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>
-          <option	value="ecs">PLG_USER_PROFILE_FIELD_VAT_STATUS_ECS</option>
-
-      </field>
-			<field
 				name="website"
 				type="url"
 				id="website"
@@ -124,7 +106,6 @@
 				message="PLG_USER_PROFILE_FIELD_WEB_SITE_MESSAGE"
 				size="30"
 			/>
-			
 			<field
 				name="aboutme"
 				type="textarea"
@@ -134,15 +115,80 @@
 				cols="30"
 				rows="5"
 				filter="safehtml"
-			/>
+			/>      
 
+      
+      <field
+        name="vat_status"
+        required="true"
+        type="list"
+        default=""
+        class="vat_status width-45"
+        label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
+        description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
+        	<option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
+          <option	value="S2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
+          <option	value="S2A">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
+          <option	value="Z">PLG_USER_PROFILE_FIELD_VAT_STATUS_Z</option>
+          <option	value="ZA">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>
+          <option	value="ECS">PLG_USER_PROFILE_FIELD_VAT_STATUS_ECS</option>
+      </field>
+      
+			<field
+				name="vat_number"
+				type="text"
+				id="vat_number"
+				description="PLG_USER_PROFILE_FIELD_VAT_NUMBER_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_VAT_NUMBER_LABEL"
+				message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
+				size="30"
+			/>
+      
+			<field
+				name="company_number"
+				type="text"
+				id="company_number"
+				description="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
+				message="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_MESSAGE"
+				size="30"
+			/>
+			
+			<field
+				name="receive_newsletter"
+				type="checkbox"
+				id="receive_newsletter"
+				description="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_DESC"
+				filter="integer"
+				label="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_LABEL"
+				message="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_MESSAGE"
+        value="1"
+        default="1"
+      />
+
+      
+			<field
+				name="where_heard"
+				type="list"
+				id="where_heard"
+				description="PLG_USER_PROFILE_FIELD_WHERE_HEARD_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
+				message="PLG_USER_PROFILE_FIELD_WHERE_HEARD_MESSAGE">
+          <option	value="">J</option>
+          <option	value="PLG_USER_PROFILE_FIELD_WHERE_HEARD_GOOGLE">PLG_USER_PROFILE_FIELD_WHERE_HEARD_GOOGLE</option>
+          <option	value="PLG_USER_PROFILE_FIELD_WHERE_HEARD_FRIEND">PLG_USER_PROFILE_FIELD_WHERE_HEARD_FRIEND</option>
+      </field>
+      
 			<field
 				name="tos"
 				type="tos"
 				label="PLG_USER_PROFILE_FIELD_TOS_LABEL"
 				description="PLG_USER_PROFILE_FIELD_TOS_DESC">
 				<option value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
-			</field>
+			</field>  
       
 		</fieldset>
 	</fields>

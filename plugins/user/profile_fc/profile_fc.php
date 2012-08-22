@@ -17,6 +17,29 @@ jimport('joomla.utilities.date');
  */
 class plgUserProfile_fc extends JPlugin
 {
+  /* 
+   * ARRAY OF FIELDS AND WHAT NOT
+   */
+  private static $fields = array(
+			'address1',
+			'address2',
+			'city',
+			'region',
+			'country',
+			'postal_code',
+			'phone_1',
+			'phone_2',
+			'phone_3',
+			'website',
+			'aboutme',
+      'tos',
+      'vat_status',
+      'vat_number',
+      'company_number',
+      'receive_newsletter',
+      'where_heard'
+    );
+  
 	/**
 	 * Constructor
 	 *
@@ -58,15 +81,35 @@ class plgUserProfile_fc extends JPlugin
 				// Load the profile data from the database.
 				$db = JFactory::getDbo();
 				$db->setQuery(
-					'SELECT profile_key, profile_value FROM #__user_profiles' .
-					' WHERE user_id = '.(int) $userId." AND profile_key LIKE 'profile.%'" .
-					' ORDER BY ordering'
-				);
-       
-// $db->setQuery('SHOW FULL COLUMNS FROM #__users');
-				$results = $db->loadRowList();
-      
+					'SELECT 
+             address1, 
+             address2,
+             city, 
+             region,
+             country,
+             postal_code, 
+             phone_1,
+             phone_2,
+             phone_3, 
+             website, 
+             aboutme, 
+             tos, 
+             vat_status, 
+             vat_number,
+             company_number,
+             receive_newsletter
+           FROM #__user_profile_fc' .
+					' WHERE user_id = '.(int) $userId
+        );
+				
         
+        
+       
+        //$db->setQuery('SHOW FULL COLUMNS FROM #__user_profile_fc');
+        
+				$results = $db->loadAssoc();
+        
+
 				// Check for a database error.
 				if ($db->getErrorNum())
 				{
@@ -76,14 +119,14 @@ class plgUserProfile_fc extends JPlugin
 
 				// Merge the profile data.
 				$data->profile = array();
-
-				foreach ($results as $v)
+        
+        
+				foreach ($results as $key => $value)
 				{
-					$k = str_replace('profile.', '', $v[0]);
-					$data->profile[$k] = json_decode($v[1], true);
-					if ($data->profile[$k] === null)
+					$data->profile[$key] = json_decode($value, true);
+					if ($data->profile[$key] == '')
 					{
-						$data->profile[$k] = $v[1];
+						$data->profile[$key] = $value;
 					}
 				}
 			}
@@ -197,26 +240,12 @@ class plgUserProfile_fc extends JPlugin
 		JForm::addFormPath(dirname(__FILE__) . '/profiles');
 		$form->loadFile('profile', false);
 
-		$fields = array(
-			'address1',
-			'address2',
-			'city',
-			'region',
-			'country',
-			'postal_code',
-			'phone_1',
-			'phone_2',
-			'phone_3',
-			'website',
-			'aboutme',
-      'tos',
-      'vat_status'
-    );
+    // Add the rule path to the form so we may validate the user profile details a bit.
+    JForm::addRulePath('C:\xampp\htdocs\administrator\components\com_helloworld\models\rules');
     
-		
 		$tosarticle = $this->params->get('register-tos_article');
 		$tosenabled = $this->params->get('register-require_tos', 0);
-    
+   
 
 		// We need to be in the registration form, field needs to be enabled and we need an article ID
 		if (!in_array($name, array('com_users.registration', 'com_admin.profile')) || !$tosenabled || !$tosarticle)
@@ -231,7 +260,7 @@ class plgUserProfile_fc extends JPlugin
 		}
 
     
-		foreach ($fields as $field)
+		foreach (self::$fields as $field)
 		{	
  
       // Case using the users manager in admin
@@ -243,6 +272,11 @@ class plgUserProfile_fc extends JPlugin
 				{
 					$form->removeField($field, 'profile');
 				}
+        
+
+
+        $form->setFieldAttribute($field, 'required', ($this->params->get('profile-require_' . $field) == 2) ? 'required' : '', 'profile');
+
 			} 
 			// Case registration
 			elseif ($name == 'com_users.registration')
@@ -295,38 +329,51 @@ class plgUserProfile_fc extends JPlugin
 	{
 		$userId	= JArrayHelper::getValue($data, 'id', 0, 'int');
 
-		if ($userId && $result && isset($data['profile']) && (count($data['profile'])))
+    if ($userId && $result && isset($data['profile']) && (count($data['profile'])))
 		{
 			try
 			{
-				//Sanitize the date
-				if (!empty($data['profile']['dob']))
-				{
-					$date = new JDate($data['profile']['dob']);
-					$data['profile']['dob'] = $date->format('Y-m-d');
-				}
+        
 
-				$db = JFactory::getDbo();
+        
+				
+
+
+        
+
+
+        
+        
+        $db = JFactory::getDbo();
 				$db->setQuery(
-					'DELETE FROM #__user_profiles WHERE user_id = '.$userId .
-					" AND profile_key LIKE 'profile.%'"
-				);
+          'DELETE FROM #__user_profile_fc WHERE user_id = '.$userId 
+        );
 
 				if (!$db->query())
 				{
 					throw new Exception($db->getErrorMsg());
 				}
 
-				$tuples = array();
-				$order	= 1;
-
-				foreach ($data['profile'] as $k => $v)
+        $cols = array();
+        $values=array();
+        
+        // loop over self::$fields and init any missing vars from the $data array
+        foreach(self::$fields as $field) {
+          if (!array_key_exists($field, $data['profile'])) {
+            $data['profile'][$field] = NULL;
+          }
+        }
+        
+        
+        // then insert the user profile here.
+        foreach ($data['profile'] as $k => $v)
 				{
-					$tuples[] = '('.$userId.', '.$db->quote('profile.'.$k).', '.$db->quote(json_encode($v)).', '.$order++.')';
+          $cols[] = $k;
+          $values[] = $db->quote($v);
 				}
-
-				$db->setQuery('INSERT INTO #__user_profiles VALUES '.implode(', ', $tuples));
-
+        
+  		 	$db->setQuery('INSERT INTO `#__user_profile_fc` (`user_id`, `'. implode('`,`', $cols) . '`) VALUES (\''. $userId . '\',' . implode(', ', $values) .')');
+         
 				if (!$db->query())
 				{
 					throw new Exception($db->getErrorMsg());
@@ -367,8 +414,7 @@ class plgUserProfile_fc extends JPlugin
 			{
 				$db = JFactory::getDbo();
 				$db->setQuery(
-					'DELETE FROM #__user_profiles WHERE user_id = '.$userId .
-					" AND profile_key LIKE 'profile.%'"
+					'DELETE FROM #__user_profile_fc WHERE user_id = '.$userId
 				);
 
 				if (!$db->query())

@@ -18,6 +18,6 @@ class JFormRuleGreeting extends JFormRule
 	* @since	1.6
 	*/
 	// For some reason the regex doesn't like the 'french' characters...
-	//protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-éàôê]+$';
-	protected $regex = '^[\w .-]+$';
+	//protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-ï¿½ï¿½ï¿½ï¿½]+$';
+	protected $regex = '^[\w .-Ã©Ã©Ã Ã´Ãª0123456789\!,&]+$';
 }

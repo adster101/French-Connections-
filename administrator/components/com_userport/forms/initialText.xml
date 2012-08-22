@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fields name="initialText">
+    <fieldset name="nonExportOptions">
+      <field type="radio" name="initial_text" default="current_users"
+        label="COM_USERPORT_LABEL_INITIAL_TEXT" description="COM_USERPORT_DESCRIPTION_INITIAL_TEXT">
+        <option value="empty">COM_USERPORT_LABEL_OPTION_EMPTY_INITIAL_TEXT</option>
+        <option value="file">COM_USERPORT_LABEL_OPTION_FILE_CONTENTS_AS_INITIAL_TEXT</option>
+        <option value="current_users">COM_USERPORT_LABEL_OPTION_CURRENT_USERS_AS_CSV_TEXT</option>
+      </field>
+      <field type="file" name="file" size="80"
+        label="COM_USERPORT_LABEL_FILE"
+        description="COM_USERPORT_DESCRIPTION_FILE" />      
+    </fieldset>
+    <fieldset name="genericOptions">
+      <field type="list" name="field_separator" default=";"
+        label="COM_USERPORT_LABEL_FIELD_SEPARATOR" description="COM_USERPORT_DESCRIPTION_FIELD_SEPARATOR">
+        <option value=",">COM_USERPORT_LABEL_OPTION_COMMA_AS_FIELD_SEPARATOR</option>
+        <option value=";">COM_USERPORT_LABEL_OPTION_SEMI_COLON_AS_FIELD_SEPARATOR</option>
+        <option value="tab">COM_USERPORT_LABEL_OPTION_TAB_AS_FIELD_SEPARATOR</option>
+      </field>
+      <field type="list" name="field_enclosure" default="single"
+        label="COM_USERPORT_LABEL_FIELD_ENCLOSURE" description="COM_USERPORT_DESCRIPTION_FIELD_ENCLOSURE">
+        <option value="single">COM_USERPORT_LABEL_OPTION_SINGLE_QUOTE_AS_FIELD_ENCLOSURE</option>
+        <option value="double">COM_USERPORT_LABEL_OPTION_DOUBLE_QUOTE_AS_FIELD_ENCLOSURE</option>
+      </field>
+      <field type="list" name="which_fields" default="import"
+        label="COM_USERPORT_LABEL_EXPORT_WHICH_FIELDS" description="COM_USERPORT_DESCRIPTION_EXPORT_WHICH_FIELDS">
+        <option value="basic">COM_USERPORT_LABEL_OPTION_EXPORT_BASIC_FIELDS</option>
+        <option value="import">COM_USERPORT_LABEL_OPTION_EXPORT_IMPORT_FIELDS</option>
+        <option value="all">COM_USERPORT_LABEL_OPTION_EXPORT_ALL_FIELDS</option>
+        </field>
+      <field type="list" name="block" default="default"
+        label="COM_USERPORT_LABEL_EXPORT_FILTER" description="COM_USERPORT_DESCRIPTION_EXPORT_FILTER">
+        <option value="0">COM_USERPORT_LABEL_OPTION_EXPORT_NON_BLOCKED_USERS</option>
+        <option value="1">COM_USERPORT_LABEL_OPTION_EXPORT_BLOCKED_USERS</option>
+        <option value="default">COM_USERPORT_LABEL_OPTION_EXPORT_BLOCKED_AND_NON_BLOCKED_USERS</option>
+      </field>        
+      <field type="list" name="filter_combination" default="or"
+        label="" description="">
+        <option value="and">COM_USERPORT_LABEL_OPTION_FILTER_USING_AND</option>
+        <option value="or">COM_USERPORT_LABEL_OPTION_FILTER_USING_OR</option>
+      </field>
+      <field type="list" name="non_activated" default="default"
+        label="" description="">
+        <option value="0">COM_USERPORT_LABEL_OPTION_EXPORT_ACTIVATED_USERS</option>
+        <option value="1">COM_USERPORT_LABEL_OPTION_EXPORT_NON_ACTIVATED_USERS</option>
+        <option value="default">COM_USERPORT_LABEL_OPTION_EXPORT_ACTIVATED_AND_NON_ACTIVATED_USERS</option>
+      </field>
+      <field type="usergroup" name="groups_override_value" multiple="true" size="10"
+        label="COM_USERPORT_LABEL_EXPORT_GROUPS_FILTER" description="COM_USERPORT_DESCRIPTION_EXPORT_GROUPS_FILTER" />      
+    </fieldset>
+  </fields>
+</form>

@@ -1,0 +1,52 @@
+/*
+ * @package userport
+ * @copyright 2008-2011 Parvus
+ * @license http://www.gnu.org/licenses/gpl-3.0.html
+ * @link http://joomlacode.org/gf/project/userport/
+ * @author Parvus
+ *
+ * userport is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * userport is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with userport. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.icon-32-download
+{ 
+  background-image: url(../../templates/bluestork/images/toolbar/icon-32-download.png);
+}
+
+.icon-32-edit
+{ 
+  background-image: url(../../templates/bluestork/images/toolbar/icon-32-edit.png); 
+}
+
+.icon-32-start
+{ 
+  background-image: url(../../templates/bluestork/images/toolbar/icon-32-revert.png);
+}
+
+.icon-32-user
+{ 
+  background-image: url(./images/user.png);
+}
+
+.icon-32-user-add
+{ 
+  background-image: url(../../templates/bluestork/images/toolbar/icon-32-user-add.png); 
+}
+
+.icon-48-userport
+{
+  background-image: url(./images/Puppeter_template_48x48px.png);
+}
+
+*/

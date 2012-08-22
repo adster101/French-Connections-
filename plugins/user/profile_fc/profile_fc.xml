@@ -155,6 +155,15 @@
 					label="PLG_USER_PROFILE_FIELD_TOS_ARTICLE_LABEL"
 					description="PLG_USER_PROFILE_FIELD_TOS_ARTICLE_DESC"
 				/>
+       	<field
+					name="register-require_where_heard"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
+					description="PLG_USER_PROFILE_FIELD_WHERE_HEARD_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+            <option	value="0">JDISABLED</option>
+        </field>   
 				<field
 					name="register-require_vat_status"
 					type="list"
@@ -164,6 +173,36 @@
             <option	value="2">JOPTION_REQUIRED</option>
             <option	value="0">JDISABLED</option>
         </field>
+        				<field
+					name="register-require_vat_number"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_VAT_NUMBER_LABEL"
+					description="PLG_USER_PROFILE_FIELD_VAT_NUMBER_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+   					<option	value="1">JOPTION_OPTIONAL</option>
+            <option	value="0">JDISABLED</option>
+        </field>        
+ 				<field
+					name="register-require_company_number"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
+					description="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+  					<option	value="1">JOPTION_OPTIONAL</option>
+            <option	value="0">JDISABLED</option>
+        </field>            
+				<field
+					name="register-require_receive_newsletter"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_LABEL"
+					description="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+				  	<option	value="1">JOPTION_OPTIONAL</option>
+            <option	value="0">JDISABLED</option>
+        </field>             
 
 				<field name="spacer1" type="spacer"
 					hr="true"
@@ -306,6 +345,45 @@
             <option	value="2">JOPTION_REQUIRED</option>
             <option	value="0">JDISABLED</option>
         </field>
+				<field
+					name="profile-require_vat_number"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_VAT_NUMBER_LABEL"
+					description="PLG_USER_PROFILE_FIELD_VAT_NUMBER_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+   					<option	value="1">JOPTION_OPTIONAL</option>
+            <option	value="0">JDISABLED</option>
+        </field>        
+ 				<field
+					name="profile-require_company_number"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
+					description="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+  					<option	value="1">JOPTION_OPTIONAL</option>
+            <option	value="0">JDISABLED</option>
+        </field>            
+				<field
+					name="profile-require_receive_newsletter"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_LABEL"
+					description="PLG_USER_PROFILE_FIELD_RECEIVE_NEWSLETTER_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+				  	<option	value="1">JOPTION_OPTIONAL</option>
+            <option	value="0">JDISABLED</option>
+        </field>             
+				<field
+					name="profile-require_where_heard"
+					type="list"
+          default="0"
+					label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
+					description="PLG_USER_PROFILE_FIELD_WHERE_HEARD_DESC">
+            <option	value="2">JOPTION_REQUIRED</option>
+            <option	value="0">JDISABLED</option>
+        </field>                    
       </fieldset>
 				
 

@@ -15,6 +15,20 @@ Joomla.submitbutton = function(task)
 			{
 				if (!document.formvalidator.isValid(forms[i]))
 				{
+           var invalid = $$('fieldset.invalid');  
+
+           // If there are invalid fieldsets 
+           if(invalid.length) {
+             // Find the active slide
+             invalid.each(function(el){
+               var panel = el.getParents('.pane-slider');
+               var bar = panel.getSiblings('h3')[0];
+
+               panel.setStyle('height','auto');
+               panel.removeClass('pane-hide').addClass('pane-down');
+               bar.removeClass('pane-toggler').addClass('pane-toggler-down');
+             });
+           }
 					isValid = false;
 					break;
 				}
@@ -33,3 +47,19 @@ Joomla.submitbutton = function(task)
 		}
 	}
 }
+
+
+ // Helper function to retrieve the parent slide
+    function getSlide(el)
+    {
+        while(!el.hasClass('slider_item')) {
+            el = el.getParent();
+        }
+
+        var identifier = el.getProperty('id').replace('slider_item_', '');
+        el.id = identifier;
+        el.c_id = identifier.split('-')[0];
+        el.nr = parseInt(identifier.split('-')[1]);
+
+        return el;
+    }

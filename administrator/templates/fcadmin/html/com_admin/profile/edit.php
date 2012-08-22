@@ -27,7 +27,10 @@ $fieldsets = $this->form->getFieldsets();
 	{
 		if (task == 'profile.cancel' || document.formvalidator.isValid(document.id('profile-form'))) {
 			Joomla.submitform(task, document.getElementById('profile-form'));
-		}
+		} else {
+      alert('Invalid form. Please complete the fields correctly.');
+    }
+ 
 	}
 </script>
 

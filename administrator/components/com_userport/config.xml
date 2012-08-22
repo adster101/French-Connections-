@@ -1,0 +1,42 @@
+<?xml version ="1.0" encoding="utf-8"?>
+
+<!--
+/*
+ * @package userport
+ * @copyright 2008-2012 Parvus
+ * @license http://www.gnu.org/licenses/gpl-3.0.html
+ * @link http://joomlacode.org/gf/project/userport/
+ * @author Parvus
+ *
+ * userport is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ * 
+ * userport is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with userport. If not, see <http://www.gnu.org/licenses/>.
+ */
+-->
+
+<root>
+  <params>
+<!--
+/* Testing for userport version 1.5 gave the following (didn't I test it properly before? - I did not check the previous two versions):
+ * - Emails were properly sent to addresses placed in bcc. Both when a single address was given, or multiple addresses.
+ * - Emails were not sent at all to addresses placed in cc. Not when a single adress was given, nor multiple adresses.
+ * - JUtility::sendMail does not return an error (returns TRUE), and the server's log did not show any errors.
+ * So I now just disable sending in cc, while still allowing bcc addresses. Disabling this option is sufficient for this.
+ * <param name="cc" type="text" size="60" default="" label="LABEL_CC" description="TOOLTIP_CC" />
+ */
+-->
+    <param name="bcc" type="text" size="60" default="" label="LABEL_BCC" description="TOOLTIP_BCC" />     
+    <param name="default_email_subject" type="text" size="60" default="" label="LABEL_EMAIL_SUBJECT" description="TOOLTIP_EMAIL_SUBJECT" />
+    <param name="default_email_body" type="textarea" cols="60" rows="5" default="" label="LABEL_EMAIL_BODY" description="TOOLTIP_EMAIL_BODY" />
+  </params>
+</root>
+
