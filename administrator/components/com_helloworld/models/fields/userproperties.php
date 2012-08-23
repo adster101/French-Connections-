@@ -40,8 +40,6 @@ class JFormFieldUserProperties extends JFormFieldList
 
 		// Initialise variables.
 		$options 	= array();
-		//$published= $this->element['published']? $this->element['published'] : array(0,1);
-		//$name 		= (string) $this->element['name'];
 
 		$id  	 		= JRequest::getInt('id');		// Get the id for the current property
 
@@ -75,7 +73,6 @@ class JFormFieldUserProperties extends JFormFieldList
 			$query->select('a.id, a.greeting'); 
 			$query->from('#__helloworld AS a');
 			$query->where('created_by = '.$created_by);		// Select only the props created by the user that created this property
-			//$query->where('created_by = '.$user->id);		// Should do this if this is a new property as otherwise user will need to create and save and then re-edit to make a unit
 			$query->where('level = 1');	// Only show those that are at level 1 
 			if ($id !='') {
 				$query->where('id <>'.$id);	// Need to ignore the current property ID (as it cannot parent itself)

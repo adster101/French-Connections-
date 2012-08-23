@@ -18,6 +18,9 @@ class HelloWorldViewHelloWorlds extends JView
 	 */
 	function display($tpl = null) 
 	{
+    
+    
+    
 		// Get data from the model
 		$items = $this->get('Items');
 		$pagination = $this->get('Pagination');
@@ -40,12 +43,11 @@ class HelloWorldViewHelloWorlds extends JView
 		}		
 		
 
-	
-
-		// Set the toolbar
-		$this->addToolBar();
+    
+    // Set the toolbar
+    $this->addToolBar();
+    
 		
-
  
 		// Display the template
 		parent::display($tpl);
@@ -64,10 +66,15 @@ class HelloWorldViewHelloWorlds extends JView
 		$document = JFactory::getDocument();
 		$document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 
+    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
+    JLoader::register('JButtonAjaxpopup', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
+    
 		$canDo = HelloWorldHelper::getActions();
 		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
 		if ($canDo->get('core.create')) 
 		{
+      $bar = JToolBar::getInstance('toolbar');
+      $bar->appendButton('Ajaxpopup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_helloworld&view=helloworlds&layout=new&format=raw');
 			JToolBarHelper::addNew('helloworld.add', 'JTOOLBAR_NEW');
 		}
 		if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) 
@@ -93,5 +100,8 @@ class HelloWorldViewHelloWorlds extends JView
 	{
 		$document = JFactory::getDocument();
 		$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworlds/submitbutton.js");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
+
 	}
 }
