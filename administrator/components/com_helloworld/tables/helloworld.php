@@ -72,7 +72,6 @@ class HelloWorldTableHelloWorld extends JTableNested
 			// Need to load any translations here if the editing language different from the property language
 			$this->loadPropertyTranslation($lang);
 
-
 			// Convert the params field to a registry.
 			$params = new JRegistry;
 			$params->loadJSON($this->params);

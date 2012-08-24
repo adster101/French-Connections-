@@ -19,7 +19,8 @@
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
 			class="inputbox"
-			required="false">
+			required="false"
+      readonly="true">
 			<option value="1">JOPTION_SELECT_PROPERTY</option>
 		</field>	
 		<field

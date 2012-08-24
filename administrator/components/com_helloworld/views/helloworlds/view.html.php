@@ -18,11 +18,19 @@ class HelloWorldViewHelloWorlds extends JView
 	 */
 	function display($tpl = null) 
 	{
-    
-    
+    // Find the user details
+    $user		= JFactory::getUser();
+    $userID = $user->id;
+   
+    // Get the option 
+    $option = JRequest::getVar('option', 'com_helloworld', 'GET', 'string');
     
 		// Get data from the model
 		$items = $this->get('Items');
+
+    // Record the number of properties here sp we can re-use it later
+    JApplication::setUserState($option. '.' . $userID . '.property.count', count($items));
+    
 		$pagination = $this->get('Pagination');
  		$this->state		= $this->get('State');
 		
@@ -73,10 +81,17 @@ class HelloWorldViewHelloWorlds extends JView
 		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
 		if ($canDo->get('core.create')) 
 		{
-      $bar = JToolBar::getInstance('toolbar');
-      $bar->appendButton('Ajaxpopup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_helloworld&view=helloworlds&layout=new&format=raw');
-			JToolBarHelper::addNew('helloworld.add', 'JTOOLBAR_NEW');
-		}
+      // If this is an owner show a modal with additional information
+      if (HelloWorldHelper::isOwner())
+      {
+        $bar = JToolBar::getInstance('toolbar');
+        $bar->appendButton('Ajaxpopup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_helloworld&view=helloworld&layout=new&format=raw');
+      } 
+      else 
+      {
+  			JToolBarHelper::addNew('helloworld.add', 'JTOOLBAR_NEW');
+      }
+    }
 		if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) 
 		{
 			JToolBarHelper::editList('helloworld.edit', 'JTOOLBAR_EDIT');

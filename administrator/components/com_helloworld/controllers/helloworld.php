@@ -15,4 +15,22 @@ class HelloWorldControllerHelloWorld extends JControllerForm
 		// E.g. check that this user actually 'owns' this property and can hence edit availability
 		return true;  //always allow to edit record 
 	} 	
+  
+  
+  public function woot() {
+    
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken( 'get' ) or die( 'Invalid Token' );
+    
+    $data = JRequest::getVar( 'jform', '', 'POST', 'array' );   
+    if (array_key_exists('parent_id', $data)) {
+      $parent_id = $data['parent_id'];     
+    }
+    $app = JFactory::getApplication();    
+    $app->enqueueMessage(JText::_('New property created as a unit of blah!'), 'warning');
+
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit', true));
+
+  }
+ 
 }

@@ -69,6 +69,22 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		return $form;
 	}
   
+  /*
+   * Method to get a form for the user to choose which property they would like to add a unit to
+   * 
+   */
+	public function getNewPropertyForm($data = array(), $loadData = false) 
+	{	
+    
+		// Get the form.
+		$form = $this->loadForm('com_helloworld.userproperties', 'userproperties', array('control' => 'jform', 'load_data' => $loadData));
+		if (empty($form)) 
+		{
+			return false;
+		} 
+    return $form;
+  }
+  
 	/**
 	 * Method to get the script that have to be included on the form
 	 *
@@ -95,4 +111,17 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		}
 		return $data;
 	}	
+  
+  /* 
+   * Method to set the parent property ID if it has been passed via POST
+   * 
+   * 
+   */
+
+	protected function preprocessForm(JForm $form, $data)
+	{
+    
+
+    
+	}
 }
