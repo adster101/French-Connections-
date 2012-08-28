@@ -97,19 +97,16 @@ class plgUserProfile_fc extends JPlugin
              vat_status, 
              vat_number,
              company_number,
-             receive_newsletter
+             receive_newsletter,
+             where_heard
            FROM #__user_profile_fc' .
 					' WHERE user_id = '.(int) $userId
         );
 				
-        
-        
-       
         //$db->setQuery('SHOW FULL COLUMNS FROM #__user_profile_fc');
         
 				$results = $db->loadAssoc();
         
-
 				// Check for a database error.
 				if ($db->getErrorNum())
 				{

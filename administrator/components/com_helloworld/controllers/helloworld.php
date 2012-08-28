@@ -27,9 +27,9 @@ class HelloWorldControllerHelloWorld extends JControllerForm
       $parent_id = $data['parent_id'];     
     }
     $app = JFactory::getApplication();    
-    $app->enqueueMessage(JText::_('New property created as a unit of blah!'), 'warning');
+    $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'warning');
 
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit', true));
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&parent_id=' . $parent_id, false));
 
   }
  

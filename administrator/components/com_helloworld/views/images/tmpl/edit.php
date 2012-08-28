@@ -64,7 +64,7 @@ $parent_id = $this->form->getValue('parent_id');
                   <?php }
                   if ($field->fieldname == 'caption') {
                     ?>
-                  <div class="image-control-bar">          
+                  <div class="image-control-bar clearfix">          
                     <div class="width-100">          
                     <?php
                     echo $field->label;
@@ -130,7 +130,7 @@ $parent_id = $this->form->getValue('parent_id');
                   <?php }
                   if ($field->fieldname == 'caption') {
                     ?>
-                  <div class="image-control-bar">          
+                  <div class="image-control-bar clearfix">          
                     <div class="width-100">          
                   <?php
                   echo $field->label;

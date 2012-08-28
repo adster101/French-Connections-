@@ -93,28 +93,28 @@ Form.Upload = new Class({
 	},
 
 	legacyUpload: function(input){
+    // Make this work!
+		//var row = input.getParent('.formRow');
+			//rowClone = row.clone(),
+			//add = function(event){
+				//event.preventDefault();
+				//var newRow = rowClone.clone();
 
-		var row = input.getParent('.formRow');
-			rowClone = row.clone(),
-			add = function(event){
-				event.preventDefault();
-				var newRow = rowClone.clone();
+				//newRow.getElement('input').grab(new Element('a.delInputRow', {
+					//text: 'x',
+					//events: {click: function(event){
+						//event.preventDefault();
+						//newRow.destroy();
+					//}}
+				//}), 'after');
 
-				newRow.getElement('input').grab(new Element('a.delInputRow', {
-					text: 'x',
-					events: {click: function(event){
-						event.preventDefault();
-						newRow.destroy();
-					}}
-				}), 'after');
+				//newRow.inject(row, 'after');
+			//};
 
-				newRow.inject(row, 'after');
-			};
-
-		new Element('a.addInputRow', {
-			text: '+',
-			events: {click: add}
-		}).inject(input, 'after');
+		//new Element('a.addInputRow', {
+			//text: '+',
+			//events: {click: add}
+		//}).inject(input, 'after');
 
 	},
 

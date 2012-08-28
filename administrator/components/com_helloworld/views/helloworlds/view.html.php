@@ -21,19 +21,16 @@ class HelloWorldViewHelloWorlds extends JView
     // Find the user details
     $user		= JFactory::getUser();
     $userID = $user->id;
-   
-    // Get the option 
-    $option = JRequest::getVar('option', 'com_helloworld', 'GET', 'string');
     
 		// Get data from the model
 		$items = $this->get('Items');
 
-    // Record the number of properties here sp we can re-use it later
-    JApplication::setUserState($option. '.' . $userID . '.property.count', count($items));
+    // Record the number of properties here in the user session scope
+    JApplication::setUserState("com_helloworlds_property_count_$userID", count($items));
     
 		$pagination = $this->get('Pagination');
  		$this->state		= $this->get('State');
-		
+		    
 		// Assign data to the view
 		$this->items = $items;
 		$this->pagination = $pagination;

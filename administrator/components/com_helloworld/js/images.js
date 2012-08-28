@@ -74,7 +74,8 @@ window.addEvent('domready', function(){
 	});
   
   //convert this to MooTools style code?
-  var fileSelect = document.getElementById("droppable"),
+  try {
+ var fileSelect = document.getElementById("droppable"),
     fileElem = document.getElementById("url");
 
   fileSelect.addEventListener("click", function (e) {
@@ -82,7 +83,12 @@ window.addEvent('domready', function(){
       fileElem.click();
     }
     e.preventDefault(); // prevent navigation to "#"
-  }, false);
+  }, false);    
+    
+  } catch (e) {
+    
+  }
+ 
 
 
 

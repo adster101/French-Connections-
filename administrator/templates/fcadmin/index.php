@@ -44,7 +44,7 @@ if ($this->params->get('highContrast')) {
 <link href="templates/<?php echo  $this->template ?>/css/ie7.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 
-<!--[if gte IE 8]>
+<!--[if IE 8]>
 <link href="templates/<?php echo  $this->template ?>/css/ie8.css" rel="stylesheet" type="text/css" />
 <![endif]-->
 </head>

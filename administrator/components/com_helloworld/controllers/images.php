@@ -71,7 +71,8 @@ class HelloWorldControllerImages extends JControllerForm
      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_CAPTION_SUCCESSFULLY_UPDATED'), 'message');
     }
     
-    
+    // Log out to a file 
+    // User ID updates caption ID from to on this 
     
     
     // Set the redirection once the delete has completed...

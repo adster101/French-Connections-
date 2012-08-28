@@ -36,12 +36,14 @@ if ($this->items > 0) :
 <h1><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING'); ?></h1>
 <hr />
 <div class="pre_message">
-<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING_BLURB'); ?>
+<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING_FIRST_PROPERTY_BLURB'); ?>
 </div>
 <hr />
 <p class="">
   <a class="btn btn-primary fltrt" href="index.php?option=com_helloworld&task=helloworld.edit">
     <?php echo JText::_('COM_HELLOWORLD_NEW_PROPERTY_PROCEED'); ?>
+    <i class="boot-icon-forward boot-icon-white"></i>
+
   </a>
 </p>
 <?php endif; ?>

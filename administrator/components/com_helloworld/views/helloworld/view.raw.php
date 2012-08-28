@@ -25,27 +25,25 @@ class HelloWorldViewHelloWorld extends JView
     $user		= JFactory::getUser();
     $userID = $user->id;
    
-    // Get the option 
-    $option = JRequest::getVar('option', 'com_helloworld', 'GET', 'string'); 
 		// Get data from the model
-    $items = JApplication::getUserState($option. '.' . $userID . '.property.count');
-
-    // If there are no properties assigned to this account then we don't need to do anything else   
+    $items = JApplication::getUserState("com_helloworlds_property_count_$userID");
+            
+    // If there already properties assigned to this account  
     if ($items > 0) {
       
       // We show the user a list of properties which they may co-locate a property with
+      
       // Rather than calling a method from the model use JForm static helper
       // makes it a bit neater.
-       $form = $this->get('NewPropertyForm');    
+      $form = $this->get('NewPropertyForm');    
       // $form = $this->loadForm('com_helloworld.userproperties', 'userproperties', array('control' => 'jform', 'load_data' => $loadData));
-
       //$form = JForm::addFieldPath();
-      
       //JForm::getInstance('com_helloworld.userproperties');
-      
       // etc
-    
       
+    } else {
+      // No forms so just set $form for neatness
+      $form = null;
     }
     
 		// Assign data to the view
