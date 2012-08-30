@@ -21,6 +21,7 @@ class HelloWorldViewHelloWorld extends JView
 	 */
 	function display($tpl = null) 
 	{
+        
     // Find the user details
     $user		= JFactory::getUser();
     $userID = $user->id;
@@ -60,7 +61,9 @@ class HelloWorldViewHelloWorld extends JView
 	
 		// Display the template
 		parent::display($tpl);
- 
+     
 	}
 
+ 
+  
 }

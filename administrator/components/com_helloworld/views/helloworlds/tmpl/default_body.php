@@ -62,5 +62,4 @@ foreach($this->items as $i => $item):
 	<?php endif; ?>
 <?php endforeach; ?>
 <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
-<input type="hidden" name="boxchecked" value="0" />
 <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />

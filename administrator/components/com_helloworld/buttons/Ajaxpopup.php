@@ -42,7 +42,7 @@ class JButtonAjaxpopup extends JButton
 	 *
 	 * @since   11.1
 	 */
-	public function fetchButton($type = 'Popup', $name = '', $text = '', $url = '', $width = 640, $height = 275, $top = 0, $left = 0, $onClose = '')
+	public function fetchButton($type = 'Popup', $name = '', $text = '', $url = '', $width = 640, $height = 300, $top = 0, $left = 0, $onClose = '')
 	{
 		JHtml::_('behavior.modal');
 
@@ -50,7 +50,13 @@ class JButtonAjaxpopup extends JButton
 		$class = $this->fetchIconClass($name);
 		$doTask = $this->_getCommand($name, $url, $width, $height, $top, $left);
 
-		$html = "<a class=\"modal\" href=\"$doTask\" rel=\"{handler: 'ajax', size: {x: $width, y: $height}}\">";
+		$html = "<a class=\"modal\" href=\"$doTask\" rel=\"{handler: 'ajax', size: {x: $width, y: $height}, 
+      onOpen:function(){
+        $('helloworld-choose-parent-form').addEvent('submit', function() {
+          Joomla.submitbutton('helloworld.woot');
+          return false;
+        })
+      }}\">";
 		$html .= "<span class=\"$class\">";
 		$html .= "</span>";
 		$html .= "$text";

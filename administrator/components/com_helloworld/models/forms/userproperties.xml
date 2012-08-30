@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form>
+<form addrulepath="/administrator/components/com_helloworld/models/rules">
   <fieldset name="properties">
    <field
 			name="parent_id"
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
-			class="inputbox"
-			required="false"
-      default="1">
-			<option value="1">JOPTION_SELECT_PROPERTY</option>
-		</field>	
+			class="validate-parent"
+			required="true">
+			<option value="">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_PLEASE_CHOOSE</option>
+			<option value="1">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT</option>
+
+    </field>	
   </fieldset>
 </form>
 

@@ -114,6 +114,7 @@ class HelloWorldViewHelloWorlds extends JView
 		$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworlds/submitbutton.js");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
+		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_PARENT_PROPERTY_UNACCEPTABLE');
 
 	}
 }

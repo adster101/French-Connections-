@@ -83,6 +83,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 			return false;
 		}
 	}
+  
 	/**
 	 * Method to compute the default name of the asset.
 	 * The default name is in the form `table_name.id`

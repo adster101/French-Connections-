@@ -14,9 +14,10 @@ if ($this->items > 0) :
 <div class="pre_message">
 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SECOND_NEW_PROPERTY_BLURB'); ?>
 </div>
-<form method="post" name="adminForm" id="helloworld-form" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.woot') .  '&' . JUtility::getToken() . '=1'; ?>">
+<form method="post" name="adminForm" id="helloworld-choose-parent-form" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.woot') .  '&' . JUtility::getToken() . '=1'; ?>">
 	<fieldset class="adminform">
-
+    <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SECOND_NEW_PROPERTY_LEGEND'); ?>
+</legend>
   <ul class="adminformlist clearfix">
 <?php foreach($this->form->getFieldset('properties') as $field): ?>
 				<li><?php echo $field->label;echo $field->input;?></li>
@@ -30,6 +31,8 @@ if ($this->items > 0) :
     <i class="boot-icon-forward boot-icon-white"></i>
   </button>
 </p>   
+		<?php echo JHtml::_('form.token'); ?>
+
 </form>
 
 <?php else : ?>
@@ -47,3 +50,4 @@ if ($this->items > 0) :
   </a>
 </p>
 <?php endif; ?>
+

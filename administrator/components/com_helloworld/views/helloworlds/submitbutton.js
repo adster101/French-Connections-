@@ -28,7 +28,7 @@ Joomla.submitbutton = function(task)
 		}
 		else
 		{
-			alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE','Some values are unacceptable'));
+			alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_PARENT_PROPERTY_UNACCEPTABLE','Please complete the form as indicated.'));
 			return false;
 		}
 	}

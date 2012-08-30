@@ -53,19 +53,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		{
 			return false;
 		}
-		// Get the parent ID of this property
-		$parent_id = $form->getValue('parent_id');		
-		// If the parent_id is not 1
-		// !== compares the type as well as the value
-		if($parent_id !=1 && $parent_id !='') {		
-			// Then this property must be designated as a unit
- 			foreach($form->getFieldSet('Location') as $field) {
-				// So we loop over the fields disabling them and making them non-required in the form
-				// This ensure that they will not be editable by the user in this instance. 
-				//$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'disabled', 'true');
-				//$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'required', 'false');
-			}		
-		}
+		
 		return $form;
 	}
   
@@ -120,6 +108,62 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 
 	protected function preprocessForm(JForm $form, $data)
 	{
+    
+    // Use getItem to get the data for the parent property if supplied
+
+    $parent_id = JApplication::getUserState('parent_id');
+    
+    if (!isset($data->parent_id)){echo"Woot!";}
+    
+    
+    // If parent_id is already set in data (and not 1) then use that value
+    // Else if parent_id is set in userState then use that
+    // Else set parent ID to 1
+    
+    if (isset($data->parent_id) && $data->parent_id != 1 && $data->parent_id != '') {
+      
+      // Grab the parent property details
+      $parent_prop = $this->getItem( $data->parent_id );
+      
+      // Set the location details accordingly
+      $data->latitude = $parent_prop->latitude;
+      $data->longitude = $parent_prop->longitude;
+      $data->nearest_town = $parent_prop->nearest_town;
+      
+      foreach($form->getFieldSet('Location') as $field) {
+				// So we loop over the fields disabling them and making them non-required in the form
+				// This ensure that they will not be editable by the user in this instance. 
+				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'class', 'readonly');
+				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'readonly', 'readonly');
+				$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'required', 'false');
+
+      }		
+    
+    } else if (!isset($data->parent_id) && $parent_id != '') {
+      $parent_prop = $this->getItem( $parent_id );
+      
+      // Set the location details accordingly
+      $data->latitude = $parent_prop->latitude;
+      $data->longitude = $parent_prop->longitude;
+      $data->nearest_town = $parent_prop->nearest_town;
+     
+    } else {
+      
+    }
+    
+
+      
+		// If the parent_id is not 1
+		// !== compares the type as well as the value
+		if($parent_id !=1 && $parent_id !='') {		
+			// Then this property must be designated as a unit
+ 			foreach($form->getFieldSet('Location') as $field) {
+				// So we loop over the fields disabling them and making them non-required in the form
+				// This ensure that they will not be editable by the user in this instance. 
+				//$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'disabled', 'true');
+				//$form->setFieldAttribute(str_replace(array('jform','[',']'), '', $field->name), 'required', 'false');
+			}		
+		}
     
 
     

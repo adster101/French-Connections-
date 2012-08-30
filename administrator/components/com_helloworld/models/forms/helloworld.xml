@@ -190,11 +190,12 @@
 			name="latitude"
 			type="text"
 			extension="com_helloworld"
-			class="inputbox validate-latitude"
+			class="validate-latitude"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
-			required="true">
+			required="true"
+      readonly="true">
 		</field>
 		<field
 			name="longitude"
