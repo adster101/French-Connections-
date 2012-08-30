@@ -21,6 +21,7 @@ $canChangeOwner = $user->authorise('core.edit.state',	'com_helloworld');
     echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
   ?>
 </p>
+
 	<div class="width-60 fltlft">
 
 		<fieldset class="adminform">
@@ -31,7 +32,15 @@ $canChangeOwner = $user->authorise('core.edit.state',	'com_helloworld');
         <?php endforeach; ?>
 			</ul>
 		</fieldset>
-
+    
+		<fieldset class="adminform">
+			<legend><?php echo JText::_( 'COM_HELLOWORLD_HELLOWORLD_OCCUPANCY_DETAILS' ); ?></legend>
+			<ul class="adminformlist">
+        <?php foreach($this->form->getFieldset('occupancy') as $field): ?>
+          <li><?php echo $field->label;echo $field->input;?></li>
+        <?php endforeach; ?>
+			</ul>
+		</fieldset>
 	</div>
  
 	<div class="width-40 fltrt">
