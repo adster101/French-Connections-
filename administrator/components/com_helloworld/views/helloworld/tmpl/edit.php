@@ -36,12 +36,68 @@ $canChangeOwner = $user->authorise('core.edit.state',	'com_helloworld');
 		<fieldset class="adminform">
 			<legend><?php echo JText::_( 'COM_HELLOWORLD_HELLOWORLD_OCCUPANCY_DETAILS' ); ?></legend>
 			<ul class="adminformlist">
-        <?php foreach($this->form->getFieldset('occupancy') as $field): ?>
-          <li><?php echo $field->label;echo $field->input;?></li>
-        <?php endforeach; ?>
+          <li><?php echo $this->form->getLabel('occupancy');echo $this->form->getInput('occupancy'); ?></li>            
 			</ul>
+      
+      <div class="clr"></div>
+      
+      <?php echo $this->form->getLabel('bedroomspacer'); ?>
+     
+      <ul class="adminformlist bedrooms">
+        <li>
+           <?php echo $this->form->getLabel('single_bedrooms')."<br />";echo $this->form->getInput('single_bedrooms'); ?>
+        </li>
+        <li>
+          <?php echo $this->form->getLabel('double_bedrooms');echo $this->form->getInput('double_bedrooms'); ?>
+        </li>
+        <li>
+          <?php echo $this->form->getLabel('triple_bedrooms');echo $this->form->getInput('triple_bedrooms'); ?>
+        </li>
+        <li>
+          <?php echo $this->form->getLabel('quad_bedrooms');echo $this->form->getInput('quad_bedrooms'); ?>
+        </li>
+        
+        <div class="clr"></div>
+        
+        <li>
+          <?php echo $this->form->getLabel('twin_bedrooms');echo $this->form->getInput('twin_bedrooms'); ?>
+        </li>        
+        <li>
+          <?php echo $this->form->getLabel('childrens_beds');echo $this->form->getInput('childrens_beds'); ?>
+        </li>        
+        <li>
+          <?php echo $this->form->getLabel('cots');echo $this->form->getInput('cots'); ?>
+        </li>        
+        <li>
+          <?php echo $this->form->getLabel('extra_beds');echo $this->form->getInput('extra_beds'); ?>
+        </li>
+ 
+        <div class="clr"></div>
+    
+        <li>
+          <?php echo $this->form->getLabel('bathrooms');echo $this->form->getInput('bathrooms'); ?>
+        </li>
+        <li>
+          <?php echo $this->form->getLabel('toilets');echo $this->form->getInput('toilets'); ?>
+        </li>
+      </ul>
 		</fieldset>
-	</div>
+		<fieldset class="adminform">
+			<legend><?php echo JText::_( 'COM_HELLOWORLD_HELLOWORLD_DESCRIPTION_LEGEND_DETAILS' ); ?></legend>
+			<ul class="adminformlist">
+        <li>
+          <?php 
+            echo $this->form->getLabel('greeting');
+            echo $this->form->getInput('greeting');
+          ?>
+        </li>
+			</ul>
+      <div class="clr"></div>
+			<?php echo $this->form->getLabel('description'); ?>
+			<div class="clr"></div>
+			<?php echo $this->form->getInput('description'); ?>
+		</fieldset>
+  </div>
  
 	<div class="width-40 fltrt">
 

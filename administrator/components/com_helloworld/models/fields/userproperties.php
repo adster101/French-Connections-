@@ -87,6 +87,11 @@ class JFormFieldUserProperties extends JFormFieldList
 
 			$properties = $db->loadObjectList();
 			// Loop over each subtree item
+      //<option value="">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_PLEASE_CHOOSE</option>
+			//<option value="1">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT</option>
+      $options[] = JHtml::_('select.option', '', JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_PLEASE_CHOOSE'));
+      $options[] = JHtml::_('select.option', '',JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT'));
+      
 			foreach($properties as $property) 
 			{		
 				$options[] = JHtml::_('select.option', $property->id, $property->greeting);

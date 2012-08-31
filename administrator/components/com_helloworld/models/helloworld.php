@@ -202,7 +202,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 			<option value="1">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT</option>
     </field></form>';
             $form->load($XmlStr, true);
-          print_r($form);
     }
     
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
-<fieldset name="details">
+  <fieldset name="details">
 		<field
 			name="id"
 			type="text"
@@ -16,9 +16,7 @@
 		<field
 			name="parent_id"
 			type="hidden"
-			
       default="1" />
-
 		<field
 			name="lft"
 			type="hidden"
@@ -35,19 +33,7 @@
 			name="lang"
 			type="hidden"
 			required="true"
-			default="en-GB"
-		/>
-		<field
-			name="greeting"
-			type="text"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
-			size="80"
-			class="inputbox validate-greeting"
-			validate="greeting"
-			required="true"
-			default=""/>
-	
+			default="en-GB"/>
 		<field
 			name="swimming"
 			type="list"
@@ -61,6 +47,25 @@
 			<option value="1">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_YES</option>
 			<option value="0">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_NO</option>
 		</field>
+    <field
+      name="property_type"
+      label="Property type"
+      type="category"
+      extension="com_helloworld"
+      scope="property-type"
+    />
+  </fieldset>
+  <fieldset name="description">
+		<field
+			name="greeting"
+			type="text"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
+			size="100"
+			class="inputbox validate-greeting"
+			validate="greeting"
+			required="true"
+			default=""/>    
 		<field
 			name="description"
 			type="editor"
@@ -72,50 +77,272 @@
 			filter="safehtml"
 			buttons="false"
 		/>
-		</fieldset>	
-		<fieldset name="owner">
-			<field
-				name="created_by"
-				type="user"
-				label="JGLOBAL_FIELD_CREATED_BY_LABEL"
-				desc="JGLOBAL_FIELD_CREATED_BY_DESC"
-				/>
-			<field
-				name="created_time"
-				type="text"
-				label="JGLOBAL_CREATED_DATE"
-				class="readonly"
-				filter="unset"
-				readonly="true" />
-			<field
-				name="modified_by"
-				type="user"
-				label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
-				class="readonly"
-				readonly="true"
-				filter="unset"/>
-			<field
-				name="modified"
-				type="text"
-				label="JGLOBAL_FIELD_MODIFIED_LABEL"
-				class="readonly"
-				filter="unset"
-				readonly="true" />		
-		</fieldset>
-    <fieldset name="occupancy">
-      <field
-        name="occupancy"
-        type="text"
-        label="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_LABEL"
-        description="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_DESC"
-        size="40"
-        class="inputbox validate-occupancy"
-        validate="occupancy"
-        required="true"
-        default=""/>	
-    </fieldset>
-		<fields name="params">
-      <fieldset
+	</fieldset>	
+	<fieldset name="owner">
+    <field
+      name="created_by"
+      type="user"
+      label="JGLOBAL_FIELD_CREATED_BY_LABEL"
+      desc="JGLOBAL_FIELD_CREATED_BY_DESC"
+      />
+    <field
+      name="created_time"
+      type="text"
+      label="JGLOBAL_CREATED_DATE"
+      class="readonly"
+      filter="unset"
+      readonly="true" />
+    <field
+      name="modified_by"
+      type="user"
+      label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+      class="readonly"
+      readonly="true"
+      filter="unset"/>
+    <field
+      name="modified"
+      type="text"
+      label="JGLOBAL_FIELD_MODIFIED_LABEL"
+      class="readonly"
+      filter="unset"
+      readonly="true" />		
+	</fieldset>
+  <fieldset name="occupancy">
+    <field
+      name="occupancy"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_DESC"
+      class="inputbox validate-occupancy"
+      validate="occupancy"
+      required="true"
+      default="">
+			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+    </field>
+    <field
+			name="bedroomspacer"
+			description=""
+      label="Bedroom options"
+      hr="true"
+			type="spacer" 
+      class="hr-spacer" />
+    <field
+      name="single_bedrooms"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      labelclass="bedroom-label"
+      validate="singlebedrooms"
+      required="true"
+      message=""
+      default="">
+			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field>    
+    <field
+      name="double_bedrooms"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_DOUBLE_ROOMS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="true"
+      default="">
+			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field>    
+    <field
+      name="triple_bedrooms"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_TRIPLE_ROOMS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_TRIPLE_ROOMS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="false"
+      default="0">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field> 
+    <field
+      name="quad_bedrooms"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_QUAD_ROOMS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_QUAD_ROOMS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="false"
+      default="0">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field> 
+    <field
+      name="twin_bedrooms"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      labelclass="bedroom-label"
+      validate="bedrooms"
+      default="">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field>    
+    <field
+      name="childrens_beds"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHILD_BEDS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHILD_BEDS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      default="">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field>    
+    <field
+      name="cots"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_COTS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_COTS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="false"
+      default="">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field> 
+    <field
+      name="extra_beds"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_BEDS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_BEDS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="false"
+      default="">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field>    
+    <field
+      name="bathrooms"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="true"
+      default="">
+			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field> 
+    <field
+      name="toilets"
+      type="list"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_TOILETS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
+      class="bedrooms-select validate-bedrooms"
+      validate="bedrooms"
+      labelclass="bedroom-label"
+      required="false"
+      default="">
+			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </field>       
+  </fieldset>
+	<fields name="params">
+    <fieldset
         name="Internal Facilities"
         label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_PARAMS">
 

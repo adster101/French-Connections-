@@ -1,0 +1,21 @@
+/*
+  Some general styles to make the bedroom fields floated rather than block
+
+*/
+
+.bedrooms li {
+  float:left;
+}
+
+.bedroom-label {
+  clear:left;
+}
+
+.bedrooms-select {
+  clear:left;
+  
+}
+
+.hr-spacer {
+  border-color:#eee;
+}
