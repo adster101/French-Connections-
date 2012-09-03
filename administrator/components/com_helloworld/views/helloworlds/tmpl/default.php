@@ -6,7 +6,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_classification'); ?>" method="post" name="adminForm">
 	
 	<table class="adminlist">
 		<thead><?php echo $this->loadTemplate('head');?></thead>

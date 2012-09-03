@@ -198,8 +198,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
 			class="validate-parent"
 			required="true">
-			<option value="">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_PLEASE_CHOOSE</option>
-			<option value="1">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT</option>
+			
     </field></form>';
             $form->load($XmlStr, true);
     }

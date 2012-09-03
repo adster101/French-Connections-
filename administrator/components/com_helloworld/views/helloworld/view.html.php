@@ -62,8 +62,10 @@ class HelloWorldViewHelloWorld extends JView
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
+    // TO DO: 
+    // Currently HelloWorlHelper::getAction only returns the core permissions for the item.
+    // Any permissions set at the component level are ignored. Need to fix that.
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-    
     JApplication::setUserState('title'.$this->item->id, $this->item->greeting);
     
     JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->greeting), 'helloworld');

@@ -8,7 +8,7 @@ jimport('joomla.application.component.controller');
 /**
  * General Controller of HelloWorld component
  */
-class TestController extends JController
+class ClassificationController extends JController
 {
 	/**
 	 * display task
@@ -18,8 +18,9 @@ class TestController extends JController
 	function display($cachable = false) 
 	{
 		// set default view if not set
-		JRequest::setVar('view', JRequest::getCmd('view', 'Test'));
+		JRequest::setVar('view', JRequest::getCmd('view', 'Classifications'));
 		// call parent behavior
 		parent::display($cachable);
 	}
+
 }

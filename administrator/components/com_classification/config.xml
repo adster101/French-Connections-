@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-	
 	<fieldset
 		name="permissions"
 		label="JCONFIG_PERMISSIONS_LABEL"
@@ -13,7 +12,7 @@
 			class="inputbox"
 			validate="rules"
 			filter="rules"
-			component="com_helloworld"
+			component="com_classification"
 			section="component"
 		/>
 	</fieldset>
