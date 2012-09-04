@@ -149,9 +149,10 @@
       class="bedrooms-select validate-bedrooms"
       labelclass="bedroom-label"
       validate="singlebedrooms"
-      required="true"
+      required="false"
       message=""
-      default="">
+      default=""
+      filter="">
 			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
         <option value="1">1</option>
         <option value="2">2</option>

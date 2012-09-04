@@ -234,6 +234,7 @@ class JControllerAdmin extends JController
 		$inc = ($this->getTask() == 'orderup') ? -1 : +1;
 
 		$model = $this->getModel();
+    echo $model;
 		$return = $model->reorder($ids, $inc);
 		if ($return === false)
 		{

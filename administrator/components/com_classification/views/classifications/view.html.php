@@ -11,6 +11,8 @@ jimport('joomla.application.component.view');
 class ClassificationViewClassifications extends JView
 {
 	protected $state;
+  protected $pagination;
+  protected $canDo;
  
   /**
     *  view display method
@@ -54,28 +56,37 @@ class ClassificationViewClassifications extends JView
 	protected function addToolBar() 
 	{			
 		$document = JFactory::getDocument();
-		$document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
-
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JButtonAjaxpopup', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
     
 		$canDo = ClassificationHelper::getActions();
-		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
-		if ($canDo->get('core.create')) 
+		
+    // Set the title which appears on the toolbar 
+    JToolBarHelper::title(JText::_('COM_CLASSIFICATION_MANAGER_CLASSIFICATIONS'));
+    		
+    if ($canDo->get('core.create')) 
 		{
-      
   			JToolBarHelper::addNew('classification.add', 'JTOOLBAR_NEW');
-      
     }
-		if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) 
+		
+    if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) 
 		{
 			JToolBarHelper::editList('helloworld.edit', 'JTOOLBAR_EDIT');
 		}
-		if ($canDo->get('core.delete')) 
+		
+    if ($canDo->get('core.delete')) 
 		{
 			JToolBarHelper::deleteList('', 'classifications.delete', 'JTOOLBAR_DELETE');
 		}
-		if ($canDo->get('core.admin')) 
+
+    if ($canDo->get('core.edit.state')) 
+		{	
+      JToolBarHelper::divider();		  
+    	JToolBarHelper::publish('classifications.publish', 'JTOOLBAR_PUBLISH', true);
+			JToolBarHelper::unpublish('classifications.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			JToolBarHelper::divider();      
+      JToolBarHelper::trash('categories.trash');
+    }		
+    
+    if ($canDo->get('core.admin')) 
 		{
 			JToolBarHelper::divider();
 			JToolBarHelper::preferences('com_classification');

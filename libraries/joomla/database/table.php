@@ -428,6 +428,7 @@ abstract class JTable extends JObject
 	 */
 	public function bind($src, $ignore = array())
 	{
+  
 		// If the source value is not an array or object return false.
 		if (!is_object($src) && !is_array($src))
 		{

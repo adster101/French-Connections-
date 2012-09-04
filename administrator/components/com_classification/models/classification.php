@@ -7,7 +7,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class HelloWorldModelHelloWorld extends JModelAdmin
+class ClassificationModelClassification extends JModelAdmin
 {
 	/**
 	 * Method override to check if you can edit an existing record.
@@ -32,7 +32,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'Classification', $prefix = 'ClassificationTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -72,21 +72,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 		} 
     return $form;
   }
-  
-  //public function save( $data = array()  )
-  //{
-    //print_r($_SESSION);die;
-    //if($this->validate($this->getForm(), $data)) {
-      //if (parent::save($data))
-      //{
-        //return true;
-      //} else {
-        //return false;
-      //}
-    //} else {
-      //return false;
-    //}
-  //}
   
 	/**
 	 * Method to get the script that have to be included on the form

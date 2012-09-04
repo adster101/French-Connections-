@@ -6,6 +6,9 @@ $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 
 $ordering 	= ($listOrder == 'lft');
+$user		= JFactory::getUser();
+$userId		= $user->get('id');
+$canChange	= $user->authorise('core.edit.state',	'com_classification');
 
 ?>
 
@@ -24,8 +27,14 @@ $ordering 	= ($listOrder == 'lft');
 	</th>	
 
 	<th width="10%">
+    <?php if ($canChange) :?>
 				<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.lft', $listDirn, $listOrder); ?>
 					<?php if ($ordering) :?>
 						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'classification.saveorder'); ?>
-					<?php endif; ?>	</th>
+					<?php endif; ?>	
+    <?php else : ?>
+      		<?php echo JText::_('JGRID_HEADING_ORDERING'); ?>
+
+    <?php endif; ?>
+  </th>
 </tr>

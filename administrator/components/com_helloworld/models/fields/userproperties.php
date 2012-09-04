@@ -90,7 +90,7 @@ class JFormFieldUserProperties extends JFormFieldList
       //<option value="">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_PLEASE_CHOOSE</option>
 			//<option value="1">COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT</option>
       $options[] = JHtml::_('select.option', '', JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_PLEASE_CHOOSE'));
-      $options[] = JHtml::_('select.option', '',JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT'));
+      $options[] = JHtml::_('select.option', '1',JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_NO_PARENT'));
       
 			foreach($properties as $property) 
 			{		

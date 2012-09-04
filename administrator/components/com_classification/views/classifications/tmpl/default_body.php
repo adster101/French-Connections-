@@ -16,9 +16,7 @@ $extension	= $this->escape($this->state->get('filter.extension'));
 
 foreach($this->items as $i => $item): 
 	$orderkey	= array_search($item->id, $this->ordering[$item->parent_id]);
-	$canCheckin	= $user->authorise('core.admin', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-
-  $canChange	= $user->authorise('core.edit.state',	$extension.'.category.'.$item->id) && $canCheckin;
+  $canChange	= $user->authorise('core.edit.state',	'com_classification');
 ?>
 
 	<tr class="row<?php echo $i % 2; ?>">
@@ -36,7 +34,7 @@ foreach($this->items as $i => $item):
 			</a>
 		</td>
 		<td class="center">
-			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canChange);?>
+			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'classifications.', $canChange);?>
 		</td>	
 
 		<td class="order">                                
@@ -44,8 +42,8 @@ foreach($this->items as $i => $item):
 						<?php 
              if ($canChange) : ?>
 							<?php if ($ordering) : ?>
-								<span><?php echo $this->pagination->orderUpIcon($i, isset($this->ordering[$item->parent_id][$orderkey - 1]), 'categories.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
-								<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, isset($this->ordering[$item->parent_id][$orderkey + 1]), 'categories.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
+								<span><?php echo $this->pagination->orderUpIcon($i, isset($this->ordering[$item->parent_id][$orderkey - 1]), 'classifications.orderup', 'JLIB_HTML_MOVE_UP', $ordering); ?></span>
+								<span><?php echo $this->pagination->orderDownIcon($i, $this->pagination->total, isset($this->ordering[$item->parent_id][$orderkey + 1]), 'classifications.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); ?></span>
 							<?php endif; ?>
 
 							<?php $disabled = $ordering ?  '' : 'disabled="disabled"'; ?>

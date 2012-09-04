@@ -41,7 +41,7 @@ foreach($this->items as $i => $item):
 		<td class="center">
 			<?php echo JText::_($item->modified); ?>
 		</td>
-		<td >
+		<td class="order">
 			<?php
 				if ($canChange) : ?>
 					<span><?php if ($item->parent_id != 1) { echo $this->pagination->orderUpIcon($i, isset($this->ordering[$item->parent_id][$orderkey - 1]), 'helloworlds.orderup', 'JLIB_HTML_MOVE_UP', $ordering); } ?></span>

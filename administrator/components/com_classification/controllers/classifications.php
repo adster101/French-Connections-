@@ -14,7 +14,7 @@ class ClassificationControllerClassifications extends JControllerAdmin
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function getModel($name = 'Classifications', $prefix = 'ClassificationModel') 
+	public function getModel($name = 'Classification', $prefix = 'ClassificationModel') 
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

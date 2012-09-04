@@ -24,16 +24,13 @@ abstract class ClassificationHelper
 		}
  
 		$actions = array(
-			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.delete', 'core.edit.own'
+			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.delete', 'core.edit.own', 'core.edit.state'
 		);
  
 		foreach ($actions as $action) {
 			$result->set($action,	$user->authorise($action, $assetName));
 		}
  
-		return $result;
-    
+		return $result; 
 	}  
-  
- 
 }
