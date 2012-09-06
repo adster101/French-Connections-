@@ -9,8 +9,6 @@ jimport('joomla.application.component.controllerform');
  * HelloWorld Controller
  */
 class ClassificationControllerClassification extends JControllerForm
-{
-
-  
+{ 
   
 }

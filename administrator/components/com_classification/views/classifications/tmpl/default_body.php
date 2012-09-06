@@ -56,5 +56,5 @@ foreach($this->items as $i => $item):
 
 	</tr>					
 <?php endforeach; ?>
-<input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
+<input type="hidden" name="extension" value="<?php echo 'com_classification'; ?>" />
 <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />

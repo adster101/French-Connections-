@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_classification/models/rules">
+	<fieldset
+    addFieldPath="/administrator/components/com_classification/models/fields"
+    name="classification">
+	      
+
+    <field
+			name="id"
+			type="text"
+      readonly="true"
+      class="readonly"
+			default="0"
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ID_LABEL"
+      description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ID_DESC"
+      />
+
+    <field
+			name="title"
+			type="text"
+			default=""
+			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_TITLE_LABEL"
+			description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_TITLE_DESC"
+      maxlength="50"
+      size="30"
+      required="true"
+      class="inputbox"
+      validate="url"
+      /> 
+
+		<field
+			name="parent_id"
+			type="text"
+			default="1"
+			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_LABEL"
+			description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_DESC"
+			readonly="false"
+      required="true"
+      filter="integer" 
+      />
+
+		<field
+			name="parent_id"
+			type="text"
+			label="COM_MENUS_ITEM_FIELD_PARENT_LABEL"
+			description="COM_MENUS_ITEM_FIELD_PARENT_DESC"
+			default="1"
+			filter="int"
+			class="inputbox"
+			size="10">
+		</field>
+
+		<field
+			name="path"
+			type="hidden"
+			filter="unset"/>
+
+		<field
+			name="level"
+			type="hidden"
+			filter="unset"/>
+
+		<field
+			name="lft"
+			type="hidden"
+			filter="unset"/>
+
+		<field
+			name="rgt"
+			type="hidden"
+			filter="unset"/>      
+      
+     
+  
+
+	
+	</fieldset>	  
+	
+</form>

@@ -69,7 +69,7 @@ class ClassificationViewClassifications extends JView
 		
     if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) 
 		{
-			JToolBarHelper::editList('helloworld.edit', 'JTOOLBAR_EDIT');
+			JToolBarHelper::editList('classification.edit', 'JTOOLBAR_EDIT');
 		}
 		
     if ($canDo->get('core.delete')) 

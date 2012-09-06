@@ -73,21 +73,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     return $form;
   }
   
-  //public function save( $data = array()  )
-  //{
-    //print_r($_SESSION);die;
-    //if($this->validate($this->getForm(), $data)) {
-      //if (parent::save($data))
-      //{
-        //return true;
-      //} else {
-        //return false;
-      //}
-    //} else {
-      //return false;
-    //}
-  //}
-  
 	/**
 	 * Method to get the script that have to be included on the form
 	 *
@@ -107,8 +92,9 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.83', array());
-		if (empty($data)) 
+		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.data', array());
+		
+    if (empty($data)) 
 		{
 			$data = $this->getItem();
 		}
