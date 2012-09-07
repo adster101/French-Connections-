@@ -19,4 +19,5 @@ class ClassificationControllerClassifications extends JControllerAdmin
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;
 	}
+  
 }

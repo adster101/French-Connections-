@@ -30,7 +30,7 @@ $canChange	= $user->authorise('core.edit.state',	'com_classification');
     <?php if ($canChange) :?>
 				<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ORDERING', 'a.lft', $listDirn, $listOrder); ?>
 					<?php if ($ordering) :?>
-						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'classification.saveorder'); ?>
+						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'classifications.saveorder'); ?>
 					<?php endif; ?>	
     <?php else : ?>
       		<?php echo JText::_('JGRID_HEADING_ORDERING'); ?>

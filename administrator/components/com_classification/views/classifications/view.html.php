@@ -83,12 +83,14 @@ class ClassificationViewClassifications extends JView
     	JToolBarHelper::publish('classifications.publish', 'JTOOLBAR_PUBLISH', true);
 			JToolBarHelper::unpublish('classifications.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 			JToolBarHelper::divider();      
-      JToolBarHelper::trash('categories.trash');
+      JToolBarHelper::trash('classifications.trash');
     }		
     
     if ($canDo->get('core.admin')) 
 		{
 			JToolBarHelper::divider();
+ 			JToolBarHelper::custom('classifications.rebuild', 'refresh.png', 'refresh_f2.png', 'JTOOLBAR_REBUILD', false);
+
 			JToolBarHelper::preferences('com_classification');
 		}
 	}

@@ -105,6 +105,7 @@
 			value="-2">
 			JTRASHED</option>
 	</field>
+  
 	<field
 		name="buttonspacer"
 		label="JGLOBAL_ACTION_PERMISSIONS_LABEL"

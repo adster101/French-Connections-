@@ -4,7 +4,6 @@
     addFieldPath="/administrator/components/com_classification/models/fields"
     name="classification">
 	      
-
     <field
 			name="id"
 			type="text"
@@ -13,7 +12,8 @@
 			default="0"
       label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ID_LABEL"
       description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ID_DESC"
-      />
+      filter="int"
+    />
 
     <field
 			name="title"
@@ -25,55 +25,81 @@
       size="30"
       required="true"
       class="inputbox"
-      validate="url"
-      /> 
+      filter="string"
+    /> 
+
+    <field
+			name="language_string"
+			type="text"
+			default=""
+			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_LANGUAGE_STRING_LABEL"
+			description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_LANGUAGE_STRING_TITLE_DESC"
+      maxlength="50"
+      size="100"
+      required="false"
+      class="inputbox"
+      filter="string"
+    /> 
 
 		<field
 			name="parent_id"
-			type="text"
-			default="1"
+			type="ClassificationParent"
 			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_LABEL"
-			description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_DESC"
-			readonly="false"
-      required="true"
-      filter="integer" 
-      />
-
-		<field
-			name="parent_id"
-			type="text"
-			label="COM_MENUS_ITEM_FIELD_PARENT_LABEL"
-			description="COM_MENUS_ITEM_FIELD_PARENT_DESC"
+			description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_DESC"
 			default="1"
 			filter="int"
-			class="inputbox"
-			size="10">
+			class="validate"
+      required="true">
+      <option
+				value="1">COM_CLASSIFICATION_ITEM_ROOT</option>
 		</field>
+
+    <field
+      name="published"
+      type="list"
+      class="inputbox"
+      default="1"
+      size="1"
+      label="JSTATUS"
+      description="JFIELD_PUBLISHED_DESC">
+      <option
+        value="1">
+        JPUBLISHED</option>
+      <option
+        value="0">
+        JUNPUBLISHED</option>
+      <option
+        value="2">
+        JARCHIVED</option>
+      <option
+        value="-2">
+        JTRASHED</option>
+    </field>
 
 		<field
 			name="path"
 			type="hidden"
-			filter="unset"/>
+			filter="unset"
+    />
 
 		<field
 			name="level"
 			type="hidden"
-			filter="unset"/>
+			filter="unset"
+    />
 
 		<field
 			name="lft"
 			type="hidden"
-			filter="unset"/>
+			filter="unset"
+    />
 
 		<field
 			name="rgt"
 			type="hidden"
-			filter="unset"/>      
+			filter="unset"
+    />      
       
-     
-  
-
-	
 	</fieldset>	  
 	
 </form>
