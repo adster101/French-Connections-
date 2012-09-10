@@ -27,8 +27,8 @@ class ClassificationViewClassifications extends JView
     // Check for errors.
     if (count($errors = $this->get('Errors'))) 
     {
-            JError::raiseError(500, implode('<br />', $errors));
-            return false;
+      JError::raiseError(500, implode('<br />', $errors));
+      return false;
     }
     // Assign data to the view
     $this->items = $items;
@@ -102,7 +102,7 @@ class ClassificationViewClassifications extends JView
 	protected function setDocument() 
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
+		$document->setTitle(JText::_('COM_CLASSIFICATION_MANAGER_CLASSIFICATIONS'));
 		$document->addScript(JURI::root() . "/administrator/components/com_classification/views/classifications/submitbutton.js");
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_PARENT_PROPERTY_UNACCEPTABLE');
 	}  

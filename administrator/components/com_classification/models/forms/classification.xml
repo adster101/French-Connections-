@@ -75,7 +75,15 @@
         value="-2">
         JTRASHED</option>
     </field>
-
+    
+    <field
+      name="alias"
+      type="text"
+      readonly="true"
+      class="readonly"
+  		label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ALIAS_LABEL"
+      description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ALIAS_DESC"
+    />
 		<field
 			name="path"
 			type="hidden"

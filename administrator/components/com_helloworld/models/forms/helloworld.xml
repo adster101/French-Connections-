@@ -34,6 +34,26 @@
 			type="hidden"
 			required="true"
 			default="en-GB"/>
+
+    <field
+      name="accommodation_type"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
+      type="accommodationtypes"
+      filter="integer"
+      required="true"
+    />
+    <field
+      name="property_type"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
+      type="propertytypes"
+      filter="integer"
+      required="true"
+    />
+    
 		<field
 			name="swimming"
 			type="list"
@@ -46,14 +66,7 @@
 			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 			<option value="1">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_YES</option>
 			<option value="0">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_NO</option>
-		</field>
-    <field
-      name="property_type"
-      label="Property type"
-      type="category"
-      extension="com_helloworld"
-      scope="property-type"
-    />
+		</field>    
   </fieldset>
   <fieldset name="description">
 		<field
@@ -149,7 +162,7 @@
       class="bedrooms-select validate-bedrooms"
       labelclass="bedroom-label"
       validate="singlebedrooms"
-      required="false"
+      required="true"
       message=""
       default=""
       filter="">

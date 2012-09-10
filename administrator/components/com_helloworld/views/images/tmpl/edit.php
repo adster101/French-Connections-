@@ -50,7 +50,8 @@ $parent_id = $this->form->getValue('parent_id');
         <ul class="adminformlist clearfix draggable-image-list" id="library">
     <?php foreach ($image_library_field_sets as $fieldset) { ?> 
             <li>
-    <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
+    <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>  
+       
       <?php if ($field->fieldname == 'image_file_name') { ?> 
                   <div class="image-container handle">
                     <span class="drag-handle clearfix bottom"><i class="boot-icon-move"></i></span>

@@ -23,10 +23,11 @@ class ClassificationTableClassification extends JTableNested
  	public function bind($array, $ignore = '') 
   {
 
+    // Check the root ID and create if not present
     $rootId = $this->getRootId();
-if ($rootId === false) {
-    $rootId = $this->addRoot();
-}   
+    if ($rootId === false) {
+      $rootId = $this->addRoot();
+    }   
 
     // Bind the rules.
     if (isset($array['rules']) && is_array($array['rules']))
@@ -39,10 +40,42 @@ if ($rootId === false) {
     
   }
   
+  	/**
+	 * Override check function
+	 *
+	 * @return  boolean
+	 *
+	 * @see     JTable::check
+	 * @since   11.1
+	 */
+	public function check()
+	{
+		// Check for a title.
+		if (trim($this->title) == '')
+		{
+			$this->setError(JText::_('JLIB_DATABASE_ERROR_MUSTCONTAIN_A_TITLE_CATEGORY'));
+			return false;
+		}
+		$this->alias = trim($this->alias);
+		if (empty($this->alias))
+		{
+			$this->alias = $this->title;
+		}
+
+		$this->alias = JApplication::stringURLSafe($this->alias);
+		if (trim(str_replace('-', '', $this->alias)) == '')
+		{
+			$this->alias = JFactory::getDate()->format('Y-m-d-H-i-s');
+		}
+
+		return true;
+	}
+  
   public function store (  )
   {
  
     // Add more validation and what not here?
+    
     
 		$this->setLocation($this->parent_id, 'last-child');
 		

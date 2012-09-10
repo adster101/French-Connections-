@@ -33,6 +33,15 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 */
 	public function bind($array, $ignore = '') 
 	{		
+    
+    // Bind the rules.
+    if (isset($array['rules']) && is_array($array['rules']))
+    {
+            $rules = new JAccessRules($array['rules']);
+            $this->setRules($rules);
+    }    
+    
+    // Merge and bind the params
 		if (isset($array['params']) && is_array($array['params']) && $this->params) 
 		{
 			// $this is an instance of HelloWorldTableHelloWorld (and includes a copy of the record as it stands in the db)
@@ -117,9 +126,28 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 */
 	protected function _getAssetParentId()
 	{
-		$asset = JTable::getInstance('Asset');
-		$asset->loadByName('com_helloworld');
-		return $asset->id;
+    // We will retrieve the parent-asset from the Asset-table
+    $assetParent = JTable::getInstance('Asset');
+
+    // Default: if no asset-parent can be found we take the global asset
+    $assetParentId = $assetParent->getRootId();
+
+    // Find the parent-asset
+    // Compared to the MVC tut and the classification component 
+    // we aren't testing whether this content is categorised or not.
+    // This is because we're not anticipating that the content will be
+    // categoriesed using the built in joomla category component
+   
+    // The item has the component as asset-parent
+    $assetParent->loadByName('com_helloworld');
+    
+    // Return the found asset-parent-id
+    if ($assetParent->id)
+    {
+      $assetParentId=$assetParent->id;
+    }
+
+    return $assetParentId;
 	}
 
 	/**

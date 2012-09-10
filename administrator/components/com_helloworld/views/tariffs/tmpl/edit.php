@@ -35,11 +35,19 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
     <fieldset class="adminform">
       <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
       <ul class="adminformlist">
-        <?php foreach ($this->form->getFieldset('additional-fields') as $field): ?>
-          <li><?php echo $field->label;
-        echo $field->input; ?></li>
-<?php endforeach; ?>
+        <li><?php echo $this->form->getLabel('id');echo $this->form->getInput('id'); ?></li>
+        <li><?php echo $this->form->getLabel('parent_id');echo $this->form->getInput('parent_id'); ?></li>
+        <li><?php echo $this->form->getLabel('greeting');echo $this->form->getInput('greeting'); ?></li>
+        <li><?php echo $this->form->getLabel('base_currency');echo $this->form->getInput('base_currency'); ?></li>
+        <li><?php echo $this->form->getLabel('tariff_based_on');echo $this->form->getInput('tariff_based_on'); ?></li>
+        <li><?php echo $this->form->getLabel('linen_costs');echo $this->form->getInput('linen_costs'); ?></li>
+
       </ul>			
+      <?php echo $this->form->getLabel('additional_price_notes'); ?>
+      <div class="clr"></div>
+
+      <?php echo $this->form->getInput('additional_price_notes'); ?>
+
     </fieldset>
 
 

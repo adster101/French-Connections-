@@ -15,7 +15,7 @@ $originalOrders = array();
 
 foreach($this->items as $i => $item): 
 	$orderkey	= array_search($item->id, $this->ordering[$item->parent_id]);
-	$canEditOwn	= $user->authorise('core.edit.own',	'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
+	$canEditOwn	= $user->authorise('core.edit',	'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
 	$canChange = true;
 	$saveOrder = false;
 ?>
