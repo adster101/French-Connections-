@@ -145,7 +145,9 @@ window.addEvent('domready', function(){
           }
         }
       });
-
+      
+      // This triggers the onchange event for the gallery/library form
+      $$('form.form-validate')[0].fireEvent('change');
 
       
       

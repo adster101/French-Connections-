@@ -16,6 +16,8 @@ class HelloWorldViewHelloWorld extends JView
 	 */
 	public function display($tpl = null) 
 	{
+
+    
 		// get the Data
 		$form = $this->get('Form');
 		$item = $this->get('Item');
@@ -83,7 +85,7 @@ class HelloWorldViewHelloWorld extends JView
 		}
 		else
 		{
-			if ($canDo->get('core.edit'))
+			if ($canDo->get('core.edit.own'))
 			{
 				// We can save the new record
 				JToolBarHelper::apply('helloworld.apply', 'JTOOLBAR_APPLY');
@@ -91,6 +93,9 @@ class HelloWorldViewHelloWorld extends JView
 			}
 			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CLOSE');
 		}
+    
+
+    
 	}
 	/**
 	 * Method to set up the document properties
@@ -103,7 +108,7 @@ class HelloWorldViewHelloWorld extends JView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworld/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
  		$document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
 
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');

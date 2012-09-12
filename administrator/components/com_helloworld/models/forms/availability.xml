@@ -63,11 +63,12 @@
 			type="list"
 			label="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_LABEL"
 			description="COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_DESC"
-			class=""
+			class="required"
 			validate=""
-			required="false"
-			default="-1">
-				<option value="-1">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+			required="true"
+			default=""
+      filter="int">
+				<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
 				<option value="0">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>
 		</field>	

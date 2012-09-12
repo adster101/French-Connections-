@@ -8,7 +8,9 @@
 			label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
 			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"
       size="80"
-      maxlength="75">
+      maxlength="75"
+      required="true"
+      class="validate">
     </field>
     <field 
       name="image_file_name"

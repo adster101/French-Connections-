@@ -7,7 +7,13 @@
 		<action name="core.delete" title="JACTION_DELETE" description="JACTION_DELETE_COMPONENT_DESC" />
 		<action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />
 		<action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_EDITOWN_COMPONENT_DESC" />
+		<action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
+    <action name="helloworld.edit.reorder" title="JACTION_REORDER" description="JACTION_EDITREORDER_COMPONENT_DESC" />
+		<action name="helloworld.edit.publish" title="JACTION_PUBLISH" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
+		<action name="helloworld.edit.trash" title="JACTION_TRASH" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
+    
 	</section>
+  
 	<section name="message">
 		<action name="core.delete" title="JACTION_DELETE" description="COM_HELLOWORLD_ACCESS_DELETE_DESC" />
 		<action name="core.edit" title="JACTION_EDIT" description="COM_HELLOWORLD_ACCESS_EDIT_DESC" />

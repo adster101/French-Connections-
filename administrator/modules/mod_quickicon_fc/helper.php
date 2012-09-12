@@ -128,6 +128,12 @@ abstract class modQuickIconHelper
 						'text' => JText::_('MOD_QUICKICON_FC_MESSAGES'),
 						'access' => true
 					),
+					array(
+						'link' => JRoute::_('index.php?option=com_classification'),
+						'image' => 'header/icon-48-category.png',
+						'text' => JText::_('MOD_QUICKICON_FC_CLASSIFICATION'),
+						'access' => array('core.manage', 'com_classification')
+					),            
         );
 			}
 			else

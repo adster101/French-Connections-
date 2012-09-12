@@ -28,7 +28,8 @@
       type="list"
       label="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_LABEL"
       description="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_DESC"
-      required="true">
+      required="true"
+      filter="int">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 			<option value="0">COM_HELLOWORLD_TARIFFS_BASE_CURRENCY_GBP</option>
 			<option value="1">COM_HELLOWORLD_TARIFFS_BASE_CURRENCY_EUR</option>      
@@ -38,23 +39,14 @@
       type="list"
       label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_LABEL"
       description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_DESC"
-      required="true">
+      required="true"
+      filter="int">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 			<option value="0">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_PROPERTY_PER_WEEK</option>
 			<option value="1">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_PROPERTY_PER_NIGHT</option>      
 			<option value="2">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_ROOM_PER_NIGHT</option>      
 			<option value="3">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_ROOM_PER_WEEK</option>      
     </field>
-    <field
-			name="linen_costs"
-			type="text"
-			label="COM_HELLOWORLD_TARIFFS_FIELD_LINEN_COSTS_LABEL"
-			description="COM_HELLOWORLD_TARIFFS_FIELD_LINEN_COSTS_LABEL"
-			size="40"
-			class="inputbox validate-linen"
-			validate=""
-			required="false"
-			default=""/>
     <field
 			name="additional_price_notes"
 			type="editor"
@@ -65,7 +57,8 @@
 			default=""
 			filter="safehtml"
 			buttons="false"
-      validation="addition-price-notes"/>
+      validate="additionalpricenotes"
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE" />
 	</fieldset>
 
 </form>

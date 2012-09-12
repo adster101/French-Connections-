@@ -18,7 +18,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	 * @return	boolean
 	 * @since	1.6
 	 */
-	protected function allowEdit($data = array(), $key = 'id')
+	public function allowEdit($data = array(), $key = 'id')
 	{
 		// Check specific edit permission then general edit permission.
 		return JFactory::getUser()->authorise('core.edit', 'com_helloworld.message.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
@@ -211,4 +211,33 @@ class HelloWorldModelHelloWorld extends JModelAdmin
     JApplication::setUserState('parent_id', '');
     
 	}
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+	 *
+	 * @since   11.1
+	 */
+	protected function canEditState()
+	{
+    
+    $task = JRequest::getVar('task', '', 'POST', 'string' );
+
+    $user = JFactory::getUser();
+    if ($task == 'orderdown' || $task == 'orderup') {
+      return $user->authorise('helloworld.edit.reorder', $this->option);
+
+    } else if ($task == 'publish' || $task == 'unpublish') {
+
+      return $user->authorise('helloworld.edit.publish', $this->option);
+
+    } else if ($task == 'trash') {
+      return $user->authorise('helloworld.edit.trash', $this->option);
+    } else {
+      return false;
+    }
+	}
+  
 }

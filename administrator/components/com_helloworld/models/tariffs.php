@@ -67,7 +67,7 @@ class HelloWorldModelTariffs extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.tariffs.data', array());
+		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.data', array());
 		if (empty($data)) 
 		{
 			$data = $this->getItem();
@@ -167,12 +167,16 @@ class HelloWorldModelTariffs extends JModelAdmin
    * @param type $data
    * @return string 
    */
-  protected function getTariffXml ($form, $data) 
+  protected function getTariffXml ($form, $data = array()) 
   {
     // Build an XML string to inject additional fields into the form
     $XmlStr = '<form>';
     $counter=0;
     $XmlStr.='<fields name="tariffs">';
+    
+    if (!$data->tariffs) {
+      return false;
+    }
     
     // Loop over the existing availability first
     foreach ($data->tariffs as $tariff) {
@@ -189,7 +193,7 @@ class HelloWorldModelTariffs extends JModelAdmin
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
           size="20"
-          class="inputbox"
+          class="inputbox validate-tariff-start-date"
           validate=""
           required="false"
           multiple="true"
@@ -202,7 +206,7 @@ class HelloWorldModelTariffs extends JModelAdmin
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
           size="20"
-          class="inputbox"
+          class="inputbox validate-tariff-start-date"
           validate=""
           required="false"
           default="'.$tariff->end_date.'"

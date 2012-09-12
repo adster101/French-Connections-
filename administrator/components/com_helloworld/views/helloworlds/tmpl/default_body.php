@@ -15,9 +15,8 @@ $originalOrders = array();
 
 foreach($this->items as $i => $item): 
 	$orderkey	= array_search($item->id, $this->ordering[$item->parent_id]);
-	$canEditOwn	= $user->authorise('core.edit',	'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
+	$canEditOwn	= $user->authorise('core.edit.own',	'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
 	$canChange = true;
-	$saveOrder = false;
 ?>
 
 <?php if ($canEditOwn) : ?>
@@ -31,14 +30,17 @@ foreach($this->items as $i => $item):
 
 		<td>
 			<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level-1) ?>
-			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id); ?>">
+			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id) . '&' . JUtility::getToken() . '=1'; ?>">
 				<?php echo $this->escape($item->greeting); ?>
 			</a>
 		</td>
-		<td class="center">
-			<?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canChange);?>
-		</td>
-		<td class="center">
+    <?php if ($user->authorise('helloworld.edit.publish', 'com_helloworld' )) : ?>
+
+      <td class="center">
+        <?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canChange);?>
+      </td>
+    <?php endif; ?>
+    <td class="center">
 			<?php echo JText::_($item->modified); ?>
 		</td>
 		<td class="order">

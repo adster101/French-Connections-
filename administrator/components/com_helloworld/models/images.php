@@ -241,8 +241,10 @@ class HelloWorldModelImages extends JModelAdmin
               type="text"
               readonly="true"
               multiple="true"
+              required="true"
               maxlength="50"
               size="30"
+              class="required"
               default="'. $image->caption .'">
             </field>        
            <field

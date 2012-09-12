@@ -1,6 +1,9 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
+$user		= JFactory::getUser();
+$userId		= $user->get('id');
+
 ?>
 	<fieldset id="filter-bar">
 		<div class="filter-search fltlft">
@@ -20,9 +23,11 @@ defined('_JEXEC') or die('Restricted Access');
 	<th>
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
 	</th>
-	<th width="3%">
-		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
-	</th>	
+  <?php if ($user->authorise('helloworld.edit.publish', 'com_helloworld' )) : ?>
+    <th width="3%">
+      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
+    </th>	
+  <?php endif; ?>
 	<th width="">
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED'); ?>
 	</th>

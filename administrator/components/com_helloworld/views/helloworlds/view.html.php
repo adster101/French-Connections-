@@ -97,11 +97,20 @@ class HelloWorldViewHelloWorlds extends JView
 		{
 			JToolBarHelper::deleteList('', 'helloworlds.delete', 'JTOOLBAR_DELETE');
 		}
-		if ($canDo->get('core.admin')) 
+ 
+    if($canDo->get('core.edit.state'))
+    {
+      JToolBarHelper::divider();		  
+    	JToolBarHelper::publish('helloworld.publish', 'JTOOLBAR_PUBLISH', true);
+			JToolBarHelper::unpublish('helloworld.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+      JToolBarHelper::trash('helloworlds.trash');      
+    }
+    
+ 		if ($canDo->get('core.admin')) 
 		{
 			JToolBarHelper::divider();
 			JToolBarHelper::preferences('com_helloworld');
-		}
+		}   
 	}
 	/**
 	 * Method to set up the document properties
@@ -112,9 +121,10 @@ class HelloWorldViewHelloWorlds extends JView
 	{
 		$document = JFactory::getDocument();
 		$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworlds/submitbutton.js");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_PARENT_PROPERTY_UNACCEPTABLE');
+
+		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 
 	}
 }

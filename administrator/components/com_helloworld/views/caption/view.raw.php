@@ -26,9 +26,7 @@ class HelloWorldViewCaption extends JView
     
     // Get the caption details for the image
     $this->form = $this->get('Form');
-    
-    
-		
+    		
 		// Display the template
 		parent::display($tpl);
  
