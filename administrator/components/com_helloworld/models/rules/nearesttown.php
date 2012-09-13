@@ -8,7 +8,7 @@ jimport('joomla.form.formrule');
 /**
  * Form Rule class for the Joomla Framework.
  */
-class JFormRuleGreeting extends JFormRule
+class JFormRuleNearesttown extends JFormRule
 {
 	/**
 	* The regular expression.
@@ -19,5 +19,5 @@ class JFormRuleGreeting extends JFormRule
 	*/
 	// For some reason the regex doesn't like the 'french' characters...
 	//protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-����]+$';
-	protected $regex = '^[\w .ééàôê0123456789\'\!,&-]{0,100}+$';
+	protected $regex = '^[\w .ééàôê\'-]{0,75}+$';
 }

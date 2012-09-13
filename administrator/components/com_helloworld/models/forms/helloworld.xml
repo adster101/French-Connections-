@@ -75,6 +75,7 @@
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
 			size="100"
+      maxlength="100"
 			class="inputbox validate-greeting"
 			validate="greeting"
 			required="true"
@@ -85,9 +86,8 @@
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
 			size="40"
-			class="inputbox validate-description"
-			default=""
-			filter="safehtml"
+			class="inputbox "
+			filter="JComponentHelper::filterText"
 			buttons="false"
 		/>
 	</fieldset>	
@@ -167,6 +167,7 @@
       default=""
       filter="">
 			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="0">None</option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -187,6 +188,7 @@
       required="true"
       default="">
 			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+        <option value="0">None</option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -433,7 +435,10 @@
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
-			required="true">
+			required="true"
+      maxlength="15"
+      filter="string"
+      validate="latlong">
 		</field>
 		<field
 			name="longitude"
@@ -443,17 +448,23 @@
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
-			required="true">
+			required="true"
+      filter="string"
+      maxlength="15"
+      validate="latlong">
 		</field>
 		<field
 			name="nearest_town"
 			type="text"
 			extension="com_helloworld"
-			class="inputbox validate-nearest_town"
+			class="inputbox validate-nearesttown"
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
-			required="true">
+			required="true"
+			filter="JComponentHelper::filterText"
+      maxlength="75"
+      validate="nearesttown">
 		</field>		
 		<field
 			name="distance_to_coast"
@@ -463,7 +474,9 @@
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
-			required="false">
+			required="false"
+      filter="int"
+      maxlength="2">
 		</field>		
 	</fieldset>
 	<fields name="params">

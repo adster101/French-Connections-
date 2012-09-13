@@ -1,7 +1,7 @@
 window.addEvent('domready', function() {
   document.formvalidator.setHandler('greeting',
     function (value) {
-      regex=/^[\w .-�����0123456789\!,&]+$/;
+      regex=/^[\w .�����0123456789\'\!,&-]+$/;
       return regex.test(value);
     });
   document.formvalidator.setHandler('occupancy',
