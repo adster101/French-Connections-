@@ -110,6 +110,7 @@ class HelloWorldViewHelloWorld extends JView
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
  		$document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
 
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}

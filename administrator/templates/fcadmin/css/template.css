@@ -2368,7 +2368,7 @@ a.icon-16-menu span img {
 
 #submenu li a,
 #submenu span.nolink {
-	cursor: pointer;
+	cursor: default;
 	padding: 0 15px;
 	border-right: 1px solid #ccc;
 	font-size: 1.1em;
@@ -2376,6 +2376,11 @@ a.icon-16-menu span img {
 	color: #808080;
 	line-height: 14px;
 	height: 12px;
+}
+
+#submenu span.nolink.denyinactive {
+  margin-left:15px;
+  padding-left:18px;
 }
 
 #submenu span.nolink {
@@ -2803,7 +2808,9 @@ table.aclmodify-table th.col2	{
 span.icon-16-unset,
 span.icon-16-allowed,
 span.icon-16-denied,
-span.icon-16-locked {
+span.icon-16-locked,
+span.icon-16-notice,
+span.icon-16-denyinactive{
 	padding-left: 18px;
 }
 
@@ -2816,11 +2823,19 @@ span.icon-16-allowed {
 }
 
 span.icon-16-denied {
-	background: url(../images/admin/icon-16-deny.png) no-repeat;
+	background: url(../images/admin/icon-16-deny.png) left no-repeat;
 }
 
 span.icon-16-locked {
 	background: url(../images/admin/checked_out.png) 0 0 no-repeat;
+}
+
+span.icon-16-notice {	
+  background: url(../images/admin/icon-16-notice-note.png) left no-repeat;
+}
+
+span.icon-16-denyinactive {
+	background: url(../images/admin/icon-16-denyinactive.png) left no-repeat; 
 }
 
 label.icon-16-allow,

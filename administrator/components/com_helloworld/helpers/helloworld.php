@@ -33,6 +33,29 @@ abstract class HelloWorldHelper
 
   }
 	
+  /*
+   * Method to get and check the status of the various key sections of a property listing
+   * I.E. Property details, availability, tariffs and images.
+   * 
+   * params int id The property id of the property being editied
+   *  
+   * return void
+   * 
+   */
+  public static function setPropertyProgress( $id = 0 ) {
+    
+    // This is called from each view.html.php file to ensure that it is populated.  
+    if(!JApplication::getUserState('property. ' .$this->item->id . 'availability.progress')) {    
+      
+      $availability = JTable::getInstance('Availability', 'HelloWorldTable', array());
+    
+       
+    }
+    
+	
+    
+  }
+  
 	/**
 	 * Get the actions
 	 */

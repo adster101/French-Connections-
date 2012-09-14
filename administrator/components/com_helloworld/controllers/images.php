@@ -253,9 +253,12 @@ class HelloWorldControllerImages extends JControllerForm
       //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
       //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
       $this->folder = 'C:XAMPP/htdocs/images/' . $id;
-      //$this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+      $this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
     } else {
+      
       $this->folder = 'C:XAMPP/htdocs/images/' . $parent_id;
+            $this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
+
     }
     
     // Check the total size of files being uploaded. If it's too large we just exit?
