@@ -47,8 +47,7 @@ abstract class HelloWorldHelper
     // This is called from each view.html.php file to ensure that it is populated.  
     if(!JApplication::getUserState('property. ' .$this->item->id . 'availability.progress')) {    
       
-      $availability = JTable::getInstance('Availability', 'HelloWorldTable', array());
-    
+    $availability = JTable::getInstance('Availability', 'HelloWorldTable', array());
        
     }
     
