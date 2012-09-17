@@ -38,7 +38,7 @@ class HelloWorldViewAvailability extends JView
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		}
-
+    
 		// Get availability as an array of days
 		$this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability = $this->availability);
 	    
@@ -71,7 +71,7 @@ class HelloWorldViewAvailability extends JView
 		$view = strtolower(JRequest::getVar('view'));
 		// Add the tabbed submenu for the property edit view.
 		HelloWorldHelper::addSubmenu($view);
-		
+
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;

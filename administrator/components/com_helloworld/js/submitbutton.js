@@ -35,7 +35,9 @@ Joomla.submitbutton = function(task)
  
 		if (isValid)
 		{
-      unbindBeforeUnload();
+      if (action[1] != 'cancel' && action[1] !='close') {
+        unbindBeforeUnload();      
+      }
 			Joomla.submitform(task);
 			return true;
 		}

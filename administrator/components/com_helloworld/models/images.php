@@ -157,10 +157,12 @@ class HelloWorldModelImages extends JModelAdmin
         // And gallery of images to show in the image manager
         $images['gallery'] = $gallery_images->load( $pk );       
       }
-
     }
+    
     $properties['images'] = $images;
- 
+    
+    print_r($properties);die;
+    
 		$item = JArrayHelper::toObject($properties, 'JObject');
 		return $item;
 	} 

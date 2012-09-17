@@ -42,18 +42,77 @@ abstract class HelloWorldHelper
    * return void
    * 
    */
-  public static function setPropertyProgress( $id = 0 ) {
+
+  public static function setPropertyProgress($id = 0) 
+  {
+    // This could maybe be done more elegantly. 
+    // 
     
-    // This is called from each view.html.php file to ensure that it is populated.  
-    if(!JApplication::getUserState('property. ' .$this->item->id . 'availability.progress')) {    
-      
-    $availability = JTable::getInstance('Availability', 'HelloWorldTable', array());
-       
+    // Get an instance of the availability table
+    $table = JTable::getInstance('Availability', 'HelloWorldTable', array());
+    
+    // Load the availability for this property
+    $availability = $table->load($id);
+
+    // Check for errors.
+    if (count($errors = $table->get('Errors'))) {
+      JError::raiseError(500, implode('<br />', $errors));
+      return false;
     }
     
-	
+    // Set the context and userstate accordingly
+    $context = "com_helloworld.availability.$id";
+    if (count($availability)) {
+      JApplication::setUserState($context . 'progress', true);
+    }
+    
+    // Get an instance of the tariffs table
+    $table = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
+ 
+    // Load the availability for this property
+    $tariffs = $table->load($id);
+
+    // Check for errors.
+    if (count($errors = $table->get('Errors'))) {
+      JError::raiseError(500, implode('<br />', $errors));
+      return false;
+    }
+    
+    // Set the context and userstate accordingly
+    $context = "com_helloworld.tariffs.$id";
+    if (count($tariffs)) {
+      JApplication::setUserState($context . 'progress', true);
+    } 
+    
+    
+    
+    // Get an instance of the images table - NO! Just use getItem from the images model file as this returns a list of the gallery and lib images.
+    $table = JTable::getInstance('Images', 'HelloWorldTable', array());
+ 
+    // Load the availability for this property
+    $images = $table->load_images($id);
+    
+     
+    
+    // Check for errors.
+    if (count($errors = $table->get('Errors'))) {
+      JError::raiseError(500, implode('<br />', $errors));
+      return false;
+    }
+    
+    // Set the context and userstate accordingly
+    $context = "com_helloworld.images.$id";
+    if (count($images)) {
+      JApplication::setUserState($context . 'progress', true);
+    }    
+    
+    
     
   }
+  
+  
+  
+  
   
 	/**
 	 * Get the actions

@@ -17,5 +17,5 @@ class JFormRuleLatlong extends JFormRule
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $regex = '^[0-9.]+$';
+	protected $regex = '^[0-9.-]+$';
 }

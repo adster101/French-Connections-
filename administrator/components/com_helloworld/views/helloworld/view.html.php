@@ -57,7 +57,12 @@ class HelloWorldViewHelloWorld extends JView
 		// Determine the layout we are using. 
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
-		HelloWorldHelper::addSubmenu($view);
+		
+    // Get the progress for this property 
+    HelloWorldHelper::setPropertyProgress($this->item->id);
+    
+    // Add the submenu to the view
+    HelloWorldHelper::addSubmenu($view);
 		
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);

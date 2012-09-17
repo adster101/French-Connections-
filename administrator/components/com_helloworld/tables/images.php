@@ -29,7 +29,7 @@ class HelloWorldTableImages extends JTable
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function load_images($id = null, $parent_id = 1) 
+	public function load_images( $id = null ) 
 	{
 
 		$query = $this->_db->getQuery(true);
