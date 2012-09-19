@@ -101,8 +101,8 @@ class HelloWorldViewHelloWorlds extends JView
     if($canDo->get('core.edit.state'))
     {
       JToolBarHelper::divider();		  
-    	JToolBarHelper::publish('helloworld.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolBarHelper::unpublish('helloworld.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+    	JToolBarHelper::publish('helloworlds.publish', 'JTOOLBAR_PUBLISH', true);
+			JToolBarHelper::unpublish('helloworlds.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('helloworlds.trash');      
     }
     

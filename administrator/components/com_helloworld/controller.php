@@ -27,9 +27,10 @@ class HelloWorldController extends JController
 		JRequest::setVar('view', JRequest::getCmd('view', 'HelloWorlds'));
     
  		// Set the default view name and format from the Request.   
-    $vName		= JRequest::getCmd('view', 'helloworlds');
+    $vName		= JRequest::getCmd('view', 'HelloWorlds');
 		$lName		= JRequest::getCmd('layout', 'default');
 		$id			= JRequest::getInt('id');
+    
 
 		// Check for edit form. This checks that the edit ID is set in the session.
     // This only occurs when someone follows a link ?option=com_helloworld&task=helloworld.edit&id=78
@@ -43,6 +44,15 @@ class HelloWorldController extends JController
 
 			return false;
 		}
+    // If the view name is helloworlds then we reset the progress session counter 
+    if ($vName == 'HelloWorlds' || $vName == 'helloworlds') {
+      JApplication::setUserState('com_helloworld.availability.progress', '');
+      JApplication::setUserState('com_helloworld.tariffs.progress', '');
+      JApplication::setUserState('com_helloworld.images.progress', '');
+      JApplication::setUserState('com_helloworld.published.progress', '');
+    }
+    
+    
 		// call parent behavior
 		parent::display($cachable);
 	}

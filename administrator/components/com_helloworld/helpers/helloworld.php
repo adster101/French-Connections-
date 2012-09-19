@@ -19,7 +19,9 @@ abstract class HelloWorldHelper
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id='.$id, $submenu == 'availability');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id='.$id, $submenu == 'tariffs');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id='.$id, $submenu == 'images');		
-		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		
+		if ($id != '') {
+      JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		    
+    }
 
     
 		// set some global property
@@ -44,70 +46,97 @@ abstract class HelloWorldHelper
    */
 
   public static function setPropertyProgress($id = 0) 
-  {
-    // This could maybe be done more elegantly. 
-    // 
+  { 
     
-    // Get an instance of the availability table
-    $table = JTable::getInstance('Availability', 'HelloWorldTable', array());
-    
-    // Load the availability for this property
-    $availability = $table->load($id);
+    $task =  JRequest::getVar('task', '', 'GET');
 
-    // Check for errors.
-    if (count($errors = $table->get('Errors'))) {
-      JError::raiseError(500, implode('<br />', $errors));
-      return false;
-    }
-    
-    // Set the context and userstate accordingly
-    $context = "com_helloworld.availability.$id";
-    if (count($availability)) {
-      JApplication::setUserState($context . 'progress', true);
-    }
-    
-    // Get an instance of the tariffs table
-    $table = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
- 
-    // Load the availability for this property
-    $tariffs = $table->load($id);
+    if(($task == '' || $task == 'edit') && $id !=0) {
 
-    // Check for errors.
-    if (count($errors = $table->get('Errors'))) {
-      JError::raiseError(500, implode('<br />', $errors));
-      return false;
+      // Check that this doesn't already exist in the session scope
+      if (!JApplication::getUserState('com_helloworld.availability.progress', false))
+      {        
+
+        // Get an instance of the availability table
+        $table = JTable::getInstance('Availability', 'HelloWorldTable', array());
+
+        // Load the availability for this property
+        $availability = $table->load($id);
+
+        // Check for errors.
+        if (count($errors = $table->get('Errors'))) {
+          JError::raiseError(500, implode('<br />', $errors));
+          return false;
+        }
+
+        // Set the userstate accordingly
+        if (count($availability)) {
+          JApplication::setUserState('com_helloworld.availability.progress', true);
+        } else {
+          JApplication::setUserState('com_helloworld.availability.progress', false);
+        }
+      }
+
+      // Check that this doesn't already exist in the session scope
+      if (!JApplication::getUserState('com_helloworld.tariffs.progress', false))
+      {    
+        // Get an instance of the tariffs table
+        $table = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
+
+        // Load the availability for this property
+        $tariffs = $table->load($id);
+
+        // Check for errors.
+        if (count($errors = $table->get('Errors'))) {
+          JError::raiseError(500, implode('<br />', $errors));
+          return false;
+        }
+
+        // Set the context and userstate accordingly
+        if (count($tariffs)) {
+          JApplication::setUserState('com_helloworld.tariffs.progress', true);
+        } else {
+          JApplication::setUserState('com_helloworld.tariffs.progress', false);        
+        }
+      }
+
+      // Check that this doesn't already exist in the session scope
+      if(!JApplication::getUserState('com_hellworld.images.progress', false))
+      {
+
+        // Import the model library 
+        $model = JModel::getInstance('Images', 'HelloWorldModel');
+
+        // Use the getItem method to retrieve the image details. 
+        $item = $model->getItem($id);
+
+        if ($item->published) {
+          JApplication::setUserState('com_helloworld.published.progress', true);
+        } else {
+          JApplication::setUserState('com_helloworld.published.progress', false);
+        }
+
+        if (array_key_exists('gallery' , $item->images->gallery) && count($item->images->gallery->getProperties()) > 0) 
+        {
+
+          JApplication::setUserState('com_helloworld.images.progress', true);
+
+        } 
+
+        else if ( count($item->images->gallery->getProperties()) > 0 )
+        {
+
+          JApplication::setUserState('com_helloworld.images.progress', true);
+
+        } 
+
+        else
+
+        {
+          JApplication::setUserState('com_helloworld.images.progress', false);
+
+        }
+      }
     }
-    
-    // Set the context and userstate accordingly
-    $context = "com_helloworld.tariffs.$id";
-    if (count($tariffs)) {
-      JApplication::setUserState($context . 'progress', true);
-    } 
-    
-    
-    
-    // Get an instance of the images table - NO! Just use getItem from the images model file as this returns a list of the gallery and lib images.
-    $table = JTable::getInstance('Images', 'HelloWorldTable', array());
- 
-    // Load the availability for this property
-    $images = $table->load_images($id);
-    
-     
-    
-    // Check for errors.
-    if (count($errors = $table->get('Errors'))) {
-      JError::raiseError(500, implode('<br />', $errors));
-      return false;
-    }
-    
-    // Set the context and userstate accordingly
-    $context = "com_helloworld.images.$id";
-    if (count($images)) {
-      JApplication::setUserState($context . 'progress', true);
-    }    
-    
-    
-    
   }
   
   

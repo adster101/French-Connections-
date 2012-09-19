@@ -91,19 +91,28 @@ class HelloWorldControllerHelloWorld extends JControllerForm
   
   public function woot() {
     
+    $parent_id = 1;
+    
     // Check that this is a valid call from a logged in user.
     JSession::checkToken( 'GET' ) or die( 'Invalid Token' );
     
     $data = JRequest::getVar( 'jform', '', 'POST', 'array' ); 
     
     if (array_key_exists('parent_id', $data)) {
+      $parent_id = $data['parent_id'];
       JApplication::setUserState('parent_id', $data['parent_id']);
     }
     
     
     
-    $app = JFactory::getApplication();    
-    $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'warning');
+    $app = JFactory::getApplication();  
+    if ($parent_id === 1) {
+
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_TO_BE_ADDED'), 'warning');
+    } else {
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'warning');
+
+    }
 
     $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit', false));
 

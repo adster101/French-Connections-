@@ -85,7 +85,9 @@ class HelloWorldModelImages extends JModelAdmin
 	{
 		// Initialise variables.
 		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
-
+    
+    $images= array();
+    
     $table = $this->getTable();
 
 		if ($pk > 0)
@@ -160,9 +162,7 @@ class HelloWorldModelImages extends JModelAdmin
     }
     
     $properties['images'] = $images;
-    
-    print_r($properties);die;
-    
+        
 		$item = JArrayHelper::toObject($properties, 'JObject');
 		return $item;
 	} 

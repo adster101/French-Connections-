@@ -6,7 +6,7 @@
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
-			class="validate-parent"
+			class="validate-parent required"
 			required="true">
 
     </field>	

@@ -16,7 +16,8 @@
       name="parent_id"
       type="hidden"
       default="">      
-    </field>     
+    </field> 
+    
   </fieldset>
   
   <fieldset name="details">
@@ -35,6 +36,15 @@
       type="hidden"
       default="">      
     </field>
+  <field 
+      name="published"
+      type="text"
+      filter="unset"/>
+      
+    <field 
+      name="expiry_date"
+      type="hidden"
+      filter="unset"/>
   </fieldset>
 </form>
 

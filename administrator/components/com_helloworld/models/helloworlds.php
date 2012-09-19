@@ -109,7 +109,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query = $db->getQuery(true);
 		
 		// Select some fields
-		$query->select('a.id,a.greeting, a.title, a.modified, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published ');
+		$query->select('a.id,a.greeting, a.title, a.modified, a.expiry_date, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published ');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		// Check the user group this user belongs to.
 		if (!(in_array(8, $groups) || in_array(11, $groups))) 

@@ -23,15 +23,17 @@ $userId		= $user->get('id');
 	<th>
 		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
 	</th>
-  <?php if ($user->authorise('helloworld.edit.publish', 'com_helloworld' )) : ?>
+  
     <th width="3%">
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
     </th>	
-  <?php endif; ?>
 	<th width="">
-		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED'); ?>
+		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
 	</th>
-	<th width="3%">
+	<th width="">
+		<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY'); ?>
+	</th>
+  <th width="3%">
 		<?php echo JText::_('JGRID_HEADING_ORDERING'); ?>
 	</th>
 	<th width="12%">

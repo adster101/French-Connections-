@@ -41,7 +41,7 @@ class HelloWorldViewHelloWorld extends JView
 		
 		// Set the toolbar
 		$this->addToolBar();
-
+    
 		// Display the template
 		parent::display($tpl);
  
@@ -114,7 +114,11 @@ class HelloWorldViewHelloWorld extends JView
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
- 		$document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
+
+    $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBYcwtxu1C9l9O3Th0W6W_X4UtJi9zh2i8&sensor=true");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js");
+
+    $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
 
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');

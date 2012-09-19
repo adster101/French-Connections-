@@ -16,7 +16,8 @@ $originalOrders = array();
 foreach($this->items as $i => $item): 
 	$orderkey	= array_search($item->id, $this->ordering[$item->parent_id]);
 	$canEditOwn	= $user->authorise('core.edit.own',	'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
-	$canChange = true;
+  $canPublish = $user->authorise('helloworld.edit.publish', 'com_helloworld' );
+  $canReorder = $user->authorise('helloworld.edit.reorder', 'com_helloworld' );
 ?>
 
 <?php if ($canEditOwn) : ?>
@@ -30,22 +31,23 @@ foreach($this->items as $i => $item):
 
 		<td>
 			<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level-1) ?>
-			<a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id) . '&' . JUtility::getToken() . '=1'; ?>">
+			<a title="" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id) . '&' . JUtility::getToken() . '=1'; ?>">
 				<?php echo $this->escape($item->greeting); ?>
 			</a>
 		</td>
-    <?php if ($user->authorise('helloworld.edit.publish', 'com_helloworld' )) : ?>
 
       <td class="center">
-        <?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canChange);?>
+        <?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canPublish);?>
       </td>
-    <?php endif; ?>
     <td class="center">
 			<?php echo JText::_($item->modified); ?>
 		</td>
+    <td class="center">
+			<?php echo JText::_($item->expiry_date); ?>
+		</td>
 		<td class="order">
 			<?php
-				if ($canChange) : ?>
+				if ($canReorder) : ?>
 					<span><?php if ($item->parent_id != 1) { echo $this->pagination->orderUpIcon($i, isset($this->ordering[$item->parent_id][$orderkey - 1]), 'helloworlds.orderup', 'JLIB_HTML_MOVE_UP', $ordering); } ?></span>
 					<span><?php if ($item->parent_id != 1) { echo $this->pagination->orderDownIcon($i, $this->pagination->total, isset($this->ordering[$item->parent_id][$orderkey + 1]), 'helloworlds.orderdown', 'JLIB_HTML_MOVE_DOWN', $ordering); } ?></span>
 				

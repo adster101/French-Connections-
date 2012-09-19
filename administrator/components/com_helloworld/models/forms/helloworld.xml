@@ -9,7 +9,15 @@
 			description ="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"
 			class="readonly"
 			readonly="true"/>
-		<field
+    <field 
+      name="expiry_date"
+      type="text"
+      readonly="true"
+      class="readonly"
+      label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
+      description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
+      filter="unset"/>
+    <field
 			name="asset_id"
 			type="hidden"
 			filter="unset"/>
@@ -34,7 +42,13 @@
 			type="hidden"
 			required="true"
 			default="en-GB"/>
+      
+    <field 
+      name="published"
+      type="hidden"
+      filter="unset"/>
 
+      
     <field
       name="accommodation_type"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
@@ -49,9 +63,11 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
-      type="propertytypes"
+      type="classificationtypes"
       filter="integer"
       required="true"
+      id="66"
+      default="1"
     />
     
 		<field
@@ -431,14 +447,15 @@
 			name="latitude"
 			type="text"
 			extension="com_helloworld"
-			class="validate-latitude"
+			class="validate-latitude "
 			default=""
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
 			required="true"
       maxlength="15"
       filter="string"
-      validate="latlong">
+      validate="latlong"
+      readonly="true">
 		</field>
 		<field
 			name="longitude"
@@ -451,7 +468,8 @@
 			required="true"
       filter="string"
       maxlength="15"
-      validate="latlong">
+      validate="latlong"
+      readonly="true">
 		</field>
 		<field
 			name="nearest_town"

@@ -106,10 +106,40 @@ $canChangeOwner = $user->authorise('core.edit.state',	'com_helloworld');
 		<?php echo JHtml::_('sliders.panel', JText::_('COM_HELLOWORLD_HELLOWORLD_LOCATION_DETAILS'), $name.'-params');?>
 <fieldset class="panelform">
 			<ul class="adminformlist">
-        <?php foreach($this->form->getFieldset('Location') as $field): ?>
-          <li><?php echo $field->label;echo $field->input;?></li>
-        <?php endforeach; ?>
+        <li>
+          <?php echo $this->form->getLabel('catid');
+          echo $this->form->getInput('catid');?>                    
+        </li>
+  
+        <li>
+          <?php echo $this->form->getLabel('latitude');
+          echo $this->form->getInput('latitude');?>   
+        </li>
+        <li class="clearfix">
+          <?php echo $this->form->getLabel('longitude');
+          echo $this->form->getInput('longitude');?>     
+        </li>  
+        <?php if ($this->item->parent_id == 1) : ?>
+        <li>        
+    
+           <p class="">
+             <a class="btn btn-primary btn-large modal-button"  rel="{handler: 'ajax', size: {x: 800, y: 600}, onOpen:function(){initialize()}}" 
+                href="<?php echo JRoute::_('index.php?option=com_helloworld&view=locate&layout=default&format=raw&id=' . (int) $this->item->id) . JUtility::getToken() . '=1'; ?>">
+               <i class="boot-icon-map-marker boot-icon-white"></i>&nbsp;Please click here to locate property via map</a></p>
+      
+        </li>
+        <?php endif; ?>
+        <li>
+          <?php echo $this->form->getLabel('nearest_town');
+          echo $this->form->getInput('nearest_town');?>                    
+        </li>        
+        <li>
+          <?php echo $this->form->getLabel('distance_to_coast');
+          echo $this->form->getInput('distance_to_coast');?>                    
+        </li>  
 			</ul>
+        
+      
 		</fieldset>
   <?php foreach ($params as $name => $fieldset): ?>
 		<?php echo JHtml::_('sliders.panel', JText::_($fieldset->label), $name.'-params');?>

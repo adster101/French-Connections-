@@ -21,8 +21,20 @@
     <field 
       name="greeting"
       type="hidden"
-      default="">      
+      default=""> 
+
     </field>
+    
+    <field 
+      name="published"
+      type="text"
+      filter="unset"/>
+      
+    <field 
+      name="expiry_date"
+      type="hidden"
+      filter="unset"/>
+    
     <field 
       name="base_currency"
       type="list"

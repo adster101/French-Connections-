@@ -83,8 +83,7 @@ class HelloWorldTableAvailability extends JTable
 			}
       
       // Tick the availability progress flag to true
-      $context = "com_helloworld.availability.$id";
-      JApplication::setUserState($context.'progress', true);
+      JApplication::setUserState('com_helloworld.availability.progress', true);
       
       
       return true;

@@ -16,6 +16,16 @@
       type="hidden"
       default="">      
     </field>
+      <field 
+      name="published"
+      type="hidden"
+      filter="unset"/>
+      
+    <field 
+      name="expiry_date"
+      type="hidden"
+      filter="unset"/>
+      
     <field
 			name="changeover_day"
 			type="list"

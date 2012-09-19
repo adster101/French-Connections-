@@ -23,21 +23,15 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
   
   // Get the id of the property
   $id = JRequest::getVar('id', '', 'GET', 'integer');
-  
+    
   // Get the app instance
   $app = JFactory::getApplication();
 
   // Would these be better tested and set in the view.html.php file?
-  $context = "com_helloworld.availability.$id";
-  $availability = $app->getUserState($context.'progress', false);
-
-  $context = "com_helloworld.tariffs.$id";
-  $tariffs = $app->getUserState($context.'progress', false);
-
-  $context = "com_helloworld.images.$id";
-  $images = $app->getUserState($context.'progress', false);
-  
-
+  $availability = $app->getUserState('com_helloworld.availability.progress', false);   
+  $tariffs = $app->getUserState('com_helloworld.tariffs.progress', false);
+  $images = $app->getUserState('com_helloworld.images.progress', false);
+  $published = $app->getUserState('com_helloworld.published.progress', false);
 
   if ($id) { // Id is set therfore is not a new propery and therefore we assume it has been completed correctly
     $list[0][3] = true;
@@ -54,7 +48,7 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
   if ($images) {
     $list[3][3] = true;
   }
-  
+    
   ?>
 
   <ul id="submenu" class="property-manager">
@@ -64,18 +58,26 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
           <?php if ($id) : // There is an id so not a new property   ?>
             <?php if (isset($item[2]) && $item[2] == 1) : // Is this the 'active' item ?>
               <a class="active" href="<?php echo JFilterOutput::ampReplace($item[1]); ?>">
-              <?php if ($item[3]) : ?>
-                  <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_COMPLETE', $item[0], $item[0]) ?>" class="icon-16-allowed hasTip">
-                    <?php echo $item[0]; ?>
-                  </span>
+                <?php if(current($item) != 'Special offers') : ?>
+                  <?php if ($item[3]) : ?>
+                    <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_COMPLETE', $item[0], $item[0]) ?>" class="icon-16-allowed hasTip">
+                      <?php echo $item[0]; ?>
+                    </span>
                   <?php else : ?>
-                  <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PLEASE_COMPLETE_DETAILS', $item[0], $item[0]) ?>" class="icon-16-notice hasTip">
-                    <?php echo $item[0]; ?>
-                  </span>
+                    <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PLEASE_COMPLETE_DETAILS', $item[0], $item[0]) ?>" class="icon-16-notice hasTip">
+                      <?php echo $item[0]; ?>
+                    </span>
                   <?php endif; ?>
+                <?php elseif ($published) : ?>
+                  <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_NOT_REQUIRED', $item[0], $item[0]) ?>" class="hasTip">
+                    <?php echo $item[0]; ?>
+                  </span>                
+                <?php endif; ?>
               </a>   
-              <?php else : // Not the active menu item  ?>
+            <?php else : // Not the active menu item  ?>
               <a class="inactive" href="<?php echo JFilterOutput::ampReplace($item[1]); ?>">
+              <?php if(current($item) != 'Special offers') : ?>
+  
               <?php if ($item[3]) : ?>
                   <span class="hasTip icon-16-allowed" title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_COMPLETE', $item[0], $item[0]) ?>">   
                   <?php echo $item[0]; ?> 
@@ -84,8 +86,14 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
                   <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PLEASE_COMPLETE_DETAILS', $item[0], $item[0]) ?>" class="icon-16-notice hasTip">
                   <?php echo $item[0]; ?> 
                   </span>
-                  <?php endif; ?>
+                  <?php endif; ?>     
+                    <?php elseif ($published) : ?>
+                  <span title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_NOT_REQUIRED', $item[0], $item[0]) ?>" class="hasTip">
+                    <?php echo $item[0]; ?>
+                  </span>                
+                <?php endif; ?>      
               </a>
+             
               <?php endif; ?>
           <?php else : // A new property   ?>
             <?php if (current($item) == 'Property details') : ?>

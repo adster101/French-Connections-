@@ -87,8 +87,7 @@ class HelloWorldTableTariffs extends JTable
 			}
       
       // Tick the availability progress flag to true
-      $context = "com_helloworld.tariffs.$id";
-      JApplication::setUserState($context.'progress', true);
+      JApplication::setUserState('com_helloworld.tariffs.progress', true);
       
       return true;
     }

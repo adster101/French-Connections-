@@ -435,8 +435,8 @@ class HelloWorldTableHelloWorld extends JTableNested
      */
     $library_images = array();
     $gallery_images = array();
-    
-    if(!array($POST)) {
+
+    if(!array_key_exists('library-images',$POST)) {
       return true;
     }
     
@@ -483,11 +483,13 @@ class HelloWorldTableHelloWorld extends JTableNested
           return false;
         }
       }          
-    } else {
-      // Set the $parent_id to the property ID so images are assigned to the gallery...this would be neater
-      // and more logical with two separate tables...
       
-      // Note that here we are using the global Joomla categories not the component ones.
+      // Tick the images progress flag to true
+      JApplication::setUserState('com_helloworld.images.progress', true);
+      
+    } else {
+      // Set the $parent_id to the property ID so images are assigned to the gallery.
+
       $image_gallery_table = JTable::getInstance('Gallery_images', 'HelloWorldTable');
       
       // Delete any existing assigned gallery images
@@ -501,6 +503,11 @@ class HelloWorldTableHelloWorld extends JTableNested
           return false;
         }
       }  
-    }  
+      
+      // Tick the images progress flag to true
+      JApplication::setUserState('com_helloworld.images.progress', true);
+      
+    }
+    
   }
 }
