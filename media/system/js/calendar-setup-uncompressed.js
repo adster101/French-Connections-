@@ -101,7 +101,7 @@ Calendar.setup = function (params) {
 		return false;
 	}
 
-	function onSelect(cal) {
+function onSelect(cal) {
 		var p = cal.params;
 		var update = (cal.dateClicked || p.electric);
 		if (update && p.inputField) {

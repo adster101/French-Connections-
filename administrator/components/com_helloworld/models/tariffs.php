@@ -130,17 +130,7 @@ class HelloWorldModelTariffs extends JModelAdmin
 		}
 		return $item;
 	}  
-  
-	/**
-	 * Method to get the script that have to be included on the form
-	 *
-	 * @return string	Script files
-	 */
-	public function getScript() 
-	{
-		return 'administrator/components/com_helloworld/models/forms/tariffs.js';
-	}
-  
+    
 	/**
 	 * Method to allow derived classes to preprocess the form.
 	 *
@@ -193,11 +183,12 @@ class HelloWorldModelTariffs extends JModelAdmin
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
           size="20"
-          class="inputbox validate-tariff-start-date"
+          class="inputbox validate-tariff-start-date required"
           validate=""
           required="false"
           multiple="true"
-          default="'.$tariff->start_date.'">
+          default="'.$tariff->start_date.'"
+          onchange="updateOtherOne();">
         </field>
         <field
           id="end_date_tariff_'.$counter.'"
@@ -244,7 +235,8 @@ class HelloWorldModelTariffs extends JModelAdmin
           validate=""
           required="false"
           multiple="true"
-          default="">
+          default=""
+          onchange="updateOtherOne();">
         </field>
         <field
           id="end_date_tariff_'. $i .'"        

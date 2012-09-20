@@ -43,7 +43,10 @@ function initialize() {
     document.getElementById('jform_latitude').value = LatLng.lat().toFixed(6);
     document.getElementById('jform_longitude').value = LatLng.lng().toFixed(6);
   });
-  
+
+  google.maps.event.addListener(map, "zoom_changed", function() {
+    map.panTo(marker.getPosition());
+  });
 
     
   

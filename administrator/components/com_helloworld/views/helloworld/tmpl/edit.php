@@ -119,7 +119,10 @@ $canChangeOwner = $user->authorise('core.edit.state',	'com_helloworld');
           <?php echo $this->form->getLabel('longitude');
           echo $this->form->getInput('longitude');?>     
         </li>  
-        <?php if ($this->item->parent_id == 1) : ?>
+        
+        <?php 
+        // Show the choose location button if this is a parent property or a new property
+        if ($this->item->parent_id == 1 || !$this->item->id) : ?>
         <li>        
     
            <p class="">

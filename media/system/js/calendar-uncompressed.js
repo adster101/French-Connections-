@@ -1800,6 +1800,5 @@ Date.prototype.setFullYear = function(y) {
 
 // END: DATE OBJECT PATCHES
 
-
 // global object that remembers the calendar
 window._dynarch_popupCalendar = null;
