@@ -417,4 +417,51 @@ abstract class HelloWorldHelper
     }
     return $availability_by_period;
   }
+
+  	/**
+	 * Displays a calendar control field
+	 *
+	 * @param   string  $value    The date value
+	 * @param   string  $name     The name of the text field
+	 * @param   string  $id       The id of the text field
+	 * @param   string  $format   The date format
+	 * @param   array   $attribs  Additional HTML attributes
+	 *
+	 * @return  string  HTML markup for a calendar field
+	 *
+	 * @since   11.1
+	 */
+	public static function linkedcalendar($value, $name, $id, $format = '%Y-%m-%d', $attribs = null)
+	{
+		static $done;
+
+		if ($done === null)
+		{
+			$done = array();
+		}
+
+		$readonly = isset($attribs['readonly']) && $attribs['readonly'] == 'readonly';
+		$disabled = isset($attribs['disabled']) && $attribs['disabled'] == 'disabled';
+		if (is_array($attribs))
+		{
+			$attribs = JArrayHelper::toString($attribs);
+		}
+
+		if (!$readonly && !$disabled)
+		{
+			// Load the calendar behavior
+			JHtml::_('behavior.tooltip');
+
+		
+			return '<input type="text" title="' . (0 !== (int) $value ? JHtml::_('date', $value) : '') . '" name="' . $name . '" id="' . $id
+				. '" value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '" ' . $attribs . ' />'
+				. JHtml::_('image', 'system/calendar.png', JText::_('JLIB_HTML_CALENDAR'), array('class' => 'calendar', 'id' => $id . '_img'), true);
+		}
+		else
+		{
+			return '<input type="text" title="' . (0 !== (int) $value ? JHtml::_('date', $value) : '')
+				. '" value="' . (0 !== (int) $value ? JHtml::_('date', $value, JFactory::getDbo()->getDateFormat()) : '') . '" ' . $attribs
+				. ' /><input type="hidden" name="' . $name . '" id="' . $id . '" value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '" />';
+		}
+	}
 }

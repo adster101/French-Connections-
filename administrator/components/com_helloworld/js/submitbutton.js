@@ -68,9 +68,9 @@ Joomla.submitbutton = function(task)
 window.addEvent('domready', function() {
   
   $$('form.form-validate')[0].addEvent("change", function(){
-    window.onbeforeunload = function() {    
-			return "Bye";
-		};
+    //window.onbeforeunload = function() {    
+			//return "Bye";
+		//};
   })
   
   // Manually trigger the change event if a calendar is clicked...

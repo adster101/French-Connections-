@@ -187,8 +187,7 @@ class HelloWorldModelTariffs extends JModelAdmin
           validate=""
           required="false"
           multiple="true"
-          default="'.$tariff->start_date.'"
-          onchange="updateOtherOne();">
+          default="'.$tariff->start_date.'">
         </field>
         <field
           id="end_date_tariff_'.$counter.'"
@@ -227,29 +226,31 @@ class HelloWorldModelTariffs extends JModelAdmin
         <field
           id="start_date_tariff_'. $i .'" 
           name="start_date"
-          type="calendar"
+          type="ariancalendar"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
           size="20"
-          class="inputbox"
+          class="inputbox start_date"
           validate=""
           required="false"
           multiple="true"
           default=""
-          onchange="updateOtherOne();">
+          onchange="updateOtherOne()">
         </field>
         <field
           id="end_date_tariff_'. $i .'"        
           name="end_date"
-          type="calendar"
+          type="ariancalendar"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
           size="20"
-          class="inputbox"
+          class="inputbox end_date"
           validate=""
           required="false"
           default=""
-          multiple="true">
+          multiple="true"
+          >
+
         </field>
         <field  
           id="tariff_'. $i .'"

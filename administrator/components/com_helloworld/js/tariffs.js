@@ -1,26 +1,31 @@
-
-function updateOtherOne() {
+window.addEvent('domready', function(){
   
-  var start_date;
-  var end_date;
+  // Create an instances array to track all the instances we create
+  var instances = {};
   
-  start_date = $('jform_tariffs_start_date_tariff_0').getProperty('value');
-  
-  $('jform_tariffs_end_date_tariff_0').setProperty('value', '');
- 
-var calendar = new Calendar(0, new Date('2013-01-01'), null, onSelect(calendar));
-calendar.create();
-calendar.show();
+  new Picker.Date($('jform_tariffs_start_date_tariff_0'),{
+    toggle: $('jform_tariffs_start_date_tariff_0_img'),
+    onSelect: function(date){
+            
+      if (instances['jform_tariffs_end_date_tariff_0'] == null) {
 
-}
+       picker = new Picker.Date($('jform_tariffs_end_date_tariff_0'),{
+          minDate:date
+        });        
+        instances['jform_tariffs_end_date_tariff_0'] = picker;      
+      } else {
+        instances['jform_tariffs_end_date_tariff_0'].destroy()
+         picker = new Picker.Date($('jform_tariffs_end_date_tariff_0'),{
+          minDate:date
+        });        
+        instances['jform_tariffs_end_date_tariff_0'] = picker;            
 
-function onSelect(calendar, date) {
-  var input_field = document.getElementById("jform_tariffs_end_date_tariff_0");
-  input_field.value = date;
-  calendar.dateClicked = true;
-  if (calendar.dateClicked) {
-    calendar.callCloseHandler(); // this calls "onClose" (see above)
-  }
-};
+      }
+        
+       
+        console.log(instances['jform_tariffs_end_date_tariff_0']);
 
-      
+    
+    }
+  })
+})
