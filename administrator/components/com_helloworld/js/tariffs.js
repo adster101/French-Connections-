@@ -5,7 +5,7 @@ $(document).ready(function(){
  $(function() {
    
    var start_date = $('#jform_tariffs_start_date_tariff_0').attr('value');
-   
+   start_date = '';
    if(start_date == '') {
      start_date = new Date();
    }
