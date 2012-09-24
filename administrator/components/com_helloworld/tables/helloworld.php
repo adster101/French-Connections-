@@ -324,7 +324,7 @@ class HelloWorldTableHelloWorld extends JTableNested
       return true;
     }
 
-    $tariffs_by_day = $this->getTariffsByDay($POST['tariffs']);
+    $tariffs_by_day = $this->getTariffsByDay($POST['tariffs']); 
     $tariff_periods = $this->getAvailabilityByPeriod($tariffs_by_day);
 
     // Get instance of the tariffs table
@@ -371,7 +371,8 @@ class HelloWorldTableHelloWorld extends JTableNested
 
       // Check that availability period is set for this loop. Possible that empty array elements exists as additional
       // tariff fields are added to the form in case owner wants to add additional tariffs etc
-
+      try {  
+      
       if ($tariffs['start_date'][$k] != '' && $tariffs['end_date'][$k] != '' && $tariffs['tariff'][$k] != '') {
 
         // Convert the availability period start date to a PHP date object
@@ -393,7 +394,13 @@ class HelloWorldTableHelloWorld extends JTableNested
           $date = $tariff_period_start_date->add($DateInterval);
         }
       }
+      
+      } catch (Exception $e ) {
+        print_r($e);die;
+      }
+      
     }
+
     return $raw_tariffs;
   } 
   

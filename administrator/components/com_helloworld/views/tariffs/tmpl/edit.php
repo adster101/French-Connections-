@@ -12,20 +12,21 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
   <div class="width-60 fltlft">
     <fieldset class="adminform">		
       <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
-      <?php foreach ($tariff_field_sets as $fieldset) { ?>
+      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?>
+        <?php foreach ($tariff_field_sets as $fieldset) { ?>
         <fieldset class="adminform">
-          <table class="adminformlist" id="<?php echo $fieldset->name; ?>">		
-            <tr>
-              <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>
-                <td>
+          <legend>Tariff</legend>
+            <ul class="adminformlist tariff-range">
+              <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>  
+              <li>
+
                   <?php
                     echo $field->label;
                     echo $field->input;
-                  ?>
-                </td> 
+                  ?>  
+              </li>
+
               <?php } // End of foreach getFieldSet fieldset name ?>
-            </tr>
-          </table>			
         </fieldset>
       <?php } // End of foreach tariff field sets ?>
     </fieldset>
@@ -41,7 +42,6 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
         <li><?php echo $this->form->getLabel('base_currency');echo $this->form->getInput('base_currency'); ?></li>
         <li><?php echo $this->form->getLabel('tariff_based_on');echo $this->form->getInput('tariff_based_on'); ?></li>
         <li><?php echo $this->form->getLabel('linen_costs');echo $this->form->getInput('linen_costs'); ?></li>
-
       </ul>			
       <?php echo $this->form->getLabel('additional_price_notes'); ?>
       <div class="clr"></div>

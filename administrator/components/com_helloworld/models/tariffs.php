@@ -119,7 +119,7 @@ class HelloWorldModelTariffs extends JModelAdmin
     }
     
     $properties['tariffs'] = $tariffs;
- 
+          
 		$item = JArrayHelper::toObject($properties, 'JObject');
 
 		if (property_exists($item, 'params'))
@@ -159,11 +159,13 @@ class HelloWorldModelTariffs extends JModelAdmin
    */
   protected function getTariffXml ($form, $data = array()) 
   {
+    
+    
     // Build an XML string to inject additional fields into the form
     $XmlStr = '<form>';
     $counter=0;
     $XmlStr.='<fields name="tariffs">';
-    
+
     if (!$data->tariffs) {
       return false;
     }
@@ -179,41 +181,48 @@ class HelloWorldModelTariffs extends JModelAdmin
         <field
           id="start_date_tariff_'.$counter.'"
           name="start_date"
-          type="calendar"
+          type="text"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-          description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
-          size="20"
-          class="inputbox validate-tariff-start-date required"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+          size="10"
+          class="inputbox start-date"
           validate=""
+          labelclass="tariff-label"
           required="false"
           multiple="true"
-          default="'.$tariff->start_date.'">
+          default="'.$tariff->start_date.'"
+          readonly="true">
         </field>
+        
         <field
           id="end_date_tariff_'.$counter.'"
           name="end_date"
-          type="calendar"
+          type="text"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
-          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
-          size="20"
-          class="inputbox validate-tariff-start-date"
+          description="COM_HELLOWORLD_TARIFFS_FIELD_DATE_RANGE_DESC"
+          size="10"
+          class="inputbox end-date"
           validate=""
+          labelclass="tariff-label"
           required="false"
+          multiple="true"
           default="'.$tariff->end_date.'"
-          multiple="true">
-        </field>
+          readonly="true">
+        </field>       
+        
         <field       
           id="tariff_'.$counter.'"
           name="tariff"
           type="text"
           label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
           description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
-          size="20"
-          class="inputbox"
-          validate=""
+          size="10"
+          class="inputbox "
+          labelclass="tariff-label"
           required="false"
           default="'.$tariff->tariff.'"
-          multiple="true"/>
+          multiple="true">
+          </field>
         </fieldset>';
         $counter++;
       }
@@ -226,41 +235,43 @@ class HelloWorldModelTariffs extends JModelAdmin
         <field
           id="start_date_tariff_'. $i .'" 
           name="start_date"
-          type="ariancalendar"
+          type="text"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
-          size="20"
-          class="inputbox start_date"
-          validate=""
+          size="10"
+          class="inputbox tariff_date"
+          labelclass="tariff-label"
           required="false"
           multiple="true"
           default=""
-          onchange="updateOtherOne()">
+          readonly="true">
         </field>
+        
         <field
-          id="end_date_tariff_'. $i .'"        
+          id="end_date_tariff_'.$i.'"
           name="end_date"
-          type="ariancalendar"
+          type="text"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
-          size="20"
-          class="inputbox end_date"
+          size="10"
+          class="inputbox tariff_date"
           validate=""
+          labelclass="tariff-label"
           required="false"
-          default=""
           multiple="true"
-          >
-
-        </field>
+          default=""
+          readonly="true">
+        </field>          
         <field  
           id="tariff_'. $i .'"
           name="tariff"
           type="text"
           label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
           description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
-          size="20"
+          size="10"
           class="inputbox"
           validate=""
+          labelclass="tariff-label"
           required="false"
           default=""
           multiple="true">

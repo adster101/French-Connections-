@@ -77,16 +77,16 @@ class HelloWorldViewTariffs extends JView
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Picker.js");
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Picker.Attach.js");
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Picker.Date.js");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/jquery-1.8.2.min.js");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js");
+
+    
 
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/tariffs.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-		$document->addStyleSheet("/administrator/components/com_helloworld/css/availability.css",'text/css',"screen");
-		$document->addStyleSheet("/administrator/components/com_helloworld/css/datepicker.css",'text/css',"screen");
+		$document->addStyleSheet("/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
+		$document->addStyleSheet("/administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css",'text/css',"screen");
 
-    $document->addStyleSheet("/administrator/components/com_helloworld/css/datepicker_minimal.css",'text/css',"screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}

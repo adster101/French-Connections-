@@ -1,31 +1,33 @@
-window.addEvent('domready', function(){
-  
-  // Create an instances array to track all the instances we create
-  var instances = {};
-  
-  new Picker.Date($('jform_tariffs_start_date_tariff_0'),{
-    toggle: $('jform_tariffs_start_date_tariff_0_img'),
-    onSelect: function(date){
-            
-      if (instances['jform_tariffs_end_date_tariff_0'] == null) {
+$(document).ready(function(){
+ 
+ 
+ 
+ $(function() {
+		$( "#jform_tariffs_start_date_tariff_0" ).datepicker({
+			numberOfMonths: 3,
+      minDate:-0,
+      showOn:"both",
+      dateFormat:"dd-mm-yy",
+      buttonImageOnly:true,
+     	buttonImage: "/media/system/images/calendar.png",
 
-       picker = new Picker.Date($('jform_tariffs_end_date_tariff_0'),{
-          minDate:date
-        });        
-        instances['jform_tariffs_end_date_tariff_0'] = picker;      
-      } else {
-        instances['jform_tariffs_end_date_tariff_0'].destroy()
-         picker = new Picker.Date($('jform_tariffs_end_date_tariff_0'),{
-          minDate:date
-        });        
-        instances['jform_tariffs_end_date_tariff_0'] = picker;            
-
-      }
-        
-       
-        console.log(instances['jform_tariffs_end_date_tariff_0']);
-
+			onSelect: function( selectedDate ) {
+				$( "#jform_tariffs_end_date_tariff_0" ).datepicker( "option", "minDate", selectedDate );
+			}
+		});
     
-    }
-  })
+		$( "#jform_tariffs_end_date_tariff_0" ).datepicker({
+			numberOfMonths: 3,
+      minDate:-0,
+      dateFormat:"dd-mm-yy",
+      showOn:"both",
+      buttonImageOnly:true,
+     	buttonImage: "/media/system/images/calendar.png",
+			onSelect: function( selectedDate ) {
+				$( "#jform_tariffs_start_date_tariff_0" ).datepicker( "option", "maxDate", selectedDate );
+			}
+		});
+	});
+ 
+ 
 })

@@ -36,7 +36,7 @@ class HelloWorldTableTariffs extends JTable
 	public function load($id = null, $reset = true) 
 	{
 		$query = $this->_db->getQuery(true);
-		$query->select('id, start_date, end_date, tariff');
+		$query->select("id, date_format(start_date, '%d-%m-%Y') as start_date, date_format(end_date, '%d-%m-%Y') as end_date, tariff");
 		$query->from($this->_tbl);
 		$query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
 		$this->_db->setQuery($query);
@@ -83,6 +83,7 @@ class HelloWorldTableTariffs extends JTable
 			{
 				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
 				$this->setError($e);
+        die;
 				return false;
 			}
       
