@@ -66,6 +66,9 @@ class HelloWorldTableTariffs extends JTable
       return false;
       
     } else {
+      // Delete existing availability
+      // Need to wrap this in some logic
+      $this->delete($id);
       
       $query = $this->_db->getQuery(true);
       
@@ -77,13 +80,13 @@ class HelloWorldTableTariffs extends JTable
         $insert_string = "$id,'" .$period['start_date']."','" . $period['end_date'] . "',". $period['status'] ."";
         $query->values($insert_string);
       }
+      
 			$this->_db->setQuery($query);
       
 			if (!$this->_db->execute())
 			{
 				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
 				$this->setError($e);
-        die;
 				return false;
 			}
       
@@ -102,7 +105,7 @@ class HelloWorldTableTariffs extends JTable
    * @return boolean 
    */
   public function check() {
-    return true;
+    return false;
   }  
   
 }

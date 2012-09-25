@@ -2810,8 +2810,12 @@ span.icon-16-allowed,
 span.icon-16-denied,
 span.icon-16-locked,
 span.icon-16-notice,
-span.icon-16-denyinactive{
+span.icon-16-denyinactive {
 	padding-left: 18px;
+}
+
+span.icon-16-info {
+  padding-left:16px;
 }
 
 span.icon-16-unset {
@@ -2837,6 +2841,7 @@ span.icon-16-notice {
 span.icon-16-denyinactive {
 	background: url(../images/admin/icon-16-denyinactive.png) left no-repeat; 
 }
+
 
 label.icon-16-allow,
 label.icon-16-deny,

@@ -56,25 +56,14 @@ class HelloWorldViewImages extends JView
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
-    
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', $this->form->getValue('greeting')), 'helloworld');
- 
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JButtonImageupload', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Imageupload.php');
-
-    // Add an upload button?
-    $bar = JToolBar::getInstance('toolbar');
-    $bar->appendButton('Imageupload', 'upload', JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'), 'index.php?option=com_helloworld&view=imageupload&format=raw&' . JUtility::getToken() . '=1&id=' . (int) $this->item->id. '&parent_id=' . (int) $this->form->getValue('parent_id'));
-
-		JToolBarHelper::divider();
-
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_TARIFFS_AND_PRICING_EDIT', $this->form->getValue('greeting')), 'helloworld');
+		
     // Built the actions for new and existing records.
-		JToolBarHelper::apply('images.apply', 'JTOOLBAR_APPLY');	
+		JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');	
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
-
-  }
+	}
   
 	/**
 	 * Method to set up the document properties
@@ -87,12 +76,11 @@ class HelloWorldViewImages extends JView
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Request.File.js");
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.MultipleFileInput.js");
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.Upload.js");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/upload.css",'text/css',"screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
-    JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/views/helloworld/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Request.File.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Form.MultipleFileInput.js.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/Form.Upload.
+    $document->addStyleSheet("/administrator/components/com_helloworld/css/upload.css",'text/css',"screen");
+		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}
 }

@@ -8,7 +8,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class HelloWorldModelCaption extends JModelAdmin
+class HelloWorldModelImageupload extends JModelAdmin
 {
 	/**
 	 * Method override to check if you can edit an existing record.
@@ -33,7 +33,7 @@ class HelloWorldModelCaption extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Images', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -49,7 +49,7 @@ class HelloWorldModelCaption extends JModelAdmin
 	{	
 
 		// Get the form.
-		$form = $this->loadForm('com_helloworld.caption', 'caption', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_helloworld.imageupload', 'imageupload', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) 
 		{
 			return false;

@@ -330,12 +330,12 @@ class HelloWorldTableHelloWorld extends JTableNested
     // Get instance of the tariffs table
     $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
 
-    // Delete existing availability
-    // Need to wrap this in some logic
-    $tariffsTable->delete($this->id);
 
     // Bind the translated fields to the JTAble instance	
     if (!$tariffsTable->save($this->id, $tariff_periods)) {
+      
+      JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'warning');
+
       JError::raiseWarning(500, $tariffsTable->getError());
       return false;
     }
@@ -443,6 +443,7 @@ class HelloWorldTableHelloWorld extends JTableNested
     $library_images = array();
     $gallery_images = array();
 
+    
     if(!array_key_exists('library-images',$POST)) {
       return true;
     }

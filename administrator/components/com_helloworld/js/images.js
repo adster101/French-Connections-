@@ -1,15 +1,14 @@
-window.addEvent('domready', function(){
-
-  
+window.addEvent('domready', function(){ 
   SqueezeBox.assign($$('a[rel=woot]'),{
     handler: 'ajax', 
     size: {x: 600, y: 175},
     ajaxOptions: {
       method:'get'
-    }
-    
+    }  
   });
+});
 
+function uploadImage() {
 	var upload = new Form.Upload('url', {
 		onComplete: function(arguments) {   
       // Clear any old messages that may be showing
@@ -154,4 +153,5 @@ window.addEvent('domready', function(){
     }
     
   });
-});
+  
+}

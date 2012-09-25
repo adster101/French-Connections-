@@ -12,10 +12,19 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
   <div class="width-60 fltlft">
     <fieldset class="adminform">		
       <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
-      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?>
+      <p>
+            <a href="#" class="fltrt">
+              <span class="icon-16-info hasTip" 
+                title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_HELP'); ?>"></span>
+            </a>
+      </p>
+         
+      
+
+      <p class="clear"><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>
         <?php foreach ($tariff_field_sets as $fieldset) { ?>
         <fieldset class="adminform">
-          <legend>Tariff</legend>
+          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFF'); ?></legend>
             <ul class="adminformlist tariff-range">
               <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>  
               <li>

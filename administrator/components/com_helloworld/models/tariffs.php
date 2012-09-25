@@ -185,7 +185,7 @@ class HelloWorldModelTariffs extends JModelAdmin
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
           description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
           size="10"
-          class="inputbox start-date"
+          class="inputbox tariff_date"
           validate=""
           labelclass="tariff-label"
           required="false"
@@ -201,7 +201,7 @@ class HelloWorldModelTariffs extends JModelAdmin
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
           description="COM_HELLOWORLD_TARIFFS_FIELD_DATE_RANGE_DESC"
           size="10"
-          class="inputbox end-date"
+          class="inputbox tariff_date"
           validate=""
           labelclass="tariff-label"
           required="false"
@@ -229,7 +229,7 @@ class HelloWorldModelTariffs extends JModelAdmin
     }
 
     // Add some empty tariff fields (3 by default)
-    for ($i = $counter; $i <= $counter + 2; $i++) {
+    for ($i = $counter; $i <= $counter + 4; $i++) {
       $XmlStr.= '
       <fieldset name="tariffs_' . $i . '">
         <field
