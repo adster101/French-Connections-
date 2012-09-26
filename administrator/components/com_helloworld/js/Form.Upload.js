@@ -18,7 +18,7 @@ Form.Upload = new Class({
 	Implements: [Options, Events],
 
 	options: {
-		dropMsg: 'Click here to browse for files on your computer. Or drag and drop images here to queue them for upload.',
+		dropMsg: 'Drag and drop images here.',
 		onComplete: function(){
 			// reload
 			window.location.href = window.location.href;
@@ -44,16 +44,17 @@ Form.Upload = new Class({
 
 		var self = this,
 
-			drop = new Element('div.droppable#droppable', {
-				text: this.options.dropMsg
+			drop = new Element('ul.droppable#droppable', {
 			}).inject(input, 'after'),
 
-			list = new Element('ul.uploadList').inject(drop, 'after'),
+			list = new Element('li.upload-queue-drag', {
+        text: this.options.dropMsg
+      }).inject(drop, 'top'),
 
 			progress = new Element('div.progress')
-				.setStyle('display', 'none').inject(list, 'after'),
+				.setStyle('display', 'none').inject(input, 'after'),
 
-			inputFiles = new Form.MultipleFileInput(input, list, drop, {
+			inputFiles = new Form.MultipleFileInput(input, drop, drop, {
 				onDragenter: drop.addClass.pass('hover', drop),
 				onDragleave: drop.removeClass.pass('hover', drop),
 				onDrop: drop.removeClass.pass('hover', drop)

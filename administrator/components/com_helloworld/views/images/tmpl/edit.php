@@ -12,7 +12,7 @@ $parent_id = $this->form->getValue('parent_id');
 
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate image-manager">
   <?php 
     // TO DO: Break this out into a separate template so it is easier to maintain
     if (count($image_library_field_sets)) { ?>
@@ -27,6 +27,12 @@ $parent_id = $this->form->getValue('parent_id');
       <?php if ($field->fieldname == 'image_file_name') { ?> 
                   <div class="image-container handle">
                     <span class="drag-handle clearfix bottom"><i class="boot-icon-move"></i></span>
+                    <div class="width-20 fltrt">
+                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
+                       class="btn btn-primary btn-mini fltrt edit" title="<?php echo JText::_('COM_HELLOWORLD_IMAGES_EDIT_CAPTION') ?>">
+                      <i class="boot-icon-edit boot-icon-white"></i>
+                    </a>
+                  </div>
                     <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                   <?php if ($parent_id != 1) { ?>
                       <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
@@ -57,12 +63,7 @@ $parent_id = $this->form->getValue('parent_id');
                       <i class="boot-icon-trash boot-icon-white"></i>
                     </a>
                   </div>
-                  <div class="width-20 fltrt">
-                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
-                       class="btn btn-primary btn-mini fltrt edit" title="<?php echo JText::_('COM_HELLOWORLD_IMAGES_EDIT_CAPTION') ?>">
-                      <i class="boot-icon-edit boot-icon-white"></i>
-                    </a>
-                  </div>
+                  
       <?php
       }
 
@@ -90,9 +91,13 @@ $parent_id = $this->form->getValue('parent_id');
             <li>
             <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
               <?php if ($field->fieldname == 'image_file_name') { ?> 
-                  <div class="image-container handle">
+                  <div class="image-container handle ">
+                    <div class="clearfix">
+                    <span class="drag-handle fltlft">
+                      <i class="boot-icon-move"></i>
+                    </span>
                    
-                    <span class="drag-handle clearfix bottom"><i class="boot-icon-move"></i></span>
+                    </div>
                     <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                   <?php if ($parent_id != 1) { ?>
                       <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
@@ -117,18 +122,23 @@ $parent_id = $this->form->getValue('parent_id');
                       echo $field->label;
                       echo $field->input;
                       ?>
+            
                   <div class="width-20 fltrt">
-                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>"
-                       class="btn btn-danger btn-mini fltrt delete">
-                      <i class="boot-icon-trash boot-icon-white"></i>
+                    <a rel="woot" 
+                       title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE') ?>"
+                       href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
+                       class="btn btn-primary btn-mini fltrt hasTip">
+                      <i class="boot-icon-pencil boot-icon-white"></i>
                     </a>
                   </div>
-                  <div class="width-20 fltrt">
-                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
-                       class="btn btn-primary btn-mini fltrt edit">
-                      <i class="boot-icon-edit boot-icon-white"></i>
-                    </a>
-                  </div>
+               <span class="width-20 fltrt">
+                      <a rel="woot" 
+                         title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_DELETE_IMAGE') ?>"
+                         href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>"
+                        class="btn btn-danger btn-mini fltrt delete hasTip">
+                        <i class="boot-icon-trash boot-icon-white"></i>
+                      </a>
+                    </span>
                 <?php
                 }
                 if (strpos($field->name, 'image_file_name')) {

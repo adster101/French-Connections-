@@ -244,6 +244,8 @@ class HelloWorldModelImages extends JModelAdmin
               readonly="true"
               multiple="true"
               required="true"
+              class="required"
+              labelclass="image-caption-label"
               maxlength="50"
               size="30"
               default="'. $image->caption .'">
@@ -295,6 +297,8 @@ class HelloWorldModelImages extends JModelAdmin
               type="text"
               readonly="true"
               multiple="true"
+              class="required"
+              labelclass="image-caption-label"
               size="30"
               default="'. $image->caption .'">
             </field>     

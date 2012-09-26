@@ -239,8 +239,8 @@ class HelloWorldControllerImages extends JControllerForm
  		$params = JComponentHelper::getParams('com_media');
 
  		// Get some data from the request
-		$files			= JRequest::getVar('jform_upload_images', '', 'files', 'array');
-
+		$files			= JRequest::getVar('jform', '', 'files', 'array');
+    
     // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
 
@@ -280,7 +280,7 @@ class HelloWorldControllerImages extends JControllerForm
 		// We want a numerically indexed array containing associative arrays
 		// Cast each item as array in case the Filedata parameter was not sent as such
 		$files = array_map( array($this, 'reformatFilesArray'),
-			(array) $files['name'], (array) $files['type'], (array) $files['tmp_name'], (array) $files['error'], (array) $files['size']
+			(array) $files['name']['upload-images'], (array) $files['type']['upload-images'], (array) $files['tmp_name']['upload-images'], (array) $files['error']['upload-images'], (array) $files['size']['upload-images']
 		);
     
 		// Set FTP credentials, if given

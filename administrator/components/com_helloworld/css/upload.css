@@ -3,6 +3,10 @@
 	width: 50%;
 }
 
+#jform_upload_images {
+  display:none;
+}
+
 .formRow {
 	overflow: auto;
 	border-bottom: 1px #bcbcbc solid;
@@ -15,19 +19,44 @@
 	margin: 0 3px 0 0;
 	border-right: 1px #bcbcbc solid;
 }
+ 
+
+.upload-queue-drag
+{
+  background: url("../img/drag.png") no-repeat scroll 30% center transparent;
+  border: 1px dashed #CCCCCC;
+  box-shadow: none;
+  color: #555555;
+  display: block;
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 210px;
+  margin: 5px;
+  text-align: center;
+  text-shadow: 0 1px 0 #FFFFFF;
+  vertical-align: middle;
+}
 
 /* Drag & Drop file uploading */
 .droppable {
-	border: #000 5px dashed;
-	border-radius: 3px;
-	background: #fff;
-	color: #000;
-	padding: 20px;
-	clear: both;
-	text-align: center;
-  font-size: 150%;
-  font-weight: bold;
-  margin-bottom:10px;
+	list-style: none;
+	white-space: nowrap;
+	margin: 0px;
+	vertical-align: middle;
+	
+	box-shadow: 0 0 2px #333 inset;
+    -moz-box-shadow: 0 0 2px #333 inset;
+    -webkit-box-shadow: 0 0 1.5px #333 inset;
+    background-color: #eee;
+    padding: 7px 5px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    
+    min-height: 200px;
+    max-height: 230px;
+    overflow: auto;
+
 }
 
 .droppable:hover {
@@ -41,11 +70,14 @@
 	list-style: none;
 }
 
-ul.uploadList .uploadItem {
-	overflow: hidden;
-	border-bottom: #BCBCBC 1px solid;
-	margin: 0 20px;
-	padding: 3px;
+.droppable .uploadItem {
+   background-color: transparent;
+    border: 1px solid #CCCCCC;
+    margin: 2px;
+    min-height: 20px;
+    padding: 1px;
+    position: relative;
+    text-shadow: 0 1px 0 #FFFFFF;
 }
 
 .uploadItem span {
@@ -111,7 +143,11 @@ a.delInputRow {
 .drag-handle {
   display:block;
   padding:6px 0;
+}
+
+.image-container {
   background:#efefef;
+
 }
 
 .handle {

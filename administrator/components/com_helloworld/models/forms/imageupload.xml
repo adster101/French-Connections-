@@ -2,10 +2,12 @@
 <form>
   <fieldset name="upload">
     <field 
-      type="ajaxupload"
+      type="file"
       label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
       description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC"
-      name="upload-images">
+      name="upload-images"
+      id="upload_images"
+      multiple="true">
     </field>
      <field 
       name="id"

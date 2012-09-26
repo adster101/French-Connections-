@@ -41,7 +41,6 @@ Form.MultipleFileInput = new Class({
 		drop = this.drop = document.id(drop);
 
 		this.setOptions(options);
-
 		var name = input.get('name');
 		if (name.slice(-2) != '[]') input.set('name', name + '[]');
 		input.set('multiple', true);
@@ -87,8 +86,10 @@ Form.MultipleFileInput = new Class({
 		new Element('li', {
 			'class': this.options.itemClass
 		}).grab(new Element('span', {
-			text: file.name + ' (' + file.size + ' Bytes)'
-		})).grab(new Element('a', {
+			text: file.name
+		})).grab(new Element('span',{
+      text: '(' + file.size + ' Bytes)'
+    })).grab(new Element('a', {
 			text: 'x',
 			href: '#',
 			events: {click: function(e){
@@ -97,6 +98,11 @@ Form.MultipleFileInput = new Class({
 			}}
 		})).inject(this.list);
 		this.fireEvent('add', file);
+    if (this._files.length > 0) {
+      $$('.upload-queue-drag').hide();
+    } else {
+      $$('.upload-queue-drag').show();
+    }
 		return this;
 	},
 

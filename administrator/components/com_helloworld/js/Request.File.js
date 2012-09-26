@@ -49,7 +49,6 @@ Request.File = new Class({
 			xhr.onprogress = this.progress.bind(this);
 			xhr.upload.onprogress = this.progress.bind(this);
 		}
-
 		xhr.open('POST', this.options.url, true);
 		xhr.onreadystatechange = this.onStateChange.bind(this);
 
