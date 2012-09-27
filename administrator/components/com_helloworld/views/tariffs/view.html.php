@@ -84,8 +84,8 @@ class HelloWorldViewTariffs extends JView
 
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js");
 		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
-		$document->addStyleSheet("administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
-		$document->addStyleSheet("administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css",'text/css',"screen");
+		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
+		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css",'text/css',"screen");
 
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
