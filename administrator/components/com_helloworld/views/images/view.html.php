@@ -22,9 +22,8 @@ class HelloWorldViewImages extends JView
 		// Get the custom script path for this screen
 		$script = $this->get('Script');
 
-		// Get the availability form, for now not loading any form data as it will be presented in the calendar rather than in a form
-		// Need to take into account the additional price notes 
-		$form = $this->get('Form');
+    // Get the form data
+    $form = $this->get('Form');
 
 		// Assign the Data
 		$this->form = $form;

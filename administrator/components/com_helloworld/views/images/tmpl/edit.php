@@ -15,10 +15,16 @@ $parent_id = $this->form->getValue('parent_id');
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate image-manager">
   <?php 
     // TO DO: Break this out into a separate template so it is easier to maintain
-    if (count($image_library_field_sets)) { ?>
+    if ($parent_id !=1) { ?>
     <div class="width-50 fltlft">
       <fieldset class="adminform">
         <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_LIBRARY'); ?></legend>
+        <?php if (!count($image_library_field_sets)): ?>
+        <ul class="adminformlist clearfix draggable-image-list" id="library">
+          <li class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY'); ?> </li>  
+
+        </ul>
+        <?php else: ?>
         <ul class="adminformlist clearfix draggable-image-list" id="library">
     <?php foreach ($image_library_field_sets as $fieldset) { ?> 
             <li>
@@ -76,16 +82,18 @@ $parent_id = $this->form->getValue('parent_id');
             <?php } // End of foreach image field sets    ?>
           </li>
         </ul>	
+        <?php endif; ?>
       </fieldset>
     </div>
 <?php } ?>
-<?php if (count($image_library_field_sets)) { ?>
+<?php if ($parent_id != 1 ) { ?>
     <div class="width-50 fltrt">
   <?php } else { ?>
       <div class="width-100 fltrt"> 
     <?php } ?>
       <fieldset class="adminform">
         <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_GALLERY'); ?></legend>
+        <?php if(count($image_gallery_field_sets)) : ?>
         <ul class="adminformlist clearfix draggable-image-list" id="gallery">
 <?php foreach ($image_gallery_field_sets as $fieldset) { ?>
             <li>
@@ -150,7 +158,13 @@ $parent_id = $this->form->getValue('parent_id');
             <?php } // End of foreach image field sets    ?>
           </li>
         </ul>	
+        <?php else: ?>
+          <ul class="" id="">
+            <li class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY'); ?> </li>  
+          </ul>
+        <?php endif; ?>
       </fieldset>    
+      
       <input type="hidden" name="task" value="images.edit" />
       <?php foreach ($this->form->getFieldset('details') as $field) { ?>
         <?php

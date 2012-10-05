@@ -33,6 +33,7 @@ window.addEvent('domready', function(){
       
       
       
+      
       image_drop_area = el.getParent('ul').getProperty('id');
       
       
@@ -91,14 +92,13 @@ function uploadImage() {
 
       system_message.adopt( success_dt, success_dd );
 
-      system_message.inject('system-message-container');
+      system_message.inject('droppable');
 
       success_ul = new Element('ul');
 
       success_dd = success_dd.adopt( success_ul );
       
       // Decode the files json struct returned from the ajax query...
-      console.log(arguments);
       var files = JSON.decode( arguments ); // decodes the response into an array
 
       files.each(function( file ) {

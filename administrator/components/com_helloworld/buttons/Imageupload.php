@@ -42,7 +42,7 @@ class JButtonImageupload extends JButton
 	 *
 	 * @since   11.1
 	 */
-	public function fetchButton($type = 'Popup', $name = '', $text = '', $url = '', $width = 500, $height = 350, $top = 0, $left = 0, $onClose = '')
+	public function fetchButton($type = 'Popup', $name = '', $text = '', $url = '', $width = 600, $height = 400, $top = 0, $left = 0, $onClose = '')
 	{
 		JHtml::_('behavior.modal');
 

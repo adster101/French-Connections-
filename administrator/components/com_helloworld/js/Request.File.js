@@ -34,7 +34,7 @@ Request.File = new Class({
 
 	append: function(key, value){
 		this.formData.append(key, value);
-		return this.formData;
+    return this.formData;
 	},
 
 	send: function(options){
@@ -52,7 +52,7 @@ Request.File = new Class({
 		xhr.open('POST', this.options.url, true);
 		xhr.onreadystatechange = this.onStateChange.bind(this);
 
-		Object.each(this.headers, function(value, key){
+    Object.each(this.headers, function(value, key){
 			try {
 				xhr.setRequestHeader(key, value);
 			} catch (e){
@@ -61,7 +61,8 @@ Request.File = new Class({
 		}, this);
 
 		this.fireEvent('request');
-		xhr.send(this.formData);
+
+    xhr.send(this.formData);
 
 		if (!this.options.async) this.onStateChange();
 		if (this.options.timeout) this.timer = this.timeout.delay(this.options.timeout, this);

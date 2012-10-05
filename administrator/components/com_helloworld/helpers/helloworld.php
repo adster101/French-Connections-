@@ -10,7 +10,7 @@ abstract class HelloWorldHelper
 	/**
 	 * Configure the Linkbar.
 	 */
-	public static function addSubmenu($submenu) 
+	public static function addSubmenu($submenu, $published = 0) 
 	{	
 		// Get the ID of the item we are editing
 		$id = JRequest::getVar('id');
@@ -19,7 +19,7 @@ abstract class HelloWorldHelper
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id='.$id, $submenu == 'availability');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id='.$id, $submenu == 'tariffs');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id='.$id, $submenu == 'images');		
-		if ($id != '') {
+		if ($id != '' && $published) {
       JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		    
     }
 
@@ -45,7 +45,7 @@ abstract class HelloWorldHelper
    * 
    */
 
-  public static function setPropertyProgress($id = 0) 
+  public static function setPropertyProgress($id = 0, $published = 0) 
   { 
     
     $task =  JRequest::getVar('task', '', 'GET');
@@ -99,6 +99,14 @@ abstract class HelloWorldHelper
         }
       }
 
+      // Set the property's published status in the session
+      if ($published) {
+        JApplication::setUserState('com_helloworld.published.progress', true);
+      } else {
+        JApplication::setUserState('com_helloworld.published.progress', false);
+      }
+      
+      
       // Check that this doesn't already exist in the session scope
       if(!JApplication::getUserState('com_hellworld.images.progress', false))
       {
@@ -109,11 +117,6 @@ abstract class HelloWorldHelper
         // Use the getItem method to retrieve the image details. 
         $item = $model->getItem($id);
 
-        if ($item->published) {
-          JApplication::setUserState('com_helloworld.published.progress', true);
-        } else {
-          JApplication::setUserState('com_helloworld.published.progress', false);
-        }
 
         if (array_key_exists('gallery' , $item->images->gallery) && count($item->images->gallery->getProperties()) > 0) 
         {

@@ -54,7 +54,6 @@
     -webkit-border-radius: 3px;
     
     min-height: 200px;
-    max-height: 230px;
     overflow: auto;
 
 }
@@ -71,7 +70,7 @@
 }
 
 .droppable .uploadItem {
-   background-color: transparent;
+   background-color: white;
     border: 1px solid #CCCCCC;
     margin: 2px;
     min-height: 20px;
@@ -80,13 +79,16 @@
     text-shadow: 0 1px 0 #FFFFFF;
 }
 
-.uploadItem span {
-	overflow: hidden;
-	float: left;
-	display: block;
-  padding-right:15px;
-  
+.droppable .uploadItem span {
+  height: 20px;
+  line-height: 20px;
+  vertical-align: middle;
+  z-index: 4;
+  margin: 0 2px;
+  display: inline-block;
 }
+
+
 
 a.addInputRow,
 a.delInputRow,
@@ -98,11 +100,14 @@ a.delInputRow,
 	text-indent: -999px;
 }
 
+.uploadItem span.image-queue-delete {
+  float:right;
+}
+
 .uploadItem a {
 	float: left;
 	display: block;
-	padding-left: 20px;
-	background-image: url(images/delete.png);
+	background-image: url(/administrator/templates/fcadmin/images/admin/publish_r.png);
 }
 
 a.delInputRow {

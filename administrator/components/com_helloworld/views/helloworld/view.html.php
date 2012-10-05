@@ -58,11 +58,13 @@ class HelloWorldViewHelloWorld extends JView
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
 		
+    $published = $this->item->published;
+    
     // Get the progress for this property 
-    HelloWorldHelper::setPropertyProgress($this->item->id);
+    HelloWorldHelper::setPropertyProgress($this->item->id,$published );
     
     // Add the submenu to the view
-    HelloWorldHelper::addSubmenu($view);
+    HelloWorldHelper::addSubmenu($view, $published);
 		
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);

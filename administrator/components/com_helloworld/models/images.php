@@ -161,9 +161,14 @@ class HelloWorldModelImages extends JModelAdmin
       }
     }
     
-    $properties['images'] = $images;
-        
+    $properties['images'] = $images;    
 		$item = JArrayHelper::toObject($properties, 'JObject');
+    
+    if (count($item->images->gallery->getProperties())) {
+      // Tick the availability progress flag to true
+      JApplication::setUserState('com_helloworld.availability.progress', true);
+    }
+    
 		return $item;
 	} 
   

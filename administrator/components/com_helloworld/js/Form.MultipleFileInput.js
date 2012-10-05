@@ -23,6 +23,7 @@ Form.MultipleFileInput = new Class({
 	Implements: [Options, Events],
 
 	options: {
+    dropMsg: 'Drag and drop images here.',
 		itemClass: 'uploadItem'/*,
 		onAdd: function(file){},
 		onRemove: function(file){},
@@ -85,24 +86,23 @@ Form.MultipleFileInput = new Class({
 		var self = this;
 		new Element('li', {
 			'class': this.options.itemClass
-		}).grab(new Element('span', {
-			text: file.name
-		})).grab(new Element('span',{
-      text: '(' + file.size + ' Bytes)'
-    })).grab(new Element('a', {
-			text: 'x',
+		}).adopt(new Element('span', {
+			text: ' '+file.name
+		}).grab(new Element('i',{
+      'class':'boot-icon-file'
+    }),'top')).grab(new Element('span',{
+      text: '(' + file.size / 1000 + ' KBytes)'
+    })).grab(new Element('span',{'class':'image-queue-delete'}).grab(new Element('a', {
 			href: '#',
 			events: {click: function(e){
 				e.preventDefault();
 				self.remove(file);
 			}}
-		})).inject(this.list);
+		}))).inject(this.list);
 		this.fireEvent('add', file);
     if (this._files.length > 0) {
-      $$('.upload-queue-drag').hide();
-    } else {
-      $$('.upload-queue-drag').show();
-    }
+      $$('.upload-queue-drag').destroy();
+    } 
 		return this;
 	},
 
@@ -113,6 +113,17 @@ Form.MultipleFileInput = new Class({
 		this.list.childNodes[index].destroy();
 		this.fireEvent('remove', file);
 		if (!this._files.length) this.fireEvent('empty');
+    
+    if (this._files.length == 0) {
+      
+      drop = $('droppable');
+      console.log(drop);
+ 
+      var elem = new Element('li.upload-queue-drag', {
+        text: this.options.dropMsg
+      }).inject(drop, 'top');
+    }
+    
 		return this;
 	},
   unsetFiles: function() {

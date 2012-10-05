@@ -54,9 +54,10 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
-      type="accommodationtypes"
+      type="classificationtypes"
       filter="integer"
       required="true"
+      id="69"
     />
     <field
       name="property_type"

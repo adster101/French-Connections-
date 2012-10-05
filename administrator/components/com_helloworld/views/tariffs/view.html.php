@@ -52,8 +52,13 @@ class HelloWorldViewTariffs extends JView
 		// Determine the layout we are using. 
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
+    
+    // Get the published state from the form data  
+    $published = $this->form->getValue('published');
+
+    
 		// Add the tabbed submenu for the property edit view.
-		HelloWorldHelper::addSubmenu($view);
+		HelloWorldHelper::addSubmenu($view, $published);
 		
 		$user = JFactory::getUser();
 		$userId = $user->id;
