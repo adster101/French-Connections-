@@ -112,7 +112,7 @@ abstract class HelloWorldHelper
       {
 
         // Import the model library 
-        $model = JModel::getInstance('Images', 'HelloWorldModel');
+        $model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
 
         // Use the getItem method to retrieve the image details. 
         $item = $model->getItem($id);

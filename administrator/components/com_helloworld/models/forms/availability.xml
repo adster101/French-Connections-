@@ -25,7 +25,10 @@
       name="expiry_date"
       type="hidden"
       filter="unset"/>
-      
+
+	</fieldset>
+  
+  <fieldset name="changeover-day">
     <field
 			name="changeover_day"
 			type="list"
@@ -34,7 +37,8 @@
 			class="validate-changeover"
 			validate="changeover"
 			required="true"
-			default="asdasd">
+			default="asdasd"
+      labelclass="control-label">
 			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 			<option value="0">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_0</option>
 			<option value="1">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_1</option>
@@ -44,8 +48,12 @@
 			<option value="5">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_5</option>
 			<option value="6">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_6</option>
 		</field>
-	</fieldset>
+    
+  </fieldset>
+  
 	<fieldset name="availability">
+          
+   
 		<field
 			name="start_date"
 			type="calendar"

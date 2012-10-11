@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  HTML
  * @since       11.1
  */
-class JButtonImageupload extends JButton
+class JToolbarButtonImageupload extends JToolbarButton
 {
 	/**
 	 * Button type
@@ -50,7 +50,8 @@ class JButtonImageupload extends JButton
 		$class = $this->fetchIconClass($name);
 		$doTask = $this->_getCommand($name, $url, $width, $height, $top, $left);
 
-		$html = "<a class=\"modal\" href=\"$doTask\" rel=\"{handler: 'ajax', size: {x: $width, y: $height}, 
+
+		$html = "<a class=\"modal btn btn-small\" href=\"$doTask\" rel=\"{handler: 'ajax', size: {x: $width, y: $height}, 
       onOpen:uploadImage,
       onClose:function(){			window.location.reload(true);
 }}\">";

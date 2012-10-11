@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  HTML
  * @since       11.1
  */
-class JButtonAjaxpopup extends JButton
+class JToolbarButtonAjaxpopup extends JToolbarButton
 {
 	/**
 	 * Button type

@@ -20,10 +20,13 @@
 	border-right: 1px #bcbcbc solid;
 }
  
+.image-manager ul {
+  margin:0;
+  list-style-type: none;
+}
 
-.upload-queue-drag
+.upload-queue-drag, .no-images-in-list
 {
-  background: url("../img/drag.png") no-repeat scroll 30% center transparent;
   border: 1px dashed #CCCCCC;
   box-shadow: none;
   color: #555555;
@@ -125,6 +128,8 @@ a.delInputRow {
   overflow:hidden;
   width:100%;
   min-height:150px;
+  list-style-type: none;
+  margin:0;
 }
 
 .draggable-image-list li,.adminformlist.draggable-image-list li {
@@ -132,9 +137,11 @@ a.delInputRow {
   margin-bottom:1.5em;
   margin-right:25px;
   min-height:175px;
-  border:1px solid #efefef;
-  padding:3px;
   background:#fff;
+}
+
+.draggable-image-list li:hover {
+  background:#efefef;
 }
 
 .draggable-image-list img {
@@ -150,10 +157,6 @@ a.delInputRow {
   padding:6px 0;
 }
 
-.image-container {
-  background:#efefef;
-
-}
 
 .handle {
   cursor:move;

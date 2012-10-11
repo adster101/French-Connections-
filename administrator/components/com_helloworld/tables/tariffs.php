@@ -105,7 +105,7 @@ class HelloWorldTableTariffs extends JTable
    * @return boolean 
    */
   public function check() {
-    return false;
+    return true;
   }  
   
 }

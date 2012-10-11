@@ -1,5 +1,5 @@
 window.addEvent('domready', function(){ 
-  SqueezeBox.assign($$('a[rel=woot]'),{
+  SqueezeBox.assign($$('[rel=woot]'),{
     handler: 'ajax', 
     size: {x: 600, y: 175},
     ajaxOptions: {
@@ -47,12 +47,17 @@ window.addEvent('domready', function(){
           if (image_drop_area == 'gallery') {
             new_element_name = element_name.replace("[library", "[gallery"); 
             e.setProperty('name', new_element_name)
+            
+            console.log($$('library'));
+            
           } else {
             new_element_name = element_name.replace('gallery', 'library'); 
             e.setProperty('name', new_element_name)
           }
         }
       });
+      
+      
       
       // This triggers the onchange event for the gallery/library form
       $$('form.form-validate')[0].fireEvent('change');
@@ -92,7 +97,7 @@ function uploadImage() {
 
       system_message.adopt( success_dt, success_dd );
 
-      system_message.inject('droppable');
+      system_message.inject('image-queue', 'top');
 
       success_ul = new Element('ul');
 

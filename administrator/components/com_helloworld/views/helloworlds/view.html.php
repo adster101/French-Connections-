@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class HelloWorldViewHelloWorlds extends JView
+class HelloWorldViewHelloWorlds extends JViewLegacy
 {
 	protected $state;
 
@@ -52,6 +52,8 @@ class HelloWorldViewHelloWorlds extends JView
     // Set the toolbar
     $this->addToolBar();
     
+    // Add the side bar
+		$this->sidebar = JHtmlSidebar::render();
 		
  
 		// Display the template
@@ -72,7 +74,7 @@ class HelloWorldViewHelloWorlds extends JView
 		$document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 
     // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JButtonAjaxpopup', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
+    JLoader::register('JToolbarButtonAjaxpopup', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
     
 		$canDo = HelloWorldHelper::getActions();
 		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
@@ -111,6 +113,33 @@ class HelloWorldViewHelloWorlds extends JView
 			JToolBarHelper::divider();
 			JToolBarHelper::preferences('com_helloworld');
 		}   
+    
+    JHtmlSidebar::setAction('index.php?option=com_helloworlds&view=articles');
+
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_PUBLISHED'),
+			'filter_published',
+			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
+		);
+
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_CATEGORY'),
+			'filter_category_id',
+			JHtml::_('select.options', JHtml::_('category.options', 'com_content'), 'value', 'text', $this->state->get('filter.category_id'))
+		);
+
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_ACCESS'),
+			'filter_access',
+			JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text', $this->state->get('filter.access'))
+		);
+
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_LANGUAGE'),
+			'filter_language',
+			JHtml::_('select.options', JHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->state->get('filter.language'))
+		);
+    
 	}
 	/**
 	 * Method to set up the document properties

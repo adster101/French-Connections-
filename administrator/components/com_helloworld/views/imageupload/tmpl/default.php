@@ -10,11 +10,11 @@ $parent_id = JRequest::getVar('parent_id','1', 'GET', 'integer');
 ?>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JUtility::getToken() . '=1&id=' . (int) $id) . '&parent_id=' . $parent_id; ?>" method="post" name="imageUpload" id="tariffs-form">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $id) . '&parent_id=' . $parent_id; ?>" method="post" name="imageUpload" id="tariffs-form">
   <div class="width-100">
     <fieldset class="adminform">		
       <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'); ?></legend>
-      <div>
+      <div id="image-queue">
           <?php foreach ($this->form->getFieldset('upload') as $field) { ?>
               <?php
                 echo $field->input;

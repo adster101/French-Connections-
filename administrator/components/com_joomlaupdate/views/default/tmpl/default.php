@@ -2,9 +2,9 @@
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_joomlaupdate
+ *
  * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
- * @since       2.5.4
  */
 
 defined('_JEXEC') or die;
@@ -12,6 +12,8 @@ defined('_JEXEC') or die;
 $ftpFieldsDisplay = $this->ftp['enabled'] ? '' : 'style = "display: none"';
 
 ?>
+
+<form action="index.php" method="post" id="adminForm">
 
 <?php if (is_null($this->updateInfo['object'])): ?>
 
@@ -25,10 +27,6 @@ $ftpFieldsDisplay = $this->ftp['enabled'] ? '' : 'style = "display: none"';
 </fieldset>
 
 <?php else: ?>
-
-<form action="index.php" method="post" id="adminForm">
-<input type="hidden" name="option" value="com_joomlaupdate" />
-<input type="hidden" name="task" value="update.download" />
 
 <fieldset>
 	<legend>
@@ -127,8 +125,12 @@ $ftpFieldsDisplay = $this->ftp['enabled'] ? '' : 'style = "display: none"';
 	</table>
 </fieldset>
 
-</form>
 <?php endif; ?>
+
+<?php echo JHtml::_('form.token'); ?>
+<input type="hidden" name="task" value="update.download" />
+<input type="hidden" name="option" value="com_joomlaupdate" />
+</form>
 
 <div class="download_message" style="display: none">
 	<p></p>

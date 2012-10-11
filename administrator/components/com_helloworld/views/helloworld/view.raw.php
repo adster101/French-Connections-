@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class HelloWorldViewHelloWorld extends JView
+class HelloWorldViewHelloWorld extends JViewLegacy
 {
 	protected $state;
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="file" version="3.0" method="upgrade">
+	<name>Joomla hot patch</name>
+	<author>joomla</author>
+	<version>3.0</version>
+	<creationDate>6 juin 2012</creationDate>
+	<description>Now you can update to 3.0.1 via the joomlaupdate component</description>
+
+	<!-- Fileset definition -->
+	<fileset>
+		<files target="administrator/components">
+					<filename>com_joomlaupdate/models/default.php</filename>
+					<filename>com_joomlaupdate/views/default/tmpl/default.php</filename>
+		</files>
+		<files target="libraries/joomla/installer">
+			<filename>adapters/file.php</filename>
+		</files>
+	</fileset>
+</extension>

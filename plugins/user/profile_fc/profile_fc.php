@@ -291,6 +291,7 @@ class plgUserProfile_fc extends JPlugin
 			// Case profile in site or admin
 			elseif ($name == 'com_users.profile' || $name == 'com_admin.profile')
 			{
+
         // Toggle whether the field is required.
         if ($this->params->get('profile-require_' . $field, 1) == 2)
         {
@@ -304,6 +305,7 @@ class plgUserProfile_fc extends JPlugin
         {
           $form->removeField($field, 'profile');
         }
+
 			}
 		}
     
@@ -311,14 +313,21 @@ class plgUserProfile_fc extends JPlugin
     // After all that we only want to show these additional fields to owners when they are updating their profile
     // or when an admin is editing an owners profile. 
     if (in_array($name, array('com_admin.profile','com_users.user')) && !$isOwner) {
+      
       // Is the admin user editing a user in the owners user group?
       $editUserID = JRequest::getVar('id', null, 'GET', 'int'); 
       if (!HelloWorldHelper::isOwner($editUserID)) {
         $form->removeGroup('profile');
       }
     } 
-      
     
+    if ($isOwner) {
+      // If this is an owner then we remove the params/settings field from the form as we don't want them setting their
+      // own editors etc.
+      $form->removeGroup('params');
+    }
+      
+
 		return true;
 	}
 

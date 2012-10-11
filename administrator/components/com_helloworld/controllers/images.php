@@ -191,10 +191,10 @@ class HelloWorldControllerImages extends JControllerForm
 
       $fullPaths = array();
       // Create a path to delete the image and each of the profile images that would've been created
-      $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, $file)));
-      $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, 'gallery', $file)));
-      $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, 'thumbs', $file)));
-      $fullPaths[] = JPath::clean(implode(DS, array(COM_IMAGE_BASE, $id, 'thumb', $file)));
+      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, $file)));
+      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, 'gallery', $file)));
+      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, 'thumbs', $file)));
+      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, 'thumb', $file)));
 
       // Loop over each file path
       foreach ($fullPaths as $path) {
@@ -415,7 +415,7 @@ class HelloWorldControllerImages extends JControllerForm
 			'tmp_name'	=> $tmp_name,
 			'error'		=> array(),
 			'size'		=> $size,
-			'filepath'	=> JPath::clean(implode(DS, array($this->folder, $name))),
+			'filepath'	=> JPath::clean(implode('/', array($this->folder, $name))),
 		);
 	}  
   

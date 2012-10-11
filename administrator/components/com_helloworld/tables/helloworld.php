@@ -51,10 +51,11 @@ class HelloWorldTableHelloWorld extends JTableNested
 			// merge the two sets of data
 			// so that both sets of params are preserved
 			foreach($array['params'] as $key=>$value) {
-				if ($this->params->getValue($key) !== null) {
-					$tmp = $this->params->set($key, '');
+				if ($this->params[$key] !== null) {
+					$tmp = $this->params[$key] = '';
 				}
 			}			
+      //print_r($this->params);die;
 			// Convert the params field to a string.
 			$parameter = new JRegistry;
 			$parameter->loadArray($array['params']);
@@ -80,11 +81,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 			$lang = HelloWorldHelper::getLang();	
 			// Need to load any translations here if the editing language different from the property language
 			$this->loadPropertyTranslation($lang);
-
-			// Convert the params field to a registry.
-			$params = new JRegistry;
-			$params->loadJSON($this->params);
-			$this->params = $params;
+      
 			return true;
 		}
 		else
@@ -314,7 +311,7 @@ class HelloWorldTableHelloWorld extends JTableNested
    *  
    */
   protected function savePropertyTariffs( $POST = array() ) {
-    
+
     if(!array($POST)) {
       return true;
     }
@@ -333,7 +330,6 @@ class HelloWorldTableHelloWorld extends JTableNested
 
     // Bind the translated fields to the JTAble instance	
     if (!$tariffsTable->save($this->id, $tariff_periods)) {
-      
       JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'warning');
 
       JError::raiseWarning(500, $tariffsTable->getError());

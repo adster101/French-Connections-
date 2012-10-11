@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewAvailability extends JView
+class HelloWorldViewAvailability extends JViewLegacy
 {
 	/**
 	 * display method of Availability View

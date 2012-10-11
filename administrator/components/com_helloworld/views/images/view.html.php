@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewImages extends JView
+class HelloWorldViewImages extends JViewLegacy
 {
 	/**
 	 * display method of Availability View
@@ -24,16 +24,23 @@ class HelloWorldViewImages extends JView
 
     // Get the form data
     $form = $this->get('Form');
+    
+    // Get the item data
+    $item = $this->get('Item');
 
 		// Assign the Data
 		$this->form = $form;
-		
+
+    // Assign the Item
+		$this->item = $item;
+    
 		// Set the toolbar
 		$this->addToolBar();
 
 		// Set the custom script
 		$this->script = $script;
 		
+    
 		// Display the template
 		parent::display($tpl);
  
@@ -60,13 +67,11 @@ class HelloWorldViewImages extends JView
 		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', $this->form->getValue('greeting')), 'helloworld');
  
     // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JButtonImageupload', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Imageupload.php');
+    JLoader::register('JToolbarButtonImageupload', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Imageupload.php');
 
     // Add an upload button?
     $bar = JToolBar::getInstance('toolbar');
-    $bar->appendButton('Imageupload', 'upload', JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'), 'index.php?option=com_helloworld&view=imageupload&format=raw&' . JUtility::getToken() . '=1&id=' . (int) $this->item->id. '&parent_id=' . (int) $this->form->getValue('parent_id'));
-
-		JToolBarHelper::divider();
+    $bar->appendButton('Imageupload', 'upload', JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'), 'index.php?option=com_helloworld&view=imageupload&format=raw&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id. '&parent_id=' . (int) $this->form->getValue('parent_id'));
 
     // Built the actions for new and existing records.
 		JToolBarHelper::apply('images.apply', 'JTOOLBAR_APPLY');	

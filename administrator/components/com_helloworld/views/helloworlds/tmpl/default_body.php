@@ -31,7 +31,7 @@ foreach($this->items as $i => $item):
 
 		<td>
 			<?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level-1) ?>
-			<a title="" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id) . '&' . JUtility::getToken() . '=1'; ?>">
+			<a title="" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id='.(int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
 				<?php echo $this->escape($item->greeting); ?>
 			</a>
 		</td>

@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewHelloWorld extends JView
+class HelloWorldViewHelloWorld extends JViewLegacy
 {
 	/**
 	 * display method of Hello view
@@ -121,7 +121,6 @@ class HelloWorldViewHelloWorld extends JView
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js");
 
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
 
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}

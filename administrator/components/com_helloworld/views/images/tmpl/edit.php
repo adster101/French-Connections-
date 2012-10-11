@@ -5,174 +5,96 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
-$image_library_field_sets = $this->form->getFieldSets('library-images');
-$image_gallery_field_sets = $this->form->getFieldSets('gallery-images');
-// Get the parent ID from the form data
-$parent_id = $this->form->getValue('parent_id');
-
 ?>
-
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate image-manager">
-  <?php 
-    // TO DO: Break this out into a separate template so it is easier to maintain
-    if ($parent_id !=1) { ?>
-    <div class="width-50 fltlft">
-      <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_LIBRARY'); ?></legend>
-        <?php if (!count($image_library_field_sets)): ?>
-        <ul class="adminformlist clearfix draggable-image-list" id="library">
-          <li class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY'); ?> </li>  
-
-        </ul>
-        <?php else: ?>
-        <ul class="adminformlist clearfix draggable-image-list" id="library">
-    <?php foreach ($image_library_field_sets as $fieldset) { ?> 
-            <li>
-    <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>  
-       
-      <?php if ($field->fieldname == 'image_file_name') { ?> 
-                  <div class="image-container handle">
-                    <span class="drag-handle clearfix bottom"><i class="boot-icon-move"></i></span>
-                    <div class="width-20 fltrt">
-                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
-                       class="btn btn-primary btn-mini fltrt edit" title="<?php echo JText::_('COM_HELLOWORLD_IMAGES_EDIT_CAPTION') ?>">
-                      <i class="boot-icon-edit boot-icon-white"></i>
-                    </a>
-                  </div>
-                    <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
-                  <?php if ($parent_id != 1) { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
-                  <?php } else { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumb/' . $field->value; ?>" />
-        <?php } ?>
-                  </div>
-                  <?php }
-                  if ($field->fieldname == 'caption') {
-                    ?>
-                  <div class="image-control-bar clearfix">          
-                    <div class="width-100">          
-                    <?php
-                    echo $field->label;
-                    echo $field->input;
-                    ?>
-                    </div>
-                  </div>
-                    <?php
-                    }
-                    if ($field->fieldname == 'image_file_id') {
-                      echo $field->label;
-                      echo $field->input;
-                      ?>
-                  <div class="width-20 fltrt">
-                    <a rel="woot" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>"
-                       class="btn btn-danger btn-mini fltrt delete">
-                      <i class="boot-icon-trash boot-icon-white"></i>
-                    </a>
-                  </div>
-                  
-      <?php
-      }
-
-      if (strpos($field->name, 'image_file_name')) {
-        echo $field->label;
-        echo $field->input;
-      }
-      ?>
-              <?php } // End of foreach getFieldSet fieldset name  ?>		
-            <?php } // End of foreach image field sets    ?>
-          </li>
-        </ul>	
-        <?php endif; ?>
-      </fieldset>
-    </div>
-<?php } ?>
-<?php if ($parent_id != 1 ) { ?>
-    <div class="width-50 fltrt">
-  <?php } else { ?>
-      <div class="width-100 fltrt"> 
-    <?php } ?>
-      <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_GALLERY'); ?></legend>
-        <?php if(count($image_gallery_field_sets)) : ?>
-        <ul class="adminformlist clearfix draggable-image-list" id="gallery">
-<?php foreach ($image_gallery_field_sets as $fieldset) { ?>
-            <li>
-            <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>             
-              <?php if ($field->fieldname == 'image_file_name') { ?> 
-                  <div class="image-container handle ">
-                    <div class="clearfix">
-                    <span class="drag-handle fltlft">
-                      <i class="boot-icon-move"></i>
-                    </span>
-                   
-                    </div>
-                    <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
-                  <?php if ($parent_id != 1) { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $parent_id . '/thumb/' . $field->value; ?>" />
+  <div class="row-fluid">
+    <?php foreach($this->item->images->getProperties() as $woot=>$value) : ?>
+    <?php if ($this->item->parent_id != 1) { ?>  
+      <div class="span6">
       <?php } else { ?>
-                      <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumb/' . $field->value; ?>" />
-                    <?php } ?></span>
-                  </div>
-                  <?php }
-                  if ($field->fieldname == 'caption') {
-                    ?>
-                  <div class="image-control-bar clearfix">          
-                    <div class="width-100">          
-                  <?php
-                  echo $field->label;
-                  echo $field->input;
-                  ?>
-                    </div>
-                  </div>
-                    <?php
-                    }
-                    if ($field->fieldname == 'image_file_id') {
-                      echo $field->label;
-                      echo $field->input;
+        <div class="span12"> 
+        <?php } ?>
+        <fieldset class="adminform">
+          <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_'.$woot); ?></legend> 
+          <div class="thumbnail">  
+            <?php if (!count($this->item->images->$woot->getProperties())): ?>
+              <ul class="hero-unit" id="<?php echo $woot; ?>">
+                <?php if ($this->item->parent_id != 1) { ?>  
+                <li><p class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY_'.$woot); ?> </p></li>
+                <?php } else { ?>
+                <li><p class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_'.$woot); ?> </p></li>
+                  
+                <?php } ?>
+              </ul>
+            <?php else: ?>
+              <ul class="draggable-image-list" id="<?php echo $woot; ?>">
+                <?php foreach ($this->item->images->$woot->getProperties() as $image) { ?>
+                  <li>
+                    <div class="handle thumbnail">
+                      <span class="drag-handle pull-left">
+                        <i class="icon-move"> </i>
+                      </span>
+                      <span class="pull-right">
+                        <a rel="woot" 
+                           title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_DELETE_IMAGE') ?>"
+                           href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $image->id . '&' . JSession::getFormToken() . '=1'; ?>"
+                           class="btn btn-danger btn-mini fltrt delete hasTip">
+                          <i class="icon-trash icon-white"></i>
+                        </a>
+                      </span>
+                      <span class="pull-right">
+                        <a rel="woot" 
+                           title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE') ?>"
+                           href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $image->id . '&' . JSession::getFormToken() . '=1'; ?>" 
+                           class="btn btn-primary btn-mini fltrt hasTip">
+                          <i class="icon-pencil icon-white"></i>
+                        </a>
+                      </span>
+                      <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
+                      <?php
+                        if ($this->item->parent_id != 1) {
+                          $imgPath = JURI::root() . 'images/' . $this->item->parent_id . '/thumb/' . $image->image_file_name;
+                        } else {
+                          $imgPath = JURI::root() . 'images/' . $this->item->id . '/thumb/' . $image->image_file_name;
+                        }
+
+                        $caption = ($image->caption ? $image->caption : JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_NO_CAPTION_SET_FOR_THIS_IMAGE'));
                       ?>
-            
-                  <div class="width-20 fltrt">
-                    <a rel="woot" 
-                       title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE') ?>"
-                       href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>" 
-                       class="btn btn-primary btn-mini fltrt hasTip">
-                      <i class="boot-icon-pencil boot-icon-white"></i>
-                    </a>
-                  </div>
-               <span class="width-20 fltrt">
-                      <a rel="woot" 
-                         title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_DELETE_IMAGE') ?>"
-                         href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $field->value . '&' . JUtility::getToken() . '=1'; ?>"
-                        class="btn btn-danger btn-mini fltrt delete hasTip">
-                        <i class="boot-icon-trash boot-icon-white"></i>
-                      </a>
-                    </span>
-                <?php
-                }
-                if (strpos($field->name, 'image_file_name')) {
-                  echo $field->label;
-                  echo $field->input;
-                }
-                ?>
-              <?php } // End of foreach getFieldSet fieldset name  ?>		
-            <?php } // End of foreach image field sets    ?>
-          </li>
-        </ul>	
-        <?php else: ?>
-          <ul class="" id="">
-            <li class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY'); ?> </li>  
-          </ul>
-        <?php endif; ?>
-      </fieldset>    
-      
-      <input type="hidden" name="task" value="images.edit" />
-      <?php foreach ($this->form->getFieldset('details') as $field) { ?>
-        <?php
-        echo $field->input;
-        ?>
-      <?php } ?>    
-      <?php echo JHtml::_('form.token'); ?>
+                      <p>
+                        <img
+                          class="hasTip" 
+                          title="<?php echo $caption; ?>"
+                          src="<?php echo $imgPath ?>" 
+                        />
+                      </p>
+                    </div>
+                    <input type="hidden" name="jform[<?php echo $woot?>-images][caption][]" value="<?php echo $image->caption; ?>" />
+                    <input type="hidden" name="jform[<?php echo $woot?>-images][image_file_name][]" value="<?php echo $image->image_file_name; ?>" />
+                    <input type="hidden" name="jform[<?php echo $woot?>-images][image_file_id][]" value="<?php echo $image->id; ?>" />
+                  </li>
+
+                <?php } // End of foreach image field sets   ?>
+              <?php endif; ?>
+            </ul>
+          </div>
+        </fieldset>
+      </div>
+        <?php endforeach; ?>
     </div>
+</form>
+
+
+
+
+
+  <input type="hidden" name="task" value="images.edit" />
+  <?php foreach ($this->form->getFieldset('details') as $field) { ?>
+    <?php
+    echo $field->input;
+    ?>
+  <?php } ?>    
+  <?php echo JHtml::_('form.token'); ?>
+</div>
 
 </form>	
 

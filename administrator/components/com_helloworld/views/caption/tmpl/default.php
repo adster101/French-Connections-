@@ -1,6 +1,6 @@
 
 
-<form method="post" name="adminForm" id="helloworld-form" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.updatecaption&id=' . (int) $this->property_id) . '&file_id=' . (int) $this->file_id . '&' . JUtility::getToken() . '=1'; ?>">
+<form method="post" name="adminForm" id="helloworld-form" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.updatecaption&id=' . (int) $this->property_id) . '&file_id=' . (int) $this->file_id . '&' . JSession::getFormToken() . '=1'; ?>">
 	<fieldset class="adminform">
   <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_EDIT_CAPTION') ?> </legend>
   <p><?php echo JText::_('COM_HELLOWORLD_IMAGES_EDIT_CAPTION_DESC') ?></p>
