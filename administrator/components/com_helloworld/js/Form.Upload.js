@@ -20,7 +20,7 @@ Form.Upload = new Class({
 	options: {
 		dropMsg: 'Drag and drop images here.',
 		onComplete: function(){
-			// reload
+			alert("Woot");
 			window.location.href = window.location.href;
 		}
 	},
@@ -51,9 +51,11 @@ Form.Upload = new Class({
         text: this.options.dropMsg
       }).inject(drop, 'top'),
 
-			progress = new Element('div.progress')
-				.setStyle('display', 'none').inject(input, 'after'),
-
+			progress_bar = new Element('div.progress.progress-striped')
+				.inject(input, 'after');
+        progress = new Element('div', {class:'bar'}).setStyle('display', 'none');
+        
+        progress_bar.adopt(progress);
 			inputFiles = new Form.MultipleFileInput(input, drop, drop, {
 				onDragenter: drop.addClass.pass('hover', drop),
 				onDragleave: drop.removeClass.pass('hover', drop),
@@ -86,6 +88,7 @@ Form.Upload = new Class({
 		form.addEvent('submit', function(event){
 			event.preventDefault();
 			inputFiles.getFiles().each(function(file){
+        inputFiles.remove(file);
 				uploadReq.append(inputname , file);
 			});
 			uploadReq.send();

@@ -1,4 +1,5 @@
 window.addEvent('domready', function(){ 
+  
   SqueezeBox.assign($$('[rel=woot]'),{
     handler: 'ajax', 
     size: {x: 600, y: 175},
@@ -68,6 +69,7 @@ window.addEvent('domready', function(){
     
   });
   
+  uploadImage();
   
 });
 
@@ -75,33 +77,34 @@ function uploadImage() {
 	var upload = new Form.Upload('jform_upload_images', {
 		onComplete: function(arguments) {   
       // Clear any old messages that may be showing
-      $('system-message-container').empty();
+      $('system-message').empty();
+      
       // Create the system-message element which will act as the dl parent
-      var system_message = new Element('dl#system-message').setProperty('style', 'display:none');
+      var error_div = new Element
+        ('div.alert.alert-error').grab(
+          new Element('a',{text:'x', class:'close'}).setProperty('data-dismiss','alert')
+        ).grab(
+          new Element('h4', {text:'Message'})
+        );
+ 
+      // Create the system-message element which will act as the dl parent
+      var success_div = new Element
+        ('div.alert.alert-success').grab(
+          new Element('a',{text:'x', class:'close'}).setProperty('data-dismiss','alert')
+        ).grab(
+          new Element('h4', {text:'Message'})
+        );     
+          
+      $('system-message').adopt( error_div );
+      $('system-message').adopt( success_div );
 
-      // Inject a dt element with a class of errir inside the system-message-container
-      var error_dt = new Element('dt.error').appendText('Error');
-      var error_dd = new Element('dd.error.message').setProperty('style', 'display:none');  
+      var error_detail = new Element('div');
 
-      system_message.adopt( error_dt, error_dd );
+      var success_detail = new Element('div');
 
-      system_message.inject('system-message-container');
+      error_div = error_div.adopt( error_detail );
+      success_div = success_div.adopt( success_detail );
 
-      error_ul = new Element('ul');
-
-      error_dd = error_dd.adopt( error_ul );
-
-      // Inject a dt element with a class of errir inside the system-message-container
-      var success_dt = new Element('dt.message').appendText('Message');
-      var success_dd = new Element('dd.message.message').setProperty('style', 'display:none');  
-
-      system_message.adopt( success_dt, success_dd );
-
-      system_message.inject('image-queue', 'top');
-
-      success_ul = new Element('ul');
-
-      success_dd = success_dd.adopt( success_ul );
       
       // Decode the files json struct returned from the ajax query...
       var files = JSON.decode( arguments ); // decodes the response into an array
@@ -110,28 +113,25 @@ function uploadImage() {
         // Loop over error object and show the error (s)
         if (file.error.length > 0) {
           file.error.each(function( error ){
-            var message = new Element('li', {
+            var message = new Element('p', {
               text: file.name + ' - ' + error 
             });
             
-            error_ul.adopt(message); 
-            error_dd.setProperty('style','display:block')
+            error_detail.adopt(message); 
 
           })
         } else {
-          var message = new Element('li', {
+          var message = new Element('p', {
             text: file.image_file_name + ' - ' + file.message
           });
           
           // Add the message to the message ul elemet       
-          success_ul.adopt(message);     
-          success_dd.setProperty('style','display:block')
+          success_detail.adopt(message); 
+
         }  
       })
       
-      system_message.setProperty('style', 'display:block')
-      
-    }
+   }
     
 	});
   

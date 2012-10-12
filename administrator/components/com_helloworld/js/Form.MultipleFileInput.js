@@ -82,14 +82,14 @@ Form.MultipleFileInput = new Class({
 	},
 
 	add: function(file){
-		this._files.push(file);
+		this._files.push(file); 
 		var self = this;
 		new Element('li', {
 			'class': this.options.itemClass
 		}).adopt(new Element('span', {
 			text: ' '+file.name
 		}).grab(new Element('i',{
-      'class':'boot-icon-file'
+      'class':'icon-picture'
     }),'top')).grab(new Element('span',{
       text: '(' + file.size / 1000 + ' KBytes)'
     })).grab(new Element('span',{'class':'image-queue-delete'}).grab(new Element('a', {
@@ -111,13 +111,12 @@ Form.MultipleFileInput = new Class({
 		if (index == -1) return this;
 		this._files.splice(index, 1);
 		this.list.childNodes[index].destroy();
-		this.fireEvent('remove', file);
+		//this.fireEvent('remove', file);
 		if (!this._files.length) this.fireEvent('empty');
     
     if (this._files.length == 0) {
       
       drop = $('droppable');
-      console.log(drop);
  
       var elem = new Element('li.upload-queue-drag', {
         text: this.options.dropMsg

@@ -168,7 +168,9 @@ class HelloWorldControllerImages extends JControllerForm
     
     // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
-     
+
+
+    
     // Get the image file ID of which we need to delete
     $file_id = JRequest::getVar ('file','','GET','int');
     
@@ -246,23 +248,16 @@ class HelloWorldControllerImages extends JControllerForm
 
     // Get the parent property ID from the GET variable
     $parent_id = JRequest::getVar( 'parent_id', '', 'GET', 'int' );  
-    
+
     // Need to ensure that images are always uploaded into the parent property folder.
     if ($parent_id == 1) {
       // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
-      //$this->folder = 'C:XAMPP/htdocs/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-      //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-      $this->folder = 'C:XAMPP/htdocs/images/' . $id;
-      //$this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-    
-      
+      $this->folder = COM_IMAGE_BASE .'/'. JRequest::getVar('id', 'GET', '', 'integer');
     } else {
-      
-      $this->folder = 'C:XAMPP/htdocs/images/' . $parent_id;
-      //$this->folder = '/home/adam/public_html/French-Connections-/images/' . JRequest::getVar('id', 'GET', '', 'integer');
-      //$this->folder = 'D:Inetpub/wwwroot/rebuild/images/' . $parent_id;
-
+      $this->folder = COM_IMAGE_BASE .'/'. $parent_id;
     }
+    
+    
     
     // Check the total size of files being uploaded. If it's too large we just exit?
     if (

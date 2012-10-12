@@ -51,10 +51,7 @@ class JToolbarButtonImageupload extends JToolbarButton
 		$doTask = $this->_getCommand($name, $url, $width, $height, $top, $left);
 
 
-		$html = "<a class=\"modal btn btn-small\" href=\"$doTask\" rel=\"{handler: 'ajax', size: {x: $width, y: $height}, 
-      onOpen:uploadImage,
-      onClose:function(){			window.location.reload(true);
-}}\">";
+		$html = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"modal btn btn-small\">";
     //function(){
         //;
         //$('helloworld-choose-parent-form').addEvent('submit', function() {
@@ -62,10 +59,10 @@ class JToolbarButtonImageupload extends JToolbarButton
           //return false;
         //})
       //}}\">";
-		$html .= "<span class=\"$class\">";
-		$html .= "</span>";
+		$html .= "<i class=\"$class\">";
+		$html .= "</i>";
 		$html .= "$text";
-		$html .= "</a>";
+		$html .= "</button>";
 
 		return $html;
 	}

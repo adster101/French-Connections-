@@ -60,15 +60,24 @@ class HelloWorldModelImages extends JModelAdmin
 	 * @return	mixed	A JForm object on success, false on failure
 	 * @since	2.5
 	 */
+	/**
+	 * Method to get the record form.
+	 *
+	 * @param	array	$data		Data for the form.
+	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+	 * @return	mixed	A JForm object on success, false on failure
+	 * @since	1.6
+	 */
 	public function getForm($data = array(), $loadData = true) 
-	{
+	{	
+
 		// Get the form.
-		$form = $this->loadForm('com_helloworld.images', 'images',
-		                        array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_helloworld.imageupload', 'imageupload', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) 
 		{
 			return false;
 		}
+		
 		return $form;
 	}
 
@@ -85,7 +94,7 @@ class HelloWorldModelImages extends JModelAdmin
 	{
 		// Initialise variables.
 		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
-    
+
     $images= array();
     
     $table = $this->getTable();
@@ -120,7 +129,6 @@ class HelloWorldModelImages extends JModelAdmin
       $subtree = $table->getTree( $pk );	
       
       if (count($subtree) == 1 && $table->isLeaf( $pk ) && $table->parent_id == 1) {
-        
         // This is a single unit property, no?
         $images['gallery'] = $imagesTable->load_images( $pk );
        
@@ -133,7 +141,7 @@ class HelloWorldModelImages extends JModelAdmin
       }
       
       if (count($subtree) > 1 && $table->parent_id == 1) {
-        
+
         // This is a parent node as subtree is gt 1 and parent id is 1 (e.g. root)
         
         // Get an instance of the gallery_images table
@@ -149,7 +157,7 @@ class HelloWorldModelImages extends JModelAdmin
       
       if ($table->isLeaf( $pk ) && $table->parent_id != 1) {
         // This is a child node as isLeaf returns true and parent_id not root (1)
-        
+
         // Get an instance of the gallery_images table
         $gallery_images = $this->getGalleryImagesTable(); 
         
@@ -166,9 +174,8 @@ class HelloWorldModelImages extends JModelAdmin
     
     if (count($item->images->gallery->getProperties())) {
       // Tick the availability progress flag to true
-      JApplication::setUserState('com_helloworld.availability.progress', true);
+      JApplication::setUserState('com_helloworld.images.progress', true);
     }
-    
 		return $item;
 	} 
   
@@ -345,7 +352,6 @@ class HelloWorldModelImages extends JModelAdmin
     foreach ($images as $image) {
  			      
       $imgObj = new JImage($image['filepath']);
-      
       $baseDir[] = COM_IMAGE_BASE.'/'.$property_id.'/gallery/';
       $baseDir[] = COM_IMAGE_BASE.'/'.$property_id.'/thumbs/';
       $baseDir[] = COM_IMAGE_BASE.'/'.$property_id.'/thumb/';
@@ -358,7 +364,7 @@ class HelloWorldModelImages extends JModelAdmin
           JFolder::create($dir);
         }        
       }
-      
+      try {
       // Firstly create the main gallery image
       // If the width is greater than the height just create an 
       if (($imgObj->getWidth() > $imgObj->getHeight()) && $imgObj->getWidth() > 500 ) {
@@ -409,6 +415,10 @@ class HelloWorldModelImages extends JModelAdmin
         $thumbnail_profile = $imgObj->resize(230,150,true,2);
         $thumbnail_profile->tofile(COM_IMAGE_BASE.'/'.$property_id.'/thumb/'.$image['image_file_name'] );
        
+      }
+      
+      } catch (Exception $e) {
+        print_r($e);
       }
       
       
