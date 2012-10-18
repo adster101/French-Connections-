@@ -34,21 +34,22 @@ class JFormFieldClassificationTypes extends JFormFieldList
 	protected function getOptions()
 	{
 		// Initialize variables.
-		$options = array();
+    $options = array();
     
     // This is passed in from the form field XML definition
  		$classificationID = $this->element['id']? $this->element['id'] : 1;
 		
+    $showPlaceHolder = $this->element['placeholder'] ? $this->element['placeholder'] : 0; 
+    
+    
     $db		= JFactory::getDbo();
+    
 		$query	= $db->getQuery(true);
-
 		$query->select('a.id as value, a.title AS text, a.level, a.published, a.language_string');
 		$query->from('#__classifications AS a');
 		$query->join('LEFT', $db->quoteName('#__classifications').' AS b ON a.lft > b.lft AND a.rgt < b.rgt');
-    $query->join('LEFT', $db->quoteName('#__classifications').' AS p ON p.id = '.(int) $classificationID);
-		$query->where('NOT(a.lft >= p.lft AND a.rgt <= p.rgt)');
+		$query->where('b.id='.$classificationID);
     $query->where('a.published = 1');
-    $query->where('a.parent_id > 1');
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
 		$query->order('a.lft ASC');
 		
@@ -62,9 +63,11 @@ class JFormFieldClassificationTypes extends JFormFieldList
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
     
-    // Add an initial 'please choose' option
-		array_unshift($options, JHtml::_('select.option', '', JText::_('COM_HELLOWORLD_PLEASE_CHOOSE')));
-
+    // Show a 'please choose' placeholder for single select drop downs
+    if ($showPlaceHolder == 'true') {
+      // Add an initial 'please choose' option
+    	array_unshift($options, JHtml::_('select.option', '', JText::_('COM_HELLOWORLD_PLEASE_CHOOSE')));
+    }
 		// Merge any additional options in the XML definition.
 		$options = array_merge(parent::getOptions(), $options);
         

@@ -161,7 +161,6 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// Maybe although we need to track availability last updated on...against the accommodation unit.
 		$POST = JRequest::getVar('jform', $default = array() );
     
-
     // Transform the params field
 		if (is_array($this->params)) {
 			$registry = new JRegistry();
@@ -175,6 +174,9 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
 		$this->savePropertyTranslation($lang);
 		
+    // Save the facilities and suitability options
+    $this->savePropertyAttributes($POST);
+    
     // Save the tariff details. Pass $POST to save function to determine if we have any or not
     $this->savePropertyTariffs($POST);
     
@@ -243,6 +245,27 @@ class HelloWorldTableHelloWorld extends JTableNested
 		return parent::store($updateNulls);
 	}
 
+  /*
+   * savePropertyAttributes - Method to check the attributes supplied for a property and save them 
+   * 
+   * param @$POST - The post data containing the attributes 
+   * 
+   */
+  protected function savePropertyAttributes( $POST=array() )
+  {
+    if(!array($POST)) {
+      return true;
+    }
+    
+    // Check for a tariffs array in the POST structure
+    if (!array_key_exists('facilities', $POST)) {
+      return true;
+    }
+    
+    
+    
+    
+  }
 	/*
 	 * saveFormTranslation
 	 * Determines the fields to translate

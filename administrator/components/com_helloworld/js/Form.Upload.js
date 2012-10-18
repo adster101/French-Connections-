@@ -47,11 +47,11 @@ Form.Upload = new Class({
 			drop = new Element('ul.droppable#droppable', {
 			}).inject(input, 'after'),
 
-			list = new Element('li.upload-queue-drag', {
+			list_placeholder = new Element('li.upload-queue-drag', {
         text: this.options.dropMsg
       }).inject(drop, 'top'),
 
-			progress_bar = new Element('div.progress.progress-striped')
+			progress_bar = new Element('div.progress.progress-striped').setStyle('display','none')
 				.inject(input, 'after');
         progress = new Element('div', {class:'bar'}).setStyle('display', 'none');
         
@@ -64,7 +64,12 @@ Form.Upload = new Class({
 
 			uploadReq = new Request.File({
 				url: form.get('action'),
-				onRequest: progress.setStyles.pass({display: 'block', width: 0}, progress),
+				onRequest: function(event){
+          progress.setStyles.pass({display: 'block', width: 0}, progress);
+          progress_bar.setStyle('display','block');
+          // Disable all the buttons in the form while the upload is taking place
+          $('');
+        },
 				onProgress: function(event){
 					var loaded = event.loaded, total = event.total;
 					progress.setStyle('width', parseInt(loaded / total * 100, 10).limit(0, 100) + '%');
@@ -72,12 +77,12 @@ Form.Upload = new Class({
 				onComplete: function(){
 					progress.setStyle('width', '100%');
 					self.fireEvent('complete', arguments);
-        
+          
           this.formData = new FormData();		
           // Remove the file elements from the HTML node
           list.empty();
           // Hide the progress-o-meter
-          progress.setStyle('display', 'none');
+          progress.setStyle('display', 'block');
           // Remove the files from the inputFiles array otherwise they persist
           inputFiles.unsetFiles();
         }
@@ -88,7 +93,6 @@ Form.Upload = new Class({
 		form.addEvent('submit', function(event){
 			event.preventDefault();
 			inputFiles.getFiles().each(function(file){
-        inputFiles.remove(file);
 				uploadReq.append(inputname , file);
 			});
 			uploadReq.send();

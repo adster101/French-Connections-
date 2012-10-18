@@ -281,6 +281,7 @@ class HelloWorldControllerImages extends JControllerForm
 			(array) $files['name']['upload-images'], (array) $files['type']['upload-images'], (array) $files['tmp_name']['upload-images'], (array) $files['error']['upload-images'], (array) $files['size']['upload-images']
 		);
     
+    
 		// Set FTP credentials, if given
 		JClientHelper::setCredentialsFromRequest('ftp');
 		JPluginHelper::importPlugin('content');

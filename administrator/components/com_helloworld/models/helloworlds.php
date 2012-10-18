@@ -22,7 +22,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 				'id', 'a.id',
 				'title', 'a.title',
 				'alias', 'a.alias',
-				'published', 'a.published',
+				'state', 'a.state',
 				'access', 'a.access', 'access_level',
 				'language', 'a.language',
 				'checked_out', 'a.checked_out',
@@ -59,6 +59,10 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$this->setState('filter.extension', $extension);
 		$parts = explode('.', $extension);
 		
+    $published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
+		$this->setState('filter.published', $published);
+    
+    
 		// extract the component name
 		$this->setState('filter.component', $parts[0]);
 
@@ -86,6 +90,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		// Compile the store id.
 		$id	.= ':'.$this->getState('filter.search');
 		$id	.= ':'.$this->getState('filter.extension');
+		$id	.= ':'.$this->getState('filter.published');
 
 		return parent::getStoreId($id);
 	}
@@ -109,7 +114,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query = $db->getQuery(true);
 		
 		// Select some fields
-		$query->select('a.id,a.greeting, a.title, a.modified, a.expiry_date, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published ');
+		$query->select('a.id,a.greeting, a.title, a.modified, a.expiry_date, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		// Check the user group this user belongs to.
 		if (!(in_array(8, $groups) || in_array(11, $groups))) 
@@ -117,6 +122,15 @@ class HelloWorldModelHelloWorlds extends JModelList
 			$query->where('created_by='.$userId);
 		}
 		$query->where('created_by !=0');
+ 
+		// Filter by published state
+		$published = $this->getState('filter.published');
+		if (is_numeric($published)) {
+			$query->where('a.published = ' . (int) $published);
+		}
+		elseif ($published === '') {
+			$query->where('(a.published = 0 OR a.published = 1)');
+		}    
 		
 		// Filter by search in title
 		// TODO - Try and tidy up this logic a bit.
@@ -195,5 +209,5 @@ class HelloWorldModelHelloWorlds extends JModelList
 		
 		return $return;
 	}
-
+ 
 }

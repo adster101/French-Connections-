@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_helloworld/models/rules">
+  <fields name="facilities">
+    <fieldset name="internal" label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_PARAMS">
+      <field
+        name="internal"
+        type="classificationtypes"
+        id="95"
+        placeholder="false"      
+        label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_LABEL"
+        description="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_DESC"
+        required="true"
+        multiple="true">
+      </field>
+    </fieldset>
+    <fieldset name="external" label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
+      <field
+        name="external"
+        placeholder="false"
+        type="classificationtypes"
+        id="117"
+        label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL"
+        description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
+        required="true"
+        multiple="true">
+      </field>
+    </fieldset>  
+  </fields>
+</form>

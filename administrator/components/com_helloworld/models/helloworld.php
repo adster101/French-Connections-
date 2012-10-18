@@ -190,14 +190,14 @@ class HelloWorldModelHelloWorld extends JModelAdmin
             
     } else if (!$isOwner) {
                
-      //$form->removeField('parent_id');
 
       $XmlStr= '<form><field
 			name="parent_id"
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
-			class="validate-parent"
+			class="validate-parent input-small"
+      labelclass="control-label"
 			required="true">
 			
     </field></form>';
@@ -222,18 +222,19 @@ class HelloWorldModelHelloWorld extends JModelAdmin
 	 */
 	protected function canEditState()
 	{
+    $comtask = JRequest::getVar('task', '', 'POST', 'string' );
     
-    $task = JRequest::getVar('task', '', 'POST', 'string' );
-
+    $task = explode('.',$comtask);
+    
     $user = JFactory::getUser();
-    if ($task == 'orderdown' || $task == 'orderup') {
+    
+    if ($task[1] == 'orderdown' || $task[1] == 'orderup') {
       return $user->authorise('helloworld.edit.reorder', $this->option);
 
-    } else if ($task == 'publish' || $task == 'unpublish') {
-
+    } else if ($task[1] == 'publish' || $task[1] == 'unpublish') {
       return $user->authorise('helloworld.edit.publish', $this->option);
 
-    } else if ($task == 'trash') {
+    } else if ($task[1] == 'trash') {
       return $user->authorise('helloworld.edit.trash', $this->option);
     } else {
       return false;

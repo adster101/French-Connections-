@@ -5,10 +5,13 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
+$format = JRequest::getVar('format','html','GET','string');
+
 ?>
+<?php if ($format == 'html') : ?>
 <div id="collapseUpload" class="collapse row-fluid">
   <div class="span12">
-    <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id) . '&parent_id=' . $this->item->parent_id; ?>" method="post" name="imageUpload" id="tariffs-form">
+    <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id) . '&parent_id=' . $this->item->parent_id; ?>" method="post" name="imageUpload" id="imageForm">
       <div class="row-fluid">
         <div class="span12">
           <h2><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'); ?></h2>
@@ -44,9 +47,10 @@ JHtml::_('behavior.formvalidation');
     </form>
   </div>
 </div>
+<?php endif; ?>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate image-manager">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate image-manager">
   <div class="row-fluid">
     <?php foreach ($this->item->images->getProperties() as $woot => $value) : ?>
         <?php if ($this->item->parent_id != 1) { ?>  
@@ -122,18 +126,8 @@ JHtml::_('behavior.formvalidation');
         </div>
 <?php endforeach; ?>
     </div>
-</form>
-
-
-
-
 
 <input type="hidden" name="task" value="images.edit" />
-<?php foreach ($this->form->getFieldset('details') as $field) { ?>
-  <?php
-  echo $field->input;
-  ?>
-<?php } ?>    
 <?php echo JHtml::_('form.token'); ?>
 </div>
 

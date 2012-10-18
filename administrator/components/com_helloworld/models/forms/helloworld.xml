@@ -1,55 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
-  <fieldset name="details">
-		<field
-			name="id"
-			type="text"
-			default="0"
-			label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
-			description ="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"
-			class="readonly"
-      labelclass="control-label"
-			readonly="true"/>
-    <field 
-      name="expiry_date"
-      type="text"
-      readonly="true"
-      class="readonly"
-      label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
-      description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
-      filter="unset"
-      labelclass="control-label"/>
+  <fieldset name="description">
     <field
-			name="asset_id"
-			type="hidden"
-			filter="unset"/>
-		<field
-			name="parent_id"
-			type="hidden"
-      default="1"
-      labelclass="control-label"/>
-		<field
-			name="lft"
-			type="hidden"
-			filter="unset"/>
-		<field
-			name="rgt"
-			type="hidden"
-			filter="unset"/>
-		<field
-			name="level"
-			type="hidden"
-			filter="unset"/>	
-		<field
-			name="lang"
-			type="hidden"
-			required="true"
-			default="en-GB"/>
-      
-    <field 
-      name="published"
-      type="hidden"
-      filter="unset"/>
+      name="greeting"
+      labelclass="control-label"
+      type="text"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
+      size="100"
+      maxlength="100"
+      class="input-xxlarge validate-greeting"
+      validate="greeting"
+      required="true"
+      default=""/>    
+    <field
+      name="description"
+      labelclass="control-label"
+      type="editor"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+      size="40"
+      class="inputbox "
+      filter="JComponentHelper::filterText"
+      buttons="false"
+		/>
+  </fieldset>	  
+ 
+  
+  <fieldset name="details">
+    
 
       
     <field
@@ -61,7 +40,8 @@
       type="classificationtypes"
       filter="integer"
       required="true"
-      id="69"
+      id="66"
+      placeholder="true"
     />
     <field
       name="property_type"
@@ -72,84 +52,109 @@
       type="classificationtypes"
       filter="integer"
       required="true"
-      id="66"
+      id="69"
       default="1"
-      
+      placeholder="true"      
     />
     
-		<field
-			name="swimming"
-			type="list"
+    <field
+      name="swimming"
+      type="classificationtypes"
       labelclass="control-label"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_DESC"
-			class="validate-swimming"
-			validate="swimming"
-			required="true"
-			default="">
-			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-			<option value="1">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_YES</option>
-			<option value="0">COM_HELLOWORLD_ACCOMMODATION_SWIMMINGPOOL_NO</option>
-		</field>    
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_DESC"
+      class="required"
+      validate="swimming"
+      required="true"
+      id="91"
+      placeholder="true"      
+      default="">
+    </field>    
   </fieldset>
-  <fieldset name="description">
-		<field
-			name="greeting"
-      labelclass="control-label"
-			type="text"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
-			size="100"
-      maxlength="100"
-			class="inputbox validate-greeting"
-			validate="greeting"
-			required="true"
-			default=""/>    
-		<field
-			name="description"
-      labelclass="control-label"
-			type="editor"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
-			size="40"
-			class="inputbox "
-			filter="JComponentHelper::filterText"
-			buttons="false"
-		/>
-	</fieldset>	
-	<fieldset name="owner">
+  <fieldset name="Location">
     <field
-      labelclass="control-label"
-      name="created_by"
-      type="user"
-      label="JGLOBAL_FIELD_CREATED_BY_LABEL"
-      desc="JGLOBAL_FIELD_CREATED_BY_DESC"
-      />
+      name="catid"
+      type="department"
+      extension="com_helloworld"
+      class="list"
+      default="1"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
+      required="true"
+      labelclass="control-label">
+      <option value="0">JOPTION_SELECT_CATEGORY</option>
+    </field>		
     <field
-      name="created_time"
+      name="location_type"
+      type="classificationtypes"
       labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
+      class="required"
+      validate="swimming"
+      required="true"
+      id="111"
+      placeholder="true"      
+      filter="int">
+    </field>    
+    <field
+      name="latitude"
       type="text"
-      label="JGLOBAL_CREATED_DATE"
-      class="readonly"
-      filter="unset"
-      readonly="true" />
-    <field
+      extension="com_helloworld"
+      class="validate-latitude "
+      default=""
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
+      required="true"
+      maxlength="15"
+      filter="string"
+      validate="latlong"
       labelclass="control-label"
-      name="modified_by"
-      type="user"
-      label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
-      class="readonly"
-      readonly="true"
-      filter="unset"/>
+      readonly="true">
+    </field>
     <field
-      labelclass="control-label"
-      name="modified"
+      name="longitude"
       type="text"
-      label="JGLOBAL_FIELD_MODIFIED_LABEL"
-      class="readonly"
-      filter="unset"
-      readonly="true" />		
-	</fieldset>
+      extension="com_helloworld"
+      class="inputbox validate-longitude"
+      default=""
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
+      required="true"
+      filter="string"
+      labelclass="control-label"
+      maxlength="15"
+      validate="latlong"
+      readonly="true">
+    </field>
+    <field
+      name="nearest_town"
+      type="text"
+      extension="com_helloworld"
+      class="inputbox validate-nearesttown"
+      default=""
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
+      required="true"
+      filter="JComponentHelper::filterText"
+      maxlength="75"
+      validate="nearesttown">
+    </field>		
+    <field
+      name="distance_to_coast"
+      type="text"
+      extension="com_helloworld"
+      class="inputbox validate-distance-to-coast"
+      default=""
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
+      required="false"
+      filter="int"
+      maxlength="2">
+    </field>		
+  </fieldset>
   <fieldset name="occupancy">
     <field
       name="occupancy"
@@ -161,22 +166,22 @@
       required="true"
       labelclass="control-label"
       default="">
-			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
+      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+      <option value="14">14</option>
+      <option value="15">15</option>
     </field>
 
     <field
@@ -191,16 +196,16 @@
       message=""
       default=""
       filter="">
-			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="0">None</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="0">None</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field>    
     <field
       name="double_bedrooms"
@@ -212,16 +217,16 @@
       labelclass="control-label"
       required="true"
       default="">
-			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="0">None</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="0">None</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field>    
     <field
       name="triple_bedrooms"
@@ -233,15 +238,15 @@
       labelclass="control-label"
       required="false"
       default="0">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field> 
     <field
       name="quad_bedrooms"
@@ -253,15 +258,15 @@
       labelclass="control-label"
       required="false"
       default="0">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field> 
     <field
       name="twin_bedrooms"
@@ -272,15 +277,15 @@
       labelclass="control-label"
       validate="bedrooms"
       default="">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field>    
     <field
       name="childrens_beds"
@@ -291,15 +296,15 @@
       validate="bedrooms"
       labelclass="control-label"
       default="">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field>    
     <field
       name="cots"
@@ -311,15 +316,15 @@
       labelclass="control-label"
       required="false"
       default="">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field> 
     <field
       name="extra_beds"
@@ -331,15 +336,15 @@
       labelclass="control-label"
       required="false"
       default="">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field>    
     <field
       name="bathrooms"
@@ -351,15 +356,15 @@
       labelclass="control-label"
       required="true"
       default="">
-			  <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field> 
     <field
       name="toilets"
@@ -371,186 +376,110 @@
       labelclass="control-label"
       required="false"
       default="">
-			  <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
+      <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
     </field>       
   </fieldset>
-	<fields name="params">
-    <fieldset
-        name="Internal Facilities"
-        label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_PARAMS">
 
-        <field
-          name="internal_features"
-          type="checkboxes"
-          label="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_LABEL"
-          description="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_DESC"
-          default=""
-          required="true">
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_AIRCON">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_AIRCON</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_BOARDGAMES">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_BOARDGAMES</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_CDPLAYER">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_CDPLAYER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_CENTRALHEATING">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_CENTRALHEATING</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_ROOMSERVICE">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_ROOMSERVICE</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_DVDPLAYER">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_DVDPLAYER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_SATELLIETV">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_SATELLIETV</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_EXCLUSIVERENTAL">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_EXCLUSIVERENTAL</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_FANS">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_FANS</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_GAMESCONSOLE">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_GAMESCONSOLE</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_HAIRDRYER">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_HAIRDRYER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_HOTTUB">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_HOTTUB</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_INTERNET">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_INTERNET</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_OPENFIRE">COM_HELLOWORLD_ACCOMMODATION_INTERNALFEATURES_OPENFIRE</option>
-        </field>
-      </fieldset>
-  	</fields>
-    <fields name="params">
-      <fieldset
-        name="kitchenfacilities"
-        label="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_PARAMS">
-        <field
-          name="kitchen_facilities"
-          type="checkboxes"
-          label="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_LABEL"
-          description="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_DESC"
-          default=""
-          required="true">
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_MICROWAVE">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_MICROWAVE</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_COOKER">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_COOKER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_DISHWASHER">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_DISHWASHER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_ELECTRICHOB">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_ELECTRICHOB</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_FREEZER">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_FREEZER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_FRIDGE">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_FRIDGE</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_FRIDGEFREEZER">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_FRIDGEFREEZER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_GASHOB">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_GASHOB</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_GASOVEN">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_GASOVEN</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_IRONINGFACILITIES">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_IRONINGFACILITIES</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_RANGE">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_RANGE</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_TUMBLEDRYER">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_TUMBLEDRYER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_WASHERDRYER">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_WASHERDRYER</option>
-          <option value="COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_WASHINGMACHINE">COM_HELLOWORLD_ACCOMMODATION_KITCHENFEATURES_WASHINGMACHINE</option>
-        </field>
-      </fieldset>
-  	</fields>
-	<fieldset name="Location">
-		<field
-			name="catid"
-			type="department"
-			extension="com_helloworld"
-			class="list"
-			default="1"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
-			required="true"
-		>
-			<option value="0">JOPTION_SELECT_CATEGORY</option>
-		</field>		
-		<field
-			name="latitude"
-			type="text"
-			extension="com_helloworld"
-			class="validate-latitude "
-			default=""
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
-			required="true"
-      maxlength="15"
-      filter="string"
-      validate="latlong"
-      readonly="true">
-		</field>
-		<field
-			name="longitude"
-			type="text"
-			extension="com_helloworld"
-			class="inputbox validate-longitude"
-			default=""
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
-			required="true"
-      filter="string"
-      maxlength="15"
-      validate="latlong"
-      readonly="true">
-		</field>
-		<field
-			name="nearest_town"
-			type="text"
-			extension="com_helloworld"
-			class="inputbox validate-nearesttown"
-			default=""
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
-			required="true"
-			filter="JComponentHelper::filterText"
-      maxlength="75"
-      validate="nearesttown">
-		</field>		
-		<field
-			name="distance_to_coast"
-			type="text"
-			extension="com_helloworld"
-			class="inputbox validate-distance-to-coast"
-			default=""
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
-			required="false"
-      filter="int"
-      maxlength="2">
-		</field>		
-	</fieldset>
-	<fields name="params">
-		<fieldset	name="params"	label="COM_HELLOWORLD_LOCATION_GENERAL_PARAMS">
-			<field name="location_type" type="radio" default="0" label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL" description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_DESC" required="true">
-				<option value="COM_HELLOWORLD_PARAMS_LOCATION_MOUNTAIN">COM_HELLOWORLD_PARAMS_LOCATION_MOUNTAIN</option>
-				<option value="COM_HELLOWORLD_PARAMS_LOCATION_COASTAL">COM_HELLOWORLD_PARAMS_LOCATION_COASTAL</option>
-				<option value="COM_HELLOWORLD_PARAMS_LOCATION_RURAL">COM_HELLOWORLD_PARAMS_LOCATION_RURAL</option>
-				<option value="COM_HELLOWORLD_PARAMS_LOCATION_CITY">COM_HELLOWORLD_PARAMS_LOCATION_CITY</option>
-				<option value="COM_HELLOWORLD_PARAMS_LOCATION_VALLEY">COM_HELLOWORLD_PARAMS_LOCATION_VALLEY</option>
-			</field>
-		</fieldset>
-		<fieldset name="access" label="COM_HELLOWORLD_ACCESS_GENERAL_PARAMS">
-			<field name="access_options" type="checkboxes" default="0" label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCESSOPTIONS_LABEL" description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCESSOPTIONS_DESC" required="true" multiple="true">
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_PUBLICTRANSPORTAVAILABLE">COM_HELLOWORLD_PARAMS_ACCESS_PUBLICTRANSPORTAVAILABLE</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_PUBLICTRANSPORTNOTAVAILABLE">COM_HELLOWORLD_PARAMS_ACCESS_PUBLICTRANSPORTNOTAVAILABLE</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_AIRPORTPICKUP">COM_HELLOWORLD_PARAMS_ACCESS_AIRPORTPICKUP</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_CARESSENTIAL">COM_HELLOWORLD_PARAMS_ACCESS_CARESSENTIAL</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_OWNERPICKUPAVAILABLE">COM_HELLOWORLD_PARAMS_ACCESS_OWNERPICKUPAVAILABLE</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_TAXIFROMAIRPORT">COM_HELLOWORLD_PARAMS_ACCESS_TAXIFROMAIRPORT</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_TAXIFROMTRAINSTATION">COM_HELLOWORLD_PARAMS_ACCESS_TAXIFROMTRAINSTATION</option>
-				<option value="COM_HELLOWORLD_PARAMS_ACCESS_TRAINSTATIONPICKUPAVAILABLE">COM_HELLOWORLD_PARAMS_ACCESS_TRAINSTATIONPICKUPAVAILABLE</option>
-			</field>
-		</fieldset>
-		<fieldset name="suitability" label="COM_HELLOWORLD_SUITABILITY_GENERAL_PARAMS">
-			<field name="suitability" type="checkboxes" default="0" label="COM_HELLOWORLD_HELLOWORLD_FIELD_SUITABILITY_LABEL" description="COM_HELLOWORLD_HELLOWORLD_FIELD_SUITABILITY_DESC" required="true" multiple="true">
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_ADULTS_ONLY">COM_HELLOWORLD_PARAMS_SUITABILITY_ADULTS_ONLY</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_COUPLE_ONLY">COM_HELLOWORLD_PARAMS_SUITABILITY_COUPLE_ONLY</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SMOKING_WELCOMED">COM_HELLOWORLD_PARAMS_SUITABILITY_SMOKING_WELCOMED</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_NON_SMOKING">COM_HELLOWORLD_PARAMS_SUITABILITY_NON_SMOKING</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_6">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_6</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_7">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_7</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_8">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_8</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_12">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_12</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_14">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_14</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_16">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_CHILDREN_OVER_16</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_NOT_SUITABLE_FOR_CHILDREN">COM_HELLOWORLD_PARAMS_SUITABILITY_NOT_SUITABLE_FOR_CHILDREN</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_NOT_SUITABLE_FOR_THE_ELDERLY">COM_HELLOWORLD_PARAMS_SUITABILITY_NOT_SUITABLE_FOR_THE_ELDERLY</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_THE_ELDERLY">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_THE_ELDERLY</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_TOURING_MOTORCYCLISTS_WELCOME">COM_HELLOWORLD_PARAMS_SUITABILITY_TOURING_MOTORCYCLISTS_WELCOME</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_NOT_SUITABLE_FOR_WHEELCHAIR">COM_HELLOWORLD_PARAMS_SUITABILITY_NOT_SUITABLE_FOR_WHEELCHAIR</option>
-				<option value="COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_WHEELCHAIR">COM_HELLOWORLD_PARAMS_SUITABILITY_SUITABLE_FOR_WHEELCHAIR</option>
-        
-			</field>
-		</fieldset>    
-	</fields>
+
+  
+ 
+
+  <fieldset name="additional-details">
+    
+    <field
+      name="id"
+      type="text"
+      default="0"
+      label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
+      description ="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"
+      class="readonly input-mini"
+      labelclass=""
+      readonly="true"/>
+    <field
+      name="parent_id"
+      type="hidden"
+      default="1"
+      labelclass=""/>     
+    <field 
+      name="expiry_date"
+      type="text"
+      readonly="true"
+      class="readonly input-small"
+      label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
+      description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
+      filter="unset"
+      labelclass=""/>
+  </fieldset>
+  <fieldset name="owner">
+    <field
+      labelclass="control-label"
+      name="created_by"
+      type="user"
+      label="JGLOBAL_FIELD_CREATED_BY_LABEL"
+      desc="JGLOBAL_FIELD_CREATED_BY_DESC"
+      class="input-small"
+      />
+    <field
+      name="created_time"
+      labelclass="control-label"
+      type="text"
+      label="JGLOBAL_CREATED_DATE"
+      class="readonly input-small"
+      filter="unset"
+      readonly="true" />
+    <field
+      labelclass="control-label"
+      name="modified_by"
+      type="user"
+      label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+      class="readonly input-small"
+      readonly="true"
+      filter="unset"/>
+    <field
+      labelclass="control-label"
+      name="modified"
+      type="text"
+      label="JGLOBAL_FIELD_MODIFIED_LABEL"
+      class="readonly input-small"
+      filter="unset"
+      readonly="true" />		
+  </fieldset>
+  <fieldset name="hidden-details">
+    <field
+      name="asset_id"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="lft"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="rgt"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="level"
+      type="hidden"
+      filter="unset"/>	
+    <field
+      name="lang"
+      type="hidden"
+      required="true"
+      default="en-GB"/>
+    <field 
+      name="published"
+      type="hidden"
+      filter="unset"/>
+  </fieldset>
+ 
 </form>
 
 

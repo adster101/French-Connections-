@@ -95,44 +95,51 @@ function uploadImage() {
           new Element('h4', {text:'Message'})
         );     
           
-      $('system-message').adopt( error_div );
-      $('system-message').adopt( success_div );
-
       var error_detail = new Element('div');
-
       var success_detail = new Element('div');
 
-      error_div = error_div.adopt( error_detail );
       success_div = success_div.adopt( success_detail );
+      error_div = error_div.adopt( error_detail );
 
-      
       // Decode the files json struct returned from the ajax query...
       var files = JSON.decode( arguments ); // decodes the response into an array
-
       files.each(function( file ) {
         // Loop over error object and show the error (s)
-        if (file.error.length > 0) {
+        if (file.error.length > 0) { 
+          
+          // We have an error, is the error alert container present?
+          if (!$$('.alert-error').length) {
+            // No, so add it to the DOM
+            $('system-message').adopt( error_div );      
+          }
+
           file.error.each(function( error ){
             var message = new Element('p', {
               text: file.name + ' - ' + error 
-            });
-            
+            });      
             error_detail.adopt(message); 
-
           })
-        } else {
+        } else {   
+
+          // We have an error, is the error alert container present?
+          if (!$$('.alert-success').length) {
+            // No, so add it to the DOM
+            $('system-message').adopt( success_div );      
+          }
           var message = new Element('p', {
             text: file.image_file_name + ' - ' + file.message
-          });
-          
+          });   
           // Add the message to the message ul elemet       
           success_detail.adopt(message); 
-
         }  
       })
       
-   }
-    
+      // Assuming we get here then we should update the gallery as well.
+      // TO DO: Make an ajax call to a 'raw' view with the updated gallery details
+      // and shove it into the DOM.
+     
+      
+    }   
 	});
   
   //convert this to MooTools style code?

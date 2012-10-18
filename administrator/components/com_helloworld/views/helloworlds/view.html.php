@@ -30,8 +30,8 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
     
 		$pagination = $this->get('Pagination');
  		$this->state		= $this->get('State');
-		    
-		// Assign data to the view
+
+    // Assign data to the view
 		$this->items = $items;
 		$this->pagination = $pagination;
 
@@ -116,11 +116,25 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
     
     JHtmlSidebar::setAction('index.php?option=com_helloworlds&view=articles');
 
+    // We need to add options to the published filter to implement the PFR queue?
+    $publishedOptions = JHtml::_('jgrid.publishedOptions');
+    
+    $PFR['value'] = -3;
+    $PFR['text'] = 'COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW';
+    $PFR['disable'] = '';
+    
+    $publishedOptions[] = $PFR;
+    
+    
+    
+    
+    
 		JHtmlSidebar::addFilter(
 			JText::_('JOPTION_SELECT_PUBLISHED'),
 			'filter_published',
-			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-		);
+			JHtml::_('select.options', $publishedOptions, 'value', 'text', $this->state->get('filter.published'), true)
+
+    );
 
 		JHtmlSidebar::addFilter(
 			JText::_('JOPTION_SELECT_CATEGORY'),

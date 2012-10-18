@@ -17,5 +17,5 @@ class JFormRuleSwimming extends JFormRule
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $regex = '^[0-1]+$';
+	protected $regex = '^[0-9]+$';
 }
