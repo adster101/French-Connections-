@@ -8,7 +8,7 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $user = JFactory::getUser();
 $userId = $user->get('id');
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_attributes&view=attributes'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_attributes'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -67,7 +67,7 @@ $userId = $user->get('id');
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
               <td>
-                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'attribute.', $canChange, 'cb'); ?>
+                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'attributes.', $canChange, 'cb'); ?>
               </td>
               <td class="">
                 <a href="<?php echo JRoute::_('index.php?option=com_attributes&task=attribute.edit&id=' . (int) $item->id); ?>">
@@ -85,8 +85,7 @@ $userId = $user->get('id');
 
             </tr>					
           <?php endforeach; ?>
-        <input type="hidden" name="extension" value="<?php echo 'com_classification'; ?>" />
-        <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
+        <input type="hidden" name="extension" value="<?php echo 'com_attributes'; ?>" />
         </tbody>
 
 
