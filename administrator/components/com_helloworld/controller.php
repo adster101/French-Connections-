@@ -59,9 +59,6 @@ class HelloWorldController extends JControllerLegacy
 	function changeLanguage()
 	{	
 		$id  	 = JRequest::getInt('id');
-		$tabposition = JRequest::getInt('tabposition');
-		$tab		 = JRequest::getInt('tab',0);
-		$tab 		 = $tabposition ? '&tab='.$tab : '';
 		$session 	 =& JFactory::getSession();
 		$session->set('com_helloworld.property.'.$id.'.lang', JRequest::getVar('Language'));
 		$view = JRequest::getVar('view');

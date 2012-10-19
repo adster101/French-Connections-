@@ -11,7 +11,7 @@ jimport('joomla.application.component.model');
 /**
  * Hello Table class
  */
-class AttributeTableAttribute extends JTable
+class AttributeTableAttributeType extends JTable
 {
   
 	/**
@@ -21,11 +21,11 @@ class AttributeTableAttribute extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__attributes', 'id', $db);
+		parent::__construct('#__attributes_type', 'id', $db);
 	}
   
   public function store (){
-    $lang = JApplication::getUserState('com_attributes.edit.'.$this->id.'.lang','en-GB');
+    $lang = JApplication::getUserState('com_attributes.type.edit.'.$this->id.'.lang','en-GB');
     
     // TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
 		$this->saveAttributeTranslation($lang);
@@ -43,7 +43,7 @@ class AttributeTableAttribute extends JTable
       JToolBarHelper::title(JText::_('Manage attribute ('. $this->title.')'));
 
 			// Get the current editing language for this property    
-      $lang = JApplication::getUserState('com_attributes.edit.'.$this->id.'.lang','en-GB');
+      $lang = JApplication::getUserState('com_attributes.type.edit.'.$this->id.'.lang','en-GB');
       
 			// Need to load any translations here if the editing language different from the property language
 			$this->loadAttributeTranslation($lang);

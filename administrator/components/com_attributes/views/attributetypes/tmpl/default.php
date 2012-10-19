@@ -3,12 +3,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-$listDirn = $this->escape($this->state->get('list.direction'));
-$listOrder = $this->escape($this->state->get('list.ordering'));
+//$listDirn = $this->escape($this->state->get('list.direction'));
+//$listOrder = $this->escape($this->state->get('list.ordering'));
 $user = JFactory::getUser();
 $userId = $user->get('id');
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_attributes&view=attributes'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_attributes&view=attributetypes'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -62,27 +62,20 @@ $userId = $user->get('id');
             $canChange = $user->authorise('core.edit.state', 'com_attributes.attribute' . $item->id);
             ?>
             <tr class="row<?php echo $i % 2; ?>">
-
               <td>
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
               <td>
-                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'attribute.', $canChange, 'cb'); ?>
+                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'attributetypes.', $canChange, 'cb'); ?>
               </td>
               <td class="">
-                <a href="<?php echo JRoute::_('index.php?option=com_attributes&task=attributes.edit&id=' . (int) $item->id); ?>">
+                <a href="<?php echo JRoute::_('index.php?option=com_attributes&task=attributetype.edit&id=' . (int) $item->id); ?>">
                   <?php echo $this->escape($item->title); ?>
                 </a>
-                <div class="small"><?php echo $this->escape($item->attribute_type); ?></div>
-
               </td>
               <td>
                 <?php echo $item->id; ?>
               </td>
-
-
-
-
             </tr>					
           <?php endforeach; ?>
         <input type="hidden" name="extension" value="<?php echo 'com_classification'; ?>" />

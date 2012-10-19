@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * Classification View
  */
-class AttributesViewAttribute extends JViewLegacy {
+class AttributesViewAttributetype extends JViewLegacy {
 
   /**
    * display method of Attribute view
@@ -57,11 +57,11 @@ class AttributesViewAttribute extends JViewLegacy {
    * Setting the toolbar
    */
   protected function addToolBar() {
-    JToolBarHelper::apply('attribute.apply', 'JTOOLBAR_APPLY');
-    JToolBarHelper::save('attribute.save', 'JTOOLBAR_SAVE');
-    JToolBarHelper::custom('attribute.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-    JToolBarHelper::custom('attribute.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-    JToolBarHelper::cancel('attribute.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::apply('attributetype.apply', 'JTOOLBAR_APPLY');
+    JToolBarHelper::save('attributetype.save', 'JTOOLBAR_SAVE');
+    JToolBarHelper::custom('attributetype.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+    JToolBarHelper::custom('attributetype.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+    JToolBarHelper::cancel('attributetype.cancel', 'JTOOLBAR_CLOSE');
 
     // Set the title which appears on the toolbar 
   }

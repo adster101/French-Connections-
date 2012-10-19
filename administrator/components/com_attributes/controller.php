@@ -22,5 +22,21 @@ class AttributesController extends JControllerLegacy
 		// call parent behavior
 		parent::display($cachable);
 	}
+  
+  /*
+   * function changeLanguage - Sets the language in the session state
+   * used in various component views to load translations for editing
+   * 
+   * TO DO: Wrap into a help function so that this is reusable
+   * 
+   */
+	function changeLanguage()
+	{	
+		$id  	 = JRequest::getInt('id');
+		$session 	 =& JFactory::getSession();
+		$session->set('com_helloworld.property.'.$id.'.lang', JRequest::getVar('Language'));
+		$view = JRequest::getVar('view');
+		$this->setRedirect('index.php?option=com_helloworld&task='.$view.'.edit&id='.$id);
+	}	  
 
 }

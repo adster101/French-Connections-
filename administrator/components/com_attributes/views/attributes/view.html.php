@@ -21,16 +21,15 @@ class AttributesViewAttributes extends JViewLegacy {
 
     $this->setDocument();
     
-    		$view = strtolower(JRequest::getVar('view'));
+    $view = strtolower(JRequest::getVar('view'));
 
-    
     AttributesHelper::addSubmenu($view);
 
     $this->addToolBar();
 		$this->sidebar = JHtmlSidebar::render();
 
-    
     parent::display($tpl);
+    
   }
 
   /**
@@ -54,7 +53,7 @@ class AttributesViewAttributes extends JViewLegacy {
     JToolBarHelper::publish('attributes.publish', 'JTOOLBAR_PUBLISH', true);
     JToolBarHelper::unpublish('attributes.unpublish', 'JTOOLBAR_UNPUBLISH', true);
     JToolBarHelper::trash('attributes.trash');
-    JToolBarHelper::deleteList('', 'classifications.delete', 'JTOOLBAR_DELETE');
+    JToolBarHelper::deleteList('Are you sure?', 'attributes.delete', 'JTOOLBAR_DELETE');
 
     // Set the title which appears on the toolbar 
     JToolBarHelper::title(JText::_('Manage Property Attributes'));

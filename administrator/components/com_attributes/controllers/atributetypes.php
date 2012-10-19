@@ -8,7 +8,7 @@ jimport('joomla.application.component.controlleradmin');
 /**
  * Classifications Controller
  */
-class AttributeControllerAttributeTypes extends JControllerAdmin
+class AttributeControllerAttributetypes extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.

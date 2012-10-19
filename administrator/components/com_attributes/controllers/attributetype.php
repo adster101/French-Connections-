@@ -9,7 +9,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class AttributesControllerAttribute extends JControllerForm {
+class AttributesControllerAttributetype extends JControllerForm {
 
   public function language() {
     $id = JRequest::getInt('id');

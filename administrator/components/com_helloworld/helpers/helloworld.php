@@ -209,6 +209,11 @@ abstract class HelloWorldHelper
 		return $lang;
 	}
 
+  /*
+   * Note, neither of these function beloware really needed as they already exist 
+   * as utility functions in the framework.
+   * 
+   */
 	public static function getLanguages()
 	{
 		$lang 	   = & JFactory::getLanguage();

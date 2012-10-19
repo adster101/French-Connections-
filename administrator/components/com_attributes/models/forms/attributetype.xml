@@ -2,7 +2,7 @@
 <form	addrulepath="/administrator/components/com_attributes/models/rules">
 	<fieldset
     addFieldPath="/administrator/components/com_attributes/models/fields"
-    name="attribute">
+    name="attribute-type">
 	      
     <field
 			name="id"
@@ -28,6 +28,19 @@
       class="inputbox input-xlarge"
       filter="string"
     /> 
+		<field name="state" type="list" label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC" class="input-small"
+			filter="intval" size="1" default="1"
+		>
+			<option value="1">
+				JPUBLISHED</option>
+			<option value="0">
+				JUNPUBLISHED</option>
+			<option value="2">
+				JARCHIVED</option>
+			<option value="-2">
+				JTRASHED</option>
+		</field>
 
       
 	</fieldset>	  

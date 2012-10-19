@@ -7,7 +7,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class AttributesModelAttribute extends JModelAdmin
+class AttributesModelAttributetype extends JModelAdmin
 {
 	/**
 	 * Method override to check if you can edit an existing record.
@@ -21,7 +21,7 @@ class AttributesModelAttribute extends JModelAdmin
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		// Check specific edit permission then general edit permission.
-		return JFactory::getUser()->authorise('core.edit', 'com_attributes.attribute.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
+		return JFactory::getUser()->authorise('core.edit', 'com_attributes.attributetype.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
 	}
 	/**
 	 * Returns a reference to the a Table object, always creating it.
@@ -32,7 +32,7 @@ class AttributesModelAttribute extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Attribute', $prefix = 'AttributeTable', $config = array()) 
+	public function getTable($type = 'AttributeType', $prefix = 'AttributeTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -48,7 +48,7 @@ class AttributesModelAttribute extends JModelAdmin
 	{	
 
 		// Get the form.
-		$form = $this->loadForm('com_attributes.attribute', 'attribute', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_attributes.attributetype', 'attributetype', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) 
 		{
 			return false;
@@ -66,7 +66,7 @@ class AttributesModelAttribute extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_attributes.edit.attribute.data', array());
+		$data = JFactory::getApplication()->getUserState('com_attributes.edit.attributetype.data', array());
     
     if (empty($data)) 
 		{
