@@ -35,12 +35,17 @@ class AttributesViewAttribute extends JViewLegacy {
     // Sort out the sidebar menu
     $view = strtolower(JRequest::getVar('view'));
 
-    $this->lang = JApplication::getUserState('com_attributes.edit.'.$this->item->id.'.lang');
+    // Get the editing language for editing the various attributes. 
+    // Could maybe be set per attribute but this works. Set to en-GB by default.
+    $this->lang = JApplication::getUserState('com_attributes.edit.lang','en-GB');
 
     $this->addToolBar();
   		
     // Display the template
     parent::display($tpl);
+
+    $this->setDocument();
+
   }
 
   /**
@@ -51,6 +56,9 @@ class AttributesViewAttribute extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('Manage property attributes'));
+ 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
+		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+
   }
 
   /**

@@ -37,10 +37,10 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
-      type="classificationtypes"
+      type="attributetype"
       filter="integer"
       required="true"
-      id="66"
+      id="7"
       placeholder="true"
     />
     <field
@@ -49,24 +49,24 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
-      type="classificationtypes"
+      type="attributetype"
       filter="integer"
       required="true"
-      id="69"
+      id="6"
       default="1"
       placeholder="true"      
     />
     
     <field
       name="swimming"
-      type="classificationtypes"
+      type="attributetype"
       labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_DESC"
       class="required"
       validate="swimming"
       required="true"
-      id="91"
+      id="5"
       placeholder="true"      
       default="">
     </field>    
@@ -86,14 +86,14 @@
     </field>		
     <field
       name="location_type"
-      type="classificationtypes"
+      type="attributetype"
       labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
       class="required"
       validate="swimming"
       required="true"
-      id="111"
+      id="8"
       placeholder="true"      
       filter="int">
     </field>    

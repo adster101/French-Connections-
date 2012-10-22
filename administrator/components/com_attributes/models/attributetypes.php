@@ -7,7 +7,6 @@ jimport('joomla.application.component.modellist');
 /**
  * HelloWorldList Model
  */
-
 class AttributesModelAttributeTypes extends JModelList
 {
 	/**

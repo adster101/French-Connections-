@@ -13,7 +13,7 @@ class AttributesControllerAttribute extends JControllerForm {
 
   public function language() {
     $id = JRequest::getInt('id');
-    JApplication::setUserState('com_attributes.edit.' . $id . '.lang', JRequest::getVar('Language'));
+    JApplication::setUserState('com_attributes.edit.lang', JRequest::getVar('Language'));
     $view = JRequest::getVar('view');
     $this->setRedirect('index.php?option=com_attributes&task=' . $view . '.edit&id=' . $id);
   }

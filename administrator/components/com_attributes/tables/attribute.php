@@ -25,7 +25,7 @@ class AttributeTableAttribute extends JTable
 	}
   
   public function store (){
-    $lang = JApplication::getUserState('com_attributes.edit.'.$this->id.'.lang','en-GB');
+    $lang = JApplication::getUserState('com_attributes.edit.lang','en-GB');
     
     // TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
 		$this->saveAttributeTranslation($lang);
@@ -41,10 +41,8 @@ class AttributeTableAttribute extends JTable
 		{    
       // Set the title here so we can see what attribute we are editing
       JToolBarHelper::title(JText::_('Manage attribute ('. $this->title.')'));
-
 			// Get the current editing language for this property    
-      $lang = JApplication::getUserState('com_attributes.edit.'.$this->id.'.lang','en-GB');
-      
+      $lang = JApplication::getUserState('com_attributes.edit.lang','en-GB');
 			// Need to load any translations here if the editing language different from the property language
 			$this->loadAttributeTranslation($lang);
       
@@ -63,19 +61,19 @@ class AttributeTableAttribute extends JTable
 	 */
 	protected function loadAttributeTranslation($lang='en-GB')
 	{
-		// If the language of the property (when it was created) is the same as the current editing language 
+  
+    // If the language of the attribute (when it was created) is the same as the current editing language 
 		// then we don't need to do anything. That is, we just show the fields as they come
 		if ($this->language_code == $lang || !$this->language_code) return true;
-		
 		// Get an instance of the JTable for the HelloWorld_translations table
 		$existingTranslations = JTable::getInstance('AttributeTranslation', 'AttributesTable');
 
 		// Load a copy of all the existing translations for this property, returns null if none found
 		$existingTranslations->load(array('attribute_id'=>$this->id));
-    
-		// Replace the loaded strings with the translated ones
-		$this->title= $existingTranslations->title;
-	}  
+
+    // Replace the loaded strings with the translated ones
+		$this->title = $existingTranslations->title;
+  }  
   
 	/*
 	 * saveFormTranslation

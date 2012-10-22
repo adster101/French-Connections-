@@ -28,7 +28,17 @@
       class="inputbox input-xlarge"
       filter="string"
     /> 
-
+    <field
+			name="attribute_type_id"
+			type="attributetypes"
+			default=""
+			label="Attribute type"
+			description ="The type of this attribute"
+      required="true"
+      class="inputbox input-large"
+      filter="int">
+        <option	value="">COM_CLASSIFICATION_ITEM_ROOT</option>
+    </field>> 
       
 	</fieldset>	  
 	

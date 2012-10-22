@@ -8,16 +8,16 @@ jimport('joomla.application.component.controlleradmin');
 /**
  * Classifications Controller
  */
-echo "Woot";die;
-class AttributesControllerAttributes extends JControllerAdmin
+class AttributesControllerAttributetypes extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function getModel($name = 'Attributes', $prefix = 'AttributesModel') 
+	public function getModel($name = 'AttributeType', $prefix = 'AttributesModel') 
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;
 	}
+  
 }

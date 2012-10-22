@@ -66,7 +66,7 @@ $userId = $user->get('id');
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
               <td>
-                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'attributetypes.', $canChange, 'cb'); ?>
+                <?php echo JHtml::_('jgrid.published', $item->published, $i, 'attributetypes.', $canChange, 'cb'); ?>
               </td>
               <td class="">
                 <a href="<?php echo JRoute::_('index.php?option=com_attributes&task=attributetype.edit&id=' . (int) $item->id); ?>">

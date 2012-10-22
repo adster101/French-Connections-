@@ -52,8 +52,8 @@ class AttributesViewAttributeTypes extends JViewLegacy {
 
     JToolBarHelper::addNew('attributetype.add', 'JTOOLBAR_NEW');
     JToolBarHelper::editList('attributetype.edit', 'JTOOLBAR_EDIT');
-    JToolBarHelper::publish('attributestype.publish', 'JTOOLBAR_PUBLISH', true);
-    JToolBarHelper::unpublish('attributestype.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+    JToolBarHelper::publish('attributetypes.publish', 'JTOOLBAR_PUBLISH', true);
+    JToolBarHelper::unpublish('attributetypes.unpublish', 'JTOOLBAR_UNPUBLISH', true);
     JToolBarHelper::trash('attributetypes.trash');
 
     // Set the title which appears on the toolbar 

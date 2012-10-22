@@ -5,6 +5,8 @@ defined('_JEXEC') or die('Restricted Access');
 // load tooltip behavior
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
+
+$this->lang = ($this->lang == '*') ? 'en-GB' : $this->lang;
 ?>
 <form class="form-validate" action="<?php echo JRoute::_('index.php?option=com_attributes&view=attribute&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">
 

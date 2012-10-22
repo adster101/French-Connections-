@@ -15,7 +15,7 @@ JFormHelper::loadFieldClass('list');
  * @subpackage	com_menus
  * @since		1.6
  */
-class JFormFieldClassificationTypes extends JFormFieldList
+class JFormFieldAttributeType extends JFormFieldList
 {
 	/**
 	 * The form field type.
@@ -23,7 +23,7 @@ class JFormFieldClassificationTypes extends JFormFieldList
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'ClassificationTypes';
+	protected $type = 'attributetype';
 
 	/**
 	 * Method to get the field options.
@@ -41,18 +41,31 @@ class JFormFieldClassificationTypes extends JFormFieldList
 		
     $showPlaceHolder = $this->element['placeholder'] ? $this->element['placeholder'] : 0; 
     
-    
+    $lang = JFactory::getLanguage();
     $db		= JFactory::getDbo();
+
+    $query	= $db->getQuery(true);
     
-		$query	= $db->getQuery(true);
-		$query->select('a.id as value, a.title AS text, a.level, a.published, a.language_string');
-		$query->from('#__classifications AS a');
-		$query->join('LEFT', $db->quoteName('#__classifications').' AS b ON a.lft > b.lft AND a.rgt < b.rgt');
+    // Retrieve based on the current editing language
+    if ($lang->getTag() === 'en-GB') {
+      $query->select('a.id as value, a.title AS text,  a.published');
+    } else {
+      $query->select('a.id as value, c.title as text, a.published');
+    }
+		$query->from('#__attributes AS a');
+    $query->join('LEFT', $db->quoteName('#__attributes_type').' AS b ON a.attribute_type_id = b.id');
+
+    // If any other language that en-GB load in the translation based on the lang->getTag() function...
+    if ($lang->getTag() != 'en-GB') {  
+      $query->join('LEFT', $db->quoteName('#__attributes_translation').' as c on c.attribute_id = a.id');
+      $query->where('c.language_code = ' . $lang->getTag());
+    }
+    
 		$query->where('b.id='.$classificationID);
     $query->where('a.published = 1');
-		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
-		$query->order('a.lft ASC');
 		
+    
+    
     // Get the options.
 		$db->setQuery($query);
 
