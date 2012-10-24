@@ -25,7 +25,7 @@ class modBreadCrumbsHelper
 		$pathway	= $app->getPathway();
 		$items		= $pathway->getPathWay();
 
-		$count = count($items);
+    $count = count($items);
 		for ($i = 0; $i < $count; $i ++)
 		{
 			$items[$i]->name = stripslashes(htmlspecialchars($items[$i]->name, ENT_COMPAT, 'UTF-8'));

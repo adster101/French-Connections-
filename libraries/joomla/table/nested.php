@@ -644,7 +644,7 @@ class JTableNested extends JTable
 	{
 		$this->parent_id = (int) $this->parent_id;
 
-		// Set up a mini exception handler.
+    // Set up a mini exception handler.
 		try
 		{
 			// Check that the parent_id field is valid.

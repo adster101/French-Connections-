@@ -82,12 +82,13 @@ class HelloWorldViewTariffs extends JViewLegacy
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-1.8.2.min.js");
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js");
+   
+    //$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-1.8.2.min.js");
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
 
     
 
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js");
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js", 'text/javascript',true);
 		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css",'text/css',"screen");

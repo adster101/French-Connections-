@@ -23,6 +23,7 @@ class ClassificationViewClassifications extends JViewLegacy
     // Get data from the model
     $items = $this->get('Items');
     $pagination = $this->get('Pagination');
+    $this->state = $this->get('State');
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) 
@@ -38,8 +39,14 @@ class ClassificationViewClassifications extends JViewLegacy
 		// Preprocess the list of items to find ordering divisions.
 		foreach ($this->items as &$item) {
 			$this->ordering[$item->parent_id][] = $item->id;
-		}		
+		}	
+    
+    // Get the view 
+    $view = strtolower(JRequest::getVar('view'));
 
+    // Load the submenu
+    ClassificationHelper::addSubmenu($view);
+    
     // Set the toolbar
     $this->addToolBar();
     
@@ -75,25 +82,18 @@ class ClassificationViewClassifications extends JViewLegacy
 			JToolBarHelper::editList('classification.edit', 'JTOOLBAR_EDIT');
 		}
 		
-    if ($canDo->get('core.delete')) 
-		{
-			JToolBarHelper::deleteList('', 'classifications.delete', 'JTOOLBAR_DELETE');
-		}
 
     if ($canDo->get('core.edit.state')) 
 		{	
-      JToolBarHelper::divider();		  
     	JToolBarHelper::publish('classifications.publish', 'JTOOLBAR_PUBLISH', true);
 			JToolBarHelper::unpublish('classifications.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-			JToolBarHelper::divider();      
       JToolBarHelper::trash('classifications.trash');
+ 			JToolBarHelper::deleteList('', 'classifications.delete', 'JTOOLBAR_DELETE');
     }		
     
     if ($canDo->get('core.admin')) 
 		{
-			JToolBarHelper::divider();
  			JToolBarHelper::custom('classifications.rebuild', 'refresh.png', 'refresh_f2.png', 'JTOOLBAR_REBUILD', false);
-
 			JToolBarHelper::preferences('com_classification');
 		}
     
@@ -103,7 +103,6 @@ class ClassificationViewClassifications extends JViewLegacy
 			JText::_('JOPTION_SELECT_PUBLISHED'),
 			'filter_published',
 			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-
     );
     
 	}

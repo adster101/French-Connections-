@@ -7,6 +7,17 @@ defined('_JEXEC') or die;
  */
 abstract class ClassificationHelper
 {
+	/**
+	 * Configure the Linkbar.
+	 */
+	public static function addSubmenu($submenu) 
+	{	
+		// Get the ID of the item we are editing
+		$id = JRequest::getVar('id');
+		JHtmlSidebar::addEntry(JText::_('Manage Locations'), 'index.php?option=com_classification', $submenu == 'classifications');
+		JHtmlSidebar::addEntry(JText::_('Import Locations'), 'index.php?option=com_classification&view=import', $submenu == 'import');	
+  }
+  
 
 	/**
 	 * Get the actions
