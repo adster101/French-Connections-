@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="import">
+    <field
+			name="user_group"
+			type="usergroup"
+      class="readonly"
+			default="0"
+      label="User group"
+      description="The user group to add the list of users being imported"
+      filter="int"
+    />  
+	</fieldset>	  
+</form>

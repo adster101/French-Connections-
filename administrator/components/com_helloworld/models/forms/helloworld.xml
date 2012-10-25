@@ -12,7 +12,8 @@
       class="input-xxlarge validate-greeting"
       validate="greeting"
       required="true"
-      default=""/>    
+      default=""/>   
+      
     <field
       name="description"
       labelclass="control-label"
@@ -43,6 +44,7 @@
       id="7"
       placeholder="true"
     />
+    
     <field
       name="property_type"
       labelclass="control-label"
