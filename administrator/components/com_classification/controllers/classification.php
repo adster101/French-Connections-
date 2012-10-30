@@ -79,7 +79,4 @@ class ClassificationControllerClassification extends JControllerForm {
 
     $this->setRedirect('index.php?option=com_classification');
   }
-
-  
-
 }
