@@ -516,7 +516,6 @@ class JTableNested extends JTable
 			// Error message set in lock method.
 			return false;
 		}
-
 		// If tracking assets, remove the asset first.
 		if ($this->_trackAssets)
 		{
