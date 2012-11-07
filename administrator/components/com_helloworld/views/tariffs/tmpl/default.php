@@ -6,7 +6,6 @@ JHtml::_('behavior.formvalidation');
 
 // Get all the fieldsets in the tariffs form group
 $tariff_field_sets = $this->form->getFieldSets('tariffs');
-
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=availability&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="tariffs-form" class="form-validate">
   <div class="width-60 fltlft">
@@ -30,7 +29,6 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
       <?php } // End of foreach tariff field sets ?>
     </fieldset>
   </div>
-  
   <div class="width-40 fltrt">
     <fieldset class="adminform">
       <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
@@ -38,14 +36,11 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
         <?php foreach ($this->form->getFieldset('additional-fields') as $field): ?>
           <li><?php echo $field->label;
         echo $field->input; ?></li>
-<?php endforeach; ?>
+        <?php endforeach; ?>
       </ul>			
     </fieldset>
-
 
     <input type="hidden" name="task" value="tariffs.edit" />
 <?php echo JHtml::_('form.token'); ?>
   </div>
-
-
 </form>	

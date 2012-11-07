@@ -7,7 +7,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class ImportUsersModelImportUsers extends JModelAdmin
+class ImportModelPropertyAttributes extends JModelAdmin
 {
 
 	/**
@@ -21,14 +21,6 @@ class ImportUsersModelImportUsers extends JModelAdmin
 	public function getForm($data = array(), $loadData = false) 
 	{	
 
-		// Get the form.
-		$form = $this->loadForm('com_importusers.importusers', 'importusers', array('control' => 'jform', 'load_data' => $loadData));
-		if (empty($form)) 
-		{
-			return false;
-		}
-	
-		return $form;
 	}
   
   

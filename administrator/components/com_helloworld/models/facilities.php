@@ -32,10 +32,23 @@ class HelloWorldModelFacilities extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Facilities', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
+	/**
+	 * Returns a reference to the a Table object, always creating it.
+	 *
+	 * @param	type	The table type to instantiate
+	 * @param	string	A prefix for the table class name. Optional.
+	 * @param	array	Configuration array for model. Optional.
+	 * @return	JTable	A database object
+	 * @since	1.6
+	 */
+	public function getAttributesTable($type = 'Attributes', $prefix = 'HelloWorldTable', $config = array()) 
+	{
+		return JTable::getInstance($type, $prefix, $config);
+	}     
 	/**
 	 * Method to get the record form.
 	 *
@@ -52,11 +65,9 @@ class HelloWorldModelFacilities extends JModelAdmin
 		{
 			return false;
 		}
-		
-		return $form;
-	}
-  
 
+    return $form;
+	}
 	/**
 	 * Method to get the data that should be injected in the form.
 	 *
@@ -66,7 +77,7 @@ class HelloWorldModelFacilities extends JModelAdmin
 	protected function loadFormData() 
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.data', array());
+		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.facilities.data', array());
 		
     if (empty($data)) 
 		{
@@ -74,6 +85,215 @@ class HelloWorldModelFacilities extends JModelAdmin
 		}
 		return $data;
 	}	
+  
+	/**
+	 * Method to allow derived classes to preprocess the form.
+	 *
+	 * @param	object	A form object.
+	 * @param	mixed	The data expected for the form.
+	 * @param	string	The name of the plugin group to import (defaults to "content").
+	 * @throws	Exception if there is an error in the form event.
+	 * @since	1.6
+	 */
+	protected function preprocessForm(JForm $form, $data)
+	{
+    if (!empty($data)) {
+      // Generate the XML to inject into the form
+      $XmlStr = $this->getAttributesXml($form, $data);
+      $form->load($XmlStr);
+    } 
+	}  
+  /**
+   * getAttributesXml - This function takes a form and some data to generate a set of XML form field definitions. These 
+   * definitions are then injected into the form so they are displayed on the facilities admin screen.
+   * 
+   * @param type $form
+   * @param type $data
+   * @return string 
+   */
+  protected function getAttributesXml ($form, $data = array()) 
+  {
+    // Build an XML string to inject additional fields into the form
+    $XmlStr = '<form>';
+    $counter=0;
+    
+    $XmlStr.= '
+    <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">
+      <field
+        checked="321" 
+        class="checkbox inline" 
+        name="internal_facilities" 
+        type="facilities" 
+        label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_LABEL" 
+        description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_DESC" 
+        multiple="true"
+        id="9">
+			</field>
+      <field type="spacer" name="internal_facilities_spacer" hr="true" />
+      <field
+        name="internal_facilities_other"
+        type="editor"
+        label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_LABEL"
+        description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_DESC"
+        filter="JComponentHelper::filterText"
+        buttons="false"
+        height="125px">
+      </field>
+    </fieldset>
+    <fieldset name="external_facilities" description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
+      <field
+        checked="321" 
+        class="checkbox inline" 
+        name="external_facilities" 
+        type="facilities" 
+        label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL" 
+        description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC" 
+        multiple="true"
+        id="10">
+      </field>
+      <field type="spacer" name="external_facilities_spacer" hr="true" />
+      <field
+        name="external_facilities_other"
+        type="editor"
+        placeholder="false"      
+        label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_LABEL"
+        description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_DESC"
+        filter="JComponentHelper::filterText"
+        buttons="false"
+        height="125px">
+      </field>
+    </fieldset>
+    <fieldset name="kitchen_facilities" description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES">
+      <field
+        checked="321" 
+        class="checkbox inline" 
+        name="kitchen_facilities" 
+        type="facilities" 
+        label="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_LABEL" 
+        description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_DESC" 
+        multiple="true"
+        id="11">
+      </field>
+    </fieldset>   
+    <fieldset name="activities" description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES">
+      <field
+        checked="321" 
+        class="checkbox inline" 
+        name="activities" 
+        type="facilities" 
+        label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL" 
+        description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC" 
+        multiple="true"
+        id="8">
+      </field>
+      <field type="spacer" name="activities_spacer" hr="true" />
+      <field
+        name="activities_other"
+        type="editor"
+        placeholder="false"      
+        label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_OTHER_LABEL"
+        description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_OTHER_DESC"
+        filter="JComponentHelper::filterText"
+        buttons="false"
+        height="125px">
+      </field>
+    </fieldset>   
+    <fieldset name="suitability" description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY">
+      <field
+        checked="321" 
+        class="checkbox inline" 
+        name="suitability" 
+        type="facilities" 
+        label="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_LABEL" 
+        description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_DESC" 
+        multiple="true"
+        id="12">
+      </field>
+    </fieldset>';
+    
+    $XmlStr.='</form>';
+    return $XmlStr;    
+  }
+    
+
+  
+  public function getItem($pk = null) {
+    
+		// Initialise variables.
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+    
+		$table = $this->getTable();
+
+		if ($pk > 0)
+		{
+			// Attempt to load the row.
+			$return = $table->load($pk);
+
+			// Check for a table object error.
+			if ($return === false && $table->getError())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+    
+		// Convert to the JObject before adding other data.
+		$properties = $table->getProperties(1);
+    
+    // Get an instance of the attributes table - Possibly need to merge this into com_attributes
+    $attributesTable = $this->getAttributesTable();
+    
+    $facilities = $attributesTable->loadFacilities();
+    
+    
+
+    // Need to select all attributes that we are interested in 
+    
+    
+    // Now we need to get the existing attribute details for this property
+    //if ($pk > 0)
+    //{
+      
+      //$facilities = $facilitiesTable->loadPropertyAttributes($pk);
+      // Check for a table object error.
+      //if ($facilities === false && $table->getError())
+      //{
+        //$this->setError($facilitiesTable->getError());
+        //return false;
+      //}
+    //}    
+    
+    $properties['attributes'] = $facilities;
+
+    
+    $item = JArrayHelper::toObject($properties, 'JObject');
+    
+    
+    
+    return $item;
+
+      }
+    /**
+	 * Used as a callback for array_map, turns the multi-file input array into a sensible array of files
+	 * Also, removes illegal characters from the 'name' and sets a 'filepath' as the final destination of the file
+	 *
+	 * @param	string	- file name			($files['name'])
+	 * @param	string	- file type			($files['type'])
+	 * @param	string	- temporary name	($files['tmp_name'])
+	 * @param	string	- error info		($files['error'])
+	 * @param	string	- file size			($files['size'])b
+	 *
+	 * @return	array
+	 * @access	protected
+	 */
+	protected function reformatFilesArray($caption, $name)
+	{
+		$name = JFile::makeSafe($name);
+		return array(
+      'attribute_type_id' => $caption,
+		);
+	}  
+      
   
 	/**
 	 * Method to test whether a user can edit the published state of a property.

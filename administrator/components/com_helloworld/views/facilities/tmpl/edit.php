@@ -6,18 +6,39 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-JHtml::_('formbehavior.chosen', 'select');
-$params = $this->form->getFieldsets('params'); ?>
+// Open flag toggles the first accordion panel to be open. Subsequent ones are 'shut' by default.
+$open = true;
+?>
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=facilities&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
+  <fieldset>
+    <legend></legend>
+  <div class="accordion" id="accordion1">
+    <?php foreach ($this->form->getFieldSets() as $name => $fieldset): ?>
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#<?php echo $name; ?>">
+            <?php echo JText::_($fieldset->description); ?>
+          </a>      
+        </div>
+        <div id="<?php echo $name ?>" class="accordion-body collapse<?php
+          if ($open) {
+            echo ' in';
+            $open = false;
+          }
+          ?>">
+          <div class="accordion-inner">        
+            <fieldset class="panelform">
+              
+              
 
-      <?php foreach ($this->form->getFieldSets('facilities') as $name => $fieldset): ?>
-            <?php if (isset($fieldset->description) && trim($fieldset->description)): ?>
-              <p class="tip"><?php echo $this->escape(JText::_($fieldset->description)); ?></p>
-            <?php endif; ?>
-            <fieldset class="panelform" >
-              <ul class="adminformlist">
-                <?php foreach ($this->form->getFieldset($name) as $field) : ?>
-                  <li><?php echo $field->label; ?><?php echo $field->input; ?></li>
-                <?php endforeach; ?>
-              </ul>
+              <?php foreach ($this->form->getFieldset($name) as $field) : ?>
+                <p><?php echo $field->label; ?></p>
+                <?php echo $field->input;?>
+              <?php endforeach; ?>
             </fieldset>
-          <?php endforeach; ?>
+          </div>
+        </div>
+      </div>
+<?php endforeach; ?>
+  </div>
+</form>

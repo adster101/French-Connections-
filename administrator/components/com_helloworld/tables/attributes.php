@@ -8,7 +8,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableAvailability extends JTable
+class HelloWorldTableAttributes extends JTable
 {
 	/**
 	 * Constructor
@@ -17,28 +17,32 @@ class HelloWorldTableAvailability extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__availability', 'id', $db);
+		parent::__construct('#__attributes', 'id', $db);
 	}
 	
 	/**
 	 * Overloaded load function
 	 *
-	 * @param       int $id property id, not primary key in this case
+	 * @param       int $id primary key in this case
 	 * @param       boolean $reset reset data
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function load($id = null, $reset = true) 
+	public function loadFacilities() 
 	{
+    
+    // Loads a list of the attributes that we are interested in
 		$query = $this->_db->getQuery(true);
-		$query->select('id, start_date, end_date, availability');
+		$query->select('id, title, attribute_type_id');
 		$query->from($this->_tbl);
-		$query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
+		$query->where("attribute_type_id in (8,9,10,11,12)");
+    $query->order('attribute_type_id, id');
 		$this->_db->setQuery($query);
+    
 		try
 		{
-			$result = $this->_db->loadObjectList();
-			return $result;
+			$result = $this->_db->loadObjectList($key='id');
+      return $result;
 		}
 		catch (RuntimeException $e)
 		{
@@ -46,6 +50,7 @@ class HelloWorldTableAvailability extends JTable
 			$this->setError($je);
 			return false;
 		}			
+    
 	}
   
   /**

@@ -63,6 +63,7 @@ class HelloWorldModelTariffs extends JModelAdmin
 	 *
 	 * @return	mixed	The data for the form.
 	 * @since	1.6
+   * 
 	 */
 	protected function loadFormData() 
 	{
@@ -102,7 +103,8 @@ class HelloWorldModelTariffs extends JModelAdmin
 				return false;
 			}
 		}
-		// Convert to the JObject before adding other data.
+    
+		// Convert to a JObject before adding other data.
 		$properties = $table->getProperties(1);
     
     // Now we need to get the existing tariff details for this property

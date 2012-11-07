@@ -28,8 +28,7 @@ class AttributesModelAttributes extends JModelList
 				'publish_up', 'a.publish_up',
 				'publish_down', 'a.publish_down',
 			);
-		}
-
+    }
 		parent::__construct($config);
 	}
   
@@ -71,6 +70,7 @@ class AttributesModelAttributes extends JModelList
 	 * Method to build an SQL query to load the list data.
 	 *
 	 * @return	string	An SQL query
+   * 
 	 */
 	protected function getListQuery()
 	{
@@ -79,8 +79,9 @@ class AttributesModelAttributes extends JModelList
 		$query = $db->getQuery(true);
 		
 		// Select some fields
+    // TO DO - This needs abstracting into an attributes table instance and reused within the property manager component
+    
 		$query->select('a.ordering,a.id,a.attribute_type_id,a.title,a.published,at.title as attribute_type, at.id as attribute_type_id');
-      
     $query->join('left','#__attributes_type at ON a.attribute_type_id = at.id');
 		
 		// From the hello table
@@ -93,11 +94,8 @@ class AttributesModelAttributes extends JModelList
     if (is_numeric($attributeTypeId)) {
       $query->where('attribute_type_id = ' . $attributeTypeId);
     }
-
 		$query->order($db->escape($listOrdering).' '.$listDirn);
 
 		return $query;
 	}   
-  
-
 }

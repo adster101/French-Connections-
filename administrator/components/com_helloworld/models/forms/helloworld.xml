@@ -41,7 +41,7 @@
       type="attributetype"
       filter="integer"
       required="true"
-      id="7"
+      id="2"
       placeholder="true"
     />
     
@@ -54,7 +54,7 @@
       type="attributetype"
       filter="integer"
       required="true"
-      id="6"
+      id="1"
       default="1"
       placeholder="true"      
     />
@@ -68,7 +68,7 @@
       class="required"
       validate="swimming"
       required="true"
-      id="5"
+      id="34"
       placeholder="true"      
       default="">
     </field>    
@@ -95,7 +95,7 @@
       class="required"
       validate="swimming"
       required="true"
-      id="8"
+      id="7"
       placeholder="true"      
       filter="int">
     </field>    

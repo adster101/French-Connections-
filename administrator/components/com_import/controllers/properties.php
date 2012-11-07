@@ -72,6 +72,7 @@ class ImportControllerProperties extends JControllerForm {
         $property->parent_id = 1;        
       }
 
+      // May need revising 
       $property->greeting = $line[2];
       $property->catid = $line[3];
       $property->params = $line[4];
@@ -108,7 +109,6 @@ class ImportControllerProperties extends JControllerForm {
       $property->changeover_day = $line[36];
       $property->published = $line[37];
       $property->video = $line[38];
-      
       
 
       if(!$property->store()) {

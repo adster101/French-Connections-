@@ -58,7 +58,7 @@ class JFormFieldAttributeType extends JFormFieldList
     // If any other language that en-GB load in the translation based on the lang->getTag() function...
     if ($lang->getTag() != 'en-GB') {  
       $query->join('LEFT', $db->quoteName('#__attributes_translation').' as c on c.attribute_id = a.id');
-      $query->where('c.language_code = ' . $lang->getTag());
+      $query->where("c.language_code = '".$lang->getTag()."'");
     }
     
 		$query->where('b.id='.$classificationID);

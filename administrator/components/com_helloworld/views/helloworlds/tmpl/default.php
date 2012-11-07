@@ -5,7 +5,6 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('dropdown.init');
-JHtml::_('formbehavior.chosen', 'select');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));

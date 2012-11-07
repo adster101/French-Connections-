@@ -24,14 +24,12 @@ class HelloWorldViewTariffs extends JViewLegacy
 
 		// Get the availability form, for now not loading any form data as it will be presented in the calendar rather than in a form
 		// Need to take into account the additional price notes 
-		$form = $this->get('Form');
-
-  
+		$form = $this->get('Form');  
 
 		// Assign the Data
 		$this->form = $form;
-		
-		// Set the toolbar
+
+    // Set the toolbar
 		$this->addToolBar();
 
 		// Set the custom script
@@ -86,13 +84,10 @@ class HelloWorldViewTariffs extends JViewLegacy
     //$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-1.8.2.min.js");
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
 
-    
-
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js", 'text/javascript',true);
 		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css",'text/css',"screen");
-
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}

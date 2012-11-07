@@ -35,29 +35,31 @@
       type="hidden"
       filter="unset"/>
     
-    <field 
+  
+  <field
       name="base_currency"
-      type="list"
+      labelclass="control-label"
       label="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_LABEL"
-      description="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_DESC"
+      description="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_MESSAGE"
+      message="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_DESC"
+      type="attributetype"
+      filter="integer"
       required="true"
-      filter="int">
-      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-			<option value="0">COM_HELLOWORLD_TARIFFS_BASE_CURRENCY_GBP</option>
-			<option value="1">COM_HELLOWORLD_TARIFFS_BASE_CURRENCY_EUR</option>      
-    </field>
+      id="19"
+      default="1"
+      placeholder="true"      
+    />    
     <field 
       name="tariff_based_on"
-      type="list"
+      type="attributetype"
       label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_LABEL"
       description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_DESC"
       required="true"
-      filter="int">
-      <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-			<option value="0">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_PROPERTY_PER_WEEK</option>
-			<option value="1">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_PROPERTY_PER_NIGHT</option>      
-			<option value="2">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_ROOM_PER_NIGHT</option>      
-			<option value="3">COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_ROOM_PER_WEEK</option>      
+      filter="int"
+      id="21"
+      default=""
+      placeholder="true">
+     
     </field>
     <field
 			name="additional_price_notes"
