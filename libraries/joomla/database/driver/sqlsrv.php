@@ -121,7 +121,7 @@ class JDatabaseDriverSqlsrv extends JDatabaseDriver
 			'CharacterSet' => 'UTF-8',
 			'ReturnDatesAsStrings' => true);
 
-		// Make sure the SQLSRV extension for PHP is installed and enabled.
+    // Make sure the SQLSRV extension for PHP is installed and enabled.
 		if (!function_exists('sqlsrv_connect'))
 		{
 			throw new RuntimeException('PHP extension sqlsrv_connect is not available.');

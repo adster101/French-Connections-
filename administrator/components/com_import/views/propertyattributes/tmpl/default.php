@@ -17,7 +17,7 @@ JHtml::_('behavior.formvalidation');
       <?php endif; ?> 
     <fieldset class="adminform">
       <legend><?php echo JText::_('Choose an import file'); ?></legend>
-      <p>Import a list of users from a CSV file into the #__property_attributes table. Sweet!</p>
+      <p>Import a list of users from a CSV file into the #__attributes_property table. Sweet!</p>
       <input class="input_box" id="install_package" name="import_file" type="file" size="57" />
       
     </fieldset>

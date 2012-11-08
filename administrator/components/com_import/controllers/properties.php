@@ -19,6 +19,31 @@ class ImportControllerProperties extends JControllerForm {
     JSession::checkToken( 'POST' ) or die( 'Invalid Token' );
     
     $config = JFactory::getConfig();
+    
+    $host = 'localhost';
+		$user = 'dev1';
+		$password = 'dumb1ed0re';
+		$database = 'tmg_cms_french_connections';
+		$prefix = '';
+		$driver = 'sqlsrv';
+		$debug = false;
+
+		$options = array('driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix);
+
+    
+    			
+    $sqlsrv = JDatabaseDriver::getInstance($options);
+		
+
+		$sqlsrv->setDebug($debug);
+
+    $query = $sqlsrv->select('*');
+    $query = $sqlsrv->from('users');
+    
+    $sqlsrv->setQuery($query);
+    
+    print_r($sqlsrv);
+    die;
     // This is here as the user table instance checks that we aren't trying to insert a record with the same 
     // username as a super user. However, by default root_user is null. As we insert a load of dummy user to start 
     // with this is matched and the user thinks we are trying to replicate the root_user. We aren't and we 

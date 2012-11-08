@@ -28,6 +28,19 @@
       class="inputbox input-xlarge"
       filter="string"
     /> 
+    <field
+			name="field_name"
+			type="text"
+			default=""
+			label="Form field text"
+			description ="This field corresponds to the form field name as they appear on the property attribute screen."
+      maxlength="25"
+      size="30"
+      required="false"
+      class="inputbox input-large"
+      filter="string"
+    />     
+    
 		<field name="state" type="list" label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC" class="input-small"
 			filter="intval" size="1" default="1"

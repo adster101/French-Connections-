@@ -8,7 +8,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableAttributes extends JTable
+class HelloWorldTablePropertyAttributes extends JTable
 {
 	/**
 	 * Constructor
@@ -17,7 +17,7 @@ class HelloWorldTableAttributes extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__attributes', 'id', $db);
+		parent::__construct('#__attributes_property', 'property_id', $db);
 	}
 	
 	/**
@@ -28,29 +28,51 @@ class HelloWorldTableAttributes extends JTable
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function loadFacilities() 
+	public function load($id = null, $reset = true) 
 	{
     
+    // Array to hold the result list
+    $property_attributes = array();
+    
     // Loads a list of the attributes that we are interested in
+    // This is probably reused on the search part
 		$query = $this->_db->getQuery(true);
-		$query->select('id, title, attribute_type_id');
-		$query->from($this->_tbl);
-		$query->where("attribute_type_id in (8,9,10,11,12)");
-    $query->order('attribute_type_id, id');
-		$this->_db->setQuery($query);
+		$query->select('at.field_name,pa.attribute_id');
+		$query->from('#__attributes_property as pa');
+    $query->leftJoin('#__attributes a on a.id = pa.attribute_id');
+
+    $query->leftJoin('#__attributes_type at on at.id = a.attribute_type_id');
+
+    $query->where($this->_db->quoteName('property_id') . ' = ' . $this->_db->quote($id));
+    $this->_db->setQuery($query);
     
 		try
 		{
-			$result = $this->_db->loadObjectList($key='id');
-      return $result;
+      
+      // Execute the db query, returns an iterator object.
+			$result = $this->_db->getIterator();
+      
+      // Loop over the iterator and do stuff with it
+      foreach ($result as $row){
+        $tmp = JArrayHelper::fromObject($row);
+
+        // If the facility type already exists
+        if (!array_key_exists($tmp['field_name'], $property_attributes)) {
+          $property_attributes[$tmp['field_name']] = array();
+        }
+        
+        $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
+        
+      }
+      return $property_attributes;
 		}
+    
 		catch (RuntimeException $e)
 		{
 			$je = new JException($e->getMessage());
 			$this->setError($je);
 			return false;
-		}			
-    
+		}
 	}
   
   /**

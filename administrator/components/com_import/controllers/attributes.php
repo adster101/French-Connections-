@@ -65,7 +65,7 @@ class ImportControllerAttributes extends JControllerForm {
       // Start building a new query to insert any attributes... 
       $query = $db->getQuery(true);
       
-      $query->insert('#__property_attributes');
+      $query->insert('#__attributes_property');
       
 			$query->columns(array('property_id','attribute_id'));
       

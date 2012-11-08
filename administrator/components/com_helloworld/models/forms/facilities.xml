@@ -16,10 +16,8 @@
   <field 
     name="greeting"
     type="hidden"
-    default=""> 
-
+    default="">
   </field>
-
   <field 
     name="published"
     type="text"
@@ -29,9 +27,5 @@
     name="expiry_date"
     type="hidden"
     filter="unset"/>
-   <fields name="facilities">
-      
-     
 
-  </fields>
 </form>
