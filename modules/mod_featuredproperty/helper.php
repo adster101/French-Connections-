@@ -1,5 +1,5 @@
 <?php 
- 
+
 /**
  * @package	Joomla.Tutorials
  * @subpackage	Module
@@ -27,9 +27,12 @@ class modFeaturedPropertyHelper
 		$db = JFactory::getDBO();
 		$db->setQuery($db->getQuery(true)
 			->select($select)
-			->from("#__helloworld as hel")
+			->from("#__helloworld as hel")    
+      ->where('hel.parent_id !=0')
+
 			->leftJoin('#__categories AS cat ON hel.catid = cat.id')
 			->leftJoin('#__helloworld_translations AS trans ON hel.id = trans.property_id')
+      ->order('rand()')
 			,0,4
 		);
 

@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * @package     Joomla.Tutorials
  * @subpackage  Module
@@ -10,9 +10,9 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-require_once (dirname(__FILE__).DS.'helper.php');
-require_once(JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'route.php');
+require_once (dirname(__FILE__).'/helper.php');
 
+require_once(JPATH_SITE.'/components/com_content/helpers/route.php');
 
 
 $helper = new modFeaturedPropertyHelper();

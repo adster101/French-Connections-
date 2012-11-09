@@ -28,7 +28,6 @@ class ImportControllerProperties extends JControllerForm {
     $config->set('root_user', 'admin');
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
     $data = JRequest::getVar('jform', null, 'POST', 'array');
-    
     $handle = fopen($userfile['tmp_name'], "r");
 
     JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_import/tables');
@@ -36,7 +35,6 @@ class ImportControllerProperties extends JControllerForm {
     $previous_property_id = '';
     
     while (($line = fgetcsv($handle)) !== FALSE) {
-      
       
       // Insert a placeholder row for the user
       // Do this so we can set a primary key of our choice.
@@ -83,34 +81,39 @@ class ImportControllerProperties extends JControllerForm {
       $property->expiry_date = $line[8];
       $property->modified_by = $line[9];
       $property->lang = $line[10];
-      $property->description = $line[11];
-      $property->thumbnail = $line[12];
-      $property->occupancy = $line[13];
-      $property->single_bedrooms = $line[14];
-      $property->double_bedrooms = $line[15];
-      $property->triple_bedrooms = $line[16];
-      $property->quad_bedrooms = $line[17];
-      $property->twin_bedrooms = $line[18];
-      $property->childrens_beds = $line[19];
-      $property->cots = $line[20];
-      $property->extra_beds = $line[21];
-      $property->bathrooms = $line[22];
-      $property->toilets = $line[23];
-      $property->swimming = $line[24];
-      $property->accommodation_type = $line[25];
-      $property->property_type = $line[26];
-      $property->location_type = $line[27];
-      $property->latitude = $line[28];
-      $property->longitude = $line[29];
-      $property->nearest_town = $line[30];
-      $property->distance_to_coast = $line[31];
-      $property->additional_price_notes = $line[32];
-      $property->base_currency = $line[33];
-      $property->tariff_based_on = $line[34];
-      $property->linen_costs = $line[35];
-      $property->changeover_day = $line[36];
-      $property->published = $line[37];
-      $property->video = $line[38];
+      $property->description = $line[11].$line[12].$line[13];
+      $property->internal_facilities_other = $line[14];
+      $property->external_facilities_other = $line[15];
+      $property->activities_other = $line[16];
+      $property->location_details = $line[17];
+      $property->getting_there = $line[18];
+      $property->thumbnail = $line[19];
+      $property->occupancy = $line[20];
+      $property->single_bedrooms = $line[21];
+      $property->double_bedrooms = $line[22];
+      $property->triple_bedrooms = $line[23];
+      $property->quad_bedrooms = $line[24];
+      $property->twin_bedrooms = $line[25];
+      $property->childrens_beds = $line[26];
+      $property->cots = $line[27];
+      $property->extra_beds = $line[28];
+      $property->bathrooms = $line[29];
+      $property->toilets = $line[30];
+      $property->swimming = $line[31];
+      $property->accommodation_type = $line[32];
+      $property->property_type = $line[33];
+      $property->location_type = $line[34];
+      $property->latitude = $line[35];
+      $property->longitude = $line[36];
+      $property->nearest_town = $line[37];
+      $property->distance_to_coast = $line[38];
+      $property->additional_price_notes = $line[39];
+      $property->base_currency = $line[40];
+      $property->tariff_based_on = $line[41];
+      $property->linen_costs = $line[42];
+      $property->changeover_day = $line[43];
+      $property->published = $line[44];
+      $property->video = $line[45];
       
 
       if(!$property->store()) {
