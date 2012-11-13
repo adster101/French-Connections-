@@ -5,6 +5,7 @@
  * @copyright	Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -37,15 +38,15 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
   }
 
   if ($availability) {
-    $list[1][3] = true;
-  }
-
-  if ($tariffs) {
     $list[2][3] = true;
   }
 
-  if ($images) {
+  if ($tariffs) {
     $list[3][3] = true;
+  }
+
+  if ($images) {
+    $list[4][3] = true;
   }
   ?>
   <div id="sidebar">

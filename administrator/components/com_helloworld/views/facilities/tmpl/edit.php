@@ -12,7 +12,9 @@ $open = true;
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=facilities&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
   <fieldset>
-    <legend></legend>
+    <legend><?php echo JText::_('COM_HELLOWORLD_FACILITIES_LEGEND'); ?></legend>
+    <p><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?></p>
+
     <div class="accordion" id="accordion1">
       <?php foreach ($this->form->getFieldSets() as $name => $fieldset): ?>
         <div class="accordion-group">

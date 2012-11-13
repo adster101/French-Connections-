@@ -31,22 +31,16 @@
   <fieldset name="changeover-day">
     <field
 			name="changeover_day"
-			type="list"
+			type="attributetype"
 			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
 			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
-			class="validate-changeover"
-			validate="changeover"
+			class="required"
+			filter="int"
+      id="20"
+      placeholder="true"
 			required="true"
 			default="asdasd"
       labelclass="control-label">
-			<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-			<option value="0">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_0</option>
-			<option value="1">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_1</option>
-			<option value="2">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_2</option>
-			<option value="3">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_3</option>
-			<option value="4">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_4</option>
-			<option value="5">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_5</option>
-			<option value="6">COM_HELLOWORLD_AVAILABILITY_CHANGEOVER_DAY_6</option>
 		</field>
     
   </fieldset>

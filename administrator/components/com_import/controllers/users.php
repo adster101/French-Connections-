@@ -32,7 +32,20 @@ class ImportControllerUsers extends JControllerForm {
     $groups[0] = $data['user_group'];
     
     $handle = fopen($userfile['tmp_name'], "r");
-        
+    
+    // Import the JFormRule and JFormRuleEmail classes so we can validate email addresses
+    jimport('joomla.form.rule');
+    require_once(JPATH_SITE.'/libraries/joomla/form/rules/email.php');
+    $isValidEmail = new JFormRuleEmail;
+    
+    // Create a new form element which JFormRuleEmail requires as an argument
+    $element = new SimpleXMLElement('<field name="email" unique="false"></field>');
+    
+    // Create a log file for the email kickers
+    jimport('joomla.error.log');
+
+    JLog::addLogger(array('text_file' => 'user.import.php'), JLog::ALL, array('import_user'));
+    
     while (($line = fgetcsv($handle)) !== FALSE) {
      
       // If property owners group - harcoded, oh dear
@@ -68,11 +81,19 @@ class ImportControllerUsers extends JControllerForm {
       if ($data['user_group'] == 10) {
         $user->id = $line[0];
       }
-      
+
+
       $user->groups = $groups;
       $user->name = $line[1];
       $user->username = $line[2];
-      $user->email = $line[3];
+
+      // Test that the email is at least in a valid format...
+      if (!JMailHelper::isEmailAddress($line[3]))
+      {
+      	$user->email = 'no_email_'.$user->id.'@email.com';
+      } else {
+        $user->email = $line[3];
+      }
       $user->password = $array['password'] = $password . ':' . $salt;
       $user->block = $line[5];
       $user->sendEmail = $line[6];
@@ -82,11 +103,10 @@ class ImportControllerUsers extends JControllerForm {
       $user->params = $line[10];
       $user->lastResetTime = $line[11];
 
-      if(!$user->save()) {
-        // Dump this out to a file?
-        echo 'User id: ' . $user->id . ' Username: ' . $user->username . 'Problem: ' . $user->getError();
-        echo "<br />";
-      }
+      if(!$user->save()) { 
+        // If this happens most likely user is a duplicate, log.
+        JLog::add(JText::_($user->username.'('.$user->id.','.$user->email.').' . $user->getError()), JLog::WARNING, 'import_user');
+      } 
     }
           
     fclose($handle);

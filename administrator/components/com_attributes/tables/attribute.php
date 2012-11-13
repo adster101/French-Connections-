@@ -43,7 +43,8 @@ class AttributeTableAttribute extends JTable
       JToolBarHelper::title(JText::_('Manage attribute ('. $this->title.')'));
 			// Get the current editing language for this property    
       $lang = JApplication::getUserState('com_attributes.edit.lang','en-GB');
-			// Need to load any translations here if the editing language different from the property language
+
+      // Need to load any translations here if the editing language different from the property language
 			$this->loadAttributeTranslation($lang);
       
 			return true;
@@ -69,10 +70,10 @@ class AttributeTableAttribute extends JTable
 		$existingTranslations = JTable::getInstance('AttributeTranslation', 'AttributesTable');
 
 		// Load a copy of all the existing translations for this property, returns null if none found
-		$existingTranslations->load(array('attribute_id'=>$this->id));
-
+		$existingTranslations->load(array('id'=>$this->id));
     // Replace the loaded strings with the translated ones
 		$this->title = $existingTranslations->title;
+
   }  
   
 	/*
@@ -88,7 +89,7 @@ class AttributeTableAttribute extends JTable
 		$existingTranslations = JTable::getInstance('AttributeTranslation', 'AttributesTable');
 
 		// Load a copy of all the existing translations for this property, returns null if none found
-		$existingTranslations->load(array('attribute_id'=>$this->id));
+		$existingTranslations->load(array('id'=>$this->id));
 	
 		// An array of all the translatable fields
 		$value = array();

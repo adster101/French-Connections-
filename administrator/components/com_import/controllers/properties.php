@@ -35,7 +35,7 @@ class ImportControllerProperties extends JControllerForm {
     $previous_property_id = '';
     
     while (($line = fgetcsv($handle)) !== FALSE) {
-      
+
       // Insert a placeholder row for the user
       // Do this so we can set a primary key of our choice.
       // Otherwise, joomla insists on generating a new user id

@@ -52,7 +52,6 @@ class ImportControllerAttributes extends JControllerForm {
     $previous_property_id = '';
       
     while (($line = fgetcsv($handle)) !== FALSE) {
-      
       // The list of property attributes is a comma separated list so it is exploded to an array
       $property_attributes = explode(',',$line[2]);
       
@@ -85,6 +84,7 @@ class ImportControllerAttributes extends JControllerForm {
 			{
 				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
 				print_r($db->getErrorMsg());
+        print_r($insert_string);
 				die;
 			}
  
