@@ -9,7 +9,7 @@ class AccommodationController extends JControllerLegacy
 {
   public function display($cachable = false, $urlparams = array()) {
     
-  	parent::display($cachable, $safeurlparams);
+  	parent::display($cachable);
 
     return $this;
   }

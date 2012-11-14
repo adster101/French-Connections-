@@ -19,7 +19,7 @@
       default="">      
     </field>
     <field 
-      name="greeting"
+      name="title"
       type="hidden"
       default=""> 
 

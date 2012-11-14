@@ -112,7 +112,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 */
 	protected function _getAssetTitle()
 	{
-		return $this->greeting;
+		return $this->title;
 	}
  
 	/**
@@ -283,12 +283,12 @@ class HelloWorldTableHelloWorld extends JTableNested
 	
 		// An array of all the translatable fields
 		$value = array();
-		$value['greeting'] = $this->greeting;
+		$value['title'] = $this->title;
 		$value['description'] = $this->description;
 		$value['property_id'] = $this->id;
 		$value['lang_code'] = $lang;
 		
-		unset($this->greeting);
+		unset($this->title);
 		unset($this->description);
 			
 		// Bind the translated fields to the JTable instance	
@@ -323,7 +323,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$existingTranslations->load(array('property_id'=>$this->id));
     
 		// Replace the loaded strings with the translated ones
-		$this->greeting = $existingTranslations->greeting;
+		$this->title = $existingTranslations->title;
 		$this->description = $existingTranslations->description;
 	}
   

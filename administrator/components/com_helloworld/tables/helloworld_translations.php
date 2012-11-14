@@ -18,7 +18,7 @@ class HelloWorldTableHelloWorld_translations extends JTable {
   var $id = '';
   var $property_id = '';
   var $lang_code = '';
-  var $greeting = '';
+  var $title = '';
   var $description = '';
 
   function __construct(&$db) {

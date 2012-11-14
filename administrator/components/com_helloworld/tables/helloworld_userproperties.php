@@ -20,7 +20,6 @@ class HelloWorldTableHelloWorld_userproperties extends JTableNested
 	var $alias = '';	
 	var $access = '';	
 	var $path = '';
-	var $greeting = '';
 	var $catid = '';
 	var $params = '';
 	var $created_by = 0;

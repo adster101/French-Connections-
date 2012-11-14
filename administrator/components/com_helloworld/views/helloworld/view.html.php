@@ -75,9 +75,9 @@ class HelloWorldViewHelloWorld extends JViewLegacy
     // Currently HelloWorlHelper::getAction only returns the core permissions for the item.
     // Any permissions set at the component level are ignored. Need to fix that.
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-    JApplication::setUserState('title'.$this->item->id, $this->item->greeting);
+    JApplication::setUserState('title'.$this->item->id, $this->item->title);
     
-    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->greeting), 'helloworld');
+    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'helloworld');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{

@@ -73,7 +73,7 @@ class ImportControllerProperties extends JControllerForm {
       }
 
       // May need revising 
-      $property->greeting = $line[2];
+      $property->title = $line[2];
       $property->catid = $line[3];
       $property->params = $line[4];
       $property->created_on = $line[6];

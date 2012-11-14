@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+// Register the Helloworld helper file
+JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
 $controller = JControllerLegacy::getInstance('Accommodation');
 $controller->execute(JFactory::getApplication()->input->get('task'));

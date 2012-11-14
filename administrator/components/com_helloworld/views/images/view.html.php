@@ -64,7 +64,7 @@ class HelloWorldViewImages extends JViewLegacy
 		$isNew = $this->item->id == 0;
     
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', $this->item->greeting), 'helloworld');
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', $this->item->title), 'helloworld');
  
     // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
     JLoader::register('JToolbarButtonImageupload', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Imageupload.php');

@@ -23,7 +23,7 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
       <fieldset class="adminform">
         <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>
         <div class="control-group">
-          <?php echo $this->form->getLabel('greeting'); ?> <?php echo $this->form->getInput('greeting'); ?>
+          <?php echo $this->form->getLabel('title'); ?> <?php echo $this->form->getInput('title'); ?>
         </div>
         <fieldset class="adminform">
           <?php foreach ($this->form->getFieldset('details') as $field): ?>

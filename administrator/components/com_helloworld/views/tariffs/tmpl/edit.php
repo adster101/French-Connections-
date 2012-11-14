@@ -46,8 +46,8 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
 <?php      echo $this->form->getInput('id'); ?>
         <?php echo $this->form->getLabel('parent_id');
       echo $this->form->getInput('parent_id'); ?>
-        <?php echo $this->form->getLabel('greeting');
-      echo $this->form->getInput('greeting'); ?>
+        <?php echo $this->form->getLabel('title');
+      echo $this->form->getInput('title'); ?>
         <?php echo $this->form->getLabel('base_currency');
       echo $this->form->getInput('base_currency'); ?>
         <?php echo $this->form->getLabel('tariff_based_on');

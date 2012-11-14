@@ -2,8 +2,8 @@
   <li class="active">
     <a href="#">Main</a>
   </li>
-  <li><a href="#">Description</a></li>
-  <li><a href="#">Location</a></li>
-  <li><a href="#">Availability</a></li>
-  <li><a href="#">Pricing</a></li>
+  <li><a href="#description">Description</a></li>
+  <li><a href="#location">Location</a></li>
+  <li><a href="#availability">Availability</a></li>
+  <li><a href="#pricing">Pricing</a></li>
 </ul>

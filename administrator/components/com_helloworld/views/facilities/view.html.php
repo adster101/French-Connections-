@@ -70,7 +70,7 @@ class HelloWorldViewFacilities extends JViewLegacy
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_FACILITIES_EDIT', $this->form->getValue('greeting')), 'helloworld');
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_FACILITIES_EDIT', $this->form->getValue('title')), 'helloworld');
 		
     // Built the actions for new and existing records.
 		JToolBarHelper::apply('facilities.apply', 'JTOOLBAR_APPLY');	

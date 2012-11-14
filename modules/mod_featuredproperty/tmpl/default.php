@@ -14,11 +14,9 @@ defined('_JEXEC') or die;
 
 
 <?php foreach ($this->items as $item) { 
-	if ($item->greeting) { ?>
-			<?php	//print_r(json_decode($item->params)->access_options);die?>
-
+	if ($item->title) { ?>
 			<a href="index.php?option=com_accommodation&view=property&id=<?php echo $item->id ?>&lang=<?php echo $this->lang ?>">
-				<h4><?php echo $item->greeting ?></h4>
+				<h4><?php echo $item->title ?></h4>
 			</a>
 		
 			<h5><?php echo $item->title ?></h5>		

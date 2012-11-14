@@ -2,7 +2,7 @@
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
   <fieldset name="description">
     <field
-      name="greeting"
+      name="title"
       labelclass="control-label"
       type="text"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
