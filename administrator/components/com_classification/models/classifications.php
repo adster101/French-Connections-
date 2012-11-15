@@ -91,12 +91,7 @@ class ClassificationModelClassifications extends JModelList {
    * @return	string	An SQL query
    */
   protected function getListQuery() {
-    // Get the user ID
-    $user = JFactory::getUser();
-    $userId = $user->get('id');
 
-    // Get the list of user groups this user is assigned to		
-    $groups = $user->getAuthorisedGroups();
     // Create a new query object.		
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
@@ -104,11 +99,7 @@ class ClassificationModelClassifications extends JModelList {
     // Select some fields
     $query->select(
             'id,title,parent_id,level,lft,rgt,alias,access,published');
-
-
-
-
-
+    
     // From the hello table
     $query->from('#__classifications');
 

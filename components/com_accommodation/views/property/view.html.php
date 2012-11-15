@@ -19,8 +19,12 @@ class AccommodationViewProperty extends JViewLegacy
     
     
 
-    
+    // Get the availability for this property
     $this->availability = $this->get('Availability');
+    
+    // Get the tariffs for this property
+    $this->tariffs = $this->get('Tariffs');
+
 
     
     
@@ -32,8 +36,8 @@ class AccommodationViewProperty extends JViewLegacy
 		}
     
 		// Display the view
-		parent::display($tpl)
-            ;
+		parent::display($tpl);
+    
 		// Set the document
 		$this->setDocument();		
 	}

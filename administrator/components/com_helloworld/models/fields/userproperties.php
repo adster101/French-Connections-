@@ -54,12 +54,14 @@ class JFormFieldUserProperties extends JFormFieldList
 
 		// Get the ID of the user who created the property 	
 		if ($id == 0) {
+      
 			// If no ID then must be a new property which means no created_by id exists for this property
       // in which case we just set the created_by id to the user id to return any props the this user also owns
       // Ensures that a list is seen when creating a new property (instead of saving before needing to see list)
 			$created_by = $user->id;
       
 		} else {
+      
       // Existing property 
       // Need to get the userID for the user who created this property
       // Use the HelloWorld table instance to do this

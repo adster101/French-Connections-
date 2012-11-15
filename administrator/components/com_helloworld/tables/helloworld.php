@@ -415,6 +415,7 @@ class HelloWorldTableHelloWorld extends JTableNested
       }
       
       } catch (Exception $e ) {
+        //TO DO - Log this
         print_r($e);die;
       }
       

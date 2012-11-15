@@ -20,5 +20,6 @@ abstract class ImportHelper
 		JHtmlSidebar::addEntry(JText::_('Attributes'), 'index.php?option=com_import&view=propertyattributes', $submenu == 'propertyattributes');	
 		JHtmlSidebar::addEntry(JText::_('Availability'), 'index.php?option=com_import&view=availability', $submenu == 'availability');	
 		JHtmlSidebar::addEntry(JText::_('Tariffs'), 'index.php?option=com_import&view=tariffs', $submenu == 'tariffs');	
+		JHtmlSidebar::addEntry(JText::_('Locations'), 'index.php?option=com_import&view=locations', $submenu == 'locations');	
   }
 }

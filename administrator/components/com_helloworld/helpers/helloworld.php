@@ -76,7 +76,7 @@ abstract class HelloWorldHelper
           JApplication::setUserState('com_helloworld.availability.progress', false);
         }
       }
-
+            
       // Check that this doesn't already exist in the session scope
       if (!JApplication::getUserState('com_helloworld.tariffs.progress', false))
       {    

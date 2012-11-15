@@ -76,7 +76,7 @@
   <fieldset name="Location">
     <field
       name="catid"
-      type="department"
+      type="departments"
       extension="com_helloworld"
       class="list"
       default="1"
@@ -156,6 +156,32 @@
       filter="int"
       maxlength="2">
     </field>		
+    <field
+			name="location_details"
+			type="editor"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_DESC"
+      rows="3"
+      class="inputbox validate-description"
+			default=""
+			filter="safehtml"
+			buttons="false"
+      validate=""
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_MESSAGE">
+    </field>
+    <field
+			name="getting_there"
+			type="editor"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_DESC"
+      rows="3"
+      class="inputbox validate-description"
+			default=""
+			filter="safehtml"
+			buttons="false"
+      validate=""
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_MESSAGE">
+    </field>    
   </fieldset>
   <fieldset name="occupancy">
     <field

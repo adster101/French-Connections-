@@ -170,6 +170,18 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
                 <?php echo $this->form->getInput('distance_to_coast'); ?>
               </div>
             </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('location_details'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('location_details'); ?>
+              </div>
+            </div> 
+            <div class="control-group">
+              <?php echo $this->form->getLabel('getting_there'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('getting_there'); ?>
+              </div>
+            </div> 
           </fieldset>    
         </div>
 
