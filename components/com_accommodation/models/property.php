@@ -89,10 +89,10 @@ class AccommodationModelProperty extends JModelItem {
           occupancy, 
           swimming, 
           distance_to_coast, 
-          latitude, 
+          hw.latitude, 
           additional_price_notes, 
           linen_costs, 
-          longitude, 
+          hw.longitude, 
           nearest_town,
           a.title as changeover_day,
           b.title as tariffs_based_on,
@@ -100,7 +100,8 @@ class AccommodationModelProperty extends JModelItem {
           d.title as location_type,
           e.title as property_type,
           f.title as accommodation_type,
-          g.title as swimming';
+          g.title as swimming,
+          h.title as department';
       }
 
       $this->_db->setQuery($this->_db->getQuery(true)
@@ -113,6 +114,7 @@ class AccommodationModelProperty extends JModelItem {
                       ->leftJoin('#__attributes e ON e.id = hw.property_type')
                       ->leftJoin('#__attributes f ON f.id = hw.accommodation_type')
                       ->leftJoin('#__attributes g ON g.id = hw.swimming')
+                      ->leftJoin('#__classifications h ON h.id = hw.catid')
                       ->where('hw.id=' . (int) $id));
 
       if (!$this->item = $this->_db->loadObject()) {
@@ -185,6 +187,9 @@ class AccommodationModelProperty extends JModelItem {
    */
 
   public function getTariffs() {
+
+    // First we need an instance of the availability table
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
     
     $tariffsTable = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
 
@@ -199,21 +204,39 @@ class AccommodationModelProperty extends JModelItem {
 
     // Check the $availability loaded correctly
     if (!$tariffs) {
+      
       // Ooops, there was a problem getting the availability
       // Check that the row actually exists
-      if ($error = $tariffsTable->getError()) {
-        // Fatal error
-        $this->setError($error);
-        return false;
-      } else {
-        // Not fatal error
-        $this->setError(JText::sprintf('COM_ACCOMMODATION_ERROR_GETTING_AVAILABILITY', $pk));
-        continue;
-      }
+      
+      // Log it baby...
     }    
     
     return $tariffs;
     
   }
+  
+  /* 
+   * Function to return the location breadcrumb trail for a property
+   *  
+   */
 
+  public function getCrumbs( ) {
+    
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
+    $table = JTable::getInstance('Classification', 'ClassificationTable');
+    
+    try {
+    
+      $crumbs = $table->getPath($pk=$this->item->catid);
+      
+    } catch (Exception $e) {
+      
+      // Log the exception here...
+      return false;
+      
+    }
+
+    return $crumbs;
+    
+  }
 }

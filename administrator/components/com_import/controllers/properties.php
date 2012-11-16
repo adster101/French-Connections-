@@ -27,7 +27,7 @@ class ImportControllerProperties extends JControllerForm {
     // explicity say there here by setting root_user in config.
     $config->set('root_user', 'admin');
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
-    $data = JRequest::getVar('jform', null, 'POST', 'array');
+
     $handle = fopen($userfile['tmp_name'], "r");
 
     JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_import/tables');
