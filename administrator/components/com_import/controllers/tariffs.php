@@ -89,18 +89,11 @@ class ImportControllerTariffs extends JControllerForm {
 			}
  
       $previous_unit_id = $line[0];
-      
       $previous_property_id = $line[1];
     }
-    
-          
+            
     fclose($handle);
-    
     $this->setMessage('Properties imported, hooray!');
-
     $this->setRedirect('index.php?option=com_import&view=availability');
   }
-
-  
-
 }
