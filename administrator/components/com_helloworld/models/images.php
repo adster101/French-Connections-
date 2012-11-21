@@ -130,7 +130,7 @@ class HelloWorldModelImages extends JModelAdmin
       
       if (count($subtree) == 1 && $table->isLeaf( $pk ) && $table->parent_id == 1) {
         // This is a single unit property, no?
-        $images['gallery'] = $imagesTable->load_images( $pk );
+        $images['library'] = $imagesTable->load_images( $pk );
        
         // Check for a table object error.
         if ($images === false && $imagesTable->getError())
@@ -172,7 +172,7 @@ class HelloWorldModelImages extends JModelAdmin
     $properties['images'] = $images;    
 		$item = JArrayHelper::toObject($properties, 'JObject');
     
-    if (count($item->images->gallery->getProperties())) {
+    if (count($item->images->library->getProperties())) {
       // Tick the availability progress flag to true
       JApplication::setUserState('com_helloworld.images.progress', true);
     }
@@ -236,7 +236,7 @@ class HelloWorldModelImages extends JModelAdmin
       // Loop over the existing availability first
       foreach ($data->images->library as $key => $image) {
 
-        if( count($image) > 0 && !array_key_exists($key, $data->images->gallery) ) {
+        if( count($image) > 0 && !array_key_exists($key, $data->images->library) ) {
               
         $XmlStr.= '
           <fieldset name="library_image_'.$counter.'">
@@ -290,6 +290,7 @@ class HelloWorldModelImages extends JModelAdmin
       // Build the fields for the image gallery...
       $XmlStr.='<fields name="gallery-images">';
       // Loop over the existing availability first
+      if (array_key_exists('gallery', $data->images)) {
       foreach ($data->images->gallery as $image) {
         if( count($image) > 0 ) {
           $XmlStr.= '
@@ -331,6 +332,7 @@ class HelloWorldModelImages extends JModelAdmin
         </fieldset>';
           $counter++;
         }
+      }
       }
         
     $XmlStr.="</fields></form>";

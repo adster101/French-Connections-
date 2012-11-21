@@ -119,14 +119,14 @@ abstract class HelloWorldHelper
         $item = $model->getItem($id);
 
 
-        if (array_key_exists('gallery' , $item->images->gallery) && count($item->images->gallery->getProperties()) > 0) 
+        if (array_key_exists('library' , $item->images->gallery) && count($item->images->gallery->getProperties()) > 0) 
         {
 
           JApplication::setUserState('com_helloworld.images.progress', true);
 
         } 
 
-        else if ( count($item->images->gallery->getProperties()) > 0 )
+        else if ( count($item->images->library->getProperties()) > 0 )
         {
 
           JApplication::setUserState('com_helloworld.images.progress', true);

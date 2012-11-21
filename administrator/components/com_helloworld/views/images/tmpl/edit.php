@@ -65,7 +65,7 @@ if (array_key_exists('gallery', $image_properties)) {
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate image-manager">
   <div class="row-fluid">
     <?php foreach ($image_properties as $woot => $value) : ?>
-      <?php if (count('gallery')) { ?>  
+      <?php if (array_key_exists('gallery',$image_properties) && array_key_exists('library',$image_properties)) { ?>  
         <div class="span6">
         <?php } else { ?>
           <div class="span12"> 
@@ -119,9 +119,9 @@ if (array_key_exists('gallery', $image_properties)) {
                           <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                           <?php
                           if ($this->item->parent_id != 1) {
-                            $imgPath = JURI::root() . 'images/' . $this->item->parent_id . '/thumb/' . $image->image_file_name;
+                            $imgPath = JURI::root() . 'images/' . $this->item->parent_id . '/thumbs/' . str_replace('.','_175x100.',$image->image_file_name);
                           } else {
-                            $imgPath = JURI::root() . 'images/' . $this->item->id . '/thumb/' . $image->image_file_name;
+                            $imgPath = JURI::root() . 'images/' . $this->item->id . '/thumbs/' . str_replace('.','_175x100.',$image->image_file_name);
                           }
 
                           $caption = ($image->caption ? $image->caption : JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_NO_CAPTION_SET_FOR_THIS_IMAGE'));

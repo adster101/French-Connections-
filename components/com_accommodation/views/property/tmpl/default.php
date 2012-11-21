@@ -7,7 +7,9 @@ $price_range = array();
 foreach ($this->tariffs as $tariff) {
   $price_range[] = $tariff->tariff;
 }
+print_r($this->images);
 ?>
+
 <div class="row-fluid">
   <div class="span12">
     <?php echo $this->loadTemplate('crumbs'); ?>

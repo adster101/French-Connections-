@@ -120,7 +120,6 @@ a.delInputRow {
 .draggable-image-list {
   overflow:hidden;
   width:100%;
-  min-height:150px;
   list-style-type: none;
   margin:0;
 }
@@ -129,7 +128,6 @@ a.delInputRow {
   float:left;
   margin-bottom:1.5em;
   margin-right:25px;
-  min-height:175px;
   background:#fff;
 }
 

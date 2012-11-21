@@ -76,7 +76,8 @@ class AccommodationModelProperty extends JModelItem {
         $select = '
           catid, 
           toilets, 
-          bathrooms, 
+          bathrooms,
+          hw.parent_id,
           SUM( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms, 
           hw.id, 
           location_details, 
@@ -151,7 +152,6 @@ class AccommodationModelProperty extends JModelItem {
 
     $availabilityTable = JTable::getInstance('Availability', 'HelloWorldTable', array());
 
-
     // Get the state for this property ID
     $id = $this->getState('property.id');
 
@@ -196,8 +196,6 @@ class AccommodationModelProperty extends JModelItem {
 
     // Get the state for this property ID
     $id = $this->getState('property.id');
-    // Get the state for this property ID
-    $id = $this->getState('property.id');
 
     // Attempt to load the availability for this property 
     $tariffs = $tariffsTable->load($id);
@@ -212,8 +210,50 @@ class AccommodationModelProperty extends JModelItem {
     }    
     
     return $tariffs;
-    
   }
+  
+ 
+  /* 
+   * Function to get a list of images for a property 
+   * 
+   */
+  public function getImages() {
+    
+    $parent_id = '';
+    $id = '';
+    
+    // First we need an instance of the images table
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
+
+    // Get the property ID
+    $id = $this->getState('property.id');
+  
+    // Get the state for this property ID
+    $parent_id = $this->item->parent_id;
+
+    // Get the images depending on whether this is a parent or a child property
+    if ($parent_id !=1 && !empty($parent_id)) { 
+      $imagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
+      $images = $imagesTable->load($id);
+      
+    } else {
+      
+      $imagesTable = JTable::getInstance('Images', 'HelloWorldTable', array());
+      $images = $imagesTable->load($id);
+      
+    }
+    // Check the $availability loaded correctly
+    if (!$images) {
+      
+      // Ooops, there was a problem getting the availability
+      // Check that the row actually exists
+      
+      // Log it baby...
+    }    
+    
+    return $images;    
+  }
+  
   
   /* 
    * Function to return the location breadcrumb trail for a property

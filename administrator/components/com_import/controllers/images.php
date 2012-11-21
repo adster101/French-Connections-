@@ -28,24 +28,28 @@ class ImportControllerImages extends JControllerForm {
     $db = JFactory::getDBO();
 
     $previous_property_id = '';
-    
+
     $db->truncateTable('#__images_property_gallery');
     $db->truncateTable('#__images_property_library');
 
-    
+    // Create a log file for the email kickers
+    jimport('joomla.error.log');
+
+    JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
+
     while (($line = fgetcsv($handle)) !== FALSE) {
 
 
       if ($previous_property_id == $line[1]) { // Must be a new unit of the same property
-      // 
+        // 
         // 1. This is a unit so store the previous images into the gallery images table 
         // against the previous property ID if unit count is 1 (if unit count is > 1 don't store)        
         if ($unit_count == 1) {
-          
+
           $initial_library_image_names = array();
-          
-          
-          
+
+
+
 
           $initial_gallery_images = '\'';
 
@@ -70,8 +74,8 @@ class ImportControllerImages extends JControllerForm {
           $db->setQuery($query);
 
           $initial_gallery_images = $db->loadAssocList($key = 'id');
-        
-        
+
+
 
 
           // Insert this lot of images into the library_images table. If a single unit property the images are stored in the library.
@@ -147,13 +151,13 @@ class ImportControllerImages extends JControllerForm {
             die;
           }
         }
-   
+
         // 4. Insert gallery images (actually unit+property images combined) into the gallery table
         // This is a list of image IDs associated with this unit.
         $gallery_images = '';
-        $library_image_names='';
+        $library_image_names = '';
         if (!empty($line[3])) {
-          $gallery_images = $line[2].','.$line[3];    
+          $gallery_images = $line[2] . ',' . $line[3];
         } else {
           $gallery_images = $line[2];
         }
@@ -168,8 +172,8 @@ class ImportControllerImages extends JControllerForm {
         $db->setQuery($query);
 
         $gallery_images = $db->loadAssocList();
-        
- 
+
+
         $property_gallery_images = '\'';
 
         // Now we need to get a list of filename so we can select those from the library...
@@ -178,7 +182,7 @@ class ImportControllerImages extends JControllerForm {
         }
 
 
-  
+
         $property_gallery_images .= implode('\',\'', $library_image_names) . '\'';
 
         $query->clear();
@@ -222,29 +226,60 @@ class ImportControllerImages extends JControllerForm {
         // 5. As this is a unit, add the property and unit images to the gallery images table
         // Increment unit count
         $unit_count++;
-        
       } else { // Must be a new property 
-      
         // Select all images for this property, loop ever them and move them to the correct folder...
-        if ($previous_property_id !='') {
-         $query->clear();
-         $query->select('id,image_file_name');
-         $query->from('#__images_property_library');
-         $query->where('property_id = ' . $previous_property_id);
-         
-         $db->setQuery($query);
+        if ($previous_property_id != '') {
+          $query->clear();
+          $query->select('id,image_file_name');
+          $query->from('#__images_property_library');
+          $query->where('property_id = ' . $previous_property_id);
 
-         $images_to_move = $db->loadAssocList($key='id');
-         foreach ($images_to_move as $images=>$image) {
-         
+          $db->setQuery($query);
 
-           $move = copy('D:\\\Pics/_images/'.$image['image_file_name'], 'C://Xampp/htdocs/images/'.$image['image_file_name']);
-           echo $move;die;
-           
-         }
-         
+          $images_to_move = $db->loadAssocList($key = 'id');
+
+          $folder = JPATH_ROOT . '/' . 'images';
+
+          $baseDir[] = $folder . '/' . $previous_property_id . '/gallery/';
+          $baseDir[] = $folder . '/' . $previous_property_id . '/thumbs/';
+          $baseDir[] = $folder . '/' . $previous_property_id . '/thumb/';
+
+          // Create folders for each of the profiles for the property, if they don't exist
+          foreach ($baseDir as $dir) {
+            if (!file_exists($dir)) {
+              jimport('joomla.filesystem.folder');
+              JFolder::create($dir);
+            }
+          }
+
+
+          foreach ($images_to_move as $images => $image) {
+            
+            // Only need to do this if images not already present.
+            if (!file_exists($folder . '/' . $previous_property_id . '/' . $image['image_file_name'])) {
+              $move = copy('D:\\\Pics/_images/' . $image['image_file_name'], $folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
+
+              if (!$move) {
+                JLog::add('Unable to move/locate image - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+              }
+
+              if (file_exists($folder . '/' . $previous_property_id . '/' . $image['image_file_name'])) {
+                try {
+                  $imgObj = new JImage($folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
+                } catch (Exception $e) {
+
+                  JLog::add('Cannot move image (wrong mime type?) - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+                }
+
+                // Consider making this not a crop but one of the other image preparation types to prevent the loss of detail?  
+                $imgObj->createThumbs('100x100', 1, $folder . '/' . $previous_property_id . '/thumbs/');
+
+                $imgObj->createThumbs('500x375', 4, $folder . '/' . $previous_property_id . '/gallery/');
+              }
+            }
+          }
         }
-        
+
         // Reset previous images
         $previous_images = array();
 
@@ -253,12 +288,11 @@ class ImportControllerImages extends JControllerForm {
 
         $property_id = $line[1]; // Set property ID
         // Add this lot of image to a library_images array. This is used next time around to append any additional images (if a multi unit)
-        
+
         if (!empty($line[3])) {
           $images = $line[2] . ',' . $line[3];
         } else {
           $images = $line[2];
-              
         }
 
         // Need to get the image filenames and captions 

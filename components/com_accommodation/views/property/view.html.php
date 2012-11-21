@@ -17,14 +17,15 @@ class AccommodationViewProperty extends JViewLegacy
     
     //$this->facilities = $this->get('Facilities');
     
-    
-
     // Get the availability for this property
     $this->availability = $this->get('Availability');
     
     // Get the tariffs for this property
     $this->tariffs = $this->get('Tariffs');
-
+    
+    // Get the tariffs for this property
+    $this->images = $this->get('Images');
+    
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');
 
@@ -55,6 +56,8 @@ class AccommodationViewProperty extends JViewLegacy
 		$document->setTitle(JText::_($this->item->title) . ' - ' . JText::_('COM_HELLOWORLD_SITE_HOLIDAY_RENTAL_IN') . $this->item->nearest_town);
 		$document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBYcwtxu1C9l9O3Th0W6W_X4UtJi9zh2i8&sensor=true");
 		$document->addScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections",'text/javascript', true, true);
+		$document->addScript("/component/com_accommodation/js/",'text/javascript', true, true);
+
     $document->addStyleSheet(JURI::root() . "/components/com_accommodation/css/styles.css",'text/css',"screen");
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/availability.css",'text/css',"screen");
   
