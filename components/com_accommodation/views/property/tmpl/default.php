@@ -141,6 +141,7 @@ foreach ($this->tariffs as $tariff) {
 
   <div class="span7">
     <!-- Image gallery -->
+    <!-- Needs go into a separate template -->
     <div id="main" role="main">
       <section class="slider">
         <div id="slider" class="flexslider">
