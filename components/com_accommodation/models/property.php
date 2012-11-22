@@ -232,19 +232,16 @@ class AccommodationModelProperty extends JModelItem {
     $parent_id = $this->item->parent_id;
 
     // Get the images depending on whether this is a parent or a child property
-    if ($parent_id !=1 && !empty($parent_id)) { 
+    if ($parent_id !=1) { 
       $imagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
       $images = $imagesTable->load($id);
       
     } else {
-      
-      $imagesTable = JTable::getInstance('Images', 'HelloWorldTable', array());
+      $imagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
       $images = $imagesTable->load($id);
-      
     }
     // Check the $availability loaded correctly
     if (!$images) {
-      
       // Ooops, there was a problem getting the availability
       // Check that the row actually exists
       
