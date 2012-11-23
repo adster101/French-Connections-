@@ -77,12 +77,14 @@ class HelloWorldViewHelloWorlds extends JViewLegacy
     JLoader::register('JToolbarButtonAjaxpopup', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
     
 		$canDo = HelloWorldHelper::getActions();
+    
 		JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
 		if ($canDo->get('core.create')) 
 		{
       // If this is an owner show a modal with additional information
       if (HelloWorldHelper::isOwner())
       {
+
         $bar = JToolBar::getInstance('toolbar');
         $bar->appendButton('Ajaxpopup', 'new', 'JTOOLBAR_NEW', 'index.php?option=com_helloworld&view=helloworld&layout=new&format=raw');
       } 

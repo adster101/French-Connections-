@@ -152,3 +152,6 @@ $originalOrders = array();
       </div>
     </div>
 </form>
+
+  <?php echo $this->loadTemplate('new'); ?>
+

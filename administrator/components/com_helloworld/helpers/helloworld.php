@@ -150,7 +150,7 @@ abstract class HelloWorldHelper
 	/**
 	 * Get the actions
 	 */
-	public static function getActions($messageId = 0)
+	public static function getActions($messageId = '')
 	{
 		$user	= JFactory::getUser();
 		$result	= new JObject;
@@ -158,18 +158,20 @@ abstract class HelloWorldHelper
 		if (empty($messageId)) {
 			$assetName = 'com_helloworld';
 		}
-		else {
-			$assetName = 'com_helloworld.message.'.(int) $messageId;
-		}
+    // This is needed to check permission at the property level. 
+    // Think for now component level is fine.
+		//else {
+			//$assetName = 'com_helloworld.message.'.(int) $messageId;
+		//}
  
 		$actions = array(
-			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.delete', 'core.edit.state', 'hellworld.edit.reorder', 'helloworld.edit.publish'
+			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.delete', 'core.edit.state', 'helloworld.edit.reorder', 'helloworld.edit.publish'
 		);
  
+    
 		foreach ($actions as $action) {
 			$result->set($action,	$user->authorise($action, $assetName));
 		}
- 
 		return $result;
 	}
 	
