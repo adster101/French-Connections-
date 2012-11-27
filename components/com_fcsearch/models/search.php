@@ -23,7 +23,7 @@ JLoader::register('FinderIndexerStemmer', FINDER_PATH_INDEXER . '/stemmer.php');
  * @subpackage  com_finder
  * @since       2.5
  */
-class FinderModelSearch extends JModelList
+class FcSearchModelSearch extends JModelList
 {
 	/**
 	 * Context string for the model type
@@ -31,7 +31,7 @@ class FinderModelSearch extends JModelList
 	 * @var    string
 	 * @since  2.5
 	 */
-	protected $context = 'com_finder.search';
+	protected $context = 'com_fcsearch.search';
 
 	/**
 	 * The query object is an instance of FinderIndexerQuery which contains and

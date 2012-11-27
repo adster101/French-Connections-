@@ -31,16 +31,13 @@ class FcSearchControllerSuggestions extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
 		$return = array();
+   
+    // Get the suggestions.
+    $model = $this->getModel('Suggestions', 'FcSearchModel');
+    $return = $model->getItems();
+		
 
-		$params = JComponentHelper::getParams('com_finder');
-		if ($params->get('show_autosuggest', 1))
-		{
-			// Get the suggestions.
-			$model = $this->getModel('Suggestions', 'FcSearchModel');
-			$return = $model->getItems();
-		}
-
-		// Check the data.
+    // Check the data.
 		if (empty($return))
 		{
 			$return = array();

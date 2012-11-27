@@ -41,9 +41,9 @@ class FcSearchModelSuggestions extends JModelList
 		// Convert them to a simple array.
 		foreach ($items as $k => $v)
 		{
-			$items[$k] = $v->term;
+			$items[$k] = $v->title;
 		}
-
+    
 		return $items;
 	}
 
@@ -61,14 +61,14 @@ class FcSearchModelSuggestions extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select required fields
-		$query->select('t.term');
-		$query->from($db->quoteName('#__finder_terms') . ' AS t');
-		$query->where('t.term LIKE ' . $db->quote($db->escape($this->getState('input'), true) . '%'));
-		$query->where('t.common = 0');
-		$query->order('t.links DESC');
-		$query->order('t.weight DESC');
+		$query->select('t.title');
+		$query->from($db->quoteName('#__classifications') . ' AS t');
+		$query->where('t.title LIKE ' . $db->quote('%'.$db->escape($this->getState('input'), true) . '%'));
+		//$query->where('t.common = 0');
+		//$query->order('t.links DESC');
+		//$query->order('t.weight DESC');
 
-		return $query;
+    return $query;
 	}
 
 	/**

@@ -12,7 +12,11 @@ defined('_JEXEC') or die;
 // Include the syndicate functions only once
 require_once __DIR__ . '/helper.php';
 
+
 $lang = JFactory::getLanguage();
+
+$lang->load('com_fcsearch', JPATH_SITE, null, false, true);
+
 $app  = JFactory::getApplication();
 
 if ($params->get('opensearch', 1)) {
