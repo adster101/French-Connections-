@@ -56,7 +56,7 @@ class AccommodationModelProperty extends JModelItem {
           sum(single_bedrooms+double_bedrooms+triple_bedrooms+quad_bedrooms+twin_bedrooms) as bedrooms,
           bathrooms,
           toilets,
-          catid,
+          department,
           hel.id,
           location_details,
           internal_facilities_other,
@@ -74,7 +74,7 @@ class AccommodationModelProperty extends JModelItem {
           nearest_town';
       } else {
         $select = '
-          catid, 
+          department, 
           toilets, 
           bathrooms,
           hw.parent_id,
@@ -115,7 +115,7 @@ class AccommodationModelProperty extends JModelItem {
                       ->leftJoin('#__attributes e ON e.id = hw.property_type')
                       ->leftJoin('#__attributes f ON f.id = hw.accommodation_type')
                       ->leftJoin('#__attributes g ON g.id = hw.swimming')
-                      ->leftJoin('#__classifications h ON h.id = hw.catid')
+                      ->leftJoin('#__classifications h ON h.id = hw.department')
                       ->where('hw.id=' . (int) $id));
 
       if (!$this->item = $this->_db->loadObject()) {
@@ -264,7 +264,7 @@ class AccommodationModelProperty extends JModelItem {
     
     try {
     
-      $crumbs = $table->getPath($pk=$this->item->catid);
+      $crumbs = $table->getPath($pk=$this->item->department);
       
     } catch (Exception $e) {
       

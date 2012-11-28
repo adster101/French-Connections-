@@ -75,13 +75,13 @@
   </fieldset>
   <fieldset name="Location">
     <field
-      name="catid"
+      name="department"
       type="departments"
       extension="com_helloworld"
       class="list"
       default="1"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_CATID_DESC"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_DESC"
       required="true"
       labelclass="control-label">
       <option value="0">JOPTION_SELECT_CATEGORY</option>

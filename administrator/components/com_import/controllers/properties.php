@@ -47,9 +47,9 @@ class ImportControllerProperties extends JControllerForm {
       $query->columns(array('id','parent_id','created_by'));
       
       if ($previous_property_id == $line[1]){  
-        $query->values("$line[0],$previous_property_id,$line[5]");
+        $query->values("$line[0],$previous_property_id,$line[7]");
       } else {
-        $query->values("$line[1],1,$line[5]");
+        $query->values("$line[1],1,$line[7]");
       }
      
       $db->setQuery($query);
@@ -74,46 +74,48 @@ class ImportControllerProperties extends JControllerForm {
 
       // May need revising 
       $property->title = $line[2];
-      $property->catid = $line[3];
-      $property->params = $line[4];
-      $property->created_on = $line[6];
-      $property->modified = $line[7];
-      $property->expiry_date = $line[8];
-      $property->modified_by = $line[9];
-      $property->lang = $line[10];
-      $property->description = $line[11].$line[12].$line[13];
-      $property->internal_facilities_other = $line[14];
-      $property->external_facilities_other = $line[15];
-      $property->activities_other = $line[16];
-      $property->location_details = $line[17];
-      $property->getting_there = $line[18];
-      $property->thumbnail = $line[19];
-      $property->occupancy = $line[20];
-      $property->single_bedrooms = $line[21];
-      $property->double_bedrooms = $line[22];
-      $property->triple_bedrooms = $line[23];
-      $property->quad_bedrooms = $line[24];
-      $property->twin_bedrooms = $line[25];
-      $property->childrens_beds = $line[26];
-      $property->cots = $line[27];
-      $property->extra_beds = $line[28];
-      $property->bathrooms = $line[29];
-      $property->toilets = $line[30];
-      $property->swimming = $line[31];
-      $property->accommodation_type = $line[32];
-      $property->property_type = $line[33];
-      $property->location_type = $line[34];
-      $property->latitude = $line[35];
-      $property->longitude = $line[36];
-      $property->nearest_town = $line[37];
-      $property->distance_to_coast = $line[38];
-      $property->additional_price_notes = $line[39];
-      $property->base_currency = $line[40];
-      $property->tariff_based_on = $line[41];
-      $property->linen_costs = $line[42];
-      $property->changeover_day = $line[43];
-      $property->published = $line[44];
-      $property->video = $line[45];
+      $property->area = $line[3];
+      $property->region = $line[4];
+      $property->department = $line[5];
+      $property->params = $line[6];
+      $property->created_on = $line[8];
+      $property->modified = $line[9];
+      $property->expiry_date = $line[10];
+      $property->modified_by = $line[11];
+      $property->lang = $line[12];
+      $property->description = $line[13].$line[14].$line[15];
+      $property->internal_facilities_other = $line[16];
+      $property->external_facilities_other = $line[17];
+      $property->activities_other = $line[18];
+      $property->location_details = $line[19];
+      $property->getting_there = $line[20];
+      $property->thumbnail = $line[21];
+      $property->occupancy = $line[22];
+      $property->single_bedrooms = $line[23];
+      $property->double_bedrooms = $line[24];
+      $property->triple_bedrooms = $line[25];
+      $property->quad_bedrooms = $line[26];
+      $property->twin_bedrooms = $line[27];
+      $property->childrens_beds = $line[28];
+      $property->cots = $line[29];
+      $property->extra_beds = $line[30];
+      $property->bathrooms = $line[31];
+      $property->toilets = $line[32];
+      $property->swimming = $line[33];
+      $property->accommodation_type = $line[34];
+      $property->property_type = $line[35];
+      $property->location_type = $line[36];
+      $property->latitude = $line[37];
+      $property->longitude = $line[38];
+      $property->nearest_town = $line[39];
+      $property->distance_to_coast = $line[40];
+      $property->additional_price_notes = $line[41];
+      $property->base_currency = $line[42];
+      $property->tariff_based_on = $line[43];
+      $property->linen_costs = $line[44];
+      $property->changeover_day = $line[45];
+      $property->published = $line[46];
+      $property->video = $line[47];
       
 
       if(!$property->store()) {

@@ -116,9 +116,9 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
             <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
             <div class="control-group">
 
-              <?php echo $this->form->getLabel('catid'); ?>
+              <?php echo $this->form->getLabel('department'); ?>
               <div class="controls">
-                <?php echo $this->form->getInput('catid'); ?>
+                <?php echo $this->form->getInput('department'); ?>
               </div>
             </div>
             <div class="control-group">

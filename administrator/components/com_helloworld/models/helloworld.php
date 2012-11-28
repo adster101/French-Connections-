@@ -139,7 +139,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
       $data->latitude = $parent_prop->latitude;
       $data->longitude = $parent_prop->longitude;
       $data->nearest_town = $parent_prop->nearest_town;
-      $data->catid = $parent_prop->catid;
+      $data->department = $parent_prop->department;
       $data->distance_to_coast = $parent_prop->distance_to_coast;
      
       foreach($form->getFieldSet('Location') as $field) {        
@@ -163,7 +163,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin
       $data->latitude = $parent_prop->latitude;
       $data->longitude = $parent_prop->longitude;
       $data->nearest_town = $parent_prop->nearest_town;
-      $data->catid = $parent_prop->catid;
+      $data->department = $parent_prop->department;
       $data->distance_to_coast = $parent_prop->distance_to_coast;
      
       if ($parent_id != 1) {

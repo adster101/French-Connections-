@@ -230,14 +230,6 @@ class HelloWorldTableHelloWorld extends JTableNested
 			}
 		}
 		
-		// Verify that the alias is unique
-		//$table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
-
-		//if ($table->load(array('alias'=>$this->alias, 'catid'=>$this->catid)) && ($table->id != $this->id || $this->id==0)) {
-			//$this->setError(JText::_('COM_CONTACT_ERROR_UNIQUE_ALIAS'));
-			//return false;
-		//}
-		
 		$this->setLocation($this->parent_id, 'last-child');
 		
 
