@@ -227,10 +227,13 @@ class HelloWorldTableHelloWorld extends JTableNested
 			
 			if (empty($this->created_by)) {
 				$this->created_by = $user->get('id');
-			}
-		}
-		
-		$this->setLocation($this->parent_id, 'last-child');
+
+      }
+    		      $this->setLocation($this->parent_id, 'last-child');
+
+
+    }
+
 		
 
 		// Attempt to store the data.

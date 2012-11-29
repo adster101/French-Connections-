@@ -7,9 +7,9 @@
       type="text"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
-      size="100"
-      maxlength="100"
-      class="input-xxlarge validate-greeting"
+      size="25"
+      maxlength="25"
+      class="input-large validate-greeting"
       validate="greeting"
       required="true"
       default=""/>   
@@ -59,19 +59,7 @@
       placeholder="true"      
     />
     
-    <field
-      name="swimming"
-      type="attributetype"
-      labelclass="control-label"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_SWIMMINGPOOL_DESC"
-      class="required"
-      validate="swimming"
-      required="true"
-      id="33"
-      placeholder="true"      
-      default="">
-    </field>    
+  
   </fieldset>
   <fieldset name="Location">
     <field

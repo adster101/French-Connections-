@@ -123,10 +123,10 @@ class ImportControllerProperties extends JControllerForm {
         echo 'Property id: ' . $property->id . $property->getError();
         echo "<br />";
       }
-      
+          $property->rebuild();
+
       $previous_property_id = $line[1];
     }
-    $property->rebuild();
           
     fclose($handle);
     

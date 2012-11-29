@@ -42,11 +42,11 @@ class FcSearchViewSearch extends JViewLegacy
 
 		// Get view data.
 		$state = $this->get('State');
+		$total = $this->get('Total');
 
     $results = $this->get('Results');
-    print_r($results);die;
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderResults') : null;
-		$total = $this->get('Total');
+		//$total = $this->get('Total');
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderTotal') : null;
 		$pagination = $this->get('Pagination');
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderPagination') : null;
@@ -66,32 +66,16 @@ class FcSearchViewSearch extends JViewLegacy
 
 		// Push out the view data.
 		$this->state = &$state;
-		$this->params = &$params;
-		$this->query = &$query;
 		$this->results = &$results;
 		$this->total = &$total;
 		$this->pagination = &$pagination;
 
-		// Check for a double quote in the query string.
-		if (strpos($this->query->input, '"'))
-		{
-			// Get the application router.
-			$router =& $app->getRouter();
-
-			// Fix the q variable in the URL.
-			if ($router->getVar('q') !== $this->query->input)
-			{
-				$router->setVar('q', $this->query->input);
-			}
-		}
+	
 
 		// Log the search
-		JSearchHelper::logSearch($this->query->input, 'com_finder');
+		JSearchHelper::logSearch('Log some useful search information...', 'com_fcsearch');
 
-		// Push out the query data.
-		JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-		$this->suggested = JHtml::_('query.suggested', $query);
-		$this->explained = JHtml::_('query.explained', $query);
+
 
 		// Escape strings for HTML output
 		$this->pageclass_sfx = htmlspecialchars($params->get('pageclass_sfx'));
@@ -105,8 +89,9 @@ class FcSearchViewSearch extends JViewLegacy
 			$this->setLayout($active->query['layout']);
 		}
 
-		$this->prepareDocument($query);
-
+		//$this->prepareDocument($query);
+    // Need to set valid meta data for the page here, load any JS, CSS Etc
+    
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('beforeFinderLayout') : null;
 
 		parent::display($tpl);
