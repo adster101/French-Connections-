@@ -19,7 +19,11 @@ class ImportControllerProperties extends JControllerForm {
     JSession::checkToken( 'POST' ) or die( 'Invalid Token' );
     
     $config = JFactory::getConfig();
+    
+    // Create a log file for the email kickers
+    jimport('joomla.error.log');
 
+    JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
     
     // This is here as the user table instance checks that we aren't trying to insert a record with the same 
     // username as a super user. However, by default root_user is null. As we insert a load of dummy user to start 
@@ -123,10 +127,37 @@ class ImportControllerProperties extends JControllerForm {
         echo 'Property id: ' . $property->id . $property->getError();
         echo "<br />";
       }
-          $property->rebuild();
-
+      
       $previous_property_id = $line[1];
+      $folder = JPATH_ROOT . '/' . 'images';
+
+   
+      
+      // Take a copy of the original image and generate the property thumbnail at the same time....
+      if (!file_exists($folder . '/' . $previous_property_id . '/' . $property->thumbnail)) {
+        
+        $move = copy('D:\\\Pics/_images/' . $property->thumbnail, $folder . '/' . $previous_property_id . '/' . $property->thumbnail);
+
+        if (!$move) {
+          JLog::add('Unable to move/locate image - ' . $property->thumbnail . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+        }
+
+        
+      }      
+      
+      if (file_exists($folder . '/' . $previous_property_id . '/' . $property->thumbnail)) {
+          try {
+            $imgObj = new JImage($folder . '/' . $previous_property_id . '/' . $property->thumbnail);
+          } catch (Exception $e) {
+
+            JLog::add('Cannot move image (wrong mime type?) - ' . $property->thumbnail . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+          }
+
+          // Consider making this not a crop but one of the other image preparation types to prevent the loss of detail?  
+          $imgObj->createThumbs('175x100', 1, $folder . '/' . $previous_property_id . '/thumb/');
+        }
     }
+    $property->rebuild();
           
     fclose($handle);
     

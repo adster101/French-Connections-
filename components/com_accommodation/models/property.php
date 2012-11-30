@@ -3,6 +3,9 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+jimport('joomla.error.log');
+
+
 /**
  * HelloWorld Model
  */
@@ -38,16 +41,23 @@ class AccommodationModelProperty extends JModelItem {
   }
 
   /**
-   * Get the message
+   * Get the property - This should probably be using the JNested table instance for the property table...
+   * 
    * @return object The message to be displayed to the user
    */
   public function getItem() {
+    
     if (!isset($this->item)) {
       // Get the language for this request 
       $lang = & JFactory::getLanguage()->getTag();
+      
       // Get the state for this property ID
       $id = $this->getState('property.id');
+      
+      
 
+      
+      
       // Language logic - should be more generic than this, in case we add more languages...
       if ($lang === 'fr-FR') {
         $select = '
@@ -146,14 +156,17 @@ class AccommodationModelProperty extends JModelItem {
    */
 
   public function getAvailability() {
-
+    // Get the state for this property ID
+    $id = $this->getState('property.id');
+    
+    // Generate a logger instance for availability
+    JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('availability'));
+    JLog::add('Retrieving availability for - ' . $id . ')', JLog::ERROR, 'import_images');
+ 
     // First we need an instance of the availability table
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
 
     $availabilityTable = JTable::getInstance('Availability', 'HelloWorldTable', array());
-
-    // Get the state for this property ID
-    $id = $this->getState('property.id');
 
     // Attempt to load the availability for this property 
     $availability = $availabilityTable->load($id);
@@ -168,8 +181,9 @@ class AccommodationModelProperty extends JModelItem {
         return false;
       } else {
         // Not fatal error
-        $this->setError(JText::sprintf('COM_ACCOMMODATION_ERROR_GETTING_AVAILABILITY', $pk));
-        continue;
+        // Log this out to property log
+        JLog::add('Problem fetching availability for - ' . $id . '(No availability?))', JLog::ERROR, 'availability');
+        //$this->setError(JText::sprintf('COM_ACCOMMODATION_ERROR_GETTING_AVAILABILITY', $id));
       }
     }
 
@@ -218,32 +232,51 @@ class AccommodationModelProperty extends JModelItem {
    * 
    */
   public function getImages() {
-    
-    $parent_id = '';
-    $id = '';
-    
-    // First we need an instance of the images table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
 
+    
+    
     // Get the property ID
     $id = $this->getState('property.id');
   
     // Get the state for this property ID
     $parent_id = $this->item->parent_id;
+    
+    // Do some logging
+    JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('images'));
+    JLog::add('Retrieving images for - ' . $id . ')', JLog::ERROR, 'import_images');    
+
+    // First we need an instance of the images table
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
 
     // Get the images depending on whether this is a parent or a child property
     if ($parent_id !=1) { 
-      $imagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
-      $images = $imagesTable->load($id);
+     
+      $galleryimagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
+      $images = $galleryimagesTable->load($id);
       
     } else {
-      $imagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
-      $images = $imagesTable->load($id);
+      
+      // Determine is this is a parent property or a leaf node...
+      $propertyTable = JTable::getInstance('HelloWorld', 'HelloWorldTable', array());
+
+      if ($propertyTable->isleaf($id)) {
+        $imagesTable = JTable::getInstance('Images', 'HelloWorldTable', array());
+        $images = $imagesTable->load_images($id);
+      } else {
+        $galleryimagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
+        $images = $galleryimagesTable->load($id);      
+      }
+      
+      
+      
+      
+      
     }
     // Check the $availability loaded correctly
     if (!$images) {
       // Ooops, there was a problem getting the availability
       // Check that the row actually exists
+      JLog::add('Problem fetching images for - ' . $id, JLog::ERROR, 'images');
       
       // Log it baby...
     }    

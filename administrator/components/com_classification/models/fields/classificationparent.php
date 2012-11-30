@@ -2,6 +2,7 @@
 /**
  * @copyright	Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ * TODO : This should really be merged with the 'departments' field from the property manager component
  */
 
 defined('JPATH_BASE') or die;
@@ -47,8 +48,9 @@ class JFormFieldClassificationParent extends JFormFieldList
 		// Filter out the record being edited from appearing in the list
 		if ($id = $this->form->getValue('id')) {    
       $query->where('a.id != ' . $id);
-      $query->where('a.level < 4');
     }
+          $query->where('a.level < 4');
+
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
 		$query->order('a.lft ASC');
 

@@ -42,10 +42,12 @@ class FcSearchViewSearch extends JViewLegacy
 
 		// Get view data.
 		$state = $this->get('State');
-		$total = $this->get('Total');
 
     $results = $this->get('Results');
-		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderResults') : null;
+    
+		$total = $this->get('Total');
+
+    JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderResults') : null;
 		//$total = $this->get('Total');
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderTotal') : null;
 		$pagination = $this->get('Pagination');

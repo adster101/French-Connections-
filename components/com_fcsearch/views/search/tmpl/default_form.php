@@ -9,9 +9,9 @@
 defined('_JEXEC') or die;
 ?>
 
-<form id="finder-search" action="" method="get" class="form-vertical" style="margin-bottom:0">
+<form id="finder-search" action="" method="get" class="form-vertical">
   <div class="row-fluid">
-    <div class="well clearfix">
+    <div class="well well-small clearfix">
     <div class="span4">
       <label for="q">
         <?php echo JText::_('COM_FINDER_SEARCH_TERMS'); ?>
@@ -95,6 +95,43 @@ defined('_JEXEC') or die;
       
     </div>
   </div>
+  <?php
+  if ($this->total == 0):
+  ?>
+  <div id="search-result-empty">
+    <h2><?php echo JText::_('COM_FINDER_SEARCH_NO_RESULTS_HEADING'); ?></h2>
+    <?php if ($app->getLanguageFilter()) : ?>
+      <p><?php echo JText::sprintf('COM_FINDER_SEARCH_NO_RESULTS_BODY_MULTILANG', $this->escape($this->query->input)); ?></p>
+    <?php else : ?>
+      <p><?php echo JText::sprintf('COM_FINDER_SEARCH_NO_RESULTS_BODY', $this->escape($this->query->input)); ?></p>
+    <?php endif; ?>
+  </div>
 
 
+  <?php else:
+  // Prepare the pagination string.  Results X - Y of Z
+  $start = (int) $this->pagination->get('limitstart') + 1;
+  $total = (int) $this->pagination->get('total');
+  $limit = (int) $this->pagination->get('limit') * $this->pagination->pagesTotal;
+  $limit = (int) ($limit > $total ? $total : $limit);
+  $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
+  ?>
+  <div class="row-fluid">
+    <div class="span9">
+  <div class="search-pagination">
+    <div class="pagination">
+      <?php echo $this->pagination->getPagesLinks(); ?>
+    </div>
+   
+  </div>
+    </div>
+    <div class="span2">
+           <?php echo $this->pagination->getResultsCounter(); ?>
+    </div>
+        <div class="span1">
+          <?php echo $this->pagination->getLimitBox(); ?>
+          
+    </div>
+  </div>
+  <?php endif; ?>
 </form>

@@ -35,7 +35,6 @@ class JFormFieldDepartments extends JFormFieldList
 	{
 		// Initialize variables.
 		$options = array();
-
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
@@ -44,14 +43,10 @@ class JFormFieldDepartments extends JFormFieldList
     $query->where('a.parent_id > 0');
 		$query->where('a.published != -2');
     
-		// Filter out the record being edited from appearing in the list
-		if ($id = $this->form->getValue('id')) {    
-      $query->where('a.id != ' . $id);
-    }     
     $query->where('a.level = 3');
 
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
-		$query->order('a.lft ASC');
+		$query->order('a.title ASC');
 
 
     $db->setQuery($query);

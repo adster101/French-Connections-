@@ -350,6 +350,7 @@ class JTableNested extends JTable
 			->set('lft = lft * (-1), rgt = rgt * (-1)')
 			->where('lft BETWEEN ' . (int) $node->lft . ' AND ' . (int) $node->rgt);
 		$this->_db->setQuery($query);
+
 		$this->_runQuery($query, 'JLIB_DATABASE_ERROR_MOVE_FAILED');
 
 		/*
@@ -372,6 +373,7 @@ class JTableNested extends JTable
 		$this->_db->setQuery($query);
 
 		$this->_runQuery($query, 'JLIB_DATABASE_ERROR_MOVE_FAILED');
+
 		// We are moving the tree relative to a reference node.
 		if ($referenceId)
 		{

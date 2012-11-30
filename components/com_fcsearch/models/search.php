@@ -80,8 +80,11 @@ class FcSearchModelSearch extends JModelList {
       return array();
     } else {
       $this->location = $row[0];
+      $this->level = $row[1];
+
     }
 
+    // Add check here on level, perform distance search if a town/city.
 
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
@@ -104,7 +107,17 @@ class FcSearchModelSearch extends JModelList {
               c.title as location_title'
     );
     $query->from('#__classifications c');
-    $query->join('left', '#__helloworld h on c.id = h.department');
+    
+    if ($this->level == 1) { // Area level
+      $query->join('left', '#__helloworld h on c.id = h.area');      
+    } else if ($this->level == 2) { // Region level
+      $query->join('left', '#__helloworld h on c.id = h.region');
+    } else if ($this->level == 3) { // Department level 
+      $query->join('left', '#__helloworld h on c.id = h.department');    
+    } else { // Town/city level
+      // errr, like TODO!
+    }
+            
     $query->where('c.id = ' . $this->location);
     $query->order('h.lft', $this->getState('list.direction', 'asc'));
 
@@ -114,7 +127,9 @@ class FcSearchModelSearch extends JModelList {
     $db->setQuery($query, $offset, $count);
     $rows = $db->loadObjectList();
 
-
+    // Process results into 
+    
+    
     // Push the results into cache.
     $this->store($store, $rows);
 
@@ -313,7 +328,15 @@ class FcSearchModelSearch extends JModelList {
               c.title'
       );
       $query->from('#__classifications c');
-      $query->join('left', '#__helloworld h on c.id = h.department');
+      if ($this->level == 1) { // Area level
+        $query->join('left', '#__helloworld h on c.id = h.area');      
+      } else if ($this->level == 2) { // Region level
+        $query->join('left', '#__helloworld h on c.id = h.region');
+      } else if ($this->level == 3) { // Department level 
+        $query->join('left', '#__helloworld h on c.id = h.department');    
+      } else { // Town/city level
+        // errr, like TODO!
+      }
       $query->where('c.id = ' . $this->location);
       $query->order('h.lft', $this->getState('list.direction', 'asc'));
 
@@ -352,8 +375,7 @@ class FcSearchModelSearch extends JModelList {
 		}
 
 		// Get the results total.
-		//$total = $this->getResultsTotal();
-    $total = 141;
+		$total = $this->getResultsTotal();
     
 		// Push the total into cache.
 		$this->store($store, $total);
@@ -361,4 +383,45 @@ class FcSearchModelSearch extends JModelList {
 		// Return the total.
 		return $this->retrieve($store);
 	}
+  
+	/**
+	 * Method to get the total number of results for the search query.
+	 *
+	 * @return  integer  The results total.
+	 *
+	 * @since   2.5
+	 * @throws  Exception on database error.
+	 */
+	protected function getResultsTotal()
+	{
+		// Get the store id.
+		$store = $this->getStoreId('getResultsTotal', false);
+		
+    // Get the maximum number of results.
+		$limit = (int) $this->getState('match.limit');
+		// Use the cached data if possible.
+		if ($this->retrieve($store))
+		{
+			return $this->retrieve($store);
+		}
+    
+    $base = $this->getListQuery();
+    
+    $sql = clone($base);
+    
+    $sql->clear('select');
+    
+   	$sql->select('COUNT(DISTINCT h.id)');
+
+    // Get the total from the database.
+    $this->_db->setQuery($sql);
+    $total = $this->_db->loadResult();
+
+    // Push the total into cache.
+    $this->store($store, min($total, $limit));
+
+    // Return the total.
+    return $this->retrieve($store);
+    
+  }
 }

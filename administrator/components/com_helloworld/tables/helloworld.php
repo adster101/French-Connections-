@@ -73,12 +73,14 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function load($pk = null, $reset = true) 
+	public function load($pk = null, $reset = true, $lang = '') 
 	{		
 		if (parent::load($pk, $reset)) 
 		{
-			// Get the current editing language for this property
-			$lang = HelloWorldHelper::getLang();	
+			// Get the current editing language for this property, if it's not passed in
+      if (empty($lang)) {
+        $lang = HelloWorldHelper::getLang();	
+      }
 			// Need to load any translations here if the editing language different from the property language
 			$this->loadPropertyTranslation($lang);
       
@@ -229,12 +231,13 @@ class HelloWorldTableHelloWorld extends JTableNested
 				$this->created_by = $user->get('id');
 
       }
-    		      $this->setLocation($this->parent_id, 'last-child');
+    		     
+      $this->setLocation($this->parent_id, 'last-child');
 
 
     }
 
-		
+		$this->debug(1);
 
 		// Attempt to store the data.
 		return parent::store($updateNulls);

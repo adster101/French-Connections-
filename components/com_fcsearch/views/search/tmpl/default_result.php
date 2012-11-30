@@ -23,10 +23,8 @@ if (!empty($this->query->highlight) && empty($this->result->mime) && $this->para
 }
 
 $pathway = explode('/',$this->result->path);
-
-
+$route = JRoute::_('index.php?option=com_accommodation&view=property&id='.$this->result->id);
 ?>
-
 <li>
   <h3 class="result-title <?php echo $mime; ?>">
     <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->result->property_title; ?></a>
@@ -35,13 +33,17 @@ $pathway = explode('/',$this->result->path);
   <p>
   <?php foreach ($pathway as $path) : ?>
 
-  <a href="<?php echo '/index.php?option=com_fcsearch&view=search&lang=en&q='.$path ?>">
+  <a href="<?php echo JRoute::_($route); ?>">
     <?php echo $path ?>
   </a>>
   <?php endforeach; ?>
   </p>
-  <a href="" class="thumbnail pull-left">
-    <img src="/images/796/thumbs/796-11_175x100.jpg" class="img-rounded" />
+  <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id='.$this->result->id) ?>" class="thumbnail pull-left">
+    <?php if ($this->result->parent_id = 1) : ?>
+      <img src='/images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail)?>' class="img-rounded" />
+    <?php else: ?>
+      <img src='/images/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail) ?>' class="img-rounded" />
+    <?php endif; ?>
   </a>
   <p>
 		<?php echo JHtml::_('string.truncate', strip_tags($this->result->description)); ?>
