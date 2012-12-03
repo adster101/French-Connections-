@@ -16,7 +16,7 @@ foreach ($this->tariffs as $tariff) {
 </div>
 <div class="page-header">
   <h1>
-    <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_TITLE', $this->item->title, $this->item->property_type, $this->item->nearest_town, $this->item->department) ?>
+    <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_TITLE', $this->item->title, $this->item->property_type, $this->item->nearest_town, $this->item->department_as_text) ?>
   </h1>
 </div>
 <div class="row-fluid">
@@ -209,7 +209,7 @@ foreach ($this->tariffs as $tariff) {
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->title) : ?>
-      <h2><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->nearest_town, $this->item->department, 'Region') ?></h2>  
+      <h2><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->nearest_town, $this->item->department_as_text, 'Region') ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->location_details) : ?>
       <?php echo $this->item->location_details; ?>

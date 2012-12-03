@@ -53,11 +53,7 @@ class AccommodationModelProperty extends JModelItem {
       
       // Get the state for this property ID
       $id = $this->getState('property.id');
-      
-      
-
-      
-      
+          
       // Language logic - should be more generic than this, in case we add more languages...
       if ($lang === 'fr-FR') {
         $select = '
@@ -84,7 +80,7 @@ class AccommodationModelProperty extends JModelItem {
           nearest_town';
       } else {
         $select = '
-          department, 
+          hw.department, 
           toilets, 
           bathrooms,
           hw.parent_id,
@@ -112,7 +108,7 @@ class AccommodationModelProperty extends JModelItem {
           e.title as property_type,
           f.title as accommodation_type,
           g.title as swimming,
-          h.title as department';
+          h.title as department_as_text';
       }
 
       $this->_db->setQuery($this->_db->getQuery(true)
@@ -296,11 +292,10 @@ class AccommodationModelProperty extends JModelItem {
     $table = JTable::getInstance('Classification', 'ClassificationTable');
     
     try {
-    
       $crumbs = $table->getPath($pk=$this->item->department);
       
     } catch (Exception $e) {
-      
+
       // Log the exception here...
       return false;
       

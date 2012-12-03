@@ -8,7 +8,7 @@
  */
 defined('_JEXEC') or die;
 ?>
-<form id="property-search" action="/index.php?option=com_fcsearch&view=search&lang=en" method="POST" class="form-vertical">
+<form id="property-search" action="<?php echo JRoute::_(JURI::base() . 'index.php?option=com_fcsearch&view=search&lang=en') ?>" method="POST" class="form-vertical">
   <div class="well clearfix">
     <h4 class="bottom"><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
 

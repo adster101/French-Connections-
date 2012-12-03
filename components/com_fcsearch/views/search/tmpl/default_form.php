@@ -120,6 +120,7 @@ defined('_JEXEC') or die;
     <div class="span9">
   <div class="search-pagination">
     <div class="pagination">
+      
       <?php echo $this->pagination->getPagesLinks(); ?>
     </div>
    
