@@ -121,8 +121,9 @@ defined('_JEXEC') or die;
     // Form checks out, looks like the user chose something from the suggestions
     // Strip the string to make it like classifications table alias
     var query = stripVowelAccent(chosen);   
+    var path = '<?php echo JRoute::_(JURI::base() . 'index.php?option=com_fcsearch&view=search&lang=en&q=') ?>';
 
-    jQuery('form#property-search').attr('action', '/index.php?option=com_fcsearch&view=search&lang=en&q='+query);
+    jQuery('form#property-search').attr('action', path+query);
     
     jQuery('form#property-search').submit();
     
@@ -135,7 +136,7 @@ defined('_JEXEC') or die;
      
     source: function (query, process) {
       jQuery.get(
-      '/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component&lang=en', 
+      "<?php echo JRoute::_(JURI::base() . 'index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component&lang=en') ?>", 
       { 
         q: query,
         items: 10
