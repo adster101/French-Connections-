@@ -28,7 +28,12 @@ class AccommodationViewProperty extends JViewLegacy
     
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');
-
+    
+    // Get the reviews
+    $this->reviews = $this->get('Reviews');
+    
+    // Get the unit info so we can show any units present...
+    $this->units = $this->get('Units');
     
     
 		// Check for errors.

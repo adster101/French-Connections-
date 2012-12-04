@@ -536,4 +536,32 @@ class HelloWorldTableHelloWorld extends JTableNested
     }
     
   }
+  
+  	/**
+	 * Method to get a node and all its child nodes.
+	 *
+	 * @param   integer  $pk          Primary key of the node for which to get the tree.
+	 * @param   boolean  $diagnostic  Only select diagnostic data for the nested sets.
+	 *
+	 * @return  mixed    Boolean false on failure or array of node objects on success.
+	 *
+	 * @since   11.1
+	 * @throws  RuntimeException on database error.
+	 */
+	public function getUnitTree($pk = null, $diagnostic = false)
+	{
+		$k = $this->_tbl_key;
+		$pk = (is_null($pk)) ? $this->$k : $pk;
+
+		// Get the node and children as a tree.
+		$query = $this->_db->getQuery(true);
+		$select = ($diagnostic) ? 'n.title,n.occupancy,n.' . $k . ', n.parent_id, n.level, n.lft, n.rgt' : 'n.*';
+		$query->select($select)
+			->from($this->_tbl . ' AS n, ' . $this->_tbl . ' AS p')
+			->where('n.lft BETWEEN p.lft AND p.rgt')
+			->where('p.' . $k . ' = ' . (int) $pk)
+			->order('n.lft');
+
+		return $this->_db->setQuery($query)->loadObjectList();
+	}
 }

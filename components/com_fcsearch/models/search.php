@@ -226,7 +226,13 @@ class FcSearchModelSearch extends JModelList {
     // Will come from the search results page.
     $this->setState('list.start', $input->get('limitstart', 0, 'uint'));
     $this->setState('list.limit', $input->get('limit', $app->getCfg('list_limit', 10), 'uint'));
+    
+    // Load the list state.
+    // Will come from the search results page.
+    $this->setState('list.start_date', $input->get('start_date','','Alnum'));
+    $this->setState('list.end_date', $input->get('end_date','','Alnum'));
 
+    
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
     switch ($dirn) {
@@ -281,6 +287,8 @@ class FcSearchModelSearch extends JModelList {
       $id .= ':' . $this->getState('list.limit');
       $id .= ':' . $this->getState('list.direction');
       $id .= ':' . $this->getState('list.searchterm');
+      $id .= ':' . $this->getState('list.start_date');
+      $id .= ':' . $this->getState('list.end_date');
     }
     return parent::getStoreId($id);
   }
@@ -301,7 +309,6 @@ class FcSearchModelSearch extends JModelList {
     if ($this->retrieve($store, true)) {
       return clone($this->retrieve($store, false));
     }
-
 
     try {
       // Create a new query object.

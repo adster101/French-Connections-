@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class ImportViewTariffs extends JViewLegacy {
+class ImportViewReviews extends JViewLegacy {
 
   /**
    *  view display method
@@ -29,10 +29,10 @@ class ImportViewTariffs extends JViewLegacy {
     $this->form = $this->get('Form');
     
     $document = JFactory::getDocument();
- 		$document->setTitle(JText::_('Import property Tariffs'));
+ 		$document->setTitle(JText::_('Import property Reviews'));
 
-    JToolBarHelper::title(JText::_('Import property Tariffs'));
-		JToolBarHelper::apply('tariffs.import', 'JTOOLBAR_APPLY');
+    JToolBarHelper::title(JText::_('Import property Reviews'));
+		JToolBarHelper::apply('reviews.import', 'JTOOLBAR_APPLY');
     // Display the template
     parent::display($tpl);
     

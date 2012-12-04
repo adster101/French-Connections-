@@ -22,5 +22,6 @@ abstract class ImportHelper
 		JHtmlSidebar::addEntry(JText::_('Tariffs'), 'index.php?option=com_import&view=tariffs', $submenu == 'tariffs');	
 		JHtmlSidebar::addEntry(JText::_('Locations'), 'index.php?option=com_import&view=locations', $submenu == 'locations');	
 		JHtmlSidebar::addEntry(JText::_('Images'), 'index.php?option=com_import&view=images', $submenu == 'images');	
+		JHtmlSidebar::addEntry(JText::_('Reviews'), 'index.php?option=com_import&view=reviews', $submenu == 'reviews');	
   }
 }

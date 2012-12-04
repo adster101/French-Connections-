@@ -11,89 +11,75 @@ jimport('joomla.user.helper');
 /**
  * HelloWorld Controller
  */
-class ImportControllerTariffs extends JControllerForm {
+class ImportControllerReviews extends JControllerForm {
 
   public function import() {
 
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken( 'POST' ) or die( 'Invalid Token' );
-    
+    JSession::checkToken('POST') or die('Invalid Token');
+
     // The file we are importing from
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
-    
+
     // Open a handle to the import file
     $handle = fopen($userfile['tmp_name'], "r");
 
     // Get a db instance
     $db = JFactory::getDBO();
-    
-    $previous_property_id = '';
-    $previous_unit_id = '';
-    $unit_count = 1; // All imported properties must have at least one unit of reference  
-    
+
     while (($line = fgetcsv($handle)) !== FALSE) {
 
-      // This is another line of availability for the same unit and property
-      if ($previous_property_id == $line[1] && $previous_unit_id == $line[0]) {
-        
-        // If unit count is one, we must be dealing with the first unit of the property...
-        if ($unit_count == 1) {
-          // So set the property ID accordingly. Caveat here is that prn becomes the parent property id for co located properties.
-          $property_id = $line[1];
-        } else {
+      if (!empty($line[2]) && $line[2] !='NULL') {
+        // Start building a new query to insert any attributes... 
+        $query = $db->getQuery(true);
+
+        // First need to determine if this review is against a parent or a unit
+        $query->select('id');
+        $query->from('#__helloworld');
+        $query->where('id=' . $line[0] . ' and parent_id=' . $line[1]);
+
+        // Execute
+        $db->setQuery($query);
+        $result = $db->loadRow();
+
+        if (count($result > 0)) {
+          // Review is against a unit
           $property_id = $line[0];
+        } else {
+          $property_id = $line[1];
         }
-        
-      } else if ($previous_property_id == $line[1] && $previous_unit_id != $line[0]) {
-        
-        // Must be a new unit of the same property, so we also increment the unit count (as we know this is a multi unit property)
-        $property_id = $line[0];
-        $unit_count++;
-        
-      } else {
 
-        // Only happens when we deal with a new property/unit combo
-        $property_id = $line[1];
-        $unit_count = 1; // reset the unit count as this must be a new prn
+        // Reset the query, ready for insert
+        $query->clear();
+        $query = $db->getQuery(true);
+
+
+        $query->insert('#__reviews');
+        $query->columns(array('property_id', 'review_text', 'date', 'rating', 'guest_firstname', 'guest_email'));
+
+        $insert_string = '';
+        $date = new DateTime($line[3]);
+
+        $review_date = $date->format('Y-m-d H:i:s');
+
+        $insert_string = $property_id . ',' . $db->quote(mysql_escape_string($line[2])) . ',' . $db->quote($review_date) . ',' . $db->quote($line[4]) . ',' . $db->quote($line[5]) . ',' . $db->quote($line[6]);
+        $query->values($insert_string);
+
+        // Set and execute the query
+        $db->setQuery($query);
+
+        if (!$db->execute()) {
+          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+          print_r($db->getErrorMsg());
+          print_r($insert_string);
+          die;
+        }
       }
-      
-      // Determine the tariff based on the rate per, this should match to the imported property data...
-      if ($line[6] == 'night') {
-        $tariff = $line[4];
-      } else {
-        $tariff = $line[5];
-      }
-
-      // Start building a new query to insert any attributes... 
-      $query = $db->getQuery(true);
-      
-      $query->insert('#__tariffs');
-      
-			$query->columns(array('id','start_date','end_date','tariff'));
-      
-      // Loop over the list of attributes for the property and check if each attribute is in the attributes list
-      $insert_string = '';
-      
-      $insert_string = "$property_id,'$line[2]','$line[3]',$tariff";
-      $query->values($insert_string);      
-               
-      // Set and execute the query
-			$db->setQuery($query);
-
-      if (!$db->execute())
-			{
-				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-				print_r($db->getErrorMsg());
-        print_r($insert_string);
-				die;
-			}
- 
-      $previous_unit_id = $line[0];
-      $previous_property_id = $line[1];
     }
-            
+
     fclose($handle);
-    $this->setMessage('Properties imported, hooray!');
-    $this->setRedirect('index.php?option=com_import&view=availability');
+    $this->setMessage('Reviews imported, hooray!');
+    $this->setRedirect('index.php?option=com_import&view=reviews');
   }
+
 }

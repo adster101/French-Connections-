@@ -9,8 +9,6 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.framework');
-
 ?>
 <div class="finder<?php echo $this->pageclass_sfx; ?>">
 <h1>

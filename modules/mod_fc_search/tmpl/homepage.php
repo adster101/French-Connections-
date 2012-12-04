@@ -7,6 +7,9 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
+
+
+
 ?>
 <form id="property-search" action="<?php echo JRoute::_(JURI::base() . 'index.php?option=com_fcsearch&view=search&lang=en') ?>" method="POST" class="form-vertical">
   <div class="well clearfix">
@@ -15,70 +18,79 @@ defined('_JEXEC') or die;
     <label for="s_kwds">
       <?php echo JText::_('COM_FCSEARCH_SEARCH_DESTINATION') ?>
     </label>
-    <input id="s_kwds" class="input-medium typeahead" type="text" name="s_kwds" autocomplete="Off" />
-
-    <!--<label for="fArrivalDate">Arrival</label> 
-    <input id="fArrivalDate" class="input-small" type="text" name="start_date" />
-
-    <label for="fDepartureDate">Departure</label> 
-    <input id="fDepartureDate" class="input-small" type="text" name="end_date" />-->
+    <input id="s_kwds" class="input-medium typeahead" type="text" name="s_kwds" autocomplete="Off" /> 
     <div class="row-fluid">
-    <div class="span6">
-      <label for="search_sleeps">
-        <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
-      </label>
-      <select id="search_sleeps" class="input-mini" name="occupancy">
-        <option value="">...</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-      </select>
+      <div class="span6">
+        <label for="start_date">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
+        </label>
+        <input id="start_date" class="span9 start_date" type="text" name="start_date" autocomplete="Off" />    
+      </div>
+      <div class="span6">
+        <label for="end_date">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
+        </label>
+        <input id="end_date" class="span9 end_date" type="text" name="end_date" autocomplete="Off"  />    
+      </div>
     </div>
-    <div class="span6">
-      <label for="search_bedrooms">
-        <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
-      </label>
-      <select id="search_bedrooms" class="input-mini" name="bedrooms">
-        <option value="">...</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18">18</option>
-        <option value="19">19</option>
-        <option value="20">20</option>
-      </select>
-    </div>
+    <div class="row-fluid">
+
+      <div class="span6">
+        <label for="search_sleeps">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
+        </label>
+        <select id="search_sleeps" class="input-mini" name="occupancy">
+          <option value="">...</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+        </select>
+      </div>
+      <div class="span6">
+        <label for="search_bedrooms">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
+        </label>
+        <select id="search_bedrooms" class="input-mini" name="bedrooms">
+          <option value="">...</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+        </select>
+      </div>
     </div>
     <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#">
       <i class="icon-search icon-white"> </i>

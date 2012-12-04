@@ -89,7 +89,7 @@
     </field>    
     <field
       name="latitude"
-      type="text"
+      type="hidden"
       extension="com_helloworld"
       class="validate-latitude "
       default=""
@@ -104,7 +104,7 @@
     </field>
     <field
       name="longitude"
-      type="text"
+      type="hidden"
       extension="com_helloworld"
       class="inputbox validate-longitude"
       default=""

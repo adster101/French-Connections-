@@ -1,3 +1,6 @@
+jQuery(document).ready(function(){
+  initialise();
+})
 
 /*
  * Simple google maps code to allow the user to choose the location of their property from the map.
@@ -6,7 +9,7 @@
  *
  **/  
 
-function initialize() {
+function initialise() {
 
   var lat = document.getElementById('jform_latitude').value;
   var lon = document.getElementById('jform_longitude').value;

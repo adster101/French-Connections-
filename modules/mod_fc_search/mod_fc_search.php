@@ -19,13 +19,6 @@ $lang->load('com_fcsearch', JPATH_SITE, null, false, true);
 
 $app  = JFactory::getApplication();
 
-if ($params->get('opensearch', 1)) {
-	$doc = JFactory::getDocument();
-
-	$ostitle = $params->get('opensearch_title', JText::_('MOD_SEARCH_SEARCHBUTTON_TEXT').' '.$app->getCfg('sitename'));
-	$doc->addHeadLink(JURI::getInstance()->toString(array('scheme', 'host', 'port')).JRoute::_('&option=com_search&format=opensearch'), 'search', 'rel', array('title' => htmlspecialchars($ostitle), 'type' => 'application/opensearchdescription+xml'));
-}
-
 $upper_limit = $lang->getUpperLimitSearchWord();
 
 $button			= $params->get('button', '');
@@ -43,4 +36,15 @@ if ($imagebutton) {
 	$img = modSearchHelper::getSearchImage($button_text);
 }
 $mitemid = $set_Itemid > 0 ? $set_Itemid : $app->input->get('Itemid');
+
+
+
 require JModuleHelper::getLayoutPath('mod_fc_search', $params->get('layout', 'default'));
+
+$document = JFactory::getDocument();
+
+$document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.8.23.custom.min.js','text/javascript');
+$document->addScript(JURI::root() . 'media/fc/js/date-range.js','text/javascript', true);
+
+$document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.8.23.custom.css');
+

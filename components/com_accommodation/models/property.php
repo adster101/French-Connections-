@@ -5,7 +5,6 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.error.log');
 
-
 /**
  * HelloWorld Model
  */
@@ -46,40 +45,15 @@ class AccommodationModelProperty extends JModelItem {
    * @return object The message to be displayed to the user
    */
   public function getItem() {
-    
+
     if (!isset($this->item)) {
       // Get the language for this request 
       $lang = & JFactory::getLanguage()->getTag();
-      
+
       // Get the state for this property ID
       $id = $this->getState('property.id');
-          
-      // Language logic - should be more generic than this, in case we add more languages...
-      if ($lang === 'fr-FR') {
-        $select = '
-          trans.title,
-          sum(),
-          sum(single_bedrooms+double_bedrooms+triple_bedrooms+quad_bedrooms+twin_bedrooms) as bedrooms,
-          bathrooms,
-          toilets,
-          department,
-          hel.id,
-          location_details,
-          internal_facilities_other,
-          external_facilities_other,
-          activities_other,
-          getting_there,
-          trans.description,
-          distance_to_coast,
-          occupancy,
-          swimming,
-          latitude,
-          longitude,
-          linen_costs,
-          additional_price_notes,
-          nearest_town';
-      } else {
-        $select = '
+
+      $select = '
           hw.department, 
           toilets, 
           bathrooms,
@@ -109,7 +83,15 @@ class AccommodationModelProperty extends JModelItem {
           f.title as accommodation_type,
           g.title as swimming,
           h.title as department_as_text';
+
+      // Language logic - essentially need to do two things, if in French
+      // 1. Load the attributes_translation table in the below joins
+      // 2. Load property translations for the property
+
+      if ($lang === 'fr-FR') {
+        
       }
+
 
       $this->_db->setQuery($this->_db->getQuery(true)
                       ->from('#__helloworld as hw')
@@ -128,6 +110,7 @@ class AccommodationModelProperty extends JModelItem {
         $this->setError($this->_db->getError());
       }
     }
+
     return $this->item;
   }
 
@@ -138,11 +121,90 @@ class AccommodationModelProperty extends JModelItem {
    */
 
   public function getFacilities() {
-    if (!isset($this->item))
-    // Get the language for this request 
-      $lang = & JFactory::getLanguage()->getTag();
-    // Get the state for this property ID
-    $id = $this->getState('property.id');
+    
+  }
+
+  /*
+   * Function to return a list of units for a given property
+   * 
+   * 
+   */
+
+  public function getUnits() {
+    if (!isset($this->units)) {
+
+      try {
+        // Get the state for this property ID
+        $id = $this->getState('property.id');
+
+        // Generate a logger instance for reviews
+        JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('units'));
+        JLog::add('Retrieving unit for - ' . $id . ')', JLog::ERROR, 'reviews');
+
+        // Load the reviews model from Property manager
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+
+        $table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
+        
+        $leaf =  $table->isLeaf($id);
+        
+        
+        if($leaf && $this->item->parent_id !=1) {
+          $units = $table->getUnitTree($this->item->parent_id, true);
+        } else {
+          $units = $table->getUnitTree($id, true);
+        }
+               
+        $this->units = $units;
+        
+        return $this->units;
+        
+      } catch (Exception $e) {
+        // Log the exception and return false
+        JLog::add('Problem fetching units for - ' . $id . $e->getMessage(), JLOG::ERROR, 'units');
+        return false;
+      }
+    }
+  }
+
+  /*
+   * Function to return a list of reviews for a given property
+   * 
+   * 
+   */
+
+  public function getReviews() {
+
+    if (!isset($this->reviews)) {
+
+      try {
+        // Get the state for this property ID
+        $id = $this->getState('property.id');
+
+        // Generate a logger instance for reviews
+        JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
+        JLog::add('Retrieving reviews for - ' . $id . ')', JLog::ERROR, 'reviews');
+
+        // Load the reviews model from Property manager
+        JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+
+        $model = JModelLegacy::getInstance('Reviews', 'HelloWorldModel');
+
+        // Attempt to load the reviews for this property 
+        $model->getListQuery();
+
+        // Get the items, sweet!
+        $reviews = $model->getItems();
+
+        $this->reviews = $reviews;
+        // Return the reviews, if any
+        return $this->reviews;
+      } catch (Exception $e) {
+        // Log the exception and return false
+        JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
+        return false;
+      }
+    }
   }
 
   /*
@@ -154,11 +216,11 @@ class AccommodationModelProperty extends JModelItem {
   public function getAvailability() {
     // Get the state for this property ID
     $id = $this->getState('property.id');
-    
+
     // Generate a logger instance for availability
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('availability'));
-    JLog::add('Retrieving availability for - ' . $id . ')', JLog::ERROR, 'import_images');
- 
+    JLog::add('Retrieving availability for - ' . $id . ')', JLog::ERROR, 'availability');
+
     // First we need an instance of the availability table
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
 
@@ -199,8 +261,8 @@ class AccommodationModelProperty extends JModelItem {
   public function getTariffs() {
 
     // First we need an instance of the availability table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
-    
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+
     $tariffsTable = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
 
 
@@ -212,46 +274,44 @@ class AccommodationModelProperty extends JModelItem {
 
     // Check the $availability loaded correctly
     if (!$tariffs) {
-      
+
       // Ooops, there was a problem getting the availability
       // Check that the row actually exists
-      
       // Log it baby...
-    }    
-    
+    }
+
     return $tariffs;
   }
-  
- 
-  /* 
+
+  /*
    * Function to get a list of images for a property 
    * 
    */
+
   public function getImages() {
 
-    
-    
+
+
     // Get the property ID
     $id = $this->getState('property.id');
-  
+
     // Get the state for this property ID
     $parent_id = $this->item->parent_id;
-    
+
     // Do some logging
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('images'));
-    JLog::add('Retrieving images for - ' . $id . ')', JLog::ERROR, 'import_images');    
+    JLog::add('Retrieving images for - ' . $id . ')', JLog::ERROR, 'import_images');
 
     // First we need an instance of the images table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
 
     // Get the images depending on whether this is a parent or a child property
-    if ($parent_id !=1) { 
-     
+    if ($parent_id != 1) {
+
       $galleryimagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
       $images = $galleryimagesTable->load($id);
-      
     } else {
-      
+
       // Determine is this is a parent property or a leaf node...
       $propertyTable = JTable::getInstance('HelloWorld', 'HelloWorldTable', array());
 
@@ -260,48 +320,40 @@ class AccommodationModelProperty extends JModelItem {
         $images = $imagesTable->load_images($id);
       } else {
         $galleryimagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
-        $images = $galleryimagesTable->load($id);      
+        $images = $galleryimagesTable->load($id);
       }
-      
-      
-      
-      
-      
     }
     // Check the $availability loaded correctly
     if (!$images) {
       // Ooops, there was a problem getting the availability
       // Check that the row actually exists
       JLog::add('Problem fetching images for - ' . $id, JLog::ERROR, 'images');
-      
+
       // Log it baby...
-    }    
-    
-    return $images;    
+    }
+
+    return $images;
   }
-  
-  
-  /* 
+
+  /*
    * Function to return the location breadcrumb trail for a property
    *  
    */
 
-  public function getCrumbs( ) {
-    
+  public function getCrumbs() {
+
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
     $table = JTable::getInstance('Classification', 'ClassificationTable');
-    
+
     try {
-      $crumbs = $table->getPath($pk=$this->item->department);
-      
+      $crumbs = $table->getPath($pk = $this->item->department);
     } catch (Exception $e) {
 
       // Log the exception here...
       return false;
-      
     }
 
     return $crumbs;
-    
   }
+
 }

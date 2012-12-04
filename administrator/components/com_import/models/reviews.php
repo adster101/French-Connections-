@@ -7,7 +7,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class ImportModelTariffs extends JModelAdmin
+class ImportModelReviews extends JModelAdmin
 {
 
 	/**

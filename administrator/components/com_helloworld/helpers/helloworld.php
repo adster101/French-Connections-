@@ -24,7 +24,6 @@ abstract class HelloWorldHelper
       JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		    
     }
 
-    
 		// set some global property
 		$document = JFactory::getDocument();
 		$document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
@@ -119,7 +118,7 @@ abstract class HelloWorldHelper
         $item = $model->getItem($id);
 
 
-        if (array_key_exists('library' , $item->images->gallery) && count($item->images->gallery->getProperties()) > 0) 
+        if (array_key_exists('library' , $item->images->library) && count($item->images->gallery->getProperties()) > 0) 
         {
 
           JApplication::setUserState('com_helloworld.images.progress', true);

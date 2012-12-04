@@ -6,7 +6,7 @@ jimport('joomla.application.component.modellist');
 /**
  * HelloWorldList Model
  */
-class HelloWorldModelOffers extends JModelList
+class HelloWorldModelReviews extends JModelList
 {
 	/**
 	 * Constructor.
@@ -26,7 +26,7 @@ class HelloWorldModelOffers extends JModelList
 	 *
 	 * @return	string	An SQL query
 	 */
-	protected function getListQuery()
+	public function getListQuery()
 	{
 		// Get the user ID
 		$user		= JFactory::getUser();
@@ -46,14 +46,11 @@ class HelloWorldModelOffers extends JModelList
 		$query->select('*');
     
 		// From the special offers table
-		$query->from('#__special_offers as a');
+		$query->from('#__reviews as a');
     
     // Only want those assigned to the current property
     $query->where('property_id = ' . $property_id);
 		
-	
-
-
 		return $query;
 	}
 

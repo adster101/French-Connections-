@@ -19,6 +19,9 @@ foreach ($this->tariffs as $tariff) {
     <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_TITLE', $this->item->title, $this->item->property_type, $this->item->nearest_town, $this->item->department_as_text) ?>
   </h1>
 </div>
+<?php if (count($this->units) > 1) : ?>
+  <?php echo $this->loadTemplate('units'); ?>
+<?php endif; ?>
 <div class="row-fluid">
   <div class="span5 key-facts">
     <div class="well">
@@ -42,10 +45,7 @@ foreach ($this->tariffs as $tariff) {
         <span class="lead large">
           <?php if ($this->tariffs) { ?>
             <strong>
-              <?php if ($this->item->base_currency) : ?>
-                <?php echo htmlspecialchars($this->item->base_currency); ?>
-              <?php endif; ?>
-              <?php echo min($price_range) . ' - ' . max($price_range); ?>
+              <?php echo htmlspecialchars($this->item->base_currency) . min($price_range) . ' - ' . htmlspecialchars($this->item->base_currency) . max($price_range); ?>
             </strong> 
           </span>
           <?php if ($this->item->tariffs_based_on) : ?>
@@ -122,11 +122,41 @@ foreach ($this->tariffs as $tariff) {
       <hr />
 
 
-      <p>         
-        <a href="#addreview">
+
+      <?php if ($this->reviews) : ?>
+        <blockquote>
+          <p>
+            <?php echo strip_tags(JHtml::_('string.truncate', $this->reviews[0]->review_text, 125)); ?>
+
+          </p>
+          <small>
+            <?php echo $this->reviews[0]->guest_firstname; ?>
+            <?php echo $this->reviews[0]->guest_surname; ?>
+            <cite title="Date Stayed">
+              <?php
+              $date = new DateTime($this->reviews[0]->date);
+
+              echo $date->format('D, d M Y');
+              ?>
+            </cite>  
+            <a href="#reviews">
+              <?php echo JText::_('COM_ACCOMMODATION_SITE_READ_MORE'); ?>
+            </a>
+
+          </small>
+        </blockquote>   
+
+      <?php else: ?>
+        <p>
           <?php echo JText::_('COM_ACCOMMODATION_SITE_NO_REVIEWS'); ?>
+        </p>
+      <?php endif; ?>
+      <p>
+        <a href="#addreview">
+          <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
         </a>
       </p>
+
       <hr />
       <p class="center">
         <a class="btn btn-large" href="#availability">
@@ -149,15 +179,11 @@ foreach ($this->tariffs as $tariff) {
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
                 <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php
-              echo JURI::root() . 'images/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_500x375.', $image->image_file_name);
-              ;
-                  ?>" /> 
+                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_500x375.', $image->image_file_name); ?>
+                       " /> 
                      <?php else: ?>
-                  <img src="<?php
-                   echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . str_replace('.', '_500x375.', $image->image_file_name);
-                   ;
-                       ?>" /> 
+                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . str_replace('.', '_500x375.', $image->image_file_name); ?>
+                       " /> 
                      <?php endif; ?>
                 <p class="flex-caption">
                   <?php echo $image->caption; ?>
@@ -214,22 +240,20 @@ foreach ($this->tariffs as $tariff) {
     <?php if ($this->item->location_details) : ?>
       <?php echo $this->item->location_details; ?>
     <?php endif; ?>
-
     <div id="map_canvas" style="width:100%; height:370px"></div>
-    <hr />
   </div>
 </div>
 
-<div class="row-fluid" id="travel">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
-</div>
+<!--<div class="row-fluid" id="travel">
+  <div class="span12">-->
+<?php //echo $this->loadTemplate('navigator'); ?>
+<!--</div>
+</div>-->
 
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->title) : ?>
-      <h2><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN')) ?></h2>  
+      <h3><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN')) ?></h3>  
     <?php endif; ?>
     <?php if ($this->item->getting_there) : ?>
       <?php echo $this->item->getting_there; ?>
@@ -239,27 +263,57 @@ foreach ($this->tariffs as $tariff) {
   <div class="span4"> 
 
   </div>
-
 </div>
 
-<div class="row-fluid" id="activities">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator');
-    ?>
-  </div>
-</div>
+<!--<div class="row-fluid" id="activities">
+  <div class="span12">-->
+<?php //echo $this->loadTemplate('navigator'); ?>
+<!--</div>
+</div>-->
 <div class="row-fluid">
 
-  <div class="span-12">
+  <div class="span8">
     <?php if ($this->item->title) : ?>
-    <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->title)) ?></h2> 
+      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->title)) ?></h3> 
     <?php endif; ?>
     <?php if ($this->item->activities_other) : ?>
       <?php echo $this->item->activities_other; ?>
     <?php endif; ?>      
   </div>
-</div>
+  <div class="span4"> 
 
+  </div>
+</div>
+<?php if ($this->reviews) { ?>
+  <div class="row-fluid" id="reviews">
+    <div class="span12">
+      <?php echo $this->loadTemplate('navigator');
+      ?>
+    </div>
+  </div>
+  <div class="row-fluid">
+
+    <div class="span-12">
+      <?php if ($this->item->title) : ?>
+        <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->title)) ?></h2> 
+      <?php endif; ?>
+
+      <?php foreach ($this->reviews as $review) : ?>
+        <blockquote>
+          <?php echo $review->review_text; ?>
+          <small>
+            <?php echo $review->guest_firstname; ?>
+            <?php echo $review->guest_surname; ?>
+            <cite title="<?php echo JText::_('COM_ACCOMMODATION_SITE_DATE_OF_STAY'); ?>">
+              <?php echo $review->date; ?>
+            </cite>  
+          </small>
+        </blockquote>         
+      <?php endforeach; ?>
+
+    </div>
+  </div>
+<?php } ?>
 <div class="row-fluid" id="facilities">
   <div class="span12">
     <?php echo $this->loadTemplate('navigator');
