@@ -63,6 +63,7 @@ class AccommodationViewProperty extends JViewLegacy
 		$document->addScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections",'text/javascript', true, true);
 		$document->addScript("components/com_accommodation/js/jquery.flexslider-min.js",'text/javascript', true, true);
 		//$document->addScript("/components/com_accommodation/js/jquery.jcarousel.pack.js",'text/javascript', true, true);
+		$document->addScript("components/com_accommodation/js/property.js",'text/javascript', true, true);
 
     $document->addStyleSheet(JURI::root() . "components/com_accommodation/css/styles.css",'text/css',"screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/availability.css",'text/css',"screen");

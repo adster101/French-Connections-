@@ -33,7 +33,7 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id='.$this-
   <p>
   <?php foreach ($pathway as $path) : ?>
 
-  <a href="<?php echo JRoute::_($route); ?>">
+  <a href="<?php echo JRoute::_('/index.php?option=com_fcsearch&view=search&q=' . JApplication::stringURLSafe($path))?>">
     <?php echo $path ?>
   </a>>
   <?php endforeach; ?>
