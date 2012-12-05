@@ -1,7 +1,7 @@
  jQuery(document).ready(function() {
 
 
-   // The slider being synced must be initialized first
+  // The slider being synced must be initialized first
     jQuery('#carousel').flexslider({
       animation: "slide",
       controlNav: false,

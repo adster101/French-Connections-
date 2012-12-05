@@ -395,13 +395,10 @@ foreach ($this->tariffs as $tariff) {
 </div>
 
 
-<script> jQuery(document).ready(function() {
-
-
+<script>
+  jQuery(document).ready(function() {
  
-
     initialize();
-
   });
 
   function initialize() {
