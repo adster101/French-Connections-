@@ -40,9 +40,9 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id='.$this-
   </p>
   <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id='.$this->result->id) ?>" class="thumbnail pull-left">
     <?php if ($this->result->parent_id = 1) : ?>
-      <img src='/images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail)?>' class="img-rounded" />
+      <img src='images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail)?>' class="img-rounded" />
     <?php else: ?>
-      <img src='/images/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail) ?>' class="img-rounded" />
+      <img src='images/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail) ?>' class="img-rounded" />
     <?php endif; ?>
   </a>
   <p>
