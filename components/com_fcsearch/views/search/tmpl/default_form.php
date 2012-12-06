@@ -62,7 +62,6 @@ $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.8.23.custom.cs
         </label>
         <select id="search_bedrooms" class="span12" name="bedrooms">
             <?php echo JHtml::_('select.options',array(-1=>'...',1=>1,2=>2),'value','text',1); ?>
-
         </select>
       </div>
       <div class="span2">
