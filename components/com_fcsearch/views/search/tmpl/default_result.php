@@ -48,5 +48,8 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id='.$this-
   <p>
 		<?php echo JHtml::_('string.truncate', strip_tags($this->result->description)); ?>
   </p>
+  <p>
+    <?php echo $this->result->bedrooms; ?>
+  </p>
 	<small class="small result-url"><?php echo $base . JRoute::_(''); ?></small>
 </li>

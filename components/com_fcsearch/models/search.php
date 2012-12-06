@@ -81,11 +81,9 @@ class FcSearchModelSearch extends JModelList {
     } else {
       $this->location = $row[0];
       $this->level = $row[1];
-
     }
 
     // Add check here on level, perform distance search if a town/city.
-
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
     $query->clear();
@@ -101,25 +99,30 @@ class FcSearchModelSearch extends JModelList {
               LEFT(h.description, 400) as description,
               h.thumbnail,
               h.occupancy,
-              h.single_bedrooms,
               h.swimming,
               c.path,
+              (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
               c.title as location_title'
     );
     $query->from('#__classifications c');
-    
+
     if ($this->level == 1) { // Area level
-      $query->join('left', '#__helloworld h on c.id = h.area');      
+      $query->join('left', '#__helloworld h on c.id = h.area');
     } else if ($this->level == 2) { // Region level
       $query->join('left', '#__helloworld h on c.id = h.region');
     } else if ($this->level == 3) { // Department level 
-      $query->join('left', '#__helloworld h on c.id = h.department');    
+      $query->join('left', '#__helloworld h on c.id = h.department');
     } else { // Town/city level
       // errr, like TODO!
     }
-            
+
     $query->where('c.id = ' . $this->location);
     $query->order('h.lft', $this->getState('list.direction', 'asc'));
+
+
+    if ($this->getState('list.bedrooms')) {
+      $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
+    }
 
     $offset = $this->getState('list.start', 0); // The first result to show, i.e. the page number
     $count = $this->getState('list.limit', 10); // The number of results to show
@@ -128,8 +131,6 @@ class FcSearchModelSearch extends JModelList {
     $rows = $db->loadObjectList();
 
     // Process results into 
-    
-    
     // Push the results into cache.
     $this->store($store, $rows);
 
@@ -150,8 +151,8 @@ class FcSearchModelSearch extends JModelList {
    */
   protected function store($id, $data, $persistent = true) {
     // Store the data in internal cache.
-		$this->cache[$id] = $data;
-    
+    $this->cache[$id] = $data;
+
     // Store the data in external cache if data is persistent.
     if ($persistent) {
       return JFactory::getCache($this->context, 'output')->store(serialize($data), $id);
@@ -174,11 +175,10 @@ class FcSearchModelSearch extends JModelList {
     $data = null;
 
     // Use the internal cache if possible.
-		if (isset($this->cache[$id]))
-		{
-			return $this->cache[$id];
-		}
-    
+    if (isset($this->cache[$id])) {
+      return $this->cache[$id];
+    }
+
     // Use the external cache if data is persistent.
     if ($persistent) {
       $data = JFactory::getCache($this->context, 'output')->get($id);
@@ -210,11 +210,10 @@ class FcSearchModelSearch extends JModelList {
     $params = $app->getParams();
     $user = JFactory::getUser();
     $filter = JFilterInput::getInstance();
-
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
     $options = array();
-    
+
     // Get the query string.
     $q = !is_null($request->get('q')) ? $request->get('q', '', 'string') : $params->get('q');
     $q = $filter->clean($q, 'string');
@@ -226,13 +225,42 @@ class FcSearchModelSearch extends JModelList {
     // Will come from the search results page.
     $this->setState('list.start', $input->get('limitstart', 0, 'uint'));
     $this->setState('list.limit', $input->get('limit', $app->getCfg('list_limit', 10), 'uint'));
-    
+
     // Load the list state.
     // Will come from the search results page.
-    $this->setState('list.start_date', $input->get('start_date','','Alnum'));
-    $this->setState('list.end_date', $input->get('end_date','','Alnum'));
+    $this->setState('list.start_date', $input->get('start_date', '', 'Alnum'));
+    $this->setState('list.end_date', $input->get('end_date', '', 'Alnum'));
 
-    
+    $bedrooms = $input->get('bedrooms', '', 'int');
+
+    if ($bedrooms == -1) { // In this case user not searching on number of beds
+
+      $app->setUserState('list.bedrooms', ''); // Update user state 
+
+      $this->setState('list.bedrooms', $app->getUserState('list.bedrooms', '')); // Update model state
+      
+    } else { // User has searched on number of bedrooms
+
+      if ($bedrooms > 0) { // We want one or more bedrooms
+
+        $app->setUserState('list.bedrooms', $bedrooms); // Update the user state - e.g. remember number of bedrooms
+
+        $this->setState('list.bedrooms', $app->getUserState('list.bedrooms', '')); // 
+        
+      } else {
+        
+        $this->setState('list.bedrooms', $app->getUserState('list.bedrooms', ''));
+        
+      }
+    }
+
+
+
+
+
+
+    $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));
+
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
     switch ($dirn) {
@@ -246,7 +274,7 @@ class FcSearchModelSearch extends JModelList {
         break;
     }
 
-      // Set the match limit.
+    // Set the match limit.
     $this->setState('match.limit', 1000);
 
     // Load the parameters.
@@ -278,8 +306,6 @@ class FcSearchModelSearch extends JModelList {
     // dates
     // prices
     // facilities
-    // occupancy
-    // bedrooms
     // and so on and son on
     if ($page) {
       // Add the list state for page specific data.
@@ -289,6 +315,8 @@ class FcSearchModelSearch extends JModelList {
       $id .= ':' . $this->getState('list.searchterm');
       $id .= ':' . $this->getState('list.start_date');
       $id .= ':' . $this->getState('list.end_date');
+      $id .= ':' . $this->getState('list.bedrooms');
+      $id .= ':' . $this->getState('list.occupancy');
     }
     return parent::getStoreId($id);
   }
@@ -329,96 +357,96 @@ class FcSearchModelSearch extends JModelList {
               LEFT(h.description, 75),
               h.thumbnail,
               h.occupancy,
-              h.single_bedrooms,
               h.swimming,
               c.path,
               c.title'
       );
       $query->from('#__classifications c');
       if ($this->level == 1) { // Area level
-        $query->join('left', '#__helloworld h on c.id = h.area');      
+        $query->join('left', '#__helloworld h on c.id = h.area');
       } else if ($this->level == 2) { // Region level
         $query->join('left', '#__helloworld h on c.id = h.region');
       } else if ($this->level == 3) { // Department level 
-        $query->join('left', '#__helloworld h on c.id = h.department');    
+        $query->join('left', '#__helloworld h on c.id = h.department');
       } else { // Town/city level
         // errr, like TODO!
       }
       $query->where('c.id = ' . $this->location);
       $query->order('h.lft', $this->getState('list.direction', 'asc'));
 
-      
+      if ($this->getState('list.bedrooms')) {
+        $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
+      }
+
+
+
       // Push the data into cache.
       $this->store($store, $query, true);
-      
+
       // Return a copy of the query object.
       return clone($this->retrieve($store, true));
-      
     } catch (Exception $e) {
       // Oops, exceptional
       print_r($e);
       die;
     }
   }
-  
-	/**
-	 * Method to get the total number of results.
-	 *
-	 * @return  integer  The total number of results.
-	 *
-	 * @since   2.5
-	 * @throws  Exception on database error.
-	 */
-	public function getTotal()
-	{
 
-		// Get the store id.
-		$store = $this->getStoreId('getTotal');
+  /**
+   * Method to get the total number of results.
+   *
+   * @return  integer  The total number of results.
+   *
+   * @since   2.5
+   * @throws  Exception on database error.
+   */
+  public function getTotal() {
 
-		// Use the cached data if possible.
-		if ($this->retrieve($store))
-		{
-			return $this->retrieve($store);
-		}
+    // Get the store id.
+    $store = $this->getStoreId('getTotal');
 
-		// Get the results total.
-		$total = $this->getResultsTotal();
-    
-		// Push the total into cache.
-		$this->store($store, $total);
+    // Use the cached data if possible.
+    if ($this->retrieve($store)) {
+      return $this->retrieve($store);
+    }
 
-		// Return the total.
-		return $this->retrieve($store);
-	}
-  
-	/**
-	 * Method to get the total number of results for the search query.
-	 *
-	 * @return  integer  The results total.
-	 *
-	 * @since   2.5
-	 * @throws  Exception on database error.
-	 */
-	protected function getResultsTotal()
-	{
-		// Get the store id.
-		$store = $this->getStoreId('getResultsTotal', false);
-		
+    // Get the results total.
+    $total = $this->getResultsTotal();
+
+    // Push the total into cache.
+    $this->store($store, $total);
+
+    // Return the total.
+    return $this->retrieve($store);
+  }
+
+  /**
+   * Method to get the total number of results for the search query.
+   *
+   * @return  integer  The results total.
+   *
+   * @since   2.5
+   * @throws  Exception on database error.
+   */
+  protected function getResultsTotal() {
+    // Get the store id.
+    $store = $this->getStoreId('getResultsTotal', false);
+
     // Get the maximum number of results.
-		$limit = (int) $this->getState('match.limit');
-		// Use the cached data if possible.
-		if ($this->retrieve($store))
-		{
-			return $this->retrieve($store);
-		}
-    
+    $limit = (int) $this->getState('match.limit');
+    // Use the cached data if possible.
+    if ($this->retrieve($store)) {
+      return $this->retrieve($store);
+    }
+
     $base = $this->getListQuery();
-    
+
     $sql = clone($base);
-    
+
     $sql->clear('select');
-    
-   	$sql->select('COUNT(DISTINCT h.id)');
+
+    $sql->select('COUNT(h.id)');
+
 
     // Get the total from the database.
     $this->_db->setQuery($sql);
@@ -429,6 +457,6 @@ class FcSearchModelSearch extends JModelList {
 
     // Return the total.
     return $this->retrieve($store);
-    
   }
+
 }

@@ -18,7 +18,7 @@ defined('_JEXEC') or die;
     <label for="s_kwds">
       <?php echo JText::_('COM_FCSEARCH_SEARCH_DESTINATION') ?>
     </label>
-    <input id="s_kwds" class="input-medium typeahead" type="text" name="s_kwds" autocomplete="Off" /> 
+    <input id="s_kwds" class="input-medium typeahead" type="text" name="s_kwds" autocomplete="Off" value="South of France"/> 
     <div class="row-fluid">
       <div class="span6">
         <label for="start_date">
@@ -68,7 +68,7 @@ defined('_JEXEC') or die;
           <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
         </label>
         <select id="search_bedrooms" class="input-mini" name="bedrooms">
-          <option value="">...</option>
+          <option value="-1">...</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
