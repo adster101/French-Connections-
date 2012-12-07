@@ -50,7 +50,11 @@ class FcSearchViewSearch extends JViewLegacy
     JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderResults') : null;
 		//$total = $this->get('Total');
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderTotal') : null;
+    
 		$pagination = $this->get('Pagination');
+    
+    
+    
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderPagination') : null;
 
 		// Check for errors.

@@ -213,6 +213,10 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
     $options = array();
+    
+
+    // Get each of the possible URL params
+    
 
     // Get the query string.
     $q = !is_null($request->get('q')) ? $request->get('q', '', 'string') : $params->get('q');
@@ -231,6 +235,7 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.start_date', $input->get('start_date', '', 'Alnum'));
     $this->setState('list.end_date', $input->get('end_date', '', 'Alnum'));
 
+    // Bedrooms search options
     $bedrooms = $input->get('bedrooms', '', 'int');
 
     if ($bedrooms == -1) { // In this case user not searching on number of beds
@@ -254,6 +259,29 @@ class FcSearchModelSearch extends JModelList {
       }
     }
 
+    // Occupancy search
+    $occupancy = $input->get('occupancy', '', 'int');
+  
+    if ($occupancy == -1) { // In this case user not searching on occupancy
+
+      $app->setUserState('list.occupancy', ''); // Update user state 
+
+      $this->setState('list.occupancy', $app->getUserState('list.occupancy', '')); // Update model state
+      
+    } else { // User has searched on number of bedrooms
+
+      if ($occupancy > 0) { // We want one or more bedrooms
+
+        $app->setUserState('list.occupancy', $occupancy); // Update the user state - e.g. remember number of bedrooms
+
+        $this->setState('list.occupancy', $app->getUserState('list.occupancy', '')); // 
+        
+      } else {
+        
+        $this->setState('list.occupancy', $app->getUserState('list.occupancy', ''));
+        
+      }
+    }    
 
 
 

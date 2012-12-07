@@ -20,9 +20,10 @@ defined('_JEXEC') or die;
  */
 function FcSearchBuildRoute(&$query)
 {
-	static $menu;
-	$segments = array();
 
+  static $menu;
+	$segments = array();
+  
 	// Load the menu if necessary.
 	if (!$menu)
 	{
@@ -68,7 +69,7 @@ function FcSearchBuildRoute(&$query)
 		{
 			unset($query['q']);
 		}
-
+    
 		return $segments;
 	}
 
@@ -80,11 +81,12 @@ function FcSearchBuildRoute(&$query)
 	if (isset($query['view']))
 	{
 		// Add the view to the segments.
-		$segments[] = $query['view'];
+		$segments[] = $query['q'];
 		unset($query['view']);
 	}
+  $segments[]='south-of-france';
 
-	return $segments;
+  return $segments;
 }
 
 /**
@@ -96,10 +98,9 @@ function FcSearchBuildRoute(&$query)
  *
  * @since   2.5
  */
-function FinderParseRoute($segments)
+function FcSearchParseRoute($segments)
 {
 	$vars = array();
-
 	// Check if the view segment is set and it equals search or advanced.
 	if (@$segments[0] === 'search' || @$segments[0] === 'advanced')
 	{
