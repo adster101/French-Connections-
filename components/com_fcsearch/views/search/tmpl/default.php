@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 ?>
 <div class="finder<?php echo $this->pageclass_sfx; ?>">
 <h1>
-  Search results, innit!
+  <?php echo $this->document->title; ?>
 </h1>
 
 	<div id="search-form" >

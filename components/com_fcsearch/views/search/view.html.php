@@ -83,9 +83,6 @@ class FcSearchViewSearch extends JViewLegacy
 
 
 
-		// Escape strings for HTML output
-		$this->pageclass_sfx = htmlspecialchars($params->get('pageclass_sfx'));
-
 		// Check for layout override only if this is not the active menu item
 		// If it is the active menu item, then the view and category id will match
 		$active = $app->getMenu()->getActive();
@@ -95,7 +92,7 @@ class FcSearchViewSearch extends JViewLegacy
 			$this->setLayout($active->query['layout']);
 		}
 
-		//$this->prepareDocument($query);
+		$this->prepareDocument();
     // Need to set valid meta data for the page here, load any JS, CSS Etc
     
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('beforeFinderLayout') : null;
@@ -170,47 +167,24 @@ class FcSearchViewSearch extends JViewLegacy
 	 *
 	 * @since   2.5
 	 */
-	protected function prepareDocument($query)
+	protected function prepareDocument()
 	{
+    
 		$app = JFactory::getApplication();
-		$menus = $app->getMenu();
+    $document = JFactory::getDocument();
+
 		$title = null;
 
-		// Because the application sets a default page title,
-		// we need to get it from the menu item itself
-		$menu = $menus->getActive();
+    $title = JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm'));
+	
+    $title = UCFirst($title);
+    
+    $title = JText::sprintf('COM_FCSEARCH_TITLE', $title);
 
-		if ($menu)
-		{
-			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
-		}
-		else
-		{
-			$this->params->def('page_heading', JText::_('COM_FINDER_DEFAULT_PAGE_TITLE'));
-		}
-
-		$title = $this->params->get('page_title', '');
-
-		if (empty($title))
-		{
-			$title = $app->getCfg('sitename');
-		}
-		elseif ($app->getCfg('sitename_pagetitles', 0) == 1)
-		{
-			$title = JText::sprintf('JPAGETITLE', $app->getCfg('sitename'), $title);
-		}
-		elseif ($app->getCfg('sitename_pagetitles', 0) == 2)
-		{
-			$title = JText::sprintf('JPAGETITLE', $title, $app->getCfg('sitename'));
-		}
 
 		$this->document->setTitle($title);
 
-		if ($layout = $this->params->get('article_layout'))
-		{
-			$this->setLayout($layout);
-		}
-
+	
 		// Configure the document meta-description.
 		if (!empty($this->explained))
 		{
@@ -224,23 +198,9 @@ class FcSearchViewSearch extends JViewLegacy
 			$this->document->setMetadata('keywords', implode(', ', $query->highlight));
 		}
 
-		if ($this->params->get('robots'))
-		{
-			$this->document->setMetadata('robots', $this->params->get('robots'));
-		}
+    $document->addScript(JURI::root() . 'media/fc/js/search.js','text/javascript', true);
 
-		// Add feed link to the document head.
-		if ($this->params->get('show_feed_link', 1) == 1)
-		{
-			// Add the RSS link.
-			$props = array('type' => 'application/rss+xml', 'title' => 'RSS 2.0');
-			$route = JRoute::_($this->query->toURI() . '&format=feed&type=rss');
-			$this->document->addHeadLink($route, 'alternate', 'rel', $props);
 
-			// Add the ATOM link.
-			$props = array('type' => 'application/atom+xml', 'title' => 'Atom 1.0');
-			$route = JRoute::_($this->query->toURI() . '&format=feed&type=atom');
-			$this->document->addHeadLink($route, 'alternate', 'rel', $props);
-		}
+		
 	}
 }

@@ -124,6 +124,10 @@ class FcSearchModelSearch extends JModelList {
       $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
     }
 
+    if ($this->getState('list.occupancy')) {
+      $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
+    }
+    
     $offset = $this->getState('list.start', 0); // The first result to show, i.e. the page number
     $count = $this->getState('list.limit', 10); // The number of results to show
     // Load the results from the database.
@@ -236,59 +240,21 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.end_date', $input->get('end_date', '', 'Alnum'));
 
     // Bedrooms search options
-    $bedrooms = $input->get('bedrooms', '', 'int');
+    $this->setState('list.bedrooms', $input->get('bedrooms', '', 'int'));
+    $app->setUserState('list.bedrooms', $input->get('bedrooms', '', 'int'));
 
-    if ($bedrooms == -1) { // In this case user not searching on number of beds
-
-      $app->setUserState('list.bedrooms', ''); // Update user state 
-
-      $this->setState('list.bedrooms', $app->getUserState('list.bedrooms', '')); // Update model state
-      
-    } else { // User has searched on number of bedrooms
-
-      if ($bedrooms > 0) { // We want one or more bedrooms
-
-        $app->setUserState('list.bedrooms', $bedrooms); // Update the user state - e.g. remember number of bedrooms
-
-        $this->setState('list.bedrooms', $app->getUserState('list.bedrooms', '')); // 
-        
-      } else {
-        
-        $this->setState('list.bedrooms', $app->getUserState('list.bedrooms', ''));
-        
-      }
-    }
-
-    // Occupancy search
-    $occupancy = $input->get('occupancy', '', 'int');
-  
-    if ($occupancy == -1) { // In this case user not searching on occupancy
-
-      $app->setUserState('list.occupancy', ''); // Update user state 
-
-      $this->setState('list.occupancy', $app->getUserState('list.occupancy', '')); // Update model state
-      
-    } else { // User has searched on number of bedrooms
-
-      if ($occupancy > 0) { // We want one or more bedrooms
-
-        $app->setUserState('list.occupancy', $occupancy); // Update the user state - e.g. remember number of bedrooms
-
-        $this->setState('list.occupancy', $app->getUserState('list.occupancy', '')); // 
-        
-      } else {
-        
-        $this->setState('list.occupancy', $app->getUserState('list.occupancy', ''));
-        
-      }
-    }    
-
-
-
-
-
+    // Occupancy
     $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));
+    $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
 
+    // Start date
+    $this->setState('list.start_date', $input->get('start_date', '', 'date'));
+    $app->setUserState('list.start_date', $input->get('start_date', '', 'date'));
+
+    // End date
+    $this->setState('list.end_date', $input->get('end_date', '', 'date'));
+    $app->setUserState('list.end_date', $input->get('end_date', '', 'date'));
+    
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
     switch ($dirn) {
@@ -406,7 +372,9 @@ class FcSearchModelSearch extends JModelList {
         $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
       }
 
-
+      if ($this->getState('list.occupancy')) {
+        $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
+      }
 
       // Push the data into cache.
       $this->store($store, $query, true);

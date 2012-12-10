@@ -23,20 +23,26 @@ function FcSearchBuildRoute(&$query)
 
   static $menu;
 	$segments = array();
+   
   
 	// Load the menu if necessary.
 	if (!$menu)
 	{
 		$menu = JFactory::getApplication('site')->getMenu();
 	}
-
-	/*
+  
+  
+  
+  
+	
+  /*
 	 * First, handle menu item routes first. When the menu system builds a
 	 * route, it only provides the option and the menu item id. We don't have
 	 * to do anything to these routes.
 	 */
 	if (count($query) === 2 && isset($query['Itemid']) && isset($query['option']))
 	{
+    
 		return $segments;
 	}
 
@@ -49,27 +55,31 @@ function FcSearchBuildRoute(&$query)
 	 */
 	if (!empty($query['Itemid']))
 	{
+    
 		// Get the menu item.
 		$item = $menu->getItem($query['Itemid']);
 
-		// Check if the view matches.
-		if ($item && @$item->query['view'] === @$query['view'])
-		{
-			unset($query['view']);
-		}
-
-		// Check if the search query filter matches.
-		if ($item && @$item->query['f'] === @$query['f'])
-		{
-			unset($query['f']);
-		}
+    $segments[0] = '';
+    $segments[1] = '';
+    $segments[2] = '';
+    $segments[3] = '';
 
 		// Check if the search query string matches.
-		if ($item && @$item->query['q'] === @$query['q'])
+		if ($item && isset($query['q']))
 		{
+      $segments[0]=$query['q'];
 			unset($query['q']);
 		}
+
     
+    
+    // Check if the search query string matches.
+		if ($item && isset($query['bedrooms']))
+		{
+      $segments[3]=$query['bedrooms'];
+			unset($query['bedrooms']);
+		}
+        
 		return $segments;
 	}
 
@@ -81,10 +91,11 @@ function FcSearchBuildRoute(&$query)
 	if (isset($query['view']))
 	{
 		// Add the view to the segments.
-		$segments[] = $query['q'];
-		unset($query['view']);
-	}
-  $segments[]='south-of-france';
+		//$segments[] = $query['q'];
+		//unset($query['view']);
+	}	
+  
+  
 
   return $segments;
 }
@@ -100,12 +111,19 @@ function FcSearchBuildRoute(&$query)
  */
 function FcSearchParseRoute($segments)
 {
-	$vars = array();
-	// Check if the view segment is set and it equals search or advanced.
-	if (@$segments[0] === 'search' || @$segments[0] === 'advanced')
-	{
-		$vars['view'] = $segments[0];
-	}
+  
+  $vars = array();
 
+  $segments[0] = str_replace(':','-', $segments[0]);
+  
+  
+  $vars['q'] = $segments[0];
+  $vars['bedrooms'] = $segments[1];
+  
+	
+  
+  
+
+  
 	return $vars;
 }

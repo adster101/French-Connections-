@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="plugin" group="system" version="1.5" method="upgrade">
+	<name>Test Router</name>
+    <author>Amy Stpehen</author>
+    <creationDate>September 2009</creationDate>
+    <copyright>Copyright (C) 2009 Joomla!.</copyright>
+    <license>http://www.gnu.org/licenses/licenses.html#GPL GPL v 2, or later</license>
+	<authorEmail>AmyStepen@tamka.org</authorEmail>
+	<authorUrl>http://tamka.org</authorUrl>
+	<version>1.0</version>
+	<description>System Plugin for playing with the Router</description>
+    <files>
+        <filename plugin="testrouter">testrouter.php</filename>
+    </files>
+	<params>
+	</params>
+</install>
