@@ -1,22 +1,27 @@
 
 jQuery(document).ready(function(){
 
- jQuery('#property-search-button').click(function(event){
+  jQuery('#property-search-button').click(function(event){
     
     // val is the 'active' suggestion populated by typeahead
     // e.g. the option chosen should be the last active one
     var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
-    
+   
     // The value contained in the typeahead field
     var chosen = jQuery(".typeahead").attr('value');
     
-    // The two should match as we want to ensure user enters destination
+    // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
+    var count = jQuery(".typeahead.dropdown-menu").length;
+
+
+    // The two should match as we want to ensure user enters destination    
+    if (chosen !== '' && count !== 0) {
+      if ( val !== chosen) {
+        jQuery('#myModal').modal();
+        return false;
+      }
+    } 
     
-    if (val !== chosen) {
-      
-      jQuery('#myModal').modal();
-      return false
-    }
     
     // Form checks out, looks like the user chose something from the suggestions
     // Strip the string to make it like classifications table alias
@@ -27,6 +32,7 @@ jQuery(document).ready(function(){
 
     //jQuery('form#property-search').attr('action', path+query);
 
+    console.log(query);
     jQuery('#s_kwds').attr('value',query);
 
 
@@ -48,7 +54,7 @@ jQuery(document).ready(function(){
       function (data) {
         process(data);
       }
-    )
+      )
     }
   })
 
@@ -58,16 +64,16 @@ jQuery(document).ready(function(){
 
     var s=str;
     var rExps=[ 
-        /[\xC0-\xC2]/g, 
-      /[\xE0-\xE2]/g,
-      /[\xC8-\xCA]/g,
-      /[\xE8-\xEB]/g,
-      /[\xCC-\xCE]/g,
-      /[\xEC-\xEE]/g,
-      /[\xD2-\xD4]/g,
-      /[\xF2-\xF4]/g,
-      /[\xD9-\xDB]/g,
-      /[\xF9-\xFB]/g
+    /[\xC0-\xC2]/g, 
+    /[\xE0-\xE2]/g,
+    /[\xC8-\xCA]/g,
+    /[\xE8-\xEB]/g,
+    /[\xCC-\xCE]/g,
+    /[\xEC-\xEE]/g,
+    /[\xD2-\xD4]/g,
+    /[\xF2-\xF4]/g,
+    /[\xD9-\xDB]/g,
+    /[\xF9-\xFB]/g
     ];
 
     var repChar=['A','a','E','e','I','i','O','o','U','u'];

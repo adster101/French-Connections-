@@ -30,8 +30,9 @@ class ImportControllerReviews extends JControllerForm {
     while (($line = fgetcsv($handle)) !== FALSE) {
 
       if (!empty($line[2]) && $line[2] !='NULL') {
-        // Start building a new query to insert any attributes... 
+        // Start building a new query to insert any attributes...        
         $query = $db->getQuery(true);
+        $query->clear();
 
         // First need to determine if this review is against a parent or a unit
         $query->select('id');
@@ -42,12 +43,14 @@ class ImportControllerReviews extends JControllerForm {
         $db->setQuery($query);
         $result = $db->loadRow();
 
-        if (count($result > 0)) {
+        if (count($result > 0) && isset($result)) {
           // Review is against a unit
           $property_id = $line[0];
         } else {
           $property_id = $line[1];
         }
+        
+    
 
         // Reset the query, ready for insert
         $query->clear();

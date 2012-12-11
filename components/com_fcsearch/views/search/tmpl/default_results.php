@@ -19,7 +19,7 @@ $app = JFactory::getApplication();
 ?>
   <div class="row-fluid">
     <div class="span9">
-      <ul class="search-results<?php echo $this->pageclass_sfx; ?> list-striped">
+      <ul class="search-results list-striped">
         <?php
         for ($i = 0, $n = count($this->results); $i < $n; $i++):
           $this->result = &$this->results[$i];

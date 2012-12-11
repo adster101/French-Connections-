@@ -9,8 +9,11 @@
 
 defined('_JEXEC') or die;
 
+$lang = JFactory::getLanguage();
+$lang->load('com_accommodation', JPATH_SITE, null, false, true);
+
 ?>
-<div class="finder<?php echo $this->pageclass_sfx; ?>">
+<div class="finder">
 <h1>
   <?php echo $this->document->title; ?>
 </h1>

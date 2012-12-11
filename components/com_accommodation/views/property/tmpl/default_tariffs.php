@@ -11,7 +11,7 @@ defined('_JEXEC') or die('Restricted access');
   <tr>
     <td>
       <?php echo htmlspecialchars($tariff->start_date); ?>
-      &dash;
+      &ndash;
       <?php echo htmlspecialchars($tariff->end_date); ?>
     </td> 
     <td>

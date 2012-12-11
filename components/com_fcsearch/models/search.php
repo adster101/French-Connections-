@@ -88,23 +88,46 @@ class FcSearchModelSearch extends JModelList {
     // TO DO - ensure this works in French as well
     $query->clear();
     $query = $db->getQuery(true);
-    $query->select(
-            'h.id,
+    $query->select('
+              distinct h.id,
               h.parent_id,
               h.level,
               h.title as property_title,
               h.area,
               h.region,
               h.department,
-              LEFT(h.description, 400) as description,
+              LEFT(h.description, 250) as description,
               h.thumbnail,
               h.occupancy,
               h.swimming,
               c.path,
               (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-              c.title as location_title'
-    );
+              c.title as location_title,
+              b.title as property_type,
+              d.title as accommodation_type,
+              (
+                select 
+                  min(tariff) 
+                from 
+                  qitz3_tariffs 
+                where 
+                  id = h.id
+              ) as from_rate,
+              e.title as tariff_based_on,
+              f.title as base_currency,
+              (
+                select 
+                  count(*)
+                from 
+                  qitz3_reviews
+                where 
+                  id = h.id
+                group by id
+              ) as review_count
+    ');
+    
     $query->from('#__classifications c');
+    
 
     if ($this->level == 1) { // Area level
       $query->join('left', '#__helloworld h on c.id = h.area');
@@ -116,8 +139,27 @@ class FcSearchModelSearch extends JModelList {
       // errr, like TODO!
     }
 
+        $query->join('left','#__attributes b ON b.id = h.property_type');
+        $query->join('left','#__attributes d ON d.id = h.accommodation_type');
+        $query->join('left','#__attributes e ON e.id = h.tariff_based_on');
+        $query->join('left','#__attributes f ON f.id = h.base_currency');
+
+      if ($this->getState('list.start_date')) {
+        $query->join('left', '#__availability a on h.id = a.id');
+        $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
+        $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+
+        $query->where('a.availability = 1');
+      }
+
+    //if ($this->getState('list.end_date')) {
+      //$query->join('left', '#__availability b on h.id = b.id');
+      //$query->where('b.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+    //}
+
+
     $query->where('c.id = ' . $this->location);
-    $query->order('h.lft', $this->getState('list.direction', 'asc'));
+    // $query->order('h.lft', $this->getState('list.direction', 'asc'));
 
 
     if ($this->getState('list.bedrooms')) {
@@ -127,7 +169,7 @@ class FcSearchModelSearch extends JModelList {
     if ($this->getState('list.occupancy')) {
       $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
     }
-    
+
     $offset = $this->getState('list.start', 0); // The first result to show, i.e. the page number
     $count = $this->getState('list.limit', 10); // The number of results to show
     // Load the results from the database.
@@ -217,11 +259,9 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
     $options = array();
-    
+
 
     // Get each of the possible URL params
-    
-
     // Get the query string.
     $q = !is_null($request->get('q')) ? $request->get('q', '', 'string') : $params->get('q');
     $q = $filter->clean($q, 'string');
@@ -254,7 +294,7 @@ class FcSearchModelSearch extends JModelList {
     // End date
     $this->setState('list.end_date', $input->get('end_date', '', 'date'));
     $app->setUserState('list.end_date', $input->get('end_date', '', 'date'));
-    
+
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
     switch ($dirn) {
@@ -340,8 +380,8 @@ class FcSearchModelSearch extends JModelList {
       // Proceed and get all the properties in this location
       // TO DO - ensure this works in French as well
       $query = $db->getQuery(true);
-      $query->select(
-              'h.id,
+      $query->select('
+              distinct h.id,
               h.parent_id,
               h.level,
               h.title,
@@ -353,8 +393,8 @@ class FcSearchModelSearch extends JModelList {
               h.occupancy,
               h.swimming,
               c.path,
-              c.title'
-      );
+              c.title
+      ');
       $query->from('#__classifications c');
       if ($this->level == 1) { // Area level
         $query->join('left', '#__helloworld h on c.id = h.area');
@@ -368,6 +408,19 @@ class FcSearchModelSearch extends JModelList {
       $query->where('c.id = ' . $this->location);
       $query->order('h.lft', $this->getState('list.direction', 'asc'));
 
+      if ($this->getState('list.start_date')) {
+        $query->join('left', '#__availability a on h.id = a.id');
+        $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
+        $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+
+        $query->where('a.availability = 1');
+      }
+
+      //if ($this->getState('list.end_date')) {
+        //$query->join('left', '#__availability b on h.id = b.id');
+        //$query->where('b.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+      //}
+      
       if ($this->getState('list.bedrooms')) {
         $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
       }
@@ -441,7 +494,7 @@ class FcSearchModelSearch extends JModelList {
 
     $sql->clear('select');
 
-    $sql->select('COUNT(h.id)');
+    $sql->select('COUNT(DISTINCT h.id)');
 
 
     // Get the total from the database.

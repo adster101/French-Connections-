@@ -13,7 +13,8 @@ $app = JFactory::getApplication();
 
 $bedrooms = $app->getUserState('list.bedrooms');
 $occupancy = $app->getUserState('list.occupancy');
-
+$start_date = $app->getUserState('list.start_date');
+$end_date = $app->getUserState('list.end_date');
 ?>
 <form id="property-search" action="<?php echo JRoute::_(JURI::base() . 'index.php?option=com_fcsearch&lang=en') ?>" method="GET" class="form-vertical">
   <div class="well clearfix">
@@ -28,13 +29,13 @@ $occupancy = $app->getUserState('list.occupancy');
         <label for="start_date">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
         </label>
-        <input id="start_date" class="span9 start_date" type="text" name="start_date" autocomplete="Off" />    
+        <input id="start_date" class="span9 start_date" type="text" name="start_date" autocomplete="Off" value="<?php echo $start_date; ?>"/>    
       </div>
       <div class="span6">
         <label for="end_date">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
         </label>
-        <input id="end_date" class="span9 end_date" type="text" name="end_date" autocomplete="Off"  />    
+        <input id="end_date" class="span9 end_date" type="text" name="end_date" autocomplete="Off" value="<?php echo $end_date; ?>" />    
       </div>
     </div>
     <div class="row-fluid">
