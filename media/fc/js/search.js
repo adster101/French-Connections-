@@ -11,16 +11,19 @@ jQuery(document).ready(function(){
     var chosen = jQuery(".typeahead").attr('value');
     
     // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
-    var count = jQuery(".typeahead.dropdown-menu").length;
+    var count = jQuery(".typeahead.dropdown-menu li").length;
 
 
-    // The two should match as we want to ensure user enters destination    
+    // If chosen not empty and count not zero, chances are we have a auto suggestion choice
     if (chosen !== '' && count !== 0) {
       if ( val !== chosen) {
         jQuery('#myModal').modal();
         return false;
       }
-    } 
+    } else if (chosen == '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
+        jQuery('#myModal').modal();
+        return false;      
+    }
     
     
     // Form checks out, looks like the user chose something from the suggestions
