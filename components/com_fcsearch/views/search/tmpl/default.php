@@ -19,7 +19,10 @@ $lang->load('com_accommodation', JPATH_SITE, null, false, true);
 </h1>
 
 	<div id="search-form" >
+    <form id="property-search" action="<?php echo JRoute::_(JURI::base() . 'index.php?option=com_fcsearch&lang=en') ?>" method="GET" class="form-vertical">
+
 		<?php echo $this->loadTemplate('form'); ?>
+    </form>
 	</div>
 
 	<div id="search-results">

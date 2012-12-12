@@ -75,6 +75,10 @@ class FcSearchViewSearch extends JViewLegacy
 		$this->results = &$results;
 		$this->total = &$total;
 		$this->pagination = &$pagination;
+		
+    $this->prepareDocument();
+
+    $this->sidebar = JHtmlSidebar::render();
 
 	
 
@@ -92,7 +96,6 @@ class FcSearchViewSearch extends JViewLegacy
 			$this->setLayout($active->query['layout']);
 		}
 
-		$this->prepareDocument();
     // Need to set valid meta data for the page here, load any JS, CSS Etc
     
 		JDEBUG ? $GLOBALS['_PROFILER']->mark('beforeFinderLayout') : null;
@@ -200,7 +203,12 @@ class FcSearchViewSearch extends JViewLegacy
 
     $document->addScript(JURI::root() . 'media/fc/js/search.js','text/javascript', true);
 
-
+		
+    JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_PUBLISHED'),
+			'sort_by',
+			JHtml::_('select.options', array('beds'=>'Bedrooms'), 'value', 'text', $this->state->get('filter.published'), true)
+    );
 		
 	}
 }

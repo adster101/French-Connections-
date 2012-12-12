@@ -21,13 +21,11 @@ $app = JFactory::getApplication();
     <div class="span9">
       <ul class="search-results list-striped">
         <?php
-        for ($i = 0, $n = count($this->results); $i < $n; $i++):
+        for ($i = 0, $n = count($this->results); $i < $n; $i++){
           $this->result = &$this->results[$i];
-          ?>
-          <?php echo $this->loadTemplate('result'); ?>
-          <?php
-        endfor;
-        ?>
+          if (!empty($this->result->id)) {
+            echo $this->loadTemplate('result'); }
+         }?>
       </ul>
     </div>
     <div class="span3">
@@ -39,8 +37,6 @@ $app = JFactory::getApplication();
     <div class="pagination">
       <?php echo $this->pagination->getPagesLinks(); ?>
     </div>
-    <div class="search-pages-counter">
-      <?php echo $pages; ?>
-    </div>
+  
   </div>
 

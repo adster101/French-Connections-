@@ -25,7 +25,6 @@ jQuery(document).ready(function(){
         return false;      
     }
     
-    
     // Form checks out, looks like the user chose something from the suggestions
     // Strip the string to make it like classifications table alias
     var query = stripVowelAccent(chosen);   
@@ -45,6 +44,14 @@ jQuery(document).ready(function(){
     return false;
     
   })
+
+  jQuery('form#property-search').change(function(event){
+    console.log(event);
+    alert("Wooty toot toot!");
+    event.preventDefault();  
+    return false;
+  });
+
   
   jQuery(".typeahead").typeahead({
      
