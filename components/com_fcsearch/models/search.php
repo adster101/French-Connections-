@@ -121,14 +121,13 @@ class FcSearchModelSearch extends JModelList {
                 from 
                   qitz3_reviews
                 where 
-                  id = h.id
-                group by id
+                  property_id = h.id
+                group by h.id
               ) as review_count
     ');
     
     $query->from('#__classifications c');
     
-
     if ($this->level == 1) { // Area level
       $query->join('left', '#__helloworld h on c.id = h.area');
     } else if ($this->level == 2) { // Region level
