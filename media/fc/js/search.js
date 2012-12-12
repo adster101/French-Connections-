@@ -90,7 +90,13 @@ jQuery(document).ready(function(){
     
     // Replace apostrophe with space
     s=s.replace(/[\']/g,' ');
-    
+
+    if(typeof String.prototype.trim !== 'function') {
+      String.prototype.trim = function() {
+        return this.replace(/^\s+|\s+$/g, ''); 
+      }
+    }
+
     // Trim any trailing space
     s=s.trim();
     
