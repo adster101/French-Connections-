@@ -58,7 +58,12 @@ class AccommodationModelProperty extends JModelItem {
           toilets, 
           bathrooms,
           hw.parent_id,
-          SUM( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms, 
+          SUM( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms,
+          single_bedrooms,
+          double_bedrooms,
+          triple_bedrooms,
+          quad_bedrooms,
+          twin_bedrooms,
           hw.id, 
           location_details, 
           internal_facilities_other, 
@@ -75,6 +80,7 @@ class AccommodationModelProperty extends JModelItem {
           linen_costs, 
           hw.longitude, 
           nearest_town,
+          linen_costs,
           a.title as changeover_day,
           b.title as tariffs_based_on,
           c.title as base_currency,
@@ -122,6 +128,52 @@ class AccommodationModelProperty extends JModelItem {
 
   public function getFacilities() {
     
+    if (!isset($this->facilities)) {
+      try {
+        // Get the state for this property ID
+        $id = $this->getState('property.id');
+      
+        $attributes = array();
+        
+        // Generate a logger instance for reviews
+        JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('facilities'));
+        JLog::add('Retrieving facilities for - ' . $id . ')', JLog::ALL, 'facilities');
+       
+        $query = $this->_db->getQuery(true);
+       	$query->select('a.title as attribute,at.title as attribute_type');
+        $query->from('#__attributes_property ap');
+        $query->join('left', '#__attributes a on a.id = ap.attribute_id');
+        $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
+        $query->where('ap.property_id = '.$id);
+        
+        
+        $results = $this->_db->setQuery($query)->loadObjectList();
+        
+        
+        
+        foreach ($results as $attribute) {
+          if (!array_key_exists($attribute->attribute_type,$attributes)) {
+            $attributes[$attribute->attribute_type] = array();
+          }
+          
+          $attributes[$attribute->attribute_type][] = $attribute->attribute;
+
+        }
+        
+        $this->facilities = $attributes;
+        
+        
+        return $this->facilities;
+
+        
+        
+        
+      } catch (Exception $e) {
+        // Log the exception and return false
+        JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
+        return false;
+      }
+    }
   }
 
   /*
@@ -139,7 +191,7 @@ class AccommodationModelProperty extends JModelItem {
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('units'));
-        JLog::add('Retrieving unit for - ' . $id . ')', JLog::ERROR, 'reviews');
+        JLog::add('Retrieving unit for - ' . $id . ')', JLog::ALL, 'units');
 
         // Load the reviews model from Property manager
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
@@ -183,7 +235,7 @@ class AccommodationModelProperty extends JModelItem {
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
-        JLog::add('Retrieving reviews for - ' . $id . ')', JLog::ERROR, 'reviews');
+        JLog::add('Retrieving reviews for - ' . $id . ')', JLog::ALL, 'reviews');
 
         // Load the reviews model from Property manager
         JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
@@ -197,6 +249,7 @@ class AccommodationModelProperty extends JModelItem {
         $reviews = $model->getItems();
 
         $this->reviews = $reviews;
+        
         // Return the reviews, if any
         return $this->reviews;
       } catch (Exception $e) {
@@ -219,7 +272,7 @@ class AccommodationModelProperty extends JModelItem {
 
     // Generate a logger instance for availability
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('availability'));
-    JLog::add('Retrieving availability for - ' . $id . ')', JLog::ERROR, 'availability');
+    JLog::add('Retrieving availability for - ' . $id . ')', JLog::ALL, 'availability');
 
     // First we need an instance of the availability table
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
@@ -241,7 +294,6 @@ class AccommodationModelProperty extends JModelItem {
         // Not fatal error
         // Log this out to property log
         JLog::add('Problem fetching availability for - ' . $id . '(No availability?))', JLog::ERROR, 'availability');
-        //$this->setError(JText::sprintf('COM_ACCOMMODATION_ERROR_GETTING_AVAILABILITY', $id));
       }
     }
 
@@ -300,7 +352,7 @@ class AccommodationModelProperty extends JModelItem {
 
     // Do some logging
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('images'));
-    JLog::add('Retrieving images for - ' . $id . ')', JLog::ERROR, 'import_images');
+    JLog::add('Retrieving images for - ' . $id . ')', JLog::ALL, 'images');
 
     // First we need an instance of the images table
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
@@ -347,6 +399,8 @@ class AccommodationModelProperty extends JModelItem {
 
     try {
       $crumbs = $table->getPath($pk = $this->item->department);
+      
+      
     } catch (Exception $e) {
 
       // Log the exception here...

@@ -26,6 +26,9 @@ class AccommodationViewProperty extends JViewLegacy
     // Get the tariffs for this property
     $this->images = $this->get('Images');
     
+    // Get the facilities for this property
+    $this->facilities = $this->get('Facilities');
+    
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');
     

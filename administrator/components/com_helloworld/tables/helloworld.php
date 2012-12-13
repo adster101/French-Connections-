@@ -555,7 +555,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 
 		// Get the node and children as a tree.
 		$query = $this->_db->getQuery(true);
-		$select = ($diagnostic) ? 'n.title,n.occupancy,n.' . $k . ', n.parent_id, n.level, n.lft, n.rgt' : 'n.*';
+		$select = ($diagnostic) ? 'n.title,n.occupancy,n.' . $k . ', n.parent_id, n.level, n.lft, n.rgt,(n.single_bedrooms + n.double_bedrooms + n.triple_bedrooms + n.quad_bedrooms + n.twin_bedrooms) as bedrooms' : 'n.*';
 		$query->select($select)
 			->from($this->_tbl . ' AS n, ' . $this->_tbl . ' AS p')
 			->where('n.lft BETWEEN p.lft AND p.rgt')
