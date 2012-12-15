@@ -45,12 +45,7 @@ jQuery(document).ready(function(){
     
   })
 
-  jQuery('form#property-search').change(function(event){
-    console.log(event);
-    alert("Wooty toot toot!");
-    event.preventDefault();  
-    return false;
-  });
+ 
 
   
   jQuery(".typeahead").typeahead({

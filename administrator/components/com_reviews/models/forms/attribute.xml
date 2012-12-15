@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_attributes/models/rules">
+	<fieldset
+    addFieldPath="/administrator/components/com_attributes/models/fields"
+    name="attribute">
+	      
+    <field
+			name="id"
+			type="text"
+      readonly="true"
+      class="readonly input-mini"
+			default="0"
+      label="Attribute ID"
+      description="The primary ID of this attribute"
+      filter="int"
+      
+    />
+
+    <field
+			name="title"
+			type="text"
+			default=""
+			label="Attribute title/text"
+			description ="The text that appears in the property manager to describe this attribute"
+      maxlength="50"
+      size="30"
+      required="true"
+      class="inputbox input-xlarge"
+      filter="string"
+    /> 
+    <field
+			name="attribute_type_id"
+			type="attributetypes"
+			default=""
+			label="Attribute type"
+			description ="The type of this attribute"
+      required="true"
+      class="inputbox input-large"
+      filter="int">
+        <option	value="">COM_CLASSIFICATION_ITEM_ROOT</option>
+    </field>> 
+      
+	</fieldset>	  
+	
+</form>

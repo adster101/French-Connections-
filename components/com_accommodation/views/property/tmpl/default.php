@@ -328,29 +328,40 @@ foreach ($this->tariffs as $tariff) {
     <table class="table table-striped">
       
       <?php if ($this->item->property_type) : ?>    
-      <tr>
-        <td><?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE') ?></td>
-        <td><?php echo $this->item->property_type; ?></td>        
-      </tr>
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE') ?></td>
+          <td><?php echo $this->item->property_type . ' (' . $this->item->accommodation_type . ')'; ?></td>        
+        </tr>
       <?php endif; ?>
-
+      
+      <?php if ($this->item->bathrooms) : ?>    
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_BATHROOMS') ?></td>
+          <td><?php echo $this->item->bathrooms ; ?></td>        
+        </tr>
+      <?php endif; ?>
+      
       <!-- Bedrooms -->
-      <?php if ($this->item->bedrooms && $this->item->bedrooms > 0) : ?>    
+      <?php if ($this->item->bedrooms && $this->item->bedrooms > 0) { ?>    
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS') ?></td>
           <td>
-            
+            <?php if ($this->item->single_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_SINGLE_BEDROOMS', $this->item->single_bedrooms); endif;?>
+            <?php if ($this->item->double_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_DOUBLE_BEDROOMS', $this->item->double_bedrooms); endif;?>
+            <?php if ($this->item->triple_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TRIPLE_BEDROOMS', $this->item->triple_bedrooms); endif;?>
+            <?php if ($this->item->quad_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_QUAD_BEDROOMS', $this->item->quad_bedrooms); endif;?>
+            <?php if ($this->item->twin_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TWIN_BEDROOMS', $this->item->twin_bedrooms); endif;?>
             
           </td>        
         </tr> 
-      <?php endif; ?>
+      <?php } ?>
       
       <!-- Occupancy -->
       <?php if ($this->item->occupancy) : ?>
-      <tr>
-        <td><?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY') ?></td>
-        <td><?php echo $this->item->occupancy; ?></td>        
-      </tr>      
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY') ?></td>
+          <td><?php echo $this->item->occupancy; ?></td>        
+        </tr>      
       <?php endif; ?>
       
       <!-- Suitability -->
@@ -363,32 +374,43 @@ foreach ($this->tariffs as $tariff) {
         
       <!-- Linen costs -->  
       <?php if ($this->item->linen_costs) : ?>
-      <tr>
-        <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
-        <td><?php echo $this->item->linen_costs; ?></td>        
-      </tr>      
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
+          <td><?php echo $this->item->linen_costs; ?></td>        
+        </tr>      
       <?php endif; ?>       
 
       
       <?php if (array_key_exists('Internal facilities',$this->facilities)) : ?>
-      <tr>
-        <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_ACTIVITIES') ?></td>
-        <td><?php echo implode(',',$this->facilities['Internal facilities']) ?></td>         
-      </tr>      
-      <?php endif; ?>         
-      
-      <?php if (array_key_exists('External features',$this->facilities)) : ?>
-      <tr>
-        <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
-        <td><?php echo implode(',',$this->facilities['External features']) ?></td>         
-      </tr>      
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
+          <td><?php echo implode(',',$this->facilities['Internal facilities']) ?></td>         
+        </tr>      
       <?php endif; ?>   
-      
+        
+      <?php if ($this->item->internal_facilities_other) : ?>
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES__OTHER_INTERNAL') ?></td>
+          <td><?php echo $this->item->internal_facilities_other; ?></td>        
+        </tr>      
+      <?php endif; ?>       
+      <?php if (array_key_exists('External features',$this->facilities)) : ?>
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
+          <td><?php echo implode(',',$this->facilities['External features']) ?></td>         
+        </tr>      
+      <?php endif; ?>   
+      <?php if ($this->item->external_facilities_other) : ?>
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_OTHER_EXTERNAL') ?></td>
+          <td><?php echo $this->item->external_facilities_other; ?></td>        
+        </tr>      
+      <?php endif; ?>       
       <?php if (array_key_exists('Kitchen features',$this->facilities)) : ?>
-      <tr>
-        <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
-        <td><?php echo implode(',',$this->facilities['Kitchen features']) ?></td>         
-      </tr>      
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
+          <td><?php echo implode(',',$this->facilities['Kitchen features']) ?></td>         
+        </tr>      
       <?php endif; ?>       
       
         
@@ -400,7 +422,6 @@ foreach ($this->tariffs as $tariff) {
 </div>
   
   
-</div>
 
 
 <div class="row-fluid" id="availability">

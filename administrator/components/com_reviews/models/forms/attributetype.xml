@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_attributes/models/rules">
+	<fieldset
+    addFieldPath="/administrator/components/com_attributes/models/fields"
+    name="attribute-type">
+	      
+    <field
+			name="id"
+			type="text"
+      readonly="true"
+      class="readonly input-mini"
+			default="0"
+      label="Attribute ID"
+      description="The primary ID of this attribute"
+      filter="int"
+      
+    />
+
+    <field
+			name="title"
+			type="text"
+			default=""
+			label="Attribute title/text"
+			description ="The text that appears in the property manager to describe this attribute"
+      maxlength="50"
+      size="30"
+      required="true"
+      class="inputbox input-xlarge"
+      filter="string"
+    /> 
+    <field
+			name="field_name"
+			type="text"
+			default=""
+			label="Form field text"
+			description ="This field corresponds to the form field name as they appear on the property attribute screen."
+      maxlength="25"
+      size="30"
+      required="false"
+      class="inputbox input-large"
+      filter="string"
+    />     
+    
+		<field name="state" type="list" label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC" class="input-small"
+			filter="intval" size="1" default="1"
+		>
+			<option value="1">
+				JPUBLISHED</option>
+			<option value="0">
+				JUNPUBLISHED</option>
+			<option value="2">
+				JARCHIVED</option>
+			<option value="-2">
+				JTRASHED</option>
+		</field>
+
+      
+	</fieldset>	  
+	
+</form>
