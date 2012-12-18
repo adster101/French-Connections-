@@ -9,13 +9,15 @@
 
 defined('_JEXEC') or die;
 
+JFormHelper::loadRuleClass('email');
+
 /**
- * JFormRule for com_contact to make sure the message body contains no banned word.
+ * JFormRule for com_contact to make sure the E-Mail adress is not blocked.
  *
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class JFormRuleContactEmailMessage extends JFormRule
+class JFormRuleReviewDate extends JFormRuleEmail
 {
 	/**
 	 * Method to test for a valid color in hexadecimal.
@@ -30,16 +32,18 @@ class JFormRuleContactEmailMessage extends JFormRule
 	 *
 	 * @return  boolean  True if the value is valid, false otherwise.
 	 */
-	public function test(&$element, $value, $group = null, &$input = null, &$form = null)
+	public function test(& $element, $value, $group = null, &$input = null, &$form = null)
 	{
-		$params = JComponentHelper::getParams('com_reviews');
-		$banned = $params->get('banned_text');
 
-		foreach(explode(';', $banned) as $item){
-			if (JString::stristr($item, $value) !== false)
-					return false;
-		}
+   if (preg_match("/^(\d{4})-(\d{2})-(\d{2})$/", $value, $matches)) {
 
-		return true;
+     if (checkdate($matches[2], $matches[3], $matches[1])) {
+          
+            return true;
+        }
+    }
+
+    
+		return false;
 	}
 }

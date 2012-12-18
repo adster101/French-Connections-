@@ -17,7 +17,7 @@ JFormHelper::loadRuleClass('email');
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class JFormRuleContactEmail extends JFormRuleEmail
+class JFormRuleReviewEmail extends JFormRuleEmail
 {
 	/**
 	 * Method to test for a valid color in hexadecimal.
@@ -38,7 +38,7 @@ class JFormRuleContactEmail extends JFormRuleEmail
 			return false;
 		}
 
-		$params = JComponentHelper::getParams('com_contact');
+		$params = JComponentHelper::getParams('com_enquiries');
 		$banned = $params->get('banned_email');
 
 		foreach(explode(';', $banned) as $item){

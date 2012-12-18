@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fieldset name="review" addrulepath="/administrator/components/com_reviews/models/rules" label="COM_CONTACT_FORM_LABEL">
+    <field name="guest_name"
+           type="text"
+           id="review-name"
+           size="30"
+           description="COM_REVIEW_NAME_DESC"
+           label="COM_REVIEW_NAME_LABEL"
+           filter="string"
+           required="true"
+           maxlength="30"
+		/>
+    <field name="guest_email"
+           type="email"
+           id="review-email"
+           size="30"
+           description="COM_REVIEW_EMAIL_TEXT_DESC"
+           label="COM_REVIEW_EMAIL_TEXT_LABEL"
+           filter="string"
+           validate="reviewemail"
+           required="true"
+		/>
+    <field name="title"
+           type="text"
+           id="reviews-title"
+           size="60"
+           description="COM_REVIEW_TITLE_TEXT_DESC"
+           label="COM_REVIEW_TITLE_TEXT_LABEL"
+           filter="string"
+           validate="reviewtitle"
+           required="true"
+           message="COM_REVIEW_TITLE_VALIDATION_MESSAGE"
+		/>
+    <field name="review_text"
+            rows="6"
+           type="textarea"
+           id="review-text"
+           description="COM_REVIEW_TEXT_DESC"
+           label="COM_REVIEW_TEXT_LABEL"
+           filter="htmlsafe"
+           validate="reviewtext"
+           required="true"
+           message="COM_REVIEW_TEXT_VALIDATION_MESSAGE"
+           class="input-xxlarge"
+		/>
+    
+    <field name="date"
+           type="calendar"
+           id="review-date"
+           class="input-small"
+           description="COM_REVIEW_DATE_DESC"
+           label="COM_REVIEW_DATE_LABEL"
+           filter="string"
+           validate="reviewdate"
+           required="true"
+           message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
+      />
+  
+    <field 
+      name="id" 
+      type="hidden" 
+      filter="int" 
+      />
+      
+    <field 
+      name="property_id" 
+      type="text" 
+      filter="int"
+      default=""
+      required="true"
+      COM_REVIEW_PROPERTY_ID_VALIDATION_MESSAGE="Please supply a property ID"
+      />
+      
+  		<field name="state" type="list" label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC" class="input-medium"
+			filter="intval" size="1" default="" required="true"
+		>
+      <option value="">JSELECT</option>
+			<option value="1">
+				JPUBLISHED</option>
+			<option value="0">
+				JUNPUBLISHED</option>
+			<option value="2">
+				JARCHIVED</option>
+			<option value="-2">
+				JTRASHED</option>
+		</field> 
+    
+  		<field name="created" type="calendar" label="COM_CONTENT_FIELD_CREATED_LABEL"
+			description="COM_CONTENT_FIELD_CREATED_DESC" class="inputbox readonly" size="22"
+			format="%Y-%m-%d %H:%M:%S" filter="user_utc" labelclass="control-label" default="now" readonly="true" />    
+      
+      
+  </fieldset>
+
+</form>

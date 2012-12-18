@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
  
-  <name>Reviews</name>
+  <name>com_reviews</name>
         <!-- The following elements are optional and free of formatting constraints -->
   <creationDate>September 2012</creationDate>
   <author>Adam Rifat</author>
@@ -23,10 +23,7 @@
   <!-- Note the folder attribute: This attribute describes the folder
   to copy FROM in the package to install therefore files copied
   in this section are copied from /site/ in the package -->
-  <files folder="site">
-    <filename>index.html</filename>
-    <filename>attributes.php</filename>
-  </files>
+  <files folder="site"></files>
  
   <administration>
     <!-- Administration Menu Section -->
@@ -35,13 +32,7 @@
     <!-- Note the folder attribute: This attribute describes the folder 
     to copy FROM in the package to install therefore files copied
     in this section are copied from /admin/ in the package -->
-    <files folder="admin">
-      <!-- Admin Main File Copy Section -->
-      <filename>index.html</filename>
-      <filename>attributes.php</filename>
-      <!-- SQL files section -->
-      <folder>sql</folder>
-    </files>
+    <files folder="admin"></files>
     <languages folder="admin">
       <language tag="en-GB">language/en-GB/en-GB.com_reviews.ini</language>
     </languages>

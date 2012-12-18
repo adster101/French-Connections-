@@ -7,10 +7,27 @@ defined('_JEXEC') or die('Restricted access');
 
 class ReviewsController extends JControllerLegacy
 {
+  
   public function display($cachable = false, $urlparams = array()) {
     
-  	parent::display($cachable);
+    
+  	$user	= JFactory::getUser();
+    
+		if (!$user->authorise('review.submit.new')) {
+         
+      throw new Exception(JText::_('COM_REVIEW_URL_INCORRECT'), 404);
+  
+    }
+
+    $safeurlparams = array(
+			'id'				=> 'INT',
+			'lang'				=> 'CMD'
+        
+		);
+
+  	parent::display($cachable, $safeurlparams);
 
     return $this;
   }
+  
 }

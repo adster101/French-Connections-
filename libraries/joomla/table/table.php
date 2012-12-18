@@ -588,7 +588,7 @@ abstract class JTable extends JObject
 			unset($this->asset_id);
 		}
 
-		// If a primary key exists update the object, otherwise insert it.
+    // If a primary key exists update the object, otherwise insert it.
 		if ($this->$k)
 		{
 			$this->_db->updateObject($this->_tbl, $this, $this->_tbl_key, $updateNulls);

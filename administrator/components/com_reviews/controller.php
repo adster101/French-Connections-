@@ -20,7 +20,8 @@ class ReviewsController extends JControllerLegacy
 		// set default view if not set
 		JRequest::setVar('view', JRequest::getCmd('view', 'Reviews'));
 		// call parent behavior
-		parent::display($cachable);
+
+    parent::display($cachable);
 	}
  
 

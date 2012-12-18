@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class JFormRuleContactEmailSubject extends JFormRule
+class JFormRuleReviewTitle extends JFormRule
 {
 	/**
 	 * Method to test for a valid color in hexadecimal.
@@ -32,7 +32,7 @@ class JFormRuleContactEmailSubject extends JFormRule
 	 */
 	public function test(&$element, $value, $group = null, &$input = null, &$form = null)
 	{
-		$params = JComponentHelper::getParams('com_contact');
+		$params = JComponentHelper::getParams('com_enquiries');
 		$banned = $params->get('banned_subject');
 
 		foreach(explode(';', $banned) as $item){
@@ -40,6 +40,10 @@ class JFormRuleContactEmailSubject extends JFormRule
 					return false;
 		}
 
+    if (strlen($value > 60)) {
+      return false;
+    }
+    
 		return true;
 	}
 }

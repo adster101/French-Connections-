@@ -60,6 +60,12 @@ class plgQuickiconFc extends JPlugin {
             'image' => 'folder',
             'text' => JText::_('MOD_QUICKICON_FC_CLASSIFICATION'),
             'access' => array('core.manage', 'com_classification')
+        ),
+        array(
+            'link' => JRoute::_('index.php?option=com_reviews'),
+            'image' => 'folder',
+            'text' => JText::_('MOD_QUICKICON_FC_REVIEWS'),
+            'access' => array('core.manage', 'com_reviews')
         )
     );
   }

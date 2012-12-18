@@ -21,8 +21,9 @@ class ReviewsModelReview extends JModelAdmin
 	protected function allowEdit($data = array(), $key = 'id')
 	{
 		// Check specific edit permission then general edit permission.
-		return JFactory::getUser()->authorise('core.edit', 'com_attributes.attribute.'.((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
+		return JFactory::getUser()->authorise('core.edit');
 	}
+  
 	/**
 	 * Returns a reference to the a Table object, always creating it.
 	 *
@@ -48,7 +49,7 @@ class ReviewsModelReview extends JModelAdmin
 	{	
 
 		// Get the form.
-		$form = $this->loadForm('com_reviews.review', 'attribute', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_reviews.reviews', 'review', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) 
 		{
 			return false;
