@@ -72,7 +72,7 @@
       COM_REVIEW_PROPERTY_ID_VALIDATION_MESSAGE="Please supply a property ID"
       />
       
-  		<field name="state" type="list" label="JSTATUS"
+  		<field name="published" type="list" label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC" class="input-medium"
 			filter="intval" size="1" default="" required="true"
 		>
@@ -89,7 +89,7 @@
     
   		<field name="created" type="calendar" label="COM_CONTENT_FIELD_CREATED_LABEL"
 			description="COM_CONTENT_FIELD_CREATED_DESC" class="inputbox readonly" size="22"
-			format="%Y-%m-%d %H:%M:%S" filter="user_utc" labelclass="control-label" default="now" readonly="true" />    
+			format="%Y-%m-%d %H:%M:%S" filter="user_utc" labelclass="control-label" default="NOW" readonly="false" />    
       
       
   </fieldset>

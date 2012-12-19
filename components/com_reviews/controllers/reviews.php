@@ -30,21 +30,23 @@ class ReviewsControllerReviews extends JControllerForm
 		$params = JComponentHelper::getParams('com_reviews');
 		$stub   = $this->input->get('id','','int');
 		$id     = (int) $stub;
-
+    $CurrentUser =& JFactory::getUser();
 		// Get the data from POST
 		$data  = $this->input->post->get('jform', array(), 'array');
     
     // Set additional data fields 
-    $data['published'] = -3; // Needs review
+    $data['published'] = 0; // Default to unpublish, user either publishes, or trashes and then delete the review
+    $data['created'] = date('Y-m-d H:i:s');
+    $data['created_by'] = $CurrentUser->id;
+           
+    // Get the property details we are adding a review for.
+    $property = $model->getItem($id);
     
-    
-    $contact = $model->getItem($id);
-
-		$params->merge($contact->params);
+          
 
 		// Check for a valid session cookie
 		if($params->get('validate_session', 0)) {
-			if(JFactory::getSession()->getState() != 'active'){
+      if(JFactory::getSession()->getState() != 'active'){
 				JError::raiseWarning(403, JText::_('COM_CONTACT_SESSION_INVALID'));
 
 				// Save the data in the session.
@@ -86,7 +88,6 @@ class ReviewsControllerReviews extends JControllerForm
 		}
     
     // Write the review into the reviews table...
-    
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_reviews/tables');
     
     $table = JTable::getInstance('Review', 'ReviewTable');
@@ -108,7 +109,7 @@ class ReviewsControllerReviews extends JControllerForm
     // And unset id incase it gets bound somehow...
     unset($data['id']);
     
-    
+    // Check that we can save the data.
     if(!$table->save($data)){
       
       $errors	= $table->getErrors();
@@ -131,9 +132,9 @@ class ReviewsControllerReviews extends JControllerForm
             
 		// Send the email
 		$sent = false;
-		if (!$params->get('custom_reply')) {
-			$sent = $this->_sendEmail($data, $params);
-		}
+		
+		$sent = $this->_sendEmail($data, $params, $property);
+		
 
 		// Set the success message if it was a success
 		if (!($sent instanceof Exception)) {
@@ -149,39 +150,43 @@ class ReviewsControllerReviews extends JControllerForm
 		if ($params->get('redirect')) {
 			$this->setRedirect($params->get('redirect'), $msg);
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub, false), $msg);
+			$this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub, false), $msg,'success');
 		}
 
 		return true;
 	}
 
-	private function _sendEmail($data, $params)
+	private function _sendEmail($data, $params, $property)
 	{
 			$app		= JFactory::getApplication();
-			$params 	= JComponentHelper::getParams('com_contact');
-			if ($contact->email_to == '' && $contact->user_id != 0) {
-				$contact_user = JUser::getInstance($contact->user_id);
-				$contact->email_to = $contact_user->get('email');
+			$params 	= JComponentHelper::getParams('com_reviews');
+      
+      // If there is a valid user for this property then get the email address
+			if ($property->created_by != 0) {
+				$property_user = JUser::getInstance($property->created_by);
+				$property->email = $property_user->get('email');
+        $property->name = $property_user->get('name');
 			}
-			$mailfrom	= $app->getCfg('mailfrom');
+          
+      $mailfrom	= $app->getCfg('mailfrom');
 			$fromname	= $app->getCfg('fromname');
 			$sitename	= $app->getCfg('sitename');
-			$copytext 	= JText::sprintf('COM_CONTACT_COPYTEXT_OF', $contact->name, $sitename);
 
-			$name		= $data['contact_name'];
-			$email		= $data['contact_email'];
-			$subject	= $data['contact_subject'];
-			$body		= $data['contact_message'];
+			$name		= $data['guest_name'];
+			$email		= $data['guest_email'];
+			$subject	= $data['title'];
+			$body		= $data['review_text'];
 
 			// Prepare email body
-			$prefix = JText::sprintf('COM_CONTACT_ENQUIRY_TEXT', JURI::base());
-			$body	= $prefix."\n".$name.' <'.$email.'>'."\r\n\r\n".stripslashes($body);
+			$prefix = JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $property->title, JURI::base());
+			$body	= $prefix."\n".$name.' <'.$email.'>'."\r\n\r\n".stripslashes($subject)."\r\n\r\n".stripslashes($body);
 
 			$mail = JFactory::getMailer();
-			$mail->addRecipient('adam@littledonkey.net');
-			$mail->addReplyTo(array($email, $name));
+			$mail->addRecipient($property->email, $property->name);
+			$mail->addReplyTo(array($mailfrom, $fromname));
 			$mail->setSender(array($mailfrom, $fromname));
-			$mail->setSubject($sitename.': '.$subject);
+      $mail->addBCC($mailfrom, $fromname);
+			$mail->setSubject($sitename.': '.JText::sprintf('COM_REVIEWS_NEW_REVIEW_SUBMITTED',$property->title));
 			$mail->setBody($body);
 			$sent = $mail->Send();
 

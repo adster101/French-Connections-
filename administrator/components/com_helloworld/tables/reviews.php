@@ -11,7 +11,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableOffer extends JTable
+class HelloWorldTableReviews extends JTable
 {
 	/**
 	 * Constructor
@@ -20,7 +20,7 @@ class HelloWorldTableOffer extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__special_offers', 'offer_id', $db);
+		parent::__construct('#__reviews', '_id', $db);
 	}	
   
   

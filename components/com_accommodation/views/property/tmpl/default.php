@@ -130,8 +130,7 @@ foreach ($this->tariffs as $tariff) {
 
           </p>
           <small>
-            <?php echo $this->reviews[0]->guest_firstname; ?>
-            <?php echo $this->reviews[0]->guest_surname; ?>
+            <?php echo $this->reviews[0]->guest_name; ?>
             <cite title="Date Stayed">
               <?php
               $date = new DateTime($this->reviews[0]->date);

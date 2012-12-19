@@ -93,23 +93,27 @@ class ReviewsModelReviews extends JModelList
 		$published = $this->getState('filter.published');
 		if (is_numeric($published)) {
 			$query->where('r.published = ' . (int) $published);
-		}
-		elseif ($published === '') {
-			$query->where('(r.published = 0 OR r.published = 1)');
-		} 
-    
+		} else {
+			$query->where('r.published IN (0,1)');
+    }
+		    
 		// Filter by search in title
 		// TODO - Try and tidy up this logic a bit.
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
-      $search = $db->Quote('%'.$db->escape($search, true).'%');
-			$query->where('(r.review_text LIKE '.$search.')');
+      if ((int) $search ) {
+        $query->where('r.property_id = '.(int) $search);
+
+      } else {
+        $search = $db->Quote('%'.$db->escape($search, true).'%');
+        $query->where('(r.review_text LIKE '.$search.')');
+      }
     }
     
-    
-		$listOrdering = $this->getState('list.ordering','id');
-		$listDirn = $db->escape($this->getState('list.direction', 'ASC'));
+		$listOrdering = $this->getState('list.ordering','r.published');
+		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
 
+    $query->order($listOrdering,'ASC');
 
 		return $query;
 	}   

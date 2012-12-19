@@ -13,7 +13,7 @@ class ReviewsController extends JControllerLegacy
     
   	$user	= JFactory::getUser();
     
-		if (!$user->authorise('review.submit.new')) {
+		if (!$user->authorise('review.submit.new', 'com_reviews')) {
          
       throw new Exception(JText::_('COM_REVIEW_URL_INCORRECT'), 404);
   

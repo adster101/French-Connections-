@@ -14,14 +14,25 @@ abstract class HelloWorldHelper
 	{	
 		// Get the ID of the item we are editing
 		$id = JRequest::getVar('id');
+    
+    //Get the current user id 
+    $user	= JFactory::getUser();
+
 		//JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id='.$id, $submenu == 'location');
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id='.$id, $submenu == 'helloworld');	
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_FACILITIES'), 'index.php?option=com_helloworld&task=facilities.edit&id='.$id, $submenu == 'facilities');		
     JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id='.$id, $submenu == 'availability');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id='.$id, $submenu == 'tariffs');		
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id='.$id, $submenu == 'images');		
-		if ($id != '' && $published) {
+
+    // Amend this so that it is based on auth as below
+    if ($id != '' && $published) {
       JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		    
+    }
+    
+    // Authorise the user if they can manage reviews
+		if ($user->authorise('core.edit','com_reviews')) {
+      JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWs'), 'index.php?option=com_helloworld&view=reviews&id='.$id, $submenu == 'reviews');
     }
 
 		// set some global property
@@ -149,27 +160,18 @@ abstract class HelloWorldHelper
 	/**
 	 * Get the actions
 	 */
-	public static function getActions($messageId = '')
+	public static function getActions($assetName = 'com_helloworld')
 	{
 		$user	= JFactory::getUser();
 		$result	= new JObject;
- 
-		if (empty($messageId)) {
-			$assetName = 'com_helloworld';
-		}
-    // This is needed to check permission at the property level. 
-    // Think for now component level is fine.
-		//else {
-			//$assetName = 'com_helloworld.message.'.(int) $messageId;
-		//}
- 
+  
 		$actions = array(
 			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.delete', 'core.edit.state', 'helloworld.edit.reorder', 'helloworld.edit.publish'
 		);
  
     
 		foreach ($actions as $action) {
-			$result->set($action,	$user->authorise($action));
+			$result->set($action,	$user->authorise($action,$assetName));
 		}
 		return $result;
 	}
