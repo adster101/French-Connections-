@@ -75,13 +75,8 @@ class HelloWorldViewReviews extends JViewLegacy
     $property_title = JApplication::getUserState('title'.$this->item->id);
 		
     // Show a helpful toobar title
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_SPECIAL_OFFERS_EDIT', $property_title), 'helloworld');
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_REVIEWS_VIEW', $property_title));
 
-    // Built the actions for new and existing records.
-		JToolBarHelper::editList('review.edit', 'JTOOLBAR_EDIT');
-		JToolBarHelper::publish('review.publish', 'JTOOLBAR_PUBLISH', true);
-		JToolBarHelper::unpublish('review.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-		JToolBarHelper::deletelist('review.delete', 'JTOOLBAR_DELETE');
     JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CLOSE');
 	}
 	/**
