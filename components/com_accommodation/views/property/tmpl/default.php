@@ -298,8 +298,7 @@ foreach ($this->tariffs as $tariff) {
         <blockquote>
           <?php echo $review->review_text; ?>
           <small>
-            <?php echo $review->guest_firstname; ?>
-            <?php echo $review->guest_surname; ?>
+            <?php echo $review->guest_name; ?>
             <cite title="<?php echo JText::_('COM_ACCOMMODATION_SITE_DATE_OF_STAY'); ?>">
               <?php echo $review->date; ?>
             </cite>  
@@ -350,7 +349,6 @@ foreach ($this->tariffs as $tariff) {
             <?php if ($this->item->triple_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TRIPLE_BEDROOMS', $this->item->triple_bedrooms); endif;?>
             <?php if ($this->item->quad_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_QUAD_BEDROOMS', $this->item->quad_bedrooms); endif;?>
             <?php if ($this->item->twin_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TWIN_BEDROOMS', $this->item->twin_bedrooms); endif;?>
-            
           </td>        
         </tr> 
       <?php } ?>
@@ -486,8 +484,23 @@ foreach ($this->tariffs as $tariff) {
     <?php endif; ?>
   </div>
 </div>
-
-
+<div class="row-fluid" id="Email">
+  <div class="span12">
+    <?php echo $this->loadTemplate('navigator'); ?>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span12">
+    <?php if ($this->item->title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->title)) ?></h2> 
+    <?php endif; ?>
+  </div>
+</div>
+<div class="row-fluid" id="tariffs">
+  <div class="span12">
+    <?php echo $this->loadTemplate('form'); ?>
+  </div>
+</div>
 <script>
   jQuery(document).ready(function() {
  

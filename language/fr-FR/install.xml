@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<extension version="2.5" client="site" type="language" method="upgrade">
-	<name>French (FR)</name>
+<extension version="3.0" client="site" type="language" method="upgrade">
+	<name>French (fr-FR)</name>
     <tag>fr-FR</tag>
-	<version>2.5.4</version>
-	<creationDate>2012-03-21</creationDate>
+	<version>3.0.2.1</version>
+	<creationDate>8 nov 2012</creationDate>
 	<author>French translation team : joomla.fr</author>
 	<authorEmail>traduction@joomla.fr</authorEmail>
 	<authorUrl>www.joomla.fr</authorUrl>
@@ -80,13 +80,10 @@
 		<filename>fr-FR.mod_whosonline.sys.ini</filename>
 		<filename>fr-FR.mod_wrapper.ini</filename>
 		<filename>fr-FR.mod_wrapper.sys.ini</filename>
-		<filename>fr-FR.pkg_joomla.sys.ini</filename>
-		<filename>fr-FR.tpl_atomic.ini</filename>
-		<filename>fr-FR.tpl_atomic.sys.ini</filename>
-		<filename>fr-FR.tpl_beez_20.ini</filename>
-		<filename>fr-FR.tpl_beez_20.sys.ini</filename>
-		<filename>fr-FR.tpl_beez5.ini</filename>
-		<filename>fr-FR.tpl_beez5.sys.ini</filename>
+		<filename>fr-FR.tpl_beez3.ini</filename>
+		<filename>fr-FR.tpl_beez3.sys.ini</filename>
+		<filename>fr-FR.tpl_protostar.ini</filename>
+		<filename>fr-FR.tpl_protostar.sys.ini</filename>
 		<filename file="meta">install.xml</filename>
 		<filename file="meta">fr-FR.xml</filename>
 	</files>

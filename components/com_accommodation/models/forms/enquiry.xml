@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
+    <field 
+      name="first_name"
+      type="text"
+      id="first-name"
+      class="validate-name"
+      size="30"
+      description="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_LABEL"
+      filter="string"
+      required="true"
+      maxlength="15"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_VALIDATION_MESSAGE"
+      validate="enquiryname"
+		/>
+    
+    <field 
+      name="last_name"
+      type="text"
+      id="last-name"
+      class="validate-name"
+      size="30"
+      description="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_LABEL"
+      filter="string"
+      required="true"
+      maxlength="15"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_VALIDATION_MESSAGE"
+      validate="enquiryname"
+    />    
+    
+    <field 
+      name="guest_email"
+      type="email"
+      id="enquiry-email"
+      class="validate-email"
+      size="30"
+      description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_LABEL"
+      filter="string"
+      validate="enquiryemail"
+      required="true"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
+		/>
+    
+    
+    <field 
+      name="enquiry_message"
+      type="textarea"
+      id="review-text"
+      row="8"
+      class="validate-message input-xlarge"
+      cols="8"
+      description="COM_ACCOMMODATION_ENQUIRY_MESSAGE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
+      filter="htmlsafe"
+      validate="enquirytext"
+      required="true"
+      message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
+      labelclass="control-label"
+		/>
+    
+    <field name="start_date"
+      type="text"
+      id="start_date"
+      class="input-small start_date"
+      description="COM_ACCOMMODATION_ENQUIRY_START_DATE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL"
+      filter="string"
+      validate="enquirydate"
+      required="true"
+      message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
+      labelclass="control-label"
+    />
+    <field name="end_date"
+      type="text"
+      id="end_date"
+      class="input-small end_date"
+      description="COM_ACCOMMODATION_ENQUIRY_END_DATE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL"
+      filter="string"
+      validate="enquirydate"
+      required="true"
+      message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
+      labelclass="control-label"
+    />  
+      
+    <field 
+      name="id" 
+      type="hidden" 
+      filter="int" 
+    />  
+  
+    <field
+      name="captcha"
+      type="captcha"
+      label="COM_ACCOMMODATION_CAPTCHA_LABEL"
+      description="COM_ACCOMMODATION_CAPTCHA_DESC"
+      validate="captcha"
+      labelclass="control-label"
+    />
+    
+  </fieldset>
+</form>

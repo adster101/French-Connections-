@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="file" version="2.5" method="upgrade">
+<extension type="file" version="3.0" method="upgrade">
 	<name>TinyMCE langue FR</name>
-	<author>French Translation Team</author>
-	<creationDate>24 Janvier 2012</creationDate>
+	<author>French translation team : joomla.fr</author>
+	<version>3.5.6</version>
+	<creationDate>27 sept 2012</creationDate>
 	<copyright>(C) 2005-2012 French Translation Team</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<authorEmail>info@comunidadjoomla.org</authorEmail>
-	<authorUrl>http://www.comunidadjoomla.org</authorUrl>
-	<version>3.4.3.2</version>
+	<authorEmail>traduction@joomla.fr</authorEmail>
+	<authorUrl>www.joomla.fr</authorUrl>
 	<description><![CDATA[
-		<h3>Installation du pack de langue FR de TinyMCE 3 pour Joomla 2.5 effectuée avec succès</h3>
-		<div style="font-weight:normal">N'oubliez pas de sélectionner la langue FR dans la <a href="index.php?option=com_plugins&view=plugins&filter_search=TinyMCE"><strong>gestion du plug-in TinyMCE</strong></a><br />
-		Si vous utilisez la détection automatique, veillez à ce que soient installés les différents packs de langue de TinyMCE correspondants à ceux installés pour Joomla!<br/><br/>
-		Traduction <a href="http://www.joomla.fr" target="_blank" title=""><strong>Joomla.fr</strong></a> sur la base de TinyMCE 3.4.3.2 pour Joomla! 2.5<br/>
-		Veuillez svp faire part des erreurs de traduction à l'adresse suivante : <a href="mailto:traduction@joomla.fr"><strong>traduction@joomla.fr</strong></a><br/><br/></div>
+		<h3>Installation du pack de langue FR de TinyMCE 3.5.6 pour Joomla 3.0 effectuée avec succès</h3>
+        <div style="font-weight:normal">
+ 		N'oubliez pas de sélectionner la langue FR dans la
+ 		<a href="index.php?option=com_plugins&view=plugins&filter_search=TinyMCE"><strong>gestion du plug-in TinyMCE</strong></a><br />
+ 		Si vous utilisez la détection automatique, veillez à ce que soient installés les différents packs de langue de TinyMCE correspondants
+ 		à ceux installés pour Joomla!</div>
 		]]>
 	</description>
 

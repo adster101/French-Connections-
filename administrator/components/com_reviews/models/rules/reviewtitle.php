@@ -32,7 +32,7 @@ class JFormRuleReviewTitle extends JFormRule
 	 */
 	public function test(&$element, $value, $group = null, &$input = null, &$form = null)
 	{
-		$params = JComponentHelper::getParams('com_enquiries');
+		$params = JComponentHelper::getParams('com_reviews');
 		$banned = $params->get('banned_subject');
 
 		foreach(explode(';', $banned) as $item){

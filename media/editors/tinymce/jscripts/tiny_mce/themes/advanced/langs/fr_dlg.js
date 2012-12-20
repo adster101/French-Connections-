@@ -51,5 +51,7 @@ link_is_email:"L'URL semble être une adresse email. Voule-vous ajouter le préf
 link_is_external:"L'URL semble être une adresse externe au site. Voule-vous ajouter le préfixe http:// exigé?",
 link_list:"Liste Liens",
 accessibility_help:"Aide à l'accessibilité",
-accessibility_usage_title:"Usage général"
+accessibility_usage_title:"Usage général",
+invalid_color_value:"Valeur de couleur invalide",
+"":""
 });

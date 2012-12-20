@@ -8,13 +8,54 @@ jimport('joomla.error.log');
 /**
  * HelloWorld Model
  */
-class AccommodationModelProperty extends JModelItem {
+class AccommodationModelProperty extends JModelForm {
 
   /**
    * @var object item
    */
   protected $item;
-
+  
+	/**
+	 * Method to get the contact form.
+	 *
+	 * The base form is loaded from XML and then an event is fired
+	 *
+	 *
+	 * @param	array	$data		An optional array of data for the form to interrogate.
+	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+	 * @return	JForm	A JForm object on success, false on failure
+	 * @since	1.6
+	 */
+	public function getForm($data = array(), $loadData = false)
+	{
+		// Get the form.
+		$form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => true));
+		if (empty($form)) {
+			return false;
+		}
+ 
+		return $form;
+	}
+  
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return	mixed	The data for the form.
+	 * @since	1.6
+	 */
+	protected function loadFormData() 
+	{
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
+		
+    if (empty($data)) 
+		{
+			$data = $this->getItem();
+		}
+    
+    return $data;
+	}	   
+  
   /**
    * Method to auto-populate the model state.
    *

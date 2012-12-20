@@ -38,7 +38,7 @@ class JFormRuleReviewEmail extends JFormRuleEmail
 			return false;
 		}
 
-		$params = JComponentHelper::getParams('com_enquiries');
+		$params = JComponentHelper::getParams('com_reviews');
 		$banned = $params->get('banned_email');
 
 		foreach(explode(';', $banned) as $item){
