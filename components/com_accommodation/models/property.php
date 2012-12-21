@@ -284,6 +284,7 @@ class AccommodationModelProperty extends JModelForm {
         $model = JModelLegacy::getInstance('Reviews', 'HelloWorldModel');
 
         // Attempt to load the reviews for this property 
+        // Need to get only the published reviews
         $model->getListQuery();
 
         // Get the items, sweet!

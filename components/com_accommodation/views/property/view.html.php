@@ -75,6 +75,8 @@ class AccommodationViewProperty extends JViewLegacy
     $document->addStyleSheet(JURI::root() . "components/com_accommodation/css/styles.css",'text/css',"screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/availability.css",'text/css',"screen");
     $document->addStyleSheet(JURI::root() . "components/com_accommodation/css/flexslider.css",'text/css',"screen");
-    $document->addStyleSheet(JURI::root() . "media/fc/css/jquery-ui-1.8.23.custom.css",'text/css',"screen");  
+    $document->addStyleSheet(JURI::root() . "media/fc/css/jquery-ui-1.8.23.custom.css",'text/css',"screen"); 
+ 		$document->addStyleSheet(JURI::root() . "/components/com_accommodation/css/availability.css",'text/css',"screen");
+
 	}	
 }
