@@ -154,9 +154,10 @@ class ImportControllerProperties extends JControllerForm {
           }
 
           // Consider making this not a crop but one of the other image preparation types to prevent the loss of detail?  
-          $imgObj->createThumbs('175x100', 1, $folder . '/' . $previous_property_id . '/thumb/');
+          $imgObj->createThumbs('210x120', 1, $folder . '/' . $previous_property_id . '/thumb/');
         }
     }
+    
     $property->rebuild();
           
     fclose($handle);

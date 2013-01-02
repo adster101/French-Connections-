@@ -41,15 +41,11 @@ class ImportControllerImages extends JControllerForm {
 
 
       if ($previous_property_id == $line[1]) { // Must be a new unit of the same property
-        // 
-        // 1. This is a unit so store the previous images into the gallery images table 
-        // against the previous property ID if unit count is 1 (if unit count is > 1 don't store)        
+        // 1. This is a unit so store the previous images into the library images table 
+        // against the previous property ID if unit count is 1 (if unit count is > 1 don't store)   
         if ($unit_count == 1) {
 
           $initial_library_image_names = array();
-
-
-
 
           $initial_gallery_images = '\'';
 
@@ -59,9 +55,6 @@ class ImportControllerImages extends JControllerForm {
           }
 
           $initial_gallery_images .= implode('\',\'', $initial_library_image_names) . '\'';
-
-
-
 
           $query->clear();
           $query = $db->getQuery(true);
@@ -78,7 +71,7 @@ class ImportControllerImages extends JControllerForm {
 
 
 
-          // Insert this lot of images into the library_images table. If a single unit property the images are stored in the library.
+          // Insert this lot of images into the gallery_images table. If a single unit property the images are stored in the library.
           // Start building a new query to insert any attributes... 
           $query = $db->getQuery(true);
 
@@ -254,9 +247,10 @@ class ImportControllerImages extends JControllerForm {
 
 
           foreach ($images_to_move as $images => $image) {
-            
+
             // Only need to do this if images not already present.
             if (!file_exists($folder . '/' . $previous_property_id . '/' . $image['image_file_name'])) {
+
               $move = copy('D:\\\Pics/_images/' . $image['image_file_name'], $folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
 
               if (!$move) {
@@ -271,10 +265,47 @@ class ImportControllerImages extends JControllerForm {
                   JLog::add('Cannot move image (wrong mime type?) - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
                 }
 
-                // Consider making this not a crop but one of the other image preparation types to prevent the loss of detail?  
-                $imgObj->createThumbs('100x100', 1, $folder . '/' . $previous_property_id . '/thumbs/');
+                // Calculate width, height and offsets
+                $width = $imgObj->getWidth();
+                $height = $imgObj->getHeight();
 
-                $imgObj->createThumbs('500x375', 4, $folder . '/' . $previous_property_id . '/gallery/');
+
+                // If not exactly square then we just take the middle portion and crop it manually, so to speak.  
+                if ($imgObj->getWidth() > $imgObj->getHeight()) {
+                  $left = ($width - $height) / 2;
+                  $thumb = $imgObj->crop($height, $height, $left, null, true);
+                  $new = $thumb->resize(100, 100, true, 1);
+                  $new->toFile($folder . '/' . $previous_property_id . '/thumbs/' . $image['image_file_name']);
+                } else if ($imgObj->getHeight() > $imgObj->getWidth()) {
+                  $top = ($height - $width) / 2;
+                  $thumb = $imgObj->crop($width, $width, null, $top, true);
+                  $new = $thumb->resize(100, 100, null, 1);
+                  $new->toFile($folder . '/' . $previous_property_id . '/thumbs/' . $image['image_file_name']);
+                }
+
+
+                // If the image is less than 550 wide then we want to create a white image and merge the two
+                if ($width < 550) {
+
+                  // Create a blank image
+                  $blank_image = imagecreatetruecolor(550, 375);
+
+                  // Set it's background to white
+                  $color = imageColorAllocate($blank_image, 255, 255, 255);
+                  imagefill($blank_image, 0, 0, $color);
+
+                  // Load the existing image
+                  $existing_image = imagecreatefromjpeg($folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
+
+                  // Copy the existing image into the new one
+                  imagecopy($blank_image, $existing_image, (550 - $width) / 2, (375 - $height) / 2, 0, 0, $width, $height);
+
+                  // Save it out
+                  imagejpeg($blank_image, $folder . '/' . $previous_property_id . '/gallery/' . str_replace('.', '_550x375.', $image['image_file_name']), 100);
+                } else {
+
+                  $imgObj->createThumbs('550x375', 4, $folder . '/' . $previous_property_id . '/gallery/');
+                }
               }
             }
           }
@@ -338,18 +369,16 @@ class ImportControllerImages extends JControllerForm {
 
         if (!$db->execute()) {
           $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-          print_r($db->getErrorMsg());
-          print_r($insert_string);
-          die;
         }
 
 
         $previous_images = $library_images;
       }
-
       // Track the property ID              
       $previous_property_id = $line[1];
     }
+
+
 
 
     fclose($handle);

@@ -21,6 +21,9 @@ if (!empty($this->query->highlight) && empty($this->result->mime) && $this->para
   $route = '';
 }
 
+$description_pieces = preg_split('/(<\s*p\s*\/?>)|(<\s*br\s*\/?>)/', preg_replace('/<p[^>]*><\\/p[^>]*>/','',$this->result->description));
+
+
 $pathway = explode('/', $this->result->path);
 $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id);
 ?>
@@ -48,18 +51,23 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
 <div class="row-fluid">
   <div class="span4">
     <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="thumbnail pull-left">
-      <?php if ($this->result->parent_id = 1) : ?>
-        <img src='images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail) ?>' class="img-rounded" />
+      <?php if ($this->result->parent_id == 1) : ?>
+        <img src='images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
       <?php else: ?>
-        <img src='images/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_175x100.', $this->result->thumbnail) ?>' class="img-rounded" />
+        <img src='images/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
       <?php endif; ?>
     </a>
   </div>
   <div class="span5">
+    
+    <?php if(count($description_pieces) > 0) : ?>
+      <?php foreach($description_pieces as $piece) : ?>
+      
+        <?php echo strip_tags($piece) ?>
+        <br />
+      <?php endforeach; ?>
+    <?php endif; ?>
 
-    <p>
-      <?php echo JHtml::_('string.truncate', strip_tags($this->result->description)); ?>
-    </p>
     <ul>
       <li>
         <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>

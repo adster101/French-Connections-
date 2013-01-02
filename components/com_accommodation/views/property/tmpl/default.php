@@ -178,10 +178,10 @@ foreach ($this->tariffs as $tariff) {
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
                 <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_500x375.', $image->image_file_name); ?>
+                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
                        " /> 
                      <?php else: ?>
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . str_replace('.', '_500x375.', $image->image_file_name); ?>
+                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
                        " /> 
                      <?php endif; ?>
                 <p class="flex-caption">
@@ -197,9 +197,9 @@ foreach ($this->tariffs as $tariff) {
               <li>
 
                 <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name); ?>" /> 
+                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/thumbs/' . $image->image_file_name ?>" /> 
                 <?php else: ?>
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name); ?>" /> 
+                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumbs/' . $image->image_file_name ?>" /> 
                 <?php endif; ?>
 
               </li>     

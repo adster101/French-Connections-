@@ -7,7 +7,7 @@
       controlNav: false,
       animationLoop: false,
       slideshow: false,
-      itemWidth: 175,
+      itemWidth: 100,
       itemMargin: 5,
       asNavFor: '#slider'
     });
