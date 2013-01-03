@@ -21,11 +21,18 @@ if (!empty($this->query->highlight) && empty($this->result->mime) && $this->para
   $route = '';
 }
 
-$description_pieces = preg_split('/(<\s*p\s*\/?>)|(<\s*br\s*\/?>)/', preg_replace('/<p[^>]*><\\/p[^>]*>/','',$this->result->description));
+// Get the first paragraph of the description - This is a workaround for the 'property listing title' issue
+preg_match('#<p[^>]*>(.*)</p>#isU', $this->result->description, $matches);
 
+// Store the first paragraph - This should always contain something (e.g. description must start with a paragraph)
+$this->result->tagline = $matches[0];
+
+// Strip the first paragraph so we can deal with it separately
+$this->result->description = preg_replace('/<p>(.*)<\/p>/','', $this->result->description);
 
 $pathway = explode('/', $this->result->path);
 $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id);
+
 ?>
 
 <li>
@@ -58,23 +65,24 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
       <?php endif; ?>
     </a>
   </div>
-  <div class="span5">
+  <div class="span6">
+<p><strong>
+    <?php    
     
-    <?php if(count($description_pieces) > 0) : ?>
-      <?php foreach($description_pieces as $piece) : ?>
-      
-        <?php echo strip_tags($piece) ?>
-        <br />
-      <?php endforeach; ?>
-    <?php endif; ?>
+    echo $this->escape(strip_tags($this->result->tagline)); ?>
+  </strong>
+</p>
+<p class="small">
+<?php
 
-    <ul>
-      <li>
+      echo $this->escape(strip_tags($this->result->description)); ?>
+</p>
+
+   
         <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
-      </li>
-    </ul>
+  
   </div>
-  <div class="span3">
+  <div class="span2" style="text-align:right;">
     <p class="">
       <?php
       if ($this->result->from_rate) {

@@ -15,5 +15,5 @@ defined('_JEXEC') or die('Restricted access');
   <li><a href="#facilities">Facilities</a></li>
   <li><a href="#availability">Availability</a></li>
   <li><a href="#tariffs">Tariffs</a></li>
-  <li><a href="#Email">Email owner</a></li>
+  <li><a href="#email">Email owner</a></li>
 </ul>

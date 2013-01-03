@@ -122,6 +122,13 @@ class AccommodationModelProperty extends JModelForm {
           hw.longitude, 
           nearest_town,
           linen_costs,
+          date_format(availability_last_updated_on, \'%D %M %Y\') as availability_last_updated_on,
+          u.name,
+          date_format(u.registerDate, \'%M %Y\') as advertising_since,
+          ufc.phone_1,
+          ufc.phone_2,
+          ufc.phone_3,
+          ufc.website,
           a.title as changeover_day,
           b.title as tariffs_based_on,
           c.title as base_currency,
@@ -151,6 +158,8 @@ class AccommodationModelProperty extends JModelForm {
                       ->leftJoin('#__attributes f ON f.id = hw.accommodation_type')
                       ->leftJoin('#__attributes g ON g.id = hw.swimming')
                       ->leftJoin('#__classifications h ON h.id = hw.department')
+                      ->leftJoin('#__users u on hw.created_by = u.id')
+                      ->leftJoin('#__user_profile_fc ufc on hw.created_by = ufc.user_id')
                       ->where('hw.id=' . (int) $id));
 
       if (!$this->item = $this->_db->loadObject()) {

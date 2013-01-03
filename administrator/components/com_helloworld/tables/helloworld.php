@@ -185,7 +185,7 @@ class HelloWorldTableHelloWorld extends JTableNested
     // Save the image details, if any are passed in, baby
     $this->saveImageDetails($POST);
     
-		// Do we have availability data to update?
+		// Do we have availability data to update? TO DO - Wrap this in a function (perhaps in the controller?)
 		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
       
       // TO DO: Tidy this up a bit - new method?
@@ -206,12 +206,15 @@ class HelloWorldTableHelloWorld extends JTableNested
         // Need to wrap this in some logic
         $availabilityTable->delete($this->id);
 
-        // Bind the translated fields to the JTAble instance	
+        // Bind the translated fields to the JTable instance	
         if (!$availabilityTable->save($this->id, $availability_by_period))
         {
           JError::raiseWarning(500, $availabilityTable->getError());
           return false;
-        }	
+        }	else {
+          // Update the availability last updated on field
+          $this->availability_last_updated_on = JFactory::getDate()->toSql();
+        }
       }
 
 		}

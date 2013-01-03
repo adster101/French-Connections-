@@ -18,7 +18,7 @@ defined('_JEXEC') or die;
 class JFormRuleEnquiryname extends JFormRule
 {
 	/**
-	 * Method to test for a valid color in hexadecimal.
+	 * Method to test for a valid enquiry name.
 	 *
 	 * @param   SimpleXMLElement  &$element  The SimpleXMLElement object representing the <field /> tag for the form field object.
 	 * @param   mixed             $value     The form field value to validate.
@@ -40,9 +40,10 @@ class JFormRuleEnquiryname extends JFormRule
 					return false;
 		}
 
-    if (strlen($value > 60)) {
+    if (!ctype_alnum($value)) {
       return false;
     }
+    
     
 		return true;
 	}

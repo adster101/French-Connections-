@@ -7,6 +7,9 @@ $price_range = array();
 foreach ($this->tariffs as $tariff) {
   $price_range[] = $tariff->tariff;
 }
+
+JHtml::_('behavior.keepalive');
+JHTML::_('behavior.formvalidation');
 ?>
 
 <div class="row-fluid">
@@ -151,7 +154,7 @@ foreach ($this->tariffs as $tariff) {
         </p>
       <?php endif; ?>
       <p>
-        <a href="<?php echo JRoute::_('http://dev.frenchconnections.co.uk/index.php?option=com_reviews&view=reviews&Itemid=167&id='.$this->item->id); ?>">
+        <a href="<?php echo JRoute::_('http://dev.frenchconnections.co.uk/index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $this->item->id); ?>">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
         </a>
       </p>
@@ -161,7 +164,7 @@ foreach ($this->tariffs as $tariff) {
         <a class="btn btn-large" href="#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
         </a>
-        <a class="btn btn-primary btn-large" href="#owner">
+        <a class="btn btn-primary btn-large" href="#email">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
         </a>
       </p>
@@ -245,7 +248,7 @@ foreach ($this->tariffs as $tariff) {
 
 <!--<div class="row-fluid" id="travel">
   <div class="span12">-->
-<?php //echo $this->loadTemplate('navigator'); ?>
+<?php //echo $this->loadTemplate('navigator');  ?>
 <!--</div>
 </div>-->
 
@@ -265,7 +268,7 @@ foreach ($this->tariffs as $tariff) {
 
 <!--<div class="row-fluid" id="activities">
   <div class="span12">-->
-<?php //echo $this->loadTemplate('navigator'); ?>
+<?php //echo $this->loadTemplate('navigator');  ?>
 <!--</div>
 </div>-->
 <div class="row-fluid">
@@ -324,101 +327,106 @@ foreach ($this->tariffs as $tariff) {
 <div class="row-fluid">
   <div class="span8">
     <table class="table table-striped">
-      
+
       <?php if ($this->item->property_type) : ?>    
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE') ?></td>
           <td><?php echo $this->item->property_type . ' (' . $this->item->accommodation_type . ')'; ?></td>        
         </tr>
       <?php endif; ?>
-      
+
       <?php if ($this->item->bathrooms) : ?>    
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_BATHROOMS') ?></td>
-          <td><?php echo $this->item->bathrooms ; ?></td>        
+          <td><?php echo $this->item->bathrooms; ?></td>        
         </tr>
       <?php endif; ?>
-      
+
       <!-- Bedrooms -->
       <?php if ($this->item->bedrooms && $this->item->bedrooms > 0) { ?>    
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS') ?></td>
           <td>
-            <?php if ($this->item->single_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_SINGLE_BEDROOMS', $this->item->single_bedrooms); endif;?>
-            <?php if ($this->item->double_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_DOUBLE_BEDROOMS', $this->item->double_bedrooms); endif;?>
-            <?php if ($this->item->triple_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TRIPLE_BEDROOMS', $this->item->triple_bedrooms); endif;?>
-            <?php if ($this->item->quad_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_QUAD_BEDROOMS', $this->item->quad_bedrooms); endif;?>
-            <?php if ($this->item->twin_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TWIN_BEDROOMS', $this->item->twin_bedrooms); endif;?>
+            <?php if ($this->item->single_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_SINGLE_BEDROOMS', $this->item->single_bedrooms);
+            endif; ?>
+            <?php if ($this->item->double_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_DOUBLE_BEDROOMS', $this->item->double_bedrooms);
+            endif; ?>
+            <?php if ($this->item->triple_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TRIPLE_BEDROOMS', $this->item->triple_bedrooms);
+            endif; ?>
+  <?php if ($this->item->quad_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_QUAD_BEDROOMS', $this->item->quad_bedrooms);
+  endif; ?>
+        <?php if ($this->item->twin_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TWIN_BEDROOMS', $this->item->twin_bedrooms);
+        endif; ?>
           </td>        
         </tr> 
-      <?php } ?>
-      
+<?php } ?>
+
       <!-- Occupancy -->
       <?php if ($this->item->occupancy) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY') ?></td>
           <td><?php echo $this->item->occupancy; ?></td>        
         </tr>      
-      <?php endif; ?>
-      
+<?php endif; ?>
+
       <!-- Suitability -->
-      <?php if (array_key_exists('Suitability',$this->facilities)) : ?>
+      <?php if (array_key_exists('Suitability', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY') ?></td>
-          <td><?php echo implode(',',$this->facilities['Suitability']) ?></td>         
+          <td><?php echo implode(',', $this->facilities['Suitability']) ?></td>         
         </tr>
-      <?php endif; ?>
-        
+<?php endif; ?>
+
       <!-- Linen costs -->  
       <?php if ($this->item->linen_costs) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
           <td><?php echo $this->item->linen_costs; ?></td>        
         </tr>      
-      <?php endif; ?>       
+<?php endif; ?>       
 
-      
-      <?php if (array_key_exists('Internal facilities',$this->facilities)) : ?>
+
+      <?php if (array_key_exists('Internal facilities', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
-          <td><?php echo implode(',',$this->facilities['Internal facilities']) ?></td>         
+          <td><?php echo implode(',', $this->facilities['Internal facilities']) ?></td>         
         </tr>      
-      <?php endif; ?>   
-        
+<?php endif; ?>   
+
       <?php if ($this->item->internal_facilities_other) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES__OTHER_INTERNAL') ?></td>
           <td><?php echo $this->item->internal_facilities_other; ?></td>        
         </tr>      
-      <?php endif; ?>       
-      <?php if (array_key_exists('External features',$this->facilities)) : ?>
+<?php endif; ?>       
+      <?php if (array_key_exists('External features', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
-          <td><?php echo implode(',',$this->facilities['External features']) ?></td>         
+          <td><?php echo implode(',', $this->facilities['External features']) ?></td>         
         </tr>      
-      <?php endif; ?>   
+<?php endif; ?>   
       <?php if ($this->item->external_facilities_other) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_OTHER_EXTERNAL') ?></td>
           <td><?php echo $this->item->external_facilities_other; ?></td>        
         </tr>      
-      <?php endif; ?>       
-      <?php if (array_key_exists('Kitchen features',$this->facilities)) : ?>
+<?php endif; ?>       
+      <?php if (array_key_exists('Kitchen features', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
-          <td><?php echo implode(',',$this->facilities['Kitchen features']) ?></td>         
+          <td><?php echo implode(',', $this->facilities['Kitchen features']) ?></td>         
         </tr>      
-      <?php endif; ?>       
-      
-        
+<?php endif; ?>       
+
+
     </table>
-  
+
   </div>
   <div class="span4">
   </div>
 </div>
-  
-  
+
+
 
 
 <div class="row-fluid" id="availability">
@@ -428,29 +436,28 @@ foreach ($this->tariffs as $tariff) {
 </div>
 <div class="row-fluid">
   <div class="span12">
-    <?php if ($this->item->title) : ?>
+<?php if ($this->item->title) : ?>
       <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->title)) ?></h2> 
-    <?php endif; ?>
-    <?php if ($this->item->changeover_day) : ?>
+        <?php endif; ?>
+      <?php if ($this->item->changeover_day) : ?>
       <p>
         <strong>
-          <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY') ?>
+      <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY') ?>
         </strong>
-        <?php echo htmlspecialchars($this->item->changeover_day) ?>
+          <?php echo htmlspecialchars($this->item->changeover_day) ?>
       </p>
-    <?php endif; ?>   
+<?php endif; ?>   
     <p>
-      <strong>
-        <?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON') ?>
-      </strong>
+     
+        <?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
     </p>
   </div>
 </div>
 <div class="row-fluid">
   <div class="span8">
-    <?php if ($this->availability) : ?>
-      <?php echo $this->availability; ?>
-    <?php endif; ?>
+<?php if ($this->availability) : ?>
+  <?php echo $this->availability; ?>
+<?php endif; ?>
   </div>
   <div class="span4">
     <p>Accommodation key</p>
@@ -464,41 +471,77 @@ foreach ($this->tariffs as $tariff) {
 </div>
 <div class="row-fluid">
   <div class="span12">
-    <?php if ($this->item->title) : ?>
+<?php if ($this->item->title) : ?>
       <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->title)) ?></h2> 
     <?php endif; ?>
   </div>
 </div>
 <div class="row-fluid">
   <div class="span8">
-    <?php if ($this->tariffs) : ?>
+<?php if ($this->tariffs) : ?>
       <?php echo $this->loadTemplate('tariffs'); ?>
     <?php endif; ?>
   </div>
   <div class="span4">
     <h3><?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?></h3>
     <?php if ($this->item->additional_price_notes) : ?>
-      <?php echo $this->item->additional_price_notes ?>
-    <?php else: ?>
-      <?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES_NONE') ?>
+  <?php echo $this->item->additional_price_notes ?>
+<?php else: ?>
+  <?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES_NONE') ?>
     <?php endif; ?>
   </div>
 </div>
-<div class="row-fluid" id="Email">
+<div class="row-fluid" id="email">
   <div class="span12">
     <?php echo $this->loadTemplate('navigator'); ?>
   </div>
 </div>
 <div class="row-fluid">
   <div class="span12">
-    <?php if ($this->item->title) : ?>
+<?php if ($this->item->title) : ?>
       <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->title)) ?></h2> 
     <?php endif; ?>
   </div>
 </div>
-<div class="row-fluid" id="tariffs">
-  <div class="span12">
+<div class="row-fluid">
+  <div class="span8">
     <?php echo $this->loadTemplate('form'); ?>
+  </div>
+  <div class="span4">
+    <h3><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h3> 
+    <p>
+    <?php echo $this->item->name; ?><br />
+    <span class="small">(<?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ADVERTISING_SINCE', $this->item->advertising_since)); ?>)</span>
+    </p>
+    
+    <p>
+      <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL'); ?>
+      <?php echo $this->item->phone_1; ?>
+    </p>
+    
+     <?php if ($this->item->phone_2) : ?>
+    <p>
+      <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
+      <?php echo $this->item->phone_2; ?>
+    </p>
+    <?php endif; ?>
+    <?php if ($this->item->phone_3) : ?>
+    <p>
+      <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
+      <?php echo $this->item->phone_3; ?>
+    </p>
+    <?php endif; ?>   
+    
+    <?php if ($this->item->website) : ?>
+    <p>
+      <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
+      <?php echo $this->item->website; ?>
+    </p>
+    <?php endif; ?>
+    <hr />
+    <p>
+      <?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
+    </p>
   </div>
 </div>
 <script>

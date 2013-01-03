@@ -1,5 +1,5 @@
 jQuery(document).ready(function(){
- 
+ jQuery
  
  jQuery(function() {
    
@@ -32,6 +32,5 @@ jQuery(document).ready(function(){
       minDate: start_date,
       showButtonPanel: true
 		});
-     
 	});
 })

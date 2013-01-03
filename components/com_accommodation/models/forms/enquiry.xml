@@ -2,43 +2,41 @@
 <form>
   <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
     <field 
-      name="first_name"
+      name="forename"
       type="text"
       id="first-name"
-      class="validate-name"
-      size="30"
+      class="validate-name input-small"
       description="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_LABEL"
       filter="string"
       required="true"
-      maxlength="15"
+      maxlength="20"
       labelclass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_VALIDATION_MESSAGE"
       validate="enquiryname"
 		/>
     
     <field 
-      name="last_name"
+      name="surname"
       type="text"
       id="last-name"
-      class="validate-name"
-      size="30"
+      class="validate-name input-small"
       description="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_LABEL"
       filter="string"
       required="true"
-      maxlength="15"
+      maxlength="20"
       labelclass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_VALIDATION_MESSAGE"
       validate="enquiryname"
     />    
     
     <field 
-      name="guest_email"
+      name="email"
       type="email"
       id="enquiry-email"
       class="validate-email"
-      size="30"
+      maxlength="75"
       description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_LABEL"
       filter="string"
@@ -48,9 +46,23 @@
       message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
 		/>
     
-    
     <field 
-      name="enquiry_message"
+      name="telephone"
+      type="text"
+      id="guest-telephone"
+      class="validate-telephone input-medium"
+      maxlength="20"
+      description="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_LABEL"
+      message="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_VALIDATION_MESSAGE"
+      filter="integer"
+      validate="telephone"
+      required="true"
+      labelclass="control-label"
+    />
+      
+    <field 
+      name="message"
       type="textarea"
       id="review-text"
       row="8"
@@ -60,7 +72,7 @@
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
       filter="htmlsafe"
       validate="enquirytext"
-      required="true"
+      required="required"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
 		/>
@@ -68,7 +80,7 @@
     <field name="start_date"
       type="text"
       id="start_date"
-      class="input-small start_date"
+      class="validate-date input-small start_date"
       description="COM_ACCOMMODATION_ENQUIRY_START_DATE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL"
       filter="string"
@@ -77,10 +89,11 @@
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
+    
     <field name="end_date"
       type="text"
       id="end_date"
-      class="input-small end_date"
+      class="validate-date input-small end_date"
       description="COM_ACCOMMODATION_ENQUIRY_END_DATE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL"
       filter="string"
@@ -89,7 +102,33 @@
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />  
-      
+ 
+    <field 
+      name="adults"
+      type="text"
+      id="enquiry-adults"
+      class="validate-numeric input-mini"
+      maxlength="2"
+      description="COM_ACCOMMODATION_ENQUIRY_ADULTS_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_ADULTS_LABEL"
+      filter="integer"
+      required="false"
+      labelclass="control-label"
+    /> 
+    
+    <field 
+      name="children"
+      type="text"
+      id="enquiry-children"
+      class="validate-numeric input-mini"
+      maxlength="2"
+      description="COM_ACCOMMODATION_ENQUIRY_CHILDREN_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_CHILDREN_LABEL"
+      filter="integer"
+      required="false"
+      labelclass="control-label"
+    /> 
+    
     <field 
       name="id" 
       type="hidden" 
