@@ -13,14 +13,14 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class AccommodationControllerEnquiry extends JControllerForm
+class AccommodationControllerProperty extends JControllerForm
 {
 	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => false));
 	}
 
-	public function submit()
+	public function enquiry()
 	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
@@ -37,7 +37,7 @@ class AccommodationControllerEnquiry extends JControllerForm
     
  
            
-    // Get the property details we are adding a review for.
+    // Get the property details we are adding an enquiry for.
     $property = $model->getItem($id);
     
           
@@ -48,7 +48,7 @@ class AccommodationControllerEnquiry extends JControllerForm
 				JError::raiseWarning(403, JText::_('COM_CONTACT_SESSION_INVALID'));
 
 				// Save the data in the session.
-				$app->setUserState('com_reviews.review.data', $data);
+				$app->setUserState('com_enquiry.enquiry.data', $data);
 
 				// Redirect back to the contact form.
 				$this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub, false));
@@ -64,8 +64,9 @@ class AccommodationControllerEnquiry extends JControllerForm
 		}
 
 		$validate = $model->validate($form, $data);
-
-		if ($validate === false) {
+    
+		
+    if ($validate === false) {
 			// Get the validation messages.
 			$errors	= $model->getErrors();
 			// Push up to five validation messages out to the user.
@@ -77,16 +78,20 @@ class AccommodationControllerEnquiry extends JControllerForm
 				}
 			}
 
-      $data['errors'] = $app->getMessageQueue();
-
+      // Trap any errors 
+      $errors = $app->getMessageQueue();
+      
 			// Save the data in the session.
 			$app->setUserState('com_accommodation.enquiry.data', $data);
+			$app->setUserState('com_accommodation.enquiry.messages', $errors);
 
 			// Redirect back to the contact form.
-			$this->setRedirect(JRoute::_('index.php?option=com_accommodation&view=property&id='.$stub.'#Email', false));
+			$this->setRedirect(JRoute::_('index.php?option=com_accommodation&view=property&id='.$stub.'#email', false));
 			return false;
 		}
     
+    print_r($data);die;
+   
     // Write the review into the reviews table...
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_reviews/tables');
     
@@ -99,7 +104,7 @@ class AccommodationControllerEnquiry extends JControllerForm
 			$app->setUserState('com_accommodation.enquiry.data', $data);
 
 			// Redirect back to the contact form.
-			$this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub.'#email', false));
      	return false;    
     }
     
@@ -125,7 +130,7 @@ class AccommodationControllerEnquiry extends JControllerForm
       
       // Save the data in the session.
 			$app->setUserState('com_reviews.review.data', $data);  	
-      $this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub, false));
+      $this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id='.$stub.'#email', false));
   
       return false;
     }

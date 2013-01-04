@@ -15,9 +15,14 @@ $app = JFactory::getApplication();
 
 //$id = $this->state->get('property.id');
 
+$doc = JDocument::getInstance();
 
 
 jimport('joomla.html.html.bootstrap');
+require_once JPATH_ROOT .'/templates/protostar/html/message.php';
+
+$renderer = new JDocumentRendererMessage($doc);
+
 ?>
 
 <?php
@@ -33,16 +38,22 @@ $app = JFactory::getApplication();
 
 
 $id = $this->item->id ? $this->item->id : '';
+
+$errors = $app->getUserState('com_accommodation.enquiry.messages');
+
+
 ?>
 
+<?php if (count($errors > 0)) : ?>
 
+<div class="contact-error">
+
+<?php echo $renderer->render($errors); ?>
+</div>
+<?php endif; ?>
 
 <div class="well">
-  <div class="contact-error">
-
-  <?php print_r($app->getUserState('com_accommodation.enquiry.data')); ?>
-
-</div>
+  
   <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $id); ?>" method="post" class="form-validate form-horizontal">
     <fieldset class="adminform">
       <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
@@ -55,7 +66,7 @@ $id = $this->item->id ? $this->item->id : '';
       <?php endforeach; ?>
       <div class="form-actions"><button class="btn btn-primary validate" type="submit"><?php echo JText::_('COM_REVIEW_REVIEW_SUBMIT'); ?></button>
         <input type="hidden" name="option" value="com_accommodation" />
-        <input type="hidden" name="task" value="enquiry.submit" />
+        <input type="hidden" name="task" value="property.enquiry" />
         <?php echo JHtml::_('form.token'); ?>
       </div>
     </fieldset>

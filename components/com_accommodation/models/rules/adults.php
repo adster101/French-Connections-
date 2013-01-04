@@ -15,10 +15,10 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class JFormRuleEnquiryname extends JFormRule
+class JFormRuleAdults extends JFormRule
 {
 	/**
-	 * Method to test for a valid enquiry name.
+	 * Method to test for a valid.
 	 *
 	 * @param   SimpleXMLElement  &$element  The SimpleXMLElement object representing the <field /> tag for the form field object.
 	 * @param   mixed             $value     The form field value to validate.
@@ -30,21 +30,18 @@ class JFormRuleEnquiryname extends JFormRule
 	 *
 	 * @return  boolean  True if the value is valid, false otherwise.
 	 */
-	public function test(&$element, $value, $group = null, &$input = null, &$form = null)
-	{
-		$params = JComponentHelper::getParams('com_enquiries');
-		$banned = $params->get('banned_names');
+	public function test(& $element, $value, $group = null, &$input = null, &$form = null)
+	{     
 
-		foreach(explode(';', $banned) as $item){
-			if (JString::stristr($item, $value) !== false)
-					return false;
-		}
-
-    if (!ctype_alnum($value)) {
+    // $value is prefiltered by Jform and will only contain alpha numeric chars (+ and spaces are stripped).
+    // Test that the string matches the pattern
+    if (preg_match('/^[0-9]{1,2}$/', $value, $matches)) {
+      // Yay
+      return true;
+    } else {
+      // Boo
       return false;
     }
-    
-    
-		return true;
-	}
+
+	}  
 }

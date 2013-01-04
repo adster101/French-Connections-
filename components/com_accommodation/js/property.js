@@ -46,7 +46,8 @@ window.addEvent('domready', function() {
     });
   document.formvalidator.setHandler('telephone',
     function (value) {
-      regex=/(((\+44)? ?(\(0\))? ?)|(0))( ?[0-9]{3,4}){3}/;
+      // Only allow digits, spaces and pluses
+      regex=/^[\d +]{11,25}$/;
       return regex.test(value);
     });
   document.formvalidator.setHandler('message',

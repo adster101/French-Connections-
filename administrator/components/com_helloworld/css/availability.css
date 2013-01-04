@@ -41,5 +41,17 @@ td.unavailable {
 	text-decoration:line-through;
 }
 
-ul.key li span.available{background: url(../_images/general/icons.gif) -24px -1213px no-repeat;}
-ul.key li span.unavailable{background: url(../_images/general/icons.gif) -24px -1236px no-repeat;}
+.key tr {
+  margin-bottom:2px;
+}
+
+.key td.available, .key td.unavailable {
+  padding:2px;
+  text-align:center;
+  vertical-align:top;
+  border:1px solid #D7E1F2;
+  width:18px;
+}
+ 
+
+

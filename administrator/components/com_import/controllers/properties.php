@@ -120,6 +120,7 @@ class ImportControllerProperties extends JControllerForm {
       $property->changeover_day = $line[45];
       $property->published = $line[46];
       $property->video = $line[47];
+      $property->availability_last_updated_on = $line[48];
       
 
       if(!$property->store()) {

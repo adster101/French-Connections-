@@ -19,7 +19,7 @@ JHTML::_('behavior.formvalidation');
 </div>
 <div class="page-header">
   <h1>
-    <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_TITLE', $this->item->title, $this->item->property_type, $this->item->nearest_town, $this->item->department_as_text) ?>
+    <?php echo $this->document->title; ?>
   </h1>
 </div>
 <?php if (count($this->units) > 1) : ?>
@@ -48,7 +48,12 @@ JHTML::_('behavior.formvalidation');
         <span class="lead large">
           <?php if ($this->tariffs) { ?>
             <strong>
-              <?php echo htmlspecialchars($this->item->base_currency) . min($price_range) . ' - ' . htmlspecialchars($this->item->base_currency) . max($price_range); ?>
+              <?php if (min($price_range) == max($price_range)) { 
+                  echo htmlspecialchars($this->item->base_currency) . min($price_range);
+                        
+                } else {
+                  echo htmlspecialchars($this->item->base_currency) . min($price_range) . ' - ' . htmlspecialchars($this->item->base_currency) . max($price_range); 
+                } ?>
             </strong> 
           </span>
           <?php if ($this->item->tariffs_based_on) : ?>
@@ -292,7 +297,7 @@ JHTML::_('behavior.formvalidation');
     </div>
   </div>
   <div class="row-fluid">
-    <div class="span-12">
+    <div class="span8">
       <?php if ($this->item->title) : ?>
         <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->title)) ?></h2> 
       <?php endif; ?>
@@ -309,6 +314,7 @@ JHTML::_('behavior.formvalidation');
         </blockquote>         
       <?php endforeach; ?>
     </div>
+    <div class="span4"></div>
   </div>
 <?php } ?>
 <div class="row-fluid" id="facilities">
@@ -460,7 +466,18 @@ JHTML::_('behavior.formvalidation');
 <?php endif; ?>
   </div>
   <div class="span4">
-    <p>Accommodation key</p>
+    <h4><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY')?></h4>
+    <table class="key">
+      <tr>
+        <td class="available"></td>
+        <td>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE')?></td>
+      </tr>
+      <tr><td>&nbsp;</td></tr>
+      <tr>
+        <td class="unavailable">&nbsp;</td>
+        <td>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE')?></td>
+      </tr>
+    </table>    
   </div>
 </div>
 
