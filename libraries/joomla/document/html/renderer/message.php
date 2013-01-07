@@ -36,7 +36,7 @@ class JDocumentRendererMessage extends JDocumentRenderer
 		$app = JFactory::getApplication();
 		$chromePath = JPATH_THEMES . '/' . $app->getTemplate() . '/html/message.php';
 		$itemOverride = false;
-
+        
 		if (file_exists($chromePath))
 		{
 			include_once $chromePath;

@@ -38,6 +38,9 @@ class AccommodationViewProperty extends JViewLegacy {
     // Get the enquiry form
     $this->form = $this->get('Form');
 
+    // Get component params
+
+    
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       JError::raiseError(500, implode('<br />', $errors));
@@ -71,7 +74,7 @@ class AccommodationViewProperty extends JViewLegacy {
     //$document->setTitle($this->title);
     $this->document->setTitle($this->title);
 
-    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBYcwtxu1C9l9O3Th0W6W_X4UtJi9zh2i8&sensor=true");
+    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
     $document->addScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections", 'text/javascript', true, true);
     $document->addScript("components/com_accommodation/js/jquery.flexslider-min.js", 'text/javascript', true, false);
     $document->addScript("components/com_accommodation/js/property.js", 'text/javascript', true, false);

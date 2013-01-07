@@ -17,11 +17,9 @@ $app = JFactory::getApplication();
 
 $doc = JDocument::getInstance();
 
-
-jimport('joomla.html.html.bootstrap');
-require_once JPATH_ROOT .'/templates/protostar/html/message.php';
-
-$renderer = new JDocumentRendererMessage($doc);
+// Include the JDocumentRendererMessage class file
+require_once JPATH_ROOT .'/libraries/joomla/document/html/renderer/message.php';
+$render = new JDocumentRendererMessage($doc);
 
 ?>
 
@@ -41,15 +39,14 @@ $id = $this->item->id ? $this->item->id : '';
 
 $errors = $app->getUserState('com_accommodation.enquiry.messages');
 
-
 ?>
 
 <?php if (count($errors > 0)) : ?>
 
 <div class="contact-error">
-
-<?php echo $renderer->render($errors); ?>
+  <?php echo $render->render($errors); ?>
 </div>
+
 <?php endif; ?>
 
 <div class="well">

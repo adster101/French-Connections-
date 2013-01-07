@@ -106,6 +106,7 @@ class AccommodationModelProperty extends JModelForm {
           quad_bedrooms,
           twin_bedrooms,
           hw.id, 
+          hw.created_by,
           location_details, 
           internal_facilities_other, 
           external_facilities_other, 
