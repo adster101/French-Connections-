@@ -70,7 +70,7 @@ class AccommodationModelProperty extends JModelForm {
    */
   protected function populateState() {
     $app = JFactory::getApplication();
-    // Get the message id
+    // Get the property id
     $id = JRequest::getInt('id');
     $this->setState('property.id', $id);
 
@@ -461,5 +461,50 @@ class AccommodationModelProperty extends JModelForm {
 
     return $crumbs;
   }
+  
+	/**
+	 * Increment the hit counter for the article.
+	 *
+	 * @param	int		Optional primary key of the article to increment.
+	 *
+	 * @return	boolean	True if successful; false otherwise and internal error set.
+	 */
+	public function hit($pk = 0)
+	{
+		$input    = JFactory::getApplication()->input;
+		$hitcount = $input->getInt('hitcount', 1);
 
+		if ($hitcount)
+		{
+      // Get the property id
+			$pk = ($this->item->parent_id == 1) ? $this->item->id : $this->item->parent_id;
+
+      $db = $this->getDbo();
+
+      $query = $db->getQuery(true);
+      
+      $query->insert('#__property_views');
+      
+      $query->columns(array('property_id','date'));
+      
+      $date	= JFactory::getDate()->toSql();
+
+      $query->values("$pk, '$date'"); 
+		
+      $db->setQuery($query);
+      
+			try
+			{
+				$db->execute();
+			}
+			catch (RuntimeException $e)
+			{
+				$this->setError($e->getMessage());
+				return false;
+			}
+		}
+		return true;
+	}
+  
+  
 }

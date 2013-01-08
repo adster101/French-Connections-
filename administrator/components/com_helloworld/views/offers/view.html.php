@@ -18,6 +18,7 @@ class HelloWorldViewOffers extends JViewLegacy
 	 */
 	function display($tpl = null) 
 	{
+    
 		// Get special offers for this property by calling getItems method of the model
 		$items = $this->get('Items');
 

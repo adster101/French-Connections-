@@ -50,6 +50,8 @@ class HelloWorldModelReviews extends JModelList
     // Only want those assigned to the current property
     $query->where('property_id = ' . $property_id);
 		
+    
+    
 		return $query;
 	}
 

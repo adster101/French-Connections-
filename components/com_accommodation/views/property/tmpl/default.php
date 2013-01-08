@@ -552,7 +552,9 @@ JHTML::_('behavior.formvalidation');
     <?php if ($this->item->website) : ?>
     <p>
       <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
-      <?php echo $this->item->website; ?>
+      <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&task=property.viewsite&id=' . ($this->item->parent_id == 1 ? $this->item->id : $this->item->parent_id)) . '&' . JSession::getFormToken() . '=1';?>">
+        <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
+      </a>
     </p>
     <?php endif; ?>
     <hr />

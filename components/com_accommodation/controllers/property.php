@@ -19,6 +19,73 @@ class AccommodationControllerProperty extends JControllerForm
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => false));
 	}
+  
+  public function viewsite() 
+  {    
+		// Check for request forgeries.
+		JSession::checkToken('GET') or jexit(JText::_('JINVALID_TOKEN'));
+
+    $stub   = $this->input->get('id','','int');
+    
+		$id     = (int) $stub;
+    
+    // Prepare a db query so we can get the website address
+    $db = JFactory::getDbo();
+    
+    $query = $db->getQuery(true);
+    
+    $query->select('upf.website')
+            ->from('#__helloworld hw')
+            ->leftJoin('#__user_profile_fc upf on upf.user_id = hw.created_by')
+            ->where('hw.id = ' . $id)
+            ->where('upf.website !=\'\'');
+    
+    $db->setQuery($query);
+    
+    try {
+      
+      $result = $db->loadRow();
+      
+      if ( parse_url( $result[0] )) { // We have a valid web address 
+
+        $website = $result[0];
+        
+        // Log the view
+        $query->getQuery(true);
+        
+        $columns = array('property_id','date');
+       
+        $query->insert('#__website_views');
+        $query->columns($columns);
+        
+        // Get the date
+        $date	= JFactory::getDate()->toSql();
+        
+        // Update the value in the db        
+        $query->values("$id,'$date'");
+        
+        $db->setQuery($query);
+              
+        $db->execute();
+        
+        // Redirect the user to the actual flippin' website
+        $this->setRedirect(JRoute::_($website, false));
+        
+      } 
+       
+      
+      
+    } catch (Exception $e) {
+      // Log error
+      print_r($e->getMessage());
+    }
+      
+    
+    
+    
+    
+    
+  }
 
 	public function enquiry()
 	{

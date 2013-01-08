@@ -44,6 +44,7 @@ class HelloWorldController extends JControllerLegacy {
 
       return false;
     }
+    
     // If the view name is helloworlds then we reset the progress session counter 
     if ($vName == 'HelloWorlds' || $vName == 'helloworlds') {
       JApplication::setUserState('com_helloworld.availability.progress', '');

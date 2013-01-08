@@ -29,6 +29,7 @@ class ReviewsModelReviews extends JModelList
 				'publish_down', 'a.publish_down',
 			);
     }
+    
 		parent::__construct($config);
 	}
   
@@ -71,6 +72,10 @@ class ReviewsModelReviews extends JModelList
 	 */
 	protected function getListQuery()
 	{
+
+    // Get the user to authorise
+    $user	= JFactory::getUser();
+
 		// Create a new query object.		
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
@@ -96,10 +101,20 @@ class ReviewsModelReviews extends JModelList
 		} else {
 			$query->where('r.published IN (0,1)');
     }
+    
+    // Need to ensure that owners only see reviews assigned to their properties
+    if (!$user->authorise('core.edit','com_review') && $user->authorise('core.edit.own','com_reviews')) {
+      
+      // User not permitted to edit globally, only their own
+      // Need to filter out 
+      echo "woot";
+      
+    } 
 		    
 		// Filter by search in title
 		// TODO - Try and tidy up this logic a bit.
 		$search = $this->getState('filter.search');
+    
 		if (!empty($search)) {
       if ((int) $search ) {
         $query->where('r.property_id = '.(int) $search);
@@ -116,5 +131,6 @@ class ReviewsModelReviews extends JModelList
     $query->order($listOrdering,'ASC');
 
 		return $query;
-	}   
+	}  
+  
 }

@@ -39,7 +39,7 @@ abstract class ReviewsHelper
 		foreach ($actions as $action) {
 			$result->set($action,	$user->authorise($action, $assetName));
 		}
- 
-		return $result;
+
+    return $result;
 	} 
 }

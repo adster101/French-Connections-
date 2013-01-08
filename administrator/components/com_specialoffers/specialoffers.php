@@ -3,19 +3,19 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', 'com_reviews')) 
+if (!JFactory::getUser()->authorise('core.admin', 'com_reviews')) 
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
   
 // Register the Helloworld helper file
-JLoader::register('ReviewsHelper', dirname(__FILE__) . '/helpers/reviews.php');
+JLoader::register('SpecialOffersHelper', dirname(__FILE__) . '/helpers/specialoffers.php');
 
 // import joomla controller library
 jimport('joomla.application.component.controller');
  
 // Get an instance of the controller 
-$controller = JControllerLegacy::getInstance('Reviews');
+$controller = JControllerLegacy::getInstance('SpecialOffers');
  
 // Perform the Request task
 $input = JFactory::getApplication()->input;

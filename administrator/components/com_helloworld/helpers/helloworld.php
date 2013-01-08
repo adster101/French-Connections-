@@ -26,8 +26,8 @@ abstract class HelloWorldHelper
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id='.$id, $submenu == 'images');		
 
     // Amend this so that it is based on auth as below
-    if ($id != '' && $published) {
-      JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&view=offers&id='.$id, $submenu == 'offers');		    
+    if ($user->authorise('core.edit','com_specialoffers')) {
+      JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_OFFERS'), 'index.php?option=com_helloworld&task=offers.listoffers&id='.$id, $submenu == 'offers');		    
     }
     
     // Authorise the user if they can manage reviews

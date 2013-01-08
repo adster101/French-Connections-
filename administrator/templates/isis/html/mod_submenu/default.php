@@ -92,24 +92,25 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
                       <a title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_COMPLETE', $item[0], $item[0]) ?>"
                          class="inactive hasTip" 
                          href="<?php echo JFilterOutput::ampReplace($item[1]); ?>">
-                        <i class="hasTip icon-save"> </i>
                         <?php echo $item[0]; ?> 
+                        <i class="hasTip icon-save"> </i>
 
                       </a>
                     <?php else : ?>
                       <a title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PLEASE_COMPLETE_DETAILS', $item[0], $item[0]) ?>"
                          class="inactive hasTip" href="<?php echo JFilterOutput::ampReplace($item[1]); ?>">
-                        <i class="icon-warning hasTip"> </i>   
                         <?php echo $item[0]; ?> 
+
+                        <i class="icon-warning hasTip"> </i>   
                       </a>
                     <?php endif; ?>     
                   <?php elseif ($published) : ?>
                     <a title="<?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DETAILS_NOT_REQUIRED', $item[0], $item[0]) ?>"
                        class="inactive hasTip" 
                        href="<?php echo JFilterOutput::ampReplace($item[1]); ?>">
+                      <?php echo $item[0]; ?>
 
                       <i class="hasTip"> </i>
-                      <?php echo $item[0]; ?>
                     </a>
                   <?php endif; ?>      
 
@@ -119,15 +120,17 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
                   <a title="<?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_PLEASE_COMPLETE_PROPERTY_DETAILS_FIRST') ?>"
                      class="active hasTip" 
                      href="#">
-                    <i class="icon-warning"> </i> 
                     <?php echo $item[0]; ?> 
+
+                    <i class="icon-warning"> </i> 
                   </a>
                 <?php else: ?>
                   <span 
                     class="nolink hasTip"
                     title="<?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_PLEASE_COMPLETE_PROPERTY_DETAILS') ?>">
-                    <i class="nolink hasTip icon-lock"> </i>  
                     <?php echo $item[0]; ?> 
+
+                    <i class="nolink hasTip icon-lock"> </i>  
                   </span>
 
                 <?php endif; ?>
