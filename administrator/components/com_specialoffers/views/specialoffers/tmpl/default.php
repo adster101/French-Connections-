@@ -54,23 +54,25 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
             <th>
-              <?php echo JText::_('COM_REVIEWS_PROPERTY_ID'); ?>
- 
+              <?php echo JText::_('COM_SPECIALOFFERS_PROPERTY_ID'); ?>
             </th>
             <th>
-              <?php echo JText::_('COM_REVIEWS_DATE_ADDED'); ?>
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_DATE_CREATED'); ?>
             </th>
             <th>
-              <?php echo JText::_('COM_REVIEWS_DATE_STATYED_AT_PROPERTY'); ?>
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_START_DATE'); ?>
+            </th>
+            <th>
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_END_DATE'); ?>
             </th>
             <th width="1%">
               <?php echo JText::_('JSTATUS'); ?>
             </th>
             <th width="10%">
-              <?php echo JText::_('COM_REVIEW_TITLE_TEXT_LABEL'); ?>
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_TITLE'); ?>
             </th>
             <th>
-              <?php echo JText::_('COM_REVIEWS_REVIEW_TEXT'); ?>
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_TEXT'); ?>
             </th>
             <th width="1%">
               <?php echo JText::_('JGRID_HEADING_ID'); ?>
@@ -93,10 +95,13 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
                <td width="10%">
                  <?php echo $item->date_created; ?>
               </td>
-               <td width="10%">
+              <td width="10%">
                  <?php echo $item->start_date; ?>
               </td>
-               <td>
+              <td width="10%">
+                 <?php echo $item->end_date; ?>
+              </td>
+              <td>
                 <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
               </td>
               <td>
