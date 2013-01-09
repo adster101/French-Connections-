@@ -13,14 +13,13 @@ $userId = $user->get('id');
 $saveOrder = $listOrder == 'r.ordering';
 $disableClassName = '';
 $disabledLabel = '';
-// Check relevant permissions for this used
-$canChangeState = $user->authorise('core.edit.state', 'com_reviews');
-$canEditOwn = $user->authorise('core.edit.own', 'com_reviews');
-$canEdit = $user->authorise('core.edit', 'com_reviews');
+
+// Check relevant permissions for this user
+$canChangeState = $user->authorise('core.edit.state', 'com_specialoffers');
+$canEditOwn = $user->authorise('core.edit.own', 'com_specialoffers');
+$canEdit = $user->authorise('core.edit', 'com_specialoffers');
 ?>
-
-
-<form action="<?php echo JRoute::_('index.php?option=com_reviews'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_specialoffers'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -92,10 +91,10 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
               </td>
 
                <td width="10%">
-                 <?php echo $item->created; ?>
+                 <?php echo $item->date_created; ?>
               </td>
                <td width="10%">
-                 <?php echo $item->date; ?>
+                 <?php echo $item->start_date; ?>
               </td>
                <td>
                 <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
@@ -112,10 +111,10 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
               <td class="">
                 <?php if ($canEdit || $canEditOwn) : ?>
                 <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->review_text)), 500); ?>
+                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->offer_description)), 500); ?>
                 </a>
                 <?php else: ?>
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->review_text)), 500); ?>
+                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->offer_description)), 500); ?>
                 <?php endif; ?>
      
               </td>

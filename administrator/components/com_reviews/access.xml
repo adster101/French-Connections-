@@ -7,8 +7,6 @@
 		<action name="core.delete" title="JACTION_DELETE" description="JACTION_DELETE_COMPONENT_DESC" />
 		<action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />
 		<action name="core.edit.state" title="JACTION_EDIT_STATE" description="JACTION_EDIT_COMPONENT_DESC" />
-    <action name="core.edit.own" title="JACTION_EDIT_OWN" description="JACTION_EDIT_COMPONENT_DESC" />
-		<action name="owner.view" title="JACTION_VIEW" description="JACTION_EDIT_COMPONENT_DESC" />
-    
+    <action name="core.edit.own" title="JACTION_EDIT_OWN" description="JACTION_EDIT_COMPONENT_DESC" />    
   </section>
 </access>

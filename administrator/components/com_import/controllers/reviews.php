@@ -58,14 +58,14 @@ class ImportControllerReviews extends JControllerForm {
 
 
         $query->insert('#__reviews');
-        $query->columns(array('property_id', 'review_text', 'date', 'rating', 'guest_firstname', 'guest_email'));
+        $query->columns(array('property_id', 'review_text', 'date', 'rating', 'guest_name', 'guest_email','state','published','created','created_by'));
 
         $insert_string = '';
         $date = new DateTime($line[3]);
 
         $review_date = $date->format('Y-m-d H:i:s');
 
-        $insert_string = $property_id . ',' . $db->quote(mysql_escape_string($line[2])) . ',' . $db->quote($review_date) . ',' . $db->quote($line[4]) . ',' . $db->quote($line[5]) . ',' . $db->quote($line[6]);
+        $insert_string = $property_id . ',' . $db->quote(mysql_escape_string($line[2])) . ',' . $db->quote($review_date) . ',' . $db->quote($line[4]) . ',' . $db->quote($line[5]) . ',' . $db->quote($line[6]).',0,1,'.$db->quote($review_date).',1';
         $query->values($insert_string);
 
         // Set and execute the query

@@ -5,23 +5,17 @@ defined('_JEXEC') or die;
 /**
  * HelloWorld component helper.
  */
-abstract class ReviewsHelper
+abstract class SpecialOffersHelper
 {  
 	/**
 	 * Get the actions
 	 */
-	public static function getActions($messageId = 0)
+	public static function getActions()
 	{
 		$user	= JFactory::getUser();
 		$result	= new JObject;
-
-		if (empty($messageId)) {
-			$assetName = 'com_reviews';
-		}
-		else {
-			$assetName = 'com_reviews.review.'.(int) $messageId;
-		}
- 
+		$assetName = 'com_specialoffers';
+		
 		$actions = array(
 			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.delete', 'core.edit.state'
 		);

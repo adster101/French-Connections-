@@ -8,7 +8,7 @@ jimport('joomla.application.component.modellist');
  * HelloWorldList Model
  */
 
-class ReviewsModelReviews extends JModelList
+class SpecialOffersModelSpecialOffers extends JModelList
 {
 	/**
 	 * Constructor.
@@ -87,28 +87,32 @@ class ReviewsModelReviews extends JModelList
 		
 		// Select some fields
 		$query->select('
-      r.id,
-      r.property_id,
-      r.title,
-      r.review_text,
-      r.published,
-      r.date,
-      r.created,
+      so.id,
+      so.published,
+      so.property_id,
+      so.start_date,
+      so.end_date,
+      so.date_created,
+      so.title,
+      so.description as offer_description,
+      so.status,
+      so.approved_by,
+      so.approved_date,
       hw.title as property_title
     ');
 		
 		// From the hello table
-		$query->from('#__reviews r');
+		$query->from('#__special_offers so');
     
-    $query->leftJoin('#__helloworld hw on hw.id = r.property_id');
+    $query->leftJoin('#__helloworld hw on hw.id = so.property_id');
     
     // Filter by published state
 		$published = $this->getState('filter.published');
 
     if (is_numeric($published)) {
-			$query->where('r.published = ' . (int) $published);
+			$query->where('so.published = ' . (int) $published);
 		} else {
-			$query->where('r.published IN (0,1)');
+			$query->where('so.published IN (0,1)');
     }
     
     // Need to ensure that owners only see reviews assigned to their properties
@@ -121,11 +125,11 @@ class ReviewsModelReviews extends JModelList
     
 		if (!empty($search)) {
       if ((int) $search ) {
-        $query->where('r.property_id = '.(int) $search);
+        $query->where('so.property_id = '.(int) $search);
 
       } else {
         $search = $db->Quote('%'.$db->escape($search, true).'%');
-        $query->where('(r.review_text LIKE '.$search.')');
+        $query->where('(so.review_text LIKE '.$search.')');
       }
     }
     
@@ -133,7 +137,6 @@ class ReviewsModelReviews extends JModelList
     
 		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
     $query->order('property_id','ASC');
-    $query->order('date', 'DESC');
     
 		return $query;
 	}  

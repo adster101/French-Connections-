@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class ReviewsViewReviews extends JViewLegacy {
+class SpecialOffersViewSpecialOffers extends JViewLegacy {
 
 	protected $items;
 	protected $state;  
@@ -50,20 +50,20 @@ class ReviewsViewReviews extends JViewLegacy {
    */
   protected function addToolBar() {
     $document = JFactory::getDocument();
-		$canDo = ReviewsHelper::getActions();
+		$canDo = SpecialOffersHelper::getActions();
 
     if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('review.add', 'JTOOLBAR_NEW');
+      JToolBarHelper::addNew('specialoffer.add', 'JTOOLBAR_NEW');
     }
     
     if ($canDo->get('core.edit')) {
-      JToolBarHelper::editList('review.edit', 'JTOOLBAR_EDIT');
+      JToolBarHelper::editList('specialoffer.edit', 'JTOOLBAR_EDIT');
     }
     
     if ($canDo->get('core.edit.state')) {
-      JToolBarHelper::publish('reviews.publish', 'JTOOLBAR_PUBLISH', true);
-      JToolBarHelper::unpublish('reviews.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-      JToolBarHelper::trash('reviews.trash');
+      JToolBarHelper::publish('specialoffers.publish', 'JTOOLBAR_PUBLISH', true);
+      JToolBarHelper::unpublish('specialoffers.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+      JToolBarHelper::trash('specialoffers.trash');
     }
     
     if ($canDo->get('core.edit.delete')) {
