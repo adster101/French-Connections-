@@ -21,12 +21,13 @@ class SpecialOffersModelSpecialOffers extends JModelList
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
-				'id', 'a.id',
-				'title', 'a.title'		,	
-				'state', 'a.state',
-				'ordering', 'a.ordering',
-				'publish_up', 'a.publish_up',
-				'publish_down', 'a.publish_down',
+				'id', 'so.id',
+				'title', 'so.title'		,	
+				'state', 'so.state',
+				'created', 'so.date_created',
+        'title','hw.title',
+				'publish_up', 'so.publish_up',
+				'publish_down', 'so.publish_down',
 			);
     }
     
@@ -60,10 +61,8 @@ class SpecialOffersModelSpecialOffers extends JModelList
 		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
 		$this->setState('filter.title', $title);  
 		
-    $ordering = $this->getUserStateFromRequest($this->context.'.filter.ordering', 'filter_title', '');
-    
-    
-    
+	
+
     
     // List state information.
 		parent::populateState();
@@ -94,7 +93,7 @@ class SpecialOffersModelSpecialOffers extends JModelList
       so.end_date,
       so.date_created,
       so.title,
-      so.description as offer_description,
+      so.description,
       so.status,
       so.approved_by,
       so.approved_date,
@@ -133,11 +132,10 @@ class SpecialOffersModelSpecialOffers extends JModelList
       }
     }
     
-		$listOrdering = $this->getState('list.ordering','r.published');
-    
-		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
-    $query->order('property_id','ASC');
-    
-		return $query;
+    $listOrdering = $this->getState('list.ordering','id');
+		$listDirn = $db->escape($this->getState('list.direction', 'ASC'));  
+    $query->order($db->escape($listOrdering).' '.$listDirn);
+		
+    return $query;
 	}  
 }

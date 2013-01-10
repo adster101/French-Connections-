@@ -99,6 +99,7 @@ class JFormFieldUserProperties extends JFormFieldList
 				$options[] = JHtml::_('select.option', $property->id, $property->title);
 			}
 		} 
+    
 		$options = array_merge(parent::getOptions(), $options);
 		
 		return $options;

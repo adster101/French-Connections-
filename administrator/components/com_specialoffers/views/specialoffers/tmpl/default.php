@@ -53,26 +53,24 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
             <th width="1%" class="hidden-phone">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
-            <th>
-              <?php echo JText::_('COM_SPECIALOFFERS_PROPERTY_ID'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_DATE_CREATED'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_START_DATE'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_END_DATE'); ?>
-            </th>
             <th width="1%">
               <?php echo JText::_('JSTATUS'); ?>
             </th>
-            <th width="10%">
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_TITLE'); ?>
+            <th>
+              <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_TITLE', 'so.title', $listDirn, $listOrder); ?>
+
+            </th>
+            <th width="12%">
+              <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_PROPERTY_ID', 'hw.title', $listDirn, $listOrder); ?>
             </th>
             <th>
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_TEXT'); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_DATE_CREATED', 'so.date_created', $listDirn, $listOrder); ?>
+            </th>
+            <th width="12%">
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_START_DATE'); ?>
+            </th>
+            <th width="12%">
+              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_END_DATE'); ?>
             </th>
             <th width="1%">
               <?php echo JText::_('JGRID_HEADING_ID'); ?>
@@ -82,48 +80,47 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
         <tbody>
           <?php
           foreach ($this->items as $i => $item):
-            
             ?>
             <tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->attribute_type_id ?>">
-              <td>
+              <td class="hidden-phone">
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-              </td>
-              <td width="12%">
-                <?php echo $this->escape($item->property_title); ?> (<?php echo $item->property_id; ?>)
-              </td>
-
-               <td width="10%">
-                 <?php echo $item->date_created; ?>
-              </td>
-              <td width="10%">
-                 <?php echo $item->start_date; ?>
-              </td>
-              <td width="10%">
-                 <?php echo $item->end_date; ?>
               </td>
               <td>
                 <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
               </td>
               <td>
                 <?php if ($canEdit || $canEditOwn) : ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->title)), 150); ?>
-                </a>
+                  <a href="<?php echo JRoute::_('index.php?option=com_specialoffers&task=specialoffer.edit&id=' . (int) $item->id); ?>">
+                    <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
+                  </a><br />
+                  <span class="small">
+                    <?php echo $this->escape($item->description); ?>
+                  </span>
                 <?php else: ?>
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->title)), 150); ?>
+                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
+                  <br />
+                  <span class="small">
+                    <?php echo $this->escape($item->description); ?>
+                  </span> 
                 <?php endif; ?>
+              </td>              
+              <td width="15%">
+                <?php echo $this->escape($item->property_title); ?> <span class="small">(<?php echo $item->property_id; ?>)</span>
               </td>
-              <td class="">
-                <?php if ($canEdit || $canEditOwn) : ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->offer_description)), 500); ?>
-                </a>
-                <?php else: ?>
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->offer_description)), 500); ?>
-                <?php endif; ?>
-     
+
+              <td width="10%">
+                <?php echo $item->date_created; ?>
               </td>
-   
+              <td width="10%">
+                <?php echo $item->start_date; ?>
+              </td>
+              <td width="10%">
+                <?php echo $item->end_date; ?>
+              </td>
+
+
+
+
               <td>
                 <?php echo $item->id; ?>
               </td>

@@ -500,7 +500,8 @@ abstract class JFormField
 				. htmlspecialchars(
 				trim($text, ':') . '::' . ($this->translateDescription ? JText::_($this->description) : $this->description),
 				ENT_COMPAT, 'UTF-8'
-			) . '"';
+			) . '"'; 
+
 		}
 
 		// Add the label text and closing tag.

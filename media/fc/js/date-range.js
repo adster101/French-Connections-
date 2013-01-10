@@ -15,7 +15,7 @@ jQuery(document).ready(function(){
       showOn:"both",
       dateFormat:"yy-mm-dd",
       buttonImageOnly:true,
-     	buttonImage: "media/system/images/calendar.png",
+     	buttonImage: "/media/system/images/calendar.png",
       showButtonPanel: true,
 			onSelect: function( selectedDate ) {
 				jQuery('.end_date').datepicker( "option", "minDate", selectedDate );
@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
       dateFormat:"yy-mm-dd",
       showOn:"both",
       buttonImageOnly:true,
-     	buttonImage: "media/system/images/calendar.png",
+     	buttonImage: "/media/system/images/calendar.png",
       minDate: start_date,
       showButtonPanel: true
 		});

@@ -70,11 +70,11 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
       JToolBarHelper::deleteList('Are you sure?', 'reviews.delete', 'JTOOLBAR_DELETE');
     }
 
-    JToolBarHelper::help('COM_REVIEWS_COMPONENT_HELP_VIEW', true);
+    JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
 
     
     // Set the title which appears on the toolbar
-    JToolBarHelper::title(JText::_('COM_REVIEW_VIEW_REVIEWS'));
+    JToolBarHelper::title(JText::_('COM_SPECIALOFFERS_MANAGE_OFFERS'));
 
     
     JHtmlSidebar::addFilter(

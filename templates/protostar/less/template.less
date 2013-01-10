@@ -381,6 +381,14 @@ h6 { font-size: 12px; line-height: 14px; }
 	.header-search .search-query {
 		width: 90%;
 	}
+input.search-query {
+  padding-right: 14px;
+  padding-right: 4px \9;
+  padding-left: 14px;
+  padding-left: 4px \9; /* IE7-8 doesn't have border-radius, so don't indent the padding */
+  margin-bottom: 0; // Remove the default margin on all inputs
+  .border-radius(3px);
+}
 	.header .nav-pills > li > a {
 		border: 1px solid @tableBorder;
 		border-bottom:0;
