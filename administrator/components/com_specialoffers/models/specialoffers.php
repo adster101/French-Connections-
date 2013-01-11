@@ -132,8 +132,8 @@ class SpecialOffersModelSpecialOffers extends JModelList
       }
     }
     
-    $listOrdering = $this->getState('list.ordering','id');
-		$listDirn = $db->escape($this->getState('list.direction', 'ASC'));  
+    $listOrdering = $this->getState('list.ordering','date_created');
+		$listDirn = $db->escape($this->getState('list.direction', 'desc'));  
     $query->order($db->escape($listOrdering).' '.$listDirn);
 		
     return $query;

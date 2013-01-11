@@ -14,7 +14,7 @@ class SpecialOffersControllerSpecialOffers extends JControllerAdmin
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
-	public function getModel($name = 'Specialoffers', $prefix = 'SpecialOffersModel') 
+	public function getModel($name = 'Specialoffer', $prefix = 'SpecialOffersModel') 
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;

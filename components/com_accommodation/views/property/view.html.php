@@ -39,8 +39,11 @@ class AccommodationViewProperty extends JViewLegacy {
     // Get the enquiry form
     $this->form = $this->get('Form');
 
+    // Get the enquiry form
+    $this->offers = $this->get('SpecialOffers');
+    
     // Get component params
-    // ??
+    // Think of some params to store for this component?
     
     // Update the hit counter for this view
     $model = $this->getModel();

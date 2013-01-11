@@ -122,16 +122,48 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    * @since	1.6
    */
   public function save($data) {
+    
     $app = JFactory::getApplication();
-
+    // Get the user
+    $user = JFactory::getUser();   
+    
+    $property_id = $data['property_id'];
+       
     // Get the date
     $date = JFactory::getDate();
 
     // Set the date created timestamp
     $data['date_created'] = $date->toSql();
 
+    // Need to assign a user who created this offer
+    // Get an instance of the property table
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
+    $table = JTable::getInstance('Helloworld', 'HelloWorldTable');
 
+    // Get the user id for the owner of this property 
+    $property = $table->load($property_id);
+        
+    if (empty($property)) {
+      // Didn't get the property details, invalid property ID?
+      // TODO log this
+      return false;
+    }
+    
+    // Set the user ID in the data array
+    $data['created_by'] = $table->created_by;
+    
+    // Also need to check that no active offers exist for this property already
+    
+    
     if (parent::save($data)) {
+     
+      // Trigger email to admin user
+      
+      // Set additional messaging to notify user that offer is awaiting moderation etc.
+      if (!$user->authorise('core.edit.state', 'com_specialoffers')) {
+        JFactory::getApplication()->enqueueMessage(JText::_('COM_SPECIALOFFERS_OFFER_ADDED_SUCCESS'));
+      }
+      
       return true;
     }
 

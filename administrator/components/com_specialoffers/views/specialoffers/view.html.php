@@ -20,6 +20,8 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
     // Get data from the model
     $this->items = $this->get('Items');
     
+    
+    
     $this->state = $this->get('State');
 		$this->pagination	= $this->get('Pagination');
 
@@ -29,7 +31,6 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
 
 
     $this->addToolBar();
-		$this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);
     
@@ -61,27 +62,36 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
     }
     
     if ($canDo->get('core.edit.state')) {
+      
+      JHtmlSidebar::addFilter(
+        JText::_('JOPTION_SELECT_PUBLISHED'),
+        'filter_published',
+        JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
+      );	 
+      
+      $this->sidebar = JHtmlSidebar::render();
+
       JToolBarHelper::publish('specialoffers.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('specialoffers.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('specialoffers.trash');
     }
     
-    if ($canDo->get('core.edit.delete')) {
-      JToolBarHelper::deleteList('Are you sure?', 'reviews.delete', 'JTOOLBAR_DELETE');
+    if ($canDo->get('core.delete')) {
+      JToolBarHelper::deleteList('Are you sure?', 'specialoffers.delete', 'JTOOLBAR_DELETE');
+    } else {
+      JToolBarHelper::custom('specialoffer.canceloffer','delete','',JText::_('COM_SPECIALOFFERS_OFFER_EXPIRE_OFFER'));
     }
+    
 
+    
+    
+    
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
-
     
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_SPECIALOFFERS_MANAGE_OFFERS'));
-
-    
-    JHtmlSidebar::addFilter(
-			JText::_('JOPTION_SELECT_PUBLISHED'),
-			'filter_published',
-			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-		);	    
+   
+   
   }
 
 

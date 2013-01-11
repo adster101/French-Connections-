@@ -7,7 +7,7 @@ defined('_JEXEC') or die('Restricted access');
 
 class AccommodationController extends JControllerLegacy
 {
-  public function display($cachable = false, $urlparams = array()) {
+  public function display($cachable = true, $urlparams = array()) {
     
   	parent::display($cachable);
 

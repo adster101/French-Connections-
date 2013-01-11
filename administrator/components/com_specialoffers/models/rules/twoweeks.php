@@ -63,7 +63,7 @@ class JFormRuleTwoWeeks extends JFormRule
     $interval = $start_date->diff($end_date);
 		$length = $interval->format('%a');
     // Test the two values against each other.
-		if ($length < 14)
+		if ($length < 15)
 		{
       
 			return true;

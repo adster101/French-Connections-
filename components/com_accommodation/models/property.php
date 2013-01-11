@@ -33,7 +33,7 @@ class AccommodationModelProperty extends JModelForm {
 		if (empty($form)) {
 			return false;
 		}
- 
+
 		return $form;
 	}
   
@@ -52,7 +52,7 @@ class AccommodationModelProperty extends JModelForm {
 		{
 			$data = $this->getItem();
 		}
-    
+        
     return $data;
 	}	   
   
@@ -147,7 +147,6 @@ class AccommodationModelProperty extends JModelForm {
         
       }
 
-
       $this->_db->setQuery($this->_db->getQuery(true)
                       ->from('#__helloworld as hw')
                       ->select($select)
@@ -196,12 +195,9 @@ class AccommodationModelProperty extends JModelForm {
         $query->join('left', '#__attributes a on a.id = ap.attribute_id');
         $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
         $query->where('ap.property_id = '.$id);
-        
-        
+       
         $results = $this->_db->setQuery($query)->loadObjectList();
-        
-        
-        
+
         foreach ($results as $attribute) {
           if (!array_key_exists($attribute->attribute_type,$attributes)) {
             $attributes[$attribute->attribute_type] = array();
@@ -216,9 +212,6 @@ class AccommodationModelProperty extends JModelForm {
         
         return $this->facilities;
 
-        
-        
-        
       } catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');

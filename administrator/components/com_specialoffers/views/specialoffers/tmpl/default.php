@@ -20,6 +20,7 @@ $canEditOwn = $user->authorise('core.edit.own', 'com_specialoffers');
 $canEdit = $user->authorise('core.edit', 'com_specialoffers');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_specialoffers'); ?>" method="post" name="adminForm" id="adminForm">
+
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -53,23 +54,23 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
             <th width="1%" class="hidden-phone">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
-            <th width="1%">
+            <th width="10%">
               <?php echo JText::_('JSTATUS'); ?>
-            </th>
+            </th>            
             <th>
               <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_TITLE', 'so.title', $listDirn, $listOrder); ?>
 
             </th>
-            <th width="12%">
+            <th width="10%">
               <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_PROPERTY_ID', 'hw.title', $listDirn, $listOrder); ?>
             </th>
             <th>
               <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_DATE_CREATED', 'so.date_created', $listDirn, $listOrder); ?>
             </th>
-            <th width="12%">
+            <th width="10%">
               <?php echo JText::_('COM_SPECIALOFFERS_OFFER_START_DATE'); ?>
             </th>
-            <th width="12%">
+            <th width="10%">
               <?php echo JText::_('COM_SPECIALOFFERS_OFFER_END_DATE'); ?>
             </th>
             <th width="1%">
@@ -78,26 +79,40 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
           </tr>		
         </thead> 
         <tbody>
-          <?php
-          foreach ($this->items as $i => $item):
-            ?>
+          <?php foreach ($this->items as $i => $item): ?>
             <tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->attribute_type_id ?>">
               <td class="hidden-phone">
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
-              <td>
-                <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
-              </td>
+              <?php if ($canChangeState) : // If user can change state just show them un/publish buttons (e.g. admin) ?>
+                <td>
+                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'specialoffers.', $canChangeState, 'cb'); ?>
+                </td>
+              <?php elseif (!$canChangeState): // Otherwise show them a link to expire or switch off an offer (e.g. owner) ?>
+                <td>
+                  <?php if ($item->published && strtotime($item->start_date) < time() && strtotime($item->end_date) > time()) : // Offer is current?>
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_ACTIVE'); ?>
+                  <?php elseif ($item->published && strtotime($item->end_date) < time()) : // Offer is published but expired?>  
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_EXPIRED'); ?>
+                  <?php elseif ($item->published && strtotime($item->start_date) > time()) : // Offer is published but scheduled for future date ?>  
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_SCHEDULED'); ?>
+                  <?php elseif (!$item->published) : // Offer is awaiting moderation ?>
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_AWAITING_APPROVAL'); ?>
+                  <?php endif; ?>
+                </td>                
+              <?php endif; ?>
               <td>
                 <?php if ($canEdit || $canEditOwn) : ?>
                   <a href="<?php echo JRoute::_('index.php?option=com_specialoffers&task=specialoffer.edit&id=' . (int) $item->id); ?>">
-                    <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
+                    <strong><?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?></strong>
                   </a><br />
                   <span class="small">
                     <?php echo $this->escape($item->description); ?>
                   </span>
                 <?php else: ?>
+                  <strong>
                   <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
+                  </strong>
                   <br />
                   <span class="small">
                     <?php echo $this->escape($item->description); ?>

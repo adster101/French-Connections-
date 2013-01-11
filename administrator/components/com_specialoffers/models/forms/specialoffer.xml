@@ -73,6 +73,11 @@
       class="required validate-prn"
     />
       
+    <field 
+      name="id"
+      type="hidden"
+      filter="int"
+      />
   	
     
   
