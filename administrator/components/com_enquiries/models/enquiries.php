@@ -8,7 +8,7 @@ jimport('joomla.application.component.modellist');
  * HelloWorldList Model
  */
 
-class SpecialOffersModelSpecialOffers extends JModelList
+class EnquiriesModelEnquiries extends JModelList
 {
 	/**
 	 * Constructor.
@@ -21,13 +21,10 @@ class SpecialOffersModelSpecialOffers extends JModelList
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
-				'id', 'so.id',
-				'title', 'so.title'		,	
-				'state', 'so.state',
-				'created', 'so.date_created',
+				'id', 'e.id',
+				'state', 'e.state',
+				'created', 'e.date_created',
         'title','hw.title',
-				'publish_up', 'so.publish_up',
-				'publish_down', 'so.publish_down',
 			);
     }
     
@@ -65,7 +62,7 @@ class SpecialOffersModelSpecialOffers extends JModelList
 
     
     // List state information.
-		parent::populateState('so.date_created','desc');
+		parent::populateState('e.date_created','desc');
 	}
 
   /**
@@ -86,32 +83,33 @@ class SpecialOffersModelSpecialOffers extends JModelList
 		
 		// Select some fields
 		$query->select('
-      so.id,
-      so.published,
-      so.property_id,
-      so.start_date,
-      so.end_date,
-      so.date_created,
-      so.title,
-      so.description,
-      so.status,
-      so.approved_by,
-      so.approved_date,
+      e.id,
+      e.forename,
+      e.surname,
+      e.email,
+      e.message,
+      e.start_date,
+      e.end_date,
+      e.date_created,
+      e.state,
+      e.property_id,
+      e.adults,
+      e.children,
       hw.title as property_title
     ');
 		
 		// From the hello table
-		$query->from('#__special_offers so');
+		$query->from('#__enquiries e');
     
-    $query->leftJoin('#__helloworld hw on hw.id = so.property_id');
+    $query->leftJoin('#__helloworld hw on hw.id = e.property_id');
     
     // Filter by published state
 		$published = $this->getState('filter.published');
 
     if (is_numeric($published)) {
-			$query->where('so.published = ' . (int) $published);
+			$query->where('e.state = ' . (int) $published);
 		} else {
-			$query->where('so.published IN (0,1)');
+			$query->where('e.state IN (0,1)');
     }
     
     // Need to ensure that owners only see reviews assigned to their properties
@@ -124,11 +122,11 @@ class SpecialOffersModelSpecialOffers extends JModelList
     
 		if (!empty($search)) {
       if ((int) $search ) {
-        $query->where('so.property_id = '.(int) $search);
+        $query->where('e.property_id = '.(int) $search);
 
       } else {
         $search = $db->Quote('%'.$db->escape($search, true).'%');
-        $query->where('(so.review_text LIKE '.$search.')');
+        $query->where('(e.message LIKE '.$search.')');
       }
     }
     
