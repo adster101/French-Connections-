@@ -181,6 +181,9 @@ class AccommodationControllerProperty extends JControllerForm
     // Set the date created timestamp
     $data['date_created'] = $date->toSql();
     
+    // Set the owner id
+    $data['owner_id'] = $property->created_by;
+    
     // Check that we can save the data.
     if(!$table->save($data)){
       

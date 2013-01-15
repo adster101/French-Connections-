@@ -175,7 +175,7 @@ class MessagesModelMessage extends JModelAdmin
 	{
 		$table = $this->getTable();
 
-		// Bind the data.
+    // Bind the data.
 		if (!$table->bind($data)) {
 			$this->setError($table->getError());
 			return false;

@@ -47,7 +47,7 @@
 		/>
     
     <field 
-      name="telephone"
+      name="phone"
       type="text"
       id="guest-telephone"
       class="validate-telephone input-medium"

@@ -53,13 +53,13 @@ class ReviewsViewReview extends JViewLegacy {
     $document->setTitle(JText::_('Manage review'));
  		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
-
   }
 
   /**
    * Setting the toolbar
    */
   protected function addToolBar() {
+    
     JToolBarHelper::apply('review.apply', 'JTOOLBAR_APPLY');
     JToolBarHelper::save('review.save', 'JTOOLBAR_SAVE');
     JToolBarHelper::custom('review.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);

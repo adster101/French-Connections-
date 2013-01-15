@@ -113,7 +113,7 @@ class EnquiriesModelEnquiries extends JModelList
     }
     
     // Need to ensure that owners only see reviews assigned to their properties
-    if (!$user->authorise('core.edit.own','com_review')) { // User not permitted to edit their own reviews
+    if (!$user->authorise('core.edit','com_enquiries') && $user->authorise('core.edit.own', 'com_enquiries')) { // User not permitted to edit their enquiries globally
       $query->where('hw.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
     } 
         
@@ -137,3 +137,4 @@ class EnquiriesModelEnquiries extends JModelList
     return $query;
 	}  
 }
+

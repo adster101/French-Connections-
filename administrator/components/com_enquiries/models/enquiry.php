@@ -12,20 +12,6 @@ jimport('joomla.application.component.modeladmin');
 class EnquiriesModelEnquiry extends JModelAdmin {
 
   /**
-   * Method override to check if you can edit an existing record.
-   *
-   * @param	array	$data	An array of input data.
-   * @param	string	$key	The name of the key for the primary key.
-   *
-   * @return	boolean
-   * @since	1.6
-   */
-  protected function allowEdit($data = array(), $key = 'id') {
-    // Check specific edit permission then general edit permission.
-    return JFactory::getUser()->authorise('core.edit');
-  }
-
-  /**
    * Returns a reference to the a Table object, always creating it.
    *
    * @param	type	The table type to instantiate
@@ -74,5 +60,4 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
     return $data;
   }
-
 }

@@ -21,15 +21,42 @@ class EnquiriesControllerEnquiry extends JControllerForm {
    * @since	1.6
    */
   protected function allowEdit($data = array(), $key = 'id') {
-
+		
+    $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
+    
+ 		$user = JFactory::getUser();
+		$userId = $user->get('id');
+    
     // Check specific edit permission then general edit permission.
-    if (JFactory::getUser()->authorise('core.edit')) {
+    if (JFactory::getUser()->authorise('core.edit','com_enquiries')) {
       return true;
     }
-
-    // Check edit own here so that they cannot edit anothers enquiry
     
+    // Check specific edit permission then general edit permission.
+    if (JFactory::getUser()->authorise('core.edit.own','com_enquiries')) {
 
+      // They have permission to edit own, but do they own?
+			$ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
+            
+      if (empty($ownerId) && $recordId) {
+        // Need to do a lookup from the model.
+        $record = $this->getModel()->getItem($recordId);
+        if (empty($record))
+        {
+          return false;
+        }
+
+        $ownerId = $record->owner_id;
+      }
+
+			// If the owner matches 'me' then do the test.
+			if ($ownerId == $userId)
+			{
+				return true;
+			}
+      
+      return false;
+    }    
     return false;
   }
 

@@ -17,11 +17,27 @@ class EnquiriesController extends JControllerLegacy
 	 */
 	function display($cachable = false) 
 	{
+
 		// set default view if not set
 		JRequest::setVar('view', JRequest::getCmd('view', 'Enquiries'));
-		// call parent behavior
+		
+    $view   = $this->input->get('view', 'enquiries');
+		$layout = $this->input->get('layout', 'default');
+		$id     = $this->input->getInt('id');
 
-    parent::display($cachable);
+		// Check for edit form.
+		if ($view == 'enquiry' && $layout == 'edit' && !$this->checkEditId('com_enquiries.edit.enquiry', $id)) {
+			// Somehow the person just went to the form - we don't allow that.
+			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option=com_enquiries', false));
+
+			return false;
+		}
+    
+    // call parent behavior
+    parent::display($cachable); 
+
 	}
  
 

@@ -72,7 +72,13 @@ class plgQuickiconFc extends JPlugin {
             'image' => 'folder',
             'text' => JText::_('MOD_QUICKICON_FC_SPECIALOFFERS'),
             'access' => array('core.manage', 'com_specialoffers')
-        )
+        ),
+        array(
+            'link' => JRoute::_('index.php?option=com_enquiries'),
+            'image' => 'folder',
+            'text' => JText::_('MOD_QUICKICON_FC_ENQUIRIES'),
+            'access' => array('core.manage', 'com_enquiries')
+        )        
     );
   }
 

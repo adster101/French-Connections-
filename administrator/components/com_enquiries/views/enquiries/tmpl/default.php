@@ -6,6 +6,7 @@
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('bootstrap.tooltip');
 
+
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $user = JFactory::getUser();
@@ -54,23 +55,20 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
             <th width="1%" class="hidden-phone">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
-            <th width="10%">
+            <th width="1%">
               <?php echo JText::_('JSTATUS'); ?>
             </th>            
             <th>
-              <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_TITLE', 'e.title', $listDirn, $listOrder); ?>
+              <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAILS'); ?>
+            </th> 
+            <th width="20%">
+              <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_PERIOD'); ?>
             </th>
             <th width="10%">
-              <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_PROPERTY_ID', 'hw.title', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_ENQUIRIES_PROPERTY_ID', 'hw.title', $listDirn, $listOrder); ?>
             </th>
             <th>
-              <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_DATE_CREATED', 'e.date_created', $listDirn, $listOrder); ?>
-            </th>
-            <th width="10%">
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_START_DATE'); ?>
-            </th>
-            <th width="10%">
-              <?php echo JText::_('COM_SPECIALOFFERS_OFFER_END_DATE'); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_ENQUIRIES_ENQUIRY_DATE_CREATED', 'e.date_created', $listDirn, $listOrder); ?>
             </th>
           </tr>		
         </thead> 
@@ -90,7 +88,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <?php if ($canEdit || $canEditOwn) : ?>
                   <a href="<?php echo JRoute::_('index.php?option=com_enquiries&task=enquiry.edit&id=' . (int) $item->id); ?>">
                     <strong>
-                      <?php echo JText::sprintf('COM_ENQUIRIES_OFFER_TITLE',$item->forename, $item->surname); ?>
+                      <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_TITLE_FIRST_LAST',$item->forename, $item->surname); ?>
                     </strong>
                   </a><br />
                   <span class="small">
@@ -98,30 +96,26 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                   </span>
                 <?php else: ?>
                   <strong>
-                      <?php echo JText::sprintf('COM_ENQUIRIES_OFFER_TITLE',$item->forename, $item->surname); ?>
+                      <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_TITLE',$item->forename, $item->surname); ?>
                   </strong>
                   <br />
                   <span class="small">
                     <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
                   </span> 
                 <?php endif; ?>
+              </td>
+              <td width="10%">
+                <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_PERIOD_FROM_TO',$item->start_date, $item->end_date); ?>
               </td>              
               <td width="15%">
                 <?php echo $this->escape($item->property_title); ?> <span class="small">(<?php echo $item->property_id; ?>)</span>
               </td>
-
               <td width="10%">
                 <?php echo $item->date_created; ?>
               </td>
-              <td width="10%">
-                <?php echo $item->start_date; ?>
-              </td>
-              <td width="10%">
-                <?php echo $item->end_date; ?>
-              </td>
             </tr>					
           <?php endforeach; ?>
-        <input type="hidden" name="extension" value="<?php echo 'com_reviews'; ?>" />
+        <input type="hidden" name="extension" value="<?php echo 'com_enquiries'; ?>" />
         </tbody>
       </table>
       <?php echo $this->pagination->getListFooter(); ?>

@@ -30,11 +30,11 @@ class EnquiriesViewEnquiry extends JViewLegacy {
     $this->item = $item;
     $this->form = $form;
 
+    $this->setDocument();
 
  
     $this->addToolBar();
   	
-    $this->setDocument();
 
     // Display the template
     parent::display($tpl);
@@ -47,28 +47,38 @@ class EnquiriesViewEnquiry extends JViewLegacy {
    * @return void
    */
   protected function setDocument() {
-    $isNew = $this->item->id == 0;
-
+   
+    // Get the document object
     $document = JFactory::getDocument();
     
-    $document->title(JText::sprintf('COM_ENQUIRIES_OFFER_EDIT', $this->item->forename, $this->item->surname), 'enquiry');
+    // Set the site property
+    $this->title = JText::sprintf('COM_ENQUIRIES_ENQUIRY_EDIT', $this->item->forename, $this->item->surname);
+    
+    // Set the document title
+    $this->document->setTitle($this->title);   
+    
+ 
     
  		$document->addScript(JURI::root() . "/administrator/components/com_enquiries/js/submitbutton.js",false,true);
-    
-    JText::script('MUPPET!');
-    
   }
 
   /**
    * Setting the toolbar
    */
   protected function addToolBar() {
-    JToolBarHelper::save('specialoffer.save', 'JTOOLBAR_SAVE');
-    JToolBarHelper::cancel('specialoffer.cancel', 'JTOOLBAR_CLOSE');
+    
+    $canDo = EnquiriesHelper::getActions();
+    
+    if ($canDo->get('core.edit')) {
+      JToolBarHelper::save('enquiry.reply', 'COM_ENQUIRIES_ENQUIRY_REPLY');
+    }
+    
+    JToolBarHelper::cancel('enquiry.cancel', 'JTOOLBAR_CLOSE');
+    
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
 
-    // Set the title which appears on the toolbar 
-    
+    // Set the component toolbar title
+    JToolbarHelper::title($this->title);    
   }
 
 }
