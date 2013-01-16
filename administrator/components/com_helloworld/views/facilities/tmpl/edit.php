@@ -41,6 +41,7 @@ $open = true;
         </div>
       <?php endforeach; ?>
     </div>
-    <input type="hidden" name="task" value="availability.edit" />
+    <?php echo $this->form->getInput('id'); ?>
+    <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
 </form>

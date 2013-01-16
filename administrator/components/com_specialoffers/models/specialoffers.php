@@ -115,7 +115,7 @@ class SpecialOffersModelSpecialOffers extends JModelList
     }
     
     // Need to ensure that owners only see reviews assigned to their properties
-    if (!$user->authorise('core.edit.own','com_review')) { // User not permitted to edit their own reviews
+    if (!$user->authorise('core.edit.own','com_specialoffers')) { // User not permitted to edit their own reviews
       $query->where('hw.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
     } 
         

@@ -42,8 +42,6 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     return $form;
   }
 
- 
-
   /**
    * Method to get the data that should be injected in the form.
    *
@@ -60,4 +58,26 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
     return $data;
   }
+
+  /*
+   * Method to preprocess the special offer edit form 
+   * 
+   * params
+   * $form
+   * $data
+   * 
+   */
+
+  protected function preprocessForm(JForm $form, $data) {
+    
+   
+    $subject = JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT');
+    $message = JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE',$data->forename);
+    
+    $form->setValue('reply_subject',null,$subject);
+    
+    $form->setValue('reply_message',null,$message);
+
+  }
+
 }

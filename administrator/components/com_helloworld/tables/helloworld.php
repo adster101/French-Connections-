@@ -55,13 +55,13 @@ class HelloWorldTableHelloWorld extends JTableNested
 					$tmp = $this->params[$key] = '';
 				}
 			}			
-      //print_r($this->params);die;
 			// Convert the params field to a string.
 			$parameter = new JRegistry;
 			$parameter->loadArray($array['params']);
 			$parameter->merge($this->params);
 			$array['params'] = (string)$parameter;
-		}
+		}    
+
 		return parent::bind($array, $ignore);
 	}
  
@@ -162,7 +162,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 		// For availability would it be cleaner to move changeover day to tariffs?
 		// Maybe although we need to track availability last updated on...against the accommodation unit.
 		$POST = JRequest::getVar('jform', $default = array() );
-    
+
     // Transform the params field
 		if (is_array($this->params)) {
 			$registry = new JRegistry();
@@ -221,8 +221,8 @@ class HelloWorldTableHelloWorld extends JTableNested
 				
 		$date	= JFactory::getDate();
 		$user	= JFactory::getUser();
-		
-		if ($this->id) {
+
+    if ($this->id) {
 			// Existing item
 			$this->modified		= $date->toSql();
 			$this->modified_by	= $user->get('id');
@@ -232,15 +232,11 @@ class HelloWorldTableHelloWorld extends JTableNested
 			
 			if (empty($this->created_by)) {
 				$this->created_by = $user->get('id');
-
       }
     		     
       $this->setLocation($this->parent_id, 'last-child');
 
-
     }
-
-		$this->debug(1);
 
 		// Attempt to store the data.
 		return parent::store($updateNulls);

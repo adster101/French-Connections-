@@ -1,13 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
+  
+
+  <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">
+    <field
+      class="checkbox inline" 
+      name="internal_facilities" 
+      type="facilities" 
+      label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_LABEL" 
+      description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_DESC" 
+      multiple="true"
+      id="9">
+    </field>
+    <field type="spacer" name="internal_facilities_spacer" hr="true" /> 
+    <field
+      name="internal_facilities_other"
+      type="editor"
+      label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>
+  </fieldset>  
+  <fieldset name="external_facilities" description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
+    <field
+      class="checkbox inline" 
+      name="external_facilities" 
+      type="facilities" 
+      label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL" 
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC" 
+      multiple="true"
+      id="10">
+    </field>
+    <field type="spacer" name="external_facilities_spacer" hr="true" />
+    <field
+      name="external_facilities_other"
+      type="editor"
+      label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>      
+  </fieldset>
+  <fieldset name="kitchen_facilities" description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES">
+    <field
+      class="checkbox inline" 
+      name="kitchen_facilities" 
+      type="facilities" 
+      label="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_LABEL" 
+      description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_DESC" 
+      multiple="true"
+      id="11">
+    </field>
+  </fieldset>   
+  <fieldset name="activities" description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES">
+    <field
+      class="checkbox inline" 
+      name="activities" 
+      type="facilities" 
+      label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL" 
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC" 
+      multiple="true"
+      id="8">
+    </field>
+    <field type="spacer" name="activities_spacer" hr="true" />
+    <field
+      name="activities_other"
+      type="editor"
+      placeholder="false"      
+      label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_OTHER_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>
+  </fieldset>   
+  <fieldset name="suitability" description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY">
+    <field
+      class="checkbox inline" 
+      name="suitability" 
+      type="facilities" 
+      label="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_LABEL" 
+      description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_DESC" 
+      multiple="true"
+      id="12">
+    </field>
+  </fieldset>
   <field 
     name="id"
-    type="text"
-    disabled="true"
-    default=""
-    label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
-    class="readonly"
-    description="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"/>
+    type="hidden"></field>
   <field 
     name="parent_id"
     type="hidden"
@@ -18,14 +101,5 @@
     type="hidden"
     default="">
   </field>
-  <field 
-    name="published"
-    type="text"
-    filter="unset"/>
-
-  <field 
-    name="expiry_date"
-    type="hidden"
-    filter="unset"/>
-
+  
 </form>

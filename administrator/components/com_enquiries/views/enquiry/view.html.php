@@ -69,7 +69,7 @@ class EnquiriesViewEnquiry extends JViewLegacy {
     
     $canDo = EnquiriesHelper::getActions();
     
-    if ($canDo->get('core.edit')) {
+    if ($canDo->get('core.edit.own')) {
       JToolBarHelper::save('enquiry.reply', 'COM_ENQUIRIES_ENQUIRY_REPLY');
     }
     

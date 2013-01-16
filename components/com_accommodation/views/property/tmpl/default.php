@@ -8,7 +8,6 @@ foreach ($this->tariffs as $tariff) {
   $price_range[] = $tariff->tariff;
 }
 
-JHtml::_('behavior.keepalive');
 JHTML::_('behavior.formvalidation');
 ?>
 
@@ -22,6 +21,17 @@ JHTML::_('behavior.formvalidation');
     <?php echo $this->document->title; ?>
   </h1>
 </div>
+<?php if (count($this->offer)) : ?>
+  <div class="well">
+    <h5>   
+      <?php echo $this->escape($this->offer->title); ?>
+    </h5>
+    <p>
+      <?php echo $this->escape($this->offer->description); ?>  
+    </p>
+  </div>
+  
+<?php endif; ?>
 <?php if (count($this->units) > 1) : ?>
   <?php echo $this->loadTemplate('units'); ?>
 <?php endif; ?>

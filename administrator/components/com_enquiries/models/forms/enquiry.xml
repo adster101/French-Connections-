@@ -98,7 +98,7 @@
     <field 
       name="property_id" 
       type="UserProperties" 
-      filter=""
+      filter="int"
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
       default=""
@@ -130,33 +130,37 @@
 	<fieldset name="reply">
 
 		<field
-			name="subject"
+			name="reply_subject"
 			type="text"
-			label="COM_MESSAGES_FIELD_SUBJECT_LABEL"
-			description="COM_MESSAGES_FIELD_SUBJECT_DESC"
+			label="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_LABEL"
+			description="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_DESC"
 			required="true"
       labelclass="control-label"
     />
 
 		<field
-			name="message"
+			name="reply_message"
 			type="textarea"
 			rows="10"
 			cols="80"
-			label="COM_MESSAGES_FIELD_MESSAGE_LABEL"
-			description="COM_MESSAGES_FIELD_MESSAGE_DESC"
+			label="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_LABEL"
+			description="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_DESC"
 			required="true"
       labelclass="control-label">
 		</field>
     
-    <field 
-      description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
-      name="email"
-      labelclass="control-label"     
-      readonly="true"
-      type="hidden">
-    </field>     
+    
     
 	</fieldset>  
+  <fieldset name="hidden">
+    <field 
+      name="email"
+      type="hidden">
+    </field>     
+    <field 
+      name="property_id"
+      type="hidden">
+    </field>  
+  </fieldset>
+
 </form>

@@ -380,6 +380,44 @@ class AccommodationModelProperty extends JModelForm {
     return $tariffs;
   }
 
+
+  /*
+   * Function to return a list of tariffs for a given property
+   */
+
+  public function getOffers() {
+
+  if (!isset($this->offer)) {
+
+      try {
+        // Get the state for this property ID
+        $id = $this->getState('property.id');
+
+        // Generate a logger instance for reviews
+        JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('offers'));
+        JLog::add('Retrieving special offers for - ' . $id . ')', JLog::ALL, 'offers');
+
+        // Get a special offers table instance
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_specialoffers/tables');
+        
+        $table = JTable::getInstance('SpecialOffer', 'SpecialOffersTable');
+        
+        $offer = $table->getOffer($id);
+        
+        $this->offer = $offer;
+        
+        // Return the offer, if any
+        
+        return $this->offer;
+        
+      } catch (Exception $e) {
+        // Log the exception and return false
+        JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
+        return false;
+      }
+    }
+  }  
+  
   /*
    * Function to get a list of images for a property 
    * 

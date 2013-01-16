@@ -4,11 +4,11 @@ defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
 JHtml::_('behavior.formvalidation');
-
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 ?>
 <form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" id="adminForm" method="post" name="adminForm">
 
-   <div id="j-main-container" class="span7">
+  <div id="j-main-container" class="span7">
 
     <fieldset class="adminform">
       <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAIL'); ?></legend>
@@ -21,7 +21,7 @@ JHtml::_('behavior.formvalidation');
         </div>         
       <?php endforeach; ?>
     </fieldset>
-     <fieldset>
+    <fieldset>
       <?php foreach ($this->form->getFieldset('details') as $field): ?>
         <div class="control-group">
           <?php echo $field->label; ?>
@@ -30,8 +30,8 @@ JHtml::_('behavior.formvalidation');
           </div>
         </div>         
       <?php endforeach; ?>
-     </fieldset>
-     <fieldset>
+    </fieldset>
+    <fieldset>
       <?php foreach ($this->form->getFieldset('themessage') as $field): ?>
         <div class="control-group">
           <?php echo $field->label; ?>
@@ -40,23 +40,30 @@ JHtml::_('behavior.formvalidation');
           </div>
         </div>         
       <?php endforeach; ?>
-     </fieldset>
-   </div>
+    </fieldset>
+  </div>
   <div class="span5">
     <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_RESPOND_TO_ENQUIRY'); ?></legend>
-     <fieldset>
+    <fieldset>
       <?php foreach ($this->form->getFieldset('reply') as $field): ?>
         <div class="control-group">
           <?php echo $field->label; ?>
           <div class="controls">
             <?php echo $field->input; ?>
           </div>
-        </div>         
+        </div>   
       <?php endforeach; ?>
-     </fieldset>    
+      <hr />
+      <button class="btn btn-small pull-right" onclick="Joomla.submitbutton('enquiry.reply')" href="#">
+        <i class="icon-save ">
+        </i>
+        <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_REPLY'); ?>
+      </button>
+    </fieldset>    
   </div>
-  
-<input type="hidden" name="task" value="" />
-
-<?php echo JHtml::_('form.token'); ?>
+  <?php foreach ($this->form->getFieldset('hidden') as $field): ?>
+    <?php echo $field->input; ?>
+  <?php endforeach; ?>
+  <input type="hidden" name="task" value="" />
+  <?php echo JHtml::_('form.token'); ?>
 </form>

@@ -74,6 +74,8 @@ class HelloWorldViewFacilities extends JViewLegacy
 		
     // Built the actions for new and existing records.
 		JToolBarHelper::apply('facilities.apply', 'JTOOLBAR_APPLY');	
+    // Built the actions for new and existing records.
+		JToolBarHelper::save('facilities.save', 'JTOOLBAR_SAVE');	
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
     
