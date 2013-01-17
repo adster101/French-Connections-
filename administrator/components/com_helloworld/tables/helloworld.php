@@ -24,8 +24,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	}
 	
 	/**
-	 * Overloaded bind function
-         *
+	 * Overloaded bind function - No longer needed - can be removed.
 	 * @param       array           named array
 	 * @return      null|string     null is operation was satisfactory, otherwise returns an error
 	 * @see JTable:bind
@@ -33,34 +32,12 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 */
 	public function bind($array, $ignore = '') 
 	{		
-    
     // Bind the rules.
     if (isset($array['rules']) && is_array($array['rules']))
     {
             $rules = new JAccessRules($array['rules']);
             $this->setRules($rules);
-    }    
-    
-    // Merge and bind the params
-		if (isset($array['params']) && is_array($array['params']) && $this->params) 
-		{
-			// $this is an instance of HelloWorldTableHelloWorld (and includes a copy of the record as it stands in the db)
-			// Loop over the $array['params']
-			// For each check that this key isn't already stored as attribute
-			// If it is delete it as there is a new one incoming
-			// merge the two sets of data
-			// so that both sets of params are preserved
-			foreach($array['params'] as $key=>$value) {
-				if ($this->params[$key] !== null) {
-					$tmp = $this->params[$key] = '';
-				}
-			}			
-			// Convert the params field to a string.
-			$parameter = new JRegistry;
-			$parameter->loadArray($array['params']);
-			$parameter->merge($this->params);
-			$array['params'] = (string)$parameter;
-		}    
+    }
 
 		return parent::bind($array, $ignore);
 	}
@@ -172,10 +149,13 @@ class HelloWorldTableHelloWorld extends JTableNested
     
 		// Get the current editing language for this property
 		$lang = HelloWorldHelper::getLang();
-		
+     
 		// TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
 		$this->savePropertyTranslation($lang);
-		
+    
+    // Save the attributes back to the database...
+    $this->savePropertyFacilities($POST);
+    
     // Save the facilities and suitability options
     $this->savePropertyAttributes($POST);
     
@@ -185,40 +165,9 @@ class HelloWorldTableHelloWorld extends JTableNested
     // Save the image details, if any are passed in, baby
     $this->saveImageDetails($POST);
     
-		// Do we have availability data to update? TO DO - Wrap this in a function (perhaps in the controller?)
-		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
-      
-      // TO DO: Tidy this up a bit - new method?
-      // E.g. $this->saveAvailability();
-      $start_date = $POST['start_date'];
-      $end_date = $POST['end_date'];
-      $availability_status = $POST['availability'];
-      
-      if ($start_date && $end_date) {
-      
-        $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-        $availability = $availabilityTable->load($this->id);
+    // Save the availability data, if is exists in the POST data
+    $this->savePropertyAvailability($POST);
 
-        $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $start_date, $end_date, $availability_status);
-        $availability_by_period = HelloWorldHelper::getAvailabilityByPeriod($availability_by_day);
-
-        // Delete existing availability
-        // Need to wrap this in some logic
-        $availabilityTable->delete($this->id);
-
-        // Bind the translated fields to the JTable instance	
-        if (!$availabilityTable->save($this->id, $availability_by_period))
-        {
-          JError::raiseWarning(500, $availabilityTable->getError());
-          return false;
-        }	else {
-          // Update the availability last updated on field
-          $this->availability_last_updated_on = JFactory::getDate()->toSql();
-        }
-      }
-
-		}
-				
 		$date	= JFactory::getDate();
 		$user	= JFactory::getUser();
 
@@ -324,6 +273,99 @@ class HelloWorldTableHelloWorld extends JTableNested
 		$this->description = $existingTranslations->description;
 	}
   
+  protected function savePropertyAvailability ($POST = array()) {
+    if(!array($POST)) {
+      return true;
+    }
+    
+    if(!array_key_exists('availability', $POST)) {
+      return true;
+    }
+    
+		// Do we have availability data to update? TO DO - Wrap this in a function (perhaps in the controller?)
+		if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
+      
+      // TO DO: Tidy this up a bit - new method?
+      // E.g. $this->saveAvailability();
+      $start_date = $POST['start_date'];
+      $end_date = $POST['end_date'];
+      $availability_status = $POST['availability'];
+      
+      if ($start_date && $end_date) {
+      
+        // Load in existing availability, so we can merge it with this new availability
+        $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
+        $availability = $availabilityTable->load($this->id);
+
+        $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $start_date, $end_date, $availability_status);
+        $availability_by_period = HelloWorldHelper::getAvailabilityByPeriod($availability_by_day);
+
+        // Delete existing availability
+        // Need to wrap this in some logic
+        $availabilityTable->delete($this->id);
+
+        // Bind the translated fields to the JTable instance	
+        if (!$availabilityTable->save($this->id, $availability_by_period))
+        {
+          JError::raiseWarning(500, $availabilityTable->getError());
+          return false;
+        }	else {
+          // Update the availability last updated on field
+          $this->availability_last_updated_on = JFactory::getDate()->toSql();
+        }
+      }
+
+		}    
+  }
+  
+  protected function savePropertyFacilities( $POST = array() ) {
+    
+    if(!array($POST)) {
+      return true;
+    }
+    
+    $attributes = array();
+    
+    // For now whitelist the attributes that are supposed to be processed here...needs moving to the model...or does it?
+    $whitelist = array('external_facilities','internal_facilities','kitchen_facilities','activities','suitability');
+    
+    // Loop over the data and prepare an array to save
+    foreach ($POST as $key => $value) {
+
+      if (!in_array($key, $whitelist)) {
+        continue;
+      }
+      
+      // We're not interested in the 'other' fields or any other POSTED data that is not an array. E.g. external_facilities_other
+      if (strpos($key, 'other') == 0 && is_array($value) ) {
+        
+        // We want to save this in one go so we make an array
+        foreach ($value as $facility) {
+          // Facilities should be integers
+          if ((int) $facility) {
+            $attributes[] = $facility;
+          }
+        }
+      }
+    }
+    
+    if (count($attributes) > 0) {
+     
+      // Get instance of the tariffs table
+      $attributesTable = JTable::getInstance($type = 'PropertyAttributes', $prefix = 'HelloWorldTable', $config = array());
+
+      // Bind the translated fields to the JTable instance	
+      if (!$attributesTable->save($this->id, $attributes)) {
+        JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_ADDING_ATTRIBUTES'), 'warning');
+
+        JError::raiseWarning(500, $attributesTable->getError());
+        return false;
+      }      
+      
+    }
+    
+    
+  }
   
   /**
    * save property tariffs, if there are any tariffs available in the POST data then we process them and save them.
@@ -331,7 +373,6 @@ class HelloWorldTableHelloWorld extends JTableNested
    *  
    */
   protected function savePropertyTariffs( $POST = array() ) {
-
     if(!array($POST)) {
       return true;
     }
@@ -413,7 +454,6 @@ class HelloWorldTableHelloWorld extends JTableNested
       
       } catch (Exception $e ) {
         //TO DO - Log this
-        print_r($e);die;
       }
       
     }

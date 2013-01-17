@@ -81,23 +81,40 @@ class HelloWorldTablePropertyAttributes extends JTable
    *  
    * 
    */
-  public function save ($id = null, $availability_periods = array() ) 
+  public function save ($id = null, $attributes = array() ) 
   {
+    
     
     if (!$this->check()) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
       
     } else {
+
+      // Firstly need to delete these...in a transaction would be better
+      $query = $this->_db->getQuery(true);
+      
+      $query->delete('#__attributes_property')->where('property_id = ' . $id);
+      
+      
+      $this->_db->setQuery($query);
+      
+			if (!$this->_db->execute())
+			{
+				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+        print_r($this->_db->getErrorMsg());
+				$this->setError($e);
+				return false;
+			}
       
       $query = $this->_db->getQuery(true);
       
-      $query->insert('#__availability');
+      $query->insert('#__attributes_property');
       
-			$query->columns(array('id','start_date','end_date','availability'));
+			$query->columns(array('property_id','attribute_id'));
       
-      foreach ($availability_periods as $period) {
-        $insert_string = "$id,'" .$period['start_date']."','" . $period['end_date'] . "',". $period['status'] ."";
+      foreach ($attributes as $attribute) {
+        $insert_string = "$id," .$attribute."";
         $query->values($insert_string);
       }
 			$this->_db->setQuery($query);
@@ -110,7 +127,7 @@ class HelloWorldTablePropertyAttributes extends JTable
 			}
       
       // Tick the availability progress flag to true
-      JApplication::setUserState('com_helloworld.availability.progress', true);
+      JApplication::setUserState('com_helloworld.facilities.progress', true);
       
       
       return true;

@@ -4,6 +4,7 @@ defined('_JEXEC') or die('Restricted access');
  
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
+
 /**
  * HelloWorld Model
  */

@@ -79,43 +79,4 @@ class HelloWorldControllerFacilities extends JControllerForm {
     }
     return false;
   }
-
-  /* 
-   * function save - 
-   * overrides controller model to check and store facilities for a given property
-   * 
-   * 
-   */
-  public function save() {
-    
-    // Get the data
-    $data = $this->input->post->get('jform', array(), 'array');
-
-    // Loop over the data and prepare an array to save
-    foreach ($data as $key=>$value) {
-      
-      // We're not interested in the 'other' fields
-      if (strpos($key, 'other') == 0) {
-        
-        // We want to save this
-        foreach ($value as $facility_id) {
-          
-        }
-      }
-    }
-    
-    print_r($data);die;
-
-    
-    
-    
-
-    // Call the parent save method which validates and checks the 
-    // data associated with a propery record (because model points to 
-    // property table/model
-    $return = parent::save();
-    
-    return $return;
-  }
-
 }

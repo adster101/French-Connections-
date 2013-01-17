@@ -4,9 +4,10 @@
 
   <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">
     <field
-      class="checkbox inline" 
+      class="checkbox inline required" 
       name="internal_facilities" 
       type="facilities" 
+      required="true"
       label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_LABEL" 
       description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_DESC" 
       multiple="true"
@@ -25,7 +26,8 @@
   </fieldset>  
   <fieldset name="external_facilities" description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
     <field
-      class="checkbox inline" 
+      class="checkbox inline required"
+      required="true"
       name="external_facilities" 
       type="facilities" 
       label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL" 

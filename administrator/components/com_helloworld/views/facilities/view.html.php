@@ -19,8 +19,12 @@ class HelloWorldViewFacilities extends JViewLegacy
 		// Get the property ID we are editing.
 		$this->item->id = JRequest::getVar('id');
     
+    // Get the property title which should be stored in the user session
+    $this->item->title = JApplication::getUserState('title'.$this->item->id, '');
+    
 		// Get the form
 		$form = $this->get('Form');
+    
   	// Assign the Data
 		$this->form = $form;  
 		    
@@ -70,7 +74,7 @@ class HelloWorldViewFacilities extends JViewLegacy
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
 		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_FACILITIES_EDIT', $this->form->getValue('title')), 'helloworld');
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_FACILITIES_EDIT', $this->item->title), 'helloworld');
 		
     // Built the actions for new and existing records.
 		JToolBarHelper::apply('facilities.apply', 'JTOOLBAR_APPLY');	
@@ -78,8 +82,6 @@ class HelloWorldViewFacilities extends JViewLegacy
 		JToolBarHelper::save('facilities.save', 'JTOOLBAR_SAVE');	
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
-    
-
     
 	}
 	/**
@@ -91,7 +93,7 @@ class HelloWorldViewFacilities extends JViewLegacy
 	{
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING_FACILITIES'));
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");

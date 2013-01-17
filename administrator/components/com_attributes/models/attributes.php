@@ -94,6 +94,13 @@ class AttributesModelAttributes extends JModelList
     if (is_numeric($attributeTypeId)) {
       $query->where('attribute_type_id = ' . $attributeTypeId);
     }
+    
+    $search = $this->getState('filter.search', '');
+    
+    if ($search) {
+      $query->where('a.title like (\'%' . $search . '%\')');
+    }
+    
 		$query->order($db->escape($listOrdering).' '.$listDirn);
 
 		return $query;

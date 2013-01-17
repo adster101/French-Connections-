@@ -444,7 +444,7 @@
       class="input-small"
       />
     <field
-      name="created_time"
+      name="created_on"
       labelclass="control-label"
       type="text"
       label="JGLOBAL_CREATED_DATE"

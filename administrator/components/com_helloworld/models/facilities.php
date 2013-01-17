@@ -85,6 +85,16 @@ class HelloWorldModelFacilities extends JModelAdmin {
     return $data;
   }  
 
+  /*
+   * Function to get the data for the facilities editing view.
+   * 
+   * TODO - For a slight performance boost should consider implementing preprocessForm to generate the property attributes here.
+   * Presntly, the facilities checkbox fields are loaded in via a custom form field type (facilities). 
+   * This should probably be amended so that the checkbox options are added dynamically in a precpreocessform method in this model.
+   * 
+   * The above would be better as you could generate all the facility options via one query rather than five.
+   * 
+   */
   public function getItem($pk = null) {
 
     // Initialise variables.
@@ -127,31 +137,11 @@ class HelloWorldModelFacilities extends JModelAdmin {
       $properties[$facility_type] = implode($value,',');
     }
     
-    
     $item = JArrayHelper::toObject($properties, 'JObject');
 
     return $item;
   }
 
-  /**
-   * Used as a callback for array_map, turns the multi-file input array into a sensible array of files
-   * Also, removes illegal characters from the 'name' and sets a 'filepath' as the final destination of the file
-   *
-   * @param	string	- file name			($files['name'])
-   * @param	string	- file type			($files['type'])
-   * @param	string	- temporary name	($files['tmp_name'])
-   * @param	string	- error info		($files['error'])
-   * @param	string	- file size			($files['size'])b
-   *
-   * @return	array
-   * @access	protected
-   */
-  protected function reformatFilesArray($caption, $name) {
-    $name = JFile::makeSafe($name);
-    return array(
-        'attribute_type_id' => $caption,
-    );
-  }
 
   /**
    * Method to test whether a user can edit the published state of a property.
