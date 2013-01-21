@@ -52,13 +52,20 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         <div class="row-fluid form-inline">
 
           <div class="span6">
-            <?php echo $this->form->getLabel('department'); ?>
-            <?php echo $this->form->getInput('department'); ?>            
+            <div class="control-group">
+              <?php echo $this->form->getLabel('department'); ?> 
+              <div class="controls">
+                <?php echo $this->form->getInput('department'); ?>
+              </div>
+            </div>
           </div>
           <div class="span6">
-
-            <?php echo $this->form->getLabel('location_type'); ?>
-            <?php echo $this->form->getInput('location_type'); ?>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('location_type'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('location_type'); ?>
+              </div>
+            </div>
           </div>
           <?php echo $this->form->getInput('latitude'); ?>           
           <?php echo $this->form->getInput('longitude'); ?>  
@@ -80,16 +87,22 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 
           <div class="span4 form-inline">              
             <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS') ?></p>
-             <?php echo $this->form->getLabel('nearest_town'); ?>
-            <?php echo $this->form->getInput('nearest_town'); ?>
-
-            <?php echo $this->form->getLabel('distance_to_coast'); ?>
-            <?php echo $this->form->getInput('distance_to_coast'); ?>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('city'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('city'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('distance_to_coast'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('distance_to_coast'); ?>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row-fluid">
           <div class="span12">        
-           
             <hr />  
             <?php echo $this->form->getLabel('location_details'); ?>
             <?php echo $this->form->getInput('location_details'); ?>
@@ -98,7 +111,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
             <?php echo $this->form->getInput('getting_there'); ?>
           </div>
         </div>
-
       </fieldset>    
 
       <fieldset class="adminform">

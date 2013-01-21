@@ -42,14 +42,21 @@ function initialise() {
     
     map.panTo(marker.getPosition());
     LatLng = marker.getPosition();
-        
+    
+    // Update lat and long for the property...    
     document.getElementById('jform_latitude').value = LatLng.lat().toFixed(6);
     document.getElementById('jform_longitude').value = LatLng.lng().toFixed(6);
+    
+    // Do an ajax call to populate the list of nearest towns...
+    
+    
+    
   });
 
   google.maps.event.addListener(map, "zoom_changed", function() {
     map.panTo(marker.getPosition());
   });
+
 
     
   

@@ -50,7 +50,7 @@ class HelloWorldTableHelloWorld extends JTableNested
 	 * @return      boolean
 	 * @see JTable:load
 	 */
-	public function load($pk = null, $reset = true, $lang = 'en-GB') 
+	public function load($pk = null, $reset = true, $lang = '') 
 	{		
 		if (parent::load($pk, $reset)) 
 		{

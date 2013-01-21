@@ -23,15 +23,11 @@
       size="40"
       class="inputbox "
       filter="JComponentHelper::filterText"
-      buttons="false"
-		/>
+      buttons="false"/>
   </fieldset>	  
  
   
   <fieldset name="details">
-    
-
-      
     <field
       name="accommodation_type"
       labelclass="control-label"
@@ -58,8 +54,6 @@
       default="1"
       placeholder="true"      
     />
-    
-  
   </fieldset>
   <fieldset name="Location">
     <field
@@ -117,20 +111,7 @@
       validate="latlong"
       readonly="true">
     </field>
-    <field
-      name="nearest_town"
-      type="text"
-      extension="com_helloworld"
-      class="inputbox validate-nearesttown"
-      default=""
-      labelclass="control-label"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
-      required="true"
-      filter="JComponentHelper::filterText"
-      maxlength="75"
-      validate="nearesttown">
-    </field>		
+		
     <field
       name="distance_to_coast"
       type="text"

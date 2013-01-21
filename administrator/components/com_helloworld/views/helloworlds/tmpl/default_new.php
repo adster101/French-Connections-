@@ -5,6 +5,8 @@ defined('_JEXEC') or die('Restricted Access');
 ?>
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<form method="post" name="adminForm" id="helloworld-choose-parent-form" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.woot') .  '&' . JSession::getFormToken() . '=1'; ?>">
+
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h3 id="myModalLabel"><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING'); ?></h3>
@@ -20,7 +22,6 @@ defined('_JEXEC') or die('Restricted Access');
         <?php echo JText::_('COM_HELLOWORLD_NEW_PROPERTY_PROCEED'); ?>
         <i class="boot-icon-forward boot-icon-white"></i>
       </button>
-      </form>
     </div>
 
   <?php else : ?>
@@ -38,6 +39,6 @@ defined('_JEXEC') or die('Restricted Access');
       </a>
     </div>
   <?php endif; ?>
-
+</form>
 
 </div>

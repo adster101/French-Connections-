@@ -15,7 +15,7 @@ JFormHelper::loadFieldClass('list');
  * @subpackage	com_menus
  * @since		1.6
  */
-class JFormFieldDepartments extends JFormFieldList
+class JFormFieldCities extends JFormFieldList
 {
 	/**
 	 * The form field type.
@@ -23,7 +23,7 @@ class JFormFieldDepartments extends JFormFieldList
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'Departments';
+	protected $type = 'Cities';
 
 	/**
 	 * Method to get the field options.
@@ -33,24 +33,35 @@ class JFormFieldDepartments extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		// Initialize variables.
+    
+    // Get latitude
+    $latitude = $this->element['latitude'] ? $this->element['latitude'] : ''; 
+    $longitude = $this->element['longitude'] ? $this->element['longitude'] : ''; 
+    
+    // Initialize variables.
 		$options = array();
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
-    $query->select('a.id, a.title, a.level');
-    $query->from('#__classifications AS a');
-    $query->where('a.parent_id > 0');
-		$query->where('a.published != -2');
-    
-    $query->where('a.level = 3');
+    $query->select('id, title, level');
+    $query->select(
+      '( 
+        3959 * acos( cos( radians(' . $longitude . ') ) 
+        * cos( radians( latitude ) ) 
+        * cos( radians( longitude ) - 
+        radians('.$latitude.') ) + 
+        sin( radians(' . $longitude . ') ) 
+        * sin( radians( latitude ) ) ) ) 
+AS distance            
+            ');
+    $query->from('#__classifications');
+    $query->where('level = 4');
 
-		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
-		$query->order('a.title ASC');
-
-    $db->setQuery($query);
+    $query->having('distance < 50');
+    $query->order('distance');
+    $db->setQuery($query,0,10);
     $items = $db->loadObjectList();
-
+    // Filter out any regions, areas etc
 		$options = array();
 
 		// Check for a database error.
@@ -61,7 +72,7 @@ class JFormFieldDepartments extends JFormFieldList
 			foreach($items as &$item) 
 			{
 				$repeat = ($item->level - 1 >= 0) ? $item->level - 1 : 0;
-				$item->title = str_repeat('- ', $repeat) . $item->title;
+				$item->title = $item->title . ' - ' . round($item->distance,0) . ' Miles';
 				$options[] = JHtml::_('select.option', $item->id, $item->title);
 			}
 

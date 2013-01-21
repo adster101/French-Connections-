@@ -9,12 +9,9 @@ if ($this->items > 0) :
 
 ?>
 
-<h1><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING'); ?></h1>
-<hr />
 <div class="pre_message">
 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SECOND_NEW_PROPERTY_BLURB'); ?>
 </div>
-<form method="post" name="adminForm" id="helloworld-choose-parent-form" class="form-validate" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.woot') .  '&' . JSession::getFormToken() . '=1'; ?>">
 	<fieldset class="adminform">
     <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SECOND_NEW_PROPERTY_LEGEND'); ?>
 </legend>
@@ -25,29 +22,14 @@ if ($this->items > 0) :
 			</ul>  
      
   </fieldset>
-    <p class="">
-  <button class="btn btn-primary fltrt">
-    <?php echo JText::_('COM_HELLOWORLD_NEW_PROPERTY_PROCEED'); ?>
-    <i class="boot-icon-forward boot-icon-white"></i>
-  </button>
-</p>   
+   
 		<?php echo JHtml::_('form.token'); ?>
 
-</form>
 
 <?php else : ?>
-<h1><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING'); ?></h1>
-<hr />
 <div class="pre_message">
 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING_FIRST_PROPERTY_BLURB'); ?>
 </div>
 <hr />
-<p class="">
-  <a class="btn btn-primary fltrt" href="index.php?option=com_helloworld&task=helloworld.edit">
-    <?php echo JText::_('COM_HELLOWORLD_NEW_PROPERTY_PROCEED'); ?>
-    <i class="boot-icon-forward boot-icon-white"></i>
-
-  </a>
-</p>
 <?php endif; ?>
 
