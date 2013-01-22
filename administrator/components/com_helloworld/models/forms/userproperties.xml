@@ -6,9 +6,9 @@
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
-			class="validate-parent required"
-			required="true">
-
+			class="required validate"
+			required="true"
+      user="">
     </field>	
   </fieldset>
 </form>

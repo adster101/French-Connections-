@@ -182,12 +182,16 @@ class HelloWorldTableHelloWorld extends JTableNested
 			if (empty($this->created_by)) {
 				$this->created_by = $user->get('id');
       }
+      
+      if (empty($this->created_on)) {
+        $this->created_on		= $date->toSql();
+      }
     		     
       $this->setLocation($this->parent_id, 'last-child');
 
     }
 
-		// Attempt to store the data.
+    // Attempt to store the data.
 		return parent::store($updateNulls);
 	}
 

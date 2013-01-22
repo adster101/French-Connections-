@@ -25,6 +25,7 @@
       filter="JComponentHelper::filterText"
       buttons="false"/>
   </fieldset>	  
+
  
   
   <fieldset name="details">
@@ -111,7 +112,21 @@
       validate="latlong"
       readonly="true">
     </field>
-		
+
+  <field
+      name="city"
+      type="cities"
+      class="inputbox validate"
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
+      required="true"
+      readonly="false"
+      latitude="46.589069"
+      longitude="2.416992">
+      <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
+    </field>		
+    
     <field
       name="distance_to_coast"
       type="text"

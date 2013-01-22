@@ -19,5 +19,5 @@ class JFormRuleNearesttown extends JFormRule
 	*/
 	// For some reason the regex doesn't like the 'french' characters...
 	//protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-����]+$';
-	protected $regex = '^[\w .ééàôê\'-]{0,75}+$';
+	protected $regex = '^[0-9]+$';
 }

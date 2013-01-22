@@ -17,6 +17,9 @@ class HelloWorldViewHelloWorld extends JViewLegacy
 	public function display($tpl = null) 
 	{
 
+    $this->state = $this->get('State');
+        
+    
     
 		// get the Data
 		$form = $this->get('Form');
@@ -71,10 +74,10 @@ class HelloWorldViewHelloWorld extends JViewLegacy
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
-    // TO DO: 
-    // Currently HelloWorlHelper::getAction only returns the core permissions for the item.
-    // Any permissions set at the component level are ignored. Need to fix that.
-		$canDo = HelloWorldHelper::getActions();
+    
+    // Get component level permissions
+		$canDo = $this->state->get('actions.permissions',array());
+    
     JApplication::setUserState('title'.$this->item->id, $this->item->title);
     
     JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'helloworld');
@@ -101,7 +104,8 @@ class HelloWorldViewHelloWorld extends JViewLegacy
 			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CLOSE');
 		}  
 	}
-	/**
+
+  /**
 	 * Method to set up the document properties
 	 *
 	 * @return void

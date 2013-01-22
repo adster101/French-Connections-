@@ -15,6 +15,7 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 // And determine the user groups the user is in
 $groups = $user->getAuthorisedGroups();
+$canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
@@ -75,7 +76,7 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
           <div class="span8">
             <?php
             // Show the choose location button if this is a parent property or a new property
-            if ($this->item->parent_id == 1) :
+            if ($this->item->parent_id != 1) :
               ?>
               <div id="map"></div>
             <?php else: ?>
@@ -198,7 +199,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
           </div>
         <?php endforeach; ?>
       </fieldset>
-      <?php if ($canChangeOwner) { ?>
         <p>
           <?php
           echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
@@ -216,7 +216,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 
           <?php endforeach; ?>
         </fieldset>
-      <?php } ?>
 
     </div>
   </div>

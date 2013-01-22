@@ -156,7 +156,17 @@ abstract class HelloWorldHelper
 		$result	= new JObject;
   
 		$actions = array(
-			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.delete', 'core.edit.state', 'helloworld.edit.reorder', 'helloworld.edit.publish'
+			'core.admin', 
+      'core.manage',
+      'core.create', 
+      'core.edit',
+      'core.edit.own',
+      'core.delete', 
+      'core.edit.state',
+      'helloworld.edit.reorder',
+      'helloworld.edit.publish',
+      'helloworld.edit.property.owner',
+      'helloworld.edit.property.parent'
 		);
  
     

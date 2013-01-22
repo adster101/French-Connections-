@@ -147,11 +147,11 @@ $originalOrders = array();
       </table>
       <div>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="boxchecked" value="0" />
+        <input type="hidden" name="boxchecked" value="" />
         <?php echo JHtml::_('form.token'); ?>
       </div>
     </div>
 </form>
 
-  <?php echo $this->loadTemplate('new'); ?>
+<?php //echo $this->loadTemplate('new'); ?>
 

@@ -11,8 +11,7 @@
     <action name="helloworld.edit.reorder" title="JACTION_REORDER" description="JACTION_EDITREORDER_COMPONENT_DESC" />
 		<action name="helloworld.edit.publish" title="JACTION_PUBLISH" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
 		<action name="helloworld.edit.trash" title="JACTION_TRASH" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
-    
+		<action name="helloworld.edit.property.owner" title="JACTION_EDIT_OWNER" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
+		<action name="helloworld.edit.property.parent" title="JACTION_EDIT_PARENT" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
 	</section>
-  
-
 </access>

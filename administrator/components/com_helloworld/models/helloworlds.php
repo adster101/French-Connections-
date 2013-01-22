@@ -128,7 +128,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		if (is_numeric($published)) {
 			$query->where('a.published = ' . (int) $published);
 		}
-		elseif ($published === '') {
+		elseif ($published == '') {
 			$query->where('(a.published = 0 OR a.published = 1)');
 		}    
 		

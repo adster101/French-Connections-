@@ -71,7 +71,23 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
     }
     return $form;
   }
+  
+  /*
+   * Method to get a form for the admin user to choose which account they would like to add a property to
+   * 
+   */
 
+  public function getNewAdminPropertyForm($data = array(), $loadData = false) {
+
+    // Get the form.
+    $form = $this->loadForm('com_helloworld.addpropertybyuser', 'addpropertybyuser', array('control' => 'jform', 'load_data' => $loadData));
+    if (empty($form)) {
+      return false;
+    }
+        
+    return $form;
+  }
+  
   /**
    * Method to get the script that have to be included on the form
    *
@@ -123,14 +139,17 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
     // E.g. at the moment any user who is not owner can edit this? 
     // e.g. add a new permission core.edit.property.changeparent
     
+    $canDo = $this->getState('actions.permissions',array());
+    // If we don't come from a view then this maybe empty so we reset it.
+    if (empty($canDo)) {
+      $canDo = HelloWorldHelper::getActions();
+    }
+    
     $isOwner = HelloWorldHelper::isOwner();
 
-    // Scope parent_id from the user session scope
-    $parent_id = JApplication::getUserState('parent_id');
-
     // If $data->parent_id is set and it's not null or 1 (e.g. a unit)
-    if (isset($data->parent_id) && $data->parent_id != 1 && $data->parent_id != '') {
-     
+    if (isset($data->parent_id) && $data->parent_id != 1 && !empty($data->parent_id)) {
+
       // Use getItem to get the data for the parent property if supplied
       $parent_prop = $this->getItem($data->parent_id);
 
@@ -145,7 +164,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
         // So we loop over the fields disabling them and making them non-required in the form
         // This ensure that they will not be editable by the user in this instance. 
         $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'readonly', 'true');
-
       }
       
       // Lastly add the city field via an XML string
@@ -153,63 +171,101 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
       $XmlStr .= '<form>';
       $XmlStr .= $this->getNearestCityXml($form, $data, true);
 
- 
       // Check is this is owner, if not owner then add the userproperties field.
       if (!$isOwner) {
         $XmlStr .= $this->getUserPropertiesXml($form, $data);
       }
       
       $XmlStr .= '</form>';
-      $form->load($XmlStr);    
-    } else if (!isset($data->parent_id) && $parent_id !='') { 
-      // Seems to apply when the user is creating a new property as parent_id 
-      // is set in the session scope in the sub controller
-      // Otherwise if parent id not set in $data but has been taken from session scope
-      // e.g. new unit being added      
+      $form->load($XmlStr);         
+    } else if (!empty($data) && $data->parent_id == 1) {
+
+      // We are editing an existing property here which isn't a child
+      $latitude = (!empty($data->latitude) ? $data->latitude : 0);
+      $longitude = (!empty($data->longitude) ? $data->longitude : 0);
+      
+      $form->setFieldAttribute('city', 'latitude', $latitude );
+      $form->setFieldAttribute('city', 'longitude', $longitude);
+
+      // Check the parent editing ability of this user
+      if ($canDo->get('helloworld.edit.property.parent')) {
+        $XmlStr = $this->getUserPropertiesXml($form, $data);
+        $form->load('<form>' . $XmlStr . '</form>');
+      }
+      
+      // Check the change parent ability of this user
+      if (!$canDo->get('helloworld.edit.property.owner')) {
+  			$form->removeField('created_by');
+      }
+      
+    } else if (!isset($data->parent_id) && !isset($data->created_by)) { 
+
+      // Only applies when a user is creating a new property as parent_id is set in the session scope in the sub controller
+      // Otherwise if parent id not set in $data but has been taken from session scope e.g. new unit being added      
       // Use getItem to get the data for the parent property if supplied
-      $parent_prop = $this->getItem($parent_id);
+     
+      // Scope parent_id from the user session scope
+      $parent_id = JApplication::getUserState('parent_id','');
 
-      // Set the location details accordingly
-      $data->latitude = $parent_prop->latitude;
-      $data->longitude = $parent_prop->longitude;
-      $data->city = $parent_prop->city;
-      $data->department = $parent_prop->department;
-      $data->distance_to_coast = $parent_prop->distance_to_coast;
-
-
-      if ($parent_id != 1) {
+      // If parent id = 1 this is a new parent property
+      if ($parent_id !=1 && $parent_id !='') { 
+        
+        // Get the parent details for the property id supplied
+        $parent_prop = $this->getItem($parent_id);
+      
+        $form->setFieldAttribute('city', 'latitude', $parent_prop->latitude );
+        $form->setFieldAttribute('city', 'longitude', $parent_prop->longitude);
+        
+        // Set the location details accordingly
+        $data->latitude = $parent_prop->latitude;
+        $data->longitude = $parent_prop->longitude;
+        $data->city = $parent_prop->city;
+        $data->location_type = $parent_prop->location_type;
+        $data->department = $parent_prop->department;
+        $data->distance_to_coast = $parent_prop->distance_to_coast;
+        $data->parent_id = $parent_id;
+        
         foreach ($form->getFieldSet('Location') as $field) {
           // So we loop over the fields disabling them and making them non-required in the form
           // This ensure that they will not be editable by the user in this instance. 
           $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'readonly', 'true');
           $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'class', 'readonly');
-          $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'required', 'false');
+          $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'required', 'false'); 
         }
+        
+      }
+      
+      // Check the parent editing ability of this user
+      if ($canDo->get('helloworld.edit.property.parent')) {
+        
+        // Scope created by from the user session scope
+        $user = JApplication::getUserState('created_by', '');
+        
+        $XmlStr = $this->getUserPropertiesXml($form, $data, $user);
+        
+        $form->load('<form>' . $XmlStr . '</form>');
+        $data->created_by = $user;
+
       }
 
-      // Set the parent_id value in $data
-      $data->set('parent_id', $parent_id);
-
-      // Lastly add the city field via an XML string
-      $XmlStr = '';
-      $XmlStr .= '<form>';
-      $XmlStr .= $this->getNearestCityXml($form, $data, true);
-      $XmlStr .= '</form>';
-      $form->load($XmlStr);
+      // Check the change parent ability of this user
+      if (!$canDo->get('helloworld.edit.property.owner')) {
+        $form->setFieldAttribute('created_by', 'type', 'hidden');
+      }
       
-    } else if (!empty($data)) {  
+ 
+        
       
-      // Else, if owner AND $data is not empty (e.g. an existing property)
-      // Lastly add the city field via an XML string
-      $XmlStr = '';
-      $XmlStr .= '<form>';
-      $XmlStr .= $this->getNearestCityXml($form, $data, false);
-      $XmlStr .= '</form>';
-      $form->load($XmlStr);
-    } 
-
-
-
+      
+    } else {
+      // Check the parent editing ability of this user
+      if ($canDo->get('helloworld.edit.property.parent')) {
+        $XmlStr = $this->getUserPropertiesXml($form, $data);
+        $form->load('<form>' . $XmlStr . '</form>');
+      }      
+    }
+    
+    
     // Reset the user state as otherwise parent_id in session scope will interfere
     // with normal editing etc
     JApplication::setUserState('parent_id', '');
@@ -226,7 +282,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function getUserPropertiesXml($form, $data) {
+  protected function getUserPropertiesXml($form, $data, $user = '' ) {
     $XmlStr = '';
     
     $XmlStr .= '<field
@@ -234,9 +290,10 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"
-			class="validate-parent input-small"
+			class="validate-parent span12"
       labelclass="control-label"
-			required="true"></field>';  
+			required="true"
+      user="' . $user .'"></field>';  
     
     return $XmlStr;
   }
@@ -267,8 +324,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
       required="true"
       readonly="' . $readonly . '"
-      filter="JComponentHelper::filterText"
-      maxlength="75"
+      filter="int"
       validate="nearesttown"
       latitude="' . $latitude . '"
       longitude="' . $longitude . '">
@@ -297,13 +353,32 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
 
     if ($task[1] == 'orderdown' || $task[1] == 'orderup') {
       return $user->authorise('helloworld.edit.reorder', $this->option);
-    } else if ($task[1] == 'publish' || $task[1] == 'unpublish') {
-      return $user->authorise('helloworld.edit.publish', $this->option);
-    } else if ($task[1] == 'trash') {
-      return $user->authorise('helloworld.edit.trash', $this->option);
+    } else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash') {
+      return $user->authorise('core.edit.state', $this->option);
     } else {
       return false;
     }
   }
+  
+	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @param	string	An optional ordering field.
+	 * @param	string	An optional direction (asc|desc).
+	 *
+	 * @return	void
+	 * @since	1.6
+	 */
+	protected function populateState($ordering = null, $direction = null)
+	{
 
+		$canDo = HelloWorldHelper::getActions();
+		$this->setState('actions.permissions', $canDo);
+		
+		// List state information.
+		parent::populateState();
+	}
+  
 }
