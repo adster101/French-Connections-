@@ -33,6 +33,12 @@ class FcSearchModelSearch extends JModelList {
    * @since  2.5
    */
   protected $location;
+  
+  /*
+   * The 'level' of the search. 1-3 is a wider area search, 4 is a town/city search
+   * 
+   */
+  protected $level;
 
   /**
    * Method to get the results of the query.
@@ -66,15 +72,11 @@ class FcSearchModelSearch extends JModelList {
     $db->setQuery($query);
 
     try {
-
       $row = $db->loadRow();
     } catch (Exception $e) {
-
-      // Log any exceptions
-      print_r($e);
-      die;
+      // Log any exception
     }
-
+    
     // No results found, return an empty array
     if (empty($row)) {
       return array();
@@ -100,7 +102,7 @@ class FcSearchModelSearch extends JModelList {
               h.thumbnail,
               h.occupancy,
               h.swimming,
-              c.path,
+              g.path,
               (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
               c.title as location_title,
               b.title as property_type,
@@ -142,6 +144,7 @@ class FcSearchModelSearch extends JModelList {
         $query->join('left','#__attributes d ON d.id = h.accommodation_type');
         $query->join('left','#__attributes e ON e.id = h.tariff_based_on');
         $query->join('left','#__attributes f ON f.id = h.base_currency');
+        $query->join('left','#__classifications g ON g.id = h.city');
 
       if ($this->getState('list.start_date')) {
         $query->join('left', '#__availability a on h.id = a.id');
@@ -178,7 +181,7 @@ class FcSearchModelSearch extends JModelList {
     // Process results into 
     // Push the results into cache.
     $this->store($store, $rows);
-
+    
     // Return the results.
     return $this->retrieve($store);
   }
@@ -434,9 +437,9 @@ class FcSearchModelSearch extends JModelList {
       // Return a copy of the query object.
       return clone($this->retrieve($store, true));
     } catch (Exception $e) {
+      
       // Oops, exceptional
-      print_r($e);
-      die;
+      
     }
   }
 

@@ -9,7 +9,10 @@
       desc="COM_HELLOWORL_HELLOWORLD_NEW_PROPERTY_CREATED_BY_DESC"
       class="input-small validate"
       labelclass="control-label" 
-      filter="int" />
+      filter="int" 
+      readonly="false"
+      onchange="updatepropertylist()"
+      />
       <field
 			name="parent_id"
 			type="UserProperties"

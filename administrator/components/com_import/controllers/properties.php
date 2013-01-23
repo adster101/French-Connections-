@@ -76,6 +76,29 @@ class ImportControllerProperties extends JControllerForm {
         $property->parent_id = 1;        
       }
 
+      // Get the nearest city/town based on the lat and long
+      		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+    $query->select('id, title, level');
+    $query->select(
+      '( 
+        3959 * acos( cos( radians(' . $line[38] . ') ) 
+        * cos( radians( latitude ) ) 
+        * cos( radians( longitude ) - 
+        radians('.$line[37].') ) + 
+        sin( radians(' . $line[38] . ') ) 
+        * sin( radians( latitude ) ) ) ) 
+AS distance            
+            ');
+    $query->from('#__classifications');
+    $query->where('level = 4');
+
+    $query->having('distance < 50');
+    $query->order('distance');
+    $db->setQuery($query,0,1);
+    $items = $db->loadRow();
+      
       // May need revising 
       $property->title = $line[2];
       $property->area = $line[3];
@@ -121,6 +144,7 @@ class ImportControllerProperties extends JControllerForm {
       $property->published = $line[46];
       $property->video = $line[47];
       $property->availability_last_updated_on = $line[48];
+      $property->city = $items[0];
       
 
       if(!$property->store()) {

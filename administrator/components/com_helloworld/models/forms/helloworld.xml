@@ -52,7 +52,7 @@
       filter="integer"
       required="true"
       id="1"
-      default="1"
+      default=""
       placeholder="true"      
     />
   </fieldset>
@@ -82,6 +82,11 @@
       placeholder="true"      
       filter="int">
     </field>    
+    <field 
+      name="map"
+      id="map"
+      type="map"
+      />
     <field
       name="latitude"
       type="hidden"
@@ -416,10 +421,13 @@
       labelclass=""
       readonly="true"/>
     <field
+      label="COM_CATEGORIES_FIELD_PARENT_LABEL"
       name="parent_id"
-      type="hidden"
+      type="UserProperties"
       default="1"
-      labelclass=""/>     
+      readonly="true"
+      labelclass=""
+      user=""/>     
     <field 
       name="expiry_date"
       type="text"
@@ -435,8 +443,9 @@
       labelclass="control-label"
       name="created_by"
       type="user"
-      label="JGLOBAL_FIELD_CREATED_BY_LABEL"
-      desc="JGLOBAL_FIELD_CREATED_BY_DESC"
+      readonly="true"
+      label="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_LABEL"
+      desc="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_DESC"
       class="input-small"
       />
     <field

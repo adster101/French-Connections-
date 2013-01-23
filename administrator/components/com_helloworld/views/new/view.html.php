@@ -11,8 +11,6 @@ jimport('joomla.application.component.view');
  */
 class HelloWorldViewNew extends JViewLegacy {
 
-  protected $state;
-
   /**
    * HelloWorld raw view display method
    * This is used to check how many properties the user has
@@ -74,6 +72,9 @@ class HelloWorldViewNew extends JViewLegacy {
     // Set the document
     $this->setDocument();
     
+    // Set the document
+    $this->addToolBar();
+    
     // Display the template
     parent::display($tpl);
   }
@@ -87,9 +88,23 @@ class HelloWorldViewNew extends JViewLegacy {
 		$document = JFactory::getDocument();
 		$document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", false, true);
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js",'text/javascript',true, false);
+
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
 
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 
 	}
+  /**
+   * Setting the toolbar
+   */
+  protected function addToolBar() {
+        
+  
+    JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CLOSE');
+    
+    JToolBarHelper::help('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
+
+  }
+  
 }

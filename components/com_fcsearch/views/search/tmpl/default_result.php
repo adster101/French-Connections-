@@ -49,8 +49,8 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
 <p>
   <?php foreach ($pathway as $path) : ?>
 
-    <a href="<?php echo JRoute::_('/index.php?option=com_fcsearch&view=search&q=' . JApplication::stringURLSafe($path)) ?>">
-      <?php echo $path ?>
+    &raquo;<a href="<?php echo JRoute::_('/index.php?option=com_fcsearch&view=search&q=' . JApplication::stringURLSafe($path)) ?>">
+      <?php echo JString::ucwords(str_replace('-',' ',$path)) ?>
     </a>
 
   <?php endforeach; ?>

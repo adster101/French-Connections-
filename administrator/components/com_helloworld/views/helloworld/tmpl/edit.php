@@ -8,7 +8,6 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 //JHtml::_('formbehavior.chosen', 'select');
 
-$params = $this->form->getFieldsets('params');
 
 // Get the user ID
 $user = JFactory::getUser();
@@ -74,11 +73,8 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         <hr />
         <div class="row-fluid">
           <div class="span8">
-            <?php
-            // Show the choose location button if this is a parent property or a new property
-            if ($this->item->parent_id != 1) :
-              ?>
-              <div id="map"></div>
+            <?php if ($this->item->parent_id == 1 || $this->item->parent_id == '') : ?>
+              <?php echo $this->form->getInput('map'); ?>           
             <?php else: ?>
               <p>You cannot edit the location of this property.</p>
               <p>Please navigate to PRN 123456 to update the location of this and all units.</p>
@@ -87,7 +83,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 
 
           <div class="span4 form-inline">              
-            <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS') ?></p>
             <div class="control-group">
               <?php echo $this->form->getLabel('city'); ?>
               <div class="controls">

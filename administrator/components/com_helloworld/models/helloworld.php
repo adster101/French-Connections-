@@ -110,6 +110,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
     if (empty($data)) {
       $data = $this->getItem();
     }
+    
+    
     return $data;
   }
 
@@ -167,17 +169,14 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
       }
       
       // Lastly add the city field via an XML string
-      $XmlStr = '';
-      $XmlStr .= '<form>';
-      $XmlStr .= $this->getNearestCityXml($form, $data, true);
+     
+      $form->setFieldAttribute('city', 'latitude', $data->latitude );
+      $form->setFieldAttribute('city', 'longitude', $data->longitude);
 
-      // Check is this is owner, if not owner then add the userproperties field.
-      if (!$isOwner) {
-        $XmlStr .= $this->getUserPropertiesXml($form, $data);
-      }
+      $form->removeField('map');
+
       
-      $XmlStr .= '</form>';
-      $form->load($XmlStr);         
+      
     } else if (!empty($data) && $data->parent_id == 1) {
 
       // We are editing an existing property here which isn't a child
@@ -207,6 +206,8 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
       // Scope parent_id from the user session scope
       $parent_id = JApplication::getUserState('parent_id','');
 
+      $data->parent_id = $parent_id;
+
       // If parent id = 1 this is a new parent property
       if ($parent_id !=1 && $parent_id !='') { 
         
@@ -223,7 +224,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
         $data->location_type = $parent_prop->location_type;
         $data->department = $parent_prop->department;
         $data->distance_to_coast = $parent_prop->distance_to_coast;
-        $data->parent_id = $parent_id;
         
         foreach ($form->getFieldSet('Location') as $field) {
           // So we loop over the fields disabling them and making them non-required in the form
@@ -233,7 +233,10 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
           $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'required', 'false'); 
         }
         
-      }
+        $form->removeField('map');
+
+        
+      } 
       
       // Check the parent editing ability of this user
       if ($canDo->get('helloworld.edit.property.parent')) {
@@ -252,11 +255,7 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
       if (!$canDo->get('helloworld.edit.property.owner')) {
         $form->setFieldAttribute('created_by', 'type', 'hidden');
       }
-      
- 
-        
-      
-      
+
     } else {
       // Check the parent editing ability of this user
       if ($canDo->get('helloworld.edit.property.parent')) {
@@ -293,8 +292,9 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
 			class="validate-parent span12"
       labelclass="control-label"
 			required="true"
+      readonly="true"
       user="' . $user .'"></field>';  
-    
+
     return $XmlStr;
   }
   

@@ -80,33 +80,6 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
     return false;
   }
 
-  public function woot() {
-
-    $parent_id = 1;
-
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken('GET') or die('Invalid Token');
-
-    $data = JRequest::getVar('jform', '', 'POST', 'array');
-
-
-    if (array_key_exists('parent_id', $data)) {
-      $parent_id = $data['parent_id'];
-      JApplication::setUserState('parent_id', $data['parent_id']);
-    }
-
-
-    $app = JFactory::getApplication();
-    if ($parent_id === 1) {
-
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_TO_BE_ADDED'), 'warning');
-    } else {
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'warning');
-    }
-
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit', false));
-  }
-
   /**
    * Method to add a new record. This is picked up before redirecting to the new property view
    *
@@ -153,6 +126,8 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
           // Store the created_by chosen in the session, we check this in the preprocess form method of the helloworld model
           JApplication::setUserState('created_by', $data['created_by']);
 
+          JApplication::setUserState('parent_id', $data['parent_id']);
+
           $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit', false));
 
           return false;
@@ -179,6 +154,11 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
           JApplication::setUserState('parent_id', $data['parent_id']);
 
           $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=helloworld.edit', false));
+          if ($data['parent_id'] == 1) {
+            $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_TO_BE_ADDED'), 'notice');
+          } else {
+            $app->enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_TO_BE_ADDED'), 'notice');
+          }
 
           return false;
         }
@@ -198,5 +178,6 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
 
     return true;
   }
+    
 
 }
