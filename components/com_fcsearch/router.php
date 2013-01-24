@@ -21,82 +21,39 @@ defined('_JEXEC') or die;
 function FcSearchBuildRoute(&$query)
 {
 
-  static $menu;
 	$segments = array();
-   
-  
-	// Load the menu if necessary.
-	if (!$menu)
-	{
-		$menu = JFactory::getApplication('site')->getMenu();
+
+  // get a menu item based on Itemid or currently active
+	$app	= JFactory::getApplication();
+	$menu	= $app->getMenu();
+
+	if (empty($query['Itemid'])) {
+		$menuItem = $menu->getActive();
+	} else {
+		$menuItem = $menu->getItem($query['Itemid']);
 	}
   
+  $segments[] = $menuItem->alias;
+
+  if (!empty($query['q'])) {
+    $segments[] = $query['q'];
+    unset($query['q']);
+  }
   
   
   
-	
-  /*
-	 * First, handle menu item routes first. When the menu system builds a
-	 * route, it only provides the option and the menu item id. We don't have
-	 * to do anything to these routes.
-	 */
-	if (count($query) === 2 && isset($query['Itemid']) && isset($query['option']))
-	{
-    
-		return $segments;
-	}
+  if (!empty($query['bedrooms'])) {
+    $segments[] = 'bedrooms_'.$query['bedrooms'];
+    unset($query['bedrooms']);
+  }
+  
+  if (!empty($query['occupancy'])) {
+    $segments[] = 'occupancy_'.$query['occupancy'];
+    unset($query['occupancy']);
+  }
 
-	/*
-	 * Next, handle a route with a supplied menu item id. All system generated
-	 * routes should fall into this group. We can assume that the menu item id
-	 * is the best possible match for the query but we need to go through and
-	 * see which variables we can eliminate from the route query string because
-	 * they are present in the menu item route already.
-	 */
-	if (!empty($query['Itemid']))
-	{
-    
-		// Get the menu item.
-		$item = $menu->getItem($query['Itemid']);
-
-    $segments[0] = '';
-    $segments[1] = '';
-    $segments[2] = '';
-    $segments[3] = '';
-
-		// Check if the search query string matches.
-		if ($item && isset($query['q']))
-		{
-      $segments[0]=$query['q'];
-			unset($query['q']);
-		}
-
-    
-    
-    // Check if the search query string matches.
-		if ($item && isset($query['bedrooms']))
-		{
-      $segments[3]=$query['bedrooms'];
-			unset($query['bedrooms']);
-		}
-        
-		return $segments;
-	}
-
-	/*
-	 * Lastly, handle a route with no menu item id. Fortunately, we only need
-	 * to deal with the view as the other route variables are supposed to stay
-	 * in the query string.
-	 */
-	if (isset($query['view']))
-	{
-		// Add the view to the segments.
-		//$segments[] = $query['q'];
-		//unset($query['view']);
-	}	
   
   
-
   return $segments;
 }
 
@@ -111,19 +68,11 @@ function FcSearchBuildRoute(&$query)
  */
 function FcSearchParseRoute($segments)
 {
-  
   $vars = array();
 
-  $segments[0] = str_replace(':','-', $segments[0]);
-  
-  
-  $vars['q'] = $segments[0];
-  $vars['bedrooms'] = $segments[1];
-  
-	
-  
+  $vars['q'] = str_replace(':','-',$segments[0]);
   
 
-  
+
 	return $vars;
 }

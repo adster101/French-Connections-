@@ -661,7 +661,6 @@ class JPagination
 				$params .= '&' . $key . '=' . $value;
 			}
 		}
-
 		$data->all = new JPaginationObject(JText::_('JLIB_HTML_VIEW_ALL'), $this->prefix);
 		if (!$this->viewall)
 		{
@@ -679,7 +678,6 @@ class JPagination
 
 			// Set the empty for removal from route
 			// @todo remove code: $page = $page == 0 ? '' : $page;
-
 			$data->start->base = '0';
 			$data->start->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=0');
 			$data->previous->base = $page;

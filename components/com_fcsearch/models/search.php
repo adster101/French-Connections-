@@ -8,7 +8,6 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 defined('_JEXEC') or die;
-
 /**
  * Search model class to perform accommodation searches through the FC properties.
  *
@@ -158,7 +157,6 @@ class FcSearchModelSearch extends JModelList {
       //$query->join('left', '#__availability b on h.id = b.id');
       //$query->where('b.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
     //}
-
 
     $query->where('c.id = ' . $this->location);
     // $query->order('h.lft', $this->getState('list.direction', 'asc'));

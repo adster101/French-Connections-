@@ -22,6 +22,8 @@ Options +FollowSymLinks
 
 RewriteEngine On
 
+
+
 ## Begin - Rewrite rules to block out some common exploits.
 # If you experience problems on your site block out the operations listed below
 # This attempts to block the most common type of exploit `attempts` to Joomla!
@@ -53,7 +55,7 @@ RewriteRule .* index.php [F]
 # Update Your Joomla! Directory (just / for root).
 ##
 
-# RewriteBase /
+#RewriteBase /
 
 ## Begin - Joomla! core SEF Section.
 #
@@ -72,5 +74,6 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 # internally rewrite the request to the index.php script
 RewriteRule .* index.php [L]
+
 #
 ## End - Joomla! core SEF Section.

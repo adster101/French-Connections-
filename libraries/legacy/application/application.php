@@ -242,7 +242,7 @@ class JApplication extends JApplicationBase
 		// Get the full request URI.
 		$uri = clone JURI::getInstance();
 
-		$router = $this->getRouter();
+    $router = $this->getRouter();
 		$result = $router->parse($uri);
 
 		foreach ($result as $key => $value)

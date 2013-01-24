@@ -34,7 +34,6 @@ jQuery(document).ready(function(){
 
     //jQuery('form#property-search').attr('action', path+query);
 
-    console.log(query);
     jQuery('#s_kwds').attr('value',query);
 
 
