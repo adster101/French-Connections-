@@ -8,6 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 defined('_JEXEC') or die;
+
 /**
  * Search model class to perform accommodation searches through the FC properties.
  *
@@ -32,12 +33,22 @@ class FcSearchModelSearch extends JModelList {
    * @since  2.5
    */
   protected $location;
-  
+
   /*
-   * The 'level' of the search. 1-3 is a wider area search, 4 is a town/city search
+   * The 'level' of the search. 1-3 is a wider area search, 4 is a town/city search.
    * 
    */
-  protected $level;
+  public $level;
+  
+  /*
+   * Latirude, if a town/city search is being applied.
+   */
+  public $latitude;
+  
+  /*
+   * Longitude, if a town/city search is being applied.
+   */
+  public $longitude;
 
   /**
    * Method to get the results of the query.
@@ -48,6 +59,7 @@ class FcSearchModelSearch extends JModelList {
    * @throws  Exception on database error.
    */
   public function getResults() {
+
     // Get the store id.
     $store = $this->getStoreId('getResults');
 
@@ -63,7 +75,7 @@ class FcSearchModelSearch extends JModelList {
     // Reuse the classification table instance
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level'));
+    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude');
     $query->from($db->quoteName('#__classifications'));
     $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));
 
@@ -75,28 +87,34 @@ class FcSearchModelSearch extends JModelList {
     } catch (Exception $e) {
       // Log any exception
     }
-    
+
     // No results found, return an empty array
     if (empty($row)) {
       return array();
     } else {
       $this->location = $row[0];
       $this->level = $row[1];
+      $this->latitude = $row[2];
+      $this->longitude = $row[3];
     }
 
     // Add check here on level, perform distance search if a town/city.
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
     $query->clear();
+
+    $ordering = $this->getState('list.direction', '');
+
     $query = $db->getQuery(true);
     $query->select('
-              distinct h.id,
+              h.id,
               h.parent_id,
               h.level,
               h.title as property_title,
               h.area,
               h.region,
               h.department,
+              h.city,
               LEFT(h.description, 250) as description,
               h.thumbnail,
               h.occupancy,
@@ -126,8 +144,23 @@ class FcSearchModelSearch extends JModelList {
                 group by h.id
               ) as review_count
     ');
-    
-    $query->from('#__classifications c');
+
+    if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+      // Add the distance based bit in as this is a town/city search
+      $query->select('
+        ( 3959 * acos(cos(radians(' . $this->longitude . ')) * 
+          cos(radians(h.latitude)) * 
+          cos(radians(h.longitude) - radians(' . $this->latitude. '))
+          + sin(radians('.$this->longitude.')) 
+          * sin(radians(h.latitude)))) AS distance
+        ');
+      
+      $query->join('left', '#__classifications c on c.id = h.city');
+
+      $query->from('#__helloworld h');
+    } else {
+      $query->from('#__classifications c');
+    }
     
     if ($this->level == 1) { // Area level
       $query->join('left', '#__helloworld h on c.id = h.area');
@@ -135,33 +168,26 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__helloworld h on c.id = h.region');
     } else if ($this->level == 3) { // Department level 
       $query->join('left', '#__helloworld h on c.id = h.department');
-    } else { // Town/city level
-      // errr, like TODO!
+    } 
+
+    $query->join('left', '#__attributes b ON b.id = h.property_type');
+    $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
+    $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
+    $query->join('left', '#__attributes f ON f.id = h.base_currency');
+    $query->join('left', '#__classifications g ON g.id = h.city');
+
+    if ($this->getState('list.start_date')) {
+      $query->join('left', '#__availability a on h.id = a.id');
+      $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
+      $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+
+      $query->where('a.availability = 1');
     }
 
-        $query->join('left','#__attributes b ON b.id = h.property_type');
-        $query->join('left','#__attributes d ON d.id = h.accommodation_type');
-        $query->join('left','#__attributes e ON e.id = h.tariff_based_on');
-        $query->join('left','#__attributes f ON f.id = h.base_currency');
-        $query->join('left','#__classifications g ON g.id = h.city');
-
-      if ($this->getState('list.start_date')) {
-        $query->join('left', '#__availability a on h.id = a.id');
-        $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
-        $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
-
-        $query->where('a.availability = 1');
-      }
-
-    //if ($this->getState('list.end_date')) {
-      //$query->join('left', '#__availability b on h.id = b.id');
-      //$query->where('b.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
-    //}
-
-    $query->where('c.id = ' . $this->location);
-    // $query->order('h.lft', $this->getState('list.direction', 'asc'));
-
-
+    if ($this->level !=4) {
+      $query->where('c.id = ' . $this->location);
+    }
+    
     if ($this->getState('list.bedrooms')) {
       $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
     }
@@ -172,6 +198,13 @@ class FcSearchModelSearch extends JModelList {
 
     $offset = $this->getState('list.start', 0); // The first result to show, i.e. the page number
     $count = $this->getState('list.limit', 10); // The number of results to show
+    
+    if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+      $query->order('distance');
+      $query->having('distance < 25');
+    }
+    
+    $query->where('h.id !=1');
     // Load the results from the database.
     $db->setQuery($query, $offset, $count);
     $rows = $db->loadObjectList();
@@ -179,11 +212,203 @@ class FcSearchModelSearch extends JModelList {
     // Process results into 
     // Push the results into cache.
     $this->store($store, $rows);
-    
+
     // Return the results.
+    return $this->retrieve($store);
+    
+  }
+
+
+  /**
+   * Method to build a database query to load the list data.
+   *
+   * @return  JDatabaseQuery  A database query.
+   *
+   * @since   2.5
+   */
+  protected function getListQuery() {
+
+    // Get the store id.
+    $store = $this->getStoreId('getListQuery');
+
+    // Use the cached data if possible.
+    if ($this->retrieve($store, true)) {
+      return clone($this->retrieve($store, false));
+    }
+
+    try {
+
+      $ordering = $this->getState('list.direction', '');
+
+      // Create a new query object.
+      $db = $this->getDbo();
+      $query = $db->getQuery(true);
+
+      // Proceed and get all the properties in this location
+      // TO DO - ensure this works in French as well
+      $query = $db->getQuery(true);
+      $query->select('
+              h.id,
+              h.parent_id,
+              h.level,
+              h.title,
+              h.area,
+              h.region,
+              h.department,
+              LEFT(h.description, 75),
+              h.thumbnail,
+              h.occupancy,
+              h.swimming,
+              c.path,
+              c.title
+      ');
+      
+   if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+      // Add the distance based bit in as this is a town/city search
+      $query->select('
+        ( 3959 * acos(cos(radians(' . $this->longitude . ')) * 
+          cos(radians(h.latitude)) * 
+          cos(radians(h.longitude) - radians(' . $this->latitude. '))
+          + sin(radians('.$this->longitude.')) 
+          * sin(radians(h.latitude)))) AS distance
+        ');
+      
+      $query->join('left', '#__classifications c on c.id = h.city');
+
+      $query->from('#__helloworld h');
+    } else {
+      $query->from('#__classifications c');
+    }      
+    
+      if ($this->level == 1) { // Area level
+        $query->join('left', '#__helloworld h on c.id = h.area');
+      } else if ($this->level == 2) { // Region level
+        $query->join('left', '#__helloworld h on c.id = h.region');
+      } else if ($this->level == 3) { // Department level 
+        $query->join('left', '#__helloworld h on c.id = h.department');
+      } 
+      
+
+      if ($this->getState('list.start_date')) {
+        $query->join('left', '#__availability a on h.id = a.id');
+        $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
+        $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+
+        $query->where('a.availability = 1');
+      }
+      
+    if ($this->level !=4) {
+      $query->where('c.id = ' . $this->location);
+    }
+     
+
+      if ($this->getState('list.bedrooms')) {
+        $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
+      }
+
+      if ($this->getState('list.occupancy')) {
+        $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
+      }
+    
+    if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+      $query->order('distance');
+      $query->having('distance < 25');
+    }
+      // Push the data into cache.
+      $this->store($store, $query, true);
+
+      // Return a copy of the query object.
+      return clone($this->retrieve($store, true));
+    } catch (Exception $e) {
+
+      // Oops, exceptional
+    }
+  }
+
+  /**
+   * Method to get the total number of results.
+   *
+   * @return  integer  The total number of results.
+   *
+   * @since   2.5
+   * @throws  Exception on database error.
+   */
+  public function getTotal() {
+
+    // Get the store id.
+    $store = $this->getStoreId('getTotal');
+
+    // Use the cached data if possible.
+    if ($this->retrieve($store)) {
+      return $this->retrieve($store);
+    }
+
+    // Get the results total.
+        
+    $total = $this->getResultsTotal();
+
+    // Push the total into cache.
+    $this->store($store, $total);
+
+    // Return the total.
     return $this->retrieve($store);
   }
 
+  /**
+   * Method to get the total number of results for the search query.
+   *
+   * @return  integer  The results total.
+   *
+   * @since   2.5
+   * @throws  Exception on database error.
+   */
+  protected function getResultsTotal() {
+    // Get the store id.
+    $store = $this->getStoreId('getResultsTotal', false);
+
+    // Get the maximum number of results.
+    $limit = (int) $this->getState('match.limit');
+    // Use the cached data if possible.
+    if ($this->retrieve($store)) {
+      return $this->retrieve($store);
+    }
+
+    $base = $this->getListQuery();
+
+    $sql = clone($base);
+
+
+    if ($this->level == 4) {
+      
+    $this->_db->setQuery($sql);
+    
+    $results = $this->_db->execute();
+    
+    $total = $this->_db->getNumRows($results);
+    
+    } else {
+      
+      
+    $sql->clear('select');
+    $sql->select('COUNT(DISTINCT h.id)');  
+    
+    // Get the total from the database.
+    $this->_db->setQuery($sql);
+    $total = $this->_db->loadResult();   
+    }
+
+      
+
+
+
+    
+    
+    // Push the total into cache.
+    $this->store($store, min($total, $limit));
+
+    // Return the total.
+    return $this->retrieve($store);
+  }
   /**
    * Method to store data in cache.
    *
@@ -259,7 +484,6 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
     $options = array();
-
 
     // Get each of the possible URL params
     // Get the query string.
@@ -355,157 +579,5 @@ class FcSearchModelSearch extends JModelList {
     return parent::getStoreId($id);
   }
 
-  /**
-   * Method to build a database query to load the list data.
-   *
-   * @return  JDatabaseQuery  A database query.
-   *
-   * @since   2.5
-   */
-  protected function getListQuery() {
-
-    // Get the store id.
-    $store = $this->getStoreId('getListQuery');
-
-    // Use the cached data if possible.
-    if ($this->retrieve($store, true)) {
-      return clone($this->retrieve($store, false));
-    }
-
-    try {
-      // Create a new query object.
-      $db = $this->getDbo();
-      $query = $db->getQuery(true);
-
-      // Proceed and get all the properties in this location
-      // TO DO - ensure this works in French as well
-      $query = $db->getQuery(true);
-      $query->select('
-              distinct h.id,
-              h.parent_id,
-              h.level,
-              h.title,
-              h.area,
-              h.region,
-              h.department,
-              LEFT(h.description, 75),
-              h.thumbnail,
-              h.occupancy,
-              h.swimming,
-              c.path,
-              c.title
-      ');
-      $query->from('#__classifications c');
-      if ($this->level == 1) { // Area level
-        $query->join('left', '#__helloworld h on c.id = h.area');
-      } else if ($this->level == 2) { // Region level
-        $query->join('left', '#__helloworld h on c.id = h.region');
-      } else if ($this->level == 3) { // Department level 
-        $query->join('left', '#__helloworld h on c.id = h.department');
-      } else { // Town/city level
-        // errr, like TODO!
-      }
-      $query->where('c.id = ' . $this->location);
-      $query->order('h.lft', $this->getState('list.direction', 'asc'));
-
-      if ($this->getState('list.start_date')) {
-        $query->join('left', '#__availability a on h.id = a.id');
-        $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
-        $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
-
-        $query->where('a.availability = 1');
-      }
-
-      //if ($this->getState('list.end_date')) {
-        //$query->join('left', '#__availability b on h.id = b.id');
-        //$query->where('b.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
-      //}
-      
-      if ($this->getState('list.bedrooms')) {
-        $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
-      }
-
-      if ($this->getState('list.occupancy')) {
-        $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
-      }
-
-      // Push the data into cache.
-      $this->store($store, $query, true);
-
-      // Return a copy of the query object.
-      return clone($this->retrieve($store, true));
-    } catch (Exception $e) {
-      
-      // Oops, exceptional
-      
-    }
-  }
-
-  /**
-   * Method to get the total number of results.
-   *
-   * @return  integer  The total number of results.
-   *
-   * @since   2.5
-   * @throws  Exception on database error.
-   */
-  public function getTotal() {
-
-    // Get the store id.
-    $store = $this->getStoreId('getTotal');
-
-    // Use the cached data if possible.
-    if ($this->retrieve($store)) {
-      return $this->retrieve($store);
-    }
-
-    // Get the results total.
-    $total = $this->getResultsTotal();
-
-    // Push the total into cache.
-    $this->store($store, $total);
-
-    // Return the total.
-    return $this->retrieve($store);
-  }
-
-  /**
-   * Method to get the total number of results for the search query.
-   *
-   * @return  integer  The results total.
-   *
-   * @since   2.5
-   * @throws  Exception on database error.
-   */
-  protected function getResultsTotal() {
-    // Get the store id.
-    $store = $this->getStoreId('getResultsTotal', false);
-
-    // Get the maximum number of results.
-    $limit = (int) $this->getState('match.limit');
-    // Use the cached data if possible.
-    if ($this->retrieve($store)) {
-      return $this->retrieve($store);
-    }
-
-    $base = $this->getListQuery();
-
-    $sql = clone($base);
-
-    $sql->clear('select');
-
-    $sql->select('COUNT(DISTINCT h.id)');
-
-
-    // Get the total from the database.
-    $this->_db->setQuery($sql);
-    $total = $this->_db->loadResult();
-
-    // Push the total into cache.
-    $this->store($store, min($total, $limit));
-
-    // Return the total.
-    return $this->retrieve($store);
-  }
-
+  
 }

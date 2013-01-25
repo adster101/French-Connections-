@@ -14,9 +14,7 @@ if (!empty($this->query->highlight) && $this->params->get('highlight_terms', 1))
 }
 
 // Get the application object.
-$app = JFactory::getApplication();
-
-?>
+$app = JFactory::getApplication(); ?>
   <div class="row-fluid">
     <div class="span9">
       <ul class="search-results list-striped">
@@ -37,6 +35,5 @@ $app = JFactory::getApplication();
     <div class="pagination">
       <?php echo $this->pagination->getPagesLinks(); ?>
     </div>
-  
   </div>
 

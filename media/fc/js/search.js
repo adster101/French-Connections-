@@ -28,15 +28,21 @@ jQuery(document).ready(function(){
     // Form checks out, looks like the user chose something from the suggestions
     // Strip the string to make it like classifications table alias
     var query = stripVowelAccent(chosen);   
-    
-    //var path = '<?php echo JRoute::_(JURI::base() . 'search/') ?>';
-    
 
-    //jQuery('form#property-search').attr('action', path+query);
+    // The path of the search, e.g. /search or /fr/search
+    var path = jQuery('form#property-search').attr('action');  
 
+    // Set the value of s_kwds to the search string alias
     jQuery('#s_kwds').attr('value',query);
+    
+    // Get the number of bedrooms chosen in the search
+    bedrooms = jQuery('#search_bedrooms').attr('value');
+    
+    
+    // Amend the path that the form is submitted to
+    jQuery('form#property-search').attr('action', path+'/'+query+'/bedrooms_'+bedrooms);
 
-
+    // Submit the form
     jQuery('form#property-search').submit();
     
     event.preventDefault();  

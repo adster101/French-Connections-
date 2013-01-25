@@ -10,13 +10,15 @@ defined('_JEXEC') or die;
 
 $document = JFactory::getDocument();
 $app = JFactory::getApplication();
+$lang = $app->getMenu()->getActive()->language;
+
 
 $bedrooms = $app->getUserState('list.bedrooms');
 $occupancy = $app->getUserState('list.occupancy');
 $start_date = $app->getUserState('list.start_date');
 $end_date = $app->getUserState('list.end_date');
 ?>
-<form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165') ?>" method="GET" class="form-vertical">
+<form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang="'.$lang.'"&Itemid=165') ?>" method="POST" class="form-vertical">
   <div class="well clearfix">
     <h4 class="bottom"><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
 

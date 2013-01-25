@@ -34,11 +34,7 @@ defined('_JEXEC') or die;
 				<?php echo $field->input;?>
 			<?php else:?>
         <div class="control-group">
-					<?php 
-            print_r($this->form->getLabel('tos'));
-            echo $field->label; 
-          
-          ?>
+					<?php echo $field->label; ?>
           <div class="controls">
 					<?php if (!$field->required && $field->type!='Spacer'): ?>
 						<span class="optional"><?php echo JText::_('COM_USERS_OPTIONAL'); ?></span><br />
