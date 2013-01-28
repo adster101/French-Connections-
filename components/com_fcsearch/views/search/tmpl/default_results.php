@@ -15,25 +15,5 @@ if (!empty($this->query->highlight) && $this->params->get('highlight_terms', 1))
 
 // Get the application object.
 $app = JFactory::getApplication(); ?>
-  <div class="row-fluid">
-    <div class="span9">
-      <ul class="search-results list-striped">
-        <?php
-        for ($i = 0, $n = count($this->results); $i < $n; $i++){
-          $this->result = &$this->results[$i];
-          if (!empty($this->result->id)) {
-            echo $this->loadTemplate('result'); }
-         }?>
-      </ul>
-    </div>
-    <div class="span3">
-      <?php echo $this->loadTemplate('refine_main'); ?>     
-    </div>
-  </div>
 
-  <div class="search-pagination">
-    <div class="pagination">
-      <?php echo $this->pagination->getPagesLinks(); ?>
-    </div>
-  </div>
 

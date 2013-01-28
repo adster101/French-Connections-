@@ -26,6 +26,8 @@ function FcSearchBuildRoute(&$query)
   // get a menu item based on Itemid or currently active
 	$app	= JFactory::getApplication();
 	$menu	= $app->getMenu();
+  
+  $uri = JFactory::getUri(); 
 
 	if (empty($query['Itemid'])) {
 		$menuItem = $menu->getActive();
@@ -33,8 +35,7 @@ function FcSearchBuildRoute(&$query)
 		$menuItem = $menu->getItem($query['Itemid']);
 	}
   
-  $segments[] = $menuItem->alias;
-
+  //$segments[] = $menuItem->alias;
   if (!empty($query['q'])) {
     $segments[] = $query['q'];
     unset($query['q']);
@@ -49,7 +50,7 @@ function FcSearchBuildRoute(&$query)
     $segments[] = 'occupancy_'.$query['occupancy'];
     unset($query['occupancy']);
   }
-
+  
   return $segments;
 }
 
@@ -65,7 +66,6 @@ function FcSearchBuildRoute(&$query)
 function FcSearchParseRoute($segments)
 {
   
-  
   $vars = array();
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
@@ -73,12 +73,10 @@ function FcSearchParseRoute($segments)
   
   // Count segments
   $count = count( $segments );
-
-  $vars['view'] = $menu->getActive()->query['view'];
   
   $vars['q'] = str_replace(':','-',$segments[0]);
 
-  if (isset($segment[1])) {
+  if (isset($segments[1])) {
     $vars['bedrooms'] = $segments[1];
   }
 

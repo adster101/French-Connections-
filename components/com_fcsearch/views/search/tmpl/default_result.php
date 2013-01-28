@@ -48,16 +48,14 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
 </h3>
 <p>
   <?php foreach ($pathway as $path) : ?>
-
-    &raquo;<a href="<?php echo JRoute::_('index.php?option=com_fcsearch&Itemid=165&q=' . JApplication::stringURLSafe($path)) ?>">
-      <?php echo JString::ucwords(str_replace('-',' ',$path)) ?>
+  &raquo;
+  <a href="<?php echo JRoute::_('index.php?option=com_fcsearch&Itemid=165&q=' . JApplication::stringURLSafe($path)) ?>"><?php echo JString::ucwords(str_replace('-',' ',$path)) ?>
     </a>
 
   <?php endforeach; ?>
 
 <div class="row-fluid">
-  <div class="span4">
-    <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="thumbnail pull-left">
+  <div class="span4"><a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="thumbnail pull-left">
       <?php if ($this->result->parent_id == 1) : ?>
         <img src='/images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
       <?php else: ?>

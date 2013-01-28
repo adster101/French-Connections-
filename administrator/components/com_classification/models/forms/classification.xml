@@ -28,19 +28,6 @@
       filter="string"
     /> 
 
-    <field
-			name="language_string"
-			type="text"
-			default=""
-			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_LANGUAGE_STRING_LABEL"
-			description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_LANGUAGE_STRING_TITLE_DESC"
-      maxlength="100"
-      size="100"
-      required="false"
-      class="inputbox input-xxlarge"
-      filter="string"
-    /> 
-
 		<field
 			name="parent_id"
 			type="ClassificationParent"
@@ -53,7 +40,36 @@
       <option
 				value="1">COM_CLASSIFICATION_ITEM_ROOT</option>
 		</field>
-
+    
+    <field
+      name="latitude"
+      type="text"
+      extension="com_helloworld"
+      class="validate-latitude "
+      default=""
+      label="COM_CLASSIFICATION_FIELD_LATITUDE_LABEL"
+      description="COM_CLASSIFICATION_FIELD_LATITUDE_DESC"
+      required="true"
+      maxlength="15"
+      filter="string"
+      validate="latlong"
+      labelclass="control-label">
+    </field>
+    
+    <field
+      name="longitude"
+      type="text"
+      extension="com_helloworld"
+      class="inputbox validate-longitude"
+      default=""
+      label="COM_CLASSIFICATION_FIELD_LONGITUDE_LABEL"
+      description="COM_CLASSIFICATION_FIELD_LONGITUDE_DESC"
+      required="true"
+      filter="string"
+      labelclass="control-label"
+      maxlength="15"
+      validate="latlong">
+    </field>
     <field
       name="published"
       type="list"
