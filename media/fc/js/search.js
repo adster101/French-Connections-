@@ -1,6 +1,9 @@
 
 jQuery(document).ready(function(){
 
+ jQuery('.map').maphilight();	
+
+
   jQuery('a[data-toggle="tab"]').on('shown', function (e) {
     
     // Store the selected tab #ref in local storage, IE8+ 

@@ -203,11 +203,11 @@ class FcSearchViewSearch extends JViewLegacy
 
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js','text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js','text/javascript', true);
-      $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.8.23.custom.min.js', 'text/javascript', true);
-      $document->addScript(JURI::root() . 'media/fc/js/date-range.js', 'text/javascript', true);
-
-      $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.8.23.custom.css');
-		    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
+    $document->addScript(JURI::root() . 'media/fc/js/jquery.maphighlight.min.js','text/javascript', true);
+    $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.8.23.custom.min.js', 'text/javascript', true);
+    $document->addScript(JURI::root() . 'media/fc/js/date-range.js', 'text/javascript', true);
+    $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.8.23.custom.css');
+		$document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
 
     JHtmlSidebar::addFilter(
 			JText::_('JOPTION_SELECT_PUBLISHED'),

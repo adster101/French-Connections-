@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
   
-   
+ 
   // Iterate over all the form fields in the contact form 
   jQuery('#adminForm label').each(function() {
     // Get the id of the label element and split it - derived the input field id

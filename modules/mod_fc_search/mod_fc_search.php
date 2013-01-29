@@ -46,6 +46,6 @@ $document = JFactory::getDocument();
 $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.8.23.custom.min.js','text/javascript');
 $document->addScript(JURI::root() . 'media/fc/js/date-range.js','text/javascript', true);
 $document->addScript(JURI::root() . 'media/fc/js/search.js','text/javascript', true);
-
+$document->addScript(JURI::root() . 'media/fc/js/jquery.maphilight.min.js','text/javascript', true);
 $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.8.23.custom.css');
 
