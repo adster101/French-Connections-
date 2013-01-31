@@ -46,7 +46,7 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
             <label class="small" for="end_date">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
             </label>   
-            <input type="text" name="end_date" id="end_Date" size="30" value="<?php echo $end_date; ?>" class="end_date span9" autocomplete="Off"/>
+            <input type="text" name="end_date" id="end_date" size="30" value="<?php echo $end_date; ?>" class="end_date span9" autocomplete="Off"/>
           </div>    
           <div class="span1">
             <label class="small" for="search_sleeps">

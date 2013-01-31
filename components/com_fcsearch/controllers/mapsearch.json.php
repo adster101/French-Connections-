@@ -28,26 +28,27 @@ class FcSearchControllerMapSearch extends JControllerLegacy
 	 *
 	 * @since   2.5
 	 */
-	public function getResults($cachable = false, $urlparams = false)
+	public function markers($cachable = false, $urlparams = false)
 	{
 		$return = array();
    
     // Get the suggestions.
-    $model = $this->getModel('Suggestions', 'FcSearchModel');
-    $return = $model->getItems();
+    $model = $this->getModel('Markers', 'FcSearchModel');
+    $state = $model->getState();
+    
+    $results = $model->getResults();
 		
-
     // Check the data.
-		if (empty($return))
+		if (empty($results))
 		{
-			$return = array();
+			$results = array();
 		}
 
 		// Use the correct json mime-type
 		header('Content-Type: application/json');
 
 		// Send the response.
-		echo json_encode($return);
+		echo json_encode($results);
 		JFactory::getApplication()->close();
 	}
 }

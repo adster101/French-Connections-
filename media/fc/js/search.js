@@ -1,7 +1,7 @@
 
 jQuery(document).ready(function(){
 
- jQuery('.map').maphilight();	
+  jQuery('.map').maphilight();	
 
 
   jQuery('a[data-toggle="tab"]').on('shown', function (e) {
@@ -13,53 +13,70 @@ jQuery(document).ready(function(){
     var selectedTab = localStorage['selectedTab'];
 
     if (selectedTab == '#mapsearch') {
-      
-      initmap();
-      
+
       // Get jiggy with the Google Maps, innit!
+      if (!document.map) {
+        initmap();
+      }
+      
+      // Get the search term
+      var query = jQuery('#s_kwds').attr('value');
+      var start_date = jQuery('#start_date').attr('value');
+      var end_date = jQuery('#end_date').attr('value');
+      var bedrooms = jQuery('#search_bedrooms').attr('value');
+      var occupancy = jQuery('#search_sleeps').attr('value');
+      
+      
+      var alias = stripVowelAccent(query);
+      
+      
       
       // Do an ajax call to populate the list of nearest towns...
-      jQuery.getJSON("/administrator/index.php?option=com_fcsearch&task=mapsearch.getresults&format=json",
+      jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json",{
+        q:alias,
+        start_date:start_date,
+        end_date:end_date,
+        bedrooms:bedrooms,
+        occupancy:occupancy,
+        format:"json"
+      },
+      function(data){
+        
+        map = document.map;
+        
+        var infowindow = new google.maps.InfoWindow();
+        
+        var marker, i;
+        
+        for (var i = 0; i < data.length; i++) {
           
-          {
-            
-            alias:'south-of-france',
-            format:"json"
-          },
-          function(data){
-            var options = '';
-            for (var i = 0; i < data.length; i++) {
-              options += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
+          var myLatlng = new google.maps.LatLng(data[i].latitude,data[i].longitude);
+          
+           
+          
+          marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map
+          });
+          
+      
+          
+          google.maps.event.addListener(marker, 'click', function(marker, i) {
+            return function() {
+              infowindow.setContent(data[i].title);
+              infowindow.open(map,marker);
             }
-            jQuery("select#jform_city").html(options);        
-
-          } 
-        );  
-      
-      
-     
-      
+            
+          })(marker,i);
+        }
+      });   
     }
-    
-    
-   
-    
-      
   });
 
   // Get the selected tab, if any and set the tab accordingly...
   var selectedTab = localStorage['selectedTab'];  
   jQuery('.nav li a[href="'+selectedTab+'"]').tab('show');
   
-  
-  
-  
-  
-  
-  
-
-  
-
   jQuery('#property-search-button').click(function(event){
     
     // val is the 'active' suggestion populated by typeahead
@@ -130,20 +147,20 @@ jQuery(document).ready(function(){
 
 function initmap() {
   
-    jQuery('#map').css('width','100%');
-    jQuery('#map').css('height','500px');
+  jQuery('#map').css('width','100%');
+  jQuery('#map').css('height','500px');
 
-    var myLatLng = new google.maps.LatLng(46.2,2.8);
-    var myOptions = {
-      center: myLatLng,
-      zoom: 6,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true,
-      zoomControl:true
-    }
-    var map = new google.maps.Map(document.getElementById("map"), myOptions);
-
+  var myLatLng = new google.maps.LatLng(46.2,2.8);
+  var myOptions = {
+    center: myLatLng,
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
+    zoomControl:true
   }
+  var map = new google.maps.Map(document.getElementById("map"), myOptions);
+  document.map = map;
+}
 
 // Function removes and replaces all French accented characters with non accented characters
 // as well as removing spurious characters and replacing spaces with dashes...innit!
