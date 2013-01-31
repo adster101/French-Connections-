@@ -57,9 +57,9 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
 <div class="row-fluid">
   <div class="span4"><a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="thumbnail pull-left">
       <?php if ($this->result->parent_id == 1) : ?>
-        <img src='/images/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
+        <img src='/images/property/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
       <?php else: ?>
-        <img src='/images/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
+        <img src='/images/property/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
       <?php endif; ?>
     </a>
   </div>

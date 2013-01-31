@@ -196,10 +196,10 @@ JHTML::_('behavior.formvalidation');
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
                 <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
                        " /> 
                      <?php else: ?>
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
                        " /> 
                      <?php endif; ?>
                 <p class="flex-caption">
@@ -215,9 +215,9 @@ JHTML::_('behavior.formvalidation');
               <li>
 
                 <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->parent_id . '/thumbs/' . $image->image_file_name ?>" /> 
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->parent_id . '/thumbs/' . $image->image_file_name ?>" /> 
                 <?php else: ?>
-                  <img src="<?php echo JURI::root() . 'images/' . $this->item->id . '/thumbs/' . $image->image_file_name ?>" /> 
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->id . '/thumbs/' . $image->image_file_name ?>" /> 
                 <?php endif; ?>
 
               </li>     

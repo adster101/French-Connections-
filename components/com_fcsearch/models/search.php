@@ -39,12 +39,12 @@ class FcSearchModelSearch extends JModelList {
    * 
    */
   public $level;
-  
+
   /*
    * Latirude, if a town/city search is being applied.
    */
   public $latitude;
-  
+
   /*
    * Longitude, if a town/city search is being applied.
    */
@@ -59,6 +59,9 @@ class FcSearchModelSearch extends JModelList {
    * @throws  Exception on database error.
    */
   public function getResults() {
+
+    // Get the date
+    $date = JFactory::getDate();
 
     // Get the store id.
     $store = $this->getStoreId('getResults');
@@ -150,25 +153,25 @@ class FcSearchModelSearch extends JModelList {
       $query->select('
         ( 3959 * acos(cos(radians(' . $this->longitude . ')) * 
           cos(radians(h.latitude)) * 
-          cos(radians(h.longitude) - radians(' . $this->latitude. '))
-          + sin(radians('.$this->longitude.')) 
+          cos(radians(h.longitude) - radians(' . $this->latitude . '))
+          + sin(radians(' . $this->longitude . ')) 
           * sin(radians(h.latitude)))) AS distance
         ');
-      
+
       $query->join('left', '#__classifications c on c.id = h.city');
 
       $query->from('#__helloworld h');
     } else {
       $query->from('#__classifications c');
     }
-    
+
     if ($this->level == 1) { // Area level
       $query->join('left', '#__helloworld h on c.id = h.area');
     } else if ($this->level == 2) { // Region level
       $query->join('left', '#__helloworld h on c.id = h.region');
     } else if ($this->level == 3) { // Department level 
       $query->join('left', '#__helloworld h on c.id = h.department');
-    } 
+    }
 
     $query->join('left', '#__attributes b ON b.id = h.property_type');
     $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
@@ -184,10 +187,10 @@ class FcSearchModelSearch extends JModelList {
       $query->where('a.availability = 1');
     }
 
-    if ($this->level !=4) {
+    if ($this->level != 4) {
       $query->where('c.id = ' . $this->location);
     }
-    
+
     if ($this->getState('list.bedrooms')) {
       $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
     }
@@ -198,12 +201,15 @@ class FcSearchModelSearch extends JModelList {
 
     $offset = $this->getState('list.start', 0); // The first result to show, i.e. the page number
     $count = $this->getState('list.limit', 10); // The number of results to show
-    
+
     if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
       $query->order('distance');
       $query->having('distance < 25');
     }
-    
+
+    // Make sure we only get live properties...
+    $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
+
     $query->where('h.id !=1');
     // Load the results from the database.
     $db->setQuery($query, $offset, $count);
@@ -215,9 +221,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Return the results.
     return $this->retrieve($store);
-    
   }
-
 
   /**
    * Method to build a database query to load the list data.
@@ -227,6 +231,9 @@ class FcSearchModelSearch extends JModelList {
    * @since   2.5
    */
   protected function getListQuery() {
+
+    // Get the date
+    $date = JFactory::getDate();
 
     // Get the store id.
     $store = $this->getStoreId('getListQuery');
@@ -262,32 +269,32 @@ class FcSearchModelSearch extends JModelList {
               c.path,
               c.title
       ');
-      
-   if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
-      // Add the distance based bit in as this is a town/city search
-      $query->select('
+
+      if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+        // Add the distance based bit in as this is a town/city search
+        $query->select('
         ( 3959 * acos(cos(radians(' . $this->longitude . ')) * 
           cos(radians(h.latitude)) * 
-          cos(radians(h.longitude) - radians(' . $this->latitude. '))
-          + sin(radians('.$this->longitude.')) 
+          cos(radians(h.longitude) - radians(' . $this->latitude . '))
+          + sin(radians(' . $this->longitude . ')) 
           * sin(radians(h.latitude)))) AS distance
         ');
-      
-      $query->join('left', '#__classifications c on c.id = h.city');
 
-      $query->from('#__helloworld h');
-    } else {
-      $query->from('#__classifications c');
-    }      
-    
+        $query->join('left', '#__classifications c on c.id = h.city');
+
+        $query->from('#__helloworld h');
+      } else {
+        $query->from('#__classifications c');
+      }
+
       if ($this->level == 1) { // Area level
         $query->join('left', '#__helloworld h on c.id = h.area');
       } else if ($this->level == 2) { // Region level
         $query->join('left', '#__helloworld h on c.id = h.region');
       } else if ($this->level == 3) { // Department level 
         $query->join('left', '#__helloworld h on c.id = h.department');
-      } 
-      
+      }
+
 
       if ($this->getState('list.start_date')) {
         $query->join('left', '#__availability a on h.id = a.id');
@@ -296,11 +303,11 @@ class FcSearchModelSearch extends JModelList {
 
         $query->where('a.availability = 1');
       }
-      
-    if ($this->level !=4) {
-      $query->where('c.id = ' . $this->location);
-    }
-     
+
+      if ($this->level != 4) {
+        $query->where('c.id = ' . $this->location);
+      }
+
 
       if ($this->getState('list.bedrooms')) {
         $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
@@ -309,11 +316,15 @@ class FcSearchModelSearch extends JModelList {
       if ($this->getState('list.occupancy')) {
         $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
       }
-    
-    if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
-      $query->order('distance');
-      $query->having('distance < 25');
-    }
+
+      if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+        $query->order('distance');
+        $query->having('distance < 25');
+      }
+      
+      // Make sure we only get live properties...
+      $query->where('h.expiry_date >= ' . $db->quote($date->toSql()) );
+
       // Push the data into cache.
       $this->store($store, $query, true);
 
@@ -344,7 +355,7 @@ class FcSearchModelSearch extends JModelList {
     }
 
     // Get the results total.
-        
+
     $total = $this->getResultsTotal();
 
     // Push the total into cache.
@@ -379,36 +390,36 @@ class FcSearchModelSearch extends JModelList {
 
 
     if ($this->level == 4) {
-      
-    $this->_db->setQuery($sql);
-    
-    $results = $this->_db->execute();
-    
-    $total = $this->_db->getNumRows($results);
-    
+
+      $this->_db->setQuery($sql);
+
+      $results = $this->_db->execute();
+
+      $total = $this->_db->getNumRows($results);
     } else {
-      
-      
-    $sql->clear('select');
-    $sql->select('COUNT(DISTINCT h.id)');  
-    
-    // Get the total from the database.
-    $this->_db->setQuery($sql);
-    $total = $this->_db->loadResult();   
+
+
+      $sql->clear('select');
+      $sql->select('COUNT(DISTINCT h.id)');
+
+      // Get the total from the database.
+      $this->_db->setQuery($sql);
+      $total = $this->_db->loadResult();
     }
 
-      
 
 
 
-    
-    
+
+
+
     // Push the total into cache.
     $this->store($store, min($total, $limit));
 
     // Return the total.
     return $this->retrieve($store);
   }
+
   /**
    * Method to store data in cache.
    *
@@ -579,5 +590,4 @@ class FcSearchModelSearch extends JModelList {
     return parent::getStoreId($id);
   }
 
-  
 }
