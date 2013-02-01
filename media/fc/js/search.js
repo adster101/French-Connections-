@@ -1,9 +1,10 @@
 
 jQuery(document).ready(function(){
 
+  // Maphilight is used to highlight the area maps on the map search graphic
   jQuery('.map').maphilight();	
 
-
+  // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function (e) {
     
     // Store the selected tab #ref in local storage, IE8+ 
@@ -19,19 +20,17 @@ jQuery(document).ready(function(){
         initmap();
       }
       
-      // Get the search term
+      // Get the search parameters, quicker to get the form and then extract the inputs?
       var query = jQuery('#s_kwds').attr('value');
       var start_date = jQuery('#start_date').attr('value');
       var end_date = jQuery('#end_date').attr('value');
       var bedrooms = jQuery('#search_bedrooms').attr('value');
       var occupancy = jQuery('#search_sleeps').attr('value');
       
+      // The actual search term
+      var alias = stripVowelAccent(query);    
       
-      var alias = stripVowelAccent(query);
-      
-      
-      
-      // Do an ajax call to populate the list of nearest towns...
+      // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json",{
         q:alias,
         start_date:start_date,
@@ -42,36 +41,46 @@ jQuery(document).ready(function(){
       },
       function(data){
         
+        // Get the map instance
         map = document.map;
         
-        var infowindow = new google.maps.InfoWindow();
+        markers = {};
         
-        var marker, i;
-        
+        // Loop over all data (properties) and create a new marker
         for (var i = 0; i < data.length; i++) {
           
-          var myLatlng = new google.maps.LatLng(data[i].latitude,data[i].longitude);
+          // The lat long of the propert, units will appear stacked on top...
+          var myLatlng = new google.maps.LatLng(data[i].latitude,data[i].longitude);           
           
-           
-          
+          // Create the marker instance
           marker = new google.maps.Marker({
             position: myLatlng,
             map: map
           });
           
-      
+          marker.setTitle((i + 1).toString());
+          content = '<h4>'+data[i].title+'</h5>'+'<a href="'+data[i].link+'"><img src="'+data[i].thumbnail+'"/></a><p>'+data[i].pricestring+'</p>';
+          attachContent(marker, content);
           
-          google.maps.event.addListener(marker, 'click', function(marker, i) {
-            return function() {
-              infowindow.setContent(data[i].title);
-              infowindow.open(map,marker);
-            }
-            
-          })(marker,i);
+          markers[i] = marker;
+          
+          //  Create a new viewpoint bound, so we can centre the map based on the markers
+          var bounds = new google.maps.LatLngBounds();
+          
+          //  Go through each...
+          jQuery.each(markers, function (index, marker) {
+            bounds.extend(marker.position);
+          });
+          
+          //  Fit these bounds to the map
+          map.fitBounds(bounds);
         }
       });   
     }
   });
+
+
+
 
   // Get the selected tab, if any and set the tab accordingly...
   var selectedTab = localStorage['selectedTab'];  
@@ -125,14 +134,12 @@ jQuery(document).ready(function(){
     return false;
     
   })
-
- 
-
   
+  // Bind the typeahead business
   jQuery(".typeahead").typeahead({
      
     source: function (query, process) {
-      jQuery.get( 'index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component&lang=en', 
+      jQuery.get( 'index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component', 
       { 
         q: query,
         items: 10
@@ -143,14 +150,14 @@ jQuery(document).ready(function(){
       )
     }
   })
-})
+}) // End of on DOM ready
 
 function initmap() {
   
-  jQuery('#map').css('width','100%');
-  jQuery('#map').css('height','500px');
+  jQuery('#map_canvas').css('width','100%');
+  jQuery('#map_canvas').css('height','500px');
 
-  var myLatLng = new google.maps.LatLng(46.2,2.8);
+  var myLatLng = new google.maps.LatLng(46.8,2.8);
   var myOptions = {
     center: myLatLng,
     zoom: 6,
@@ -158,9 +165,22 @@ function initmap() {
     disableDefaultUI: true,
     zoomControl:true
   }
-  var map = new google.maps.Map(document.getElementById("map"), myOptions);
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
   document.map = map;
 }
+
+// The five markers show a secret message when clicked
+// but that message is not within the marker's instance data
+function attachContent(marker, num) {
+  var infowindow = new google.maps.InfoWindow({
+    content: num
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(marker.get('map'), marker);
+  });
+}
+
 
 // Function removes and replaces all French accented characters with non accented characters
 // as well as removing spurious characters and replacing spaces with dashes...innit!

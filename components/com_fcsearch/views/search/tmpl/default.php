@@ -140,7 +140,7 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
           <div class="tab-pane" id="mapsearch">
             <div class="row-fluid">
               <div class="span9">
-                <div id="map"></div>
+                <div id="map_canvas"></div>
               </div>
               <div class="span3">
                 <?php echo $this->loadTemplate('refine'); ?>

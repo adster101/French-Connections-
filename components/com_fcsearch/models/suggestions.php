@@ -60,13 +60,20 @@ class FcSearchModelSuggestions extends JModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
+    $input = JFactory::getApplication()->input;
+    
+    $lang = $input->get('lang', 'en');
+        
 		// Select required fields
 		$query->select('t.title');
-		$query->from($db->quoteName('#__classifications') . ' AS t');
+    
+    if ($lang == 'fr') {
+      $query->from($db->quoteName('#__classifications_translation') . ' AS t');
+    } else {
+      $query->from($db->quoteName('#__classifications') . ' AS t');
+    }
+    
 		$query->where('t.title LIKE ' . $db->quote('%'.$db->escape($this->getState('input'), true) . '%'));
-		//$query->where('t.common = 0');
-		//$query->order('t.links DESC');
-		//$query->order('t.weight DESC');
 
     return $query;
 	}

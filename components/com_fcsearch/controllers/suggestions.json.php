@@ -36,7 +36,6 @@ class FcSearchControllerSuggestions extends JControllerLegacy
     $model = $this->getModel('Suggestions', 'FcSearchModel');
     $return = $model->getItems();
 		
-
     // Check the data.
 		if (empty($return))
 		{

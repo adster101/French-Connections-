@@ -37,6 +37,14 @@ class FcSearchControllerMapSearch extends JControllerLegacy
     $state = $model->getState();
     
     $results = $model->getResults();
+    
+    // Process the results so we don't need to do that in the browser
+    foreach ($results as &$result) {
+      $result->link = JRoute::_('index.php?option=com_accomodation&id='.$result->id);
+      $result->pricestring = JText::_('COM_FCSEARCH_SEARCH_FROM');
+      $result->thumbnail = JRoute::_(JPATH_SITE . '/images/property/thumb/' . $result->id . '/' . $result->thumbnail );
+    }
+    
 		
     // Check the data.
 		if (empty($results))

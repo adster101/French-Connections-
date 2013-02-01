@@ -112,8 +112,12 @@ class FcSearchModelMarkers extends JModelList
 
     // Get the store id.
     $store = $this->getStoreId('getResults');
-
-    // Use the cached data if possible.
+    
+    // Get the input and derive the language
+    $input = JFactory::getApplication()->input;
+    $lang = $input->get('lang');
+    
+    // Use cached data if possible.
     if ($this->retrieve($store)) {
       return $this->retrieve($store);
     }
@@ -125,9 +129,15 @@ class FcSearchModelMarkers extends JModelList
     // Reuse the classification table instance
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude');
-    $query->from($db->quoteName('#__classifications'));
-    $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));
+    $query->select('c.id, ' . $db->quoteName('level') . ',latitude, longitude');
+
+    if ($lang == 'fr') {
+      $query->from($db->quoteName('#__classifications_translations') . ' ctr');
+      $query->join('left', '#__classifications c on c.id = classification_id');
+    } else {
+      $query->from($db->quoteName('#__classifications'));
+    }
+    $query->where('ctr.alias' . ' = ' . $db->quote($this->getState('list.searchterm', '')));
 
     // Load the result (should only be one) from the database.
     $db->setQuery($query);
@@ -137,7 +147,7 @@ class FcSearchModelMarkers extends JModelList
     } catch (Exception $e) {
       // Log any exception
     }
-
+    
     // No results found, return an empty array
     if (empty($row)) {
       return array();
@@ -147,7 +157,7 @@ class FcSearchModelMarkers extends JModelList
       $this->latitude = $row[2];
       $this->longitude = $row[3];
     }
-
+    
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
     $query->clear();
@@ -157,17 +167,12 @@ class FcSearchModelMarkers extends JModelList
               h.id,
               h.parent_id,
               h.level,
-              h.title as property_title,
               h.area,
-              h.region,
-              h.department,
+              h.title,
               h.latitude,
               h.longitude,
               h.city,
               h.thumbnail,
-              h.occupancy,
-              h.swimming,
-              (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
               c.title as location_title,
               b.title as property_type,
               d.title as accommodation_type,
@@ -191,6 +196,7 @@ class FcSearchModelMarkers extends JModelList
                 group by h.id
               ) as review_count
     ');
+
     
     if ($this->level == 4) {
       // Add the distance based bit in as this is a town/city search
@@ -247,7 +253,12 @@ class FcSearchModelMarkers extends JModelList
     // Make sure we only get live properties...
     $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
+    // We don't want the root element
     $query->where('h.id !=1');
+    
+    // Also, we only want the parent properties, for the map, otherwise units overlayed
+    $query->where('h.level = 1');
+    
     // Load the results from the database.
     $db->setQuery($query);
     $rows = $db->loadObjectList();
@@ -259,6 +270,7 @@ class FcSearchModelMarkers extends JModelList
     // Return the results.
     return $this->retrieve($store);
   }  
+  
   
   /**
    * Method to store data in cache.

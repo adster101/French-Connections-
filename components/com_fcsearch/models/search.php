@@ -59,7 +59,7 @@ class FcSearchModelSearch extends JModelList {
    * @throws  Exception on database error.
    */
   public function getResults() {
-
+    
     // Get the date
     $date = JFactory::getDate();
 
@@ -158,9 +158,10 @@ class FcSearchModelSearch extends JModelList {
           * sin(radians(h.latitude)))) AS distance
         ');
 
-      $query->join('left', '#__classifications c on c.id = h.city');
-
       $query->from('#__helloworld h');
+
+      $query->join('left', '#__classifications c on c.id = h.city');
+      
     } else {
       $query->from('#__classifications c');
     }
@@ -494,8 +495,8 @@ class FcSearchModelSearch extends JModelList {
     $filter = JFilterInput::getInstance();
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
-    $options = array();
 
+    
     // Get each of the possible URL params
     // Get the query string.
     $q = !is_null($request->get('q')) ? $request->get('q', '', 'string') : $params->get('q');
@@ -586,6 +587,7 @@ class FcSearchModelSearch extends JModelList {
       $id .= ':' . $this->getState('list.end_date');
       $id .= ':' . $this->getState('list.bedrooms');
       $id .= ':' . $this->getState('list.occupancy');
+      $id .= ':' . $this->getState('list.lang');
     }
     return parent::getStoreId($id);
   }
