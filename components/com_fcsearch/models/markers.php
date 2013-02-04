@@ -129,15 +129,11 @@ class FcSearchModelMarkers extends JModelList
     // Reuse the classification table instance
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    $query->select('c.id, ' . $db->quoteName('level') . ',latitude, longitude');
 
-    if ($lang == 'fr') {
-      $query->from($db->quoteName('#__classifications_translations') . ' ctr');
-      $query->join('left', '#__classifications c on c.id = classification_id');
-    } else {
-      $query->from($db->quoteName('#__classifications'));
-    }
-    $query->where('ctr.alias' . ' = ' . $db->quote($this->getState('list.searchterm', '')));
+    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude');
+    $query->from($db->quoteName('#__classifications'));
+    $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));    
+    $query->where('alias' . ' = ' . $db->quote($this->getState('list.searchterm', '')));
 
     // Load the result (should only be one) from the database.
     $db->setQuery($query);

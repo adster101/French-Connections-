@@ -113,7 +113,7 @@ class AccommodationModelProperty extends JModelForm {
           activities_other, 
           getting_there, 
           hw.title, 
-          description, 
+          hw.description, 
           occupancy, 
           swimming, 
           distance_to_coast, 

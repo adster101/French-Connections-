@@ -21,10 +21,7 @@ class ImportControllerLocations extends JControllerForm {
     $config = JFactory::getConfig();
 
 
-    // This is here as the user table instance checks that we aren't trying to insert a record with the same 
-    // username as a super user. However, by default root_user is null. As we insert a load of dummy user to start 
-    // with this is matched and the user thinks we are trying to replicate the root_user. We aren't and we 
-    // explicity say there here by setting root_user in config.
+   
     $config->set('root_user', 'admin');
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
@@ -44,7 +41,7 @@ class ImportControllerLocations extends JControllerForm {
       $query = $db->getQuery(true);
 
       $query->insert('#__classifications');
-      $query->columns(array('id', 'parent_id', 'title', 'path','alias', 'access', 'published', 'longitude', 'latitude'));
+      $query->columns(array('id', 'parent_id', 'title', 'description', 'path','alias', 'access', 'published', 'longitude', 'latitude'));
 
       $current_level = $line[1];
 
@@ -61,7 +58,7 @@ class ImportControllerLocations extends JControllerForm {
       $alias = JApplication::stringURLSafe($line[2]);
       $title = mysql_escape_string($line[2]);
 
-      $query->values("$line[0],$parent_id,'$title','$alias','$alias',1,1,$line[3],$line[4]");
+      $query->values("$line[0],$parent_id,'$title','".  mysql_real_escape_string($line[5])."','$alias','$alias',1,1,$line[3],$line[4]");
      
 
       $db->setQuery($query);
@@ -92,7 +89,7 @@ class ImportControllerLocations extends JControllerForm {
     
     $this->setMessage('Properties imported, hooray!');
 
-    $this->setRedirect('index.php?option=com_import&view=properties');
+    $this->setRedirect('index.php?option=com_import&view=locations');
     
   }
 

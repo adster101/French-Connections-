@@ -35,7 +35,7 @@ class ClassificationTableClassification extends JTableNested
     
   }
   
-  	/**
+  /**
 	 * Override check function
 	 *
 	 * @return  boolean
@@ -73,9 +73,21 @@ class ClassificationTableClassification extends JTableNested
     
     
 		$this->setLocation($this->parent_id, 'last-child');
+    
+    
+    
+    
 		
 		// Attempt to store the data.
-		return parent::store();
+		$return = parent::store();
+    
+    if ($return) {
+      // Rebuild the path for this classification
+      //$this->rebuildPath($this->id);      
+    }
+    
+    return $return;
+        
     
   }
   

@@ -31,4 +31,20 @@ class modSearchHelper
 		$img = JHtml::_('image', 'searchButton.gif', $button_text, null, true, true);
 		return $img;
 	}
+  
+  /*
+   * Get the list of regions alias so we can plug those into the search map - language aware!
+   * 
+   * @return aww
+   */
+  public static function getSearchRegions()
+  {
+    
+    // Get the list of regions, which are at level 2
+    
+    
+    
+  }
+  
+  
 }

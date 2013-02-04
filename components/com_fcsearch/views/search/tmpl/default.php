@@ -150,10 +150,12 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
           <div class="tab-pane" id="localinfo">
             <div class="row-fluid">
               <div class="span9">
-                <p>Localinfo, innit!</p>
+                <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
+                <?php echo $this->localinfo->description; ?>
+
               </div>
               <div class="span3">
-                <p>Other</p>
+                <p>Something else...</p>
               </div>
             </div>
           </div>

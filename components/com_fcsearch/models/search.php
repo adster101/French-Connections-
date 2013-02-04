@@ -38,18 +38,69 @@ class FcSearchModelSearch extends JModelList {
    * The 'level' of the search. 1-3 is a wider area search, 4 is a town/city search.
    * 
    */
-  public $level;
+  public $level = '';
 
   /*
-   * Latirude, if a town/city search is being applied.
+   * Latitude, if a town/city search is being applied.
    */
-  public $latitude;
+  public $latitude = '';
 
   /*
    * Longitude, if a town/city search is being applied.
    */
-  public $longitude;
+  public $longitude = ''; 
+  
+  /*
+   * Title the title of the locality being searched on.
+   */
+  public $title = '';
+  
+  /*
+   * Description, the description of the locality being searched on.
+   */
+  public $description = '';
+   
+  public function getLocalInfo() 
+  {
+    // First off we need to get the classification detail
+    // E.g. is this a department, area or town etc
+    // Create the query to get the search results.
+    // Make this a call to get the crumbs trail?
+    // Reuse the classification table instance
+    
+    // TODO - Cache this
+    
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude,' . $db->QuoteName('description') . ',' . $db->QuoteName('title'));
+    $query->from($db->quoteName('#__classifications'));
+    $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));
 
+    // Load the result (should only be one) from the database.
+    $db->setQuery($query);
+
+    try {
+      $row = $db->loadObject();
+      
+    } catch (Exception $e) {
+      // Log any exception
+    }
+
+    // No results found, return an empty array
+    if (empty($row)) {
+      return array();
+    } else {
+      $this->location = $row->id;
+      $this->level = $row->level;
+      $this->latitude = $row->latitude;
+      $this->longitude = $row->longitude;
+      //$this->description = $row[4];
+      //$this->title = $row[5];
+      return $row;
+      
+    }
+  }
+  
   /**
    * Method to get the results of the query.
    *
@@ -60,6 +111,9 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getResults() {
     
+    $db = $this->getDbo();
+    
+    $query = $db->getQuery(true);    
     // Get the date
     $date = JFactory::getDate();
 
@@ -71,40 +125,9 @@ class FcSearchModelSearch extends JModelList {
       return $this->retrieve($store);
     }
 
-    // First off we need to get the classification detail
-    // E.g. is this a department, area or town etc
-    // Create the query to get the search results.
-    // Make this a call to get the crumbs trail?
-    // Reuse the classification table instance
-    $db = $this->getDbo();
-    $query = $db->getQuery(true);
-    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude');
-    $query->from($db->quoteName('#__classifications'));
-    $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));
-
-    // Load the result (should only be one) from the database.
-    $db->setQuery($query);
-
-    try {
-      $row = $db->loadRow();
-    } catch (Exception $e) {
-      // Log any exception
-    }
-
-    // No results found, return an empty array
-    if (empty($row)) {
-      return array();
-    } else {
-      $this->location = $row[0];
-      $this->level = $row[1];
-      $this->latitude = $row[2];
-      $this->longitude = $row[3];
-    }
-
     // Add check here on level, perform distance search if a town/city.
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
-    $query->clear();
 
     $ordering = $this->getState('list.direction', '');
 

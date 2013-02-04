@@ -43,6 +43,8 @@ class FcSearchViewSearch extends JViewLegacy
 		// Get view data.
 		$state = $this->get('State');
 
+    $localinfo = $this->get('LocalInfo');
+    
     $results = $this->get('Results');
     
 		$total = $this->get('Total');
@@ -75,6 +77,7 @@ class FcSearchViewSearch extends JViewLegacy
 		$this->results = &$results;
 		$this->total = &$total;
 		$this->pagination = &$pagination;
+    $this->localinfo = $localinfo;
 		
     $this->prepareDocument();
 

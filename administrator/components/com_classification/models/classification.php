@@ -76,6 +76,6 @@ class ClassificationModelClassification extends JModelAdmin
     return $data;
 	}
   
-  
+
   
 }

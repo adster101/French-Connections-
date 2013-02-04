@@ -39,6 +39,7 @@ $mitemid = $set_Itemid > 0 ? $set_Itemid : $app->input->get('Itemid');
 
 
 
+
 require JModuleHelper::getLayoutPath('mod_fc_search', $params->get('layout', 'default'));
 
 $document = JFactory::getDocument();
