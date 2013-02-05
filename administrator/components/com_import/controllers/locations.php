@@ -40,7 +40,7 @@ class ImportControllerLocations extends JControllerForm {
 
       $query = $db->getQuery(true);
 
-      $query->insert('#__classifications');
+      $query->insert('#__classifications_translations');
       $query->columns(array('id', 'parent_id', 'title', 'description', 'path','alias', 'access', 'published', 'longitude', 'latitude'));
 
       $current_level = $line[1];
