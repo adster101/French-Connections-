@@ -131,7 +131,12 @@ class FcSearchModelMarkers extends JModelList
     $query = $db->getQuery(true);
 
     $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude');
-    $query->from($db->quoteName('#__classifications'));
+    if($lang == 'fr') {
+      $query->from($db->quoteName('#__classifications_translations'));
+
+    } else {
+      $query->from($db->quoteName('#__classifications'));
+    }
     $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));    
     $query->where('alias' . ' = ' . $db->quote($this->getState('list.searchterm', '')));
 
@@ -203,12 +208,18 @@ class FcSearchModelMarkers extends JModelList
           + sin(radians(' . $this->longitude . ')) 
           * sin(radians(h.latitude)))) AS distance
         ');
-
-      $query->join('left', '#__classifications c on c.id = h.city');
-
+      if ($lang =='fr') {
+        $query->join('left', '#__classifications_translations c on c.id = h.city');
+      } else {
+        $query->join('left', '#__classifications c on c.id = h.city');
+      }
       $query->from('#__helloworld h');
     } else {
-      $query->from('#__classifications c');
+      if ($lang == 'fr') {
+        $query->from('#__classifications_translations c');
+      } else {
+        $query->from('#__classifications c');
+      }
     }
     
     if ($this->level == 1) { // Area level
@@ -219,12 +230,22 @@ class FcSearchModelMarkers extends JModelList
       $query->join('left', '#__helloworld h on c.id = h.department');
     }
 
-    $query->join('left', '#__attributes b ON b.id = h.property_type');
-    $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
-    $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
-    $query->join('left', '#__attributes f ON f.id = h.base_currency');
-    $query->join('left', '#__classifications g ON g.id = h.city');
-
+    if($lang == 'fr') {
+      
+      $query->join('left', '#__attributes_translation b ON b.id = h.property_type');
+      $query->join('left', '#__attributes_translation d ON d.id = h.accommodation_type');
+      $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
+      $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');      
+      $query->join('left', '#__classifications_translations g ON g.id = h.city');      
+    } else {
+      $query->join('left', '#__attributes b ON b.id = h.property_type');
+      $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
+      $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
+      $query->join('left', '#__attributes f ON f.id = h.base_currency');      
+      $query->join('left', '#__classifications g ON g.id = h.city');
+      
+    }
+    
     if ($this->getState('list.start_date')) {
       $query->join('left', '#__availability a on h.id = a.id');
       $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
@@ -245,7 +266,10 @@ class FcSearchModelMarkers extends JModelList
       $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
     }
 
-
+    if ($this->level == 4) {
+      $query->having('distance < 50');
+    }
+    
     // Make sure we only get live properties...
     $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 

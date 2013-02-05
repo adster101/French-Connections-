@@ -18,19 +18,7 @@ defined('_JEXEC') or die;
  */
 class modSearchHelper
 {
-	/**
-	 * Display the search button as an image.
-	 *
-	 * @param	string	$button_text	The alt text for the button.
-	 *
-	 * @return	string	The HTML for the image.
-	 * @since	1.5
-	 */
-	public static function getSearchImage($button_text)
-	{
-		$img = JHtml::_('image', 'searchButton.gif', $button_text, null, true, true);
-		return $img;
-	}
+
   
   /*
    * Get the list of regions alias so we can plug those into the search map - language aware!
@@ -40,11 +28,34 @@ class modSearchHelper
   public static function getSearchRegions()
   {
     
+    $input = JFactory::getApplication()->input;
+    
+    $lang = $input->get('lang', 'en');    
+    
     // Get the list of regions, which are at level 2
+    $db = JFactory::getDbo();
     
+    $query = $db->getQuery(true);
     
+    $query->select('id,alias, title');
     
+    if ($lang == 'fr') {
+      $query->from($db->quoteName('#__classifications_translations') . ' AS t');
+    } else {
+      $query->from($db->quoteName('#__classifications') . ' AS t');
+    }
+    
+    $query->where('level = 2');
+    
+    $db->setQuery($query);
+    
+    try {
+      $regions = $db->loadObjectList($key='id');
+      
+    } catch (Exception $e) {
+      // Log any exception
+    }
+    return $regions;
   }
-  
   
 }

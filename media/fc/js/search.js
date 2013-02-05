@@ -83,10 +83,13 @@ jQuery(document).ready(function(){
 
 
   // Get the selected tab, if any and set the tab accordingly...
-  var selectedTab = localStorage['selectedTab'];  
-  jQuery('.nav li a[href="'+selectedTab+'"]').tab('show');
+  var selectedTab = localStorage['selectedTab']; 
+  if (selectedTab == '#mapsearch') {
+    jQuery('.nav li a[href="'+selectedTab+'"]').tab('show');
+  }
   
-  jQuery('#property-search-button').click(function(event){
+  
+  jQuery('#property-search-button').click(function(event) {
     
     // val is the 'active' suggestion populated by typeahead
     // e.g. the option chosen should be the last active one
@@ -125,7 +128,7 @@ jQuery(document).ready(function(){
     
     
     // Amend the path that the form is submitted to
-    jQuery('form#property-search').attr('action', path+'/'+query+'/bedrooms_'+bedrooms);
+    jQuery('form#property-search').attr('action', path+'/'+query);
 
     // Submit the form
     jQuery('form#property-search').submit();

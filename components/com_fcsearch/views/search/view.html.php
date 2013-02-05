@@ -48,17 +48,10 @@ class FcSearchViewSearch extends JViewLegacy
     $results = $this->get('Results');
     
 		$total = $this->get('Total');
-
-    JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderResults') : null;
-		//$total = $this->get('Total');
-		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderTotal') : null;
     
 		$pagination = $this->get('Pagination');
     
     
-    
-		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderPagination') : null;
-
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
@@ -187,9 +180,10 @@ class FcSearchViewSearch extends JViewLegacy
     
     $title = JText::sprintf('COM_FCSEARCH_TITLE', $title);
 
-
 		$this->document->setTitle($title);
-
+    
+		$this->document->addHeadLink(JRoute::_('blah'.'&type=rss'), 'canonical', 'rel', '');
+		$this->document->addHeadLink(JRoute::_('blah'.'&type=rss'), 'next', 'rel', '');
 	
 		// Configure the document meta-description.
 		if (!empty($this->explained))

@@ -11,7 +11,7 @@ jimport('joomla.user.helper');
 /**
  * HelloWorld Controller
  */
-class ImportControllerLocations extends JControllerForm {
+class ImportControllerLocationsTranslations extends JControllerForm {
 
   public function import() {
 
@@ -40,7 +40,7 @@ class ImportControllerLocations extends JControllerForm {
 
       $query = $db->getQuery(true);
 
-      $query->insert('#__classifications');
+      $query->insert('#__classifications_translations');
       $query->columns(array('id', 'parent_id', 'title', 'description', 'path','alias', 'access', 'published', 'longitude', 'latitude'));
 
       $current_level = $line[1];
@@ -83,7 +83,7 @@ class ImportControllerLocations extends JControllerForm {
     
     JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_classification/tables');
 
-    $classification = JTable::getInstance('Classification', 'ClassificationTable');
+    $classification = JTable::getInstance('ClassificationTranslations', 'ClassificationTable');
     
     $classification->rebuild();
     

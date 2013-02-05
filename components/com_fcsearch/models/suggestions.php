@@ -68,7 +68,7 @@ class FcSearchModelSuggestions extends JModelList
 		$query->select('t.title');
     
     if ($lang == 'fr') {
-      $query->from($db->quoteName('#__classifications_translation') . ' AS t');
+      $query->from($db->quoteName('#__classifications_translations') . ' AS t');
     } else {
       $query->from($db->quoteName('#__classifications') . ' AS t');
     }

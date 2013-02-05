@@ -27,7 +27,7 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
   </h1>
 
   <div id="search-form" >
-    <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165') ?>" method="GET" class="form-vertical">
+    <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165') ?>" method="POST" class="form-vertical">
       <div class="row-fluid">
         <div class="well well-small clearfix">
           <div class="span4">
