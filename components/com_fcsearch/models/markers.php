@@ -248,8 +248,8 @@ class FcSearchModelMarkers extends JModelList
     
     if ($this->getState('list.start_date')) {
       $query->join('left', '#__availability a on h.id = a.id');
-      $query->where('a.start_date <= ' . $db->quote($this->getState('list.start_date', '')));
-      $query->where('a.end_date >= ' . $db->quote($this->getState('list.end_date', '')));
+      $query->where('a.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
+      $query->where('a.end_date >= ' . $db->quote($this->getState('list.departure', '')));
 
       $query->where('a.availability = 1');
     }
@@ -372,8 +372,10 @@ class FcSearchModelMarkers extends JModelList
 
     // Get each of the possible URL params
     // Get the query string.
-    $q = !is_null($request->get('q')) ? $request->get('q', '', 'string') : $params->get('q');
-    $q = $filter->clean($q, 'string');
+    $q = !is_null($request->get('s_kwds')) ? $request->get('s_kwds', '', 'string') : $params->get('q');
+    $q = $app->stringURLSafe($filter->clean($q, 'string'));
+    
+    
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');

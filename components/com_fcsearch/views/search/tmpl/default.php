@@ -11,15 +11,30 @@ defined('_JEXEC') or die;
 $lang = JFactory::getLanguage();
 $lang->load('com_accommodation', JPATH_SITE, null, false, true);
 
-$document = JFactory::getDocument();
+$doc = JFactory::getDocument();
 $app = JFactory::getApplication();
 
+$uri = JUri::current();
 
 $bedrooms = $this->state->get('list.bedrooms');
 $occupancy = $this->state->get('list.occupancy');
-$start_date = $this->state->get('list.start_date');
-$end_date = $this->state->get('list.end_date');
+$arrival = $this->state->get('list.arrival');
+$departure = $this->state->get('list.departure');
+
 $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
+
+
+$pagdata = $this->pagination->getData();
+
+		if ($pagdata->next->link)
+		{
+		 $doc->addHeadLink($pagdata->next->link, 'next', 'rel');
+		}
+
+		if ($pagdata->previous->link)
+		{
+		 $doc->addHeadLink($pagdata->previous->link, 'prev', 'rel');
+		}
 ?>
 <div class="finder">
   <h1>
@@ -34,34 +49,34 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
             <label class="small" for="q">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
             </label>
-            <input id="s_kwds" class="span12 typeahead" type="text" name="q" autocomplete="Off" value="<?php echo $searchterm ?>"/> 
+            <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>"/> 
           </div>
           <div class="span2">
-            <label class="small" for="start_Date">
+            <label class="small" for="arrival">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
             </label>       
-            <input type="text" name="start_date" id="start_date" size="30" value="<?php echo $start_date; ?>" class="start_date span9" autocomplete="Off" />
+            <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="start_date span9" autocomplete="Off" />
           </div>
           <div class="span2">
-            <label class="small" for="end_date">
+            <label class="small" for="departure">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
             </label>   
-            <input type="text" name="end_date" id="end_date" size="30" value="<?php echo $end_date; ?>" class="end_date span9" autocomplete="Off"/>
+            <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure; ?>" class="end_date span9" autocomplete="Off"/>
           </div>    
           <div class="span1">
-            <label class="small" for="search_sleeps">
+            <label class="small" for="occupancy">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
             </label> 
-            <select id="search_sleeps" class="span12" name="occupancy">
-              <?php echo JHtml::_('select.options', array(0 => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
+            <select id="occupancy" class="span12" name="occupancy">
+              <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
             </select>
           </div>
           <div class="span1">
-            <label class="small" for="search_bedrooms">
+            <label class="small" for="bedrooms">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
             </label>
-            <select id="search_bedrooms" class="span12" name="bedrooms">
-              <?php echo JHtml::_('select.options', array(0 => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
+            <select id="bedrooms" class="span12" name="bedrooms">
+              <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
             </select>
           </div>
 
@@ -99,10 +114,9 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
                 <label for="sort_by" class="control-label small">
                   <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
                 </label>
-                <select id="search_bedrooms" class="small input-small" name="sort_by">
+                <select id="sort_by" class="small input-small" name="sort_by">
                   <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_SEARCH_PLEASE_CHOOSE')), 'value', 'text', $bedrooms); ?>
                 </select>
-
             </ul>
           </div>
         </div>
@@ -134,6 +148,7 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
               </div>
               <div class="span3">
                 <?php echo $this->loadTemplate('refine'); ?>
+                <a href="<?php echo $uri . '/filter-type_villa'; ?>">Some filter</a>
               </div>
             </div>
           </div>

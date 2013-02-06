@@ -554,8 +554,8 @@ class FcSearchModelSearch extends JModelList {
     
     // Get each of the possible URL params
     // Get the query string.
-    $q = !is_null($request->get('q')) ? $request->get('q', '', 'string') : $params->get('q');
-    $q = $filter->clean($q, 'string');
+    $q = !is_null($request->get('s_kwds')) ? $request->get('s_kwds', '', 'string') : $params->get('s_kwds');
+    $q = $app->stringURLSafe($filter->clean($q, 'string'));
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');
@@ -567,8 +567,11 @@ class FcSearchModelSearch extends JModelList {
 
     // Load the list state.
     // Will come from the search results page.
-    $this->setState('list.start_date', $input->get('start_date', '', 'Alnum'));
-    $this->setState('list.end_date', $input->get('end_date', '', 'Alnum'));
+    $this->setState('list.arrival', str_replace('arrival_','',$input->get('arrival', '', 'date')));
+    $app->setUserState('list.arrival', str_replace('arrival_','',$input->get('arrival', '', 'date')));
+
+    $this->setState('list.departure', str_replace('departure_','',$input->get('departure', '', 'date')));
+    $app->setUserState('list.departure', str_replace('departure_','',$input->get('departure', '', 'date')));
 
     // Bedrooms search options
     $this->setState('list.bedrooms', $input->get('bedrooms', '', 'int'));
@@ -577,14 +580,6 @@ class FcSearchModelSearch extends JModelList {
     // Occupancy
     $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));
     $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
-
-    // Start date
-    $this->setState('list.start_date', $input->get('start_date', '', 'date'));
-    $app->setUserState('list.start_date', $input->get('start_date', '', 'date'));
-
-    // End date
-    $this->setState('list.end_date', $input->get('end_date', '', 'date'));
-    $app->setUserState('list.end_date', $input->get('end_date', '', 'date'));
 
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
@@ -608,6 +603,10 @@ class FcSearchModelSearch extends JModelList {
     // Load the user state.
     $this->setState('user.id', (int) $user->get('id'));
     $this->setState('user.groups', $user->getAuthorisedViewLevels());
+    
+    
+
+    
   }
 
   /**

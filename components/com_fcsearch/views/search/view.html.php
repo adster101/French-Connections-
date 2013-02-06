@@ -182,8 +182,6 @@ class FcSearchViewSearch extends JViewLegacy
 
 		$this->document->setTitle($title);
     
-		$this->document->addHeadLink(JRoute::_('blah'.'&type=rss'), 'canonical', 'rel', '');
-		$this->document->addHeadLink(JRoute::_('blah'.'&type=rss'), 'next', 'rel', '');
 	
 		// Configure the document meta-description.
 		if (!empty($this->explained))

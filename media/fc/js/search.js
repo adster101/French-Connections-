@@ -13,6 +13,7 @@ jQuery(document).ready(function(){
     // Get the selected tab from the local storage
     var selectedTab = localStorage['selectedTab'];
 
+    // If the selected tab is the map tag then grab the markers
     if (selectedTab == '#mapsearch') {
 
       // Get jiggy with the Google Maps, innit!
@@ -22,19 +23,19 @@ jQuery(document).ready(function(){
       
       // Get the search parameters, quicker to get the form and then extract the inputs?
       var query = jQuery('#s_kwds').attr('value');
-      var start_date = jQuery('#start_date').attr('value');
-      var end_date = jQuery('#end_date').attr('value');
-      var bedrooms = jQuery('#search_bedrooms').attr('value');
-      var occupancy = jQuery('#search_sleeps').attr('value');
+      var start_date = jQuery('#arrival').attr('value');
+      var end_date = jQuery('#departure').attr('value');
+      var bedrooms = jQuery('#bedrooms').attr('value');
+      var occupancy = jQuery('#occupancy').attr('value');
       
       // The actual search term
       var alias = stripVowelAccent(query);    
       
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json",{
-        q:alias,
-        start_date:start_date,
-        end_date:end_date,
+        s_kwds:alias,
+        arrival:start_date,
+        departure:end_date,
         bedrooms:bedrooms,
         occupancy:occupancy,
         format:"json"
@@ -84,13 +85,14 @@ jQuery(document).ready(function(){
 
   // Get the selected tab, if any and set the tab accordingly...
   var selectedTab = localStorage['selectedTab']; 
+  
   if (selectedTab == '#mapsearch') {
     jQuery('.nav li a[href="'+selectedTab+'"]').tab('show');
   }
   
-  
   jQuery('#property-search-button').click(function(event) {
     
+
     // val is the 'active' suggestion populated by typeahead
     // e.g. the option chosen should be the last active one
     var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
@@ -118,22 +120,33 @@ jQuery(document).ready(function(){
     var query = stripVowelAccent(chosen);   
 
     // The path of the search, e.g. /search or /fr/search
-    var path = jQuery('form#property-search').attr('action');  
+    var path = '/search';  
 
-    // Set the value of s_kwds to the search string alias
-    jQuery('#s_kwds').attr('value',query);
-    
-    // Get the number of bedrooms chosen in the search
-    bedrooms = jQuery('#search_bedrooms').attr('value');
-    
+    // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
+    inputs = jQuery('#property-search').find(':input').each(function() {
+      
+      id = jQuery(this).attr('id');
+      value = jQuery(this).attr('value');
+      
+      if (value && id) {
+        if (id == 's_kwds') {
+          value = stripVowelAccent(value);
+          path = path + '/' +value;
+        } else {
+          path = path+'/'+id+'_'+value;
+        }
+      }
+      
+      
+      
+    });          
     
     // Amend the path that the form is submitted to
-    jQuery('form#property-search').attr('action', path+'/'+query);
+    jQuery('form#property-search').attr('action', path);
 
     // Submit the form
     jQuery('form#property-search').submit();
     
-    event.preventDefault();  
     return false;
     
   })
@@ -142,7 +155,7 @@ jQuery(document).ready(function(){
   jQuery(".typeahead").typeahead({
      
     source: function (query, process) {
-      jQuery.get( 'index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component', 
+      jQuery.get( '/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component', 
       { 
         q: query,
         items: 10

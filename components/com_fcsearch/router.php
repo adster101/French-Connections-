@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
  */
 function FcSearchBuildRoute(&$query)
 {
-  
+
 	$segments = array();
 
   // get a menu item based on Itemid or currently active
@@ -35,21 +35,33 @@ function FcSearchBuildRoute(&$query)
 		$menuItem = $menu->getItem($query['Itemid']);
 	}
   
-  //$segments[] = $menuItem->alias;
-  if (!empty($query['q'])) {
-    $segments[] = $query['q'];
-    unset($query['q']);
+  if (!empty($query['s_kwds'])) {
+    $segments[] = $query['s_kwds'];
+    unset($query['s_kwds']);
   }
+  
+  if (!empty($query['arrival'])) {
+    $segments[] = $query['arrival'];
+    unset($query['arrival']);
+  }
+  
+  if (!empty($query['departure'])) {
+    $segments[] = $query['departure'];
+    unset($query['departure']);
+  } 
     
+  if (!empty($query['occupancy'])) {
+    $segments[] = $query['occupancy'];
+    unset($query['occupancy']);
+  }
+  
   if (!empty($query['bedrooms'])) {
     $segments[] = $query['bedrooms'];
     unset($query['bedrooms']);
   }
-  
-  if (!empty($query['occupancy'])) {
-    $segments[] = 'occupancy_'.$query['occupancy'];
-    unset($query['occupancy']);
-  }
+
+
+
   
   return $segments;
 }
@@ -70,15 +82,31 @@ function FcSearchParseRoute($segments)
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
 
-  
   // Count segments
   $count = count( $segments );
   
-  $vars['q'] = str_replace(':','-',$segments[0]);
-
-  if (isset($segments[1])) {
-    $vars['bedrooms'] = $segments[1];
+  
+  // Need to loop over the segments and test each for a particular filter...
+  
+  // The first segment has to be the alias the search is based on.
+  $vars['s_kwds'] = str_replace(':','-',$segments[0]);
+  
+  array_shift($segments);
+  
+  // The main filters will always come from the form
+  // i.e. the dates, occupancy, bedrooms etc
+  
+  foreach($segments as $segment) {
+    
+    // We know that all filter will be period separated, so let's explode on .
+    $filter = explode('_',$segment);
+    
+    $vars[$filter[0]] = str_replace(':','-',$segment);
+   
   }
+  
 
+  
+  
 	return $vars;
 }

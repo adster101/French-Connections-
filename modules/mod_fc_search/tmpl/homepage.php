@@ -15,8 +15,8 @@ $lang = $app->input->get('lang','en');
 
 $bedrooms = $app->getUserState('list.bedrooms');
 $occupancy = $app->getUserState('list.occupancy');
-$start_date = $app->getUserState('list.start_date');
-$end_date = $app->getUserState('list.end_date');
+$arrival = $app->getUserState('list.arrival');
+$departure = $app->getUserState('list.departure');
 
 
 // The following are coordinates that trace out the outline shape of a region. They should really be stored in the classifications table
@@ -54,7 +54,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         <area 
           shape="poly" 
           coords="<?php echo $area_map[$region->id] ?>"
-          href="<?php echo JRoute::_('index.php?option=com_fcsearch&q='. $region->alias .'&lang=' . $lang . '&Itemid=165'); ?>" 
+          href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds='. $region->alias .'&lang=' . $lang . '&Itemid=165'); ?>" 
           alt="<?php echo $region->title ?>">
        <?php endforeach; ?>
       </map>
@@ -63,37 +63,37 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <label for="s_kwds">
       <?php echo JText::_('COM_FCSEARCH_SEARCH_DESTINATION') ?>
     </label>
-    <input id="s_kwds" class="input-medium typeahead" type="text" name="q" autocomplete="Off" value=""/> 
+    <input id="s_kwds" class="input-medium typeahead" type="text" name="s_kwds" autocomplete="Off" value=""/> 
     <div class="row-fluid">
       <div class="span6">
-        <label for="start_date">
+        <label for="arrival">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
         </label>
-        <input id="start_date" class="span9 start_date" type="text" name="start_date" autocomplete="Off" value="<?php echo $start_date; ?>"/>    
+        <input id="arrival" class="span9 start_date" type="text" name="arrival" autocomplete="Off" value="<?php echo $arrival; ?>"/>    
       </div>
       <div class="span6">
-        <label for="end_date">
+        <label for="departure">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
         </label>
-        <input id="end_date" class="span9 end_date" type="text" name="end_date" autocomplete="Off" value="<?php echo $end_date; ?>" />    
+        <input id="departure" class="span9 end_date" type="text" name="departure" autocomplete="Off" value="<?php echo $departure; ?>" />    
       </div>
     </div>
     <div class="row-fluid">
 
       <div class="span6">
-        <label for="search_sleeps">
+        <label for="occupancy">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
         </label>
-        <select id="search_sleeps" class="input-mini" name="occupancy">
-          <?php echo JHtml::_('select.options', array(0 => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>          
+        <select id="occupancy" class="input-mini" name="occupancy">
+          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>          
         </select>
       </div>
       <div class="span6">
-        <label for="search_bedrooms">
+        <label for="bedrooms">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
         </label>
-        <select id="search_bedrooms" class="input-mini" name="bedrooms">
-          <?php echo JHtml::_('select.options', array(0 => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, '10+' => 10), 'value', 'text', $bedrooms); ?>
+        <select id="bedrooms" class="input-mini" name="bedrooms">
+          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, '10+' => 10), 'value', 'text', $bedrooms); ?>
         </select>
       </div>
     </div>
