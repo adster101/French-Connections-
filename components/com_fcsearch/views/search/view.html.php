@@ -51,6 +51,8 @@ class FcSearchViewSearch extends JViewLegacy
     
 		$pagination = $this->get('Pagination');
     
+    $refine_options = $this->get('RefineOptions');
+    
     
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -71,12 +73,10 @@ class FcSearchViewSearch extends JViewLegacy
 		$this->total = &$total;
 		$this->pagination = &$pagination;
     $this->localinfo = $localinfo;
+    $this->refine_options = $refine_options;
 		
     $this->prepareDocument();
-
     $this->sidebar = JHtmlSidebar::render();
-
-	
 
 		// Log the search
 		JSearchHelper::logSearch('Log some useful search information...', 'com_fcsearch');

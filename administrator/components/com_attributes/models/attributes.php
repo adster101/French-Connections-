@@ -81,7 +81,7 @@ class AttributesModelAttributes extends JModelList
 		// Select some fields
     // TO DO - This needs abstracting into an attributes table instance and reused within the property manager component
     
-		$query->select('a.ordering,a.id,a.attribute_type_id,a.title,a.published,at.title as attribute_type, at.id as attribute_type_id');
+		$query->select('a.ordering,a.id,a.attribute_type_id,a.title,a.published,a.search_filter,at.title as attribute_type, at.id as attribute_type_id');
     $query->join('left','#__attributes_type at ON a.attribute_type_id = at.id');
 		
 		// From the hello table

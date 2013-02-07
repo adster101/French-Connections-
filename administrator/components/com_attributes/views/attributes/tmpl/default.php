@@ -77,11 +77,13 @@ if ($saveOrder) {
             <th>
               <?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
             </th>
+            <th>
+              Search filter
+            </th>
             <th width="1%">
               <?php echo JText::_('JGRID_HEADING_ID'); ?>
             </th>
           </tr>		
-
         </thead> 
         <tbody>
           <?php
@@ -113,6 +115,9 @@ if ($saveOrder) {
                 </a>
                 <div class="small"><?php echo $this->escape($item->attribute_type); ?></div>
 
+              </td>
+              <td>
+                <?php echo $item->search_filter ?>
               </td>
               <td>
                 <?php echo $item->id; ?>

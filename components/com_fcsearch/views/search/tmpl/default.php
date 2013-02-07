@@ -26,15 +26,13 @@ $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list
 
 $pagdata = $this->pagination->getData();
 
-		if ($pagdata->next->link)
-		{
-		 $doc->addHeadLink($pagdata->next->link, 'next', 'rel');
-		}
+if ($pagdata->next->link) {
+  $doc->addHeadLink($pagdata->next->link, 'next', 'rel');
+}
 
-		if ($pagdata->previous->link)
-		{
-		 $doc->addHeadLink($pagdata->previous->link, 'prev', 'rel');
-		}
+if ($pagdata->previous->link) {
+  $doc->addHeadLink($pagdata->previous->link, 'prev', 'rel');
+}
 ?>
 <div class="finder">
   <h1>
@@ -128,7 +126,11 @@ $pagdata = $this->pagination->getData();
                   <div class="pagination small">
                     <?php echo $this->pagination->getPagesLinks(); ?>
                     <p class="small pull-right" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
-                  </div>        
+                  </div>                  
+                </div>
+              </div>
+              <div class="row-fluid">
+                <div class="span9">
                   <ul class="search-results list-striped">
                     <?php
                     for ($i = 0, $n = count($this->results); $i < $n; $i++) {
@@ -139,17 +141,17 @@ $pagdata = $this->pagination->getData();
                     }
                     ?>
                   </ul>
-                </div>
-                <div class="search-pagination">
-                  <div class="pagination">
-                    <?php echo $this->pagination->getPagesLinks(); ?>
+                  <div class="search-pagination">
+                    <div class="pagination">
+                      <?php echo $this->pagination->getPagesLinks(); ?>
+                    </div>
                   </div>
                 </div>
+                <div class="span3">
+                  <?php echo $this->loadTemplate('refine'); ?>
+                </div>
               </div>
-              <div class="span3">
-                <?php echo $this->loadTemplate('refine'); ?>
-                <a href="<?php echo $uri . '/filter-type_villa'; ?>">Some filter</a>
-              </div>
+
             </div>
           </div>
           <div class="tab-pane" id="mapsearch">

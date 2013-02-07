@@ -2,12 +2,12 @@
 <metafile version="3.0" client="site">
     <tag>fr-FR</tag>
 	<name>French (fr-FR)</name>
-	<version>3.0.2.1</version>
-	<creationDate>8 nov 2012</creationDate>
+	<version>3.0.3.1</version>
+	<creationDate>22 jan 2012</creationDate>
 	<author>French translation team : joomla.fr</author>
 	<authorEmail>traduction@joomla.fr</authorEmail>
 	<authorUrl>www.joomla.fr</authorUrl>
-	<copyright>Copyright (C) 2005 - 2012 Open Source Matters &amp; joomla.fr. All rights reserved.</copyright>
+	<copyright>Copyright (C) 2005 - 2013 Open Source Matters &amp; joomla.fr. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <description>French site language for Joomla 3.0</description>
 	<metadata>

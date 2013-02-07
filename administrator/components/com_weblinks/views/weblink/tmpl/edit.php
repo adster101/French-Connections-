@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_weblinks
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -18,12 +18,10 @@ JHtml::_('formbehavior.chosen', 'select');
 <script type="text/javascript">
 	Joomla.submitbutton = function(task)
 	{
-		if (task == 'weblink.cancel' || document.formvalidator.isValid(document.id('weblink-form'))) {
+		if (task == 'weblink.cancel' || document.formvalidator.isValid(document.id('weblink-form')))
+		{
 			<?php echo $this->form->getField('description')->save(); ?>
 			Joomla.submitform(task, document.getElementById('weblink-form'));
-		}
-		else {
-			alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED'));?>');
 		}
 	}
 </script>
@@ -81,9 +79,9 @@ JHtml::_('formbehavior.chosen', 'select');
 						<?php echo $this->form->getInput('images'); ?>
 					</div>
 				</div>
-				<?php foreach($this->form->getGroup('images') as $field): ?>
+				<?php foreach ($this->form->getGroup('images') as $field) : ?>
 					<div class="control-group">
-						<?php if (!$field->hidden): ?>
+						<?php if (!$field->hidden) : ?>
 							<div class="control-label">
 								<?php echo $field->label; ?>
 							</div>
@@ -151,7 +149,7 @@ JHtml::_('formbehavior.chosen', 'select');
 			<?php echo JHtml::_('form.token'); ?>
 		</div>
 		</div>
-		<!-- End Weblinks -->		
+		<!-- End Weblinks -->
 		<!-- Begin Sidebar -->
 		<div class="span2">
 			<h4><?php echo JText::_('JDETAILS');?></h4>

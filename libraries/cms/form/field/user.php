@@ -3,7 +3,7 @@
  * @package     Joomla.Libraries
  * @subpackage  Form
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -82,6 +82,7 @@ class JFormFieldUser extends JFormField
 		$html[] = '<div class="input-append">';
 		$html[] = '	<input class="input-medium" type="text" id="' . $this->id . '_name"' . ' value="' . htmlspecialchars($table->name, ENT_COMPAT, 'UTF-8') . '"'
 			. ' disabled="disabled"' . $attr . ' />';
+
 		// Create the user select button.
 		if ($this->element['readonly'] != 'true')
 		{

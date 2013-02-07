@@ -3,7 +3,7 @@
  * @package     Joomla.Site
  * @subpackage  com_finder
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -247,7 +247,7 @@ class FinderModelSearch extends JModelList
 		{
 			// Convert the associative array to a numerically indexed array.
 			$groups = array_values($this->query->filters);
-      
+
 			// Iterate through each taxonomy group and add the join and where.
 			for ($i = 0, $c = count($groups); $i < $c; $i++)
 			{

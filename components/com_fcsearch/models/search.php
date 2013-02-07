@@ -48,32 +48,30 @@ class FcSearchModelSearch extends JModelList {
   /*
    * Longitude, if a town/city search is being applied.
    */
-  public $longitude = ''; 
-  
+  public $longitude = '';
+
   /*
    * Title the title of the locality being searched on.
    */
   public $title = '';
-  
+
   /*
    * Description, the description of the locality being searched on.
    */
   public $description = '';
-   
-  public function getLocalInfo() 
-  {
+
+  public function getLocalInfo() {
     // First off we need to get the classification detail
     // E.g. is this a department, area or town etc
     // Create the query to get the search results.
     // Make this a call to get the crumbs trail?
     // Reuse the classification table instance
-    
     // TODO - Cache the result 
-    
+
     $input = JFactory::getApplication()->input;
-    
-    $lang = $input->get('lang', 'en'); 
-    
+
+    $lang = $input->get('lang', 'en');
+
     $db = $this->getDbo();
     $query = $db->getQuery(true);
     $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude,' . $db->QuoteName('description') . ',' . $db->QuoteName('title'));
@@ -89,7 +87,6 @@ class FcSearchModelSearch extends JModelList {
 
     try {
       $row = $db->loadObject();
-      
     } catch (Exception $e) {
       // Log any exception
     }
@@ -105,10 +102,9 @@ class FcSearchModelSearch extends JModelList {
       //$this->description = $row[4];
       //$this->title = $row[5];
       return $row;
-      
     }
   }
-  
+
   /**
    * Method to get the results of the query.
    *
@@ -118,10 +114,10 @@ class FcSearchModelSearch extends JModelList {
    * @throws  Exception on database error.
    */
   public function getResults() {
-    
+
     $db = $this->getDbo();
-    
-    $query = $db->getQuery(true);    
+
+    $query = $db->getQuery(true);
     // Get the date
     $date = JFactory::getDate();
 
@@ -132,9 +128,9 @@ class FcSearchModelSearch extends JModelList {
     if ($this->retrieve($store)) {
       return $this->retrieve($store);
     }
-    
+
     // Get the language from the state
-    $lang = $this->getState('list.language','en');
+    $lang = $this->getState('list.language', 'en');
 
     // Add check here on level, perform distance search if a town/city.
     // Proceed and get all the properties in this location
@@ -195,17 +191,15 @@ class FcSearchModelSearch extends JModelList {
       $query->from('#__helloworld h');
       if ($lang == 'fr') {
         $query->join('left', '#__classifications_translations c on c.id = h.city');
-
       } else {
         $query->join('left', '#__classifications c on c.id = h.city');
       }
     } else { // This else happens if the search is not on a town or city level region
       if ($lang == 'fr') {
         $query->from('#__classifications_translations c');
-
       } else {
         $query->from('#__classifications c');
-      }      
+      }
     }
 
     if ($this->level == 1) { // Area level
@@ -221,17 +215,15 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
       $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');
       $query->join('left', '#__classifications_translations g ON g.id = h.city');
-      
     } else {
       $query->join('left', '#__attributes b ON b.id = h.property_type');
       $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
       $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
-      $query->join('left', '#__attributes f ON f.id = h.base_currency'); 
+      $query->join('left', '#__attributes f ON f.id = h.base_currency');
       $query->join('left', '#__classifications g ON g.id = h.city');
-
     }
-    
-    
+
+
 
     if ($this->getState('list.start_date')) {
       $query->join('left', '#__availability a on h.id = a.id');
@@ -375,9 +367,9 @@ class FcSearchModelSearch extends JModelList {
         $query->order('distance');
         $query->having('distance < 25');
       }
-      
+
       // Make sure we only get live properties...
-      $query->where('h.expiry_date >= ' . $db->quote($date->toSql()) );
+      $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
       // Push the data into cache.
       $this->store($store, $query, true);
@@ -462,16 +454,81 @@ class FcSearchModelSearch extends JModelList {
     }
 
 
-
-
-
-
-
     // Push the total into cache.
     $this->store($store, min($total, $limit));
 
     // Return the total.
     return $this->retrieve($store);
+  }
+
+  /**
+   * Method to retrieve a list of 'refinement options' for display on the search screen
+   *  
+   */
+  public function getRefineOptions() {
+
+    try {
+
+      $attributes = array();
+      $lang = $this->getState('list.language', 'en');
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+
+      // Retrieve based on the language
+      if ($lang == 'fr') {
+        $query->select('a.id as value, c.title as attribute, a.published, at.title as attribute_type');
+      } else {
+        $query->select('a.id as value, a.title AS attribute,  a.published, at.title as attribute_type');
+      }
+      $query->select(
+              '((
+
+SELECT COUNT( * ) 
+FROM qitz3_attributes_property ap
+WHERE ap.attribute_id = a.id
+) + ( 
+SELECT COUNT( * ) 
+FROM qitz3_helloworld h
+WHERE h.property_type = a.id )
+) AS count'
+              );
+
+      $query->from('#__attributes AS a');
+      $query->join('LEFT', $db->quoteName('#__attributes_type') . ' AS b ON a.attribute_type_id = b.id');
+      $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
+
+      // If any other language that en-GB load in the translation based on the lang->getTag() function...
+      if ($lang == 'fr') {
+        $query->join('LEFT', $db->quoteName('#__attributes_translation') . ' c on c.id = a.id');
+      }
+
+      $query->where('search_filter = 1');
+      $query->where('a.published = 1');
+
+      // Get the options.
+      $db->setQuery($query);
+
+
+
+
+      $facilities = $db->loadObjectList();
+
+      foreach ($facilities as $attribute) {
+        if (!array_key_exists($attribute->attribute_type, $attributes)) {
+          $attributes[$attribute->attribute_type] = array();
+        }
+
+        $attributes[$attribute->attribute_type][] = $attribute->attribute ;
+      }
+      
+      return $attributes;
+      
+    } catch (Exception $e) {
+      print_r($e->getMessage());
+      // Log the exception and return false
+      //JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
+      return false;
+    }
   }
 
   /**
@@ -486,6 +543,7 @@ class FcSearchModelSearch extends JModelList {
    * @since   2.5
    */
   protected function store($id, $data, $persistent = true) {
+
     // Store the data in internal cache.
     $this->cache[$id] = $data;
 
@@ -506,6 +564,7 @@ class FcSearchModelSearch extends JModelList {
    * @return  mixed  The cached data if found, null otherwise.
    *
    * @since   2.5
+   * 
    */
   protected function retrieve($id, $persistent = true) {
     $data = null;
@@ -550,8 +609,8 @@ class FcSearchModelSearch extends JModelList {
     $request = $input->request;
 
     // Set the language in the model state    
-    $this->setState ('list.language',$input->get('lang', 'en')); 
-    
+    $this->setState('list.language', $input->get('lang', 'en'));
+
     // Get each of the possible URL params
     // Get the query string.
     $q = !is_null($request->get('s_kwds')) ? $request->get('s_kwds', '', 'string') : $params->get('s_kwds');
@@ -567,11 +626,11 @@ class FcSearchModelSearch extends JModelList {
 
     // Load the list state.
     // Will come from the search results page.
-    $this->setState('list.arrival', str_replace('arrival_','',$input->get('arrival', '', 'date')));
-    $app->setUserState('list.arrival', str_replace('arrival_','',$input->get('arrival', '', 'date')));
+    $this->setState('list.arrival', str_replace('arrival_', '', $input->get('arrival', '', 'date')));
+    $app->setUserState('list.arrival', str_replace('arrival_', '', $input->get('arrival', '', 'date')));
 
-    $this->setState('list.departure', str_replace('departure_','',$input->get('departure', '', 'date')));
-    $app->setUserState('list.departure', str_replace('departure_','',$input->get('departure', '', 'date')));
+    $this->setState('list.departure', str_replace('departure_', '', $input->get('departure', '', 'date')));
+    $app->setUserState('list.departure', str_replace('departure_', '', $input->get('departure', '', 'date')));
 
     // Bedrooms search options
     $this->setState('list.bedrooms', $input->get('bedrooms', '', 'int'));
@@ -603,10 +662,6 @@ class FcSearchModelSearch extends JModelList {
     // Load the user state.
     $this->setState('user.id', (int) $user->get('id'));
     $this->setState('user.groups', $user->getAuthorisedViewLevels());
-    
-    
-
-    
   }
 
   /**

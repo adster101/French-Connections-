@@ -1888,7 +1888,6 @@ table .span24 {
 	position: relative;
 	height: 0;
 	overflow: hidden;
-	overflow: visible \9;
 	-webkit-transition: height .35s ease;
 	-moz-transition: height .35s ease;
 	-o-transition: height .35s ease;
@@ -5554,6 +5553,9 @@ fieldset.radio.btn-group {
 input.invalid {
 	border: 1px solid #9d261d;
 }
+.tip-text {
+	text-align: left;
+}
 @font-face {
 	font-family: 'IcoMoon';
 	src: url('../../../../media/jui/fonts/IcoMoon.eot');
@@ -5716,8 +5718,10 @@ input.invalid {
 .icon-support:before {
 	content: "\46";
 }
+.icon-pending:before,
 .icon-warning:before {
 	content: "\48";
+	color: #f89406;
 }
 .icon-publish:before,
 .icon-save:before,

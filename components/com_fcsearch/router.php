@@ -98,15 +98,12 @@ function FcSearchParseRoute($segments)
   
   foreach($segments as $segment) {
     
-    // We know that all filter will be period separated, so let's explode on .
+    // We know that all filter will be _period_ separated, so let's explode on .
     $filter = explode('_',$segment);
     
     $vars[$filter[0]] = str_replace(':','-',$segment);
    
   }
-  
 
-  
-  
 	return $vars;
 }

@@ -13,7 +13,6 @@
       label="Attribute ID"
       description="The primary ID of this attribute"
       filter="int"
-      
     />
 
     <field
@@ -28,6 +27,7 @@
       class="inputbox input-xlarge"
       filter="string"
     /> 
+    
     <field
 			name="attribute_type_id"
 			type="attributetypes"
@@ -38,7 +38,20 @@
       class="inputbox input-large"
       filter="int">
         <option	value="">COM_CLASSIFICATION_ITEM_ROOT</option>
-    </field>> 
+    </field>
+    
+    <field
+			name="search_filter"
+			type="list"
+			default="0"
+			label="Search filter"
+			description ="Whether to show this attribute as a filter on the search pages..."
+      required="true"
+      class="inputbox input-mini"
+      filter="int">
+        <option	value="0">No</option>
+        <option	value="1">Yes</option>
+    </field>
       
 	</fieldset>	  
 	

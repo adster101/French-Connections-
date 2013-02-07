@@ -3,7 +3,7 @@
  * @package     Joomla.Platform
  * @subpackage  Pagination
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -661,6 +661,7 @@ class JPagination
 				$params .= '&' . $key . '=' . $value;
 			}
 		}
+
 		$data->all = new JPaginationObject(JText::_('JLIB_HTML_VIEW_ALL'), $this->prefix);
 		if (!$this->viewall)
 		{
@@ -678,6 +679,7 @@ class JPagination
 
 			// Set the empty for removal from route
 			// @todo remove code: $page = $page == 0 ? '' : $page;
+
 			$data->start->base = '0';
 			$data->start->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=0');
 			$data->previous->base = $page;

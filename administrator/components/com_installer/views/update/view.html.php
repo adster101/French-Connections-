@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_installer
  *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -48,7 +48,7 @@ class InstallerViewUpdate extends InstallerViewDefault
 	 *
 	 * @return  void
 	 *
-	 * @since	1.6
+	 * @since   1.6
 	 */
 	public function display($tpl = null)
 	{
@@ -74,7 +74,7 @@ class InstallerViewUpdate extends InstallerViewDefault
 	 *
 	 * @return  void
 	 *
-	 * @since	1.6
+	 * @since   1.6
 	 */
 	protected function addToolbar()
 	{
@@ -88,16 +88,30 @@ class InstallerViewUpdate extends InstallerViewDefault
 		JToolbarHelper::help('JHELP_EXTENSIONS_EXTENSION_MANAGER_UPDATE');
 		JHtmlSidebar::setAction('index.php?option=com_installer&view=manage');
 
-		JHtmlSidebar::addFilter(JText::_('COM_INSTALLER_VALUE_CLIENT_SELECT'), 'filter_client_id',
-			JHtml::_('select.options', array('0' => 'JSITE', '1' => 'JADMINISTRATOR'), 'value', 'text', $this->state->get('filter.client_id'), true));
+		JHtmlSidebar::addFilter(
+			JText::_('COM_INSTALLER_VALUE_CLIENT_SELECT'),
+			'filter_client_id',
+			JHtml::_('select.options', array('0' => 'JSITE', '1' => 'JADMINISTRATOR'), 'value', 'text', $this->state->get('filter.client_id'), true)
+		);
 
-		JHtmlSidebar::addFilter(JText::_('COM_INSTALLER_VALUE_TYPE_SELECT'), 'filter_type',
-			JHtml::_('select.options', InstallerHelper::getExtensionTypes(), 'value', 'text', $this->state->get('filter.type'), true));
+		JHtmlSidebar::addFilter(
+			JText::_('COM_INSTALLER_VALUE_TYPE_SELECT'),
+			'filter_type',
+			JHtml::_('select.options', InstallerHelper::getExtensionTypes(), 'value', 'text', $this->state->get('filter.type'), true)
+		);
 
-		JHtmlSidebar::addFilter(JText::_('COM_INSTALLER_VALUE_FOLDER_SELECT'), 'filter_group',
-			JHtml::_('select.options',
-				array_merge(InstallerHelper::getExtensionGroupes(), array('*' => JText::_('COM_INSTALLER_VALUE_FOLDER_NONAPPLICABLE'))), 'value',
-				'text', $this->state->get('filter.group'), true));
+		JHtmlSidebar::addFilter(
+			JText::_('COM_INSTALLER_VALUE_FOLDER_SELECT'),
+			'filter_group',
+			JHtml::_(
+				'select.options',
+				array_merge(InstallerHelper::getExtensionGroupes(), array('*' => JText::_('COM_INSTALLER_VALUE_FOLDER_NONAPPLICABLE'))),
+				'value',
+				'text',
+				$this->state->get('filter.group'),
+				true
+			)
+		);
 		parent::addToolbar();
 	}
 }
