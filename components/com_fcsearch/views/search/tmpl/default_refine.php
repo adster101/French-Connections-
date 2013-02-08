@@ -9,10 +9,11 @@
 defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
-print_r($this->refine_options);
+
 ?>
+
 <style>
-  .refine.affix {top:5px;}
+  .refine.affix {top:5px;width:220px;
   
 </style>
 <div class="refine" data-spy="affix" data-offset-top="500">
@@ -27,11 +28,12 @@ print_r($this->refine_options);
       </div>
       <div id="<?php echo $app->stringURLSafe($key) ?>" class="accordion-body collapse in">
         <div class="accordion-inner">
-          <?php foreach($values as $value) :?>
+          <?php foreach($values as $key => $value) : ?>
           <p>
-            <a href="<?php echo JRoute::_(JUri::current()) . '/' . $value?>"><?php echo $value . '()'; ?></a>
+            <a class="muted" href="<?php echo JRoute::_(JUri::current()). "/" . $value['search_code'] . JStringNormalise::toUnderscoreSeparated($key) . '_' . $value['id'] ?>">
+               <i class="icon-new"> </i>&nbsp;<?php echo $key; ?> (<?php echo $value['count']; ?>)
+            </a>
           </p>
-          
           <?php endforeach; ?>
         </div>
       </div>
@@ -41,6 +43,7 @@ print_r($this->refine_options);
  
   </div>
 
+  
 
 
 

@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
 function FcSearchBuildRoute(&$query)
 {
 
-	$segments = array();
+  $segments = array();
 
   // get a menu item based on Itemid or currently active
 	$app	= JFactory::getApplication();
@@ -98,10 +98,18 @@ function FcSearchParseRoute($segments)
   
   foreach($segments as $segment) {
     
-    // We know that all filter will be _period_ separated, so let's explode on .
+    // We know that all filter will be _ separated, so let's explode on .
     $filter = explode('_',$segment);
     
-    $vars[$filter[0]] = str_replace(':','-',$segment);
+    if (array_key_exists($filter[0], $vars)) {
+      $vars[$filter[0]]['asd'] = str_replace(':','-',$segment);
+      
+    } else {
+
+      $vars[$filter[0]] = str_replace(':','-',$segment);
+    
+    }
+    
    
   }
 

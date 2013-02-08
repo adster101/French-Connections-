@@ -51,6 +51,7 @@ class FcSearchViewSearch extends JViewLegacy
     
 		$pagination = $this->get('Pagination');
     
+    // Has to be done after getState, as with all really.
     $refine_options = $this->get('RefineOptions');
     
     
@@ -202,6 +203,7 @@ class FcSearchViewSearch extends JViewLegacy
     $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.8.23.custom.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/date-range.js', 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.8.23.custom.css');
+    $document->addStyleSheet(JURI::root() . 'media/fc/css/general.css');
 		$document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
 
     JHtmlSidebar::addFilter(

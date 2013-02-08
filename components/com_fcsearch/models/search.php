@@ -131,6 +131,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Get the language from the state
     $lang = $this->getState('list.language', 'en');
+    
 
     // Add check here on level, perform distance search if a town/city.
     // Proceed and get all the properties in this location
@@ -301,19 +302,7 @@ class FcSearchModelSearch extends JModelList {
       // TO DO - ensure this works in French as well
       $query = $db->getQuery(true);
       $query->select('
-              h.id,
-              h.parent_id,
-              h.level,
-              h.title,
-              h.area,
-              h.region,
-              h.department,
-              LEFT(h.description, 75),
-              h.thumbnail,
-              h.occupancy,
-              h.swimming,
-              c.path,
-              c.title
+              h.id
       ');
 
       if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
@@ -376,6 +365,7 @@ class FcSearchModelSearch extends JModelList {
 
       // Return a copy of the query object.
       return clone($this->retrieve($store, true));
+      
     } catch (Exception $e) {
 
       // Oops, exceptional
@@ -421,44 +411,41 @@ class FcSearchModelSearch extends JModelList {
    */
   protected function getResultsTotal() {
     // Get the store id.
-    $store = $this->getStoreId('getResultsTotal', false);
+    $storeTotal = $this->getStoreId('getResultsTotal', false);
+    $storeResults = $this->getStoreId('getResultsTotalRefine', false);
 
     // Get the maximum number of results.
     $limit = (int) $this->getState('match.limit');
+    
     // Use the cached data if possible.
-    if ($this->retrieve($store)) {
-      return $this->retrieve($store);
+    if ($this->retrieve($storeTotal)) {
+      return $this->retrieve($storeTotal);
     }
 
     $base = $this->getListQuery();
 
     $sql = clone($base);
 
+    $this->_db->setQuery($sql);
 
-    if ($this->level == 4) {
-
-      $this->_db->setQuery($sql);
-
-      $results = $this->_db->execute();
-
-      $total = $this->_db->getNumRows($results);
-    } else {
-
-
-      $sql->clear('select');
-      $sql->select('COUNT(DISTINCT h.id)');
-
-      // Get the total from the database.
-      $this->_db->setQuery($sql);
-      $total = $this->_db->loadResult();
-    }
-
-
+    // Execute the query so we can get a valid db resource 
+    $handle = $this->_db->execute();
+    
+    // Get the total number returnerd
+    $total = $this->_db->getNumRows($handle);
+    
+    // Get the actual data set?
+    $resultset = $this->_db->loadObjectList();
+      
+    
     // Push the total into cache.
-    $this->store($store, min($total, $limit));
-
+    $this->store($storeTotal, min($total, $limit));
+    
+    // Push the result set into the cache
+    $this->store($storeResults, $resultset);
+    
     // Return the total.
-    return $this->retrieve($store);
+    return $this->retrieve($storeTotal);
   }
 
   /**
@@ -467,6 +454,28 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getRefineOptions() {
 
+    // The query resultset should be stored in the cache already
+    $storeResults = $this->getStoreId('getResultsTotalRefine', false);
+    
+    // The array of property IDs we have results for, for this particular query
+    $property_list = array();
+    
+    
+    // Use the cached data if possible.
+    if ($this->retrieve($storeResults)) {
+      
+      $resultset = $this->retrieve($storeResults);
+      
+      foreach ($resultset as $result) {
+        $property_list[] = $result->id;
+      }
+      
+    }    
+    
+    $property_list = implode(',',$property_list);
+    
+    
+    
     try {
 
       $attributes = array();
@@ -476,26 +485,14 @@ class FcSearchModelSearch extends JModelList {
 
       // Retrieve based on the language
       if ($lang == 'fr') {
-        $query->select('a.id as value, c.title as attribute, a.published, at.title as attribute_type');
+        $query->select('a.id,count(attribute_id) as count, c.title as attribute, a.published, at.title as facility_type, at.search_code');
       } else {
-        $query->select('a.id as value, a.title AS attribute,  a.published, at.title as attribute_type');
+        $query->select('a.id,count(attribute_id) as count, a.title AS attribute, a.published, at.title as facility_type, at.search_code');
       }
-      $query->select(
-              '((
-
-SELECT COUNT( * ) 
-FROM qitz3_attributes_property ap
-WHERE ap.attribute_id = a.id
-) + ( 
-SELECT COUNT( * ) 
-FROM qitz3_helloworld h
-WHERE h.property_type = a.id )
-) AS count'
-              );
 
       $query->from('#__attributes AS a');
-      $query->join('LEFT', $db->quoteName('#__attributes_type') . ' AS b ON a.attribute_type_id = b.id');
       $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
+      $query->join('left', '#__attributes_property ap on ap.attribute_id = a.id');
 
       // If any other language that en-GB load in the translation based on the lang->getTag() function...
       if ($lang == 'fr') {
@@ -504,7 +501,9 @@ WHERE h.property_type = a.id )
 
       $query->where('search_filter = 1');
       $query->where('a.published = 1');
-
+      $query->where('property_id in (' . $property_list . ')');
+      $query->group('a.id');
+      
       // Get the options.
       $db->setQuery($query);
 
@@ -513,14 +512,16 @@ WHERE h.property_type = a.id )
 
       $facilities = $db->loadObjectList();
 
-      foreach ($facilities as $attribute) {
-        if (!array_key_exists($attribute->attribute_type, $attributes)) {
-          $attributes[$attribute->attribute_type] = array();
+      foreach ($facilities as $facility) {
+        if (!array_key_exists($facility->facility_type, $attributes)) {
+          $attributes[$facility->facility_type] = array();
         }
 
-        $attributes[$attribute->attribute_type][] = $attribute->attribute ;
-      }
-      
+        $attributes[$facility->facility_type][$facility->attribute]['count'] = $facility->count;
+        $attributes[$facility->facility_type][$facility->attribute]['search_code'] = $facility->search_code;
+        $attributes[$facility->facility_type][$facility->attribute]['id'] = $facility->id;
+
+      }     
       return $attributes;
       
     } catch (Exception $e) {
@@ -635,6 +636,8 @@ WHERE h.property_type = a.id )
     // Bedrooms search options
     $this->setState('list.bedrooms', $input->get('bedrooms', '', 'int'));
     $app->setUserState('list.bedrooms', $input->get('bedrooms', '', 'int'));
+    
+    $this->setState('list.activity', $input->get('activity', '', 'int'));
 
     // Occupancy
     $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));

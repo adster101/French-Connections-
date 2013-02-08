@@ -40,6 +40,18 @@
       class="inputbox input-large"
       filter="string"
     />     
+    <field
+			name="search_code"
+			type="text"
+			default=""
+			label="Search code"
+			description ="This field is provided as a code which is applied to the filter string on the search result page."
+      maxlength="25"
+      size="30"
+      required="false"
+      class="inputbox input-large"
+      filter="string"
+    />     
     
 		<field name="state" type="list" label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC" class="input-small"
