@@ -51,6 +51,7 @@ class FcSearchViewSearch extends JViewLegacy
     
 		$pagination = $this->get('Pagination');
     
+    
     // Has to be done after getState, as with all really.
     $refine_options = $this->get('RefineOptions');
     
@@ -70,7 +71,10 @@ class FcSearchViewSearch extends JViewLegacy
 
 		// Push out the view data.
 		$this->state = &$state;
-		$this->results = &$results;
+
+    $this->results = &$results;
+    
+    
 		$this->total = &$total;
 		$this->pagination = &$pagination;
     $this->localinfo = $localinfo;
@@ -94,12 +98,7 @@ class FcSearchViewSearch extends JViewLegacy
 		}
 
     // Need to set valid meta data for the page here, load any JS, CSS Etc
-    
-		JDEBUG ? $GLOBALS['_PROFILER']->mark('beforeFinderLayout') : null;
-
 		parent::display($tpl);
-
-		JDEBUG ? $GLOBALS['_PROFILER']->mark('afterFinderLayout') : null;
 	}
 
 	/**
