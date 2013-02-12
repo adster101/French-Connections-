@@ -35,7 +35,7 @@ class ImportControllerAttributes extends JControllerForm {
 
     $query->select('id');
     $query->from('#__attributes');
-    $query->where("attribute_type_id in (8,9,10,11,12,28)");
+    $query->where("attribute_type_id in (1,2,7,8,9,10,11,12,28)");
 
     // Set the query.
     $db->setQuery($query);

@@ -43,7 +43,7 @@ class HelloWorldTablePropertyAttributes extends JTable
 
     $query->leftJoin('#__attributes_type at on at.id = a.attribute_type_id');
 
-    $query->where($this->_db->quoteName('property_id') . ' = ' . $this->_db->quote($id));
+    $query->where($this->_db->quoteName('property_id') . ' = ' . (int) $id);
     $this->_db->setQuery($query);
     
 		try
@@ -64,6 +64,7 @@ class HelloWorldTablePropertyAttributes extends JTable
         $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
         
       }
+
       return $property_attributes;
 		}
     

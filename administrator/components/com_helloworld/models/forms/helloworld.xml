@@ -27,35 +27,7 @@
   </fieldset>	  
 
  
-  
-  <fieldset name="details">
-    <field
-      name="accommodation_type"
-      labelclass="control-label"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
-      message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
-      type="attributetype"
-      filter="integer"
-      required="true"
-      id="2"
-      placeholder="true"
-    />
-    
-    <field
-      name="property_type"
-      labelclass="control-label"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
-      message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
-      type="attributetype"
-      filter="integer"
-      required="true"
-      id="1"
-      default=""
-      placeholder="true"      
-    />
-  </fieldset>
+
   <fieldset name="Location">
     <field
       name="department"
@@ -69,19 +41,7 @@
       labelclass="control-label">
       <option value="0">JOPTION_SELECT_CATEGORY</option>
     </field>		
-    <field
-      name="location_type"
-      type="attributetype"
-      labelclass="control-label"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
-      class="required"
-      validate="swimming"
-      required="true"
-      id="7"
-      placeholder="true"      
-      filter="int">
-    </field>    
+  
     <field 
       name="map"
       id="map"

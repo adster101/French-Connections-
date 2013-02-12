@@ -1,8 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
   
-
-  <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">
+    
+  <fieldset name="property_type_details" description="The property details">
+      <field
+      name="location_type"
+      type="attributetype"
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
+      class="required"
+      validate="swimming"
+      required="true"
+      id="7"
+      filter="int">
+    </field>    
+    <field
+      name="accommodation_type"
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
+      type="attributetype"
+      filter="integer"
+      required="true"
+      id="2"
+    />
+    
+    <field
+      name="property_type"
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
+      type="attributetype"
+      filter="integer"
+      required="true"
+      id="1"
+      default=""
+    />
+  </fieldset>
+  <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">   
     <field
       class="checkbox inline required" 
       name="internal_facilities" 
@@ -92,7 +130,8 @@
   </fieldset>
   <field 
     name="id"
-    type="hidden"></field>
+    type="hidden">
+  </field>
   <field 
     name="parent_id"
     type="hidden"

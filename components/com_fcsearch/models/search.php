@@ -140,7 +140,7 @@ class FcSearchModelSearch extends JModelList {
     $ordering = $this->getState('list.direction', '');
 
     $query = $db->getQuery(true);
-    $query->select('
+    $query->select('STRAIGHT_JOIN
               h.id,
               h.parent_id,
               h.level,
@@ -156,8 +156,6 @@ class FcSearchModelSearch extends JModelList {
               g.path,
               (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
               c.title as location_title,
-              b.title as property_type,
-              d.title as accommodation_type,
               (
                 select 
                   min(tariff) 
@@ -168,6 +166,7 @@ class FcSearchModelSearch extends JModelList {
               ) as from_rate,
               e.title as tariff_based_on,
               f.title as base_currency,
+              a.title as property_type,
               (
                 select 
                   count(*)
@@ -213,14 +212,18 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__helloworld h on c.id = h.department');
     }
     if ($lang == 'fr') {
-      $query->join('left', '#__attributes_translation b ON b.id = h.property_type');
-      $query->join('left', '#__attributes_translation d ON d.id = h.accommodation_type');
+
       $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
       $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');
       $query->join('left', '#__classifications_translations g ON g.id = h.city');
     } else {
-      $query->join('left', '#__attributes b ON b.id = h.property_type');
-      $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
+      
+      // These joins bring in the property and accommodation types for each property
+      $query->join('left', '#__attributes_property ap ON ap.property_id = h.id');
+      $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');      
+      $query->join('left', '#__attributes a ON a.id = ap.attribute_id');
+      $query->where('a.attribute_type_id = 1');
+      
       $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
       $query->join('left', '#__attributes f ON f.id = h.base_currency');
       $query->join('left', '#__classifications g ON g.id = h.city');
@@ -254,8 +257,8 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($activities)) {
 
         foreach ($activities as $activity => $id) {
-          $query->join('left', '#__attributes_property ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
-          $query->where('ap' . $activity . '.attribute_id = ' . (int) $id);
+          $query->join('left', '#__attributes_property ap' . $id . ' ON ap' . $id . '.property_id = h.id');
+          $query->where('ap' . $id . '.attribute_id = ' . (int) $id);
         }
       } elseif ($this->getState('list.activities')) {
         $query->join('left', '#__attributes_property apact ON apact.property_id = h.id');
@@ -271,17 +274,14 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($facilities)) {
 
         foreach ($facilities as $facility => $id) {
-          $query->join('left', '#__attributes_property ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
-          $query->where('ap' . $facility . '.attribute_id = ' . (int) $id);
+          $query->join('left', '#__attributes_property ap' . $id . ' ON ap' . $id . '.property_id = h.id');
+          $query->where('ap' . $id . '.attribute_id = ' . (int) $id);
         }
       } elseif ($this->getState('list.property_facilities')) {
         $query->join('left', '#__attributes_property apfac ON apfac.property_id = h.id');
         $query->where('apfac.attribute_id = ' . $this->getState('list.property_facilities'));
       }
     }
-
-
-
 
     $offset = $this->getState('list.start', 0); // The first result to show, i.e. the page number
     $count = $this->getState('list.limit', 10); // The number of results to show
@@ -383,15 +383,15 @@ class FcSearchModelSearch extends JModelList {
         if (is_array($activities)) {
 
           foreach ($activities as $activity => $id) {
-            $query->join('left', '#__attributes_property ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
-            $query->where('ap' . $activity . '.attribute_id = ' . (int) $id);
+            $query->join('left', '#__attributes_property ap' . $id . ' ON ap' . $id . '.property_id = h.id');
+            $query->where('ap' . $id . '.attribute_id = ' . (int) $id);
           }
         } elseif ($this->getState('list.activities')) {
           $query->join('left', '#__attributes_property apact ON apact.property_id = h.id');
           $query->where('apact.attribute_id = ' . $this->getState('list.activities'));
         }
       }
-      
+
       // Add the property facilities filter to the query 
       if ($this->getState('list.property_facilities')) {
 
@@ -400,8 +400,8 @@ class FcSearchModelSearch extends JModelList {
         if (is_array($facilities)) {
 
           foreach ($facilities as $facility => $id) {
-            $query->join('left', '#__attributes_property ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
-            $query->where('ap' . $facility . '.attribute_id = ' . (int) $id);
+            $query->join('left', '#__attributes_property ap' . $id . ' ON ap' . $id . '.property_id = h.id');
+            $query->where('ap' . $id . '.attribute_id = ' . (int) $id);
           }
         } elseif (!empty($facilities)) {
           $query->join('left', '#__attributes_property apfac ON apfac.property_id = h.id');
@@ -711,8 +711,6 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));
     $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
 
-    
-    
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
     switch ($dirn) {
@@ -730,14 +728,14 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('match.limit', 1000);
 
     // Get the rest of the filter options such as property type, facilities and activites etc.
-    $activities = $request->get('activities','','array');
-    
-    $property_facilities = $input->get('internal');
+    $activities = $request->get('activities', '', 'array');
+
+    $property_facilities = $input->get('internal','','array');
 
     // populateFilterState pushes all the filter IDs into the state
     $this->populateFilterState($activities, 'activities');
     $this->populateFilterState($property_facilities, 'property_facilities');
-    
+
     // Load the parameters.
     $this->setState('params', $params);
 
@@ -750,9 +748,9 @@ class FcSearchModelSearch extends JModelList {
    * Method to generate the filter state ids for later filtering in the db
    * 
    */
-  
+
   private function populateFilterState($input, $label) {
-    
+
     if (is_array($input)) {
 
       $ids = array();
@@ -765,7 +763,6 @@ class FcSearchModelSearch extends JModelList {
       }
 
       $this->setState('list.' . $label, $ids);
-            
     } elseif (!empty($input)) {
 
       $id = (int) array_pop(explode('_', $input));
@@ -806,8 +803,29 @@ class FcSearchModelSearch extends JModelList {
       $id .= ':' . $this->getState('list.bedrooms');
       $id .= ':' . $this->getState('list.occupancy');
       $id .= ':' . $this->getState('list.language');
-      // Need to add some mechanism to identify each and every filter that has been applied, as results will depend on that also
+      // Get each of the filter attribute id and build that into the cache key...
+      $activities = $this->getState('list.activities', '');
+      $property_facilities = $this->getState('list.property_facilities', '');
+
+      // For the activities...
+      if (is_array($activities)) {
+        foreach ($activities as $key => $activity) {
+          $id .= ':' . $activity;
+        }
+      } elseif ($activities) {
+        $id .= ':' . $activities;
+      }
+
+      // For the property facilities...
+      if (is_array($property_facilities)) {
+        foreach ($property_facilities as $key => $facility) {
+          $id .= ':' . $facility;
+        }
+      } else {
+        $id .= ':' . $property_facilities;
+      }
     }
+
     return parent::getStoreId($id);
   }
 

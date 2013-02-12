@@ -231,7 +231,6 @@ class FcSearchModelMarkers extends JModelList
     }
 
     if($lang == 'fr') {
-      
       $query->join('left', '#__attributes_translation b ON b.id = h.property_type');
       $query->join('left', '#__attributes_translation d ON d.id = h.accommodation_type');
       $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
@@ -243,14 +242,12 @@ class FcSearchModelMarkers extends JModelList
       $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
       $query->join('left', '#__attributes f ON f.id = h.base_currency');      
       $query->join('left', '#__classifications g ON g.id = h.city');
-      
     }
     
     if ($this->getState('list.start_date')) {
       $query->join('left', '#__availability a on h.id = a.id');
       $query->where('a.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
       $query->where('a.end_date >= ' . $db->quote($this->getState('list.departure', '')));
-
       $query->where('a.availability = 1');
     }
 
@@ -270,6 +267,41 @@ class FcSearchModelMarkers extends JModelList
       $query->having('distance < 50');
     }
     
+
+    // Add the activities filter to the query 
+    if ($this->getState('list.activities', array())) {
+
+      $activities = $this->getState('list.activities');
+      print_r($activities);
+      if (is_array($activities)) {
+
+        foreach ($activities as $activity => $id) {
+          $query->join('left', '#__attributes_property ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
+          $query->where('ap' . $activity . '.attribute_id = ' . (int) $id);
+        }
+      } elseif ($this->getState('list.activities')) {
+        $query->join('left', '#__attributes_property apact ON apact.property_id = h.id');
+        $query->where('apact.attribute_id = ' . $this->getState('list.activities'));
+      }
+    }
+
+    // Add the property facilities filter to the query 
+    if ($this->getState('list.property_facilities', array())) {
+
+      $facilities = $this->getState('list.property_facilities');
+
+      if (is_array($facilities)) {
+
+        foreach ($facilities as $facility => $id) {
+          $query->join('left', '#__attributes_property ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
+          $query->where('ap' . $facility . '.attribute_id = ' . (int) $id);
+        }
+      } elseif ($this->getState('list.property_facilities')) {
+        $query->join('left', '#__attributes_property apfac ON apfac.property_id = h.id');
+        $query->where('apfac.attribute_id = ' . $this->getState('list.property_facilities'));
+      }
+    }
+    
     // Make sure we only get live properties...
     $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
@@ -282,7 +314,7 @@ class FcSearchModelMarkers extends JModelList
     // Load the results from the database.
     $db->setQuery($query);
     $rows = $db->loadObjectList();
-
+    
     // Process results into 
     // Push the results into cache.
     $this->store($store, $rows);
@@ -375,8 +407,7 @@ class FcSearchModelMarkers extends JModelList
     $q = !is_null($request->get('s_kwds')) ? $request->get('s_kwds', '', 'string') : $params->get('q');
     $q = $app->stringURLSafe($filter->clean($q, 'string'));
     
-    
-
+   
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');
 
@@ -404,5 +435,42 @@ class FcSearchModelMarkers extends JModelList
     // Load the user state.
     $this->setState('user.id', (int) $user->get('id'));
     $this->setState('user.groups', $user->getAuthorisedViewLevels());
+    
+    // Get the rest of the filter options such as property type, facilities and activites etc.
+    $activities = $request->get('activities','','array');
+    
+    $property_facilities = $input->get('internal');
+
+    // populateFilterState pushes all the filter IDs into the state
+    $this->populateFilterState($activities, 'activities');
+    $this->populateFilterState($property_facilities, 'property_facilities');    
+    
   }
+  
+  /*
+   * Method to generate the filter state ids for later filtering in the db
+   * 
+   */
+  
+  private function populateFilterState($input, $label) {
+    
+    if (is_array($input)) {
+
+      $ids = array();
+
+      foreach ($input as $filter) {
+        // Assume that this is in the form of e.g. activity_Golf_51
+        $id = (int) array_pop(explode('_', $filter));
+
+        $ids[] = $id;
+      }
+
+      $this->setState('list.' . $label, $ids);
+            
+    } elseif (!empty($input)) {
+
+      $id = (int) array_pop(explode('_', $input));
+      $this->setState('list.' . $label, $id);
+    }
+  }  
 }

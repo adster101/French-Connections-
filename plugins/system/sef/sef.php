@@ -44,7 +44,8 @@ class plgSystemSef extends JPlugin
 		}
 
 		$link = 'index.php' . $uri->toString(array('query', 'fragment'));
-		$link = $domain . JRoute::_($link);
+
+    $link = $domain . JRoute::_($link);
 
 		if ($current !== $link)
 		{

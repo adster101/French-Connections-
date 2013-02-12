@@ -175,12 +175,39 @@ class FcSearchViewSearch extends JViewLegacy
 		$title = null;
 
     $title = JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm'));
-	
+    	
     $title = UCFirst($title);
     
     $title = JText::sprintf('COM_FCSEARCH_TITLE', $title);
+    
+    $bedrooms = $this->state->get('list.bedrooms');
+    $occupancy = $this->state->get('list.occupancy');
+    
+    $activities = $app->input->get('activities',array(),'array');
+  
+    $activityStr = (string) '';
+    
+    if (count($activities) > 0) {
+      foreach ($activities as $key => $value) {
+        $parts = explode('_',$value);
+        array_pop($parts);
+        array_shift($parts);
+        $activity = implode(' ',$parts);
+        $activity = JStringNormalise::toSpaceSeparated($activity);
+        $activityStr .= ' | ' . $activity;
+      }
+    }
+    
 
+    $title = ($bedrooms ? $title . ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : $title);
+    $title = ($occupancy ? $title . ' | ' . $occupancy . ' ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') : $title);
+    $title = ($activityStr ? $title . $activityStr : $title);
+
+    
+    
 		$this->document->setTitle($title);
+    
+    
     
 	
 		// Configure the document meta-description.
@@ -190,12 +217,7 @@ class FcSearchViewSearch extends JViewLegacy
 			$this->document->setDescription($explained);
 		}
 
-		// Configure the document meta-keywords.
-		if (!empty($query->highlight))
-		{
-			$this->document->setMetadata('keywords', implode(', ', $query->highlight));
-		}
-
+    
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js','text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js','text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/jquery.maphilight.min.js','text/javascript', true);

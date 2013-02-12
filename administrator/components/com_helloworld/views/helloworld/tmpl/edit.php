@@ -24,21 +24,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>
         <?php echo $this->form->getLabel('title'); ?> <?php echo $this->form->getInput('title'); ?>
         <hr />
-        <fieldset class="adminform ">
-          <div class="row-fluid"> 
-            <div class="span6">
-              <?php echo $this->form->getLabel('accommodation_type'); ?>
-              <?php echo $this->form->getInput('accommodation_type'); ?>
-            </div>
-            <div class="span6">
-              <?php echo $this->form->getLabel('property_type'); ?>
-              <?php echo $this->form->getInput('property_type'); ?>
-            </div>
-          </div>
-
-
-        </fieldset>
-        <hr />
         <?php echo $this->form->getLabel('description'); ?>
         <div class="clearfix">
 

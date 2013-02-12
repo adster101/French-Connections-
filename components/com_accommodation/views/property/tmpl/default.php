@@ -169,7 +169,7 @@ JHTML::_('behavior.formvalidation');
         </p>
       <?php endif; ?>
       <p>
-        <a href="<?php echo JRoute::_('http://dev.frenchconnections.co.uk/index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $this->item->id); ?>">
+        <a href="<?php echo JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $this->item->id); ?>">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
         </a>
       </p>

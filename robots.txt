@@ -28,3 +28,20 @@ Disallow: /plugins/
 Disallow: /templates/
 Disallow: /tmp/
 
+Disallow: */bedrooms_
+Disallow: */arrival_
+Disallow: */departure_
+Disallow: */occupancy_
+Disallow: */bedrooms_
+Disallow: */external_
+Disallow: */internal_
+Disallow: */kitchen_
+Disallow: */activities_
+Disallow: */fr/*
+Disallow: */psearch/*
+Disallow: */en/search/property/
+Disallow: */en/search/realestateproperty/
+Disallow: */reviews/
+
+
+
