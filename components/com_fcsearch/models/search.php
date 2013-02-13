@@ -24,7 +24,7 @@ class FcSearchModelSearch extends JModelList {
    * @var    string
    * @since  2.5
    */
-  protected $context = 'com_fcsearch.search';
+  protected $context = 'com_fcsearch';
 
   /**
    * The location integer is the classification id
@@ -139,6 +139,7 @@ class FcSearchModelSearch extends JModelList {
     $ordering = $this->getState('list.direction', '');
 
     $query = $db->getQuery(true);
+    
     $query->select('STRAIGHT_JOIN
               h.id,
               h.parent_id,
@@ -540,8 +541,8 @@ class FcSearchModelSearch extends JModelList {
 
 
     // Get the store id.
-    $storeTotal = $this->getStoreId('getResultsTotal', false);
-    $storeResults = $this->getStoreId('getResultsTotalRefine', false);
+    $storeTotal = $this->getStoreId('getResultsTotal');
+    $storeResults = $this->getStoreId('getResultsTotalRefine');
 
     // Get the maximum number of results.
     $limit = (int) $this->getState('match.limit');
@@ -562,7 +563,6 @@ class FcSearchModelSearch extends JModelList {
     // Get the actual data set?
     $resultset = $this->_db->loadObjectList();
 
-
     // Get the total number returnerd
     $total = count($resultset);
 
@@ -571,7 +571,6 @@ class FcSearchModelSearch extends JModelList {
 
     // Push the result set into the cache
     $this->store($storeResults, $resultset);
-
 
     // Return the total.
     return $this->retrieve($storeTotal);
@@ -583,10 +582,12 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getRefineOptions() {
 
-    // The query resultset should be stored in the cache already
-    $storeResults = $this->getStoreId('getResultsTotalRefine', false);
+    // The query resultset should be stored in the local model cache already (e.g. not in the persistent cache...
+    $storeResults = $this->getStoreId('getResultsTotalRefine');
 
     // The array of property IDs we have results for, for this particular query
+    
+    // This is borked and needs fixing...
     $property_list = array();
 
 
@@ -895,6 +896,8 @@ class FcSearchModelSearch extends JModelList {
       }
     }
 
+    echo $id."<br />";
+    
     return parent::getStoreId($id);
   }
 
