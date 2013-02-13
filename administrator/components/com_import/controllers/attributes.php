@@ -29,13 +29,12 @@ class ImportControllerAttributes extends JControllerForm {
 
     // Get a db instance
     $db = JFactory::getDBO();
-
-
+    
     $query = $db->getQuery(true);
 
     $query->select('id');
     $query->from('#__attributes');
-    $query->where("attribute_type_id in (1,2,7,8,9,10,11,12,28)");
+    $query->where("attribute_type_id in (7,8,9,10,11,12,28)");
 
     // Set the query.
     $db->setQuery($query);
@@ -44,7 +43,7 @@ class ImportControllerAttributes extends JControllerForm {
     $results = $db->loadObjectList();
 
     $query->clear();
-
+    
     foreach ($results as $key => $value) {
       if ($value->id != 515 && $value->id != 616 && $value->id !=617) {
         $attributes[] = $value->id;
@@ -76,8 +75,15 @@ class ImportControllerAttributes extends JControllerForm {
         if (in_array($value, $attributes)) {
           $insert_string = "$property_id,$value";
           $query->values($insert_string);
+          
         }
       }
+      // Add the property type ID into the list of attributes to insert
+      $insert_string = "$property_id,$line[3]";
+      $query->values($insert_string);
+      // Add the accommodation type ID into the list of attributes to insert
+      $insert_string = "$property_id,$line[4]";
+      $query->values($insert_string);
       // Set and execute the query
       $db->setQuery($query);
 

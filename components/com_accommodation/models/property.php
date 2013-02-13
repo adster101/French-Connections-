@@ -133,9 +133,6 @@ class AccommodationModelProperty extends JModelForm {
           a.title as changeover_day,
           b.title as tariffs_based_on,
           c.title as base_currency,
-          d.title as location_type,
-          e.title as property_type,
-          f.title as accommodation_type,
           g.title as swimming,
           h.title as department_as_text';
 
@@ -153,9 +150,6 @@ class AccommodationModelProperty extends JModelForm {
                       ->leftJoin('#__attributes a ON a.id = hw.changeover_day')
                       ->leftJoin('#__attributes b ON b.id = hw.tariff_based_on')
                       ->leftJoin('#__attributes c ON c.id = hw.base_currency')
-                      ->leftJoin('#__attributes d ON d.id = hw.location_type')
-                      ->leftJoin('#__attributes e ON e.id = hw.property_type')
-                      ->leftJoin('#__attributes f ON f.id = hw.accommodation_type')
                       ->leftJoin('#__attributes g ON g.id = hw.swimming')
                       ->leftJoin('#__classifications h ON h.id = hw.department')
                       ->leftJoin('#__users u on hw.created_by = u.id')
@@ -206,7 +200,7 @@ class AccommodationModelProperty extends JModelForm {
           $attributes[$attribute->attribute_type][] = $attribute->attribute;
 
         }
-        
+
         $this->facilities = $attributes;
         
         

@@ -59,6 +59,18 @@ function FcSearchBuildRoute(&$query) {
     unset($query['bedrooms']);
   }
 
+  if (!empty($query['property'])) {
+    $segments[] = $query['property'];
+    unset($query['property']);
+  }
+
+  if (!empty($query['accommodation'])) {
+    $segments[] = $query['accommodation'];
+    unset($query['accommodation']);
+  }
+
+  
+  
   if (!empty($query['internal'])) {
 
     if (is_array($query['internal'])) {

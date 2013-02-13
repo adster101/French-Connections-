@@ -72,10 +72,10 @@ class AccommodationViewProperty extends JViewLegacy {
     
     $document = JFactory::getDocument();
     
-    if ($this->item->accommodation_type == 'Bed and Breakfast') {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->title, $this->item->property_type, $this->item->accommodation_type, $this->item->nearest_town, $this->item->department_as_text);
+    if ($this->facilities['Accommodation Type'][0] == 'Bed and Breakfast') {
+      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->title, $this->facilities['Property Type'][0], $this->facilities['Accommodation Type'][0], $this->item->nearest_town, $this->item->department_as_text);
     } else {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->title, $this->item->property_type, $this->item->accommodation_type, $this->item->nearest_town, $this->item->department_as_text);
+      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->title, $this->facilities['Property Type'][0], $this->facilities['Accommodation Type'][0], $this->item->nearest_town, $this->item->department_as_text);
     }
     
     // Set document and page titles

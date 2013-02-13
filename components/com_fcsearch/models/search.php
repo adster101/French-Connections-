@@ -132,7 +132,6 @@ class FcSearchModelSearch extends JModelList {
     // Get the language from the state
     $lang = $this->getState('list.language', 'en');
 
-
     // Add check here on level, perform distance search if a town/city.
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
@@ -167,6 +166,7 @@ class FcSearchModelSearch extends JModelList {
               e.title as tariff_based_on,
               f.title as base_currency,
               a.title as property_type,
+              a2.title as accommodation_type,
               (
                 select 
                   count(*)
@@ -202,8 +202,6 @@ class FcSearchModelSearch extends JModelList {
       }
     }
 
-
-
     if ($this->level == 1) { // Area level
       $query->join('left', '#__helloworld h on c.id = h.area');
     } else if ($this->level == 2) { // Region level
@@ -211,22 +209,52 @@ class FcSearchModelSearch extends JModelList {
     } else if ($this->level == 3) { // Department level 
       $query->join('left', '#__helloworld h on c.id = h.department');
     }
+
     if ($lang == 'fr') {
+
+      // These joins bring in the french translations for property and accommodation types 
+      $query->join('left', '#__attributes_property ap ON ap.property_id = h.id');
+      $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
+      $query->join('left', '#__attributes_translation a ON a.id = ap.attribute_id');
+
+      $query->join('left', '#__attributes_property ap2 ON ap2.property_id = h.id');
+      $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
+      $query->join('left', '#__attributes_translation a2 ON a2.id = ap2.attribute_id');
+
+
 
       $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
       $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');
       $query->join('left', '#__classifications_translations g ON g.id = h.city');
     } else {
-      
+
       // These joins bring in the property and accommodation types for each property
       $query->join('left', '#__attributes_property ap ON ap.property_id = h.id');
-      $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');      
+      $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
       $query->join('left', '#__attributes a ON a.id = ap.attribute_id');
-      $query->where('a.attribute_type_id = 1');
-      
+
+      $query->join('left', '#__attributes_property ap2 ON ap2.property_id = h.id');
+      $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
+      $query->join('left', '#__attributes a2 ON a2.id = ap2.attribute_id');
+
+
       $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
       $query->join('left', '#__attributes f ON f.id = h.base_currency');
       $query->join('left', '#__classifications g ON g.id = h.city');
+    }
+
+    // Filter out the property and accommodation attribute types...this is necessary
+    $query->where('a.attribute_type_id = 1');
+    $query->where('a2.attribute_type_id = 2');
+
+    // Get the property type filter
+    if ($this->getState('list.property_type', '')) {
+      $query->where('a.id = ' . $this->getState('list.property_type'));
+    }
+
+    // Get the property type filter
+    if ($this->getState('list.accommodation_type', '')) {
+      $query->where('a2.id = ' . $this->getState('list.accommodation_type'));
     }
 
     if ($this->getState('list.arrival')) {
@@ -367,6 +395,23 @@ class FcSearchModelSearch extends JModelList {
         $query->join('left', '#__helloworld h on c.id = h.department');
       }
 
+     
+
+        // These joins bring in the property and accommodation types for each property
+        $query->join('left', '#__attributes_property ap ON ap.property_id = h.id');
+        $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
+        $query->join('left', '#__attributes a ON a.id = ap.attribute_id');
+
+        $query->join('left', '#__attributes_property ap2 ON ap2.property_id = h.id');
+        $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
+        $query->join('left', '#__attributes a2 ON a2.id = ap2.attribute_id');
+
+
+        $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
+        $query->join('left', '#__attributes f ON f.id = h.base_currency');
+        $query->join('left', '#__classifications g ON g.id = h.city');
+     
+
 
       if ($this->getState('list.arrival')) {
         $query->join('left', '#__availability a on h.id = a.id');
@@ -374,6 +419,19 @@ class FcSearchModelSearch extends JModelList {
         $query->where('a.end_date >= ' . $db->quote($this->getState('list.departure', '')));
 
         $query->where('a.availability = 1');
+      }
+      // Filter out the property and accommodation attribute types...this is necessary
+      $query->where('a.attribute_type_id = 1');
+      $query->where('a2.attribute_type_id = 2');
+      
+      // Get the property type filter
+      if ($this->getState('list.property_type', '')) {
+        $query->where('a.id = ' . $this->getState('list.property_type'));
+      }
+
+      // Get the property type filter
+      if ($this->getState('list.accommodation_type', '')) {
+        $query->where('a2.id = ' . $this->getState('list.accommodation_type'));
       }
 
       if ($this->getState('list.activities', array())) {
@@ -711,6 +769,14 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));
     $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
 
+    // Property type
+    $this->setState('list.property_type', $input->get('property', '', 'int'));
+    $app->setUserState('list.property_type', $input->get('property', '', 'array'));
+
+    // Accommodation type
+    $this->setState('list.accommodation_type', $input->get('accommodation', '', 'int'));
+    $app->setUserState('list.accommodation_type', $input->get('accommodation', '', 'array'));
+
     // Load the sort direction.
     $dirn = $params->get('sort_direction', 'asc');
     switch ($dirn) {
@@ -730,7 +796,7 @@ class FcSearchModelSearch extends JModelList {
     // Get the rest of the filter options such as property type, facilities and activites etc.
     $activities = $request->get('activities', '', 'array');
 
-    $property_facilities = $input->get('internal','','array');
+    $property_facilities = $input->get('internal', '', 'array');
 
     // populateFilterState pushes all the filter IDs into the state
     $this->populateFilterState($activities, 'activities');
@@ -803,6 +869,9 @@ class FcSearchModelSearch extends JModelList {
       $id .= ':' . $this->getState('list.bedrooms');
       $id .= ':' . $this->getState('list.occupancy');
       $id .= ':' . $this->getState('list.language');
+      $id .= ':' . $this->getState('list.property_type');
+      $id .= ':' . $this->getState('list.accommodation_type');
+
       // Get each of the filter attribute id and build that into the cache key...
       $activities = $this->getState('list.activities', '');
       $property_facilities = $this->getState('list.property_facilities', '');

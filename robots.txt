@@ -42,6 +42,7 @@ Disallow: */psearch/*
 Disallow: */en/search/property/
 Disallow: */en/search/realestateproperty/
 Disallow: */reviews/
-
-
-
+Disallow: */accommodation_type_
+Disallow: *?start
+Disallow: *?limitstart
+Disallow: */guide/

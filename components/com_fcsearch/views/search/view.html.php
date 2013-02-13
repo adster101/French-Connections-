@@ -177,13 +177,28 @@ class FcSearchViewSearch extends JViewLegacy
     $title = JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm'));
     	
     $title = UCFirst($title);
+
     
-    $title = JText::sprintf('COM_FCSEARCH_TITLE', $title);
+    $property_type = $app->input->get('property','','string');
+
+    if ($property_type) {
+      $parts = explode('_',$property_type);
+      array_pop($parts);
+      array_shift($parts);
+      $type = implode(' ',$parts);
+      $type = JStringNormalise::toSpaceSeparated($type);      
+      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', $title, $type);
+      
+    } else {
+      $title = JText::sprintf('COM_FCSEARCH_TITLE', $title);
+    }
     
     $bedrooms = $this->state->get('list.bedrooms');
     $occupancy = $this->state->get('list.occupancy');
     
+    
     $activities = $app->input->get('activities',array(),'array');
+
   
     $activityStr = (string) '';
     
@@ -198,7 +213,6 @@ class FcSearchViewSearch extends JViewLegacy
       }
     }
     
-
     $title = ($bedrooms ? $title . ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : $title);
     $title = ($occupancy ? $title . ' | ' . $occupancy . ' ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') : $title);
     $title = ($activityStr ? $title . $activityStr : $title);
