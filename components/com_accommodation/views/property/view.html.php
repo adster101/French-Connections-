@@ -10,7 +10,7 @@ class AccommodationViewProperty extends JViewLegacy {
 
   // Overwriting JView display method
   function display($tpl = null) {
-    
+
     // Assign data to the view
     $this->item = $this->get('Item');
 

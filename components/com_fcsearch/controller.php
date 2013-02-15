@@ -30,12 +30,12 @@ class FcSearchController extends JControllerLegacy
 	 *
 	 * @since   2.5
 	 */
-	public function display($cachable = false, $urlparams = array())
+	public function display($cachable = true, $urlparams = array())
 	{
 		$input = JFactory::getApplication()->input;
 		$cachable = true;
 
-		// Set the default view name and format from the Request.
+    // Set the default view name and format from the Request.
 		$viewName = $input->get('view', 'search', 'word');
 		$input->set('view', $viewName);
 
@@ -46,8 +46,19 @@ class FcSearchController extends JControllerLegacy
 		}
 
 		$safeurlparams = array(
-			'f' 	=> 'INT',
-			'lang' 	=> 'CMD'
+			'property' 	=> 'array',
+			'accommodation' 	=> 'array',
+			'external' 	=> 'array',
+			'kitchen' 	=> 'array',
+			'activities' 	=> 'array',
+			'internal' 	=> 'array',
+			's_kwds' 	=> 'CMD',
+      'start' => 'CMD',  
+      'limitstart' => 'CMD',  
+      'bedrooms' => 'CMD',  
+      'occupancy' => 'CMD',  
+      'arrival' => 'CMD',  
+      'departure' => 'CMD'  
 		);
 
 		return parent::display($cachable, $safeurlparams);

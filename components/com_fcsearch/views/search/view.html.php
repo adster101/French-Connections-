@@ -37,10 +37,12 @@ class FcSearchViewSearch extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = JFactory::getApplication();
+  
+
+    $app = JFactory::getApplication();
 		$params = $app->getParams();
 
-		// Get view data.
+    // Get view data.
 		$state = $this->get('State');
 
     $localinfo = $this->get('LocalInfo');

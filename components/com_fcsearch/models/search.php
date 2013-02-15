@@ -24,7 +24,7 @@ class FcSearchModelSearch extends JModelList {
    * @var    string
    * @since  2.5
    */
-  protected $context = 'com_fcsearch';
+  protected $context = 'com_fcsearch.search';
 
   /**
    * The location integer is the classification id
@@ -117,7 +117,6 @@ class FcSearchModelSearch extends JModelList {
 
     $db = $this->getDbo();
 
-    $query = $db->getQuery(true);
     // Get the date
     $date = JFactory::getDate();
 
@@ -129,7 +128,6 @@ class FcSearchModelSearch extends JModelList {
       return $this->retrieve($store);
     } 
 
-    $query = $db->getQuery(true);
 
     $base = $this->getListQuery();
 
@@ -140,6 +138,8 @@ class FcSearchModelSearch extends JModelList {
     
     // Load the results from the database.
     $db->setQuery($sql, $offset, $count);
+       
+   
     $rows = $db->loadObjectList();
 
     // Process results into 
@@ -185,7 +185,7 @@ class FcSearchModelSearch extends JModelList {
       $db = $this->getDbo();
       $query = $db->getQuery(true);
 
-      $query->select('STRAIGHT_JOIN
+      $query->select('STRAIGHT_JOIN 
               h.id,
               h.parent_id,
               h.level,
@@ -304,11 +304,11 @@ class FcSearchModelSearch extends JModelList {
       }
 
       if ($this->getState('list.arrival')) {
-        $query->join('left', '#__availability a on h.id = a.id');
-        $query->where('a.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
-        $query->where('a.end_date >= ' . $db->quote($this->getState('list.departure', '')));
+        $query->join('left', '#__availability arr on h.id = arr.id');
+        $query->where('arr.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
+        $query->where('arr.end_date >= ' . $db->quote($this->getState('list.departure', '')));
 
-        $query->where('a.availability = 1');
+        $query->where('arr.availability = 1');
       }
 
       if ($this->level != 4) {
@@ -400,7 +400,7 @@ class FcSearchModelSearch extends JModelList {
       // Make sure we only get live properties...
       $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
-      $query->where('h.id !=1');
+      $query->where('h.id > 1');
 
 
       // Push the query into the cache.
@@ -466,18 +466,23 @@ class FcSearchModelSearch extends JModelList {
       return $this->retrieve($storeTotal);
     }
 
-    $base = $this->getListQuery();
+    $sql = $this->getListQuery();
 
-    $sql = clone($base);
+    $db = $this->getDbo();
 
-    $this->_db->setQuery($sql);
-
-    // Execute the query so we can get a valid db resource 
-    //$handle = $this->_db->execute();
-    // Get the actual data set?
+    $query = $db->getQuery(true);
     
+    $db->setQuery($sql);
+ 
+    // Execute the query so we can get a valid db resource 
+    // $handle = $this->_db->execute();
+    // Get the actual data set?
+    // $_PROFILER = JProfiler::getInstance('Application');
 
-    $resultset = $this->_db->loadObjectList();
+    //JDEBUG ? $_PROFILER->mark('This getResultsTotal thing') : null;
+
+    $resultset = $db->loadObjectList();
+    //JDEBUG ? $_PROFILER->mark('This getResultsTotal thing finished') : null;
 
     // Get the total number returnerd
     $total = count($resultset);
@@ -500,11 +505,10 @@ class FcSearchModelSearch extends JModelList {
 
     // The query resultset should be stored in the local model cache already (e.g. not in the persistent cache...
     $storeResults = $this->getStoreId('getResultsTotalRefine');
-
+    
     // The array of property IDs we have results for, for this particular query
     // This is borked and needs fixing...
     $property_list = array();
-
 
     // Use the cached data if possible.
     if ($this->retrieve($storeResults)) {
@@ -549,11 +553,7 @@ class FcSearchModelSearch extends JModelList {
       // Get the options.
       $db->setQuery($query);
 
-
-
-
       $facilities = $db->loadObjectList();
-
 
       foreach ($facilities as $facility) {
         if (!array_key_exists($facility->facility_type, $attributes)) {
@@ -661,7 +661,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');
-    $app->setUserState('search.searchterm', $q, 'string');
+    $app->setUserState('list.searchterm', $q, 'string');
 
     // Set the list starting page, for the pagination
     $this->setState('list.start', $input->get('limitstart', 0, 'uint'));
@@ -834,8 +834,6 @@ class FcSearchModelSearch extends JModelList {
         $id .= ':' . $kitchen_facilities;
       }
     }
-
-    echo $id."<br />";
 
     return parent::getStoreId($id);
   }
