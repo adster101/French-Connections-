@@ -12,12 +12,21 @@ $app = JFactory::getApplication();
 
 
 $uri = str_replace('http://', '', JUri::current());
-
 ?>
 
 
 <div class="refine">
+  <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_BUDGET'); ?></h4>
+  <p>
+    <label class="span2" for="amount">Price Range:</label>
+    <input type="text" id="amount" />
+  </p>
+  
+  <div id="slider-range"></div>
+  <hr />
   <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
+
+
   <div class="accordion" id="accordion2">
     <?php foreach ($this->refine_options as $key => $values) : ?>    
       <div class="accordion-group">

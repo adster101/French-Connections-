@@ -21,7 +21,7 @@ defined('_JEXEC') or die;
 function FcSearchBuildRoute(&$query) {
 
   $segments = array();
-
+  
   // get a menu item based on Itemid or currently active
   $app = JFactory::getApplication();
   $menu = $app->getMenu();

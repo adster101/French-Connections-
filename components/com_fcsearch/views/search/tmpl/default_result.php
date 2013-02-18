@@ -33,6 +33,8 @@ $this->result->description = preg_replace('/<p>(.*)<\/p>/','', $this->result->de
 $pathway = explode('/', $this->result->path);
 $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id);
 
+
+
 ?>
 
 <li>
@@ -83,12 +85,19 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
   <div class="span2" style="text-align:right;">
     <p class="">
       <?php
-      if ($this->result->from_rate) {
+      if ($this->result->price) {
         echo JText::_('COM_FCSEARCH_SEARCH_FROM');
         ?>
         <span class="lead">
-          <?php echo $this->result->base_currency; ?><?php echo $this->result->from_rate; ?>
-        </span><br />
+          
+          <?php
+            if ($this->result->base_currency != '£') { // Must be  EURO
+              $this->result->price = $this->currencies['GBP']->exchange_rate * $this->result->price;
+            } 
+          
+            echo '&pound;' . round($this->result->price); ?>
+        </span>
+      <br />
         <span class="small"><?php echo $this->result->tariff_based_on; ?><span>
 
             <?php
@@ -98,9 +107,9 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
           ?>
           </p>
 
-          <?php if ($this->result->review_count) : ?>
+          <?php if ($this->result->reviews) : ?>
             <p class="small">
-              <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->review_count); ?>
+              <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
             </p>
           <?php endif; ?>
 

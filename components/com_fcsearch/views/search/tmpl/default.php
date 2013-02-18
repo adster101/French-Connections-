@@ -21,8 +21,12 @@ $occupancy = $this->state->get('list.occupancy');
 $arrival = $this->state->get('list.arrival');
 $departure = $this->state->get('list.departure');
 
+$ordering = $app->input->request->get('order');
+
 $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 
+$sortFields = $this->getSortFields();
+$listOrder = $this->escape($this->state->get('list.ordering'));
 
 $pagdata = $this->pagination->getData();
 
@@ -33,12 +37,12 @@ if ($pagdata->next->link) {
 if ($pagdata->previous->link) {
   $doc->addHeadLink($pagdata->previous->link, 'prev', 'rel');
 }
+
 ?>
 <div class="finder">
   <h1>
     <small><?php echo $this->document->title; ?></small>
   </h1>
-
   <div id="search-form" >
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165') ?>" method="POST" class="form-vertical">
       <div class="row-fluid">
@@ -112,8 +116,8 @@ if ($pagdata->previous->link) {
                 <label for="sort_by" class="control-label small">
                   <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
                 </label>
-                <select id="sort_by" class="small input-small" name="sort_by">
-                  <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_SEARCH_PLEASE_CHOOSE')), 'value', 'text', $bedrooms); ?>
+                <select id="sort_by" class="small input-medium" name="sort_by">
+                  <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering ); ?>
                 </select>
             </ul>
           </div>
@@ -151,7 +155,6 @@ if ($pagdata->previous->link) {
                   <?php echo $this->loadTemplate('refine'); ?>
                 </div>
               </div>
-
             </div>
           </div>
           <div class="tab-pane" id="mapsearch">
@@ -199,6 +202,10 @@ if ($pagdata->previous->link) {
 
 
       <input type="hidden" name="option" value="com_fcsearch" />
+      <?php 
+      // Following method adds a hidden field which essentially tracks the state of the search
+      // Possibly, this could/would be better in session scope?
+      echo $this->getFilters(); ?>
 
     </form>
   </div>

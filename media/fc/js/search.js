@@ -1,6 +1,20 @@
 
 jQuery(document).ready(function(){
 
+  jQuery("#slider-range" ).slider({
+      range: true,
+      value: 25,
+      min: 0,
+      max: 5000,
+      values: [0, 2500],
+      slide: function( event, ui ) {
+        jQuery( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+      }
+  });
+    
+ jQuery( "#amount" ).val( "$" + jQuery( "#slider-range" ).slider( "values", 0 ) +
+      " - $" + jQuery( "#slider-range" ).slider( "values", 1 ) );
+    
   // Maphilight is used to highlight the area maps on the map search graphic
   jQuery('.map').maphilight();	
 
@@ -90,6 +104,9 @@ jQuery(document).ready(function(){
     jQuery('.nav li a[href="'+selectedTab+'"]').tab('show');
   }
   
+  
+  
+  
   jQuery('#property-search-button').click(function(event) {
     
 
@@ -127,17 +144,22 @@ jQuery(document).ready(function(){
       
       id = jQuery(this).attr('id');
       value = jQuery(this).attr('value');
-      
       if (value && id) {
         if (id == 's_kwds') {
           value = stripVowelAccent(value);
           path = path + '/' +value;
+        } else if (id == 'filter') {
+          path = path+'/'+value;
+        } else if (id == 'sort_by') {
+          path = path+'/'+value;         
+        
         } else {
           path = path+'/'+id+'_'+value;
         }
       }
       
-      
+      console.log(path);
+  
       
     });          
     
@@ -150,6 +172,8 @@ jQuery(document).ready(function(){
     return false;
     
   })
+  
+  
   
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({

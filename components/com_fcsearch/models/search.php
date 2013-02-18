@@ -208,7 +208,7 @@ class FcSearchModelSearch extends JModelList {
                   qitz3_tariffs 
                 where 
                   id = h.id
-              ) as from_rate,
+              ) as price,
               e.title as tariff_based_on,
               f.title as base_currency,
               a.title as property_type,
@@ -221,7 +221,7 @@ class FcSearchModelSearch extends JModelList {
                 where 
                   property_id = h.id
                 group by h.id
-              ) as review_count
+              ) as reviews
     ');
 
       if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
@@ -400,6 +400,15 @@ class FcSearchModelSearch extends JModelList {
       // Make sure we only get live properties...
       $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
+      $sort_column = $this->getState('list.sort_column',''); 
+      $sort_order = $this->getState('list.direction',''); 
+      
+      if($sort_column) {
+        
+        $query->order($sort_column . ' ' . $sort_order);
+        
+      }
+      
       $query->where('h.id > 1');
 
 
@@ -650,7 +659,7 @@ class FcSearchModelSearch extends JModelList {
     $filter = JFilterInput::getInstance();
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
-
+    
     // Set the language in the model state    
     $this->setState('list.language', $input->get('lang', 'en'));
 
@@ -686,7 +695,7 @@ class FcSearchModelSearch extends JModelList {
     $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
 
     // Property type
-    $this->setState('list.property_type', $input->get('property', '', 'int'));
+    $this->setState('list.property_type', $request->get('property', '', 'int'));
     $app->setUserState('list.property_type', $input->get('property', '', 'array'));
 
     // Accommodation type
@@ -694,18 +703,14 @@ class FcSearchModelSearch extends JModelList {
     $app->setUserState('list.accommodation_type', $input->get('accommodation', '', 'array'));
 
     // Load the sort direction.
-    $dirn = $params->get('sort_direction', 'asc');
-    switch ($dirn) {
-      case 'asc':
-        $this->setState('list.direction', 'ASC');
-        break;
-
-      default:
-      case 'desc':
-        $this->setState('list.direction', 'DESC');
-        break;
+    $dirn = $request->get('order', array(),'array');
+    
+    if (!empty($dirn)) {
+      $sort_order = explode('_',$dirn[0]);
+      $this->setState('list.sort_column', $sort_order[1]);
+      $this->setState('list.direction', $sort_order[2]);
     }
-
+    
     // Set the match limit.
     $this->setState('match.limit', 1000);
 
@@ -782,6 +787,7 @@ class FcSearchModelSearch extends JModelList {
       // Add the list state for page specific data.
       $id .= ':' . $this->getState('list.start');
       $id .= ':' . $this->getState('list.limit');
+      $id .= ':' . $this->getState('list.sort_column');
       $id .= ':' . $this->getState('list.direction');
       $id .= ':' . $this->getState('list.searchterm');
       $id .= ':' . $this->getState('list.start_date');
