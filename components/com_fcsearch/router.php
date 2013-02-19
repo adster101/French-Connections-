@@ -64,12 +64,25 @@ function FcSearchBuildRoute(&$query) {
     unset($query['property']);
   }
 
+  if (!empty($query['order'])) {
+    $segments[] = $query['order'];
+    unset($query['order']);
+  }
+  
+  if (!empty($query['min'])) {
+    $segments[] = $query['min'];
+    unset($query['min']);
+  }
+  
+  if (!empty($query['max'])) {
+    $segments[] = $query['max'];
+    unset($query['max']);
+  }
+
   if (!empty($query['accommodation'])) {
     $segments[] = $query['accommodation'];
     unset($query['accommodation']);
   }
-
-  
   
   if (!empty($query['internal'])) {
 

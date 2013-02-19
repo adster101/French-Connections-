@@ -2,3 +2,7 @@
   padding-left:32px !important;
   background: url('/administrator/templates/isis/images/admin/expandall.png') 9px center no-repeat;
 }
+
+.search .field-container {
+  margin-right:14px;
+}

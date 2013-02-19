@@ -224,7 +224,7 @@ class FcSearchModelSearch extends JModelList {
               ) as reviews
     ');
 
-      if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+      if ($this->level == 4) {
         // Add the distance based bit in as this is a town/city search
         $query->select('
         ( 3959 * acos(cos(radians(' . $this->longitude . ')) * 
@@ -235,6 +235,7 @@ class FcSearchModelSearch extends JModelList {
         ');
 
         $query->from('#__helloworld h');
+        
         if ($lang == 'fr') {
           $query->join('left', '#__classifications_translations c on c.id = h.city');
         } else {
@@ -392,7 +393,7 @@ class FcSearchModelSearch extends JModelList {
       }
 
 
-      if ($this->level == 4 && ($ordering == 'ASC' || $ordering == 'DESC')) {
+      if ($this->level == 4) {
         $query->order('distance');
         $query->having('distance < 25');
       }
@@ -400,6 +401,7 @@ class FcSearchModelSearch extends JModelList {
       // Make sure we only get live properties...
       $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
+      // Sort out the ordering required
       $sort_column = $this->getState('list.sort_column',''); 
       $sort_order = $this->getState('list.direction',''); 
       
@@ -408,6 +410,20 @@ class FcSearchModelSearch extends JModelList {
         $query->order($sort_column . ' ' . $sort_order);
         
       }
+      
+      // Sort out the budget requirements
+      $min_price = $this->getState('list.min_price','');
+      if (!empty($min_price)) {
+        $query->having('price > ' . $min_price);
+      }
+
+      // Sort out the budget requirements
+      $max_price = $this->getState('list.max_price','');
+      if (!empty($max_price)) {
+        $query->having('price < ' . $max_price);
+      }
+              
+      
       
       $query->where('h.id > 1');
 
@@ -476,7 +492,8 @@ class FcSearchModelSearch extends JModelList {
     }
 
     $sql = $this->getListQuery();
-
+    
+    
     $db = $this->getDbo();
 
     $query = $db->getQuery(true);
@@ -656,10 +673,11 @@ class FcSearchModelSearch extends JModelList {
     $input = $app->input;
     $params = $app->getParams();
     $user = JFactory::getUser();
+    // Should apply this filter to other params here as well...
     $filter = JFilterInput::getInstance();
     $this->setState('filter.language', $app->getLanguageFilter());
     $request = $input->request;
-    
+        
     // Set the language in the model state    
     $this->setState('list.language', $input->get('lang', 'en'));
 
@@ -702,9 +720,17 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.accommodation_type', $input->get('accommodation', '', 'int'));
     $app->setUserState('list.accommodation_type', $input->get('accommodation', '', 'array'));
 
+    // Budget and price, innit!
+    $this->setState('list.min_price', $input->get('min', '', 'int'));
+    $app->setUserState('list.min_price', $input->get('min', '', 'array'));
+
+    // Budget and price, innit!
+    $this->setState('list.max_price', $input->get('max', '', 'int'));
+    $app->setUserState('list.max_price', $input->get('max', '', 'array'));
+
     // Load the sort direction.
     $dirn = $request->get('order', array(),'array');
-    
+
     if (!empty($dirn)) {
       $sort_order = explode('_',$dirn[0]);
       $this->setState('list.sort_column', $sort_order[1]);
@@ -797,6 +823,8 @@ class FcSearchModelSearch extends JModelList {
       $id .= ':' . $this->getState('list.language');
       $id .= ':' . $this->getState('list.property_type');
       $id .= ':' . $this->getState('list.accommodation_type');
+      $id .= ':' . $this->getState('list.max_price');
+      $id .= ':' . $this->getState('list.min_price');
 
       // Get each of the filter attribute id and build that into the cache key...
       $activities = $this->getState('list.activities', '');

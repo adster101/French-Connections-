@@ -58,7 +58,10 @@ class FcSearchController extends JControllerLegacy
       'bedrooms' => 'CMD',  
       'occupancy' => 'CMD',  
       'arrival' => 'CMD',  
-      'departure' => 'CMD'  
+      'departure' => 'CMD',  
+      'order' => 'CMD',  
+      'min' => 'CMD',
+      'max' => 'CMD'  
 		);
 
 		return parent::display($cachable, $safeurlparams);

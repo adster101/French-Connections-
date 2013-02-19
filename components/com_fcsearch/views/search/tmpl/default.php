@@ -37,7 +37,6 @@ if ($pagdata->next->link) {
 if ($pagdata->previous->link) {
   $doc->addHeadLink($pagdata->previous->link, 'prev', 'rel');
 }
-
 ?>
 <div class="finder">
   <h1>
@@ -116,68 +115,50 @@ if ($pagdata->previous->link) {
                 <label for="sort_by" class="control-label small">
                   <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
                 </label>
-                <select id="sort_by" class="small input-medium" name="sort_by">
-                  <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering ); ?>
+                <select id="sort_by" class="small input-medium" name="order">
+                  <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
                 </select>
             </ul>
           </div>
         </div>
-        <div class="tab-content">
-          <div class="tab-pane active" id="list">
-            <div class="row-fluid">
-              <div class="span9">
-                <div class="search-pagination">
-                  <div class="pagination small">
-                    <?php echo $this->pagination->getPagesLinks(); ?>
-                    <p class="small pull-right" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
-                  </div>                  
+        <div class="row-fluid">
+          <div class="tab-content span9">
+            <div class="tab-pane active" id="list">
+              <div class="search-pagination">
+                <div class="pagination small">
+                  <?php echo $this->pagination->getPagesLinks(); ?>
+                  <p class="small pull-right" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
+                </div>                  
+              </div>
+              <ul class="search-results list-striped">
+                <?php
+                for ($i = 0, $n = count($this->results); $i < $n; $i++) {
+                  $this->result = &$this->results[$i];
+                  if (!empty($this->result->id)) {
+                    echo $this->loadTemplate('result');
+                  }
+                }
+                ?>
+              </ul>
+              <div class="search-pagination">
+                <div class="pagination">
+                  <?php echo $this->pagination->getPagesLinks(); ?>
                 </div>
               </div>
+
+            </div>
+            <div class="tab-pane" id="mapsearch">
+              <div id="map_canvas"></div>
+            </div>
+            <div class="tab-pane" id="localinfo">
               <div class="row-fluid">
-                <div class="span9">
-                  <ul class="search-results list-striped">
-                    <?php
-                    for ($i = 0, $n = count($this->results); $i < $n; $i++) {
-                      $this->result = &$this->results[$i];
-                      if (!empty($this->result->id)) {
-                        echo $this->loadTemplate('result');
-                      }
-                    }
-                    ?>
-                  </ul>
-                  <div class="search-pagination">
-                    <div class="pagination">
-                      <?php echo $this->pagination->getPagesLinks(); ?>
-                    </div>
-                  </div>
-                </div>
-                <div class="span3">
-                  <?php echo $this->loadTemplate('refine'); ?>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="mapsearch">
-            <div class="row-fluid">
-              <div class="span9">
-                <div id="map_canvas"></div>
-              </div>
-              <div class="span3">
-                <?php echo $this->loadTemplate('refine'); ?>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane" id="localinfo">
-            <div class="row-fluid">
-              <div class="span9">
                 <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
                 <?php echo $this->localinfo->description; ?>
-
-              </div>
-              <div class="span3">
-                <p>Something else...</p>
               </div>
             </div>
+          </div>
+          <div class="span3">
+            <?php echo $this->loadTemplate('refine'); ?>
           </div>
         </div>
         <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -202,10 +183,11 @@ if ($pagdata->previous->link) {
 
 
       <input type="hidden" name="option" value="com_fcsearch" />
-      <?php 
+      <?php
       // Following method adds a hidden field which essentially tracks the state of the search
       // Possibly, this could/would be better in session scope?
-      echo $this->getFilters(); ?>
+      echo $this->getFilters();
+      ?>
 
     </form>
   </div>

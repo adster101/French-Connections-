@@ -46,6 +46,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $localinfo = $this->get('LocalInfo');
 
     
+    
     $results = $this->get('Results');
 
     $total = $this->get('Total');
@@ -259,6 +260,24 @@ class FcSearchViewSearch extends JViewLegacy {
     $options[] = JHtml::_('select.option', 'order_price_DESC', JText::_('COM_FCSEARCH_SEARCH_ORDER_PRICE_DESC'));
     $options[] = JHtml::_('select.option', 'order_occupancy_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_OCCUPANCY'));
     $options[] = JHtml::_('select.option', 'order_reviews_desc', JText::_('COM_FCSEARCH_SEARCH_ORDER_REVIEWS'));
+    return $options;
+  }
+  
+  /**
+   * Get a list of filter options for the state of a module.
+   *
+   * @return	array	An array of JHtmlOption elements.
+   */
+  protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_') {
+    // Build the filter options.
+    $options = array();
+
+    $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
+
+    for ($i=$start;$i<$end;$i=$i+$step) {
+      $options[] = JHtml::_('select.option', $budget.$i, JText::_($i));
+    }
+    
     return $options;
   }
 
