@@ -22,23 +22,35 @@ jQuery(document).ready(function(){
       }
       
       // Get the search parameters, quicker to get the form and then extract the inputs?
-      var query = jQuery('#s_kwds').attr('value');
-      var start_date = jQuery('#arrival').attr('value');
-      var end_date = jQuery('#departure').attr('value');
-      var bedrooms = jQuery('#bedrooms').attr('value');
-      var occupancy = jQuery('#occupancy').attr('value');
+    // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
+    path ='';
+    inputs = jQuery('#property-search').find(':input').each(function() {
       
-      // The actual search term
-      var alias = stripVowelAccent(query);    
+      id = jQuery(this).attr('id');
+      value = jQuery(this).attr('value');
+      if (value && id) {
+        if (id == 's_kwds') {
+          value = stripVowelAccent(value);
+          path = path + value;
+        } else if (id == 'filter') {
+          path = path + '/' + value;
+        } else if (id == 'sort_by') {
+          path = path + '/' + value;         
+        } else if (id == 'min_price') {
+          path = path + '/' + value;
+        } else if (id == 'max_price') { 
+          path = path + '/' + value;
+        } else {
+          path = path+'/'+id+'_'+value;
+        }
+      }
+    })
+      
+ 
       
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json",{
-        s_kwds:alias,
-        arrival:start_date,
-        departure:end_date,
-        bedrooms:bedrooms,
-        occupancy:occupancy,
-        format:"json"
+        s_kwds:path
       },
       function(data){
         
@@ -58,9 +70,9 @@ jQuery(document).ready(function(){
             position: myLatlng,
             map: map
           });
-          
+          console.log(data);
           marker.setTitle((i + 1).toString());
-          content = '<h4>'+data[i].title+'</h5>'+'<a href="'+data[i].link+'"><img src="'+data[i].thumbnail+'"/></a><p>'+data[i].pricestring+'</p>';
+          content = '<h4>'+data[i].property_title+'</h5>'+'<a href="'+data[i].link+'"><img src="'+data[i].thumbnail+'"/></a><p>'+data[i].pricestring+'</p>';
           attachContent(marker, content);
           
           markers[i] = marker;

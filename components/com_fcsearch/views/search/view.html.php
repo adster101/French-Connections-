@@ -117,7 +117,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $input = $app->input->get('accommodation');
 
     // Obviously, these the search URL is built up via js prior to the form submit
-    $filters = array('property', 'external', 'accommodation', 'internal', 'activities');
+    $filters = array('property', 'external', 'accommodation', 'internal', 'activities', 'kitchen');
 
     // Create hidden input elements for each part of the URI.
     foreach ($filters as $filter) {

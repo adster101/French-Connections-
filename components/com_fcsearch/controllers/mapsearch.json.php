@@ -31,17 +31,49 @@ class FcSearchControllerMapSearch extends JControllerLegacy
 	public function markers($cachable = false, $urlparams = false)
 	{
 		$return = array();
-   
-    // Get the suggestions.
-    $model = $this->getModel('Markers', 'FcSearchModel');
-    $state = $model->getState();
     
-    $results = $model->getResults();
+    require_once(JPATH_SITE . '/components/com_fcsearch/router.php');
+
+    $app = JFactory::getApplication();
+        
+    $input = $app->input;
+    
+    $filter_vars = $app->input->get('s_kwds','','string');
+    
+    $segments = explode('/', $filter_vars);
+    
+    $vars = FcSearchParseRoute($segments);
+
+    foreach ($vars as $key => $value) {
+      
+      $input->set($key, $value);
+              
+    }
+    
+    
+    
+    
+    $model = $this->getModel('Search', 'FcSearchModel');
+    
+    $localInfo = $model->getLocalInfo();
+    
+    $model->location = $localInfo->id;
+    
+    $state = $model->populateState();
+    $poo = $model->getResultsTotal();
+    
+    $id = $model->getStoreId('getResultsTotalRefine');
+    
+    // Use the cached data if possible.
+    
+    $results = $model->retrieve($id);
+    
+   
     
     // Process the results so we don't need to do that in the browser
     foreach ($results as &$result) {
       $result->link = JRoute::_('index.php?option=com_accomodation&id='.$result->id);
-      $result->pricestring = JText::_('COM_FCSEARCH_SEARCH_FROM');
+      $result->pricestring = JText::_('COM_FCSEARCH_SEARCH_FROM' . $result->base_currency . $result->price);
       $result->thumbnail = JRoute::_(JPATH_SITE . '/images/property/thumb/' . $result->id . '/' . $result->thumbnail );
     }
     

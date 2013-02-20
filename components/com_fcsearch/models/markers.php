@@ -272,7 +272,6 @@ class FcSearchModelMarkers extends JModelList
     if ($this->getState('list.activities', array())) {
 
       $activities = $this->getState('list.activities');
-      print_r($activities);
       if (is_array($activities)) {
 
         foreach ($activities as $activity => $id) {

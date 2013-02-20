@@ -95,6 +95,17 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['internal']);
   }
+  if (!empty($query['kitchen'])) {
+
+    if (is_array($query['kitchen'])) {
+      foreach ($query['kitchen'] as $segment) {
+        $segments[] = $segment;
+      }
+    } else {
+      $segments[] = $query['kitchen'];
+    }
+    unset($query['kitchen']);
+  }
 
   if (!empty($query['activities'])) {
 
@@ -119,13 +130,6 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['external']);
   }
-
-
-
-
-
-
-
 
   return $segments;
 }

@@ -32,7 +32,7 @@ class FcSearchModelSearch extends JModelList {
    * @var   query
    * @since  2.5
    */
-  protected $location;
+  public $location;
 
   /*
    * The 'level' of the search. 1-3 is a wider area search, 4 is a town/city search.
@@ -177,6 +177,7 @@ class FcSearchModelSearch extends JModelList {
     }
 
     try {
+      
 
 
       $ordering = $this->getState('list.direction', '');
@@ -193,6 +194,8 @@ class FcSearchModelSearch extends JModelList {
               h.area,
               h.region,
               h.department,
+              h.latitude,
+              h.longitude,
               h.city,
               LEFT(h.description, 250) as description,
               h.thumbnail,
@@ -476,7 +479,7 @@ class FcSearchModelSearch extends JModelList {
    * @since   2.5
    * @throws  Exception on database error.
    */
-  protected function getResultsTotal() {
+  public function getResultsTotal() {
 
 
     // Get the store id.
@@ -518,6 +521,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Push the result set into the cache
     $this->store($storeResults, $resultset);
+            
 
     // Return the total.
     return $this->retrieve($storeTotal);
@@ -531,7 +535,7 @@ class FcSearchModelSearch extends JModelList {
 
     // The query resultset should be stored in the local model cache already (e.g. not in the persistent cache...
     $storeResults = $this->getStoreId('getResultsTotalRefine');
-    
+
     // The array of property IDs we have results for, for this particular query
     // This is borked and needs fixing...
     $property_list = array();
@@ -635,7 +639,7 @@ class FcSearchModelSearch extends JModelList {
    * @since   2.5
    * 
    */
-  protected function retrieve($id, $persistent = true) {
+  public function retrieve($id, $persistent = true) {
     $data = null;
 
     // Use the internal cache if possible.
@@ -645,6 +649,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Use the external cache if data is persistent.
     if ($persistent) {
+
       $data = JFactory::getCache($this->context, 'output')->get($id);
       $data = $data ? unserialize($data) : null;
     }
@@ -667,7 +672,7 @@ class FcSearchModelSearch extends JModelList {
    *
    * @since   2.5
    */
-  protected function populateState($ordering = null, $direction = null) {
+  public function populateState($ordering = null, $direction = null) {
     // Get the configuration options.
     $app = JFactory::getApplication();
     $input = $app->input;
@@ -801,7 +806,7 @@ class FcSearchModelSearch extends JModelList {
    *
    * @since   2.5
    */
-  protected function getStoreId($id = '', $page = true) {
+  public function getStoreId($id = '', $page = true) {
     // Default will generate store IDs based on start (i.e. page number), limit (i.e. results per page), ordering
     // Possible additional things to cache against would be
     // language
@@ -869,7 +874,8 @@ class FcSearchModelSearch extends JModelList {
       }
     }
 
-    return parent::getStoreId($id);
+    return $id;
+
   }
 
 }
