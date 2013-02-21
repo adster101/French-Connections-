@@ -19,9 +19,9 @@ class modFeaturedPropertyHelper
 		$lang =& JFactory::getLanguage()->getTag();
 		
 		if ($lang === 'fr-FR') {
-			$select = 'c.title,hel.id,trans.title,trans.description,lang,occupancy,swimming';
+			$select = 'c.title,hel.id,trans.title,trans.description,lang,occupancy,swimming, thumbnail,hel.parent_id';
 		} else {
-			$select = 'c.title,hel.id,hel.title,hel.description,lang,occupancy,swimming';
+			$select = 'c.title,hel.id,hel.title,hel.description,lang,occupancy,swimming, thumbnail, hel.parent_id';
 		}
 
 		$db = JFactory::getDBO();

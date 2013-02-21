@@ -22,29 +22,29 @@ jQuery(document).ready(function(){
       }
       
       // Get the search parameters, quicker to get the form and then extract the inputs?
-    // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
-    path ='';
-    inputs = jQuery('#property-search').find(':input').each(function() {
+      // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
+      path ='';
+      inputs = jQuery('#property-search').find(':input').each(function() {
       
-      id = jQuery(this).attr('id');
-      value = jQuery(this).attr('value');
-      if (value && id) {
-        if (id == 's_kwds') {
-          value = stripVowelAccent(value);
-          path = path + value;
-        } else if (id == 'filter') {
-          path = path + '/' + value;
-        } else if (id == 'sort_by') {
-          path = path + '/' + value;         
-        } else if (id == 'min_price') {
-          path = path + '/' + value;
-        } else if (id == 'max_price') { 
-          path = path + '/' + value;
-        } else {
-          path = path+'/'+id+'_'+value;
+        id = jQuery(this).attr('id');
+        value = jQuery(this).attr('value');
+        if (value && id) {
+          if (id == 's_kwds') {
+            value = stripVowelAccent(value);
+            path = path + value;
+          } else if (id == 'filter') {
+            path = path + '/' + value;
+          } else if (id == 'sort_by') {
+            path = path + '/' + value;         
+          } else if (id == 'min_price') {
+            path = path + '/' + value;
+          } else if (id == 'max_price') { 
+            path = path + '/' + value;
+          } else {
+            path = path+'/'+id+'_'+value;
+          }
         }
-      }
-    })
+      })
       
  
       
@@ -118,7 +118,6 @@ jQuery(document).ready(function(){
     // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
     var count = jQuery(".typeahead.dropdown-menu li").length;
 
-
     // If chosen not empty and count not zero, chances are we have a auto suggestion choice
     if (chosen !== '' && count !== 0) {
       if ( val !== chosen) {
@@ -158,8 +157,6 @@ jQuery(document).ready(function(){
           path = path+'/'+id+'_'+value;
         }
       }
-       
-      
     });          
     
     // Amend the path that the form is submitted to
@@ -171,8 +168,6 @@ jQuery(document).ready(function(){
     return false;
     
   })
-  
-  
   
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
