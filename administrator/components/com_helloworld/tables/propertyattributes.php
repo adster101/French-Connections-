@@ -85,7 +85,6 @@ class HelloWorldTablePropertyAttributes extends JTable
   public function save ($id = null, $attributes = array() ) 
   {
     
-    
     if (!$this->check()) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
@@ -129,7 +128,6 @@ class HelloWorldTablePropertyAttributes extends JTable
       
       // Tick the availability progress flag to true
       JApplication::setUserState('com_helloworld.facilities.progress', true);
-      
       
       return true;
     }

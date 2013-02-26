@@ -103,7 +103,7 @@ class ImportControllerAttributes extends JControllerForm {
 
     $this->setMessage('Properties imported, hooray!');
 
-    $this->setRedirect('index.php?option=com_import&view=properties');
+    $this->setRedirect('index.php?option=com_import&view=propertyattributes');
   }
 
 }

@@ -27,53 +27,53 @@ class FcSearchControllerMapSearch extends JControllerLegacy
 	 * @return  void
 	 *
 	 * @since   2.5
+   * 
 	 */
 	public function markers($cachable = false, $urlparams = false)
 	{
 		$return = array();
     
+    // Require the component router
     require_once(JPATH_SITE . '/components/com_fcsearch/router.php');
 
+    // Get the application instance
     $app = JFactory::getApplication();
         
+    // Get the input date for this request
     $input = $app->input;
     
+    // Set the filter vars (this comes in the form of one big long string)
     $filter_vars = $app->input->get('s_kwds','','string');
     
+    // Break it up into segments
     $segments = explode('/', $filter_vars);
     
+    // Get the vars for this request
     $vars = FcSearchParseRoute($segments);
 
+    // And set them in the input scope
     foreach ($vars as $key => $value) {
-      
       $input->set($key, $value);
-              
     }
     
-    
-    
-    
+    // Get an instance of the search model
     $model = $this->getModel('Search', 'FcSearchModel');
     
+    // Get the area/region/town etc that the search is being performed against
     $localInfo = $model->getLocalInfo();
     
+    // Set the location
     $model->location = $localInfo->id;
     
-    $state = $model->populateState();
-    $poo = $model->getResultsTotal();
-    
-    $id = $model->getStoreId('getResultsTotalRefine');
-    
-    // Use the cached data if possible.
-    
-    $results = $model->retrieve($id);
-    
-   
+    // Populate the state information
+    $model->populateState();
+
+    // Get a list of markers for this map/search combinations
+    $results = $model->getMapMarkers(); 
     
     // Process the results so we don't need to do that in the browser
     foreach ($results as &$result) {
       $result->link = JRoute::_('index.php?option=com_accomodation&id='.$result->id);
-      $result->pricestring = JText::_('COM_FCSEARCH_SEARCH_FROM' . $result->base_currency . $result->price);
       $result->thumbnail = JRoute::_(JPATH_SITE . '/images/property/thumb/' . $result->id . '/' . $result->thumbnail );
     }
     
