@@ -166,7 +166,8 @@ abstract class HelloWorldHelper
       'helloworld.edit.reorder',
       'helloworld.edit.publish',
       'helloworld.edit.property.owner',
-      'helloworld.edit.property.parent'
+      'helloworld.edit.property.parent',
+      'helloworld.filter'
 		);
  
     

@@ -70,7 +70,7 @@ jQuery(document).ready(function(){
             position: myLatlng,
             map: map
           });
-          console.log(data);
+
           marker.setTitle((i + 1).toString());
           content = '<h4>'+data[i].property_title+'</h5>'+'<a href="'+data[i].link+'"><img src="'+data[i].thumbnail+'"/></a><p>'+data[i].pricestring+'</p>';
           attachContent(marker, content);

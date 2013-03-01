@@ -147,8 +147,6 @@ class HelloWorldModelHelloWorld extends JModelAdmin {
       $canDo = HelloWorldHelper::getActions();
     }
     
-    $isOwner = HelloWorldHelper::isOwner();
-
     // If $data->parent_id is set and it's not null or 1 (e.g. a unit)
     if (isset($data->parent_id) && $data->parent_id != 1 && !empty($data->parent_id)) {
 

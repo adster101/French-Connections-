@@ -30,7 +30,7 @@ function FcSearchBuildRoute(&$query) {
 
   if (empty($query['Itemid'])) {
     $menuItem = $menu->getActive();
-  } else {
+  } else {  
     $menuItem = $menu->getItem($query['Itemid']);
   }
 
