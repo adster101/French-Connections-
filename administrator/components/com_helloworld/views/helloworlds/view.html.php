@@ -29,6 +29,7 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
     JApplication::setUserState("com_helloworlds_property_count_$userID", count($items));
 
     $pagination = $this->get('Pagination');
+    
     $this->state = $this->get('State');
 
     // Assign data to the view

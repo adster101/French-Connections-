@@ -18,7 +18,9 @@ abstract class HelloWorldHelper
     //Get the current user id 
     $user	= JFactory::getUser();
 
-		//JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id='.$id, $submenu == 'location');
+    // We only want to present the edit location screen if we are editing a parent property
+    
+		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id='.$id, $submenu == 'location');
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id='.$id, $submenu == 'helloworld');	
 		JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_FACILITIES'), 'index.php?option=com_helloworld&task=facilities.edit&id='.$id, $submenu == 'facilities');		
     JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id='.$id, $submenu == 'availability');		
@@ -33,7 +35,6 @@ abstract class HelloWorldHelper
 		$document->addStyleDeclaration('.icon-48-tariffs {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 		$document->addStyleDeclaration('.icon-48-images {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 		$document->addStyleDeclaration('.icon-48-offers {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
-
   }
 	
   /*
@@ -167,7 +168,10 @@ abstract class HelloWorldHelper
       'helloworld.edit.publish',
       'helloworld.edit.property.owner',
       'helloworld.edit.property.parent',
-      'helloworld.filter'
+      'helloworld.filter',
+      'helloworld.display-owner',
+      'helloworld.sort-by-expiry',
+      'helloworld.sort-by-prn'
 		);
  
     

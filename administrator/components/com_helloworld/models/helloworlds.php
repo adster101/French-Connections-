@@ -25,6 +25,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 				'state', 'a.state',
 				'access', 'a.access', 'access_level',
 				'language', 'a.language',
+        'expiry_date', 'a.expiry_date',  
 				'checked_out', 'a.checked_out',
 				'checked_out_time', 'a.checked_out_time',
 				'created_time', 'a.created_time',
@@ -61,8 +62,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		
     $published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
 		$this->setState('filter.published', $published);
-    
-    
+        
 		// extract the component name
 		$this->setState('filter.component', $parts[0]);
 
@@ -114,7 +114,7 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$query = $db->getQuery(true);
 		
 		// Select some fields
-		$query->select('a.id, a.title, a.modified, a.expiry_date, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published');
+		$query->select('a.id, a.thumbnail, a.title, a.modified, a.expiry_date, a.alias, a.access, a.created_by, a.path, a.parent_id, a.level, a.lft, a.rgt, a.lang,ua.name AS author_name, a.published');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 		// Check the user group this user belongs to.
 		if (!(in_array(8, $groups) || in_array(11, $groups))) 
@@ -166,7 +166,6 @@ class HelloWorldModelHelloWorlds extends JModelList
 							$property_ids[] = $property->id;
 						}
 						$query->where('a.id in (' . implode(",",$property_ids) . ')');				
-
 					}
 				} else {
 					// Try a search for this ID but most likely it doesn't exists
@@ -189,11 +188,13 @@ class HelloWorldModelHelloWorlds extends JModelList
 		
 		// From the hello table
 		$query->from('#__helloworld as a');
-		
+		   
 		$listOrdering = $this->getState('list.ordering', 'a.lft');
 		$listDirn = $db->escape($this->getState('list.direction', 'ASC'));
 
 		$query->order($db->escape($listOrdering).' '.$listDirn);
+		$query->order($db->escape('parent_id'));
+		$query->order($db->escape('lft'));
 
 		return $query;
 	}
