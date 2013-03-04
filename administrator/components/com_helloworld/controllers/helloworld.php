@@ -294,8 +294,8 @@ class HelloWorldControllerHelloWorld extends JControllerForm {
     // Here we are at point where we can determine if we need to generate a new version or not.
     // Firstly check against the expiry date. We use the POST data and not the filtered form data as the expirty date is unset
     if (!empty($data['expiry_date'])) {
-      // Property has an expiry date...
       
+      // Property has an expiry date...
       if (!empty($data['published'])) {
         // Case through the various published states
         

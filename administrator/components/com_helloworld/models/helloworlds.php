@@ -193,8 +193,10 @@ class HelloWorldModelHelloWorlds extends JModelList
 		$listDirn = $db->escape($this->getState('list.direction', 'ASC'));
 
 		$query->order($db->escape($listOrdering).' '.$listDirn);
-		$query->order($db->escape('parent_id'));
-		$query->order($db->escape('lft'));
+		$query->order($db->escape('lft asc'));
+
+    $query->order($db->escape('parent_id'));
+		$query->order($db->escape('created_by'));
 
 		return $query;
 	}

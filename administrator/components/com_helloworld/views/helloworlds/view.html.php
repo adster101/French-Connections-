@@ -130,6 +130,10 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
               JText::_('JOPTION_SELECT_LANGUAGE'), 'filter_language', JHtml::_('select.options', JHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->state->get('filter.language'))
       );
     }
+    
+    // Add a menu 
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_users');
+    
   }
 
   /**

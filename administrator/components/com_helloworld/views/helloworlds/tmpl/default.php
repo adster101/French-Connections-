@@ -79,7 +79,7 @@ $canDo = HelloWorldHelper::getActions();
             <th width="3%">
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
             </th>	
-              <th>              
+            <th>              
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
             </th>
           </tr>
@@ -91,6 +91,11 @@ $canDo = HelloWorldHelper::getActions();
                 $canEditOwn = $user->authorise('core.edit.own', 'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
                 $canPublish = $user->authorise('helloworld.edit.publish', 'com_helloworld');
                 $canReorder = $user->authorise('helloworld.edit.reorder', 'com_helloworld');
+                $expiry_date = new DateTime($item->expiry_date);
+                $now = date('Y-m-d');
+                $now = new DateTime($now);
+                
+                $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
                 ?>
 
             <?php if ($canEditOwn) : ?>
@@ -104,14 +109,27 @@ $canDo = HelloWorldHelper::getActions();
 
                 <td>
                   <?php echo str_repeat('<span class="gi">|&mdash;</span>', $item->level - 1) ?>
-                  <img width="30px" src=<?php echo '/images/property/' . $item->id . '/thumbs/' . $item->thumbnail ?> />
+                  <?php if ($item->parent_id == 1) : ?>
+                    <img width="30px" src=<?php echo '/images/property/' . $item->id . '/thumbs/' . $item->thumbnail ?> />
+                  <?php endif; ?>
                   <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=helloworld.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                     <?php echo $this->escape($item->title); ?>
                   </a>
+
                 </td>
 
-                <td>
+                <td>                  
                   <?php echo ($item->parent_id == 1) ? JText::_($item->expiry_date) : ''; ?>
+                  
+                  <?php if ( $days_to_renewal > 0 && $item->parent_id == 1 && $days_to_renewal < 28) : ?>
+                    <br /><span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL',$days_to_renewal); ?></span>
+                  <?php elseif ($item->parent_id == 1 ) : ?>
+                    <br /><a class="btn btn-danger btn-small">
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
+                    </a>
+                    
+                  <?php endif; ?>
+                  
                 </td>
                 <td class="order">
                   <?php if ($canReorder) : ?>
@@ -130,6 +148,7 @@ $canDo = HelloWorldHelper::getActions();
                   <?php endif; ?>
                 </td>
                 <?php if ($canDo->get('helloworld.display-owner')) : ?>
+
                   <td>
                     <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
                       <?php echo JText::_($item->author_name); ?>

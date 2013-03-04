@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewHelloWorld extends JViewLegacy
+class HelloWorldViewSummary extends JViewLegacy
 {
 	/**
 	 * display method of Hello view
@@ -18,8 +18,6 @@ class HelloWorldViewHelloWorld extends JViewLegacy
 	{
 
     $this->state = $this->get('State');
-        
-    
     
 		// get the Data
 		$form = $this->get('Form');
@@ -81,7 +79,8 @@ class HelloWorldViewHelloWorld extends JViewLegacy
     JApplication::setUserState('title'.$this->item->id, $this->item->title);
     
     JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'helloworld');
-		// Built the actions for new and existing records.
+		
+    // Built the actions for new and existing records.
 		if ($isNew) 
 		{
 			// For new records, check the create permission.

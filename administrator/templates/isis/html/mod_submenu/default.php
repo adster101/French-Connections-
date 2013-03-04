@@ -55,10 +55,13 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
   }
   ?>
   <div id="sidebar">
-    <div class="sidebar-nav">
+    <div class="well well-small">
       <ul id="submenu" class="property-manager nav nav-list">
         <?php foreach ($list as &$item) : ?>
-          <?php if (isset($item[2]) && $item[2] == 1) :
+          <?php if ($item[1] == '#') : ?>
+            <li class="nav-header"><?php echo $item[0]; ?></li>
+            <?php continue; ?>
+          <?php elseif (isset($item[2]) && $item[2] == 1) :
             ?><li class="active"><?php
     else :
             ?><li><?php
