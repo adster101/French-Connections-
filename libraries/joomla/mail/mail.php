@@ -440,7 +440,8 @@ class JMail extends PHPMailer
 	public function sendMail($from, $fromName, $recipient, $subject, $body, $mode = false, $cc = null, $bcc = null, $attachment = null,
 		$replyTo = null, $replyToName = null)
 	{
-		$this->setSubject($subject);
+
+    $this->setSubject($subject);
 		$this->setBody($body);
 
 		// Are we sending the email as HTML?
@@ -473,7 +474,7 @@ class JMail extends PHPMailer
 		$autoReplyTo = (empty($this->ReplyTo)) ? true : false;
 		$this->setSender(array($from, $fromName, $autoReplyTo));
 
-		return $this->Send();
+    return $this->Send();
 	}
 
 	/**

@@ -19,7 +19,7 @@ $canDo = HelloWorldHelper::getActions();
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
-    <div id="j-sidebar-container" class="span2">
+  <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10">
@@ -124,7 +124,7 @@ $canDo = HelloWorldHelper::getActions();
                   <?php if ( $days_to_renewal > 0 && $item->parent_id == 1 && $days_to_renewal < 28) : ?>
                     <br /><span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL',$days_to_renewal); ?></span>
                   <?php elseif ($item->parent_id == 1 ) : ?>
-                    <br /><a class="btn btn-danger btn-small">
+                    <a class="btn btn-danger btn-small">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
                     </a>
                     

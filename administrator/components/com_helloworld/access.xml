@@ -16,6 +16,7 @@
 		<action name="helloworld.display-owner" title="COM_HELLOWORLD_DISPLAY_OWNER" description="" />
 		<action name="helloworld.sort-by-expiry" title="COM_HELLOWORLD_SORT_BY_EXPIRY_DATE" description="" />
 		<action name="helloworld.sort-by-prn" title="COM_HELLOWORLD_SORT_BY_PRN" description="" />
+		<action name="helloworld.ownermenu.view" title="COM_HELLOWORLD_OWNER_MENU_VIEW" description="" />
 	</section>
   <section name="category">
 		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />

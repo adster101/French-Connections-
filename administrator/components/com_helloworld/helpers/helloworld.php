@@ -156,7 +156,8 @@ abstract class HelloWorldHelper {
         'helloworld.filter',
         'helloworld.display-owner',
         'helloworld.sort-by-expiry',
-        'helloworld.sort-by-prn'
+        'helloworld.sort-by-prn',
+        'helloworld.ownermenu.view'
     );
 
 

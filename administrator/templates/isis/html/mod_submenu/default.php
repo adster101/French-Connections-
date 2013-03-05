@@ -55,7 +55,6 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
   }
   ?>
   <div id="sidebar">
-    <div class="well well-small">
       <ul id="submenu" class="property-manager nav nav-list">
         <?php foreach ($list as &$item) : ?>
           <?php if ($item[1] == '#') : ?>
@@ -146,7 +145,6 @@ if ($context == 'com_helloworld') : // If we are in the property manager then we
           </li>
         <?php endforeach; ?>
       </ul>
-    </div>
   </div>
 
 

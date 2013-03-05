@@ -47,14 +47,12 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
       $this->ordering[$item->parent_id][] = $item->id;
     }
 
-
-
     // Set the toolbar
     $this->addToolBar();
 
     // Add the side bar
     $this->sidebar = JHtmlSidebar::render();
-
+   
 
     // Display the template
     parent::display($tpl);
@@ -70,6 +68,8 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
     $document = JFactory::getDocument();
     $document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 
+    $user = JFactory::getUser();
+    
     // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
     JLoader::register('JToolbarButtonAjaxpopup', JPATH_ROOT . '/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
 
@@ -131,8 +131,19 @@ class HelloWorldViewHelloWorlds extends JViewLegacy {
       );
     }
     
-    // Add a menu 
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_users');
+    // Display a helpful navigation for the owners 
+    if ($canDo->get('helloworld.ownermenu.view')) {
+    
+      $view = strtolower(JRequest::getVar('view'));
+      
+      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_admin&view=profile&layout=edit&id=' . $user->id . '#sms', ($view == 'profile'));
+      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_RENTAL_ACCOMMODATION'), 'index.php?option=com_helloworld', ($view == 'helloworlds'));
+      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_REALESTATE_ACCOMMODATION'), 'index.php?option=com_realestate', ($view == 'realestate'));
+
+      
+    }
+    
+    
     
   }
 
