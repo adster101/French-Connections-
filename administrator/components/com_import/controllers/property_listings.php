@@ -71,10 +71,8 @@ AS distance
       $db->setQuery($query, 0, 1);
       $items = $db->loadRow();
    
-      if (empty($items)) {
-        $items[] = 0;
-      }
-      
+  
+         
       $query->clear();
       
       $query->insert('#__property_listings');
@@ -97,17 +95,20 @@ AS distance
           'latitude',
           'longitude',
           'distance_to_coast',
-          'published'));
+          'published',
+          'snooze_until'
+          ));
       $insert_string = '';
 
-
+      
+      
       // May need revising 
       $insert_string .= $line[0];
       $insert_string .= ','.$db->quote($line[1]);
       $insert_string .= ','.$line[2];
       $insert_string .= ','.$line[3];
       $insert_string .= ','.$line[4];
-      $insert_string .= ','.$items[0];
+      $insert_string .= ','.$db->quote($items[0]);
       $insert_string .= ','.$db->quote($line[5]);
       $insert_string .= ','.$db->quote($line[6]);
       $insert_string .= ','.$db->quote($line[7]);
@@ -119,8 +120,8 @@ AS distance
       $insert_string .= ','.$db->quote($line[13]);
       $insert_string .= ','.$db->quote($line[14]);
       $insert_string .= ','.$db->quote($line[15]);
-      $insert_string .= ',1';
-
+      $insert_string .= ','.$line[16];
+      $insert_string .= ','.$db->quote($line[17]);
 
       $query->values($insert_string);
       $db->setQuery($query);

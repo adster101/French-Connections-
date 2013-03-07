@@ -25,10 +25,10 @@ class HelloWorldController extends JControllerLegacy {
     $document = JFactory::getDocument();
 
     // set default view if not set
-    JRequest::setVar('view', JRequest::getCmd('view', 'HelloWorlds'));
+    JRequest::setVar('view', JRequest::getCmd('view', 'Property'));
 
     // Set the default view name and format from the Request.   
-    $vName = JRequest::getCmd('view', 'HelloWorlds');
+    $vName = JRequest::getCmd('view', 'Property');
     $lName = JRequest::getCmd('layout', 'default');
     $id = JRequest::getInt('id');
 

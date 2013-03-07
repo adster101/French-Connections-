@@ -154,7 +154,7 @@ abstract class HelloWorldHelper {
         'helloworld.edit.property.owner',
         'helloworld.edit.property.parent',
         'helloworld.filter',
-        'helloworld.display-owner',
+        'helloworld.display.owner',
         'helloworld.sort-by-expiry',
         'helloworld.sort-by-prn',
         'helloworld.ownermenu.view'
