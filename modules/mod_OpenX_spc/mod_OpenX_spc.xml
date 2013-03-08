@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="module" version="1.6">
+	<name>OpenX Single Page Call</name>
+	<author>Sysgen Media LLC</author>
+	<creationDate>April 2011</creationDate>
+	<authorEmail>support@sysgenmedia.com</authorEmail>
+	<authorUrl>http://www.sysgenmedia.com</authorUrl>
+	<copyright>Copyright 2011 Sysgen Media LLC. All Rights Reserved.</copyright>
+	<license>GNU/GPL</license>
+	<version>1.1</version>
+	<description>This module allows you to easily implement your OpenX tags into your joomla site via a Single Page Call. Instead of making several calls to the adserver for pages with multiple ads, a single call loads the page much faster, without the delays associated with rendering each zone individually. You will need to have an OpenX account wither on your own infrastructure of on the hosted version of OpenX. Visit http://www.openx.org for more information.
+</description>
+	<files>
+		<filename module="mod_OpenX_spc">mod_OpenX_spc.php</filename>
+		<filename module="mod_OpenX_spc">mod_OpenX_spc.xml</filename>
+	</files>
+	
+	<config>
+		<fields name="params"><fieldset name="basic" label="Settings">
+			<field name="spacer1" type="spacer" label="Please enter the URL of your OpenX invocation header script. You generate invocation code for a single page call at the website level, rather than at the zone level. In the Websites and Zones -> Website properties -> Invocation Code tab" />
+			<field name="openx_location" type="text" default="yourserver.com/openx/www/delivery/spcjs.php?id=1" size="40" label="Script URL:  http://" description="Header Script URL" />
+			<field name="spacer2" type="spacer" hr="true" />		
+			<field name="spacer3" type="spacer" label="Enter the zone ID from OpenX that you wish to display in this module."  />		
+			<field name="openx_zone_id" type="text" default="" label="OpenX Zone ID" description="Please type in the id of the zone from your OpenX account." />
+			<field name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+		</fieldset></fields>
+	</config>
+	
+	
+	<params>
+		<param name="@spacer1" type="spacer" default="Please enter the URL of your OpenX invocation header script. You generate invocation code for a single page call at the website level, rather than at the zone level. In the Websites and Zones -> Website properties -> Invocation Code tab" label="" description="" />
+		<param name="openx_location" type="text" default="yourserver.com/openx/www/delivery/spcjs.php?id=1" size="60" label="http://" description="Header Script URL" />
+		<param name="@spacer3" type="spacer" default="" label=" " description=" " />		
+		<param name="@spacer2" type="spacer" default="Enter the zone ID from OpenX that you wish to display in this module." label="" description="" />		
+		<param name="openx_zone_id" type="text" default="" label="OpenX Zone ID" description="Please type in the id of the zone from your OpenX account." />
+		<param name="moduleclass_sfx" type="text" default="" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
+
+	</params>
+</install>
