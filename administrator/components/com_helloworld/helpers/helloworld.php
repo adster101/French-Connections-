@@ -8,7 +8,49 @@ defined('_JEXEC') or die;
  */
 abstract class HelloWorldHelper {
 
+	/**
+	 * Get a list of filter options for the state of a module.
+	 *
+	 * @return	array	An array of JHtmlOption elements.
+	 */
+	public static function getStateOptions()
+	{
+        
+		// Build the filter options.
+		$options	= array();
+		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_HELLOWORLD_HELLOWORLD_ACTIVE'));
+		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_HELLOWORLD_HELLOWORLD_INACTIVE'));
+		$options[]	= JHtml::_('select.option',	'-2',	JText::_('JTRASHED'));
+		return $options;
+	}  
   
+  /*
+   * Get a list of filter options for the review state of a property
+   * 
+   * @return  array An array of JHtmlOption elements
+   */
+  public static function getReviewOptions()
+  {
+ 		// Build the filter options.
+		$options	= array();
+		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_HELLOWORLD_HELLOWORLD_UPDATED'));
+		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW'));
+		return $options;   
+  }
+  
+  /*
+   * Get a list of filter options for the snooze state of a property
+   * 
+   * @return  array An array of JHtmlOption elements
+   */
+  public static function getSnoozeOptions()
+  {
+ 		// Build the filter options.
+		$options	= array();
+ 		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_HELLOWORLD_HELLOWORLD_HIDE_SNOOZED'));
+		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
+		return $options;   
+  }
   
   /**
    * Configure the Linkbar.
@@ -155,9 +197,11 @@ abstract class HelloWorldHelper {
         'helloworld.edit.property.parent',
         'helloworld.filter',
         'helloworld.display.owner',
-        'helloworld.sort-by-expiry',
-        'helloworld.sort-by-prn',
-        'helloworld.ownermenu.view'
+        'helloworld.display.contactlog',
+        'helloworld.sort.expiry',
+        'helloworld.sort.prn',
+        'helloworld.ownermenu.view',
+        'helloworld.snooze'
     );
 
 

@@ -37,7 +37,7 @@ $listing_id = '';
                  id="filter_search" 
                  value="<?php echo $this->escape($this->state->get('filter.search')); ?>" 
                  title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" 
-                 placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />        
+                 placeholder="<?php echo JText::_('COM_HELLOWORLD_PROPERTY_SEARCH_FILTER'); ?>" />        
         </div>
         <div class="btn-group pull-left hidden-phone">
           <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
@@ -52,7 +52,7 @@ $listing_id = '';
         <thead>
           <tr>
             <th width="5%">
-              <?php if ($canDo->get('helloworld.sort-by-prn')) : ?>
+              <?php if ($canDo->get('helloworld.sort.prn')) : ?>
                 <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_ID', 'id', $listDirn, $listOrder); ?>
               <?php else : ?>
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ID') ?>
@@ -66,11 +66,14 @@ $listing_id = '';
             </th>
 
             <th width="12%">
-              <?php if ($canDo->get('helloworld.sort-by-expiry')) : ?>
+              <?php if ($canDo->get('helloworld.sort.expiry')) : ?>
                 <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY', 'expiry_date', $listDirn, $listOrder); ?>
               <?php else: ?>
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY'); ?>
               <?php endif; ?>
+            </th>
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?> 
             </th>
 
             <?php if ($canDo->get('helloworld.display.owner')) : ?>
@@ -78,11 +81,18 @@ $listing_id = '';
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
               </th>
             <?php endif; ?>
-            <th width="3%">
+            <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
             </th>	
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
+            </th>	
+
             <th>              
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
+            </th>
+            <th>              
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SNOOZE'); ?>
             </th>
           </tr>
         </thead>
@@ -96,7 +106,6 @@ $listing_id = '';
                 $expiry_date = new DateTime($item->expiry_date);
                 $now = date('Y-m-d');
                 $now = new DateTime($now);
-                
                 $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
                 ?>
 
@@ -113,29 +122,30 @@ $listing_id = '';
                   <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                     <?php echo $this->escape($item->title); ?>
                   </a>
-
                 </td>
-
                 <td>                  
                   <?php echo $item->expiry_date; ?>
                   
+
+                  
+                </td>
+                <td>
                   <?php if ( $days_to_renewal < 28 && $days_to_renewal > 0) : ?>
-                    <br />
                     <span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL',$days_to_renewal); ?></span>
                     <br />
                     <a class="btn btn-danger btn-small">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
                     </a>
                   <?php elseif ($days_to_renewal < 0) : ?>
-                    <br />
                     <a class="btn btn-danger btn-small">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
                     </a>
                   <?php elseif(empty($item->expiry_date)): ?>
                     &mdash;
-                    
+                  <?php elseif ($days_to_renewal > 28) : ?>
+                    <?php echo JHtml::_('autorenew.state', $item->auto_renew, $i, 'enquiries.', 1, 'cb'); ?>
+
                   <?php endif; ?>
-                  
                 </td>
                 
                 <?php if ($canDo->get('helloworld.display.owner')) : ?>
@@ -155,10 +165,21 @@ $listing_id = '';
                 <?php endif; ?>
                 <td class="center">
                   <?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canPublish); ?>
-                </td>                  
+                </td>
+                <td>
+                  <?php echo JText::_($item->count); ?>
+                </td>
                 <td>
                   <?php echo JText::_($item->modified); ?>
                 </td>
+                
+                <?php if ($canDo->get('helloworld.snooze')) : ?>
+                <td>
+                  <a class="btn btn-micro active" href="index.php?option=com_helloworld&view=snooze&tmpl=component&" data-toggle="modal" data-target="#modal">
+                    <i class="icon-calendar"></i>
+                  </a>   
+                </td>
+                <?php endif; ?>
               </tr>					
             <?php else : ?>
             <?php endif; ?>
@@ -185,5 +206,8 @@ $listing_id = '';
     </div>
 </form>
 
-<?php //echo $this->loadTemplate('new');   ?>
+<?php 
+$layout      = new JLayoutFile('modal',$basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+echo $layout->render($data = array());
+?>
 

@@ -90,45 +90,30 @@ class HelloWorldViewProperty extends JViewLegacy {
     }
 
     if ($canDo->get('core.edit.state')) {
-      JToolBarHelper::divider();
       JToolBarHelper::publish('helloworlds.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('helloworlds.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('helloworlds.trash');
     }
-
+    
     if ($canDo->get('core.admin')) {
-      JToolBarHelper::divider();
       JToolBarHelper::preferences('com_helloworld');
     }
-
-    // We need to add options to the published filter to implement the PFR queue?
-    $publishedOptions = JHtml::_('jgrid.publishedOptions');
-
-    $PFR['value'] = -3;
-    $PFR['text'] = 'COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW';
-    $PFR['disable'] = '';
-
-    $publishedOptions[] = $PFR;
-
-
-
+  
     // Check that the user is authorised to view the filters.
     if ($canDo->get('helloworld.filter')) {
+      
       JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', $publishedOptions, 'value', 'text', $this->state->get('filter.published'), true)
+              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_ACTIVE'), 'filter_published', JHtml::_('select.options', HelloWorldHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
+      );
+      JHtmlSidebar::addFilter(
+              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_REVIEW'), 'filter_state', JHtml::_('select.options', HelloWorldHelper::getReviewOptions(), 'value', 'text', $this->state->get('filter.review_state'), true)
+      );
+      JHtmlSidebar::addFilter(
+              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_SNOOZED'), 'filter_snoozed', JHtml::_('select.options', HelloWorldHelper::getSnoozeOptions(), 'value', 'text', $this->state->get('filter.snoozed'), true)
       );
 
-      JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_CATEGORY'), 'filter_category_id', JHtml::_('select.options', JHtml::_('category.options', 'com_content'), 'value', 'text', $this->state->get('filter.category_id'))
-      );
 
-      JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_ACCESS'), 'filter_access', JHtml::_('select.options', JHtml::_('access.assetgroups'), 'value', 'text', $this->state->get('filter.access'))
-      );
 
-      JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_LANGUAGE'), 'filter_language', JHtml::_('select.options', JHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->state->get('filter.language'))
-      );
     }
     
     // Display a helpful navigation for the owners 
