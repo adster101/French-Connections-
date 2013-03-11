@@ -9,7 +9,6 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
       size="25"
       maxlength="25"
-      
       class="input-large validate-greeting"
       validate="greeting"
       required="true"

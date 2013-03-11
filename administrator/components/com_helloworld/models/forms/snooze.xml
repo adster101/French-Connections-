@@ -2,25 +2,36 @@
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
 	<fieldset name="snooze">
 		<field
-			name="caption"
-			type="text"
+			name="snooze_until"
+			type="calendar"
 			default=""
-			label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
-			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"
+			label="COM_HELLOWORLD_SNOOZE_SNOOZE_DATE"
+			description =""
       size="80"
       maxlength="75"
-      required="true"
-      class="validate">
+      class="validate"
+      labelclass="control-label">
     </field>
+    
     <field 
-      name="image_file_name"
-      type="hidden"
-      default="">
+      name="mail_body_text"
+      type="textarea"
+			label="COM_HELLOWORLD_SNOOZE_CONTACT_NOTES"
+			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"      
+      labelclass="control-label"
+      class="input-xlarge"
+      filter="string">
     </field>
+    
     <field 
-      name="property_id"
-      type="hidden"
-      default="">
+      name="id"
+      type="text"
+      filter="int"
+      class="input-large"
+      readonly="true"
+      label="COM_HELLOWORLD_SNOOZE_PROPERTY_ID"
+			description =""      
+      labelclass="control-label">
     </field>
   </fieldset>
 </form>

@@ -2,41 +2,192 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-// import the Joomla modellist library
-jimport('joomla.application.component.modellist');
+
+// import Joomla modelform library
+jimport('joomla.application.component.modeladmin');
 
 /**
- * HelloWorldList Model
+ * HelloWorld Model
  */
-class HelloWorldModelProperty extends JModelList {
+class HelloWorldModelProperty extends JModelAdmin {
 
   /**
-   * Constructor.
+   * Method override to check if you can edit an existing record.
    *
-   * @param	array	An optional associative array of configuration settings.
-   * @see		JController
+   * @param	array	$data	An array of input data.
+   * @param	string	$key	The name of the key for the primary key.
+   *
+   * @return	boolean
    * @since	1.6
    */
-  public function __construct($config = array()) {
-    if (empty($config['filter_fields'])) {
-      $config['filter_fields'] = array(
-          'id', 'a.id',
-          'title', 'a.title',
-          'alias', 'a.alias',
-          'state', 'a.state',
-          'access', 'a.access', 'access_level',
-          'language', 'a.language',
-          'expiry_date', 'a.expiry_date',
-          'checked_out', 'a.checked_out',
-          'checked_out_time', 'a.checked_out_time',
-          'created_time', 'a.created_time',
-          'created_user_id', 'a.created_user_id',
-          'level', 'a.level',
-          'path', 'a.path',
-          'snoozed','a.snooze_until'
-      );
+  public function allowEdit($data = array(), $key = 'id') {
+    // Check specific edit permission then general edit permission.
+    return JFactory::getUser()->authorise('core.edit', 'com_helloworld.message.' . ((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
+  }
+
+  /**
+   * Returns a reference to the a Table object, always creating it.
+   *
+   * @param	type	The table type to instantiate
+   * @param	string	A prefix for the table class name. Optional.
+   * @param	array	Configuration array for model. Optional.
+   * @return	JTable	A database object
+   * @since	1.6
+   */
+  public function getTable($type = 'PropertyListing', $prefix = 'HelloWorldTable', $config = array()) {
+    return JTable::getInstance($type, $prefix, $config);
+  }
+
+  /**
+   * Method to get the record form.
+   *
+   * @param	array	$data		Data for the form.
+   * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+   * @return	mixed	A JForm object on success, false on failure
+   * @since	1.6
+   */
+  public function getForm($data = array(), $loadData = true) {
+
+    // Get the form.
+    $form = $this->loadForm('com_helloworld.property', 'property', array('control' => 'jform', 'load_data' => $loadData));
+    if (empty($form)) {
+      return false;
     }
-    parent::__construct($config);
+
+    return $form;
+  }
+
+  /**
+   * Method to get the script that have to be included on the form
+   *
+   * @return string	Script files
+   */
+  public function getScript() {
+    return 'administrator/components/com_helloworld/models/forms/helloworld.js';
+  }
+
+  /**
+   * Method to get the data that should be injected in the form.
+   *
+   * @return	mixed	The data for the form.
+   * @since	1.6
+   */
+  protected function loadFormData() {
+    // Check the session for previously entered form data.
+    $data = JFactory::getApplication()->getUserState('com_helloworld.edit.property.data', array());
+
+    if (empty($data)) {
+      $data = $this->getItem();
+    }
+    
+    return $data;
+  }
+
+  /*
+   * This method checks whether the property being edited is a unit.
+   * If it is then we take the lat and long from the parent property 
+   * and force those to be the same for this property.
+   * 
+   * This can happen from two places.
+   * Firstly, if a user is adding a new property they may choose a parent property
+   * in which case we take the parent_id from the user session.
+   * 
+   * Secondly, if the user is editing an existing property which already has a 
+   * parent_id set. I.e. is already marked as a unit. In this case it will be set
+   * in the $data scope.
+   * 
+   * param JForm $form The JForm instance for the view being edited
+   * param array $data The form data as derived from the view (may be empty)
+   * 
+   * @return void
+   * 
+   */
+
+  protected function preprocessForm(JForm $form, $data) {
+
+    // More robustly checked on the component level permissions?
+    // E.g. at the moment any user who is not owner can edit this? 
+    // e.g. add a new permission core.edit.property.changeparent    
+   
+    $canDo = $this->getState('actions.permissions', array());
+    // If we don't come from a view then this maybe empty so we reset it.
+    if (empty($canDo)) {
+      $canDo = HelloWorldHelper::getActions();
+    }
+
+    // Check the change parent ability of this user
+    if (!$canDo->get('helloworld.edit.property.owner')) {
+      $form->removeField('created_by');
+    }
+    
+    // Set the location details accordingly 
+    if (!empty($data->latitude) && !empty($data->longitude)) {
+      $form->setFieldAttribute('city', 'latitude', $data->latitude );
+      $form->setFieldAttribute('city', 'longitude', $data->longitude);    
+    }   
+    
+  }
+
+  /**
+   * Method to return the neatest city xml foeld definition string
+   *
+   * @param   object    $form, the form instance
+   * @param   mixed     $data, the form data 
+   * @param   boolean   is this a property owner? 
+   * 
+   * @return  string .
+   *
+   * @since   11.1
+   */
+  protected function getNearestCityXml($form, $data, $readonly = 'true') {
+    $latitude = (!empty($data->latitude) ? $data->latitude : 0);
+    $longitude = (!empty($data->longitude) ? $data->longitude : 0);
+    $readonly = ($readonly) ? 'true' : 'false';
+
+    $XmlStr = '<field
+      name="city"
+      type="cities"
+      extension="com_helloworld"
+      class="inputbox validate-nearesttown"
+      labelclass="control-label"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
+      required="true"
+      readonly="' . $readonly . '"
+      filter="int"
+      validate="nearesttown"
+      latitude="' . $latitude . '"
+      longitude="' . $longitude . '">
+      <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
+
+    </field>';
+
+    return $XmlStr;
+  }
+
+  /**
+   * Method to test whether a record can be deleted.
+   *
+   * @param   object  $record  A record object.
+   *
+   * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+   *
+   * @since   11.1
+   */
+  protected function canEditState() {
+    $comtask = JRequest::getVar('task', '', 'POST', 'string');
+
+    $task = explode('.', $comtask);
+
+    $user = JFactory::getUser();
+
+    if ($task[1] == 'orderdown' || $task[1] == 'orderup') {
+      return $user->authorise('helloworld.edit.reorder', $this->option);
+    } else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash') {
+      return $user->authorise('core.edit.state', $this->option);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -51,183 +202,12 @@ class HelloWorldModelProperty extends JModelList {
    * @since	1.6
    */
   protected function populateState($ordering = null, $direction = null) {
-    // Initialise variables
-    $app = JFactory::getApplication();
-    $context = $this->context;
 
-    $extension = $app->getUserStateFromRequest('com_helloworlds.property.filter.extension', 'extension', 'com_helloworlds', 'cmd');
-
-    $this->setState('filter.extension', $extension);
-    $parts = explode('.', $extension);
-
-    $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-    $this->setState('filter.published', $published);
-
-    $review_state = $this->getUserStateFromRequest($this->context . '.filter.review_state', 'filter_state', '');
-    $this->setState('filter.review_state', $review_state);
-
-    $snooze_state = $this->getUserStateFromRequest($this->context . '.filter.snoozed', 'filter_snoozed', '');
-    $this->setState('filter.snoozed', $snooze_state);
-
-    // extract the component name
-    $this->setState('filter.component', $parts[0]);
-
-    $search = $this->getUserStateFromRequest($context . '.search', 'filter_search');
-    $this->setState('filter.search', $search);
+    $canDo = HelloWorldHelper::getActions();
+    $this->setState('actions.permissions', $canDo);
 
     // List state information.
-    parent::populateState('a.id', 'asc');
-  }
-
-  /**
-   * Method to get a store id based on model configuration state.
-   *
-   * This is necessary because the model is used by the component and
-   * different modules that might need different sets of data or different
-   * ordering requirements.
-   *
-   * @param	string		$id	A prefix for the store id.
-   *
-   * @return	string		A store id.
-   * @since	1.6
-   */
-  protected function getStoreId($id = '') {
-    // Compile the store id.
-    $id .= ':' . $this->getState('filter.search');
-    $id .= ':' . $this->getState('filter.extension');
-    $id .= ':' . $this->getState('filter.published');
-    $id .= ':' . $this->getState('filter.review_state');
-    $id .= ':' . $this->getState('filter.snoozed');
-
-    return parent::getStoreId($id);
-  }
-
-  /**
-   * Method to build an SQL query to load the list data.
-   *
-   * @return	string	An SQL query
-   */
-  protected function getListQuery() {
-    // Get the user ID
-    $user = JFactory::getUser();
-    $userId = $user->get('id');
-
-    // Get the access control permissions in a handy array
-    $canDo = HelloWorldHelper::getActions();
-
-    // Create a new query object.		
-    $db = JFactory::getDBO();
-    $query = $db->getQuery(true);
-
-    // Select some fields
-    $query->select('
-      a.id, 
-      a.title, 
-      a.created_by, 
-      a.published,
-      a.expiry_date,
-      a.modified,
-      views.count,
-      a.auto_renew
-    ');
-
-    // Join the user details if the user has the ACL rights.
-    if ($canDo->get('helloworld.display.owner')) {
-      $query->select('
-        u.email,
-        p.phone_1,
-        u.name
-
-      ');
-      $query->join('LEFT', '#__users AS u ON u.id = a.created_by');
-      $query->join('LEFT', '#__user_profile_fc AS p ON p.user_id = u.id');
-    }
-
-    // Add in the number of page view this property has had in the last twelve months...
-    $now = date('Y-m-d');
-    $last_year = strtotime("-1 year", strtotime($now));
-    $query->join('left', '(SELECT property_id, count(id) as count FROM #__property_views where  date > ' . $db->quote(date('Y-m-d', $last_year)) . ' group by property_id) views on views.property_id = a.id');
-
-    // Check the user group this user belongs to. 
-    // Fundamental check to ensure owners only see their own listings.
-    // Should this be with an ACL check, e.g. core.edit.own and core.edit
-    // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
-    //  // If true then has permission to edit all as well as own, otherwise just own
-    if ($canDo->get('core.edit.own') && !$canDo->get('core.edit')) {
-      $query->where('a.created_by=' . $userId);
-    }
-
-    $query->where('a.created_by !=0');
-
-    // Filter by published state
-    $published = $this->getState('filter.published');
-    if (is_numeric($published)) {
-      $query->where('a.published = ' . (int) $published);
-    } elseif ($published == '') {
-      $query->where('(a.published = 0 OR a.published = 1)');
-    }
-    
-    // Filter by review state
-    $review_state = $this->getState('filter.review_state');
-    if (is_numeric($review_state)) {
-      $query->where('a.state = ' . (int) $review_state);
-    } 
-    
-    // Filter by review state
-    $snooze_state = $this->getState('filter.snoozed');
-    if (!empty($snooze_state) ) {
-      if ($snooze_state == 0) {
-        $query->where('a.snooze_until < ' . date('Y-m-d'));    
-      }
-    } else {
-      $query->where('a.snooze_until < ' . date('Y-m-d'));
-    }
-
-    // Filter by search in title
-    // TODO - Try and tidy up this logic a bit.
-    $search = $this->getState('filter.search');
-    if (!empty($search)) {
-      if ((int) $search) {
-
-        // This pulls out the property with ID searched on, it's parent and any siblings. 
-        $query->where('a.id = ' . (int) $search);
-      } elseif (stripos($search, 'account:') === 0) {
-        $search = $db->Quote('%' . $db->escape(substr($search, 8), true) . '%');
-        $query->where('(u.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
-      } elseif (stripos($search, 'accid:') === 0) {
-        $search = substr($search, 6);
-        $query->where('(u.id = ' . $search . ')');
-      } else {
-        $search = $db->Quote('%' . $db->escape($search, true) . '%');
-        $query->where('(a.title LIKE ' . $search . ')');
-      }
-    }
-
-
-    // From the hello table
-    $query->from('#__property_listings as a');
-
-    $listOrdering = $this->getState('list.ordering', 'a.id');
-    $listDirn = $db->escape($this->getState('list.direction', 'ASC'));
-
-    $query->order($db->escape($listOrdering) . ' ' . $listDirn);
-
-    $query->order($db->escape('a.created_by'));
-
-    //$query->where('h.id is not null');
-
-    return $query;
-  }
-
-  function getLanguages() {
-    $lang = & JFactory::getLanguage();
-    $languages = $lang->getKnownLanguages(JPATH_SITE);
-
-    $return = array();
-    foreach ($languages as $tag => $properties)
-      $return[] = JHTML::_('select.option', $tag, $properties['name']);
-
-    return $return;
+    parent::populateState();
   }
 
 }

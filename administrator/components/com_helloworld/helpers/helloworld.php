@@ -55,33 +55,32 @@ abstract class HelloWorldHelper {
   /**
    * Configure the Linkbar.
    */
-  public static function addSubmenu($submenu, $published = 0, $parent_id = 1) {
-    // Get the ID of the item we are editing
-    $id = JRequest::getVar('id');
+  public static function addSubmenu($view = '') {
 
     //Get the current user id 
     $user = JFactory::getUser();
 
 
     
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY_MENU'), '#');
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY_MENU'), '#');
     
     
     // We only want to present the edit location screen if we are editing a parent property
-    if ($parent_id == 1 || empty($parent_id)) {
-      JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id=' . $id, $submenu == 'location');
-    }
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id=' . $id, $submenu == 'helloworld');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_FACILITIES'), 'index.php?option=com_helloworld&task=facilities.edit&id=' . $id, $submenu == 'facilities');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id=' . $id, $submenu == 'availability');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id=' . $id, $submenu == 'tariffs');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id=' . $id, $submenu == 'images');
+    //if ($parent_id == 1 || empty($parent_id)) {
+      //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id=' . $id, $submenu == 'location');
+    //}
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id=' . $id, $submenu == 'helloworld');
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_FACILITIES'), 'index.php?option=com_helloworld&task=facilities.edit&id=' . $id, $submenu == 'facilities');
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id=' . $id, $submenu == 'availability');
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id=' . $id, $submenu == 'tariffs');
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id=' . $id, $submenu == 'images');
       
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ENQUIRIES'), 'index.php?option=com_enquiries', $submenu=='');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_INVOICE_HISTORY'), 'index.php?option=com_invoices', $submenu=='');
-    JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_users', $submenu=='');
-    
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_admin&view=profile&layout=edit&id=' . $user->id . '#sms', ($view == 'profile'));
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_RENTAL_ACCOMMODATION'), 'index.php?option=com_helloworld', ($view == 'properties'));
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_REALESTATE_ACCOMMODATION'), 'index.php?option=com_realestate', ($view == 'realestate'));
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ENQUIRIES'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
+
   }
 
   /*

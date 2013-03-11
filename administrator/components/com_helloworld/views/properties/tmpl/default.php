@@ -91,9 +91,11 @@ $listing_id = '';
             <th>              
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
             </th>
-            <th>              
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SNOOZE'); ?>
-            </th>
+            <?php if ($canDo->get('helloworld.snooze')) : ?>
+              <th>              
+                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SNOOZE'); ?>
+              </th>
+            <?php endif; ?>
           </tr>
         </thead>
 
@@ -119,7 +121,7 @@ $listing_id = '';
                 </td>
 
                 <td>
-                  <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
+                  <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                     <?php echo $this->escape($item->title); ?>
                   </a>
                 </td>
@@ -159,23 +161,21 @@ $listing_id = '';
                       <?php echo JText::_($item->email); ?>
                       <br />
                       <?php echo JText::_($item->phone_1); ?>
-                      
                     </span>
                   </td>	
                 <?php endif; ?>
                 <td class="center">
-                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'helloworlds.', $canPublish); ?>
+                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish); ?>
                 </td>
                 <td>
                   <?php echo JText::_($item->count); ?>
                 </td>
                 <td>
                   <?php echo JText::_($item->modified); ?>
-                </td>
-                
+                </td>  
                 <?php if ($canDo->get('helloworld.snooze')) : ?>
                 <td>
-                  <a class="btn btn-micro active" href="index.php?option=com_helloworld&view=snooze&tmpl=component&" data-toggle="modal" data-target="#modal">
+                  <a class="btn btn-micro active" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=snooze.update&id=' . $item->id . '&' . JSession::getFormToken() . '=1') ?>">
                     <i class="icon-calendar"></i>
                   </a>   
                 </td>

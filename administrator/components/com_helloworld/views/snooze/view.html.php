@@ -32,11 +32,47 @@ class HelloWorldViewSnooze extends JViewLegacy
     
     // Get the form for this puppy...
 		$form = $this->get('Form');
+    $item = $this->get('Item');
     
-    print_r($form);
-    
-    
+    // Assign the view data
+    $this->form = $form;
+    $this->item = $item;
+
+    $this->setDocument();
+    $this->addToolBar();
 
 		parent::display();
 	}
+  
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		// Determine the view we are using. 
+		$view = strtolower(JRequest::getVar('view'));
+    
+			
+    // Show a helpful toobar title
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_SNOOZE_PROPERTY_TITLE',$this->item->title));
+
+    JToolBarHelper::save('snooze.save', 'JTOOLBAR_SAVE');
+
+    JToolBarHelper::cancel('snooze.cancel', 'JTOOLBAR_CLOSE');
+	}  
+  
+  /**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::sprintf('COM_HELLOWORLD_SNOOZE_PROPERTY_TITLE',$this->item->title));
+	} 
+  
+  
+  
+  
 }

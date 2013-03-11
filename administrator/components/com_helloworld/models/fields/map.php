@@ -43,6 +43,6 @@ class JFormFieldMap extends JFormField
 
 		// Initialize JavaScript field attributes.
 		$onchange = $this->element['onchange'] ? ' onchange="' . (string) $this->element['onchange'] . '"' : '';
-		return  '<div id ="map"  id="' . $this->id . '" ></div>' . JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS');
+		return  '<div id ="map"  id="' . $this->id . '" ></div>';
 	}
 }

@@ -1,149 +1,137 @@
 <?php
-
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
+ 
 // import Joomla view library
 jimport('joomla.application.component.view');
 
 /**
- * HelloWorlds View
+ * HelloWorld View
  */
-class HelloWorldViewProperty extends JViewLegacy {
+class HelloWorldViewProperty extends JViewLegacy
+{
+	/**
+	 * display method of Hello view
+	 * @return void
+	 */
+	public function display($tpl = null) 
+	{
 
-  protected $state;
-
-  /**
-   * HelloWorlds view display method
-   * @return void
-   */
-  function display($tpl = null) {
-    // Find the user details
-    $user = JFactory::getUser();
-    $userID = $user->id;
-
-    // Get data from the model
-    $items = $this->get('Items');
-
-    // Record the number of properties here in the user session scope
-    JApplication::setUserState("com_helloworlds_property_count_$userID", count($items));
-
-    $pagination = $this->get('Pagination');
-    
     $this->state = $this->get('State');
-
-    // Assign data to the view
-    $this->items = $items;
-    $this->pagination = $pagination;
-
-    // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
-      JError::raiseError(500, implode('<br />', $errors));
-      return false;
-    }
-
-    // Preprocess the list of items to find ordering divisions.
-    foreach ($this->items as &$item) {
-      // $this->ordering[$item->parent_id][] = $item->id;
-    }
-
-    // Set the toolbar
-    $this->addToolBar();
-
-    // Add the side bar
-    $this->sidebar = JHtmlSidebar::render();
-   
-
-    // Display the template
-    parent::display($tpl);
-
-    // Set the document
-    $this->setDocument();
-  }
-
-  /**
-   * Setting the toolbar
-   */
-  protected function addToolBar() {
-    $document = JFactory::getDocument();
-    $document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
-
-    $user = JFactory::getUser();
+        
     
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JToolbarButtonAjaxpopup', JPATH_ROOT . '/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
+  	// get the Data
+		$form = $this->get('Form');
+		$item = $this->get('Item');
+		$script = $this->get('Script');
+		$languages = HelloWorldHelper::getLanguages();
+		$lang = HelloWorldHelper::getLang();
+	
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) 
+		{
+			JError::raiseError(500, implode('<br />', $errors));
+			return false;
+		}
 
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JToolbarButtonAjaxpopupchooseowner', JPATH_ROOT . '/administrator/components/com_helloworld/buttons/Ajaxpopupchooseowner.php');
-
-    $canDo = HelloWorldHelper::getActions();
-
-    JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
-    if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('helloworld.addnew', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_PROPERTY', false);
-    }
-    if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) {
-      JToolBarHelper::editList('helloworld.edit', 'JTOOLBAR_EDIT');
-    }
-    if ($canDo->get('core.delete')) {
-      JToolBarHelper::deleteList('', 'helloworlds.delete', 'JTOOLBAR_DELETE');
-    }
-
-    if ($canDo->get('core.edit.state')) {
-      JToolBarHelper::publish('helloworlds.publish', 'JTOOLBAR_PUBLISH', true);
-      JToolBarHelper::unpublish('helloworlds.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-      JToolBarHelper::trash('helloworlds.trash');
-    }
+		// Assign the Data
+		$this->form = $form;
+		$this->item = $item;
+		$this->script = $script;
+		$this->languages = $languages;
+		$this->lang = $lang;
+		
+		// Set the toolbar
+		$this->addToolBar();
     
-    if ($canDo->get('core.admin')) {
-      JToolBarHelper::preferences('com_helloworld');
-    }
-  
-    // Check that the user is authorised to view the filters.
-    if ($canDo->get('helloworld.filter')) {
-      
-      JHtmlSidebar::addFilter(
-              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_ACTIVE'), 'filter_published', JHtml::_('select.options', HelloWorldHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
-      );
-      JHtmlSidebar::addFilter(
-              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_REVIEW'), 'filter_state', JHtml::_('select.options', HelloWorldHelper::getReviewOptions(), 'value', 'text', $this->state->get('filter.review_state'), true)
-      );
-      JHtmlSidebar::addFilter(
-              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_SNOOZED'), 'filter_snoozed', JHtml::_('select.options', HelloWorldHelper::getSnoozeOptions(), 'value', 'text', $this->state->get('filter.snoozed'), true)
-      );
-
-
-
-    }
+		// Display the template
+		parent::display($tpl);
+ 
+		// Set the document
+		$this->setDocument();
+	}
+	
+	/**
+	 * Setting the toolbar
+	 */
+	protected function addToolBar() 
+	{
+		// Determine the layout we are using. 
+		// Should this be done with views? 
+		$view = strtolower(JRequest::getVar('view'));
+		
+    $published = $this->item->published;
+    
+    // Get the progress for this property 
+    HelloWorldHelper::setPropertyProgress($this->item->id,$published );
+    
+		
+		// Eventually figured out that the below hides the submenu on this view.
+		//JRequest::setVar('hidemainmenu', true);
+		$user = JFactory::getUser();
+		$userId = $user->id;
+		$isNew = $this->item->id == 0;
+    
+    // Get component level permissions
+		$canDo = $this->state->get('actions.permissions',array());
+    
+    JApplication::setUserState('title'.$this->item->id, $this->item->title);
+    
+    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'helloworld');
+		// Built the actions for new and existing records.
+		if ($isNew) 
+		{
+			// For new records, check the create permission.
+			if ($canDo->get('core.create')) 
+			{
+				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
+				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			}
+			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
+		}
+		else
+		{
+			if ($canDo->get('core.edit.own'))
+			{
+				// We can save the new record
+				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
+			}
+			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
+		}  
     
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {
     
       $view = strtolower(JRequest::getVar('view'));
+  
+      $canDo = HelloWorldHelper::addSubmenu($view);
       
-      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_admin&view=profile&layout=edit&id=' . $user->id . '#sms', ($view == 'profile'));
-      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_RENTAL_ACCOMMODATION'), 'index.php?option=com_helloworld', ($view == 'helloworlds'));
-      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_REALESTATE_ACCOMMODATION'), 'index.php?option=com_realestate', ($view == 'realestate'));
-
+      // Add the side bar
+      $this->sidebar = JHtmlSidebar::render();
       
-    }
-    
-    
-    
-  }
+    }    
+	}
 
   /**
-   * Method to set up the document properties
-   *
-   * @return void
-   */
-  protected function setDocument() {
-    $document = JFactory::getDocument();
-    $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css", 'text/css', "screen");
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument() 
+	{
+		$isNew = $this->item->id == 0;
+		$document = JFactory::getDocument();
+		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+		$document->addScript(JURI::root() . $this->script);
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 
-    JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
-  }
+    $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js",'text/javascript',true, true);
 
+    $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
+
+		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+	}
 }
