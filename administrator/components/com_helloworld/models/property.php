@@ -65,7 +65,73 @@ class HelloWorldModelProperty extends JModelAdmin {
   public function getScript() {
     return 'administrator/components/com_helloworld/models/forms/helloworld.js';
   }
+  
+	/**
+	 * Method to get a list of units for a given property listing
+	 *
+	 * @param   integer  $pk  The id of the property listing.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since   12.2
+	 */
+	public function getUnits()
+	{
+    
+    $input= JFactory::getApplication()->input;
+    $id = $input->get('id', '', 'int');
+    
+    // Get the units table
+    $units_table = $this->getTable('PropertyUnits','HelloWorldTable');
 
+    if ($id > 0)
+		{
+			// Attempt to load the row.
+			$return = $units_table->load_units($id);
+
+			// Check for a table object error.
+			if ($return === false && $units_table->getError())
+			{
+				$this->setError($units_table->getError());
+				return false;
+			}
+		}  
+    
+    // Set the default unit in the model state so we can fetch it in a bit
+    $this->setState('listing.defaultunit',$return[0]->id);
+    
+    
+    $units = $return;
+
+		return $units;
+	}
+  
+  public function getProgress()
+  {
+    $id = ($this->getState('listing.defaultunit',''));
+
+    // Get the units table
+    $units_table = $this->getTable('PropertyUnits','HelloWorldTable'); 
+    
+    if ($id)
+		{
+			// Attempt to load the row.
+			$return = $units_table->progress($id);
+
+			// Check for a table object error.
+			if ($return === false && $units_table->getError())
+			{
+				$this->setError($units_table->getError());
+				return false;
+			}
+		}    
+    
+    return $return;
+   
+
+  }
+
+    
   /**
    * Method to get the data that should be injected in the form.
    *

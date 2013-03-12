@@ -21,7 +21,8 @@ class HelloWorldTablePropertyListing extends JTable
 	function __construct(&$db) 
 	{
 		parent::__construct('#__property_listings', 'id', $db);
-	}	
+	}	  
   
+
   
 }

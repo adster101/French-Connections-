@@ -14,7 +14,7 @@ $userId = $user->get('id');
 $groups = $user->getAuthorisedGroups();
 $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
-
+$data = array('units'=>$this->units,'item'=>$this->item,'progress'=>$this->progress);
 ?>
 
 
@@ -30,7 +30,7 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         <?php endif; ?> 
         <?php
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        echo $layout->render($data = array());
+        echo $layout->render($data);
         ?>
         <fieldset class="adminform form-horizontal">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS'); ?></legend>

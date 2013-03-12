@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewProperty extends JViewLegacy
+class HelloWorldViewUnit extends JViewLegacy
 {
 	/**
 	 * display method of Hello view
@@ -16,21 +16,21 @@ class HelloWorldViewProperty extends JViewLegacy
 	 */
 	public function display($tpl = null) 
 	{
-    
+
     $this->state = $this->get('State');
         
-  	// get the Data
+    
+		// get the Data
 		$form = $this->get('Form');
 		$item = $this->get('Item');
-		$script = $this->get('Script');
-    
+    $script = $this->get('Script');
     $units = $this->get('Units');  
-    
     $progress = $this->get('Progress');
-    
-		$languages = HelloWorldHelper::getLanguages();
+
+    $languages = HelloWorldHelper::getLanguages();
 		$lang = HelloWorldHelper::getLang();
-	
+	  
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -42,10 +42,10 @@ class HelloWorldViewProperty extends JViewLegacy
 		$this->form = $form;
 		$this->item = $item;
 		$this->script = $script;
-		$this->languages = $languages;
-		$this->lang = $lang;
     $this->units =  $units;
     $this->progress =  $progress;
+    $this->languages = $languages;
+		$this->lang = $lang;
 		
 		// Set the toolbar
 		$this->addToolBar();
@@ -71,13 +71,12 @@ class HelloWorldViewProperty extends JViewLegacy
     // Get the progress for this property 
     HelloWorldHelper::setPropertyProgress($this->item->id,$published );
     
-		
+ 		
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
 		$userId = $user->id;
 		$isNew = $this->item->id == 0;
-    
     // Get component level permissions
 		$canDo = $this->state->get('actions.permissions',array());
     
@@ -90,22 +89,22 @@ class HelloWorldViewProperty extends JViewLegacy
 			// For new records, check the create permission.
 			if ($canDo->get('core.create')) 
 			{
-				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
-			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
 			if ($canDo->get('core.edit.own'))
 			{
 				// We can save the new record
-				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
 			}
 			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
-		}  
+		} 
     
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {
@@ -117,7 +116,8 @@ class HelloWorldViewProperty extends JViewLegacy
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
       
-    }    
+    } 
+    
 	}
 
   /**
