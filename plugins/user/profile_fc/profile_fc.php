@@ -37,7 +37,8 @@ class plgUserProfile_fc extends JPlugin
       'vat_number',
       'company_number',
       'receive_newsletter',
-      'where_heard'
+      'where_heard',
+      'captcha'
     );
   
 	/**

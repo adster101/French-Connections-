@@ -82,7 +82,7 @@ abstract class HelloWorldHelper {
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ENQUIRIES'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
 
   }
-
+  
   /*
    * Method to get and check the status of the various key sections of a property listing
    * I.E. Property details, availability, tariffs and images.
@@ -91,88 +91,82 @@ abstract class HelloWorldHelper {
    *  
    * return void
    * 
+   */  
+  public static function getPropertyProgress($id ='')
+  {
+    
+    
+    
+  }
+  
+
+  /*
+   * Helper function to update the state of the listing the user is currently editing.
+   * 
+   * @param JObject item The item (the property) being edited 
+   * @param JObject units The list of units assigned to a particular property
+   *  
+   * return void
+   * 
    */
 
-  public static function setPropertyProgress($id = 0, $published = 0) {
+  public static function setPropertyProgress($item = '', $units = '') {
+    
+    // Collect the input from the request
+    $input = JFactory::getApplication()->input;
+    
+    // Basic idea is that all edits of a listing must setup this data object. 
+    // This will mean that all units and the listing data is available for any unit being editied
+    
+    // The id of the item being edited, could be unit or listing
+    $id = $input->get('id','','int');
+    
+    // The component - com_helloworld unless something has gone wrong!
+    $option = $input->get('option','com_helloworld','string');
+    
+    // The user details
+    $user = JFactory::getUser();
 
-    $task = JRequest::getVar('task', '', 'GET');
+    // Create the 'progress' object
+    $progress = new JObject;
+        
+    $listing_progress_array = array(
+        'listing_id'=>$id,
+        'listing_title'=>$item->title,
+        'latitude'=>$item->latitude,
+        'longitude'=>$item->longitude,
+        'city'=>$item->city,
+        'expiry'=>$item->expiry_date,
+        'units'=>$units
+       );
+            
+    // Check that this doesn't already exist in the session scope
+    $progress->setProperties($listing_progress_array);
+    JApplication::setUserState('listing', $progress);
+   
+        
+   
+    // May still need to use the below to check for images against the property listing
+    //if (!JApplication::getUserState('com_hellworld.images.progress', false)) {
 
-    if (($task == '' || $task == 'edit') && $id != 0) {
+      // Import the model library 
+      //$model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
 
-      // Check that this doesn't already exist in the session scope
-      if (!JApplication::getUserState('com_helloworld.availability.progress', false)) {
-
-        // Get an instance of the availability table
-        $table = JTable::getInstance('Availability', 'HelloWorldTable', array());
-
-        // Load the availability for this property
-        $availability = $table->load($id);
-
-        // Check for errors.
-        if (count($errors = $table->get('Errors'))) {
-          JError::raiseError(500, implode('<br />', $errors));
-          return false;
-        }
-
-        // Set the userstate accordingly
-        if (count($availability)) {
-          JApplication::setUserState('com_helloworld.availability.progress', true);
-        } else {
-          JApplication::setUserState('com_helloworld.availability.progress', false);
-        }
-      }
-
-      // Check that this doesn't already exist in the session scope
-      if (!JApplication::getUserState('com_helloworld.tariffs.progress', false)) {
-        // Get an instance of the tariffs table
-        $table = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
-
-        // Load the availability for this property
-        $tariffs = $table->load($id);
-
-        // Check for errors.
-        if (count($errors = $table->get('Errors'))) {
-          JError::raiseError(500, implode('<br />', $errors));
-          return false;
-        }
-
-        // Set the context and userstate accordingly
-        if (count($tariffs)) {
-          JApplication::setUserState('com_helloworld.tariffs.progress', true);
-        } else {
-          JApplication::setUserState('com_helloworld.tariffs.progress', false);
-        }
-      }
-
-      // Set the property's published status in the session
-      if ($published) {
-        JApplication::setUserState('com_helloworld.published.progress', true);
-      } else {
-        JApplication::setUserState('com_helloworld.published.progress', false);
-      }
+      // Use the getItem method to retrieve the image details. 
+      //$item = $model->getItem($id);
 
 
-      // Check that this doesn't already exist in the session scope
-      if (!JApplication::getUserState('com_hellworld.images.progress', false)) {
+      //if (array_key_exists('library', $item->images->library) && count($item->images->gallery->getProperties()) > 0) {
 
-        // Import the model library 
-        $model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+        //JApplication::setUserState('com_helloworld.images.progress', true);
+      //} else if (count($item->images->library->getProperties()) > 0) {
 
-        // Use the getItem method to retrieve the image details. 
-        $item = $model->getItem($id);
-
-
-        if (array_key_exists('library', $item->images->library) && count($item->images->gallery->getProperties()) > 0) {
-
-          JApplication::setUserState('com_helloworld.images.progress', true);
-        } else if (count($item->images->library->getProperties()) > 0) {
-
-          JApplication::setUserState('com_helloworld.images.progress', true);
-        } else {
-          JApplication::setUserState('com_helloworld.images.progress', false);
-        }
-      }
-    }
+        //JApplication::setUserState('com_helloworld.images.progress', true);
+      //} else {
+        //JApplication::setUserState('com_helloworld.images.progress', false);
+      //}
+    //}
+    //}
   }
 
   /**

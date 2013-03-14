@@ -79,7 +79,7 @@ class HelloWorldViewProperties extends JViewLegacy {
 
     JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
     if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('property.addnew', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_PROPERTY', false);
+      JToolBarHelper::addNew('property.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_PROPERTY', false);
     }
     if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) {
       JToolBarHelper::editList('property.edit', 'JTOOLBAR_EDIT');

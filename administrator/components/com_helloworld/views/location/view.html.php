@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewUnit extends JViewLegacy
+class HelloWorldViewProperty extends JViewLegacy
 {
 	/**
 	 * display method of Hello view
@@ -16,19 +16,21 @@ class HelloWorldViewUnit extends JViewLegacy
 	 */
 	public function display($tpl = null) 
 	{
-
-    $this->state = $this->get('State');
-
-		
-    // get and assign the Data
-		$this->form = $this->get('Form');
-		$this->item = $this->get('Item');
-    $this->script = $this->get('Script');
     
-   
-    $this->languages = HelloWorldHelper::getLanguages();
-		$this->lang = HelloWorldHelper::getLang();
-
+    $this->state = $this->get('State');
+        
+  	// get the Data
+		$form = $this->get('Form');
+		$item = $this->get('Item');
+		$script = $this->get('Script');
+    
+    $units = $this->get('Units');  
+    
+    $progress = $this->get('Progress');
+    
+		$languages = HelloWorldHelper::getLanguages();
+		$lang = HelloWorldHelper::getLang();
+	
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -36,7 +38,16 @@ class HelloWorldViewUnit extends JViewLegacy
 			return false;
 		}
 
-    // Set the toolbar
+		// Assign the Data
+		$this->form = $form;
+		$this->item = $item;
+		$this->script = $script;
+		$this->languages = $languages;
+		$this->lang = $lang;
+    $this->units =  $units;
+    $this->progress =  $progress;
+		
+		// Set the toolbar
 		$this->addToolBar();
     
 		// Display the template
@@ -55,46 +66,46 @@ class HelloWorldViewUnit extends JViewLegacy
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
 		
+    $published = $this->item->published;
     
     // Get the progress for this property 
-    //HelloWorldHelper::setPropertyProgress($this->item->id,$published );
+    HelloWorldHelper::setPropertyProgress($this->item->id,$published );
     
- 		
+		
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
 		$userId = $user->id;
-    
 		$isNew = $this->item->id == 0;
     
     // Get component level permissions
-		$canDo = HelloWorldHelper::getActions();
-
-    JApplication::setUserState('title'.$this->item->id, $this->item->unit_title);
+		$canDo = $this->state->get('actions.permissions',array());
     
-    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title), 'helloworld');
+    JApplication::setUserState('title'.$this->item->id, $this->item->title);
+    
+    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'helloworld');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{
 			// For new records, check the create permission.
 			if ($canDo->get('core.create')) 
 			{
-				JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
-			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
 			if ($canDo->get('core.edit.own'))
 			{
 				// We can save the new record
-				JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
 			}
 			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
-		} 
+		}  
     
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {
@@ -106,8 +117,7 @@ class HelloWorldViewUnit extends JViewLegacy
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
       
-    } 
-    
+    }    
 	}
 
   /**

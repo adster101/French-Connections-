@@ -14,19 +14,11 @@ $userId = $user->get('id');
 $groups = $user->getAuthorisedGroups();
 $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
-
-// Initialise a data array to pass into the progress tabs layout
-$data = array();
-
-// Add the data that we have...
-$data['units'] = (!empty($this->units)) ? $this->units : '';
-$data['item'] = (!empty($this->item)) ? $this->item: '';
-$data['progress'] = (!empty($this->progress)) ? $this->progress : array();
-
-
+$data = array('units'=>$this->units,'item'=>$this->item,'progress'=>$this->progress);
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
+
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">

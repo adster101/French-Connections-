@@ -14,7 +14,7 @@ $userId = $user->get('id');
 $groups = $user->getAuthorisedGroups();
 $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
-$data = array('units'=>$this->units,'item'=>$this->item,'progress'=>$this->progress);
+$data = $this->item;
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">

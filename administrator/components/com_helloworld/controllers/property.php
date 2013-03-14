@@ -87,7 +87,7 @@ class HelloWorldControllerProperty extends JControllerForm {
    *
    * @since   12.2
    */
-  public function addnew() {
+  public function listing() {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
@@ -262,7 +262,6 @@ class HelloWorldControllerProperty extends JControllerForm {
 
     // Test whether the data is valid.
     $validData = $model->validate($form, $data);
-
     // Check for validation errors.
     if ($validData === false) {
       // Get the validation messages.
@@ -414,5 +413,12 @@ class HelloWorldControllerProperty extends JControllerForm {
 
     return true;
   }
+  
+  public function postSaveHook(JModelLegacy $model, $validData = array()) {
+    
+    // Various things we could do here...
+    // For now we want to push the property listing progress into the session
+    
+ }
 
 }

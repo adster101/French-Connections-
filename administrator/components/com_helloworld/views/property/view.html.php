@@ -17,16 +17,19 @@ class HelloWorldViewProperty extends JViewLegacy
 	public function display($tpl = null) 
 	{
     
+    // Get the model state
     $this->state = $this->get('State');
-        
+    
   	// get the Data
-		$form = $this->get('Form');
-		$item = $this->get('Item');
-		$script = $this->get('Script');
+		$this->form = $this->get('Form');
+		$this->item = $this->get('Item');
     
-    $units = $this->get('Units');  
+		$this->script = $this->get('Script');
     
-    $progress = $this->get('Progress');
+    $this->units = $this->get('Units');  
+
+    // Update the progress..this is stored in the session scope so doesn't return here.
+    HelloWorldHelper::setPropertyProgress($this->item, $this->units);
     
 		$languages = HelloWorldHelper::getLanguages();
 		$lang = HelloWorldHelper::getLang();
@@ -38,14 +41,10 @@ class HelloWorldViewProperty extends JViewLegacy
 			return false;
 		}
 
-		// Assign the Data
-		$this->form = $form;
-		$this->item = $item;
-		$this->script = $script;
+		// Assign the language data
 		$this->languages = $languages;
 		$this->lang = $lang;
-    $this->units =  $units;
-    $this->progress =  $progress;
+
 		
 		// Set the toolbar
 		$this->addToolBar();
@@ -68,8 +67,7 @@ class HelloWorldViewProperty extends JViewLegacy
 		
     $published = $this->item->published;
     
-    // Get the progress for this property 
-    HelloWorldHelper::setPropertyProgress($this->item->id,$published );
+   
     
 		
 		// Eventually figured out that the below hides the submenu on this view.
@@ -79,7 +77,7 @@ class HelloWorldViewProperty extends JViewLegacy
 		$isNew = $this->item->id == 0;
     
     // Get component level permissions
-		$canDo = $this->state->get('actions.permissions',array());
+		$canDo = HelloWorldHelper::getActions();
     
     JApplication::setUserState('title'.$this->item->id, $this->item->title);
     

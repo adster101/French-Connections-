@@ -12,7 +12,7 @@
       class="input-xxlarge validate-greeting"
       validate="greeting"
       required="true"
-      default=""/>   
+      filter="string"/>   
       
   </fieldset>	  
 
@@ -162,7 +162,9 @@
       readonly="false"
       label="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_LABEL"
       desc="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_DESC"
-      class="input-small"
+      class="input-small required"
+      required="true"
+      validate=""
       />
     <field
       name="created_on"
@@ -170,7 +172,7 @@
       type="text"
       label="JGLOBAL_CREATED_DATE"
       class="readonly input-small"
-      filter="unset"
+      filter="string"
       readonly="true" />
     <field
       labelclass="control-label"

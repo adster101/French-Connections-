@@ -81,9 +81,14 @@ class HelloWorldModelProperty extends JModelAdmin {
     $input= JFactory::getApplication()->input;
     $id = $input->get('id', '', 'int');
     
+    $return = false;
+    
     // Get the units table
     $units_table = $this->getTable('PropertyUnits','HelloWorldTable');
-
+    
+    // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
+    $units_table->set('_tbl_key','parent_id');
+    
     if ($id > 0)
 		{
 			// Attempt to load the row.
@@ -95,21 +100,21 @@ class HelloWorldModelProperty extends JModelAdmin {
 				$this->setError($units_table->getError());
 				return false;
 			}
-		}  
-    
-    // Set the default unit in the model state so we can fetch it in a bit
-    $this->setState('listing.defaultunit',$return[0]->id);
-    
-    
-    $units = $return;
+		} else {
+      return false;
+    } 
 
-		return $units;
+		// Convert to the JObject before adding other data.
+		$units = JArrayHelper::toObject($return, 'JObject');
+
+    return $units;
 	}
   
   public function getProgress()
   {
-    $id = ($this->getState('listing.defaultunit',''));
 
+    $return = false;
+    
     // Get the units table
     $units_table = $this->getTable('PropertyUnits','HelloWorldTable'); 
     
@@ -124,7 +129,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 				$this->setError($units_table->getError());
 				return false;
 			}
-		}    
+		} 
     
     return $return;
    
@@ -145,10 +150,12 @@ class HelloWorldModelProperty extends JModelAdmin {
     if (empty($data)) {
       $data = $this->getItem();
     }
-    
+
     return $data;
   }
-
+  
+	
+  
   /*
    * This method checks whether the property being edited is a unit.
    * If it is then we take the lat and long from the parent property 
@@ -182,15 +189,22 @@ class HelloWorldModelProperty extends JModelAdmin {
     }
 
     // Check the change parent ability of this user
-    if (!$canDo->get('helloworld.edit.property.owner')) {
-      $form->removeField('created_by');
+    if (!$canDo->get('helloworld.edit.property.owner')) {  
+      $user = JFactory::getUser();
+      // Set the default owner to the user creating this.
+      $form->setFieldAttribute('created_by', 'type', 'hidden');
+      $form->setFieldAttribute('created_by', 'default', $user->id);
     }
     
-    // Set the location details accordingly 
+    // Set the location details accordingly, needed for one of the form field types... 
     if (!empty($data->latitude) && !empty($data->longitude)) {
       $form->setFieldAttribute('city', 'latitude', $data->latitude );
       $form->setFieldAttribute('city', 'longitude', $data->longitude);    
     }   
+    
+    // Set the created date
+    $form->setFieldAttribute('created_on', 'default', date('Y-m-d'));    
+
     
   }
 

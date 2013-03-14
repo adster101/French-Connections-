@@ -18,26 +18,25 @@ $originalOrders = array();
 $canDo = HelloWorldHelper::getActions();
 
 $listing_id = '';
-
-
 ?>
+
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
-  <div id="j-sidebar-container" class="span2">
+    <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10">
     <?php else : ?>
       <div id="j-main-container">
-      <?php endif; ?> 
+      <?php endif; ?>
       <div id="filter-bar" class="btn-toolbar">
         <div class="filter-search btn-group pull-left">
           <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-          <input type="text" name="filter_search" 
-                 id="filter_search" 
-                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>" 
-                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" 
-                 placeholder="<?php echo JText::_('COM_HELLOWORLD_PROPERTY_SEARCH_FILTER'); ?>" />        
+          <input type="text" name="filter_search"
+                 id="filter_search"
+                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
+                 placeholder="<?php echo JText::_('COM_HELLOWORLD_PROPERTY_SEARCH_FILTER'); ?>" />
         </div>
         <div class="btn-group pull-left hidden-phone">
           <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
@@ -48,6 +47,13 @@ $listing_id = '';
           <?php echo $this->pagination->getLimitBox(); ?>
         </div>
       </div>
+      <?php if (empty($this->items)) : // This user doesn't have any listings against their account ?>
+        <hr />
+        <div class="alert alert-block">
+          <strong><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_NO_LISTINGS'); ?><strong>
+        </div>
+        <hr/>
+      <?php else: ?>
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>
@@ -60,7 +66,7 @@ $listing_id = '';
             </th>
             <th width="2%">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
-            </th>			
+            </th>
             <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
             </th>
@@ -73,7 +79,7 @@ $listing_id = '';
               <?php endif; ?>
             </th>
             <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?> 
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?>
             </th>
 
             <?php if ($canDo->get('helloworld.display.owner')) : ?>
@@ -83,16 +89,16 @@ $listing_id = '';
             <?php endif; ?>
             <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
-            </th>	
+            </th>
             <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
-            </th>	
+            </th>
 
-            <th>              
+            <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
             </th>
             <?php if ($canDo->get('helloworld.snooze')) : ?>
-              <th>              
+              <th>
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SNOOZE'); ?>
               </th>
             <?php endif; ?>
@@ -100,20 +106,21 @@ $listing_id = '';
         </thead>
 
         <tbody>
-          <?php foreach ($this->items as $i => $item):
-                //$orderkey = array_search($item->id, $this->ordering[$item->parent_id]);
-                $canEditOwn = $user->authorise('core.edit.own', 'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
-                $canPublish = $user->authorise('helloworld.edit.publish', 'com_helloworld');
-                $canReorder = $user->authorise('helloworld.edit.reorder', 'com_helloworld');
-                $expiry_date = new DateTime($item->expiry_date);
-                $now = date('Y-m-d');
-                $now = new DateTime($now);
-                $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
-                ?>
+          <?php foreach ($this->items as $i => $item): ?>
+            <?php
+            //$orderkey = array_search($item->id, $this->ordering[$item->parent_id]);
+            $canEditOwn = $user->authorise('core.edit.own', 'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
+            $canPublish = $user->authorise('helloworld.edit.publish', 'com_helloworld');
+            $canReorder = $user->authorise('helloworld.edit.reorder', 'com_helloworld');
+            $expiry_date = new DateTime($item->expiry_date);
+            $now = date('Y-m-d');
+            $now = new DateTime($now);
+            $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
+            ?>
 
             <?php if ($canEditOwn) : ?>
               <tr class="row<?php echo $i % 2; ?>">
-                <td>		
+                <td>
                   <?php echo $item->id; ?>
                 </td>
                 <td>
@@ -125,15 +132,15 @@ $listing_id = '';
                     <?php echo $this->escape($item->title); ?>
                   </a>
                 </td>
-                <td>                  
+                <td>
                   <?php echo $item->expiry_date; ?>
-                  
 
-                  
+
+
                 </td>
                 <td>
-                  <?php if ( $days_to_renewal < 28 && $days_to_renewal > 0) : ?>
-                    <span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL',$days_to_renewal); ?></span>
+                  <?php if ($days_to_renewal < 28 && $days_to_renewal > 0) : ?>
+                    <span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal); ?></span>
                     <br />
                     <a class="btn btn-danger btn-small">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
@@ -142,14 +149,14 @@ $listing_id = '';
                     <a class="btn btn-danger btn-small">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
                     </a>
-                  <?php elseif(empty($item->expiry_date)): ?>
+                  <?php elseif (empty($item->expiry_date)): ?>
                     &mdash;
                   <?php elseif ($days_to_renewal > 28) : ?>
                     <?php echo JHtml::_('autorenew.state', $item->auto_renew, $i, 'enquiries.', 1, 'cb'); ?>
 
                   <?php endif; ?>
                 </td>
-                
+
                 <?php if ($canDo->get('helloworld.display.owner')) : ?>
 
                   <td>
@@ -162,7 +169,7 @@ $listing_id = '';
                       <br />
                       <?php echo JText::_($item->phone_1); ?>
                     </span>
-                  </td>	
+                  </td>
                 <?php endif; ?>
                 <td class="center">
                   <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish); ?>
@@ -172,15 +179,15 @@ $listing_id = '';
                 </td>
                 <td>
                   <?php echo JText::_($item->modified); ?>
-                </td>  
-                <?php if ($canDo->get('helloworld.snooze')) : ?>
-                <td>
-                  <a class="btn btn-micro active" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=snooze.update&id=' . $item->id . '&' . JSession::getFormToken() . '=1') ?>">
-                    <i class="icon-calendar"></i>
-                  </a>   
                 </td>
+                <?php if ($canDo->get('helloworld.snooze')) : ?>
+                  <td>
+                    <a class="btn btn-micro active" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=snooze.update&id=' . $item->id . '&' . JSession::getFormToken() . '=1') ?>">
+                      <i class="icon-calendar"></i>
+                    </a>
+                  </td>
                 <?php endif; ?>
-              </tr>					
+              </tr>
             <?php else : ?>
             <?php endif; ?>
           <?php endforeach; ?>
@@ -188,12 +195,15 @@ $listing_id = '';
         <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
 
         </tbody>
+
         <tfoot>
           <tr>
             <td colspan="7"></td>
           </tr>
         </tfoot>
       </table>
+      <?php endif; ?>
+
       <?php echo $this->pagination->getListFooter(); ?>
 
       <div>
@@ -206,8 +216,8 @@ $listing_id = '';
     </div>
 </form>
 
-<?php 
-$layout      = new JLayoutFile('modal',$basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+<?php
+$layout = new JLayoutFile('modal', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
 echo $layout->render($data = array());
 ?>
 

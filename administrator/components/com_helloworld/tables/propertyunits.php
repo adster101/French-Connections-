@@ -68,44 +68,9 @@ class HelloWorldTablePropertyUnits extends JTable
 		// Bind the object with the row and return.
 		return $row;
 	}
-  
-  /**
-	 * Overloaded load function. This load the units for the given property ID.
-	 *
-	 * @param       int $id property id, not primary key in this case
-	 * @param       boolean $reset reset data
-	 * @return      boolean
-	 * @see JTable:load
-	 */
-	public function load_units($id = null, $unit_id = null, $reset = true) 
-	{
-		$query = $this->_db->getQuery(true);
-		$query->select('
-      id, 
-      parent_id,
-      unit_title
-    ');
-		$query->from($this->_db->quoteName('#__property_units'));
-		$query->where($this->_db->quoteName('parent_id') . ' = ' . $this->_db->quote($id));
-    $query->order('ordering');
-		$this->_db->setQuery($query);
-
-    try
-		{
-			$result = $this->_db->loadObjectList();
-			return $result;
-		}
-		catch (RuntimeException $e)
-		{
-			$je = new JException($e->getMessage());
-			$this->setError($je);
-			return false;
-		}			
-	}  
-  
+    
 	/**
-	 * Method to load a row from the database by primary key and bind the fields
-	 * to the JTable instance properties.
+	 * Overriden loadish method to load multiple units from instead of one
 	 *
 	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
 	 *                           set the instance property value is used.
@@ -118,8 +83,27 @@ class HelloWorldTablePropertyUnits extends JTable
 	 * @throws  RuntimeException
 	 * @throws  UnexpectedValueException
 	 */
-	public function load($id = '', $reset = true)
+	public function load_units($keys = null, $reset = true)
 	{
+		if (empty($keys))
+		{
+			// If empty, use the value of the current key
+			$keyName = $this->_tbl_key;
+			$keyValue = $this->$keyName;
+
+			// If empty primary key there's is no need to load anything
+			if (empty($keyValue))
+			{
+				return true;
+			}
+
+			$keys = array($keyName => $keyValue);
+		}
+		elseif (!is_array($keys))
+		{
+			// Load by primary key.
+			$keys = array($this->_tbl_key => $keys);
+		}
 
 		if ($reset)
 		{
@@ -129,32 +113,48 @@ class HelloWorldTablePropertyUnits extends JTable
 		// Initialise the query.
 		$query = $this->_db->getQuery(true);
 		$query->select('
-      pl.title,
-      pl.latitude,
-      pl.longitude,
-      pl.department,
-      pu.*
-    ');
-    
-		$query->from('#__property_units pu');
-    
-    $query->join('left', '#__property_listings pl on pl.id = pu.parent_id');
+        id,
+        parent_id,
+        ordering,
+        unit_title,
+        LEFT(description,050) as description,
+        thumbnail,
+        single_bedrooms,
+        accommodation_type,
+        property_type,
+        (select count(*) from qitz3_attributes_property where property_id = pu.id) as facilities,
+        (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
+        (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs,
+        (select count(*) from qitz3_images_property_gallery where property_id =  pu.id) as images
+      ');
+		$query->from('#__property_units as pu');
+		$fields = array_keys($this->getProperties());
 
-    // Add the search tuple to the query.
-		$query->where('pu.id = ' . (int) $id);
-		
+    foreach ($keys as $field => $value)
+		{
+			// Check that $field is in the table.
+			if (!in_array($field, $fields))
+			{
+				throw new UnexpectedValueException(sprintf('Missing field in database: %s &#160; %s.', get_class($this), $field));
+			}
+			// Add the search tuple to the query.
+			$query->where($this->_db->quoteName($field) . ' = ' . $this->_db->quote($value));
+		}
+    
 		$this->_db->setQuery($query);
 
-		$row = $this->_db->loadObject();
-    
-		// Check that we have a result.
-		if (empty($row))
+		$rows = $this->_db->loadAssocList($key='id');
+
+    // Check that we have a result.
+		if (empty($rows))
 		{
 			return false;
 		}
-
-		// Bind the object with the row and return.
-		return $row;
+    
+   
+		return $rows;
 	}
+  
+
   
 }

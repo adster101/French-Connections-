@@ -37,41 +37,7 @@ class HelloWorldModelUnit extends JModelAdmin {
   public function getTable($type = 'PropertyUnits', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
-  
-	/**
-	 * Method to get a single record.
-	 *
-	 * @param   integer  $pk  The id of the primary key.
-	 *
-	 * @return  mixed    Object on success, false on failure.
-	 *
-	 * @since   12.2
-	 */
-	public function getItem($pk = null)
-	{
-		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
-    
-		$table = $this->getTable();
 
-		if ($pk > 0)
-		{
-			// Attempt to load the row.
-			$return = $table->load($pk);
-
-			// Check for a table object error.
-			if ($return === false && $table->getError())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
-		} else {
-      return false;
-    }
-
-
-		return $return;
-	}
-  
 	/**
 	 * Method to get a list of units for a given property listing
 	 *
@@ -84,15 +50,19 @@ class HelloWorldModelUnit extends JModelAdmin {
 	public function getUnits()
 	{
     
-    $id = $this->getState('unit.parent_id', '');
-
+    // Get the listing ID the user is editing against
+    $id = JApplication::getUserState('com_helloworld.listing_id'); 
+        
     // Get the units table
     $units_table = $this->getTable('PropertyUnits','HelloWorldTable');
-
+    
+    // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
+    $units_table->set('_tbl_key','parent_id');
+    
     if ($id > 0)
 		{
 			// Attempt to load the row.
-			$return = $units_table->load_units($id);
+			$return = $units_table->load($id);
 
 			// Check for a table object error.
 			if ($return === false && $units_table->getError())
@@ -100,43 +70,22 @@ class HelloWorldModelUnit extends JModelAdmin {
 				$this->setError($units_table->getError());
 				return false;
 			}
-		} else {
-      return false;
-    } 
-    
-        
-    $units = $return;
+		}  
 
-		return $units;
-	}
+		// Convert to the JObject before adding other data.
+		$properties = $units_table->getProperties(1);
+		$units = JArrayHelper::toObject($properties, 'JObject');
+
+    return $units;
+	}  
+
+    
   
-  public function getProgress()
-  {
-    $input= JFactory::getApplication()->input;
-    $id = $input->get('id', '', 'int');
-    
-    // Get the units table
-    $units_table = $this->getTable('PropertyUnits','HelloWorldTable'); 
-    
-    $return = false;
-    
-    if ($id)
-		{
-			// Attempt to load the row.
-			$return = $units_table->progress($id);
 
-			// Check for a table object error.
-			if ($return === false && $units_table->getError())
-			{
-				$this->setError($units_table->getError());
-				return false;
-			}
-		}    
     
-    return $return;
-   
+    
 
-  }
+  
 
   /**
    * Method to get the record form.
@@ -263,5 +212,10 @@ class HelloWorldModelUnit extends JModelAdmin {
 		// List state information.
 		parent::populateState();
 	}
+  
+  protected function preprocessForm(JForm $form, $data, $group = 'content') {
+    $input = JFactory::getApplication()->input;
+
+  }
   
 }

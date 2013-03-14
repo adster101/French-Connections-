@@ -265,44 +265,17 @@
  
 
   <fieldset name="additional-details">
-    
     <field
       name="id"
       type="text"
       default="0"
-      label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
-      description ="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"
+      label="COM_HELLOWORLD_FIELD_UNIT_ID_LABEL"
+      description ="COM_HELLOWORLD_FIELD_UNIT_ID_DESC"
       class="readonly input-mini"
       labelclass=""
-      readonly="true"/>
-    <field
-      label="COM_CATEGORIES_FIELD_PARENT_LABEL"
-      name="parent_id"
-      type="UserProperties"
-      default="1"
-      readonly="true"
-      labelclass=""
-      user=""/>     
-    <field 
-      name="expiry_date"
-      type="text"
-      readonly="true"
-      class="readonly input-small"
-      label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
-      description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
-      filter="unset"
-      labelclass=""/>
+      readonly="true"/>    
   </fieldset>
   <fieldset name="owner">
-    <field
-      labelclass="control-label"
-      name="created_by"
-      type="user"
-      readonly="true"
-      label="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_LABEL"
-      desc="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_DESC"
-      class="input-small"
-      />
     <field
       name="created_on"
       labelclass="control-label"

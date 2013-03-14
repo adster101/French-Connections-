@@ -966,7 +966,7 @@ abstract class JModelAdmin extends JModelForm
 		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
 		$isNew = true;
 
-		// Include the content plugins for the on save events.
+    // Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
 
 		// Allow an exception to be thrown.

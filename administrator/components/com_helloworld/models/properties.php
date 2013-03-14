@@ -182,7 +182,7 @@ class HelloWorldModelProperties extends JModelList {
           $query->where('a.snooze_until < ' . date('Y-m-d'));
         }
       } else {
-        $query->where('a.snooze_until < ' . date('Y-m-d'));
+        $query->where('(a.snooze_until < ' . date('Y-m-d') . ' OR a.snooze_until is null)');
       }
     }
 
