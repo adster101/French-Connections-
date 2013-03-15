@@ -27,7 +27,18 @@ $listing_details = $listing->getProperties();
 $id = $input->get('id', '', 'int');
 
 $units = $listing_details['units'];
+$property_details = ($listing_details['listing_id'] && $listing_details['latitude'] && $listing_details['longitude'] && $listing_details['city'] && $listing_details['listing_title']) ? true : false;
 ?>
+
+<?php if ($property_details) : ?>
+  <div class="alert alert-info">
+    <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>  
+  </div>
+<?php elseif (!$property_details) : ?>
+  <div class="alert alert-info">
+    <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>  
+  </div>
+<?php endif; ?>
 
 <?php if (count($listing_details['units']) > 1) : ?>
   <div>
@@ -54,7 +65,7 @@ $units = $listing_details['units'];
   <li <?php echo ($view == 'property') ? 'class=\'active\'' : '' ?>>
     <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $listing_details['listing_id']) ?>">
       <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS') ?>
-      <?php if ($listing_details['listing_id'] && $listing_details['latitude'] && $listing_details['longitude'] && $listing_details['city'] && $listing_details['listing_title']) : ?>
+      <?php if ($property_details) : ?>
         <i class="icon icon-ok"></i>
       <?php else: ?>
         <i class="icon icon-warning"></i>
@@ -64,11 +75,11 @@ $units = $listing_details['units'];
   <li <?php echo ($view == 'unit') ? 'class=\'active\'' : '' ?>>
     <?php if (!empty($units)) : ?>
       <?php foreach ($listing_details['units'] as $unit => $detail) : ?>
-       <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . $detail->id) ?>">
-        <?php echo JText::_('Accommodation'); ?>
-        <i class='icon icon-warning'></i>
-      </a>
-        
+        <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . $detail->id) ?>">
+          <?php echo JText::_('Accommodation'); ?>
+          <i class='icon icon-warning'></i>
+        </a>
+
       <?php endforeach; ?>
     <?php else: // No units supplied, guess it must be a new property ?>
       <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit') ?>">
@@ -79,26 +90,34 @@ $units = $listing_details['units'];
 
   </li>
   <li>
-    <a href="#">Image gallery
-      <?php //echo (!empty($data['progress']) && $data['progress']['images']) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
-    </a>
+    <?php if (!empty($units)) : ?>
+      <a href="#">Image gallery
+        <?php //echo (!empty($data['progress']) && $data['progress']['images']) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
+      </a>
+    <?php else: ?>
+      <span>Image Gallery</span>
+    <?php endif; ?>
   </li>
   <li>
-    <a href="#">Availability
-      <?php echo (!empty($units)) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
-    </a>
+    <?php if (!empty($units)) : ?>
+      <a href="#">Availability
+        <?php //echo (!empty($data['progress']) && $data['progress']['images']) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
+      </a>
+    <?php else: ?>
+      <span>Availability
+        <?php echo (!empty($units)) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
+      </span>
+    <?php endif; ?>  
   </li>
   <li>
-    <a href="#">Facilities
-      <?php echo (!empty($units)) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
-
-    </a>
+    <?php if (!empty($units)) : ?>
+      <a href="#">Tariffs
+        <?php //echo (!empty($data['progress']) && $data['progress']['images']) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
+      </a>
+    <?php else: ?>
+      <span>Tariffs
+        <?php echo (!empty($units)) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
+      </span>
+    <?php endif; ?> 
   </li>
-  <li>
-    <a href="#">Tariffs
-      <?php echo (!empty($units)) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
-
-    </a>
-  </li>
-
 </ul>

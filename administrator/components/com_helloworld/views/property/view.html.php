@@ -81,7 +81,7 @@ class HelloWorldViewProperty extends JViewLegacy
     
     JApplication::setUserState('title'.$this->item->id, $this->item->title);
     
-    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'helloworld');
+    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title, $this->item->id), 'helloworld');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{
@@ -127,7 +127,7 @@ class HelloWorldViewProperty extends JViewLegacy
 	{
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title, $this->item->id), 'helloworld');
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 

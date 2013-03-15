@@ -23,6 +23,7 @@ class HelloWorldViewUnit extends JViewLegacy
     // get and assign the Data
 		$this->form = $this->get('Form');
 		$this->item = $this->get('Item');
+    
     $this->script = $this->get('Script');
     
    
@@ -70,10 +71,12 @@ class HelloWorldViewUnit extends JViewLegacy
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-    JApplication::setUserState('title'.$this->item->id, $this->item->unit_title);
-    
-    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title), 'helloworld');
-		// Built the actions for new and existing records.
+    // Get the listing details from the session...
+    $listing = JApplication::getUserState('listing', false);
+
+    JToolBarHelper::title($listing->listing_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->listing_title,$listing->listing_id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+		
+    // Built the actions for new and existing records.
 		if ($isNew) 
 		{
 			// For new records, check the create permission.
@@ -83,7 +86,7 @@ class HelloWorldViewUnit extends JViewLegacy
 				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
-			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
@@ -119,7 +122,11 @@ class HelloWorldViewUnit extends JViewLegacy
 	{
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+	  
+    // Get the listing details from the session...
+    $listing = JApplication::getUserState('listing', false);
+
+    $document->setTitle($listing->listing_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->listing_title,$listing->listing_id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 

@@ -90,13 +90,16 @@ $data['progress'] = (!empty($this->progress)) ? $this->progress : array();
               <hr />
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>
             </div>
-          </div>
+          </div> 
+          <hr />
           <div class="row-fluid">
-            <div class="span12">        
-              <hr />  
+            <div class="span6"> 
+               
               <?php echo $this->form->getLabel('location_details'); ?>
               <?php echo $this->form->getInput('location_details'); ?>
-              <hr />
+            
+            </div>
+            <div class="span6">
               <?php echo $this->form->getLabel('getting_there'); ?>
               <?php echo $this->form->getInput('getting_there'); ?>
             </div>

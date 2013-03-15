@@ -38,54 +38,103 @@ class HelloWorldModelUnit extends JModelAdmin {
     return JTable::getInstance($type, $prefix, $config);
   }
 
-	/**
-	 * Method to get a list of units for a given property listing
-	 *
-	 * @param   integer  $pk  The id of the property listing.
-	 *
-	 * @return  mixed    Object on success, false on failure.
-	 *
-	 * @since   12.2
-	 */
-	public function getUnits()
-	{
-    
+  /*
+   * Function to get the data for the facilities editing view.
+   * 
+   * TODO - For a slight performance boost should consider implementing preprocessForm to generate the property attributes here.
+   * Presntly, the facilities checkbox fields are loaded in via a custom form field type (facilities). 
+   * This should probably be amended so that the checkbox options are added dynamically in a precpreocessform method in this model.
+   * 
+   * The above would be better as you could generate all the facility options via one query rather than five.
+   * 
+   */
+
+  public function getItem($pk = null) {
+
+    // Initialise variables.
+    $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+
+    $table = $this->getTable();
+
+    $property_facilities = '';
+
+    if ($pk > 0) {
+      // Attempt to load the row.
+      $return = $table->load($pk);
+
+      // Check for a table object error.
+      if ($return === false && $table->getError()) {
+        $this->setError($table->getError());
+        return false;
+      }
+    }
+
+    // Convert to the JObject before adding other data.
+    $properties = $table->getProperties(1);
+
+    // Get an instance of the attributes table - Possibly need to merge this into com_attributes
+    $attributesTable = $this->getTable('PropertyAttributes', 'HelloWorldTable');
+
+    if ($pk > 0) {
+      $property_facilities = $attributesTable->load($id = $pk);
+
+      // Check for a table object error.
+      if ($property_facilities === false && $attributesTable->getError()) {
+        $this->setError($attributesTable->getError());
+        return false;
+      }
+    }
+
+    // Load returns an array for each facility type
+    // We need to append each one to item so that they may be bound to the form
+    if (!empty($property_facilities)) {
+      foreach ($property_facilities as $facility_type => $value) {
+        $properties[$facility_type] = implode($value, ',');
+      }
+    }
+
+    $item = JArrayHelper::toObject($properties, 'JObject');
+
+    return $item;
+  }
+
+  /**
+   * Method to get a list of units for a given property listing
+   *
+   * @param   integer  $pk  The id of the property listing.
+   *
+   * @return  mixed    Object on success, false on failure.
+   *
+   * @since   12.2
+   */
+  public function getUnits() {
+
     // Get the listing ID the user is editing against
-    $id = JApplication::getUserState('com_helloworld.listing_id'); 
-        
+    $id = JApplication::getUserState('com_helloworld.listing_id');
+
     // Get the units table
-    $units_table = $this->getTable('PropertyUnits','HelloWorldTable');
-    
+    $units_table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+
     // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
-    $units_table->set('_tbl_key','parent_id');
-    
-    if ($id > 0)
-		{
-			// Attempt to load the row.
-			$return = $units_table->load($id);
+    $units_table->set('_tbl_key', 'parent_id');
 
-			// Check for a table object error.
-			if ($return === false && $units_table->getError())
-			{
-				$this->setError($units_table->getError());
-				return false;
-			}
-		}  
+    if ($id > 0) {
+      // Attempt to load the row.
+      $return = $units_table->load($id);
 
-		// Convert to the JObject before adding other data.
-		$properties = $units_table->getProperties(1);
-		$units = JArrayHelper::toObject($properties, 'JObject');
+      // Check for a table object error.
+      if ($return === false && $units_table->getError()) {
+        $this->setError($units_table->getError());
+        return false;
+      }
+    }
+
+    // Convert to the JObject before adding other data.
+    $properties = $units_table->getProperties(1);
+    $units = JArrayHelper::toObject($properties, 'JObject');
 
     return $units;
-	}  
-
-    
-  
-
-    
-    
-
-  
+  }
 
   /**
    * Method to get the record form.
@@ -105,39 +154,7 @@ class HelloWorldModelUnit extends JModelAdmin {
 
     return $form;
   }
-  
 
-  /*
-   * Method to get a form for the user to choose which property they would like to add a unit to
-   * 
-   */
-
-  public function getNewPropertyForm($data = array(), $loadData = false) {
-
-    // Get the form.
-    $form = $this->loadForm('com_helloworld.userproperties', 'userproperties', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
-      return false;
-    }
-    return $form;
-  }
-  
-  /*
-   * Method to get a form for the admin user to choose which account they would like to add a property to
-   * 
-   */
-
-  public function getNewAdminPropertyForm($data = array(), $loadData = false) {
-
-    // Get the form.
-    $form = $this->loadForm('com_helloworld.addpropertybyuser', 'addpropertybyuser', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
-      return false;
-    }
-        
-    return $form;
-  }
-  
   /**
    * Method to get the script that have to be included on the form
    *
@@ -160,15 +177,12 @@ class HelloWorldModelUnit extends JModelAdmin {
     if (empty($data)) {
       $data = $this->getItem();
     }
-    
-    
+
     return $data;
   }
 
-
-
   /**
-   * Method to test whether a record can be deleted.
+   * Method to test whether a user can edit state.
    *
    * @param   object  $record  A record object.
    *
@@ -191,31 +205,187 @@ class HelloWorldModelUnit extends JModelAdmin {
       return false;
     }
   }
-  
-	/**
-	 * Method to auto-populate the model state.
-	 *
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @param	string	An optional ordering field.
-	 * @param	string	An optional direction (asc|desc).
-	 *
-	 * @return	void
-	 * @since	1.6
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
 
-		$canDo = HelloWorldHelper::getActions();
-		$this->setState('actions.permissions', $canDo);
-		
-		// List state information.
-		parent::populateState();
-	}
-  
-  protected function preprocessForm(JForm $form, $data, $group = 'content') {
-    $input = JFactory::getApplication()->input;
+  /**
+   * Method to auto-populate the model state.
+   *
+   * Note. Calling getState in this method will result in recursion.
+   *
+   * @param	string	An optional ordering field.
+   * @param	string	An optional direction (asc|desc).
+   *
+   * @return	void
+   * @since	1.6
+   */
+  protected function populateState($ordering = null, $direction = null) {
 
+    $canDo = HelloWorldHelper::getActions();
+    $this->setState('actions.permissions', $canDo);
+
+    // List state information.
+    parent::populateState();
   }
+
+  protected function preprocessForm(JForm $form, $data) {
+
+    // Get the user
+    $user = JFactory::getUser();
+
+    // Set the default owner to the user creating this.
+    $form->setFieldAttribute('created_by', 'type', 'hidden');
+    $form->setFieldAttribute('created_by', 'default', $user->id);
+
+    // We also need to get the listing ID from the session so we can associate this unit with a listing...
+    $listing = JApplication::getUserState('listing', false);
+
+    $form->setFieldAttribute('parent_id', 'default', $listing->listing_id);
+  }
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param   array  $data  The form data.
+	 *
+	 * @return  boolean  True on success, False on error.
+	 *
+	 * @since   12.2
+	 */
+	public function save($data)
+	{
+		$dispatcher = JEventDispatcher::getInstance();
+		$table = $this->getTable();
+		$key = $table->getKeyName();
+		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+		$isNew = true;
+
+    // Include the content plugins for the on save events.
+		JPluginHelper::importPlugin('content');
+
+		// Allow an exception to be thrown.
+		try
+		{
+			// Load the row if saving an existing record.
+			if ($pk > 0)
+			{
+				$table->load($pk);
+				$isNew = false;
+			}
+
+			// Bind the data.
+			if (!$table->bind($data))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Prepare the row for saving
+			$this->prepareTable($table);
+
+			// Check the data.
+			if (!$table->check())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Trigger the onContentBeforeSave event.
+			$result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
+			if (in_array(false, $result, true))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Store the data.
+			if (!$table->store())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Clean the cache.
+			$this->cleanCache();
+
+			// Trigger the onContentAfterSave event.
+			$dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+
+			return false;
+		}
+
+		$pkName = $table->getKeyName();
+
+		if (isset($table->$pkName))
+		{
+			$this->setState($this->getName() . '.id', $table->$pkName);
+		}
+		$this->setState($this->getName() . '.new', $isNew);
+
+		return true;
+	}
+	    
+  /* 
+   * Method to save the property attributes into the #__attribute_property table.
+   * 
+   * 
+   * 
+   */
+  
+   protected function savePropertyFacilities($data = array()) {
+
+    if (!is_array($data) || empty($data)) {
+      return true;
+    }
+    
+
+    $attributes = array();
+
+    // For now whitelist the attributes that are supposed to be processed here...needs moving to the model...or does it?
+    $whitelist = array('accommodation_type', 'external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability');
+
+    // Loop over the data and prepare an array to save
+    foreach ($data as $key => $value) {
+
+      if (!in_array($key, $whitelist)) {
+        continue;
+      }
+
+      // We're not interested in the 'other' fields E.g. external_facilities_other
+      if (strpos($key, 'other') == 0 && !empty($value)) {
+
+        // Location, property and accommodation types are all single integers and not arrays 
+        if (is_array($value)) {
+          // We want to save this in one go so we make an array
+          foreach ($value as $facility) {
+            // Facilities should be integers
+            if ((int) $facility) {
+              $attributes[] = $facility;
+            }
+          }
+        } else {
+          $attributes[] = $value;
+        }
+      }
+    }
+ 
+    // If we have any attributes
+    if (count($attributes) > 0) {
+
+      // Get instance of the tariffs table
+      $attributesTable = JTable::getInstance($type = 'PropertyAttributes', $prefix = 'HelloWorldTable', $config = array());
+
+      // Bind the translated fields to the JTable instance	
+      if (!$attributesTable->save($this->id, $attributes)) {
+        JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_ADDING_ATTRIBUTES'), 'warning');
+
+        JError::raiseWarning(500, $attributesTable->getError());
+        return false;
+      }
+      
+      return true;
+    }
+  }   
   
 }

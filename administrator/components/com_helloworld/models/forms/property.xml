@@ -9,7 +9,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
       size="75"
       maxlength="75"
-      class="input-xxlarge validate-greeting"
+      class="span12 validate-greeting"
       validate="greeting"
       required="true"
       filter="string"/>   
@@ -83,13 +83,15 @@
     </field>		
     <field
       name="location_type"
-      type="text"
+      type="attributetype"
       class="inputbox validate"
       labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
       required="true"
-      filter="int">
+      filter="int"
+      id="7"
+      >
     </field>		    
     <field
       name="distance_to_coast"

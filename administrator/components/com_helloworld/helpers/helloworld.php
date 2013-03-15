@@ -8,50 +8,49 @@ defined('_JEXEC') or die;
  */
 abstract class HelloWorldHelper {
 
-	/**
-	 * Get a list of filter options for the state of a module.
-	 *
-	 * @return	array	An array of JHtmlOption elements.
-	 */
-	public static function getStateOptions()
-	{
-        
-		// Build the filter options.
-		$options	= array();
-		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_HELLOWORLD_HELLOWORLD_ACTIVE'));
-		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_HELLOWORLD_HELLOWORLD_INACTIVE'));
-		$options[]	= JHtml::_('select.option',	'-2',	JText::_('JTRASHED'));
-		return $options;
-	}  
-  
+  /**
+   * Get a list of filter options for the state of a module.
+   *
+   * @return	array	An array of JHtmlOption elements.
+   */
+  public static function getStateOptions() {
+
+    // Build the filter options.
+    $options = array();
+    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_ACTIVE'));
+    $options[] = JHtml::_('select.option', '0', JText::_('COM_HELLOWORLD_HELLOWORLD_INACTIVE'));
+    $options[] = JHtml::_('select.option', '-2', JText::_('JTRASHED'));
+    return $options;
+  }
+
   /*
    * Get a list of filter options for the review state of a property
    * 
    * @return  array An array of JHtmlOption elements
    */
-  public static function getReviewOptions()
-  {
- 		// Build the filter options.
-		$options	= array();
-		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_HELLOWORLD_HELLOWORLD_UPDATED'));
-		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW'));
-		return $options;   
+
+  public static function getReviewOptions() {
+    // Build the filter options.
+    $options = array();
+    $options[] = JHtml::_('select.option', '0', JText::_('COM_HELLOWORLD_HELLOWORLD_UPDATED'));
+    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW'));
+    return $options;
   }
-  
+
   /*
    * Get a list of filter options for the snooze state of a property
    * 
    * @return  array An array of JHtmlOption elements
    */
-  public static function getSnoozeOptions()
-  {
- 		// Build the filter options.
-		$options	= array();
- 		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_HELLOWORLD_HELLOWORLD_HIDE_SNOOZED'));
-		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
-		return $options;   
+
+  public static function getSnoozeOptions() {
+    // Build the filter options.
+    $options = array();
+    $options[] = JHtml::_('select.option', '0', JText::_('COM_HELLOWORLD_HELLOWORLD_HIDE_SNOOZED'));
+    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
+    return $options;
   }
-  
+
   /**
    * Configure the Linkbar.
    */
@@ -61,28 +60,25 @@ abstract class HelloWorldHelper {
     $user = JFactory::getUser();
 
 
-    
+
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY_MENU'), '#');
-    
-    
     // We only want to present the edit location screen if we are editing a parent property
     //if ($parent_id == 1 || empty($parent_id)) {
-      //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id=' . $id, $submenu == 'location');
+    //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LOCATION'), 'index.php?option=com_helloworld&task=location.edit&id=' . $id, $submenu == 'location');
     //}
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_PROPERTY'), 'index.php?option=com_helloworld&task=helloworld.edit&id=' . $id, $submenu == 'helloworld');
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_FACILITIES'), 'index.php?option=com_helloworld&task=facilities.edit&id=' . $id, $submenu == 'facilities');
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'), 'index.php?option=com_helloworld&task=availability.edit&id=' . $id, $submenu == 'availability');
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'), 'index.php?option=com_helloworld&task=tariffs.edit&id=' . $id, $submenu == 'tariffs');
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id=' . $id, $submenu == 'images');
-      
+
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_admin&view=profile&layout=edit&id=' . $user->id . '#sms', ($view == 'profile'));
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_RENTAL_ACCOMMODATION'), 'index.php?option=com_helloworld', ($view == 'properties'));
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_REALESTATE_ACCOMMODATION'), 'index.php?option=com_realestate', ($view == 'realestate'));
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ENQUIRIES'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
-
   }
-  
+
   /*
    * Method to get and check the status of the various key sections of a property listing
    * I.E. Property details, availability, tariffs and images.
@@ -91,14 +87,11 @@ abstract class HelloWorldHelper {
    *  
    * return void
    * 
-   */  
-  public static function getPropertyProgress($id ='')
-  {
-    
-    
+   */
+
+  public static function getPropertyProgress($id = '') {
     
   }
-  
 
   /*
    * Helper function to update the state of the listing the user is currently editing.
@@ -111,62 +104,82 @@ abstract class HelloWorldHelper {
    */
 
   public static function setPropertyProgress($item = '', $units = '') {
-    
+
     // Collect the input from the request
     $input = JFactory::getApplication()->input;
-    
+
     // Basic idea is that all edits of a listing must setup this data object. 
     // This will mean that all units and the listing data is available for any unit being editied
-    
     // The id of the item being edited, could be unit or listing
-    $id = $input->get('id','','int');
-    
+    $id = $input->get('id', '', 'int');
+
     // The component - com_helloworld unless something has gone wrong!
-    $option = $input->get('option','com_helloworld','string');
-    
+    $option = $input->get('option', 'com_helloworld', 'string');
+
     // The user details
     $user = JFactory::getUser();
 
     // Create the 'progress' object
     $progress = new JObject;
-        
+
     $listing_progress_array = array(
-        'listing_id'=>$id,
-        'listing_title'=>$item->title,
-        'latitude'=>$item->latitude,
-        'longitude'=>$item->longitude,
-        'city'=>$item->city,
-        'expiry'=>$item->expiry_date,
-        'units'=>$units
-       );
-            
+        'listing_id' => $id,
+        'listing_title' => $item->title,
+        'latitude' => $item->latitude,
+        'longitude' => $item->longitude,
+        'city' => $item->city,
+        'expiry' => $item->expiry_date,
+        'units' => $units
+    );
+
     // Check that this doesn't already exist in the session scope
     $progress->setProperties($listing_progress_array);
     JApplication::setUserState('listing', $progress);
-   
-        
-   
+
+
+
     // May still need to use the below to check for images against the property listing
     //if (!JApplication::getUserState('com_hellworld.images.progress', false)) {
-
-      // Import the model library 
-      //$model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
-
-      // Use the getItem method to retrieve the image details. 
-      //$item = $model->getItem($id);
-
-
-      //if (array_key_exists('library', $item->images->library) && count($item->images->gallery->getProperties()) > 0) {
-
-        //JApplication::setUserState('com_helloworld.images.progress', true);
-      //} else if (count($item->images->library->getProperties()) > 0) {
-
-        //JApplication::setUserState('com_helloworld.images.progress', true);
-      //} else {
-        //JApplication::setUserState('com_helloworld.images.progress', false);
-      //}
+    // Import the model library 
+    //$model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+    // Use the getItem method to retrieve the image details. 
+    //$item = $model->getItem($id);
+    //if (array_key_exists('library', $item->images->library) && count($item->images->gallery->getProperties()) > 0) {
+    //JApplication::setUserState('com_helloworld.images.progress', true);
+    //} else if (count($item->images->library->getProperties()) > 0) {
+    //JApplication::setUserState('com_helloworld.images.progress', true);
+    //} else {
+    //JApplication::setUserState('com_helloworld.images.progress', false);
     //}
     //}
+    //}
+  }
+
+  public static function updateUnitProgress($data = '', $context = '') {
+
+    // Get the listing details from the session 
+    $listing = JApplication::getUserState('listing', false);
+
+    $units = $listing->units;
+
+    if (empty($units)) { // As units is empty this must be the first one for this listing.
+      // Initialise a unit item for the listing object. This data has already been, checked, filtered and what not.
+      $unit = new JObject;
+      
+      $unit->id = $data['id'];
+
+ 
+    } else { // We already have a unit(s)
+      if (array_key_exists($data['id'],$units) && $listing->listing_id == $data['parent_id']) {
+        $listing->units = JArrayHelper::toObject($data, 'JObject');
+      }
+
+    }
+    
+
+    JApplication::setUserState('listing', $listing);
+    
+    
   }
 
   /**

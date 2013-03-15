@@ -23,7 +23,32 @@ class HelloWorldTablePropertyListing extends JTable
 		parent::__construct('#__property_listings', 'id', $db);
 	}	  
   
-	
+  public function store($updateNulls = false)
+  {
+    $date = JFactory::getDate();
+    $user = JFactory::getUser();
+
+    if ($this->id) {
+      // Existing item
+      $this->modified = $date->toSql();
+      $this->modified_by = $user->get('id');
+    } else {
+      // New newsfeed. A feed created and created_by field can be set by the user,
+      // so we don't touch either of these if they are set.
+
+      if (empty($this->created_by)) {
+        $this->created_by = $user->get('id');
+      }
+
+      if (empty($this->created_on)) {
+        $this->created_on = $date->toSql();
+      }
+
+    }
+    
+    return parent::store($updateNulls = false);
+  }
+  
   
   
 
