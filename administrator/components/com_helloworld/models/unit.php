@@ -276,6 +276,10 @@ class HelloWorldModelUnit extends JModelAdmin {
 				$isNew = false;
 			}
 
+      // Let's have a before bind trigger
+      $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
+ 
+      
 			// Bind the data.
 			if (!$table->bind($data))
 			{
@@ -308,7 +312,7 @@ class HelloWorldModelUnit extends JModelAdmin {
 				return false;
 			}
       
-      // Save the facilities data, more or less the only reason we are overriding this method...
+      // Save the facilities data...
       if (!$this->savePropertyFacilities($data, $pk)) {
         $this->setError('Problem saving facilities');
       }
