@@ -15,11 +15,10 @@ class HelloWorldUpload extends MediaHelper {
   
 }
 
-
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerImages extends JControllerForm
+class HelloWorldControllerImages extends JControllerAdmin
 {
   protected $extension;
 
@@ -61,7 +60,9 @@ class HelloWorldControllerImages extends JControllerForm
 	{
 		// Initialise variables.
 		$recordId = (int) isset($data[$key]) ? $data[$key] : 0;
-		$user = JFactory::getUser();
+    echo $recordId;die;
+    $user = JFactory::getUser();
+    
 		$userId = $user->get('id');
     // This covers the case where the user is creating a new property (i.e. id is 0 or not set
     if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
@@ -84,7 +85,7 @@ class HelloWorldControllerImages extends JControllerForm
 			if (empty($ownerId) && $recordId)
 			{
 				// Need to do a lookup from the model.
-        $model = $this->getModel('HelloWorld');
+        $model = $this->getModel('Property');
         $record = $model->getItem($recordId);
         
 				if (empty($record))

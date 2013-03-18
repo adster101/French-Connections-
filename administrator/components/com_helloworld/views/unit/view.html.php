@@ -74,7 +74,7 @@ class HelloWorldViewUnit extends JViewLegacy
     // Get the listing details from the session...
     $listing = JApplication::getUserState('listing', false);
 
-    JToolBarHelper::title($listing->listing_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->listing_title,$listing->listing_id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 		
     // Built the actions for new and existing records.
 		if ($isNew) 
@@ -126,7 +126,7 @@ class HelloWorldViewUnit extends JViewLegacy
     // Get the listing details from the session...
     $listing = JApplication::getUserState('listing', false);
 
-    $document->setTitle($listing->listing_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->listing_title,$listing->listing_id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    $document->setTitle($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 

@@ -29,7 +29,7 @@ class ImportControllerAttributes extends JControllerForm {
 
     // Get a db instance
     $db = JFactory::getDBO();
-    
+
     $query = $db->getQuery(true);
 
     $query->select('id');
@@ -43,24 +43,23 @@ class ImportControllerAttributes extends JControllerForm {
     $results = $db->loadObjectList();
 
     $query->clear();
-    
+
     foreach ($results as $key => $value) {
-      if ($value->id != 515 && $value->id != 616 && $value->id !=617) {
+      if ($value->id != 515 && $value->id != 616 && $value->id != 617) {
         $attributes[] = $value->id;
       }
     }
-    
+
     $previous_property_id = '';
 
     while (($line = fgetcsv($handle)) !== FALSE) {
       // The list of property attributes is a comma separated list so it is exploded to an array
       $property_attributes = explode(',', $line[2]);
 
-      if ($previous_property_id == $line[1]) {
-        $property_id = $line[0];
-      } else {
-        $property_id = $line[1];
-      }
+      $go = false;
+
+      $property_id = $line[0];
+
 
       // Start building a new query to insert any attributes... 
       $query = $db->getQuery(true);
@@ -75,27 +74,20 @@ class ImportControllerAttributes extends JControllerForm {
         if (in_array($value, $attributes)) {
           $insert_string = "$property_id,$value";
           $query->values($insert_string);
-          
+          $go = true;
         }
       }
-      // Add the property type ID into the list of attributes to insert
-      $insert_string = "$property_id,$line[3]";
-      $query->values($insert_string);
-      // Add the accommodation type ID into the list of attributes to insert
-      $insert_string = "$property_id,$line[4]";
-      $query->values($insert_string);
+
       // Set and execute the query
       $db->setQuery($query);
-
-      if (!$db->execute()) {
-        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-        print_r($db->getErrorMsg());
-        print_r($insert_string);
-        die;
+      if ($go) {
+        if (!$db->execute()) {
+          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+          print_r($db->getErrorMsg());
+          print_r($insert_string);
+          die;
+        }
       }
-
-
-      $previous_property_id = $line[1];
     }
 
 

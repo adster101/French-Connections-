@@ -95,6 +95,7 @@ abstract class HelloWorldHelper {
 
   /*
    * Helper function to update the state of the listing the user is currently editing.
+   * N.B. This is only responsible for updating the parent listing details
    * 
    * @param JObject item The item (the property) being edited 
    * @param JObject units The list of units assigned to a particular property
@@ -103,7 +104,7 @@ abstract class HelloWorldHelper {
    * 
    */
 
-  public static function setPropertyProgress($item = '', $units = '') {
+  public static function setPropertyProgress($item = '', $units = array()) {
 
     // Collect the input from the request
     $input = JFactory::getApplication()->input;
@@ -122,12 +123,15 @@ abstract class HelloWorldHelper {
     // Create the 'progress' object
     $progress = new JObject;
 
+    if (!empty($units)) {
+      $units = $units->getProperties();
+    }
+
     $listing_progress_array = array(
-        'listing_id' => $id,
-        'listing_title' => $item->title,
+        'id' => $item->id,
+        'title' => $item->title,
         'latitude' => $item->latitude,
         'longitude' => $item->longitude,
-        'city' => $item->city,
         'expiry' => $item->expiry_date,
         'units' => $units
     );
@@ -135,7 +139,7 @@ abstract class HelloWorldHelper {
     // Check that this doesn't already exist in the session scope
     $progress->setProperties($listing_progress_array);
     JApplication::setUserState('listing', $progress);
-
+    
 
 
     // May still need to use the below to check for images against the property listing

@@ -118,10 +118,6 @@ class HelloWorldTablePropertyUnits extends JTable
         ordering,
         unit_title,
         LEFT(description,050) as description,
-        thumbnail,
-        single_bedrooms,
-        accommodation_type,
-        property_type,
         (select count(*) from qitz3_attributes_property where property_id = pu.id) as facilities,
         (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs,
@@ -156,6 +152,36 @@ class HelloWorldTablePropertyUnits extends JTable
 	}
   
   
+  /*
+   * Overridden store method to capture the created by and modified dates etc
+   * 
+   * 
+   */
+  public function store($updateNulls = false) {
+    
+    $date = JFactory::getDate();
+    $user = JFactory::getUser();
+
+    if ($this->id) {
+      // Existing item
+      $this->modified = $date->toSql();
+      $this->modified_by = $user->get('id');
+    } else {
+      // New newsfeed. A feed created and created_by field can be set by the user,
+      // so we don't touch either of these if they are set.
+
+      if (empty($this->created_by)) {
+        $this->created_by = $user->get('id');
+      }
+
+      if (empty($this->created_on)) {
+        $this->created_on = $date->toSql();
+      }
+
+    }
+    
+    return parent::store($updateNulls);
+  }
 
   
 }

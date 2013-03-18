@@ -16,12 +16,7 @@ $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 
 // Initialise a data array to pass into the progress tabs layout
-$data = array();
-
-// Add the data that we have...
-$data['units'] = (!empty($this->units)) ? $this->units : '';
-$data['item'] = (!empty($this->item)) ? $this->item: '';
-$data['progress'] = (!empty($this->progress)) ? $this->progress : array();
+$data = JApplication::getUserState('listing', '');
 
 
 ?>
@@ -31,6 +26,7 @@ $data['progress'] = (!empty($this->progress)) ? $this->progress : array();
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
+       
       </div>
       <div id="" class="span8">
       <?php else : ?>

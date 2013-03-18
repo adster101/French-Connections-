@@ -238,10 +238,11 @@ class HelloWorldModelUnit extends JModelAdmin {
     // We also need to get the listing ID from the session so we can associate this unit with a listing...
     $listing = JApplication::getUserState('listing', false);
 
-    $form->setFieldAttribute('parent_id', 'default', $listing->listing_id);
+    $form->setFieldAttribute('parent_id', 'default', $listing->id);
   }
+  
 	/**
-	 * Method to save the form data.
+	 * Overidden method to save the form data.
 	 *
 	 * @param   array  $data  The form data.
 	 *
@@ -256,7 +257,12 @@ class HelloWorldModelUnit extends JModelAdmin {
 		$key = $table->getKeyName();
 		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
 		$isNew = true;
-
+    $app = JFactory::getApplication();
+    $data = $app->input->post->get('jform', array(), 'array');
+    
+    // A list of fields that should trigger a new version if they are different to existing record
+    $fields_to_check = array('title', 'description', 'location_details', 'getting_there');
+    
     // Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
 
@@ -301,7 +307,15 @@ class HelloWorldModelUnit extends JModelAdmin {
 				$this->setError($table->getError());
 				return false;
 			}
-
+      
+      // Save the facilities data, more or less the only reason we are overriding this method...
+      if (!$this->savePropertyFacilities($data, $pk)) {
+        $this->setError('Problem saving facilities');
+      }
+      
+      
+      
+      
 			// Clean the cache.
 			$this->cleanCache();
 
@@ -333,13 +347,12 @@ class HelloWorldModelUnit extends JModelAdmin {
    * 
    */
   
-   protected function savePropertyFacilities($data = array()) {
+   protected function savePropertyFacilities($data = array(), $id = 0) {
 
     if (!is_array($data) || empty($data)) {
       return true;
     }
     
-
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...needs moving to the model...or does it?
@@ -377,7 +390,7 @@ class HelloWorldModelUnit extends JModelAdmin {
       $attributesTable = JTable::getInstance($type = 'PropertyAttributes', $prefix = 'HelloWorldTable', $config = array());
 
       // Bind the translated fields to the JTable instance	
-      if (!$attributesTable->save($this->id, $attributes)) {
+      if (!$attributesTable->save($id, $attributes)) {
         JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_ADDING_ATTRIBUTES'), 'warning');
 
         JError::raiseWarning(500, $attributesTable->getError());

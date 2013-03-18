@@ -14,7 +14,7 @@ $userId = $user->get('id');
 $groups = $user->getAuthorisedGroups();
 $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
-$data = $this->item;
+$data = JApplication::getUserState('listing', '');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">

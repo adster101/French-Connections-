@@ -61,17 +61,17 @@ class HelloWorldViewImages extends JViewLegacy
 		
 		$user = JFactory::getUser();
 		$userId = $user->id;
-		$isNew = $this->item->id == 0;
+		$isNew = 0;
     
-		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', $this->item->title), 'helloworld');
+		$canDo = HelloWorldHelper::getActions();
+		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', ''), 'helloworld');
  
     // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
     JLoader::register('JToolbarButtonImageupload', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Imageupload.php');
 
     // Add an upload button?
     $bar = JToolBar::getInstance('toolbar');
-    $bar->appendButton('Imageupload', 'upload', JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'), 'index.php?option=com_helloworld&view=imageupload&format=raw&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id. '&parent_id=' . (int) $this->form->getValue('parent_id'));
+    $bar->appendButton('Imageupload', 'upload', JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'), 'index.php?option=com_helloworld&view=imageupload&format=raw&' . JSession::getFormToken() . '=1');
 
     // Built the actions for new and existing records.
 		JToolBarHelper::apply('images.apply', 'JTOOLBAR_APPLY');	

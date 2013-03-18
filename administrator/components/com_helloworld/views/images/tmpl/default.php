@@ -6,7 +6,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
 $format = JRequest::getVar('format', 'html', 'GET', 'string');
-$image_properties = $this->item->images->getProperties();
+//$image_properties = $this->item->images->getProperties();
 $library_images = array();
 $gallery_images = array();
 
@@ -24,17 +24,12 @@ if (array_key_exists('gallery', $image_properties)) {
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id) . '&parent_id=' . $this->item->parent_id; ?>" method="post" name="imageUpload" id="imageForm">
         <div class="row-fluid">
           <div class="span12">
-            Some sensible image manager at last?
             <h2><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'); ?></h2>
             <p><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_HELP'); ?></p>
 
             <fieldset class="adminform">		
               <div id="image-queue">
-                <?php foreach ($this->form->getFieldset('upload') as $field) { ?>
-                  <?php
-                  echo $field->input;
-                  ?>
-                <?php } ?>
+                
               </div>       
             </fieldset>
             <div class="clearfix">
@@ -48,12 +43,7 @@ if (array_key_exists('gallery', $image_properties)) {
               </button>
             </div>
             <?php echo JHtml::_('form.token'); ?>
-            <?php foreach ($this->form->getFieldset('details') as $field) { ?>
-              <?php
-              echo $field->label;
-              echo $field->input;
-              ?>   
-            <?php } ?>
+         
           </div>
         </div>
       </form>
