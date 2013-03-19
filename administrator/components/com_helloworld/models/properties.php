@@ -128,7 +128,8 @@ class HelloWorldModelProperties extends JModelList {
       a.expiry_date,
       a.modified,
       views.count,
-      a.auto_renew
+      a.auto_renew,
+      version
     ');
 
     // Join the user details if the user has the ACL rights.

@@ -240,123 +240,143 @@ class HelloWorldModelUnit extends JModelAdmin {
 
     $form->setFieldAttribute('parent_id', 'default', $listing->id);
   }
-  
-	/**
-	 * Overidden method to save the form data.
-	 *
-	 * @param   array  $data  The form data.
-	 *
-	 * @return  boolean  True on success, False on error.
-	 *
-	 * @since   12.2
-	 */
-	public function save($data)
-	{
-		$dispatcher = JEventDispatcher::getInstance();
-		$table = $this->getTable();
-		$key = $table->getKeyName();
-		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
-		$isNew = true;
+
+  /**
+   * Overidden method to save the form data.
+   *
+   * @param   array  $data  The form data.
+   *
+   * @return  boolean  True on success, False on error.
+   *
+   * @since   12.2
+   */
+  public function save($data) {
+    $dispatcher = JEventDispatcher::getInstance();
+    $table = $this->getTable();
+    $key = $table->getKeyName();
+    $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+    $isNew = true;
     $app = JFactory::getApplication();
     $data = $app->input->post->get('jform', array(), 'array');
-    
-    // A list of fields that should trigger a new version if they are different to existing record
-    $fields_to_check = array('title', 'description', 'location_details', 'getting_there');
-    
+
     // Include the content plugins for the on save events.
-		JPluginHelper::importPlugin('content');
+    JPluginHelper::importPlugin('content');
 
-		// Allow an exception to be thrown.
-		try
-		{
-			// Load the row if saving an existing record.
-			if ($pk > 0)
-			{
-				$table->load($pk);
-				$isNew = false;
-			}
+    // Allow an exception to be thrown.
+    try {
 
-      // Let's have a before bind trigger
-      $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
- 
-      
-			// Bind the data.
-			if (!$table->bind($data))
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+      // If $data['new_version'] is true we need to get the data out of the version table 
+      // and then update that new version
+      if ($data['new_version']) {
+        
+        // Get the new version ID 
+        $table = $this->getTable('PropertyUnitsVersion');
+        
+        // Set the table id 
+        $table->id = $data['id'];
+        
+        $table= $table->getLatestUnitVersion();
+        
+        
+        
+        
+        
+      } else {
 
-			// Prepare the row for saving
-			$this->prepareTable($table);
+        // Load the exisiting row, if there is one
+        if ($pk > 0) {
+          $table->load($pk);
+          $isNew = false;
+        }
 
-			// Check the data.
-			if (!$table->check())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+        // Let's have a before bind trigger
+        $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
 
-			// Trigger the onContentBeforeSave event.
-			$result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
-			if (in_array(false, $result, true))
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+        // $version should contain an array with one element. If the array contains true then we need to create a new version...
+        if ($version[0]) {
 
-			// Store the data.
-			if (!$table->store())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
-      
-      // Save the facilities data...
-      if (!$this->savePropertyFacilities($data, $pk)) {
-        $this->setError('Problem saving facilities');
+          $table = $this->getTable('PropertyUnitsVersion');
+        }
+
+        // Bind the data.
+        if (!$table->bind($data)) {
+          $this->setError($table->getError());
+          return false;
+        }
+
+        // Prepare the row for saving
+        $this->prepareTable($table);
+
+        // Check the data.
+        if (!$table->check()) {
+          $this->setError($table->getError());
+          return false;
+        }
+
+        // Trigger the onContentBeforeSave event.
+        $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
+
+        if (in_array(false, $result, true)) {
+          $this->setError($table->getError());
+          return false;
+        }
+
+
+        // Update the unit version table to use the version_id ke
+        $table->set('_tbl_key', 'version_id');
+
+        // Store the data.
+        if (!$table->store()) {
+          $this->setError($table->getError());
+          return false;
+        }
+
+        // Should have a new unit version here.
+        // Need to update the new_version flag in the #__property_units table to indicate a new, unpublished version
+        // Also, need to save the facilities into a new table rather than saving them directly.
+        // Save the facilities data...
+        if (!$this->savePropertyFacilities($data, $pk)) {
+          $this->setError('Problem saving facilities');
+        }
+
+
+
+
+        // Clean the cache.
+        $this->cleanCache();
+
+        // Trigger the onContentAfterSave event.
+        $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
       }
-      
-      
-      
-      
-			// Clean the cache.
-			$this->cleanCache();
+    } catch (Exception $e) {
+      $this->setError($e->getMessage());
 
-			// Trigger the onContentAfterSave event.
-			$dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
-		}
-		catch (Exception $e)
-		{
-			$this->setError($e->getMessage());
+      return false;
+    }
 
-			return false;
-		}
+    $pkName = $table->getKeyName();
 
-		$pkName = $table->getKeyName();
+    if (isset($table->$pkName)) {
+      $this->setState($this->getName() . '.id', $table->$pkName);
+    }
+    $this->setState($this->getName() . '.new', $isNew);
 
-		if (isset($table->$pkName))
-		{
-			$this->setState($this->getName() . '.id', $table->$pkName);
-		}
-		$this->setState($this->getName() . '.new', $isNew);
+    return true;
+  }
 
-		return true;
-	}
-	    
-  /* 
+  /*
    * Method to save the property attributes into the #__attribute_property table.
    * 
    * 
    * 
    */
-  
-   protected function savePropertyFacilities($data = array(), $id = 0) {
+
+  protected function savePropertyFacilities($data = array(), $id = 0) {
 
     if (!is_array($data) || empty($data)) {
       return true;
     }
-    
+
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...needs moving to the model...or does it?
@@ -386,7 +406,7 @@ class HelloWorldModelUnit extends JModelAdmin {
         }
       }
     }
- 
+
     // If we have any attributes
     if (count($attributes) > 0) {
 
@@ -400,9 +420,9 @@ class HelloWorldModelUnit extends JModelAdmin {
         JError::raiseWarning(500, $attributesTable->getError());
         return false;
       }
-      
+
       return true;
     }
-  }   
-  
+  }
+ 
 }

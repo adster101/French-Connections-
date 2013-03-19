@@ -57,7 +57,7 @@ $listing_id = '';
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>
-            <th width="5%">
+            <th>
               <?php if ($canDo->get('helloworld.sort.prn')) : ?>
                 <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_ID', 'id', $listDirn, $listOrder); ?>
               <?php else : ?>
@@ -66,6 +66,9 @@ $listing_id = '';
             </th>
             <th width="2%">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+            </th>           
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
             </th>
             <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
@@ -81,22 +84,20 @@ $listing_id = '';
             <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?>
             </th>
-
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
+            </th>
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
+            </th>
+            
             <?php if ($canDo->get('helloworld.display.owner')) : ?>
               <th>
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
               </th>
             <?php endif; ?>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
-            </th>
 
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
-            </th>
+
             <?php if ($canDo->get('helloworld.snooze')) : ?>
               <th>
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SNOOZE'); ?>
@@ -126,6 +127,11 @@ $listing_id = '';
                 <td>
                   <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                 </td>
+                <td class="center">
+                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish); ?>
+     							<?php echo JHtml::_('contentadministrator.featured', $item->version, $i, 1); ?>
+
+                </td>
 
                 <td>
                   <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
@@ -134,9 +140,6 @@ $listing_id = '';
                 </td>
                 <td>
                   <?php echo $item->expiry_date; ?>
-
-
-
                 </td>
                 <td>
                   <?php if ($days_to_renewal < 28 && $days_to_renewal > 0) : ?>
@@ -156,9 +159,13 @@ $listing_id = '';
 
                   <?php endif; ?>
                 </td>
-
+                <td>
+                  <?php echo JText::_($item->count); ?>
+                </td>                <td>
+                  <?php echo JText::_($item->modified); ?>
+                </td>
+                
                 <?php if ($canDo->get('helloworld.display.owner')) : ?>
-
                   <td>
                     <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
                       <?php echo JText::_($item->name); ?>
@@ -171,15 +178,8 @@ $listing_id = '';
                     </span>
                   </td>
                 <?php endif; ?>
-                <td class="center">
-                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish); ?>
-                </td>
-                <td>
-                  <?php echo JText::_($item->count); ?>
-                </td>
-                <td>
-                  <?php echo JText::_($item->modified); ?>
-                </td>
+
+
                 <?php if ($canDo->get('helloworld.snooze')) : ?>
                   <td>
                     <a class="btn btn-micro active" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=snooze.update&id=' . $item->id . '&' . JSession::getFormToken() . '=1') ?>">

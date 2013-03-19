@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package     Joomla.Plugin
  * @subpackage  Content.joomla
@@ -6,7 +7,6 @@
  * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('_JEXEC') or die;
 
 /**
@@ -16,74 +16,77 @@ defined('_JEXEC') or die;
  * @subpackage  Content.joomla
  * @since       1.6
  */
-class plgContentVersion extends JPlugin
-{
-	/**
-	 * Example after save content method
-	 * Article is passed by reference, but after the save, so no changes will be saved.
-	 * Method is called right after the content is saved
-	 *
-	 * @param   string  The context of the content passed to the plugin (added in 1.6)
-	 * @param   object		A JTableContent object
-	 * @param   bool		If the content is just about to be created
-	 * @since   1.6
-	 */
-	public function onContentBeforeBind($context, $article, $isNew, $data)
-	{
+class plgContentVersion extends JPlugin {
 
-    print_r($data);die;
+  /**
+   * Example after save content method
+   * Article is passed by reference, but after the save, so no changes will be saved.
+   * Method is called right after the content is saved
+   *
+   * @param   string  The context of the content passed to the plugin (added in 1.6)
+   * @param   object		A JTableContent object
+   * @param   bool		If the content is just about to be created
+   * @since   1.6
+   */
+  public function onContentBeforeBind($context, $article, $isNew, $data) {
+
+    $new_version = false;
+
+    // Here we check whether we are already editing an unpublished new version of this item
+    // So if we are then we can skip all the comparing and simply save straight over the new unpublished version
     
-		// Check we are handling the frontend edit form.
-		if ($context != 'com_helloworld.unit')
-		{
-			return true;
-		}
+    if ($data['new_version']) {
+      return true;
+    } else {
+      // A list of fields to check through which will trigger the creation of a new version
+      $fields_to_check = array(
+          'unit_title' => 1,
+          'description' => 1,
+          'internal_facilities_other' => 1,
+          'external_facilities_other' => 1,
+          'activities_other' => 1,
+          'location_details' => 1,
+          'getting_there' => 1,
+          'additional_price_notes' => 1,
+          'linen_costs' => 1
+      );
 
-		// Check if this function is enabled.
-		if (!$this->params->def('email_new_fe', 1))
-		{
-			return true;
-		}
+      // Check we are handling a property manager form.
+      if ($context != 'com_helloworld.unit' && $context != 'com_helloworld.property') {
+        return false;
+      }
+      // Check if this is a new article.
+      if ($isNew) {
+        // New article so no need for a new version
+        return false;
+      }
 
-		// Check this is a new article.
-		if (!$isNew)
-		{
-			return true;
-		}
 
-		$user = JFactory::getUser();
 
-		// Messaging for new items
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_messages/models', 'MessagesModel');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_messages/tables');
+      // Check the expiry date...if this is a unit we won't have the expiry date so we look it up...
+      $listing = JApplication::getUserState('listing', false);
 
-		$db = JFactory::getDbo();
-		$db->setQuery('SELECT id FROM #__users WHERE sendEmail = 1');
-		$users = (array) $db->loadColumn();
+      $expiry_date = ($context == 'com_helloworld.unit') ? $listing->expiry : $article->expiry_date;
 
-		$default_language = JComponentHelper::getParams('com_languages')->get('administrator');
-		$debug = JFactory::getConfig()->get('debug_lang');
+      // Parse the date so we can check it's valid
+      $date = date_parse($expiry_date);
 
-		foreach ($users as $user_id)
-		{
-			if ($user_id != $user->id)
-			{
-				// Load language for messaging
-				$receiver = JUser::getInstance($user_id);
-				$lang = JLanguage::getInstance($receiver->getParam('admin_language', $default_language), $debug);
-				$lang->load('com_content');
-				$message = array(
-					'user_id_to'	=> $user_id,
-					'subject'		=> $lang->_('COM_CONTENT_NEW_ARTICLE'),
-					'message'		=> sprintf($lang->_('COM_CONTENT_ON_NEW_CONTENT'), $user->get('name'), $article->title)
-				);
-				$model_message = JModelLegacy::getInstance('Message', 'MessagesModel');
-				$result = $model_message->save($message);
-			}
-		}
+      // Check if there is an expiry date for this content, if not then just return out...
+      if (checkdate($date['month'], $date['day'], $date['year'])) {
+        // Loop over the fields that will trigger a new version and check to see if any differ
+        foreach ($article as $field => $value) {
+          // Compair the content from the database with the content from the editor
+          if (array_key_exists($field, $fields_to_check)) {
+            // Compare the two strings...
+            if (strcmp($article->$field, $data[$field]) > 0) {
+              $new_version = true;
+            }
+          }
+        }
+      }
 
-		return $result;
-	}
-
+      return $new_version;
+    }
+  }
 
 }

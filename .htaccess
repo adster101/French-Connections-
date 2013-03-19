@@ -15,6 +15,13 @@
 # it has been set by your server administrator and you do not need it set here.
 ##
 
+## Fix Font error for Chrome
+AddType application/x-font-woff woff
+AddType application/x-font-ttf ttf
+AddType application/vnd.ms-fontobject eot
+AddType image/svg+xml svg
+
+
 ## Can be commented out if causes errors, see notes above.
 Options +FollowSymLinks
 

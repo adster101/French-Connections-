@@ -34,6 +34,7 @@ $units = $listing->units;
 $property_details = ($listing_details['id'] && $listing_details['latitude'] && $listing_details['longitude'] && $listing_details['title']) ? true : false;
 
 // Assign a 'default' unit ID 
+$units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
 
 ?>

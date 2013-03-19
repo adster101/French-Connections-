@@ -421,6 +421,11 @@
     default=""
     filter="int">      
   </field>
+  <field 
+    name="new_version"
+    type="hidden"
+    filter="int"
+    default="" />
   
   <field 
     name="published"

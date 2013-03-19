@@ -32,10 +32,8 @@ $data = JApplication::getUserState('listing', '');
       <?php else : ?>
         <div lass="span10 form-inline">
         <?php endif; ?> 
-        <?php
-        $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        echo $layout->render($data);
-        ?>
+        <?php $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+        echo $layout->render($data); ?>
         <fieldset class="adminform form-horizontal">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS'); ?></legend>
             <div class="control-group">
@@ -45,7 +43,6 @@ $data = JApplication::getUserState('listing', '');
                 </div>
             </div>
           <hr />
-      
         </fieldset>
 
         <fieldset> 
