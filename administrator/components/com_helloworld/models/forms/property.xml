@@ -23,13 +23,13 @@
       name="department"
       type="departments"
       extension="com_helloworld"
-      class="list"
+      class="list validate"
       default="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_DESC"
       required="true"
       labelclass="control-label">
-      <option value="0">JOPTION_SELECT_CATEGORY</option>
+      <option value="">JOPTION_SELECT_CATEGORY</option>
     </field>		
   
     <field 
@@ -42,7 +42,7 @@
       type="hidden"
       extension="com_helloworld"
       class="validate-latitude "
-      default=""
+      default="46.589069"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
       required="true"
@@ -57,7 +57,7 @@
       type="hidden"
       extension="com_helloworld"
       class="inputbox validate-longitude"
-      default=""
+      default="2.416992"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
       required="true"
@@ -166,7 +166,7 @@
       desc="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_DESC"
       class="input-small required"
       required="true"
-      validate=""
+      validate="owner"
       />
     <field
       name="created_on"

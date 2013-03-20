@@ -5,143 +5,95 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
-$format = JRequest::getVar('format', 'html', 'GET', 'string');
-//$image_properties = $this->item->images->getProperties();
-$library_images = array();
-$gallery_images = array();
+// No direct access to this file
+defined('_JEXEC') or die('Restricted Access');
+// load tooltip behavior
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-if (array_key_exists('library', $image_properties)) {
-  $library_images = $image_properties['library']->getProperties();
-}
+JHtml::_('behavior.tooltip');
+JHtml::_('behavior.multiselect');
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn = $this->escape($this->state->get('list.direction'));
 
-if (array_key_exists('gallery', $image_properties)) {
-  $gallery_images = $image_properties['gallery']->getProperties();
-}
-?>
-<?php if ($format == 'html') : ?>
-  <div id="collapseUpload" class="collapse row-fluid">
-    <div class="span12">
-      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id) . '&parent_id=' . $this->item->parent_id; ?>" method="post" name="imageUpload" id="imageForm">
-        <div class="row-fluid">
-          <div class="span12">
-            <h2><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'); ?></h2>
-            <p><?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_HELP'); ?></p>
+$data = JApplication::getUserState('listing', '');
 
-            <fieldset class="adminform">		
-              <div id="image-queue">
-                
-              </div>       
-            </fieldset>
-            <div class="clearfix">
-              <button class="btn btn-large" id="explore">
-                <i class="icon-search"></i> 
-                <?php echo JText::_('COM_HELLOWORLD_IMAGES_BROWSE_IMAGES'); ?>
-              </button>      
-              <button class="btn btn-primary btn-large">
-                <i class="icon-upload icon-white"></i> 
-                <?php echo JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'); ?>
-              </button>
-            </div>
-            <?php echo JHtml::_('form.token'); ?>
-         
-          </div>
-        </div>
-      </form>
+?>  
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=offers'); ?>" method="post" name="adminForm" id="adminForm">
+
+  <?php if (!empty($this->sidebar)): ?>
+    <div id="j-sidebar-container" class="span2">
+      <?php echo $this->sidebar; ?>
     </div>
-  </div>
-<?php endif; ?>
+    <div id="j-main-container" class="span10">
+    <?php else : ?>
+      <div id="j-main-container">
+      <?php endif; ?>
+      <?php
+      $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      echo $layout->render($data);
+      ?>  
+      <table id="articleList" class="table table-striped">
+        <thead>
+          <tr>
+            <th width="1%" class="nowrap center hidden-phone">
+              <?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+            </th>
+            <th width="1%">
+              <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
+            </th>			
+            <th width="10%">
+              <?php echo JText::_('COM_HELLOWORLD_OFFERS_HEADING_GREETING'); ?>
+            </th>
+
+          </tr>
+        </thead>
+        <?php
+        $listOrder = $this->escape($this->state->get('list.ordering'));
+        $user = JFactory::getUser();
+        $userId = $user->id;
+        $groups = $user->getAuthorisedGroups();
+        $ordering = ($listOrder == 'a.lft');
+        $originalOrders = array();
+
+        foreach ($this->items as $i => $item):
+          ?>
+
+          <tr class="row<?php echo $i % 2; ?>">
+            <td>
+              <span class="sortable-handler hasTooltip <?php echo $disableClassName; ?>" title="<?php echo $disabledLabel; ?>">
+                <i class="icon-menu"></i>
+              </span>
+              <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
+            </td>
+            <td>
+              <img src="<?php echo '/images/property/' . (int) $this->item->id . '/thumbs/' . $item->image_file_name; ?>" />
+            </td>
+            <td>
+              <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=image.edit&id=' . (int) $item->id) ?>">
+  <?php echo $this->escape($item->caption); ?>
+              </a>
+            </td>
+          </tr>				
+
+<?php endforeach; ?>
+
+        <tr>
+          <td colspan="7">
+          </td>
+        </tr>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate image-manager">
-  <div class="row-fluid">
-    <?php foreach ($image_properties as $woot => $value) : ?>
-      <?php if (array_key_exists('gallery', $image_properties) && array_key_exists('library', $image_properties)) { ?>  
-        <div class="span6">
-        <?php } else { ?>
-          <div class="span12"> 
-          <?php } ?>           
-          <div class="thumbnail">  
-            <fieldset class="adminform">
-              <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_' . $woot); ?></legend> 
-              <?php if (!count($image_properties[$woot])): ?>
-                <ul class="hero-unit" id="<?php echo $woot; ?>">
-                  <?php if ($this->item->parent_id != 1) { ?>  
-                    <li><p class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY_' . $woot); ?> </p></li>
-                  <?php } else { ?>
-                    <li><p class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_' . $woot); ?> </p></li>
 
-                  <?php } ?>
-                </ul>
-              <?php else: ?>
-                <ul class="draggable-image-list" id="<?php echo $woot; ?>">
-                  <?php foreach ($this->item->images->$woot->getProperties() as $image) : ?>
+        <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
+        <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
 
-                    <?php
-                    if (array_key_exists($image->image_file_name, $gallery_images) && $woot == 'library') {
-                      $show = false;
-                    } else {
-                      $show = true;
-                    }
-                    ?>
 
-                    <?php if ($show) : ?>
-                      <li>
-                        <div class="handle thumbnail">
-                          <span class="drag-handle pull-left">
-                            <i class="icon-move"> </i>
-                          </span>
-                          <span class="pull-right">
-                            <a rel="woot" 
-                               title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_DELETE_IMAGE') ?>"
-                               href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&parent_id=' . (int) $this->item->parent_id . '&property_id=' . (int) $this->item->id) . '&id=' . (int) $image->id . '&' . JSession::getFormToken() . '=1'; ?>"
-                               class="btn btn-danger btn-mini fltrt delete hasTip">
-                              <i class="icon-trash icon-white"></i>
-                            </a>
-                          </span>
-                          <span class="pull-right">
-                            <a rel="woot" 
-                               title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE') ?>"
-                               href="<?php echo JRoute::_('index.php?option=com_helloworld&view=caption&format=raw&property_id=' . (int) $this->item->id) . '&id=' . (int) $image->id . '&' . JSession::getFormToken() . '=1'; ?>" 
-                               class="btn btn-primary btn-mini fltrt hasTip">
-                              <i class="icon-pencil icon-white"></i>
-                            </a>
-                          </span>
-                          <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
-                          <?php
-                          if ($this->item->parent_id != 1) {
-                            $imgPath = JURI::root() . 'images/' . $this->item->parent_id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name);
-                          } else {
-                            $imgPath = JURI::root() . 'images/' . $this->item->id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name);
-                          }
-
-                          $caption = ($image->caption ? $image->caption : JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_NO_CAPTION_SET_FOR_THIS_IMAGE'));
-                          ?>
-                          <p>
-                            <img
-                              class="hasTip" 
-                              title="<?php echo $caption; ?>"
-                              src="<?php echo $imgPath ?>" 
-                              />
-                          </p>
-                        </div>
-                        <input type="hidden" name="jform[<?php echo $woot ?>-images][caption][]" value="<?php echo $image->caption; ?>" />
-                        <input type="hidden" name="jform[<?php echo $woot ?>-images][image_file_name][]" value="<?php echo $image->image_file_name; ?>" />
-                        <input type="hidden" name="jform[<?php echo $woot ?>-images][image_file_id][]" value="<?php echo $image->id; ?>" />
-                      </li>
-                    <?php endif; ?>
-                  <?php endforeach; // End of foreach image field sets      ?>
-                <?php endif; ?>
-              </ul>
-            </fieldset>  
-          </div>
-        </div>
-      <?php endforeach; ?>
+      </table>
+      <input type="hidden" name="task" value="" />
+      <input type="hidden" name="boxchecked" value="0" />
+<?php echo JHtml::_('form.token'); ?>
     </div>
 
-    <input type="hidden" name="task" value="images.edit" />
-    <?php echo JHtml::_('form.token'); ?>
-  </div>
-
-</form>	
+</form>
 
 

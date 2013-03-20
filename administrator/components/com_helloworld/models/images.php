@@ -10,7 +10,41 @@ jimport('joomla.application.component.modeladmin');
  */
 class HelloWorldModelImages extends JModelList
 {
+  
+	/**
+	 * Method to get a JDatabaseQuery object for retrieving the data set from a database.
+	 *
+	 * @return  JDatabaseQuery   A JDatabaseQuery object to retrieve the data set.
+	 *
+	 * @since   12.2
+	 */
+	protected function getListQuery()
+	{
+    
+    // Get the listing details from the session...
+    $app = JFactory::getApplication();
+    $id = $app->input->get('id','','int');
+    
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
 
+    // Get a list of the images uploaded against this listing
+    $query->select('
+      id,
+      property_id,
+      image_file_name,
+      caption
+    ');
+    $query->from('#__property_images_library');
+    
+    $query->where('property_id = ' . (int) $id);
+    
+    
+    
+    return $query;
+	}
+  
+  
   
   /*
    * Method to generate a set of profile images for images being uploaded via the image manager

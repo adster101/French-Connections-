@@ -33,10 +33,11 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
     $date = JFactory::getDate();
     $user = JFactory::getUser();
 
-    if ($this->id) {
+    if ($this->version_id) {
       // Existing item
       $this->modified = $date->toSql();
       $this->modified_by = $user->get('id');
+
     } else {
       // New newsfeed. A feed created and created_by field can be set by the user,
       // so we don't touch either of these if they are set.
@@ -48,26 +49,12 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
       if (empty($this->created_on)) {
         $this->created_on = $date->toSql();
       }
-
+      
+      // Update the state of this version to 1 to denote that it is a live new version
+      $this->state = 1;
     }
 
     return parent::store($updateNulls);
   }
-
-  
-  /*
-   * Method to get the version id of the most recent unpublished version
-   * 
-   * 
-   */
-  
-  public function getLatestUnitVersion($id = null)
-  {
-    print_r($this->id);
-    die;
-    // Get the database connection 
-    $db = JFactory::getDbo();
-    
-  }  
   
 }

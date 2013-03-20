@@ -265,25 +265,21 @@ class HelloWorldModelUnit extends JModelAdmin {
     // Allow an exception to be thrown.
     try {
 
-      // If $data['new_version'] is true we need to get the data out of the version table 
-      // and then update that new version
+      // If $data['new_version'] is true we need to update that new version in the version table
       if ($data['new_version']) {
-        
-        // Get the new version ID 
-        $table = $this->getTable('PropertyUnitsVersion');
-        
-        // Set the table id 
-        $table->id = $data['id'];
-        
-        $table= $table->getLatestUnitVersion();
-        
-        
-        
-        
-        
-      } else {
 
-        // Load the exisiting row, if there is one
+        // Get the latest unpublished version id for this unit, that exists in the db
+        $version = $this->getLatestUnitVersion($data['id']);
+
+        if ($version->version_id > 0) {
+          // Now we are ready to save our updated unit details to the new version table
+          $table = $this->getTable('PropertyUnitsVersion');
+          
+          // Set the version ID that we want to bind and store the data against...
+          $table->version_id = $version->version_id;
+        }
+      } else { // Here we don't explicitly know if there is a new version
+        // Load the exisiting row, if there is one. 
         if ($pk > 0) {
           $table->load($pk);
           $isNew = false;
@@ -294,60 +290,60 @@ class HelloWorldModelUnit extends JModelAdmin {
 
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
         if ($version[0]) {
-
+          // Switch the table model to the version one
           $table = $this->getTable('PropertyUnitsVersion');
+          $table->set('_tbl_key','version_id');
+
         }
-
-        // Bind the data.
-        if (!$table->bind($data)) {
-          $this->setError($table->getError());
-          return false;
-        }
-
-        // Prepare the row for saving
-        $this->prepareTable($table);
-
-        // Check the data.
-        if (!$table->check()) {
-          $this->setError($table->getError());
-          return false;
-        }
-
-        // Trigger the onContentBeforeSave event.
-        $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
-
-        if (in_array(false, $result, true)) {
-          $this->setError($table->getError());
-          return false;
-        }
-
-
-        // Update the unit version table to use the version_id ke
-        $table->set('_tbl_key', 'version_id');
-
-        // Store the data.
-        if (!$table->store()) {
-          $this->setError($table->getError());
-          return false;
-        }
-
-        // Should have a new unit version here.
-        // Need to update the new_version flag in the #__property_units table to indicate a new, unpublished version
-        // Also, need to save the facilities into a new table rather than saving them directly.
-        // Save the facilities data...
-        if (!$this->savePropertyFacilities($data, $pk)) {
-          $this->setError('Problem saving facilities');
-        }
-
-
-
-
-        // Clean the cache.
-        $this->cleanCache();
-
-        // Trigger the onContentAfterSave event.
-        $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
       }
+
+      
+      // Bind the data.
+      if (!$table->bind($data)) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Prepare the row for saving
+      $this->prepareTable($table);
+
+      // Check the data.
+      if (!$table->check()) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Trigger the onContentBeforeSave event.
+      $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
+
+      if (in_array(false, $result, true)) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Store the data.
+      if (!$table->store()) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Should have a new unit version here.
+      // Need to update the new_version flag in the #__property_units table to indicate a new, unpublished version
+      // Also, need to save the facilities into a new table rather than saving them directly.
+      // Save the facilities data...
+      if (!$this->savePropertyFacilities($data, $pk)) {
+        $this->setError('Problem saving facilities');
+      }
+
+
+      // Set the table key back to ID so the controller redirects to the right place
+      $table->set('_tbl_key','id');
+
+      // Clean the cache.
+      $this->cleanCache();
+
+      // Trigger the onContentAfterSave event.
+      $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
     } catch (Exception $e) {
       $this->setError($e->getMessage());
 
@@ -362,6 +358,33 @@ class HelloWorldModelUnit extends JModelAdmin {
     $this->setState($this->getName() . '.new', $isNew);
 
     return true;
+  }
+
+  /*
+   * Method to get the version id of the most recent unpublished version
+   * 
+   * 
+   */
+
+  public function getLatestUnitVersion($id = '') {
+    // Retrieve latest unit version
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+    $query->select('version_id');
+    $query->from('#__property_units_versions');
+    $query->where('id = ' . (int) $id);
+    $query->where('state = 1');
+    $query->order('version_id', 'desc');
+
+    $db->setQuery((string) $query);
+
+    try {
+      $row = $db->loadObject();
+    } catch (RuntimeException $e) {
+      JError::raiseError(500, $e->getMessage());
+    }
+
+    return $row;
   }
 
   /*
@@ -424,5 +447,5 @@ class HelloWorldModelUnit extends JModelAdmin {
       return true;
     }
   }
- 
+
 }

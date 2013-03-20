@@ -17,8 +17,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 
 // Initialise a data array to pass into the progress tabs layout
 $data = JApplication::getUserState('listing', '');
-
-
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
@@ -26,7 +24,10 @@ $data = JApplication::getUserState('listing', '');
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
-       
+        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>     
+        <!--
+          <script src="http://help.frenchconnections.co.uk/ChatScript.ashx?config=1&id=ControlID" type="text/javascript"></script>
+        -->
       </div>
       <div id="" class="span8">
       <?php else : ?>

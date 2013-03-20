@@ -67,9 +67,14 @@ class HelloWorldController extends JControllerLegacy {
       }
     }
 
-
+		$safeurlparams = array(
+			'id' 	=> 'int',
+      'option' => 'string',
+      'listing_id' => 'int',
+      'version_id' => 'int'
+		);
     // call parent behavior
-    parent::display($cachable);
+    parent::display($cachable, $safeurlparams);
   }
 
   function changeLanguage() {

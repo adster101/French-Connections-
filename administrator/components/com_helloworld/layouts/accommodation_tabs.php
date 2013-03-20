@@ -28,9 +28,10 @@ $listing_details = $listing->getProperties();
 // Get the id of the item the user is editing
 $id = $input->get('id', '', 'int');
 
-// Get properties needs to be passed false to get non-public properties...
+// Get the units 
 $units = $listing->units;
 
+// Test what has been added for the property listing details
 $property_details = ($listing_details['id'] && $listing_details['latitude'] && $listing_details['longitude'] && $listing_details['title']) ? true : false;
 
 // Assign a 'default' unit ID 
@@ -39,13 +40,30 @@ $default_unit = (count($units) > 0) ? key($units) : '';
 
 ?>
 
-<?php if ($property_details) : ?>
+<?php if ($view == 'property' && !$property_details) : ?>
+  <div class="alert alert-info">
+    <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>  
+  </div>
+<?php elseif (($view == 'property' && $property_details && empty($units))) : ?>
+  <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
+    <a href="index.php?option=com_helloworld&task=unit.edit" class="btn btn-primary">
+      <?php echo JText::_('COM_HELLOWORLD_PROCEED'); ?>    
+    </a>
+  </div>
+<?php elseif (($view == 'property' || $view == 'unit') && !empty($units) && !$units[$default_unit]->images ) : ?>
+  <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_IMAGES_DETAILS'); ?>
+    <a href="index.php?option=com_helloworld&view=images" class="btn btn-primary">
+      <?php echo JText::_('COM_HELLOWORLD_PROCEED'); ?>    
+    </a>
+  </div>
+<?php elseif ($view == 'unit') : ?>
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
   <div class="alert alert-info">
     <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>  
-  </div>
-<?php elseif (($property_details && $view == 'unit' && !empty($units))) : ?>
-  <div class="alert alert-info">
-    <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_IMAGE_DETAILS'); ?>  
   </div>
 <?php endif; ?>
 
@@ -127,7 +145,7 @@ $default_unit = (count($units) > 0) ? key($units) : '';
             <?php echo ($units[$id]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
           </a>
         <?php else: ?>
-          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id) ?>">
+          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $id) ?>">
             <?php echo JText::_('IMAGE_GALLERY'); ?>
             <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
           </a>     

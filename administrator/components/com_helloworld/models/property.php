@@ -202,6 +202,9 @@ class HelloWorldModelProperty extends JModelAdmin {
       $form->setFieldAttribute('city', 'longitude', $data->longitude);    
     }   
     
+    
+    
+    
     // Set the created date
     $form->setFieldAttribute('created_on', 'default', date('Y-m-d'));    
 

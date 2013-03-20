@@ -21,18 +21,12 @@ class HelloWorldViewImages extends JViewLegacy
 	
 		// Get the custom script path for this screen
 		$script = $this->get('Script');
-
-    // Get the form data
-    $form = $this->get('Form');
     
     // Get the item data
-    $item = $this->get('Item');
-
-		// Assign the Data
-		$this->form = $form;
+    $items = $this->get('Items');
 
     // Assign the Item
-		$this->item = $item;
+		$this->items = $items;
     
 		// Set the toolbar
 		$this->addToolBar();
@@ -40,6 +34,7 @@ class HelloWorldViewImages extends JViewLegacy
 		// Set the custom script
 		$this->script = $script;
 		
+    $this->state = $this->get('State');
     
 		// Display the template
 		parent::display($tpl);
@@ -56,28 +51,35 @@ class HelloWorldViewImages extends JViewLegacy
 		// Determine the layout we are using. 
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
-		// Add the tabbed submenu for the property edit view.
-		HelloWorldHelper::addSubmenu($view);
-		
+
 		$user = JFactory::getUser();
-		$userId = $user->id;
-		$isNew = 0;
-    
+		$userId = $user->id;    
+   
+    // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_IMAGES_EDIT', ''), 'helloworld');
+
+    // Get the listing details from the session...
+    $listing = JApplication::getUserState('listing', false);
+
+    JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
  
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JToolbarButtonImageupload', JPATH_ROOT.'/administrator/components/com_helloworld/buttons/Imageupload.php');
-
-    // Add an upload button?
-    $bar = JToolBar::getInstance('toolbar');
-    $bar->appendButton('Imageupload', 'upload', JText::_('COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES'), 'index.php?option=com_helloworld&view=imageupload&format=raw&' . JSession::getFormToken() . '=1');
-
+    
     // Built the actions for new and existing records.
 		JToolBarHelper::apply('images.apply', 'JTOOLBAR_APPLY');	
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
-
+		JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CANCEL');
+ 
+    // Display a helpful navigation for the owners 
+    if ($canDo->get('helloworld.ownermenu.view')) {
+    
+      $view = strtolower(JRequest::getVar('view'));
+  
+      $canDo = HelloWorldHelper::addSubmenu($view);
+      
+      // Add the side bar
+      $this->sidebar = JHtmlSidebar::render();
+      
+    }
   }
   
 	/**
@@ -87,11 +89,14 @@ class HelloWorldViewImages extends JViewLegacy
 	 */
 	protected function setDocument() 
 	{
-		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
-		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
+	  
+    // Get the listing details from the session...
+    $listing = JApplication::getUserState('listing', false);
+
+    $document->setTitle($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
 		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Request.File.js");
 		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.MultipleFileInput.js");
 		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.Upload.js");
