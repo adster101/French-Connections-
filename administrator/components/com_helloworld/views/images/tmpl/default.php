@@ -14,11 +14,33 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.multiselect');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
-
+$saveOrder = true;
+if ($saveOrder)
+{
+	$saveOrderingUrl = 'index.php?option=com_content&task=articles.saveOrderAjax&tmpl=component';
+	JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+}
 $data = JApplication::getUserState('listing', '');
 
-?>  
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=offers'); ?>" method="post" name="adminForm" id="adminForm">
+?>
+<script type="text/javascript">
+	Joomla.orderTable = function()
+	{
+		table = document.getElementById("sortTable");
+		direction = document.getElementById("directionTable");
+		order = table.options[table.selectedIndex].value;
+		if (order != '<?php echo $listOrder; ?>')
+		{
+			dirn = 'asc';
+		}
+		else
+		{
+			dirn = direction.options[direction.selectedIndex].value;
+		}
+		Joomla.tableOrdering(order, dirn, '');
+	}
+</script>
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
 
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
@@ -35,16 +57,21 @@ $data = JApplication::getUserState('listing', '');
       <table id="articleList" class="table table-striped">
         <thead>
           <tr>
-            <th width="1%" class="nowrap center hidden-phone">
+            <th width="3%" class="nowrap  hidden-phone">
               <?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
             </th>
-            <th width="1%">
+            <th width="3%">
               <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
             </th>			
             <th width="10%">
+              <?php echo JText::_('COM_HELLOWORLD_THUMBNAIL'); ?>              
+            </th>
+            <th width="25%">
               <?php echo JText::_('COM_HELLOWORLD_OFFERS_HEADING_GREETING'); ?>
             </th>
-
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_IMAGES_CHOOSE_THUMBNAIL'); ?>
+            </th>
           </tr>
         </thead>
         <?php
@@ -58,20 +85,26 @@ $data = JApplication::getUserState('listing', '');
         foreach ($this->items as $i => $item):
           ?>
 
-          <tr class="row<?php echo $i % 2; ?>">
+          <tr>
             <td>
-              <span class="sortable-handler hasTooltip <?php echo $disableClassName; ?>" title="<?php echo $disabledLabel; ?>">
-                <i class="icon-menu"></i>
+              <span class="sortable-handler hasTooltip <?php //echo $disableClassName; ?>" title="<?php //echo $disabledLabel; ?>">
+                <i class="icon-move"></i>
               </span>
               <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
             </td>
-            <td>
-              <img src="<?php echo '/images/property/' . (int) $this->item->id . '/thumbs/' . $item->image_file_name; ?>" />
+            <td class="hidden-phone">
+              <?php echo JHtml::_('grid.id', $i, $item->id); ?>
+            </td>
+            <td> 
+              <img width="75" src="<?php echo '/images/property/' . (int) $this->item->id . '/thumbs/' . $item->image_file_name; ?>" />
+            </td>
+            <td>         
+              <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=image.edit&id=' . (int) $item->id) ?>">
+                <?php echo $this->escape($item->caption); ?>
+              </a>
             </td>
             <td>
-              <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=image.edit&id=' . (int) $item->id) ?>">
-  <?php echo $this->escape($item->caption); ?>
-              </a>
+              <input type="radio" name="image_id[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
             </td>
           </tr>				
 
@@ -91,7 +124,7 @@ $data = JApplication::getUserState('listing', '');
       </table>
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />
-<?php echo JHtml::_('form.token'); ?>
+      <?php echo JHtml::_('form.token'); ?>
     </div>
 
 </form>

@@ -28,6 +28,9 @@ $listing_details = $listing->getProperties();
 // Get the id of the item the user is editing
 $id = $input->get('id', '', 'int');
 
+// Get the listing ID
+$listing_id = $listing_details['id'];
+
 // Get the units 
 $units = $listing->units;
 
@@ -136,16 +139,21 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       </span>
     <?php endif; ?>
   </li>
-  <li>
+  <li <?php echo ($view == 'images') ? 'class=\'active\'' : '' ?>>
     <?php if (!empty($units)) : ?>
-      <?php if (count($units) > 0) : ?>
-        <?php if (array_key_exists($id, $units)) : ?>
-          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.edit&id=' . $id) ?>">
+      <?php if (count($units) == 1) : // There is only one unit for this listing...so far...  ?>
+        <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id . '&listing_id=' . $listing_id) ?>">
+            <?php echo JText::_('IMAGE_GALLERY'); ?>
+            <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+        </a>
+      <?php elseif (count($units) > 1) : ?>
+        <?php if (array_key_exists($id, $units)) : // If the  ?>
+          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$id]->id . '&listing_id=' . $listing_id  ) ?>">
             <?php echo JText::_('IMAGE_GALLERY'); ?>
             <?php echo ($units[$id]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
           </a>
         <?php else: ?>
-          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $id) ?>">
+          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id) . '&listing_id=' . $listing_id ?>">
             <?php echo JText::_('IMAGE_GALLERY'); ?>
             <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
           </a>     

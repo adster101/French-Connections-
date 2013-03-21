@@ -51,7 +51,7 @@ class HelloWorldTablePropertyUnits extends JTable
       (select count(*) from qitz3_attributes_property where property_id = ' . (int) $pk . ') as facilities,
       (select count(*) from qitz3_availability where id = ' . (int) $pk . ' and start_date > CURDATE()) as availability,
       (select count(*) from qitz3_tariffs where id =  ' . (int) $pk . ' and start_date > CURDATE()) as tariffs,
-      (select count(*) from qitz3_images_property_gallery where property_id =  ' . (int) $pk . ') as images
+      (select count(*) from qitz3_property_images_gallery where property_id =  ' . (int) $pk . ') as images
     ');
 
    
@@ -121,7 +121,7 @@ class HelloWorldTablePropertyUnits extends JTable
         (select count(*) from qitz3_attributes_property where property_id = pu.id) as facilities,
         (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs,
-        (select count(*) from qitz3_images_property_gallery where property_id =  pu.id) as images
+        (select count(*) from qitz3_property_images_gallery where property_id =  pu.id) as images
       ');
 		$query->from('#__property_units as pu');
 		$fields = array_keys($this->getProperties());

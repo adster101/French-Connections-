@@ -29,8 +29,8 @@ class ImportControllerImages extends JControllerForm {
 
     $previous_property_id = '';
 
-    $db->truncateTable('#__images_property_gallery');
-    $db->truncateTable('#__images_property_library');
+    $db->truncateTable('#__property_images_gallery');
+    $db->truncateTable('#__property_images_library');
 
     // Create a log file for the email kickers
     jimport('joomla.error.log');
@@ -60,7 +60,7 @@ class ImportControllerImages extends JControllerForm {
           $query = $db->getQuery(true);
 
           $query->select('id');
-          $query->from('#__images_property_library');
+          $query->from('#__property_images_library');
           $query->where('image_file_name in (' . $initial_gallery_images . ')');
 
           // Set and execute the query
@@ -75,7 +75,7 @@ class ImportControllerImages extends JControllerForm {
           // Start building a new query to insert any attributes... 
           $query = $db->getQuery(true);
 
-          $query->insert('#__images_property_gallery');
+          $query->insert('#__property_images_gallery');
 
           $query->columns(array('property_id', 'property_library_id'));
 
@@ -122,7 +122,7 @@ class ImportControllerImages extends JControllerForm {
           $query->clear();
           $query = $db->getQuery(true);
 
-          $query->insert('#__images_property_library');
+          $query->insert('#__property_images_library');
           $query->columns(array('property_id', 'image_file_name', 'caption'));
 
           // Loop over the list of images and insert them...
@@ -182,7 +182,7 @@ class ImportControllerImages extends JControllerForm {
         $query = $db->getQuery(true);
 
         $query->select('id');
-        $query->from('#__images_property_library');
+        $query->from('#__property_images_library');
         $query->where('image_file_name in (' . $property_gallery_images . ')');
 
         // Set and execute the query
@@ -190,7 +190,7 @@ class ImportControllerImages extends JControllerForm {
 
         $gallery_images = $db->loadAssocList($key = 'id');
 
-        $query->insert('#__images_property_gallery');
+        $query->insert('#__property_images_gallery');
 
         $query->columns(array('property_id', 'property_library_id'));
 
@@ -219,19 +219,20 @@ class ImportControllerImages extends JControllerForm {
         // 5. As this is a unit, add the property and unit images to the gallery images table
         // Increment unit count
         $unit_count++;
+
       } else { // Must be a new property 
         // Select all images for this property, loop ever them and move them to the correct folder...
         if ($previous_property_id != '') {
           $query->clear();
           $query->select('id,image_file_name');
-          $query->from('#__images_property_library');
+          $query->from('#__property_images_library');
           $query->where('property_id = ' . $previous_property_id);
 
           $db->setQuery($query);
 
           $images_to_move = $db->loadAssocList($key = 'id');
 
-          $folder = JPATH_ROOT . '/' . 'images';
+          $folder = JPATH_ROOT . '/' . 'images/property';
 
           $baseDir[] = $folder . '/' . $previous_property_id . '/gallery/';
           $baseDir[] = $folder . '/' . $previous_property_id . '/thumbs/';
@@ -340,7 +341,7 @@ class ImportControllerImages extends JControllerForm {
 
         $library_images = $db->loadAssocList($key = 'fde_id');
 
-
+        
 
 
 
@@ -348,7 +349,7 @@ class ImportControllerImages extends JControllerForm {
         // Start building a new query to insert any attributes... 
         $query = $db->getQuery(true);
 
-        $query->insert('#__images_property_library');
+        $query->insert('#__property_images_library');
 
         $query->columns(array('property_id', 'image_file_name', 'caption'));
 
@@ -371,13 +372,51 @@ class ImportControllerImages extends JControllerForm {
           $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
         }
 
+        if ($unit_count == 1) {
+          $query = $db->getQuery(true);
+          $query->select('id');
+          $query->from('#__property_images_library');
+          $query->where('property_id = ' . $property_id);
+
+          // Set and execute the query
+          $db->setQuery($query);
+          
+          if (!$db->execute()) {
+            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+          }
+          
+          $gal_images = $db->loadAssocList();
+                   
+          // Set up a new query to insert into the gallery 
+          $query = $db->getQuery(true);
+
+          $query->insert('#__property_images_gallery');
+
+          $query->columns(array('property_id', 'property_library_id'));
+          
+          // gal_images contains all the images for the listing and the first unit
+          foreach ($gal_images as $image => $id) {
+            $insert_string = $db->quote($line[0]) . ',' . $id['id'];
+            $query->values($insert_string);
+          }
+          
+          // Set and execute the query
+          $db->setQuery($query);
+
+          if (!$db->execute()) {
+            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+          }
+        
+          
+          
+        }
 
         $previous_images = $library_images;
       }
       // Track the property ID              
       $previous_property_id = $line[1];
     }
-
+    die;
 
 
 

@@ -18,8 +18,9 @@ class HelloWorldViewImages extends JViewLegacy
 	{
 		// Get the property ID we are editing.
 		$this->item->id = JRequest::getVar('id');
-	
-		// Get the custom script path for this screen
+    $app = JFactory::getApplication();
+
+    // Get the custom script path for this screen
 		$script = $this->get('Script');
     
     // Get the item data
@@ -65,7 +66,12 @@ class HelloWorldViewImages extends JViewLegacy
  
     
     // Built the actions for new and existing records.
-		JToolBarHelper::apply('images.apply', 'JTOOLBAR_APPLY');	
+    if ($canDo->get('core.create')) {
+      JToolBarHelper::addNew('image.edit');
+      
+    }
+    
+    
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CANCEL');
  
