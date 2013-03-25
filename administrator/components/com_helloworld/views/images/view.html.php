@@ -73,7 +73,7 @@ class HelloWorldViewImages extends JViewLegacy
     
     
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-		JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CANCEL');
+		JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
  
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {

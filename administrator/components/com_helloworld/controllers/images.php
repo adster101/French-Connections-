@@ -231,10 +231,10 @@ class HelloWorldControllerImages extends JControllerAdmin
     
     // An array to hold the that are good to save against the property
     $images = array();
-    
+
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken( 'get' ) or die( 'Invalid Token' );
-    
+    JSession::checkToken('GET') or die( 'Invalid Token' );
+
     // Check that this user is authorised to edit (i.e. owns) this this property
     $this->allowEdit();
     
@@ -243,6 +243,7 @@ class HelloWorldControllerImages extends JControllerAdmin
 
  		// Get some data from the request
 		$files			= JRequest::getVar('jform', '', 'files', 'array');
+    
     
     // Get the property ID from the GET variable
     $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
@@ -384,7 +385,7 @@ class HelloWorldControllerImages extends JControllerAdmin
         $images_model->generateImageProfiles($images, $parent_id);
       }
     }
-    
+    print_r(json_encode($files));die;
     echo json_encode($files);
     
     jexit(); // Exit this request now as results passed back to client via xhr transport.

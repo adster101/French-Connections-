@@ -54,7 +54,6 @@ class HelloWorldViewImage extends JViewLegacy {
 
     JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title, $listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
-
  
 
 
@@ -85,14 +84,21 @@ class HelloWorldViewImage extends JViewLegacy {
     $listing = JApplication::getUserState('listing', false);
 
     $document->setTitle($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title, $listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
 
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
+    $document->addScript("http://blueimp.github.com/JavaScript-Templates/tmpl.min.js", 'text/javascript', true, false);
+    $document->addScript("http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js", 'text/javascript', true, false);
+    $document->addScript("http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.iframe-transport.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-fp.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-ui.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/main.js", 'text/javascript', true, false);
+    
+    
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery.fileupload-ui.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
   }

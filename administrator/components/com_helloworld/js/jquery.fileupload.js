@@ -1,5 +1,5 @@
 /*
- * jQuery File Upload Plugin 5.26
+ * jQuery File Upload Plugin 5.28.4
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
@@ -215,7 +215,7 @@
         ],
 
         _BitrateTimer: function () {
-            this.timestamp = +(new Date());
+            this.timestamp = (new Date()).getTime();
             this.loaded = 0;
             this.bitrate = 0;
             this.getBitrate = function (now, loaded, interval) {
@@ -243,7 +243,7 @@
             if ($.isArray(options.formData)) {
                 return options.formData;
             }
-            if (options.formData) {
+            if ($.type(options.formData) === 'object') {
                 formData = [];
                 $.each(options.formData, function (name, value) {
                     formData.push({name: name, value: value});
@@ -262,16 +262,34 @@
         },
 
         _initProgressObject: function (obj) {
-            obj._progress = {
+            var progress = {
                 loaded: 0,
                 total: 0,
                 bitrate: 0
             };
+            if (obj._progress) {
+                $.extend(obj._progress, progress);
+            } else {
+                obj._progress = progress;
+            }
+        },
+
+        _initResponseObject: function (obj) {
+            var prop;
+            if (obj._response) {
+                for (prop in obj._response) {
+                    if (obj._response.hasOwnProperty(prop)) {
+                        delete obj._response[prop];
+                    }
+                }
+            } else {
+                obj._response = {};
+            }
         },
 
         _onProgress: function (e, data) {
             if (e.lengthComputable) {
-                var now = +(new Date()),
+                var now = (new Date()).getTime(),
                     loaded;
                 if (data._time && data.progressInterval &&
                         (now - data._time < data.progressInterval) &&
@@ -541,7 +559,7 @@
                 if (this.jqXHR) {
                     return this.jqXHR.abort();
                 }
-                return this._getXHRPromise();
+                return that._getXHRPromise();
             };
             data.state = function () {
                 if (this.jqXHR) {
@@ -550,6 +568,9 @@
             };
             data.progress = function () {
                 return this._progress;
+            };
+            data.response = function () {
+                return this._response;
             };
         },
 
@@ -679,9 +700,11 @@
                 this._progress.loaded = this._progress.total = 0;
                 this._progress.bitrate = 0;
             }
-            if (!data._progress) {
-                data._progress = {};
-            }
+            // Make sure the container objects for the .response() and
+            // .progress() methods on the data object are available
+            // and reset to their initial state:
+            this._initResponseObject(data);
+            this._initProgressObject(data);
             data._progress.loaded = data.loaded = data.uploadedBytes || 0;
             data._progress.total = data.total = this._getTotal(data.files) || 1;
             data._progress.bitrate = data.bitrate = 0;
@@ -692,7 +715,8 @@
         },
 
         _onDone: function (result, textStatus, jqXHR, options) {
-            var total = options._progress.total;
+            var total = options._progress.total,
+                response = options._response;
             if (options._progress.loaded < total) {
                 // Create a progress event if no final progress event
                 // with loaded equaling total has been triggered:
@@ -702,35 +726,30 @@
                     total: total
                 }), options);
             }
-            options.result = result;
-            options.textStatus = textStatus;
-            options.jqXHR = jqXHR;
+            response.result = options.result = result;
+            response.textStatus = options.textStatus = textStatus;
+            response.jqXHR = options.jqXHR = jqXHR;
             this._trigger('done', null, options);
         },
 
         _onFail: function (jqXHR, textStatus, errorThrown, options) {
-            options.jqXHR = jqXHR;
-            options.textStatus = textStatus;
-            options.errorThrown = errorThrown;
-            this._trigger('fail', null, options);
+            var response = options._response;
             if (options.recalculateProgress) {
                 // Remove the failed (error or abort) file upload from
                 // the global progress calculation:
                 this._progress.loaded -= options._progress.loaded;
                 this._progress.total -= options._progress.total;
             }
+            response.jqXHR = options.jqXHR = jqXHR;
+            response.textStatus = options.textStatus = textStatus;
+            response.errorThrown = options.errorThrown = errorThrown;
+            this._trigger('fail', null, options);
         },
 
         _onAlways: function (jqXHRorResult, textStatus, jqXHRorError, options) {
             // jqXHRorResult, textStatus and jqXHRorError are added to the
             // options object via done and fail callbacks
-            this._active -= 1;
             this._trigger('always', null, options);
-            if (this._active === 0) {
-                // The stop callback is triggered when all uploads have
-                // been completed, equivalent to the global ajaxStop event:
-                this._trigger('stop');
-            }
         },
 
         _onSend: function (e, data) {
@@ -756,13 +775,14 @@
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         that._onFail(jqXHR, textStatus, errorThrown, options);
                     }).always(function (jqXHRorResult, textStatus, jqXHRorError) {
-                        that._sending -= 1;
                         that._onAlways(
                             jqXHRorResult,
                             textStatus,
                             jqXHRorError,
                             options
                         );
+                        that._sending -= 1;
+                        that._active -= 1;
                         if (options.limitConcurrentUploads &&
                                 options.limitConcurrentUploads > that._sending) {
                             // Start the next queued upload,
@@ -775,6 +795,11 @@
                                 }
                                 nextSlot = that._slots.shift();
                             }
+                        }
+                        if (that._active === 0) {
+                            // The stop callback is triggered when all uploads have
+                            // been completed, equivalent to the global ajaxStop event:
+                            that._trigger('stop');
                         }
                     });
                     return jqXHR;
@@ -841,6 +866,7 @@
                 var newData = $.extend({}, data);
                 newData.files = fileSet ? element : [element];
                 newData.paramName = paramNameSet[index];
+                that._initResponseObject(newData);
                 that._initProgressObject(newData);
                 that._addConvenienceMethods(e, newData);
                 result = that._trigger('add', e, newData);
@@ -1119,6 +1145,12 @@
             this._sending = this._active = 0;
             this._initProgressObject(this);
             this._initEventHandlers();
+        },
+
+        // This method is exposed to the widget API and allows to query
+        // the number of active uploads:
+        active: function () {
+            return this._active;
         },
 
         // This method is exposed to the widget API and allows to query

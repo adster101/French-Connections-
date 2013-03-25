@@ -19,7 +19,7 @@ jQuery(function () {
     jQuery('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'index.php?option=com_helloworld&task=images.upload'
+        //url: 'index.php?option=com_helloworld&task=images.upload'
     });
 
     // Enable iframe cross-domain access via redirect option:
@@ -32,10 +32,8 @@ jQuery(function () {
         )
     );
 
-    if (window.location.hostname === 'blueimp.github.com') {
         // Demo settings:
         jQuery('#fileupload').fileupload('option', {
-            url: '//jquery-file-upload.appspot.com/',
             maxFileSize: 5000000,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             process: [
@@ -54,30 +52,7 @@ jQuery(function () {
                 }
             ]
         });
-        // Upload server status check for browsers with CORS support:
-        if (jQuery.support.cors) {
-            jQuery.ajax({
-                url: '//jquery-file-upload.appspot.com/',
-                type: 'HEAD'
-            }).fail(function () {
-                jQuery('<span class="alert alert-error"/>')
-                    .text('Upload server currently unavailable - ' +
-                            new Date())
-                    .appendTo('#fileupload');
-            });
-        }
-    } else {
-        // Load existing files:
-        jQuery.ajax({
-            // Uncomment the following to send cross-domain cookies:
-            //xhrFields: {withCredentials: true},
-            url: jQuery('#fileupload').fileupload('option', 'url'),
-            dataType: 'json',
-            context: jQuery('#fileupload')[0]
-        }).done(function (result) {
-            jQuery(this).fileupload('option', 'done')
-                .call(this, null, {result: result});
-        });
-    }
+
+   
 
 });

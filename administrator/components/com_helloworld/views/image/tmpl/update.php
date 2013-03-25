@@ -23,25 +23,34 @@ $data = JApplication::getUserState('listing', '');
   <?php else : ?>
     <div id="j-main-container">
     <?php endif; ?>
+
+   
+ 
+      <blockquote>
+        <p>File Upload widget with multiple file selection, drag&amp;drop support, progress bars and preview images for jQuery.<br>
+          Supports cross-domain, chunked and resumable file uploads and client-side image resizing.<br>
+          Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.</p>
+      </blockquote>
+      <br>
       <!-- The file upload form used as target for the file upload widget -->
-      <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1'); ?>" method="GET" enctype="multipart/form-data">
+      <form id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1'); ?>" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
-        <noscript><input type="hidden" name="redirect" value="/"></noscript>
+        <noscript><input type="hidden" name="redirect" value="http://blueimp.github.com/jQuery-File-Upload/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row-fluid fileupload-buttonbar">
+        <div class="row fileupload-buttonbar">
           <div class="span7">
             <!-- The fileinput-button span is used to style the file input field as button -->
             <span class="btn btn-success fileinput-button">
               <i class="icon-plus icon-white"></i>
               <span>Add files...</span>
-              <input type="file" name="jform[files]" multiple>
+              <input type="file" name="files[]" multiple>
             </span>
             <button type="submit" class="btn btn-primary start">
               <i class="icon-upload icon-white"></i>
               <span>Start upload</span>
             </button>
             <button type="reset" class="btn btn-warning cancel">
-              <i class="icon-trash icon-white"></i>
+              <i class="icon-ban-circle icon-white"></i>
               <span>Cancel upload</span>
             </button>
             <button type="button" class="btn btn-danger delete">
@@ -64,9 +73,7 @@ $data = JApplication::getUserState('listing', '');
         <div class="fileupload-loading"></div>
         <br>
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped">
-          <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
-        </table>
+        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
       </form>
       <br>
       <div class="well">
@@ -130,7 +137,7 @@ $data = JApplication::getUserState('listing', '');
         {% } %}
         <td>{% if (!i) { %}
           <button class="btn btn-warning cancel">
-            <i class="icon-trash icon-white"></i>
+            <i class="icon-ban-circle icon-white"></i>
             <span>Cancel</span>
           </button>
           {% } %}</td>

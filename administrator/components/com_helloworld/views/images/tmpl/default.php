@@ -74,17 +74,15 @@ $data = JApplication::getUserState('listing', '');
             </th>
           </tr>
         </thead>
-        <?php
+        <?php 
         $listOrder = $this->escape($this->state->get('list.ordering'));
         $user = JFactory::getUser();
         $userId = $user->id;
         $groups = $user->getAuthorisedGroups();
         $ordering = ($listOrder == 'a.lft');
         $originalOrders = array();
-
-        foreach ($this->items as $i => $item):
-          ?>
-
+        
+        foreach ($this->items as $i => $item): ?>
           <tr>
             <td>
               <span class="sortable-handler hasTooltip <?php //echo $disableClassName; ?>" title="<?php //echo $disabledLabel; ?>">
@@ -96,10 +94,10 @@ $data = JApplication::getUserState('listing', '');
               <?php echo JHtml::_('grid.id', $i, $item->id); ?>
             </td>
             <td> 
-              <img width="75" src="<?php echo '/images/property/' . (int) $this->item->id . '/thumbs/' . $item->image_file_name; ?>" />
+              <img width="75" src="<?php echo '/images/property/' . (int) $this->items[0]->property_id . '/thumbs/' . $item->image_file_name; ?>" />
             </td>
             <td>         
-              <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=image.edit&id=' . (int) $item->id) ?>">
+              <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=image.edit&layout=update&id=' . (int) $item->id) ?>">
                 <?php echo $this->escape($item->caption); ?>
               </a>
             </td>
