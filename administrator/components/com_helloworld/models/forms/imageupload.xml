@@ -5,8 +5,8 @@
       type="file"
       label="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_LABEL"
       description ="COM_HELLOWORLD_IMAGES_UPLOAD_IMAGES_DESC"
-      name="upload-images"
-      id="upload_images"
+      name="files"
+      id="fileupload"
       multiple="true">
     </field>
      <field 

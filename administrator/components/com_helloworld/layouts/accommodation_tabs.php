@@ -139,7 +139,7 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       </span>
     <?php endif; ?>
   </li>
-  <li <?php echo ($view == 'images') ? 'class=\'active\'' : '' ?>>
+  <li <?php echo ($view == 'images' || $view == 'image') ? 'class=\'active\'' : '' ?>>
     <?php if (!empty($units)) : ?>
       <?php if (count($units) == 1) : // There is only one unit for this listing...so far...  ?>
         <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id . '&listing_id=' . $listing_id) ?>">

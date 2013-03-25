@@ -8,7 +8,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class HelloWorldModelImageupload extends JModelAdmin
+class HelloWorldModelImage extends JModelAdmin
 {
 	/**
 	 * Method override to check if you can edit an existing record.
