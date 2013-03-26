@@ -211,7 +211,10 @@ abstract class HelloWorldHelper {
         'helloworld.sort.expiry',
         'helloworld.sort.prn',
         'helloworld.ownermenu.view',
-        'helloworld.snooze'
+        'helloworld.snooze',
+        'helloworld.images.delete',
+        'helloworld.images.edit',
+        'helloworld.images.create'
     );
 
 

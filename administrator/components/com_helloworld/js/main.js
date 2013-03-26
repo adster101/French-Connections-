@@ -20,6 +20,9 @@ jQuery(function () {
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
         //url: 'index.php?option=com_helloworld&task=images.upload'
+        //downloadTemplateId:null,
+        //uploadTemplateId:null,
+
     });
 
     // Enable iframe cross-domain access via redirect option:

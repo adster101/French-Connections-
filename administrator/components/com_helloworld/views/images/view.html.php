@@ -64,12 +64,28 @@ class HelloWorldViewImages extends JViewLegacy
 
     JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
  
+ 		$bar = JToolBar::getInstance('toolbar');
+
     
-    // Built the actions for new and existing records.
-    if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('image.edit');
-      
+		// Add a upload button
+    if ($canDo->get('helloworld.images.create')) {
+
+			$title = JText::_('JTOOLBAR_UPLOAD');
+			$dhtml = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"btn btn-small btn-success\">
+						<i class=\"icon-plus icon-white\" title=\"$title\"></i>
+						$title</button>";
+			$bar->appendButton('Custom', $dhtml, 'upload');
+			JToolbarHelper::divider();
+		}    
+    
+    if ($canDo->get('helloworld.images.delete')) {
+      JToolBarHelper::deleteList(JText::_('COM_HELLOWORLD_IMAGES_ARE_YOU_SURE'),'images.delete');      
     }
+    
+    if ($canDo->get('helloworld.images.edit')) {
+      JToolBarHelper::editList();
+    }
+    
     
     
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
@@ -102,12 +118,19 @@ class HelloWorldViewImages extends JViewLegacy
 
     $document->setTitle($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Request.File.js");
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.MultipleFileInput.js");
-		$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/Form.Upload.js");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/upload.css",'text/css',"screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css",'text/css',"screen");
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
+    $document->addScript("http://blueimp.github.com/JavaScript-Templates/tmpl.min.js", 'text/javascript', true, false);
+    $document->addScript("http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js", 'text/javascript', true, false);
+    $document->addScript("http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.iframe-transport.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-fp.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-ui.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/main.js", 'text/javascript', true, false);
+   
+    
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery.fileupload-ui.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');

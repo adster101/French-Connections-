@@ -60,7 +60,7 @@ class HelloWorldControllerImages extends JControllerAdmin
 	{
 		// Initialise variables.
 		$recordId = (int) isset($data[$key]) ? $data[$key] : 0;
-    echo $recordId;die;
+
     $user = JFactory::getUser();
     
 		$userId = $user->get('id');
@@ -229,35 +229,37 @@ class HelloWorldControllerImages extends JControllerAdmin
 
   function upload () {
     
+    // Get the app and user instances
+    $app = JFactory::getApplication();
+    $user = JFactory::getUser();
+    
+    // Get the id, which is the unit ID we are uploading the image against
+    $id = $app->input->get('id', '', 'GET', 'int' );   
+    
+    
     // An array to hold the that are good to save against the property
     $images = array();
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('GET') or die( 'Invalid Token' );
 
-    // Check that this user is authorised to edit (i.e. owns) this this property
-    $this->allowEdit();
-    
-    // Get the component parameters
+    // Check that this user is authorised to upload images here
+    if (!$user->authorise('helloworld.images.create', $this->extension)) {
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images' . $this->getRedirectToItemAppend($id, 'id'), false));
+    }
+                
+    // Get the media component parameters
  		$params = JComponentHelper::getParams('com_media');
 
  		// Get some data from the request
 		$files			= JRequest::getVar('jform', '', 'files', 'array');
-    
+
+    print_r($files);die;
     
     // Get the property ID from the GET variable
-    $id = JRequest::getVar( 'id', '', 'GET', 'int' );   
 
-    // Get the parent property ID from the GET variable
-    $parent_id = JRequest::getVar( 'parent_id', '', 'GET', 'int' );  
 
-    // Need to ensure that images are always uploaded into the parent property folder.
-    if ($parent_id == 1) {
-      // Create the folder path into which we are uploading the images to - This is why they are not copying on test...
-      $this->folder = COM_IMAGE_BASE .'/'. JRequest::getVar('id', 'GET', '', 'integer');
-    } else {
-      $this->folder = COM_IMAGE_BASE .'/'. $parent_id;
-    }
     
     
     
