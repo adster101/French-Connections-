@@ -43,6 +43,7 @@ class HelloWorldModelImages extends JModelList
   
   
   
+  
   /*
    * Method to generate a set of profile images for images being uploaded via the image manager
    * 

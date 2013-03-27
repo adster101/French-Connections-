@@ -33,7 +33,7 @@ class HelloWorldModelImage extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'Image', $prefix = 'HelloWorldTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -74,4 +74,5 @@ class HelloWorldModelImage extends JModelAdmin
 		}
 		return $data;
 	}	
+  
 }

@@ -163,6 +163,10 @@ $data = JApplication::getUserState('listing', '');
         <td class="preview"><span class="fade"></span></td>
         <td class="name"><span>{%=file.name%}</span></td>
         <td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+        <td class="title">
+          <label><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL'); ?>
+          <input type="text" name="title" required="required" class="required input-large" aria-invalid="false" value="Fuckwit" /></label>
+        </td>
         {% if (file.error) { %}
         <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
         {% } else if (o.files.valid && !i) { %}

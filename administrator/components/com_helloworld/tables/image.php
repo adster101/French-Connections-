@@ -9,7 +9,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableImages extends JTable
+class HelloWorldTableImage extends JTable
 {
 	/**
 	 * Constructor
@@ -18,7 +18,7 @@ class HelloWorldTableImages extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__images_property_library', 'id', $db);
+		parent::__construct('#__property_images_library', 'id', $db);
 	}
 	
 	/**

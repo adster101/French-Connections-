@@ -11,51 +11,71 @@
 
 /*jslint nomen: true, unparam: true, regexp: true */
 /*global $, window, document */
+(function (factory) {
+  'use strict';
+  if (typeof define === 'function' && define.amd) {
+    // Register as an anonymous AMD module:
+    define([
+      'jquery',
+      'tmpl',
+      'load-image',
+      './jquery.fileupload-fp'
+      ], factory);
+  } else {
+    // Browser globals:
+    factory(
+      window.jQuery,
+      window.tmpl,
+      window.loadImage
+      );
+  }
+}(function ($, tmpl, loadImage) {
+  'use strict';
+
+  // Override the _startHandler method so that the start button is not disabled if the caption is empty
+  $.widget('blueimp.fileupload', $.blueimp.fileupload, {
+    _startHandler: function (e) {
+      e.preventDefault();
+
+      var button = $(e.currentTarget),
+      template = button.closest('.template-upload'),
+      data = template.data('data');
+      if (data && data.submit && !data.jqXHR && data.submit()) {
+        button.prop('disabled', true);
+      }
+    }
+
+  });
+
+}));
 
 jQuery(function () {
-    'use strict';
+  
+  'use strict';
 
-    // Initialize the jQuery File Upload widget:
-    jQuery('#fileupload').fileupload({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
-        //url: 'index.php?option=com_helloworld&task=images.upload'
-        //downloadTemplateId:null,
-        //uploadTemplateId:null,
+  // Initialize the jQuery File Upload widget:
+  jQuery('#fileupload').fileupload({
+    // Uncomment the following to send cross-domain cookies:
+    //xhrFields: {withCredentials: true},
+    //url: 'index.php?option=com_helloworld&task=images.upload'
+    //downloadTemplateId:null,
+    //uploadTemplateId:null,
+    maxFileSize:2000000,
+    singleFileUploads:true, 
+  }).bind('fileuploadsubmit', function (e, data) {
+    
+    var inputs = data.context.find(':input');
+    var labels = data.context.find('label');
 
-    });
-
-    // Enable iframe cross-domain access via redirect option:
-    jQuery('#fileupload').fileupload(
-        'option',
-        'redirect',
-        window.location.href.replace(
-            /\/[^\/]*$/,
-            '/cors/result.html?%s'
-        )
-    );
-
-        // Demo settings:
-        jQuery('#fileupload').fileupload('option', {
-            maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            process: [
-                {
-                    action: 'load',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
-                    maxFileSize: 20000000 // 20MB
-                },
-                {
-                    action: 'resize',
-                    maxWidth: 1440,
-                    maxHeight: 900
-                },
-                {
-                    action: 'save'
-                }
-            ]
-        });
-
-   
-
+    if (inputs.filter('[required][value=""]').first().focus().length) {
+      jQuery(inputs.filter('[required]')).addClass('invalid');
+      jQuery(labels).addClass('invalid');
+      
+      return false;
+    } 
+    
+    data.formData = inputs.serializeArray();
+  });
 });
+
+
