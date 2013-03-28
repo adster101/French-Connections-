@@ -9,6 +9,48 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
+ table.table tr.template-upload td {
+   display:inline-block;
+   min-width:130px;
+   padding:0;
+ }
+ 
+ .files .progress {
+   width:100%;
+ }
+ 
+ table.table tr.template-upload td.preview .progress {
+   margin-bottom:0;
+ }
+ 
+table.table tr.template-upload {
+  display: inline-block;
+  width: 150px;
+  margin-right: 10px;
+  position:relative;
+} 
+
+table.table tr.template-upload td {
+  background:none;
+  border-top:none;
+}
+
+table.table tr.template-upload td.start {
+  display:none;
+}
+
+table.table tr.template-upload td.cancel {
+  position:absolute;
+  left:120px;
+  top:-5px;
+  
+  
+}
+
+table.table tr.template-upload td.preview span img {
+  border:5px solid #fff;
+}
+
 
 .fileinput-button {
   position: relative;
@@ -32,11 +74,9 @@
 .fileupload-buttonbar .toggle {
   margin-bottom: 5px;
 }
-.files .progress {
-  width: 200px;
-}
+
 .progress-animated .bar {
-  background: url(../img/progressbar.gif) !important;
+  background: url(/media/fc/css/images/progressbar.gif) !important;
   filter: none;
 }
 .fileupload-loading {
@@ -44,7 +84,7 @@
   left: 50%;
   width: 128px;
   height: 128px;
-  background: url(../img/loading.gif) center no-repeat;
+  background: url(/media/fc/css/images/loading.gif) center no-repeat;
   display: none;
 }
 .fileupload-processing .fileupload-loading {
@@ -70,7 +110,7 @@
     display: none;
   }
   .files .preview * {
-    width: 40px;
+    width: 80px;
   }
   .files .name * {
     width: 80px;
