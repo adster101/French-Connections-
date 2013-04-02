@@ -16,15 +16,20 @@ class HelloWorldViewImages extends JViewLegacy
 	 */
 	public function display($tpl = null) 
 	{
-		// Get the property ID we are editing.
+
+    // Get the property ID we are editing.
 		$this->item->id = JRequest::getVar('id');
+    $app = JFactory::getApplication();
 	   
     // Get the item data
-    $item = $this->get('Item');
+    $items = $this->get('Items');
 
     // Assign the Item
-		$this->item = $item;
-    	 
+		$this->items = $items;
+
+    // Get the state
+    $this->state = $this->get('State');   		
+   	 
 		// Display the template
 		parent::display($tpl);
  

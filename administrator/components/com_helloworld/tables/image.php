@@ -133,10 +133,7 @@ class HelloWorldTableImage extends JTable
    * @return boolean 
    */
   public function check($images= array()) {
-    if (!count($images)) {
-      return false;
-      
-    }
+    
     return true;
   }
   

@@ -12,10 +12,6 @@ jimport('joomla.filesystem.file');
 // require helper file
 require_once('administrator/components/com_media/helpers/media.php');
 
-class HelloWorldUpload extends MediaHelper {
-  
-}
-
 /**
  * HelloWorld Controller
  */
@@ -149,7 +145,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
     $app = JFactory::getApplication();
 
-    // Check that this user is authorised to edit (i.e. owns) this this property
+    // Check that this user is authorised to edit (i.e. owns) this this asset
     if (!$this->allowEdit()) {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld' . $this->getRedirectToListAppend(), false));
@@ -204,9 +200,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_DELETE_PROBLEM_FETCHING_IMAGE_DETAILS'), 'message');
     }
 
-
-
-
     // Set the redirection once the delete has completed...
     $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=images.edit' . $this->getRedirectToItemAppend($id, 'id'), false));
   }
@@ -214,11 +207,14 @@ class HelloWorldControllerImages extends JControllerAdmin {
   function upload() {
 
     // Get the app and user instances
-    $app = JFactory::getApplication();
+    $app = JFactory::getApplication($initialise = false);
     $user = JFactory::getUser();
 
     // Get the id, which is the unit ID we are uploading the image against
     $unit_id = $app->input->get('id', '', 'GET', 'int');
+
+    // Set the filepath for the images to be moved into
+    $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
 
     // An array to hold the that are good to save against the property
     $images = array();
@@ -236,38 +232,38 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $params = JComponentHelper::getParams('com_media');
 
     // Get some data from the request
-    $upload = JRequest::getVar('jform', '', 'files', 'array');
+    $files = JRequest::getVar('jform', '', 'files', 'array');
 
-    // Check the total size of files being uploaded. If it's too large we just exit?
-    if ($_SERVER['CONTENT_LENGTH'] > ($params->get('upload_maxsize', 0) * 1024 * 1024) ||
-            $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('upload_max_filesize')) * 1024 * 1024 ||
-            $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('post_max_size')) * 1024 * 1024 ||
-            $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('memory_limit')) * 1024 * 1024) {
-      // Not acceptable. Too large a total file size.
-      // return an error message and ...
-      $general_error[]['error'][] = JText::_('COM_HELLOWORLD_IMAGES_TOTAL_FILE_SIZE_TOO_LARGE');
-      echo json_encode($general_error);
-      jexit();
-    }
     // Input is in the form of an associative array containing numerically indexed arrays - passed in from PHP/Apache in this format?
     // We want a numerically indexed array containing associative arrays
     // Cast each item as array in case the Filedata parameter was not sent as such
-    $upload = array_map(array($this, 'reformatFilesArray'), (array) $upload['name'], (array) $upload['type'], (array) $upload['tmp_name'], (array) $upload['size']
+    $uploaded_file = array_map(
+            array($this, 'reformatFilesArray'), (array) $files['name'], (array) $files['type'], (array) $files['tmp_name'], (array) $files['size']
     );
 
     // Set FTP credentials, if given
     JClientHelper::setCredentialsFromRequest('ftp');
     JPluginHelper::importPlugin('content');
+
     $dispatcher = JDispatcher::getInstance();
 
-    // Loop over each file in the files array and do some checking, if the file checks out we proceed to transfer it to the relevant folder
-    foreach ($upload as &$file) {
+    foreach ($uploaded_file as &$file) {
 
-      // Firstly check if the image already exists...if it does we don't want to upload it agin
-      if (JFile::exists($file['filepath'])) {
-        // A file with this name already exists
-        $file['error'][] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_ALREADY_EXISTS');
+      // Initialise an error component of the $upload_file array
+      $file['error'] = '';
+
+      // Perform some validation on the file, this would be better wrapped into a simple class file
+      // Check the total size of files being uploaded. If it's too large we just exit?
+      if (
+              $_SERVER['CONTENT_LENGTH'] > ($params->get('upload_maxsize', 0) * 1024 * 1024) ||
+              $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('upload_max_filesize')) * 1024 * 1024 ||
+              $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('post_max_size')) * 1024 * 1024 ||
+              $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('memory_limit')) * 1024 * 1024) {
+        // Not acceptable. Too large a total file size.
+        // return an error message and ...
+        $file['error'] = JText::_('COM_HELLOWORLD_IMAGES_TOTAL_FILE_SIZE_TOO_LARGE');
       }
+
 
       // Check that it has a valid name
       if (!isset($file['name'])) {
@@ -283,7 +279,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
         // The file can't be uploaded
         $file['error'][] = JText::_($err);
       }
-      
+
 
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
       if (empty($file['error'])) {
@@ -301,34 +297,52 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['url'] = JURI::root() . 'images/property/' . $unit_id . '/' . $file['name'];
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
-        $file['parent_id'] = $unit_id;
-        $file['delete_url'] = 'some_url';
+        $file['property_id'] = $unit_id;
+        $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
+        $file['message'] = empty($file['error']) ? JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
+        $file['thumbnail_url'] = '';
+        
+        // Get an instance of the images model file so we can load the existing images for this unit
+        // primarily so we can get the ordering 
+        $model = $this->getModel('Images');
+        
+        $existing_images = $model->getItems();
+
+        if (empty($existing_images)) {
+          $ordering = 1;
+        } else {
+          
+          $last = array_pop($existing_images);
+          $ordering = $last->ordering + 1;
+        }
+        
+        // Set the ordering on the image being uploaded
+        $file['ordering'] = $ordering; 
+        
+        
+        // Load the relevant model(s) so we can save the data back to the db
+        $model = $this->getModel('Image');
+
+        
+        
+        // If we are happy to save and have something to save
+        if (!$model->save($file)) {
+          $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_SAVE_FILE');
+        }
+        
+        
+        
       }
     }
 
-    // Lastly, loop over the $upload array (again) 
-    foreach ($upload as &$file) {
 
-      // If the image uploaded correctly there won't be any errors
-      if (empty($file['error'])) {
 
-        // Add a success message to the file item and then add this to an images array 
-        $file['message'] = JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED');
-        $images[] = $file;
-      }
-    }
 
-    // Load the relevant model(s) so we can save the data back to the db
-    $model = $this->getModel('Image');
-    
-    // If we are happy to save and have something to save
-    $model->save($upload);
-    
     $files = array();
-    
-    $files['files'] = $upload;
-   
+
+    $files['files'] = $uploaded_file;
+
     echo json_encode($files);
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
@@ -348,7 +362,8 @@ class HelloWorldControllerImages extends JControllerAdmin {
    * @access	protected
    */
   protected function reformatFilesArray($name, $type, $tmp_name, $size) {
-    $name = JFile::makeSafe($name);
+    // Prepend a unique ID to the filename so that all files have a unique name.
+    $name = uniqid() . '-' . JFile::makeSafe($name);
     return array(
         'name' => $name,
         'type' => $type,
@@ -359,3 +374,4 @@ class HelloWorldControllerImages extends JControllerAdmin {
   }
 
 }
+

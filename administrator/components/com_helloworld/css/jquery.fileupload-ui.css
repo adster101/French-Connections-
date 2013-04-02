@@ -9,7 +9,10 @@
  * Licensed under the MIT license:
  * http://www.opensource.org/licenses/MIT
  */
- table.table tr.template-upload td {
+
+
+ table.table tr.template-upload td,
+table.table tr.template-download td {
    display:inline-block;
    min-width:130px;
    padding:0;
@@ -23,14 +26,16 @@
    margin-bottom:0;
  }
  
-table.table tr.template-upload {
+table.table tr.template-upload,
+table.table tr.template-download {
   display: inline-block;
   width: 150px;
   margin-right: 10px;
   position:relative;
 } 
 
-table.table tr.template-upload td {
+table.table tr.template-upload td,
+table.table tr.template-download td{
   background:none;
   border-top:none;
 }

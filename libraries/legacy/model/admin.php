@@ -1020,8 +1020,7 @@ abstract class JModelAdmin extends JModelForm
 		catch (Exception $e)
 		{
 			$this->setError($e->getMessage());
-
-			return false;
+      return false;
 		}
 
 		$pkName = $table->getKeyName();

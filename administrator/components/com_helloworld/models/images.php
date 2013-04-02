@@ -23,7 +23,7 @@ class HelloWorldModelImages extends JModelList
     
     // Get the listing details from the session...
     $app = JFactory::getApplication();
-    $id = $app->input->get('listing_id','','int');
+    $id = $app->input->get('id','','int');
         
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
@@ -33,11 +33,15 @@ class HelloWorldModelImages extends JModelList
       id,
       property_id,
       image_file_name,
-      caption
+      caption,
+      ordering
     ');
     $query->from('#__property_images_library');
     
     $query->where('property_id = ' . (int) $id);
+    
+    $query->order('ordering','asc');
+    
     return $query;
 	}
   

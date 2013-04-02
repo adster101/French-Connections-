@@ -25,7 +25,7 @@ jQuery(function () {
     // Uncomment the following to send cross-domain cookies:
     //xhrFields: {withCredentials: true},
     //url: 'index.php?option=com_helloworld&task=images.upload'
-    downloadTemplateId:null,
+    //downloadTemplateId:null,
     //uploadTemplateId:null,
     previewMaxWidth:120,
     previewAsCanvas:false,
@@ -35,8 +35,42 @@ jQuery(function () {
     sequentialUploads:true,
     dropZone:dropZone
   }).bind('fileuploadalways', function (e,data){
-    //cleanup dropzone
-    console.log('Uploads done');
+    
+    
+    
+    // File has been uploaded, need to refresh the existing images list
+    try {
+      console.log(data.result.files[0]);
+      
+      if (!data.result.files[0].error.length) {
+        // Empty the exisiting image list
+        // Show a spinner bar
+        // Get the new list
+        // Show the new list
+        // Hide the spinner bar
+        
+        var property_id = data.result.files[0].property_id;
+        
+        jQuery.get(
+          "/administrator/index.php?option=com_helloworld&view=images&layout=image_list&format=raw",
+          {
+            id:property_id
+          })
+        .done(function(data) {
+           jQuery('.ui-sortable').empty();
+           jQuery('.ui-sortable').html(data);
+         });
+      }  
+    } catch(err) {
+      console.log(err.message);
+    }
+
+    
+   
+    
+    
+    
+    
   });
 });
 // Prevent the default browser drag drop behaviour 

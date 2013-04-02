@@ -625,6 +625,7 @@ abstract class JTable extends JObject
 
 		// Check for an error.
 		$error = $asset->getError();
+    
 		if ($error)
 		{
 			$this->setError($error);
