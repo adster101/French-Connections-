@@ -74,22 +74,17 @@ class HelloWorldViewImages extends JViewLegacy
 			$dhtml = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"btn btn-small btn-success\">
 						<i class=\"icon-plus icon-white\" title=\"$title\"></i>
 						$title</button>";
-			$bar->appendButton('Custom', $dhtml, 'upload');
-			JToolbarHelper::divider();
+			//$bar->appendButton('Custom', $dhtml, 'upload');
+			
 		}    
     
-    if ($canDo->get('helloworld.images.delete')) {
-      JToolBarHelper::deleteList(JText::_('COM_HELLOWORLD_IMAGES_ARE_YOU_SURE'),'images.delete');      
-    }
-    
-    if ($canDo->get('helloworld.images.edit')) {
-      JToolBarHelper::editList();
-    }
-    
+  
     
     
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
+
+    JToolBarHelper::help('', '');
  
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {

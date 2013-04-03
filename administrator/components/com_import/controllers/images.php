@@ -284,7 +284,6 @@ class ImportControllerImages extends JControllerForm {
                   $new->toFile($folder . '/' . $previous_property_id . '/thumbs/' . $image['image_file_name']);
                 }
 
-
                 // If the image is less than 550 wide then we want to create a white image and merge the two
                 if ($width < 550) {
 
@@ -303,6 +302,8 @@ class ImportControllerImages extends JControllerForm {
 
                   // Save it out
                   imagejpeg($blank_image, $folder . '/' . $previous_property_id . '/gallery/' . str_replace('.', '_550x375.', $image['image_file_name']), 100);
+               
+                  
                 } else {
 
                   $imgObj->createThumbs('550x375', 4, $folder . '/' . $previous_property_id . '/gallery/');

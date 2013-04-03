@@ -76,7 +76,7 @@ $data = JApplication::getUserState('listing', '');
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                   <i class="icon-plus icon-white"></i>
-                  <span>Add files...</span>
+                  <span>Add files to upload</span>
                   <input type="file" name="jform[files]" multiple>
                 </span>
                 <!--<button type="button" class="btn btn-danger delete">
@@ -125,20 +125,15 @@ $data = JApplication::getUserState('listing', '');
         <tr class="template-upload fade">
           <td class="preview">
             <span class="fade"></span>
-            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
           </td>
-          <!--<td class="name"><span>{%=file.name%}</span></td>
-          <td class="size">
-            <span>{%=o.formatFileSize(file.size)%}</span>
-          </td>-->
-          <!--<td class="title">
-            <label><?php //echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL'); ?>
-              <input type="text" name="title" required="required" class="required input-large" aria-invalid="false" value="Fuckwit" /></label>
-          </td>-->
+          <td class="name"><span>{%=file.name%}</span> - <span>{%=o.formatFileSize(file.size)%}</span></td>
+
           {% if (file.error) { %}
           <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
           {% } else if (o.files.valid && !i) { %}
-    
+          <td>
+            <div class="progress progress-success progress-striped active" style="margin-bottom:0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+          </td>    
           <td class="start">{% if (!o.options.autoUpload) { %}
             <button class="btn btn-primary start">
               <i class="icon-upload icon-white"></i>
@@ -146,11 +141,14 @@ $data = JApplication::getUserState('listing', '');
             </button>
             {% } %}</td>
           {% } else { %}
-          <td colspan="2"></td>
+          <td colspan="2">
+
+          </td>
           {% } %}
+
           <td class="cancel">{% if (!i) { %}
-            <button class="btn btn-small btn-warning">
-              <span>&times;</span>
+            <button class="close pull-right">
+              &times;
             </button>
             {% } %}</td>
         </tr>
@@ -178,7 +176,7 @@ $data = JApplication::getUserState('listing', '');
           {% } %}
           </script>   
           
-          <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
+          <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
             <fieldset>
               <legend>
                 <?php echo JText::_('COM_HELLOWORLD_IMAGES_EXISTING_IMAGE_LIST'); ?>
@@ -187,56 +185,27 @@ $data = JApplication::getUserState('listing', '');
                 <thead>
                   <tr>
                     <th width="3%" class="nowrap  hidden-phone">
-                      <?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_ORDERING'); ?>              
                     </th>
                     <th width="3%">
                       <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
                     </th>			
                     <th width="10%">
-                      <?php echo JText::_('COM_HELLOWORLD_THUMBNAIL'); ?>              
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_THUMBNAIL'); ?>              
                     </th>
                     <th width="25%">
-                      <?php echo JText::_('COM_HELLOWORLD_OFFERS_HEADING_GREETING'); ?>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION'); ?>
                     </th>
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_IMAGES_CHOOSE_THUMBNAIL'); ?>
                     </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_DELETE_IMAGE'); ?>
+                    </th>
                   </tr>
                 </thead>
-                <?php
-                $listOrder = $this->escape($this->state->get('list.ordering'));
-                $user = JFactory::getUser();
-                $userId = $user->id;
-                $groups = $user->getAuthorisedGroups();
-                $ordering = ($listOrder == 'a.lft');
-                $originalOrders = array();
-
-                foreach ($this->items as $i => $item):
-                  ?>
-                  <tr>
-                    <td>
-                      <span class="sortable-handler hasTooltip <?php //echo $disableClassName;          ?>" title="<?php //echo $disabledLabel;          ?>">
-                        <i class="icon-move"></i>
-                      </span>
-                      <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
-                    </td>
-                    <td class="hidden-phone">
-                      <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-                    </td>
-                    <td> 
-                      <img width="75" src="<?php echo '/images/property/' . (int) $this->items[0]->property_id . '/thumbs/' . $item->image_file_name; ?>" />
-                    </td>
-                    <td>         
-                      <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=image.edit&layout=update&id=' . (int) $item->id) ?>">
-                        <?php echo $this->escape($item->caption); ?>
-                      </a>
-                    </td>
-                    <td>
-                      <input type="radio" name="image_id[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
-                    </td>
-                  </tr>				
-
-                <?php endforeach; ?>
+                  <?php echo $this->loadTemplate('image_list'); ?>
+              
 
                 <tr>
                   <td colspan="7">
@@ -272,3 +241,6 @@ $data = JApplication::getUserState('listing', '');
 
       </div>
     </div>
+<div id="dialog-confirm">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+</div>

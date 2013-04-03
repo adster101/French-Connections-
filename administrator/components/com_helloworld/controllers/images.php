@@ -142,68 +142,52 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
-
+    
+    // Get the application instance
     $app = JFactory::getApplication();
-
+    
+    // Get the model instance??
+    $model = $this->getModel('Image','HelloWorldModel');
+    
+    //
     // Check that this user is authorised to edit (i.e. owns) this this asset
     if (!$this->allowEdit()) {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld' . $this->getRedirectToListAppend(), false));
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $property_id, false));
       return false;
     }
 
     // Get the property ID from the GET variable
-    $id = JRequest::getVar('id', '', 'GET', 'int');
+    $property_id = JRequest::getVar('property_id', '', 'GET', 'int');
 
 
 
     // Get the image file ID of which we need to delete
-    $file_id = JRequest::getVar('file', '', 'GET', 'int');
+    $file_id = JRequest::getVar('id', '', 'GET', 'int');
 
     // Let's delete this puppy...first we need to get the file details
-    JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
-    $table = JTable::getInstance('Images', 'HelloWorldTable');
+    $table = $model->getTable();
 
-    // Get the image details
-    if ($table->load($file_id)) {
 
-      // Name of the image to remove
-      $file = $table->image_file_name;
-
-      if ($file !== JFile::makeSafe($file)) {
-        // filename is not safe
-        $filename = htmlspecialchars($path, ENT_COMPAT, 'UTF-8');
-        Error::raiseWarning(100, JText::sprintf('COM_MEDIA_ERROR_UNABLE_TO_DELETE_FILE_WARNFILENAME', substr($filename, strlen(COM_IMAGE_BASE))));
-      }
-
-      $fullPaths = array();
-      // Create a path to delete the image and each of the profile images that would've been created
-      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, $file)));
-      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, 'gallery', $file)));
-      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, 'thumbs', $file)));
-      $fullPaths[] = JPath::clean(implode('/', array(COM_IMAGE_BASE, $id, 'thumb', $file)));
-
-      // Loop over each file path
-      foreach ($fullPaths as $path) {
-        if (is_file($path)) {
-          JFile::delete($path);
-          $app = JFactory::getApplication();
-        }
-      }
 
       $del = $table->delete($file_id);
 
       // Also need to check and delete this from the gallery_images table if 
       // Set the message
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
-    } else {
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_DELETE_PROBLEM_FETCHING_IMAGE_DETAILS'), 'message');
-    }
+   
 
     // Set the redirection once the delete has completed...
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=images.edit' . $this->getRedirectToItemAppend($id, 'id'), false));
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $property_id, false));
   }
 
+  /*
+   * Action to handle uploading of images from the unit image gallery
+   * 
+   * TODO - Make this code more resuable...
+   * 
+   */
+  
   function upload() {
 
     // Get the app and user instances
@@ -280,18 +264,16 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['error'][] = JText::_($err);
       }
 
-
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
       if (empty($file['error'])) {
-
-        // Create a new JObject to 
-        $object_file = new JObject($file);
 
         // Move the file from the tmp location to the property image folder
         if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
           // Error in upload
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE');
         }
+        
+    
 
         // Add the url to the uploaded files array
         $file['url'] = JURI::root() . 'images/property/' . $unit_id . '/' . $file['name'];
@@ -301,7 +283,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
-        $file['thumbnail_url'] = '';
+        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
         
         // Get an instance of the images model file so we can load the existing images for this unit
         // primarily so we can get the ordering 
@@ -320,18 +302,19 @@ class HelloWorldControllerImages extends JControllerAdmin {
         // Set the ordering on the image being uploaded
         $file['ordering'] = $ordering; 
         
+        // Image has been uploaded, let's create some image profiles...
+        $model->generateImageProfile($file['filepath'], (int) $file['property_id'],$file['image_file_name'],'gallery', 578,435);
+        $model->generateImageProfile($file['filepath'], (int) $file['property_id'],$file['image_file_name'],'thumbs', 100,100);
+        $model->generateImageProfile($file['filepath'], (int) $file['property_id'],$file['image_file_name'],'thumb', 210,120);
         
         // Load the relevant model(s) so we can save the data back to the db
         $model = $this->getModel('Image');
-
         
-        
+       
         // If we are happy to save and have something to save
         if (!$model->save($file)) {
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_SAVE_FILE');
         }
-        
-        
         
       }
     }

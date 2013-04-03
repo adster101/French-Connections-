@@ -27,22 +27,36 @@ jQuery(function () {
     //url: 'index.php?option=com_helloworld&task=images.upload'
     //downloadTemplateId:null,
     //uploadTemplateId:null,
-    previewMaxWidth:120,
+    previewMaxWidth:230,
     previewAsCanvas:false,
     previewMaxHeight:120,
-    maxFileSize:2000000,
+    maxFileSize:4000000,
     singleFileUploads:true, 
     sequentialUploads:true,
     dropZone:dropZone
-  }).bind('fileuploadalways', function (e,data){
+  }).bind('fileuploaddone', function (e,data){
+    
+                
     
     
     
     // File has been uploaded, need to refresh the existing images list
     try {
-      console.log(data.result.files[0]);
       
       if (!data.result.files[0].error.length) {
+                        
+                            jQuery("#fc-message")
+                              .addClass("alert alert-success show")
+                              .html(data.result.files[0].message);
+
+                            // Will be the place to alert about submitting for approval etc
+                        
+                        
+                       
+                   
+                       
+        
+        
         // Empty the exisiting image list
         // Show a spinner bar
         // Get the new list
@@ -52,15 +66,17 @@ jQuery(function () {
         var property_id = data.result.files[0].property_id;
         
         jQuery.get(
-          "/administrator/index.php?option=com_helloworld&view=images&layout=image_list&format=raw",
+          "/administrator/index.php?option=com_helloworld&view=images&layout=default_image_list&format=raw",
           {
             id:property_id
           })
         .done(function(data) {
-           jQuery('.ui-sortable').empty();
-           jQuery('.ui-sortable').html(data);
-         });
-      }  
+          jQuery('.ui-sortable').empty();
+          jQuery('.ui-sortable').html(data);
+        });
+      } else {
+        
+      } 
     } catch(err) {
       console.log(err.message);
     }
@@ -71,11 +87,24 @@ jQuery(function () {
     
     
     
-  });
+  }).bind('fileuploadadd', function (e,data){
+    
+    
+    });
 });
 // Prevent the default browser drag drop behaviour 
 jQuery(function(){
   jQuery(document).bind('drop dragover', function (e) {
     e.preventDefault();
   });  
+  
+  jQuery('.delete').on('click', function(event) {
+    
+    
+    if (!confirm("Really delete?")) {  event.preventDefault() };
+      
+    
+    
+  })
+  
 })

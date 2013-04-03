@@ -42,7 +42,8 @@ $units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
 
 ?>
-
+<div id="fc-message" class="hide alert">
+</div>
 <?php if ($view == 'property' && !$property_details) : ?>
   <div class="alert alert-info">
     <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>  
