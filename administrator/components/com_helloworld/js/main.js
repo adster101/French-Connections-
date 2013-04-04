@@ -46,15 +46,12 @@ jQuery(function () {
       if (!data.result.files[0].error.length) {
                         
         jQuery("#fc-message")
-        .addClass("alert alert-success show")
-        .html(data.result.files[0].message);
+          .addClass("alert alert-success show")
+          .html(data.result.files[0].message);
 
         // Will be the place to alert about submitting for approval etc
                         
-                        
-                       
-                   
-                       
+                                            
         
         
         // Empty the exisiting image list
