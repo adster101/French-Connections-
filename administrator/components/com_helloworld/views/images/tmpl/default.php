@@ -12,12 +12,14 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.multiselect');
+
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 
 $saveOrder = true;
+
 if ($saveOrder) {
-  $saveOrderingUrl = 'index.php?option=com_content&task=articles.saveOrderAjax&tmpl=component';
+  $saveOrderingUrl = 'index.php?option=com_helloworld&task=images.saveOrderAjax&tmpl=component';
   JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
@@ -29,23 +31,7 @@ $id = $input->get('id', '', 'int');
 
 $data = JApplication::getUserState('listing', '');
 ?>
-<script type="text/javascript">
-  Joomla.orderTable = function()
-  {
-    table = document.getElementById("sortTable");
-    direction = document.getElementById("directionTable");
-    order = table.options[table.selectedIndex].value;
-    if (order != '<?php echo $listOrder; ?>')
-    {
-      dirn = 'asc';
-    }
-    else
-    {
-      dirn = direction.options[direction.selectedIndex].value;
-    }
-    Joomla.tableOrdering(order, dirn, '');
-  }
-</script>
+
 <div class="row-fluid">
 
   <?php if (!empty($this->sidebar)): ?>
@@ -53,7 +39,7 @@ $data = JApplication::getUserState('listing', '');
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="j-main-container" class="span7">
+    <div id="j-main-container" class="span8">
     <?php else : ?>
       <div id="j-main-container" class="span10">
       <?php endif; ?>
@@ -78,7 +64,14 @@ $data = JApplication::getUserState('listing', '');
                   <i class="icon-plus icon-white"></i>
                   <span>Add files to upload</span>
                   <input type="file" name="jform[files]" multiple>
-                </span>
+                </span> <button type="submit" class="btn btn-primary start">
+                  <i class="icon-upload icon-white"></i>
+                  <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                  <i class="icon-trash icon-white"></i>
+                  <span>Cancel upload</span>
+                </button>
                 <!--<button type="button" class="btn btn-danger delete">
                   <i class="icon-trash icon-white"></i>
                   <span>Delete</span>
@@ -102,16 +95,7 @@ $data = JApplication::getUserState('listing', '');
                     <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
                   </table> 
                 </div>
-                <div class="pull-right">
-                <button type="submit" class="btn btn-primary start">
-                  <i class="icon-upload icon-white"></i>
-                  <span>Start upload</span>
-                </button>
-                <button type="reset" class="btn btn-warning cancel">
-                  <i class="icon-trash icon-white"></i>
-                  <span>Cancel upload</span>
-                </button>
-                </div>
+
               </div>
             </div>
           </fieldset>
@@ -184,38 +168,32 @@ $data = JApplication::getUserState('listing', '');
               <table id="articleList" class="table table-striped">
                 <thead>
                   <tr>
-                    <th width="3%" class="nowrap  hidden-phone">
+                    <th class="nowrap  hidden-phone">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_ORDERING'); ?>              
-                    </th>
-                    <th width="3%">
-                      <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
-                    </th>			
-                    <th width="10%">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_THUMBNAIL'); ?>              
-                    </th>
-                    <th width="25%">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION'); ?>
-                    </th>
+                    </th>	
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_IMAGES_CHOOSE_THUMBNAIL'); ?>
                     </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_THUMBNAIL'); ?>              
+                    </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION'); ?>
+                    </th>
+
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_DELETE_IMAGE'); ?>
                     </th>
                   </tr>
                 </thead>
+                <tbody class="ui-sortable">
                   <?php echo $this->loadTemplate('image_list'); ?>
+                </tbody>
               
-
-                <tr>
-                  <td colspan="7">
-                  </td>
-                </tr>
 
 
 
                 <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
-                <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
 
 
               </table>
@@ -227,7 +205,7 @@ $data = JApplication::getUserState('listing', '');
 
         </div>
 
-        <div class="span3">
+        <div class="span2">
           <div class="well well-small">
             <h3>Image upload notes</h3>
             <ul>
@@ -241,6 +219,3 @@ $data = JApplication::getUserState('listing', '');
 
       </div>
     </div>
-<div id="dialog-confirm">
-  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
-</div>

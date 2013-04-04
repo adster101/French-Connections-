@@ -53,18 +53,21 @@ class HelloWorldControllerImages extends JControllerAdmin {
    * @since   1.6
    */
   protected function allowEdit($data = array(), $key = 'id') {
+
     // Initialise variables.
     $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
 
     $user = JFactory::getUser();
 
     $userId = $user->get('id');
+
     // This covers the case where the user is creating a new property (i.e. id is 0 or not set
     if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
       return true;
     }
 
     // Check general edit permission first.
+    // User can edit anything in this extension
     if ($user->authorise('core.edit', $this->extension)) {
       return true;
     }
@@ -77,7 +80,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
       if (empty($ownerId) && $recordId) {
         // Need to do a lookup from the model.
-        $model = $this->getModel('Property');
+        $model = $this->getModel('Unit');
         $record = $model->getItem($recordId);
 
         if (empty($record)) {
@@ -100,55 +103,71 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
 
+    // Set up some arrays
+    // Data is used to check the ownership and also passed to the model save method...
+    $data = array();
+    
+    // Response is used to send a message back to the client
+    $response = array();
+
+    // Get the input data
     $app = JFactory::getApplication();
-
+    $input = $app->input;
+    
+    // Get the file ID from the GET variable
+    $id = JRequest::getVar('id', '', 'GET', 'int');   
+   
     // Check that this user is authorised to edit (i.e. owns) this this property
-    if (!$this->allowEdit()) {
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld' . $this->getRedirectToListAppend(), false));
-      return false;
+    if (!$this->allowEdit($data, 'property_id')) 
+    {
+      $response = JText::_('NOT_AUTHORISED');
+      echo $response;
+      jexit(); // Exit this request now as results passed back to client via xhr transport.    
+     
     }
+    
+    // Build up the data 
+    $data['property_id'] = $input->get('property_id', '', 'int');
+    $data['caption'] = $input->get('caption','','string');
+    $data['id'] = $input->get('id','','int');
+    
+    // Need to ensure the caption is filtered at some point
 
-    // Get the property ID from the GET variable
-    $id = JRequest::getVar('id', '', 'GET', 'int');
+    // Load the relevant model(s) so we can save the data back to the db
+    $model = $this->getModel('Image','HelloWorldModel');
+    
+    // If we are happy to save and have something to save
+    if (!$model->save($data)) {
+      // Problem saving, oops
+      $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
+      echo $response;
+      jexit(); // Exit this request now as results passed back to client via xhr transport.    
 
-    // Get the image file ID of which we need to delete
-    $file_id = JRequest::getVar('file_id', '', 'GET', 'int');
-
-    // Get the caption, needs filtering
-    $raw = JRequest::getVar('jform', '', 'POST', 'array');
-
-    // Let's update this puppy...first we need to get the 
-    JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
-    $table = JTable::getInstance('Images', 'HelloWorldTable');
-
-    $table->id = $file_id;
-
-    // Bind the translated fields to the JTable instance	
-    if (!$table->bind($raw)) {
-      JError::raiseWarning(500, $table->getError());
-    } else {
-      $table->store($file_id);
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_CAPTION_SUCCESSFULLY_UPDATED'), 'message');
     }
+    
 
+    $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_UPDATED');
+    
+    echo $response;
+
+    jexit(); // Exit this request now as results passed back to client via xhr transport.    
+    
     // Log out to a file 
     // User ID updates caption ID from to on this 
     // Set the redirection once the delete has completed...
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&task=images.edit' . $this->getRedirectToItemAppend($id, 'id'), false));
   }
 
   function delete() {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
-    
+
     // Get the application instance
     $app = JFactory::getApplication();
-    
+
     // Get the model instance??
-    $model = $this->getModel('Image','HelloWorldModel');
-    
+    $model = $this->getModel('Image', 'HelloWorldModel');
+
     //
     // Check that this user is authorised to edit (i.e. owns) this this asset
     if (!$this->allowEdit()) {
@@ -170,12 +189,12 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
 
 
-      $del = $table->delete($file_id);
+    $del = $table->delete($file_id);
 
-      // Also need to check and delete this from the gallery_images table if 
-      // Set the message
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
-   
+    // Also need to check and delete this from the gallery_images table if 
+    // Set the message
+    $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
+
 
     // Set the redirection once the delete has completed...
     $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $property_id, false));
@@ -187,7 +206,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
    * TODO - Make this code more resuable...
    * 
    */
-  
+
   function upload() {
 
     // Get the app and user instances
@@ -272,8 +291,8 @@ class HelloWorldControllerImages extends JControllerAdmin {
           // Error in upload
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE');
         }
-        
-    
+
+
 
         // Add the url to the uploaded files array
         $file['url'] = JURI::root() . 'images/property/' . $unit_id . '/' . $file['name'];
@@ -284,38 +303,37 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
         $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
-        
+
         // Get an instance of the images model file so we can load the existing images for this unit
         // primarily so we can get the ordering 
         $model = $this->getModel('Images');
-        
+
         $existing_images = $model->getItems();
 
         if (empty($existing_images)) {
           $ordering = 1;
         } else {
-          
+
           $last = array_pop($existing_images);
           $ordering = $last->ordering + 1;
         }
-        
+
         // Set the ordering on the image being uploaded
-        $file['ordering'] = $ordering; 
-        
+        $file['ordering'] = $ordering;
+
         // Image has been uploaded, let's create some image profiles...
-        $model->generateImageProfile($file['filepath'], (int) $file['property_id'],$file['image_file_name'],'gallery', 578,435);
-        $model->generateImageProfile($file['filepath'], (int) $file['property_id'],$file['image_file_name'],'thumbs', 100,100);
-        $model->generateImageProfile($file['filepath'], (int) $file['property_id'],$file['image_file_name'],'thumb', 210,120);
-        
+        $model->generateImageProfile($file['filepath'], (int) $file['property_id'], $file['image_file_name'], 'gallery', 578, 435);
+        $model->generateImageProfile($file['filepath'], (int) $file['property_id'], $file['image_file_name'], 'thumbs', 100, 100);
+        $model->generateImageProfile($file['filepath'], (int) $file['property_id'], $file['image_file_name'], 'thumb', 210, 120);
+
         // Load the relevant model(s) so we can save the data back to the db
         $model = $this->getModel('Image');
-        
-       
+
+
         // If we are happy to save and have something to save
         if (!$model->save($file)) {
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_SAVE_FILE');
         }
-        
       }
     }
 
@@ -355,6 +373,39 @@ class HelloWorldControllerImages extends JControllerAdmin {
         'filepath' => JPath::clean(implode('/', array($this->folder, $name))),
     );
   }
+  
+	/**
+	 * Method to save the submitted ordering values for records via AJAX.
+	 *
+	 * @return  void
+	 *
+	 * @since   3.0
+	 */
+	public function saveOrderAjax()
+	{
+		$pks = $this->input->post->get('cid', array(), 'array');
+		$order = $this->input->post->get('order', array(), 'array');
 
+   
+		// Sanitize the input
+		JArrayHelper::toInteger($pks);
+		JArrayHelper::toInteger($order);
+
+		// Get the model
+		$model = $this->getModel('Image');
+
+		// Save the ordering
+		$return = $model->saveorder($pks, $order);
+
+		if ($return)
+		{
+			echo "1";
+		}
+
+		// Close the application
+		JFactory::getApplication()->close();
+	}
+  
+  
 }
 

@@ -45,11 +45,11 @@ jQuery(function () {
       
       if (!data.result.files[0].error.length) {
                         
-                            jQuery("#fc-message")
-                              .addClass("alert alert-success show")
-                              .html(data.result.files[0].message);
+        jQuery("#fc-message")
+        .addClass("alert alert-success show")
+        .html(data.result.files[0].message);
 
-                            // Will be the place to alert about submitting for approval etc
+        // Will be the place to alert about submitting for approval etc
                         
                         
                        
@@ -80,16 +80,9 @@ jQuery(function () {
     } catch(err) {
       console.log(err.message);
     }
-
-    
-   
-    
-    
-    
-    
   }).bind('fileuploadadd', function (e,data){
     
-    
+
     });
 });
 // Prevent the default browser drag drop behaviour 
@@ -101,10 +94,60 @@ jQuery(function(){
   jQuery('.delete').on('click', function(event) {
     
     
-    if (!confirm("Really delete?")) {  event.preventDefault() };
+    if (!confirm("Really delete?")) {
+      event.preventDefault()
+      };
       
     
     
+  });
+  
+  // Update the caption count and what not...
+  jQuery('.caption').each(function(){
+    
+    var that = this;    
+    var length = jQuery(that).find('input').val().length;
+    var input = jQuery(that).find('input[type=text]');
+
+    // Update the span element with the initial value of the caption
+    jQuery(that).find('span.caption-count').text(75 - length);  
+    
+    jQuery(input).on('keyup', function(event) {
+      
+      // On the keyup event, update the value of the span count element
+      var length = jQuery(that).find('input').val().length;
+
+      jQuery(that).find('span.caption-count').text(75 - length);
+    
+    });
   })
+  
+  // Bind a click event to the update-caption buttons
+  jQuery('.update-caption').each(function(){
+    
+    jQuery(this).on('click', function(event){
+      
+      event.preventDefault();
+
+      var that = this;
+      
+      // Update the caption via the GET ajax thingamy bob
+      var url = jQuery(this).attr('href');
+      var caption = jQuery(this).siblings('input[type=text]').val();
+
+        jQuery.get(
+          url,{
+            caption:caption
+          })
+        .done(function(data) {
+          // Update the caption bit with a message
+          jQuery(that).siblings('p').append(data);
+          jQuery('span.message').delay(5000).fadeOut(1000);
+          
+        });      
+      
+    })
+  })
+ 
   
 })
