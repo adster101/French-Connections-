@@ -295,8 +295,7 @@ abstract class HelloWorldHelper {
    */
   public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0) {
     // Init calendar string
-    $calendar = '';
-    $calendar.='<table class="avCalendar">';
+    $calendar = '<div class="row-fluid">';
     // Get now
     $now = time();
 
@@ -306,10 +305,7 @@ abstract class HelloWorldHelper {
 
     // The loop loops over some code which outputs a calendar. It does this $months times 
     for ($z = 0; $z <= $months; $z++) {
-      if ($z % 4 == 0) {
-        $calendar.="<tr>";
-      }
-      $calendar.="<td>";
+      $calendar.='<div class="span3" style="min-height:185px;"><div class="calendar-container">';
 
       $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
       #remember that mktime will automatically correct if invalid dates are entered 
@@ -324,15 +320,16 @@ abstract class HelloWorldHelper {
       $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day 
       $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names 
 
-      $calendar .= '<p class="month-year">' . $title . '</p>' . "\n" . '<table class="avCalendarMonth">' . "\n";
-
+      $calendar.= '<table class="table table-condensed avCalendar">' . "\n";
+      $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr>' . "\n";
       if ($day_name_length) { #if the day names should be shown ($day_name_length > 0) 
         #if day_name_length is >3, the full name of the day will be printed 
         foreach ($day_names as $d)
           $calendar .= '<th abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
-        $calendar .= "</tr>\n<tr>";
       }
-
+      
+      $calendar.="</tr></thead>";
+      
       if ($weekday > 0)
         $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>';#initial 'empty' days 
       for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++) {
@@ -345,25 +342,22 @@ abstract class HelloWorldHelper {
 
         if (array_key_exists($today, $availability)) {
           if ($availability[$today]) { // Availability is true, i.e. available
-            $calendar .= '<td class="available">' . $day . '</td>';
+            $calendar .= '<td data-date='.$today.' class="available"><a href="#">' . $day . '</td>';
           } else { // Availability is false i.e. unavailable
-            $calendar .= '<td class="unavailable">' . $day . '</td>';
+            $calendar .= '<td data-date='.$today.' class="unavailable"><a href="#">' . $day . '</a></td>';
           }
         } else { // Availability not defined for this day so we default to unavailable
-          $calendar .= '<td class="unavailable">' . $day . '</td>';
+          $calendar .= '<td data-date='.$today.' class="unavailable"><a href="#">' . $day . '</a></td>';
         }
       }
       if ($weekday != 7)
         $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days 
 
-      $calendar.="</table></td>";
-      if ($z % 4 == 3) {
-        $calendar.="</tr>";
-      }
+      $calendar.="</table></div></div>";
+    
       $month++;
     }
-    $calendar.="</table>";
-
+    $calendar.='</div>';
     return $calendar;
   }
 

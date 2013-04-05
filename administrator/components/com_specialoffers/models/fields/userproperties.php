@@ -56,8 +56,8 @@ class JFormFieldUserProperties extends JFormFieldList
 		// We don't want the property currently being edited
 	
 		if (in_array(10,$groups)) { // This user is in the property owner user group (10) or a super user.
-			$query->select('a.id, a.title,a.level'); 
-			$query->from('#__helloworld AS a');
+			$query->select('a.id, a.unit_title'); 
+			$query->from('#__property_units AS a');
 			$query->where('created_by = '.$user->id);		// Select only the props created by the user that created this property
 			
 			// Get the options.
@@ -69,8 +69,7 @@ class JFormFieldUserProperties extends JFormFieldList
       
 			foreach($properties as $property) 
 			{				
-        $property->title  = str_repeat('- ', $property->level).$property->title;
-				$options[] = JHtml::_('select.option', $property->id, $property->title);
+				$options[] = JHtml::_('select.option', $property->id, $property->unit_title);
 			}
 		} 
     

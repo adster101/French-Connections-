@@ -46,8 +46,8 @@ jQuery(function () {
       if (!data.result.files[0].error.length) {
                         
         jQuery("#fc-message")
-          .addClass("alert alert-success show")
-          .html(data.result.files[0].message);
+        .addClass("alert alert-success show")
+        .html(data.result.files[0].message);
 
         // Will be the place to alert about submitting for approval etc
                         
@@ -70,6 +70,10 @@ jQuery(function () {
         .done(function(data) {
           jQuery('.ui-sortable').empty();
           jQuery('.ui-sortable').html(data);
+          
+          // Bind the caption save event to the 
+          add_event_handlers();
+          
         });
       } else {
         
@@ -82,22 +86,29 @@ jQuery(function () {
 
     });
 });
-// Prevent the default browser drag drop behaviour 
+
+// When the Document is ready...
 jQuery(function(){
+   
+  // Prevent the default browser drag drop behaviour
   jQuery(document).bind('drop dragover', function (e) {
     e.preventDefault();
   });  
   
+  // Add the event handlers to the save caption and delete buttons
+  add_event_handlers();
+  
+})
+
+// Add the relevant event handlers to the save caption and delete buttons
+function add_event_handlers() {
+	var sortableList = new jQuery.JSortableList('#articleList tbody','adminForm','' , 'index.php?option=com_helloworld&task=images.saveOrderAjax&tmpl=component','','');
+    
   jQuery('.delete').on('click', function(event) {
-    
-    
     if (!confirm("Really delete?")) {
       event.preventDefault()
-      };
-      
-    
-    
-  });
+    };
+  });    
   
   // Update the caption count and what not...
   jQuery('.caption').each(function(){
@@ -132,19 +143,18 @@ jQuery(function(){
       var url = jQuery(this).attr('href');
       var caption = jQuery(this).siblings('input[type=text]').val();
 
-        jQuery.get(
-          url,{
-            caption:caption
-          })
-        .done(function(data) {
-          // Update the caption bit with a message
-          jQuery(that).siblings('p').append(data);
-          jQuery('span.message').delay(5000).fadeOut(1000);
+      jQuery.get(
+        url,{
+          caption:caption
+        })
+      .done(function(data) {
+        // Update the caption bit with a message
+        jQuery(that).siblings('p').append(data);
+        jQuery('span.message').delay(5000).fadeOut(1000);
           
-        });      
+      });      
       
     })
-  })
- 
-  
-})
+  })    
+    
+}

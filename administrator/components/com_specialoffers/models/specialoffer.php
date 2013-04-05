@@ -124,6 +124,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
   public function save($data) {
     
     $app = JFactory::getApplication();
+    
     // Get the user
     $user = JFactory::getUser();   
     
@@ -135,11 +136,12 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
     // Set the date created timestamp
     $data['date_created'] = $date->toSql();
 
-    // Need to assign a user who created this offer
+    // The user who created the offer needs to be the property/unit owner
     // Get an instance of the property table
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
-    $table = JTable::getInstance('Helloworld', 'HelloWorldTable');
-
+    
+    $table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+    
     // Get the user id for the owner of this property 
     $property = $table->load($property_id);
         

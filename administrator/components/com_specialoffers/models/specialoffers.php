@@ -97,13 +97,13 @@ class SpecialOffersModelSpecialOffers extends JModelList
       so.status,
       so.approved_by,
       so.approved_date,
-      hw.title as property_title
+      hw.unit_title as property_title
     ');
 		
 		// From the hello table
 		$query->from('#__special_offers so');
     
-    $query->leftJoin('#__helloworld hw on hw.id = so.property_id');
+    $query->leftJoin('#__property_units hw on hw.id = so.property_id');
     
     // Filter by published state
 		$published = $this->getState('filter.published');

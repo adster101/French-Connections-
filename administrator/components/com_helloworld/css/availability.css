@@ -1,44 +1,60 @@
 /* 
-	Availability calendar table styles 
+  Availability calendar table styles 
 */
 
-table.avCalendar td{
-	vertical-align:top;
+table.avCalendar a {
+  color:#333;
+}
 
+table.avCalendar td.available:hover, 
+table.avCalendar td.unavailable:hover {
+  cursor:pointer;
+}
+
+table.avCalendar td, 
+table.avCalendar th {
+  vertical-align:top;
+  padding:0;
+  text-align:center;
+  border:0;
+}
+
+.calendar-container {
+  padding: 4px;
+  margin-top: 1px;
+  z-index: 3000;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 table.avCalendarMonth {
-	border-collapse:collapse;
-	border: 1px solid #d7e1f2;	
+  border-collapse:collapse;
+  border: 1px solid #d7e1f2;	
 }
 
 table.avCalendarMonth th {
-	border-bottom: 1px solid #d7e1f2;
-	background-color: #f2f5f1;
-	padding:0 2px;
-	text-align:center;
+  border-bottom: 1px solid #d7e1f2;
+  background-color: #f2f5f1;
+  text-align:center;
 }
 
 .month-year {
-	background:#d7e1f2;
-	margin-bottom:0;
-	text-align:center;
-	font-weight:bold;
-}
-
-table.avCalendarMonth td {
-	padding:0 2px;
-	text-align:center;
+  background:#d7e1f2;
+  margin-bottom:0;
+  text-align:center;
+  font-weight:bold;
 }
 
 table.avCalendarMonth td.unknown {
-	color:#d7e1f2;
+  color:#d7e1f2;
 }
 
 td.unavailable {
-	color: #333; 
-	background-color: #ccc !important;
-	text-decoration:line-through;
+  color: #333; 
+  background-color: #ccc !important;
+  text-decoration:line-through;
 }
 
 .key tr {
@@ -52,6 +68,6 @@ td.unavailable {
   border:1px solid #D7E1F2;
   width:18px;
 }
- 
+
 
 

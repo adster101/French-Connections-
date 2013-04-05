@@ -65,14 +65,13 @@ class HelloWorldControllerImages extends JControllerAdmin {
     if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
       return true;
     }
-
+    
     // Check general edit permission first.
     // User can edit anything in this extension
     if ($user->authorise('core.edit', $this->extension)) {
       return true;
     }
-
-    // Fallback on edit.own.
+    
     // First test if the permission is available.
     if ($user->authorise('core.edit.own', $this->extension)) {
 
@@ -114,9 +113,11 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $app = JFactory::getApplication();
     $input = $app->input;
     
-    // Get the file ID from the GET variable
-    $id = JRequest::getVar('id', '', 'GET', 'int');   
-   
+    // Build up the data 
+    $data['property_id'] = $input->get('property_id', '', 'int');
+    $data['caption'] = $input->get('caption','','string');
+    $data['id'] = $input->get('id','','int'); 
+    
     // Check that this user is authorised to edit (i.e. owns) this this property
     if (!$this->allowEdit($data, 'property_id')) 
     {
@@ -126,10 +127,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
      
     }
     
-    // Build up the data 
-    $data['property_id'] = $input->get('property_id', '', 'int');
-    $data['caption'] = $input->get('caption','','string');
-    $data['id'] = $input->get('id','','int');
+
     
     // Need to ensure the caption is filtered at some point
 
@@ -164,40 +162,34 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
     // Get the application instance
     $app = JFactory::getApplication();
-
-    // Get the model instance??
-    $model = $this->getModel('Image', 'HelloWorldModel');
-
-    //
+    $input = $app->input;
+    
+    // Build up the data 
+    
+    $data['property_id'] = $input->get('property_id', '', 'int');
+    $data['id'] = $input->get('id','','int'); 
+   
     // Check that this user is authorised to edit (i.e. owns) this this asset
-    if (!$this->allowEdit()) {
+    if (!$this->allowEdit($data, 'property_id')) {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $property_id, false));
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $data['property_id'], false));
       return false;
     }
 
-    // Get the property ID from the GET variable
-    $property_id = JRequest::getVar('property_id', '', 'GET', 'int');
-
-
-
-    // Get the image file ID of which we need to delete
-    $file_id = JRequest::getVar('id', '', 'GET', 'int');
+    // Get the image model
+    $model = $this->getModel('Image', 'HelloWorldModel');
 
     // Let's delete this puppy...first we need to get the file details
     $table = $model->getTable();
 
-
-
-    $del = $table->delete($file_id);
-
-    // Also need to check and delete this from the gallery_images table if 
-    // Set the message
-    $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
-
-
+    if (!$table->delete($data['id'])) {
+       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'message');     
+    } else {
+      // Set the message
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
+    }
     // Set the redirection once the delete has completed...
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $property_id, false));
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $data['property_id'], false));
   }
 
   /*
@@ -230,7 +222,8 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
     }
-
+       
+    
     // Get the media component parameters
     $params = JComponentHelper::getParams('com_media');
 
@@ -282,15 +275,22 @@ class HelloWorldControllerImages extends JControllerAdmin {
         // The file can't be uploaded
         $file['error'][] = JText::_($err);
       }
-
+      
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
+      
       if (empty($file['error'])) {
-
+      
         // Move the file from the tmp location to the property image folder
         if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
           // Error in upload
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE');
         }
+      }
+        
+      // If there are no errors recorded for this file, we move it to the relevant folder for this property
+      if (empty($file['error'])) {
+
+
 
 
 

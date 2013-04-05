@@ -27,17 +27,19 @@ class HelloWorldViewAvailability extends JViewLegacy
 		$form = $this->get('Form');
 
 		// get an instance of the availability table
-		$table = $this->get('AvailabilityTable');
+		$availability = $this->get('Availability');
 		
-		// Get the actual availability for this property 
-		$this->availability = $table->load($this->item->id);	
-		
+    // Get the unit item we are editing the availability for...
+    $item = $this->get('Item');
+    			
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		}
+    
+    $this->availability = $availability;
     
 		// Get availability as an array of days
 		$this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability = $this->availability);
@@ -48,6 +50,9 @@ class HelloWorldViewAvailability extends JViewLegacy
 		// Assign the Data
 		$this->form = $form;
 		
+    // Assign the item
+    $this->item = $item;
+    
 		// Set the toolbar
 		$this->addToolBar();
 
@@ -69,24 +74,37 @@ class HelloWorldViewAvailability extends JViewLegacy
 		// Determine the layout we are using. 
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
-    
     $published = $this->form->getValue('published');
-
     
-		// Add the tabbed submenu for the property edit view.
-		HelloWorldHelper::addSubmenu($view, $published);
+    // Get component level permissions
+		$canDo = HelloWorldHelper::getActions();
 
-		$user = JFactory::getUser();
-		$userId = $user->id;
-		$isNew = $this->item->id == 0;
-		$canDo = HelloWorldHelper::getActions($this->item->id);
-		JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->form->getValue('title')), 'helloworld');
-		
-    // Built the actions for new and existing records.
+    // Get the listing details from the session...
+    $listing = JApplication::getUserState('listing', false);
+
+    JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+ 
+ 		$bar = JToolBar::getInstance('toolbar');
+
+	  // Built the actions for new and existing records.
 		JToolBarHelper::apply('availability.apply', 'JTOOLBAR_APPLY');	
+    
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-		JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
-
+		JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
+   
+    JToolBarHelper::help('', '');
+    
+    // Display a helpful navigation for the owners 
+    if ($canDo->get('helloworld.ownermenu.view')) {
+    
+      $view = strtolower(JRequest::getVar('view'));
+  
+      $canDo = HelloWorldHelper::addSubmenu($view);
+      
+      // Add the side bar
+      $this->sidebar = JHtmlSidebar::render();
+      
+    }
 	}
 	/**
 	 * Method to set up the document properties

@@ -5,23 +5,16 @@
 -->
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
   <fieldset name="additional-fields">
+ 
     <field 
       name="id"
-      type="text"
-      disabled="true"
-      default=""
-      label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
-      class="readonly"
-      description="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"/>
-    <field 
-      name="parent_id"
       type="hidden"
       default="">      
     </field>
     <field 
       name="title"
-      type="hidden"
-      default=""> 
+      type="text"
+      readonly="true"> 
 
     </field>
     
@@ -35,7 +28,19 @@
       type="hidden"
       filter="unset"/>
     
-  
+     <field
+			name="changeover_day"
+			type="attributetype"
+			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
+			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
+			class="required"
+			filter="int"
+      id="20"
+      placeholder="true"
+			required="true"
+			default="asdasd"
+      labelclass="control-label">
+		</field> 
   <field
       name="base_currency"
       labelclass="control-label"

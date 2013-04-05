@@ -19,25 +19,67 @@ class HelloWorldModelAvailability extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'PropertyUnits', $prefix = 'HelloWorldTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 	
 	/**
-	 * Returns a reference to the a Table object, always creating it.
+	 * Returns a the availability for this property
 	 *
-	 * @param	type	The table type to instantiate
-	 * @param	string	A prefix for the table class name. Optional.
-	 * @param	array	Configuration array for model. Optional.
-	 * @return	JTable	A database object
-	 * @since	1.6
 	 */
-	public function getAvailabilityTable($type = 'Availability', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getAvailability( $id = '' ) 
 	{
-		return JTable::getInstance($type, $prefix, $config);
+    
+    $id = (!empty($id)) ? $id : (int) $this->getState($this->getName() . '.id');
+    
+    $query = $this->getAvailabilityQuery($id);
+    
+    try
+		{
+      $this->_db->setQuery($query);
+      $result = $this->_db->loadObjectList();		
+    }
+    
+		catch (RuntimeException $e)
+		
+    {
+			$this->setError($e->getMessage());
+			return false;
+		}
+    
+    
+    return $result;
+		
 	}
 	
+  
+	/**
+	 * Method to generate a query to get the availability for a particular property
+   * 
+   * TO DO: Add a check to ensure that the user requesting the availability
+   * is the owner... 
+	 *
+	 * @param       int $id property id, not primary key in this case
+	 * @param       boolean $reset reset data
+	 * @return      boolean
+	 * @see JTable:load
+	 */
+	public function getAvailabilityQuery($id = null, $reset = true) 
+	{
+    // Create a new query object.		
+    $db = JFactory::getDBO();
+    $query = $db->getQuery(true);
+    
+		$query = $this->_db->getQuery(true);
+		$query->select('id, start_date, end_date, availability');
+		$query->from($this->_db->quoteName('#__availability'));
+		$query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
+		$this->_db->setQuery($query);
+		
+    return $query;
+    
+	}  
 	/**
 	 * Method to get the record form. 
 	 *

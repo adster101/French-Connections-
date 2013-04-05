@@ -1,53 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
-	<fieldset name="additional-fields">
-    <field 
-      name="id"
-      type="hidden"
-      default="">
-    </field>
-    <field 
-      name="parent_id"
-      type="hidden"
-      default="">      
-    </field>
-    <field 
-      name="title"
-      type="hidden"
-      default="">      
-    </field>
-      <field 
-      name="published"
-      type="hidden"
-      filter="unset"/>
-      
-    <field 
-      name="expiry_date"
-      type="hidden"
-      filter="unset"/>
-
-	</fieldset>
-  
-  <fieldset name="changeover-day">
-    <field
-			name="changeover_day"
-			type="attributetype"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
-			class="required"
-			filter="int"
-      id="20"
-      placeholder="true"
-			required="true"
-			default="asdasd"
-      labelclass="control-label">
-		</field>
-    
-  </fieldset>
   
 	<fieldset name="availability">
-          
-   
+         
 		<field
 			name="start_date"
 			type="calendar"
