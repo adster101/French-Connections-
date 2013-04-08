@@ -321,7 +321,7 @@ abstract class HelloWorldHelper {
       $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names 
 
       $calendar.= '<table class="table table-condensed avCalendar">' . "\n";
-      $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr>' . "\n";
+      $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr class="days">' . "\n";
       if ($day_name_length) { #if the day names should be shown ($day_name_length > 0) 
         #if day_name_length is >3, the full name of the day will be printed 
         foreach ($day_names as $d)
@@ -342,12 +342,12 @@ abstract class HelloWorldHelper {
 
         if (array_key_exists($today, $availability)) {
           if ($availability[$today]) { // Availability is true, i.e. available
-            $calendar .= '<td data-date='.$today.' class="available"><a href="#">' . $day . '</td>';
+            $calendar .= '<td data-date='.$today.' class="available small"><a href="#">' . $day . '</td>';
           } else { // Availability is false i.e. unavailable
-            $calendar .= '<td data-date='.$today.' class="unavailable"><a href="#">' . $day . '</a></td>';
+            $calendar .= '<td data-date='.$today.' class="unavailable small"><a href="#">' . $day . '</a></td>';
           }
         } else { // Availability not defined for this day so we default to unavailable
-          $calendar .= '<td data-date='.$today.' class="unavailable"><a href="#">' . $day . '</a></td>';
+          $calendar .= '<td data-date='.$today.' class="unavailable small"><a href="#">' . $day . '</a></td>';
         }
       }
       if ($weekday != 7)

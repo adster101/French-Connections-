@@ -118,7 +118,9 @@ class HelloWorldViewAvailability extends JViewLegacy
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/availability.js", false,true);
 		$document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/availability.css",'text/css',"screen");
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+		JText::script('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY_CHOOSE_START_DATE');
+		JText::script('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY_CHOOSE_END_DATE');
 	}
 }

@@ -5,25 +5,29 @@
          
 		<field
 			name="start_date"
-			type="calendar"
+			type="text"
 			label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
 			description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
 			size="40"
 			class="inputbox input-small"
 			validate=""
-			required="false"
-			default="">
+			required="true"
+			default=""
+      readonly="true"
+      labelclass="control-label">
     </field>
 		<field
 			name="end_date"
-			type="calendar"
+			type="text"
 			label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
 			description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
 			size="40"
 			class="inputbox input-small"
 			validate=""
-			required="false"
-			default="">
+			required="true"
+			default=""
+      readonly="true"  
+      labelclass="control-label">
     </field>
 		<field
 			name="availability"
@@ -33,7 +37,8 @@
 			class="required input-medium"
 			validate=""
 			required="true"
-			default=""
+			default=""      
+      labelclass="control-label"
       filter="int">
 				<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>

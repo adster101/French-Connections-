@@ -36,10 +36,6 @@ jQuery(function () {
     dropZone:dropZone
   }).bind('fileuploaddone', function (e,data){
     
-                
-    
-    
-    
     // File has been uploaded, need to refresh the existing images list
     try {
       
@@ -50,9 +46,6 @@ jQuery(function () {
         .html(data.result.files[0].message);
 
         // Will be the place to alert about submitting for approval etc
-                        
-                                            
-        
         
         // Empty the exisiting image list
         // Show a spinner bar

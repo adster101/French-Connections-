@@ -2,31 +2,44 @@
   Availability calendar table styles 
 */
 
-table.avCalendar a {
+table.avCalendar {
+  margin-bottom:0;
+}
+
+table.avCalendar td {
+  border:1px solid #fff;
+}
+
+table.avCalendar a,
+table.aCalendar a:hover {
   color:#333;
+  text-decoration:none;
+  margin:0 0px 0px 2px;
+  display:block;
+  height:35px;
 }
 
 table.avCalendar td.available:hover, 
 table.avCalendar td.unavailable:hover {
   cursor:pointer;
+  
 }
 
 table.avCalendar td, 
 table.avCalendar th {
   vertical-align:top;
   padding:0;
-  text-align:center;
-  border:0;
 }
 
 .calendar-container {
   padding: 4px;
-  margin-top: 1px;
+  margin-top: 18px;
   z-index: 3000;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  height:250px;
 }
 
 table.avCalendarMonth {
@@ -34,27 +47,47 @@ table.avCalendarMonth {
   border: 1px solid #d7e1f2;	
 }
 
-table.avCalendarMonth th {
+table.avCalendar tr.days {
   border-bottom: 1px solid #d7e1f2;
   background-color: #f2f5f1;
-  text-align:center;
+}
+
+tr.days th {
+  width:22px;
 }
 
 .month-year {
   background:#d7e1f2;
-  margin-bottom:0;
-  text-align:center;
+  margin-bottom:1px;
   font-weight:bold;
+  padding:3px 0 6px 3px;
 }
 
-table.avCalendarMonth td.unknown {
-  color:#d7e1f2;
+td.available {
+  color: #333; 
+  background-color: #eee !important;
 }
 
 td.unavailable {
-  color: #333; 
-  background-color: #ccc !important;
+  color: #fff; 
+  background-color: #aaa !important;
   text-decoration:line-through;
+}
+
+td.unavailable a {
+  color:#eee;
+}
+
+td a.available-unavailable {
+  background:url('/media/fc/css/images/available-unavailable.gif') center center no-repeat;
+}
+
+td a.unavailable-available {
+  background:url('/media/fc/css/images/unavailable-available.gif') center center no-repeat;
+}
+
+table.avCalendar td.available-unavailable {
+  
 }
 
 .key tr {
@@ -63,7 +96,6 @@ td.unavailable {
 
 .key td.available, .key td.unavailable {
   padding:2px;
-  text-align:center;
   vertical-align:top;
   border:1px solid #D7E1F2;
   width:18px;
