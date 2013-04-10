@@ -53,8 +53,8 @@ class SpecialOffersTableSpecialOffer extends JTable
 		$query->from($this->_tbl);
     $query->where('property_id = ' . $this->_db->quote($id));
     $query->where('published = 1');
-    $query->where('start_date < ' . $this->_db->Quote(date('Y-m-d')));
-    $query->where('end_date > ' . $this->_db->Quote(date('Y-m-d')));
+    $query->where('start_date <= ' . $this->_db->Quote(date('Y-m-d')));
+    $query->where('end_date >= ' . $this->_db->Quote(date('Y-m-d')));
             
     // Get the offer 
     $this->_db->setQuery($query,0,1);

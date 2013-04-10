@@ -35,40 +35,48 @@ jQuery(document).ready(function(){
             
       // Get the date that has been clicked...
       var date = jQuery(this).parent('td').attr('data-date');
-               
+
+
+      // Check if the form has already been updated        
       var form = jQuery('form#adminForm.updated');
+      
+      // Existing availability status
+      var existing = jQuery(this).parent('td').hasClass('available');
+        
 
       if (form.length > 0) {
-            
+
+        jQuery(this).addClass('end');
+
+
         // TO DO: Check that start and end dates are valid, e.g. end date is after start date
+        
+        
         
         // Update the start/end date depending on what's been chosen
         jQuery('#adminForm #jform_end_date').attr('value', date);
         
         
-        // TO DO: Disable the save button, show a working spinners (when the save button is pressed)
-        
-        
         // Should have a valid start and end date here...
         jQuery('#availabilityModal').modal('show');
-      
+        
+        // TO DO: Disable the save button, show a working spinners (when the save button is pressed)
+     
       } else {
-      
+        
+        jQuery(this).addClass('start');
+
         jQuery('#adminForm #jform_start_date').attr('value', date);    
       
         // Add a 'updated' class to the modal form
         jQuery('form#adminForm').addClass('updated');
       
-        // Existing availability status
-        var existing = jQuery(this).parent('td').hasClass('available');
+ 
         
-        // Add an 'available/booked' class to the 
-        if (existing) {
-          jQuery(this).addClass('available-unavailable edited');
-        } else {
-          jQuery(this).addClass('unavailable-available edited');
-          
-        }
+      // Need some mechanism to indicate the users intent
+        
+        
+        
       
       }
       
@@ -102,7 +110,7 @@ function reset() {
   var end_date = jQuery('#jform_end_date').val('');
   var status = jQuery('#jform_availability').val('');
   jQuery('form#adminForm').removeClass('updated');
-  jQuery('.avCalendar td a').removeClass('edited unavailable-available available-unavailable');
+  jQuery('.avCalendar td a').removeClass('edited start end');
 
 }
  

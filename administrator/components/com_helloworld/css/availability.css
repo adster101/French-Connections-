@@ -10,8 +10,9 @@ table.avCalendar td {
   border:1px solid #fff;
 }
 
-table.avCalendar a,
-table.aCalendar a:hover {
+table.avCalendar td a,
+table.aCalendar td a:hover,
+table.avCalendar td span{
   color:#333;
   text-decoration:none;
   margin:0 0px 0px 2px;
@@ -74,16 +75,17 @@ td.unavailable {
   text-decoration:line-through;
 }
 
-td.unavailable a {
+td.unavailable a,
+table.avCalendar td.unavailable span {
   color:#eee;
 }
 
-td a.available-unavailable {
-  background:url('/media/fc/css/images/available-unavailable.gif') center center no-repeat;
+td a.start {
+  background:url('/media/fc/css/images/availability-start-date.png') center center no-repeat;
 }
 
-td a.unavailable-available {
-  background:url('/media/fc/css/images/unavailable-available.gif') center center no-repeat;
+td a.end {
+  background:url('/media/fc/css/images/availability-end-date.png') center center no-repeat;
 }
 
 table.avCalendar td.available-unavailable {

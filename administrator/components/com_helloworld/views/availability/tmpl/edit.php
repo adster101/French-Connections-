@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 $data = JApplication::getUserState('listing', '');
-$availability_last_updated = ($this->item->availability_last_updated) ? $this->item->availability_last_updated : '';
+$availability_last_updated = (!empty($this->item->availability_last_updated)) ? $this->item->availability_last_updated : '';
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>

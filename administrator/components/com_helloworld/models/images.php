@@ -75,85 +75,83 @@ class HelloWorldModelImages extends JModelList {
     }
 
     $file_path = COM_IMAGE_BASE . '/' . $property_id . '/' . $profile . '/' . $image_file_name;
+    if (!file_exists($file_path)) {
+      try {
 
-    try {
+        $width = $imgObj->getWidth();
+        $height = $imgObj->getHeight();
 
-      $width = $imgObj->getWidth();
-      $height = $imgObj->getHeight();
+        // If the width is greater than the height just create it 
+        if (($width > $height) && $width > $max_width) {
 
-      // If the width is greater than the height just create it 
-      if (($width > $height) && $width > $max_width) {
+          // This image is roughly landscape orientated with a width greater than max width allowed
+          $profile = $imgObj->resize($max_width, $max_height, true, 3);
 
-        // This image is roughly landscape orientated with a width greater than max width allowed
-        $profile = $imgObj->resize($max_width, $max_height, true, 3);
+          // Check the aspect ratio. I.e. we want to retain a 4:3 aspect ratio
+          if ($profile->getHeight() > $max_height) {
 
-        // Check the aspect ratio. I.e. we want to retain a 4:3 aspect ratio
-        if ($profile->getHeight() > $max_height) {
+            // Crop out the extra height
+            $profile = $profile->crop($max_width, $max_height, 0, ($profile->getHeight() - $max_height) / 2, false);
+          } else if ($profile->getWidth() > $max_width) {
 
-          // Crop out the extra height
-          $profile = $profile->crop($max_width, $max_height, 0, ($profile->getHeight() - $max_height) / 2, false);
+            // Crop out the extra width
+            $profile = $profile->crop($max_width, $max_height, ($profile->getWidth() - $max_width) / 2, 0, false);
+          }
+
+          // Put it out to a file
+          $profile->tofile($file_path);
           
-        } else if ($profile->getWidth() > $max_width) {
+        } else if ($width < $height) {
 
-          // Crop out the extra width
-          $profile = $profile->crop($max_width, $max_height, ($profile->getWidth() - $max_width) / 2, 0, false);
-        }
+          // This image is roughly portrait orientated with a width greater than the max width allowed
+          $profile = $imgObj->resize($max_width, $max_height, false, 2);
 
-        // Put it out to a file
-        $profile->tofile($file_path);
-        
-      } else if (($width < $height) && $width > $max_width) {
+          // Check the resultant width
+          if ($profile->getWidth() < $max_width) {
 
-        // This image is roughly portrait orientated with a width greater than the max width allowed
-        $profile = $imgObj->resize($max_width, $max_height, false, 2);
+            $blank_image = $this->createBlankImage($max_width, $max_height);
 
-        // Check the resultant width
-        if ($profile->getWidth() < $max_width) {
+            // Write out the gallery file
+            // Need to do this as imagecopy requires a handle  
+            $profile->tofile($file_path);
 
+            // Load the existing image
+            $existing_image = imagecreatefromjpeg($file_path);
+
+            // Copy the existing image into the new one
+            imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
+
+            // Save it out
+            imagejpeg($blank_image, $file_path, 100);
+          } else {
+
+            // Width is okay, just write it out
+            $profile->tofile($file_path);
+          }
+        } else if ((($width > $height) && $width < $max_width) || (($width < $height) && $height < $max_height)) {
+
+          // This image is landscape orientated with a width less than 500px
+          // Create a blank image
           $blank_image = $this->createBlankImage($max_width, $max_height);
 
-          // Write out the gallery file
-          // Need to do this as imagecopy requires a handle  
-          $profile->tofile($file_path);
+          // Write out the gallery file, unprocessed
+          $imgObj->tofile($file_path);
 
           // Load the existing image
           $existing_image = imagecreatefromjpeg($file_path);
 
           // Copy the existing image into the new one
-          imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
+          imagecopy($blank_image, $existing_image, ($max_width - $imgObj->getWidth()) / 2, ($max_height - $imgObj->getHeight()) / 2, 0, 0, $imgObj->getWidth(), $imgObj->getHeight());
 
           // Save it out
           imagejpeg($blank_image, $file_path, 100);
-          
-        } else {
-
-          // Width is okay, just write it out
-          $profile->tofile($file_path);
         }
-      } else if ((($width > $height) && $width < $max_width) || (($width < $height) && $height < $max_height) )  {
-
-        // This image is landscape orientated with a width less than 500px
-        // Create a blank image
-        $blank_image = $this->createBlankImage($max_width, $max_height);
-
-        // Write out the gallery file, unprocessed
-        $imgObj->tofile($file_path);
-
-        // Load the existing image
-        $existing_image = imagecreatefromjpeg($file_path);
-
-        // Copy the existing image into the new one
-        imagecopy($blank_image, $existing_image, ($max_width - $imgObj->getWidth()) / 2, ($max_height - $imgObj->getHeight()) / 2, 0, 0, $imgObj->getWidth(), $imgObj->getHeight());
-
-        // Save it out
-        imagejpeg($blank_image, $file_path, 100);
+      } catch (Exception $e) {
         
       }
-    } catch (Exception $e) {
-      
     }
   }
-  
+
   /*
    * Method to generate a blank image for use in the above profile creation method.
    */

@@ -227,7 +227,8 @@ class AccommodationControllerProperty extends JControllerForm
 		if ($params->get('redirect')) {
 			$this->setRedirect($params->get('redirect'), $msg);
 		} else {
-			$this->setRedirect(JRoute::_('index.php?option=com_accommodation&view=property&id='.$stub.'#email', true));
+      $this->setMessage(JText::_('COM_REVIEWS_EMAIL_THANKS'));
+			$this->setRedirect(JRoute::_('index.php?option=com_accommodation&view=property&id='.$stub.'#email', $msg));
 		}
 
 		return true;
@@ -242,12 +243,14 @@ class AccommodationControllerProperty extends JControllerForm
 			if ($property->created_by != 0) {
 				$property_user = JUser::getInstance($property->created_by);
 
-        $property->email = $property_user->get('email');
+        // If in DEBUG mode, redirect email to me!
+        $property->email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $property_user->get('email');
         $property->name = $property_user->get('name');
         
         // Also need to get the user profile details here (for SMS prefs etc) 
         
 			}
+      
       
       
       // The details of where who is sending the email (e.g. FC in this case).

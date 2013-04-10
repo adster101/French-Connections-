@@ -19,17 +19,16 @@ class modFeaturedPropertyHelper
 		$lang =& JFactory::getLanguage()->getTag();
 		
 		if ($lang === 'fr-FR') {
-			$select = 'c.title,hel.id,trans.title,trans.description,lang,occupancy,swimming, thumbnail,hel.parent_id';
+			$select = 'c.title,hel.id,trans.title,trans.description,occupancy, thumbnail';
 		} else {
-			$select = 'c.title,hel.id,hel.title,hel.description,lang,occupancy,swimming, thumbnail, hel.parent_id';
+			$select = 'c.title,hel.id,unit.unit_title,unit.description,occupancy, thumbnail';
 		}
 
 		$db = JFactory::getDBO();
 		$db->setQuery($db->getQuery(true)
 			->select($select)
-			->from("#__helloworld as hel")    
-      ->where('hel.parent_id !=0')
-
+			->from("#__property_listings as hel")    
+      ->leftJoin('#__property_units unit ON hel.id = unit.parent_id')
 			->leftJoin('#__classifications AS c ON hel.city = c.id')
 			->leftJoin('#__helloworld_translations AS trans ON hel.id = trans.property_id')
       ->order('rand()')

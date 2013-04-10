@@ -31,7 +31,7 @@ class plgContentVersion extends JPlugin {
   public function onContentBeforeBind($context, $article, $isNew, $data) {
 
     $new_version = false;
-
+    
     // Here we check whether we are already editing an unpublished new version of this item
     // So if we are then we can skip all the comparing and simply save straight over the new unpublished version
     
@@ -61,21 +61,19 @@ class plgContentVersion extends JPlugin {
         return false;
       }
 
-
-
       // Check the expiry date...if this is a unit we won't have the expiry date so we look it up...
       $listing = JApplication::getUserState('listing', false);
-
       $expiry_date = ($context == 'com_helloworld.unit') ? $listing->expiry : $article->expiry_date;
 
       // Parse the date so we can check it's valid
+
       $date = date_parse($expiry_date);
 
       // Check if there is an expiry date for this content, if not then just return out...
       if (checkdate($date['month'], $date['day'], $date['year'])) {
         // Loop over the fields that will trigger a new version and check to see if any differ
         foreach ($article as $field => $value) {
-          // Compair the content from the database with the content from the editor
+          // Compare the content from the database with the content from the editor
           if (array_key_exists($field, $fields_to_check)) {
             // Compare the two strings...
             if (strcmp($article->$field, $data[$field]) > 0) {
@@ -84,7 +82,6 @@ class plgContentVersion extends JPlugin {
           }
         }
       }
-
       return $new_version;
     }
   }

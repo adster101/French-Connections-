@@ -211,40 +211,41 @@ class HelloWorldModelProperty extends JModelAdmin {
   }
 
   /**
-   * Method to return the neatest city xml foeld definition string
+   * Method to return the location details based on the city the user has chosen
    *
-   * @param   object    $form, the form instance
-   * @param   mixed     $data, the form data 
-   * @param   boolean   is this a property owner? 
+   * @param   int    $city, the nearest town/city
    * 
-   * @return  string .
+   * @return  mixed
    *
    * @since   11.1
    */
-  protected function getNearestCityXml($form, $data, $readonly = 'true') {
-    $latitude = (!empty($data->latitude) ? $data->latitude : 0);
-    $longitude = (!empty($data->longitude) ? $data->longitude : 0);
-    $readonly = ($readonly) ? 'true' : 'false';
-
-    $XmlStr = '<field
-      name="city"
-      type="cities"
-      extension="com_helloworld"
-      class="inputbox validate-nearesttown"
-      labelclass="control-label"
-      label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
-      description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
-      required="true"
-      readonly="' . $readonly . '"
-      filter="int"
-      validate="nearesttown"
-      latitude="' . $latitude . '"
-      longitude="' . $longitude . '">
-      <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
-
-    </field>';
-
-    return $XmlStr;
+  
+  protected function getLocationDetails($city) {
+    
+    $location_details_array = array();
+    
+    // Get the table instance for the classification table
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
+   
+    $table = $this->getTable('Classification', 'ClassificationTable');
+    
+    if(!$location_details = $table->getPath($city)) {
+      $this->setError($table->getError());
+      return false;
+    };
+    
+    // Loop over the location details and pass them back as an array
+    foreach ($location_details as $key => $value) {
+      
+      if ($value->level > 0) {
+        $location_details_array[] = $value->id;
+      }
+      
+    }
+    
+    
+    return $location_details_array;
+    
   }
 
   /**
@@ -292,4 +293,130 @@ class HelloWorldModelProperty extends JModelAdmin {
     parent::populateState();
   }
 
+  /**
+   * Overidden method to save the form data.
+   *
+   * @param   array  $data  The form data.
+   *
+   * @return  boolean  True on success, False on error.
+   *
+   * @since   12.2
+   */
+  public function save($data) {
+    
+    $dispatcher = JEventDispatcher::getInstance();
+    $table = $this->getTable();
+    $key = $table->getKeyName();
+    $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+    $isNew = true;
+    $app = JFactory::getApplication();
+    $data = $app->input->post->get('jform', array(), 'array');
+    
+    $city = (!empty($data['city'])) ? $data['city'] : '';
+    
+    // Need to get the location details (area, region, dept) and update the data array
+    $location_details = $this->getLocationDetails($city);
+    
+    // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
+    if (!empty($location_details)) {
+      $data['area'] = $location_details[0];
+      $data['region'] = $location_details[1];
+      $data['department'] = $location_details[2];
+      $data['city'] = $location_details[3];
+    }
+    
+    // Include the content plugins for the on save events.
+    JPluginHelper::importPlugin('content');
+
+    // Allow an exception to be thrown.
+    try {
+
+      // If $data['new_version'] is true we need to update that new version in the version table
+      if ($data['new_version']) {
+
+        // Get the latest unpublished version id for this unit, that exists in the db
+        $version = $this->getLatestUnitVersion($data['id']);
+
+        if ($version->version_id > 0) {
+          // Now we are ready to save our updated unit details to the new version table
+          $table = $this->getTable('PropertyUnitsVersion');
+          
+          // Set the version ID that we want to bind and store the data against...
+          $table->version_id = $version->version_id;
+        }
+      } else { // Here we don't explicitly know if there is a new version
+        // Load the exisiting row, if there is one. 
+        if ($pk > 0) {
+          $table->load($pk);
+          $isNew = false;
+        }
+
+        // Let's have a before bind trigger
+        $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
+
+        // $version should contain an array with one element. If the array contains true then we need to create a new version...
+        if ($version[0]) {
+          // Switch the table model to the version one
+          $table = $this->getTable('PropertyUnitsVersion');
+          $table->set('_tbl_key','version_id');
+
+        }
+      }
+
+      
+      // Bind the data.
+      if (!$table->bind($data)) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Prepare the row for saving
+      $this->prepareTable($table);
+
+      // Check the data.
+      if (!$table->check()) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Trigger the onContentBeforeSave event.
+      $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
+
+      if (in_array(false, $result, true)) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Store the data.
+      if (!$table->store()) {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Set the table key back to ID so the controller redirects to the right place
+      $table->set('_tbl_key','id');
+
+      // Clean the cache.
+      $this->cleanCache();
+
+      // Trigger the onContentAfterSave event.
+      $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
+    } catch (Exception $e) {
+      $this->setError($e->getMessage());
+
+      return false;
+    }
+
+    $pkName = $table->getKeyName();
+
+    if (isset($table->$pkName)) {
+      $this->setState($this->getName() . '.id', $table->$pkName);
+    }
+    $this->setState($this->getName() . '.new', $isNew);
+
+    return true;
+  }
+  
+
+  
 }

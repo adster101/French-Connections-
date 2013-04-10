@@ -261,48 +261,6 @@ class HelloWorldTableHelloWorld extends JTableNested {
     $this->description = $existingTranslations->description;
   }
 
-  protected function savePropertyAvailability($POST = array()) {
-    if (!array($POST)) {
-      return true;
-    }
-
-    if (!array_key_exists('availability', $POST)) {
-      return true;
-    }
-
-    // Do we have availability data to update? TO DO - Wrap this in a function (perhaps in the controller?)
-    if (isset($POST['start_date']) && isset($POST['end_date']) && isset($POST['availability'])) { // We have some new availability?
-      // TO DO: Tidy this up a bit - new method?
-      // E.g. $this->saveAvailability();
-      $start_date = $POST['start_date'];
-      $end_date = $POST['end_date'];
-      $availability_status = $POST['availability'];
-
-      if ($start_date && $end_date) {
-
-        // Load in existing availability, so we can merge it with this new availability
-        $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-        $availability = $availabilityTable->load($this->id);
-
-        $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $start_date, $end_date, $availability_status);
-        $availability_by_period = HelloWorldHelper::getAvailabilityByPeriod($availability_by_day);
-
-        // Delete existing availability
-        // Need to wrap this in some logic
-        $availabilityTable->delete($this->id);
-
-        // Bind the translated fields to the JTable instance	
-        if (!$availabilityTable->save($this->id, $availability_by_period)) {
-          JError::raiseWarning(500, $availabilityTable->getError());
-          return false;
-        } else {
-          // Update the availability last updated on field
-          $this->availability_last_updated_on = JFactory::getDate()->toSql();
-        }
-      }
-    }
-  }
-
   protected function savePropertyFacilities($POST = array()) {
 
     if (!array($POST)) {
@@ -557,32 +515,4 @@ class HelloWorldTableHelloWorld extends JTableNested {
       JApplication::setUserState('com_helloworld.images.progress', true);
     }
   }
-
-  /**
-   * Method to get a node and all its child nodes.
-   *
-   * @param   integer  $pk          Primary key of the node for which to get the tree.
-   * @param   boolean  $diagnostic  Only select diagnostic data for the nested sets.
-   *
-   * @return  mixed    Boolean false on failure or array of node objects on success.
-   *
-   * @since   11.1
-   * @throws  RuntimeException on database error.
-   */
-  public function getUnitTree($pk = null, $diagnostic = false) {
-    $k = $this->_tbl_key;
-    $pk = (is_null($pk)) ? $this->$k : $pk;
-
-    // Get the node and children as a tree.
-    $query = $this->_db->getQuery(true);
-    $select = ($diagnostic) ? 'n.title,n.occupancy,n.' . $k . ', n.parent_id, n.level, n.lft, n.rgt,(n.single_bedrooms + n.double_bedrooms + n.triple_bedrooms + n.quad_bedrooms + n.twin_bedrooms) as bedrooms' : 'n.*';
-    $query->select($select)
-            ->from($this->_tbl . ' AS n, ' . $this->_tbl . ' AS p')
-            ->where('n.lft BETWEEN p.lft AND p.rgt')
-            ->where('p.' . $k . ' = ' . (int) $pk)
-            ->order('n.lft');
-
-    return $this->_db->setQuery($query)->loadObjectList();
-  }
-
 }

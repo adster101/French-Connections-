@@ -14,48 +14,45 @@ class AccommodationModelProperty extends JModelForm {
    * @var object item
    */
   protected $item;
-  
-	/**
-	 * Method to get the contact form.
-	 *
-	 * The base form is loaded from XML and then an event is fired
-	 *
-	 *
-	 * @param	array	$data		An optional array of data for the form to interrogate.
-	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
-	 * @return	JForm	A JForm object on success, false on failure
-	 * @since	1.6
-	 */
-	public function getForm($data = array(), $loadData = false)
-	{
-		// Get the form.
-		$form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => true));
-		if (empty($form)) {
-			return false;
-		}
 
-		return $form;
-	}
-  
-	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return	mixed	The data for the form.
-	 * @since	1.6
-	 */
-	protected function loadFormData() 
-	{
-		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
-		
-    if (empty($data)) 
-		{
-			$data = $this->getItem();
-		}
-        
+  /**
+   * Method to get the contact form.
+   *
+   * The base form is loaded from XML and then an event is fired
+   *
+   *
+   * @param	array	$data		An optional array of data for the form to interrogate.
+   * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+   * @return	JForm	A JForm object on success, false on failure
+   * @since	1.6
+   */
+  public function getForm($data = array(), $loadData = false) {
+    // Get the form.
+    $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => true));
+    if (empty($form)) {
+      return false;
+    }
+
+    return $form;
+  }
+
+  /**
+   * Method to get the data that should be injected in the form.
+   *
+   * @return	mixed	The data for the form.
+   * @since	1.6
+   */
+  protected function loadFormData() {
+    // Check the session for previously entered form data.
+    $data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
+
+    if (empty($data)) {
+      $data = $this->getItem();
+    }
+
     return $data;
-	}	   
-  
+  }
+
   /**
    * Method to auto-populate the model state.
    *
@@ -69,10 +66,21 @@ class AccommodationModelProperty extends JModelForm {
    * @since	1.6
    */
   protected function populateState() {
+
+    // Get the input values etc
     $app = JFactory::getApplication();
+    $input = $app->input;
+
     // Get the property id
-    $id = JRequest::getInt('id');
+    $id = $input->get('id', '', 'int');
+
+    // Get the unit id
+    $unit_id = $input->get('unit_id', '', 'int');
+
+    // Set the states
     $this->setState('property.id', $id);
+
+    $this->setState('unit.id', $unit_id);
 
     // Load the parameters.
     $params = $app->getParams();
@@ -81,7 +89,7 @@ class AccommodationModelProperty extends JModelForm {
   }
 
   /**
-   * Get the property - This should probably be using the JNested table instance for the property table...
+   * Get the property listing details. This comprises of the main property and the unit. If no unit specified the first based on unit ordering is used...
    * 
    * @return object The message to be displayed to the user
    */
@@ -94,46 +102,49 @@ class AccommodationModelProperty extends JModelForm {
       // Get the state for this property ID
       $id = $this->getState('property.id');
 
+      $unit_id = $this->getState('unit.id', false);
+
       $select = '
-          hw.department, 
-          toilets, 
-          bathrooms,
-          hw.parent_id,
-          SUM( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms,
+          pl.department, 
+          pl.city,
+          unit.toilets, 
+          unit.bathrooms,
+          unit.id as unit_id,
+          ( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms,
           single_bedrooms,
           double_bedrooms,
           triple_bedrooms,
           quad_bedrooms,
           twin_bedrooms,
-          hw.id, 
-          hw.created_by,
+          pl.id, 
+          pl.created_by,
           location_details, 
           internal_facilities_other, 
           external_facilities_other, 
           activities_other, 
           getting_there, 
-          hw.title, 
-          hw.description, 
+          pl.title, 
           occupancy, 
-          swimming, 
           distance_to_coast, 
-          hw.latitude, 
+          pl.latitude, 
+          pl.longitude,
           additional_price_notes, 
           linen_costs, 
-          hw.longitude, 
-          nearest_town,
           linen_costs,
           date_format(availability_last_updated_on, \'%D %M %Y\') as availability_last_updated_on,
-          u.name,
-          date_format(u.registerDate, \'%M %Y\') as advertising_since,
+          unit.unit_title,
+          unit.description,
+          date_format(pl.created_on, \'%M %Y\') as advertising_since,
+          a.title as changeover_day,
           ufc.phone_1,
           ufc.phone_2,
           ufc.phone_3,
           ufc.website,
-          a.title as changeover_day,
           b.title as tariffs_based_on,
           c.title as base_currency,
-          g.title as swimming,
+          d.title as accommodation_type,
+          e.title as property_type,
+          f.title as nearest_town,
           h.title as department_as_text';
 
       // Language logic - essentially need to do two things, if in French
@@ -144,21 +155,42 @@ class AccommodationModelProperty extends JModelForm {
         
       }
 
-      $this->_db->setQuery($this->_db->getQuery(true)
-                      ->from('#__helloworld as hw')
-                      ->select($select)
-                      ->leftJoin('#__attributes a ON a.id = hw.changeover_day')
-                      ->leftJoin('#__attributes b ON b.id = hw.tariff_based_on')
-                      ->leftJoin('#__attributes c ON c.id = hw.base_currency')
-                      ->leftJoin('#__attributes g ON g.id = hw.swimming')
-                      ->leftJoin('#__classifications h ON h.id = hw.department')
-                      ->leftJoin('#__users u on hw.created_by = u.id')
-                      ->leftJoin('#__user_profile_fc ufc on hw.created_by = ufc.user_id')
-                      ->where('hw.id=' . (int) $id));
+      $query = $this->_db->getQuery(true);
 
-      if (!$this->item = $this->_db->loadObject()) {
+      $query->select($select);
+
+      $query->from('#__property_listings as pl');
+
+      // Join the units table in, only retrieves one at a time??
+      $query->leftJoin('#__property_units unit ON pl.id = unit.parent_id');
+
+      // If unit ID is specified load that unit instead of the default one
+      if ($unit_id) {
+        $query->where('unit.id = ' . (int) $unit_id);
+      }
+
+      $query->where('pl.id=' . (int) $id);
+      $query->where('pl.published = 1');
+      $query->where('unit.published = 1');
+
+      $query->leftJoin('#__attributes a ON a.id = unit.changeover_day');
+      $query->leftJoin('#__attributes b ON b.id = unit.tariff_based_on');
+      $query->leftJoin('#__attributes c ON c.id = unit.base_currency');
+      $query->leftJoin('#__attributes d ON d.id = unit.accommodation_type');
+      $query->leftJoin('#__attributes e ON e.id = unit.property_type');
+      $query->leftJoin('#__classifications f ON f.id = pl.city');
+      $query->leftJoin('#__classifications h ON h.id = pl.department');
+      $query->leftJoin('#__users u on pl.created_by = u.id');
+      $query->leftJoin('#__user_profile_fc ufc on pl.created_by = ufc.user_id');
+
+      if (!$this->item = $this->_db->setQuery($query)->loadObject()) {
         $this->setError($this->_db->getError());
       }
+    }
+
+    // Update the unit id into the model state
+    if (empty($unit_id)) {
+      $this->setState('unit.id', $this->item->unit_id);
     }
 
     return $this->item;
@@ -171,41 +203,39 @@ class AccommodationModelProperty extends JModelForm {
    */
 
   public function getFacilities() {
-    
+
     if (!isset($this->facilities)) {
       try {
         // Get the state for this property ID
-        $id = $this->getState('property.id');
-      
+        $id = $this->getState('unit.id');
+
         $attributes = array();
-        
+
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('facilities'));
         JLog::add('Retrieving facilities for - ' . $id . ')', JLog::ALL, 'facilities');
-       
+
         $query = $this->_db->getQuery(true);
-       	$query->select('a.title as attribute,at.title as attribute_type');
+        $query->select('a.title as attribute,at.title as attribute_type');
         $query->from('#__attributes_property ap');
         $query->join('left', '#__attributes a on a.id = ap.attribute_id');
         $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
-        $query->where('ap.property_id = '.$id);
-       
+        $query->where('ap.property_id = ' . $id);
+
         $results = $this->_db->setQuery($query)->loadObjectList();
 
         foreach ($results as $attribute) {
-          if (!array_key_exists($attribute->attribute_type,$attributes)) {
+          if (!array_key_exists($attribute->attribute_type, $attributes)) {
             $attributes[$attribute->attribute_type] = array();
           }
-          
-          $attributes[$attribute->attribute_type][] = $attribute->attribute;
 
+          $attributes[$attribute->attribute_type][] = $attribute->attribute;
         }
 
         $this->facilities = $attributes;
-        
-        
-        return $this->facilities;
 
+
+        return $this->facilities;
       } catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
@@ -221,6 +251,7 @@ class AccommodationModelProperty extends JModelForm {
    */
 
   public function getUnits() {
+
     if (!isset($this->units)) {
 
       try {
@@ -231,24 +262,18 @@ class AccommodationModelProperty extends JModelForm {
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('units'));
         JLog::add('Retrieving unit for - ' . $id . ')', JLog::ALL, 'units');
 
-        // Load the reviews model from Property manager
-        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+        // Get the node and children as a tree.
+        $query = $this->_db->getQuery(true);
+        $select = 'unit_title,id,occupancy,parent_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
+        $query->select($select)
+                ->from('#__property_units')
+                ->where('parent_id = ' . (int) $id)
+                ->where('published = 1')
+                ->order('ordering');
 
-        $table = JTable::getInstance('HelloWorld', 'HelloWorldTable');
-        
-        $leaf =  $table->isLeaf($id);
-        
-        
-        if($leaf && $this->item->parent_id !=1) {
-          $units = $table->getUnitTree($this->item->parent_id, true);
-        } else {
-          $units = $table->getUnitTree($id, true);
-        }
-               
-        $this->units = $units;
-        
+        return $this->_db->setQuery($query)->loadObjectList();
+
         return $this->units;
-        
       } catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching units for - ' . $id . $e->getMessage(), JLOG::ERROR, 'units');
@@ -269,7 +294,7 @@ class AccommodationModelProperty extends JModelForm {
 
       try {
         // Get the state for this property ID
-        $id = $this->getState('property.id');
+        $id = $this->getState('unit.id');
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
@@ -288,7 +313,7 @@ class AccommodationModelProperty extends JModelForm {
         $reviews = $model->getItems();
 
         $this->reviews = $reviews;
-        
+
         // Return the reviews, if any
         return $this->reviews;
       } catch (Exception $e) {
@@ -309,7 +334,9 @@ class AccommodationModelProperty extends JModelForm {
     // Get the state for this property ID
     $id = $this->getState('property.id');
 
-    // Generate a logger instance for availability
+    $unit_id = $this->getState('unit.id');
+
+// Generate a logger instance for availability
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('availability'));
     JLog::add('Retrieving availability for - ' . $id . ')', JLog::ALL, 'availability');
 
@@ -319,7 +346,7 @@ class AccommodationModelProperty extends JModelForm {
     $availabilityTable = JTable::getInstance('Availability', 'HelloWorldTable', array());
 
     // Attempt to load the availability for this property 
-    $availability = $availabilityTable->load($id);
+    $availability = $availabilityTable->load($unit_id);
 
     // Check the $availability loaded correctly
     if (!$availability) {
@@ -358,7 +385,7 @@ class AccommodationModelProperty extends JModelForm {
 
 
     // Get the state for this property ID
-    $id = $this->getState('property.id');
+    $id = $this->getState('unit.id');
 
     // Attempt to load the availability for this property 
     $tariffs = $tariffsTable->load($id);
@@ -374,18 +401,17 @@ class AccommodationModelProperty extends JModelForm {
     return $tariffs;
   }
 
-
   /*
    * Function to return a list of tariffs for a given property
    */
 
   public function getOffers() {
 
-  if (!isset($this->offer)) {
+    if (!isset($this->offer)) {
 
       try {
         // Get the state for this property ID
-        $id = $this->getState('property.id');
+        $id = $this->getState('unit.id');
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('offers'));
@@ -393,25 +419,24 @@ class AccommodationModelProperty extends JModelForm {
 
         // Get a special offers table instance
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_specialoffers/tables');
-        
+
         $table = JTable::getInstance('SpecialOffer', 'SpecialOffersTable');
-        
+
         $offer = $table->getOffer($id);
-        
+
         $this->offer = $offer;
-        
+
         // Return the offer, if any
-        
+
         return $this->offer;
-        
       } catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
       }
     }
-  }  
-  
+  }
+
   /*
    * Function to get a list of images for a property 
    * 
@@ -419,39 +444,42 @@ class AccommodationModelProperty extends JModelForm {
 
   public function getImages() {
 
-
-
     // Get the property ID
     $id = $this->getState('property.id');
 
     // Get the state for this property ID
-    $parent_id = $this->item->parent_id;
+    $unit_id = $this->getState('unit.id');
+
+    $app = JFactory::getApplication();
+
 
     // Do some logging
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('images'));
-    JLog::add('Retrieving images for - ' . $id . ')', JLog::ALL, 'images');
+    JLog::add('Retrieving images for - ' . $unit_id . ')', JLog::ALL, 'images');
 
-    // First we need an instance of the images table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
 
-    // Get the images depending on whether this is a parent or a child property
-    if ($parent_id != 1) {
+    // Get a list of the images uploaded against this listing
+    $query->select('
+      id,
+      property_id,
+      image_file_name,
+      caption,
+      ordering
+    ');
+    $query->from('#__property_images_library');
 
-      $galleryimagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
-      $images = $galleryimagesTable->load($id);
-    } else {
+    $query->where('property_id = ' . (int) $unit_id);
 
-      // Determine is this is a parent property or a leaf node...
-      $propertyTable = JTable::getInstance('HelloWorld', 'HelloWorldTable', array());
+    $query->order('ordering', 'asc');
 
-      if ($propertyTable->isleaf($id)) {
-        $imagesTable = JTable::getInstance('Images', 'HelloWorldTable', array());
-        $images = $imagesTable->load_images($id);
-      } else {
-        $galleryimagesTable = JTable::getInstance('Gallery_images', 'HelloWorldTable', array());
-        $images = $galleryimagesTable->load($id);
-      }
-    }
+    $db->setQuery($query);
+
+    $images = $db->loadObjectList();
+
+
+
     // Check the $availability loaded correctly
     if (!$images) {
       // Ooops, there was a problem getting the availability
@@ -475,9 +503,7 @@ class AccommodationModelProperty extends JModelForm {
     $table = JTable::getInstance('Classification', 'ClassificationTable');
 
     try {
-      $crumbs = $table->getPath($pk = $this->item->department);
-      
-      
+      $crumbs = $table->getPath($pk = $this->item->city);
     } catch (Exception $e) {
 
       // Log the exception here...
@@ -486,50 +512,45 @@ class AccommodationModelProperty extends JModelForm {
 
     return $crumbs;
   }
-  
-	/**
-	 * Increment the hit counter for the article.
-	 *
-	 * @param	int		Optional primary key of the article to increment.
-	 *
-	 * @return	boolean	True if successful; false otherwise and internal error set.
-	 */
-	public function hit($pk = 0)
-	{
-		$input    = JFactory::getApplication()->input;
-		$hitcount = $input->getInt('hitcount', 1);
 
-		if ($hitcount)
-		{
+  /**
+   * Increment the hit counter for the article.
+   *
+   * @param	int		Optional primary key of the article to increment.
+   *
+   * @return	boolean	True if successful; false otherwise and internal error set.
+   */
+  public function hit() {
+
+    $input = JFactory::getApplication()->input;
+    $hitcount = $input->getInt('hitcount', 1);
+
+    if ($hitcount) {
       // Get the property id
-			$pk = ($this->item->parent_id == 1) ? $this->item->id : $this->item->parent_id;
+      $pk = $this->getState('unit.id', false);
 
       $db = $this->getDbo();
 
       $query = $db->getQuery(true);
-      
-      $query->insert('#__property_views');
-      
-      $query->columns(array('property_id','date'));
-      
-      $date	= JFactory::getDate()->toSql();
 
-      $query->values("$pk, '$date'"); 
-		
+      $query->insert('#__property_views');
+
+      $query->columns(array('property_id', 'date'));
+
+      $date = JFactory::getDate()->toSql();
+
+      $query->values("$pk, '$date'");
+
       $db->setQuery($query);
-      
-			try
-			{
-				$db->execute();
-			}
-			catch (RuntimeException $e)
-			{
-				$this->setError($e->getMessage());
-				return false;
-			}
-		}
-		return true;
-	}
-  
-  
+
+      try {
+        $db->execute();
+      } catch (RuntimeException $e) {
+        $this->setError($e->getMessage());
+        return false;
+      }
+    }
+    return true;
+  }
+
 }

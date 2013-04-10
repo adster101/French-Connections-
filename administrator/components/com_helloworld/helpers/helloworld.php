@@ -46,8 +46,8 @@ abstract class HelloWorldHelper {
   public static function getSnoozeOptions() {
     // Build the filter options.
     $options = array();
-    $options[] = JHtml::_('select.option', '0', JText::_('COM_HELLOWORLD_HELLOWORLD_HIDE_SNOOZED'));
-    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
+    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_HIDE_SNOOZED'));
+    $options[] = JHtml::_('select.option', '2', JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
     return $options;
   }
 
@@ -294,6 +294,15 @@ abstract class HelloWorldHelper {
    * @return string False on failure or error, true otherwise.
    */
   public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0) {
+    
+    
+    // Get the view
+    $app = JFactory::getApplication();
+    $view = $app->input->get('view','','string'); 
+    
+    $showlinks = ($view == 'availability') ? true : false;
+    
+    
     // Init calendar string
     $calendar = '<div class="row-fluid">';
     // Get now
@@ -342,12 +351,19 @@ abstract class HelloWorldHelper {
 
         if (array_key_exists($today, $availability)) {
           if ($availability[$today]) { // Availability is true, i.e. available
-            $calendar .= '<td data-date='.$today.' class="available small"><a href="#">' . $day . '</td>';
+            
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available','small'),$showlinks);
+            
+            
           } else { // Availability is false i.e. unavailable
-            $calendar .= '<td data-date='.$today.' class="unavailable small"><a href="#">' . $day . '</a></td>';
+
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable','small'),$showlinks);
+                        
           }
         } else { // Availability not defined for this day so we default to unavailable
-          $calendar .= '<td data-date='.$today.' class="unavailable small"><a href="#">' . $day . '</a></td>';
+          
+          $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable','small'),$showlinks);
+          
         }
       }
       if ($weekday != 7)
@@ -361,6 +377,32 @@ abstract class HelloWorldHelper {
     return $calendar;
   }
 
+  public function generateDateCell($today = '', $day = '', $classes = array(), $showlinks = false) {
+    
+    $return = '';
+    
+    $class = implode(' ', $classes);
+    if (!empty($today)) {
+       $return .= '<td data-date=' .$today. ' class="' . $class . '">';
+         
+       if ($showlinks) {
+         $return .= '<a href="#">' . $day . '</a></td>';
+       } else {
+         $return .= '<span>' . $day . '</span>';
+         
+       }
+       
+       $return .= '</td>';
+
+   
+    }
+    
+    return $return;
+
+    
+    
+  }
+  
   /**
    *  Generates an array containing availability for each availability period stored for the property
    *

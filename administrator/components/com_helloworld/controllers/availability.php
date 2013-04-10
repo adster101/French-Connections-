@@ -81,25 +81,7 @@ class HelloWorldControllerAvailability extends JControllerForm {
     }
     return false;
   }
-
-  /*
-   * Overridden save method to save the availability
-   * 
-   * 
-   */
-
-  public function save() {
-
-    // Validate SESSION
-    // Validate user is owner
-    // Validate form data against the xml definition
-    // Setup the model
-    // Pass the data into the model and save
-    // Echo out a JSON? response to show on the client.
-    
-    
-    echo "WTF!?";
-    die;
-  }
-
+  
+  public function postSaveHook(){
+  }  
 }

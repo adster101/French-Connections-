@@ -44,5 +44,11 @@
 				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
 				<option value="0">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>
 		</field>	
+    <field 
+      name="id"
+      type="hidden"
+      filter="int">
+    </field>
+      
 	</fieldset>	
 </form>

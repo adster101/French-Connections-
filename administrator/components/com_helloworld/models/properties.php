@@ -66,7 +66,8 @@ class HelloWorldModelProperties extends JModelList {
     $review_state = $this->getUserStateFromRequest($this->context . '.filter.review_state', 'filter_state', '');
     $this->setState('filter.review_state', $review_state);
 
-    $snooze_state = $this->getUserStateFromRequest($this->context . '.filter.snoozed', 'filter_snoozed', '');
+    $snooze_state = $this->getUserStateFromRequest($this->context . '.filter.snoozed', 'filter_snoozed', false);
+
     $this->setState('filter.snoozed', $snooze_state);
 
     // extract the component name
@@ -177,13 +178,19 @@ class HelloWorldModelProperties extends JModelList {
     // Filter by snooze state
     // Should only apply to users who can view and change snooze state
     if ($canDo->get('helloworld.snooze')) {
+      
       $snooze_state = $this->getState('filter.snoozed');
-      if (!empty($snooze_state)) {
-        if ($snooze_state == 0) {
-          $query->where('a.snooze_until < ' . date('Y-m-d'));
-        }
-      } else {
-        $query->where('(a.snooze_until < ' . date('Y-m-d') . ' OR a.snooze_until is null)');
+
+      // If snooze state is not set or set to hide snoozed...
+      if ($snooze_state == false || $snooze_state ==1) {
+        
+        // ...hide snoozed properties
+        $query->where('a.snooze_until <= ' . date('Y-m-d'));
+
+      } elseif ($snooze_state == 2) {
+        
+        // Don't filter, user wants to see all snoozed props as well as not snoozed etc
+        
       }
     }
 
@@ -235,3 +242,4 @@ class HelloWorldModelProperties extends JModelList {
   }
 
 }
+

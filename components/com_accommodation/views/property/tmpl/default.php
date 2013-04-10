@@ -9,6 +9,7 @@ foreach ($this->tariffs as $tariff) {
 }
 
 JHTML::_('behavior.formvalidation');
+
 ?>
 
 <div class="row-fluid">
@@ -22,7 +23,7 @@ JHTML::_('behavior.formvalidation');
   </h1>
 </div>
 <?php if (count($this->offer)) : ?>
-  <div class="well">
+  <div class="well well-small">
     <h5>   
       <?php echo $this->escape($this->offer->title); ?>
     </h5>
@@ -116,13 +117,6 @@ JHTML::_('behavior.formvalidation');
           <span class="pull-right"><?php echo $this->facilities['Location Type'][0] ?></span>
         </p>
       <?php endif; ?>
-      <!-- Swimming pool type-->
-      <?php if ($this->item->swimming) : ?>
-        <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_SWIMMING_FACILITIES'); ?>
-          <span class="pull-right"><?php echo $this->item->swimming; ?></span>
-        </p>
-      <?php endif; ?>
       <!-- Changeover day -->
       <?php if ($this->item->changeover_day) : ?>
         <p class="dotted">
@@ -130,23 +124,29 @@ JHTML::_('behavior.formvalidation');
           <span class="pull-right"><?php echo $this->item->changeover_day; ?></span>
         </p>
       <?php endif; ?>
-      <!-- Changeover day -->
-      <?php if (array_key_exists('Property Type', $this->facilities)) : ?>
+      <!-- Property tyep -->
+      <?php if ($this->item->property_type) : ?>
         <p class="dotted">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE'); ?>
-          <span class="pull-right"><?php echo $this->facilities['Property Type'][0] ?></span>
+          <span class="pull-right"><?php echo $this->item->property_type; ?></span>
         </p>
       <?php endif; ?>
-
-      <hr />
-
-
+      <!-- External facilities inc pool type-->
+      <?php if (array_key_exists('External Facilities', $this->facilities)) : ?>
+        <p class="dotted clearfix">
+          <span>
+            <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
+            <?php echo implode(',', $this->facilities['External Facilities']) ?>
+          </span>         
+        </p>   
+      <?php endif; ?>   
+     
+      <hr class="clear" />
 
       <?php if ($this->reviews) : ?>
         <blockquote>
           <p>
             <?php echo strip_tags(JHtml::_('string.truncate', $this->reviews[0]->review_text, 125)); ?>
-
           </p>
           <small>
             <?php echo $this->reviews[0]->guest_name; ?>
@@ -196,13 +196,7 @@ JHTML::_('behavior.formvalidation');
           <ul class="slides">
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
-                <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->parent_id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
-                       " /> 
-                     <?php else: ?>
-                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->id . '/gallery/' . str_replace('.', '_550x375.', $image->image_file_name); ?>
-                       " /> 
-                     <?php endif; ?>
+                <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
                 <p class="flex-caption">
                   <?php echo $image->caption; ?>
                 </p>
@@ -214,13 +208,7 @@ JHTML::_('behavior.formvalidation');
           <ul class="slides">
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
-
-                <?php if ($this->item->parent_id != 1) : ?>  
-                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->parent_id . '/thumbs/' . $image->image_file_name ?>" /> 
-                <?php else: ?>
-                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->id . '/thumbs/' . $image->image_file_name ?>" /> 
-                <?php endif; ?>
-
+                <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name ?>" /> 
               </li>     
             <?php endforeach; ?>
           </ul>
@@ -236,8 +224,8 @@ JHTML::_('behavior.formvalidation');
 </div>
 <div class="row-fluid">
   <div class="span8">
-    <?php if ($this->item->title) : ?>
-      <h2><?php echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->title) ?></h2>  
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->unit_title) ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->description) : ?>
       <?php echo $this->item->description; ?>
@@ -252,7 +240,7 @@ JHTML::_('behavior.formvalidation');
 </div>
 <div class="row-fluid">
   <div class="span8">
-    <?php if ($this->item->title) : ?>
+    <?php if ($this->item->unit_title) : ?>
       <h2><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->nearest_town, $this->item->department_as_text, 'Region') ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->location_details) : ?>
@@ -270,7 +258,7 @@ JHTML::_('behavior.formvalidation');
 
 <div class="row-fluid">
   <div class="span8">
-    <?php if ($this->item->title) : ?>
+    <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN')) ?></h3>  
     <?php endif; ?>
     <?php if ($this->item->getting_there) : ?>
@@ -289,8 +277,8 @@ JHTML::_('behavior.formvalidation');
 </div>-->
 <div class="row-fluid">
   <div class="span8">
-    <?php if ($this->item->title) : ?>
-      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->title)) ?></h3> 
+    <?php if ($this->item->unit_title) : ?>
+      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->unit_title)) ?></h3> 
     <?php endif; ?>
     <?php if ($this->item->activities_other) : ?>
       <?php echo $this->item->activities_other; ?>
@@ -309,8 +297,8 @@ JHTML::_('behavior.formvalidation');
   </div>
   <div class="row-fluid">
     <div class="span8">
-      <?php if ($this->item->title) : ?>
-        <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->title)) ?></h2> 
+      <?php if ($this->item->unit_title) : ?>
+        <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->unit_title)) ?></h2> 
       <?php endif; ?>
 
       <?php foreach ($this->reviews as $review) : ?>
@@ -336,8 +324,8 @@ JHTML::_('behavior.formvalidation');
 </div>
 <div class="row-fluid">
   <div class="span-12">
-    <?php if ($this->item->title) : ?>
-      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->title)) ?></h2> 
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h2> 
     <?php endif; ?>
   </div>
 </div>
@@ -420,7 +408,7 @@ JHTML::_('behavior.formvalidation');
 
       <?php if ($this->item->internal_facilities_other) : ?>
         <tr>
-          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES__OTHER_INTERNAL') ?></td>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_OTHER_INTERNAL') ?></td>
           <td><?php echo $this->item->internal_facilities_other; ?></td>        
         </tr>      
       <?php endif; ?>       
@@ -457,10 +445,14 @@ JHTML::_('behavior.formvalidation');
   </div>
 </div>
 <div class="row-fluid">
-  <div class="span12">
-    <?php if ($this->item->title) : ?>
-      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->title)) ?></h2> 
+  <div class="span8">
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
     <?php endif; ?>
+  </div>
+</div>
+<div clas="row-fluid">
+  <div class="span8">
     <?php if ($this->item->changeover_day) : ?>
       <p>
         <strong>
@@ -470,16 +462,8 @@ JHTML::_('behavior.formvalidation');
       </p>
     <?php endif; ?>   
     <p>
-
       <?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
     </p>
-  </div>
-</div>
-<div class="row-fluid">
-  <div class="span8">
-    <?php if ($this->availability) : ?>
-      <?php echo $this->availability; ?>
-    <?php endif; ?>
   </div>
   <div class="span4">
     <h4><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY') ?></h4>
@@ -496,6 +480,14 @@ JHTML::_('behavior.formvalidation');
     </table>    
   </div>
 </div>
+<div class="row-fluid">
+  <div class="span12">
+    <?php if ($this->availability) : ?>
+      <?php echo $this->availability; ?>
+    <?php endif; ?>
+  </div>
+
+</div>
 
 <div class="row-fluid" id="tariffs">
   <div class="span12">
@@ -504,8 +496,8 @@ JHTML::_('behavior.formvalidation');
 </div>
 <div class="row-fluid">
   <div class="span12">
-    <?php if ($this->item->title) : ?>
-      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->title)) ?></h2> 
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h2> 
     <?php endif; ?>
   </div>
 </div>
@@ -531,8 +523,8 @@ JHTML::_('behavior.formvalidation');
 </div>
 <div class="row-fluid">
   <div class="span12">
-    <?php if ($this->item->title) : ?>
-      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->title)) ?></h2> 
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->unit_title)) ?></h2> 
     <?php endif; ?>
   </div>
 </div>
@@ -598,7 +590,7 @@ JHTML::_('behavior.formvalidation');
     var marker = new google.maps.Marker({
       position: myLatLng,
       map:map,
-      title:"<?php echo $this->item->title ?>"
+      title:"<?php echo $this->item->unit_title ?>"
     });
     google.maps.event.addListener(map, 'zoom_changed', function() {
       // 3 seconds after the center of the map has changed, pan back to the

@@ -37,387 +37,117 @@ class ImportControllerImages extends JControllerForm {
 
     JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
 
+    $model = JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+
+    $model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+
+    define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
+
     while (($line = fgetcsv($handle)) !== FALSE) {
-
-
-      if ($previous_property_id == $line[1]) { // Must be a new unit of the same property
-        // 1. This is a unit so store the previous images into the library images table 
-        // against the previous property ID if unit count is 1 (if unit count is > 1 don't store)   
-        if ($unit_count == 1) {
-
-          $initial_library_image_names = array();
-
-          $initial_gallery_images = '\'';
-
-          // Now we need to get a list of filename so we can select those from the library...
-          foreach ($previous_images as $images => $image) {
-            $initial_library_image_names[] = $image['fde_filename'];
-          }
-
-          $initial_gallery_images .= implode('\',\'', $initial_library_image_names) . '\'';
-
-          $query->clear();
-          $query = $db->getQuery(true);
-
-          $query->select('id');
-          $query->from('#__property_images_library');
-          $query->where('image_file_name in (' . $initial_gallery_images . ')');
-
-          // Set and execute the query
-          $db->setQuery($query);
-
-          $initial_gallery_images = $db->loadAssocList($key = 'id');
-
-
-
-
-          // Insert this lot of images into the gallery_images table. If a single unit property the images are stored in the library.
-          // Start building a new query to insert any attributes... 
-          $query = $db->getQuery(true);
-
-          $query->insert('#__property_images_gallery');
-
-          $query->columns(array('property_id', 'property_library_id'));
-
-          // Loop over the list of images and insert them...
-          $insert_string = '';
-
-          // Previous images includes the unit images for this parent property          
-          foreach ($initial_gallery_images as $images => $image) {
-            $insert_string = "$property_id,'" . $image['id'] . "'";
-            $query->values($insert_string);
-          }
-
-          // Set and execute the query
-          $db->setQuery($query);
-
-          if (!$db->execute()) {
-            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-            print_r($db->getErrorMsg());
-            print_r($insert_string);
-            die;
-          }
-        }
-
-
-
-        // 2. Add any *unit* images to the library.  
-        // Check that there are additional unit images
-        if (!empty($line[3])) {
-
-
-          $extra_library_images = $line[3];
-
-          $query->clear();
-
-          $query->select('fde_id, fde_filename, fde_description');
-          $query->from('#__file_details');
-          $query->where('fde_id in (' . $extra_library_images . ')');
-
-          // Set and execute the query
-          $db->setQuery($query);
-
-          $additional_library_images = $db->loadAssocList($key = 'fde_id');
-
-          $query->clear();
-          $query = $db->getQuery(true);
-
-          $query->insert('#__property_images_library');
-          $query->columns(array('property_id', 'image_file_name', 'caption'));
-
-          // Loop over the list of images and insert them...
-          // Need to select them all from the file_details table first...
-          $insert_string = '';
-
-          foreach ($additional_library_images as $images => $image) {
-            $insert_string = "$line[1],'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'";
-            $query->values($insert_string);
-          }
-
-          // Set and execute the query
-          $db->setQuery($query);
-
-          if (!$db->execute()) {
-            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-            print_r($db->getErrorMsg());
-            print_r($insert_string);
-            die;
-          }
-        }
-
-        // 4. Insert gallery images (actually unit+property images combined) into the gallery table
-        // This is a list of image IDs associated with this unit.
-        $gallery_images = '';
-        $library_image_names = '';
-        if (!empty($line[3])) {
-          $gallery_images = $line[2] . ',' . $line[3];
-        } else {
-          $gallery_images = $line[2];
-        }
-
-        $query->clear();
-
-        $query->select('fde_id, fde_filename, fde_description');
-        $query->from('#__file_details');
-        $query->where('fde_id in (' . $gallery_images . ')');
-
-        // Set and execute the query
-        $db->setQuery($query);
-
-        $gallery_images = $db->loadAssocList();
-
-
-        $property_gallery_images = '\'';
-
-        // Now we need to get a list of filename so we can select those from the library...
-        foreach ($gallery_images as $images => $image) {
-          $library_image_names[] = $image['fde_filename'];
-        }
-
-
-
-        $property_gallery_images .= implode('\',\'', $library_image_names) . '\'';
-
-        $query->clear();
-        $query = $db->getQuery(true);
-
-        $query->select('id');
-        $query->from('#__property_images_library');
-        $query->where('image_file_name in (' . $property_gallery_images . ')');
-
-        // Set and execute the query
-        $db->setQuery($query);
-
-        $gallery_images = $db->loadAssocList($key = 'id');
-
-        $query->insert('#__property_images_gallery');
-
-        $query->columns(array('property_id', 'property_library_id'));
-
-        // Loop over the list of images and insert them...
-        $insert_string = '';
-
-        // Previous images includes the unit images for this parent property
-        foreach ($gallery_images as $image => $id) {
-          $insert_string = "$line[0]," . $id['id'] . "";
-          $query->values($insert_string);
-        }
-
-        // Set and execute the query
-        $db->setQuery($query);
-
-        if (!$db->execute()) {
-          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-          print_r($db->getErrorMsg());
-          print_r($insert_string);
-          die;
-        }
-
-        // Library table should now hold a deduped list of ALL images associated with this property (so far).
-        // This may be added next time around, if it's a new unit.
-        // 
-        // 5. As this is a unit, add the property and unit images to the gallery images table
-        // Increment unit count
-        $unit_count++;
-
-      } else { // Must be a new property 
-        // Select all images for this property, loop ever them and move them to the correct folder...
-        if ($previous_property_id != '') {
-          $query->clear();
-          $query->select('id,image_file_name');
-          $query->from('#__property_images_library');
-          $query->where('property_id = ' . $previous_property_id);
-
-          $db->setQuery($query);
-
-          $images_to_move = $db->loadAssocList($key = 'id');
-
-          $folder = JPATH_ROOT . '/' . 'images/property';
-
-          $baseDir[] = $folder . '/' . $previous_property_id . '/gallery/';
-          $baseDir[] = $folder . '/' . $previous_property_id . '/thumbs/';
-          $baseDir[] = $folder . '/' . $previous_property_id . '/thumb/';
-
-          // Create folders for each of the profiles for the property, if they don't exist
-          foreach ($baseDir as $dir) {
-            if (!file_exists($dir)) {
-              jimport('joomla.filesystem.folder');
-              JFolder::create($dir);
-            }
-          }
-
-
-          foreach ($images_to_move as $images => $image) {
-
-            // Only need to do this if images not already present.
-            if (!file_exists($folder . '/' . $previous_property_id . '/' . $image['image_file_name'])) {
-
-              $move = copy('D:\\\Pics/_images/' . $image['image_file_name'], $folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
-
-              if (!$move) {
-                JLog::add('Unable to move/locate image - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
-              }
-
-              if (file_exists($folder . '/' . $previous_property_id . '/' . $image['image_file_name'])) {
-                try {
-                  $imgObj = new JImage($folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
-                } catch (Exception $e) {
-
-                  JLog::add('Cannot move image (wrong mime type?) - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
-                }
-
-                // Calculate width, height and offsets
-                $width = $imgObj->getWidth();
-                $height = $imgObj->getHeight();
-
-
-                // If not exactly square then we just take the middle portion and crop it manually, so to speak.  
-                if ($imgObj->getWidth() > $imgObj->getHeight()) {
-                  $left = ($width - $height) / 2;
-                  $thumb = $imgObj->crop($height, $height, $left, null, true);
-                  $new = $thumb->resize(100, 100, true, 1);
-                  $new->toFile($folder . '/' . $previous_property_id . '/thumbs/' . $image['image_file_name']);
-                } else if ($imgObj->getHeight() > $imgObj->getWidth()) {
-                  $top = ($height - $width) / 2;
-                  $thumb = $imgObj->crop($width, $width, null, $top, true);
-                  $new = $thumb->resize(100, 100, null, 1);
-                  $new->toFile($folder . '/' . $previous_property_id . '/thumbs/' . $image['image_file_name']);
-                }
-
-                // If the image is less than 550 wide then we want to create a white image and merge the two
-                if ($width < 550) {
-
-                  // Create a blank image
-                  $blank_image = imagecreatetruecolor(550, 375);
-
-                  // Set it's background to white
-                  $color = imageColorAllocate($blank_image, 255, 255, 255);
-                  imagefill($blank_image, 0, 0, $color);
-
-                  // Load the existing image
-                  $existing_image = imagecreatefromjpeg($folder . '/' . $previous_property_id . '/' . $image['image_file_name']);
-
-                  // Copy the existing image into the new one
-                  imagecopy($blank_image, $existing_image, (550 - $width) / 2, (375 - $height) / 2, 0, 0, $width, $height);
-
-                  // Save it out
-                  imagejpeg($blank_image, $folder . '/' . $previous_property_id . '/gallery/' . str_replace('.', '_550x375.', $image['image_file_name']), 100);
-               
-                  
-                } else {
-
-                  $imgObj->createThumbs('550x375', 4, $folder . '/' . $previous_property_id . '/gallery/');
-                }
-              }
-            }
-          }
-        }
-
-        // Reset previous images
-        $previous_images = array();
-
-        // Reset unit count
-        $unit_count = 1;
-
-        $property_id = $line[1]; // Set property ID
-        // Add this lot of image to a library_images array. This is used next time around to append any additional images (if a multi unit)
-
-        if (!empty($line[3])) {
-          $images = $line[2] . ',' . $line[3];
-        } else {
-          $images = $line[2];
-        }
-
-        // Need to get the image filenames and captions 
-        $query = $db->getQuery(true);
-
-        $query->clear();
-
-        $query->select('fde_id, fde_filename, fde_description');
-        $query->from('#__file_details');
-        $query->where('fde_id in (' . $images . ')');
-
-        // Set and execute the query
-        $db->setQuery($query);
-
-        $library_images = $db->loadAssocList($key = 'fde_id');
-
+      
+      $ordering = 1;
+      // Firstly, get all the images associated with this unit
+      $external_images = explode(',', $line[2]);
+      $internal_images = explode(',', $line[3]);
+
+      // Splice the internal images into the second position of the external images
+      // in order to preserve the ordering of current gallery
+      array_splice($external_images, 1, 0, $internal_images);
+
+      // Implode into a comma delimited string
+      $images = implode(',', array_filter($external_images));
+
+      
+      
+      // Get a query object
+      $query = $db->getQuery(true);
+
+      $query->select('fde_id, fde_filename, fde_description, 0 as ordering');
+      $query->from('#__file_details');
+      $query->where('fde_id in (' . $images . ')');
+
+      // Set and execute the query
+      $db->setQuery($query);
+
+      $existing_images = $db->loadAssocList($key = 'fde_id');
+
+      // Images array has the images in the order we want
+      // Existing images has the file details we want
+      // Need to reorder existing images based on images.
+      
+      foreach ($existing_images as $key => &$value) {
+        // $key is the file id
+        $position = array_search($key, explode(',',$images));
         
-
-
-
-        // Insert this lot of images into the library_images table. If a single unit property the images are stored in the library.
-        // Start building a new query to insert any attributes... 
-        $query = $db->getQuery(true);
-
-        $query->insert('#__property_images_library');
-
-        $query->columns(array('property_id', 'image_file_name', 'caption'));
-
-        // Loop over the list of images and insert them...
-        // Need to select them all from the file_details table first...
-
-
-
-        $insert_string = '';
-
-        foreach ($library_images as $images => $image) {
-          $insert_string = "$property_id,'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'";
-          $query->values($insert_string);
-        }
-
-        // Set and execute the query
-        $db->setQuery($query);
-
-        if (!$db->execute()) {
-          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-        }
-
-        if ($unit_count == 1) {
-          $query = $db->getQuery(true);
-          $query->select('id');
-          $query->from('#__property_images_library');
-          $query->where('property_id = ' . $property_id);
-
-          // Set and execute the query
-          $db->setQuery($query);
-          
-          if (!$db->execute()) {
-            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-          }
-          
-          $gal_images = $db->loadAssocList();
-                   
-          // Set up a new query to insert into the gallery 
-          $query = $db->getQuery(true);
-
-          $query->insert('#__property_images_gallery');
-
-          $query->columns(array('property_id', 'property_library_id'));
-          
-          // gal_images contains all the images for the listing and the first unit
-          foreach ($gal_images as $image => $id) {
-            $insert_string = $db->quote($line[0]) . ',' . $id['id'];
-            $query->values($insert_string);
-          }
-          
-          // Set and execute the query
-          $db->setQuery($query);
-
-          if (!$db->execute()) {
-            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-          }
+        $value['ordering'] = $position + 1;
         
-          
-          
-        }
-
-        $previous_images = $library_images;
       }
-      // Track the property ID              
-      $previous_property_id = $line[1];
+      
+      $query->clear();
+      $query = $db->getQuery(true);
+
+      $query->insert('#__property_images_library');
+      $query->columns(array('property_id', 'image_file_name', 'caption', 'ordering'));
+
+      // Loop over the list of images and insert them...
+      // Need to select them all from the file_details table first...
+      $insert_string = '';
+
+      foreach ($existing_images as $images => $image) {
+        $insert_string = "$line[0],'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'," . (int) $image['ordering'];
+        $query->values($insert_string);
+      }
+
+      // Set and execute the query
+      $db->setQuery($query);
+
+      if (!$db->execute()) {
+        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+        print_r($db->getErrorMsg());
+        print_r($insert_string);
+        die;
+      }
+
+      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
+      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
+      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
+
+      // Create folders for each of the profiles for the property, if they don't exist
+      foreach ($baseDir as $dir) {
+        if (!file_exists($dir)) {
+          jimport('joomla.filesystem.folder');
+          JFolder::create($dir);
+        }
+      }
+
+      // Move each image and create the profile images
+      foreach ($existing_images as $key => $value) {
+
+        $filepath = COM_IMAGE_BASE . $line[0];
+
+        $image = $filepath . '/' . $value['fde_filename'];
+
+        // Move the image into the relevant folder, if we don't have it already...
+        if (!file_exists($image)) {
+
+          $move = copy('D:\\\Pics/_images/' . $value['fde_filename'], $filepath . '/' . $value['fde_filename']);
+
+          if (!$move) {
+            JLog::add('Unable to move/locate image - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+          }
+        }
+
+        // Image has been uploaded, let's create some image profiles...
+        try {
+          $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'gallery', 578, 435);
+          $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumbs', 100, 100);
+          $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumb', 210, 120);
+        } catch (Exception $e) {
+          
+          
+        }
+      }
     }
-    die;
 
 
 
@@ -429,3 +159,4 @@ class ImportControllerImages extends JControllerForm {
   }
 
 }
+

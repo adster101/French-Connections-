@@ -275,6 +275,8 @@ class HelloWorldModelUnit extends JModelAdmin {
           // Now we are ready to save our updated unit details to the new version table
           $table = $this->getTable('PropertyUnitsVersion');
           
+          $table->set('_tbl_key','version_id');
+
           // Set the version ID that we want to bind and store the data against...
           $table->version_id = $version->version_id;
         }
@@ -339,11 +341,15 @@ class HelloWorldModelUnit extends JModelAdmin {
       // Set the table key back to ID so the controller redirects to the right place
       $table->set('_tbl_key','id');
 
+      // Need to update the original unit to indicate that it has a new, unpublished version...
+      
+      
       // Clean the cache.
       $this->cleanCache();
 
       // Trigger the onContentAfterSave event.
       $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
+      
     } catch (Exception $e) {
       $this->setError($e->getMessage());
 
@@ -403,7 +409,7 @@ class HelloWorldModelUnit extends JModelAdmin {
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...needs moving to the model...or does it?
-    $whitelist = array('accommodation_type', 'external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability');
+    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability');
 
     // Loop over the data and prepare an array to save
     foreach ($data as $key => $value) {

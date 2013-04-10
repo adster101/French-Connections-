@@ -21,7 +21,10 @@ class HelloWorldViewAvailability extends JViewLegacy
 	
 		// Get the custom script path for this screen
 		$script = $this->get('Script');
-
+    
+    //Populate the state
+    $this->state = $this->get('State');
+    
 		// Get the availability form, for now not loading any form data as it will be presented in the calendar rather than in a form
 		// Need to take into account the additional price notes 
 		$form = $this->get('Form');

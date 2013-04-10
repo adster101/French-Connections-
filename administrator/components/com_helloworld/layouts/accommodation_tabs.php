@@ -65,8 +65,8 @@ $default_unit = (count($units) > 0) ? key($units) : '';
     </a>
   </div>
 <?php elseif ($view == 'unit') : ?>
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
   <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
     <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>  
   </div>
 <?php endif; ?>
@@ -166,7 +166,7 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       </span>
     <?php endif; ?>
   </li>
-  <li>
+  <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
     <?php if (!empty($units)) : ?>
       <?php if (count($units) > 0) : ?>
         <?php if (array_key_exists($id, $units)) : ?>

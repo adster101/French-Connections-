@@ -48,15 +48,15 @@ $data = JApplication::getUserState('listing', '');
 
         <fieldset> 
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
-
           <div class="row-fluid">
             <div class="span8">
               <?php echo $this->form->getInput('map'); ?>           
               <?php echo $this->form->getInput('latitude'); ?>           
               <?php echo $this->form->getInput('longitude'); ?>            
             </div>
-
-            <div class="span4 form-inline">      
+            <div class="span4 form-inline">    
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>
+              <hr />              
               <div class="control-group">
                 <?php echo $this->form->getLabel('department'); ?> 
                 <div class="controls">
@@ -81,8 +81,6 @@ $data = JApplication::getUserState('listing', '');
                   <?php echo $this->form->getInput('distance_to_coast'); ?>
                 </div>
               </div>
-              <hr />
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>
             </div>
           </div> 
           <hr />

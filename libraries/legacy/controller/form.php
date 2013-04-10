@@ -736,7 +736,8 @@ class JControllerForm extends JControllerLegacy
 			case 'apply':
 				// Set the record data in the session.
 				$recordId = $model->getState($this->context . '.id');
-				$this->holdEditId($context, $recordId);
+
+        $this->holdEditId($context, $recordId);
 				$app->setUserState($context . '.data', null);
 				$model->checkout($recordId);
 
