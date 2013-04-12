@@ -97,12 +97,6 @@ $listing_id = '';
               </th>
             <?php endif; ?>
 
-
-            <?php if ($canDo->get('helloworld.snooze')) : ?>
-              <th>
-                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_SNOOZE'); ?>
-              </th>
-            <?php endif; ?>
           </tr>
         </thead>
 
@@ -176,15 +170,11 @@ $listing_id = '';
                       <br />
                       <?php echo JText::_($item->phone_1); ?>
                     </span>
-                  </td>
-                <?php endif; ?>
-
-
-                <?php if ($canDo->get('helloworld.snooze')) : ?>
-                  <td>
-                    <a class="btn btn-micro active" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=snooze.update&id=' . $item->id . '&' . JSession::getFormToken() . '=1') ?>">
-                      <i class="icon-calendar"></i>
-                    </a>
+                    <?php if ($canDo->get('helloworld.display.notes')) : ?>
+                      <br />
+                      <?php echo JHtml::_('property.notes', $item->id); ?>
+                    
+                    <?php endif; ?>
                   </td>
                 <?php endif; ?>
               </tr>

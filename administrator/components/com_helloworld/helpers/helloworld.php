@@ -207,7 +207,7 @@ abstract class HelloWorldHelper {
         'helloworld.edit.property.parent',
         'helloworld.filter',
         'helloworld.display.owner',
-        'helloworld.display.contactlog',
+        'helloworld.display.notes',
         'helloworld.sort.expiry',
         'helloworld.sort.prn',
         'helloworld.ownermenu.view',

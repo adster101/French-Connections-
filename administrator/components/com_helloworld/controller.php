@@ -32,7 +32,6 @@ class HelloWorldController extends JControllerLegacy {
     $lName = JRequest::getCmd('layout', 'default');
     $id = JRequest::getInt('id');
 
-
     // Check for edit form. This checks that the edit ID is set in the session.
     // This only occurs when someone follows a link ?option=com_helloworld&task=helloworld.edit&id=78
     // A check in each sub controller is also needed to ensure that the user does actually own the item id

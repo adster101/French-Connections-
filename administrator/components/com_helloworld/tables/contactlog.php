@@ -20,6 +20,6 @@ class HelloWorldTableContactLog extends JTable
 	 */
 	function __construct(&$db) 
 	{
-		parent::__construct('#__property_contact_log', 'id', $db);
+		parent::__construct('#__property_listings_notes', 'id', $db);
 	}	 
 }

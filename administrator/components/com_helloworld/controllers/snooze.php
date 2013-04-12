@@ -41,12 +41,14 @@ class HelloWorldControllerSnooze extends JControllerForm {
    */
   public function update() {
 
+    $user   = JFactory::getUser();
     $app = JFactory::getApplication();
     $context = "$this->option.edit.$this->context";
-    $recordId = $this->input->get->get('id', '', 'int');
+    $records = $this->input->get('cid', array(), 'array');
+    $recordId = $records[0];
 
     // Access check.
-    if (!$this->allowEdit(array($key => $recordId), $key)) {
+    if (!$user->authorise('helloworld.snooze', $this->option)) {
       $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
       $this->setMessage($this->getError(), 'error');
 
@@ -60,7 +62,8 @@ class HelloWorldControllerSnooze extends JControllerForm {
       return false;
     }
 
-    // User authorise, Hurray!
+    
+    // User authorised, Hurray!
     $this->holdEditId($context, $recordId);
     $app->setUserState($context . '.data', null);
 
@@ -241,9 +244,11 @@ class HelloWorldControllerSnooze extends JControllerForm {
     $contact_model = JTable::getInstance('ContactLog', 'HelloWorldTable');
 
     $contact_model->property_id = $data['id'];
-    $contact_model->mail_body_text = $data['mail_body_text'];
-    $contact_model->mail_subject = 'SNOOZED';
-
+    $contact_model->body = $data['body'];
+    $contact_model->subject = $data['subject'];
+    $contact_model->created_time = JFactory::getDate()->toSql();
+    
+    
     if (!$contact_model->store()) {
       // Check-in failed, so go back to the record and display a notice.
       $this->setError(JText::sprintf('COM_PROPERTY_SAVE_CONTACT_LOG_ERROR', $model->getError()));

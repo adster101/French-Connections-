@@ -64,7 +64,7 @@ class HelloWorldControllerAvailability extends JControllerForm {
       $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
       if (empty($ownerId) && $recordId) {
         // Need to do a lookup from the model.
-        $model = $this->getModel('HelloWorld');
+        $model = $this->getModel();
         $record = $model->getItem($recordId);
 
         if (empty($record)) {

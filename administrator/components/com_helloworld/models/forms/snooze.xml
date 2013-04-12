@@ -12,9 +12,16 @@
       class="validate"
       labelclass="control-label">
     </field>
-    
     <field 
-      name="mail_body_text"
+      name="subject"
+      type="input"
+      label="Note subject"
+      labelclass="control-label"
+      class="input"
+      filter="string">
+    </field>
+    <field 
+      name="body"
       type="textarea"
 			label="COM_HELLOWORLD_SNOOZE_CONTACT_NOTES"
 			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"      

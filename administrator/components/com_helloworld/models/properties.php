@@ -185,7 +185,7 @@ class HelloWorldModelProperties extends JModelList {
       if ($snooze_state == false || $snooze_state ==1) {
         
         // ...hide snoozed properties
-        $query->where('a.snooze_until <= ' . date('Y-m-d'));
+        $query->where('a.snooze_until < NOW()');
 
       } elseif ($snooze_state == 2) {
         
@@ -199,7 +199,6 @@ class HelloWorldModelProperties extends JModelList {
     $search = $this->getState('filter.search');
     if (!empty($search)) {
       if ((int) $search) {
-
         // This pulls out the property with ID searched on, it's parent and any siblings. 
         $query->where('a.id = ' . (int) $search);
       } elseif (stripos($search, 'account:') === 0) {

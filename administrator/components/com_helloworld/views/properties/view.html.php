@@ -94,6 +94,10 @@ class HelloWorldViewProperties extends JViewLegacy {
       JToolBarHelper::trash('properties.trash');
     }
     
+    if ($canDo->get('helloworld.snooze')) {
+      JToolBarHelper::custom('snooze.update','calendar','',$alt='COM_ADMIN_NOTE',$listSelect=true);
+    }
+    
     if ($canDo->get('core.admin')) {
       JToolBarHelper::preferences('com_helloworld');
     }
