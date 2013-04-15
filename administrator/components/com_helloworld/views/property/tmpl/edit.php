@@ -115,12 +115,7 @@ $data = JApplication::getUserState('listing', '');
             </div>
           <?php endforeach; ?>
         </fieldset>
-        <p>
-          <?php
-          echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
-          echo JHTML::_('select.genericlist', $this->languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $this->lang);
-          ?>
-        </p>
+
         <fieldset class="panelform">
           <?php foreach ($this->form->getFieldset('owner') as $field): ?>
             <div class="control-group">
@@ -132,7 +127,17 @@ $data = JApplication::getUserState('listing', '');
 
           <?php endforeach; ?>
         </fieldset>
+        <fieldset class="panelform">
+          <?php foreach ($this->form->getFieldset('notes') as $field): ?>
+            <div class="control-group">
+              <?php echo $field->label; ?>
+              <div class="controls">
+                <?php echo $field->input; ?>
+              </div>
+            </div>
 
+          <?php endforeach; ?>
+        </fieldset>
       </div>
     </div>
   </div>

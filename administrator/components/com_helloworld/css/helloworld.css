@@ -42,4 +42,10 @@ body { height: 100%; margin: 0; padding: 0 }
   background: url('/administrator/templates/isis/images/admin/expandall.png') 9px center no-repeat;
 }
 
+select#Language {
+  margin-bottom:0;
+}
    
+.nav-tabs > li > span.language {
+  display:inline;
+}

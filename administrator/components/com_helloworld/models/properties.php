@@ -120,6 +120,10 @@ class HelloWorldModelProperties extends JModelList {
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
 
+    // Add in the number of page view this property has had in the last twelve months...
+    $now = date('Y-m-d');
+    $last_year = strtotime("-1 year", strtotime($now));
+    
     // Select some fields
     $query->select('
       a.id, 
@@ -128,7 +132,14 @@ class HelloWorldModelProperties extends JModelList {
       a.published,
       a.expiry_date,
       a.modified,
-      views.count,
+      (SELECT count(id) as count 
+      FROM #__property_views
+      where property_id = a.id
+      and date > ' . $db->quote(date('Y-m-d', $last_year)) . ') as view_count,
+      (SELECT count(id) as count 
+      FROM #__enquiries
+      where property_id = a.id
+      and date_created > ' . $db->quote(date('Y-m-d', $last_year)) . ') as enquiry_count,
       a.auto_renew,
       version
     ');
@@ -145,10 +156,7 @@ class HelloWorldModelProperties extends JModelList {
       $query->join('LEFT', '#__user_profile_fc AS p ON p.user_id = u.id');
     }
 
-    // Add in the number of page view this property has had in the last twelve months...
-    $now = date('Y-m-d');
-    $last_year = strtotime("-1 year", strtotime($now));
-    $query->join('left', '(SELECT property_id, count(id) as count FROM #__property_views where  date > ' . $db->quote(date('Y-m-d', $last_year)) . ' group by property_id) views on views.property_id = a.id');
+
 
     // Check the user group this user belongs to. 
     // Fundamental check to ensure owners only see their own listings.
@@ -178,19 +186,17 @@ class HelloWorldModelProperties extends JModelList {
     // Filter by snooze state
     // Should only apply to users who can view and change snooze state
     if ($canDo->get('helloworld.snooze')) {
-      
+
       $snooze_state = $this->getState('filter.snoozed');
 
       // If snooze state is not set or set to hide snoozed...
-      if ($snooze_state == false || $snooze_state ==1) {
-        
+      if ($snooze_state == false || $snooze_state == 1) {
+
         // ...hide snoozed properties
         $query->where('a.snooze_until < NOW()');
-
       } elseif ($snooze_state == 2) {
-        
+
         // Don't filter, user wants to see all snoozed props as well as not snoozed etc
-        
       }
     }
 
@@ -217,14 +223,13 @@ class HelloWorldModelProperties extends JModelList {
     // From the hello table
     $query->from('#__property_listings as a');
 
-    $listOrdering = $this->getState('list.ordering', 'a.id');
-    $listDirn = $db->escape($this->getState('list.direction', 'ASC'));
+    $listOrdering = $this->getState('list.ordering', '');
+    $listDirn = $db->escape($this->getState('list.direction', ''));
 
-    $query->order($db->escape($listOrdering) . ' ' . $listDirn);
-
-    $query->order($db->escape('a.created_by'));
-
-    //$query->where('h.id is not null');
+    // Order if we have a specific ordering.
+    if ($listOrdering) {
+      $query->order($db->escape($listOrdering) . ' ' . $listDirn);
+    }
 
     return $query;
   }

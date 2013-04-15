@@ -14,10 +14,10 @@ jimport('joomla.user.helper');
 class ImportControllerArticles extends JControllerForm {
 
   public function import() {
-    
+
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken( 'POST' ) or die( 'Invalid Token' );
-    
+    JSession::checkToken('POST') or die('Invalid Token');
+
     $config = JFactory::getConfig();
     // This is here as the user table instance checks that we aren't trying to insert a record with the same 
     // username as a super user. However, by default root_user is null. As we insert a load of dummy user to start 
@@ -29,9 +29,9 @@ class ImportControllerArticles extends JControllerForm {
 
     // Add the content model
     JControllerForm::addModelPath(JPATH_ADMINISTRATOR . '/components/com_content/models');
-    
 
-  
+
+
 
     // Open a handle to the import file
     $handle = fopen($userfile['tmp_name'], "r");
@@ -39,34 +39,32 @@ class ImportControllerArticles extends JControllerForm {
 
 
     while (($line = fgetcsv($handle)) !== FALSE) {
-      
+
+
       $data = array();
-      
-      $model = $this->getModel('Article','ContentModel');
+
+      $model = $this->getModel('Article', 'ContentModel');
 
       $data['id'] = '';
-      $data['fulltext'] = $line[9];
+      $data['fulltext'] = $line[10];
       $data['state'] = $line[1];
-      $data['introtext'] = $line[7];
-      $data['title'] = $line[6];
+      $data['introtext'] = $line[8];
+      $data['title'] = $line[7];
       $data['created'] = $line[2];
       $data['catid'] = 33;
       $data['language'] = 'en-GB';
-      
-      $model->save($data);
-      
-      
 
+      if (!$model->save($data)) {
+        $error = $model->getError();
+      }
+      
     }
-    
-          
+
     fclose($handle);
-    
-    $this->setMessage('Users imported, hooray!');
 
-    $this->setRedirect('index.php?option=com_import&view=users');
+    $this->setMessage('Articles imported, hooray!');
+
+    $this->setRedirect('index.php?option=com_import&view=articles');
   }
-
-  
 
 }

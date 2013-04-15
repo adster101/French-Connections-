@@ -9,11 +9,10 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
       size="75"
       maxlength="75"
-      class="span12 validate-greeting"
+      class="input-xxlarge validate-greeting"
       validate="greeting"
       required="true"
       filter="string"/>   
-      
   </fieldset>	  
 
  
@@ -134,8 +133,7 @@
     </field>    
   </fieldset>
 
-  <fieldset name="additional-details">
-    
+  <fieldset name="additional-details"> 
     <field
       name="id"
       type="text"
@@ -145,7 +143,6 @@
       class="readonly input-mini"
       labelclass=""
       readonly="true"/>
-    
     <field 
       name="expiry_date"
       type="text"
@@ -154,8 +151,10 @@
       label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
       description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
       filter="unset"
-      labelclass=""/>
+      labelclass=""/> 
+      
   </fieldset>
+  
   <fieldset name="owner">
     <field
       labelclass="control-label"
@@ -193,6 +192,19 @@
       filter="unset"
       readonly="true" />		
   </fieldset>
+  
+  <fieldset name="notes">
+    <field 
+      labelclass="control-label"
+      name="note"
+      filter="string"
+      type="textarea"
+      label="COM_HELLOWORLD_FIELD_PROPERTY_ADMIN_NOTES_LABEL"
+      description="COM_HELLOWORLD_FIELD_PROPERTY_ADMIN_NOTES_DESC"
+      default="">      
+    </field>   
+  </fieldset>
+  
   <fieldset name="hidden-details">
     <field
       name="asset_id"

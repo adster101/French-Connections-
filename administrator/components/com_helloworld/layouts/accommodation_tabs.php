@@ -2,6 +2,9 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+$languages = HelloWorldHelper::getLanguages();
+$lang = HelloWorldHelper::getLang();
+
 // Need to take the data from the object passed into the template...
 $data = $displayData;
 
@@ -40,7 +43,6 @@ $property_details = ($listing_details['id'] && $listing_details['latitude'] && $
 // Assign a 'default' unit ID 
 $units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
-
 ?>
 <div id="fc-message" class="hide alert">
 </div>
@@ -56,7 +58,7 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       <?php echo JText::_('COM_HELLOWORLD_PROCEED'); ?>    
     </a>
   </div>
-<?php elseif (($view == 'property' || $view == 'unit') && !empty($units) && !$units[$default_unit]->images ) : ?>
+<?php elseif (($view == 'property' || $view == 'unit') && !empty($units) && !$units[$default_unit]->images) : ?>
   <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_IMAGES_DETAILS'); ?>
@@ -91,7 +93,7 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       </ul>
     </div>
   </div>
-<hr />
+  <hr />
 <?php endif; ?>
 <ul class="nav nav-tabs">
   <li <?php echo ($view == 'property') ? 'class=\'active\'' : '' ?>>
@@ -105,7 +107,7 @@ $default_unit = (count($units) > 0) ? key($units) : '';
     </a>
   </li>
   <li <?php echo ($view == 'unit') ? 'class=\'active\'' : '' ?>>
-    <?php if (!empty($units)) : // This listing has one or more units already    ?> 
+    <?php if (!empty($units)) : // This listing has one or more units already     ?> 
       <?php if (count($units) == 1) : // There is only one unit for this listing...so far...  ?>
         <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . $units[$default_unit]->id) ?>">
           <?php echo JText::_($units[$default_unit]->unit_title); ?>
@@ -129,12 +131,12 @@ $default_unit = (count($units) > 0) ? key($units) : '';
         <?php echo JText::_('Accommodation'); ?>
         <i class='icon icon-warning'></i>
       </a>     
-    <?php elseif ($property_details) : // No units supplied, property details complete  ?>
+    <?php elseif ($property_details) : // No units supplied, property details complete   ?>
       <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit') ?>">
         <?php echo JText::_('Accommodation'); ?>
         <i class='icon icon-warning'></i>
       </a>
-    <?php else: // Brand new property  ?>
+    <?php else: // Brand new property   ?>
       <span class="muted">
         <?php echo JText::_('Accommodation'); ?>
       </span>
@@ -144,19 +146,19 @@ $default_unit = (count($units) > 0) ? key($units) : '';
     <?php if (!empty($units)) : ?>
       <?php if (count($units) == 1) : // There is only one unit for this listing...so far...  ?>
         <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id . '&listing_id=' . $listing_id) ?>">
-            <?php echo JText::_('IMAGE_GALLERY'); ?>
-            <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+          <?php echo JText::_('IMAGE_GALLERY'); ?>
+          <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
         </a>
       <?php elseif (count($units) > 1) : ?>
         <?php if (array_key_exists($id, $units)) : // If the  ?>
-          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$id]->id . '&listing_id=' . $listing_id  ) ?>">
+          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$id]->id . '&listing_id=' . $listing_id) ?>">
             <?php echo JText::_('IMAGE_GALLERY'); ?>
-            <?php echo ($units[$id]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+            <?php echo ($units[$id]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
           </a>
         <?php else: ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id) . '&listing_id=' . $listing_id ?>">
             <?php echo JText::_('IMAGE_GALLERY'); ?>
-            <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+            <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
           </a>     
         <?php endif; ?>
       <?php endif; ?> 
@@ -172,12 +174,12 @@ $default_unit = (count($units) > 0) ? key($units) : '';
         <?php if (array_key_exists($id, $units)) : ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit&id=' . $id) ?>">
             <?php echo JText::_('Availability'); ?>
-            <?php echo ($units[$id]->availability) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+            <?php echo ($units[$id]->availability) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
           </a>
         <?php else: ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit&id=' . $units[$default_unit]->id) ?>">
             <?php echo JText::_('Availability'); ?>
-            <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+            <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
           </a>     
         <?php endif; ?>
       <?php endif; ?> 
@@ -193,12 +195,12 @@ $default_unit = (count($units) > 0) ? key($units) : '';
         <?php if (array_key_exists($id, $units)) : ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=tariffs.edit&id=' . $id) ?>">
             <?php echo JText::_('Tariffs'); ?>
-            <?php echo ($units[$id]->availability) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+            <?php echo ($units[$id]->availability) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
           </a>
         <?php else: ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=tariffs.edit&id=' . $units[$default_unit]->id) ?>">
             <?php echo JText::_('Tariffs'); ?>
-            <?php echo ($units[$default_unit]->tariffs) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>';     ?>
+            <?php echo ($units[$default_unit]->tariffs) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
           </a>     
         <?php endif; ?>
       <?php endif; ?> 
@@ -208,4 +210,14 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       </span>
     <?php endif; ?>
   </li>
-</ul>
+
+
+  <li class="active pull-right" dir="ltr">
+    <span class="language">
+      <?php echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN'); ?>
+    </span>
+    <?php
+    echo JHTML::_('select.genericlist', $languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $lang);
+    ?>
+  </li>
+</ul> 

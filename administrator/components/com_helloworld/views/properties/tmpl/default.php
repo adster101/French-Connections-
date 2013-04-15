@@ -154,7 +154,8 @@ $listing_id = '';
                   <?php endif; ?>
                 </td>
                 <td>
-                  <?php echo JText::_($item->count); ?>
+                  <?php echo JText::_($item->view_count); ?><br />
+                  <?php echo JText::_($item->enquiry_count); ?> 
                 </td>                <td>
                   <?php echo JText::_($item->modified); ?>
                 </td>

@@ -43,7 +43,7 @@ class HelloWorldTablePropertyListing extends JTable
       if (empty($this->created_on)) {
         $this->created_on = $date->toSql();
       }
-
+      
     }
     
     return parent::store($updateNulls = false);

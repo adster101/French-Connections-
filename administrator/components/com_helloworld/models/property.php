@@ -65,78 +65,69 @@ class HelloWorldModelProperty extends JModelAdmin {
   public function getScript() {
     return 'administrator/components/com_helloworld/models/forms/helloworld.js';
   }
-  
-	/**
-	 * Method to get a list of units for a given property listing
-	 *
-	 * @param   integer  $pk  The id of the property listing.
-	 *
-	 * @return  mixed    Object on success, false on failure.
-	 *
-	 * @since   12.2
-	 */
-	public function getUnits()
-	{
-    
-    $input= JFactory::getApplication()->input;
+
+  /**
+   * Method to get a list of units for a given property listing
+   *
+   * @param   integer  $pk  The id of the property listing.
+   *
+   * @return  mixed    Object on success, false on failure.
+   *
+   * @since   12.2
+   */
+  public function getUnits() {
+
+    $input = JFactory::getApplication()->input;
     $id = $input->get('id', '', 'int');
-    
+
     $return = false;
-    
+
     // Get the units table
-    $units_table = $this->getTable('PropertyUnits','HelloWorldTable');
-    
+    $units_table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+
     // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
-    $units_table->set('_tbl_key','parent_id');
-    
-    if ($id > 0)
-		{
-			// Attempt to load the row.
-			$return = $units_table->load_units($id);
+    $units_table->set('_tbl_key', 'parent_id');
 
-			// Check for a table object error.
-			if ($return === false && $units_table->getError())
-			{
-				$this->setError($units_table->getError());
-				return false;
-			}
-		} else {
+    if ($id > 0) {
+      // Attempt to load the row.
+      $return = $units_table->load_units($id);
+
+      // Check for a table object error.
+      if ($return === false && $units_table->getError()) {
+        $this->setError($units_table->getError());
+        return false;
+      }
+    } else {
       return false;
-    } 
+    }
 
-		// Convert to the JObject before adding other data.
-		$units = JArrayHelper::toObject($return, 'JObject');
+    // Convert to the JObject before adding other data.
+    $units = JArrayHelper::toObject($return, 'JObject');
 
     return $units;
-	}
-  
-  public function getProgress()
-  {
-
-    $return = false;
-    
-    // Get the units table
-    $units_table = $this->getTable('PropertyUnits','HelloWorldTable'); 
-    
-    if ($id)
-		{
-			// Attempt to load the row.
-			$return = $units_table->progress($id);
-
-			// Check for a table object error.
-			if ($return === false && $units_table->getError())
-			{
-				$this->setError($units_table->getError());
-				return false;
-			}
-		} 
-    
-    return $return;
-   
-
   }
 
-    
+  public function getProgress() {
+
+    $return = false;
+
+    // Get the units table
+    $units_table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+
+    if ($id) {
+      // Attempt to load the row.
+      $return = $units_table->progress($id);
+
+      // Check for a table object error.
+      if ($return === false && $units_table->getError()) {
+        $this->setError($units_table->getError());
+        return false;
+      }
+    }
+
+    return $return;
+  }
+
   /**
    * Method to get the data that should be injected in the form.
    *
@@ -153,9 +144,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     return $data;
   }
-  
-	
-  
+
   /*
    * This method checks whether the property being edited is a unit.
    * If it is then we take the lat and long from the parent property 
@@ -181,7 +170,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     // More robustly checked on the component level permissions?
     // E.g. at the moment any user who is not owner can edit this? 
     // e.g. add a new permission core.edit.property.changeparent    
-   
+
     $canDo = $this->getState('actions.permissions', array());
     // If we don't come from a view then this maybe empty so we reset it.
     if (empty($canDo)) {
@@ -189,25 +178,18 @@ class HelloWorldModelProperty extends JModelAdmin {
     }
 
     // Check the change parent ability of this user
-    if (!$canDo->get('helloworld.edit.property.owner')) {  
+    if (!$canDo->get('helloworld.edit.property.owner')) {
       $user = JFactory::getUser();
       // Set the default owner to the user creating this.
       $form->setFieldAttribute('created_by', 'type', 'hidden');
       $form->setFieldAttribute('created_by', 'default', $user->id);
     }
-    
+
     // Set the location details accordingly, needed for one of the form field types... 
     if (!empty($data->latitude) && !empty($data->longitude)) {
-      $form->setFieldAttribute('city', 'latitude', $data->latitude );
-      $form->setFieldAttribute('city', 'longitude', $data->longitude);    
-    }   
-    
-    
-    
-    
-    // Set the created date
-    $form->setFieldAttribute('created_on', 'default', date('Y-m-d'));    
-
+      $form->setFieldAttribute('city', 'latitude', $data->latitude);
+      $form->setFieldAttribute('city', 'longitude', $data->longitude);
+    }
   }
 
   /**
@@ -219,33 +201,30 @@ class HelloWorldModelProperty extends JModelAdmin {
    *
    * @since   11.1
    */
-  
   protected function getLocationDetails($city) {
-    
+
     $location_details_array = array();
-    
+
     // Get the table instance for the classification table
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
-   
+
     $table = $this->getTable('Classification', 'ClassificationTable');
-    
-    if(!$location_details = $table->getPath($city)) {
+
+    if (!$location_details = $table->getPath($city)) {
       $this->setError($table->getError());
       return false;
     };
-    
+
     // Loop over the location details and pass them back as an array
     foreach ($location_details as $key => $value) {
-      
+
       if ($value->level > 0) {
         $location_details_array[] = $value->id;
       }
-      
     }
-    
-    
+
+
     return $location_details_array;
-    
   }
 
   /**
@@ -296,27 +275,25 @@ class HelloWorldModelProperty extends JModelAdmin {
   /**
    * Overidden method to save the form data.
    *
-   * @param   array  $data  The form data.
+   * @param   array  $data  The filtered form data.
    *
    * @return  boolean  True on success, False on error.
    *
    * @since   12.2
    */
   public function save($data) {
-    
+
     $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
-    $app = JFactory::getApplication();
-    $data = $app->input->post->get('jform', array(), 'array');
-    
+
     $city = (!empty($data['city'])) ? $data['city'] : '';
-    
+
     // Need to get the location details (area, region, dept) and update the data array
     $location_details = $this->getLocationDetails($city);
-    
+
     // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
     if (!empty($location_details)) {
       $data['area'] = $location_details[0];
@@ -324,7 +301,7 @@ class HelloWorldModelProperty extends JModelAdmin {
       $data['department'] = $location_details[2];
       $data['city'] = $location_details[3];
     }
-    
+
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
 
@@ -340,7 +317,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         if ($version->version_id > 0) {
           // Now we are ready to save our updated unit details to the new version table
           $table = $this->getTable('PropertyUnitsVersion');
-          
+
           // Set the version ID that we want to bind and store the data against...
           $table->version_id = $version->version_id;
         }
@@ -353,17 +330,15 @@ class HelloWorldModelProperty extends JModelAdmin {
 
         // Let's have a before bind trigger
         $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
-
+        $version = false;
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
         if ($version[0]) {
           // Switch the table model to the version one
           $table = $this->getTable('PropertyUnitsVersion');
-          $table->set('_tbl_key','version_id');
-
+          $table->set('_tbl_key', 'version_id');
         }
       }
 
-      
       // Bind the data.
       if (!$table->bind($data)) {
         $this->setError($table->getError());
@@ -393,8 +368,41 @@ class HelloWorldModelProperty extends JModelAdmin {
         return false;
       }
 
+      // Save the admin note if it's present
+      if (!empty($data['note'])) {
+
+        $note = array();
+
+        $note['property_id'] = $data['id'];
+        $note['state'] = 1;
+        $note['body'] = $data['note'];
+        $note['created_time'] = JFactory::getDate()->toSql();
+
+        $note_table = $this->getTable('Note', 'HelloWorldTable');
+
+        // Bind the data.
+        if (!$note_table->bind($note)) {
+          $this->setError($note_table->getError());
+          return false;
+        }
+
+        // Prepare the row for saving
+        $this->prepareTable($note_table);
+
+        // Check the data.
+        if (!$note_table->check()) {
+          $this->setError($note_table->getError());
+          return false;
+        }
+        // Store the data.
+        if (!$note_table->store()) {
+          $this->setError($note_table->getError());
+          return false;
+        }
+      }
+    
       // Set the table key back to ID so the controller redirects to the right place
-      $table->set('_tbl_key','id');
+      $table->set('_tbl_key', 'id');
 
       // Clean the cache.
       $this->cleanCache();
@@ -416,7 +424,5 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     return true;
   }
-  
 
-  
 }

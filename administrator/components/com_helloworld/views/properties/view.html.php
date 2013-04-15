@@ -48,10 +48,7 @@ class HelloWorldViewProperties extends JViewLegacy {
     }
 
     // Set the toolbar
-    $this->addToolBar();
-
-
-   
+    $this->addToolBar(); 
 
     // Display the template
     parent::display($tpl);
@@ -142,7 +139,6 @@ class HelloWorldViewProperties extends JViewLegacy {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
   }
