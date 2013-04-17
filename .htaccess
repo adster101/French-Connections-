@@ -1,0 +1,182 @@
+##
+# @package		Joomla
+# @copyright	Copyright (C) 2005 - 2012 Open Source Matters. All rights reserved.
+# @license		GNU General Public License version 2 or later; see LICENSE.txt
+##
+
+##
+# READ THIS COMPLETELY IF YOU CHOOSE TO USE THIS FILE!
+#
+# The line just below this section: 'Options +FollowSymLinks' may cause problems
+# with some server configurations.  It is required for use of mod_rewrite, but may already
+# be set by your server administrator in a way that dissallows changing it in
+# your .htaccess file.  If using it causes your server to error out, comment it out (add # to
+# beginning of line), reload your site in your browser and test your sef url's.  If they work,
+# it has been set by your server administrator and you do not need it set here.
+##
+
+## Fix Font error for Chrome
+AddType application/x-font-woff woff
+AddType application/x-font-ttf ttf
+AddType application/vnd.ms-fontobject eot
+AddType image/svg+xml svg
+
+# `FileETag None` is not enough for every server.
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+
+FileETag None
+
+<IfModule mod_deflate.c>
+
+    # Force compression for mangled headers.
+    # http://developer.yahoo.com/blogs/ydn/posts/2010/12/pushing-beyond-gzipping
+    <IfModule mod_setenvif.c>
+        <IfModule mod_headers.c>
+            SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+            RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+        </IfModule>
+    </IfModule>
+
+    # Compress all output labeled with one of the following MIME-types
+    # (for Apache versions below 2.3.7, you don't need to enable `mod_filter`
+    #  and can remove the `<IfModule mod_filter.c>` and `</IfModule>` lines
+    #  as `AddOutputFilterByType` is still in the core directives).
+    <IfModule mod_filter.c>
+        AddOutputFilterByType DEFLATE application/atom+xml \
+                                      application/javascript \
+                                      application/json \
+                                      application/rss+xml \
+                                      application/vnd.ms-fontobject \
+                                      application/x-font-ttf \
+                                      application/x-web-app-manifest+json \
+                                      application/xhtml+xml \
+                                      application/xml \
+                                      font/opentype \
+                                      image/svg+xml \
+                                      image/x-icon \
+                                      text/css \
+                                      text/html \
+                                      text/plain \
+                                      text/x-component \
+                                      text/xml
+    </IfModule>
+
+</IfModule>
+# The following expires headers are set pretty far in the future. If you don't
+# control versioning with filename-based cache busting, consider lowering the
+# cache time for resources like CSS and JS to something like 1 week.
+
+<IfModule mod_expires.c>
+
+    ExpiresActive on
+    ExpiresDefault                                      "access plus 1 month"
+
+  # CSS
+    ExpiresByType text/css                              "access plus 1 year"
+
+  # Data interchange
+    ExpiresByType application/json                      "access plus 0 seconds"
+    ExpiresByType application/xml                       "access plus 0 seconds"
+    ExpiresByType text/xml                              "access plus 0 seconds"
+
+  # Favicon (cannot be renamed!)
+    ExpiresByType image/x-icon                          "access plus 1 week"
+
+  # HTML components (HTCs)
+    ExpiresByType text/x-component                      "access plus 1 month"
+
+  # HTML
+    ExpiresByType text/html                             "access plus 0 seconds"
+
+  # JavaScript
+    ExpiresByType application/javascript                "access plus 1 year"
+
+  # Manifest files
+    ExpiresByType application/x-web-app-manifest+json   "access plus 0 seconds"
+    ExpiresByType text/cache-manifest                   "access plus 0 seconds"
+
+  # Media
+    ExpiresByType audio/ogg                             "access plus 1 month"
+    ExpiresByType image/gif                             "access plus 1 month"
+    ExpiresByType image/jpeg                            "access plus 1 month"
+    ExpiresByType image/png                             "access plus 1 month"
+    ExpiresByType video/mp4                             "access plus 1 month"
+    ExpiresByType video/ogg                             "access plus 1 month"
+    ExpiresByType video/webm                            "access plus 1 month"
+
+  # Web feeds
+    ExpiresByType application/atom+xml                  "access plus 1 hour"
+    ExpiresByType application/rss+xml                   "access plus 1 hour"
+
+  # Web fonts
+    ExpiresByType application/font-woff                 "access plus 1 month"
+    ExpiresByType application/vnd.ms-fontobject         "access plus 1 month"
+    ExpiresByType application/x-font-ttf                "access plus 1 month"
+    ExpiresByType font/opentype                         "access plus 1 month"
+    ExpiresByType image/svg+xml                         "access plus 1 month"
+
+</IfModule>
+## Can be commented out if causes errors, see notes above.
+Options +FollowSymLinks
+
+## Mod_rewrite in use.
+
+RewriteEngine On
+
+
+
+## Begin - Rewrite rules to block out some common exploits.
+# If you experience problems on your site block out the operations listed below
+# This attempts to block the most common type of exploit `attempts` to Joomla!
+#
+# Block out any script trying to base64_encode data within the URL.
+RewriteCond %{QUERY_STRING} base64_encode[^(]*\([^)]*\) [OR]
+# Block out any script that includes a <script> tag in URL.
+RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+# Block out any script trying to set a PHP GLOBALS variable via URL.
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+# Block out any script trying to modify a _REQUEST variable via URL.
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
+# Return 403 Forbidden header and show the content of the root homepage
+RewriteRule .* index.php [F]
+#
+## End - Rewrite rules to block out some common exploits.
+
+## Begin - Custom redirects
+#
+# If you need to redirect some pages, or set a canonical non-www to
+# www redirect (or vice versa), place that code here. Ensure those
+# redirects use the correct RewriteRule syntax and the [R=301,L] flags.
+#
+## End - Custom redirects
+
+##
+# Uncomment following line if your webserver's URL
+# is not directly related to physical file paths.
+# Update Your Joomla! Directory (just / for root).
+##
+
+#RewriteBase /
+
+## Begin - Joomla! core SEF Section.
+#
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+#
+# If the requested path and file is not /index.php and the request
+# has not already been internally rewritten to the index.php script
+RewriteCond %{REQUEST_URI} !^/index\.php
+# and the request is for something within the component folder,
+# or for the site root, or for an extensionless URL, or the
+# requested URL ends with one of the listed extensions
+RewriteCond %{REQUEST_URI} /component/|(/[^.]*|\.(php|html?|feed|pdf|vcf|raw))$ [NC]
+# and the requested path and file doesn't directly match a physical file
+RewriteCond %{REQUEST_FILENAME} !-f
+# and the requested path and file doesn't directly match a physical folder
+RewriteCond %{REQUEST_FILENAME} !-d
+# internally rewrite the request to the index.php script
+RewriteRule .* index.php [L]
+
+#
+## End - Joomla! core SEF Section.
