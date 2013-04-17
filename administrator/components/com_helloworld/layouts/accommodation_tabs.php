@@ -218,12 +218,10 @@ $default_unit = (count($units) > 0) ? key($units) : '';
   </li>
 
 
-  <li class="active pull-right" dir="ltr">
+  <!--<li class="active pull-right" dir="ltr">
     <span class="language">
-      <?php echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN'); ?>
+      <?php //echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN'); ?>
     </span>
-    <?php
-    echo JHTML::_('select.genericlist', $languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $lang);
-    ?>
-  </li>
+    <?php //echo JHTML::_('select.genericlist', $languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $lang); ?>
+  </li>-->
 </ul> 

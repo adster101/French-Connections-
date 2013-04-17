@@ -384,14 +384,7 @@
           <option	value="2">JOPTION_REQUIRED</option>
           <option	value="0">JDISABLED</option>
         </field>  
-        <field
-          name="captcha"
-          type="captcha"
-          label="COM_USERS_CAPTCHA_LABEL"
-          description="COM_USERS_CAPTCHA_DESC"
-          validate="captcha"
-          plugin=""
-        />
+      
       </fieldset>
 				
 

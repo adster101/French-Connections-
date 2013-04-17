@@ -161,6 +161,7 @@
       name="created_by"
       type="user"
       readonly="false"
+      default=""
       label="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_LABEL"
       desc="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_DESC"
       class="input-small required"
@@ -206,27 +207,6 @@
   </fieldset>
   
   <fieldset name="hidden-details">
-    <field
-      name="asset_id"
-      type="hidden"
-      filter="unset"/>
-    <field
-      name="lft"
-      type="hidden"
-      filter="unset"/>
-    <field
-      name="rgt"
-      type="hidden"
-      filter="unset"/>
-    <field
-      name="level"
-      type="hidden"
-      filter="unset"/>	
-    <field
-      name="lang"
-      type="hidden"
-      required="true"
-      default="en-GB"/>
     <field 
       name="published"
       type="hidden"

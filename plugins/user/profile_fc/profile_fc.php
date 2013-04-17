@@ -37,8 +37,7 @@ class plgUserProfile_fc extends JPlugin
       'vat_number',
       'company_number',
       'receive_newsletter',
-      'where_heard',
-      'captcha'
+      'where_heard'
     );
   
 	/**
@@ -212,8 +211,6 @@ class plgUserProfile_fc extends JPlugin
 
 		// Check we are manipulating a valid form.
 		$name = $form->getName();
-
-    echo JURI::current();
     
     if (!in_array($name, array('com_admin.profile', 'com_users.user', 'com_users.profile', 'com_users.registration')))
 		{
