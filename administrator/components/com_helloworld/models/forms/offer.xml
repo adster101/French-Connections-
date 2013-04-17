@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_helloworld/models/rules">
+	<fieldset name="offer-details">
+		 <field
+			name="created_by"
+			type="hidden"
+			/>	
+    <field
+			name="property_id"
+			type="hidden"
+			/>	
+    <field
+			name="offer_id"
+			type="text"
+			default=""
+			label="COM_HELLOWORLD_FIELD_OFFER_ID_LABEL"
+			description ="COM_HELLOWORLD_FIELD_OFFER_ID_DESC"
+			class="readonly"
+			readonly="true"/>	
+    <field
+			name="title"
+			type="text"
+			default=""
+			label="COM_HELLOWORLD_FIELD_OFFER_TITLE_LABEL"
+			description ="COM_HELLOWORLD_FIELD_OFFER_TITLE_DESC"
+      maxlength="50"
+      size="50"
+      required="true"
+      class="inputbox validate-offertitle"
+      validate="offertitle"
+      />  
+		<field
+			name="description"
+			type="textarea"
+			default=""
+			label="COM_HELLOWORLD_FIELD_OFFER_DESCRIPTION_LABEL"
+			description ="COM_HELLOWORLD_FIELD_OFFER_DESCRIPTION_LABEL"
+      maxlength="150"
+      required="true" 
+      class="inputbox validate-offerdescription"
+      validate="startdate"
+      rows="5"
+      cols="3"
+    /> 
+     
+  </fieldset>
+  
+	<fieldset name="availability">
+		<field
+			name="start_date"
+			type="calendar"
+			label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
+			description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
+			size="40"
+			class="inputbox validate-startdate startdate"
+			validate=""
+			required="true"
+			default="">
+    </field>
+		<field
+			name="end_date"
+			type="calendar"
+			label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+			description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+			size="40"
+			class="inputbox validate-enddate enddate"
+			validate="enddate"
+			required="true"
+			default="">
+    </field>
+		
+	</fieldset>	  
+	
+</form>

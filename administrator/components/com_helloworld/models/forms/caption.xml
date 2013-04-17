@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_helloworld/models/rules">
+	<fieldset name="caption-details">
+		<field
+			name="caption"
+			type="text"
+			default=""
+			label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"
+      size="80"
+      maxlength="75"
+      required="true"
+      class="validate">
+    </field>
+    <field 
+      name="image_file_name"
+      type="hidden"
+      default="">
+    </field>
+    <field 
+      name="property_id"
+      type="hidden"
+      default="">
+    </field>
+    <field 
+      name="image_url"
+      type="hidden"
+      default="">
+    </field>    
+  </fieldset>
+</form>
