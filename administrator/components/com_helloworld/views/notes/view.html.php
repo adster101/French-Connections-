@@ -66,6 +66,8 @@ class HelloWorldViewNotes extends JViewLegacy
 		$this->pagination = $this->get('Pagination');
 		$this->state      = $this->get('State');
 		$this->user       = $this->get('User');
+    
+    $this->id = JFactory::getApplication()->input->get('property_id','','int');
   
     HelloWorldHelper::addSubmenu('notes');
 

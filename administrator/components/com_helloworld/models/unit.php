@@ -256,8 +256,6 @@ class HelloWorldModelUnit extends JModelAdmin {
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
-    $app = JFactory::getApplication();
-    $data = $app->input->post->get('jform', array(), 'array');
 
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
@@ -288,10 +286,10 @@ class HelloWorldModelUnit extends JModelAdmin {
         }
 
         // Let's have a before bind trigger
-        $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
+        $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
 
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
-        if ($version[0]) {
+        if ($new_version_required[0]) {
           // Switch the table model to the version one
           $table = $this->getTable('PropertyUnitsVersion');
           $table->set('_tbl_key','version_id');
@@ -327,6 +325,17 @@ class HelloWorldModelUnit extends JModelAdmin {
       if (!$table->store()) {
         $this->setError($table->getError());
         return false;
+      } else {
+        
+        if($new_version_required[0]) {
+          
+          // Update the unit to indicate that it has been updated
+          // Update the property to indicate that one of it's units has been update
+          // This should only happen the first time we create a new version of this unit...
+          $table = $this->getTable();
+          
+        }
+         
       }
 
       // Should have a new unit version here.

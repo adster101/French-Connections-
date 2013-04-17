@@ -40,6 +40,7 @@ class plgContentVersion extends JPlugin {
     } else {
       // A list of fields to check through which will trigger the creation of a new version
       $fields_to_check = array(
+          'title' => 1,
           'unit_title' => 1,
           'description' => 1,
           'internal_facilities_other' => 1,
@@ -61,9 +62,9 @@ class plgContentVersion extends JPlugin {
         return false;
       }
 
-      // Check the expiry date...if this is a unit we won't have the expiry date so we look it up...
+      // Check the expiry date...
       $listing = JApplication::getUserState('listing', false);
-      $expiry_date = ($context == 'com_helloworld.unit') ? $listing->expiry : $article->expiry_date;
+      $expiry_date = ($listing->expiry) ? $listing->expiry : '';
 
       // Parse the date so we can check it's valid
 
@@ -82,6 +83,7 @@ class plgContentVersion extends JPlugin {
           }
         }
       }
+
       return $new_version;
     }
   }

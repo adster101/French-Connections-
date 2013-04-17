@@ -133,7 +133,8 @@ abstract class HelloWorldHelper {
         'latitude' => $item->latitude,
         'longitude' => $item->longitude,
         'expiry' => $item->expiry_date,
-        'units' => $units
+        'units' => $units,
+        'updated' => $item->new_version
     );
 
     // Check that this doesn't already exist in the session scope

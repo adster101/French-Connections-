@@ -56,7 +56,58 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     return $form;
   }
+  
+	/**
+	 * getItem is overridden so that we can, if necessary, load any updated fields from the version tables.
+   * 
+   * We check the new_version flag and if that is true, we load property details from the #__property_listings_versions table and update the fields
+   * 
+	 * @param   integer  $pk  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since   12.2
+	 */
+	public function getItem($pk = null)
+	{
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+		$table = $this->getTable();
 
+		if ($pk > 0)
+		{
+			// Attempt to load the row.
+			$return = $table->load($pk);
+
+			// Check for a table object error.
+			if ($return === false && $table->getError())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+		}
+
+    // Convert to the JObject before adding other data.
+		$properties = $table->getProperties(1);
+    
+    // If new_version flag is true, there is an unpublished version in the versions table.
+    if ($properties['new_version']) {
+      
+      // Need to load the new version details here to replace those loaded here.
+
+    }
+    
+		$item = JArrayHelper::toObject($properties, 'JObject');
+
+		if (property_exists($item, 'params'))
+		{
+			$registry = new JRegistry;
+			$registry->loadString($item->params);
+			$item->params = $registry->toArray();
+		}
+
+		return $item;
+	}
+  
   /**
    * Method to get the script that have to be included on the form
    *
@@ -291,7 +342,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     $city = (!empty($data['city'])) ? $data['city'] : '';
 
-    // Need to get the location details (area, region, dept) and update the data array
+    // Get the location details (area, region, dept) and update the data array
     $location_details = $this->getLocationDetails($city);
 
     // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
@@ -311,15 +362,15 @@ class HelloWorldModelProperty extends JModelAdmin {
       // If $data['new_version'] is true we need to update that new version in the version table
       if ($data['new_version']) {
 
-        // Get the latest unpublished version id for this unit, that exists in the db
-        $version = $this->getLatestUnitVersion($data['id']);
+        // Get the latest unpublished version id for this listing, that exists in the db
+        $new_version = $this->getLatestListingVersion($data['id']);
 
-        if ($version->version_id > 0) {
-          // Now we are ready to save our updated unit details to the new version table
-          $table = $this->getTable('PropertyUnitsVersion');
+        if ($new_version->version_id > 0) {
+          // Here, we know we have an unpublished version, so need to save changes into new version, not over existing version.
+          $table = $this->getTable('PropertyListingsVersion');
 
           // Set the version ID that we want to bind and store the data against...
-          $table->version_id = $version->version_id;
+          $table->version_id = $new_version->version_id;
         }
       } else { // Here we don't explicitly know if there is a new version
         // Load the exisiting row, if there is one. 
@@ -329,17 +380,19 @@ class HelloWorldModelProperty extends JModelAdmin {
         }
 
         // Let's have a before bind trigger
-        $version = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
-        $version = false;
+        $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
+
+
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
-        if ($version[0]) {
+        if ($new_version_required[0]) {
+
           // Switch the table model to the version one
-          $table = $this->getTable('PropertyUnitsVersion');
+          $table = $this->getTable('PropertyListingsVersion');
           $table->set('_tbl_key', 'version_id');
         }
       }
 
-      // Bind the data.
+      // Bind the data. This will bind to the appropriate table.
       if (!$table->bind($data)) {
         $this->setError($table->getError());
         return false;
@@ -366,9 +419,29 @@ class HelloWorldModelProperty extends JModelAdmin {
       if (!$table->store()) {
         $this->setError($table->getError());
         return false;
-      }
+      } else {
 
-      // Save the admin note if it's present
+        // Save is successful, if we are creating 
+        if ($new_version_required[0]) {
+
+          // Update the existing property listing to indicate that we have a new version for it.
+          // This should only happen the first time we create a new version.
+          $table = $this->getTable();
+          
+          $update = array();
+          
+
+          $table->id = $pk;
+          $table->new_version = 1;
+         
+          if (!$table->store()) {
+            $this->setError($table->getError());
+            return false;
+          }
+        }
+      }
+      
+      // Save any admin notes, if present
       if (!empty($data['note'])) {
 
         $note = array();
@@ -400,7 +473,7 @@ class HelloWorldModelProperty extends JModelAdmin {
           return false;
         }
       }
-    
+
       // Set the table key back to ID so the controller redirects to the right place
       $table->set('_tbl_key', 'id');
 
@@ -423,6 +496,33 @@ class HelloWorldModelProperty extends JModelAdmin {
     $this->setState($this->getName() . '.new', $isNew);
 
     return true;
+  }
+
+  /*
+   * Method to get the version id of the most recent unpublished version
+   * 
+   * 
+   */
+
+  public function getLatestListingVersion($id = '') {
+    // Retrieve latest unit version
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+    $query->select('version_id');
+    $query->from('#__property_listings_versions');
+    $query->where('id = ' . (int) $id);
+    $query->where('state = 1');
+    $query->order('version_id', 'desc');
+
+    $db->setQuery((string) $query);
+
+    try {
+      $row = $db->loadObject();
+    } catch (RuntimeException $e) {
+      JError::raiseError(500, $e->getMessage());
+    }
+
+    return $row;
   }
 
 }

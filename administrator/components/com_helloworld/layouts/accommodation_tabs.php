@@ -23,7 +23,7 @@ $option = $input->get('option', '', 'string');
 $view = $input->get('view', '', 'string');
 
 // Retrieve the listing details from the session
-$listing = $data;
+$listing = JApplication::getUserState('listing', '');
 
 // Convert the listing detail to an array for easier processing
 $listing_details = $listing->getProperties();
@@ -44,8 +44,14 @@ $property_details = ($listing_details['id'] && $listing_details['latitude'] && $
 $units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
 ?>
-<div id="fc-message" class="hide alert">
-</div>
+<?php if ($listing->updated) : ?>
+  <div class="alert alert-info">
+    <?php echo JText::_('COM_HELLOWORLD_PLEASE_SUBMIT_PROPERTY_FOR_REVIEW'); ?>  
+    <a href="" class="btn btn-info">
+      <?php echo JText::_('SUBMIT_FOR_REVIEW'); ?>    
+    </a>
+  </div>
+<?php endif; ?>
 <?php if ($view == 'property' && !$property_details) : ?>
   <div class="alert alert-info">
     <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>  
@@ -110,18 +116,18 @@ $default_unit = (count($units) > 0) ? key($units) : '';
     <?php if (!empty($units)) : // This listing has one or more units already     ?> 
       <?php if (count($units) == 1) : // There is only one unit for this listing...so far...  ?>
         <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . $units[$default_unit]->id) ?>">
-          <?php echo JText::_($units[$default_unit]->unit_title); ?>
+          <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS'); ?>
           <i class='icon icon-ok'></i>
         </a>
       <?php elseif (count($units) > 1) : ?>
         <?php if (array_key_exists($id, $units)) : ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . $id) ?>">
-            <?php echo JText::_($units[$id]->unit_title); ?>
+            <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS'); ?>
             <i class='icon icon-ok'></i>
           </a>
         <?php else: ?>
           <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . $units[$default_unit]->id) ?>">
-            <?php echo JText::_($units[$default_unit]->unit_title); ?>
+            <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS'); ?>
             <i class='icon icon-ok'></i>
           </a>     
         <?php endif; ?>

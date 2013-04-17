@@ -86,7 +86,8 @@ class HelloWorldTablePropertyAttributes extends JTable
   {
     
     if (!$this->check()) {
-      JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
+      
+      //JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
       
     } else {
@@ -117,6 +118,7 @@ class HelloWorldTablePropertyAttributes extends JTable
         $insert_string = "$id," .$attribute."";
         $query->values($insert_string);
       }
+      
 			$this->_db->setQuery($query);
       
 			if (!$this->_db->execute())

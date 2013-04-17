@@ -141,7 +141,7 @@ class HelloWorldModelProperties extends JModelList {
       where property_id = a.id
       and date_created > ' . $db->quote(date('Y-m-d', $last_year)) . ') as enquiry_count,
       a.auto_renew,
-      version
+      new_version
     ');
 
     // Join the user details if the user has the ACL rights.

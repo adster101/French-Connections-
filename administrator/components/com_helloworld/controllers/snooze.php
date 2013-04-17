@@ -247,7 +247,7 @@ class HelloWorldControllerSnooze extends JControllerForm {
     $contact_model->body = $data['body'];
     $contact_model->subject = $data['subject'];
     $contact_model->created_time = JFactory::getDate()->toSql();
-    
+    $contact_model->created_user_id = JFactory::getUser()->id;
     
     if (!$contact_model->store()) {
       // Check-in failed, so go back to the record and display a notice.

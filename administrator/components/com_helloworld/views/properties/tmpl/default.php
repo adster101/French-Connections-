@@ -123,7 +123,7 @@ $listing_id = '';
                 </td>
                 <td class="center">
                   <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish); ?>
-     							<?php echo JHtml::_('contentadministrator.featured', $item->version, $i, 1); ?>
+     							<?php echo JHtml::_('contentadministrator.featured', $item->new_version, $i, 1); ?>
 
                 </td>
 

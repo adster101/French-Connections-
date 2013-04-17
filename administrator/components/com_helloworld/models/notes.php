@@ -76,7 +76,8 @@ class HelloWorldModelNotes extends JModelList {
         a.subject,
         a.body,
         a.created_time,
-        a.catid
+        a.catid,
+        a.property_id
         ');
       $query->where('a.property_id = ' . $property_id);
     }

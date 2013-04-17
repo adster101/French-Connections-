@@ -22,13 +22,14 @@ class HelloWorldViewProperty extends JViewLegacy
     
   	// get the Data
 		$this->form = $this->get('Form');
+    
 		$this->item = $this->get('Item');
     
 		$this->script = $this->get('Script');
     
     $this->units = $this->get('Units');  
 
-    // Update the progress..this is stored in the session scope so doesn't return here.
+    // Update the progress...this is stored in the session scope so doesn't return here.
     HelloWorldHelper::setPropertyProgress($this->item, $this->units);
     
 		$languages = HelloWorldHelper::getLanguages();
@@ -65,11 +66,8 @@ class HelloWorldViewProperty extends JViewLegacy
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
 		
-    $published = $this->item->published;
-    
-   
-    
-		
+    $published = $this->item->published;  
+  	
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
