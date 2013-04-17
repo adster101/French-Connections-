@@ -132,6 +132,7 @@ class HelloWorldModelProperties extends JModelList {
       a.published,
       a.expiry_date,
       a.modified,
+      a.created_on,
       (SELECT count(id) as count 
       FROM #__property_views
       where property_id = a.id

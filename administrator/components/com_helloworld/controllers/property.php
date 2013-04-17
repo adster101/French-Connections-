@@ -86,5 +86,9 @@ class HelloWorldControllerProperty extends JControllerForm {
     // For now we want to push the property listing progress into the session
     
  }
+ 
+ public function submit_for_review() {
+   echo "Woot!";die;
+ }
 
 }

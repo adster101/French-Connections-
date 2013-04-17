@@ -202,4 +202,64 @@ class JHtmlProperty
 		);
 		return $states;
 	}
+	
+  /**
+	 * @param	int $value	The state value
+	 * @param	int $i
+	 */
+	public static function state($value = 0, $i, $canChange)
+	{
+		// Array of image, task, title, action.
+		$states	= array(
+			-2	=> array('trash.png',		'enquiries.unpublish',	'JTRASHED',				'COM_MESSAGES_MARK_AS_UNREAD'),
+			1	=> array('email-read-32.png',		'enquiries.unpublish',	'COM_MESSAGES_OPTION_READ',		'COM_MESSAGES_MARK_AS_UNREAD'),
+			0	=> array('email-unread-32.png',	'enquiries.publish',		'COM_MESSAGES_OPTION_UNREAD',	'COM_MESSAGES_MARK_AS_READ')
+		);
+		$state	= JArrayHelper::getValue($states, (int) $value, $states[0]);
+		$html	= JHtml::_('image', 'admin/'.$state[0], JText::_($state[2]), null, true);
+		if ($canChange) {
+			$html = '<a href="#" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[3]).'">'
+					.$html.'</a>';
+		}
+
+		return $html;
+	}
+  
+  /**
+	 * Gets a list of the actions that can be performed.
+	 *
+	 * @param   string	$extension	The extension.
+	 * @param   integer  $categoryId	The category ID.
+	 *
+	 * @return  JObject
+	 * @since   1.6
+	 */
+	public static function getActions($extension, $categoryId = 0)
+	{
+		$user		= JFactory::getUser();
+		$result		= new JObject;
+		$parts		= explode('.', $extension);
+		$component	= $parts[0];
+
+		if (empty($categoryId))
+		{
+			$assetName = $component;
+			$level = 'component';
+		}
+		else
+		{
+			$assetName = $component.'.category.'.(int) $categoryId;
+			$level = 'category';
+		}
+
+		$actions = JAccess::getActions($component, $level);
+
+		foreach ($actions as $action)
+		{
+			$result->set($action->name, $user->authorise($action->name, $assetName));
+		}
+
+		return $result;
+	}
+  
 }

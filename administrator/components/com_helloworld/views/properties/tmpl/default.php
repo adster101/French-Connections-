@@ -68,7 +68,10 @@ $listing_id = '';
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>           
             <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_PUBLISHED'); ?>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ACTIVE'); ?>
+            </th>
+            <th>
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
             </th>
             <th>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
@@ -121,10 +124,11 @@ $listing_id = '';
                 <td>
                   <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                 </td>
-                <td class="center">
-                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish); ?>
-     							<?php echo JHtml::_('contentadministrator.featured', $item->new_version, $i, 1); ?>
-
+                <td>
+                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish,'cb',$item->created_on, $item->expiry_date); ?>
+                </td>
+                <td>
+     							<?php echo JHtml::_('property.review', $item->new_version, $i, 1); ?>
                 </td>
 
                 <td>
