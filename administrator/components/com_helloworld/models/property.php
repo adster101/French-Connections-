@@ -60,7 +60,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 	/**
 	 * getItem is overridden so that we can, if necessary, load any updated fields from the version tables.
    * 
-   * We check the new_version flag and if that is true, we load property details from the #__property_listings_versions table and update the fields
+   * We check the review state flag and if that is true, we load property details from the #__property_listings_versions table and update the fields
    * 
 	 * @param   integer  $pk  The id of the primary key.
 	 *
@@ -89,8 +89,8 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Convert to the JObject before adding other data.
 		$properties = $table->getProperties(1);
     
-    // If new_version flag is true, there is an unpublished version in the versions table.
-    if ($properties['new_version']) {
+    // If review flag is true, there is an unpublished version in the versions table.
+    if ($properties['review']) {
       
       // Need to load the new version details here to replace those loaded here.
 
@@ -359,8 +359,8 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Allow an exception to be thrown.
     try {
 
-      // If $data['new_version'] is true we need to update that new version in the version table
-      if ($data['new_version']) {
+      // If $data['review'] is true we need to update that new version in the version table
+      if ($data['review']) {
 
         // Get the latest unpublished version id for this listing, that exists in the db
         $new_version = $this->getLatestListingVersion($data['id']);
@@ -432,7 +432,7 @@ class HelloWorldModelProperty extends JModelAdmin {
           
 
           $table->id = $pk;
-          $table->new_version = 1;
+          $table->review = 1;
          
           if (!$table->store()) {
             $this->setError($table->getError());

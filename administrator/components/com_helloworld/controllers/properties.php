@@ -19,4 +19,14 @@ class HelloWorldControllerProperties extends JControllerAdmin
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 		return $model;
 	}
+  
+  public function submit()
+  {
+    $this->setMessage('Submitted for review', 'notice');
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false)
+      );
+  }
+  
 }

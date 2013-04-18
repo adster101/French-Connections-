@@ -47,6 +47,9 @@ class HelloWorldViewProperties extends JViewLegacy {
       // $this->ordering[$item->parent_id][] = $item->id;
     }
 
+    // Register the JHtmlProperty class
+    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
+
     // Set the toolbar
     $this->addToolBar(); 
 
@@ -106,7 +109,7 @@ class HelloWorldViewProperties extends JViewLegacy {
               JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_ACTIVE'), 'filter_published', JHtml::_('select.options', HelloWorldHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
       );
       JHtmlSidebar::addFilter(
-              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_REVIEW'), 'filter_state', JHtml::_('select.options', HelloWorldHelper::getReviewOptions(), 'value', 'text', $this->state->get('filter.review_state'), true)
+              JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_REVIEW'), 'filter_review', JHtml::_('select.options', HelloWorldHelper::getReviewOptions(), 'value', 'text', $this->state->get('filter.review'), true)
       );
       JHtmlSidebar::addFilter(
               JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_SNOOZED'), 'filter_snoozed', JHtml::_('select.options', HelloWorldHelper::getSnoozeOptions(), 'value', 'text', $this->state->get('filter.snoozed'), true)

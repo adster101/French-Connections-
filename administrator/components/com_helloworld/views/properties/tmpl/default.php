@@ -5,7 +5,8 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('dropdown.init');
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+
+$arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
@@ -51,168 +52,187 @@ $listing_id = '';
         <hr />
         <div class="alert alert-block">
           <strong><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_NO_LISTINGS'); ?><strong>
-        </div>
-        <hr/>
-      <?php else: ?>
-      <table class="table table-striped" id="articleList">
-        <thead>
-          <tr>
-            <th>
-              <?php if ($canDo->get('helloworld.sort.prn')) : ?>
-                <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_ID', 'id', $listDirn, $listOrder); ?>
-              <?php else : ?>
-                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ID') ?>
-              <?php endif; ?>
-            </th>
-            <th width="2%">
-              <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
-            </th>           
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ACTIVE'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
-            </th>
-
-            <th width="12%">
-              <?php if ($canDo->get('helloworld.sort.expiry')) : ?>
-                <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY', 'expiry_date', $listDirn, $listOrder); ?>
-              <?php else: ?>
-                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY'); ?>
-              <?php endif; ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
-            </th>
-            
-            <?php if ($canDo->get('helloworld.display.owner')) : ?>
-              <th>
-                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
-              </th>
-            <?php endif; ?>
-
-          </tr>
-        </thead>
-
-        <tbody>
-          <?php foreach ($this->items as $i => $item): ?>
-            <?php
-            //$orderkey = array_search($item->id, $this->ordering[$item->parent_id]);
-            $canEditOwn = $user->authorise('core.edit.own', 'com_helloworld') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
-            $canPublish = $user->authorise('helloworld.edit.publish', 'com_helloworld');
-            $canReorder = $user->authorise('helloworld.edit.reorder', 'com_helloworld');
-            $expiry_date = new DateTime($item->expiry_date);
-            $now = date('Y-m-d');
-            $now = new DateTime($now);
-            $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
-            ?>
-
-            <?php if ($canEditOwn) : ?>
-              <tr class="row<?php echo $i % 2; ?>">
-                <td>
-                  <?php echo $item->id; ?>
-                </td>
-                <td>
-                  <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-                </td>
-                <td>
-                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish,'cb',$item->created_on, $item->expiry_date); ?>
-                </td>
-                <td>
-     							<?php echo JHtml::_('property.review', $item->new_version, $i, 1); ?>
-                </td>
-
-                <td>
-                  <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
-                    <?php echo $this->escape($item->title); ?>
-                  </a>
-                </td>
-                <td>
-                  <?php echo $item->expiry_date; ?>
-                </td>
-                <td>
-                  <?php if ($days_to_renewal < 28 && $days_to_renewal > 0) : ?>
-                    <span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal); ?></span>
-                    <br />
-                    <a class="btn btn-danger btn-small">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
-                    </a>
-                  <?php elseif ($days_to_renewal < 0) : ?>
-                    <a class="btn btn-danger btn-small">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
-                    </a>
-                  <?php elseif (empty($item->expiry_date)): ?>
-                    &mdash;
-                  <?php elseif ($days_to_renewal > 28) : ?>
-                    <?php echo JHtml::_('autorenew.state', $item->auto_renew, $i, 'enquiries.', 1, 'cb'); ?>
-
-                  <?php endif; ?>
-                </td>
-                <td>
-                  <?php echo JText::_($item->view_count); ?><br />
-                  <?php echo JText::_($item->enquiry_count); ?> 
-                </td>                <td>
-                  <?php echo JText::_($item->modified); ?>
-                </td>
-                
-                <?php if ($canDo->get('helloworld.display.owner')) : ?>
-                  <td>
-                    <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
-                      <?php echo JText::_($item->name); ?>
-                    </a>
-                    <br />
-                    <span class="small muted">
-                      <?php echo JText::_($item->email); ?>
-                      <br />
-                      <?php echo JText::_($item->phone_1); ?>
-                    </span>
-                    <?php if ($canDo->get('helloworld.display.notes')) : ?>
-                      <br />
-                      <?php echo JHtml::_('property.notes', $item->id); ?>
-                    
+              </div>
+              <hr/>
+            <?php else: ?>
+              <table class="table table-striped" id="articleList">
+                <thead>
+                  <tr>
+                    <th>
+                      <?php if ($canDo->get('helloworld.sort.prn')) : ?>
+                        <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_ID', 'id', $listDirn, $listOrder); ?>
+                      <?php else : ?>
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ID') ?>
+                      <?php endif; ?>
+                    </th>
+                    <th width="2%">
+                      <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+                    </th>
+                    <?php if ($canDo->get('core.edit.state')) : ?>
+                      <th>
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ACTIVE'); ?>
+                      </th>
                     <?php endif; ?>
-                  </td>
-                <?php endif; ?>
-              </tr>
-            <?php else : ?>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
+                    </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
+                    </th>
+
+                    <th width="12%">
+                      <?php if ($canDo->get('helloworld.sort.expiry')) : ?>
+                        <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY', 'expiry_date', $listDirn, $listOrder); ?>
+                      <?php else: ?>
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY'); ?>
+                      <?php endif; ?>
+                    </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?>
+                    </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
+                    </th>
+                    <th>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
+                    </th>
+
+                    <?php if ($canDo->get('helloworld.display.owner')) : ?>
+                      <th>
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
+                      </th>
+                    <?php endif; ?>
+
+                  </tr>
+                </thead>
+                <?php
+                $canEditOwn = $canDo->get('core.edit.own');
+                $canPublish = $canDo->get('helloworld.edit.publish');
+
+                $canSubmitForReview = $canDo->get('helloworld.property.submit');
+                $canReview = $canDo->get('helloworld.property.review');
+                ?>
+
+                <tbody>
+                  <?php foreach ($this->items as $i => $item): ?>
+                    <?php
+                    $expiry_date = new DateTime($item->expiry_date);
+                    $now = date('Y-m-d');
+                    $now = new DateTime($now);
+                    $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
+
+                    if ($item->review == 0) {
+                      $enabled = false;
+                    } elseif ($item->review == 1) {
+                      $enabled = $canDo->get('helloworld.property.submit');
+                    } elseif ($item->review == 2) {
+                      $enabled = $canDo->get('helloworld.property.review');
+                    } elseif ($item->review ==-1) {
+                      $enabled = false;
+                    }
+                    ?>
+                    <?php if ($canEditOwn) : ?>
+                      <tr class="row<?php echo $i % 2; ?>">
+                        <td>
+                          <?php echo $item->id; ?>
+                        </td>
+                        <td>
+                          <?php echo JHtml::_('grid.id', $i, $item->id); ?>
+                        </td>
+                        <?php if ($canDo->get('core.edit.state')) : ?>
+                          <td>
+                            <?php echo JHtml::_('jgrid.published', $item->published, $i, 'properties.', $canPublish, 'cb', $item->created_on, $item->expiry_date); ?>
+                          </td>
+                        <?php endif; ?>
+                        <td>
+                          <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'properties.', $enabled); ?>
+                        </td>
+                        <td>
+                          <?php if ($item->review != 2) :?>
+                          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
+                            <?php echo $this->escape($item->title); ?>
+                          </a>
+                          <?php else: ?>
+                            <?php echo $this->escape($item->title); ?>
+                          <?php endif; ?>
+                        </td>
+                        <td>
+                          <?php echo $item->expiry_date; ?>
+                        </td>
+                        <td>
+                          <?php if ($days_to_renewal < 28 && $days_to_renewal > 0) : ?>
+                            <span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal); ?></span>
+                            <br />
+                            <a class="btn btn-danger btn-small">
+                              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
+                            </a>
+                          <?php elseif ($days_to_renewal < 0) : ?>
+                            <a class="btn btn-danger btn-small">
+                              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
+                            </a>
+                          <?php elseif (empty($item->expiry_date)): ?>
+                            &mdash;
+                          <?php elseif ($days_to_renewal > 28) : ?>
+                            <?php echo JHtml::_('autorenew.state', $item->auto_renew, $i, 'enquiries.', 1, 'cb'); ?>
+
+                          <?php endif; ?>
+                        </td>
+                        <td>
+                          <?php echo JText::_($item->view_count); ?><br />
+                          <?php echo JText::_($item->enquiry_count); ?> 
+                        </td>                <td>
+                          <?php echo JText::_($item->modified); ?>
+                        </td>
+
+                        <?php if ($canDo->get('helloworld.display.owner')) : ?>
+                          <td>
+                            <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
+                              <?php echo JText::_($item->name); ?>
+                            </a>
+                            <br />
+                            <span class="small muted">
+                              <?php echo JText::_($item->email); ?>
+                              <br />
+                              <?php echo JText::_($item->phone_1); ?>
+                            </span>
+                            <?php if ($canDo->get('helloworld.display.notes')) : ?>
+                              <br />
+                              <?php echo JHtml::_('property.notes', $item->id); ?>
+
+                            <?php endif; ?>
+                          </td>
+                        <?php endif; ?>
+                      </tr>
+                    <?php else : ?>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+                <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
+                <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
+
+                </tbody>
+
+                <tfoot>
+                  <tr>
+                    <td colspan="7"></td>
+                  </tr>
+                </tfoot>
+              </table>
             <?php endif; ?>
-          <?php endforeach; ?>
-        <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
-        <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
 
-        </tbody>
+            <?php echo $this->pagination->getListFooter(); ?>
 
-        <tfoot>
-          <tr>
-            <td colspan="7"></td>
-          </tr>
-        </tfoot>
-      </table>
-      <?php endif; ?>
+            <div>
+              <input type="hidden" name="task" value="" />
+              <input type="hidden" name="boxchecked" value="" />
+              <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+              <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+              <?php echo JHtml::_('form.token'); ?>
+            </div>
+            </div>
+            </form>
 
-      <?php echo $this->pagination->getListFooter(); ?>
-
-      <div>
-        <input type="hidden" name="task" value="" />
-        <input type="hidden" name="boxchecked" value="" />
-        <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-        <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
-        <?php echo JHtml::_('form.token'); ?>
-      </div>
-    </div>
-</form>
-
-<?php
-$layout = new JLayoutFile('modal', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-echo $layout->render($data = array());
-?>
+            <?php
+            $layout = new JLayoutFile('modal', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+            echo $layout->render($data = array());
+            ?>
 

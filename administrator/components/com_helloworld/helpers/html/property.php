@@ -86,8 +86,7 @@ class JHtmlProperty
 	/**
 	 * Displays a note icon.
 	 *
-	 * @param   integer  $count   The number of notes for the user
-	 * @param   integer  $userId  The user ID
+	 * @param   integer  $userId  The property ID
 	 *
 	 * @return  string  A link to a modal window with the user notes
 	 *
@@ -108,68 +107,6 @@ class JHtmlProperty
 			. '<span class="label label-info"><i class="icon-drawer-2"></i>' . $title . '</span></a>';
 	}
 
-	/**
-	 * Build an array of block/unblock user states to be used by jgrid.state,
-	 * State options will be different for any user
-	 * and for currently logged in user
-	 *
-	 * @param   boolean  $self  True if state array is for currently logged in user
-	 *
-	 * @return  array  a list of possible states to display
-	 *
-	 * @since  3.0
-	 */
-	public static function blockStates( $self = false)
-	{
-		if ($self)
-		{
-			$states = array(
-				1 => array(
-					'task'				=> 'unblock',
-					'text'				=> '',
-					'active_title'		=> 'COM_USERS_USER_FIELD_BLOCK_DESC',
-					'inactive_title'	=> '',
-					'tip'				=> true,
-					'active_class'		=> 'unpublish',
-					'inactive_class'	=> 'unpublish'
-				),
-				0 => array(
-					'task'				=> 'block',
-					'text'				=> '',
-					'active_title'		=> '',
-					'inactive_title'	=> 'COM_USERS_USERS_ERROR_CANNOT_BLOCK_SELF',
-					'tip'				=> true,
-					'active_class'		=> 'publish',
-					'inactive_class'	=> 'publish'
-				)
-			);
-		}
-		else
-		{
-			$states = array(
-				1 => array(
-					'task'				=> 'unblock',
-					'text'				=> '',
-					'active_title'		=> 'COM_USERS_TOOLBAR_UNBLOCK',
-					'inactive_title'	=> '',
-					'tip'				=> true,
-					'active_class'		=> 'unpublish',
-					'inactive_class'	=> 'unpublish'
-				),
-				0 => array(
-					'task'				=> 'block',
-					'text'				=> '',
-					'active_title'		=> 'COM_USERS_USER_FIELD_BLOCK_DESC',
-					'inactive_title'	=> '',
-					'tip'				=> true,
-					'active_class'		=> 'publish',
-					'inactive_class'	=> 'publish'
-				)
-			);
-		}
-
-		return $states;
-	}
 
 	/**
 	 * Build an array of activate states to be used by jgrid.state,
@@ -178,17 +115,17 @@ class JHtmlProperty
 	 *
 	 * @since  3.0
 	 */
-	public static function activateStates()
+	public static function reviewStates()
 	{
 		$states = array(
-			1	=> array(
-				'task'				=> 'activate',
+			-1	=> array(
+				'task'				=> '',
 				'text'				=> '',
-				'active_title'		=> 'COM_USERS_TOOLBAR_ACTIVATE',
-				'inactive_title'	=> '',
+				'active_title'		=> '',
+				'inactive_title'	=> 'COM_USERS_ACTIVATED',
 				'tip'				=> true,
-				'active_class'		=> 'unpublish',
-				'inactive_class'	=> 'unpublish'
+				'active_class'		=> 'publish',
+				'inactive_class'	=> 'publish'
 			),
 			0	=> array(
 				'task'				=> '',
@@ -198,32 +135,30 @@ class JHtmlProperty
 				'tip'				=> true,
 				'active_class'		=> 'publish',
 				'inactive_class'	=> 'publish'
-			)
-		);
+			),
+      1	=> array(
+          'task'				=> 'submit',
+          'text'				=> '',
+          'active_title'		=> 'COM_PROPERTY_TOOLBAR_ACTIVATE',
+          'inactive_title'	=> '',
+          'tip'				=> true,
+          'active_class'		=> 'warning',
+          'inactive_class'	=> 'warning'
+        ),
+      2 => array(
+            'task' => 'review',
+            'text' => '',
+            'active_title' => 'COM_HELLOWORLD_PROPERTY_LOCKED_FOR_EDITING',
+            'inactive_title' => 'COM_HELLOWORLD_PROPERTY_LOCKED_FOR_EDITING',
+            'tip' => true,
+            'active_class' => 'locked',
+            'inactive_class' => 'locked'
+        ),
+    );
 		return $states;
 	}
 	
-  /**
-	 * @param	int $value	The state value
-	 * @param	int $i
-	 */
-	public static function state($value = 0, $i, $canChange)
-	{
-		// Array of image, task, title, action.
-		$states	= array(
-			-2	=> array('trash.png',		'enquiries.unpublish',	'JTRASHED',				'COM_MESSAGES_MARK_AS_UNREAD'),
-			1	=> array('email-read-32.png',		'enquiries.unpublish',	'COM_MESSAGES_OPTION_READ',		'COM_MESSAGES_MARK_AS_UNREAD'),
-			0	=> array('email-unread-32.png',	'enquiries.publish',		'COM_MESSAGES_OPTION_UNREAD',	'COM_MESSAGES_MARK_AS_READ')
-		);
-		$state	= JArrayHelper::getValue($states, (int) $value, $states[0]);
-		$html	= JHtml::_('image', 'admin/'.$state[0], JText::_($state[2]), null, true);
-		if ($canChange) {
-			$html = '<a href="#" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[3]).'">'
-					.$html.'</a>';
-		}
 
-		return $html;
-	}
   
   /**
 	 * Gets a list of the actions that can be performed.

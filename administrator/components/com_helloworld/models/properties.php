@@ -23,7 +23,7 @@ class HelloWorldModelProperties extends JModelList {
           'id', 'a.id',
           'title', 'a.title',
           'alias', 'a.alias',
-          'state', 'a.state',
+          'review', 'a.review',
           'access', 'a.access', 'access_level',
           'language', 'a.language',
           'expiry_date', 'a.expiry_date',
@@ -63,8 +63,8 @@ class HelloWorldModelProperties extends JModelList {
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
 
-    $review_state = $this->getUserStateFromRequest($this->context . '.filter.review_state', 'filter_state', '');
-    $this->setState('filter.review_state', $review_state);
+    $review_state = $this->getUserStateFromRequest($this->context . '.filter.review', 'filter_review', '');
+    $this->setState('filter.review', $review_state);
 
     $snooze_state = $this->getUserStateFromRequest($this->context . '.filter.snoozed', 'filter_snoozed', false);
 
@@ -97,7 +97,7 @@ class HelloWorldModelProperties extends JModelList {
     $id .= ':' . $this->getState('filter.search');
     $id .= ':' . $this->getState('filter.extension');
     $id .= ':' . $this->getState('filter.published');
-    $id .= ':' . $this->getState('filter.review_state');
+    $id .= ':' . $this->getState('filter.review');
     $id .= ':' . $this->getState('filter.snoozed');
 
     return parent::getStoreId($id);
@@ -142,7 +142,7 @@ class HelloWorldModelProperties extends JModelList {
       where property_id = a.id
       and date_created > ' . $db->quote(date('Y-m-d', $last_year)) . ') as enquiry_count,
       a.auto_renew,
-      new_version
+      review
     ');
 
     // Join the user details if the user has the ACL rights.
@@ -179,9 +179,9 @@ class HelloWorldModelProperties extends JModelList {
     }
 
     // Filter by review state
-    $review_state = $this->getState('filter.review_state');
+    $review_state = $this->getState('filter.review');
     if (is_numeric($review_state)) {
-      $query->where('a.state = ' . (int) $review_state);
+      $query->where('a.review = ' . (int) $review_state);
     }
 
     // Filter by snooze state

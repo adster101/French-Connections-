@@ -216,8 +216,6 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       </span>
     <?php endif; ?>
   </li>
-
-
   <!--<li class="active pull-right" dir="ltr">
     <span class="language">
       <?php //echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN'); ?>

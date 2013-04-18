@@ -32,8 +32,8 @@ abstract class HelloWorldHelper {
   public static function getReviewOptions() {
     // Build the filter options.
     $options = array();
-    $options[] = JHtml::_('select.option', '0', JText::_('COM_HELLOWORLD_HELLOWORLD_UPDATED'));
-    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW'));
+    $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_UPDATED'));
+    $options[] = JHtml::_('select.option', '2', JText::_('COM_HELLOWORLD_HELLOWORLD_FOR_REVIEW'));
     return $options;
   }
 
@@ -134,7 +134,7 @@ abstract class HelloWorldHelper {
         'longitude' => $item->longitude,
         'expiry' => $item->expiry_date,
         'units' => $units,
-        'updated' => $item->new_version
+        'updated' => $item->review
     );
 
     // Check that this doesn't already exist in the session scope
@@ -215,7 +215,9 @@ abstract class HelloWorldHelper {
         'helloworld.snooze',
         'helloworld.images.delete',
         'helloworld.images.edit',
-        'helloworld.images.create'
+        'helloworld.images.create',
+        'helloworld.property.submit',
+        'helloworld.property.review'
     );
 
 
