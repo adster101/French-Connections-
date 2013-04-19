@@ -329,8 +329,8 @@ class HelloWorldModelUnit extends JModelAdmin {
         
         if($new_version_required[0]) {
           
-          // Update the unit to indicate that it has been updated
-          // Update the property to indicate that one of it's units has been update
+          // Update the unit to indicate that it has been updated...
+          // Update the property to indicate that one of it's units has been update...
           // This should only happen the first time we create a new version of this unit...
           $table = $this->getTable();
           

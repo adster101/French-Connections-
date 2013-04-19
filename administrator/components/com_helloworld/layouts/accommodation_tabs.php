@@ -44,14 +44,7 @@ $property_details = ($listing_details['id'] && $listing_details['latitude'] && $
 $units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
 ?>
-<?php if ($listing->updated) : ?>
-  <div class="alert alert-info">
-    <?php echo JText::_('COM_HELLOWORLD_PLEASE_SUBMIT_PROPERTY_FOR_REVIEW'); ?>  
-    <a href="" class="btn btn-info">
-      <?php echo JText::_('SUBMIT_FOR_REVIEW'); ?>    
-    </a>
-  </div>
-<?php endif; ?>
+
 <?php if ($view == 'property' && !$property_details) : ?>
   <div class="alert alert-info">
     <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>  
@@ -72,10 +65,12 @@ $default_unit = (count($units) > 0) ? key($units) : '';
       <?php echo JText::_('COM_HELLOWORLD_PROCEED'); ?>    
     </a>
   </div>
-<?php elseif ($view == 'unit') : ?>
+<?php elseif ($listing->updated == 1) : ?>
   <div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>  
+    <?php echo JText::_('COM_HELLOWORLD_PLEASE_SUBMIT_PROPERTY_FOR_REVIEW'); ?>  
+    <a href="" class="btn btn-info">
+      <?php echo JText::_('SUBMIT_FOR_REVIEW'); ?>    
+    </a>
   </div>
 <?php endif; ?>
 

@@ -433,6 +433,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
           $table->id = $pk;
           $table->review = 1;
+          $table->modified = JFActory::getDate()->toSql();
          
           if (!$table->store()) {
             $this->setError($table->getError());
