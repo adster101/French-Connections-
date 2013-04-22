@@ -28,5 +28,5 @@ class HelloWorldControllerProperties extends JControllerAdmin
                       'index.php?option=' . $this->option, false)
       );
   }
-  
+    
 }

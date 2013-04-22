@@ -41,6 +41,7 @@ class HelloWorldControllerProperty extends JControllerForm {
    * @since   1.6
    */
   protected function allowEdit($data = array(), $key = 'id') {
+
     // Initialise variables.
     $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
     $user = JFactory::getUser();
@@ -64,11 +65,9 @@ class HelloWorldControllerProperty extends JControllerForm {
       if (empty($ownerId) && $recordId) {
         // Need to do a lookup from the model.
         $record = $this->getModel()->getItem($recordId);
-
         if (empty($record)) {
           return false;
         }
-
         $ownerId = $record->created_by;
       }
 
@@ -79,16 +78,66 @@ class HelloWorldControllerProperty extends JControllerForm {
     }
     return false;
   }
- 
+
   public function postSaveHook(JModelLegacy $model, $validData = array()) {
-    
+
     // Various things we could do here...
     // For now we want to push the property listing progress into the session
+  }
+
+  /*
+   * renew action prepares a property for renewal...
+   * 
+   * 
+   */
+
+  public function renew($data = array()) {
+
+    $app = JFactory::getApplication();
+
+    $records = $this->input->get('cid', array(), 'array');
+    $recordId = $records[0];
+    $model = $this->getModel();
+    $table = $model->getTable();
+
+    // Determine the name of the primary key for the data.
+    if (empty($key)) {
+      $key = $table->getKeyName();
+    }
+
     
- }
- 
- public function submit_for_review() {
-   echo "Woot!";die;
- }
+
+    if (!$this->allowEdit(array($key => $recordId), $key)) {
+      $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->extension, false
+              )
+      );
+
+      return false;
+    }
+    
+    $model->getFullListingDetails($recordId);
+    
+    
+    
+    
+    // 1. Load the property listing details (including units) using a full join on published units.
+    // 2. Ensure that the expiry date has indeed expired and also that there is an expiry date (no expiry date means not a renewal).
+    // 3. Check that there are no pending changes which need to be reviewed. If there are then need to get the owner to submit property for review before proceeding to payment
+    // 4. Work out how much needs to be paid for the renewal.
+    // 5. Show the payment form
+    // 6. Process the payment details
+    // 7. Update the expiry date, generate invoice from based on the order
+    // 8. Show confirmation page, generate renewal thankyou email?    
+
+    
+    return false;
+    
+    
+  }
 
 }

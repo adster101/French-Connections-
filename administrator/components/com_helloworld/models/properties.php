@@ -31,10 +31,8 @@ class HelloWorldModelProperties extends JModelList {
           'checked_out_time', 'a.checked_out_time',
           'created_time', 'a.created_time',
           'created_user_id', 'a.created_user_id',
-          'level', 'a.level',
-          'path', 'a.path',
           'snoozed', 'a.snooze_until'
-      );
+          );
     }
     parent::__construct($config);
   }
@@ -53,6 +51,7 @@ class HelloWorldModelProperties extends JModelList {
   protected function populateState($ordering = null, $direction = null) {
     // Initialise variables
     $app = JFactory::getApplication();
+    
     $context = $this->context;
 
     $extension = $app->getUserStateFromRequest('com_helloworlds.property.filter.extension', 'extension', 'com_helloworlds', 'cmd');
@@ -60,8 +59,15 @@ class HelloWorldModelProperties extends JModelList {
     $this->setState('filter.extension', $extension);
     $parts = explode('.', $extension);
 
+    // Should be an int. No filter is null so perhaps no filter should be -1?
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
+    
+    $expiry_start_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_start_date', 'expiry_start_date', '','date');
+    $this->setState('filter.expiry_start_date', $expiry_start_date);
+
+    $expiry_end_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_end_date', 'expiry_end_date', '','date');
+    $this->setState('filter.expiry_end_date', $expiry_end_date);
 
     $review_state = $this->getUserStateFromRequest($this->context . '.filter.review', 'filter_review', '');
     $this->setState('filter.review', $review_state);
@@ -99,6 +105,8 @@ class HelloWorldModelProperties extends JModelList {
     $id .= ':' . $this->getState('filter.published');
     $id .= ':' . $this->getState('filter.review');
     $id .= ':' . $this->getState('filter.snoozed');
+    $id .= ':' . $this->getState('filter.expiry_end_date');
+    $id .= ':' . $this->getState('filter.expiry_start_date');
 
     return parent::getStoreId($id);
   }
@@ -199,6 +207,14 @@ class HelloWorldModelProperties extends JModelList {
 
         // Don't filter, user wants to see all snoozed props as well as not snoozed etc
       }
+    }
+    
+    // Filter on expiry date
+    $expiry_start_date = $this->getState('filter.expiry_start_date');
+    $expiry_end_date = $this->getState('filter.expiry_end_date');
+  
+    if ($expiry_start_date && $expiry_end_date) {
+      $query->where('a.expiry_date >=' . $db->quote($expiry_start_date) . ' and a.expiry_date <=' . $db->quote($expiry_end_date));
     }
 
     // Filter by search in title

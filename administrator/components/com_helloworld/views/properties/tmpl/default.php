@@ -10,6 +10,9 @@ $arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
+$expiry_start_date = $this->state->get('filter.expiry_start_date');
+$expiry_end_date = $this->state->get('filter.expiry_end_date');
+
 $user = JFactory::getUser();
 $userId = $user->get('id');
 $groups = $user->getAuthorisedGroups();
@@ -19,12 +22,27 @@ $originalOrders = array();
 $canDo = HelloWorldHelper::getActions();
 
 $listing_id = '';
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
+      <div class="">
+        
+        <hr />
+        <h4>Expiry date filters</h4>
+        
+        <?php echo JHtml::_('calendar', $expiry_start_date, 'expiry_start_date', 'expiry_start_date', '%Y-%m-%d', array()); ?>
+        <?php echo JHtml::_('calendar', $expiry_end_date, 'expiry_end_date', 'expiry_end_date', '%Y-%m-%d', array()); ?>
+
+        <div class="btn-group hidden-phone pull-right">
+          <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+          <button class="btn tip hasTooltip" type="button" onclick="document.id('expiry_start_date').value='';document.id('expiry_end_date').value='';this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+        </div>
+      </div>
+
     </div>
     <div id="j-main-container" class="span10">
     <?php else : ?>
@@ -127,7 +145,7 @@ $listing_id = '';
                       $enabled = $canDo->get('helloworld.property.submit');
                     } elseif ($item->review == 2) {
                       $enabled = $canDo->get('helloworld.property.review');
-                    } elseif ($item->review ==-1) {
+                    } elseif ($item->review == -1) {
                       $enabled = false;
                     }
                     ?>
@@ -148,10 +166,10 @@ $listing_id = '';
                           <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'properties.', $enabled); ?>
                         </td>
                         <td>
-                          <?php if ($item->review != 2) :?>
-                          <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
-                            <?php echo $this->escape($item->title); ?>
-                          </a>
+                          <?php if ($item->review != 2) : ?>
+                            <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
+                              <?php echo $this->escape($item->title); ?>
+                            </a>
                           <?php else: ?>
                             <?php echo $this->escape($item->title); ?>
                           <?php endif; ?>
@@ -163,18 +181,15 @@ $listing_id = '';
                           <?php if ($days_to_renewal < 28 && $days_to_renewal > 0) : ?>
                             <span><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal); ?></span>
                             <br />
-                            <a class="btn btn-danger btn-small">
+                            <a class="btn btn-danger btn-small" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.renew&id=' . (int) $item->id) ?>">
                               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
                             </a>
-                          <?php elseif ($days_to_renewal < 0) : ?>
-                            <a class="btn btn-danger btn-small">
-                              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW'); ?>
-                            </a>
+                          <?php elseif ($days_to_renewal <= 0) : ?>
+                            <?php echo JHtml::_('property.renew',$i, JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW')); ?>
                           <?php elseif (empty($item->expiry_date)): ?>
                             &mdash;
                           <?php elseif ($days_to_renewal > 28) : ?>
                             <?php echo JHtml::_('autorenew.state', $item->auto_renew, $i, 'enquiries.', 1, 'cb'); ?>
-
                           <?php endif; ?>
                         </td>
                         <td>
@@ -207,7 +222,6 @@ $listing_id = '';
                     <?php endif; ?>
                   <?php endforeach; ?>
                 <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
-                <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
 
                 </tbody>
 

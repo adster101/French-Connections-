@@ -50,7 +50,7 @@ abstract class HelloWorldHelper {
     $options[] = JHtml::_('select.option', '2', JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
     return $options;
   }
-
+  
   /**
    * Configure the Linkbar.
    */

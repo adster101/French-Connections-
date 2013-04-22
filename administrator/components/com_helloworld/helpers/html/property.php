@@ -157,7 +157,22 @@ class JHtmlProperty
     );
 		return $states;
 	}
-	
+  
+	/**
+	 * @param	int $value	The state value
+	 * @param	int $i
+	 */
+	public static function renew($i, $title)
+	{
+    $html = '';
+    
+		    
+			$html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb'.$i.'\',\'property.renew\')" title="'.$title.'" class="btn btn-danger">'
+					.JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW').'</a>';
+		
+		return $html;
+	}
+  
 
   
   /**

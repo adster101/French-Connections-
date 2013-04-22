@@ -293,7 +293,6 @@ class HelloWorldModelUnit extends JModelAdmin {
           // Switch the table model to the version one
           $table = $this->getTable('PropertyUnitsVersion');
           $table->set('_tbl_key','version_id');
-
         }
       }
 
