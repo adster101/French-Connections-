@@ -51,7 +51,7 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
       }
       
       // Update the state of this version to 1 to denote that it is a live new version
-      $this->state = 1;
+      $this->review = 1;
     }
 
     return parent::store($updateNulls);

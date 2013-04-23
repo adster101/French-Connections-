@@ -264,7 +264,7 @@ class HelloWorldModelUnit extends JModelAdmin {
     try {
 
       // If $data['new_version'] is true we need to update that new version in the version table
-      if ($data['new_version']) {
+      if ($data['review']) {
 
         // Get the latest unpublished version id for this unit, that exists in the db
         $version = $this->getLatestUnitVersion($data['id']);
@@ -272,8 +272,8 @@ class HelloWorldModelUnit extends JModelAdmin {
         if ($version->version_id > 0) {
           // Now we are ready to save our updated unit details to the new version table
           $table = $this->getTable('PropertyUnitsVersion');
-          
-          $table->set('_tbl_key','version_id');
+
+          $table->set('_tbl_key', 'version_id');
 
           // Set the version ID that we want to bind and store the data against...
           $table->version_id = $version->version_id;
@@ -292,11 +292,10 @@ class HelloWorldModelUnit extends JModelAdmin {
         if ($new_version_required[0]) {
           // Switch the table model to the version one
           $table = $this->getTable('PropertyUnitsVersion');
-          $table->set('_tbl_key','version_id');
+          $table->set('_tbl_key', 'version_id');
         }
       }
 
-      
       // Bind the data.
       if (!$table->bind($data)) {
         $this->setError($table->getError());
@@ -325,16 +324,46 @@ class HelloWorldModelUnit extends JModelAdmin {
         $this->setError($table->getError());
         return false;
       } else {
-        
-        if($new_version_required[0]) {
-          
+
+        if ($new_version_required[0]) {
+
           // Update the unit to indicate that it has been updated...
           // Update the property to indicate that one of it's units has been update...
           // This should only happen the first time we create a new version of this unit...
+          // Get the default table 
           $table = $this->getTable();
           
+          // Set the table key back to ID so the controller redirects to the right place
+          $table->set('_tbl_key', 'id');
+          
+          // Update the id, review and modified dates etc
+          $table->id = $pk;
+          $table->review = 1;
+          $table->modified = JFActory::getDate()->toSql();
+
+          // Update the unit record        
+          if (!$table->store()) {
+            $this->setError($table->getError());
+            return false;
+          }
+
+          // Also need to update the listing to flag it as in need of review
+          $table = $this->getTable('PropertyListing', 'HelloWorldTable');
+
+          $table->id = $data['parent_id'];
+          $table->review = 1;
+          $table->modified = JFActory::getDate()->toSql();
+
+          // Update the property record        
+          if (!$table->store()) {
+            $this->setError($table->getError());
+            return false;
+          }
+          
+          // Reset the table id to the unit, now we're done updating the listing...
+          $table->id = $pk;
+          
         }
-         
       }
 
       // Should have a new unit version here.
@@ -345,13 +374,10 @@ class HelloWorldModelUnit extends JModelAdmin {
         $this->setError('Problem saving facilities');
       }
 
-
       // Set the table key back to ID so the controller redirects to the right place
-      $table->set('_tbl_key','id');
+      $table->set('_tbl_key', 'id');
 
       // Need to update the original unit to indicate that it has a new, unpublished version...
-      
-      
       // Clean the cache.
       $this->cleanCache();
 
@@ -359,8 +385,8 @@ class HelloWorldModelUnit extends JModelAdmin {
       $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
       
     } catch (Exception $e) {
+      
       $this->setError($e->getMessage());
-
       return false;
     }
 
@@ -387,7 +413,7 @@ class HelloWorldModelUnit extends JModelAdmin {
     $query->select('version_id');
     $query->from('#__property_units_versions');
     $query->where('id = ' . (int) $id);
-    $query->where('state = 1');
+    $query->where('review = 1');
     $query->order('version_id', 'desc');
 
     $db->setQuery((string) $query);

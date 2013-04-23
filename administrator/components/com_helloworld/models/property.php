@@ -413,9 +413,7 @@ class HelloWorldModelProperty extends JModelAdmin {
           // Update the existing property listing to indicate that we have a new version for it.
           // This should only happen the first time we create a new version.
           $table = $this->getTable();
-          
-          $update = array();
-          
+                 
 
           $table->id = $pk;
           $table->review = 1;
@@ -511,5 +509,19 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     return $row;
   }
-
+  
+  /* 
+   * Method to get the full property listing details based on the property listing ID
+   *
+   * @param id int The property listing ID of the listing to be returned.
+   *  
+   */
+  public function getFullListingDetails($id = '') 
+  {
+    
+    
+    
+    
+  }
+  
 }

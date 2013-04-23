@@ -201,6 +201,7 @@ class plgUserProfile_fc extends JPlugin
     // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR.'/components/com_helloworld/helpers/helloworld.php');
 
+    // Below should really be done via a ACL rule
     $isOwner = HelloWorldHelper::isOwner();
     
 		if (!($form instanceof JForm))
@@ -275,6 +276,7 @@ class plgUserProfile_fc extends JPlugin
         $form->setFieldAttribute($field, 'required', ($this->params->get('profile-require_' . $field) == 2) ? 'required' : '', 'profile');
 
 			} 
+      
 			// Case registration
 			elseif ($name == 'com_users.registration')
 			{
@@ -288,6 +290,7 @@ class plgUserProfile_fc extends JPlugin
 					$form->removeField($field, 'profile');
 				}
 			}
+      
 			// Case profile in site or admin
 			elseif ($name == 'com_users.profile' || $name == 'com_admin.profile')
 			{

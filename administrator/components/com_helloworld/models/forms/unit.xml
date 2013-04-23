@@ -422,10 +422,10 @@
     filter="int">      
   </field>
   <field 
-    name="new_version"
+    name="review"
     type="hidden"
     filter="int"
-    default="" />
+    default="0" />
   
   <field 
     name="published"
