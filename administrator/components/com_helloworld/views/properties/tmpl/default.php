@@ -206,7 +206,7 @@ $listing_id = '';
                             </a>
                             <br />
                             <span class="small muted">
-                              <?php echo JText::_($item->email); ?>
+                              <a href="mailto:<?php echo JText::_($item->email);?>"><?php echo JText::_($item->email); ?></a>
                               <br />
                               <?php echo JText::_($item->phone_1); ?>
                             </span>

@@ -251,8 +251,8 @@ class HelloWorldControllerRenewal extends JControllerForm {
 		}    
     
     // Here we have valid address and VAT status data...
-    // 
-    // Forwards on to the money page...
+     
+    // Forwards on to the money (shot) page...
     
     
     

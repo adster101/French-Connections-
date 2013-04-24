@@ -11,7 +11,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTablePropertyUnits extends JTable
+class HelloWorldTableUnits extends JTable
 {
 	/**
 	 * Constructor
@@ -70,7 +70,8 @@ class HelloWorldTablePropertyUnits extends JTable
 	}
     
 	/**
-	 * Overriden loadish method to load multiple units from instead of one
+	 * 
+   * 
 	 *
 	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
 	 *                           set the instance property value is used.

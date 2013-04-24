@@ -120,7 +120,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     $return = false;
 
     // Get the units table
-    $units_table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+    $units_table = $this->getTable('Units', 'HelloWorldTable');
 
     // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
     $units_table->set('_tbl_key', 'parent_id');

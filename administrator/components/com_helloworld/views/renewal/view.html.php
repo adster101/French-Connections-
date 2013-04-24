@@ -30,11 +30,11 @@ class HelloWorldViewRenewal extends JViewLegacy {
     // Get the record details...again...this time from the session
     $this->listing = JApplication::getUserState($this->extension . '.listing.detail', '');
 
+    // Get the amount they actually need to pay...
+    $this->units = $this->get('Units');
+    
     // Get the payment/address form
     $this->form = $this->get('Form');
-
-
-
 
     // Get a total of what the owner needs to pay for this renewal
     // Set the document
@@ -55,10 +55,8 @@ class HelloWorldViewRenewal extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", false, true);
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js", 'text/javascript', true, false);
-
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/bootstrap-button.css", 'text/css', "screen");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", true, false);
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/vat.js", 'text/javascript', true, false);
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
   }
