@@ -27,16 +27,18 @@ class HelloWorldViewRenewal extends JViewLegacy {
 
     $this->id = $input->get('id', '', 'int');
 
-    // Get the record details...again...this time from the session
-    $this->listing = JApplication::getUserState($this->extension . '.listing.detail', '');
-
-    // Get the amount they actually need to pay...
-    $this->units = $this->get('Units');
+    // Get the property listing details...again...
+    //$this->item = $this->get('Property');
+    
+    // Get the units and image details they against this property
+    //$this->units = $this->get('Units');
     
     // Get the payment/address form
     $this->form = $this->get('Form');
 
-    // Get a total of what the owner needs to pay for this renewal
+    // Get a summary total of what the owner needs to pay for this renewal
+    $this->total = $this->get('Total');
+    
     // Set the document
     $this->setDocument();
 

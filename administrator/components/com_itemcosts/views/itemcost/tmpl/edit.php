@@ -67,6 +67,10 @@ $document->addStyleSheet('components/com_itemcosts/assets/css/itemcosts.css');
 				<div class="control-label"><?php echo $this->form->getLabel('cost'); ?></div>
 				<div class="controls"><?php echo $this->form->getInput('cost'); ?></div>
 			</div>
+			<div class="control-group">
+				<div class="control-label"><?php echo $this->form->getLabel('catid'); ?></div>
+				<div class="controls"><?php echo $this->form->getInput('catid'); ?></div>
+			</div>
 
 				
             </fieldset>

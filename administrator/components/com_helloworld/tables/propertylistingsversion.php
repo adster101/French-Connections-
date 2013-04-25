@@ -53,7 +53,7 @@ class HelloWorldTablePropertyListingsVersion extends JTable
       // Update the state of this version to 1 to denote that it is a live new version
       // 1 = unpublished new version
       // 0 = published/archived version
-      $this->state = 1;
+      $this->review = 1;
     }
 
     return parent::store($updateNulls);

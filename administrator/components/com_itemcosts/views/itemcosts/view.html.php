@@ -120,6 +120,12 @@ class ItemcostsViewItemcosts extends JViewLegacy
 			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true)
 
 		);
+    
+		JHtmlSidebar::addFilter(
+			JText::_('JOPTION_SELECT_CATEGORY'),
+			'filter_category_id',
+			JHtml::_('select.options', JHtml::_('category.options', 'com_itemcosts'), 'value', 'text', $this->state->get('filter.category'))
+		);
 
         
 	}

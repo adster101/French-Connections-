@@ -25,6 +25,12 @@ class ItemcostsHelper
 			'index.php?option=com_itemcosts&view=itemcosts',
 			$vName == 'itemcosts'
 		);
+    
+		JHtmlSidebar::addEntry(
+			JText::_('Item cost categories'),
+			'index.php?option=com_categories&extension=com_itemcosts',
+			$vName == 'categories'
+		);
 
 	}
 

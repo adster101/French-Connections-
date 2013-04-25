@@ -35,6 +35,7 @@ class ItemcostsModelitemcosts extends JModelList
                 'code', 'a.code',
                 'description', 'a.description',
                 'cost', 'a.cost',
+                'category', 'a.catid'
 
             );
         }
@@ -59,6 +60,9 @@ class ItemcostsModelitemcosts extends JModelList
 
 		$published = $app->getUserStateFromRequest($this->context.'.filter.state', 'filter_published', '', 'string');
 		$this->setState('filter.state', $published);
+
+    $category = $app->getUserStateFromRequest($this->context.'.filter.category', 'filter_category_id', '', 'string');
+		$this->setState('filter.category', $category);
         
         
         
@@ -128,6 +132,12 @@ class ItemcostsModelitemcosts extends JModelList
     } else if ($published === '') {
         $query->where('(a.state IN (0, 1))');
     }
+    
+    // Filter by category state
+    $category = $this->getState('filter.category');
+    if (is_numeric($category)) {
+        $query->where('a.catid = '.(int) $category);
+    } 
     
 
 		// Filter by search in title

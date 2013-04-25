@@ -11,6 +11,79 @@ class HelloWorldModelRenewal extends JModelAdmin
 {
 
   public $extension = 'com_helloworld';
+ 
+  /*
+   * A units property to store the listing units against
+   */
+  public $units = '';
+  
+  /*
+   * A listing property to store the listing against
+   * 
+   */
+  public $listing = '';
+  
+  /* 
+   * The owner ID for the user that is renewing...taken from the listing not the session scope
+   */
+  public $owner_id = '';
+  
+  /* 
+   * The owner profile for the user that is renewing...VAT status and invoice address etc
+   */
+  public $owner_profile = '';
+  
+  /*
+   * Return a summary total object based on the property settings, number of units and images count
+   * 
+   * 
+   */
+  public function getTotal() {
+    
+    // Get the app/input gubbins
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    
+    // The listing ID being renewed
+    $id = $input->get('id', '', 'int');
+    
+    $this->units = $this->getUnits($id);
+    
+    $this->listing = $this->getListing($id);
+    
+    if (empty($this->listing)) {
+      return false;
+    }
+    
+    if (empty($this->units)) {
+      return false;
+    }    
+    
+    // If listing is for review
+    // Load the new version from the versions table
+    // For each unit, also check if it's been updated. 
+    // If it has then need to load the new version details in from the version table, 
+    // including revised image count etc
+    
+    // Convert listing into an array
+    $this->listing = $this->listing->getProperties();
+    
+    $this->owner_id = $this->listing['created_by'];
+    
+    $this->owner_profile = $this->getItem($this->owner_id);
+    
+    print_r($this->units);
+    
+    
+    // Also need to check the vouchers table to see if there are any vouchers to apply to this account...
+    
+    // Once we have the vouchers we are good to go...
+    // So...first off determine the VAT status...
+    // 
+    
+    
+    
+  }
   
   /*
    * Returns a list of units for a given listing id (using the units model)
@@ -19,21 +92,49 @@ class HelloWorldModelRenewal extends JModelAdmin
    * return array An array of units along with image counts...
    *    
    */
-  public function getUnits() {
+  public function getUnits($id = '') {
     
-  
-
+    if (empty($id)) {
+      // No ID
+      return false;
+    }    
+     
     // Get an instance of the units model
     $model = JModelLegacy::getInstance('Units','HelloWorldModel');
-    
-    
     $units = $model->getItems();
     
     return $units;
+  }
+  
+  /*
+   * Returns the property listing given the id (using the property model)...
+   * 
+   * @param int The id of the parent property listing
+   * 
+   * return array An array of units along with image counts...
+   *    
+   */
+  public function getListing($id = '') {
     
+    if (empty($id)) {
+      // No ID
+      return false;
+    }           
+
+    // Get an instance of the property listing model
+    $model = JModelLegacy::getInstance('Property','HelloWorldModel');
     
+    // Get an instance of the units model
+    $listing = $model->getItem($id);
+       
+    return $listing;    
     
   }
+  
+  
+  
+  
+  
   
 	/**
 	 * Returns a reference to the a Table object, always creating it.
@@ -50,7 +151,7 @@ class HelloWorldModelRenewal extends JModelAdmin
 	}
   
 	/**
-	 * Method to get a single record.
+	 * Method to get a single record. getItem here is set to return user profile data which is used to populate the form.
 	 *
 	 * @param   integer	The id of the primary key.
 	 *
@@ -161,6 +262,7 @@ class HelloWorldModelRenewal extends JModelAdmin
     
     // Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_helloworld.property.renewal.data', array());
+    
 		if (empty($data)) 
 		{
 			$data = $this->getItem($user_id);
