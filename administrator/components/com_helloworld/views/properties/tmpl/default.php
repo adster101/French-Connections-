@@ -189,16 +189,16 @@ $listing_id = '';
                           <?php elseif (empty($item->expiry_date)): ?>
                             &mdash;
                           <?php elseif ($days_to_renewal > 28) : ?>
-                            <?php echo JHtml::_('autorenew.state', $item->auto_renew, $i, 'enquiries.', 1, 'cb'); ?>
+                            <?php echo JHtml::_('renewal.state', $item->auto_renew, $i, 'property.autorenew.', 1, 'cb'); ?>
                           <?php endif; ?>
                         </td>
                         <td>
                           <?php echo JText::_($item->view_count); ?><br />
                           <?php echo JText::_($item->enquiry_count); ?> 
-                        </td>                <td>
+                        </td>                
+                        <td>
                           <?php echo JText::_($item->modified); ?>
                         </td>
-
                         <?php if ($canDo->get('helloworld.display.owner')) : ?>
                           <td>
                             <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">

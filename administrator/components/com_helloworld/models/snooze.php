@@ -36,7 +36,7 @@ class HelloWorldModelSnooze extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'PropertyListing', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
   
