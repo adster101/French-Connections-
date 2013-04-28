@@ -348,7 +348,7 @@ class HelloWorldModelUnit extends JModelAdmin {
           }
 
           // Also need to update the listing to flag it as in need of review
-          $table = $this->getTable('PropertyListing', 'HelloWorldTable');
+          $table = $this->getTable('Property', 'HelloWorldTable');
 
           $table->id = $data['parent_id'];
           $table->review = 1;

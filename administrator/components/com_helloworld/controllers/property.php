@@ -85,4 +85,31 @@ class HelloWorldControllerProperty extends JControllerForm {
     // For now we want to push the property listing progress into the session
   }
 
+  /*
+   * Listing controller - checks ownership of record and redirect to listing view
+   * 
+   */
+
+  public function listing() {
+
+    $app = JFactory::getApplication();
+
+    $listing_id = $this->input->get('id', '', 'int');
+
+    $data['id'] = $listing_id;
+
+    if (!$this->allowEdit($data, 'id')) {
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false)
+      );
+    }
+    
+    // Set holdEditID etc
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $listing_id, false)
+    );
+  }
+
 }
