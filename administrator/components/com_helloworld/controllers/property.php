@@ -111,5 +111,49 @@ class HelloWorldControllerProperty extends JControllerForm {
                     'index.php?option=' . $this->option . '&view=listing&id=' . (int) $listing_id, false)
     );
   }
+  
+  
+  /*
+   * Autorenewal controller action - checks ownership of record and redirects to listing view
+   * 
+   */
+
+  public function setupautorenewal() {
+
+    $app = JFactory::getApplication();
+		$model = $this->getModel();
+		$table = $model->getTable();
+   	
+    $context = "$this->option.autorenewal.$this->context";
+
+    // Determine the name of the primary key for the data.
+		if (empty($key))
+		{
+			$key = $table->getKeyName();
+		}
+    
+		$cid   = $this->input->post->get('cid', array(), 'array');
+
+    $recordId = (int) (count($cid) ? $cid[0] : $this->input->getInt($urlVar));
+
+    
+		if (!$this->allowEdit(array($key => $recordId), $key)) {
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false)
+      );
+    }
+    
+    $this->holdEditId($context, $recordId);
+		$app->setUserState($context . '.data', null);
+    
+    // Set holdEditID etc
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=setupautorenewal&id=' . (int) $data['id'], false)
+    );
+  }
+  
+  
 
 }

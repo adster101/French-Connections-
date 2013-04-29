@@ -63,8 +63,6 @@ class HelloWorldModelListing extends JModelList {
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
     
-    $this->setState('filter.snoozed', $snooze_state);
-
     // extract the component name
     $this->setState('filter.component', $parts[0]);
 
@@ -160,10 +158,6 @@ class HelloWorldModelListing extends JModelList {
       $query->where('(pu.published = 0 OR pu.published = 1)');
     }
 
-    // Order if we have a specific ordering.
-    if ($listOrdering) {
-      $query->order($db->escape($listOrdering) . ' ' . $listDirn);
-    }
 
     return $query;
   }

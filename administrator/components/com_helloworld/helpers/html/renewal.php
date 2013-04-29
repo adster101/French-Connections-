@@ -20,29 +20,28 @@ class JHtmlRenewal
 	 * @param	int $value	The state value
 	 * @param	int $i
 	 */
-	public static function state($value = 0, $i, $canChange)
+	public static function state($value = '', $i, $canChange)
 	{
 		// Array of image, task, title, action.
     // Possible renewal states are
     // Expired (renew now)
-    // About to expire (non auto renew) (renew now) (opt in)
+    // About to expire (non auto-renew) (renew now) (opt in)
     // About to expire (auto renew) (opt out)
     // Publshed with > 28 days to renewal (non auto renew) (opt in)
  
     
 		$states	= array(
-			0	=> array('publish_x.png',		'helloworlds.autorenewon',	'COM_MESSAGES_OPTION_READ',		'COM_MESSAGES_MARK_AS_UNREAD'),
-			1	=> array('publish_g.png',	'enquiries.autorenewoff',		'COM_MESSAGES_OPTION_UNREAD',	'COM_MESSAGES_MARK_AS_READ')
+			0	=> array('cogs',		'property.setupautorenewal',	'Enable automatic renewals for this listing', 'Why not enable auto renewals...?'),
+			1	=> array('wrench',	'property.setupautorenewal',		'Automatic renewals have been enabled for this listing', 'Auto renewals have been enabled for this listing. This property will automatically renew on the expiry date shown. No further action requried etc etc blah blah blah')
 		);
     
 		$state	= JArrayHelper::getValue($states, (int) $value, $states[0]);
     
-		$html	= JHtml::_('image', 'admin/'.$state[0], JText::_($state[2]), null, true);
     
 		if ($canChange) {
-      
-			$html = '<a href="#" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[3]).'">'
-					.$html.'</a>';
+			$html = '<a rel="tooltip" class="btn" href="#" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[3]).'">';
+      $html .= $state[2];
+      $html .='</a>';
 		}
 
 		return $html;

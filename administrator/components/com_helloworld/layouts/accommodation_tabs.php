@@ -43,6 +43,9 @@ $property_details = ($listing_details['id'] && $listing_details['latitude'] && $
 // Assign a 'default' unit ID 
 $units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
+
+print_r($listing);
+
 ?>
 
 <?php if ($view == 'property' && !$property_details) : ?>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_helloworld/models/rules">
+	<fieldset name="autorenewaloptions">
+		<field
+			name="VendorTxCode"
+			type="radio"
+			default=""
+			label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
+			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"
+      size="80"
+      maxlength="75"
+      required="true"
+      class="validate"
+      multiple="true">
+    </field>
+    
+  </fieldset>
+</form>

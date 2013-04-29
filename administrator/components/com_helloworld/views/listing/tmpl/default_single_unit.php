@@ -6,10 +6,8 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('dropdown.init');
 
-
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
-
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
@@ -18,6 +16,7 @@ $ordering = ($listOrder == 'a.lft');
 $originalOrders = array();
 
 $canDo = HelloWorldHelper::getActions();
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
@@ -49,22 +48,7 @@ $canDo = HelloWorldHelper::getActions();
 
         <tbody>
           <?php foreach ($this->items as $i => $item): ?>
-            <?php
-            $expiry_date = new DateTime($item->expiry_date);
-            $now = date('Y-m-d');
-            $now = new DateTime($now);
-            $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
 
-            if ($item->review == 0) {
-              $enabled = false;
-            } elseif ($item->review == 1) {
-              $enabled = $canDo->get('helloworld.property.submit');
-            } elseif ($item->review == 2) {
-              $enabled = $canDo->get('helloworld.property.review');
-            } elseif ($item->review == -1) {
-              $enabled = false;
-            }
-            ?>
             <?php if ($canEditOwn) : ?>
               <tr class="row<?php echo $i % 2; ?>">
                 <td>

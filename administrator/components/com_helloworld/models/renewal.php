@@ -167,8 +167,8 @@ class HelloWorldModelRenewal extends JModelAdmin
       
       $vat = array();
       $vat['vat_status'] = $item->vat_status;
-      $vat['company_number'] = $item->vat_status;
-      $vat['vat_number'] = $item->vat_status;
+      $vat['company_number'] = $item->company_number;
+      $vat['vat_number'] = $item->vat_number;
       
 			$item->vat = $vat;
       
@@ -226,13 +226,13 @@ class HelloWorldModelRenewal extends JModelAdmin
     {
       
       // This user already has VAT status setup so we know it...
-			$form->removeGroup('vat'); 
+			//$form->removeGroup('vat'); 
       
     }
     
     if (!empty($data->address1) && !empty($data->city) && !empty($data->postal_code))
     {
-      $form->removeGroup('invoice_address');
+      //$form->removeGroup('invoice_address');
     }
   }
   

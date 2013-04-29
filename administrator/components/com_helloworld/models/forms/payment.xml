@@ -148,10 +148,9 @@
       filter="string"
       label="PLG_USER_PROFILE_FIELD_COUNTRY_LABEL"
       message="PLG_USER_PROFILE_FIELD_COUNTRY_MESSAGE"
-      size="30"
       labelclass="control-label"
       required="true"
-      class="input-small">
+      class="input-large">
         <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
         <option	value="UK">United Kingdon</option>
         <option	value="FR">France</option>
@@ -192,7 +191,8 @@
         size="30"
         class="input-small"
         labelclass="control-label"     
-        maxlength=""
+        maxlength="10"
+        default=""
 			/>
       
       <field
@@ -206,7 +206,8 @@
         size="30"
         labelclass="control-label"
         class="input-small"
-        maxlength=""
+        maxlength="10"
+        default=""
 			/> 
     </fieldset>
   </fields>
