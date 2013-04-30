@@ -18,20 +18,21 @@ class HelloWorldViewListing extends JViewLegacy {
    * @return void
    */
   function display($tpl = null) {
+    
     // Find the user details
     $user = JFactory::getUser();
     $userID = $user->id;
-
+    
+    // Get the ID
+    $app = JFactory::getApplication();
+    $this->id = $app->input->get('id','','int');
+    
     // Get data from the model
-    $items = $this->get('Items');
+    $this->items = $this->get('Items');
 
-    $pagination = $this->get('Pagination');
+    $this->pagination = $this->get('Pagination');
     
     $this->state = $this->get('State');
-
-    // Assign data to the view
-    $this->items = $items;
-    $this->pagination = $pagination;
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
@@ -60,7 +61,7 @@ class HelloWorldViewListing extends JViewLegacy {
     
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id));
     
     JToolBarHelper::cancel();
     
@@ -72,7 +73,10 @@ class HelloWorldViewListing extends JViewLegacy {
       JToolBarHelper::addNew('unit.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
     }
 
-
+    if ($canDo->get('helloworld.property.preview')) {
+      
+      JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);      
+    }
     
 
     

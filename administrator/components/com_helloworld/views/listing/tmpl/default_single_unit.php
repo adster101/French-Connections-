@@ -17,6 +17,8 @@ $originalOrders = array();
 
 $canDo = HelloWorldHelper::getActions();
 
+print_r($this->items);
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
@@ -29,13 +31,14 @@ $canDo = HelloWorldHelper::getActions();
       <div id="j-main-container">
       <?php endif; ?>
 
+      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+        <hr />
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>
 
-            <th>
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
-            </th>
+
+
           </tr>
         </thead>
         <?php
@@ -52,29 +55,28 @@ $canDo = HelloWorldHelper::getActions();
             <?php if ($canEditOwn) : ?>
               <tr class="row<?php echo $i % 2; ?>">
                 <td>
-                  <?php echo $item->id; ?>
-                </td>
-                <td>
-                  <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-                </td>
-                <td>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->parent_id) ?>">
-                    <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS') ?>
+                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->listing_id) ?>">
+                    <i class="icon icon-compass"></i> 
+                    <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS') ?>
                     <i class="icon icon-ok"></i> 
                   </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . (int) $item->id) ?>">
+                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . (int) $item->unit_id) ?>">
+                    <i class="icon icon-home"></i> 
                     <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS') ?>
                     <i class="icon icon-ok"></i> 
                   </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $item->id) ?>">
+                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $item->unit_id) ?>">
+                    <i class="icon icon-pictures"></i> 
                     <?php echo Jtext::_('IMAGE_GALLERY') ?>
                     <i class="icon icon-ok"></i> 
                   </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit&id=' . (int) $item->id) ?>">
+                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit&id=' . (int) $item->unit_id) ?>">
+                    <i class="icon icon-calendar"></i> 
                     <?php echo Jtext::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY') ?>
                     <i class="icon icon-ok"></i> 
                   </a>
                   <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=tariffs.edit&id=' . (int) $item->id) ?>">
+                    <i class="icon icon-briefcase"></i> 
                     <?php echo Jtext::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS') ?>
                     <i class="icon icon-ok"></i> 
                   </a>

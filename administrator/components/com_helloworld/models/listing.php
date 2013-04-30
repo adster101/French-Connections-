@@ -121,9 +121,10 @@ class HelloWorldModelListing extends JModelList {
     // Initialise the query.
     $query = $this->_db->getQuery(true);
     $query->select('
-        pu.id,
+        pl.title,
+        pl.id as listing_id,
+        pu.id unit_id,
         pu.parent_id,
-        
         pu.ordering,
         pu.unit_title,
         CASE
@@ -135,9 +136,9 @@ class HelloWorldModelListing extends JModelList {
         (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs
       ');
-    $query->from('#__property_units as pu');
-    $query->join('left','#__property_listings pl on pl.id = pu.parent_id'); 
-    $query->where('pu.parent_id = ' . (int) $id);
+    $query->from('#__property_listings as pl');
+    $query->join('left','#__property_units pu on pl.id = pu.parent_id'); 
+    $query->where('pl.id = ' . (int) $id);
     
     // Check the user group this user belongs to. 
     // Fundamental check to ensure owners only see their own listings.
@@ -155,9 +156,8 @@ class HelloWorldModelListing extends JModelList {
     if (is_numeric($published)) {
       $query->where('pu.published = ' . (int) $published);
     } elseif ($published == '') {
-      $query->where('(pu.published = 0 OR pu.published = 1)');
+      $query->where('(pu.published = 0 OR pu.published = 1 OR pu.published is null)');
     }
-
 
     return $query;
   }

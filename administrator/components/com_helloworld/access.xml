@@ -24,6 +24,8 @@
 		<action name="helloworld.images.create" title="COM_HELLOWORLD_HELLOWORLD_CREATE_IMAGE" description="" />
 		<action name="helloworld.property.submit" title="Submit for review" description="" />
 		<action name="helloworld.property.review" title="Review and approve changes" description="" />
+		<action name="helloworld.property.autorenew" title="Update auto renreal status" description="" />
+		<action name="helloworld.property.preview" title="Generate a property preview" description="" />
 	</section>
   <section name="category">
 		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />

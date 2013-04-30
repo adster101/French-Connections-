@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class HelloWorldViewSetUpAutoRenewal extends JViewLegacy {
+class HelloWorldViewAutoRenewals extends JViewLegacy {
 
   /**
    * HelloWorld raw view display method
@@ -27,18 +27,12 @@ class HelloWorldViewSetUpAutoRenewal extends JViewLegacy {
 
     $this->id = $input->get('id', '', 'int');
 
-    // Get the property listing details...again...
-    //$this->item = $this->get('Property');
-    
-    // Get the units and image details they against this property
-    //$this->units = $this->get('Units');
-    
-    // Get the payment/address form
+    // Get the property listing details...
+    $this->item = $this->get('Item');
+
+    // Get the auto renewal options for this listing
     $this->form = $this->get('Form');
 
-    // Get a summary total of what the owner needs to pay for this renewal
-    $this->total = $this->get('Total');
-    
     // Set the document
     $this->setDocument();
 
@@ -67,25 +61,32 @@ class HelloWorldViewSetUpAutoRenewal extends JViewLegacy {
    * Setting the toolbar
    */
   protected function addToolBar() {
+
+    JToolBarHelper::title(($this->item->title) ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->item->id, $this->item->title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW'));
+
     // Get component level permissions
-    $canDo = HelloWorldHelper::getActions();
-    
+		$canDo = HelloWorldHelper::getActions();
+
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {
 
       $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu($view);
+      HelloWorldHelper::addSubmenu($view);
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
     }
-
     
-    JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
+    if ($canDo->get('helloworld.property.autorenew')) {
+      // We can save the new record
+      JToolBarHelper::save('autorenewals.save', 'JTOOLBAR_SAVE');
+    }
+    
+    
+    JToolBarHelper::cancel('autorenewals.cancel', 'JTOOLBAR_CLOSE');
 
     JToolBarHelper::help('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
-    
   }
 
 }

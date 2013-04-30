@@ -560,8 +560,8 @@ class JControllerForm extends JControllerLegacy
 		$checkin = property_exists($table, 'checked_out');
 		$context = "$this->option.edit.$this->context";
 		$task = $this->getTask();
-
-		// Determine the name of the primary key for the data.
+        
+    // Determine the name of the primary key for the data.
 		if (empty($key))
 		{
 			$key = $table->getKeyName();
@@ -575,7 +575,7 @@ class JControllerForm extends JControllerLegacy
 
 		$recordId = $this->input->getInt($urlVar);
 
-		if (!$this->checkEditId($context, $recordId))
+    if (!$this->checkEditId($context, $recordId))
 		{
 			// Somehow the person just went to the form and tried to save it. We don't allow that.
 			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $recordId));
@@ -590,7 +590,7 @@ class JControllerForm extends JControllerLegacy
 
 			return false;
 		}
-
+    
 		// Populate the row id from the session.
 		$data[$key] = $recordId;
 
@@ -649,7 +649,7 @@ class JControllerForm extends JControllerLegacy
 		// Test whether the data is valid.
 		$validData = $model->validate($form, $data);
 
-		// Check for validation errors.
+    // Check for validation errors.
 		if ($validData === false)
 		{
 			// Get the validation messages.

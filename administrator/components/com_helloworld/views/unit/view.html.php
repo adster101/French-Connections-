@@ -26,7 +26,8 @@ class HelloWorldViewUnit extends JViewLegacy
     
     $this->script = $this->get('Script');
     
-   
+    
+    
     $this->languages = HelloWorldHelper::getLanguages();
 		$this->lang = HelloWorldHelper::getLang();
 

@@ -44,7 +44,6 @@ $property_details = ($listing_details['id'] && $listing_details['latitude'] && $
 $units = (!$units) ? array() : $units;
 $default_unit = (count($units) > 0) ? key($units) : '';
 
-print_r($listing);
 
 ?>
 

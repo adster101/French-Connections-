@@ -5,10 +5,8 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
 $language = JFactory::getLanguage();
-$language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
 
 $fieldsets = $this->form->getFieldSets();
-
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
@@ -19,11 +17,11 @@ $fieldsets = $this->form->getFieldSets();
     <?php else : ?>
       <div lass="span10">
       <?php endif; ?> 
-      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=renewal&layout=billing&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=autorenewals&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <?php foreach ($fieldsets as $fieldset) : ?>
           <fieldset>
+            <?php echo JText::_($fieldset->description); ?>
             <legend><?php echo JText::_($fieldset->label); ?></legend>
-            <p><?php echo JText::_($fieldset->description); ?></p>
             <?php foreach ($this->form->getFieldset($fieldset->name) as $field) : ?>
               <div class="control-group">
                 <?php echo $field->label; ?>
@@ -33,15 +31,14 @@ $fieldsets = $this->form->getFieldSets();
               </div>
               <hr />
             <?php endforeach; ?>
-            <button class="btn btn-primary btn-large pull-right">
-              Proceed >>
-            </button>
           </fieldset>           
         <?php endforeach; ?>
 
 
 
-        <input type="hidden" name="task" value="renewal.doPayment" />
+        <input type="hidden" name="task" value="" />
+        <input type="hidden" name="jform[id]" value="11" />
+        
         <?php echo JHtml::_('form.token'); ?>
 
 

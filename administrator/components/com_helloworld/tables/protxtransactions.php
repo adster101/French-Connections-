@@ -11,7 +11,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableContactLog extends JTable
+class HelloWorldTableProtxTransactions extends JTable
 {
 	/**
 	 * Constructor

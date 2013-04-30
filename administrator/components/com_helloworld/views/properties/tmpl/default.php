@@ -32,7 +32,6 @@ $listing_id = '';
 
         <hr />
         <h4>Expiry date filters</h4>
-
         <?php echo JHtml::_('calendar', $expiry_start_date, 'expiry_start_date', 'expiry_start_date', '%Y-%m-%d', array()); ?>
         <?php echo JHtml::_('calendar', $expiry_end_date, 'expiry_end_date', 'expiry_end_date', '%Y-%m-%d', array()); ?>
 
@@ -104,7 +103,7 @@ $listing_id = '';
                         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY'); ?>
                       <?php endif; ?>
                     </th>
-                    <th width="10%">
+                    <th width="15%">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?>
                     </th>
                     <th width="10%">
@@ -143,7 +142,7 @@ $listing_id = '';
                       $days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
                     }
                     
-                    $auto_renew = (!empty($item->auto_renew)) ? true : false;
+                    $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
                     if ($item->review == 0) {
                       $enabled = false;

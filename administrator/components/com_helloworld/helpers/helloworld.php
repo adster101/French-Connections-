@@ -217,7 +217,9 @@ abstract class HelloWorldHelper {
         'helloworld.images.edit',
         'helloworld.images.create',
         'helloworld.property.submit',
-        'helloworld.property.review'
+        'helloworld.property.review',
+        'helloworld.property.autorenew',
+        'helloworld.property.preview'
     );
 
 

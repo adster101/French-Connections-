@@ -149,7 +149,7 @@ class HelloWorldModelProperties extends JModelList {
       FROM #__enquiries
       where property_id = a.id
       and date_created > ' . $db->quote(date('Y-m-d', $last_year)) . ') as enquiry_count,
-      a.auto_renew,
+      a.VendorTxCode,
       review
     ');
 

@@ -80,7 +80,8 @@ class HelloWorldViewProperty extends JViewLegacy
     JApplication::setUserState('title'.$this->item->id, $this->item->title);
     
     JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title, $this->item->id), 'helloworld');
-		// Built the actions for new and existing records.
+		
+    // Built the actions for new and existing records.
 		if ($isNew) 
 		{
 			// For new records, check the create permission.

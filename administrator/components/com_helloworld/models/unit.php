@@ -61,7 +61,7 @@ class HelloWorldModelUnit extends JModelAdmin {
     if ($pk > 0) {
       // Attempt to load the row.
       $return = $table->load($pk);
-
+      var_dump($table);die;
       // Check for a table object error.
       if ($return === false && $table->getError()) {
         $this->setError($table->getError());
@@ -94,7 +94,7 @@ class HelloWorldModelUnit extends JModelAdmin {
     }
 
     $item = JArrayHelper::toObject($properties, 'JObject');
-
+    var_dump($item);
     return $item;
   }
 
