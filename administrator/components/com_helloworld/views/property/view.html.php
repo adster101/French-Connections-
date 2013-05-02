@@ -30,7 +30,7 @@ class HelloWorldViewProperty extends JViewLegacy
     $this->units = $this->get('Units');  
 
     // Update the progress...this is stored in the session scope so doesn't return here.
-    HelloWorldHelper::setPropertyProgress($this->item, $this->units);
+    //HelloWorldHelper::setPropertyProgress($this->item, $this->units);
     
 		$languages = HelloWorldHelper::getLanguages();
 		$lang = HelloWorldHelper::getLang();
@@ -65,9 +65,7 @@ class HelloWorldViewProperty extends JViewLegacy
 		// Determine the layout we are using. 
 		// Should this be done with views? 
 		$view = strtolower(JRequest::getVar('view'));
-		
-    $published = $this->item->published;  
-  	
+		  	
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
@@ -96,12 +94,13 @@ class HelloWorldViewProperty extends JViewLegacy
 		else
 		{
 			if ($canDo->get('core.edit.own'))
+        JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
+
 			{
 				// We can save the new record
 				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
 			}
-			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
 		}  
     
     // Display a helpful navigation for the owners 

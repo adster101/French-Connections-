@@ -28,7 +28,7 @@ $data = JApplication::getUserState('listing', '');
         <?php endif; ?> 
         <?php
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        echo $layout->render($data);
+        //echo $layout->render($data);
         ?>   
         <fieldset class="adminform">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>

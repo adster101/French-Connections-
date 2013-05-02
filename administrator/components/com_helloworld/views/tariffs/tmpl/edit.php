@@ -54,12 +54,10 @@ $tariff_field_sets = $this->form->getFieldSets('tariffs');
       echo $this->form->getInput('tariff_based_on'); ?>
         <?php echo $this->form->getLabel('linen_costs');
       echo $this->form->getInput('linen_costs'); ?>
-     	
-<?php echo $this->form->getLabel('additional_price_notes'); ?>
-     
-
-    <?php echo $this->form->getInput('additional_price_notes'); ?>
-
+        <?php echo $this->form->getLabel('additional_price_notes'); 
+      echo $this->form->getInput('additional_price_notes'); ?>
+        <?php echo $this->form->getLabel('changeover_day'); 
+      echo $this->form->getInput('changeover_day'); ?>
     </fieldset>
 
 

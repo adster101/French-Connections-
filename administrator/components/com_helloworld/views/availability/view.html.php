@@ -34,7 +34,7 @@ class HelloWorldViewAvailability extends JViewLegacy
 		
     // Get the unit item we are editing the availability for...
     $item = $this->get('Item');
-    			
+        			
 		// Check for errors.
 		if (count($errors = $this->get('Errors'))) 
 		{
@@ -82,10 +82,7 @@ class HelloWorldViewAvailability extends JViewLegacy
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-    // Get the listing details from the session...
-    $listing = JApplication::getUserState('listing', false);
-
-    JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title($this->item->unit_title ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->item->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
  
  		$bar = JToolBar::getInstance('toolbar');
 

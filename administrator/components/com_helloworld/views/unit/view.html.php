@@ -72,8 +72,6 @@ class HelloWorldViewUnit extends JViewLegacy
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-    // Get the listing details from the session...
-    $listing = JApplication::getUserState('listing', false);
 
     JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 		

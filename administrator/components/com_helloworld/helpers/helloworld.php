@@ -50,7 +50,7 @@ abstract class HelloWorldHelper {
     $options[] = JHtml::_('select.option', '2', JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
     return $options;
   }
-  
+
   /**
    * Configure the Linkbar.
    */
@@ -104,7 +104,7 @@ abstract class HelloWorldHelper {
    * 
    */
 
-  public static function setPropertyProgress($item = '', $units = array()) {
+  public static function setPropertyProgress($items = array()) {
 
     // Collect the input from the request
     $input = JFactory::getApplication()->input;
@@ -113,51 +113,42 @@ abstract class HelloWorldHelper {
     // This will mean that all units and the listing data is available for any unit being editied
     // The id of the item being edited, could be unit or listing
     $id = $input->get('id', '', 'int');
+    
+    // Create the 'progress' array.object
+    $progress = array();
 
-    // The component - com_helloworld unless something has gone wrong!
-    $option = $input->get('option', 'com_helloworld', 'string');
+    foreach ($items as $key => $value) {
 
-    // The user details
-    $user = JFactory::getUser();
+      if (!array_key_exists('listing', $progress)) {
+        $progress['listing'] = $value->listing_id;
+      }
+      
+      if (!array_key_exists('review',$progress)) {
+        $progress['review'] = $value->review;
+      }
 
-    // Create the 'progress' object
-    $progress = new JObject;
 
-    if (!empty($units)) {
-      $units = $units->getProperties();
+
+      // Only store the unit details if there is a unit
+      if (!empty($value->unit_id)) {
+        if (!array_key_exists('units', $progress)) {
+          $progress['units'] = array();
+        }  
+
+        $progress['units'][$value->unit_title] = array();
+        $progress['units'][$value->unit_title]['images'] = ($value->images > 0) ? 1 : 0;
+        $progress['units'][$value->unit_title]['availability'] = ($value->availability > 0) ? 1 : 0;
+        $progress['units'][$value->unit_title]['tariffs'] = ($value->tariffs > 0) ? 1 : 0;
+      }
     }
 
-    $listing_progress_array = array(
-        'id' => $item->id,
-        'title' => $item->title,
-        'latitude' => $item->latitude,
-        'longitude' => $item->longitude,
-        'expiry' => $item->expiry_date,
-        'units' => $units,
-        'updated' => $item->review
-    );
+
+
+
 
     // Check that this doesn't already exist in the session scope
-    $progress->setProperties($listing_progress_array);
-    JApplication::setUserState('listing', $progress);
-    
-
-
-    // May still need to use the below to check for images against the property listing
-    //if (!JApplication::getUserState('com_hellworld.images.progress', false)) {
-    // Import the model library 
-    //$model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
-    // Use the getItem method to retrieve the image details. 
-    //$item = $model->getItem($id);
-    //if (array_key_exists('library', $item->images->library) && count($item->images->gallery->getProperties()) > 0) {
-    //JApplication::setUserState('com_helloworld.images.progress', true);
-    //} else if (count($item->images->library->getProperties()) > 0) {
-    //JApplication::setUserState('com_helloworld.images.progress', true);
-    //} else {
-    //JApplication::setUserState('com_helloworld.images.progress', false);
-    //}
-    //}
-    //}
+    //$progress->setProperties($listing_progress_array);
+    return $progress;
   }
 
   public static function updateUnitProgress($data = '', $context = '') {
@@ -170,21 +161,16 @@ abstract class HelloWorldHelper {
     if (empty($units)) { // As units is empty this must be the first one for this listing.
       // Initialise a unit item for the listing object. This data has already been, checked, filtered and what not.
       $unit = new JObject;
-      
-      $unit->id = $data['id'];
 
- 
+      $unit->id = $data['id'];
     } else { // We already have a unit(s)
-      if (array_key_exists($data['id'],$units) && $listing->listing_id == $data['parent_id']) {
+      if (array_key_exists($data['id'], $units) && $listing->listing_id == $data['parent_id']) {
         $listing->units = JArrayHelper::toObject($data, 'JObject');
       }
-
     }
-    
+
 
     JApplication::setUserState('listing', $listing);
-    
-    
   }
 
   /**
@@ -299,15 +285,15 @@ abstract class HelloWorldHelper {
    * @return string False on failure or error, true otherwise.
    */
   public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0) {
-    
-    
+
+
     // Get the view
     $app = JFactory::getApplication();
-    $view = $app->input->get('view','','string'); 
-    
+    $view = $app->input->get('view', '', 'string');
+
     $showlinks = ($view == 'availability') ? true : false;
-    
-    
+
+
     // Init calendar string
     $calendar = '<div class="row-fluid">';
     // Get now
@@ -341,9 +327,9 @@ abstract class HelloWorldHelper {
         foreach ($day_names as $d)
           $calendar .= '<th abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
       }
-      
+
       $calendar.="</tr></thead>";
-      
+
       if ($weekday > 0)
         $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>';#initial 'empty' days 
       for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++) {
@@ -356,26 +342,19 @@ abstract class HelloWorldHelper {
 
         if (array_key_exists($today, $availability)) {
           if ($availability[$today]) { // Availability is true, i.e. available
-            
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available','small'),$showlinks);
-            
-            
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available', 'small'), $showlinks);
           } else { // Availability is false i.e. unavailable
-
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable','small'),$showlinks);
-                        
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable', 'small'), $showlinks);
           }
         } else { // Availability not defined for this day so we default to unavailable
-          
-          $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable','small'),$showlinks);
-          
+          $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable', 'small'), $showlinks);
         }
       }
       if ($weekday != 7)
         $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days 
 
       $calendar.="</table></div></div>";
-    
+
       $month++;
     }
     $calendar.='</div>';
@@ -383,31 +362,25 @@ abstract class HelloWorldHelper {
   }
 
   public function generateDateCell($today = '', $day = '', $classes = array(), $showlinks = false) {
-    
+
     $return = '';
-    
+
     $class = implode(' ', $classes);
     if (!empty($today)) {
-       $return .= '<td data-date=' .$today. ' class="' . $class . '">';
-         
-       if ($showlinks) {
-         $return .= '<a href="#">' . $day . '</a></td>';
-       } else {
-         $return .= '<span>' . $day . '</span>';
-         
-       }
-       
-       $return .= '</td>';
+      $return .= '<td data-date=' . $today . ' class="' . $class . '">';
 
-   
+      if ($showlinks) {
+        $return .= '<a href="#">' . $day . '</a></td>';
+      } else {
+        $return .= '<span>' . $day . '</span>';
+      }
+
+      $return .= '</td>';
     }
-    
-    return $return;
 
-    
-    
+    return $return;
   }
-  
+
   /**
    *  Generates an array containing availability for each availability period stored for the property
    *
@@ -548,6 +521,5 @@ abstract class HelloWorldHelper {
               . ' /><input type="hidden" name="' . $name . '" id="' . $id . '" value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '" />';
     }
   }
-   
-  
+
 }

@@ -212,7 +212,7 @@
       type="hidden"
       filter="unset"/>
     <field 
-      name="new_version"
+      name="review"
       type="hidden"
       filter="int"
       default="" />

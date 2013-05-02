@@ -17,8 +17,9 @@ $availability_last_updated = (!empty($this->item->availability_last_updated)) ? 
       <?php endif; ?>
       <?php
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      echo $layout->render($data);
+      // echo $layout->render($data);
       ?>  
+      <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->item->unit_title); ?></legend>
       <div class="row-fluid">
         <div class="span8">
           <p class="pull-left">
@@ -36,7 +37,6 @@ $availability_last_updated = (!empty($this->item->availability_last_updated)) ? 
           </table> 
         </div>
       </div>
-      <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->item->unit_title); ?></legend>
       <?php echo $this->calendar; ?>
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=availability&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <div id="availabilityModal" class="hide fade modal">

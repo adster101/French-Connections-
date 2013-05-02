@@ -123,16 +123,20 @@ class HelloWorldModelListing extends JModelList {
     $query->select('
         pl.title,
         pl.id as listing_id,
+        pl.review,
         pu.id unit_id,
         pu.parent_id,
         pu.ordering,
         pu.unit_title,
+        pu.changeover_day,
+        base_currency,
+        tariff_based_on,
         CASE
           WHEN pu.review = 0 
             THEN (select count(*) from qitz3_property_images_library where property_id =  pu.id)
           ELSE
             (select count(*) from qitz3_property_images_library_version where property_id =  pu.id)
-        END as image_count,
+        END as images,
         (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs
       ');

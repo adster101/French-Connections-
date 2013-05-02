@@ -9,7 +9,7 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class HelloWorldModelNew extends JModelAdmin {
+class HelloWorldModelSubmit extends JModelAdmin {
    /**
    * Method to get the record form.
    *
@@ -21,7 +21,7 @@ class HelloWorldModelNew extends JModelAdmin {
   public function getForm($data = array(), $loadData = true) {
 
     // Get the form.
-    $form = $this->loadForm('com_helloworld.helloworld', 'helloworld', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_helloworld.submit', 'submit', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form)) {
       return false;
     }
@@ -29,34 +29,4 @@ class HelloWorldModelNew extends JModelAdmin {
     return $form;
   }
   
-  /*
-   * Method to get a form for the user to choose which property they would like to add a unit to
-   * 
-   */
-
-  public function getNewPropertyForm($data = array(), $loadData = false) {
-
-    // Get the form.
-    $form = $this->loadForm('com_helloworld.userproperties', 'userproperties', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
-      return false;
-    }
-    return $form;
-  }
-  
-  /*
-   * Method to get a form for the admin user to choose which account they would like to add a property to
-   * 
-   */
-
-  public function getNewAdminPropertyForm($data = array(), $loadData = false) {
-
-    // Get the form.
-    $form = $this->loadForm('com_helloworld.addpropertybyuser', 'addpropertybyuser', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
-      return false;
-    }
-        
-    return $form;
-  }
 }

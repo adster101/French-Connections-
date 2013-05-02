@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
-	<fieldset name="caption-details">
+	<fieldset name="submit">
 		<field
-			name="caption"
-			type="text"
+			name="admin_notes"
+			type="textarea"
 			default=""
-			label="COM_HELLOWORLD_IMAGES_IMAGE_CAPTION_LABEL"
-			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"
+			label="COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_NOTES_FIELD"
+			description ="COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_NOTES_DESCRIPTION"
       size="80"
       maxlength="75"
       required="true"
-      class="validate">
+      class="validate"
+      filter="string">
     </field>
     <field 
-      name="image_file_name"
-      type="hidden"
-      default="">
-    </field>
+      name="tos"
+      type="checkbox"
+      default=""
+      required="true"
+      filter="int"
+      label="By checking this box I confirm that I have read and agree to be bound by all of the French Connections Terms and Conditions."
+      />
     <field 
-      name="property_id"
+      name="id"
       type="hidden"
-      default="">
+      default=""
+      filter="int">
     </field>
-    <field 
-      name="image_url"
-      type="hidden"
-      default="">
-    </field>    
+ 
   </fieldset>
 </form>

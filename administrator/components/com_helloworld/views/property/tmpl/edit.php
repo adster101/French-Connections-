@@ -15,9 +15,6 @@ $groups = $user->getAuthorisedGroups();
 $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
 
-// Initialise a data array to pass into the progress tabs layout
-$data = $this->item;
-
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
@@ -25,19 +22,15 @@ $data = $this->item;
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
-        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>     
-        <!--
-          <script src="http://help.frenchconnections.co.uk/ChatScript.ashx?config=1&id=ControlID" type="text/javascript"></script>
-        -->
+        <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>     
       </div>
       <div id="" class="span8">
       <?php else : ?>
-        <div lass="span10 form-inline">
+        <div class="span10 form-inline">
         <?php endif; ?> 
-          <!-- Begin accommodation tabs -->
         <?php 
           $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-          echo $layout->render($data); 
+          //echo $layout->render($data); 
         ?>
         <fieldset class="adminform form-horizontal">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS'); ?></legend>

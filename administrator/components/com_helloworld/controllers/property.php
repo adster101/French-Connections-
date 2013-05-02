@@ -104,16 +104,32 @@ class HelloWorldControllerProperty extends JControllerForm {
                       'index.php?option=' . $this->option, false)
       );
     }
-    
+
     // Set holdEditID etc
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=listing&id=' . (int) $listing_id, false)
     );
+        
   }
-  
-  
 
-  
+  public function cancel($key = null) {
+    if (parent::cancel($key)) {
+      $app = JFactory::getApplication();
+      $recordId = $app->input->getInt('id');
+
+
+      $this->view_list = ($recordId) ? 'listing' : 'properties';
+
+      if ($recordId > 0) {
+        $this->setRedirect(
+                JRoute::_(
+                        'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
+                        . (int) $recordId, false
+                )
+        );
+      }
+    }
+  }
 
 }

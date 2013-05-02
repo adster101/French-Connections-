@@ -77,7 +77,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
 
     if (!empty($data->VendorTxCodes)) {
 
-      $default = ($data->VendorTxCode) ? $data->VendorTxCode : 0;
+      $default = ($data->VendorTxCode) ? $data->VendorTxCode : '';
       
       // Build an XML string to inject additional fields into the form
       $XmlStr = '<form><fieldset name="autorenewaloptions" description="COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_BLURB" label="COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_LEGEND">';
@@ -97,7 +97,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
                 JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_CARD_DETAILS',$transaction[1], $transaction[2],$transaction[3]) . 
                 ' </option>';
       }
-      $XmlStr .= '<option value=\'\'>None/opt out</option>';
+      $XmlStr .= '<option value=\'0\'>None/opt out</option>';
       $XmlStr .= '</field></fieldset></form>';
       $form->load($XmlStr,false);
     }

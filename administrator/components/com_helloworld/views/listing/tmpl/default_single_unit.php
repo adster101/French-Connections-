@@ -6,6 +6,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('dropdown.init');
 
+$arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+
+
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
 
@@ -16,97 +19,80 @@ $ordering = ($listOrder == 'a.lft');
 $originalOrders = array();
 
 $canDo = HelloWorldHelper::getActions();
-
-print_r($this->items);
-
+$canEditOwn = $canDo->get('core.edit.own');
+$canPublish = $canDo->get('helloworld.edit.publish');
+$canSubmitForReview = $canDo->get('helloworld.property.submit');
+$canReview = $canDo->get('helloworld.property.review');
+$data = array();
+$data['snapshot'] = $this->items;
+$data['form'] = $this->form;
+$data['progress'] = $this->progress;
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
+<div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
+      <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>     
     </div>
-    <div id="j-main-container" class="span10">
+    <div id="" class="span8">
     <?php else : ?>
-      <div id="j-main-container">
+      <div class="span10 form-inline">
       <?php endif; ?>
 
-      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+      <?php 
+      
+      $layout = new JLayoutFile('submit_for_approval', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      echo $layout->render($data);
+      ?>  
+              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+
+      <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
+
         <hr />
-      <table class="table table-striped" id="articleList">
-        <thead>
-          <tr>
-
-
-
-          </tr>
-        </thead>
-        <?php
-        $canEditOwn = $canDo->get('core.edit.own');
-        $canPublish = $canDo->get('helloworld.edit.publish');
-
-        $canSubmitForReview = $canDo->get('helloworld.property.submit');
-        $canReview = $canDo->get('helloworld.property.review');
-        ?>
-
-        <tbody>
-          <?php foreach ($this->items as $i => $item): ?>
-
-            <?php if ($canEditOwn) : ?>
-              <tr class="row<?php echo $i % 2; ?>">
-                <td>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->listing_id) ?>">
-                    <i class="icon icon-compass"></i> 
-                    <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS') ?>
-                    <i class="icon icon-ok"></i> 
-                  </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit&id=' . (int) $item->unit_id) ?>">
-                    <i class="icon icon-home"></i> 
-                    <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS') ?>
-                    <i class="icon icon-ok"></i> 
-                  </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $item->unit_id) ?>">
-                    <i class="icon icon-pictures"></i> 
-                    <?php echo Jtext::_('IMAGE_GALLERY') ?>
-                    <i class="icon icon-ok"></i> 
-                  </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit&id=' . (int) $item->unit_id) ?>">
-                    <i class="icon icon-calendar"></i> 
-                    <?php echo Jtext::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY') ?>
-                    <i class="icon icon-ok"></i> 
-                  </a>
-                  <a class="btn" href="<?php echo JRoute::_('index.php?option=com_helloworld&task=tariffs.edit&id=' . (int) $item->id) ?>">
-                    <i class="icon icon-briefcase"></i> 
-                    <?php echo Jtext::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS') ?>
-                    <i class="icon icon-ok"></i> 
-                  </a>
-                </td>
-              </tr>
-            <?php else : ?>
-            <p>asasd</p>
-          <?php endif; ?>
-        <?php endforeach; ?>
-        <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
-
-        </tbody>
-
-        <tfoot>
-          <tr>
-            <td colspan="7"></td>
-          </tr>
-        </tfoot>
-      </table>
-
-      <?php echo $this->pagination->getListFooter(); ?>
-
-      <div>
+        <table class="table table-striped" id="articleList">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody>
+            <?php foreach ($this->items as $i => $item): ?>
+              <?php if ($canEditOwn) : ?>
+                <tr>
+                  <td>
+                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'unit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item) ?>
+                  </td>
+                </tr>
+              <?php else : ?>
+              <?php endif; ?>
+            <?php endforeach; ?>
+            </form>
+          <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="7"></td>
+            </tr>
+          </tfoot>
+        </table>
+        <?php echo $this->pagination->getListFooter(); ?>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="boxchecked" value="" />
-        <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-        <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
         <?php echo JHtml::_('form.token'); ?>
-      </div>
     </div>
-</form>
+    <div class="span2">
+      <h4>Key</h4>
+      <p>
+        <i class="icon icon-warning"></i>
+        Please complete
+      </p>            
+      <p>
+        <i class="icon icon-publish"></i>
+        Section complete
+      </p>            
+    </div>
+  </div>
 
 

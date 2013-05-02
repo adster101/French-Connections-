@@ -19,21 +19,35 @@ class HelloWorldViewListing extends JViewLegacy {
    */
   function display($tpl = null) {
     
+    // Add the submit model to this view so we can fetch the submit for approval form
+    // And handle the associated logic...
+    $submit = JModelLegacy::getInstance('Submit', 'HelloWorldModel');
+        
+  
     // Find the user details
     $user = JFactory::getUser();
     $userID = $user->id;
-    
+
     // Get the ID
     $app = JFactory::getApplication();
-    $this->id = $app->input->get('id','','int');
-    
+    $this->id = $app->input->get('id', '', 'int');
+
     // Get data from the model
     $this->items = $this->get('Items');
 
     $this->pagination = $this->get('Pagination');
-    
-    $this->state = $this->get('State');
 
+    $this->state = $this->get('State');
+    
+    $this->form = $submit->getForm();
+    
+    // Register the JHtmlProperty class
+    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');   
+    
+    // Check the status of this set of units.
+    // If no images, or availability etc, track it 
+    $this->progress = HelloWorldHelper::setPropertyProgress($this->items);
+       
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       JError::raiseError(500, implode('<br />', $errors));
@@ -41,13 +55,14 @@ class HelloWorldViewListing extends JViewLegacy {
     }
 
     // Set the toolbar
-    $this->addToolBar(); 
+    $this->addToolBar();
 
     // Display the template
     parent::display($tpl);
 
     // Set the document
     $this->setDocument();
+    
   }
 
   /**
@@ -58,42 +73,43 @@ class HelloWorldViewListing extends JViewLegacy {
     $document = JFactory::getDocument();
 
     $user = JFactory::getUser();
-    
+
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id));
-    
+    JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
+
     JToolBarHelper::cancel();
-    
-    if ($canDo->get('core.delete')) {
-      JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
-    }
-    
-    if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('unit.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
+
+
+
+    // Only show the add units button if there is at least one listing
+    if (count($this->items) > 0) {
+      if ($canDo->get('core.create')) {
+        JToolBarHelper::addNew('unit.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
+      }
+
+      if ($canDo->get('core.delete')) {
+        JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
+      }
+      if ($canDo->get('helloworld.property.preview')) {
+        JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);
+      }
     }
 
-    if ($canDo->get('helloworld.property.preview')) {
-      
-      JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);      
-    }
-    
 
-    
+
+
+
     // Display a helpful navigation for the owners 
     if ($canDo->get('helloworld.ownermenu.view')) {
-    
+
       $view = strtolower(JRequest::getVar('view'));
-  
+
       $canDo = HelloWorldHelper::addSubmenu($view);
-      
+
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
-      
     }
-    
-    
-    
   }
 
   /**

@@ -61,6 +61,7 @@ class HelloWorldTableTariffs extends JTable
    */
   public function save ($id = null, $tariff_periods = array() ) 
   {
+    print_r($tariff_periods);die;
     if (!$this->check()) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
@@ -89,9 +90,6 @@ class HelloWorldTableTariffs extends JTable
 				$this->setError($e);
 				return false;
 			}
-      
-      // Tick the availability progress flag to true
-      JApplication::setUserState('com_helloworld.tariffs.progress', true);
       
       return true;
     }
