@@ -34,7 +34,7 @@ class plgContentVersion extends JPlugin {
 
     // Here we check whether we are already editing an unpublished new version of this item
     // So if we are then we can skip all the comparing and simply save straight over the new unpublished version
-    
+
     if ($data['review']) {
       return true;
     } else {
@@ -69,13 +69,12 @@ class plgContentVersion extends JPlugin {
       $date = date_parse($expiry_date);
       $check = checkdate($date['month'], $date['day'], $date['year']);
       } else {
-        
+
         // Must be a unit.
         // If the unit is published then we create a new version for it.
         $check = ($article->published) ? 1 : 0;
-        
       }
-      
+
       //Check if there is an expiry date for this content, if not then just return out...
       if ($check) {
         // Loop over the fields that will trigger a new version and check to see if any differ

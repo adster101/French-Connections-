@@ -200,7 +200,6 @@ class JHtmlProperty {
    * @param	int $i
    */
   public static function progressButton($listing_id, $unit_id, $task, $icon, $button_text, $item) {
-
     $active = false;
     $progress_icon = 'warning';
     $html = '';
@@ -210,21 +209,21 @@ class JHtmlProperty {
       $active = true;
       $progress_icon = 'ok';
       $id = $listing_id;
-      
+
     } elseif (empty($unit_id) && $task == 'unit') { // This property has no unit, or unit details not completed...
 
       $active = true;
       $progress_icon = 'warning';
       $id = $unit_id;
-           
+
     } elseif (!empty($unit_id) && $task == 'images') {
-      
+
       $active = true;
       $progress_icon = ($item->images > 0) ? 'ok' : 'warning';
       $id = $unit_id;
-      
+
     } elseif (!empty($unit_id) && $task == 'availability') {
-      
+
       $progress_icon = ($item->availability > 0) ? 'ok' : 'warning';
       $active = true;
       $id = $unit_id;
@@ -234,13 +233,13 @@ class JHtmlProperty {
       $active = true;
       $progress_icon = ($item->tariffs > 0) ? 'ok' : 'warning';
       $id = $unit_id;
-      
+
     } elseif (!empty($unit_id) && $task == 'unit') {
-      
+
       $active = true;
       $progress_icon = 'ok';
       $id = $unit_id;
-      
+
     }
 
     if ($active) {

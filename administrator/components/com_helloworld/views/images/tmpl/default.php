@@ -45,8 +45,8 @@ $data = JApplication::getUserState('listing', '');
       <?php endif; ?>
       <?php
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      echo $layout->render($data);
-      ?>  
+      // echo $layout->render($data);
+      ?>
       <div id="collapseUpload" class="in collapse">
         <!-- The file upload form used as target for the file upload widget -->
         <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $id); ?>" method="GET" enctype="multipart/form-data">
@@ -93,7 +93,7 @@ $data = JApplication::getUserState('listing', '');
                   <!-- The table listing the files available for upload/download -->
                   <table role="presentation" class="table">
                     <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
-                  </table> 
+                  </table>
                 </div>
 
               </div>
@@ -117,7 +117,7 @@ $data = JApplication::getUserState('listing', '');
           {% } else if (o.files.valid && !i) { %}
           <td>
             <div class="progress progress-success progress-striped active" style="margin-bottom:0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
-          </td>    
+          </td>
           <td class="start">{% if (!o.options.autoUpload) { %}
             <button class="btn btn-primary start">
               <i class="icon-upload icon-white"></i>
@@ -138,8 +138,8 @@ $data = JApplication::getUserState('listing', '');
         </tr>
         {% } %}
         </script>
-        
-        
+
+
         <!-- The template to display files available for download -->
         <script id="template-download" type="text/x-tmpl">
           {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -153,13 +153,13 @@ $data = JApplication::getUserState('listing', '');
               {% } %}</td>
             <td class="notice" colspan="2"><span class="label label-success">Success!</span> {%=file.message%}</td>
 
-            
+
             {% } %}
-            
+
           </tr>
           {% } %}
-          </script>   
-          
+          </script>
+
           <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
             <fieldset>
               <legend>
@@ -169,13 +169,13 @@ $data = JApplication::getUserState('listing', '');
                 <thead>
                   <tr>
                     <th class="nowrap  hidden-phone">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_ORDERING'); ?>              
-                    </th>	
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_ORDERING'); ?>
+                    </th>
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_IMAGES_CHOOSE_THUMBNAIL'); ?>
                     </th>
                     <th>
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_THUMBNAIL'); ?>              
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_THUMBNAIL'); ?>
                     </th>
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION'); ?>
@@ -189,7 +189,7 @@ $data = JApplication::getUserState('listing', '');
                 <tbody class="ui-sortable">
                   <?php echo $this->loadTemplate('image_list'); ?>
                 </tbody>
-              
+
 
 
 
@@ -201,7 +201,7 @@ $data = JApplication::getUserState('listing', '');
               <input type="hidden" name="boxchecked" value="0" />
               <?php echo JHtml::_('form.token'); ?>
             </fieldset>
-          </form>           
+          </form>
 
         </div>
 

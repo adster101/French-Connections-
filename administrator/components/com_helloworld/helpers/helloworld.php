@@ -25,7 +25,7 @@ abstract class HelloWorldHelper {
 
   /*
    * Get a list of filter options for the review state of a property
-   * 
+   *
    * @return  array An array of JHtmlOption elements
    */
 
@@ -39,7 +39,7 @@ abstract class HelloWorldHelper {
 
   /*
    * Get a list of filter options for the snooze state of a property
-   * 
+   *
    * @return  array An array of JHtmlOption elements
    */
 
@@ -56,7 +56,7 @@ abstract class HelloWorldHelper {
    */
   public static function addSubmenu($view = '') {
 
-    //Get the current user id 
+    //Get the current user id
     $user = JFactory::getUser();
 
 
@@ -82,26 +82,26 @@ abstract class HelloWorldHelper {
   /*
    * Method to get and check the status of the various key sections of a property listing
    * I.E. Property details, availability, tariffs and images.
-   * 
+   *
    * params int id The property id of the property being editied
-   *  
+   *
    * return void
-   * 
+   *
    */
 
   public static function getPropertyProgress($id = '') {
-    
+
   }
 
   /*
    * Helper function to update the state of the listing the user is currently editing.
    * N.B. This is only responsible for updating the parent listing details
-   * 
-   * @param JObject item The item (the property) being edited 
+   *
+   * @param JObject item The item (the property) being edited
    * @param JObject units The list of units assigned to a particular property
-   *  
+   *
    * return void
-   * 
+   *
    */
 
   public static function setPropertyProgress($items = array()) {
@@ -109,11 +109,11 @@ abstract class HelloWorldHelper {
     // Collect the input from the request
     $input = JFactory::getApplication()->input;
 
-    // Basic idea is that all edits of a listing must setup this data object. 
+    // Basic idea is that all edits of a listing must setup this data object.
     // This will mean that all units and the listing data is available for any unit being editied
     // The id of the item being edited, could be unit or listing
     $id = $input->get('id', '', 'int');
-    
+
     // Create the 'progress' array.object
     $progress = array();
 
@@ -122,7 +122,7 @@ abstract class HelloWorldHelper {
       if (!array_key_exists('listing', $progress)) {
         $progress['listing'] = $value->listing_id;
       }
-      
+
       if (!array_key_exists('review',$progress)) {
         $progress['review'] = $value->review;
       }
@@ -133,7 +133,7 @@ abstract class HelloWorldHelper {
       if (!empty($value->unit_id)) {
         if (!array_key_exists('units', $progress)) {
           $progress['units'] = array();
-        }  
+        }
 
         $progress['units'][$value->unit_title] = array();
         $progress['units'][$value->unit_title]['images'] = ($value->images > 0) ? 1 : 0;
@@ -142,10 +142,6 @@ abstract class HelloWorldHelper {
       }
     }
 
-
-
-
-
     // Check that this doesn't already exist in the session scope
     //$progress->setProperties($listing_progress_array);
     return $progress;
@@ -153,7 +149,7 @@ abstract class HelloWorldHelper {
 
   public static function updateUnitProgress($data = '', $context = '') {
 
-    // Get the listing details from the session 
+    // Get the listing details from the session
     $listing = JApplication::getUserState('listing', false);
 
     $units = $listing->units;
@@ -216,8 +212,8 @@ abstract class HelloWorldHelper {
   }
 
   /* Method to determine whether the currently logged in user is an 'owner' or an admin or something else...
-   * 
-   * 
+   *
+   *
    */
 
   public static function isOwner($editUserID = null) {
@@ -240,7 +236,7 @@ abstract class HelloWorldHelper {
   }
 
   /*
-   * Get the default language 
+   * Get the default language
    */
 
   public static function getDefaultLanguage() {
@@ -249,9 +245,9 @@ abstract class HelloWorldHelper {
   }
 
   /*
-   * Note, neither of these function beloware really needed as they already exist 
+   * Note, neither of these function beloware really needed as they already exist
    * as utility functions in the framework.
-   * 
+   *
    */
 
   public static function getLanguages() {
@@ -273,12 +269,12 @@ abstract class HelloWorldHelper {
   }
 
   /**
-   * Generates HTML to display an availability calendar. 
+   * Generates HTML to display an availability calendar.
    *
    * PHP Calendar (version 2.3), written by Keith Devens (adapted here)
    * http://keithdevens.com/software/php_calendar
    *
-   * @param int $months The number of months to display the availability for 
+   * @param int $months The number of months to display the availability for
    * @param array $availability The availability for this ID as an array.
    * @param type $day_name_length
    * @param type $first_day
@@ -303,27 +299,27 @@ abstract class HelloWorldHelper {
     $month = date("m", $now);
     $year = date("y", $now);
 
-    // The loop loops over some code which outputs a calendar. It does this $months times 
+    // The loop loops over some code which outputs a calendar. It does this $months times
     for ($z = 0; $z <= $months; $z++) {
       $calendar.='<div class="span3" style="min-height:185px;"><div class="calendar-container">';
 
       $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
-      #remember that mktime will automatically correct if invalid dates are entered 
-      # for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998 
-      # this provides a built in "rounding" feature to generate_calendar() 
+      #remember that mktime will automatically correct if invalid dates are entered
+      # for instance, mktime(0,0,0,12,32,1997) will be the date for Jan 1, 1998
+      # this provides a built in "rounding" feature to generate_calendar()
 
-      $day_names = array(); #generate all the day names according to the current locale 
-      for ($n = 0, $t = (3 + $first_day) * 86400; $n < 7; $n++, $t+=86400) #January 4, 1970 was a Sunday 
-        $day_names[$n] = ucfirst(gmstrftime('%A', $t)); #%A means full textual day name 
+      $day_names = array(); #generate all the day names according to the current locale
+      for ($n = 0, $t = (3 + $first_day) * 86400; $n < 7; $n++, $t+=86400) #January 4, 1970 was a Sunday
+        $day_names[$n] = ucfirst(gmstrftime('%A', $t)); #%A means full textual day name
 
       list($month, $year, $month_name, $weekday) = explode(',', gmstrftime('%m,%Y,%B,%w', $first_of_month));
-      $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day 
-      $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names 
+      $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day
+      $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names
 
       $calendar.= '<table class="table table-condensed avCalendar">' . "\n";
       $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr class="days">' . "\n";
-      if ($day_name_length) { #if the day names should be shown ($day_name_length > 0) 
-        #if day_name_length is >3, the full name of the day will be printed 
+      if ($day_name_length) { #if the day names should be shown ($day_name_length > 0)
+        #if day_name_length is >3, the full name of the day will be printed
         foreach ($day_names as $d)
           $calendar .= '<th abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
       }
@@ -331,10 +327,10 @@ abstract class HelloWorldHelper {
       $calendar.="</tr></thead>";
 
       if ($weekday > 0)
-        $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>';#initial 'empty' days 
+        $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>';#initial 'empty' days
       for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++) {
         if ($weekday == 7) {
-          $weekday = 0; #start a new week 
+          $weekday = 0; #start a new week
           $calendar .= "</tr>\n<tr>";
         }
 
@@ -351,7 +347,7 @@ abstract class HelloWorldHelper {
         }
       }
       if ($weekday != 7)
-        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days 
+        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days
 
       $calendar.="</table></div></div>";
 
@@ -385,13 +381,13 @@ abstract class HelloWorldHelper {
    *  Generates an array containing availability for each availability period stored for the property
    *
    * Returns an array of available days based on available periods.
-   * 
+   *
    * @param array $availability An array of availability periods as stored against a property
-   * @param Date $new_start_date The start date of a new availability period 
+   * @param Date $new_start_date The start date of a new availability period
    * @param Date $new_end_date  The end date of a new availability period
    * @param boolean $new_availability_status The status for the availability period being updated
    * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
-   * 
+   *
    */
   public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability = false) {
     // Array to hold availability per day for each day that availability has been set for.
@@ -401,13 +397,13 @@ abstract class HelloWorldHelper {
     // Generate a DateInterval object which is re-used in the below loop
     $DateInterval = new DateInterval('P1D');
 
-    // For each availability period passed in 	
+    // For each availability period passed in
     foreach ($availability_by_day as $availability_period) {
 
       // Convert the availability period start date to a PHP date object
       $availability_period_start_date = new DateTime($availability_period->start_date);
 
-      // Convert the availability period end date to a date 
+      // Convert the availability period end date to a date
       $availability_period_end_date = new DateTime($availability_period->end_date);
 
       // Calculate the length of the availability period in days
@@ -432,7 +428,7 @@ abstract class HelloWorldHelper {
       // Convert the availability period start date to a PHP date object
       $availability_period_start_date = new DateTime($start_date);
 
-      // Convert the availability period end date to a date 
+      // Convert the availability period end date to a date
       $availability_period_end_date = new DateTime($end_date);
 
       // Calculate the length of the availability period in days
@@ -453,10 +449,10 @@ abstract class HelloWorldHelper {
 
   /**
    * Given an array of availability by day returns an array of availability periods, ready for insert into the db
-   *  
+   *
    * @param array $availability_by_day An array of days containing the availability status
    * @return array An array of availability periods
-   * 
+   *
    */
   public static function getAvailabilityByPeriod($availability_by_day = array()) {
     $current_status = '';

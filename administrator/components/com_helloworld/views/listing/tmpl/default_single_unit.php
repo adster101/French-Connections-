@@ -33,19 +33,20 @@ $data['progress'] = $this->progress;
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
-      <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>     
+      <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>
     </div>
     <div id="" class="span8">
     <?php else : ?>
       <div class="span10 form-inline">
       <?php endif; ?>
 
-      <?php 
-      
+      <?php
+
       $layout = new JLayoutFile('submit_for_approval', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      echo $layout->render($data);
-      ?>  
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+      echo $layout->render($data); ?>
+      <?php
+
+      echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
 
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
 
@@ -87,11 +88,11 @@ $data['progress'] = $this->progress;
       <p>
         <i class="icon icon-warning"></i>
         Please complete
-      </p>            
+      </p>
       <p>
         <i class="icon icon-publish"></i>
         Section complete
-      </p>            
+      </p>
     </div>
   </div>
 

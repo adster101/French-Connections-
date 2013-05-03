@@ -14,7 +14,9 @@ $userId = $user->get('id');
 $groups = $user->getAuthorisedGroups();
 $canDo = $this->state->get('actions.permissions');
 $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
-
+$data = array();
+$data['property'] = $this->item;
+$data['units'] = $this->units;
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
@@ -22,40 +24,40 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
-        <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>     
+        <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>
       </div>
       <div id="" class="span8">
       <?php else : ?>
         <div class="span10 form-inline">
-        <?php endif; ?> 
-        <?php 
+        <?php endif; ?>
+        <?php
           $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-          //echo $layout->render($data); 
+          echo $layout->render($data);
         ?>
         <fieldset class="adminform form-horizontal">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS'); ?></legend>
             <div class="control-group">
-              <?php echo $this->form->getLabel('title'); ?> 
+              <?php echo $this->form->getLabel('title'); ?>
               <div class="controls">
                 <?php echo $this->form->getInput('title'); ?>
               </div>
             </div>
           <hr />
         </fieldset>
-          
-        <fieldset> 
+
+        <fieldset>
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
           <div class="row-fluid">
             <div class="span8">
-              <?php echo $this->form->getInput('map'); ?>           
-              <?php echo $this->form->getInput('latitude'); ?>           
-              <?php echo $this->form->getInput('longitude'); ?>            
+              <?php echo $this->form->getInput('map'); ?>
+              <?php echo $this->form->getInput('latitude'); ?>
+              <?php echo $this->form->getInput('longitude'); ?>
             </div>
-            <div class="span4 form-inline">    
+            <div class="span4 form-inline">
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>
-              <hr />              
+              <hr />
               <div class="control-group">
-                <?php echo $this->form->getLabel('department'); ?> 
+                <?php echo $this->form->getLabel('department'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('department'); ?>
                 </div>
@@ -79,21 +81,21 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
           <hr />
           <div class="row-fluid">
-            <div class="span6"> 
-               
+            <div class="span6">
+
               <?php echo $this->form->getLabel('location_details'); ?>
               <?php echo $this->form->getInput('location_details'); ?>
-            
+
             </div>
             <div class="span6">
               <?php echo $this->form->getLabel('getting_there'); ?>
               <?php echo $this->form->getInput('getting_there'); ?>
             </div>
           </div>
-        </fieldset>    
+        </fieldset>
 
 
 

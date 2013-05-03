@@ -1,7 +1,7 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla nested table library
 jimport('joomla.database.table');
 
@@ -18,18 +18,18 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
 	 *
 	 * @param object Database connector object
 	 */
-	function __construct(&$db) 
+	function __construct(&$db)
 	{
 		parent::__construct('#__property_units_versions', 'id', $db);
-	}	
-  
+	}
+
   /*
    * Overridden store method to capture the created by and modified dates etc
-   * 
-   * 
+   *
+   *
    */
   public function store($updateNulls = false) {
-    
+
     $date = JFactory::getDate();
     $user = JFactory::getUser();
 
@@ -49,12 +49,14 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
       if (empty($this->created_on)) {
         $this->created_on = $date->toSql();
       }
-      
+
       // Update the state of this version to 1 to denote that it is a live new version
       $this->review = 1;
     }
 
     return parent::store($updateNulls);
   }
-  
+
+	
+
 }

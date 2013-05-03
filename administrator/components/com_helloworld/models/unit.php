@@ -40,13 +40,13 @@ class HelloWorldModelUnit extends JModelAdmin {
 
   /*
    * Function to get the data for the facilities editing view.
-   * 
+   *
    * TODO - For a slight performance boost should consider implementing preprocessForm to generate the property attributes here.
-   * Presntly, the facilities checkbox fields are loaded in via a custom form field type (facilities). 
+   * Presntly, the facilities checkbox fields are loaded in via a custom form field type (facilities).
    * This should probably be amended so that the checkbox options are added dynamically in a precpreocessform method in this model.
-   * 
+   *
    * The above would be better as you could generate all the facility options via one query rather than five.
-   * 
+   *
    */
 
   public function getItem($pk = null) {
@@ -67,6 +67,20 @@ class HelloWorldModelUnit extends JModelAdmin {
         $this->setError($table->getError());
         return false;
       }
+    }
+
+    // Check if this unit has an unpublished version...
+    if ($table->review) {
+
+
+
+      // Uh oh, need to load the new version details
+      //$new_version = $this->getLatestUnitVersion($pk);
+
+
+
+      //print_r($new_version);die;
+
     }
 
     // Convert to the JObject before adding other data.
@@ -231,14 +245,15 @@ class HelloWorldModelUnit extends JModelAdmin {
     // Get the user
     $user = JFactory::getUser();
 
-    // Set the default owner to the user creating this.
+    // Set the created_by field to the current user...
     $form->setFieldAttribute('created_by', 'type', 'hidden');
     $form->setFieldAttribute('created_by', 'default', $user->id);
 
-    // We also need to get the listing ID from the session so we can associate this unit with a listing...
-    $listing = JApplication::getUserState('listing', false);
+    if (!empty($data)) { // Only applies when populating the form, data not present when validating.
+      $form->setFieldAttribute('parent_id', 'default', $data->parent_id);
+    }
 
-    $form->setFieldAttribute('parent_id', 'default', $listing->id);
+    // Also need to check edit.state permission and unset published field if not allowed.
   }
 
   /**
@@ -257,8 +272,14 @@ class HelloWorldModelUnit extends JModelAdmin {
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
 
+    $version = '';
+
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
+
+    // TO DO: If this is an existing unit, then we need to update the existing row with the form data, then save that rather
+    // than using the form data directly (as it won't have any of the unit details that are captured on the tariffs screen...
+    // (or just move the unit data from the tariffs screen...)
 
     // Allow an exception to be thrown.
     try {
@@ -279,7 +300,7 @@ class HelloWorldModelUnit extends JModelAdmin {
           $table->version_id = $version->version_id;
         }
       } else { // Here we don't explicitly know if there is a new version
-        // Load the exisiting row, if there is one. 
+        // Load the exisiting row, if there is one.
         if ($pk > 0) {
           $table->load($pk);
           $isNew = false;
@@ -325,23 +346,26 @@ class HelloWorldModelUnit extends JModelAdmin {
         return false;
       } else {
 
+        // At this point the table is set to unit version
+        $new_version_id = $table->version_id;
+
+        // Additional processing if a new version was created
         if ($new_version_required[0]) {
 
-          // Update the unit to indicate that it has been updated...
           // Update the property to indicate that one of it's units has been update...
           // This should only happen the first time we create a new version of this unit...
-          // Get the default table 
+          // Get the default table
           $table = $this->getTable();
-          
+
           // Set the table key back to ID so the controller redirects to the right place
           $table->set('_tbl_key', 'id');
-          
+
           // Update the id, review and modified dates etc
           $table->id = $pk;
           $table->review = 1;
           $table->modified = JFActory::getDate()->toSql();
 
-          // Update the unit record        
+          // Update the unit record
           if (!$table->store()) {
             $this->setError($table->getError());
             return false;
@@ -354,20 +378,20 @@ class HelloWorldModelUnit extends JModelAdmin {
           $table->review = 1;
           $table->modified = JFActory::getDate()->toSql();
 
-          // Update the property record        
+          // Update the property record
           if (!$table->store()) {
             $this->setError($table->getError());
             return false;
           }
-          
+
           // Reset the table id to the unit, now we're done updating the listing...
           $table->id = $pk;
-          
         }
+
+
+
       }
 
-      // Should have a new unit version here.
-      // Need to update the new_version flag in the #__property_units table to indicate a new, unpublished version
       // Also, need to save the facilities into a new table rather than saving them directly.
       // Save the facilities data...
       if (!$this->savePropertyFacilities($data, $pk)) {
@@ -383,9 +407,8 @@ class HelloWorldModelUnit extends JModelAdmin {
 
       // Trigger the onContentAfterSave event.
       $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
-      
     } catch (Exception $e) {
-      
+
       $this->setError($e->getMessage());
       return false;
     }
@@ -402,11 +425,11 @@ class HelloWorldModelUnit extends JModelAdmin {
 
   /*
    * Method to get the version id of the most recent unpublished version
-   * 
-   * 
+   *
+   *
    */
 
-  public function getLatestUnitVersion($id = '') {
+  public function getLatestUnitVersion($id = '',$fields = '*') {
     // Retrieve latest unit version
     $db = $this->getDbo();
     $query = $db->getQuery(true);
@@ -429,12 +452,12 @@ class HelloWorldModelUnit extends JModelAdmin {
 
   /*
    * Method to save the property attributes into the #__attribute_property table.
-   * 
-   * 
-   * 
+   *
+   *
+   *
    */
 
-  protected function savePropertyFacilities($data = array(), $id = 0) {
+  protected function savePropertyFacilities($data = array(), $id = 0, $version) {
 
     if (!is_array($data) || empty($data)) {
       return true;
@@ -455,7 +478,7 @@ class HelloWorldModelUnit extends JModelAdmin {
       // We're not interested in the 'other' fields E.g. external_facilities_other
       if (strpos($key, 'other') == 0 && !empty($value)) {
 
-        // Location, property and accommodation types are all single integers and not arrays 
+        // Location, property and accommodation types are all single integers and not arrays
         if (is_array($value)) {
           // We want to save this in one go so we make an array
           foreach ($value as $facility) {
@@ -476,8 +499,8 @@ class HelloWorldModelUnit extends JModelAdmin {
       // Get instance of the tariffs table
       $attributesTable = JTable::getInstance($type = 'PropertyAttributes', $prefix = 'HelloWorldTable', $config = array());
 
-      // Bind the translated fields to the JTable instance	
-      if (!$attributesTable->save($id, $attributes)) {
+      // Bind the translated fields to the JTable instance
+      if (!$attributesTable->save($id, $attributes, $table)) {
         JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_ADDING_ATTRIBUTES'), 'warning');
 
         JError::raiseWarning(500, $attributesTable->getError());

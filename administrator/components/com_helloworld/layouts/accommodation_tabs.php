@@ -22,38 +22,21 @@ $option = $input->get('option', '', 'string');
 // Get the view
 $view = $input->get('view', '', 'string');
 
-
 // Get the id of the item the user is editing
 $id = $input->get('id', '', 'int');
+
+$units = $data['units'];
+
+$property = $data['property'];
+
 ?>
 
-<?php if ($view == 'property') : ?>
+<?php if ($view == 'property' && $property->review) : ?>
   <div class="alert alert-info">
-    <?php echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>  
+    <?php //echo JText::_('COM_HELLOWORLD_PLEASE_COMPLETE_LISTING_DETAILS'); ?>
+    This listing has unpublished changes. These changes will not appear on your live listing until they have been submitted for review.
   </div>
-<?php elseif (($view == 'property' && $property_details && empty($units))) : ?>
-  <div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
-    <a href="index.php?option=com_helloworld&task=unit.edit" class="btn btn-primary">
-      <?php echo JText::_('COM_HELLOWORLD_PROCEED'); ?>    
-    </a>
-  </div>
-<?php elseif (($view == 'property' || $view == 'unit') && !empty($units) && !$units[$default_unit]->images) : ?>
-  <div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_IMAGES_DETAILS'); ?>
-    <a href="index.php?option=com_helloworld&view=images" class="btn btn-primary">
-      <?php echo JText::_('COM_HELLOWORLD_PROCEED'); ?>    
-    </a>
-  </div>
-<?php elseif ($listing->updated == 1) : ?>
-  <div class="alert alert-info">
-    <?php echo JText::_('COM_HELLOWORLD_PLEASE_SUBMIT_PROPERTY_FOR_REVIEW'); ?>  
-    <a href="" class="btn btn-info">
-      <?php echo JText::_('SUBMIT_FOR_REVIEW'); ?>    
-    </a>
-  </div>
+
 <?php endif; ?>
 
 <?php if (count($units) > 1) : ?>
@@ -65,7 +48,7 @@ $id = $input->get('id', '', 'int');
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <?php foreach ($listing_details['units'] as $value) : ?>
+        <?php foreach ($data['units'] as $value) : ?>
           <li>
             <a href="<?php echo JText::_('index.php?option=com_helloworld&task=unit.edit&id=' . $value->id) ?>">
               <?php echo $value->unit_title; ?>
@@ -80,37 +63,34 @@ $id = $input->get('id', '', 'int');
 
 <ul class="nav nav-tabs">
   <li <?php echo ($view == 'property') ? 'class=\'active\'' : '' ?>>
-    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $listing_details['id']) ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $data['id']) ?>">
+      <i class="icon icon-compass"></i>
       <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS') ?>
     </a>
   </li>
   <li <?php echo ($view == 'unit') ? 'class=\'active\'' : '' ?>>
     <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=unit.edit') ?>">
+      <i class="icon icon-home"></i>
       <?php echo JText::_('Accommodation'); ?>
-      <i class='icon icon-warning'></i>
     </a>
   </li>
   <li <?php echo ($view == 'images' || $view == 'image') ? 'class=\'active\'' : '' ?>>
-    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . $units[$default_unit]->id . '&listing_id=' . $listing_id) ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=images') ?>">
+      <i class="icon icon-pictures"></i>
       <?php echo JText::_('IMAGE_GALLERY'); ?>
-      <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
     </a>
   </li>
   <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
-
-    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit&id=' . $units[$default_unit]->id) ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=availability.edit') ?>">
+      <i class="icon icon-calendar"></i>
       <?php echo JText::_('Availability'); ?>
-      <?php echo ($units[$default_unit]->images) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
-    </a>     
-
+    </a>
   </li>
   <li>
-
-    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=tariffs.edit&id=' . $units[$default_unit]->id) ?>">
+    <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=tariffs.edit') ?>">
+      <i class="icon icon-briefcase"></i>
       <?php echo JText::_('Tariffs'); ?>
-      <?php echo ($units[$default_unit]->tariffs) ? '<i class=\'icon icon-ok\'></i>' : '<i class=\'icon icon-warning\'></i>'; ?>
-    </a>     
-
+    </a>
   </li>
   <!--<li class="active pull-right" dir="ltr">
     <span class="language">
@@ -118,4 +98,4 @@ $id = $input->get('id', '', 'int');
     </span>
   <?php //echo JHTML::_('select.genericlist', $languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $lang);  ?>
   </li>-->
-</ul> 
+</ul>

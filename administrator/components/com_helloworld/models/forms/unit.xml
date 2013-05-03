@@ -12,8 +12,8 @@
       class="input-large validate-greeting"
       validate="greeting"
       required="true"
-      default=""/>  
-      
+      default=""/>
+
     <field
       name="accommodation_type"
       labelclass="control-label"
@@ -25,7 +25,7 @@
       required="true"
       id="2"
     />
-    
+
     <field
       name="property_type"
       labelclass="control-label"
@@ -37,8 +37,8 @@
       required="true"
       id="1"
       default=""
-    />      
-      
+    />
+
     <field
       name="description"
       labelclass="control-label"
@@ -49,7 +49,7 @@
       class="inputbox "
       filter="JComponentHelper::filterText"
       buttons="false"/>
-  </fieldset>	  
+  </fieldset>
 
   <fieldset name="occupancy">
     <field
@@ -102,7 +102,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field>    
+    </field>
     <field
       name="double_bedrooms"
       type="list"
@@ -123,7 +123,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field>    
+    </field>
     <field
       name="triple_bedrooms"
       type="list"
@@ -143,7 +143,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field> 
+    </field>
     <field
       name="quad_bedrooms"
       type="list"
@@ -163,7 +163,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field> 
+    </field>
     <field
       name="twin_bedrooms"
       type="list"
@@ -182,7 +182,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field>    
+    </field>
     <field
       name="childrens_beds"
       type="list"
@@ -201,7 +201,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field>    
+    </field>
     <field
       name="cots"
       type="list"
@@ -221,7 +221,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field> 
+    </field>
     <field
       name="extra_beds"
       type="list"
@@ -241,7 +241,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field>    
+    </field>
     <field
       name="bathrooms"
       type="list"
@@ -261,7 +261,7 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field> 
+    </field>
     <field
       name="toilets"
       type="list"
@@ -281,22 +281,22 @@
       <option value="6">6</option>
       <option value="7">7</option>
       <option value="8">8</option>
-    </field>       
+    </field>
   </fieldset>
 
-  
-  <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">   
+
+  <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">
     <field
-      class="checkbox inline required" 
-      name="internal_facilities" 
-      type="facilities" 
+      class="checkbox inline required"
+      name="internal_facilities"
+      type="facilities"
       required="true"
-      label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_LABEL" 
-      description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_DESC" 
+      label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_DESC"
       multiple="true"
       id="9">
     </field>
-    <field type="spacer" name="internal_facilities_spacer" hr="true" /> 
+    <field type="spacer" name="internal_facilities_spacer" hr="true" />
     <field
       name="internal_facilities_other"
       type="editor"
@@ -306,15 +306,15 @@
       buttons="false"
       height="125px">
     </field>
-  </fieldset>  
+  </fieldset>
   <fieldset name="external_facilities" description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
     <field
       class="checkbox inline required"
       required="true"
-      name="external_facilities" 
-      type="facilities" 
-      label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL" 
-      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC" 
+      name="external_facilities"
+      type="facilities"
+      label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
       multiple="true"
       id="10">
     </field>
@@ -327,26 +327,26 @@
       filter="JComponentHelper::filterText"
       buttons="false"
       height="125px">
-    </field>      
+    </field>
   </fieldset>
   <fieldset name="kitchen_facilities" description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES">
     <field
-      class="checkbox inline" 
-      name="kitchen_facilities" 
-      type="facilities" 
-      label="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_LABEL" 
-      description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_DESC" 
+      class="checkbox inline"
+      name="kitchen_facilities"
+      type="facilities"
+      label="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES_DESC"
       multiple="true"
       id="11">
     </field>
-  </fieldset>   
+  </fieldset>
   <fieldset name="activities" description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES">
     <field
-      class="checkbox inline" 
-      name="activities" 
-      type="facilities" 
-      label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL" 
-      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC" 
+      class="checkbox inline"
+      name="activities"
+      type="facilities"
+      label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
       multiple="true"
       id="8">
     </field>
@@ -354,26 +354,26 @@
     <field
       name="activities_other"
       type="editor"
-      placeholder="false"      
+      placeholder="false"
       label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_OTHER_LABEL"
       description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_OTHER_DESC"
       filter="JComponentHelper::filterText"
       buttons="false"
       height="125px">
     </field>
-  </fieldset>   
+  </fieldset>
   <fieldset name="suitability" description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY">
     <field
-      class="checkbox inline" 
-      name="suitability" 
-      type="facilities" 
-      label="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_LABEL" 
-      description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_DESC" 
+      class="checkbox inline"
+      name="suitability"
+      type="facilities"
+      label="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_DESC"
       multiple="true"
       id="12">
     </field>
-  </fieldset> 
- 
+  </fieldset>
+
 
 <fieldset name="additional-details">
   <field
@@ -384,7 +384,7 @@
     description ="COM_HELLOWORLD_FIELD_UNIT_ID_DESC"
     class="readonly input-mini"
     labelclass=""
-    readonly="true"/>    
+    readonly="true"/>
 
   <field
     name="created_on"
@@ -414,25 +414,21 @@
     label="JGLOBAL_FIELD_MODIFIED_LABEL"
     class="readonly input-small"
     filter="unset"
-    readonly="true" />	
-  <field 
+    readonly="true" />
+  <field
     name="parent_id"
     type="hidden"
     default=""
-    filter="int">      
+    filter="int">
   </field>
-  <field 
+  <field
     name="review"
     type="hidden"
     filter="int"
     default="0" />
-  
-  <field 
-    name="published"
-    type="list"
-    filter="int"/>
+
 </fieldset>
- 
+
 </form>
 
 

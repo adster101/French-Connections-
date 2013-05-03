@@ -18,12 +18,11 @@ class HelloWorldViewListing extends JViewLegacy {
    * @return void
    */
   function display($tpl = null) {
-    
+
     // Add the submit model to this view so we can fetch the submit for approval form
     // And handle the associated logic...
     $submit = JModelLegacy::getInstance('Submit', 'HelloWorldModel');
-        
-  
+
     // Find the user details
     $user = JFactory::getUser();
     $userID = $user->id;
@@ -38,16 +37,16 @@ class HelloWorldViewListing extends JViewLegacy {
     $this->pagination = $this->get('Pagination');
 
     $this->state = $this->get('State');
-    
+
     $this->form = $submit->getForm();
-    
+
     // Register the JHtmlProperty class
-    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');   
-    
+    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
+
     // Check the status of this set of units.
-    // If no images, or availability etc, track it 
+    // If no images, or availability etc, track it
     $this->progress = HelloWorldHelper::setPropertyProgress($this->items);
-       
+
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       JError::raiseError(500, implode('<br />', $errors));
@@ -62,7 +61,7 @@ class HelloWorldViewListing extends JViewLegacy {
 
     // Set the document
     $this->setDocument();
-    
+
   }
 
   /**
@@ -78,29 +77,26 @@ class HelloWorldViewListing extends JViewLegacy {
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
 
-    JToolBarHelper::cancel();
+    JToolBarHelper::cancel('property.cancel');
 
 
 
     // Only show the add units button if there is at least one listing
     if (count($this->items) > 0) {
+      if ($canDo->get('core.delete')) {
+        JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
+      }
+
       if ($canDo->get('core.create')) {
         JToolBarHelper::addNew('unit.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
       }
 
-      if ($canDo->get('core.delete')) {
-        JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
-      }
       if ($canDo->get('helloworld.property.preview')) {
         JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);
       }
     }
 
-
-
-
-
-    // Display a helpful navigation for the owners 
+    // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {
 
       $view = strtolower(JRequest::getVar('view'));

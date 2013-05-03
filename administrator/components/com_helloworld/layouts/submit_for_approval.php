@@ -18,7 +18,7 @@ $notices = array();
         <?php $notices[] = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_PROGRESS_NOTICES', $section, $key); ?>
       <?php endif; ?>
     <?php endforeach; ?>
-  <?php endforeach; ?> 
+  <?php endforeach; ?>
 <?php endif; ?>
 
 <?php if (!empty($notices)) : ?>
@@ -33,7 +33,7 @@ $notices = array();
   </div>
 <?php elseif (empty($notices) && $progress['review']) : ?>
   <div class="well well-small">
-    <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=propertysubmit&id=' . (int) $progress['listing']); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
+    <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=propertysubmit&id=' . (int) $progress['listing']); ?>" method="post" name="" id="" class=" ">
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
       <hr />
       <fieldset class="panelform">

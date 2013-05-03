@@ -80,7 +80,27 @@ class HelloWorldControllerUnit extends JControllerForm {
     return false;
   }
 
+  public function cancel($key = null) {
+    if (parent::cancel($key)) {
 
+      $app = JFactory::getApplication();
+      $data = $app->input->get('jform',array(),'array');
+
+      $recordId = ($data['parent_id']) ? $data['parent_id'] : 0;
+
+ 
+      $this->view_list = ($recordId) ? 'listing' : 'properties';
+
+      if ($recordId > 0) {
+        $this->setRedirect(
+                JRoute::_(
+                        'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
+                        . (int) $recordId, false
+                )
+        );
+      }
+    }
+  }
 
 
 }
