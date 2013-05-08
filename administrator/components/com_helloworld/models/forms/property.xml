@@ -12,10 +12,10 @@
       class="input-xxlarge validate-greeting"
       validate="greeting"
       required="true"
-      filter="string"/>   
-  </fieldset>	  
+      filter="string"/>
+  </fieldset>
 
- 
+
 
   <fieldset name="Location">
     <field
@@ -29,9 +29,9 @@
       required="true"
       labelclass="control-label">
       <option value="">JOPTION_SELECT_CATEGORY</option>
-    </field>		
-  
-    <field 
+    </field>
+
+    <field
       name="map"
       id="map"
       type="map"
@@ -79,7 +79,7 @@
       latitude="46.589069"
       longitude="2.416992">
       <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
-    </field>		
+    </field>
     <field
       name="location_type"
       type="attributetype"
@@ -91,7 +91,7 @@
       filter="int"
       id="7"
       >
-    </field>		    
+    </field>
     <field
       name="distance_to_coast"
       type="text"
@@ -104,7 +104,7 @@
       required="false"
       filter="int"
       maxlength="2">
-    </field>		
+    </field>
     <field
 			name="location_details"
 			type="editor"
@@ -130,52 +130,11 @@
 			buttons="false"
       validate=""
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_MESSAGE">
-    </field>    
+    </field>
   </fieldset>
 
-  <fieldset name="additional-details"> 
-    <field
-      name="id"
-      type="text"
-      default="0"
-      label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
-      description ="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"
-      class="readonly input-mini"
-      labelclass=""
-      readonly="true"/>
-    <field 
-      name="expiry_date"
-      type="text"
-      readonly="true"
-      class="readonly input-small"
-      label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
-      description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
-      filter="unset"
-      labelclass=""/> 
-      
-  </fieldset>
-  
   <fieldset name="owner">
-    <field
-      labelclass="control-label"
-      name="created_by"
-      type="user"
-      readonly="false"
-      default=""
-      label="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_LABEL"
-      desc="COM_HELLOWORLD_FIELD_PROPERTY_CREATED_BY_DESC"
-      class="input-small required"
-      required="true"
-      validate="owner"
-      />
-    <field
-      name="created_on"
-      labelclass="control-label"
-      type="text"
-      label="JGLOBAL_CREATED_DATE"
-      class="readonly input-small"
-      filter="string"
-      readonly="true" />
+
     <field
       labelclass="control-label"
       name="modified_by"
@@ -186,38 +145,48 @@
       filter="unset"/>
     <field
       labelclass="control-label"
-      name="modified"
+      name="modified_on"
       type="text"
       label="JGLOBAL_FIELD_MODIFIED_LABEL"
-      class="readonly input-small"
+      class="readonly input-larges"
       filter="unset"
-      readonly="true" />		
+      readonly="true" />
   </fieldset>
-  
+
   <fieldset name="notes">
-    <field 
+    <field
       labelclass="control-label"
       name="note"
       filter="string"
       type="textarea"
       label="COM_HELLOWORLD_FIELD_PROPERTY_ADMIN_NOTES_LABEL"
       description="COM_HELLOWORLD_FIELD_PROPERTY_ADMIN_NOTES_DESC"
-      default="">      
-    </field>   
+      default="">
+    </field>
   </fieldset>
-  
+
   <fieldset name="hidden-details">
-    <field 
+    <field
+      name="parent_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
       name="published"
       type="hidden"
       filter="unset"/>
-    <field 
+    <field
       name="review"
       type="hidden"
       filter="int"
       default="" />
   </fieldset>
- 
+
 </form>
 
 

@@ -63,26 +63,28 @@ class plgContentVersion extends JPlugin {
       }
 
       // Check the expiry date...
-      if ($context == 'come_helloworld.property') {
-      $expiry_date = ($article->expiry_date) ? $article->expiry_date : '';
-      // Parse the date so we can check it's valid
-      $date = date_parse($expiry_date);
-      $check = checkdate($date['month'], $date['day'], $date['year']);
+      if ($context == 'com_helloworld.property') {
+
+        $expiry_date = ($article->published_on) ? $article->published_on : '';
+        // Parse the date so we can check it's valid
+        $date = date_parse($expiry_date);
+        $check = checkdate($date['month'], $date['day'], $date['year']);
       } else {
 
         // Must be a unit.
         // If the unit is published then we create a new version for it.
         $check = ($article->published) ? 1 : 0;
       }
-
       //Check if there is an expiry date for this content, if not then just return out...
       if ($check) {
+
         // Loop over the fields that will trigger a new version and check to see if any differ
         foreach ($article as $field => $value) {
           // Compare the content from the database with the content from the editor
           if (array_key_exists($field, $fields_to_check)) {
             // Compare the two strings...
-            if (strcmp($article->$field, $data[$field]) > 0) {
+            $compare = strcmp($article->$field, $data[$field]);
+            if ($compare <> 0) {
               $new_version = true;
             }
           }
@@ -92,5 +94,7 @@ class plgContentVersion extends JPlugin {
       return $new_version;
     }
   }
+
+
 
 }

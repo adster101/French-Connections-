@@ -62,7 +62,7 @@ $data['progress'] = $this->progress;
             <strong>Property details</strong>
           </td>
           <td>
-            <?php echo JHtmlProperty::progressButton($this->items[0]->listing_id, $this->items[0]->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0]) ?>
+            <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0]) ?>
           </td>
         </tr>
         <tfoot>
@@ -88,10 +88,10 @@ $data['progress'] = $this->progress;
                 </td>
 
                 <td>
-                  <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'unit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item) ?>
-                  <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item) ?>
-                  <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item) ?>
-                  <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item) ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item,'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item,'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item,'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item,'unit_id') ?>
                 </td>
                 <td>
                   Order Up/Down

@@ -120,7 +120,7 @@ abstract class HelloWorldHelper {
     foreach ($items as $key => $value) {
 
       if (!array_key_exists('listing', $progress)) {
-        $progress['listing'] = $value->listing_id;
+        $progress['listing'] = $value->id;
       }
 
       if (!array_key_exists('review',$progress)) {
@@ -147,27 +147,6 @@ abstract class HelloWorldHelper {
     return $progress;
   }
 
-  public static function updateUnitProgress($data = '', $context = '') {
-
-    // Get the listing details from the session
-    $listing = JApplication::getUserState('listing', false);
-
-    $units = $listing->units;
-
-    if (empty($units)) { // As units is empty this must be the first one for this listing.
-      // Initialise a unit item for the listing object. This data has already been, checked, filtered and what not.
-      $unit = new JObject;
-
-      $unit->id = $data['id'];
-    } else { // We already have a unit(s)
-      if (array_key_exists($data['id'], $units) && $listing->listing_id == $data['parent_id']) {
-        $listing->units = JArrayHelper::toObject($data, 'JObject');
-      }
-    }
-
-
-    JApplication::setUserState('listing', $listing);
-  }
 
   /**
    * Get the actions

@@ -33,11 +33,11 @@ class JFormFieldCities extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-    
+
     // Get latitude
-    $latitude = $this->element['latitude'] ? $this->element['latitude'] : ''; 
-    $longitude = $this->element['longitude'] ? $this->element['longitude'] : ''; 
-    
+    $latitude = $this->element['latitude'] ? $this->element['latitude'] : '';
+    $longitude = $this->element['longitude'] ? $this->element['longitude'] : '';
+
     // Initialize variables.
 		$options = array();
 		$db = JFactory::getDbo();
@@ -45,17 +45,17 @@ class JFormFieldCities extends JFormFieldList
 
     $query->select('id, title, level');
     $query->select(
-      '( 
-        3959 * acos( cos( radians(' . $longitude . ') ) 
-        * cos( radians( latitude ) ) 
-        * cos( radians( longitude ) - 
-        radians('.$latitude.') ) + 
-        sin( radians(' . $longitude . ') ) 
-        * sin( radians( latitude ) ) ) ) 
-AS distance            
+      '(
+        3959 * acos( cos( radians(' . $longitude . ') )
+        * cos( radians( latitude ) )
+        * cos( radians( longitude ) -
+        radians('.$latitude.') ) +
+        sin( radians(' . $longitude . ') )
+        * sin( radians( latitude ) ) ) )
+        AS distance
             ');
     $query->from('#__classifications');
-    $query->where('level = 4');
+    $query->where('level = 5');
 
     $query->having('distance < 50');
     $query->order('distance');
@@ -69,7 +69,7 @@ AS distance
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
 			// Loop over each subtree item
-			foreach($items as &$item) 
+			foreach($items as &$item)
 			{
 				$repeat = ($item->level - 1 >= 0) ? $item->level - 1 : 0;
 				$item->title = $item->title . ' - ' . round($item->distance,0) . ' Miles';

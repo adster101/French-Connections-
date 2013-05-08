@@ -1,7 +1,7 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla nested table library
 jimport('joomla.database.table');
 
@@ -11,17 +11,17 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableUnits extends JTable
+class HelloWorldTableUnitVersions extends JTable
 {
 	/**
 	 * Constructor
 	 *
 	 * @param object Database connector object
 	 */
-	function __construct(&$db) 
+	function __construct(&$db)
 	{
-		parent::__construct('#__property_units', 'id', $db);
-	}	
+		parent::__construct('#__unit_versions', 'unit_id', $db);
+	}
 	/**
 	 * Method to load a row from the database by primary key and bind the fields
 	 * to the JTable instance properties.
@@ -39,7 +39,7 @@ class HelloWorldTableUnits extends JTable
 	 */
 	public function progress($pk = '', $reset = true)
 	{
-		
+
 		if ($reset)
 		{
 			$this->reset();
@@ -54,7 +54,7 @@ class HelloWorldTableUnits extends JTable
       (select count(*) from qitz3_property_images_gallery where property_id =  ' . (int) $pk . ') as images
     ');
 
-   
+
 		$this->_db->setQuery($query);
 
 		$row = $this->_db->loadAssoc();
@@ -68,10 +68,10 @@ class HelloWorldTableUnits extends JTable
 		// Bind the object with the row and return.
 		return $row;
 	}
-    
+
 	/**
-	 * 
-   * 
+	 *
+   *
 	 *
 	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
 	 *                           set the instance property value is used.
@@ -137,7 +137,7 @@ class HelloWorldTableUnits extends JTable
 			// Add the search tuple to the query.
 			$query->where($this->_db->quoteName($field) . ' = ' . $this->_db->quote($value));
 		}
-    
+
 		$this->_db->setQuery($query);
 
 		$rows = $this->_db->loadAssocList($key='id');
@@ -147,19 +147,19 @@ class HelloWorldTableUnits extends JTable
 		{
 			return false;
 		}
-    
-   
+
+
 		return $rows;
 	}
-  
-  
+
+
   /*
    * Overridden store method to capture the created by and modified dates etc
-   * 
-   * 
+   *
+   *
    */
   public function store($updateNulls = false) {
-    
+
     $date = JFactory::getDate();
     $user = JFactory::getUser();
 
@@ -180,9 +180,9 @@ class HelloWorldTableUnits extends JTable
       }
 
     }
-    
+
     return parent::store($updateNulls);
   }
 
-  
+
 }

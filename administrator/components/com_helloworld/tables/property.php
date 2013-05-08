@@ -1,7 +1,7 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla nested table library
 jimport('joomla.database.table');
 
@@ -18,11 +18,11 @@ class HelloWorldTableProperty extends JTable
 	 *
 	 * @param object Database connector object
 	 */
-	function __construct(&$db) 
+	function __construct(&$db)
 	{
-		parent::__construct('#__property_listings', 'id', $db);
-	}	  
-  
+		parent::__construct('#__property', 'id', $db);
+	}
+
   public function store($updateNulls = false)
   {
     $date = JFactory::getDate();
@@ -30,7 +30,6 @@ class HelloWorldTableProperty extends JTable
 
     if ($this->id) {
       // Existing item
-      $this->modified = $date->toSql();
       $this->modified_by = $user->get('id');
     } else {
       // New newsfeed. A feed created and created_by field can be set by the user,
@@ -43,14 +42,14 @@ class HelloWorldTableProperty extends JTable
       if (empty($this->created_on)) {
         $this->created_on = $date->toSql();
       }
-      
+
     }
-    
+
     return parent::store($updateNulls = false);
   }
-  
-  
-  
 
-  
+
+
+
+
 }

@@ -8,7 +8,7 @@ jimport('joomla.application.component.modellist');
  */
 class HelloWorldModelNearestPropertyList extends JModelList
 {
-  
+
   	/**
 	 * Method to get an array of data items.
 	 *
@@ -20,7 +20,7 @@ class HelloWorldModelNearestPropertyList extends JModelList
 	{
 		// Get the items.
 		$items = parent::getItems();
-    
+
     $props = array();
 
 		// Convert them to a simple array.
@@ -29,7 +29,7 @@ class HelloWorldModelNearestPropertyList extends JModelList
       $props[$k]['id'] = $v->id;
 			$props[$k]['title'] = $v->title . round($v->distance,2) . ' Miles';
 		}
-    
+
     $choose = array('id'=>'','title'=>'Please choose');
 
     // Add the placeholder
@@ -52,29 +52,29 @@ class HelloWorldModelNearestPropertyList extends JModelList
 		$query = $db->getQuery(true);
 
     $input = JFactory::getApplication()->input;
-    
+
     $latitude = $input->get('lat','','string');
     $longitude = $input->get('lon','','string');
-    
+
     $query->select('id, title, level');
     $query->select(
-      '( 
-        3959 * acos( cos( radians(' . $longitude . ') ) 
-        * cos( radians( latitude ) ) 
-        * cos( radians( longitude ) - 
-        radians('.$latitude.') ) + 
-        sin( radians(' . $longitude . ') ) 
-        * sin( radians( latitude ) ) ) ) 
-        AS distance            
+      '(
+        3959 * acos( cos( radians(' . $longitude . ') )
+        * cos( radians( latitude ) )
+        * cos( radians( longitude ) -
+        radians('.$latitude.') ) +
+        sin( radians(' . $longitude . ') )
+        * sin( radians( latitude ) ) ) )
+        AS distance
             ');
     $query->from('#__classifications');
-    $query->where('level = 4');
+    $query->where('level = 5');
 
     $query->having('distance < 50');
     $query->order('distance');
 
 		return $query;
 	}
-  
-	
+
+
 }

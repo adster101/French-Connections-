@@ -42,8 +42,8 @@ class JFormFieldDepartments extends JFormFieldList
     $query->from('#__classifications AS a');
     $query->where('a.parent_id > 0');
 		$query->where('a.published != -2');
-    
-    $query->where('a.level = 3');
+
+    $query->where('a.level = 4');
 
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
 		$query->order('a.title ASC');
@@ -58,7 +58,7 @@ class JFormFieldDepartments extends JFormFieldList
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
 			// Loop over each subtree item
-			foreach($items as &$item) 
+			foreach($items as &$item)
 			{
 				$repeat = ($item->level - 1 >= 0) ? $item->level - 1 : 0;
 				$item->title = str_repeat('- ', $repeat) . $item->title;

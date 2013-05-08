@@ -81,13 +81,15 @@ class HelloWorldControllerProperty extends JControllerForm {
 
   public function postSaveHook(JModelLegacy $model, $validData = array()) {
 
-    // Various things we could do here...
-    // For now we want to push the property listing progress into the session
+    
+
+
+
   }
 
   /*
    * Listing controller - checks ownership of record and redirect to listing view
-   * 
+   *
    */
 
   public function listing() {
@@ -110,7 +112,7 @@ class HelloWorldControllerProperty extends JControllerForm {
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=listing&id=' . (int) $listing_id, false)
     );
-        
+
   }
 
   public function cancel($key = null) {

@@ -11,7 +11,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTablePropertyUnitsVersion extends JTable
+class HelloWorldTablePropertyVersions extends JTable
 {
 	/**
 	 * Constructor
@@ -20,7 +20,7 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
 	 */
 	function __construct(&$db)
 	{
-		parent::__construct('#__property_units_versions', 'id', $db);
+		parent::__construct('#__property_versions', 'parent_id', $db);
 	}
 
   /*
@@ -33,14 +33,14 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
     $date = JFactory::getDate();
     $user = JFactory::getUser();
 
-    if ($this->version_id) {
+    if ($this->id) {
       // Existing item
-      $this->modified = $date->toSql();
+      $this->modified_on = $date->toSql();
       $this->modified_by = $user->get('id');
 
     } else {
-      // New newsfeed. A feed created and created_by field can be set by the user,
-      // so we don't touch either of these if they are set.
+
+      // New property version so add in the who created it and when
 
       if (empty($this->created_by)) {
         $this->created_by = $user->get('id');
@@ -49,13 +49,11 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
       if (empty($this->created_on)) {
         $this->created_on = $date->toSql();
       }
-
-      // Update the state of this version to 1 to denote that it is a live new version
-      $this->review = 1;
     }
 
     return parent::store($updateNulls);
   }
+
 
 	/**
 	 * Method to load a row from the database by primary key and bind the fields
@@ -72,7 +70,7 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
 	 * @throws  RuntimeException
 	 * @throws  UnexpectedValueException
 	 */
-	public function load($keys = null, $reset = true)
+	public function load($keys = null, $reset = true, $latest=true)
 	{
 		if (empty($keys))
 		{
@@ -101,12 +99,10 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
 
 		// Initialise the query.
 		$query = $this->_db->getQuery(true);
-    $query->select('version_id');
-    $query->from('#__property_units_versions');
-    $query->where('id = ' . (int) $id);
-    $query->where('review = 1');
-    $query->order('version_id', 'desc');
+		$query->select('*');
 		$query->from($this->_tbl);
+    $query->order('id desc');
+
 		$fields = array_keys($this->getProperties());
 
 		foreach ($keys as $field => $value)
@@ -133,5 +129,6 @@ class HelloWorldTablePropertyUnitsVersion extends JTable
 		// Bind the object with the row and return.
 		return $this->bind($row);
 	}
+
 
 }

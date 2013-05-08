@@ -20,7 +20,7 @@ class HelloWorldModelProperty extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'PropertyVersions', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -42,58 +42,53 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     return $form;
   }
-  
-	/**
-	 * getItem is overridden so that we can, if necessary, load any updated fields from the version tables.
-   * 
+
+  /**
+   * getItem is overridden so that we can, if necessary, load any updated fields from the version tables.
+   *
    * We check the review state flag and if that is true, we load property details from the #__property_listings_versions table and update the fields
-   * 
-	 * @param   integer  $pk  The id of the primary key.
-	 *
-	 * @return  mixed    Object on success, false on failure.
-	 *
-	 * @since   12.2
-	 */
-	public function getItem($pk = null)
-	{
-		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
-		$table = $this->getTable();
+   *
+   * @param   integer  $pk  The id of the primary key.
+   *
+   * @return  mixed    Object on success, false on failure.
+   *
+   * @since   12.2
+   */
+  public function getItem($pk = null) {
+    $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+    $table = $this->getTable();
 
-		if ($pk > 0)
-		{
-			// Attempt to load the row.
-			$return = $table->load($pk);
+    if ($pk > 0) {
+      // Attempt to load the row.
+      $return = $table->load($pk);
 
-			// Check for a table object error.
-			if ($return === false && $table->getError())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
-		}
+      // Check for a table object error.
+      if ($return === false && $table->getError()) {
+        $this->setError($table->getError());
+        return false;
+      }
+    }
 
     // Convert to the JObject before adding other data.
-		$properties = $table->getProperties(1);
-    
+    $properties = $table->getProperties(1);
+
     // If review flag is true, there is an unpublished version in the versions table.
     if ($properties['review']) {
-      
+
       // Need to load the new version details here to replace those loaded here.
-
     }
-    
-		$item = JArrayHelper::toObject($properties, 'JObject');
 
-		if (property_exists($item, 'params'))
-		{
-			$registry = new JRegistry;
-			$registry->loadString($item->params);
-			$item->params = $registry->toArray();
-		}
+    $item = JArrayHelper::toObject($properties, 'JObject');
 
-		return $item;
-	}
-  
+    if (property_exists($item, 'params')) {
+      $registry = new JRegistry;
+      $registry->loadString($item->params);
+      $item->params = $registry->toArray();
+    }
+
+    return $item;
+  }
+
   /**
    * Method to get the script that have to be included on the form
    *
@@ -184,29 +179,29 @@ class HelloWorldModelProperty extends JModelAdmin {
 
   /*
    * This method checks whether the property being edited is a unit.
-   * If it is then we take the lat and long from the parent property 
+   * If it is then we take the lat and long from the parent property
    * and force those to be the same for this property.
-   * 
+   *
    * This can happen from two places.
    * Firstly, if a user is adding a new property they may choose a parent property
    * in which case we take the parent_id from the user session.
-   * 
-   * Secondly, if the user is editing an existing property which already has a 
+   *
+   * Secondly, if the user is editing an existing property which already has a
    * parent_id set. I.e. is already marked as a unit. In this case it will be set
    * in the $data scope.
-   * 
+   *
    * param JForm $form The JForm instance for the view being edited
    * param array $data The form data as derived from the view (may be empty)
-   * 
+   *
    * @return void
-   * 
+   *
    */
 
   protected function preprocessForm(JForm $form, $data) {
 
     // More robustly checked on the component level permissions?
-    // E.g. at the moment any user who is not owner can edit this? 
-    // e.g. add a new permission core.edit.property.changeparent    
+    // E.g. at the moment any user who is not owner can edit this?
+    // e.g. add a new permission core.edit.property.changeparent
 
     $canDo = $this->getState('actions.permissions', array());
     // If we don't come from a view then this maybe empty so we reset it.
@@ -222,7 +217,7 @@ class HelloWorldModelProperty extends JModelAdmin {
       $form->setFieldAttribute('created_by', 'default', $user->id);
     }
 
-    // Set the location details accordingly, needed for one of the form field types... 
+    // Set the location details accordingly, needed for one of the form field types...
     if (!empty($data->latitude) && !empty($data->longitude)) {
       $form->setFieldAttribute('city', 'latitude', $data->latitude);
       $form->setFieldAttribute('city', 'longitude', $data->longitude);
@@ -233,7 +228,7 @@ class HelloWorldModelProperty extends JModelAdmin {
    * Method to return the location details based on the city the user has chosen
    *
    * @param   int    $city, the nearest town/city
-   * 
+   *
    * @return  mixed
    *
    * @since   11.1
@@ -333,10 +328,10 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
     if (!empty($location_details)) {
-      $data['area'] = $location_details[0];
-      $data['region'] = $location_details[1];
-      $data['department'] = $location_details[2];
-      $data['city'] = $location_details[3];
+      $data['area'] = $location_details[1];
+      $data['region'] = $location_details[2];
+      $data['department'] = $location_details[3];
+      $data['city'] = $location_details[4];
     }
 
     // Include the content plugins for the on save events.
@@ -346,20 +341,10 @@ class HelloWorldModelProperty extends JModelAdmin {
     try {
 
       // If $data['review'] is true we need to update that new version in the version table
-      if ($data['review']) {
+      if ($data['review'] == 0) {
 
-        // Get the latest unpublished version id for this listing, that exists in the db
-        $new_version = $this->getLatestListingVersion($data['id']);
-
-        if ($new_version->version_id > 0) {
-          // Here, we know we have an unpublished version, so need to save changes into new version, not over existing version.
-          $table = $this->getTable('PropertyListingsVersion');
-
-          // Set the version ID that we want to bind and store the data against...
-          $table->version_id = $new_version->version_id;
-        }
-      } else { // Here we don't explicitly know if there is a new version
-        // Load the exisiting row, if there is one. 
+        // Here we don't explicitly know if there is a new version
+        // Load the exisiting row, if there is one.
         if ($pk > 0) {
           $table->load($pk);
           $isNew = false;
@@ -373,10 +358,16 @@ class HelloWorldModelProperty extends JModelAdmin {
         if ($new_version_required[0]) {
 
           // Switch the table model to the version one
-          $table = $this->getTable('PropertyListingsVersion');
-          $table->set('_tbl_key', 'version_id');
+          $data['id'] = '';
+          $data['review'] = '1';
+          $data['published_on'] = '';
         }
       }
+
+      // Set the table model to the appropriate key
+      // If we don't do this, the model will save against the parent_id
+      // but we want it saving against the version id
+      $table->set('_tbl_key', 'id');
 
       // Bind the data. This will bind to the appropriate table.
       if (!$table->bind($data)) {
@@ -407,31 +398,24 @@ class HelloWorldModelProperty extends JModelAdmin {
         return false;
       } else {
 
-        // Save is successful, if we are creating 
-        if ($new_version_required[0]) {
+        // Update the existing property listing to indicate that we have a new version for it.
+        $property = $this->getTable('Property', 'HelloWorldTable');
 
-          // Update the existing property listing to indicate that we have a new version for it.
-          // This should only happen the first time we create a new version.
-          $table = $this->getTable();
-                 
+        $property->id = $pk;
+        $property->review = 1;
 
-          $table->id = $pk;
-          $table->review = 1;
-          $table->modified = JFActory::getDate()->toSql();
-         
-          if (!$table->store()) {
-            $this->setError($table->getError());
-            return false;
-          }
+        if (!$property->store()) {
+          $this->setError($property->getError());
+          return false;
         }
       }
-      
+
       // Save any admin notes, if present
       if (!empty($data['note'])) {
 
         $note = array();
 
-        $note['property_id'] = $data['id'];
+        $note['property_id'] = $data['parent_id'];
         $note['state'] = 1;
         $note['body'] = $data['note'];
         $note['created_time'] = JFactory::getDate()->toSql();
@@ -459,9 +443,6 @@ class HelloWorldModelProperty extends JModelAdmin {
         }
       }
 
-      // Set the table key back to ID so the controller redirects to the right place
-      $table->set('_tbl_key', 'id');
-
       // Clean the cache.
       $this->cleanCache();
 
@@ -473,6 +454,10 @@ class HelloWorldModelProperty extends JModelAdmin {
       return false;
     }
 
+    // Set the table key back to the parent id so it redirects based on that key
+    // on not the version key id
+    $table->set('_tbl_key', 'parent_id');
+
     $pkName = $table->getKeyName();
 
     if (isset($table->$pkName)) {
@@ -483,45 +468,4 @@ class HelloWorldModelProperty extends JModelAdmin {
     return true;
   }
 
-  /*
-   * Method to get the version id of the most recent unpublished version
-   * 
-   * 
-   */
-
-  public function getLatestListingVersion($id = '') {
-    // Retrieve latest unit version
-    $db = $this->getDbo();
-    $query = $db->getQuery(true);
-    $query->select('version_id');
-    $query->from('#__property_listings_versions');
-    $query->where('id = ' . (int) $id);
-    $query->where('state = 1');
-    $query->order('version_id', 'desc');
-
-    $db->setQuery((string) $query);
-
-    try {
-      $row = $db->loadObject();
-    } catch (RuntimeException $e) {
-      JError::raiseError(500, $e->getMessage());
-    }
-
-    return $row;
-  }
-  
-  /* 
-   * Method to get the full property listing details based on the property listing ID
-   *
-   * @param id int The property listing ID of the listing to be returned.
-   *  
-   */
-  public function getFullListingDetails($id = '') 
-  {
-    
-    
-    
-    
-  }
-  
 }

@@ -51,7 +51,7 @@ class HelloWorldModelProperties extends JModelList {
   protected function populateState($ordering = null, $direction = null) {
     // Initialise variables
     $app = JFactory::getApplication();
-    
+
     $context = $this->context;
 
     $extension = $app->getUserStateFromRequest('com_helloworlds.property.filter.extension', 'extension', 'com_helloworlds', 'cmd');
@@ -62,7 +62,7 @@ class HelloWorldModelProperties extends JModelList {
     // Should be an int. No filter is null so perhaps no filter should be -1?
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
-    
+
     $expiry_start_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_start_date', 'expiry_start_date', '','date');
     $this->setState('filter.expiry_start_date', $expiry_start_date);
 
@@ -124,33 +124,33 @@ class HelloWorldModelProperties extends JModelList {
     // Get the access control permissions in a handy array
     $canDo = HelloWorldHelper::getActions();
 
-    // Create a new query object.		
+    // Create a new query object.
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
 
     // Add in the number of page view this property has had in the last twelve months...
     $now = date('Y-m-d');
     $last_year = strtotime("-1 year", strtotime($now));
-    
+
     // Select some fields
     $query->select('
-      a.id, 
-      a.title, 
-      a.created_by, 
+      a.id,
+      b.title,
+      a.created_by,
       a.published,
       a.expiry_date,
       a.modified,
       a.created_on,
-      (SELECT count(id) as count 
+      (SELECT count(id) as count
       FROM #__property_views
       where property_id = a.id
       and date > ' . $db->quote(date('Y-m-d', $last_year)) . ') as view_count,
-      (SELECT count(id) as count 
+      (SELECT count(id) as count
       FROM #__enquiries
       where property_id = a.id
       and date_created > ' . $db->quote(date('Y-m-d', $last_year)) . ') as enquiry_count,
-      a.VendorTxCode,
-      review
+      b.VendorTxCode,
+      a.review
     ');
 
     // Join the user details if the user has the ACL rights.
@@ -159,19 +159,15 @@ class HelloWorldModelProperties extends JModelList {
         u.email,
         p.phone_1,
         u.name
-
       ');
       $query->join('LEFT', '#__users AS u ON u.id = a.created_by');
       $query->join('LEFT', '#__user_profile_fc AS p ON p.user_id = u.id');
     }
 
-
-
-    // Check the user group this user belongs to. 
     // Fundamental check to ensure owners only see their own listings.
-    // Should this be with an ACL check, e.g. core.edit.own and core.edit
+    // This is an ACL check, e.g. core.edit.own and core.edit
     // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
-    //  // If true then has permission to edit all as well as own, otherwise just own
+    //If true then has permission to edit all as well as own, otherwise just own
     if ($canDo->get('core.edit.own') && !$canDo->get('core.edit')) {
       $query->where('a.created_by=' . $userId);
     }
@@ -208,11 +204,11 @@ class HelloWorldModelProperties extends JModelList {
         // Don't filter, user wants to see all snoozed props as well as not snoozed etc
       }
     }
-    
+
     // Filter on expiry date
     $expiry_start_date = $this->getState('filter.expiry_start_date');
     $expiry_end_date = $this->getState('filter.expiry_end_date');
-  
+
     if ($expiry_start_date && $expiry_end_date) {
       $query->where('a.expiry_date >=' . $db->quote($expiry_start_date) . ' and a.expiry_date <=' . $db->quote($expiry_end_date));
     }
@@ -222,7 +218,7 @@ class HelloWorldModelProperties extends JModelList {
     $search = $this->getState('filter.search');
     if (!empty($search)) {
       if ((int) $search) {
-        // This pulls out the property with ID searched on, it's parent and any siblings. 
+        // This pulls out the property with ID searched on, it's parent and any siblings.
         $query->where('a.id = ' . (int) $search);
       } elseif (stripos($search, 'account:') === 0) {
         $search = $db->Quote('%' . $db->escape(substr($search, 8), true) . '%');
@@ -238,8 +234,11 @@ class HelloWorldModelProperties extends JModelList {
 
 
     // From the hello table
-    $query->from('#__property_listings as a');
-
+    $query->from('#__property as a');
+    $query->join('inner','#__property_versions as b on (
+      a.id = b.parent_id
+      and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id)
+    )');
     $listOrdering = $this->getState('list.ordering', '');
     $listDirn = $db->escape($this->getState('list.direction', ''));
 

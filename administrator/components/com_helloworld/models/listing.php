@@ -51,7 +51,7 @@ class HelloWorldModelListing extends JModelList {
   protected function populateState($ordering = null, $direction = null) {
     // Initialise variables
     $app = JFactory::getApplication();
-    
+
     $context = $this->context;
 
     $extension = $app->getUserStateFromRequest('com_helloworlds.property.filter.extension', 'extension', 'com_helloworlds', 'cmd');
@@ -62,7 +62,7 @@ class HelloWorldModelListing extends JModelList {
     // Should be an int. No filter is null so perhaps no filter should be -1?
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
-    
+
     // extract the component name
     $this->setState('filter.component', $parts[0]);
 
@@ -106,54 +106,49 @@ class HelloWorldModelListing extends JModelList {
 
     // Get the access control permissions in a handy array
     $canDo = HelloWorldHelper::getActions();
-    
+
     // Get the app/input gubbins
     $app = JFactory::getApplication();
     $input = $app->input;
-    
+
     // The listing ID
     $id = $input->get('id', '', 'int');
-    
-    // Create a new query object.		
+
+    // Create a new query object.
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
 
     // Initialise the query.
     $query = $this->_db->getQuery(true);
     $query->select('
-        pl.title,
-        pl.id as listing_id,
-        pl.review,
-        pu.id unit_id,
+        a.id,
+        a.review,
+        pu.unit_id unit_id,
         pu.parent_id,
         pu.ordering,
         pu.unit_title,
         pu.changeover_day,
         base_currency,
         tariff_based_on,
-        CASE
-          WHEN pu.review = 0 
-            THEN (select count(*) from qitz3_property_images_library where property_id =  pu.id)
-          ELSE
-            (select count(*) from qitz3_property_images_library_version where property_id =  pu.id)
-        END as images,
-        (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
-        (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs
+        (select count(*) from qitz3_property_images_library where property_id =  pu.unit_id) as images,
+        (select count(*) from qitz3_availability where id = pu.unit_id and end_date > CURDATE()) as availability,
+        (select count(*) from qitz3_tariffs where id = pu.unit_id and end_date > CURDATE()) as tariffs
       ');
-    $query->from('#__property_listings as pl');
-    $query->join('left','#__property_units pu on pl.id = pu.parent_id'); 
-    $query->where('pl.id = ' . (int) $id);
-    
-    // Check the user group this user belongs to. 
+    $query->from('#__property as a');
+    $query->join('inner', '#__property_versions as b on a.id = b.parent_id and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id)');
+    $query->join('left','#__unit_versions pu on a.id = pu.parent_id');
+    $query->where('a.id = ' . (int) $id);
+    $query->order('ordering');
+    // Check the user group this user belongs to.
     // Fundamental check to ensure owners only see their own listings.
     // Should this be with an ACL check, e.g. core.edit.own and core.edit
     // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
     //  // If true then has permission to edit all as well as own, otherwise just own
     if ($canDo->get('core.edit.own') && !$canDo->get('core.edit')) {
-      $query->where('pl.created_by=' . $userId);
+      $query->where('a.created_by=' . $userId);
     }
 
-    $query->where('pl.created_by !=0');
+    $query->where('a.created_by !=0');
 
     // Filter by published state
     $published = $this->getState('filter.published');

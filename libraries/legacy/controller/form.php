@@ -560,14 +560,14 @@ class JControllerForm extends JControllerLegacy
 		$checkin = property_exists($table, 'checked_out');
 		$context = "$this->option.edit.$this->context";
 		$task = $this->getTask();
-        
+
     // Determine the name of the primary key for the data.
 		if (empty($key))
 		{
 			$key = $table->getKeyName();
 		}
 
-		// To avoid data collisions the urlVar may be different from the primary key.
+    // To avoid data collisions the urlVar may be different from the primary key.
 		if (empty($urlVar))
 		{
 			$urlVar = $key;
@@ -590,8 +590,8 @@ class JControllerForm extends JControllerLegacy
 
 			return false;
 		}
-    
-		// Populate the row id from the session.
+
+    // Populate the row id from the session.
 		$data[$key] = $recordId;
 
 		// The save2copy task needs to be handled slightly differently.
