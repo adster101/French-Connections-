@@ -740,7 +740,7 @@ abstract class JModelAdmin extends JModelForm
 		$pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
 		$table = $this->getTable();
 
-		if ($pk > 0)
+    if ($pk > 0)
 		{
 			// Attempt to load the row.
 			$return = $table->load($pk);

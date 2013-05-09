@@ -1,7 +1,7 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla view library
 jimport('joomla.application.component.view');
 
@@ -14,48 +14,55 @@ class HelloWorldViewImages extends JViewLegacy
 	 * display method of Availability View
 	 * @return void
 	 */
-	public function display($tpl = null) 
+	public function display($tpl = null)
 	{
+    $model = $this->getModel();
+
+    $this->state = $this->get('State');
+    $model->setState('woot','wooty');
+    print_r($this->state);die;
+
+
 		// Get the property ID we are editing.
 		$this->item->id = JRequest::getVar('id');
+
     $app = JFactory::getApplication();
 
     // Get the custom script path for this screen
 		$script = $this->get('Script');
-    
+
     // Get the item data
     $items = $this->get('Items');
 
     // Assign the Item
 		$this->items = $items;
-    
+
 		// Set the toolbar
 		$this->addToolBar();
 
 		// Set the custom script
 		$this->script = $script;
-		
-    $this->state = $this->get('State');
-    
+
+
 		// Display the template
 		parent::display($tpl);
- 
+
 		// Set the document
 		$this->setDocument();
 	}
-	
+
 	/**
 	 * Setting the toolbar
 	 */
-	protected function addToolBar() 
+	protected function addToolBar()
 	{
-		// Determine the layout we are using. 
-		// Should this be done with views? 
+		// Determine the layout we are using.
+		// Should this be done with views?
 		$view = strtolower(JRequest::getVar('view'));
 
 		$user = JFactory::getUser();
-		$userId = $user->id;    
-   
+		$userId = $user->id;
+
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
@@ -63,10 +70,10 @@ class HelloWorldViewImages extends JViewLegacy
     $listing = JApplication::getUserState('listing', false);
 
     JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
- 
+
  		$bar = JToolBar::getInstance('toolbar');
 
-    
+
 		// Add a upload button
     if ($canDo->get('helloworld.images.create')) {
 
@@ -75,39 +82,39 @@ class HelloWorldViewImages extends JViewLegacy
 						<i class=\"icon-plus icon-white\" title=\"$title\"></i>
 						$title</button>";
 			//$bar->appendButton('Custom', $dhtml, 'upload');
-			
-		}    
-    
-  
-    
-    
+
+		}
+
+
+
+
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
 		JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('', '');
- 
-    // Display a helpful navigation for the owners 
+
+    // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {
-    
+
       $view = strtolower(JRequest::getVar('view'));
-  
+
       $canDo = HelloWorldHelper::addSubmenu($view);
-      
+
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
-      
+
     }
   }
-  
+
 	/**
 	 * Method to set up the document properties
 	 *
 	 * @return void
 	 */
-	protected function setDocument() 
+	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-	  
+
     // Get the listing details from the session...
     $listing = JApplication::getUserState('listing', false);
 
@@ -122,8 +129,8 @@ class HelloWorldViewImages extends JViewLegacy
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-fp.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-ui.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/main.js", 'text/javascript', true, false);
-   
-    
+
+
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery.fileupload-ui.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");

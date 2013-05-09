@@ -26,7 +26,7 @@ class HelloWorldModelUnits extends JModelList {
     // Get the access control permissions in a handy array
     $canDo = HelloWorldHelper::getActions();
 
-    // Create a new query object.		
+    // Create a new query object.
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
 
@@ -37,7 +37,7 @@ class HelloWorldModelUnits extends JModelList {
         parent_id,
         ordering,
         unit_title,
-        (select count(*) from qitz3_attributes_property where property_id = pu.id) as facilities,
+        (select count(*) from #__property_attributes where property_id = pu.id) as facilities,
         (select count(*) from qitz3_availability where id = pu.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where id = pu.id and end_date > CURDATE()) as tariffs,
         (select count(*) from qitz3_property_images_library where property_id =  pu.id) as images

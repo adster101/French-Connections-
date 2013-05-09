@@ -123,22 +123,24 @@ class HelloWorldModelListing extends JModelList {
     $query->select('
         a.id,
         a.review,
-        pu.unit_id unit_id,
-        pu.parent_id,
-        pu.ordering,
-        pu.unit_title,
-        pu.changeover_day,
+        e.unit_id unit_id,
+        e.parent_id,
+        e.ordering,
+        e.unit_title,
+        e.changeover_day,
         base_currency,
         tariff_based_on,
-        (select count(*) from qitz3_property_images_library where property_id =  pu.unit_id) as images,
-        (select count(*) from qitz3_availability where id = pu.unit_id and end_date > CURDATE()) as availability,
-        (select count(*) from qitz3_tariffs where id = pu.unit_id and end_date > CURDATE()) as tariffs
+        (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
+        (select count(*) from qitz3_availability where id = e.id and end_date > CURDATE()) as availability,
+        (select count(*) from qitz3_tariffs where id = e.id and end_date > CURDATE()) as tariffs
       ');
     $query->from('#__property as a');
-    $query->join('inner', '#__property_versions as b on a.id = b.parent_id and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id)');
-    $query->join('left','#__unit_versions pu on a.id = pu.parent_id');
+    $query->join('inner', '#__property_versions as b on (a.id = b.parent_id and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id))');
+    $query->join('left','#__unit d on d.property_id = a.id');
+    $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
     $query->where('a.id = ' . (int) $id);
     $query->order('ordering');
+
     // Check the user group this user belongs to.
     // Fundamental check to ensure owners only see their own listings.
     // Should this be with an ACL check, e.g. core.edit.own and core.edit
@@ -153,9 +155,9 @@ class HelloWorldModelListing extends JModelList {
     // Filter by published state
     $published = $this->getState('filter.published');
     if (is_numeric($published)) {
-      $query->where('pu.published = ' . (int) $published);
+      $query->where('e.published = ' . (int) $published);
     } elseif ($published == '') {
-      $query->where('(pu.published = 0 OR pu.published = 1 OR pu.published is null)');
+      $query->where('(e.published = 0 OR e.published = 1 OR e.published is null)');
     }
 
     return $query;

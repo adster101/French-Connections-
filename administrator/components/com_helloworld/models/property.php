@@ -115,7 +115,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     $return = false;
 
     // Get the units table
-    $units_table = $this->getTable('Units', 'HelloWorldTable');
+    $units_table = $this->getTable('UnitVersions', 'HelloWorldTable');
 
     // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
     $units_table->set('_tbl_key', 'parent_id');
@@ -357,7 +357,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
         if ($new_version_required[0]) {
 
-          // Switch the table model to the version one
+          // As a new version is required amend the data array before we save
           $data['id'] = '';
           $data['review'] = '1';
           $data['published_on'] = '';
@@ -398,7 +398,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         return false;
       } else {
 
-        // Update the existing property listing to indicate that we have a new version for it.
+        // Update the existing property listing to indicate that the listing has been updated
         $property = $this->getTable('Property', 'HelloWorldTable');
 
         $property->id = $pk;

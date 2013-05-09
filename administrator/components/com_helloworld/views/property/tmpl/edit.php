@@ -146,6 +146,6 @@ $data['units'] = $this->units;
 
     <?php echo $field->input; ?>
   <?php endforeach; ?>
-  <input type="hidden" name="task" value="helloworld.edit" />
+  <input type="hidden" name="task" value="" />
   <?php echo JHtml::_('form.token'); ?>
 </form>

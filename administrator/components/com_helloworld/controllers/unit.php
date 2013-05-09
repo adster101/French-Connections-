@@ -88,7 +88,6 @@ class HelloWorldControllerUnit extends JControllerForm {
 
       $recordId = ($data['parent_id']) ? $data['parent_id'] : 0;
 
- 
       $this->view_list = ($recordId) ? 'listing' : 'properties';
 
       if ($recordId > 0) {

@@ -1,13 +1,13 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class ImportModelNotes extends JModelAdmin
+class ImportModelImages extends JModelAdmin
 {
 
 	/**
@@ -18,12 +18,12 @@ class ImportModelNotes extends JModelAdmin
 	 * @return	mixed	A JForm object on success, false on failure
 	 * @since	1.6
 	 */
-	public function getForm($data = array(), $loadData = false) 
-	{	
+	public function getForm($data = array(), $loadData = false)
+	{
 
 	}
-  
-  
-  
-  
+
+
+
+
 }

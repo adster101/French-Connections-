@@ -22,7 +22,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'PropertyVersions', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -73,12 +73,12 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
    * @since	1.6
    */
   protected function preprocessForm(JForm $form, $data) {
-    
+
 
     if (!empty($data->VendorTxCodes)) {
 
       $default = ($data->VendorTxCode) ? $data->VendorTxCode : '';
-      
+
       // Build an XML string to inject additional fields into the form
       $XmlStr = '<form><fieldset name="autorenewaloptions" description="COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_BLURB" label="COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_LEGEND">';
       $XmlStr .= '<field
@@ -93,8 +93,8 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
       // Loop over the existing availability first
       foreach ($data->VendorTxCodes as $transaction) {
 
-        $XmlStr.= '<option value="' . $transaction[0] . '"> ' . 
-                JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_CARD_DETAILS',$transaction[1], $transaction[2],$transaction[3]) . 
+        $XmlStr.= '<option value="' . $transaction[0] . '"> ' .
+                JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_CARD_DETAILS',$transaction[1], $transaction[2],$transaction[3]) .
                 ' </option>';
       }
       $XmlStr .= '<option value=\'0\'>None/opt out</option>';
@@ -104,12 +104,14 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
   }
 
   /*
-   * Augmented getItem function to get the existing transactions for a listing 
+   * Augmented getItem function to get the existing transactions for a listing
    * so that we can add them to the form
-   * 
+   *
    */
 
   public function getItem($pk = null) {
+
+    echo $pk;die;
 
     if ($item = parent::getItem($pk)) {
 
@@ -124,7 +126,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
 
   /*
    * Get a list of the protx transactions we have on file for this listing
-   * 
+   *
    */
 
   protected function getProtxTransactions($pk = null) {
@@ -139,7 +141,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
     $query->select('
       VendorTxCode,
       CardType,
-      CardExpiryDate, 
+      CardExpiryDate,
       CardLastFourDigits
     ');
 
@@ -157,7 +159,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
 
     return $rows;
   }
-  
+
   /**
 	 * Method to save the form data.
 	 *
@@ -174,7 +176,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
 		$key = $table->getKeyName();
 		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
 		$isNew = true;
-        
+
     // Include the content plugins for the on save events.
 		JPluginHelper::importPlugin('content');
 
@@ -242,9 +244,9 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
 
 		return true;
 	}
-  
-	
 
-  
+
+
+
 
 }

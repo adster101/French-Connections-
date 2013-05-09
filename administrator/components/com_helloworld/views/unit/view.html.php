@@ -20,13 +20,11 @@ class HelloWorldViewUnit extends JViewLegacy
     $this->state = $this->get('State');
 
 
-    // get and assign the Data
+    // Get the unit edit form
 		$this->form = $this->get('Form');
+
+    // Get the unit item...
 		$this->item = $this->get('Item');
-
-    $this->script = $this->get('Script');
-
-
 
     $this->languages = HelloWorldHelper::getLanguages();
 		$this->lang = HelloWorldHelper::getLang();
@@ -57,13 +55,9 @@ class HelloWorldViewUnit extends JViewLegacy
 		// Should this be done with views?
 		$view = strtolower(JRequest::getVar('view'));
 
-
     // Get the progress for this property
     //HelloWorldHelper::setPropertyProgress($this->item->id,$published );
 
-
-		// Eventually figured out that the below hides the submenu on this view.
-		//JRequest::setVar('hidemainmenu', true);
 		$user = JFactory::getUser();
 		$userId = $user->id;
 
@@ -72,12 +66,12 @@ class HelloWorldViewUnit extends JViewLegacy
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-
     JToolBarHelper::title($this->item->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
     // Built the actions for new and existing records.
 		if ($isNew)
 		{
+			JToolBarHelper::cancel('unit.cancel', 'JTOOLBAR_CANCEL');
 			// For new records, check the create permission.
 			if ($canDo->get('core.create'))
 			{
@@ -85,17 +79,16 @@ class HelloWorldViewUnit extends JViewLegacy
 				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
-			JToolBarHelper::cancel('unit.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
+			JToolBarHelper::cancel('unit.cancel', 'JTOOLBAR_CLOSE');
 			if ($canDo->get('core.edit.own'))
 			{
 				// We can save the new record
-				JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
+        JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
 			}
-			JToolBarHelper::cancel('unit.cancel', 'JTOOLBAR_CLOSE');
 		}
 
     // Display a helpful navigation for the owners
@@ -123,9 +116,8 @@ class HelloWorldViewUnit extends JViewLegacy
 		$document = JFactory::getDocument();
 
     $document->setTitle($this->item->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
-		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-
+		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/models/forms/helloworld.js");
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
 
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');

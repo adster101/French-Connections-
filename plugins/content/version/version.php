@@ -33,7 +33,7 @@ class plgContentVersion extends JPlugin {
     $new_version = false;
 
     // Here we check whether we are already editing an unpublished new version of this item
-    // So if we are then we can skip all the comparing and simply save straight over the new unpublished version
+    // So if we are then we can skip all the comparing and simply save straight over the new/unpublished version
 
     if ($data['review']) {
       return true;
@@ -62,19 +62,14 @@ class plgContentVersion extends JPlugin {
         return false;
       }
 
-      // Check the expiry date...
-      if ($context == 'com_helloworld.property') {
 
-        $expiry_date = ($article->published_on) ? $article->published_on : '';
-        // Parse the date so we can check it's valid
-        $date = date_parse($expiry_date);
-        $check = checkdate($date['month'], $date['day'], $date['year']);
-      } else {
 
-        // Must be a unit.
-        // If the unit is published then we create a new version for it.
-        $check = ($article->published) ? 1 : 0;
-      }
+      $expiry_date = ($article->published_on) ? $article->published_on : '';
+      // Parse the date so we can check it's valid
+      $date = date_parse($expiry_date);
+      $check = checkdate($date['month'], $date['day'], $date['year']);
+
+
       //Check if there is an expiry date for this content, if not then just return out...
       if ($check) {
 
@@ -94,7 +89,5 @@ class plgContentVersion extends JPlugin {
       return $new_version;
     }
   }
-
-
 
 }

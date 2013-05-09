@@ -151,9 +151,9 @@ class FcSearchModelSearch extends JModelList {
 
   /*
    * Method to build an sql query which when executred, will return a list of property IDs conforming to a particular set of filter
-   * 
+   *
    * @return  JDatabaseQuery  A database query.
-   * 
+   *
    */
 
   public function getPropertyListQuery($markers = false) {
@@ -262,15 +262,15 @@ class FcSearchModelSearch extends JModelList {
       $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
     }
 
-    // Filter on property type 
+    // Filter on property type
     if ($this->getState('list.property_type', '')) {
-      $query->join('left', '#__attributes_property ap on ap.property_id = h.id');
+      $query->join('left', '#__property_attributes ap on ap.property_id = h.id');
       $query->where('ap.attribute_id = ' . $this->getState('list.property_type'));
     }
 
-    // Filter on property type 
+    // Filter on property type
     if ($this->getState('list.accommodation_type', '')) {
-      $query->join('left', '#__attributes_property ap2 on ap2.property_id = h.id');
+      $query->join('left', '#__property_attributes ap2 on ap2.property_id = h.id');
       $query->where('ap2.attribute_id = ' . $this->getState('list.accommodation_type'));
     }
 
@@ -309,7 +309,7 @@ class FcSearchModelSearch extends JModelList {
    * @return  JDatabaseQuery  A database query.
    *
    * @since   2.5
-   * 
+   *
    */
 
   protected function getListQuery() {
@@ -330,19 +330,19 @@ class FcSearchModelSearch extends JModelList {
 
     try {
 
-      
+
       $sort_column = $this->getState('list.sort_column', '');
       $sort_order = $this->getState('list.direction', '');
-      
+
       // Create a new query object.
       $db = $this->getDbo();
       $query = $db->getQuery(true);
-      
+
       // This is a MySql query optimisation for when the user is sorting
       $straight_join = ($sort_column && $sort_order) ? 'STRAIGHT_JOIN' : '';
-        
+
       $query->select('
-              STRAIGHT_JOIN 
+              STRAIGHT_JOIN
               h.id,
               h.parent_id,
               h.level,
@@ -419,11 +419,11 @@ class FcSearchModelSearch extends JModelList {
       if ($lang == 'fr') {
 
         // These joins bring in the french translations for property and accommodation types
-        $query->join('left', '#__attributes_property ap ON ap.property_id = h.id');
+        $query->join('left', '#__property_attributes ap ON ap.property_id = h.id');
         $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
         $query->join('left', '#__attributes_translation a ON a.id = ap.attribute_id');
 
-        $query->join('left', '#__attributes_property ap2 ON ap2.property_id = h.id');
+        $query->join('left', '#__property_attributes ap2 ON ap2.property_id = h.id');
         $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
         $query->join('left', '#__attributes_translation a2 ON a2.id = ap2.attribute_id');
 
@@ -433,11 +433,11 @@ class FcSearchModelSearch extends JModelList {
       } else {
 
         // These joins bring in the property and accommodation types for each property
-        $query->join('left', '#__attributes_property ap ON ap.property_id = h.id');
+        $query->join('left', '#__property_attributes ap ON ap.property_id = h.id');
         $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
         $query->join('left', '#__attributes a ON a.id = ap.attribute_id');
 
-        $query->join('left', '#__attributes_property ap2 ON ap2.property_id = h.id');
+        $query->join('left', '#__property_attributes ap2 ON ap2.property_id = h.id');
         $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
         $query->join('left', '#__attributes a2 ON a2.id = ap2.attribute_id');
 
@@ -446,7 +446,7 @@ class FcSearchModelSearch extends JModelList {
         $query->join('left', '#__classifications g ON g.id = h.city');
       }
 
-      // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g. 
+      // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g.
       // the type of property and whether it is self catering etc. Another option is to populate this in the property table
       // Perhaps (I suppose) as some sort of param field?
       $query->where('a.attribute_type_id = 1');
@@ -685,7 +685,7 @@ class FcSearchModelSearch extends JModelList {
 
       $query->from('#__attributes AS a');
       $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
-      $query->join('left', '#__attributes_property ap on ap.attribute_id = a.id');
+      $query->join('left', '#__property_attributes ap on ap.attribute_id = a.id');
 
       // If any other language that en-GB load in the translation based on the lang->getTag() function...
       if ($lang == 'fr') {
@@ -727,10 +727,10 @@ class FcSearchModelSearch extends JModelList {
   }
 
   /*
-   * Method to get a load of marker information based on getPropertyList 
-   * 
+   * Method to get a load of marker information based on getPropertyList
+   *
    * @return array  A list of property ids and associated info
-   * 
+   *
    */
 
   public function getMapMarkers() {
@@ -756,9 +756,9 @@ class FcSearchModelSearch extends JModelList {
 
   /*
    * Method to build a query for the getMapMarkers query to use, to, like, get the map markers
-   * 
+   *
    * @return  object  Returns a query to get a list of map markers...should probably be refined to get 10 at a time...
-   *  
+   *
    */
 
   /**
@@ -950,11 +950,11 @@ class FcSearchModelSearch extends JModelList {
   }
 
   /*
-   * Method to generate the various filter options, 
+   * Method to generate the various filter options,
    * add them to the query and then return the query object
-   * 
+   *
    * @return  query  The search query being built
-   * 
+   *
    */
 
   private function getFilterState($filter = '', JDatabaseQueryMysqli $query) {
@@ -975,11 +975,11 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($filters)) {
 
         foreach ($filters as $key => $value) {
-          $query->join('left', '#__attributes_property ap' . $value . ' ON ap' . $value . '.property_id = h.id');
+          $query->join('left', '#__property_attributes ap' . $value . ' ON ap' . $value . '.property_id = h.id');
           $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
         }
       } else {
-        $query->join('left', '#__attributes_property ' . $filter . ' ON apact.property_id = h.id');
+        $query->join('left', '#__property_attributes ' . $filter . ' ON apact.property_id = h.id');
         $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
       }
     }

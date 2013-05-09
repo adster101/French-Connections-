@@ -76,11 +76,7 @@ class HelloWorldModelUnit extends JModelAdmin {
 
       // Uh oh, need to load the new version details
       //$new_version = $this->getLatestUnitVersion($pk);
-
-
-
       //print_r($new_version);die;
-
     }
 
     // Convert to the JObject before adding other data.
@@ -167,15 +163,6 @@ class HelloWorldModelUnit extends JModelAdmin {
     }
 
     return $form;
-  }
-
-  /**
-   * Method to get the script that have to be included on the form
-   *
-   * @return string	Script files
-   */
-  public function getScript() {
-    return 'administrator/components/com_helloworld/models/forms/helloworld.js';
   }
 
   /**
@@ -271,8 +258,9 @@ class HelloWorldModelUnit extends JModelAdmin {
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
+    $new_version_required = array('');
 
-    $version = '';
+    $old_version_id = ($data['id']) ? $data['id'] : '';
 
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
@@ -280,26 +268,13 @@ class HelloWorldModelUnit extends JModelAdmin {
     // TO DO: If this is an existing unit, then we need to update the existing row with the form data, then save that rather
     // than using the form data directly (as it won't have any of the unit details that are captured on the tariffs screen...
     // (or just move the unit data from the tariffs screen...)
-
     // Allow an exception to be thrown.
     try {
 
       // If $data['new_version'] is true we need to update that new version in the version table
-      if ($data['review']) {
+      if ($data['review'] == 0) {
 
-        // Get the latest unpublished version id for this unit, that exists in the db
-        $version = $this->getLatestUnitVersion($data['id']);
-
-        if ($version->version_id > 0) {
-          // Now we are ready to save our updated unit details to the new version table
-          $table = $this->getTable('PropertyUnitsVersion');
-
-          $table->set('_tbl_key', 'version_id');
-
-          // Set the version ID that we want to bind and store the data against...
-          $table->version_id = $version->version_id;
-        }
-      } else { // Here we don't explicitly know if there is a new version
+        // Here we don't explicitly know if there is a new version
         // Load the exisiting row, if there is one.
         if ($pk > 0) {
           $table->load($pk);
@@ -310,12 +285,18 @@ class HelloWorldModelUnit extends JModelAdmin {
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
 
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
-        if ($new_version_required[0]) {
-          // Switch the table model to the version one
-          $table = $this->getTable('PropertyUnitsVersion');
-          $table->set('_tbl_key', 'version_id');
+        if ($new_version_required[0] ===  true) {
+          // As a new version is required amend the data array before we save
+          $data['id'] = '';
+          $data['review'] = '1';
+          $data['published_on'] = '';
         }
       }
+
+      // Set the table model to the appropriate key
+      // If we don't do this, the model will save against the parent_id
+      // but we want it saving against the version id
+      $table->set('_tbl_key', 'id');
 
       // Bind the data.
       if (!$table->bind($data)) {
@@ -346,60 +327,50 @@ class HelloWorldModelUnit extends JModelAdmin {
         return false;
       } else {
 
-        // At this point the table is set to unit version
-        $new_version_id = $table->version_id;
+        // Update the existing property listing to indicate that we have a new version for it.
+        $property = $this->getTable('Property', 'HelloWorldTable');
 
-        // Additional processing if a new version was created
-        if ($new_version_required[0]) {
+        $property->id = $pk;
+        $property->review = 1;
 
-          // Update the property to indicate that one of it's units has been update...
-          // This should only happen the first time we create a new version of this unit...
-          // Get the default table
-          $table = $this->getTable();
-
-          // Set the table key back to ID so the controller redirects to the right place
-          $table->set('_tbl_key', 'id');
-
-          // Update the id, review and modified dates etc
-          $table->id = $pk;
-          $table->review = 1;
-          $table->modified = JFActory::getDate()->toSql();
-
-          // Update the unit record
-          if (!$table->store()) {
-            $this->setError($table->getError());
-            return false;
-          }
-
-          // Also need to update the listing to flag it as in need of review
-          $table = $this->getTable('Property', 'HelloWorldTable');
-
-          $table->id = $data['parent_id'];
-          $table->review = 1;
-          $table->modified = JFActory::getDate()->toSql();
-
-          // Update the property record
-          if (!$table->store()) {
-            $this->setError($table->getError());
-            return false;
-          }
-
-          // Reset the table id to the unit, now we're done updating the listing...
-          $table->id = $pk;
+        if (!$property->store()) {
+          $this->setError($property->getError());
+          return false;
         }
-
-
-
       }
 
-      // Also, need to save the facilities into a new table rather than saving them directly.
-      // Save the facilities data...
-      if (!$this->savePropertyFacilities($data, $pk)) {
+      $new_version_id = ($table->id) ? $table->id : '';
+
+      // Here we may have created a new version.
+      // If so then we need to save the facilities against the new version
+      // create a copy of all images against the new version
+      // and potentially make a copy of the availability and tariffs (although this may be deferred).
+
+      if (!$this->savePropertyFacilities($data, $pk, $new_version_id)) {
         $this->setError('Problem saving facilities');
       }
 
-      // Set the table key back to ID so the controller redirects to the right place
-      $table->set('_tbl_key', 'id');
+      // Wrap this up into a neat function
+      // When a new version is created we also need to take all existing images and copy 'em
+
+      if ($new_version_required[0] === true) {
+
+        $image = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+
+        $image->setState('listlimit', '10000');
+
+        $image->setState('version_id', $old_version_id);
+
+        $images = $image->getItems();
+
+        // Shove these images into the images table against $new_version_id
+
+      }
+
+
+
+
+
 
       // Need to update the original unit to indicate that it has a new, unpublished version...
       // Clean the cache.
@@ -413,6 +384,10 @@ class HelloWorldModelUnit extends JModelAdmin {
       return false;
     }
 
+    // Set the table key back to the parent id so it redirects based on that key
+    // on not the version key id
+    $table->set('_tbl_key', 'unit_id');
+
     $pkName = $table->getKeyName();
 
     if (isset($table->$pkName)) {
@@ -424,48 +399,25 @@ class HelloWorldModelUnit extends JModelAdmin {
   }
 
   /*
-   * Method to get the version id of the most recent unpublished version
-   *
-   *
-   */
-
-  public function getLatestUnitVersion($id = '',$fields = '*') {
-    // Retrieve latest unit version
-    $db = $this->getDbo();
-    $query = $db->getQuery(true);
-    $query->select('version_id');
-    $query->from('#__property_units_versions');
-    $query->where('id = ' . (int) $id);
-    $query->where('review = 1');
-    $query->order('version_id', 'desc');
-
-    $db->setQuery((string) $query);
-
-    try {
-      $row = $db->loadObject();
-    } catch (RuntimeException $e) {
-      JError::raiseError(500, $e->getMessage());
-    }
-
-    return $row;
-  }
-
-  /*
    * Method to save the property attributes into the #__attribute_property table.
    *
    *
    *
    */
 
-  protected function savePropertyFacilities($data = array(), $id = 0, $version) {
+  protected function savePropertyFacilities($data = array(), $id = 0, $version_id = '') {
 
     if (!is_array($data) || empty($data)) {
       return true;
     }
 
+    if (empty($version_id)) {
+      return true;
+    }
+
     $attributes = array();
 
-    // For now whitelist the attributes that are supposed to be processed here...needs moving to the model...or does it?
+    // For now whitelist the attributes that are supposed to be processed here...access options need adding.
     $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability');
 
     // Loop over the data and prepare an array to save
@@ -500,7 +452,7 @@ class HelloWorldModelUnit extends JModelAdmin {
       $attributesTable = JTable::getInstance($type = 'PropertyAttributes', $prefix = 'HelloWorldTable', $config = array());
 
       // Bind the translated fields to the JTable instance
-      if (!$attributesTable->save($id, $attributes, $table)) {
+      if (!$attributesTable->save($id, $attributes, $version_id)) {
         JApplication::enqueueMessage(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_ADDING_ATTRIBUTES'), 'warning');
 
         JError::raiseWarning(500, $attributesTable->getError());

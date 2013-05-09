@@ -81,7 +81,7 @@ class HelloWorldControllerAutoRenewals extends JControllerForm {
 
   /*
    * Autorenewal controller action - checks ownership of record and redirects to listing view
-   * 
+   *
    */
 
   public function showtransactionlist() {
@@ -111,13 +111,13 @@ class HelloWorldControllerAutoRenewals extends JControllerForm {
       return false;
     }
 
-    // Set holdEditID etc    
+    // Set holdEditID etc
     $this->holdEditId($context, $recordId);
     $app->setUserState($context . '.data', null);
 
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=autorenewals&id=' . (int) $recordId, false)
+                    'index.php?option=' . $this->option . '&view=autorenewals&parent_id=' . (int) $recordId, false)
     );
   }
 

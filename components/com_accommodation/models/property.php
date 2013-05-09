@@ -90,13 +90,13 @@ class AccommodationModelProperty extends JModelForm {
 
   /**
    * Get the property listing details. This comprises of the main property and the unit. If no unit specified the first based on unit ordering is used...
-   * 
+   *
    * @return object The message to be displayed to the user
    */
   public function getItem() {
 
     if (!isset($this->item)) {
-      // Get the language for this request 
+      // Get the language for this request
       $lang = & JFactory::getLanguage()->getTag();
 
       // Get the state for this property ID
@@ -105,9 +105,9 @@ class AccommodationModelProperty extends JModelForm {
       $unit_id = $this->getState('unit.id', false);
 
       $select = '
-          pl.department, 
+          pl.department,
           pl.city,
-          unit.toilets, 
+          unit.toilets,
           unit.bathrooms,
           unit.id as unit_id,
           ( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms,
@@ -116,20 +116,20 @@ class AccommodationModelProperty extends JModelForm {
           triple_bedrooms,
           quad_bedrooms,
           twin_bedrooms,
-          pl.id, 
+          pl.id,
           pl.created_by,
-          location_details, 
-          internal_facilities_other, 
-          external_facilities_other, 
-          activities_other, 
-          getting_there, 
-          pl.title, 
-          occupancy, 
-          distance_to_coast, 
-          pl.latitude, 
+          location_details,
+          internal_facilities_other,
+          external_facilities_other,
+          activities_other,
+          getting_there,
+          pl.title,
+          occupancy,
+          distance_to_coast,
+          pl.latitude,
           pl.longitude,
-          additional_price_notes, 
-          linen_costs, 
+          additional_price_notes,
+          linen_costs,
           linen_costs,
           date_format(availability_last_updated_on, \'%D %M %Y\') as availability_last_updated_on,
           unit.unit_title,
@@ -152,7 +152,7 @@ class AccommodationModelProperty extends JModelForm {
       // 2. Load property translations for the property
 
       if ($lang === 'fr-FR') {
-        
+
       }
 
       $query = $this->_db->getQuery(true);
@@ -198,8 +198,8 @@ class AccommodationModelProperty extends JModelForm {
 
   /*
    * Function to return a list of facilities for a given property
-   * 
-   * 
+   *
+   *
    */
 
   public function getFacilities() {
@@ -217,7 +217,7 @@ class AccommodationModelProperty extends JModelForm {
 
         $query = $this->_db->getQuery(true);
         $query->select('a.title as attribute,at.title as attribute_type');
-        $query->from('#__attributes_property ap');
+        $query->from('#__property_attributes ap');
         $query->join('left', '#__attributes a on a.id = ap.attribute_id');
         $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
         $query->where('ap.property_id = ' . $id);
@@ -246,8 +246,8 @@ class AccommodationModelProperty extends JModelForm {
 
   /*
    * Function to return a list of units for a given property
-   * 
-   * 
+   *
+   *
    */
 
   public function getUnits() {
@@ -284,8 +284,8 @@ class AccommodationModelProperty extends JModelForm {
 
   /*
    * Function to return a list of reviews for a given property
-   * 
-   * 
+   *
+   *
    */
 
   public function getReviews() {
@@ -305,7 +305,7 @@ class AccommodationModelProperty extends JModelForm {
 
         $model = JModelLegacy::getInstance('Reviews', 'HelloWorldModel');
 
-        // Attempt to load the reviews for this property 
+        // Attempt to load the reviews for this property
         // Need to get only the published reviews
         $model->getListQuery();
 
@@ -326,8 +326,8 @@ class AccommodationModelProperty extends JModelForm {
 
   /*
    * Function to return availability calendar for a given property
-   * 
-   * 
+   *
+   *
    */
 
   public function getAvailability() {
@@ -345,7 +345,7 @@ class AccommodationModelProperty extends JModelForm {
 
     $availabilityTable = JTable::getInstance('Availability', 'HelloWorldTable', array());
 
-    // Attempt to load the availability for this property 
+    // Attempt to load the availability for this property
     $availability = $availabilityTable->load($unit_id);
 
     // Check the $availability loaded correctly
@@ -387,7 +387,7 @@ class AccommodationModelProperty extends JModelForm {
     // Get the state for this property ID
     $id = $this->getState('unit.id');
 
-    // Attempt to load the availability for this property 
+    // Attempt to load the availability for this property
     $tariffs = $tariffsTable->load($id);
 
     // Check the $availability loaded correctly
@@ -438,8 +438,8 @@ class AccommodationModelProperty extends JModelForm {
   }
 
   /*
-   * Function to get a list of images for a property 
-   * 
+   * Function to get a list of images for a property
+   *
    */
 
   public function getImages() {
@@ -494,7 +494,7 @@ class AccommodationModelProperty extends JModelForm {
 
   /*
    * Function to return the location breadcrumb trail for a property
-   *  
+   *
    */
 
   public function getCrumbs() {

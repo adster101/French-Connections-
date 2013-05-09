@@ -53,6 +53,22 @@ class ImportControllerAttributes extends JControllerForm {
     $previous_property_id = '';
 
     while (($line = fgetcsv($handle)) !== FALSE) {
+
+      // Initially we need to get the unit version id from the #__unit_versions table
+      $query = $db->getQuery(true);
+
+      $query->select('id');
+      $query->from('#__unit_versions');
+      $query->where('unit_id = ' . (int) $line[0]);
+
+      // Set the query.
+      $db->setQuery($query);
+
+      // Do it, baby!
+      $version_id = $db->loadRow();
+
+      $query->clear();
+
       // The list of property attributes is a comma separated list so it is exploded to an array
       $property_attributes = explode(',', $line[2]);
 
@@ -60,23 +76,25 @@ class ImportControllerAttributes extends JControllerForm {
 
       $property_id = $line[0];
 
-
-      // Start building a new query to insert any attributes... 
+      // Start building a new query to insert any attributes...
       $query = $db->getQuery(true);
 
-      $query->insert('#__attributes_property');
+      $query->insert('#__property_attributes');
 
-      $query->columns(array('property_id', 'attribute_id'));
+      $query->columns(array('version_id', 'property_id', 'attribute_id'));
 
       // Loop over the list of attributes for the property and check if each attribute is in the attributes list
       foreach ($property_attributes as $key => $value) {
         $insert_string = '';
         if (in_array($value, $attributes)) {
-          $insert_string = "$property_id,$value";
+          $insert_string = "$version_id[0],$property_id,$value";
           $query->values($insert_string);
           $go = true;
         }
       }
+
+      if (!empty($version_id[0])) {
+
 
       // Set and execute the query
       $db->setQuery($query);
@@ -87,6 +105,7 @@ class ImportControllerAttributes extends JControllerForm {
           print_r($insert_string);
           die;
         }
+      }
       }
     }
 

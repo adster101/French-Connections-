@@ -17,7 +17,7 @@ class HelloWorldTablePropertyAttributes extends JTable
 	 */
 	function __construct(&$db)
 	{
-		parent::__construct('#__attributes_property', 'property_id', $db);
+		parent::__construct('#__property_attributes', 'property_id', $db);
 	}
 
 	/**
@@ -38,7 +38,7 @@ class HelloWorldTablePropertyAttributes extends JTable
     // This is probably reused on the search part
 		$query = $this->_db->getQuery(true);
 		$query->select('at.field_name,pa.attribute_id');
-		$query->from('#__attributes_property as pa');
+		$query->from('#__property_attributes as pa');
     $query->leftJoin('#__attributes a on a.id = pa.attribute_id');
 
     $query->leftJoin('#__attributes_type at on at.id = a.attribute_type_id');
@@ -78,11 +78,11 @@ class HelloWorldTablePropertyAttributes extends JTable
 
   /**
    * Overloaded save function
-   * Takes the availability periods and saves them into the availability table.
+   * Takes the facilities and saves them into the availability table.
    *
    *
    */
-  public function save ($id = null, $attributes = array(), $table )
+  public function save ($id = null, $attributes = array(), $version_id = '')
   {
 
     if (!$this->check()) {
@@ -95,7 +95,7 @@ class HelloWorldTablePropertyAttributes extends JTable
       // Firstly need to delete these...in a transaction would be better
       $query = $this->_db->getQuery(true);
 
-      $query->delete('#__attributes_property')->where('property_id = ' . $id);
+      $query->delete('#__property_attributes')->where('version_id = ' . $version_id);
 
 
       $this->_db->setQuery($query);
@@ -110,12 +110,12 @@ class HelloWorldTablePropertyAttributes extends JTable
 
       $query = $this->_db->getQuery(true);
 
-      $query->insert('#__attributes_property');
+      $query->insert('#__property_attributes');
 
-			$query->columns(array('property_id','attribute_id'));
+			$query->columns(array('version_id','property_id','attribute_id'));
 
       foreach ($attributes as $attribute) {
-        $insert_string = "$id," .$attribute."";
+        $insert_string = "$version_id, $id," .$attribute."";
         $query->values($insert_string);
       }
 

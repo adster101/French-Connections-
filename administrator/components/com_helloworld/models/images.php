@@ -20,10 +20,10 @@ class HelloWorldModelImages extends JModelList {
    */
   protected function getListQuery() {
 
-    // Get the listing details from the session...
+    // Get the listing details from the model state...
     $app = JFactory::getApplication();
-    $id = $app->input->get('id', '', 'int');
-
+    $id = $this->getState('version_id','');
+    
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
@@ -37,7 +37,7 @@ class HelloWorldModelImages extends JModelList {
     ');
     $query->from('#__property_images_library');
 
-    $query->where('property_id = ' . (int) $id);
+    $query->where('version_id = ' . (int) $id);
 
     $query->order('ordering', 'asc');
 
@@ -46,8 +46,8 @@ class HelloWorldModelImages extends JModelList {
 
   /*
    * Method to generate a set of profile images for images being uploaded via the image manager
-   * 
-   * 
+   *
+   *
    */
 
   public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 550, $max_height = 375) {
@@ -81,7 +81,7 @@ class HelloWorldModelImages extends JModelList {
         $width = $imgObj->getWidth();
         $height = $imgObj->getHeight();
 
-        // If the width is greater than the height just create it 
+        // If the width is greater than the height just create it
         if (($width > $height) && $width > $max_width) {
 
           // This image is roughly landscape orientated with a width greater than max width allowed
@@ -100,7 +100,7 @@ class HelloWorldModelImages extends JModelList {
 
           // Put it out to a file
           $profile->tofile($file_path);
-          
+
         } else if ($width < $height) {
 
           // This image is roughly portrait orientated with a width greater than the max width allowed
@@ -112,7 +112,7 @@ class HelloWorldModelImages extends JModelList {
             $blank_image = $this->createBlankImage($max_width, $max_height);
 
             // Write out the gallery file
-            // Need to do this as imagecopy requires a handle  
+            // Need to do this as imagecopy requires a handle
             $profile->tofile($file_path);
 
             // Load the existing image
@@ -147,7 +147,7 @@ class HelloWorldModelImages extends JModelList {
           imagejpeg($blank_image, $file_path, 100);
         }
       } catch (Exception $e) {
-        
+
       }
     }
   }

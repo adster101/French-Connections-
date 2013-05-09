@@ -81,7 +81,7 @@ class HelloWorldControllerProperty extends JControllerForm {
 
   public function postSaveHook(JModelLegacy $model, $validData = array()) {
 
-    
+
 
 
 
@@ -118,8 +118,7 @@ class HelloWorldControllerProperty extends JControllerForm {
   public function cancel($key = null) {
     if (parent::cancel($key)) {
       $app = JFactory::getApplication();
-      $recordId = $app->input->getInt('id');
-
+      $recordId = $app->input->getInt('parent_id');
 
       $this->view_list = ($recordId) ? 'listing' : 'properties';
 

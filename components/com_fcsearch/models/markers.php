@@ -43,7 +43,7 @@ class FcSearchModelMarkers extends JModelList
 		{
 			$items[$k] = $v->title;
 		}
-    
+
 		return $items;
 	}
 
@@ -112,11 +112,11 @@ class FcSearchModelMarkers extends JModelList
 
     // Get the store id.
     $store = $this->getStoreId('getResults');
-    
+
     // Get the input and derive the language
     $input = JFactory::getApplication()->input;
     $lang = $input->get('lang');
-    
+
     // Use cached data if possible.
     if ($this->retrieve($store)) {
       return $this->retrieve($store);
@@ -137,7 +137,7 @@ class FcSearchModelMarkers extends JModelList
     } else {
       $query->from($db->quoteName('#__classifications'));
     }
-    $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));    
+    $query->where($db->quoteName('alias') . ' = ' . $db->quote($this->getState('list.searchterm', '')));
     $query->where('alias' . ' = ' . $db->quote($this->getState('list.searchterm', '')));
 
     // Load the result (should only be one) from the database.
@@ -148,7 +148,7 @@ class FcSearchModelMarkers extends JModelList
     } catch (Exception $e) {
       // Log any exception
     }
-    
+
     // No results found, return an empty array
     if (empty($row)) {
       return array();
@@ -158,7 +158,7 @@ class FcSearchModelMarkers extends JModelList
       $this->latitude = $row[2];
       $this->longitude = $row[3];
     }
-    
+
     // Proceed and get all the properties in this location
     // TO DO - ensure this works in French as well
     $query->clear();
@@ -178,34 +178,34 @@ class FcSearchModelMarkers extends JModelList
               b.title as property_type,
               d.title as accommodation_type,
               (
-                select 
-                  min(tariff) 
-                from 
-                  qitz3_tariffs 
-                where 
+                select
+                  min(tariff)
+                from
+                  qitz3_tariffs
+                where
                   id = h.id
               ) as from_rate,
               e.title as tariff_based_on,
               f.title as base_currency,
               (
-                select 
+                select
                   count(*)
-                from 
+                from
                   qitz3_reviews
-                where 
+                where
                   property_id = h.id
                 group by h.id
               ) as review_count
     ');
 
-    
+
     if ($this->level == 4) {
       // Add the distance based bit in as this is a town/city search
       $query->select('
-        ( 3959 * acos(cos(radians(' . $this->longitude . ')) * 
-          cos(radians(h.latitude)) * 
+        ( 3959 * acos(cos(radians(' . $this->longitude . ')) *
+          cos(radians(h.latitude)) *
           cos(radians(h.longitude) - radians(' . $this->latitude . '))
-          + sin(radians(' . $this->longitude . ')) 
+          + sin(radians(' . $this->longitude . '))
           * sin(radians(h.latitude)))) AS distance
         ');
       if ($lang =='fr') {
@@ -221,12 +221,12 @@ class FcSearchModelMarkers extends JModelList
         $query->from('#__classifications c');
       }
     }
-    
+
     if ($this->level == 1) { // Area level
       $query->join('left', '#__helloworld h on c.id = h.area');
     } else if ($this->level == 2) { // Region level
       $query->join('left', '#__helloworld h on c.id = h.region');
-    } else if ($this->level == 3) { // Department level 
+    } else if ($this->level == 3) { // Department level
       $query->join('left', '#__helloworld h on c.id = h.department');
     }
 
@@ -234,16 +234,16 @@ class FcSearchModelMarkers extends JModelList
       $query->join('left', '#__attributes_translation b ON b.id = h.property_type');
       $query->join('left', '#__attributes_translation d ON d.id = h.accommodation_type');
       $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
-      $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');      
-      $query->join('left', '#__classifications_translations g ON g.id = h.city');      
+      $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');
+      $query->join('left', '#__classifications_translations g ON g.id = h.city');
     } else {
       $query->join('left', '#__attributes b ON b.id = h.property_type');
       $query->join('left', '#__attributes d ON d.id = h.accommodation_type');
       $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
-      $query->join('left', '#__attributes f ON f.id = h.base_currency');      
+      $query->join('left', '#__attributes f ON f.id = h.base_currency');
       $query->join('left', '#__classifications g ON g.id = h.city');
     }
-    
+
     if ($this->getState('list.start_date')) {
       $query->join('left', '#__availability a on h.id = a.id');
       $query->where('a.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
@@ -266,25 +266,25 @@ class FcSearchModelMarkers extends JModelList
     if ($this->level == 4) {
       $query->having('distance < 50');
     }
-    
 
-    // Add the activities filter to the query 
+
+    // Add the activities filter to the query
     if ($this->getState('list.activities', array())) {
 
       $activities = $this->getState('list.activities');
       if (is_array($activities)) {
 
         foreach ($activities as $activity => $id) {
-          $query->join('left', '#__attributes_property ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
+          $query->join('left', '#__property_attributes ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
           $query->where('ap' . $activity . '.attribute_id = ' . (int) $id);
         }
       } elseif ($this->getState('list.activities')) {
-        $query->join('left', '#__attributes_property apact ON apact.property_id = h.id');
+        $query->join('left', '#__property_attributes apact ON apact.property_id = h.id');
         $query->where('apact.attribute_id = ' . $this->getState('list.activities'));
       }
     }
 
-    // Add the property facilities filter to the query 
+    // Add the property facilities filter to the query
     if ($this->getState('list.property_facilities', array())) {
 
       $facilities = $this->getState('list.property_facilities');
@@ -292,37 +292,37 @@ class FcSearchModelMarkers extends JModelList
       if (is_array($facilities)) {
 
         foreach ($facilities as $facility => $id) {
-          $query->join('left', '#__attributes_property ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
+          $query->join('left', '#__property_attributes ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
           $query->where('ap' . $facility . '.attribute_id = ' . (int) $id);
         }
       } elseif ($this->getState('list.property_facilities')) {
-        $query->join('left', '#__attributes_property apfac ON apfac.property_id = h.id');
+        $query->join('left', '#__property_attributes apfac ON apfac.property_id = h.id');
         $query->where('apfac.attribute_id = ' . $this->getState('list.property_facilities'));
       }
     }
-    
+
     // Make sure we only get live properties...
     $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
 
     // We don't want the root element
     $query->where('h.id !=1');
-    
+
     // Also, we only want the parent properties, for the map, otherwise units overlayed
     $query->where('h.level = 1');
-    
+
     // Load the results from the database.
     $db->setQuery($query);
     $rows = $db->loadObjectList();
-    
-    // Process results into 
+
+    // Process results into
     // Push the results into cache.
     $this->store($store, $rows);
 
     // Return the results.
     return $this->retrieve($store);
-  }  
-  
-  
+  }
+
+
   /**
    * Method to store data in cache.
    *
@@ -376,10 +376,10 @@ class FcSearchModelMarkers extends JModelList
     }
 
     return $data;
-  }  
-  
-  
-  
+  }
+
+
+
 
   /**
    * Method to auto-populate the model state.  Calling getState in this method will result in recursion.
@@ -405,8 +405,8 @@ class FcSearchModelMarkers extends JModelList
     // Get the query string.
     $q = !is_null($request->get('s_kwds')) ? $request->get('s_kwds', '', 'string') : $params->get('q');
     $q = $app->stringURLSafe($filter->clean($q, 'string'));
-    
-   
+
+
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');
 
@@ -425,7 +425,7 @@ class FcSearchModelMarkers extends JModelList
 
     // End date
     $this->setState('list.end_date', $input->get('end_date', '', 'date'));
-    // Store in the session 
+    // Store in the session
     $app->setUserState('list.end_date', $input->get('end_date', '', 'date'));
 
     // Set the match limit.
@@ -434,25 +434,25 @@ class FcSearchModelMarkers extends JModelList
     // Load the user state.
     $this->setState('user.id', (int) $user->get('id'));
     $this->setState('user.groups', $user->getAuthorisedViewLevels());
-    
+
     // Get the rest of the filter options such as property type, facilities and activites etc.
     $activities = $request->get('activities','','array');
-    
+
     $property_facilities = $input->get('internal');
 
     // populateFilterState pushes all the filter IDs into the state
     $this->populateFilterState($activities, 'activities');
-    $this->populateFilterState($property_facilities, 'property_facilities');    
-    
+    $this->populateFilterState($property_facilities, 'property_facilities');
+
   }
-  
+
   /*
    * Method to generate the filter state ids for later filtering in the db
-   * 
+   *
    */
-  
+
   private function populateFilterState($input, $label) {
-    
+
     if (is_array($input)) {
 
       $ids = array();
@@ -465,11 +465,11 @@ class FcSearchModelMarkers extends JModelList
       }
 
       $this->setState('list.' . $label, $ids);
-            
+
     } elseif (!empty($input)) {
 
       $id = (int) array_pop(explode('_', $input));
       $this->setState('list.' . $label, $id);
     }
-  }  
+  }
 }

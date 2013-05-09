@@ -29,7 +29,6 @@ class ImportControllerImages extends JControllerForm {
 
     $previous_property_id = '';
 
-    $db->truncateTable('#__property_images_gallery');
     $db->truncateTable('#__property_images_library');
 
     // Create a log file for the email kickers
@@ -44,7 +43,23 @@ class ImportControllerImages extends JControllerForm {
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
     while (($line = fgetcsv($handle)) !== FALSE) {
-      
+
+      // Initially we need to get the unit version id from the #__unit_versions table
+      $query = $db->getQuery(true);
+
+      $query->select('id');
+      $query->from('#__unit_versions');
+      $query->where('unit_id = ' . (int) $line[0]);
+
+      // Set the query.
+      $db->setQuery($query);
+
+      // Do it, baby!
+      $version_id = $db->loadRow();
+
+      $query->clear();
+
+
       $ordering = 1;
       // Firstly, get all the images associated with this unit
       $external_images = explode(',', $line[2]);
@@ -57,8 +72,8 @@ class ImportControllerImages extends JControllerForm {
       // Implode into a comma delimited string
       $images = implode(',', array_filter($external_images));
 
-      
-      
+
+
       // Get a query object
       $query = $db->getQuery(true);
 
@@ -74,38 +89,41 @@ class ImportControllerImages extends JControllerForm {
       // Images array has the images in the order we want
       // Existing images has the file details we want
       // Need to reorder existing images based on images.
-      
+
       foreach ($existing_images as $key => &$value) {
         // $key is the file id
-        $position = array_search($key, explode(',',$images));
-        
+        $position = array_search($key, explode(',', $images));
+
         $value['ordering'] = $position + 1;
-        
       }
-      
+
       $query->clear();
       $query = $db->getQuery(true);
 
       $query->insert('#__property_images_library');
-      $query->columns(array('property_id', 'image_file_name', 'caption', 'ordering'));
+      $query->columns(array('version_id','property_id', 'image_file_name', 'caption', 'ordering'));
 
       // Loop over the list of images and insert them...
       // Need to select them all from the file_details table first...
       $insert_string = '';
 
       foreach ($existing_images as $images => $image) {
-        $insert_string = "$line[0],'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'," . (int) $image['ordering'];
+        $insert_string = "$version_id[0],$line[0],'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'," . (int) $image['ordering'];
         $query->values($insert_string);
       }
 
       // Set and execute the query
       $db->setQuery($query);
 
-      if (!$db->execute()) {
-        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-        print_r($db->getErrorMsg());
-        print_r($insert_string);
-        die;
+      // Only do this is we find a unit version for this unit (e.g. import units first)
+      if (!empty($version_id[0])) {
+
+        if (!$db->execute()) {
+          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+          print_r($db->getErrorMsg());
+          print_r($insert_string);
+          die;
+        }
       }
 
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
@@ -143,8 +161,7 @@ class ImportControllerImages extends JControllerForm {
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumbs', 100, 100);
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumb', 210, 120);
         } catch (Exception $e) {
-          
-          
+
         }
       }
     }
