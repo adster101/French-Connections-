@@ -58,13 +58,14 @@ $data['progress'] = $this->progress;
           <tbody>
             <?php foreach ($this->items as $i => $item): ?>
               <?php if ($canEditOwn) : ?>
+                <?php $urlParam = (empty($item->unit_id) ? 'listing_id' : 'unit_id'); ?>
                 <tr>
                   <td>
-                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item) ?>
-                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'unit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item) ?>
-                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item) ?>
-                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item) ?>
-                    <?php echo JHtmlProperty::progressButton($item->listing_id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, $urlParam) ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item) ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item) ?>
                   </td>
                 </tr>
               <?php else : ?>
@@ -81,6 +82,8 @@ $data['progress'] = $this->progress;
         </table>
         <?php echo $this->pagination->getListFooter(); ?>
         <input type="hidden" name="task" value="" />
+        <input type="hidden" name="listing_id" value="<?php echo $item->id ?>" />
+
         <?php echo JHtml::_('form.token'); ?>
     </div>
     <div class="span2">

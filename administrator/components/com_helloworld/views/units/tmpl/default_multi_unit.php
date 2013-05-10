@@ -27,7 +27,6 @@ $data = array();
 $data['snapshot'] = $this->items;
 $data['form'] = $this->form;
 $data['progress'] = $this->progress;
-
 ?>
 
 <?php if (!empty($this->sidebar)): ?>
@@ -38,24 +37,18 @@ $data['progress'] = $this->progress;
   <?php else : ?>
     <div id="j-main-container">
     <?php endif; ?>
-
-
-
-      <?php
-        $layout = new JLayoutFile('submit_for_approval', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        echo $layout->render($data);
-      ?>
-
-
-
-
+    <?php
+    $layout = new JLayoutFile('submit_for_approval', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+    echo $layout->render($data);
+    ?>
     <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
-
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
       <table class="table table-striped">
         <thead>
-        <th>
-        </th>
+          <tr>
+            <th>
+            </th>
+          </tr>
         </thead>
         <tr>
           <td width="15%">
@@ -74,28 +67,49 @@ $data['progress'] = $this->progress;
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>
-            <th></th>
+            <th width="2%">
+              <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+            </th>
+            <?php if ($canDo->get('core.edit.state')) : ?>
+              <th>
+                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_ACTIVE'); ?>
+              </th>
+            <?php endif; ?>
+            <th>
+              Ordering
+            </th>
+            <th colspan="2">
+              Units
+            </th>
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($this->items as $i => $item):
-
-            ?>
+          <?php foreach ($this->items as $i => $item): ?>
             <?php if ($canEditOwn) : ?>
               <tr>
-                <td width="15%">
+                <td>
+                  <?php echo JHtml::_('grid.id', $i, $item->unit_id); ?>
+                </td>
+                <?php if ($canDo->get('core.edit.state')) : ?>
+                  <td>
+                    <?php echo JHtml::_('jgrid.published', $item->published, $i, 'units.', $canPublish, 'cb', $item->created_on); ?>
+                  </td>
+                <?php endif; ?>
+                <td>
+                  <?php echo $this->pagination->orderUpIcon($i, true, 'units.orderup', 'JLIB_HTML_MOVE_UP', 1); ?>
+                  <?php echo $this->pagination->orderDownIcon($i, count($this->items), true, 'units.orderdown', 'JLIB_HTML_MOVE_DOWN', 1); ?>
+                </td>
+                <td>
                   <strong><?php echo JText::_($item->unit_title) ?></strong>
                 </td>
 
                 <td>
-                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item,'unit_id') ?>
-                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item,'unit_id') ?>
-                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item,'unit_id') ?>
-                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item,'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
+                  <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
                 </td>
-                <td>
-                  Order Up/Down
-                </td>
+
               </tr>
             <?php else : ?>
             <?php endif; ?>
@@ -109,8 +123,11 @@ $data['progress'] = $this->progress;
         </tfoot>
       </table>
       <input type="hidden" name="extension" value="<?php echo 'com_helloworld'; ?>" />
+      <input type="hidden" name="boxchecked" value="" />
+
       <?php echo $this->pagination->getListFooter(); ?>
       <input type="hidden" name="task" value="" />
+      <input type="hidden" name="listing_id" value="<?php echo $this->id ?>" />
       <?php echo JHtml::_('form.token'); ?>
   </div>
 

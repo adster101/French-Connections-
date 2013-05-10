@@ -9,7 +9,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerUnit extends JControllerForm {
+class HelloWorldControllerUnitVersions extends JControllerForm {
 
   protected $extension;
 
@@ -84,11 +84,11 @@ class HelloWorldControllerUnit extends JControllerForm {
     if (parent::cancel($key)) {
 
       $app = JFactory::getApplication();
-      $data = $app->input->get('jform',array(),'array');
+      $data = $app->input->get('jform', array(), 'array');
 
       $recordId = ($data['parent_id']) ? $data['parent_id'] : 0;
 
-      $this->view_list = ($recordId) ? 'listing' : 'properties';
+      $this->view_list = ($recordId) ? 'units' : 'properties';
 
       if ($recordId > 0) {
         $this->setRedirect(
@@ -101,5 +101,26 @@ class HelloWorldControllerUnit extends JControllerForm {
     }
   }
 
+  public function edit($key = null, $urlVar = null) {
+
+
+    $listing_id = JFactory::getApplication()->input->get('l', '', 'int');
+
+    if (!empty($listing_id)) {
+
+
+      if (parent::edit($key, $urlVar)) {
+        $this->setRedirect(
+                JRoute::_(
+                        'index.php?option=' . $this->option . '&view=' . $this->view_item
+                        . $this->getRedirectToItemAppend($recordId, $urlVar) . '&listing_id=' . (int) $listing_id, false
+                )
+        );
+      }
+    } else {
+      parent::edit($key, $urlVar);
+    }
+
+  }
 
 }

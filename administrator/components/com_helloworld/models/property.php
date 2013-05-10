@@ -328,6 +328,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
     if (!empty($location_details)) {
+      $data['country'] = $location_details[0];
       $data['area'] = $location_details[1];
       $data['region'] = $location_details[2];
       $data['department'] = $location_details[3];
@@ -340,10 +341,9 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Allow an exception to be thrown.
     try {
 
-      // If $data['review'] is true we need to update that new version in the version table
+      // If $data['review'] is true we need to check whether a new version is required
       if ($data['review'] == 0) {
 
-        // Here we don't explicitly know if there is a new version
         // Load the exisiting row, if there is one.
         if ($pk > 0) {
           $table->load($pk);
@@ -353,7 +353,6 @@ class HelloWorldModelProperty extends JModelAdmin {
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
 
-
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
         if ($new_version_required[0]) {
 
@@ -361,6 +360,22 @@ class HelloWorldModelProperty extends JModelAdmin {
           $data['id'] = '';
           $data['review'] = '1';
           $data['published_on'] = '';
+        }
+      }
+
+      // If this is a new propery then we need to generate a 'stub' entry into the propery table
+      // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
+      if ($isNew) {
+
+        $new_property_id = $this->createNewProperty($data);
+
+        if (!$new_property_id) {
+
+          // Problem creating the new property stub...
+          $this->setError('There was a problem createing your property. Please try again.');
+          return false;
+        } else {
+          $data['parent_id'] = $new_property_id;
         }
       }
 
@@ -396,12 +411,16 @@ class HelloWorldModelProperty extends JModelAdmin {
       if (!$table->store()) {
         $this->setError($table->getError());
         return false;
-      } else {
+      }
+
+      // If not a new property mark the property listing as for review
+      // TO DO: look at this - ensure that new props can't be published without review
+      if (!$isNew) {
 
         // Update the existing property listing to indicate that the listing has been updated
         $property = $this->getTable('Property', 'HelloWorldTable');
 
-        $property->id = $pk;
+        $property->id = $table->parent_id;
         $property->review = 1;
 
         if (!$property->store()) {
@@ -413,12 +432,15 @@ class HelloWorldModelProperty extends JModelAdmin {
       // Save any admin notes, if present
       if (!empty($data['note'])) {
 
+
         $note = array();
 
         $note['property_id'] = $data['parent_id'];
         $note['state'] = 1;
         $note['body'] = $data['note'];
         $note['created_time'] = JFactory::getDate()->toSql();
+
+        // $this->saveAdminNote($note);
 
         $note_table = $this->getTable('Note', 'HelloWorldTable');
 
@@ -466,6 +488,28 @@ class HelloWorldModelProperty extends JModelAdmin {
     $this->setState($this->getName() . '.new', $isNew);
 
     return true;
+  }
+
+  public function createNewProperty($data = array()) {
+
+    if (empty($data)) {
+      return false;
+    }
+
+    $property_table = $this->getTable('Property', 'HelloWorldTable');
+
+    if (!$property_table->bind($data)) {
+      $this->setErrro($property_table->getError());
+      return false;
+    }
+
+    // Optional further sanity check after data has been validated, filtered, and about to be checked...
+    //$this->prepareTable($property_table);
+    if (!$property_table->store()) {
+      return false;
+    }
+
+    return $property_table->id;
   }
 
 }

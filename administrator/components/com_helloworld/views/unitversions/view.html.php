@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewUnit extends JViewLegacy
+class HelloWorldViewUnitVersions extends JViewLegacy
 {
 	/**
 	 * display method of Hello view
@@ -19,12 +19,11 @@ class HelloWorldViewUnit extends JViewLegacy
 
     $this->state = $this->get('State');
 
+    // Get the unit item...
+		$this->item = $this->get('Item');
 
     // Get the unit edit form
 		$this->form = $this->get('Form');
-
-    // Get the unit item...
-		$this->item = $this->get('Item');
 
     $this->languages = HelloWorldHelper::getLanguages();
 		$this->lang = HelloWorldHelper::getLang();
@@ -71,23 +70,23 @@ class HelloWorldViewUnit extends JViewLegacy
     // Built the actions for new and existing records.
 		if ($isNew)
 		{
-			JToolBarHelper::cancel('unit.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
 			// For new records, check the create permission.
 			if ($canDo->get('core.create'))
 			{
-				JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 		}
 		else
 		{
-			JToolBarHelper::cancel('unit.cancel', 'JTOOLBAR_CLOSE');
+			JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
 			if ($canDo->get('core.edit.own'))
 			{
 				// We can save the new record
-				JToolBarHelper::save('unit.save', 'JTOOLBAR_SAVE');
-        JToolBarHelper::apply('unit.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
+        JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
 			}
 		}
 

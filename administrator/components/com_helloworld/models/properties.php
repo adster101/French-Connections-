@@ -197,8 +197,8 @@ class HelloWorldModelProperties extends JModelList {
       // If snooze state is not set or set to hide snoozed...
       if ($snooze_state == false || $snooze_state == 1) {
 
-        // ...hide snoozed properties
-        $query->where('a.snooze_until < NOW()');
+        // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
+        $query->where('(a.snooze_until < NOW() OR a.snooze_until is null)');
       } elseif ($snooze_state == 2) {
 
         // Don't filter, user wants to see all snoozed props as well as not snoozed etc

@@ -210,11 +210,11 @@ class JHtmlProperty {
       $progress_icon = 'ok';
       $id = $listing_id;
 
-    } elseif (empty($unit_id) && $task == 'unit') { // This property has no unit, or unit details not completed...
+    } elseif (empty($unit_id) && $task == 'unitversions') { // This property has no unit, or unit details not completed...
 
       $active = true;
       $progress_icon = 'warning';
-      $id = $unit_id;
+      $id = $listing_id;
 
     } elseif (!empty($unit_id) && $task == 'images') {
 
@@ -234,7 +234,7 @@ class JHtmlProperty {
       $progress_icon = ($item->tariffs > 0) ? 'ok' : 'warning';
       $id = $unit_id;
 
-    } elseif (!empty($unit_id) && $task == 'unit') {
+    } elseif (!empty($unit_id) && $task == 'unitversions') {
 
       $active = true;
       $progress_icon = 'ok';

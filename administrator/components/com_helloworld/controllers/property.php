@@ -73,18 +73,11 @@ class HelloWorldControllerProperty extends JControllerForm {
 
       // If the owner matches 'me' then do the test.
       if ($ownerId == $userId) {
+
         return true;
       }
     }
     return false;
-  }
-
-  public function postSaveHook(JModelLegacy $model, $validData = array()) {
-
-
-
-
-
   }
 
   /*
@@ -105,14 +98,19 @@ class HelloWorldControllerProperty extends JControllerForm {
               JRoute::_(
                       'index.php?option=' . $this->option, false)
       );
+
+			$this->setMessage('blah', 'error');
+
+      return false;
+
     }
 
     // Set holdEditID etc
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $listing_id, false)
+                    'index.php?option=' . $this->option . '&view=units&id=' . (int) $listing_id, false)
     );
-
+    return true;
   }
 
   public function cancel($key = null) {
@@ -120,7 +118,7 @@ class HelloWorldControllerProperty extends JControllerForm {
       $app = JFactory::getApplication();
       $recordId = $app->input->getInt('parent_id');
 
-      $this->view_list = ($recordId) ? 'listing' : 'properties';
+      $this->view_list = ($recordId) ? 'units' : 'properties';
 
       if ($recordId > 0) {
         $this->setRedirect(

@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class HelloWorldViewListing extends JViewLegacy {
+class HelloWorldViewUnits extends JViewLegacy {
 
   protected $state;
 
@@ -88,7 +88,7 @@ class HelloWorldViewListing extends JViewLegacy {
       }
 
       if ($canDo->get('core.create')) {
-        JToolBarHelper::addNew('unit.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
+        JToolBarHelper::addNew('unitversions.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
       }
 
       if ($canDo->get('helloworld.property.preview')) {

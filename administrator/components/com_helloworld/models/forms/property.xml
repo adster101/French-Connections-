@@ -133,6 +133,7 @@
     </field>
   </fieldset>
 
+
   <fieldset name="owner">
 
     <field
@@ -151,6 +152,13 @@
       class="readonly input-larges"
       filter="unset"
       readonly="true" />
+    <field
+      labelclass="control-label"
+      name="created_by"
+      type="user"
+      filter="int"
+      required="true"
+    />
   </fieldset>
 
   <fieldset name="notes">
