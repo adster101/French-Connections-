@@ -28,6 +28,7 @@ $data['snapshot'] = $this->items;
 $data['form'] = $this->form;
 $data['progress'] = $this->progress;
 ?>
+<div class="row-fluid">
 
 <?php if (!empty($this->sidebar)): ?>
   <div id="j-sidebar-container" class="span2">
