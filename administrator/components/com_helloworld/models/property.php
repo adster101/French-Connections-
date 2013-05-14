@@ -199,11 +199,8 @@ class HelloWorldModelProperty extends JModelAdmin {
 
   protected function preprocessForm(JForm $form, $data) {
 
-    // More robustly checked on the component level permissions?
-    // E.g. at the moment any user who is not owner can edit this?
-    // e.g. add a new permission core.edit.property.changeparent
-
     $canDo = $this->getState('actions.permissions', array());
+
     // If we don't come from a view then this maybe empty so we reset it.
     if (empty($canDo)) {
       $canDo = HelloWorldHelper::getActions();

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset>
+
+    <field
+      name="id"
+      type="text"
+      default="0"
+      label="COM_INVOICES_FORM_LBL_INVOICE_ID"
+      readonly="true"
+      class="readonly"
+      description="JGLOBAL_FIELD_ID_DESC"
+    />
+
+    <field
+      name="created_by"
+      type="createdby"
+      default=""
+      label="COM_INVOICES_FORM_LBL_INVOICE_CREATED_BY"
+      description="COM_INVOICES_FORM_DESC_INVOICE_CREATED_BY"  />
+
+    <field name="user_id" type="user"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_USER_ID"
+           description="COM_INVOICES_FORM_DESC_INVOICE_USER_ID"
+
+
+                 required="true"
+           class="input-small"
+           filter="int" />
+
+    <field name="date_created" type="text" size="40" class="inputbox"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_DATE_CREATED"
+           description="COM_INVOICES_FORM_DESC_INVOICE_DATE_CREATED"
+           default="0000-00-00 00:00:00"
+
+
+        filter="safehtml" />
+
+    <field name="currency" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_CURRENCY"
+           description="COM_INVOICES_FORM_DESC_INVOICE_CURRENCY"
+
+
+                 required="true"
+           readonly="true"
+           filter="string"
+           size="3"
+           maxlength="3" />
+
+    <field name="exchange_rate" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_EXCHANGE_RATE"
+           description="COM_INVOICES_FORM_DESC_INVOICE_EXCHANGE_RATE"
+
+
+                 required="true"
+           readonly="true"
+           filter="int"
+           size="1"
+           maxlength="1" />
+
+    <field name="invoice_type" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_INVOICE_TYPE"
+           description="COM_INVOICES_FORM_DESC_INVOICE_INVOICE_TYPE"
+
+
+                 required="true"
+           filter="string"
+           size="1"
+           maxlength="1" />
+
+    <field name="journal_memo" type="textarea"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_JOURNAL_MEMO"
+           description="COM_INVOICES_FORM_DESC_INVOICE_JOURNAL_MEMO"
+
+
+                 required="true"
+           cols="100"
+           rows="8"
+           filter="string" />
+
+    <field name="total_net" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_TOTAL_NET"
+           description="COM_INVOICES_FORM_DESC_INVOICE_TOTAL_NET"
+
+
+
+            filter="float"
+           size="10"
+           maxlength="10" />
+
+    <field name="vat" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_VAT"
+           description="COM_INVOICES_FORM_DESC_INVOICE_VAT"
+
+
+
+            filter="float"
+           size="9"
+           maxlength="9" />
+
+    <field name="property_id" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_PROPERTY_ID"
+           description="COM_INVOICES_FORM_DESC_INVOICE_PROPERTY_ID"
+
+
+                 required="true"
+           filter="int" />
+
+    <field name="due_date" type="calendar"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_DUE_DATE"
+           description="COM_INVOICES_FORM_DESC_INVOICE_DUE_DATE"
+
+
+                 required="true"
+           filter="string" />
+
+    <field name="salutation" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_SALUTATION"
+           description="COM_INVOICES_FORM_DESC_INVOICE_SALUTATION"
+
+
+
+            filter="string"
+           size="5"
+           maxlength="5" />
+
+    <field name="first_name" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_FIRST_NAME"
+           description="COM_INVOICES_FORM_DESC_INVOICE_FIRST_NAME"
+
+
+                 required="true"
+           filter="string"
+           size="25"
+           maxlength="25" />
+
+    <field name="surname" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_SURNAME"
+           description="COM_INVOICES_FORM_DESC_INVOICE_SURNAME"
+
+
+                 required="true"
+           filter="string"
+           size="25"
+           maxlength="25" />
+
+    <field name="address" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_ADDRESS"
+           description="COM_INVOICES_FORM_DESC_INVOICE_ADDRESS"
+
+
+                 required="true"
+           filter="string"
+           size="255"
+           maxlength="255" />
+
+    <field name="town" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_TOWN"
+           description="COM_INVOICES_FORM_DESC_INVOICE_TOWN"
+
+
+                 required="true"
+           filter="string"
+           size="255"
+           maxlength="255" />
+
+    <field name="county" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_COUNTY"
+           description="COM_INVOICES_FORM_DESC_INVOICE_COUNTY"
+
+
+                 required="true"
+           filter="string"
+           size="255"
+           maxlength="255" />
+
+    <field name="postcode" type="text"
+
+            label="COM_INVOICES_FORM_LBL_INVOICE_POSTCODE"
+           description="COM_INVOICES_FORM_DESC_INVOICE_POSTCODE"
+
+
+                 required="true"
+           filter="string"
+           size="8"
+           maxlength="8" />
+
+    <field
+      name="state"
+      type="list"
+      label="JSTATUS"
+      description="JFIELD_PUBLISHED_DESC"
+      class="inputbox"
+      size="1"
+      default="1">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+    </field>
+
+  </fieldset>
+
+</form>
