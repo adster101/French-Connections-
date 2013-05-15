@@ -178,47 +178,61 @@ class HelloWorldModelProperty extends JModelAdmin {
   }
 
   /*
-   * This method checks whether the property being edited is a unit.
-   * If it is then we take the lat and long from the parent property
-   * and force those to be the same for this property.
-   *
-   * This can happen from two places.
-   * Firstly, if a user is adding a new property they may choose a parent property
-   * in which case we take the parent_id from the user session.
-   *
-   * Secondly, if the user is editing an existing property which already has a
-   * parent_id set. I.e. is already marked as a unit. In this case it will be set
-   * in the $data scope.
-   *
    * param JForm $form The JForm instance for the view being edited
    * param array $data The form data as derived from the view (may be empty)
    *
    * @return void
    *
    */
-
   protected function preprocessForm(JForm $form, $data) {
 
+    // Convert data to array if it's an array
+    if (is_array($data)) {
+      $data = JArrayHelper::toObject($data, 'JObject');
+    }
+
+    // Call populate state to ensure state variables are set correctly when form is validated via controller
+    $this->populateState();
+
+    // Get permissions
     $canDo = $this->getState('actions.permissions', array());
+
+    // Get the id from the state
+    $id = $this->getState($this->getName() . '.id','');
+    $isNew = (empty($id)) ? true : false;
 
     // If we don't come from a view then this maybe empty so we reset it.
     if (empty($canDo)) {
       $canDo = HelloWorldHelper::getActions();
     }
 
-    // Check the change parent ability of this user
+    // If not allowed to 'change owner' then set created by to user id
     if (!$canDo->get('helloworld.edit.property.owner')) {
+
       $user = JFactory::getUser();
       // Set the default owner to the user creating this.
       $form->setFieldAttribute('created_by', 'type', 'hidden');
       $form->setFieldAttribute('created_by', 'default', $user->id);
+
+    } elseif ($canDo->get('helloworld.edit.property.owner') && ($isNew == true)) { // This is an admin but not a new property
+
+      // This user can change the owner (e.g. admin) but it's not a new property
+      $form->setFieldAttribute('created_by', 'required', 'true');
+
+    } elseif ($canDo->get('helloworld.edit.property.owner') && !$isNew) { // This is an admin but not a new property
+
+      // This user can change the owner (e.g. admin) but it's not a new property
+      $form->removeField('created_by');
+
     }
 
     // Set the location details accordingly, needed for one of the form field types...
     if (!empty($data->latitude) && !empty($data->longitude)) {
       $form->setFieldAttribute('city', 'latitude', $data->latitude);
       $form->setFieldAttribute('city', 'longitude', $data->longitude);
+      $form->setFieldAttribute('city', 'default', $data->city);
     }
+   
   }
 
   /**
@@ -487,6 +501,12 @@ class HelloWorldModelProperty extends JModelAdmin {
     return true;
   }
 
+  /*
+   *
+   * Method to create a 'parent' entry into the #__property table.
+   * This needs to be done prior to saving the version into #__property_versions for new props
+   *
+   */
   public function createNewProperty($data = array()) {
 
     if (empty($data)) {

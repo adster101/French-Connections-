@@ -81,6 +81,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
   }
 
   public function cancel($key = null) {
+
     if (parent::cancel($key)) {
 
       $app = JFactory::getApplication();
@@ -101,10 +102,16 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     }
   }
 
+  /*
+   * Overload edit here in order to pass a form variable through to the next view.
+   * That is, listing_id needs to be passed into the new unit view.
+   * 
+   *
+   */
   public function edit($key = null, $urlVar = null) {
 
 
-    $listing_id = JFactory::getApplication()->input->get('l', '', 'int');
+    $listing_id = JFactory::getApplication()->input->get('listing_id', '', 'int');
 
     if (!empty($listing_id)) {
 

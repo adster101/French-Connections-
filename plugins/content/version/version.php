@@ -53,7 +53,7 @@ class plgContentVersion extends JPlugin {
       );
 
       // Check we are handling a property manager form.
-      if ($context != 'com_helloworld.unit' && $context != 'com_helloworld.property') {
+      if ($context != 'com_helloworld.unitversions' && $context != 'com_helloworld.property') {
         return false;
       }
       // Check if this is a new article.

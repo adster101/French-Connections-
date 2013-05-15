@@ -498,4 +498,28 @@ abstract class HelloWorldHelper {
     }
   }
 
+  public static function getUnitsbyId($data = array()) {
+
+    if(empty($data)) {
+      return array();
+    }
+
+    $units = array();
+
+    foreach ($data as $key => $value) {
+
+      if (!array_key_exists($value->unit_id,$units)) {
+        $units[$value->unit_id] = $value;
+
+      }
+
+
+
+
+    }
+
+    return $units;
+
+  }
+
 }

@@ -99,10 +99,9 @@ class HelloWorldControllerProperty extends JControllerForm {
                       'index.php?option=' . $this->option, false)
       );
 
-			$this->setMessage('blah', 'error');
+      $this->setMessage('blah', 'error');
 
       return false;
-
     }
 
     // Set holdEditID etc
@@ -127,6 +126,33 @@ class HelloWorldControllerProperty extends JControllerForm {
                         . (int) $recordId, false
                 )
         );
+      }
+    }
+  }
+
+  /*
+   * Override the save method in order to redirect
+   *
+   */
+
+  public function save($key = null, $urlVar = null) {
+    if (parent::save($key, $urlVar)) {
+
+      $task = $this->getTask();
+      if ($task == 'save') {
+        $app = JFactory::getApplication();
+        $recordId = $app->input->getInt('parent_id');
+
+        $this->view_list = ($recordId) ? 'units' : 'properties';
+
+        if ($recordId > 0) {
+          $this->setRedirect(
+                  JRoute::_(
+                          'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
+                          . (int) $recordId, false
+                  )
+          );
+        }
       }
     }
   }

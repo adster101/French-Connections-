@@ -135,7 +135,6 @@
 
 
   <fieldset name="owner">
-
     <field
       labelclass="control-label"
       name="modified_by"
@@ -157,7 +156,11 @@
       name="created_by"
       type="user"
       filter="int"
-      required="true"
+      required="false"
+      validate="owner"
+      message="COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_CHOOSE_OWNER"
+      label="COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY"
+      description="COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_CHOOSE_OWNER_DESC"
     />
   </fieldset>
 

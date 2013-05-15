@@ -29,11 +29,15 @@ class HelloWorldViewSnooze extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-    
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    $this->id = $input->get('id','','int');
     // Get the form for this puppy...
 		$form = $this->get('Form');
     $item = $this->get('Item');
-    
+
     // Assign the view data
     $this->form = $form;
     $this->item = $item;
@@ -43,36 +47,36 @@ class HelloWorldViewSnooze extends JViewLegacy
 
 		parent::display();
 	}
-  
+
 	/**
 	 * Setting the toolbar
 	 */
-	protected function addToolBar() 
+	protected function addToolBar()
 	{
-		// Determine the view we are using. 
+		// Determine the view we are using.
 		$view = strtolower(JRequest::getVar('view'));
-    
-			
+
+
     // Show a helpful toobar title
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_SNOOZE_PROPERTY_TITLE',$this->item->title));
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_ADD_NOTE',$this->id));
 
     JToolBarHelper::save('snooze.save', 'JTOOLBAR_SAVE');
 
     JToolBarHelper::cancel('snooze.cancel', 'JTOOLBAR_CLOSE');
-	}  
-  
+	}
+
   /**
 	 * Method to set up the document properties
 	 *
 	 * @return void
 	 */
-	protected function setDocument() 
+	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle(JText::sprintf('COM_HELLOWORLD_SNOOZE_PROPERTY_TITLE',$this->item->title));
-	} 
-  
-  
-  
-  
+		$document->setTitle(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_ADD_NOTE',$this->id));
+	}
+
+
+
+
 }

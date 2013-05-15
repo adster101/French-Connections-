@@ -37,7 +37,6 @@ class JFormFieldCities extends JFormFieldList
     // Get latitude
     $latitude = $this->element['latitude'] ? $this->element['latitude'] : '';
     $longitude = $this->element['longitude'] ? $this->element['longitude'] : '';
-
     // Initialize variables.
 		$options = array();
 		$db = JFactory::getDbo();

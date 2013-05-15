@@ -48,11 +48,20 @@ class HelloWorldModelUnits extends JModelList {
    * @return	void
    * @since	1.6
    */
-  protected function populateState($ordering = null, $direction = null) {
+  public function populateState($ordering = null, $direction = null) {
+
     // Initialise variables
     $app = JFactory::getApplication();
 
+    // Get the app/input gubbins
+    $input = $app->input;
+
+    // The listing ID
+    $id = $input->get('id', '', 'int');
+
     $context = $this->context;
+
+    $this->setState($this->context . '.id',$id);
 
     $extension = $app->getUserStateFromRequest('com_helloworlds.property.filter.extension', 'extension', 'com_helloworlds', 'cmd');
 
@@ -100,6 +109,7 @@ class HelloWorldModelUnits extends JModelList {
    * @return	string	An SQL query
    */
   protected function getListQuery() {
+
     // Get the user ID
     $user = JFactory::getUser();
     $userId = $user->get('id');
@@ -107,12 +117,7 @@ class HelloWorldModelUnits extends JModelList {
     // Get the access control permissions in a handy array
     $canDo = HelloWorldHelper::getActions();
 
-    // Get the app/input gubbins
-    $app = JFactory::getApplication();
-    $input = $app->input;
-
-    // The listing ID
-    $id = $input->get('id', '', 'int');
+    $id = $this->getState($this->context . '.id','');
 
     // Create a new query object.
     $db = JFactory::getDBO();

@@ -11,10 +11,9 @@ JHtml::_('behavior.keepalive');
 $user = JFactory::getUser();
 $userId = $user->get('id');
 // And determine the user groups the user is in
-$groups = $user->getAuthorisedGroups();
-$canDo = $this->state->get('actions.permissions');
-$canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
-$data = JApplication::getUserState('listing', '');
+
+$data = array('item' => $this->item, 'units' => $this->progress);
+
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
@@ -28,7 +27,7 @@ $data = JApplication::getUserState('listing', '');
         <?php endif; ?>
         <?php
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        //echo $layout->render($data);
+        echo $layout->render($data);
         ?>
         <fieldset class="adminform">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>

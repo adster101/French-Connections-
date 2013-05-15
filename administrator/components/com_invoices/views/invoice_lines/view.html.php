@@ -25,6 +25,10 @@ class InvoicesViewInvoice_lines extends JViewLegacy {
    * Display the view
    */
   public function display($tpl = null) {
+
+    $app = JFactory::getApplication();
+    $this->id = $app->input->get('invoice_id','','int');
+
     $this->state = $this->get('State');
 
     $this->items = $this->get('Items');
@@ -54,7 +58,7 @@ class InvoicesViewInvoice_lines extends JViewLegacy {
     $state = $this->get('State');
     $canDo = InvoicesHelper::getActions();
 
-    JToolBarHelper::title(JText::_('COM_INVOICES_TITLE_INVOICE_LINES'), 'invoice_lines.png');
+    JToolBarHelper::title(JText::sprintf('COM_INVOICES_TITLE_INVOICE_LINES',$this->id), 'invoice_lines.png');
 
     //Show trash and delete for components that uses the state field
     if (isset($this->items[0]->state)) {
@@ -68,7 +72,7 @@ class InvoicesViewInvoice_lines extends JViewLegacy {
     }
 
     JToolBarHelper::cancel('cancel');
-    JToolBarHelper::custom('invoice.print');
+    JToolBarHelper::custom('invoice.print','print','print','COM_INVOICES_INVOICE_PRINT');
 
     if ($canDo->get('core.admin')) {
       JToolBarHelper::preferences('com_invoices');

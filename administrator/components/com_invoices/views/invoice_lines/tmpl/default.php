@@ -14,11 +14,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
-print_r($this->items);
 $user = JFactory::getUser();
 $userId = $user->get('id');
 ?>
-
 
 <form action="<?php echo JRoute::_('index.php?option=com_invoices'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
@@ -29,6 +27,18 @@ $userId = $user->get('id');
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
+      <p class="bottom">
+        <img alt="French Connections Logo" src="/images/general/logo-3.png">
+      </p>
+      <p class="small">
+        VAT Reg. Number: GB 801 2299 61<br>Company Registration Number: 3216862
+      </p>
+      <p class="large">
+        <strong>
+          INVOICE <?php echo $this->escape($this->id); ?>
+        </strong>
+      </p>
+      <hr />
       <p><strong>Invoice to:</strong></p>
       <p>
         <?php echo $this->escape($this->items[0]->first_name . ' ' . $this->items[0]->surname); ?><br />
@@ -45,9 +55,9 @@ $userId = $user->get('id');
       </p>
 
       <?php if (!empty($this->items[0]->due_date)): ?>
-        <p>For Advertising on Internet site French Connections for 1 year commencing <?php echo $this->items[0]->due_date; ?>reference <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
+        <p>For Advertising on Internet site French Connections for 1 year commencing <?php echo $this->items[0]->due_date; ?>reference: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
       <?php else: ?>
-        <p>Sundries reference <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
+        <p>Sundries reference: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
       <?php endif; ?>
       <p>
         Date issued
@@ -71,26 +81,25 @@ $userId = $user->get('id');
               <td><?php echo $this->escape($item->quantity) ?></td>
               <td><?php echo $this->escape($item->item_description) ?></td>
               <td text-align="right"><?php echo $this->escape($item->line_value) ?></td>
-              <td text-align="right"><?php echo $this->escape($item->line_value * $item->quantity) ?></td>
+              <td text-align="right"><?php echo number_format($this->escape($item->line_value * $item->quantity),2) ?></td>
             </tr>
 
           <?php endforeach; ?>
 
-            <tr>
-              <td colspan="2"></td>
-              <td>
-                <strong>VAT</strong>
-              </td>
-              <td><?php echo $this->escape($item->vat) ?></td>
-            </tr>
-            <tr>
-              <td colspan="3">&nbsp;</td>
-              <td align="right">
-                <strong>
-                  <?php echo $this->escape($this->items[0]->total_net) + $this->escape($this->items[0]->vat) ?>
-                </strong>
-              </td>
-            </tr>
+          <tr>
+            <td colspan="3">
+              <strong>VAT</strong>
+            </td>
+            <td><?php echo $this->escape($item->vat) ?></td>
+          </tr>
+          <tr>
+            <td colspan="3">&nbsp;</td>
+            <td align="right">
+              <strong>
+                <?php echo number_format($this->escape($this->items[0]->total_net) + $this->escape($this->items[0]->vat),2) ?>
+              </strong>
+            </td>
+          </tr>
         </tbody>
         <tfoot>
           <tr>

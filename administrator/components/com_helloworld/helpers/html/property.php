@@ -199,7 +199,7 @@ class JHtmlProperty {
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id, $unit_id, $task, $icon, $button_text, $item, $urlParam = 'parent_id') {
+  public static function progressButton($listing_id, $unit_id, $task, $icon, $button_text, $item, $urlParam = 'parent_id',$btnClass='btn') {
     $active = false;
     $progress_icon = 'warning';
     $html = '';
@@ -244,7 +244,7 @@ class JHtmlProperty {
 
     if ($active) {
       // This button should be active
-      $html .= '<a class="btn"'
+      $html .= '<a class="$btnClass"'
               . ' href="' . JRoute::_('index.php?option=com_helloworld&task=' . $task . '.edit&' . $urlParam . '=' . (int) $id) . '"'
               . ' rel="tooltip">';
       $html .= '<i class="icon icon-' . $icon . '"></i>';
@@ -253,7 +253,7 @@ class JHtmlProperty {
       $html .= '</a>';
     } else {
       // This button should be inactive
-      $html .= '<span disabled class="btn"'
+      $html .= '<span disabled class="$btnClass"'
               . ' rel="tooltip">';
       $html .= '<i class="icon icon-' . $icon . '"></i>';
       $html .= '&nbsp;' . Jtext::_($button_text);

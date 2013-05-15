@@ -23,6 +23,7 @@ $notices = array();
 
 <?php if (!empty($notices)) : ?>
   <div class="alert alert-info">
+    <h4>Property Progress</h4>
     <ul>
       <?php foreach ($notices as $key => $value) : ?>
         <li>

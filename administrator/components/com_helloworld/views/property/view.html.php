@@ -29,9 +29,6 @@ class HelloWorldViewProperty extends JViewLegacy
 
     $this->units = $this->get('Units');
 
-    // Update the progress...this is stored in the session scope so doesn't return here.
-    //HelloWorldHelper::setPropertyProgress($this->item, $this->units);
-
 		$languages = HelloWorldHelper::getLanguages();
 		$lang = HelloWorldHelper::getLang();
 
@@ -62,34 +59,33 @@ class HelloWorldViewProperty extends JViewLegacy
 	 */
 	protected function addToolBar()
 	{
-		// Determine the layout we are using.
-		// Should this be done with views?
+		// Determine the view we are using.
 		$view = strtolower(JRequest::getVar('view'));
 
-		// Eventually figured out that the below hides the submenu on this view.
-		//JRequest::setVar('hidemainmenu', true);
+    // Get the user details
 		$user = JFactory::getUser();
 		$userId = $user->id;
+
+    // Is this a new property?
 		$isNew = $this->item->id == 0;
 
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
-
-    JApplication::setUserState('title'.$this->item->id, $this->item->title);
 
     JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title, $this->item->id), 'helloworld');
 
     // Built the actions for new and existing records.
 		if ($isNew)
 		{
+			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
+
 			// For new records, check the create permission.
 			if ($canDo->get('core.create'))
 			{
-				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
-			JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{

@@ -22,11 +22,28 @@ class HelloWorldViewUnitVersions extends JViewLegacy
     // Get the unit item...
 		$this->item = $this->get('Item');
 
+    // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
+    $model = JModelLegacy::getInstance('Units', 'HelloWorldModel',array('ignore_request'=>true));
+
+    // Here we attempt to wedge some data into the model
+    // So another method in the same model can use it.
+    $listing_id = ($this->item->parent_id) ? $this->item->parent_id : '';
+
+    // Set some model options
+    $model->setState('com_helloworld.' . $model->getName() . '.id', $listing_id);
+    $model->setState('list.limit', 10);
+
+    // Get the unit progress...
+    $this->progress = $model->getItems();
+
     // Get the unit edit form
 		$this->form = $this->get('Form');
 
     $this->languages = HelloWorldHelper::getLanguages();
 		$this->lang = HelloWorldHelper::getLang();
+
+    // Register the JHtmlProperty class
+    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -65,7 +82,7 @@ class HelloWorldViewUnitVersions extends JViewLegacy
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title($this->item->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title(($isNew) ? JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title)  );
 
     // Built the actions for new and existing records.
 		if ($isNew)
@@ -113,8 +130,7 @@ class HelloWorldViewUnitVersions extends JViewLegacy
 	{
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
-
-    $document->setTitle($this->item->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) );
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/models/forms/helloworld.js");
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");

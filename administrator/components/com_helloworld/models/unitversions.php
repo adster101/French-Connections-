@@ -69,16 +69,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       }
     }
 
-    // Check if this unit has an unpublished version...
-    if ($table->review) {
-
-
-
-      // Uh oh, need to load the new version details
-      //$new_version = $this->getLatestUnitVersion($pk);
-      //print_r($new_version);die;
-    }
-
     // Convert to the JObject before adding other data.
     $properties = $table->getProperties(1);
 
@@ -107,44 +97,56 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     return $item;
   }
+	/**
+	 * Method to load a row from the database by primary key and bind the fields
+	 * to the JTable instance properties.
+	 *
+	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
+	 *                           set the instance property value is used.
+	 * @param   boolean  $reset  True to reset the default values before loading the new row.
+	 *
+	 * @return  boolean  True if successful. False if row not found.
+	 *
+	 * @link    http://docs.joomla.org/JTable/load
+	 * @since   11.1
+	 * @throws  RuntimeException
+	 * @throws  UnexpectedValueException
+	 */
+	public function getProgress($id = '')
+	{
 
-  /**
-   * Method to get a list of units for a given property listing
-   *
-   * @param   integer  $pk  The id of the property listing.
-   *
-   * @return  mixed    Object on success, false on failure.
-   *
-   * @since   12.2
-   */
-  public function getUnits() {
+    // Get the version id of the unit we are editing from the model state
+    $version_id = $this->getState($this->getName() . '.version.id','');
 
-    // Get the listing ID the user is editing against
-    $id = JApplication::getUserState('com_helloworld.listing_id');
+    $unit_id = $this->getState($this->getName() . '.id','');
 
-    // Get the units table
-    $units_table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+    $db = JFactory::getDbo();
 
-    // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
-    $units_table->set('_tbl_key', 'parent_id');
+    $query = $db->getQuery(true);
 
-    if ($id > 0) {
-      // Attempt to load the row.
-      $return = $units_table->load($id);
+		// Initialise the query.
+		$query = $this->_db->getQuery(true);
+		$query->select('
+      (select count(*) from #__property_attributes where version_id = ' . (int) $version_id . ') as facilities,
+      (select count(*) from qitz3_availability where id = ' . (int) $unit_id . ' and start_date > CURDATE()) as availability,
+      (select count(*) from qitz3_tariffs where id =  ' . (int) $unit_id . ' and start_date > CURDATE()) as tariffs,
+      (select count(*) from qitz3_property_images_library where version_id =  ' . (int) $version_id . ') as images
+    ');
 
-      // Check for a table object error.
-      if ($return === false && $units_table->getError()) {
-        $this->setError($units_table->getError());
-        return false;
-      }
-    }
+		$this->_db->setQuery($query);
 
-    // Convert to the JObject before adding other data.
-    $properties = $units_table->getProperties(1);
-    $units = JArrayHelper::toObject($properties, 'JObject');
+		$row = $this->_db->loadAssoc();
 
-    return $units;
-  }
+    // Check that we have a result.
+		if (empty($row))
+		{
+			return false;
+		}
+
+		// Bind the object with the row and return.
+		return $row;
+	}
+
 
   /**
    * Method to get the record form.
@@ -223,6 +225,14 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $canDo = HelloWorldHelper::getActions();
     $this->setState('actions.permissions', $canDo);
 
+    // Set the model state for this unit
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    $listing_id = $input->get('listing_id', '', 'int');
+    $this->setState('unitversions.listing_id', $listing_id);
+
+
     // List state information.
     parent::populateState();
   }
@@ -234,19 +244,14 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     $app = JFactory::getApplication();
     $input = $app->input;
-    $parent_id = $input->get('listing_id','','int');
-
-    // Set the created_by field to the current user...
-    $form->setFieldAttribute('created_by', 'type', 'hidden');
-    $form->setFieldAttribute('created_by', 'default', $user->id);
+    $parent_id = $input->get('listing_id', '', 'int');
 
     // Set the parent ID for this unit, if it's not set
-    if(empty($data->parent_id)) {
+    if (empty($data->parent_id)) {
 
       $data->parent_id = $parent_id;
 
       $form->setFieldAttribute('parent_id', 'default', $parent_id);
-
     }
 
     if (!empty($data)) { // Only applies when populating the form, data not present when validating.
@@ -278,13 +283,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
 
-    // TO DO: If this is an existing unit, then we need to update the existing row with the form data, then save that rather
-    // than using the form data directly (as it won't have any of the unit details that are captured on the tariffs screen...
-    // (or just move the unit data from the tariffs screen...)
     // Allow an exception to be thrown.
     try {
 
-      // If $data['version'] is not true we need to load the existing data to be able to compare
+      // If $data['review'] is not true we need to load the existing data to be able to compare
       if ($data['review'] == 0) {
 
         // Here we don't explicitly know if there is a new version
@@ -298,11 +300,30 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
 
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
-        if ($new_version_required[0] ===  true) {
+        if ($new_version_required[0] === true) {
           // As a new version is required amend the data array before we save
           $data['id'] = '';
           $data['review'] = '1';
           $data['published_on'] = '';
+        }
+      }
+
+      // If this is a new unit then we need to generate a 'stub' entry into the unit table
+      // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
+      if ($isNew) {
+
+        $data['property_id'] = $data['parent_id'];
+        $new_unit_id = $this->createNewUnit($data);
+
+        if (!$new_unit_id) {
+
+          // Problem creating the new property stub...
+          $this->setError('There was a problem createing your unit. Please try again.');
+          return false;
+        } else {
+          $data['review'] = '1';
+          $data['published_on'] = '';
+          $data['unit_id'] = $new_unit_id;
         }
       }
 
@@ -343,7 +364,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         // Update the existing property listing to indicate that we have a new version for it.
         $property = $this->getTable('Property', 'HelloWorldTable');
 
-        $property->id = $pk;
+        $property->id = $table->unit_id;
         $property->review = 1;
 
         if (!$property->store()) {
@@ -359,7 +380,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // create a copy of all images against the new version
       // and potentially make a copy of the availability and tariffs (although this may be deferred).
 
-      if (!$this->savePropertyFacilities($data, $pk, $new_version_id)) {
+      if (!$this->savePropertyFacilities($data, $property->id, $new_version_id)) {
         $this->setError('Problem saving facilities');
       }
 
@@ -377,7 +398,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $images = $image->getItems();
 
         // Shove these images into the images table against $new_version_id
-
       }
 
 
@@ -385,7 +405,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
 
 
-      // Need to update the original unit to indicate that it has a new, unpublished version...
       // Clean the cache.
       $this->cleanCache();
 
@@ -474,6 +493,35 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       return true;
     }
+  }
+
+  /*
+   *
+   * Method to create a 'unit' entry into the #__unit table.
+   * This needs to be done prior to saving the version into #__unit_versions for new props
+   *
+   */
+
+  public function createNewUnit($data = array()) {
+
+    if (empty($data)) {
+      return false;
+    }
+
+    $unit_table = $this->getTable('Unit', 'HelloWorldTable');
+
+    if (!$unit_table->bind($data)) {
+      $this->setErrro($unit_table->getError());
+      return false;
+    }
+
+    // Optional further sanity check after data has been validated, filtered, and about to be checked...
+    //$this->prepareTable($property_table);
+    if (!$unit_table->store()) {
+      return false;
+    }
+
+    return $unit_table->id;
   }
 
 }
