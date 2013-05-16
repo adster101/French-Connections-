@@ -29,7 +29,7 @@ class HelloWorldViewProperties extends JViewLegacy {
     JApplication::setUserState("com_helloworlds_property_count_$userID", count($items));
 
     $pagination = $this->get('Pagination');
-    
+
     $this->state = $this->get('State');
 
     // Assign data to the view
@@ -51,7 +51,7 @@ class HelloWorldViewProperties extends JViewLegacy {
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
     // Set the toolbar
-    $this->addToolBar(); 
+    $this->addToolBar();
 
     // Display the template
     parent::display($tpl);
@@ -68,7 +68,7 @@ class HelloWorldViewProperties extends JViewLegacy {
     $document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 
     $user = JFactory::getUser();
-    
+
     // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
     JLoader::register('JToolbarButtonAjaxpopup', JPATH_ROOT . '/administrator/components/com_helloworld/buttons/Ajaxpopup.php');
 
@@ -93,18 +93,18 @@ class HelloWorldViewProperties extends JViewLegacy {
       JToolBarHelper::unpublish('properties.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('properties.trash');
     }
-    
+
     if ($canDo->get('helloworld.snooze')) {
       JToolBarHelper::custom('snooze.update','calendar','',$alt='COM_ADMIN_NOTE',$listSelect=true);
     }
-    
+
     if ($canDo->get('core.admin')) {
       JToolBarHelper::preferences('com_helloworld');
     }
-  
+
     // Check that the user is authorised to view the filters.
     if ($canDo->get('helloworld.filter')) {
-      
+
       JHtmlSidebar::addFilter(
               JText::_('COM_HELLOWORLD_HELLOWORLD_FILTER_ACTIVE'), 'filter_published', JHtml::_('select.options', HelloWorldHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
       );
@@ -116,21 +116,21 @@ class HelloWorldViewProperties extends JViewLegacy {
       );
 
     }
-    
-    // Display a helpful navigation for the owners 
+
+    // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {
-    
+
       $view = strtolower(JRequest::getVar('view'));
-  
+
       $canDo = HelloWorldHelper::addSubmenu($view);
-      
+
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
-      
+
     }
-    
-    
-    
+
+
+
   }
 
   /**

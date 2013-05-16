@@ -157,7 +157,7 @@ class JHtmlProperty {
     $html = '';
 
 
-    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'renewal.process\')" title="' . $title . '" class="btn btn-danger">'
+    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'listing.renew\')" title="' . $title . '" class="btn btn-danger">'
             . JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW') . '</a>';
 
     return $html;
@@ -199,22 +199,30 @@ class JHtmlProperty {
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id, $unit_id, $task, $icon, $button_text, $item, $urlParam = 'parent_id',$btnClass='btn') {
+  public static function progressButton($listing_id, $unit_id, $task, $icon, $button_text, $item, $urlParam = 'parent_id',$btnClass='') {
     $active = false;
     $progress_icon = 'warning';
     $html = '';
 
-    if (!empty($listing_id) && $task == 'property') {
+    if (!empty($listing_id) && ($task == 'propertyversions')) {
 
       $active = true;
       $progress_icon = 'ok';
       $id = $listing_id;
 
-    } elseif (empty($unit_id) && $task == 'unitversions') { // This property has no unit, or unit details not completed...
+    } elseif (empty($listing_id) && ($task == 'propertyversions')) {
 
       $active = true;
       $progress_icon = 'warning';
       $id = $listing_id;
+
+    }  elseif (empty($unit_id) && $task == 'unitversions' && !empty($listing_id)) { // This property has no unit, or unit details not completed...
+
+      $active = true;
+      $progress_icon = 'warning';
+      $id = $listing_id;
+      // Set urlParam here as a new unit may need listing id in GET scope
+      $urlParam = 'parent_id';
 
     } elseif (!empty($unit_id) && $task == 'images') {
 
@@ -244,7 +252,7 @@ class JHtmlProperty {
 
     if ($active) {
       // This button should be active
-      $html .= '<a class="$btnClass"'
+      $html .= '<a class="' . $btnClass . '"'
               . ' href="' . JRoute::_('index.php?option=com_helloworld&task=' . $task . '.edit&' . $urlParam . '=' . (int) $id) . '"'
               . ' rel="tooltip">';
       $html .= '<i class="icon icon-' . $icon . '"></i>';
@@ -253,7 +261,7 @@ class JHtmlProperty {
       $html .= '</a>';
     } else {
       // This button should be inactive
-      $html .= '<span disabled class="$btnClass"'
+      $html .= '<span disabled class="' . $btnClass . '"'
               . ' rel="tooltip">';
       $html .= '<i class="icon icon-' . $icon . '"></i>';
       $html .= '&nbsp;' . Jtext::_($button_text);

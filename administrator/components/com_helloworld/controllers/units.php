@@ -24,27 +24,23 @@ class HelloWorldControllerUnits extends JControllerAdmin
   public function publish() {
 
     parent::publish();
-		$listing_id = JFactory::getApplication()->input->get('listing_id','','int');
+		$listing_id = JFactory::getApplication()->input->get('parent_id','','int');
 
     $extension = $this->input->get('extension');
 		$id = ($listing_id) ? '&id=' . $listing_id: '';
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $id, false));
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=listing' . $id, false));
 
   }
 
   public function reorder() {
 
     parent::reorder();
-    
-		$listing_id = JFactory::getApplication()->input->get('listing_id','','int');
+
+		$listing_id = JFactory::getApplication()->input->get('parent_id','','int');
 
     $extension = $this->input->get('extension');
 		$id = ($listing_id) ? '&id=' . $listing_id: '';
-		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $id, false));
+		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=listing' . $id, false));
 
   }
-
-
-
-
 }

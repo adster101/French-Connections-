@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewProperty extends JViewLegacy
+class HelloWorldViewPropertyVersions extends JViewLegacy
 {
 	/**
 	 * display method of Hello view
@@ -27,7 +27,18 @@ class HelloWorldViewProperty extends JViewLegacy
 
 		$this->script = $this->get('Script');
 
-    $this->units = $this->get('Units');
+    // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
+    $model = JModelLegacy::getInstance('Listing', 'HelloWorldModel',array('ignore_request'=>true));
+
+    // Here we attempt to wedge some data into the model
+    // So another method in the same model can use it.
+    $listing_id = ($this->item->parent_id) ? $this->item->parent_id : '';
+
+    // Set some model options
+    $model->setState('com_helloworld.' . $model->getName() . '.id', $listing_id);
+    $model->setState('list.limit', 10);
+
+    $this->progress = $model->getItems();
 
 		$languages = HelloWorldHelper::getLanguages();
 		$lang = HelloWorldHelper::getLang();
@@ -38,6 +49,9 @@ class HelloWorldViewProperty extends JViewLegacy
 			JError::raiseError(500, implode('<br />', $errors));
 			return false;
 		}
+
+    // Register the JHtmlProperty class
+    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
 		// Assign the language data
 		$this->languages = $languages;
@@ -82,20 +96,20 @@ class HelloWorldViewProperty extends JViewLegacy
 			// For new records, check the create permission.
 			if ($canDo->get('core.create'))
 			{
-				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
-				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 		}
 		else
 		{
 			if ($canDo->get('core.edit.own'))
-        JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
+        JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
 
 			{
 				// We can save the new record
-				JToolBarHelper::apply('property.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('property.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
 			}
 		}
 

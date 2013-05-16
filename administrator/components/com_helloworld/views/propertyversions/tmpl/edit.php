@@ -1,22 +1,14 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
-//JHtml::_('formbehavior.chosen', 'select');
-// Get the user ID
-$user = JFactory::getUser();
-$userId = $user->get('id');
-// And determine the user groups the user is in
-$groups = $user->getAuthorisedGroups();
-$canDo = $this->state->get('actions.permissions');
-$canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
+
 $data = array();
 $data['property'] = $this->item;
-$data['units'] = $this->units;
+$data['progress'] = $this->progress;
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&parent_id=' . (int) $this->item->parent_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">

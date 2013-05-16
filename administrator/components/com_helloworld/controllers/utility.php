@@ -7,8 +7,8 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controllerform');
 
 class HelloWorldControllerUtility extends JControllerForm {
-  
-   /**
+
+  /**
    * Method to check if you can edit a record.
    *
    * @param   array   $data  An array of input data.

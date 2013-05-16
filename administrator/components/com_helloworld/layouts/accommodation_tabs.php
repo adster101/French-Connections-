@@ -2,52 +2,43 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+// Get the input data
 $app = JFactory::getApplication();
+$input = $app->input;
+$view = $input->get('view', '', 'string');$languages = HelloWorldHelper::getLanguages();
+$listing_id = $input->get('parent_id','','int');
 
-$languages = HelloWorldHelper::getLanguages();
 $lang = HelloWorldHelper::getLang();
 
-// Need to take the data from the object passed into the template...
+// Take the data from the object passed into the template...
 $data = $displayData;
 
-// Get the input data
-$input = $app->input;
-$view = $input->get('view', '', 'string');
-$unit_id = $input->get('unit_id','','int');
-// PRocess the units into associated array
+// Process the units into a keyed array (useful so we can get at individual units)
+// Easier to just foreach ?
+$units = HelloWorldHelper::getUnitsById($data['progress']);
 
-$units = HelloWorldHelper::getUnitsById($data['units']);
+// Determine the unit id, if a new unit unit_id = 0 - the listing id is then used as parent in the create unit view
+($view == 'propertyversions') ? $unit_id = key($units) : $unit_id = $input->get('unit_id', '0', 'int');
 
-$item = $units[$unit_id];
+// Set the item which is used below to output the tabs
+$item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);
+
 
 ?>
 <ul class="nav nav-tabs">
-  <li <?php echo ($view == 'property') ? 'class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item) ?>
+  <li<?php echo ($view == 'propertyversions') ? ' class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item,'parent_id','') ?>
   </li>
-  <li <?php echo ($view == 'unitversions') ? 'class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','') ?>
-  </li>
-  <li <?php echo ($view == 'images' || $view == 'image') ? 'class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','') ?>
-  </li>
-  <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
-  </li>
-  <li>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
-  </li>
-
-  <?php if (count($data['units']) > 1) : ?>
+  <?php if (count($data['progress']) > 1) : ?>
     <li class="dropdown">
       <a class="dropdown-toggle"
          data-toggle="dropdown"
          href="#">
-        Switch unit
+        Switch to unit
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
-        <?php foreach ($data['units'] as $value) : ?>
+        <?php foreach ($data['progress'] as $value) : ?>
           <li>
             <a href="<?php echo JText::_('index.php?option=com_helloworld&task=unitversions.edit&unit_id=' . $value->unit_id) ?>">
               <?php echo $value->unit_title; ?>
@@ -56,6 +47,17 @@ $item = $units[$unit_id];
         <?php endforeach; ?>
       </ul>
     </li>
-
   <?php endif; ?>
+  <li<?php echo ($view == 'unitversions') ? ' class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','') ?>
+  </li>
+  <li<?php echo ($view == 'images' || $view == 'image') ? ' class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','') ?>
+  </li>
+  <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
+  </li>
+  <li>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
+  </li>
 </ul>

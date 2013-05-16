@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class HelloWorldViewUnits extends JViewLegacy {
+class HelloWorldViewListing extends JViewLegacy {
 
   protected $state;
 
@@ -77,7 +77,7 @@ class HelloWorldViewUnits extends JViewLegacy {
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
 
-    JToolBarHelper::cancel('property.cancel');
+    JToolBarHelper::cancel('properties');
 
 
 

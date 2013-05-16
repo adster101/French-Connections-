@@ -89,7 +89,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
       $recordId = ($data['parent_id']) ? $data['parent_id'] : 0;
 
-      $this->view_list = ($recordId) ? 'units' : 'properties';
+      $this->view_list = ($recordId) ? 'listing' : 'properties';
 
       if ($recordId > 0) {
         $this->setRedirect(
@@ -105,13 +105,13 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
   /*
    * Overload edit here in order to pass a form variable through to the next view.
    * That is, listing_id needs to be passed into the new unit view.
-   * 
+   *
    *
    */
   public function edit($key = null, $urlVar = null) {
 
 
-    $listing_id = JFactory::getApplication()->input->get('listing_id', '', 'int');
+    $listing_id = JFactory::getApplication()->input->get('parent_id', '', 'int');
 
     if (!empty($listing_id)) {
 
@@ -120,7 +120,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
         $this->setRedirect(
                 JRoute::_(
                         'index.php?option=' . $this->option . '&view=' . $this->view_item
-                        . $this->getRedirectToItemAppend($recordId, $urlVar) . '&listing_id=' . (int) $listing_id, false
+                        . $this->getRedirectToItemAppend($recordId, $urlVar) . '&parent_id=' . (int) $listing_id, false
                 )
         );
       }

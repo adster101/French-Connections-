@@ -81,7 +81,7 @@ class HelloWorldControllerAvailability extends JControllerForm {
     }
     return false;
   }
-  
+
   public function postSaveHook(){
-  }  
+  }
 }

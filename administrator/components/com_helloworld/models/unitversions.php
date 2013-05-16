@@ -244,7 +244,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     $app = JFactory::getApplication();
     $input = $app->input;
-    $parent_id = $input->get('listing_id', '', 'int');
+    $parent_id = $input->get('parent_id', '', 'int');
 
     // Set the parent ID for this unit, if it's not set
     if (empty($data->parent_id)) {

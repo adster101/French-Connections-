@@ -232,7 +232,6 @@ class HelloWorldModelProperties extends JModelList {
       }
     }
 
-
     // From the hello table
     $query->from('#__property as a');
     $query->join('inner','#__property_versions as b on (

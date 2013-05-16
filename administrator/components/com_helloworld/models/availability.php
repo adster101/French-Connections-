@@ -40,7 +40,7 @@ class HelloWorldModelAvailability extends JModelAdmin {
       // Need to wrap this in some logic
       $availabilityTable->delete($id);
 
-      // Bind the translated fields to the JTable instance	
+      // Bind the translated fields to the JTable instance
       if (!$availabilityTable->save($id, $availability_by_period)) {
         JError::raiseWarning(500, $availabilityTable->getError());
         return false;
@@ -53,12 +53,15 @@ class HelloWorldModelAvailability extends JModelAdmin {
       return false;
     }
 
+
+
+
     $this->setState($this->getName() . '.id', $id);
 
 
     return true;
   }
-  
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -68,7 +71,7 @@ class HelloWorldModelAvailability extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Units', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'Availability', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -96,9 +99,9 @@ class HelloWorldModelAvailability extends JModelAdmin {
 
   /**
    * Method to generate a query to get the availability for a particular property
-   * 
+   *
    * TO DO: Add a check to ensure that the user requesting the availability
-   * is the owner... 
+   * is the owner...
    *
    * @param       int $id property id, not primary key in this case
    * @param       boolean $reset reset data
@@ -106,7 +109,7 @@ class HelloWorldModelAvailability extends JModelAdmin {
    * @see JTable:load
    */
   public function getAvailabilityQuery($id = null, $reset = true) {
-    // Create a new query object.		
+    // Create a new query object.
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
 
@@ -120,7 +123,7 @@ class HelloWorldModelAvailability extends JModelAdmin {
   }
 
   /**
-   * Method to get the record form. 
+   * Method to get the record form.
    *
    * @param	array	$data		Data for the form.
    * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.

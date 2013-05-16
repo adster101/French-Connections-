@@ -23,11 +23,22 @@ class HelloWorldViewUnitVersions extends JViewLegacy
 		$this->item = $this->get('Item');
 
     // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
-    $model = JModelLegacy::getInstance('Units', 'HelloWorldModel',array('ignore_request'=>true));
+    $model = JModelLegacy::getInstance('Listing', 'HelloWorldModel',array('ignore_request'=>true));
 
     // Here we attempt to wedge some data into the model
     // So another method in the same model can use it.
+    // If this is a new unit then we don't
+
     $listing_id = ($this->item->parent_id) ? $this->item->parent_id : '';
+
+    if (empty($listing_id)) {
+
+      // Probably creating a new unit, listing id is in GET scope
+      $app = JFactory::getApplication();
+      $input = $app->input;
+
+      $listing_id = $input->get('parent_id','','int');
+    }
 
     // Set some model options
     $model->setState('com_helloworld.' . $model->getName() . '.id', $listing_id);
@@ -35,6 +46,7 @@ class HelloWorldViewUnitVersions extends JViewLegacy
 
     // Get the unit progress...
     $this->progress = $model->getItems();
+
 
     // Get the unit edit form
 		$this->form = $this->get('Form');

@@ -124,7 +124,7 @@ abstract class HelloWorldHelper {
         $progress['listing'] = $value->id;
       }
 
-      if (!array_key_exists('review',$progress)) {
+      if (!array_key_exists('review', $progress)) {
         $progress['review'] = $value->review;
       }
 
@@ -147,7 +147,6 @@ abstract class HelloWorldHelper {
     //$progress->setProperties($listing_progress_array);
     return $progress;
   }
-
 
   /**
    * Get the actions
@@ -498,28 +497,67 @@ abstract class HelloWorldHelper {
     }
   }
 
+  /*
+   * Static helper method to return a list of units keyed by unit id.
+   * This is used to pass into the accommodation tabs layout.
+   *
+   *
+   * return   array $units
+   *
+   */
+
   public static function getUnitsbyId($data = array()) {
 
-    if(empty($data)) {
-      return array();
-    }
+    if (empty($data)) {
 
+      // This is a new property as no progress data has been returned (e.g. no listing or unit data)
+      $units = array();
+
+      $listing = new stdClass();
+      $listing->id = '';
+      $listing->review = '';
+      $listing->unit_id = '';
+      $listing->parent_id = '';
+      $listing->changeover_day = '';
+      $listing->images = 0;
+      $listing->tariffs = 0;
+      $listing->availability = 0;
+
+      $units[] = $listing;
+
+      return $units;
+    }
     $units = array();
 
     foreach ($data as $key => $value) {
 
-      if (!array_key_exists($value->unit_id,$units)) {
-        $units[$value->unit_id] = $value;
-
+      if (empty($value->unit_id)) {
+        $value->unit_id = 0;
       }
 
-
-
-
+      if (!array_key_exists($value->unit_id, $units)) {
+        $units[$value->unit_id] = $value;
+      }
     }
 
     return $units;
+  }
 
+  public static function getEmptyUnit($listing_id = '') {
+
+    // This is a new property as no progress data has been returned (e.g. no listing or unit data)
+
+    $listing = new stdClass();
+    $listing->id = $listing_id;
+    $listing->review = '';
+    $listing->unit_id = '';
+    $listing->parent_id = $listing_id;
+    $listing->changeover_day = '';
+    $listing->images = 0;
+    $listing->tariffs = 0;
+    $listing->availability = 0;
+
+    return $listing;
   }
 
 }

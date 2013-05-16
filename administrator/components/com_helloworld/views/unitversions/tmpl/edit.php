@@ -12,7 +12,7 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 // And determine the user groups the user is in
 
-$data = array('item' => $this->item, 'units' => $this->progress);
+$data = array('item' => $this->item, 'progress' => $this->progress);
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">

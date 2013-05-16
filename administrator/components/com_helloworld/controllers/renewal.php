@@ -77,86 +77,14 @@ class HelloWorldControllerRenewal extends JControllerForm {
     }
     return false;
   }
-  
-  
-  public function process ()
-  {
 
-   // Check that this is a valid call from a logged in user.
-    JSession::checkToken() or die('Invalid Token');
-    
-    $app = JFactory::getApplication();
 
-    $records = $this->input->get('cid', array(), 'array');
-    $recordId = $records[0];
-    $model = $this->getModel('Property','HelloWorldModel');
-    $table = $model->getTable();
- 		$context = "$this->option.property.$this->context";
-   
-    // Determine the name of the primary key for the data.
-    if (empty($key)) {
-      $key = $table->getKeyName();
-    }
 
-    // Check that the owner/user can edit/renew this record
-    if (!$this->allowEdit(array($key => $recordId), $key)) {
-      $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
-      $this->setMessage($this->getError(), 'error');
 
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->extension, false
-              )
-      );
-
-      return false;
-    }
-
-    // Get the details of the property listing that is being renewed
-    $record = $model->getItem($recordId);
-
-    // Check the review status and the expiry date
-    if ($record->review == 1) {
-
-      // OOps property needs to be submitted for review before it can be renewed.
-      // If status is anything but 1 then okay, we can let it through
-      // i.e. 0 is okay, 2 is locked for editing, e.g. marked for review
-      // Redirect to com_helloworld&task=property.renew
-        // Redirect to the renewal payment/summary form thingy...
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->extension . '&view=properties', false
-                )
-        );      
-    } else {
-
-      // Assume that expiry date is in the past...
-      if ($record->expiry_date) {
-
-        // Add this to holdEditId etc...and then redirect to the view directly
-        JApplication::setUserState($this->extension . '.listing.detail', $record);
-        
-        // Check-out succeeded, push the new record id into the session.
-        $this->holdEditId($context, $recordId);
-        $app->setUserState($context . '.data', null);        
-       
-        // Redirect to the renewal payment/summary form thingy...
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->extension . '&view=renewal&layout=billing&id=' . (int) $recordId, false
-                )
-        );
-      }
-    }
- 
-
-    return false;
-  }  
-  
   /*
-   * 
+   *
    * Overriden save method
-   * 
+   *
    */
   public function doPayment($key = null, $urlVar = null) {
 		// Check for request forgeries.
@@ -170,7 +98,7 @@ class HelloWorldControllerRenewal extends JControllerForm {
 		$checkin = property_exists($table, 'checked_out');
 		$context = "$this->option.property.$this->context";
 		$task = $this->getTask();
-    
+
 
 		// Determine the name of the primary key for the data.
 		if (empty($key))
@@ -183,9 +111,9 @@ class HelloWorldControllerRenewal extends JControllerForm {
 		{
 			$urlVar = $key;
 		}
-    
+
 		$recordId = $this->input->getInt($urlVar);
-    
+
 
 		if (!$this->checkEditId($context, $recordId))
 		{
@@ -201,8 +129,8 @@ class HelloWorldControllerRenewal extends JControllerForm {
 			);
 
 			return false;
-		}    
-    
+		}
+
     // Validate the posted data.
 		// Sometimes the form needs some posted data, such as for plugins and modules.
 		$form = $model->getForm($data, false);
@@ -248,14 +176,14 @@ class HelloWorldControllerRenewal extends JControllerForm {
 			);
 
 			return false;
-		}    
-    
+		}
+
     // Here we have valid address and VAT status data...
-     
+
     // Forwards on to the money (shot) page...
-    
-    
-    
-    
+
+
+
+
   }
 }

@@ -19,7 +19,7 @@ class HelloWorldController extends JControllerLegacy {
   function display($cachable = false) {
 
     // Set up an array of views to protect from direct access
-    $views_to_protect = array('helloworld' => 1, 'availability' => 1, 'images' => 1, 'tariffs' => 1, 'offers' => 1);
+    $views_to_protect = array('helloworld' => 1, 'availability' => 1, 'images' => 1, 'tariffs' => 1, 'offers' => 1, 'units' => 1);
 
     // Get the document object.
     $document = JFactory::getDocument();
@@ -27,7 +27,7 @@ class HelloWorldController extends JControllerLegacy {
     // set default view if not set
     JRequest::setVar('view', JRequest::getCmd('view', 'Properties'));
 
-    // Set the default view name and format from the Request.   
+    // Set the default view name and format from the Request.
     $vName = JRequest::getCmd('view', 'Property');
     $lName = JRequest::getCmd('layout', 'default');
     $id = JRequest::getInt('id');
@@ -43,21 +43,13 @@ class HelloWorldController extends JControllerLegacy {
 
       return false;
     }
-    
-    // If the view name is helloworlds then we reset the progress session counter 
-    if ($vName == 'HelloWorlds' || $vName == 'helloworlds') {
-      JApplication::setUserState('com_helloworld.availability.progress', '');
-      JApplication::setUserState('com_helloworld.tariffs.progress', '');
-      JApplication::setUserState('com_helloworld.images.progress', '');
-      JApplication::setUserState('com_helloworld.published.progress', '');
-    }
 
     // Protect the reviews view from owners via ACL
     if ($vName == 'reviews' || $vName == 'Reviews') {
       $user = JFactory::getUser();
 
       if (!$user->authorise('core.edit','com_reviews')) {
-        
+
         $app = JFactory::getApplication();
 
         $app->enqueueMessage('Permission denied', 'error');

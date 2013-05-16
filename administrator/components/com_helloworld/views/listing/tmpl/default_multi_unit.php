@@ -24,6 +24,7 @@ $data = array();
 $data['snapshot'] = $this->items;
 $data['form'] = $this->form;
 $data['progress'] = $this->progress;
+
 ?>
 <div class="row-fluid">
 
@@ -53,7 +54,7 @@ $data['progress'] = $this->progress;
               <strong>Property details</strong>
             </td>
             <td>
-              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'property', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0]) ?>
+              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0],'parent_id','btn') ?>
             </td>
           </tr>
           <tfoot>
@@ -102,10 +103,10 @@ $data['progress'] = $this->progress;
                   </td>
 
                   <td>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id','btn') ?>
                   </td>
 
                 </tr>
@@ -125,7 +126,7 @@ $data['progress'] = $this->progress;
 
         <?php echo $this->pagination->getListFooter(); ?>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="listing_id" value="<?php echo $this->id ?>" />
+        <input type="hidden" name="parent_id" value="<?php echo $this->id ?>" />
         <?php echo JHtml::_('form.token'); ?>
     </div>
 

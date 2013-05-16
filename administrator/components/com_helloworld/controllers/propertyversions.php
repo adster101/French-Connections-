@@ -9,7 +9,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerProperty extends JControllerForm {
+class HelloWorldControllerPropertyVersions extends JControllerForm {
 
   protected $extension;
 
@@ -81,43 +81,15 @@ class HelloWorldControllerProperty extends JControllerForm {
   }
 
   /*
-   * Listing controller - checks ownership of record and redirect to listing view
-   *
+   * Overload the cancel method
    */
-
-  public function listing() {
-
-    $app = JFactory::getApplication();
-
-    $listing_id = $this->input->get('id', '', 'int');
-
-    $data['id'] = $listing_id;
-
-    if (!$this->allowEdit($data, 'id')) {
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option, false)
-      );
-
-      $this->setMessage('blah', 'error');
-
-      return false;
-    }
-
-    // Set holdEditID etc
-    $this->setRedirect(
-            JRoute::_(
-                    'index.php?option=' . $this->option . '&view=units&id=' . (int) $listing_id, false)
-    );
-    return true;
-  }
 
   public function cancel($key = null) {
     if (parent::cancel($key)) {
       $app = JFactory::getApplication();
       $recordId = $app->input->getInt('parent_id');
 
-      $this->view_list = ($recordId) ? 'units' : 'properties';
+      $this->view_list = ($recordId) ? 'listing' : 'properties';
 
       if ($recordId > 0) {
         $this->setRedirect(

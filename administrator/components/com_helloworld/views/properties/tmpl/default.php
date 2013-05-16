@@ -141,7 +141,7 @@ $listing_id = '';
                       $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
                       $days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
                     }
-                    
+
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
                     if ($item->review == 0) {
@@ -172,11 +172,11 @@ $listing_id = '';
                         </td>
                         <td>
                           <?php if ($item->review != 2) : ?>
-                            <!-- 
+                            <!--
                               <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';   ?>">
                             -->
                             <?php echo $this->escape($item->title); ?>
-                            <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=property.listing&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
+                            <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7) : ?>
                                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php else: ?>
@@ -197,7 +197,7 @@ $listing_id = '';
                           <?php elseif (empty($days_to_renewal)) : ?>
                             Publish now...
                           <?php elseif ($days_to_renewal <= 7) : ?>
-                            <?php echo JHtml::_('property.renew', $i, JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW')); ?>                          
+                            <?php echo JHtml::_('property.renew', $i, JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW')); ?>
                           <?php elseif ($days_to_renewal <= 0) : ?>
                             <?php echo JHtml::_('property.renew', $i, JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW')); ?>
                           <?php elseif (empty($item->expiry_date)): ?>
@@ -208,8 +208,8 @@ $listing_id = '';
                         </td>
                         <td>
                           <?php echo JText::_($item->view_count); ?><br />
-                          <?php echo JText::_($item->enquiry_count); ?> 
-                        </td>                
+                          <?php echo JText::_($item->enquiry_count); ?>
+                        </td>
                         <td>
                           <?php echo JText::_($item->modified); ?>
                         </td>
