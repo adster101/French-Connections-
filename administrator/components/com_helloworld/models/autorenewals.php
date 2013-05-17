@@ -22,7 +22,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'PropertyVersions', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -111,7 +111,6 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
 
   public function getItem($pk = null) {
 
-    echo $pk;die;
 
     if ($item = parent::getItem($pk)) {
 
@@ -148,7 +147,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
     $query->from('#__protx_transactions');
 
     $query->where('property_id = ' . (int) $pk);
-    $query->where('CardExpiryDate > now()');
+    //$query->where('CardExpiryDate > now()');
     $db->setQuery($query);
 
     $rows = $db->loadRowList();

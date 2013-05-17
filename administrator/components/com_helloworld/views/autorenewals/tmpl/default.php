@@ -16,7 +16,7 @@ $fieldsets = $this->form->getFieldSets();
     <div id="" class="span8">
     <?php else : ?>
       <div lass="span10">
-      <?php endif; ?> 
+      <?php endif; ?>
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=autorenewals&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <?php foreach ($fieldsets as $fieldset) : ?>
           <fieldset>
@@ -27,18 +27,18 @@ $fieldsets = $this->form->getFieldSets();
                 <?php echo $field->label; ?>
                 <div class="controls">
                   <?php echo $field->input; ?>
-                </div> 
+                </div>
               </div>
               <hr />
             <?php endforeach; ?>
-          </fieldset>           
+          </fieldset>
         <?php endforeach; ?>
 
 
 
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="jform[id]" value="11" />
-        
+
         <?php echo JHtml::_('form.token'); ?>
 
 

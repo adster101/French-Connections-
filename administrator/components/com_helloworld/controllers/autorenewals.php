@@ -90,6 +90,7 @@ class HelloWorldControllerAutoRenewals extends JControllerForm {
     $model = $this->getModel();
     $table = $model->getTable();
 
+
     $context = "$this->option.edit.$this->context";
     // Determine the name of the primary key for the data.
     if (empty($key)) {
@@ -117,8 +118,10 @@ class HelloWorldControllerAutoRenewals extends JControllerForm {
 
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=autorenewals&parent_id=' . (int) $recordId, false)
+                    'index.php?option=' . $this->option . '&view=autorenewals&id=' . (int) $recordId, false)
     );
+
+    return true;
   }
 
   /**

@@ -73,8 +73,6 @@ class ImportControllerProperty_listings extends JControllerForm {
       $db->setQuery($query, 0, 1);
       $items = $db->loadRow();
 
-
-
       $query->clear();
 
       $query->insert('#__property_versions');
@@ -95,7 +93,6 @@ class ImportControllerProperty_listings extends JControllerForm {
           'distance_to_coast',
           'exchange_rate_eur',
           'exchange_rate_usd',
-          'VendorTxCode',
           'video_url',
           'booking_form',
           'deposit_currency',
@@ -115,10 +112,11 @@ class ImportControllerProperty_listings extends JControllerForm {
           'fax',
           'email_1',
           'email_2',
-          'state',
+          'review',
           'created_on',
           'created_by',
           'modified_on',
+          'modified_by',
           'published_on'
       ));
       $insert_string = '';
@@ -162,9 +160,8 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $db->quote($line[33]);
       $insert_string .= ',' . $db->quote($line[34]);
       $insert_string .= ',' . $db->quote($line[35]);
+      $insert_string .= ',1';
       $insert_string .= ',' . $db->quote($line[36]);
-      $insert_string .= ',' . $db->quote($line[37]);
-
 
       $query->values($insert_string);
       $db->setQuery($query);

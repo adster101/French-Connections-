@@ -53,7 +53,7 @@
       labelclass="control-label"
       required="true"
       />
-  
+
     <field
       name="BillingPostCode"
       type="text"
@@ -66,15 +66,15 @@
       labelclass="control-label"
       required="true"
       class="input-small"
-			/> 
-      
+			/>
+
   </fieldset>
-  
-  <fields 
+
+  <fields
     name="invoice_address">
-  
-  <fieldset name="invoice-address" label="PLG_USER_PROFILE_LEGEND_INVOICE_DETAILS" description="The address that will appear on your invoices.">     
-   
+
+  <fieldset name="invoice-address" label="PLG_USER_PROFILE_LEGEND_INVOICE_DETAILS" description="The address that will appear on your invoices.">
+
     <field
       name="address1"
       type="text"
@@ -138,8 +138,8 @@
       labelclass="control-label"
       required="true"
       class="input-small"
-			/> 
-      
+			/>
+
     <field
       name="country"
       type="list"
@@ -156,7 +156,7 @@
         <option	value="FR">France</option>
         <option	value="ECT">Other</option>
     </field>
-      
+
   </fieldset>
   </fields>
 
@@ -179,7 +179,7 @@
         <option	value="ZA">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>
         <option	value="ECS">PLG_USER_PROFILE_FIELD_VAT_STATUS_ECS</option>
       </field>
-      
+
       <field
         name="vat_number"
         type="text"
@@ -190,11 +190,11 @@
         message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
         size="30"
         class="input-small"
-        labelclass="control-label"     
+        labelclass="control-label"
         maxlength="10"
         default=""
 			/>
-      
+
       <field
         name="company_number"
         type="text"
@@ -208,7 +208,7 @@
         class="input-small"
         maxlength="10"
         default=""
-			/> 
+			/>
     </fieldset>
   </fields>
 

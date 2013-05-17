@@ -127,13 +127,16 @@ class HelloWorldModelListing extends JModelList {
     $query = $this->_db->getQuery(true);
     $query->select('
         a.id,
+        a.expiry_date,
         a.review,
+        a.created_by,
         e.unit_id unit_id,
         e.parent_id,
         d.ordering,
         e.unit_title,
         e.changeover_day,
         d.published,
+        e.accommodation_type,
         e.created_on,
         base_currency,
         tariff_based_on,

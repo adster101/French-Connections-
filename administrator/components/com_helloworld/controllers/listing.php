@@ -4,15 +4,15 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
-// jimport('joomla.application.component.controlleradmin');
+jimport('joomla.application.component.controllerform');
 
 // Include the utility class which extends controllerform
-include_once('utility.php');
+//include_once('utility.php');
 
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerListing extends HelloWorldControllerUtility {
+class HelloWorldControllerListing extends JControllerForm {
 
   protected $extension;
 
@@ -33,6 +33,54 @@ class HelloWorldControllerListing extends HelloWorldControllerUtility {
     }
   }
 
+  /**
+   * Method to check if you can edit a record.
+   *
+   * @param   array   $data  An array of input data.
+   * @param   string  $key   The name of the key for the primary key.
+   *
+   * @return  boolean
+   *
+   * @since   1.6
+   */
+  protected function allowEdit($data = array(), $key = 'id') {
+
+    // Initialise variables.
+    $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
+    $user = JFactory::getUser();
+    $userId = $user->get('id');
+
+    // This covers the case where the user is creating a new property (i.e. id is 0 or not set
+    if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
+      return true;
+    }
+
+    // Check general edit permission first.
+    if ($user->authorise('core.edit', $this->extension)) {
+      return true;
+    }
+
+    // Fallback on edit.own.
+    // First test if the permission is available.
+    if ($user->authorise('core.edit.own', $this->extension)) {
+      // Now test the owner is the user.
+      $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
+      if (empty($ownerId) && $recordId) {
+        // Need to do a lookup from the model.
+        $record = $this->getModel('Property')->getItem($recordId);
+        if (empty($record)) {
+          return false;
+        }
+        $ownerId = $record->created_by;
+      }
+
+      // If the owner matches 'me' then do the test.
+      if ($ownerId == $userId) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /*
    * View action - checks ownership of record sets the edit id in session and redirects to the view
@@ -69,20 +117,17 @@ class HelloWorldControllerListing extends HelloWorldControllerUtility {
     return true;
   }
 
+  public function renew() {
 
-  public function renew()
-  {
-
-   // Check that this is a valid call from a logged in user.
+    // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
 
     $app = JFactory::getApplication();
-
     $records = $this->input->get('cid', array(), 'array');
     $recordId = $records[0];
-    $model = $this->getModel('Property','HelloWorldModel');
+    $model = $this->getModel('Property', 'HelloWorldModel');
     $table = $model->getTable();
- 		$context = "$this->option.property.$this->context";
+    $context = "$this->extension . '.' . $this->view_list . '.' . 'renew'";
 
     // Determine the name of the primary key for the data.
     if (empty($key)) {
@@ -103,44 +148,28 @@ class HelloWorldControllerListing extends HelloWorldControllerUtility {
       return false;
     }
 
-    // Get the details of the property listing that is being renewed
-    $record = $model->getItem($recordId);
 
-    // Check the review status and the expiry date
-    if ($record->review == 1) {
+    // User is allowed to edit this resource, push the new record id into the session.
+    $this->holdEditId($context, $recordId);
 
-      // OOps property needs to be submitted for review before it can be renewed.
-      // If status is anything but 1 then okay, we can let it through
-      // i.e. 0 is okay, 2 is locked for editing, e.g. marked for review
-      // Redirect to com_helloworld&task=property.renew
-        // Redirect to the renewal payment/summary form thingy...
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->extension . '&view=properties', false
-                )
-        );
-    } else {
+    // Redirect to the renewal payment/summary form thingy...
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false
+            )
+    );
 
-      // Assume that expiry date is in the past...
-      if ($record->expiry_date) {
-
-        // Add this to holdEditId etc...and then redirect to the view directly
-        JApplication::setUserState($this->extension . '.listing.detail', $record);
-
-        // Check-out succeeded, push the new record id into the session.
-        $this->holdEditId($context, $recordId);
-        $app->setUserState($context . '.data', null);
-
-        // Redirect to the renewal payment/summary form thingy...
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->extension . '&view=renewal&layout=billing&id=' . (int) $recordId, false
-                )
-        );
-      }
-    }
 
 
     return false;
   }
+
+  public function renew_verify_invoice_address() {
+
+    // Check valid checkEditId thingy for security
+    // Validate form, save details back to user table if needed and redirect to relevant screen.
+
+
+  }
+
 }

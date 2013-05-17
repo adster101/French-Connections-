@@ -73,6 +73,7 @@ abstract class HelloWorldHelper {
     //JSubMenuHelper::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_IMAGES'), 'index.php?option=com_helloworld&task=images.edit&id=' . $id, $submenu == 'images');
 
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ADDITIONAL_MARKETING'), '');
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_admin&view=profile&layout=edit&id=' . $user->id . '#sms', ($view == 'profile'));
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_INVOICES'), 'index.php?option=com_invoices', ($view == 'profile'));
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_RENTAL_ACCOMMODATION'), 'index.php?option=com_helloworld', ($view == 'properties'));

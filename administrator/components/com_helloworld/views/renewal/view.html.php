@@ -15,7 +15,7 @@ class HelloWorldViewRenewal extends JViewLegacy {
    * HelloWorld raw view display method
    * This is used to check how many properties the user has
    * when they click 'new' on the property manager.
-   * 
+   *
    * @return void
    */
   function display($tpl = null) {
@@ -25,20 +25,17 @@ class HelloWorldViewRenewal extends JViewLegacy {
 
     $this->extension = $input->get('option', '', 'string');
 
+    // Set the default model HelloWorldModelProperty
+    $this->setModel(JModelLegacy::getInstance('Property', 'HelloWorldModel'), true);
+
     $this->id = $input->get('id', '', 'int');
 
-    // Get the property listing details...again...
-    //$this->item = $this->get('Property');
-    
     // Get the units and image details they against this property
-    //$this->units = $this->get('Units');
-    
-    // Get the payment/address form
-    $this->form = $this->get('Form');
+    $this->summary = $this->get('RenewalSummary');
 
-    // Get a summary total of what the owner needs to pay for this renewal
-    $this->total = $this->get('Total');
-    
+    // Get the payment/address form
+    $this->form = $this->get('UserFormDetails');
+
     // Set the document
     $this->setDocument();
 
@@ -69,8 +66,8 @@ class HelloWorldViewRenewal extends JViewLegacy {
   protected function addToolBar() {
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
-    
-    // Display a helpful navigation for the owners 
+
+    // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {
 
       $view = strtolower(JRequest::getVar('view'));
@@ -81,11 +78,11 @@ class HelloWorldViewRenewal extends JViewLegacy {
       $this->sidebar = JHtmlSidebar::render();
     }
 
-    
+
     JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
 
     JToolBarHelper::help('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
-    
+
   }
 
 }

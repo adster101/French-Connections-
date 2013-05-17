@@ -15,7 +15,7 @@ class HelloWorldViewAutoRenewals extends JViewLegacy {
    * HelloWorld raw view display method
    * This is used to check how many properties the user has
    * when they click 'new' on the property manager.
-   * 
+   *
    * @return void
    */
   function display($tpl = null) {
@@ -62,12 +62,12 @@ class HelloWorldViewAutoRenewals extends JViewLegacy {
    */
   protected function addToolBar() {
 
-    JToolBarHelper::title(($this->item->title) ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->item->id, $this->item->title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW'));
+    JToolBarHelper::title(($this->id) ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->id, $this->item->title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW'));
 
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-    // Display a helpful navigation for the owners 
+    // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {
 
       $view = strtolower(JRequest::getVar('view'));
@@ -77,13 +77,13 @@ class HelloWorldViewAutoRenewals extends JViewLegacy {
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
     }
-    
+
     if ($canDo->get('helloworld.property.autorenew')) {
       // We can save the new record
       JToolBarHelper::save('autorenewals.save', 'JTOOLBAR_SAVE');
     }
-    
-    
+
+
     JToolBarHelper::cancel('autorenewals.cancel', 'JTOOLBAR_CLOSE');
 
     JToolBarHelper::help('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
