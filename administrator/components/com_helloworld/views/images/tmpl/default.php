@@ -7,15 +7,13 @@ JHtml::_('behavior.formvalidation');
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
-// load tooltip behavior
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
+// load tooltip behavior
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.multiselect');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
-
 $saveOrder = true;
 
 if ($saveOrder) {
@@ -28,8 +26,9 @@ $app = JFactory::getApplication();
 $input = $app->input;
 
 $id = $input->get('id', '', 'int');
+$data = array('item' => $this->unit, 'progress' => $this->progress);
 
-$data = JApplication::getUserState('listing', '');
+
 ?>
 
 <div class="row-fluid">
@@ -45,7 +44,7 @@ $data = JApplication::getUserState('listing', '');
       <?php endif; ?>
       <?php
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      // echo $layout->render($data);
+      echo $layout->render($data);
       ?>
       <div id="collapseUpload" class="in collapse">
         <!-- The file upload form used as target for the file upload widget -->

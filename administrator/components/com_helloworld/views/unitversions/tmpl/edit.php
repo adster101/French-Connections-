@@ -13,7 +13,6 @@ $userId = $user->get('id');
 // And determine the user groups the user is in
 
 $data = array('item' => $this->item, 'progress' => $this->progress);
-
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
@@ -32,7 +31,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <fieldset class="adminform">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>
           <div class="control-group">
-
             <?php echo $this->form->getLabel('unit_title'); ?>
             <div class="controls">
               <?php echo $this->form->getInput('unit_title'); ?>
@@ -91,6 +89,8 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
+          </div>
+          <div class="row-fluid">
             <div class="span3">
               <div class="control-group">
                 <?php echo $this->form->getLabel('quad_bedrooms'); ?>
@@ -123,6 +123,8 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
+          </div>
+          <div class="row-fluid">
             <div class="span3">
               <div class="control-group">
                 <?php echo $this->form->getLabel('extra_beds'); ?>
@@ -257,20 +259,14 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
             </div>
           <?php endforeach; ?>
         </fieldset>
-        <p>
-          <?php
-          echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
-          echo JHTML::_('select.genericlist', $this->languages, 'Language', 'onchange="submitbutton(\'changeLanguage\')"', 'value', 'text', $this->lang);
-          ?>
-        </p>
 
 
       </div>
     </div>
   </div>
-          <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
-                <?php echo $field->input; ?>
-          <?php endforeach; ?>
+  <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
+    <?php echo $field->input; ?>
+  <?php endforeach; ?>
 
 
   <input type="hidden" name="task" value="" />

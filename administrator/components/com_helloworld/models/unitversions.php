@@ -97,56 +97,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     return $item;
   }
-	/**
-	 * Method to load a row from the database by primary key and bind the fields
-	 * to the JTable instance properties.
-	 *
-	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
-	 *                           set the instance property value is used.
-	 * @param   boolean  $reset  True to reset the default values before loading the new row.
-	 *
-	 * @return  boolean  True if successful. False if row not found.
-	 *
-	 * @link    http://docs.joomla.org/JTable/load
-	 * @since   11.1
-	 * @throws  RuntimeException
-	 * @throws  UnexpectedValueException
-	 */
-	public function getProgress($id = '')
-	{
-
-    // Get the version id of the unit we are editing from the model state
-    $version_id = $this->getState($this->getName() . '.version.id','');
-
-    $unit_id = $this->getState($this->getName() . '.id','');
-
-    $db = JFactory::getDbo();
-
-    $query = $db->getQuery(true);
-
-		// Initialise the query.
-		$query = $this->_db->getQuery(true);
-		$query->select('
-      (select count(*) from #__property_attributes where version_id = ' . (int) $version_id . ') as facilities,
-      (select count(*) from qitz3_availability where id = ' . (int) $unit_id . ' and start_date > CURDATE()) as availability,
-      (select count(*) from qitz3_tariffs where id =  ' . (int) $unit_id . ' and start_date > CURDATE()) as tariffs,
-      (select count(*) from qitz3_property_images_library where version_id =  ' . (int) $version_id . ') as images
-    ');
-
-		$this->_db->setQuery($query);
-
-		$row = $this->_db->loadAssoc();
-
-    // Check that we have a result.
-		if (empty($row))
-		{
-			return false;
-		}
-
-		// Bind the object with the row and return.
-		return $row;
-	}
-
 
   /**
    * Method to get the record form.
@@ -220,7 +170,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    * @return	void
    * @since	1.6
    */
-  protected function populateState($ordering = null, $direction = null) {
+  public function populateState($ordering = null, $direction = null) {
 
     $canDo = HelloWorldHelper::getActions();
     $this->setState('actions.permissions', $canDo);

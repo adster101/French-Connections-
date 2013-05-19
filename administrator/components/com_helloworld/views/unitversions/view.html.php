@@ -47,15 +47,11 @@ class HelloWorldViewUnitVersions extends JViewLegacy
     // Get the unit progress...
     $this->progress = $model->getItems();
 
-
     // Get the unit edit form
 		$this->form = $this->get('Form');
 
     $this->languages = HelloWorldHelper::getLanguages();
 		$this->lang = HelloWorldHelper::getLang();
-
-    // Register the JHtmlProperty class
-    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

@@ -27,7 +27,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
 ?>
 <ul class="nav nav-tabs">
   <li<?php echo ($view == 'propertyversions') ? ' class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item,'parent_id','') ?>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions','edit','compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item,'parent_id','') ?>
   </li>
   <?php if (count($data['progress']) > 1) : ?>
     <li class="dropdown">
@@ -49,15 +49,15 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
     </li>
   <?php endif; ?>
   <li<?php echo ($view == 'unitversions') ? ' class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','') ?>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','') ?>
   </li>
   <li<?php echo ($view == 'images' || $view == 'image') ? ' class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','') ?>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage','pictures', 'IMAGE_GALLERY', $item, 'unit_id','') ?>
   </li>
   <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
   </li>
   <li>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
   </li>
 </ul>

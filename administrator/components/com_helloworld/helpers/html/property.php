@@ -199,24 +199,24 @@ class JHtmlProperty {
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id, $unit_id, $task, $icon, $button_text, $item, $urlParam = 'parent_id',$btnClass='') {
+  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'parent_id',$btnClass = '') {
     $active = false;
     $progress_icon = 'warning';
     $html = '';
 
-    if (!empty($listing_id) && ($task == 'propertyversions')) {
+    if (!empty($listing_id) && ($controller == 'propertyversions')) {
 
       $active = true;
       $progress_icon = 'ok';
       $id = $listing_id;
 
-    } elseif (empty($listing_id) && ($task == 'propertyversions')) {
+    } elseif (empty($listing_id) && ($controller == 'propertyversions')) {
 
       $active = true;
       $progress_icon = 'warning';
       $id = $listing_id;
 
-    }  elseif (empty($unit_id) && $task == 'unitversions' && !empty($listing_id)) { // This property has no unit, or unit details not completed...
+    }  elseif (empty($unit_id) && $controller == 'unitversions' && !empty($listing_id)) { // This property has no unit, or unit details not completed...
 
       $active = true;
       $progress_icon = 'warning';
@@ -224,25 +224,25 @@ class JHtmlProperty {
       // Set urlParam here as a new unit may need listing id in GET scope
       $urlParam = 'parent_id';
 
-    } elseif (!empty($unit_id) && $task == 'images') {
+    } elseif (!empty($unit_id) && $controller == 'images') {
 
       $active = true;
       $progress_icon = ($item->images > 0) ? 'ok' : 'warning';
       $id = $unit_id;
 
-    } elseif (!empty($unit_id) && $task == 'availability') {
+    } elseif (!empty($unit_id) && $controller == 'availability') {
 
       $progress_icon = ($item->availability > 0) ? 'ok' : 'warning';
       $active = true;
       $id = $unit_id;
 
-    } elseif (!empty($unit_id) && $task == 'tariffs') {
+    } elseif (!empty($unit_id) && $controller == 'tariffs') {
 
       $active = true;
       $progress_icon = ($item->tariffs > 0) ? 'ok' : 'warning';
       $id = $unit_id;
 
-    } elseif (!empty($unit_id) && $task == 'unitversions') {
+    } elseif (!empty($unit_id) && $controller == 'unitversions') {
 
       $active = true;
       $progress_icon = 'ok';
@@ -253,7 +253,7 @@ class JHtmlProperty {
     if ($active) {
       // This button should be active
       $html .= '<a class="' . $btnClass . '"'
-              . ' href="' . JRoute::_('index.php?option=com_helloworld&task=' . $task . '.edit&' . $urlParam . '=' . (int) $id) . '"'
+              . ' href="' . JRoute::_('index.php?option=com_helloworld&task=' . $controller . '.' . $action . '&' . $urlParam . '=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '"'
               . ' rel="tooltip">';
       $html .= '<i class="icon icon-' . $icon . '"></i>';
       $html .= '&nbsp;' . Jtext::_($button_text);

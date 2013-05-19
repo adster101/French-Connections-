@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-$data = JApplication::getUserState('listing', '');
+
 $availability_last_updated = (!empty($this->item->availability_last_updated)) ? $this->item->availability_last_updated : '';
 ?>
 <div class="row-fluid">
@@ -17,7 +17,7 @@ $availability_last_updated = (!empty($this->item->availability_last_updated)) ? 
       <?php endif; ?>
       <?php
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      // echo $layout->render($data);
+      echo $layout->render($data);
       ?>  
       <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->item->unit_title); ?></legend>
       <div class="row-fluid">

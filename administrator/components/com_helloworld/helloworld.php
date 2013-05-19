@@ -10,7 +10,10 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_helloworld'))
  
 // Register the Helloworld helper file
 JLoader::register('HelloWorldHelper', dirname(__FILE__) . '/helpers/helloworld.php');
- 
+
+// Register the JHtmlProperty class
+JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
+
 // import joomla controller library
 jimport('joomla.application.component.controller');
 

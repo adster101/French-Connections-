@@ -4,7 +4,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla modelform library
-jimport('joomla.application.component.modeladmin');
+jimport('joomla.application.component.modellist');
 
 /**
  * Images Model
@@ -22,8 +22,9 @@ class HelloWorldModelImages extends JModelList {
 
     // Get the listing details from the model state...
     $app = JFactory::getApplication();
-    $id = $this->getState('version_id','');
     
+    $id = $this->getState('version_id','');
+        
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
@@ -167,5 +168,8 @@ class HelloWorldModelImages extends JModelList {
 
     return $blank_image;
   }
+  
 
+  
+  
 }

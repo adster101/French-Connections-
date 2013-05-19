@@ -16,33 +16,32 @@ class HelloWorldViewImages extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-    $model = $this->getModel();
+    // Add the Listing model to this view, so we can get the progress stuff
+    $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel',array('ignore_request'=>true)));
 
+    // Add the Listing unitversions model to this view, so we can get the unit detail
+    $this->setModel(JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel'));
+
+    // Get the unitversions instance so we can get the unit detail
+    $unit = $this->getModel('UnitVersions');
+    $unit->populateState();
+    $this->unit = $unit->getItem();
+    
+    // Get the listing model so we can get the tab progress detail
+    $progress = $this->getModel('Listing');
+    $progress->setState('com_helloworld.listing.id',$this->unit->parent_id);
+    $this->progress = $progress->getItems();
+    
+    // populateState for the images model
     $this->state = $this->get('State');
-    $model->setState('woot','wooty');
-    print_r($this->state);die;
-
-
-		// Get the property ID we are editing.
-		$this->item->id = JRequest::getVar('id');
-
-    $app = JFactory::getApplication();
-
-    // Get the custom script path for this screen
-		$script = $this->get('Script');
-
-    // Get the item data
-    $items = $this->get('Items');
-
-    // Assign the Item
-		$this->items = $items;
+    $images = $this->getModel();
+    $images->setState('version_id',$this->unit->id);
+    
+    // Get the images associated with this unit version 
+    $this->items = $this->get('Items');
 
 		// Set the toolbar
 		$this->addToolBar();
-
-		// Set the custom script
-		$this->script = $script;
-
 
 		// Display the template
 		parent::display($tpl);
@@ -69,7 +68,7 @@ class HelloWorldViewImages extends JViewLegacy
     // Get the listing details from the session...
     $listing = JApplication::getUserState('listing', false);
 
-    JToolBarHelper::title($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
  		$bar = JToolBar::getInstance('toolbar');
 
@@ -89,7 +88,7 @@ class HelloWorldViewImages extends JViewLegacy
 
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-		JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CANCEL');
+		JToolBarHelper::cancel('listing.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('', '');
 
@@ -114,9 +113,6 @@ class HelloWorldViewImages extends JViewLegacy
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-
-    // Get the listing details from the session...
-    $listing = JApplication::getUserState('listing', false);
 
     $document->setTitle($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 

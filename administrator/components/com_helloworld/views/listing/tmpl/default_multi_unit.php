@@ -54,7 +54,7 @@ $data['progress'] = $this->progress;
               <strong>Property details</strong>
             </td>
             <td>
-              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0],'parent_id','btn') ?>
+              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0],'parent_id','btn') ?>
             </td>
           </tr>
           <tfoot>
@@ -103,10 +103,10 @@ $data['progress'] = $this->progress;
                   </td>
 
                   <td>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'manage', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id','btn') ?>
                   </td>
 
                 </tr>

@@ -4,12 +4,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
-jimport('joomla.application.component.controllerform');
+jimport('joomla.application.component.controlleradmin');
 
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerAvailability extends JControllerForm {
+class HelloWorldControllerAvailability extends JControllerAdmin {
 
   protected $extension;
 
@@ -82,6 +82,33 @@ class HelloWorldControllerAvailability extends JControllerForm {
     return false;
   }
 
-  public function postSaveHook(){
+  public function manage() {
+
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken('GET') or die('Invalid Token');
+
+    // $id is the listing the user is trying to edit
+    $id = $this->input->get('unit_id', '', 'int');
+
+    $data['id'] = $id;
+
+    if (!$this->allowEdit($data, 'id')) {
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false)
+      );
+
+      $this->setMessage('blah', 'error');
+
+      return false;
+    }
+
+
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=availability&unit_id=' . (int) $id, false)
+    );
+    return true;
   }
+
 }

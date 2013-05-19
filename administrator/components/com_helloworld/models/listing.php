@@ -61,7 +61,7 @@ class HelloWorldModelListing extends JModelList {
 
     $context = $this->context;
 
-    $this->setState($this->context . '.id',$id);
+    $this->setState($this->context . '.id', $id);
 
     $extension = $app->getUserStateFromRequest('com_helloworlds.property.filter.extension', 'extension', 'com_helloworlds', 'cmd');
 
