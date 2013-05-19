@@ -25,6 +25,11 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
 
 
 ?>
+<?php if (empty($item->expiry_date)) : ?>
+<div class="alert alert-info">
+  Property listing 0% complete
+</div>
+<?php endif; ?>
 <ul class="nav nav-tabs">
   <li<?php echo ($view == 'propertyversions') ? ' class=\'active\'' : '' ?>>
     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions','edit','compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item,'parent_id','') ?>
