@@ -37,7 +37,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
   }
 
   /**
-   * 
+   *
    * The folder we are uploading into
    */
   protected $folder = '';
@@ -65,13 +65,13 @@ class HelloWorldControllerImages extends JControllerAdmin {
     if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
       return true;
     }
-    
+
     // Check general edit permission first.
     // User can edit anything in this extension
     if ($user->authorise('core.edit', $this->extension)) {
       return true;
     }
-    
+
     // First test if the permission is available.
     if ($user->authorise('core.edit.own', $this->extension)) {
 
@@ -105,53 +105,53 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Set up some arrays
     // Data is used to check the ownership and also passed to the model save method...
     $data = array();
-    
+
     // Response is used to send a message back to the client
     $response = array();
 
     // Get the input data
     $app = JFactory::getApplication();
     $input = $app->input;
-    
-    // Build up the data 
+
+    // Build up the data
     $data['property_id'] = $input->get('property_id', '', 'int');
     $data['caption'] = $input->get('caption','','string');
-    $data['id'] = $input->get('id','','int'); 
-    
+    $data['id'] = $input->get('id','','int');
+
     // Check that this user is authorised to edit (i.e. owns) this this property
-    if (!$this->allowEdit($data, 'property_id')) 
+    if (!$this->allowEdit($data, 'property_id'))
     {
       $response = JText::_('NOT_AUTHORISED');
       echo $response;
-      jexit(); // Exit this request now as results passed back to client via xhr transport.    
-     
-    }
-    
+      jexit(); // Exit this request now as results passed back to client via xhr transport.
 
-    
+    }
+
+
+
     // Need to ensure the caption is filtered at some point
 
     // Load the relevant model(s) so we can save the data back to the db
     $model = $this->getModel('Image','HelloWorldModel');
-    
+
     // If we are happy to save and have something to save
     if (!$model->save($data)) {
       // Problem saving, oops
       $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
       echo $response;
-      jexit(); // Exit this request now as results passed back to client via xhr transport.    
+      jexit(); // Exit this request now as results passed back to client via xhr transport.
 
     }
-    
+
 
     $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_UPDATED');
-    
+
     echo $response;
 
-    jexit(); // Exit this request now as results passed back to client via xhr transport.    
-    
-    // Log out to a file 
-    // User ID updates caption ID from to on this 
+    jexit(); // Exit this request now as results passed back to client via xhr transport.
+
+    // Log out to a file
+    // User ID updates caption ID from to on this
   }
 
   function delete() {
@@ -162,12 +162,12 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Get the application instance
     $app = JFactory::getApplication();
     $input = $app->input;
-    
-    // Build up the data 
-    
+
+    // Build up the data
+
     $data['property_id'] = $input->get('property_id', '', 'int');
-    $data['id'] = $input->get('id','','int'); 
-   
+    $data['id'] = $input->get('id','','int');
+
     // Check that this user is authorised to edit (i.e. owns) this this asset
     if (!$this->allowEdit($data, 'property_id')) {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
@@ -182,7 +182,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $table = $model->getTable();
 
     if (!$table->delete($data['id'])) {
-       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'message');     
+       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'message');
     } else {
       // Set the message
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
@@ -193,9 +193,9 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
   /*
    * Action to handle uploading of images from the unit image gallery
-   * 
+   *
    * TODO - Make this code more resuable...
-   * 
+   *
    */
 
   function upload() {
@@ -221,8 +221,8 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
     }
-       
-    
+
+
     // Get the media component parameters
     $params = JComponentHelper::getParams('com_media');
 
@@ -274,18 +274,18 @@ class HelloWorldControllerImages extends JControllerAdmin {
         // The file can't be uploaded
         $file['error'][] = JText::_($err);
       }
-      
+
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
-      
+
       if (empty($file['error'])) {
-      
+
         // Move the file from the tmp location to the property image folder
         if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
           // Error in upload
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE');
         }
       }
-        
+
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
       if (empty($file['error'])) {
 
@@ -304,7 +304,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
 
         // Get an instance of the images model file so we can load the existing images for this unit
-        // primarily so we can get the ordering 
+        // primarily so we can get the ordering
         $model = $this->getModel('Images');
 
         $existing_images = $model->getItems();
@@ -372,7 +372,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
         'filepath' => JPath::clean(implode('/', array($this->folder, $name))),
     );
   }
-  
+
 	/**
 	 * Method to save the submitted ordering values for records via AJAX.
 	 *
@@ -385,7 +385,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
 		$pks = $this->input->post->get('cid', array(), 'array');
 		$order = $this->input->post->get('order', array(), 'array');
 
-   
+
 		// Sanitize the input
 		JArrayHelper::toInteger($pks);
 		JArrayHelper::toInteger($order);
@@ -439,6 +439,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
     );
     return true;
   }
-  
+
 }
 

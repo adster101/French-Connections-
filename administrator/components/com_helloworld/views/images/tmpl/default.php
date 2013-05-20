@@ -25,10 +25,8 @@ $app = JFactory::getApplication();
 
 $input = $app->input;
 
-$id = $input->get('id', '', 'int');
+$unit_id = $input->get('unit_id', '', 'int');
 $data = array('item' => $this->unit, 'progress' => $this->progress);
-
-
 ?>
 
 <div class="row-fluid">
@@ -159,11 +157,19 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
           {% } %}
           </script>
 
-          <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
+          <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
+
             <fieldset>
               <legend>
                 <?php echo JText::_('COM_HELLOWORLD_IMAGES_EXISTING_IMAGE_LIST'); ?>
               </legend>
+              <div class="pull-left">
+                <?php echo $this->pagination->getListFooter() ?>
+              </div>
+              <div class="btn-group pull-right">
+                <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
+                <?php echo $this->pagination->getLimitBox(); ?>
+              </div>
               <table id="articleList" class="table table-striped">
                 <thead>
                   <tr>
@@ -199,9 +205,9 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
               <input type="hidden" name="task" value="" />
               <input type="hidden" name="boxchecked" value="0" />
               <?php echo JHtml::_('form.token'); ?>
+
             </fieldset>
           </form>
-
         </div>
 
         <div class="span2">

@@ -3,8 +3,24 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
+$data = array('item' => $this->unit, 'progress' => $this->progress);
 
-$availability_last_updated = (!empty($this->item->availability_last_updated)) ? $this->item->availability_last_updated : '';
+// Get the input data
+$app = JFactory::getApplication();
+$input = $app->input;
+$view = $input->get('view', '', 'string');$languages = HelloWorldHelper::getLanguages();
+
+// Process the units into a keyed array (useful so we can get at individual units)
+// Easier to just foreach ?
+$units = HelloWorldHelper::getUnitsById($data['progress']);
+
+// Determine the unit id, if a new unit unit_id = 0 - the listing id is then used as parent in the create unit view
+($view == 'propertyversions') ? $unit_id = key($units) : $unit_id = $input->get('unit_id', '0', 'int');
+
+// Set the item which is used below to output the tabs
+$item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);
+
+$availability_last_updated = (!empty($item->availability_last_updated_on)) ? $item->availability_last_updated_on : '';
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
@@ -18,8 +34,8 @@ $availability_last_updated = (!empty($this->item->availability_last_updated)) ? 
       <?php
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
       echo $layout->render($data);
-      ?>  
-      <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->item->unit_title); ?></legend>
+      ?>
+      <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->unit->unit_title); ?></legend>
       <div class="row-fluid">
         <div class="span8">
           <p class="pull-left">
@@ -34,11 +50,12 @@ $availability_last_updated = (!empty($this->item->availability_last_updated)) ? 
               <td>&nbsp;</td>
               <td class="unavailable">1</td>
               <td>&nbsp;<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY_UNAVAILABLE') ?></td>
-          </table> 
+            </tr>
+          </table>
         </div>
       </div>
       <?php echo $this->calendar; ?>
-      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=availability&task=edit&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=availability&unit_id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <div id="availabilityModal" class="hide fade modal">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -67,7 +84,7 @@ $availability_last_updated = (!empty($this->item->availability_last_updated)) ? 
               <?php echo JText::_('JCANCEL') ?>
             </button>
 
-          </div> 
+          </div>
         </div>
       </form>
 

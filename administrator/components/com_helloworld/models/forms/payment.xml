@@ -162,7 +162,7 @@
 
   <fields name="vat">
 
-    <fieldset name="vat-details" description="PLG_USER_PROFILE_LEGEND_VAT_DETAILS">
+    <fieldset name="vat-details" label="PLG_USER_PROFILE_LEGEND_VAT_DETAILS">
       <field
         name="vat_status"
         required="true"

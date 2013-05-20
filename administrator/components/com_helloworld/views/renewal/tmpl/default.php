@@ -37,9 +37,6 @@ $fieldsets = $this->form->getFieldSets();
             </button>
           </fieldset>
         <?php endforeach; ?>
-
-
-
         <input type="hidden" name="task" value="renewal.doPayment" />
         <?php echo JHtml::_('form.token'); ?>
 

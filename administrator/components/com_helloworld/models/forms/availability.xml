@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
-  
+
 	<fieldset name="availability">
-         
+
 		<field
 			name="start_date"
 			type="text"
@@ -26,7 +26,7 @@
 			validate=""
 			required="true"
 			default=""
-      readonly="true"  
+      readonly="true"
       labelclass="control-label">
     </field>
 		<field
@@ -37,18 +37,18 @@
 			class="required input-medium"
 			validate=""
 			required="true"
-			default=""      
+			default=""
       labelclass="control-label"
       filter="int">
 				<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
 				<option value="0">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>
-		</field>	
-    <field 
-      name="id"
+		</field>
+    <field
+      name="unit_id"
       type="hidden"
       filter="int">
     </field>
-      
-	</fieldset>	
+
+	</fieldset>
 </form>

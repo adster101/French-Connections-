@@ -21,6 +21,11 @@ class HelloWorldModelProperty extends JModelAdmin {
    */
   public $owner_id = '';
 
+  /*
+   * Whether this is a renewal or not - determined via the expiry date
+   */
+  public $renewal = '';
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -63,6 +68,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
   public function getRenewalSummary() {
 
+    // The call to getState also calls populateState (if it hasn't been called already)
     $id = $this->getState($this->getName() . '.id', '');
 
     if (empty($id)) {
@@ -73,19 +79,21 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Get an instance of the units model
     $model = JModelLegacy::getInstance('listing', 'HelloWorldModel');
 
-    $units = $model->getItems();
+    $listing = $model->getItems();
 
-    if (!$units) {
+    if (!$listing) {
       return false;
     }
 
     // Get the user details based on the owner of the property
-    $this->owner_id = ($units[0]->created_by) ? $units[0]->created_by : '';
+    $this->owner_id = ($listing[0]->created_by) ? $listing[0]->created_by : '';
+
+    // Set the renewal status
+    $this->renewal = (!empty($listing[0]->expiry_date)) ? true : false;
 
     $user = $this->getUser($this->owner_id);
 
-
-    $summary = $this->summary($units, $user);
+    $summary = $this->summary($listing, $user);
 
     // Get vouchers, need to pick up any vouchers that are added against a property here
     // Detect the inclusion into the French site network
@@ -94,6 +102,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     return $units;
   }
+
 
   /*
    * Method to get the payment form bound with the details of the
@@ -167,15 +176,18 @@ class HelloWorldModelProperty extends JModelAdmin {
    *
    *
    */
-  protected function summary ($units = array(), $user) {
+
+  protected function summary($units = array(), $user) {
 
     // $units contains the listing including all the units and so on.
     // From this we can generate our pro forma order
     // Need to know the user invoice address and VAT status for this user
     // If we don't know the VAT status then intially apply it.
     // If the property is a B&B, then only charge for one unit, regardless of how many units are listed.
-
+    // If the expiry date is set then this is a renewal. Regardless of whether it has actually expired or not
+    // Item codes will be dependent on whether it is a renewal or not
     // Flag to indicate whether we've alrady counted a b&B unit
+
     $bed_and_breakfast = false;
 
     // A unit counter
@@ -184,12 +196,17 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Total images holder
     $image_count = 0;
 
+    // Item costs line holder
+    $item_costs = array();
+
     // Loop over all the units found
     foreach ($units as $unit) {
 
       if ($unit->accommodation_type == 25) {
+
         $unit_count++;
       } else {
+
         (!$bed_and_breakfast) ? $unit_count++ : '';
 
         $bed_and_breakfast = true;
@@ -197,9 +214,27 @@ class HelloWorldModelProperty extends JModelAdmin {
 
       // If image count less than number of images on this unit, update image count
       ($image_count < $unit->images) ? $image_count = $unit->images : '';
+    }
+
+    // Determine the item costs
+    if ($image_count >=8 ) {
+
+      if ($this->renewal) {
+
+        $item_costs[] = '1004-009';
+
+      } else {
+
+      $item_costs[] = '1005-009';
+
+    }
 
 
     }
+
+
+
+    print_r($item_costs);die;
 
 
 
@@ -208,10 +243,6 @@ class HelloWorldModelProperty extends JModelAdmin {
     echo $image_count;
     echo "<br />";
     echo $unit_count;
-
-
-
   }
-
 
 }

@@ -26,19 +26,21 @@ class HelloWorldViewImages extends JViewLegacy
     $unit = $this->getModel('UnitVersions');
     $unit->populateState();
     $this->unit = $unit->getItem();
-    
+
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');
     $progress->setState('com_helloworld.listing.id',$this->unit->parent_id);
     $this->progress = $progress->getItems();
-    
+
     // populateState for the images model
     $this->state = $this->get('State');
     $images = $this->getModel();
     $images->setState('version_id',$this->unit->id);
-    
-    // Get the images associated with this unit version 
+
+    // Get the images associated with this unit version
     $this->items = $this->get('Items');
+
+    $this->pagination = $this->get('Pagination');
 
 		// Set the toolbar
 		$this->addToolBar();
@@ -65,10 +67,7 @@ class HelloWorldViewImages extends JViewLegacy
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();
 
-    // Get the listing details from the session...
-    $listing = JApplication::getUserState('listing', false);
-
-    JToolBarHelper::title($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title(($this->unit->unit_title) ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
  		$bar = JToolBar::getInstance('toolbar');
 
@@ -114,7 +113,7 @@ class HelloWorldViewImages extends JViewLegacy
 	{
 		$document = JFactory::getDocument();
 
-    $document->setTitle($listing->title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $listing->title,$listing->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
     $document->addScript("http://blueimp.github.com/JavaScript-Templates/tmpl.min.js", 'text/javascript', true, false);

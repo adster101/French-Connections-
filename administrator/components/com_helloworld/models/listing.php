@@ -136,12 +136,13 @@ class HelloWorldModelListing extends JModelList {
         e.unit_title,
         e.changeover_day,
         d.published,
+        d.availability_last_updated_on,
         e.accommodation_type,
         e.created_on,
         base_currency,
         tariff_based_on,
         (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
-        (select count(*) from qitz3_availability where id = d.id and end_date > CURDATE()) as availability,
+        (select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where id = d.id and end_date > CURDATE()) as tariffs
       ');
     $query->from('#__property as a');

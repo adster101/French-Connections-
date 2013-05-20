@@ -4,12 +4,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
-jimport('joomla.application.component.controlleradmin');
+jimport('joomla.application.component.controllerform');
 
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerAvailability extends JControllerAdmin {
+class HelloWorldControllerAvailability extends JControllerForm {
 
   protected $extension;
 
@@ -104,6 +104,8 @@ class HelloWorldControllerAvailability extends JControllerAdmin {
     }
 
 
+    $this->holdEditId('com_helloworld.edit.availability',$id);
+    
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=availability&unit_id=' . (int) $id, false)

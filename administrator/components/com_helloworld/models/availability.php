@@ -11,6 +11,8 @@ jimport('joomla.application.component.modeladmin');
  */
 class HelloWorldModelAvailability extends JModelAdmin {
 
+  protected $unit = '';
+
   /**
    * Overrideen Method to save the form data.
    *
@@ -22,23 +24,29 @@ class HelloWorldModelAvailability extends JModelAdmin {
    */
   public function save($data) {
 
-    $dispatcher = JEventDispatcher::getInstance();
-    $app = JFactory::getApplication();
-    $data = $app->input->post->get('jform', array(), 'array');
-    $id = $app->input->get('id', '', 'int');
+    // Required objects
+    $input = JFactory::getApplication()->input;
+
+    $data = new JRegistry($input->get('jform', '', 'array'));
+
+    // Get any data being able to use default values
+    $id = $data->get('unit_id', 0);
+    $start_date = $data->get('start_date', null);
+    $end_date= $data->get('end_date', null);
+    $availability_status = $data->get('availability',1);
 
     // Allow an exception to be thrown.
     try {
       // Load in existing availability, so we can merge it with this new availability
       $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-      $availability = $availabilityTable->load($id);
+      $availability = $availabilityTable->load($data->id);
 
-      $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $data['start_date'], $data['end_date'], $data['availability']);
+      $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $start_date, $end_date, $availability_status);
       $availability_by_period = HelloWorldHelper::getAvailabilityByPeriod($availability_by_day);
 
       // Delete existing availability
       // Need to wrap this in some logic
-      $availabilityTable->delete($id);
+      $this->delete($data->id);
 
       // Bind the translated fields to the JTable instance
       if (!$availabilityTable->save($id, $availability_by_period)) {
@@ -52,9 +60,6 @@ class HelloWorldModelAvailability extends JModelAdmin {
       $this->setError($e->getMessage());
       return false;
     }
-
-
-
 
     $this->setState($this->getName() . '.id', $id);
 
@@ -79,7 +84,7 @@ class HelloWorldModelAvailability extends JModelAdmin {
    * Returns a the availability for this property
    *
    */
-  public function getAvailability($id = '') {
+  public function getAvailability() {
 
     $id = (!empty($id)) ? $id : (int) $this->getState($this->getName() . '.id');
 
@@ -92,7 +97,6 @@ class HelloWorldModelAvailability extends JModelAdmin {
       $this->setError($e->getMessage());
       return false;
     }
-
 
     return $result;
   }
@@ -114,9 +118,9 @@ class HelloWorldModelAvailability extends JModelAdmin {
     $query = $db->getQuery(true);
 
     $query = $this->_db->getQuery(true);
-    $query->select('id, start_date, end_date, availability');
+    $query->select('unit_id, start_date, end_date, availability');
     $query->from($this->_db->quoteName('#__availability'));
-    $query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
+    $query->where($this->_db->quoteName('unit_id') . ' = ' . $this->_db->quote($id));
     $this->_db->setQuery($query);
 
     return $query;
@@ -136,6 +140,7 @@ class HelloWorldModelAvailability extends JModelAdmin {
     if (empty($form)) {
       return false;
     }
+
     return $form;
   }
 
@@ -151,16 +156,41 @@ class HelloWorldModelAvailability extends JModelAdmin {
     if (empty($data)) {
       $data = $this->getItem();
     }
+
+
     return $data;
   }
 
   /**
-   * Method to get the script that have to be included on the form
+   * Method to get a single record.
    *
-   * @return string	Script files
+   * @param   integer  $pk  The id of the primary key.
+   *
+   * @return  mixed    Object on success, false on failure.
+   *
+   * @since   12.2
    */
-  public function getScript() {
-    return 'administrator/components/com_helloworld/models/forms/availability.js';
+  public function getItem($pk = null) {
+    $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+
+    $table = $this->getTable('UnitVersions', 'HelloWorldTable');
+
+    if ($pk > 0) {
+      // Attempt to load the row.
+      $return = $table->load($pk);
+
+      // Check for a table object error.
+      if ($return === false && $table->getError()) {
+        $this->setError($table->getError());
+        return false;
+      }
+    }
+
+    // Convert to the JObject before adding other data.
+    $properties = $table->getProperties(1);
+    $item = JArrayHelper::toObject($properties, 'JObject');
+
+    return $item;
   }
 
 }
