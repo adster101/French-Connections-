@@ -91,18 +91,97 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Set the renewal status
     $this->renewal = (!empty($listing[0]->expiry_date)) ? true : false;
 
+    // Get the user details
     $user = $this->getUser($this->owner_id);
 
-    $summary = $this->summary($listing, $user);
+    // Get the order summary, consists of item codes and quantities
+    $order_summary = $this->summary($listing);
+
+    // Get the item cost details based on the summary
+    $item_costs = $this->getItemCosts($order_summary);
+
+    // Add the VAT status to the order summary
+    $vat_status = ($user->vat_status) ? $user->vat_status : 'Z';
+
+    // Calculate the value of each line of the order...
+    $order_summary = $this->getOrderTotals($order_summary, $item_costs, $vat_status);
 
     // Get vouchers, need to pick up any vouchers that are added against a property here
     // Detect the inclusion into the French site network
-    // Need to determine if this is a renewal...check expiry date
 
 
-    return $units;
+    $order_summary = JArrayHelper::toObject($order_summary);
+
+
+
+    return $order_summary;
   }
 
+  /*
+   * Calculate the line costs for the pro forma order
+   *
+   */
+
+  public function getOrderTotals($order_summary = array(), $item_costs = array(), $vat_status) {
+
+    // Get the vat rate from the item costs config params setting
+    $vat = JComponentHelper::getParams('com_itemcosts')->get('vat');
+
+    // Loop over each order line and merge the item cost in
+    foreach ($order_summary as $order => &$line) {
+      if (array_key_exists($order, $item_costs)) {
+
+        $line = array_merge($order_summary[$order], $item_costs[$order]);
+      }
+
+      if ($vat_status == 'S2' || $vat_status == 'S2A') {
+        $line['vat'] = $line['quantity'] * $line['cost'] * $vat;
+      } else {
+        $line['vat'] = 0;
+      }
+      $line['line_value'] = $line['quantity'] * $line['cost'];
+
+    }
+
+    return $order_summary;
+  }
+
+  /*
+   * Get the item costs for the renewal
+   *
+   */
+
+  public function getItemCosts($order_summary = array()) {
+
+    if (empty($order_summary)) {
+      return array();
+    }
+
+    $items = array_keys($order_summary);
+
+    // Required objects
+    $db = JFactory::getDbo();
+
+    foreach ($items as $key => &$item) {
+      $item = $db->quote($item);
+    }
+
+    $item_codes = implode(',', $items);
+
+    $query = $db->getQuery(true);
+    $query->select('code, description as item_description, cost, catid');
+    $query->from('#__item_costs');
+
+    $query->where('code in (' . $item_codes . ')');
+
+
+    $db->setQuery($query);
+
+    $result = $db->loadAssocList($key = 'code');
+
+
+    return $result;
+  }
 
   /*
    * Method to get the payment form bound with the details of the
@@ -113,7 +192,7 @@ class HelloWorldModelProperty extends JModelAdmin {
   public function getUserFormDetails() {
 
     // Get a copy of the form we are using to collect the user invoice address and vat status
-    $form = $this->loadForm('com_helloworld.helloworld', 'payment', array('control' => 'jform', 'load_data' => false));
+    $form = $this->loadForm('com_helloworld.helloworld', 'ordersummary', array('control' => 'jform', 'load_data' => false));
 
     if (empty($form)) {
       return false;
@@ -172,12 +251,12 @@ class HelloWorldModelProperty extends JModelAdmin {
   }
 
   /*
-   * Method to process and generate a rough proforma order...
+   * Method to process and generate a proforma order...
    *
    *
    */
 
-  protected function summary($units = array(), $user) {
+  protected function summary($units = array()) {
 
     // $units contains the listing including all the units and so on.
     // From this we can generate our pro forma order
@@ -215,34 +294,52 @@ class HelloWorldModelProperty extends JModelAdmin {
       // If image count less than number of images on this unit, update image count
       ($image_count < $unit->images) ? $image_count = $unit->images : '';
     }
+    // Below covers most cases
+    // Need to also consider
+    // Site network, e.g. French Translations
+    // Video
+    // Booking form, although not counted at renewal
+    // Link to personal site
+    // Special offers - figure out how to deal with
 
-    // Determine the item costs
-    if ($image_count >=8 ) {
+    if ($this->renewal) {
 
-      if ($this->renewal) {
+      // Determine the item costs
+      if ($image_count >= 8) { // Renewal
+        $item_costs['1004-009']['quantity'] = 1;
+        $item_costs['1004-006']['quantity'] = $unit_count;
+      } else { // Image count must be less than 8 but still a renewal
+        $item_costs['1004-002']['quantity'] = 1;
+        $item_costs['1004-006']['quantity'] = $unit_count;
 
-        $item_costs[] = '1004-009';
+        if ($image_count > 4 && $image_count <= 7) {
 
-      } else {
+          // Additional images
+          $additional_images = $image_count - 4;
 
-      $item_costs[] = '1005-009';
+          $item_costs['1004-005']['quantity'] = $additional_images;
+        }
+      }
+    } else { // New property being published for first time
+      // Determine the item costs
+      if ($image_count >= 8) { // Renewal
+        $item_costs['1004-009']['quantity'] = 1;
+        $item_costs['1004-006']['quantity'] = $unit_count;
+      } else { // Image count must be less than 8
+        $item_costs['1005-002']['quantity'] = 1;
+        $item_costs['1005-006']['quantity'] = $unit_count;
 
+        if ($image_count > 4 && $image_count <= 7) {
+
+          // Additional images
+          $additional_images = $image_count - 4;
+
+          $item_costs['1005-005']['quantity'] = $additional_images;
+        }
+      }
     }
 
-
-    }
-
-
-
-    print_r($item_costs);die;
-
-
-
-
-    // Determine the item cost dependent on the max number of images a unit has...
-    echo $image_count;
-    echo "<br />";
-    echo $unit_count;
+    return $item_costs;
   }
 
 }

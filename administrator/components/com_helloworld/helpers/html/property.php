@@ -157,11 +157,29 @@ class JHtmlProperty {
     $html = '';
 
 
-    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'listing.renew\')" title="' . $title . '" class="btn btn-danger">'
+    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'listing.ordersummary\')" title="' . $title . '" class="btn btn-danger">'
             . JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW') . '</a>';
 
     return $html;
   }
+
+  /*
+   * A generic make button function button
+   *
+   *
+   */
+  public static function button ($btnClass = '', $task = '', $iconClass = '', $text) {
+
+    $html = '';
+    $html.='<button class="' . $btnClass . '" onclick="Joomla.submitbutton(\'' . $task . '\')">'
+      . JText::_($text)
+      . '<i class="' . $iconClass . '"></i>'
+      . '</button>';
+
+    return $html;
+
+  }
+
 
   /**
    * Gets a list of the actions that can be performed.

@@ -5,13 +5,11 @@
 		description="COM_ITEMCOSTS_COMPONENT_DESC"
 	>
 
-        <field name="test"
-             type="radio"
-             default="1"
-             label="COM_ITEMCOSTS_TEST_LABEL"
-             description="COM_ITEMCOSTS_TEST_DESC">
-                 <option value="0">JHIDE</option>
-                 <option value="1">JSHOW</option>
+        <field name="vat"
+             type="text"
+             default="0.2"
+             label="Vat rate"
+             description="The globally defined vat rate (no need for % signs etc)">
          </field>
 
 	</fieldset>
@@ -21,8 +19,8 @@
 		label="JCONFIG_PERMISSIONS_LABEL"
 	>
 
-		<field 
-            name="rules" 
+		<field
+            name="rules"
             type="rules"
 			component="com_itemcosts"
             class="inputbox"

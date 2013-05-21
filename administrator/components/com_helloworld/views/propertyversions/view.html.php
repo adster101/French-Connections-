@@ -133,11 +133,14 @@ class HelloWorldViewPropertyVersions extends JViewLegacy
 	 */
 	protected function setDocument()
 	{
+
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
+
 		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title, $this->item->id), 'helloworld');
-		$document->addScript(JURI::root() . $this->script);
-		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
+
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/helloworld.js");
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 
     $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js",'text/javascript',true, false);

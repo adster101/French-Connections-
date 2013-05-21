@@ -53,19 +53,30 @@ class HelloWorldViewRenewal extends JViewLegacy {
    */
   protected function setDocument() {
     $document = JFactory::getDocument();
-    $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
+
+    // Set the page title
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY',$this->id));
+
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", true, false);
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/vat.js", 'text/javascript', true, false);
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+
   }
 
   /**
    * Setting the toolbar
    */
   protected function addToolBar() {
+    // Register the JHtmlProperty class
+    JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
+
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
+
+    $document = JFactory::getDocument();
+		$document->setTitle(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY',$this->id));
 
     // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {
@@ -79,10 +90,9 @@ class HelloWorldViewRenewal extends JViewLegacy {
     }
 
 
-    JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
 
     JToolBarHelper::help('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
-
   }
 
 }
