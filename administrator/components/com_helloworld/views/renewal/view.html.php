@@ -22,19 +22,34 @@ class HelloWorldViewRenewal extends JViewLegacy {
 
     $app = JFactory::getApplication();
     $input = $app->input;
-
+    $this->id = $input->get('id', '', 'int');
     $this->extension = $input->get('option', '', 'string');
 
-    // Set the default model HelloWorldModelProperty
+    $layout = $input->get('layout','','string');
+
+    // Add the UserProfile model so we can get the user details and the form...
+    //$this->setModel(JModelLegacy::getInstance('UserProfile', 'HelloWorldModel'), true);
+
+    // Add the Property model so we can get the renewal details...
     $this->setModel(JModelLegacy::getInstance('Property', 'HelloWorldModel'), true);
 
-    $this->id = $input->get('id', '', 'int');
+    // Get an instance of the property model
+    $property = $this->getModel('Property');
 
     // Get the units and image details they against this property
     $this->summary = $this->get('RenewalSummary');
 
-    // Get the payment/address form
-    $this->form = $this->get('UserFormDetails');
+    // Get an instance of the default model
+    $user = $this->getModel();
+
+    // And set a the owner_id property so we can use it
+    $user->owner_id = $property->owner_id;
+
+    if ($layout == 'payment') {
+      // Get the payment form
+      $this->form = $this->get('PaymentForm');
+
+    }
 
     // Set the document
     $this->setDocument();
@@ -44,6 +59,7 @@ class HelloWorldViewRenewal extends JViewLegacy {
 
     // Display the template
     parent::display($tpl);
+
   }
 
   /**
@@ -57,8 +73,9 @@ class HelloWorldViewRenewal extends JViewLegacy {
     // Set the page title
     JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY',$this->id));
 
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", true, false);
+    //$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", true, false);
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/vat.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", 'text/javascript', true, false);
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
 		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');

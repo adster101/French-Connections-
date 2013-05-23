@@ -11,7 +11,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableProtxTransactions extends JTable
+class HelloWorldTableProtxTransactionlines extends JTable
 {
 	/**
 	 * Constructor
@@ -20,6 +20,6 @@ class HelloWorldTableProtxTransactions extends JTable
 	 */
 	function __construct(&$db)
 	{
-		parent::__construct('#__protx_transactions', 'id', $db);
+		parent::__construct('#__protx_transaction_lines', 'id', $db);
 	}
 }

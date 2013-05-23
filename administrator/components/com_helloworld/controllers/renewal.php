@@ -3,13 +3,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// import Joomla controllerform library
-jimport('joomla.application.component.controllerform');
-
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerRenewal extends JControllerForm {
+class HelloWorldControllerRenewal extends JControllerLegacy {
 
   protected $extension;
 
@@ -29,6 +26,46 @@ class HelloWorldControllerRenewal extends JControllerForm {
       $this->extension = JRequest::getCmd('extension', 'com_helloworld');
     }
   }
+
+  public function summary() {
+
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');
+
+    // Get the record ID being renewed
+    $records = $this->input->get('cid', array(), 'array');
+    $recordId = $records[0];
+
+    // Set the context so we can hold the edit ID
+    $context = "com_helloworld.renewal.summary";
+
+    // Check that the owner/user can edit/renew this record
+    if (!$this->allowEdit(array('id' => $recordId))) {
+      $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->extension, false
+              )
+      );
+
+      return false;
+    }
+
+    // User is allowed to edit this resource, push the new record id into the session.
+    $this->holdEditId($context, $recordId);
+
+    // Redirect to the renewal payment/summary form thingy...
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false
+            )
+    );
+
+    return false;
+  }
+
   /**
    * Method to check if you can edit a record.
    *
@@ -82,74 +119,28 @@ class HelloWorldControllerRenewal extends JControllerForm {
 
 
   /*
-   *
-   * Overriden save method
+   *  Method to process the card details for a renewal payment...actual payment processing is done in the model...
    *
    */
-  public function doPayment($key = null, $urlVar = null) {
+
+	public function process()
+	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
+
 		$app   = JFactory::getApplication();
-		$lang  = JFactory::getLanguage();
-		$model = $this->getModel();
-		$table = $model->getTable();
+		$model = $this->getModel('Property');
+		$form  = $model->getPaymentForm();
 		$data  = $this->input->post->get('jform', array(), 'array');
-		$checkin = property_exists($table, 'checked_out');
-		$context = "$this->option.property.$this->context";
-		$task = $this->getTask();
-
-
-		// Determine the name of the primary key for the data.
-		if (empty($key))
-		{
-			$key = $table->getKeyName();
-		}
-
-		// To avoid data collisions the urlVar may be different from the primary key.
-		if (empty($urlVar))
-		{
-			$urlVar = $key;
-		}
-
-		$recordId = $this->input->getInt($urlVar);
-
-
-		if (!$this->checkEditId($context, $recordId))
-		{
-			// Somehow the person just went to the form and tried to save it. We don't allow that.
-			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $recordId));
-			$this->setMessage($this->getError(), 'error');
-
-			$this->setRedirect(
-				JRoute::_(
-					'index.php?option=' . $this->option . '&view=' . $this->view_list
-					. $this->getRedirectToListAppend(), false
-				)
-			);
-
-			return false;
-		}
-
-    // Validate the posted data.
-		// Sometimes the form needs some posted data, such as for plugins and modules.
-		$form = $model->getForm($data, false);
-
-		if (!$form)
-		{
-			$app->enqueueMessage($model->getError(), 'error');
-
-			return false;
-		}
-
-		// Test whether the data is valid.
-		$validData = $model->validate($form, $data);
+		// Validate the posted data.
+		$return = $model->validate($form, $data);
 
 		// Check for validation errors.
-		if ($validData === false)
+		if ($return === false)
 		{
 			// Get the validation messages.
-			$errors = $model->getErrors();
+			$errors	= $model->getErrors();
 
 			// Push up to three validation messages out to the user.
 			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
@@ -157,33 +148,50 @@ class HelloWorldControllerRenewal extends JControllerForm {
 				if ($errors[$i] instanceof Exception)
 				{
 					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				}
-				else
-				{
+				} else {
 					$app->enqueueMessage($errors[$i], 'warning');
 				}
 			}
 
 			// Save the data in the session.
-			$app->setUserState($context . '.data', $data);
+			$app->setUserState('com_helloworld.renewal.data', $data);
 
 			// Redirect back to the edit screen.
-			$this->setRedirect(
-				JRoute::_(
-					'index.php?option=' . $this->option . '&view=' . $this->view_item
-					. $this->getRedirectToItemAppend($recordId, $urlVar), false
-				)
-			);
-
+			$this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'] , false));
 			return false;
 		}
 
-    // Here we have valid address and VAT status data...
+		// Attempt to save the configuration.
+		$data	= $return;
+		$return = $model->processRenewal($data);
 
-    // Forwards on to the money (shot) page...
+		// Check the return value.
+		if ($return === false)
+		{
+			// Save the data in the session.
+			$app->setUserState('com_helloworld.renewal.data', $data);
+
+			// Save failed, go back to the screen and display a notice.
+			$message = JText::sprintf('JERROR_SAVE_FAILED', $model->getError());
+			$this->setRedirect('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'], $message, 'error');
+			return false;
+		}
+
+		// Set the success message.
+		$message = JText::_('PROPERTY HAS BEEN RENEWED. WHOOPY DOO');
+
+		// Set the redirect based on the task.
+		switch ($this->getTask())
+		{
+
+			default:
+				$this->setRedirect('index.php?option=com_helloworld', $message);
+				break;
+		}
+
+		return true;
+	}
 
 
 
-
-  }
 }

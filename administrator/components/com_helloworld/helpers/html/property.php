@@ -157,7 +157,7 @@ class JHtmlProperty {
     $html = '';
 
 
-    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'listing.ordersummary\')" title="' . $title . '" class="btn btn-danger">'
+    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'renewal.summary\')" title="' . $title . '" class="btn btn-danger">'
             . JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW') . '</a>';
 
     return $html;

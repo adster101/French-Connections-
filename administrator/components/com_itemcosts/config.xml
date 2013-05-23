@@ -11,6 +11,56 @@
              label="Vat rate"
              description="The globally defined vat rate (no need for % signs etc)">
          </field>
+            <field
+      name="VPSProtocol"
+      type="text"
+      default="2.23"
+      label="VPS Protocal"
+      description="" />
+    <field
+      name="PurchaseURL"
+      type="text"
+      default=""
+      label="URL to Purchase"
+      description="" />
+    <field
+      name="RepeatURL"
+      type="text"
+      default=""
+      label="URL to do a repeat payment"
+      description="" />
+
+    <field
+      name="VendorName"
+      type="text"
+      default=""
+      label="Vendor Name"
+      description="" />
+    <field
+      name="TransactionType"
+      type="text"
+      default=""
+      label="Transaction Type"
+      description="" />
+
+    <field
+      name="Currency"
+      type="text"
+      default="GBP"
+      label="Currency"
+      description="" />
+
+    <field
+      name="server"
+      type="list"
+      default="SIMULATOR"
+      label="Server to connect to"
+      description="">
+      <option value="SIMULATOR">Simulator</option>
+      <option value="TEST">Test</option>
+      <option value="LIVE">Live</option>
+    </field>
+
 
 	</fieldset>
 
