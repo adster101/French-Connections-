@@ -21,7 +21,9 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    * @since	1.6
    */
   public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array()) {
+
     return JTable::getInstance($type, $prefix, $config);
+    
   }
 
   /**
@@ -60,22 +62,22 @@ class EnquiriesModelEnquiry extends JModelAdmin {
   }
 
   /*
-   * Method to preprocess the special offer edit form 
-   * 
+   * Method to preprocess the special offer edit form
+   *
    * params
    * $form
    * $data
-   * 
+   *
    */
 
   protected function preprocessForm(JForm $form, $data) {
-    
-   
+
+
     $subject = JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT');
     $message = JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE',$data->forename);
-    
+
     $form->setValue('reply_subject',null,$subject);
-    
+
     $form->setValue('reply_message',null,$message);
 
   }

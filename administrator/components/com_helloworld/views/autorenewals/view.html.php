@@ -62,7 +62,7 @@ class HelloWorldViewAutoRenewals extends JViewLegacy {
    */
   protected function addToolBar() {
 
-    JToolBarHelper::title(($this->id) ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->id, $this->item->title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW'));
+    JToolBarHelper::title(($this->id) ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->id) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW'));
 
     // Get component level permissions
 		$canDo = HelloWorldHelper::getActions();

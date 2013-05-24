@@ -101,6 +101,30 @@ class JHtmlProperty {
   }
 
   /**
+   * Displays a 'my stats' icon
+   *
+   * @param   integer  $userId  The property ID
+   *
+   * @return  string  A link to a modal window with the user notes
+   *
+   * @since   2.5
+   */
+  public static function stats($id,$u_id) {
+
+    if (empty($id)) {
+      return '';
+    }
+
+    $title = JText::_('COM_HELLOWORLD_HELLOWORLD_VIEW_PROPERTY_STATS');
+
+    return '<a class="modal"'
+            . ' href="' . JRoute::_('index.php?option=com_helloworld&task=listing.stats&tmpl=component&layout=modal&id=' . (int) $id . '&u_id=' . (int) $u_id . '&' . JSession::getFormToken() . '=1') . '"'
+            . ' rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'
+            . '<span class="label label-info"><i class="icon-bars"></i>' . $title . '</span></a>';
+  }
+
+
+  /**
    * Build an array of activate states to be used by jgrid.state,
    *
    * @return  array  a list of possible states to display

@@ -529,7 +529,7 @@ abstract class JTable extends JObject
 
 		$row = $this->_db->loadAssoc();
 
-		// Check that we have a result.
+    // Check that we have a result.
 		if (empty($row))
 		{
 			return false;

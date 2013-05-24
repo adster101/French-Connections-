@@ -173,7 +173,7 @@ $listing_id = '';
                         <td>
                           <?php if ($item->review != 2) : ?>
                             <!--
-                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';   ?>">
+                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';    ?>">
                             -->
                             <?php echo $this->escape($item->title); ?>
                             <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
@@ -207,8 +207,10 @@ $listing_id = '';
                           <?php endif; ?>
                         </td>
                         <td>
-                          <?php echo JText::_($item->view_count); ?><br />
-                          <?php echo JText::_($item->enquiry_count); ?>
+                          <?php echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
+
+                          <?php //echo JText::_($item->view_count); ?><br />
+                          <?php //echo JText::_($item->enquiry_count); ?>
                         </td>
                         <td>
                           <?php echo JText::_($item->modified); ?>

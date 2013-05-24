@@ -1,7 +1,7 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla nested table library
 jimport('joomla.database.table');
 
@@ -13,22 +13,21 @@ jimport('joomla.application.component.model');
  */
 class EnquiriesTableEnquiry extends JTable
 {
-  
+
 	/**
 	 * Constructor
 	 *
 	 * @param object Database connector object
 	 */
-	function __construct(&$db) 
+	function __construct(&$db)
 	{
 		parent::__construct('#__enquiries', 'id', $db);
 	}
-      
-  public function load($pk = null, $reset = true) 
-	{		
-		if (parent::load($pk, $reset)) 
-		{    
-          
+
+  public function load($pk = null, $reset = true)
+	{
+		if (parent::load($pk, $reset))
+		{
 			return true;
 		}
 		else
@@ -97,5 +96,5 @@ class EnquiriesTableEnquiry extends JTable
 
 		$this->setError('');
 		return true;
-	}  
+	}
 }

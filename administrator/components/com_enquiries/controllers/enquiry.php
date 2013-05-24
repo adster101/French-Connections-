@@ -61,8 +61,8 @@ class EnquiriesControllerEnquiry extends JControllerForm {
   /*
    * Function to reply to an owner enquiry.
    * Updates a date field in the enquiries table to indicate the owner replied.
-   * 
-   * 
+   *
+   *
    */
 
   public function reply() {
@@ -86,10 +86,10 @@ class EnquiriesControllerEnquiry extends JControllerForm {
 
       $sent = $this->_sendEmail($data);
     }
-    
+
     // Set the success message if it was a success
 		if (!($sent instanceof Exception)) {
-      
+
       $msg = JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SENT');
       // Redirect if it is set in the parameters, otherwise redirect back to where we came from
 
@@ -104,7 +104,7 @@ class EnquiriesControllerEnquiry extends JControllerForm {
   }
 
   private function _sendEmail($data = array()) {
-    
+
     // Get the user details
     // These may be passed in from above...
     $user = JFactory::getUser();

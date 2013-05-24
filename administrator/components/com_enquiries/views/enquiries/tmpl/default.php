@@ -33,11 +33,11 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
       <div id="filter-bar" class="btn-toolbar">
         <div class="filter-search btn-group pull-left">
           <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-          <input type="text" name="filter_search" 
-                 id="filter_search" 
-                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>" 
-                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" 
-                 placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />        
+          <input type="text" name="filter_search"
+                 id="filter_search"
+                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
+                 placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />
         </div>
         <div class="btn-group pull-left hidden-phone">
           <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
@@ -46,7 +46,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
         <div class="btn-group pull-right hidden-phone">
           <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
           <?php echo $this->pagination->getLimitBox(); ?>
-        </div>	
+        </div>
       </div>
 
       <table class="table table-striped" id="articleList">
@@ -57,10 +57,10 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
             </th>
             <th width="1%">
               <?php echo JText::_('JSTATUS'); ?>
-            </th>            
+            </th>
             <th>
               <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAILS'); ?>
-            </th> 
+            </th>
             <th width="20%">
               <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_PERIOD'); ?>
             </th>
@@ -70,11 +70,11 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
             <th>
               <?php echo JHtml::_('grid.sort', 'COM_ENQUIRIES_ENQUIRY_DATE_CREATED', 'e.date_created', $listDirn, $listOrder); ?>
             </th>
-          </tr>		
-        </thead> 
+          </tr>
+        </thead>
         <tbody>
           <?php foreach ($this->items as $i => $item): ?>
-            <tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->attribute_type_id ?>">
+            <tr>
               <td class="hidden-phone">
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
@@ -82,7 +82,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <td>
                   <?php echo JHtml::_('enquiries.state', $item->state, $i, 'enquiries.', $canChangeState, 'cb'); ?>
                 </td>
-             
+
               <?php endif; ?>
               <td>
                 <?php if ($canEdit || $canEditOwn) : ?>
@@ -101,19 +101,19 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                   <br />
                   <span class="small">
                     <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
-                  </span> 
+                  </span>
                 <?php endif; ?>
               </td>
               <td width="10%">
                 <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_PERIOD_FROM_TO',$item->start_date, $item->end_date); ?>
-              </td>              
+              </td>
               <td width="15%">
                 <?php echo $this->escape($item->property_title); ?> <span class="small">(<?php echo $item->property_id; ?>)</span>
               </td>
               <td width="10%">
                 <?php echo $item->date_created; ?>
               </td>
-            </tr>					
+            </tr>
           <?php endforeach; ?>
         <input type="hidden" name="extension" value="<?php echo 'com_enquiries'; ?>" />
         </tbody>

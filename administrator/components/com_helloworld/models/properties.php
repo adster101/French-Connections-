@@ -141,14 +141,6 @@ class HelloWorldModelProperties extends JModelList {
       a.expiry_date,
       a.modified,
       a.created_on,
-      (SELECT count(id) as count
-      FROM #__property_views
-      where property_id = a.id
-      and date > ' . $db->quote(date('Y-m-d', $last_year)) . ') as view_count,
-      (SELECT count(id) as count
-      FROM #__enquiries
-      where property_id = a.id
-      and date_created > ' . $db->quote(date('Y-m-d', $last_year)) . ') as enquiry_count,
       a.VendorTxCode,
       a.review
     ');

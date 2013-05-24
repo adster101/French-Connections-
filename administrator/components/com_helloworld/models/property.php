@@ -616,11 +616,29 @@ class HelloWorldModelProperty extends JModelAdmin {
 
 
     // Figure out what to reuturn to our controller an
-
   }
 
   public function updateExpiryDate() {
 
+    $data = array();
+
+    $date = JFactory::getDate();
+    $date->add(new DateInterval('P365D'));
+
+    $table = JTable::getInstance('Property', 'HelloWorldTable');
+
+    $data['expiry_date'] = $date->toSql();
+    $data['id'] = $this->property_id;
+    $data['published'] = 1;
+
+    $bind = $table->bind($data);
+
+
+    // Store the data.
+    if (!$table->store()) {
+      $this->setError($table->getError());
+      return false;
+    }
   }
 
   /*   * ***********************************************************
