@@ -26,7 +26,19 @@ class HelloWorldViewStats extends JViewLegacy
 		// Display the template
 		parent::display($tpl);
 
+    // Set the document
+		$this->setDocument();
 	}
 
+  /**
+	 * Method to set up the document properties
+	 *
+	 * @return void
+	 */
+	protected function setDocument()
+	{
+		$document = JFactory::getDocument();
+		$document->addScript('https://www.google.com/jsapi',false,false);
 
+	}
 }
