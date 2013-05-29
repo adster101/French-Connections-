@@ -95,7 +95,6 @@ $listing_id = '';
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
                     </th>
-
                     <th width="10%">
                       <?php if ($canDo->get('helloworld.sort.expiry')) : ?>
                         <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_EXPIRY', 'expiry_date', $listDirn, $listOrder); ?>
@@ -173,7 +172,7 @@ $listing_id = '';
                         <td>
                           <?php if ($item->review != 2) : ?>
                             <!--
-                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';    ?>">
+                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';     ?>">
                             -->
                             <?php echo $this->escape($item->title); ?>
                             <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
@@ -227,8 +226,11 @@ $listing_id = '';
                               <?php echo JText::_($item->phone_1); ?>
                             </span>
                             <?php if ($canDo->get('helloworld.display.notes')) : ?>
-                              <br />
-                              <?php echo JHtml::_('property.notes', $item->id); ?>
+                              <p>
+                                <?php echo JHtml::_('property.notes', $item->id); ?>
+                                &nbsp; 
+                                <?php echo JHtml::_('property.addNote', $item->id); ?>
+                              </p>
 
                             <?php endif; ?>
                           </td>

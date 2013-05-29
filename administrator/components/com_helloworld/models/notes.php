@@ -62,7 +62,7 @@ class HelloWorldModelNotes extends JModelList {
     $section = $this->getState('filter.category_id');
 
 
-    $query->from('#__property_listings_notes AS a');
+    $query->from('#__property_notes AS a');
 
     // Filter by a single user.
     $property_id = (int) $this->getState('filter.property_id');

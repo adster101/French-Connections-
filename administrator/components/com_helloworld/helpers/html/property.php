@@ -50,11 +50,11 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function addNote($userId) {
-    $title = JText::_('COM_USERS_ADD_NOTE');
+  public static function addNote($property_id) {
+    $title = JText::_('COM_HELLOWORLD_ADD_NOTE');
 
-    return '<a href="' . JRoute::_('index.php?option=com_users&task=note.add&u_id=' . (int) $userId) . '">'
-            . '<span class="label label-info"><i class="icon-vcard"></i>' . $title . '</span></a>';
+    return '<a href="' . JRoute::_('index.php?option=com_helloworld&task=note.add&property_id=' . (int) $property_id) . '">'
+            . '<span class="label label-info"><i class="icon-plus"></i>' . $title . '</span></a>';
   }
 
   /**

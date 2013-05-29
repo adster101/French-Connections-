@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class HelloWorldViewSnooze extends JViewLegacy
+class HelloWorldViewNote extends JViewLegacy
 {
 	/**
 	 * Method to display the view.
@@ -29,23 +29,23 @@ class HelloWorldViewSnooze extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+ 		// Initialise view variables.
+		$this->state = $this->get('State');
+		$this->item = $this->get('Item');
+		$this->form = $this->get('Form');
 
-    $app = JFactory::getApplication();
-    $input = $app->input;
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
+		{
+			throw new Exception(implode("\n", $errors), 500);
+		}
 
-    $this->id = $input->get('id','','int');
-    // Get the form for this puppy...
-		$form = $this->get('Form');
-    $item = $this->get('Item');
+		// Get the component HTML helpers
+		JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
-    // Assign the view data
-    $this->form = $form;
-    $this->item = $item;
-
-    $this->setDocument();
-    $this->addToolBar();
-
-		parent::display();
+		parent::display($tpl);
+		$this->addToolbar();
+		$this->setDocument();
 	}
 
 	/**
@@ -58,11 +58,11 @@ class HelloWorldViewSnooze extends JViewLegacy
 
 
     // Show a helpful toobar title
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_ADD_NOTE',$this->id));
+    JToolBarHelper::title(JText::_('COM_HELLOWORLD_HELLOWORLD_ADD_NOTE'));
 
-    JToolBarHelper::save('snooze.save', 'JTOOLBAR_SAVE');
+    JToolBarHelper::save('note.save', 'JTOOLBAR_SAVE');
 
-    JToolBarHelper::cancel('snooze.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('note.cancel', 'JTOOLBAR_CLOSE');
 	}
 
   /**
@@ -73,8 +73,9 @@ class HelloWorldViewSnooze extends JViewLegacy
 	protected function setDocument()
 	{
 		$document = JFactory::getDocument();
-		$document->setTitle(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_ADD_NOTE',$this->id));
-	}
+		$document->setTitle(JText::_('COM_HELLOWORLD_HELLOWORLD_ADD_NOTE'));
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", 'text/javascript',true, false);
+  }
 
 
 

@@ -22,46 +22,53 @@ class HelloWorldModelStats extends JModelLegacy {
 
   protected $id = '';
 
-  public function getGraph() {
-
+  public function getGraphData() {
 
     // Get the id from the model state
     $id = $this->getState('stats.id');
-
-    // Get the property views and what not
-    $data = $this->getData($id, '#__property_views');
-
-    $months = array();
-
-    // Gets an array of the last X months in reverse order
-    for ($x = 0; $x < 12; $x++) {
-      $months[] = date('m-Y', mktime(0, 0, 0, date('m') - $x, 1));
-    }
-
-
-    // Sort and then reverse the array
-    ksort($months, SORT_DESC);
-    $months = array_reverse($months);
-
-
+    
     // Set up an array to hold the series data
-    $count = array();
+    $graph_data = array();
+    
+    // Get the various data to populate the report 
+    $data = $this->getData($id, '#__property_views');
+    $enquiry_data = $this->getData($id, '#__enquiries');
+    $enquiry_data = $this->getData($id, '#__enquiries');
+    $clickthrough_data = $this->getData($id, '#__website_views');
 
+    // Gets an array of the previous twelve months
+    $months = $this->getMonths();
+
+    $view_data = $this->processData($months, $data, 'views');
+    $enquiry_data = $this->processData($months, $enquiry_data, 'enquiries');
+    $click_data = $this->processData($months, $clickthrough_data, 'clicks');
+    
+    $graph_data['enquiries'] = array_merge_recursive($enquiry_data, $click_data, $view_data);
+    
+    return $graph_data;
+  }
+
+  /*
+   * This method adds data to a graph_data method which is then used to display property stats
+   * 
+   */
+  public function processData($months = array(), $data = array(), $stat = '')
+  {
     // Based on each month, we loop over the property data and if data exists for that month add it to the array
     foreach ($months as $key => $value) {
 
       if (array_key_exists($value, $data)) {
-        $count[$value]['views'] = $data[$value]['count'];
+        $graph_data[$value][$stat] = $data[$value]['count'];
       } else {
 
-        $count[$value]['views'] = 0;
+        $graph_data[$value][$stat] = 0;
       }
     }
-
-
-    return $count;
-  }
-
+    
+    return $graph_data;
+    
+  }  
+  
   public function populateState() {
     $input = JFactory::getApplication()->input;
     $id = $input->getInt('id');
@@ -108,4 +115,21 @@ class HelloWorldModelStats extends JModelLegacy {
     return $data;
   }
 
+  public function getMonths()
+  {
+    $months = array();
+
+    // Gets an array of the last X months in reverse order
+    for ($x = 0; $x < 12; $x++) {
+      $months[] = date('m-Y', mktime(0, 0, 0, date('m') - $x, 1));
+    }
+
+    // Sort and then reverse the array
+    ksort($months, SORT_DESC);
+    $months = array_reverse($months);
+    
+    return $months;
+    
+  }
+  
 }

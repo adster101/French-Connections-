@@ -27,7 +27,7 @@ class HelloWorldTableNote extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		parent::__construct('#__property_listings_notes', 'id', $db);
+		parent::__construct('#__property_notes', 'id', $db);
 	}
 
 	/**

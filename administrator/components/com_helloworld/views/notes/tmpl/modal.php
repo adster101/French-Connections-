@@ -8,13 +8,11 @@
  */
 
 defined('_JEXEC') or die;
-
 /* @var $this UsersViewNotes */
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 ?>
-<div class="unotes">
 	<h1><?php echo JText::sprintf('COM_HELLOWORLD_NOTES_FOR_PROPERTY', $this->id); ?></h1>
 <?php if (empty($this->items)) : ?>
 	<?php echo JText::_('COM_USERS_NO_NOTES'); ?>
@@ -52,4 +50,3 @@ JHtml::_('behavior.tooltip');
 	<?php endforeach; ?>
 	</ol>
 <?php endif; ?>
-</div>

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
-	<fieldset name="snooze">
-		<field
+	<fieldset name="note">
+    <field 
+      name="property_id"
+      type="text"
+      filter="int"
+      required="true"
+      class="input-large"
+      readonly="true"
+      label="COM_HELLOWORLD_SNOOZE_PROPERTY_ID"
+			description =""      
+      labelclass="control-label">
+    </field>
+    <field
 			name="snooze_until"
 			type="calendar"
 			default=""
@@ -18,7 +29,8 @@
       label="Note subject"
       labelclass="control-label"
       class="input"
-      filter="string">
+      filter="string"
+      required="true">
     </field>
     <field 
       name="body"
@@ -29,16 +41,21 @@
       class="input-xlarge"
       filter="string">
     </field>
-    
     <field 
-      name="id"
-      type="text"
-      filter="int"
+      name="catid"
+      required="true"
+      default="0"
+      type="category"
+			label="COM_HELLOWORLD_ADMIN_NOTES_CATEGORY"
+			description ="" 
+      message="COM_HELLOWORLD_ADMIN_NOTES_CATEGORY_VALIDATION"
+      labelclass="control-label"
       class="input-large"
-      readonly="true"
-      label="COM_HELLOWORLD_SNOOZE_PROPERTY_ID"
-			description =""      
-      labelclass="control-label">
-    </field>
+      filter="int"
+      validate="nonzero"
+      show_root="true"
+      extension="com_helloworld">
+    </field>    
+
   </fieldset>
 </form>

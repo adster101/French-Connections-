@@ -21,7 +21,7 @@ class HelloWorldViewStats extends JViewLegacy
     $this->get('State');
 
     // Get an instance of the property model
-    $this->data = $this->get('Graph');
+    $this->data = $this->get('GraphData');
 
 		// Display the template
 		parent::display($tpl);
