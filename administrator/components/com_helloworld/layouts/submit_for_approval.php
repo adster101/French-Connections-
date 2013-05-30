@@ -6,11 +6,17 @@ defined('_JEXEC') or die('Restricted access');
 $form = $displayData['form'];
 $progress = $displayData['progress'];
 $notices = array();
+
 ?>
 
+<?php if (empty($item->expiry_date)) : ?>
+<div class="alert alert-info">
+  Property listing 0% complete
+</div>
+<?php endif; ?>
 
 <?php if (empty($progress['units'])) : // Listing has no units ?>
-    <?php $notices[] = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
+  <?php $notices[] = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
 <?php elseif (!empty($progress['units'])) : // Listing has unit(s) ?>
   <?php foreach ($progress['units'] as $key => $value) : ?>
     <?php foreach ($value as $section => $complete) : ?>

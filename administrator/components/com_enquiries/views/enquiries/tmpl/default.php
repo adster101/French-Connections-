@@ -108,7 +108,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_PERIOD_FROM_TO',$item->start_date, $item->end_date); ?>
               </td>
               <td width="15%">
-                <?php echo $this->escape($item->property_title); ?> <span class="small">(<?php echo $item->property_id; ?>)</span>
+                <?php echo $this->escape($item->property_id); ?>
               </td>
               <td width="10%">
                 <?php echo $item->date_created; ?>

@@ -44,7 +44,7 @@ $data['progress'] = $this->progress;
 
       <?php
 
-      $layout = new JLayoutFile('submit_for_approval', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
       echo $layout->render($data); ?>
       <?php
 

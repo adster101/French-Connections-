@@ -5,7 +5,8 @@ defined('_JEXEC') or die('Restricted access');
 // Get the input data
 $app = JFactory::getApplication();
 $input = $app->input;
-$view = $input->get('view', '', 'string');$languages = HelloWorldHelper::getLanguages();
+$view = $input->get('view', '', 'string');
+$languages = HelloWorldHelper::getLanguages();
 $listing_id = $input->get('parent_id','','int');
 
 $lang = HelloWorldHelper::getLang();
@@ -23,13 +24,8 @@ $units = HelloWorldHelper::getUnitsById($data['progress']);
 // Set the item which is used below to output the tabs
 $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);
 
-
 ?>
-<?php if (empty($item->expiry_date)) : ?>
-<div class="alert alert-info">
-  Property listing 0% complete
-</div>
-<?php endif; ?>
+
 <ul class="nav nav-tabs">
   <li<?php echo ($view == 'propertyversions') ? ' class=\'active\'' : '' ?>>
     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions','edit','compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item,'parent_id','') ?>

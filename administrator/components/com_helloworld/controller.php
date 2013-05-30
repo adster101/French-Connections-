@@ -12,11 +12,47 @@ jimport('joomla.application.component.controller');
 class HelloWorldController extends JControllerLegacy {
 
   /**
+	 * Checks whether a user can see this view.
+	 *
+	 * @param   string	$view	The view name.
+	 *
+	 * @return  boolean
+	 * @since   1.6
+	 */
+	protected function canView($view)
+	{
+		$canDo	= HelloWorldHelper::getActions();
+
+    switch ($view)
+		{
+			// Special permissions.
+			case 'notes':
+				return $canDo->get('helloworld.view.' . $view);
+				break;
+
+			// Default permissions.
+			default:
+				return true;
+		}
+	}
+
+  /**
    * display task
    *
    * @return void
    */
   function display($cachable = false) {
+
+		$view   = $this->input->get('view', '');
+		$layout = $this->input->get('layout', 'default');
+		$id     = $this->input->getInt('id');
+
+		if (!$this->canView($view))
+		{
+			JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+
+			return;
+		}
 
     // Set up an array of views to protect from direct access
     $views_to_protect = array('helloworld' => 1, 'availability' => 1, 'images' => 1, 'tariffs' => 1, 'offers' => 1, 'units' => 1);

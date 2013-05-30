@@ -225,10 +225,10 @@ $listing_id = '';
                               <br />
                               <?php echo JText::_($item->phone_1); ?>
                             </span>
-                            <?php if ($canDo->get('helloworld.display.notes')) : ?>
+                            <?php if ($canDo->get('helloworld.view.notes')) : ?>
                               <p>
                                 <?php echo JHtml::_('property.notes', $item->id); ?>
-                                &nbsp; 
+                                &nbsp;
                                 <?php echo JHtml::_('property.addNote', $item->id); ?>
                               </p>
 

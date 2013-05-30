@@ -6,9 +6,15 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
+// Add various bits of data to an array
 $data = array();
 $data['property'] = $this->item;
 $data['progress'] = $this->progress;
+
+// So we can pass them into our layout files
+$tabs_layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+$progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&parent_id=' . (int) $this->item->parent_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
@@ -23,8 +29,8 @@ $data['progress'] = $this->progress;
         <div class="span10 form-inline">
         <?php endif; ?>
         <?php
-          $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-          echo $layout->render($data);
+          echo $progress_layout->render($data);
+          echo $tabs_layout->render($data);
         ?>
         <fieldset class="adminform form-horizontal">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS'); ?></legend>

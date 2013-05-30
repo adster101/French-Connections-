@@ -96,7 +96,7 @@ class JHtmlProperty {
 
     return '<a class="modal"'
             . ' href="' . JRoute::_('index.php?option=com_helloworld&view=notes&tmpl=component&layout=modal&property_id=' . (int) $id) . '"'
-            . ' rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'
+            . ' rel="{handler: \'iframe\', size: {x: 800, y: 550}}">'
             . '<span class="label label-info"><i class="icon-drawer-2"></i>' . $title . '</span></a>';
   }
 

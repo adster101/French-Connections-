@@ -27,10 +27,10 @@ class EnquiriesModelEnquiries extends JModelList
         'title','hw.title',
 			);
     }
-    
+
 		parent::__construct($config);
 	}
-  
+
 	/**
 	 * Method to auto-populate the model state.
 	 *
@@ -56,20 +56,20 @@ class EnquiriesModelEnquiries extends JModelList
 		$this->setState('filter.published', $published);
 
 		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
-		$this->setState('filter.title', $title);  
-		
-	
+		$this->setState('filter.title', $title);
 
-    
+
+
+
     // List state information.
-		parent::populateState('e.date_created','desc');
+		parent::populateState('e.id','desc');
 	}
 
   /**
 	 * Method to build an SQL query to load the list data.
 	 *
 	 * @return	string	An SQL query
-   * 
+   *
 	 */
 	protected function getListQuery()
 	{
@@ -77,10 +77,10 @@ class EnquiriesModelEnquiries extends JModelList
     // Get the user to authorise
     $user	= JFactory::getUser();
 
-		// Create a new query object.		
+		// Create a new query object.
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
-		
+
 		// Select some fields
 		$query->select('
       e.id,
@@ -94,15 +94,14 @@ class EnquiriesModelEnquiries extends JModelList
       e.state,
       e.property_id,
       e.adults,
-      e.children,
-      hw.title as property_title
+      e.children
     ');
-		
+
 		// From the hello table
 		$query->from('#__enquiries e');
-    
-    $query->leftJoin('#__helloworld hw on hw.id = e.property_id');
-    
+
+    $query->leftJoin('#__property p on p.id = e.property_id');
+
     // Filter by published state
 		$published = $this->getState('filter.published');
 
@@ -111,15 +110,15 @@ class EnquiriesModelEnquiries extends JModelList
 		} else {
 			$query->where('e.state IN (0,1)');
     }
-    
+
     // Need to ensure that owners only see reviews assigned to their properties
     if (!$user->authorise('core.edit','com_enquiries') && $user->authorise('core.edit.own', 'com_enquiries')) { // User not permitted to edit their enquiries globally
-      $query->where('hw.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
-    } 
-        
+      $query->where('p.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
+    }
+
 		// Filter by search in title
 		$search = $this->getState('filter.search');
-    
+
 		if (!empty($search)) {
       if ((int) $search ) {
         $query->where('e.property_id = '.(int) $search);
@@ -129,12 +128,12 @@ class EnquiriesModelEnquiries extends JModelList
         $query->where('(e.message LIKE '.$search.')');
       }
     }
-    
-    $listOrdering = $this->getState('list.ordering','date_created');
-		$listDirn = $db->escape($this->getState('list.direction', 'desc'));  
+
+    $listOrdering = $this->getState('list.ordering','id');
+		$listDirn = $db->escape($this->getState('list.direction', 'desc'));
     $query->order($db->escape($listOrdering).' '.$listDirn);
-		
+
     return $query;
-	}  
+	}
 }
 

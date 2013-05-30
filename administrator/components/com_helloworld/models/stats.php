@@ -26,13 +26,12 @@ class HelloWorldModelStats extends JModelLegacy {
 
     // Get the id from the model state
     $id = $this->getState('stats.id');
-    
+
     // Set up an array to hold the series data
     $graph_data = array();
-    
-    // Get the various data to populate the report 
+
+    // Get the various data to populate the report
     $data = $this->getData($id, '#__property_views');
-    $enquiry_data = $this->getData($id, '#__enquiries');
     $enquiry_data = $this->getData($id, '#__enquiries');
     $clickthrough_data = $this->getData($id, '#__website_views');
 
@@ -42,33 +41,38 @@ class HelloWorldModelStats extends JModelLegacy {
     $view_data = $this->processData($months, $data, 'views');
     $enquiry_data = $this->processData($months, $enquiry_data, 'enquiries');
     $click_data = $this->processData($months, $clickthrough_data, 'clicks');
-    
+
     $graph_data['enquiries'] = array_merge_recursive($enquiry_data, $click_data, $view_data);
-    
+
     return $graph_data;
   }
 
   /*
    * This method adds data to a graph_data method which is then used to display property stats
-   * 
+   *
    */
   public function processData($months = array(), $data = array(), $stat = '')
   {
+
+    // Initialise array to hold the data
+    $graph_date = array();
+
     // Based on each month, we loop over the property data and if data exists for that month add it to the array
     foreach ($months as $key => $value) {
 
+      // If we have data for this month we extract it
       if (array_key_exists($value, $data)) {
         $graph_data[$value][$stat] = $data[$value]['count'];
       } else {
-
+        // Otherwise set it to 0
         $graph_data[$value][$stat] = 0;
       }
     }
-    
+
     return $graph_data;
-    
-  }  
-  
+
+  }
+
   public function populateState() {
     $input = JFactory::getApplication()->input;
     $id = $input->getInt('id');
@@ -127,9 +131,9 @@ class HelloWorldModelStats extends JModelLegacy {
     // Sort and then reverse the array
     ksort($months, SORT_DESC);
     $months = array_reverse($months);
-    
+
     return $months;
-    
+
   }
-  
+
 }

@@ -8,7 +8,7 @@ defined('_JEXEC') or die('Restricted access');
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
   google.setOnLoadCallback(drawChart);
-  
+
   function drawChart() {
     // Create the data table.
     var data = new google.visualization.DataTable();
@@ -43,7 +43,7 @@ defined('_JEXEC') or die('Restricted access');
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
   google.setOnLoadCallback(drawChart2);
-  
+
   function drawChart2() {
     // Create the data table.
     var data2 = new google.visualization.DataTable();
@@ -51,7 +51,6 @@ defined('_JEXEC') or die('Restricted access');
 
     data2.addColumn('number', 'Property enquiries');
     data2.addColumn('number', 'Website click throughs');
-    data2.addColumn('number', 'French Connections page views');
     data2.addRows([
 
 
@@ -59,7 +58,7 @@ defined('_JEXEC') or die('Restricted access');
   <?php
   $date_parts = explode('-', $date);
   echo '[';
-  echo 'new Date(' . $date_parts[1] . ',' . ($date_parts[0] - 1) . ',1)' . ', ' . $data['enquiries'] . ',' . $data['clicks'] . ', ' . $data['views'];
+  echo 'new Date(' . $date_parts[1] . ',' . ($date_parts[0] - 1) . ',1)' . ', ' . $data['enquiries'] . ',' . $data['clicks'];
   echo '],';
   ?>
 <?php endforeach; ?>

@@ -85,7 +85,15 @@ class HelloWorldModelNotes extends JModelList {
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');
     $orderDirn = $this->state->get('list.direction');
+
+    $category = $this->state->get('filter.category_id','');
+
+    if (!empty($category)) {
+      $query->where('a.catid = ' . $category);
+    }
+
     $query->order($db->escape($orderCol . ' ' . $orderDirn));
+
 
     return $query;
   }

@@ -14,7 +14,7 @@
 		<action name="helloworld.edit.property.parent" title="JACTION_EDIT_PARENT" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
 		<action name="helloworld.filter" title="COM_HELLOWORLD_PROPERTY_FILTER" description="" />
 		<action name="helloworld.display.owner" title="COM_HELLOWORLD_DISPLAY_OWNER" description="" />
-		<action name="helloworld.display.notes" title="COM_HELLOWORLD_DISPLAY_CONTACT_LOG" description="" />
+		<action name="helloworld.view.notes" title="COM_HELLOWORLD_DISPLAY_CONTACT_LOG" description="" />
 		<action name="helloworld.notes.add" title="COM_HELLOWORLD_HELLOWORLD_SNOOZE" description="" />
     <action name="helloworld.sort.expiry" title="COM_HELLOWORLD_SORT_BY_EXPIRY_DATE" description="" />
 		<action name="helloworld.sort.prn" title="COM_HELLOWORLD_SORT_BY_PRN" description="" />
