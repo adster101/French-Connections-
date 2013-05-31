@@ -395,6 +395,11 @@
       type="hidden"
       filter="int"
     />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+    />
   </fieldset>
 
   <fieldset name="additional-details">

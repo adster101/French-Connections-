@@ -41,12 +41,15 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
       <div id="j-main-container" class="span10">
       <?php endif; ?>
       <?php
+      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      echo $progress->render($data);
+
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
       echo $layout->render($data);
       ?>
       <div id="collapseUpload" class="in collapse">
         <!-- The file upload form used as target for the file upload widget -->
-        <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $id); ?>" method="GET" enctype="multipart/form-data">
+        <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&property_id=' . (int) $this->unit->parent_id . '&version_id=' . (int) $this->unit->id . '&unit_id=' . $this->unit->unit_id); ?>" method="GET" enctype="multipart/form-data">
           <!-- Redirect browsers with JavaScript disabled to the origin page -->
           <noscript><input type="hidden" name="redirect" value="/"></noscript>
           <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->

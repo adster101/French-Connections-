@@ -25,6 +25,9 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <div class="span10">
         <?php endif; ?>
         <?php
+        $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+        echo $progress->render($data);
+        
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
         echo $layout->render($data);
         ?>

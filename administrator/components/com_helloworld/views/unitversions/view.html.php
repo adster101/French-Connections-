@@ -36,7 +36,6 @@ class HelloWorldViewUnitVersions extends JViewLegacy
       // Probably creating a new unit, listing id is in GET scope
       $app = JFactory::getApplication();
       $input = $app->input;
-
       $listing_id = $input->get('parent_id','','int');
     }
 

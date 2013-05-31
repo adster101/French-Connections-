@@ -43,10 +43,6 @@ class HelloWorldViewListing extends JViewLegacy {
     // Register the JHtmlProperty class
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
-    // Check the status of this set of units.
-    // If no images, or availability etc, track it
-    $this->progress = HelloWorldHelper::setPropertyProgress($this->items);
-
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       JError::raiseError(500, implode('<br />', $errors));

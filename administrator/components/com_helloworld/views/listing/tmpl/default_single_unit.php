@@ -23,11 +23,9 @@ $canEditOwn = $canDo->get('core.edit.own');
 $canPublish = $canDo->get('helloworld.edit.publish');
 $canSubmitForReview = $canDo->get('helloworld.property.submit');
 $canReview = $canDo->get('helloworld.property.review');
-$data = array();
-$data['snapshot'] = $this->items;
-$data['form'] = $this->form;
-$data['progress'] = $this->progress;
 
+$data = array();
+$data['progress'] = $this->items;
 
 ?>
 
@@ -45,8 +43,7 @@ $data['progress'] = $this->progress;
       <?php
 
       $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      echo $layout->render($data); ?>
-      <?php
+      echo $layout->render($data);
 
       echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
 
@@ -89,15 +86,7 @@ $data['progress'] = $this->progress;
         <?php echo JHtml::_('form.token'); ?>
     </div>
     <div class="span2">
-      <h4>Key</h4>
-      <p>
-        <i class="icon icon-warning"></i>
-        Please complete
-      </p>
-      <p>
-        <i class="icon icon-publish"></i>
-        Section complete
-      </p>
+
     </div>
   </div>
 

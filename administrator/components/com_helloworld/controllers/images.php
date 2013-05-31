@@ -188,7 +188,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
     }
     // Set the redirection once the delete has completed...
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $data['property_id'], false));
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $data['property_id'], false));
   }
 
   /*
@@ -205,10 +205,16 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $user = JFactory::getUser();
 
     // Get the id, which is the unit ID we are uploading the image against
-    $unit_id = $app->input->get('id', '', 'GET', 'int');
+    $unit_id = $app->input->get('unit_id', '', 'GET', 'int');
+
+    // Get the id, which is the unit ID we are uploading the image against
+    $property_id = $app->input->get('property_id', '', 'GET', 'int');
+
+    // Get the version id
+    $version_id = $app->input->get('version_id','','GET','int');
 
     // Set the filepath for the images to be moved into
-    $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
+    $this->folder = JPATH_SITE . '/images/property/' . $property_id . '/';
 
     // An array to hold the that are good to save against the property
     $images = array();
@@ -218,7 +224,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
     // Check that this user is authorised to upload images here
     if (!$user->authorise('helloworld.images.create', $this->extension)) {
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_NOT_AUTHORISED'), 'message');
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
     }
 
@@ -288,29 +294,29 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
       if (empty($file['error'])) {
-
-
-
-
-
         // Add the url to the uploaded files array
-        $file['url'] = JURI::root() . 'images/property/' . $unit_id . '/' . $file['name'];
+        $file['url'] = JURI::root() . 'images/property/' . $property_id . '/' . $file['name'];
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
         $file['property_id'] = $unit_id;
+        $file['version_id'] = $version_id;
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
-        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
+        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $property_id . '/thumb/' . $file['name'];
 
         // Get an instance of the images model file so we can load the existing images for this unit
         // primarily so we can get the ordering
         $model = $this->getModel('Images');
 
-        $existing_images = $model->getItems();
+        $model->setState('version_id',$version_id);
 
+        $existing_images = $model->getItems();
+   
         if (empty($existing_images)) {
+
           $ordering = 1;
+
         } else {
 
           $last = array_pop($existing_images);

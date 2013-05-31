@@ -125,7 +125,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    */
   protected function loadFormData() {
     // Check the session for previously entered form data.
-    $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unit.data', array());
+    $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unitversions.data', array());
 
     if (empty($data)) {
       $data = $this->getItem();
@@ -230,21 +230,23 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     $old_version_id = ($data['id']) ? $data['id'] : '';
 
+
+
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
 
     // Allow an exception to be thrown.
     try {
 
-      // If $data['review'] is not true we need to load the existing data to be able to compare
-      if ($data['review'] == 0) {
+      // Here we don't explicitly know if there is a new version
+      // Load the exisiting row, if there is one.
+      if ($pk > 0) {
+        $table->load($pk);
+        $isNew = false;
+      }
 
-        // Here we don't explicitly know if there is a new version
-        // Load the exisiting row, if there is one.
-        if ($pk > 0) {
-          $table->load($pk);
-          $isNew = false;
-        }
+      // Check whether this unit is published, if it is then we run the check to see if a new version is required.
+      if (!empty($data['published_on'])) {
 
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
@@ -253,7 +255,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         if ($new_version_required[0] === true) {
           // As a new version is required amend the data array before we save
           $data['id'] = '';
-          $data['review'] = '1';
+          // Not clear whether we need review status or not, default to 0 in db anyway
+          $data['review'] = '0';
           $data['published_on'] = '';
         }
       }
@@ -262,6 +265,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       if ($isNew) {
 
+        // in unit table property ID refers to the parent property
         $data['property_id'] = $data['parent_id'];
         $new_unit_id = $this->createNewUnit($data);
 
@@ -271,8 +275,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           $this->setError('There was a problem createing your unit. Please try again.');
           return false;
         } else {
-          $data['review'] = '1';
-          $data['published_on'] = '';
+          // Set the new unit id in the data array so that it is bound and created in the unit_versions
           $data['unit_id'] = $new_unit_id;
         }
       }
@@ -314,7 +317,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         // Update the existing property listing to indicate that we have a new version for it.
         $property = $this->getTable('Property', 'HelloWorldTable');
 
-        $property->id = $table->unit_id;
+        $property->id = $table->parent_id;
         $property->review = 1;
 
         if (!$property->store()) {
@@ -349,10 +352,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
         // Shove these images into the images table against $new_version_id
       }
-
-
-
-
 
 
       // Clean the cache.

@@ -20,11 +20,9 @@ $canEditOwn = $canDo->get('core.edit.own');
 $canPublish = $canDo->get('helloworld.edit.publish');
 $canSubmitForReview = $canDo->get('helloworld.property.submit');
 $canReview = $canDo->get('helloworld.property.review');
-$data = array();
-$data['snapshot'] = $this->items;
-$data['form'] = $this->form;
-$data['progress'] = $this->progress;
 
+$data = array();
+$data['progress'] = $this->items;
 ?>
 <div class="row-fluid">
 
@@ -36,12 +34,13 @@ $data['progress'] = $this->progress;
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <?php
-      $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-      echo $layout->render($data);
-      ?>
+
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+        <?php
+          $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+          echo $layout->render($data);
+        ?>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -54,7 +53,7 @@ $data['progress'] = $this->progress;
               <strong>Property details</strong>
             </td>
             <td>
-              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0],'parent_id','btn') ?>
+              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0], 'parent_id', 'btn') ?>
             </td>
           </tr>
           <tfoot>
@@ -78,7 +77,7 @@ $data['progress'] = $this->progress;
                 Ordering
               </th>
               <th colspan="2">
-                Units
+                Unit name
               </th>
             </tr>
           </thead>
@@ -103,10 +102,10 @@ $data['progress'] = $this->progress;
                   </td>
 
                   <td>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'manage', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id','btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', 'btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', 'btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', 'btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'manage', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', 'btn') ?>
                   </td>
 
                 </tr>
@@ -131,14 +130,6 @@ $data['progress'] = $this->progress;
     </div>
 
     <div class="span2">
-      <h4>Key</h4>
-      <p>
-        <i class="icon icon-warning"></i>
-        Please complete
-      </p>
-      <p>
-        <i class="icon icon-publish"></i>
-        Section complete
-      </p>
+
     </div>
   </div>
