@@ -16,6 +16,7 @@ class HelloWorldViewImages extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+
     // Add the Listing model to this view, so we can get the progress stuff
     $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel',array('ignore_request'=>true)));
 

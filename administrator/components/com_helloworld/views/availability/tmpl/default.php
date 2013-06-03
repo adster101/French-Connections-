@@ -21,7 +21,9 @@ $units = HelloWorldHelper::getUnitsById($data['progress']);
 $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);
 
 $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $item->availability_last_updated_on : '';
+
 ?>
+
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
@@ -32,7 +34,9 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
       <div id="j-main-container" class="span10">
       <?php endif; ?>
       <?php
+      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      echo $progress->render($data);
       echo $layout->render($data);
       ?>
       <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->unit->unit_title); ?></legend>

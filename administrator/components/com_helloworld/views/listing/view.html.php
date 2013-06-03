@@ -19,9 +19,6 @@ class HelloWorldViewListing extends JViewLegacy {
    */
   function display($tpl = null) {
 
-    // Add the submit model to this view so we can fetch the submit for approval form
-    // And handle the associated logic...
-    $submit = JModelLegacy::getInstance('Submit', 'HelloWorldModel');
 
     // Find the user details
     $user = JFactory::getUser();
@@ -38,7 +35,7 @@ class HelloWorldViewListing extends JViewLegacy {
 
     $this->state = $this->get('State');
 
-    $this->form = $submit->getForm();
+    $this->form = $this->getForm();
 
     // Register the JHtmlProperty class
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');

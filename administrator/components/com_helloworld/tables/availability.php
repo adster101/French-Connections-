@@ -28,7 +28,6 @@ class HelloWorldTableAvailability extends JTable
    */
   public function save ($id = null, $availability_periods = array() )
   {
-
     if (!$this->check()) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;

@@ -184,6 +184,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
    * @return void
    *
    */
+
   protected function preprocessForm(JForm $form, $data) {
 
     // Convert data to array if it's an array
@@ -198,7 +199,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     $canDo = $this->getState('actions.permissions', array());
 
     // Get the id from the state
-    $id = $this->getState($this->getName() . '.id','');
+    $id = $this->getState($this->getName() . '.id', '');
     $isNew = (empty($id)) ? true : false;
 
     // If we don't come from a view then this maybe empty so we reset it.
@@ -213,17 +214,12 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       // Set the default owner to the user creating this.
       $form->setFieldAttribute('created_by', 'type', 'hidden');
       $form->setFieldAttribute('created_by', 'default', $user->id);
-
     } elseif ($canDo->get('helloworld.edit.property.owner') && ($isNew == true)) { // This is an admin but not a new property
-
       // This user can change the owner (e.g. admin) but it's not a new property
       $form->setFieldAttribute('created_by', 'required', 'true');
-
     } elseif ($canDo->get('helloworld.edit.property.owner') && !$isNew) { // This is an admin but not a new property
-
       // This user can change the owner (e.g. admin) but it's not a new property
       $form->removeField('created_by');
-
     }
 
     // Set the location details accordingly, needed for one of the form field types...
@@ -232,7 +228,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $form->setFieldAttribute('city', 'longitude', $data->longitude);
       $form->setFieldAttribute('city', 'default', $data->city);
     }
-
   }
 
   /**
@@ -351,15 +346,14 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
     // Allow an exception to be thrown.
     try {
+      // Load the exisiting row, if there is one.
+      if ($pk > 0) {
+        $table->load($pk);
+        $isNew = false;
+      }
 
-      // If $data['review'] is true we need to check whether a new version is required
-      if ($data['review'] == 0) {
-
-        // Load the exisiting row, if there is one.
-        if ($pk > 0) {
-          $table->load($pk);
-          $isNew = false;
-        }
+      // If $data['published_on'] is true we need to check whether a new version is required
+      if (!empty($data['published_on'])) {
 
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
@@ -507,6 +501,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
    * This needs to be done prior to saving the version into #__property_versions for new props
    *
    */
+
   public function createNewProperty($data = array()) {
 
     if (empty($data)) {

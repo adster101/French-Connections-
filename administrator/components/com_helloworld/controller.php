@@ -66,16 +66,16 @@ class HelloWorldController extends JControllerLegacy {
     // Set the default view name and format from the Request.
     $vName = JRequest::getCmd('view', 'Property');
     $lName = JRequest::getCmd('layout', 'default');
-    $id = JRequest::getInt('id');
+    $id = JRequest::getInt('unit_id');
 
     // Check for edit form. This checks that the edit ID is set in the session.
     // This only occurs when someone follows a link ?option=com_helloworld&task=helloworld.edit&id=78
     // A check in each sub controller is also needed to ensure that the user does actually own the item id
-    if (array_key_exists($vName, $views_to_protect) && $lName == 'edit' && !$this->checkEditId('com_helloworld.edit.' . $vName, $id)) {
+    if (array_key_exists($vName, $views_to_protect) && !$this->checkEditId('com_helloworld.edit.' . $vName, $id)) {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=helloworlds', false));
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=properties', false));
 
       return false;
     }

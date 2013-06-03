@@ -312,7 +312,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $model->setState('version_id',$version_id);
 
         $existing_images = $model->getItems();
-   
+
         if (empty($existing_images)) {
 
           $ordering = 1;
@@ -438,6 +438,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
       return false;
     }
 
+    $this->holdEditId('com_helloworld.edit.images',$id);
 
     $this->setRedirect(
             JRoute::_(

@@ -7,6 +7,38 @@ defined('_JEXEC') or die;
  * HelloWorld component helper.
  */
 abstract class HelloWorldHelper {
+  /*
+   * Determines a list of notices to display for a property notifying the user of which units and which sections need attention
+   */
+
+  public static function getProgressNotices($progress = array()) {
+
+    $notices = array();
+
+    if (empty($progress)) {
+      return false;
+    }
+
+    // The sections we want to check for. Tariffs needs expanding for the more detailed tariff data (changeover day etc)
+    $sections = array('images' => array(), 'availability' => array(), 'tariffs' => array());
+
+    foreach ($sections as $section => $value) {
+
+      foreach ($progress as $key => $unit) {
+        if ($unit->$section == 0) { // If the unit doesn't have this section
+          if (!array_key_exists($section, $notices)) {
+            $notices[$section]['units'] = '';
+          }
+
+          // Add the unit that is failing to the list
+          $notices[$section]['units'][] = $unit->unit_title;
+        }
+      }
+    }
+
+
+    return $notices;
+  }
 
   /**
    * Get a list of filter options for the state of a module.
@@ -263,16 +295,15 @@ abstract class HelloWorldHelper {
    */
   public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0) {
 
-
     // Get the view
     $app = JFactory::getApplication();
     $view = $app->input->get('view', '', 'string');
 
+    $calendar = '<div class="row-fluid">';
+
     $showlinks = ($view == 'availability') ? true : false;
 
-
     // Init calendar string
-    $calendar = '<div class="row-fluid">';
     // Get now
     $now = time();
 
@@ -282,7 +313,8 @@ abstract class HelloWorldHelper {
 
     // The loop loops over some code which outputs a calendar. It does this $months times
     for ($z = 0; $z <= $months; $z++) {
-      $calendar.='<div class="span3" style="min-height:185px;"><div class="calendar-container">';
+
+      $calendar.='<div class="span3"><div class="calendar-container">';
 
       $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
       #remember that mktime will automatically correct if invalid dates are entered
@@ -316,25 +348,50 @@ abstract class HelloWorldHelper {
         }
 
         $today = date('Y-m-d', gmmktime(0, 0, 0, $month, $day, $year));
+        $yesterday = date('Y-m-d', gmmktime(0, 0, 0, $month, $day - 1, $year));
 
-        if (array_key_exists($today, $availability)) {
-          if ($availability[$today]) { // Availability is true, i.e. available
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available', 'small'), $showlinks);
+        // Check whether availability status is set for the preceeding day
+        $status = (array_key_exists($today, $availability)) ? $availability[$today] : true;
+        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : true;
+
+        if ($status) { // Availability is true, i.e. available
+          if ($status_yesterday != $status) {
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable-available', 'small'), $showlinks);
+          } else {
+              $calendar .= HelloWorldHelper::generateDateCell($today, $day , array('available', 'small'), $showlinks);
+          }
+
           } else { // Availability is false i.e. unavailable
+
+          if ($status_yesterday != $status) {
+
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available-unavailable', 'small'), $showlinks);
+          } else {
+
             $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable', 'small'), $showlinks);
           }
-        } else { // Availability not defined for this day so we default to unavailable
-          $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable', 'small'), $showlinks);
         }
       }
-      if ($weekday != 7)
-        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days
 
+      if ($weekday != 7) {
+        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days
+      }
       $calendar.="</table></div></div>";
+
+      echo ($z % 4);
+      if (($z % 4 === 3)) {
+        $calendar.='</div><div class="row-fluid">';
+      }
+
+      if ($z==$months) {
+        $calendar.='</div>';
+      }
 
       $month++;
     }
-    $calendar.='</div>';
+
+
+
     return $calendar;
   }
 
@@ -359,7 +416,7 @@ abstract class HelloWorldHelper {
   }
 
   /**
-   *  Generates an array containing availability for each availability period stored for the property
+   * Generates an array containing availability for each availability period stored for the property
    *
    * Returns an array of available days based on available periods.
    *
@@ -370,7 +427,7 @@ abstract class HelloWorldHelper {
    * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
    *
    */
-  public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability = false) {
+  public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability_statu = true) {
     // Array to hold availability per day for each day that availability has been set for.
     // This is needed as availability is stored by period, but displayed by day.
     $raw_availability = array();
@@ -418,7 +475,7 @@ abstract class HelloWorldHelper {
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
       for ($i = 0; $i <= $availability_period_length->days; $i++) {
 
-        $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability;
+        $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_statu;
 
         // Add one day to the start date for each day of availability
         $date = $availability_period_start_date->add($DateInterval);

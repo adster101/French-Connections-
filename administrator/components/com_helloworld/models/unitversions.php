@@ -333,7 +333,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // create a copy of all images against the new version
       // and potentially make a copy of the availability and tariffs (although this may be deferred).
 
-      if (!$this->savePropertyFacilities($data, $property->id, $new_version_id)) {
+      if (!$this->savePropertyFacilities($data, $table->unit_id, $new_version_id)) {
         $this->setError('Problem saving facilities');
       }
 

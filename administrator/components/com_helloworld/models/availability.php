@@ -32,29 +32,44 @@ class HelloWorldModelAvailability extends JModelAdmin {
     // Get any data being able to use default values
     $id = $data->get('unit_id', 0);
     $start_date = $data->get('start_date', null);
-    $end_date= $data->get('end_date', null);
-    $availability_status = $data->get('availability',1);
+    $end_date = $data->get('end_date', null);
+    $availability_status = $data->get('availability', 1);
 
     // Allow an exception to be thrown.
     try {
       // Load in existing availability, so we can merge it with this new availability
       $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'HelloWorldTable', $config = array());
-      $availability = $availabilityTable->load($data->id);
+      $availability = $this->getAvailability($id);
 
       $availability_by_day = HelloWorldHelper::getAvailabilityByDay($availability, $start_date, $end_date, $availability_status);
       $availability_by_period = HelloWorldHelper::getAvailabilityByPeriod($availability_by_day);
 
       // Delete existing availability
       // Need to wrap this in some logic
-      $this->delete($data->id);
+      $unit_id = $id;
+      $this->delete($unit_id);
 
       // Bind the translated fields to the JTable instance
       if (!$availabilityTable->save($id, $availability_by_period)) {
         JError::raiseWarning(500, $availabilityTable->getError());
         return false;
-      } else {
-        // Update the availability last updated on field
-        $this->availability_last_updated_on = JFactory::getDate()->toSql();
+      }
+
+      // Update the availability last updated on field
+      $table = $this->getTable('Unit', 'HelloWorldTable');
+
+      $data = array();
+      $data['id'] = $id;
+      $data['availability_last_updated_on'] = JFactory::getDate()->toSql();
+
+      if (!$table->bind($data)) {
+        JError::raiseWarning(500, $table->getError());
+        return false;
+      }
+
+      if (!$table->store()) {
+        JError::raiseWarning(500, $table->getError());
+        return false;
       }
     } catch (Exception $e) {
       $this->setError($e->getMessage());
@@ -81,10 +96,10 @@ class HelloWorldModelAvailability extends JModelAdmin {
   }
 
   /**
-   * Returns a the availability for this property
+   * Returns the availability for this property
    *
    */
-  public function getAvailability() {
+  public function getAvailability($id = '') {
 
     $id = (!empty($id)) ? $id : (int) $this->getState($this->getName() . '.id');
 

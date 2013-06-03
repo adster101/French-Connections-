@@ -1,5 +1,5 @@
-/* 
-  Availability calendar table styles 
+/*
+  Availability calendar table styles
 */
 
 table.avCalendar {
@@ -15,18 +15,18 @@ table.aCalendar td a:hover,
 table.avCalendar td span{
   color:#333;
   text-decoration:none;
-  margin:0 0px 0px 2px;
+  margin:0 0px 0px 0px;
   display:block;
   height:35px;
 }
 
-table.avCalendar td.available:hover, 
+table.avCalendar td.available:hover,
 table.avCalendar td.unavailable:hover {
   cursor:pointer;
-  
+
 }
 
-table.avCalendar td, 
+table.avCalendar td,
 table.avCalendar th {
   vertical-align:top;
   padding:0;
@@ -45,7 +45,7 @@ table.avCalendar th {
 
 table.avCalendarMonth {
   border-collapse:collapse;
-  border: 1px solid #d7e1f2;	
+  border: 1px solid #d7e1f2;
 }
 
 table.avCalendar tr.days {
@@ -65,12 +65,12 @@ tr.days th {
 }
 
 td.available {
-  color: #333; 
+  color: #333;
   background-color: #eee !important;
 }
 
 td.unavailable {
-  color: #fff; 
+  color: #fff;
   background-color: #aaa !important;
   text-decoration:line-through;
 }
@@ -88,8 +88,13 @@ td a.end {
   background:url('/media/fc/css/images/availability-end-date.png') center center no-repeat;
 }
 
-table.avCalendar td.available-unavailable {
-  
+td.available-unavailable {
+  background:url('/media/fc/css/images/available-unavailable.png') center center no-repeat;
+
+}
+td.unavailable-available {
+  background:url('/media/fc/css/images/unavailable-available.png') center center no-repeat;
+
 }
 
 .key tr {

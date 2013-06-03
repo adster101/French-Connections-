@@ -30,35 +30,92 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
   <li<?php echo ($view == 'propertyversions') ? ' class=\'active\'' : '' ?>>
     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item, 'parent_id', '') ?>
   </li>
-  <li<?php echo ($view == 'unitversions') ? ' class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', '') ?>
-  </li>
-  <li<?php echo ($view == 'images' || $view == 'image') ? ' class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', '') ?>
-  </li>
-  <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
-  </li>
-  <li>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
-  </li>
   <?php if (count($data['progress']) > 1) : ?>
-    <li class="dropdown">
+    <li class="dropdown <?php echo ($view == 'unitversions') ? 'active' : '' ?>">
       <a class="dropdown-toggle"
          data-toggle="dropdown"
          href="#">
-        Switch to unit
+        <i class="icon icon-home"></i>
+        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS'); ?>
         <b class="caret"></b>
       </a>
       <ul class="dropdown-menu">
         <?php foreach ($data['progress'] as $value) : ?>
           <li>
-            <a href="<?php echo JText::_('index.php?option=com_helloworld&task=unitversions.edit&unit_id=' . $value->unit_id) ?>">
-              <?php echo $value->unit_title; ?>
-            </a>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'unitversions', 'edit', 'home', $value->unit_title, $item, 'unit_id', '') ?>
           </li>
         <?php endforeach; ?>
       </ul>
     </li>
+  <?php else: ?>
+    <li<?php echo ($view == 'unitversions') ? ' class=\'active\'' : '' ?>>
+      <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', '') ?>
+    </li>
+  <?php endif; ?>
+  <?php if (count($data['progress']) > 1) : ?>
+    <li class="dropdown <?php echo ($view == 'images') ? 'active' : '' ?>">
+      <a class="dropdown-toggle"
+         data-toggle="dropdown"
+         href="#">
+        <i class="icon icon-pictures"></i>
+        <?php echo JText::_('IMAGE_GALLERY'); ?>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <?php foreach ($data['progress'] as $value) : ?>
+          <li>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'images', 'manage', 'pictures', $value->unit_title, $item, 'unit_id', '') ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+  <?php else: ?>
+  <li<?php echo ($view == 'images' || $view == 'image') ? ' class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', '') ?>
+  </li>
+  <?php endif; ?>
+  <?php if (count($data['progress']) > 1) : ?>
+    <li class="dropdown <?php echo ($view == 'availability') ? 'active' : '' ?>">
+      <a class="dropdown-toggle"
+         data-toggle="dropdown"
+         href="#">
+        <i class="icon icon-calendar-2"></i>
+        <?php echo JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY'); ?>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <?php foreach ($data['progress'] as $value) : ?>
+          <li>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'availability', 'manage', 'calendar-2', $value->unit_title, $item, 'unit_id') ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+  <?php else: ?>
+  <li <?php echo ($view == 'availability') ? 'class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id') ?>
+  </li>
+  <?php endif; ?>
+  <?php if (count($data['progress']) > 1) : ?>
+    <li class="dropdown <?php echo ($view == 'tariffs') ? 'active' : '' ?>">
+      <a class="dropdown-toggle"
+         data-toggle="dropdown"
+         href="#">
+        <i class="icon icon-briefcase"></i>
+        <?php echo JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS'); ?>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <?php foreach ($data['progress'] as $value) : ?>
+          <li>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'tariffs', 'edit', 'briefcase', $value->unit_title, $item, 'unit_id') ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+  <?php else: ?>
+  <li>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
+  </li>
   <?php endif; ?>
 </ul>

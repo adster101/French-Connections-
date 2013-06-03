@@ -24,9 +24,8 @@ $app = JFactory::getApplication();
 
 $input = $app->input;
 
-$id = $input->get('id', '', 'int');
+$id = $input->get('property_id', '', 'int');
 
-$data = JApplication::getUserState('listing', '');
 ?>
 
 
