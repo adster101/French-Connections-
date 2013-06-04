@@ -24,7 +24,16 @@ class HelloWorldModelProperty extends JModelAdmin {
   /*
    * Whether this is a renewal or not - determined via the expiry date
    */
-  public $renewal = '';
+  public $renewal_status = '';
+
+  /*
+   * The expiry date of the listing being edited
+   */
+  public $expiry_date = '';
+
+  /*
+   *
+   */
 
   /**
    * Returns a reference to the a Table object, always creating it.
@@ -70,6 +79,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     // The call to getState also calls populateState (if it hasn't been called already)
     $id = $this->getState($this->getName() . '.id', '');
+    $renewal_status = '';
 
     if (empty($id)) {
       // No ID
@@ -89,7 +99,8 @@ class HelloWorldModelProperty extends JModelAdmin {
     $this->owner_id = ($listing[0]->created_by) ? $listing[0]->created_by : '';
 
     // Set the renewal status
-    $this->renewal = (!empty($listing[0]->expiry_date)) ? true : false;
+    $renewal_status = (!empty($listing[0]->expiry_date)) ? true : false;
+    $this->setRenewalStatus($renewal_status);
 
     // Get the user details
     $user = $this->getUser($this->owner_id);
@@ -326,8 +337,10 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Booking form, although not counted at renewal
     // Link to personal site
     // Special offers - figure out how to deal with
+    // Also possible the 'additional' marketing gubbins
+    // Vouchers!
 
-    if ($this->renewal) {
+    if ($this->getRenewalStatus()) {
 
       // Determine the item costs
       if ($image_count >= 8) { // Renewal
@@ -355,10 +368,10 @@ class HelloWorldModelProperty extends JModelAdmin {
     } else { // New property being published for first time
       // Determine the item costs
       if ($image_count >= 8) {
-        $item_costs['1004-009']['quantity'] = 1;
+        $item_costs['1005-009']['quantity'] = 1;
 
         if ($unit_count > 1) {
-          $item_costs['1004-006']['quantity'] = $unit_count;
+          $item_costs['1005-006']['quantity'] = $unit_count;
         }
       } else { // Image count must be less than 8
         // Add the base item price
@@ -380,9 +393,9 @@ class HelloWorldModelProperty extends JModelAdmin {
     return $item_costs;
   }
 
-  public function processRenewal($data) {
+  public function processPayment($data) {
 
-    // Set the state for this model so it knows which listing to get the summary of...
+    // Set the state for this model so it knows which listing we are looking at
     $this->setState($this->getName() . '.id', $data['id']);
 
     // Set the property id
@@ -393,7 +406,6 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     // Get the invoice component parameters which hold the protx settings
     $protx_settings = JComponentHelper::getParams('com_itemcosts');
-
 
     $sngTotal = 0.0;
     $strBasket = "";
@@ -564,16 +576,12 @@ class HelloWorldModelProperty extends JModelAdmin {
       $strDBStatus = "UNKNOWN - An unknown status was returned from Sage Pay.  The Status was: " . mysql_real_escape_string($strStatus) . ", with StatusDetail:" . mysql_real_escape_string($strStatusDetail);
     echo $strDBStatus;
 
+    // Save the transaction out to the protx table
     $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
 
     // Okay now we have processed the transaction and update it in the db.
     switch ($strStatus) {
       case 'OK':
-        // Payment authorised so update the expiry date
-        // Clear down any vouchers?
-        // Work out the special offers
-        // etc
-        $this->updateExpiryDate();
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
         return true;
         break;
@@ -612,27 +620,71 @@ class HelloWorldModelProperty extends JModelAdmin {
         return false;
         break;
     }
-
-
-
-    // Figure out what to reuturn to our controller an
   }
 
-  public function updateExpiryDate() {
+
+  /*
+   * This method determines whether we have just processed a renewal or a new sign up payment
+   * and does the relevant processing on the property listing.
+   *
+   */
+  public function processListing()
+  {
+
+    // Okay, so we have a payment, will either be a renewal or a sign up.
+    if ($this->getRenewalStatus()) {
+
+      // Renewal, or additional payment
+      // If it's an additional payment the expiry date will be in the future
+
+      // Update the expiry date
+      // TO DO: Will need to add an additional check for a six month listing?
+
+      $this->updateProperty(true);
+
+      // Get the expiry date etc
+
+    } else {
+
+      // This must be a sign up.
+
+      // Update the expiry date
+      $this->updateProperty(false,true);
+
+      // At this point, payment has been made, property 'locked' - email owner to notify them.
+
+    }
+
+
+  }
+
+  /*
+   * This method updates the property expiry date and review status.
+   *
+   * @expiry indicates whether to update the expiry date
+   * @reivew indicates whether to trap the property into the review queue or not
+   *
+   */
+
+  public function updateProperty($expiry = false, $review = true) {
 
     $data = array();
+    $data['id'] = $this->property_id;
 
     $date = JFactory::getDate();
-    $date->add(new DateInterval('P365D'));
-
     $table = JTable::getInstance('Property', 'HelloWorldTable');
 
-    $data['expiry_date'] = $date->toSql();
-    $data['id'] = $this->property_id;
-    $data['published'] = 1;
+    if ($expiry) {
+      $date->add(new DateInterval('P365D'));
+      $data['expiry_date'] = $date->toSql();
+    }
+
+    // This takes care of flagging the property as being locked for review
+    if ($review) {
+      $data['review'] = 2;
+    }
 
     $bind = $table->bind($data);
-
 
     // Store the data.
     if (!$table->store()) {
@@ -730,6 +782,50 @@ class HelloWorldModelProperty extends JModelAdmin {
     }
 
     return true;
+  }
+
+	/**
+	 * Method to get a store id based on model configuration state.
+	 *
+	 * This is necessary because the model is used by the component and
+	 * different modules that might need different sets of data or different
+	 * ordering requirements.
+	 *
+	 * @param   string  $id  A prefix for the store id.
+	 *
+	 * @return  string  A store id.
+	 *
+	 * @since   1.6
+	 */
+	protected function getStoreId($id = '')
+	{
+		// Compile the store id.
+		$id	.= ':'.$this->getState('filter.search');
+		$id	.= ':'.$this->getState('filter.active');
+
+		return parent::getStoreId($id);
+	}
+
+  /*
+   * Set the renewal status
+   */
+  protected function setRenewalStatus( $renewal_status = false )
+  {
+
+    // Set the renewal status...
+    $this->renewal_status = $renewal_status;
+
+  }
+
+  /*
+   * Get the renewal status
+   */
+  public function getRenewalStatus( )
+  {
+
+    // Set the renewal status...
+    return $this->renewal_status;
+
   }
 
 }

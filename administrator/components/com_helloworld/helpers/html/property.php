@@ -174,6 +174,21 @@ class JHtmlProperty {
   }
 
   /**
+   * Helper method which determines the button and message to show on the listing status
+   *
+   * @param int $days The number of days until the property expires
+   *
+   */
+  public static function listingStatus($days = 0)
+  {
+
+    //
+
+
+  }
+
+
+  /**
    * @param	int $value	The state value
    * @param	int $i
    */

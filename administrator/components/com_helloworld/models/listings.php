@@ -8,7 +8,7 @@ jimport('joomla.application.component.modellist');
 /**
  * HelloWorldList Model
  */
-class HelloWorldModelProperties extends JModelList {
+class HelloWorldModelListings extends JModelList {
 
   /**
    * Constructor.

@@ -8,7 +8,7 @@ jimport('joomla.application.component.controlleradmin');
 /**
  * HelloWorlds Controller
  */
-class HelloWorldControllerProperties extends JControllerAdmin
+class HelloWorldControllerListings extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
@@ -21,7 +21,7 @@ class HelloWorldControllerProperties extends JControllerAdmin
 	}
 
   /*
-   * 
+   *
    */
   public function submit()
   {

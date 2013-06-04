@@ -86,6 +86,8 @@ class HelloWorldControllerListing extends JControllerForm {
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('GET') or die('Invalid Token');
 
+    $context = "$this->option.view.$this->context";
+
     // $id is the listing the user is trying to edit
     $id = $this->input->get('id', '', 'int');
 
@@ -100,6 +102,8 @@ class HelloWorldControllerListing extends JControllerForm {
       return false;
     }
 
+    // Hold the edit ID once the id and user have been authorised.
+    $this->holdEditId($context, $id);
 
     $this->setRedirect(
             JRoute::_(
@@ -131,6 +135,130 @@ class HelloWorldControllerListing extends JControllerForm {
 
 
     return true;
+  }
+
+  public function submit() {
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');
+
+    $app = JFactory::getApplication();
+    $lang = JFactory::getLanguage();
+    $model = $this->getModel('Submit');
+    $data = $this->input->post->get('jform', array(), 'array');
+    $context = "$this->option.view.$this->context";
+    $task = $this->getTask();
+
+    // Get the record ID from the data array
+    $recordId = $data['id'];
+
+    // Check that the edit ID is in the session scope
+    if (!$this->checkEditId($context, $recordId)) {
+      // Somehow the person just went to the form and tried to save it. We don't allow that.
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $recordId));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . $this->getRedirectToListAppend(), false
+              )
+      );
+
+      return false;
+    }
+
+    // Validate the posted data.
+    // Sometimes the form needs some posted data, such as for plugins and modules.
+    $form = $model->getForm($data, false);
+
+    if (!$form) {
+      $app->enqueueMessage($model->getError(), 'error');
+
+      return false;
+    }
+
+    // Test whether the data is valid.
+    $validData = $model->validate($form, $data);
+
+    // Check for validation errors.
+    if ($validData === false) {
+
+      // Get the validation messages.
+      $errors = $model->getErrors();
+
+      // Push up to three validation messages out to the user.
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+        if ($errors[$i] instanceof Exception) {
+          $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+        } else {
+          $app->enqueueMessage($errors[$i], 'warning');
+        }
+      }
+
+      // Save the data in the session.
+      $app->setUserState($context . '.data', $data);
+
+      // Redirect back to the edit screen.
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_item
+                      . $this->getRedirectToItemAppend($recordId, 'id'), false
+              )
+      );
+
+      return false;
+    }
+
+    // It's all good.
+    // Redirect back to the edit screen.
+
+    // Redirect to the renewal payment/summary form thingy...
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false
+            )
+    );
+
+
+
+
+    // Hand off to the model to check whether this is a new property
+    // Get the details, work out price etc
+    // Process payment
+    // Update property status (expiry date, review status etc)
+    // send confirmation email
+    // etc
+  }
+
+  /**
+   * Gets the URL arguments to append to an item redirect.
+   *
+   * @param   integer  $recordId  The primary key id for the item.
+   * @param   string   $urlVar    The name of the URL variable for the id.
+   *
+   * @return  string  The arguments to append to the redirect URL.
+   *
+   * @since   12.2
+   */
+  protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id') {
+    $tmpl = $this->input->get('tmpl');
+    $layout = $this->input->get('layout');
+    $append = '';
+
+    // Setup redirect info.
+    if ($tmpl) {
+      $append .= '&tmpl=' . $tmpl;
+    }
+
+    if ($layout) {
+      $append .= '&layout=' . $layout;
+    }
+
+    if ($recordId) {
+      $append .= '&' . $urlVar . '=' . $recordId;
+    }
+
+    return $append;
   }
 
 }

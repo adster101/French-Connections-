@@ -89,7 +89,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
       $recordId = ($data['parent_id']) ? $data['parent_id'] : 0;
 
-      $this->view_list = ($recordId) ? 'listing' : 'properties';
+      $this->view_list = ($recordId) ? 'listing' : 'listings';
 
       if ($recordId > 0) {
         $this->setRedirect(

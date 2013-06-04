@@ -115,83 +115,86 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
     return false;
   }
 
-
-
-
   /*
    *  Method to process the card details for a renewal payment...actual payment processing is done in the model...
    *
    */
 
-	public function process()
-	{
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+  public function process() {
 
+    // Check for request forgeries.
+    JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$app   = JFactory::getApplication();
-		$model = $this->getModel('Property');
-		$form  = $model->getPaymentForm();
-		$data  = $this->input->post->get('jform', array(), 'array');
-		// Validate the posted data.
-		$return = $model->validate($form, $data);
+    $app = JFactory::getApplication();
+    // Here, we could abstract the call the get the listing in the below processPayment method
+    // so it would be possible to pass in the data as a config option...
+    $model = $this->getModel('Property');
+    $form = $model->getPaymentForm();
 
-		// Check for validation errors.
-		if ($return === false)
-		{
-			// Get the validation messages.
-			$errors	= $model->getErrors();
+    // Data here is the clients billing address details
+    $data = $this->input->post->get('jform', array(), 'array');
 
-			// Push up to three validation messages out to the user.
-			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
-			{
-				if ($errors[$i] instanceof Exception)
-				{
-					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-				} else {
-					$app->enqueueMessage($errors[$i], 'warning');
-				}
-			}
+    // TO DO: Add another check here to make sure the user is authed to do this
+    // Validate the posted data.
+    $validData = $model->validate($form, $data);
 
-			// Save the data in the session.
-			$app->setUserState('com_helloworld.renewal.data', $data);
+    // Check for validation errors.
+    if ($validData === false) {
+      // Get the validation messages.
+      $errors = $model->getErrors();
 
-			// Redirect back to the edit screen.
-			$this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'] , false));
-			return false;
-		}
+      // Push up to three validation messages out to the user.
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
+        if ($errors[$i] instanceof Exception) {
+          $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+        } else {
+          $app->enqueueMessage($errors[$i], 'warning');
+        }
+      }
 
-		// Attempt to save the configuration.
-		$data	= $return;
-		$return = $model->processRenewal($data);
+      // Save the data in the session.
+      $app->setUserState('com_helloworld.renewal.data', $data);
 
-		// Check the return value.
-		if ($return === false)
-		{
-			// Save the data in the session.
-			$app->setUserState('com_helloworld.renewal.data', $data);
+      // Redirect back to the edit screen.
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'], false));
+      return false;
+    }
 
-			// Save failed, go back to the screen and display a notice.
-			$message = JText::sprintf('JERROR_SAVE_FAILED', $model->getError());
-			$this->setRedirect('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'], $message, 'error');
-			return false;
-		}
+    // Attempt to save the configuration.
+    $return = $model->processPayment($validData);
 
-		// Set the success message.
-		$message = JText::_('PROPERTY HAS BEEN RENEWED. WHOOPY DOO');
+    // Check the return value.
+    if ($return === false) {
+      // Save the data in the session.
+      $app->setUserState('com_helloworld.renewal.data', $data);
 
-		// Set the redirect based on the task.
-		switch ($this->getTask())
-		{
+      // Save failed, go back to the screen and display a notice.
+      $message = JText::sprintf('JERROR_SAVE_FAILED', $model->getError());
+      $this->setRedirect('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'], $message, 'error');
+      return false;
+    }
 
-			default:
-				$this->setRedirect('index.php?option=com_helloworld', $message);
-				break;
-		}
+    // Payment has been authorised...
+    // Need to process the rest of the gubbins
+    // Essentially we need to do the following
+    // Update the expiry date to one year hence
+    // If a renewal, then no need to hold the property in the PFR, so update the expiry date and send a confirmation email and write into the admin log
+    // If a sign up, then update review status to 2, update the expiry date and send an email to confirm payment? Log payment amount against the property as well
 
-		return true;
-	}
+    $message = $model->processListing();
 
+    // Set the success message.
+    $message = JText::_('PROPERTY HAS BEEN RENEWED. WHOOPY DOO');
 
+    // Set the redirect based on the task.
+    switch ($this->getTask()) {
+
+      default:
+        $this->setRedirect('index.php?option=com_helloworld', $message);
+        break;
+    }
+
+    return true;
+  }
 
 }

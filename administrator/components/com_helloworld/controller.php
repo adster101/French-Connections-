@@ -61,7 +61,7 @@ class HelloWorldController extends JControllerLegacy {
     $document = JFactory::getDocument();
 
     // set default view if not set
-    JRequest::setVar('view', JRequest::getCmd('view', 'Properties'));
+    JRequest::setVar('view', JRequest::getCmd('view', 'Listings'));
 
     // Set the default view name and format from the Request.
     $vName = JRequest::getCmd('view', 'Property');
@@ -75,7 +75,7 @@ class HelloWorldController extends JControllerLegacy {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=properties', false));
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=listings', false));
 
       return false;
     }
@@ -84,7 +84,7 @@ class HelloWorldController extends JControllerLegacy {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=properties', false));
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=listings', false));
 
       return false;
     }

@@ -89,16 +89,16 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
       $app = JFactory::getApplication();
       $recordId = $app->input->get('parent_id',0,'int');
 
-      $this->view_list = ($recordId) ? 'listing' : 'properties';
+      $this->view_list = ($recordId) ? 'listing' : 'listings';
 
-      
+
         $this->setRedirect(
                 JRoute::_(
                         'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
                         . (int) $recordId, false
                 )
         );
-      
+
     }
   }
 
@@ -115,7 +115,7 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
         $app = JFactory::getApplication();
         $recordId = $app->input->getInt('parent_id');
 
-        $this->view_list = ($recordId) ? 'units' : 'properties';
+        $this->view_list = ($recordId) ? 'units' : 'listings';
 
         if ($recordId > 0) {
           $this->setRedirect(

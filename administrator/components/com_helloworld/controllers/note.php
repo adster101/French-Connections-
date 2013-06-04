@@ -29,7 +29,7 @@ class HelloWorldControllerNote extends JControllerForm {
       $this->extension = JRequest::getCmd('extension', 'com_helloworld');
     }
 
-    $this->view_list = 'properties';
+    $this->view_list = 'listings';
   }
 
 

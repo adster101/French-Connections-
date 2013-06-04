@@ -26,6 +26,7 @@ $canReview = $canDo->get('helloworld.property.review');
 
 $data = array();
 $data['progress'] = $this->items;
+$data['form'] = $this->form;
 
 ?>
 

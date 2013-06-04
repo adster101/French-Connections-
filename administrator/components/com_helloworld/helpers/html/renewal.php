@@ -28,12 +28,12 @@ class JHtmlRenewal
     // About to expire (non auto-renew) (renew now) (opt in)
     // About to expire (auto renew) (opt out)
     // Publshed with > 28 days to renewal (non auto renew) (opt in)
-     
+
 		$states	= array(
 			0	=> array(
-          'chevron-right',	
-          'autorenewals.showtransactionlist', 
-          'Enable auto renewals for this listing', 
+          'chevron-right',
+          'autorenewals.showtransactionlist',
+          'Enable auto renewals for this listing',
           'Enable auto-renewals',
           'Click here to enable auto renewals for this listing.'
           ),
@@ -41,12 +41,12 @@ class JHtmlRenewal
           'chevron-right',
           'autorenewals.showtransactionlist',
           'Auto renewals have been enabled for this listing.',
-          'Cancel auto-renewals', 
-          'This property will automatically renew on the expiry date shown. No further action requried etc')
+          'Cancel auto-renewals',
+          'This property will automatically renew on the expiry date shown. No further action requried.')
 		);
-    
+
 		$state	= JArrayHelper::getValue($states, (int) $value, $states[0]);
-        
+
 		if ($canChange) {
       $html = '<p class=\'small\'>' . $state[2] . '</p>';
 			$html .= '<a rel="tooltip" class="btn" href="#" onclick="return listItemTask(\'cb'.$i.'\',\''.$state[1].'\')" title="'.JText::_($state[4]).'">';

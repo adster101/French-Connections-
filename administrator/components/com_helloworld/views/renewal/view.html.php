@@ -48,7 +48,6 @@ class HelloWorldViewRenewal extends JViewLegacy {
     if ($layout == 'payment') {
       // Get the payment form
       $this->form = $this->get('PaymentForm');
-
     }
 
     // Set the document

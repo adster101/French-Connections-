@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class HelloWorldViewProperties extends JViewLegacy {
+class HelloWorldViewListings extends JViewLegacy {
 
   protected $state;
 
@@ -24,9 +24,6 @@ class HelloWorldViewProperties extends JViewLegacy {
 
     // Get data from the model
     $items = $this->get('Items');
-
-    // Record the number of properties here in the user session scope
-    JApplication::setUserState("com_helloworlds_property_count_$userID", count($items));
 
     $pagination = $this->get('Pagination');
 
@@ -85,13 +82,13 @@ class HelloWorldViewProperties extends JViewLegacy {
       JToolBarHelper::editList('propertyversions.edit', 'JTOOLBAR_EDIT');
     }
     if ($canDo->get('core.delete')) {
-      JToolBarHelper::deleteList('', 'properties.delete', 'JTOOLBAR_DELETE');
+      JToolBarHelper::deleteList('', 'listings.delete', 'JTOOLBAR_DELETE');
     }
 
     if ($canDo->get('core.edit.state')) {
-      JToolBarHelper::publish('properties.publish', 'JTOOLBAR_PUBLISH', true);
-      JToolBarHelper::unpublish('properties.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-      JToolBarHelper::trash('properties.trash');
+      JToolBarHelper::publish('listings.publish', 'JTOOLBAR_PUBLISH', true);
+      JToolBarHelper::unpublish('listings.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+      JToolBarHelper::trash('listings.trash');
     }
 
     if ($canDo->get('core.admin')) {
