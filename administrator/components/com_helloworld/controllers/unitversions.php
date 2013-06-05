@@ -28,6 +28,9 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     if (empty($this->extension)) {
       $this->extension = JRequest::getCmd('extension', 'com_helloworld');
     }
+
+    // Set the view list - applies when saving/cancelling rather than 'inflecting' the list view
+    $this->view_list = 'listing';
   }
 
   /**
@@ -80,27 +83,6 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     return false;
   }
 
-  public function cancel($key = null) {
-
-    if (parent::cancel($key)) {
-
-      $app = JFactory::getApplication();
-      $data = $app->input->get('jform', array(), 'array');
-
-      $recordId = ($data['parent_id']) ? $data['parent_id'] : 0;
-
-      $this->view_list = ($recordId) ? 'listing' : 'listings';
-
-      if ($recordId > 0) {
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
-                        . (int) $recordId, false
-                )
-        );
-      }
-    }
-  }
 
   /*
    * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
@@ -139,4 +121,36 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     return $append;
   }
 
+  /*
+   * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
+   * MAkes more sense to override this than the individual save/edit methods
+   *
+   */
+
+  public function getRedirectToListAppend($recordId = null, $urlVar = 'id') {
+
+    // Get the default append string
+    $append = parent::getRedirectToListAppend($recordId, $urlVar);
+
+    // Get the task, if we are 'editing' then the parent id won't be set in the form scope
+    $task = $this->getTask();
+
+    switch ($task) :
+      case 'save':
+      case 'cancel':
+        // Derive the parent id from the form data
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        $id = $data['parent_id'];
+
+        break;
+
+    endswitch;
+
+    // If parent ID is set in form data also append to the url
+    if ($id > 0) {
+      $append .= '&id=' . $id;
+    }
+
+    return $append;
+  }
 }

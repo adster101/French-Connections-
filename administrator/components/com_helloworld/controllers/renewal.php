@@ -29,12 +29,8 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
 
   public function summary() {
 
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken() or die('Invalid Token');
-
     // Get the record ID being renewed
-    $records = $this->input->get('cid', array(), 'array');
-    $recordId = $records[0];
+    $recordId = $this->input->get('id', '', 'int');
 
     // Set the context so we can hold the edit ID
     $context = "com_helloworld.renewal.summary";

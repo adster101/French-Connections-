@@ -109,7 +109,7 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function stats($id,$u_id) {
+  public static function stats($id, $u_id) {
 
     if (empty($id)) {
       return '';
@@ -122,7 +122,6 @@ class JHtmlProperty {
             . ' rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'
             . '<span class="label label-info"><i class="icon-bars"></i>' . $title . '</span></a>';
   }
-
 
   /**
    * Build an array of activate states to be used by jgrid.state,
@@ -174,30 +173,102 @@ class JHtmlProperty {
   }
 
   /**
-   * Helper method which determines the button and message to show on the listing status
-   *
-   * @param int $days The number of days until the property expires
-   *
+   * @param	int $days	The number of days until the property expires, or null if a new sign up
+   * @param	int $i
    */
-  public static function listingStatus($days = 0)
-  {
+  public static function renewalButton($days = '', $id = '') {
 
-    //
+    // Array of image, task, title, action.
+    // Possible renewal states are
+    // Expired (renew now)
+    // About to expire (non auto-renew) (renew now) (opt in)
+    // About to expire (auto renew) (opt out)
+    // Publshed with > 28 days to renewal (non auto renew) (opt in)
 
+    $value = '';
+    $html = '';
 
+    if ($days <= 7 && $days >= 0 && !empty($days)) { // Property about to expire
+      $value = 0;
+    } elseif ($days < 0 && !empty($days)) { // Property has expired
+      $value = 1;
+    } elseif (empty($days)) { // A new sign up which has never been published...
+      $value = 2;
+    } elseif ($days > 7) { // 7 days until renewal
+      $value = 3;
+    }
+
+    $states = array(
+        0 => array(
+            'chevron-right',
+            'renewal.summary',
+            'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE',
+            'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE_TOOLTIP',
+            'btn-danger'),
+        1 => array(
+            'chevron-right',
+            'renewal.summary',
+            'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW',
+            'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
+            'btn-danger'),
+        2 => array(
+            'chevron-right',
+            'listing.view',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
+            'btn-primary'),
+        3 => array(
+            'chevron-right',
+            'listing.view',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
+            'btn-primary')
+    );
+
+    $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
+
+    $html .= '<a rel="tooltip" class="btn ' . $state[5] . '" href="' . JRoute::_('index.php?option=com_helloworld&task=' . $state[1] . '&id=' . (int) $id) . '" title="' . JText::_($state[4]) . '">';
+    $html .= '<i class=\'icon-' . $state[0] . '\'></i>&nbsp;';
+    $html .= JText::_($state[3]);
+    $html .='</a>';
+
+    return $html;
   }
-
 
   /**
    * @param	int $value	The state value
    * @param	int $i
    */
-  public static function renew($i, $title) {
+  public static function autorenewalstate($value = '', $id = '') {
+
     $html = '';
 
+    $states = array(
+        0 => array(
+            'chevron-right',
+            'autorenewals.showtransactionlist',
+            'COM_HELLOWORLD_HELLOWORLD_ENABLE_AUTO_RENEWALS',
+            'COM_HELLOWORLD_HELLOWORLD_ENABLE_AUTO_RENEWALS_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_ENABLE_AUTO_RENEWALS_CLICK_HERE'
+        ),
+        1 => array(
+            'chevron-right',
+            'autorenewals.showtransactionlist',
+            'COM_HELLOWORLD_HELLOWORLD_CANCEL_AUTO_RENEWALS',
+            'COM_HELLOWORLD_HELLOWORLD_CANCEL_AUTO_RENEWALS_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_CANCEL_AUTO_RENEWALS_CLICK_HERE')
+    );
 
-    $html = '<a rel="tooltip" href="javascript::void(0);" onclick="return listItemTask(\'cb' . $i . '\',\'renewal.summary\')" title="' . $title . '" class="btn btn-danger">'
-            . JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW') . '</a>';
+    $state = JArrayHelper::getValue($states, (int) $value, $states[0]);
+
+    $html .= '<a rel="tooltip" class="" href="' . JRoute::_('index.php?option=com_helloworld&task=' . $state[1] . '&id=' . (int) $id) . '" title="' . JText::_($state[4]) . '">';
+    $html .= JText::_($state[3]);
+    $html .= '<i class=\'icon-' . $state[0] . '\'></i>';
+    $html .='</a>';
 
     return $html;
   }
@@ -207,18 +278,17 @@ class JHtmlProperty {
    *
    *
    */
-  public static function button ($btnClass = '', $task = '', $iconClass = '', $text) {
+
+  public static function button($btnClass = '', $task = '', $iconClass = '', $text) {
 
     $html = '';
     $html.='<button class="' . $btnClass . '" onclick="Joomla.submitbutton(\'' . $task . '\')">'
-      . JText::_($text)
-      . '<i class="' . $iconClass . '"></i>'
-      . '</button>';
+            . JText::_($text)
+            . '<i class="' . $iconClass . '"></i>'
+            . '</button>';
 
     return $html;
-
   }
-
 
   /**
    * Gets a list of the actions that can be performed.
@@ -256,7 +326,7 @@ class JHtmlProperty {
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'parent_id',$btnClass = '') {
+  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'parent_id', $btnClass = '') {
     $active = false;
     $progress_icon = 'warning';
     $html = '';
@@ -266,45 +336,37 @@ class JHtmlProperty {
       $active = true;
       $progress_icon = 'ok';
       $id = $listing_id;
-
     } elseif (empty($listing_id) && ($controller == 'propertyversions')) {
 
       $active = true;
       $progress_icon = 'warning';
       $id = $listing_id;
-
-    }  elseif (empty($unit_id) && $controller == 'unitversions' && !empty($listing_id)) { // This property has no unit, or unit details not completed...
-
+    } elseif (empty($unit_id) && $controller == 'unitversions' && !empty($listing_id)) { // This property has no unit, or unit details not completed...
       $active = true;
       $progress_icon = 'warning';
       $id = $listing_id;
       // Set urlParam here as a new unit may need listing id in GET scope
       $urlParam = 'parent_id';
-
     } elseif (!empty($unit_id) && $controller == 'images') {
 
       $active = true;
       $progress_icon = ($item->images > 0) ? 'ok' : 'warning';
       $id = $unit_id;
-
     } elseif (!empty($unit_id) && $controller == 'availability') {
 
       $progress_icon = ($item->availability > 0) ? 'ok' : 'warning';
       $active = true;
       $id = $unit_id;
-
     } elseif (!empty($unit_id) && $controller == 'tariffs') {
 
       $active = true;
       $progress_icon = ($item->tariffs > 0) ? 'ok' : 'warning';
       $id = $unit_id;
-
     } elseif (!empty($unit_id) && $controller == 'unitversions') {
 
       $active = true;
       $progress_icon = 'ok';
       $id = $unit_id;
-
     }
 
     if ($active) {

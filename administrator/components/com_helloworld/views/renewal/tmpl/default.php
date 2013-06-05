@@ -41,7 +41,7 @@ $total_vat = '';
             <tr>
               <td><?php echo $this->escape($item->quantity) ?></td>
               <td><?php echo $this->escape($item->item_description) ?></td>
-              <td text-align="right"><?php echo number_format($this->escape($item->line_value), 2) ?></td>
+              <td text-align="right"><?php echo number_format($this->escape($item->cost), 2) ?></td>
               <td text-align="right"><?php echo number_format($this->escape($item->line_value), 2) ?></td>
             </tr>
 

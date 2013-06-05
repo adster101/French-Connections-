@@ -13,6 +13,7 @@ $userId = $user->get('id');
 // And determine the user groups the user is in
 
 $data = array('item' => $this->item, 'progress' => $this->progress);
+
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
@@ -27,7 +28,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <?php
         $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
         echo $progress->render($data);
-        
+
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
         echo $layout->render($data);
         ?>

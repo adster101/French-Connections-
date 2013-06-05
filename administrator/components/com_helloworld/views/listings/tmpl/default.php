@@ -61,7 +61,7 @@ $listing_id = '';
           <?php echo $this->pagination->getLimitBox(); ?>
         </div>
       </div>
-      <?php if (empty($this->items)) : // This user doesn't have any listings against their account  ?>
+      <?php if (empty($this->items)) : // This user doesn't have any listings against their account   ?>
         <hr />
         <div class="alert alert-block">
           <strong><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_NO_LISTINGS'); ?><strong>
@@ -100,10 +100,10 @@ $listing_id = '';
                       <?php endif; ?>
                     </th>
                     <th width="15%">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RENEWAL'); ?>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_LISTING_STATUS'); ?>
                     </th>
                     <th width="10%">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_RECENT_PAGE_VIEWS'); ?>
+                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_LISTING_STATS'); ?>
                     </th>
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
@@ -169,15 +169,17 @@ $listing_id = '';
                         <td>
                           <?php if ($item->review != 2) : ?>
                             <!--
-                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';       ?>">
+                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';            ?>">
                             -->
                             <?php echo $this->escape($item->title); ?>
+                            <br>
                             <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
-                              <?php if ($days_to_renewal <= 7) : ?>
+                              <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
                                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php else: ?>
                                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_MORE_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php endif; ?>
+                              </span>
                             </a>
                           <?php else: ?>
                             <?php echo $this->escape($item->title); ?>
@@ -185,29 +187,27 @@ $listing_id = '';
                         </td>
                         <td>
                           <?php echo $item->expiry_date; ?>
-                        </td>
-                        <td>
-                          <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0) : ?>
+                          <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0 && !empty($days_to_renewal)) : // Property is expiring in the next 28 days ?>
                             <p>
                               <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal_pretty); ?>
                             </p>
-                          <?php else: // Property must have expired ?>
+                          <?php elseif ($days_to_renewal < 0) : // Property must have expired ?>
                             <p>
                               <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PROPERTY_EXPIRED'); ?>
                             </p>
                           <?php endif; ?>
+                        </td>
+                        <td>
 
-
-                          <?php if (empty($days_to_renewal)) : ?>
-                            Publish now...
-                          <?php elseif ($days_to_renewal <= 7) : ?>
-                            <?php echo JHtml::_('property.renew', $i, JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW')); ?>
-                          <?php elseif ($days_to_renewal <= 0) : ?>
-                            <?php echo JHtml::_('property.renew', $i, JText::_('COM_HELLOWORLD_HELLOWORLD_RENEW_NOW')); ?>
-                          <?php elseif (empty($item->expiry_date)): ?>
-                            &mdash;
-                          <?php elseif ($days_to_renewal > 28) : ?>
-                            <?php echo JHtml::_('renewal.state', $auto_renew, $i, 'property.autorenew.', 1, 'cb'); ?>
+                          <?php if ($item->review != 2) : ?>
+                            <p>
+                              <?php echo JHtml::_('property.autorenewalstate', $auto_renew, $item->id); ?>
+                            </p>
+                            <p>
+                              <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id); ?>
+                            </p>
+                          <?php else: ?>
+                            Locked for edit
                           <?php endif; ?>
                         </td>
                         <td>

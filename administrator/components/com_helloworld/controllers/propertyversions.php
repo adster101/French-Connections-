@@ -28,6 +28,9 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
     if (empty($this->extension)) {
       $this->extension = JRequest::getCmd('extension', 'com_helloworld');
     }
+
+    // Set the view list - applies when saving rather than 'inflecting' the list view
+    $this->view_list = 'listing';
   }
 
   /**
@@ -81,52 +84,36 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
   }
 
   /*
-   * Overload the cancel method
-   */
-
-  public function cancel($key = null) {
-    if (parent::cancel($key)) {
-      $app = JFactory::getApplication();
-      $recordId = $app->input->get('parent_id',0,'int');
-
-      $this->view_list = ($recordId) ? 'listing' : 'listings';
-
-
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
-                        . (int) $recordId, false
-                )
-        );
-
-    }
-  }
-
-  /*
-   * Override the save method in order to redirect
+   * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
+   * MAkes more sense to override this than the individual save/edit methods
    *
    */
 
-  public function save($key = null, $urlVar = null) {
-    if (parent::save($key, $urlVar)) {
+  public function getRedirectToListAppend($recordId = null, $urlVar = 'id') {
 
-      $task = $this->getTask();
-      if ($task == 'save') {
-        $app = JFactory::getApplication();
-        $recordId = $app->input->getInt('parent_id');
+    // Get the default append string
+    $append = parent::getRedirectToListAppend($recordId, $urlVar);
 
-        $this->view_list = ($recordId) ? 'units' : 'listings';
+    // Get the task, if we are 'editing' then the parent id won't be set in the form scope
+    $task = $this->getTask();
 
-        if ($recordId > 0) {
-          $this->setRedirect(
-                  JRoute::_(
-                          'index.php?option=' . $this->option . '&view=' . $this->view_list . '&id='
-                          . (int) $recordId, false
-                  )
-          );
-        }
-      }
+    switch ($task) :
+      case 'save':
+      case 'cancel':
+        // Derive the parent id from the form data
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        $id = $data['parent_id'];
+
+        break;
+
+    endswitch;
+
+    // If parent ID is set in form data also append to the url
+    if ($id > 0) {
+      $append .= '&id=' . $id;
     }
+
+    return $append;
   }
 
 }

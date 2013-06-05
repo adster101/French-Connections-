@@ -83,9 +83,6 @@ class HelloWorldControllerListing extends JControllerForm {
 
   public function view() {
 
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken('GET') or die('Invalid Token');
-
     $context = "$this->option.view.$this->context";
 
     // $id is the listing the user is trying to edit

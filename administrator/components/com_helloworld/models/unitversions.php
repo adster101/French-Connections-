@@ -119,16 +119,33 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
   /**
    * Method to get the data that should be injected in the form.
+   * If no form data is available then we set the parent_id using the
+   * request data.
    *
    * @return	mixed	The data for the form.
    * @since	1.6
    */
   protected function loadFormData() {
+
+    $input = JFactory::getApplication()->input;
+    $parent_id = $input->get('parent_id', '', 'int');
+
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unitversions.data', array());
 
+    // If nout in session then we grab the item from the database
     if (empty($data)) {
       $data = $this->getItem();
+    }
+
+    // If data is not an object convert it to object
+    if (is_array($data)) {
+      $data = JArrayHelper::toObject($data);
+    }
+
+    // Set the parent ID for this unit, if it's not set (e.g. for a new unit)
+    if (empty($data->parent_id)) {
+      $data->parent_id = $parent_id;
     }
 
     return $data;
@@ -189,26 +206,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
   protected function preprocessForm(JForm $form, $data) {
 
-    // Get the user
-    $user = JFactory::getUser();
 
-    $app = JFactory::getApplication();
-    $input = $app->input;
-    $parent_id = $input->get('parent_id', '', 'int');
-
-    // Set the parent ID for this unit, if it's not set
-    if (empty($data->parent_id)) {
-
-      $data->parent_id = $parent_id;
-
-      $form->setFieldAttribute('parent_id', 'default', $parent_id);
-    }
-
-    if (!empty($data)) { // Only applies when populating the form, data not present when validating.
-      $form->setFieldAttribute('parent_id', 'default', $data->parent_id);
-    }
-
-    // Also need to check edit.state permission and unset published field if not allowed.
   }
 
   /**

@@ -97,9 +97,9 @@ class HelloWorldControllerAutoRenewals extends JControllerForm {
       $key = $table->getKeyName();
     }
 
-    $cid = $this->input->post->get('cid', array(), 'array');
+    $recordId = $this->input->get('id', '', 'int');
 
-    $recordId = (int) (count($cid) ? $cid[0] : $this->input->getInt($urlVar));
+    //$recordId = (int) (count($cid) ? $cid[0] : $this->input->getInt($urlVar));
 
     if (!$this->allowEdit(array($key => $recordId), $key)) {
       $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));

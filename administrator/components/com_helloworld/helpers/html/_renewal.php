@@ -20,7 +20,7 @@ class JHtmlRenewal
 	 * @param	int $value	The state value
 	 * @param	int $i
 	 */
-	public static function state($value = '', $i, $canChange)
+	public static function autorenewalstate($value = '', $i, $canChange)
 	{
 		// Array of image, task, title, action.
     // Possible renewal states are

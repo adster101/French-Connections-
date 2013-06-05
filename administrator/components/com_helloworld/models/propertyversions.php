@@ -168,7 +168,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
    */
   protected function loadFormData() {
     // Check the session for previously entered form data.
-    $data = JFactory::getApplication()->getUserState('com_helloworld.edit.property.data', array());
+    $data = JFactory::getApplication()->getUserState('com_helloworld.edit.propertyversions.data', array());
 
     if (empty($data)) {
       $data = $this->getItem();
