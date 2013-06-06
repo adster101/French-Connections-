@@ -32,11 +32,11 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
       <div id="filter-bar" class="btn-toolbar">
         <div class="filter-search btn-group pull-left">
           <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-          <input type="text" name="filter_search" 
-                 id="filter_search" 
-                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>" 
-                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" 
-                 placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />        
+          <input type="text" name="filter_search"
+                 id="filter_search"
+                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
+                 placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />
         </div>
         <div class="btn-group pull-left hidden-phone">
           <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
@@ -45,7 +45,7 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
         <div class="btn-group pull-right hidden-phone">
           <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
           <?php echo $this->pagination->getLimitBox(); ?>
-        </div>	
+        </div>
       </div>
 
       <table class="table table-striped" id="articleList">
@@ -56,7 +56,7 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
             </th>
             <th>
               <?php echo JText::_('COM_REVIEWS_PROPERTY_ID'); ?>
- 
+
             </th>
             <th>
               <?php echo JText::_('COM_REVIEWS_DATE_ADDED'); ?>
@@ -76,19 +76,19 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
             <th width="1%">
               <?php echo JText::_('JGRID_HEADING_ID'); ?>
             </th>
-          </tr>		
-        </thead> 
+          </tr>
+        </thead>
         <tbody>
           <?php
           foreach ($this->items as $i => $item):
-            
+
             ?>
-            <tr class="row<?php echo $i % 2; ?>" sortable-group-id="<?php echo $item->attribute_type_id ?>">
+            <tr>
               <td>
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
               <td width="12%">
-                <?php echo $this->escape($item->property_title); ?> (<?php echo $item->property_id; ?>)
+                <?php echo $item->unit_id; ?>
               </td>
 
                <td width="10%">
@@ -117,13 +117,13 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
                 <?php else: ?>
                   <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->review_text)), 500); ?>
                 <?php endif; ?>
-     
+
               </td>
-   
+
               <td>
                 <?php echo $item->id; ?>
               </td>
-            </tr>					
+            </tr>
           <?php endforeach; ?>
         <input type="hidden" name="extension" value="<?php echo 'com_reviews'; ?>" />
         </tbody>

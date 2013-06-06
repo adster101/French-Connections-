@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.6.0" method="upgrade">
+    <name>com_payments</name>
+    <creationDate>2013-05-14</creationDate>
+    <copyright>Copyright (C) 2013. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Adam Rifat</author>
+    <authorEmail>adam@littledonkey.net</authorEmail>
+    <authorUrl>http://</authorUrl>
+    <version>1.0.0</version>
+    <description>This component allows you to view payments generated through renewals etc.</description>
+
+    <install> <!-- Runs on install -->
+        <sql>
+        </sql>
+    </install>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+        </sql>
+    </uninstall>
+
+    <files folder="site">
+        <filename>index.html</filename>
+        <filename>payments.php</filename>
+        <filename>controller.php</filename>
+        <filename>router.php</filename>
+        <folder>views</folder>
+        <folder>models</folder>
+        <folder>controllers</folder>
+        <folder>helpers</folder>
+    </files>
+    <languages folder="site">
+        <language tag="en-GB">language/en-GB.com_payments.ini
+        </language>
+    </languages>
+    <administration>
+        <menu>COM_PAYMENTS</menu>
+        <submenu>
+
+			<menu link="option=com_payments&amp;view=payments" view="payments"  alt="Payments/Payments">COM_PAYMENTS_TITLE_PAYMENTS</menu>
+
+			<menu link="option=com_payments&amp;view=payment" view="payment" alt="Payments/Payment">COM_PAYMENTS_TITLE_PAYMENT</menu>
+
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>controller.php</filename>
+            <filename>index.html</filename>
+            <filename>payments.php</filename>
+            <folder>controllers</folder>
+            <folder>assets</folder>
+            <folder>helpers</folder>
+            <folder>models</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+        </files>
+        <languages folder="administrator">
+
+			<language tag="en-GB">language/en-GB.com_payments.ini</language>
+			<language tag="en-GB">language/en-GB.com_payments.sys.ini</language>
+        </languages>
+    </administration>
+</extension>

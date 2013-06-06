@@ -112,12 +112,7 @@ class InvoicesViewInvoices extends JViewLegacy {
             JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true)
     );
 
-    //Filter for the field due_date
-    $this->extra_sidebar .= '<small><label for="filter_from_due_date">From Due Date</label></small>';
-    $this->extra_sidebar .= JHtml::_('calendar', $this->state->get('filter.due_date.from'), 'filter_due_date_from', 'filter_from_due_date', '%Y-%m-%d', 'style="width:142px;" onchange="this.form.submit();"');
-    $this->extra_sidebar .= '<small><label for="filter_to_due_date">To Due Date</label></small>';
-    $this->extra_sidebar .= JHtml::_('calendar', $this->state->get('filter.due_date.to'), 'filter_due_date_to', 'filter_to_due_date', '%Y-%m-%d', 'style="width:142px;" onchange="this.form.submit();"');
-    $this->extra_sidebar .= '<hr class="hr-condensed">';
+  
   }
 
   protected function getSortFields() {

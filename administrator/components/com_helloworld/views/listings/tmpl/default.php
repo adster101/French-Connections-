@@ -169,7 +169,7 @@ $listing_id = '';
                         <td>
                           <?php if ($item->review != 2) : ?>
                             <!--
-                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';            ?>">
+                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';             ?>">
                             -->
                             <?php echo $this->escape($item->title); ?>
                             <br>
@@ -246,14 +246,22 @@ $listing_id = '';
                 </tbody>
 
                 <tfoot>
+                  <?php
+                  if (isset($this->items[0])) {
+                    $colspan = count(get_object_vars($this->items[0]));
+                  } else {
+                    $colspan = 10;
+                  }
+                  ?>
                   <tr>
-                    <td colspan="7"></td>
+                    <td colspan="<?php echo $colspan ?>">
+                      <?php echo $this->pagination->getListFooter(); ?>
+                    </td>
                   </tr>
                 </tfoot>
               </table>
             <?php endif; ?>
 
-            <?php echo $this->pagination->getListFooter(); ?>
 
             <div>
               <input type="hidden" name="task" value="" />

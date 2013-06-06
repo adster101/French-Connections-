@@ -7,117 +7,112 @@
  * @author      Adam Rifat <adam@littledonkey.net> - http://
  */
 
-// No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modeladmin');
+jimport('joomla.application.component.modellist');
 
 /**
- * Invoices model.
+ * Methods supporting a list of Invoices records.
  */
-class InvoicesModelinvoice extends JModelAdmin
+class InvoicesModelinvoice extends JModelList
 {
-	/**
-	 * @var		string	The prefix to use with controller messages.
-	 * @since	1.6
-	 */
-	protected $text_prefix = 'COM_INVOICES';
+
+    /**
+     * Constructor.
+     *
+     * @param    array    An optional associative array of configuration settings.
+     * @see        JController
+     * @since    1.6
+     */
+    public function __construct($config = array())
+    {
+        if (empty($config['filter_fields'])) {
+            $config['filter_fields'] = array(
+
+            );
+        }
+
+        parent::__construct($config);
+    }
 
 
 	/**
-	 * Returns a reference to the a Table object, always creating it.
+	 * Method to auto-populate the model state.
 	 *
-	 * @param	type	The table type to instantiate
-	 * @param	string	A prefix for the table class name. Optional.
-	 * @param	array	Configuration array for model. Optional.
-	 * @return	JTable	A database object
-	 * @since	1.6
+	 * Note. Calling getState in this method will result in recursion.
 	 */
-	public function getTable($type = 'Invoice', $prefix = 'InvoicesTable', $config = array())
-	{
-		return JTable::getInstance($type, $prefix, $config);
-	}
-
-	/**
-	 * Method to get the record form.
-	 *
-	 * @param	array	$data		An optional array of data for the form to interogate.
-	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
-	 * @return	JForm	A JForm object on success, false on failure
-	 * @since	1.6
-	 */
-	public function getForm($data = array(), $loadData = true)
+	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
-		$app	= JFactory::getApplication();
+		$app = JFactory::getApplication();
 
-		// Get the form.
-		$form = $this->loadForm('com_invoices.invoice', 'invoice', array('control' => 'jform', 'load_data' => $loadData));
-		if (empty($form)) {
-			return false;
-		}
+    $id = $app->getUserStateFromRequest($this->context.'.invoice.id','invoice_id','','int');
+    $this->setState($this->context.'.invoice.id',$id);
 
-		return $form;
+		// Load the filter state.
+		$search = $app->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
+		$this->setState('filter.search', $search);
+
+		$published = $app->getUserStateFromRequest($this->context.'.filter.state', 'filter_published', '', 'string');
+		$this->setState('filter.state', $published);
+
+
+
+		// Load the parameters.
+		$params = JComponentHelper::getParams('com_invoices');
+		$this->setState('params', $params);
+
+		// List state information.
+		parent::populateState('a.property_id', 'asc');
 	}
 
 	/**
-	 * Method to get the data that should be injected in the form.
+	 * Method to get a store id based on model configuration state.
 	 *
-	 * @return	mixed	The data for the form.
+	 * This is necessary because the model is used by the component and
+	 * different modules that might need different sets of data or different
+	 * ordering requirements.
+	 *
+	 * @param	string		$id	A prefix for the store id.
+	 * @return	string		A store id.
 	 * @since	1.6
 	 */
-	protected function loadFormData()
+	protected function getStoreId($id = '')
 	{
-		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_invoices.edit.invoice.data', array());
+		// Compile the store id.
+		$id.= ':' . $this->getState('filter.search');
+		$id.= ':' . $this->getState('filter.state');
 
-		if (empty($data)) {
-			$data = $this->getItem();
-            
-		}
-
-		return $data;
+		return parent::getStoreId($id);
 	}
 
 	/**
-	 * Method to get a single record.
+	 * Build an SQL query to load the list data.
 	 *
-	 * @param	integer	The id of the primary key.
-	 *
-	 * @return	mixed	Object on success, false on failure.
+	 * @return	JDatabaseQuery
 	 * @since	1.6
 	 */
-	public function getItem($pk = null)
+	protected function getListQuery()
 	{
-		if ($item = parent::getItem($pk)) {
+		$db		= $this->getDbo();
+		$query	= $db->getQuery(true);
 
-			//Do any procesing on fields here if needed
+    $user = JFactory::getUser();
 
-		}
+    $query->select('il.item_code,il.item_description,il.quantity,il.total_net as line_value,il.vat as line_vat_value');
+    $query->from('#__invoice_lines il');
 
-		return $item;
+    $query->select('i.id,i.due_date,i.property_id,i.date_created,i.total_net,i.vat,i.property_id,i.first_name,i.surname,i.address,i.town,i.county,i.postcode');
+    $query->leftJoin('#__invoices i on il.invoice_id = i.id');
+
+    $query->where('invoice_id = ' . (int) $this->getState($this->context.'.invoice.id',''));
+
+		$canDo	= InvoicesHelper::getActions();
+
+    if (!$canDo->get('core.edit') && $canDo->get('code.edit.own')) {
+      $query->where('i.user_id = ' . (int) $user->id);
+    }
+
+		return $query;
 	}
-
-	/**
-	 * Prepare and sanitise the table prior to saving.
-	 *
-	 * @since	1.6
-	 */
-	protected function prepareTable($table)
-	{
-		jimport('joomla.filter.output');
-
-		if (empty($table->id)) {
-
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '') {
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__invoices');
-				$max = $db->loadResult();
-				$table->ordering = $max+1;
-			}
-
-		}
-	}
-
 }

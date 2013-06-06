@@ -293,7 +293,6 @@ class JControllerForm extends JControllerLegacy
 	public function cancel($key = null)
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
 		$app = JFactory::getApplication();
 		$model = $this->getModel();
 		$table = $model->getTable();

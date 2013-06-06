@@ -44,7 +44,7 @@
            message="COM_REVIEW_TEXT_VALIDATION_MESSAGE"
            class="input-xxlarge"
 		/>
-    
+
     <field name="date"
            type="calendar"
            id="review-date"
@@ -56,22 +56,22 @@
            required="true"
            message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
       />
-  
-    <field 
-      name="id" 
-      type="hidden" 
-      filter="int" 
+
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
       />
-      
-    <field 
-      name="property_id" 
-      type="text" 
+
+    <field
+      name="unit_id"
+      type="text"
       filter="int"
       default=""
       required="true"
       COM_REVIEW_PROPERTY_ID_VALIDATION_MESSAGE="Please supply a property ID"
       />
-      
+
   		<field name="published" type="list" label="JSTATUS"
 			description="JFIELD_PUBLISHED_DESC" class="input-medium"
 			filter="intval" size="1" default="" required="true"
@@ -85,13 +85,13 @@
 				JARCHIVED</option>
 			<option value="-2">
 				JTRASHED</option>
-		</field> 
-    
+		</field>
+
   		<field name="created" type="calendar" label="COM_CONTENT_FIELD_CREATED_LABEL"
 			description="COM_CONTENT_FIELD_CREATED_DESC" class="inputbox readonly" size="22"
-			format="%Y-%m-%d %H:%M:%S" filter="user_utc" labelclass="control-label" default="NOW" readonly="false" />    
-      
-      
+			format="%Y-%m-%d %H:%M:%S" filter="user_utc" labelclass="control-label" default="NOW" readonly="false" />
+
+
   </fieldset>
 
 </form>

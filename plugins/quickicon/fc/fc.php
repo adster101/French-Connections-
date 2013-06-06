@@ -84,6 +84,12 @@ class plgQuickiconFc extends JPlugin {
             'image' => 'folder',
             'text' => JText::_('MOD_QUICKICON_FC_ITEMCOSTS'),
             'access' => array('core.manage', 'com_itemcosts')
+        ),
+        array(
+            'link' => JRoute::_('index.php?option=com_payments'),
+            'image' => 'folder',
+            'text' => JText::_('MOD_QUICKICON_FC_PAYMENTS'),
+            'access' => array('core.manage', 'com_payments')
         )
     );
   }

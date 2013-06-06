@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Invoices records.
  */
-class InvoicesModelinvoice_lines extends JModelList
+class PaymentsModelPayment extends JModelList
 {
 
     /**
@@ -46,8 +46,8 @@ class InvoicesModelinvoice_lines extends JModelList
 		// Initialise variables.
 		$app = JFactory::getApplication();
 
-    $id = $app->getUserStateFromRequest($this->context.'.invoice.id','invoice_id','','int');
-    $this->setState($this->context.'.invoice.id',$id);
+    $id = $app->getUserStateFromRequest($this->context.'.payment.id','id','','int');
+    $this->setState($this->context.'.payment.id',$id);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
@@ -59,7 +59,7 @@ class InvoicesModelinvoice_lines extends JModelList
 
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_invoices');
+		$params = JComponentHelper::getParams('com_payments');
 		$this->setState('params', $params);
 
 		// List state information.
@@ -99,15 +99,15 @@ class InvoicesModelinvoice_lines extends JModelList
 
     $user = JFactory::getUser();
 
-    $query->select('il.item_code,il.item_description,il.quantity,il.total_net as line_value,il.vat as line_vat_value');
-    $query->from('#__invoice_lines il');
+    $query->select('*, (ptl.quantity * ptl.cost) as line_total');
+    $query->from('#__protx_transactions pt');
 
-    $query->select('i.id,i.due_date,i.property_id,i.date_created,i.total_net,i.vat,i.property_id,i.first_name,i.surname,i.address,i.town,i.county,i.postcode');
-    $query->leftJoin('#__invoices i on il.invoice_id = i.id');
+    $query->leftJoin('#__protx_transaction_lines ptl on ptl.VendorTxCode = pt.VendorTxCode');
+    $query->leftJoin('#__property p on p.id = pt.property_id');
+    $query->leftJoin('#__item_costs ic on ic.code = ptl.code');
+    $query->where('pt.id = ' . (int) $this->getState($this->context.'.payment.id',''));
 
-    $query->where('invoice_id = ' . (int) $this->getState($this->context.'.invoice.id',''));
-
-		$canDo	= InvoicesHelper::getActions();
+		$canDo	= PaymentsHelper::getActions();
 
     if (!$canDo->get('core.edit') && $canDo->get('code.edit.own')) {
       $query->where('i.user_id = ' . (int) $user->id);

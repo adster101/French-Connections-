@@ -414,7 +414,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     // Okay, so we have validated the form and we have the order summary
     // First off, generate a VendorTxCode and stash what we have in the db
-    $VendorTxCode = $this->owner_id . ' - ' . $data['id'] . ' - ' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
+    $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
 
     // Loop over the order lines and make the basket
     foreach ($order as $item => $line) {

@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Invoices.
  */
-class InvoicesViewInvoice_lines extends JViewLegacy {
+class PaymentsViewPayments extends JViewLegacy {
 
   protected $items;
   protected $pagination;
@@ -25,25 +25,20 @@ class InvoicesViewInvoice_lines extends JViewLegacy {
    * Display the view
    */
   public function display($tpl = null) {
-
-    $app = JFactory::getApplication();
-    $this->id = $app->input->get('invoice_id','','int');
-
     $this->state = $this->get('State');
-
     $this->items = $this->get('Items');
+    $this->pagination = $this->get('Pagination');
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       throw new Exception(implode("\n", $errors));
     }
 
-    InvoicesHelper::addSubmenu('invoice_lines');
+    PaymentsHelper::addSubmenu('payments');
 
     $this->addToolbar();
 
     $this->sidebar = JHtmlSidebar::render();
-
     parent::display($tpl);
   }
 
@@ -53,33 +48,36 @@ class InvoicesViewInvoice_lines extends JViewLegacy {
    * @since	1.6
    */
   protected function addToolbar() {
-    require_once JPATH_COMPONENT . '/helpers/invoices.php';
+    require_once JPATH_COMPONENT . '/helpers/payments.php';
 
     $state = $this->get('State');
-    $canDo = InvoicesHelper::getActions();
+    $canDo = PaymentsHelper::getActions($state->get('filter.category_id'));
 
-    JToolBarHelper::title(JText::sprintf('COM_INVOICES_TITLE_INVOICE_LINES',$this->id), 'invoice_lines.png');
+    JToolBarHelper::title(JText::_('COM_PAYMENTS_TITLE_PAYMENTS'));
 
-    //Show trash and delete for components that uses the state field
-    if (isset($this->items[0]->state)) {
-      if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
-        JToolBarHelper::deleteList('', 'invoice_lines.delete', 'JTOOLBAR_EMPTY_TRASH');
+
+    if ($canDo->get('core.edit.state')) {
+
+      if (isset($this->items[0]->state)) {
         JToolBarHelper::divider();
-      } else if ($canDo->get('core.edit.state')) {
-        JToolBarHelper::trash('invoice_lines.trash', 'JTOOLBAR_TRASH');
+      } else if (isset($this->items[0])) {
+        //If this component does not use state then show a direct delete button as we can not trash
+        JToolBarHelper::deleteList('', 'payments.delete', 'JTOOLBAR_DELETE');
+      }
+
+      if (isset($this->items[0]->state)) {
         JToolBarHelper::divider();
+        JToolBarHelper::archiveList('payments.archive', 'JTOOLBAR_ARCHIVE');
       }
     }
 
-    JToolBarHelper::cancel('cancel');
-    JToolBarHelper::custom('invoice.print','print','print','COM_INVOICES_INVOICE_PRINT');
-
     if ($canDo->get('core.admin')) {
-      JToolBarHelper::preferences('com_invoices');
+      JToolBarHelper::preferences('com_payments');
     }
 
     //Set sidebar action - New in 3.0
-    JHtmlSidebar::setAction('index.php?option=com_invoices&view=invoice_lines');
+    JHtmlSidebar::setAction('index.php?option=com_payments&view=payments');
+
   }
 
   protected function getSortFields() {

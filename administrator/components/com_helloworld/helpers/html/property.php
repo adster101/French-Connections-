@@ -367,6 +367,11 @@ class JHtmlProperty {
       $active = true;
       $progress_icon = 'ok';
       $id = $unit_id;
+    } elseif (!empty($unit_id) && $controller == 'reviews') {
+
+      $active = true;
+      $progress_icon = 'ok';
+      $id = $unit_id;
     }
 
     if ($active) {
