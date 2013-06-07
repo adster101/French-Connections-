@@ -19,7 +19,7 @@ class HelloWorldModelReviews extends JModelList
 	{
 		parent::__construct($config);
 	}
-	
+
 	/**
 	 * Method to build an SQL query to load the list data.
 	 *
@@ -32,26 +32,26 @@ class HelloWorldModelReviews extends JModelList
 		$userId		= $user->get('id');
 
     // Get the property ID
-    $property_id = JRequest::getVar('id','','GET','int'); 
-    
-    // Get the list of user groups this user is assigned to		
+    $property_id = JRequest::getVar('id','','GET','int');
+
+    // Get the list of user groups this user is assigned to
 		$groups = $user->getAuthorisedGroups();
-		
-		// Create a new query object.		
+
+		// Create a new query object.
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
-		
+
 		// Select some fields
 		$query->select('*');
-    
+
 		// From the special offers table
 		$query->from('#__reviews as a');
-    
+
     // Only want those assigned to the current property
     $query->where('property_id = ' . $property_id);
-		
-    
-    
+
+
+
 		return $query;
 	}
 

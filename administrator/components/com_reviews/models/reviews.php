@@ -62,9 +62,6 @@ class ReviewsModelReviews extends JModelList
 
     $ordering = $this->getUserStateFromRequest($this->context.'.filter.ordering', 'filter_title', '');
 
-
-
-
     // List state information.
 		parent::populateState();
 	}
@@ -80,6 +77,10 @@ class ReviewsModelReviews extends JModelList
 
     // Get the user to authorise
     $user	= JFactory::getUser();
+
+    // Get the unit id - will be present if an owner is looking at reviews for one or other of their units
+    $input = JFactory::getApplication()->input;
+    $unit_id = $input->get('unit_id','','int');
 
 		// Create a new query object.
 		$db = JFactory::getDBO();
@@ -111,8 +112,8 @@ class ReviewsModelReviews extends JModelList
     }
 
     // Need to ensure that owners only see reviews assigned to their properties
-    if (!$user->authorise('core.edit.own','com_review')) { // User not permitted to edit their own reviews
-      $query->where('hw.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
+    if (!empty($unit_id)) { // User not permitted to edit their own reviews
+      $query->where('r.unit_id = ' . (int) $unit_id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
     }
 
 		// Filter by search in title

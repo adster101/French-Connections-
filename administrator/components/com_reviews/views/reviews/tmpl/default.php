@@ -13,6 +13,10 @@ $userId = $user->get('id');
 $saveOrder = $listOrder == 'r.ordering';
 $disableClassName = '';
 $disabledLabel = '';
+$input = JFactory::getApplication()->input;
+
+$option = $input->get('option','','string');
+
 // Check relevant permissions for this used
 $canChangeState = $user->authorise('core.edit.state', 'com_reviews');
 $canEditOwn = $user->authorise('core.edit.own', 'com_reviews');
@@ -20,7 +24,7 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
 ?>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_reviews'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=' . $option ); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>

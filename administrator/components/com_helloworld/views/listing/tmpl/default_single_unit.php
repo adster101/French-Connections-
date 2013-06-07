@@ -66,8 +66,7 @@ $data['form'] = $this->form;
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item,'unit_id','btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item,'unit_id','btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'manage', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item,'unit_id','btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'reviews', 'view', 'comment', 'COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWS', $item, 'unit_id', 'btn') ?>
-
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'reviews', 'comment', 'COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWS', $item, 'unit_id', 'btn') ?>
                   </td>
                 </tr>
               <?php else : ?>

@@ -31,6 +31,9 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
     // Set the view list - applies when saving/cancelling rather than 'inflecting' the list view
     $this->view_list = 'listing';
+
+    // Set the view item -
+    // $this->view_list = 'listing';
   }
 
   /**
@@ -62,10 +65,14 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     // Fallback on edit.own.
     // First test if the permission is available.
     if ($user->authorise('core.edit.own', $this->extension)) {
+
       // Now test the owner is the user.
       $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
       if (empty($ownerId) && $recordId) {
         // Need to do a lookup from the model.
+        // TO DO: Needs to be a more generic getOwnerID method which
+        // pull the owner id from the the property table.
+        // Therefore the user id in the unit tables is purely informational (and not really needed).
         $record = $this->getModel()->getItem($recordId);
 
         if (empty($record)) {
@@ -83,40 +90,88 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     return false;
   }
 
+  /*
+   * Method to check that the user can view the reviews, and if so redirect to the correct view
+   *
+   */
+
+  public function reviews($key = null, $urlVar = null) {
+
+    $model = $this->getModel();
+    $table = $model->getTable();
+
+    // Set the context
+    $context = "$this->option.view.$this->context";
+
+    // Determine the name of the primary key for the data.
+    if (empty($key)) {
+      $key = $table->getKeyName();
+    }
+
+    // To avoid data collisions the urlVar may be different from the primary key.
+    if (empty($urlVar)) {
+      $urlVar = $key;
+    }
+
+    // $id is the listing the user is trying to edit
+    $recordId = $this->input->getInt($urlVar);
+
+    if (!$this->allowEdit(array($key => $recordId), $key)) {
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false)
+      );
+
+      $this->setMessage('Not authorised...', 'error');
+
+      return false;
+    }
+
+    // Hold the edit ID once the id and user have been authorised.
+    $this->holdEditId($context, $recordId);
+    $this->set('view_item', 'reviews');
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=' . $this->view_item
+                    . $this->getRedirectToItemAppend($recordId, $urlVar), false
+            )
+    );
+    return true;
+  }
 
   /*
    * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
    * This is mostly useful for when a new unit is being created and the validation fails...
    *
-   * MAkes more sense to override this than the individual save/edit methods
+   * Makes more sense to override this than the individual save/edit methods
    */
 
-  public function getRedirectToItemAppend($recordId = null, $urlVar = 'id') {
+  public function getRedirectToItemAppend($recordId = null, $urlVar = 'unit_id') {
 
     // Get the default append string
     $append = parent::getRedirectToItemAppend($recordId, $urlVar);
 
     // Get the task, if we are 'editing' then the parent id won't be set in the form scope
     $task = $this->getTask();
-
     switch ($task) :
       case 'edit':
-        $id = JFactory::getApplication()->input->get('parent_id', 0, 'int');
+        $recordId = JFactory::getApplication()->input->get('parent_id', 0, 'int');
+        $urlVar = '&parent_id=';
         break;
       case 'apply':
       case 'save':
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-        $id = $data['parent_id'];
+        $recordId = $data['parent_id'];
+        $urlVar = '&parent_id=';
         break;
-      default:
-        $id = 0;
+      case 'reviews':
+        $append = '';
+        if ($recordId) {
+          $append .= '&' . $urlVar . '=' . $recordId;
+        }
+        break;
     endswitch;
-
-    // If parent ID is set in form data also append to the url
-    if ($id > 0) {
-      $append .= '&parent_id=' . $id;
-    }
 
     return $append;
   }
@@ -144,6 +199,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
         break;
 
+
     endswitch;
 
     // If parent ID is set in form data also append to the url
@@ -153,4 +209,5 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
     return $append;
   }
+
 }
