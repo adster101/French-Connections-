@@ -12,27 +12,25 @@ jimport('joomla.application.component.view');
 class ReviewsViewReviews extends JViewLegacy {
 
 	protected $items;
-	protected $state;  
+	protected $state;
  	protected $pagination;
- 
 
-  function display($tpl = null) {    // Gets the info from the model and displays the template 
+  function display($tpl = null) {    // Gets the info from the model and displays the template
     // Get data from the model
     $this->items = $this->get('Items');
-    
+
     $this->state = $this->get('State');
 		$this->pagination	= $this->get('Pagination');
 
     $this->setDocument();
-    
-    $view = strtolower(JRequest::getVar('view'));
 
+    $view = strtolower(JRequest::getVar('view'));
 
     $this->addToolBar();
 		$this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);
-    
+
   }
 
   /**
@@ -55,40 +53,35 @@ class ReviewsViewReviews extends JViewLegacy {
     if ($canDo->get('core.create')) {
       JToolBarHelper::addNew('review.add', 'JTOOLBAR_NEW');
     }
-    
+
     if ($canDo->get('core.edit')) {
       JToolBarHelper::editList('review.edit', 'JTOOLBAR_EDIT');
     }
-    
+
     if ($canDo->get('core.edit.state')) {
       JToolBarHelper::publish('reviews.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('reviews.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('reviews.trash');
     }
-    
+
     if ($canDo->get('core.edit.delete')) {
       JToolBarHelper::deleteList('Are you sure?', 'reviews.delete', 'JTOOLBAR_DELETE');
     }
 
     JToolBarHelper::help('COM_REVIEWS_COMPONENT_HELP_VIEW', true);
 
-    
+
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_REVIEW_VIEW_REVIEWS'));
 
-    
+
     JHtmlSidebar::addFilter(
 			JText::_('JOPTION_SELECT_PUBLISHED'),
 			'filter_published',
 			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-		);	    
+		);
   }
 
-
-
-
-  
-  
 	/**
 	 * Returns an array of fields the table can be sorted by
 	 *
@@ -104,5 +97,5 @@ class ReviewsViewReviews extends JViewLegacy {
 			'a.id' => JText::_('JGRID_HEADING_ID')
 		);
 	}
-  
+
 }

@@ -45,12 +45,6 @@ class ReviewsModelReviews extends JModelList
 	{
 		$app = JFactory::getApplication();
 
-		// Adjust the context to support modal layouts.
-		if ($layout = $app->input->get('layout'))
-		{
-			$this->context .= '.'.$layout;
-		}
-
 		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
@@ -63,7 +57,7 @@ class ReviewsModelReviews extends JModelList
     $ordering = $this->getUserStateFromRequest($this->context.'.filter.ordering', 'filter_title', '');
 
     // List state information.
-		parent::populateState();
+		parent::populateState('id', 'desc');
 	}
 
   /**
@@ -94,7 +88,8 @@ class ReviewsModelReviews extends JModelList
       r.review_text,
       r.published,
       r.date,
-      r.created
+      r.created,
+      b.unit_title
     ');
 
 		// From the hello table
@@ -116,6 +111,8 @@ class ReviewsModelReviews extends JModelList
       $query->where('r.unit_id = ' . (int) $unit_id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
     }
 
+    $query->join('inner', '#__unit_versions as b on (hw.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions as c where c.unit_id = hw.id))');
+
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
@@ -129,11 +126,10 @@ class ReviewsModelReviews extends JModelList
       }
     }
 
-		$listOrdering = $this->getState('list.ordering','r.published');
+		$listOrdering = $this->getState('list.ordering','r.id');
 
-		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
-    $query->order('property_id','ASC');
-    $query->order('date', 'DESC');
+ 		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
+    $query->order($listOrdering,$listDirn);
 
 		return $query;
 	}

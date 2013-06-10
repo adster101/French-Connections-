@@ -38,8 +38,7 @@ class HelloWorldTableUnitVersions extends JTable
       $this->modified_on = $date->toSql();
       $this->modified_by = $user->get('id');
     } else {
-      // New newsfeed. A feed created and created_by field can be set by the user,
-      // so we don't touch either of these if they are set.
+      // New new.
 
       if (empty($this->created_by)) {
         $this->created_by = $user->get('id');

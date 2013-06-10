@@ -84,7 +84,7 @@ class HelloWorldViewListing extends JViewLegacy {
       }
 
       if ($canDo->get('core.create')) {
-        JToolBarHelper::addNew('unitversions.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
+        JToolBarHelper::addNew('unitversions.add', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
       }
 
       if ($canDo->get('helloworld.property.preview')) {
@@ -97,7 +97,7 @@ class HelloWorldViewListing extends JViewLegacy {
 
       $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu($view);
+      $canDo = HelloWorldHelper::addSubmenu('listings');
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();

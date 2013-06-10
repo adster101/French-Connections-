@@ -1,4 +1,5 @@
 <?php
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -8,37 +9,35 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTablePropertyAttributes extends JTable
-{
-	/**
-	 * Constructor
-	 *
-	 * @param object Database connector object
-	 */
-	function __construct(&$db)
-	{
-		parent::__construct('#__property_attributes', 'property_id', $db);
-	}
+class HelloWorldTablePropertyAttributes extends JTable {
 
-	/**
-	 * Overloaded load function
-	 *
-	 * @param       int $id primary key in this case
-	 * @param       boolean $reset reset data
-	 * @return      boolean
-	 * @see JTable:load
-	 */
-	public function load($id = null, $reset = true)
-	{
+  /**
+   * Constructor
+   *
+   * @param object Database connector object
+   */
+  function __construct(&$db) {
+    parent::__construct('#__property_attributes', 'property_id', $db);
+  }
+
+  /**
+   * Overloaded load function
+   *
+   * @param       int $id primary key in this case
+   * @param       boolean $reset reset data
+   * @return      boolean
+   * @see JTable:load
+   */
+  public function load($id = null, $reset = true) {
 
     // Array to hold the result list
     $property_attributes = array();
 
     // Loads a list of the attributes that we are interested in
     // This is probably reused on the search part
-		$query = $this->_db->getQuery(true);
-		$query->select('at.field_name,pa.attribute_id');
-		$query->from('#__property_attributes as pa');
+    $query = $this->_db->getQuery(true);
+    $query->select('at.field_name,pa.attribute_id');
+    $query->from('#__property_attributes as pa');
     $query->leftJoin('#__attributes a on a.id = pa.attribute_id');
 
     $query->leftJoin('#__attributes_type at on at.id = a.attribute_type_id');
@@ -46,14 +45,13 @@ class HelloWorldTablePropertyAttributes extends JTable
     $query->where($this->_db->quoteName('property_id') . ' = ' . (int) $id);
     $this->_db->setQuery($query);
 
-		try
-		{
+    try {
 
       // Execute the db query, returns an iterator object.
-			$result = $this->_db->getIterator();
+      $result = $this->_db->getIterator();
 
       // Loop over the iterator and do stuff with it
-      foreach ($result as $row){
+      foreach ($result as $row) {
         $tmp = JArrayHelper::fromObject($row);
 
         // If the facility type already exists
@@ -62,19 +60,15 @@ class HelloWorldTablePropertyAttributes extends JTable
         }
 
         $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
-
       }
 
       return $property_attributes;
-		}
-
-		catch (RuntimeException $e)
-		{
-			$je = new JException($e->getMessage());
-			$this->setError($je);
-			return false;
-		}
-	}
+    } catch (RuntimeException $e) {
+      $je = new JException($e->getMessage());
+      $this->setError($je);
+      return false;
+    }
+  }
 
   /**
    * Overloaded save function
@@ -82,58 +76,55 @@ class HelloWorldTablePropertyAttributes extends JTable
    *
    *
    */
-  public function save ($id = null, $attributes = array(), $version_id = '')
-  {
+  public function save($id = null, $attributes = array(), $old_version_id = '', $new_version_id = '') {
 
     if (!$this->check()) {
 
       //JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
-
     } else {
 
       // Firstly need to delete these...in a transaction would be better
       $query = $this->_db->getQuery(true);
 
-      $query->delete('#__property_attributes')->where('version_id = ' . $version_id);
+      if ($old_version_id == $new_version_id) {
 
+        $query->delete('#__property_attributes')->where('version_id = ' . $old_version_id);
+      }
 
       $this->_db->setQuery($query);
 
-			if (!$this->_db->execute())
-			{
-				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+      if (!$this->_db->execute()) {
+        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
         print_r($this->_db->getErrorMsg());
-				$this->setError($e);
-				return false;
-			}
+        $this->setError($e);
+        return false;
+      }
 
       $query = $this->_db->getQuery(true);
 
       $query->insert('#__property_attributes');
 
-			$query->columns(array('version_id','property_id','attribute_id'));
+      $query->columns(array('version_id', 'property_id', 'attribute_id'));
 
       foreach ($attributes as $attribute) {
-        $insert_string = "$version_id, $id," .$attribute."";
+        $insert_string = "$new_version_id, $id," . $attribute . "";
         $query->values($insert_string);
       }
 
-			$this->_db->setQuery($query);
+      $this->_db->setQuery($query);
 
-			if (!$this->_db->execute())
-			{
-				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
-				$this->setError($e);
-				return false;
-			}
+      if (!$this->_db->execute()) {
+        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+        $this->setError($e);
+        return false;
+      }
 
       // Tick the availability progress flag to true
       JApplication::setUserState('com_helloworld.facilities.progress', true);
 
       return true;
     }
-
   }
 
   /**
@@ -145,4 +136,5 @@ class HelloWorldTablePropertyAttributes extends JTable
   public function check() {
     return true;
   }
+
 }

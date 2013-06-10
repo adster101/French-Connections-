@@ -118,4 +118,26 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id') ?>
   </li>
   <?php endif; ?>
+  <?php if (count($data['progress']) > 1) : ?>
+    <li class="dropdown <?php echo ($view == 'reviews') ? 'active' : '' ?>">
+      <a class="dropdown-toggle"
+         data-toggle="dropdown"
+         href="#">
+        <i class="icon icon-briefcase"></i>
+        <?php echo JText::_('COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWS'); ?>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <?php foreach ($data['progress'] as $value) : ?>
+          <li>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'unitversions', 'reviews', 'comment', $value->unit_title, $item, 'unit_id') ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    </li>
+  <?php else: ?>
+  <li <?php echo ($view == 'reviews') ? 'class=\'active\'' : '' ?>>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'reviews', 'comment', 'COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWS', $item, 'unit_id') ?>
+  </li>
+  <?php endif; ?>
 </ul>

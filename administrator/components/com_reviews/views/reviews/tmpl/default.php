@@ -15,16 +15,28 @@ $disableClassName = '';
 $disabledLabel = '';
 $input = JFactory::getApplication()->input;
 
-$option = $input->get('option','','string');
+// Get the following options from the request.
+$option = $input->get('option', '', 'string');
+$view = $input->get('view', 'default', 'string');
+$unit_id = $input->get('unit_id', '0', 'int');
 
-// Check relevant permissions for this used
-$canChangeState = $user->authorise('core.edit.state', 'com_reviews');
-$canEditOwn = $user->authorise('core.edit.own', 'com_reviews');
-$canEdit = $user->authorise('core.edit', 'com_reviews');
+// If the review is being viewed through the reviews view of hellowolrd then we need to redirect back there
+// and not the to the com_reviews component.
+$route = ($option == 'com_helloworld') ? $option . '&view=reviews&unit_id=' . (int) $unit_id : $option;
+
+// Check relevant permissions for the user against the reviews component
+$canDo = ReviewsHelper::getActions('com_reviews');
+
+$canChangeState = ($option == 'com_helloworld') ? false : $canDo->get('core.edit.state');
+$canEditOwn = $canDo->get('core.edit.own');
+$canEdit = $canDo->get('core.edit');
+
+$data = array('item' => $this->unit, 'progress' => $this->progress);
+
+
 ?>
 
-
-<form action="<?php echo JRoute::_('index.php?option=' . $option ); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=' . $route); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -33,6 +45,14 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
+      <?php
+      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      echo $progress->render($data);
+
+      $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+      echo $layout->render($data);
+      ?>
+      <?php if ($option == 'com_reviews') : ?>
       <div id="filter-bar" class="btn-toolbar">
         <div class="filter-search btn-group pull-left">
           <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
@@ -47,10 +67,12 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
           <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value='';this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
         </div>
         <div class="btn-group pull-right hidden-phone">
-          <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
+          <label for="limit" class="element-invisible">
+            <?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
           <?php echo $this->pagination->getLimitBox(); ?>
         </div>
       </div>
+      <?php endif; ?>
 
       <table class="table table-striped" id="articleList">
         <thead>
@@ -61,6 +83,9 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
             <th>
               <?php echo JText::_('COM_REVIEWS_PROPERTY_ID'); ?>
 
+            </th>
+            <th>
+              <?php echo JText::_('COM_REVIEWS_REVIEW_TEXT'); ?>
             </th>
             <th>
               <?php echo JText::_('COM_REVIEWS_DATE_ADDED'); ?>
@@ -74,55 +99,51 @@ $canEdit = $user->authorise('core.edit', 'com_reviews');
             <th width="10%">
               <?php echo JText::_('COM_REVIEW_TITLE_TEXT_LABEL'); ?>
             </th>
-            <th>
-              <?php echo JText::_('COM_REVIEWS_REVIEW_TEXT'); ?>
-            </th>
+
             <th width="1%">
               <?php echo JText::_('JGRID_HEADING_ID'); ?>
             </th>
           </tr>
         </thead>
         <tbody>
-          <?php
-          foreach ($this->items as $i => $item):
-
-            ?>
+          <?php foreach ($this->items as $i => $item): ?>
             <tr>
               <td>
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
               <td width="12%">
-                <?php echo $item->unit_id; ?>
+                <?php echo $item->unit_title; ?>
+                (<?php echo $item->unit_id; ?>)
               </td>
+              <td class="">
+                <?php if ($canEdit || $canEditOwn) : ?>
+                  <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
+                    <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->review_text)), 500); ?>
+                  </a>
+                <?php else: ?>
+                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->review_text)), 500); ?>
+                <?php endif; ?>
 
-               <td width="10%">
-                 <?php echo $item->created; ?>
               </td>
-               <td width="10%">
-                 <?php echo $item->date; ?>
+              <td width="10%">
+                <?php echo $item->created; ?>
               </td>
-               <td>
+              <td width="10%">
+                <?php echo $item->date; ?>
+              </td>
+              <td>
                 <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
               </td>
               <td>
                 <?php if ($canEdit || $canEditOwn) : ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->title)), 150); ?>
-                </a>
+                  <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
+                    <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
+                  </a>
                 <?php else: ?>
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->title)), 150); ?>
+                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
                 <?php endif; ?>
               </td>
-              <td class="">
-                <?php if ($canEdit || $canEditOwn) : ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->review_text)), 500); ?>
-                </a>
-                <?php else: ?>
-                  <?php echo JHtml::_('string.truncate',  $this->escape(strip_tags($item->review_text)), 500); ?>
-                <?php endif; ?>
 
-              </td>
 
               <td>
                 <?php echo $item->id; ?>

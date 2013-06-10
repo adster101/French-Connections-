@@ -78,9 +78,6 @@ class HelloWorldViewUnitVersions extends JViewLegacy
 		// Should this be done with views?
 		$view = strtolower(JRequest::getVar('view'));
 
-    // Get the progress for this property
-    //HelloWorldHelper::setPropertyProgress($this->item->id,$published );
-
 		$user = JFactory::getUser();
 		$userId = $user->id;
 

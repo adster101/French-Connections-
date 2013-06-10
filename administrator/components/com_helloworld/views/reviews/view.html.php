@@ -1,4 +1,5 @@
 <?php
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -8,16 +9,18 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewReviews extends JViewLegacy
-{
-	protected $state;
+class HelloWorldViewReviews extends JViewLegacy {
 
-	/**
-	 * HelloWorlds view display method
-	 * @return void
-	 */
-	function display($tpl = null)
-	{
+  protected $state;
+
+  /**
+   * HelloWorlds view display method
+   * @return void
+   */
+  function display($tpl = null) {
+
+    // Add the reviews language file
+    JFactory::getLanguage()->load('com_reviews');
 
     // Add the include path for the reviews model
     $this->addTemplatePath(JPATH_ADMINISTRATOR . '/components/com_reviews/views/reviews/tmpl');
@@ -26,73 +29,102 @@ class HelloWorldViewReviews extends JViewLegacy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_reviews/models');
 
     // Set the default model
-    $this->setModel(JModelLegacy::getInstance('Reviews', 'ReviewsModel'),true);
+    $this->setModel(JModelLegacy::getInstance('Reviews', 'ReviewsModel'), true);
 
-		// Get special offers for this property by calling getItems method of the model
-		$this->items = $this->get('Items');
+    // Add the unitversions model so we can grab the unit details...
+    $this->setModel(JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel'));
+
+    // Add the property model so we can grab the progress
+    $this->setModeL(JModelLegacy::getInstance('Listing', 'HelloWorldModel', array('ignore_request' => true)));
+
+
+    // Get special offers for this property by calling getItems method of the model
+    $this->items = $this->get('Items');
 
     // Get the pagination an state...
     $this->pagination = $this->get('Pagination');
- 		$this->state		= $this->get('State');
+    $this->state = $this->get('State');
 
-    // Get the item (unit) ID from the request url...should always be present here
-    // as we are coming in from the property manager
-    $this->item->id = JRequest::getVar('id', '', 'GET', 'int');
+    // Get an instance of the unitversions model
+    $unit = $this->getModel('UnitVersions');
 
-    // Get the option parameter
-    $option = JRequest::getVar('option', '', 'GET', 'string');
+    // Load the unit detail
+    $this->unit = $unit->getItem();
 
-    // Add the property ID to the user state (i.e. save it in the session)
-    JApplication::setUserState("$option.property_id", $this->item->id);
+    // Get an instance of the listing model
+    $listing = $this->getModel('Listing');
 
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			JError::raiseError(500, implode('<br />', $errors));
-			return false;
+    $listing_id = ($this->unit->parent_id) ? $this->unit->parent_id : '';
+
+
+    // Set some model options
+    $listing->setState('com_helloworld.' . $listing->getName() . '.id', $listing_id);
+
+    // Get the unit progress...
+    $this->progress = $listing->getItems();
+
+
+    // Register the Helloworld helper file
+    JLoader::register('ReviewsHelper', JPATH_ADMINISTRATOR . '/components/com_reviews/helpers/reviews.php');
+
+
+
+
+
+
+    // Check for errors.
+    if (count($errors = $this->get('Errors'))) {
+      JError::raiseError(500, implode('<br />', $errors));
+      return false;
       die;
-		}
+    }
 
-		// Set the toolbar
-		$this->addToolBar();
+    // Set the toolbar
+    $this->addToolBar();
 
     //$this->addTemplatePath(JPATH_ADMINISTRATOR . '/components/com_reviews/views/reviews/tmpl');
+    // Display the template
+    parent::display($tpl);
 
-		// Display the template
-		parent::display($tpl);
+    // Set the document
+    $this->setDocument();
+  }
 
-		// Set the document
-		$this->setDocument();
-	}
+  /**
+   * Setting the toolbar
+   */
+  protected function addToolBar() {
+    // Get component level permissions
+    $canDo = HelloWorldHelper::getActions();
 
-
-	/**
-	 * Setting the toolbar
-	 */
-	protected function addToolBar()
-	{
-		// Determine the view we are using.
-		$view = strtolower(JRequest::getVar('view'));
-
-		// Add the tabbed submenu for the property edit view.
-		HelloWorldHelper::addSubmenu($view);
-
-    // Get the property title which is set in the helloworld view...
-    $property_title = JApplication::getUserState('title'.$this->item->id);
+    // Determine the view we are using.
+    $view = strtolower(JRequest::getVar('view'));
 
     // Show a helpful toobar title
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_REVIEWS_VIEW', $property_title));
+    JToolBarHelper::title(JText::_('COM_HELLOWORLD_REVIEWS_VIEW'));
 
     JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
-	}
-	/**
-	 * Method to set up the document properties
-	 *
-	 * @return void
-	 */
-	protected function setDocument()
-	{
-		$document = JFactory::getDocument();
-		$document->setTitle(JText::_('COM_HELLOWORLD_OFFERS_MANAGE_OFFERS'));
-	}
+
+    // Display a helpful navigation for the owners
+    if ($canDo->get('helloworld.ownermenu.view')) {
+
+      $view = strtolower(JRequest::getVar('view'));
+
+      $canDo = HelloWorldHelper::addSubmenu('listings');
+
+      // Add the side bar
+      $this->sidebar = JHtmlSidebar::render();
+    }
+  }
+
+  /**
+   * Method to set up the document properties
+   *
+   * @return void
+   */
+  protected function setDocument() {
+    $document = JFactory::getDocument();
+    $document->setTitle(JText::_('COM_HELLOWORLD_OFFERS_MANAGE_OFFERS'));
+  }
+
 }

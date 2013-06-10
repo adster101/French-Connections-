@@ -30,42 +30,24 @@ class ImportControllerReviews extends JControllerForm {
     while (($line = fgetcsv($handle)) !== FALSE) {
 
       if (!empty($line[2]) && $line[2] !='NULL') {
-        // Start building a new query to insert any attributes...        
+
+        // Start building a new query to insert any attributes...
         $query = $db->getQuery(true);
         $query->clear();
-
-        // First need to determine if this review is against a parent or a unit
-        $query->select('id');
-        $query->from('#__helloworld');
-        $query->where('id=' . $line[0] . ' and parent_id=' . $line[1]);
-
-        // Execute
-        $db->setQuery($query);
-        $result = $db->loadRow();
-
-        if (count($result > 0) && isset($result)) {
-          // Review is against a unit
-          $property_id = $line[0];
-        } else {
-          $property_id = $line[1];
-        }
-        
-    
 
         // Reset the query, ready for insert
         $query->clear();
         $query = $db->getQuery(true);
 
-
         $query->insert('#__reviews');
-        $query->columns(array('property_id', 'review_text', 'date', 'rating', 'guest_name', 'guest_email','state','published','created','created_by'));
+        $query->columns(array('unit_id', 'review_text', 'date', 'rating', 'guest_name', 'guest_email','state','published','created','created_by'));
 
         $insert_string = '';
         $date = new DateTime($line[3]);
 
         $review_date = $date->format('Y-m-d H:i:s');
 
-        $insert_string = $property_id . ',' . $db->quote(mysql_escape_string($line[2])) . ',' . $db->quote($review_date) . ',' . $db->quote($line[4]) . ',' . $db->quote($line[5]) . ',' . $db->quote($line[6]).',0,1,'.$db->quote($review_date).',1';
+        $insert_string = $line[0] . ',' . $db->quote(mysql_escape_string($line[2])) . ',' . $db->quote($review_date) . ',' . $db->quote($line[4]) . ',' . $db->quote($line[5]) . ',' . $db->quote($line[6]).',0,1,'.$db->quote($review_date).',1';
         $query->values($insert_string);
 
         // Set and execute the query

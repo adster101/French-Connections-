@@ -154,9 +154,13 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     // Get the task, if we are 'editing' then the parent id won't be set in the form scope
     $task = $this->getTask();
     switch ($task) :
+      case 'add':
       case 'edit':
         $recordId = JFactory::getApplication()->input->get('parent_id', 0, 'int');
         $urlVar = '&parent_id=';
+        if ($recordId) {
+          $append .= $urlVar . $recordId;
+        }
         break;
       case 'apply':
       case 'save':
@@ -168,7 +172,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
       case 'reviews':
         $append = '';
         if ($recordId) {
-          $append .= '&' . $urlVar . '=' . $recordId;
+          $append .= $urlVar . $recordId;
         }
         break;
     endswitch;

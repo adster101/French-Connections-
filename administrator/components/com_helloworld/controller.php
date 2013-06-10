@@ -88,8 +88,6 @@ class HelloWorldController extends JControllerLegacy {
       return false;
     }
 
-
-
     if ($vName == 'stats' && !$this->checkEditId('com_helloworld.stats.view',$id)) {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
@@ -97,20 +95,6 @@ class HelloWorldController extends JControllerLegacy {
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=listings', false));
 
       return false;
-    }
-
-    // Protect the reviews view from owners via ACL
-    if ($vName == 'reviews' || $vName == 'Reviews') {
-      $user = JFactory::getUser();
-
-      if (!$user->authorise('core.edit', 'com_reviews')) {
-
-        $app = JFactory::getApplication();
-
-        $app->enqueueMessage('Permission denied', 'error');
-
-        $this->setRedirect(JRoute::_('index.php?option=com_helloworld'));
-      }
     }
 
     // call parent behavior
