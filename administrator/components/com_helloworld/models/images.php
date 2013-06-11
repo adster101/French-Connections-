@@ -22,9 +22,9 @@ class HelloWorldModelImages extends JModelList {
 
     // Get the listing details from the model state...
     $app = JFactory::getApplication();
-    
+
     $id = $this->getState('version_id','');
-        
+
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
@@ -34,7 +34,8 @@ class HelloWorldModelImages extends JModelList {
       property_id,
       image_file_name,
       caption,
-      ordering
+      ordering,
+      version_id
     ');
     $query->from('#__property_images_library');
 
@@ -168,8 +169,8 @@ class HelloWorldModelImages extends JModelList {
 
     return $blank_image;
   }
-  
 
-  
-  
+
+
+
 }

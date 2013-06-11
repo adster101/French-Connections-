@@ -3,53 +3,45 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Get the input data
-$app = JFactory::getApplication();
-$input = $app->input;
-$view = $input->get('view', '', 'string');
-
-$message = '';
+$app          = JFactory::getApplication();
+$input        = $app->input;
+$view         = $input->get('view', '', 'string');
+$message      = '';
 
 // $displayData is passed into the layout from our template
-$progress = $displayData['progress'];
+$progress     = $displayData['progress'];
+$form         = (!empty($displayData['form'])) ? $displayData['form'] : '';
 
-// Get an array of what units still need relevant data added...
-$notices = HelloWorldHelper::getProgressNotices($progress);
+$notices      = HelloWorldHelper::getProgressNotices($progress); // Get an array of what units still need relevant data added...
 
-$percentage = 0;
+$id           = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
 
-$form = (!empty($displayData['form'])) ? $displayData['form'] : '';
+$review       = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
 
+// $expiry_date - the expiry date of this property
+$expiry_date  = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
 
-// If progress not empty - we at least have a property record
-// If first unit_id is empty and unit count is 1 - no unit details stored
-// If we have one unit and a unit_id then check the images etc
-// Determine from above overall progress...
-// If property has an expiry date and review is 1 then need to submit for PFR
-// Otherwise property is new and needs to be published. Will it go through same screen? Different messaging?
+echo $expiry_date;
+
 ?>
 
 <div class="row-fluid">
-  <div class="span8">
+  <div class="span9">
     <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data ?>
-      <?php
-      $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS');
-      ?>
+      <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
     <?php elseif (!empty($progress) && empty($progress[0]->unit_id)) : // Listing has been created but no unit   ?>
-      <?php
-      $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS');
-      ?>
+      <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
     <?php elseif (!empty($progress) && !empty($progress[0]->unit_id) && count($progress) >= 1) : // Multi unit with possible some units unfinished? ?>
 
     <?php endif; ?>
     <?php if (!empty($message)) : ?>
       <div class="alert alert-info">
-        <h4>Property Progress</h4>
-
+        <h4>Listing Progress</h4>
         <?php echo $message; ?>
       </div>
     <?php elseif (!empty($notices)) : ?>
       <div class="alert alert-info">
-        <h4>Property Progress</h4>
+        <h4>Listing Progress</h4>
         <ul>
           <?php foreach ($notices as $key => $value) : ?>
             <li>
@@ -61,7 +53,7 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
           <?php endforeach; ?>
         </ul>
       </div>
-    <?php elseif (empty($notices) && $view == 'listing') : ?>
+    <?php elseif (empty($notices) && $view == 'listing' && $review) : ?>
       <div class="well well-small">
         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
         <hr />
@@ -71,15 +63,26 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 
           <?php echo $form->getInput('tos'); ?>
           <?php echo $form->getInput('id'); ?>
-
         </fieldset>
         <button class="btn btn-primary" onclick="Joomla.submitbutton('listing.submit')">
           <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
         </button>
       </div>
+    <?php elseif (empty($notices) && $view == 'listing' && !$review) : ?>
+      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+    <?php elseif ($review) : ?>
+      <div class="alert alert-info">
+        <h4>Listing Progress</h4>
+        <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_UNSUBMITTED_CHANGES'); ?></p>
+        <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=listing&id=' . (int) $id) ?>" class="btn btn-primary">
+          <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
+          <i class="icon icon-arrow-right-2 icon-white"> </i>
+        </a>
+      </div>
     <?php endif; ?>
   </div>
-  <div class="span4">
+  <?php // Need to put the following into language strings ?>
+  <div class="span3">
     <h4>Key</h4>
     <p>
       <i class="icon icon-warning"> </i>

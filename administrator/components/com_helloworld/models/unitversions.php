@@ -225,8 +225,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
     $new_version_required = array('');
-
     $old_version_id = ($data['id']) ? $data['id'] : '';
+
+    // Generate a logger instance for reviews
+    JLog::addLogger(array('text_file' => 'unitversions.update.php'), JLog::ALL, array('unitversions'));
 
     // Get an db instance and start a transaction
     $db = JFactory::getDBO();
@@ -240,6 +242,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       // Here we don't explicitly know if there is a new version
       // Load the exisiting row, if there is one.
+
       if ($pk > 0) {
         $table->load($pk);
         $isNew = false;
@@ -247,6 +250,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       // Check whether this unit is published, if it is then we run the check to see if a new version is required.
       if (!empty($data['published_on'])) {
+        JLog::add('Checking if new unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
 
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
@@ -259,6 +263,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           // Will always be set in the unit stub if it needs reviewing
           // $data['review'] = '0';
           $data['published_on'] = '';
+          JLog::add('New unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
         }
       }
 
@@ -271,12 +276,13 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $data['review'] = 1;
         $new_unit_id = $this->createNewUnit($data);
 
-        if (!$new_unit_id) {
 
+        if (!$new_unit_id) {
           // Problem creating the new property stub...
-          $this->setError('There was a problem creating your unit. Please try again.');
-          return false;
+          Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT'));
         }
+
+        JLog::add('New unit ' . $new_unit_id . 'created', JLog::ALL, 'unitversions');
 
         // Set the new unit id in the data array so that
         // when it is bound below it is assign to the correct property
@@ -291,7 +297,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // Bind the data.
       if (!$table->bind($data)) {
         $this->setError($table->getError());
-        return false;
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // Prepare the row for saving
@@ -300,7 +306,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // Check the data. Use this to increment the counter for unit?
       if (!$table->check()) {
         $this->setError($table->getError());
-        return false;
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // Trigger the onContentBeforeSave event.
@@ -308,13 +314,13 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       if (in_array(false, $result, true)) {
         $this->setError($table->getError());
-        return false;
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // Store the data.
       if (!$table->store()) {
         $this->setError($table->getError());
-        return false;
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // The version id is the id of the version created/updated in the _unit_versions table
@@ -323,8 +329,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // We will always want to update the facilities relating to the version id
       // E.g. if a new unit, insert facilitites, if new version then we will
       // save the facilities against the new version id.
+
+      JLog::add('About to save facilities for unit version ID' . $new_version_id, JLog::ALL, 'unitversions');
+
       if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id)) {
-        $this->setError('Problem saving facilities');
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // When a new version is created or a new unit is created
@@ -332,16 +341,16 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
         // Here we have created a new version or a new unit
         // TO DO: Wrap the below into a function
-
         // Update the existing property listing to indicate that it has been modified in a way that requires a review
         $property = $this->getTable('Property', 'HelloWorldTable');
 
         $property->id = $table->parent_id;
         $property->review = 1;
+        JLog::add('About to update Property review status for ' . $property->id, 'unitversions');
 
         if (!$property->store()) {
           $this->setError($property->getError());
-          return false;
+          Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
         }
 
         if (!$isNew) { // For a new unit the review status defaults to 1 so no need to update here
@@ -350,34 +359,29 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           $unit->id = $pk;
           $unit->review = 1;
 
+          JLog::add('About to update Unit review status for ' . $pk, 'unitversions');
+
           if (!$unit->store()) {
             $this->setError($unit->getError());
-            return false;
+            Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
           }
-        }
 
-        if (!$isNew) {
+          // Copy the images against the new version id, but only if the versions are different
+          // If we are updating a new unpublished version, no need to copy images
 
-          // create a copy of all images against the new version
-          $image = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+          if ($old_version_id != $new_version_id) {
+          JLog::add('About to copy images for unit ' . $pk, 'unitversions');
 
-          $image->setState('listlimit', '10000');
-
-          $image->setState('version_id', $old_version_id);
-
-          $images = $image->getItems();
-
-          // Shove these images into the images table against $new_version_id
-
+            $this->copyUnitImages($old_version_id, $new_version_id);
+          }
         }
       }
 
-      // Clean the cache.
+      // Clean the cache??
       $this->cleanCache();
 
       // Commit the transaction
       $db->transactionCommit();
-
 
       // Trigger the onContentAfterSave event.
       $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
@@ -385,9 +389,12 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       // Roll back any queries executed so far
       $db->transactionRollback();
-
-      $this->setError($e->getMessage());
+      print_r($e->getMessage());
       die;
+      $this->setError($e->getMessage());
+
+      // Log the exception
+      JLog::add('There was a problem: ' . $e->getMessage(), JLog::ALL, 'unitversions');
       return false;
     }
 
@@ -403,6 +410,43 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $this->setState($this->getName() . '.new', $isNew);
 
     return true;
+  }
+
+  public function copyUnitImages($old_version_id = '', $new_version_id = '') {
+
+    // Get a list of all images stored against the old version
+    $image = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+    $image->setState('listlimit', '10000');
+    $image->setState('version_id', $old_version_id);
+
+    // Get the images assigned to this old unit version id
+    $images = $image->getItems();
+
+    // Get a db instance
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->insert('#__property_images_library');
+
+    $query->columns(array('version_id', 'property_id', 'image_file_name', 'caption', ordering));
+
+    foreach ($images as $image) {
+      // Only insert if there are some images
+      $insert_string = "$new_version_id, '" . $image->property_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
+      $query->values($insert_string);
+    }
+
+    // Execute the query
+    $this->_db->setQuery($query);
+
+    if (!$db->execute($query)) {
+      Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+
+    }
+    return true;
+
+
+
   }
 
   /*
@@ -468,6 +512,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       return true;
     }
+
+    return true;
   }
 
   /*

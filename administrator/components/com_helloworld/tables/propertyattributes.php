@@ -90,16 +90,18 @@ class HelloWorldTablePropertyAttributes extends JTable {
       if ($old_version_id == $new_version_id) {
 
         $query->delete('#__property_attributes')->where('version_id = ' . $old_version_id);
+        $this->_db->setQuery($query);
+
+        if (!$this->_db->execute()) {
+
+          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+
+          $this->setError($e);
+          return false;
+        }
       }
 
-      $this->_db->setQuery($query);
 
-      if (!$this->_db->execute()) {
-        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
-        print_r($this->_db->getErrorMsg());
-        $this->setError($e);
-        return false;
-      }
 
       $query = $this->_db->getQuery(true);
 

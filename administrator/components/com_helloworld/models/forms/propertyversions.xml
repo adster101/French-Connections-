@@ -196,6 +196,12 @@
       type="hidden"
       filter="int"
       default="" />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+      default=""
+    />
   </fieldset>
 
 </form>

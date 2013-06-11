@@ -35,12 +35,10 @@ $data['form'] = $this->form;
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
-        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
         <?php
-          $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-          echo $layout->render($data);
+        $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+        echo $layout->render($data);
         ?>
         <table class="table table-striped">
           <thead>
@@ -113,7 +111,6 @@ $data['form'] = $this->form;
                 </tr>
               <?php else : ?>
               <?php endif; ?>
-              </form>
             <?php endforeach; ?>
           </tbody>
           <tfoot>
@@ -129,9 +126,11 @@ $data['form'] = $this->form;
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="parent_id" value="<?php echo $this->id ?>" />
         <?php echo JHtml::_('form.token'); ?>
+      </form>
+
     </div>
 
     <div class="span2">
-
+      <p>Help (me)...</p>
     </div>
   </div>

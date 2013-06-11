@@ -638,8 +638,6 @@ class HelloWorldModelProperty extends JModelAdmin {
       // If it's an additional payment the expiry date will be in the future
 
       // Update the expiry date
-      // TO DO: Will need to add an additional check for a six month listing?
-
       $this->updateProperty(true);
 
       // Get the expiry date etc

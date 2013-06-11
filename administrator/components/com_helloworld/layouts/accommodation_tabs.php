@@ -42,7 +42,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
       <ul class="dropdown-menu">
         <?php foreach ($data['progress'] as $value) : ?>
           <li>
-            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'unitversions', 'edit', 'home', $value->unit_title, $item, 'unit_id', '') ?>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'unitversions', 'edit', 'home', $value->unit_title, $units[$value->unit_id], 'unit_id', '') ?>
           </li>
         <?php endforeach; ?>
       </ul>
@@ -64,7 +64,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
       <ul class="dropdown-menu">
         <?php foreach ($data['progress'] as $value) : ?>
           <li>
-            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'images', 'manage', 'pictures', $value->unit_title, $item, 'unit_id', '') ?>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'images', 'manage', 'pictures', $value->unit_title, $units[$value->unit_id], 'unit_id', '') ?>
           </li>
         <?php endforeach; ?>
       </ul>
@@ -86,7 +86,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
       <ul class="dropdown-menu">
         <?php foreach ($data['progress'] as $value) : ?>
           <li>
-            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'availability', 'manage', 'calendar-2', $value->unit_title, $item, 'unit_id') ?>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'availability', 'manage', 'calendar-2', $value->unit_title, $units[$value->unit_id], 'unit_id') ?>
           </li>
         <?php endforeach; ?>
       </ul>
@@ -108,7 +108,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
       <ul class="dropdown-menu">
         <?php foreach ($data['progress'] as $value) : ?>
           <li>
-            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'tariffs', 'edit', 'briefcase', $value->unit_title, $item, 'unit_id') ?>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'tariffs', 'edit', 'briefcase', $value->unit_title, $units[$value->unit_id], 'unit_id') ?>
           </li>
         <?php endforeach; ?>
       </ul>
@@ -130,7 +130,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
       <ul class="dropdown-menu">
         <?php foreach ($data['progress'] as $value) : ?>
           <li>
-            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'unitversions', 'reviews', 'comment', $value->unit_title, $item, 'unit_id') ?>
+            <?php echo JHtmlProperty::progressButton($item->id, $value->unit_id, 'unitversions', 'reviews', 'comment', $value->unit_title, $units[$value->unit_id], 'unit_id') ?>
           </li>
         <?php endforeach; ?>
       </ul>

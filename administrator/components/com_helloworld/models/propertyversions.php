@@ -354,7 +354,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
       // If $data['published_on'] is true we need to check whether a new version is required
       if (!empty($data['published_on'])) {
-
+    
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
 

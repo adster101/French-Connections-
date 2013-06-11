@@ -7,6 +7,7 @@ defined('_JEXEC') or die;
  * HelloWorld component helper.
  */
 abstract class HelloWorldHelper {
+  
   /*
    * Determines a list of notices to display for a property notifying the user of which units and which sections need attention
    */
@@ -378,7 +379,6 @@ abstract class HelloWorldHelper {
       }
       $calendar.="</table></div></div>";
 
-      echo ($z % 4);
       if (($z % 4 === 3)) {
         $calendar.='</div><div class="row-fluid">';
       }

@@ -130,10 +130,11 @@ class ImportControllerImages extends JControllerForm {
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
 
+      jimport('joomla.filesystem.folder');
+
       // Create folders for each of the profiles for the property, if they don't exist
       foreach ($baseDir as $dir) {
         if (!file_exists($dir)) {
-          jimport('joomla.filesystem.folder');
           JFolder::create($dir);
         }
       }

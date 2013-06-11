@@ -172,7 +172,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
       case 'reviews':
         $append = '';
         if ($recordId) {
-          $append .= $urlVar . $recordId;
+          $append .= '&' . $urlVar . '='. $recordId;
         }
         break;
     endswitch;
