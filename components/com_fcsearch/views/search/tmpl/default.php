@@ -50,24 +50,24 @@ if ($pagdata->previous->link) {
             <label class="small" for="q">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
             </label>
-            <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>"/> 
+            <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>"/>
           </div>
           <div class="span2">
             <label class="small" for="arrival">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
-            </label>       
+            </label>
             <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="start_date span9" autocomplete="Off" />
           </div>
           <div class="span2">
             <label class="small" for="departure">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
-            </label>   
+            </label>
             <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure; ?>" class="end_date span9" autocomplete="Off"/>
-          </div>    
+          </div>
           <div class="span1">
             <label class="small" for="occupancy">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
-            </label> 
+            </label>
             <select id="occupancy" class="span12" name="occupancy">
               <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
             </select>
@@ -85,12 +85,12 @@ if ($pagdata->previous->link) {
             <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#" style="margin-top:18px;">
               <i class="icon-search icon-white"> </i>
               <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-            </button>      
-          </div>  
+            </button>
+          </div>
         </div>
       </div>
       <?php
-      if ($this->total == 0):
+      if (0):
         ?>
         <div id="search-result-empty">
           <h2><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_HEADING'); ?></h2>
@@ -128,7 +128,7 @@ if ($pagdata->previous->link) {
                 <div class="pagination small">
                   <?php echo $this->pagination->getPagesLinks(); ?>
                   <p class="small pull-right" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
-                </div>                  
+                </div>
               </div>
               <ul class="search-results list-striped">
                 <?php
@@ -174,11 +174,11 @@ if ($pagdata->previous->link) {
             </p>
           </div>
           <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true"> 
+            <button class="btn" data-dismiss="modal" aria-hidden="true">
               <?php echo JText::_('COM_FCSEARCH_SEARCH_PLEASE_ENTER_A_DESTINATION_CLOSE'); ?>
             </button>
           </div>
-        </div>  
+        </div>
       <?php endif; ?>
 
 

@@ -177,33 +177,30 @@ class FcSearchModelSearch extends JModelList {
     // other associated gubbins (e.g. no need to join attributes_type table here. Also, no need to do the tariff or review
     // counts.
     // If the destination search is based on a city/town
-    $query->select('h.id');
+    $query->select('c.unit_id as id');
 
-    if ($this->level == 4) {
-      // Calculate the distances
-      // Doesn't need to be done here...
-      $query->select('
-        (
-          3959 * acos(
-            cos(
-              radians(' . $this->longitude . ')
-            ) * cos(
-              radians(
-                h.latitude
-              )
-            ) * cos(
-              radians(
-                h.longitude
-              ) - radians(' . $this->latitude . ')
-            ) + sin(
-              radians(' . $this->longitude . ')
-            ) * sin(
-              radians(
-                h.latitude)
-              )
-            )
-          ) AS distance
-      ');
+    $query->from('#__property a');
+    $query->join('left', '#__property_versions as b on ( a.id = b.parent_id and b.published_on is not null )');
+    $query->join('left', '#__unit_versions as c on ( a.id = c.parent_id and c.published_on is not null )');
+    // Need to switch these based on the language
+    //if ($lang == 'fr') {
+    //$query->from('#__classifications_translations c');
+    //} //else {
+    //$query->from('#__classifications c');
+    //}
+    // Need to switch the below based on the level e.g. department or whatever
+    if ($this->level == 1) { // Country level
+      $query->join('left', '#__classifications as d on d.id = b.country');
+      $query->where('b.country = ' . $this->location);
+    } elseif ($this->level == 2) { // Area level
+      $query->join('left', '#__classifications as d on d.id = b.area');
+      $query->where('b.area = ' . $this->location);
+    } elseif ($this->level == 3) { // Region level
+      $query->join('left', '#__classifications as d on d.id = b.region');
+      $query->where('b.region= ' . $this->location);
+    } elseif ($this->level == 4) { // Department level
+      $query->join('left', '#__classifications as d on d.id = b.department');
+      $query->where('b.department = ' . $this->location);
     }
 
     // Is this a map marker request?
@@ -228,20 +225,6 @@ class FcSearchModelSearch extends JModelList {
       ');
     }
 
-    // Select from the helloworld table initially
-    $query->from('#__helloworld h');
-
-    // Depending on the level the where is different
-    if ($this->level == 1) { // Area level
-      $query->where('h.area = ' . $this->location);
-    } else if ($this->level == 2) { // Region level
-      $query->where('h.region = ' . $this->location);
-    } else if ($this->level == 3) { // Department level
-      $query->where('h.department = ' . $this->location);
-    } else if ($this->level == 4) { // City/town
-      $query->order('distance');
-      $query->having('distance < 25');
-    }
 
     // Filter out on the start and end dates for this search
     if ($this->getState('list.arrival')) {
@@ -291,10 +274,7 @@ class FcSearchModelSearch extends JModelList {
     }
 
     // Make sure we only get live properties...
-    $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
-
-    // And active ones
-    $query->where('h.published = 1');
+    $query->where('a.expiry_date >= ' . $db->quote($date->toSql()));
 
     // Push the query into the cache.
     $this->store($store, $query, true);
@@ -338,52 +318,65 @@ class FcSearchModelSearch extends JModelList {
       $db = $this->getDbo();
       $query = $db->getQuery(true);
 
-      // This is a MySql query optimisation for when the user is sorting
-      $straight_join = ($sort_column && $sort_order) ? 'STRAIGHT_JOIN' : '';
-
       $query->select('
-              STRAIGHT_JOIN
-              h.id,
-              h.parent_id,
-              h.level,
-              h.title as property_title,
-              h.area,
-              h.region,
-              h.department,
-              h.latitude,
-              h.longitude,
-              h.city,
-              LEFT(h.description, 250) as description,
-              h.thumbnail,
-              h.occupancy,
-              h.swimming,
-              g.path,
-              (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-              c.title as location_title,
-              (
-                select
-                  min(tariff)
-                from
-                  qitz3_tariffs
-                where
-                  id = h.id
-              ) as price,
-              e.title as tariff_based_on,
-              f.title as base_currency,
-              a.title as property_type,
-              a2.title as accommodation_type,
-              (
-                select
-                  count(property_id)
-                from
-                  qitz3_reviews
-                where
-                  property_id = h.id
-                group by h.id
-              ) as reviews
-    ');
+        a.id,
+        c.unit_id,
+        b.published_on,
+        c.thumbnail,
+        b.title,
+        b.area,
+        b.region,
+        b.department,
+        b.latitude,
+        b.longitude,
+        b.city,
+        c.occupancy,
+        i.path,
+        c.description,
+        d.title as location_title,
+        (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
+        (select min(tariff) from qitz3_tariffs where id = c.unit_id and end_date > now() group by id) as price,
+        (select count(unit_id) from qitz3_reviews where unit_id = c.unit_id ) as reviews,
+        e.title as accommodation_type,
+        f.title as property_type,
+        g.title as tariff_based_on,
+        h.title as base_currency
+      ');
 
-      if ($this->level == 4) {
+      $query->from('#__property a');
+      $query->join('left', '#__property_versions as b on ( a.id = b.parent_id and b.published_on is not null )');
+      $query->join('left', '#__unit_versions as c on ( a.id = c.parent_id and c.published_on is not null )');
+      // Need to switch these based on the language
+      //if ($lang == 'fr') {
+      //$query->from('#__classifications_translations c');
+      //} //else {
+      //$query->from('#__classifications c');
+      //}
+      // Need to switch the below based on the level e.g. department or whatever
+      if ($this->level == 1) { // Country level
+        $query->join('left', '#__classifications as d on d.id = b.country');
+        $query->where('b.country = ' . $this->location);
+      } elseif ($this->level == 2) { // Area level
+        $query->join('left', '#__classifications as d on d.id = b.area');
+        $query->where('b.area = ' . $this->location);
+      } elseif ($this->level == 3) { // Region level
+        $query->join('left', '#__classifications as d on d.id = b.region');
+        $query->where('b.region= ' . $this->location);
+      } elseif ($this->level == 4) { // Department level
+        $query->join('left', '#__classifications as d on d.id = b.department');
+        $query->where('b.department = ' . $this->location);
+      }
+
+      $query->join('left', '#__attributes e on e.id = c.accommodation_type');
+      $query->join('left', '#__attributes f on f.id = c.property_type');
+      $query->join('left', '#__attributes g on g.id = c.tariff_based_on');
+      $query->join('left', '#__attributes h on h.id = c.base_currency');
+      $query->join('left', '#__classifications i ON i.id = b.city');
+
+
+
+
+      if ($this->level == 5) {
         // Add the distance based bit in as this is a town/city search
         $query->select('
         ( 3959 * acos(cos(radians(' . $this->longitude . ')) *
@@ -392,66 +385,16 @@ class FcSearchModelSearch extends JModelList {
           + sin(radians(' . $this->longitude . '))
           * sin(radians(h.latitude)))) AS distance
         ');
-
-        $query->from('#__helloworld h');
-
-        if ($lang == 'fr') {
-          $query->join('left', '#__classifications_translations c on c.id = h.city');
-        } else {
-          $query->join('left', '#__classifications c on c.id = h.city');
-        }
-      } else { // This else happens if the search is not on a town or city level region
-        if ($lang == 'fr') {
-          $query->from('#__classifications_translations c');
-        } else {
-          $query->from('#__classifications c');
-        }
       }
 
-      if ($this->level == 1) { // Area level
-        $query->join('left', '#__helloworld h on c.id = h.area');
-      } else if ($this->level == 2) { // Region level
-        $query->join('left', '#__helloworld h on c.id = h.region');
-      } else if ($this->level == 3) { // Department level
-        $query->join('left', '#__helloworld h on c.id = h.department');
-      }
 
-      if ($lang == 'fr') {
 
-        // These joins bring in the french translations for property and accommodation types
-        $query->join('left', '#__property_attributes ap ON ap.property_id = h.id');
-        $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
-        $query->join('left', '#__attributes_translation a ON a.id = ap.attribute_id');
-
-        $query->join('left', '#__property_attributes ap2 ON ap2.property_id = h.id');
-        $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
-        $query->join('left', '#__attributes_translation a2 ON a2.id = ap2.attribute_id');
-
-        $query->join('left', '#__attributes_translation e ON e.id = h.tariff_based_on');
-        $query->join('left', '#__attributes_translation f ON f.id = h.base_currency');
-        $query->join('left', '#__classifications_translations g ON g.id = h.city');
-      } else {
-
-        // These joins bring in the property and accommodation types for each property
-        $query->join('left', '#__property_attributes ap ON ap.property_id = h.id');
-        $query->join('left', '#__attributes_type at ON at.id = ap.attribute_id');
-        $query->join('left', '#__attributes a ON a.id = ap.attribute_id');
-
-        $query->join('left', '#__property_attributes ap2 ON ap2.property_id = h.id');
-        $query->join('left', '#__attributes_type at2 ON at2.id = ap2.attribute_id');
-        $query->join('left', '#__attributes a2 ON a2.id = ap2.attribute_id');
-
-        $query->join('left', '#__attributes e ON e.id = h.tariff_based_on');
-        $query->join('left', '#__attributes f ON f.id = h.base_currency');
-        $query->join('left', '#__classifications g ON g.id = h.city');
-      }
 
       // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g.
       // the type of property and whether it is self catering etc. Another option is to populate this in the property table
       // Perhaps (I suppose) as some sort of param field?
-      $query->where('a.attribute_type_id = 1');
-      $query->where('a2.attribute_type_id = 2');
-
+      //$query->where('a.attribute_type_id = 1');
+      //$query->where('a2.attribute_type_id = 2');
       // Get the property type filter
       if ($this->getState('list.property_type', '')) {
         $query->where('a.id = ' . $this->getState('list.property_type'));
@@ -470,9 +413,6 @@ class FcSearchModelSearch extends JModelList {
         $query->where('arr.availability = 1');
       }
 
-      if ($this->level != 4) {
-        $query->where('c.id = ' . $this->location);
-      }
 
       if ($this->getState('list.bedrooms')) {
         $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
@@ -489,34 +429,13 @@ class FcSearchModelSearch extends JModelList {
       $query = $this->getFilterState('kitchen', $query);
 
 
-      if ($this->level == 4) {
+      if ($this->level == 5) {
         $query->order('distance');
         $query->having('distance < 25');
       }
 
       // Make sure we only get live properties...
-      $query->where('h.expiry_date >= ' . $db->quote($date->toSql()));
-
-      // Sort out the ordering required
-      if ($sort_column) {
-        $query->order($sort_column . ' ' . $sort_order);
-      }
-
-      // Sort out the budget requirements
-      $min_price = $this->getState('list.min_price', '');
-      if (!empty($min_price)) {
-        $query->having('price > ' . $min_price);
-      }
-
-      // Sort out the budget requirements
-      $max_price = $this->getState('list.max_price', '');
-      if (!empty($max_price)) {
-        $query->having('price < ' . $max_price);
-      }
-
-      // We don't want the root element
-      $query->where('h.id > 1');
-
+      $query->where('a.expiry_date >= ' . $db->quote($date->toSql()));
 
       // Push the query into the cache.
       $this->store($store, $query, true);

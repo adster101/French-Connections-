@@ -7,7 +7,29 @@ defined('_JEXEC') or die;
  * HelloWorld component helper.
  */
 abstract class HelloWorldHelper {
-  
+
+  /**
+   * Method to return the number of days until the property is due to expire
+   *
+   * @param type $expiry_date
+   */
+  public static function getDaysToExpiry($expiry_date = '') {
+
+    $expiry_date = (!empty($expiry_date)) ? new DateTime($expiry_date) : '';
+
+    $days_to_renewal = '';
+    //$day_to_renewal_pretty = '';
+
+    if ($expiry_date) {
+      $now = date('Y-m-d');
+      $now = new DateTime($now);
+      $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
+      //$days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
+    }
+
+    return $days_to_renewal;
+  }
+
   /*
    * Determines a list of notices to display for a property notifying the user of which units and which sections need attention
    */
@@ -359,11 +381,9 @@ abstract class HelloWorldHelper {
           if ($status_yesterday != $status) {
             $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable-available', 'small'), $showlinks);
           } else {
-              $calendar .= HelloWorldHelper::generateDateCell($today, $day , array('available', 'small'), $showlinks);
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available', 'small'), $showlinks);
           }
-
-          } else { // Availability is false i.e. unavailable
-
+        } else { // Availability is false i.e. unavailable
           if ($status_yesterday != $status) {
 
             $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available-unavailable', 'small'), $showlinks);
@@ -375,7 +395,7 @@ abstract class HelloWorldHelper {
       }
 
       if ($weekday != 7) {
-        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>';#remaining "empty" days
+        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>'; #remaining "empty" days
       }
       $calendar.="</table></div></div>";
 
@@ -383,7 +403,7 @@ abstract class HelloWorldHelper {
         $calendar.='</div><div class="row-fluid">';
       }
 
-      if ($z==$months) {
+      if ($z == $months) {
         $calendar.='</div>';
       }
 

@@ -144,7 +144,7 @@ class HelloWorldControllerListing extends JControllerForm {
     $data = $this->input->post->get('jform', array(), 'array');
     $context = "$this->option.view.$this->context";
     $task = $this->getTask();
- 
+
     // Get the record ID from the data array
     $recordId = $data['id'];
 
@@ -207,7 +207,11 @@ class HelloWorldControllerListing extends JControllerForm {
     }
 
     // It's all good.
-    // Redirect back to the edit screen.
+    // Here we need to determine how to handle this submission for review.
+    // If the expiry date is imminent then we need to redirect the user to the renewal screen.
+    // If the property has expired then we need to redirect the user to the renewal screen (or they will click the renewal button)
+    // If not expired then we need to determine if they have added any new billable items
+    // Otherwise, should just be submitted to the PFR and locked for editing.
 
     // Redirect to the renewal payment/summary form thingy...
     $this->setRedirect(

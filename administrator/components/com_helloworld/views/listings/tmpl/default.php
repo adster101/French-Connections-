@@ -128,15 +128,8 @@ $listing_id = '';
                 <tbody>
                   <?php foreach ($this->items as $i => $item): ?>
                     <?php
-                    $expiry_date = (!empty($item->expiry_date)) ? new DateTime($item->expiry_date) : '';
-                    $days_to_renewal = '';
-                    $day_to_renewal_pretty = '';
-                    if ($expiry_date) {
-                      $now = date('Y-m-d');
-                      $now = new DateTime($now);
-                      $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
-                      $days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
-                    }
+
+                    $days_to_renewal = HelloWorldHelper::getDaysToExpiry($item->expiry_date);
 
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
@@ -189,7 +182,7 @@ $listing_id = '';
                           <?php echo $item->expiry_date; ?>
                           <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0 && !empty($days_to_renewal)) : // Property is expiring in the next 28 days ?>
                             <p>
-                              <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal_pretty); ?>
+                              <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal); ?>
                             </p>
                           <?php elseif ($days_to_renewal < 0) : // Property must have expired ?>
                             <p>

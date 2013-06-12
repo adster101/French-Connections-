@@ -39,21 +39,21 @@ class FcSearchViewSearch extends JViewLegacy {
 
     // Get the currencies
     $this->currencies = $this->getCurrencyConversions();
-    
+
     // Get view data.
     $state = $this->get('State');
 
     $localinfo = $this->get('LocalInfo');
 
     $property_list = $this->get('PropertyList');
-    
+
     $results = $this->get('Results');
 
     $total = $this->get('Total');
 
     $pagination = $this->get('Pagination');
 
-    
+
     // Has to be done after getState, as with all really.
     $refine_options = $this->get('RefineOptions');
 
@@ -102,7 +102,7 @@ class FcSearchViewSearch extends JViewLegacy {
 
   /**
    * Method to get hidden input fields for a search form so that control variables
-   * are not lost upon form submission. E.g. if someone is filtering on gites we remember that so that the next search 
+   * are not lost upon form submission. E.g. if someone is filtering on gites we remember that so that the next search
    * is still focused on Gites.
    *
    * @return  string  A string of hidden input form fields
@@ -132,7 +132,7 @@ class FcSearchViewSearch extends JViewLegacy {
       }
     }
 
-    
+
     $fields = implode('/',$filter_str);
     $fields .= '<input type="hidden" name="filter" value="' . $fields . '" id="filter" />';
 
@@ -262,7 +262,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $options[] = JHtml::_('select.option', 'order_reviews_desc', JText::_('COM_FCSEARCH_SEARCH_ORDER_REVIEWS'));
     return $options;
   }
-  
+
   /**
    * Get a list of filter options for the state of a module.
    *
@@ -277,37 +277,37 @@ class FcSearchViewSearch extends JViewLegacy {
     for ($i=$start;$i<$end;$i=$i+$step) {
       $options[] = JHtml::_('select.option', $budget.$i, JText::_($i));
     }
-    
+
     return $options;
   }
 
-  /* 
+  /*
    * Get a list of the currency conversions
-   * 
+   *
    * @return object An object containing the conversion rates from EUR to GBP and USD
-   * 
+   *
    */
   protected function getCurrencyConversions() {
-    
+
     $db = JFactory::getDbo();
-    
+
     $query = $db->getQuery(true);
-    
+
     try {
       $query->select('currency, exchange_rate');
       $query->from('#__currency_conversion');
-      
+
       $db->setQuery($query);
-      
+
       $results = $db->loadObjectList($key='currency');
-      
+
     } catch (Exception $e) {
       // Log this error
     }
-    
-    
+
+
     return $results;
-    
+
   }
-  
+
 }

@@ -38,14 +38,14 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
 ?>
 
 <li>
-</p>  
+</p>
 <p class="pull-right">
   <a class="btn btn-small" href="#">
     <i class="icon-bookmark"> </i><?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_TO_FAVOURITES') ?>
   </a>
 </p>
 <h3 class="result-title <?php echo $mime; ?>">
-  <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->result->property_title; ?></a>
+  <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->result->title; ?></a>
   <small><?php echo $this->result->property_type . ' , ' . $this->result->location_title ?></small>
 </h3>
 <p>
@@ -58,17 +58,13 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
 
 <div class="row-fluid">
   <div class="span4"><a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="thumbnail pull-left">
-      <?php if ($this->result->parent_id == 1) : ?>
-        <img src='/images/property/<?php echo $this->result->id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
-      <?php else: ?>
-        <img src='/images/property/<?php echo $this->result->parent_id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
-      <?php endif; ?>
+        <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . str_replace('.', '_210x120.', $this->result->thumbnail) ?>' class="img-rounded" />
     </a>
   </div>
   <div class="span6">
 <p><strong>
-    <?php    
-    
+    <?php
+
     echo $this->escape(strip_tags($this->result->tagline)); ?>
   </strong>
 </p>
@@ -78,9 +74,9 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
       echo $this->escape(strip_tags($this->result->description)); ?>
 </p>
 
-   
+
         <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
-  
+
   </div>
   <div class="span2" style="text-align:right;">
     <p class="">
@@ -89,12 +85,12 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
         echo JText::_('COM_FCSEARCH_SEARCH_FROM');
         ?>
         <span class="lead">
-          
+
           <?php
             if ($this->result->base_currency != '£') { // Must be  EURO
               $this->result->price = $this->currencies['GBP']->exchange_rate * $this->result->price;
-            } 
-          
+            }
+
             echo '&pound;' . round($this->result->price); ?>
         </span>
       <br />

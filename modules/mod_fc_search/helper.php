@@ -19,43 +19,43 @@ defined('_JEXEC') or die;
 class modSearchHelper
 {
 
-  
+
   /*
    * Get the list of regions alias so we can plug those into the search map - language aware!
-   * 
+   *
    * @return aww
    */
   public static function getSearchRegions()
   {
-    
+
     $input = JFactory::getApplication()->input;
-    
-    $lang = $input->get('lang', 'en');    
-    
+
+    $lang = $input->get('lang', 'en');
+
     // Get the list of regions, which are at level 2
     $db = JFactory::getDbo();
-    
+
     $query = $db->getQuery(true);
-    
+
     $query->select('id,alias, title');
-    
+
     if ($lang == 'fr') {
       $query->from($db->quoteName('#__classifications_translations') . ' AS t');
     } else {
       $query->from($db->quoteName('#__classifications') . ' AS t');
     }
-    
-    $query->where('level = 2');
-    
+
+    $query->where('level = 3');
+
     $db->setQuery($query);
-    
+
     try {
       $regions = $db->loadObjectList($key='id');
-      
+
     } catch (Exception $e) {
       // Log any exception
     }
     return $regions;
   }
-  
+
 }

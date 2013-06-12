@@ -3,31 +3,28 @@
 defined('_JEXEC') or die('Restricted access');
 
 // Get the input data
-$app          = JFactory::getApplication();
-$input        = $app->input;
-$view         = $input->get('view', '', 'string');
-$message      = '';
+$app = JFactory::getApplication();
+$input = $app->input;
+$view = $input->get('view', '', 'string');
+$message = '';
 
 // $displayData is passed into the layout from our template
-$progress     = $displayData['progress'];
-$form         = (!empty($displayData['form'])) ? $displayData['form'] : '';
+$progress = $displayData['progress'];
+$form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 
-$notices      = HelloWorldHelper::getProgressNotices($progress); // Get an array of what units still need relevant data added...
+$notices = HelloWorldHelper::getProgressNotices($progress); // Get an array of what units still need relevant data added...
 
-$id           = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
+$id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
 
-$review       = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
-
+$review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
 // $expiry_date - the expiry date of this property
-$expiry_date  = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
-
-echo $expiry_date;
-
+$expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
+$days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
 ?>
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data ?>
+    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data  ?>
       <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
     <?php elseif (!empty($progress) && empty($progress[0]->unit_id)) : // Listing has been created but no unit   ?>
       <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
@@ -53,7 +50,7 @@ echo $expiry_date;
           <?php endforeach; ?>
         </ul>
       </div>
-    <?php elseif (empty($notices) && $view == 'listing' && $review) : ?>
+    <?php elseif ((empty($notices) && $view == 'listing') && $review) : ?>
       <div class="well well-small">
         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
         <hr />
@@ -68,8 +65,14 @@ echo $expiry_date;
           <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
         </button>
       </div>
-    <?php elseif (empty($notices) && $view == 'listing' && !$review) : ?>
+    <?php elseif (empty($notices) && $view == 'listing' && !$review && $days_to_renewal >= 7) : ?>
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+    <?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review) : ?>
+      <div class="alert alert-danger">
+        <h4>Listing Progress</h4>
+        <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
+        <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
+      </div>
     <?php elseif ($review) : ?>
       <div class="alert alert-info">
         <h4>Listing Progress</h4>
