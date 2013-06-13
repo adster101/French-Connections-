@@ -42,7 +42,7 @@ class ImportControllerImages extends JControllerForm {
 
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
-    while (($line = fgetcsv($handle)) !== FALSE) {
+    while (($line = fgetcsv($handle, 0, $delimiter = "|")) !== FALSE) {
 
       // Initially we need to get the unit version id from the #__unit_versions table
       $query = $db->getQuery(true);
@@ -59,8 +59,13 @@ class ImportControllerImages extends JControllerForm {
 
       $query->clear();
 
+      // If we don't have any images proceed
+      if (empty($line[2]) && empty($line[3])) {
+        continue;
+      }
 
       $ordering = 1;
+
       // Firstly, get all the images associated with this unit
       $external_images = explode(',', $line[2]);
       $internal_images = explode(',', $line[3]);
@@ -69,10 +74,7 @@ class ImportControllerImages extends JControllerForm {
       // in order to preserve the ordering of current gallery
       array_splice($external_images, 1, 0, $internal_images);
 
-      // Implode into a comma delimited string
       $images = implode(',', array_filter($external_images));
-
-
 
       // Get a query object
       $query = $db->getQuery(true);
@@ -101,7 +103,7 @@ class ImportControllerImages extends JControllerForm {
       $query = $db->getQuery(true);
 
       $query->insert('#__property_images_library');
-      $query->columns(array('version_id','property_id', 'image_file_name', 'caption', 'ordering'));
+      $query->columns(array('version_id', 'property_id', 'image_file_name', 'caption', 'ordering'));
 
       // Loop over the list of images and insert them...
       // Need to select them all from the file_details table first...
@@ -116,7 +118,7 @@ class ImportControllerImages extends JControllerForm {
       $db->setQuery($query);
 
       // Only do this is we find a unit version for this unit (e.g. import units first)
-      if (!empty($version_id[0])) {
+      if (!empty($version_id[0]) && !empty($existing_images)) {
 
         if (!$db->execute()) {
           $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
@@ -168,7 +170,7 @@ class ImportControllerImages extends JControllerForm {
     }
 
 
-
+    die;
     fclose($handle);
 
     $this->setMessage('Properties images imported, hooray!');

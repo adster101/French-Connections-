@@ -177,7 +177,7 @@ class FcSearchModelSearch extends JModelList {
     // other associated gubbins (e.g. no need to join attributes_type table here. Also, no need to do the tariff or review
     // counts.
     // If the destination search is based on a city/town
-    $query->select('c.unit_id as id');
+    $query->select('c.id as id');
 
     $query->from('#__property a');
     $query->join('left', '#__property_versions as b on ( a.id = b.parent_id and b.published_on is not null )');
@@ -211,24 +211,18 @@ class FcSearchModelSearch extends JModelList {
     $min_price = $this->getState('list.min_price', '');
     $max_price = $this->getState('list.max_price', '');
 
+
     // Are we refining on the budget?
     if (!empty($max_price) || !empty($min_price)) {
       $query->select('
-        (
-          select
-            min(tariff)
-          from
-            qitz3_tariffs
-          where
-            id = h.id
-        ) as price
+        (select min(tariff) from qitz3_tariffs where id = c.unit_id and end_date > now() group by id) as price
       ');
     }
 
 
     // Filter out on the start and end dates for this search
     if ($this->getState('list.arrival')) {
-      $query->join('left', '#__availability arr on h.id = arr.id');
+      $query->join('left', '#__availability arr on c.unit_id = arr.unit_id');
       $query->where('arr.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
       $query->where('arr.end_date >= ' . $db->quote($this->getState('list.departure', '')));
 
@@ -321,6 +315,7 @@ class FcSearchModelSearch extends JModelList {
       $query->select('
         a.id,
         c.unit_id,
+        c.unit_title,
         b.published_on,
         c.thumbnail,
         b.title,
@@ -346,6 +341,7 @@ class FcSearchModelSearch extends JModelList {
       $query->from('#__property a');
       $query->join('left', '#__property_versions as b on ( a.id = b.parent_id and b.published_on is not null )');
       $query->join('left', '#__unit_versions as c on ( a.id = c.parent_id and c.published_on is not null )');
+
       // Need to switch these based on the language
       //if ($lang == 'fr') {
       //$query->from('#__classifications_translations c');
@@ -353,6 +349,7 @@ class FcSearchModelSearch extends JModelList {
       //$query->from('#__classifications c');
       //}
       // Need to switch the below based on the level e.g. department or whatever
+
       if ($this->level == 1) { // Country level
         $query->join('left', '#__classifications as d on d.id = b.country');
         $query->where('b.country = ' . $this->location);
@@ -406,20 +403,19 @@ class FcSearchModelSearch extends JModelList {
       }
 
       if ($this->getState('list.arrival')) {
-        $query->join('left', '#__availability arr on h.id = arr.id');
+        $query->join('left', '#__availability arr on c.unit_id = arr.unit_id');
         $query->where('arr.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
         $query->where('arr.end_date >= ' . $db->quote($this->getState('list.departure', '')));
 
         $query->where('arr.availability = 1');
       }
 
-
       if ($this->getState('list.bedrooms')) {
         $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
       }
 
       if ($this->getState('list.occupancy')) {
-        $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
+        $query->where('c.occupancy >= ' . $this->getState('list.occupancy', ''));
       }
 
       // Apply the rest of the filter, if there are any
@@ -436,6 +432,24 @@ class FcSearchModelSearch extends JModelList {
 
       // Make sure we only get live properties...
       $query->where('a.expiry_date >= ' . $db->quote($date->toSql()));
+
+      // Sort out the ordering required
+      if ($sort_column) {
+        $query->order($sort_column . ' ' . $sort_order);
+      }
+
+
+      // Sort out the budget requirements
+      $min_price = $this->getState('list.min_price', '');
+      if (!empty($min_price)) {
+        $query->having('price > ' . $min_price);
+      }
+
+      // Sort out the budget requirements
+      $max_price = $this->getState('list.max_price', '');
+      if (!empty($max_price)) {
+        $query->having('price < ' . $max_price);
+      }
 
       // Push the query into the cache.
       $this->store($store, $query, true);
@@ -507,7 +521,6 @@ class FcSearchModelSearch extends JModelList {
 
     // Push the total into cache.
     $this->store($store, min($total, $limit));
-
 
     // Return the total.
     return $this->retrieve($store);
@@ -613,7 +626,7 @@ class FcSearchModelSearch extends JModelList {
 
       $query->where('search_filter = 1');
       $query->where('a.published = 1');
-      $query->where('property_id in (' . $property_list . ')');
+      $query->where('version_id in (' . $property_list . ')');
       $query->group('a.id');
 
       // Get the options.
@@ -894,11 +907,11 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($filters)) {
 
         foreach ($filters as $key => $value) {
-          $query->join('left', '#__property_attributes ap' . $value . ' ON ap' . $value . '.property_id = h.id');
+          $query->join('left', '#__property_attributes ap' . $value . ' ON ap' . $value . '.property_id = c.unit_id');
           $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
         }
       } else {
-        $query->join('left', '#__property_attributes ' . $filter . ' ON apact.property_id = h.id');
+        $query->join('left', '#__property_attributes ' . $filter . ' ON apact.property_id = c.unit_id');
         $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
       }
     }
