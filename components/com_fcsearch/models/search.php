@@ -205,7 +205,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Is this a map marker request?
     if ($markers) {
-      $query->select('latitude, longitude, title, thumbnail, occupancy');
+      $query->select('b.latitude, b.longitude, c.unit_title, c.thumbnail, c.occupancy');
     }
 
     $min_price = $this->getState('list.min_price', '');
@@ -288,8 +288,8 @@ class FcSearchModelSearch extends JModelList {
 
   protected function getListQuery() {
 
-    // Get the date
-    $date = JFactory::getDate();
+
+    $date = date('Y-m-d');
 
     // Get the store id.
     $store = $this->getStoreId('getListQuery');
@@ -327,7 +327,7 @@ class FcSearchModelSearch extends JModelList {
         b.city,
         c.occupancy,
         i.path,
-        c.description,
+        left(c.description,500) as description,
         d.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
         (select min(tariff) from qitz3_tariffs where id = c.unit_id and end_date > now() group by id) as price,
@@ -431,7 +431,7 @@ class FcSearchModelSearch extends JModelList {
       }
 
       // Make sure we only get live properties...
-      $query->where('a.expiry_date >= ' . $db->quote($date->toSql()));
+      $query->where('a.expiry_date >= ' . $db->quote($date));
 
       // Sort out the ordering required
       if ($sort_column) {
@@ -628,7 +628,7 @@ class FcSearchModelSearch extends JModelList {
       $query->where('a.published = 1');
       $query->where('version_id in (' . $property_list . ')');
       $query->group('a.id');
-
+      $query->order('count desc');
       // Get the options.
       $db->setQuery($query);
 

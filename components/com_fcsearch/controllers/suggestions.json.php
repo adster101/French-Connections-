@@ -31,11 +31,11 @@ class FcSearchControllerSuggestions extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
 		$return = array();
-   
+
     // Get the suggestions.
     $model = $this->getModel('Suggestions', 'FcSearchModel');
     $return = $model->getItems();
-		
+
     // Check the data.
 		if (empty($return))
 		{

@@ -25,6 +25,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
     // Get the item data
     $this->item = $this->get('Item');
 
+
     // Get the form
     $form = $this->get('Form');
 
@@ -48,15 +49,17 @@ class HelloWorldViewTariffs extends JViewLegacy {
    * Setting the toolbar
    */
   protected function addToolBar() {
-    // Determine the layout we are using. 
-    // Should this be done with views? 
+    // Determine the layout we are using.
+    // Should this be done with views?
     $view = strtolower(JRequest::getVar('view'));
 
-    // Get the published state from the form data  
+    // Get the published state from the form data
     $published = $this->form->getValue('published');
 
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
+
+    JToolBarHelper::title( JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title)  );
 
     if ($canDo->get('core.edit.own'))
       JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE'); {

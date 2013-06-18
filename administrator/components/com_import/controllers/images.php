@@ -34,6 +34,9 @@ class ImportControllerImages extends JControllerForm {
     // Create a log file for the email kickers
     jimport('joomla.error.log');
 
+    jimport('joomla.filesystem.folder');
+
+
     JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
 
     $model = JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
@@ -99,6 +102,9 @@ class ImportControllerImages extends JControllerForm {
         $value['ordering'] = $position + 1;
       }
 
+
+
+
       $query->clear();
       $query = $db->getQuery(true);
 
@@ -128,13 +134,14 @@ class ImportControllerImages extends JControllerForm {
         }
       }
 
+
+
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
 
-      jimport('joomla.filesystem.folder');
 
-      // Create folders for each of the profiles for the property, if they don't exist
+      /* Create folders for each of the profiles for the property, if they don't exist
       foreach ($baseDir as $dir) {
         if (!file_exists($dir)) {
           JFolder::create($dir);
@@ -166,11 +173,11 @@ class ImportControllerImages extends JControllerForm {
         } catch (Exception $e) {
 
         }
-      }
+      }*/
     }
 
 
-    die;
+
     fclose($handle);
 
     $this->setMessage('Properties images imported, hooray!');

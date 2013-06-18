@@ -1,15 +1,15 @@
 
 jQuery(document).ready(function(){
-  
+
   // Maphilight is used to highlight the area maps on the map search graphic
-  jQuery('.map').maphilight();	
+  jQuery('.map').maphilight();
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function (e) {
-    
-    // Store the selected tab #ref in local storage, IE8+ 
+
+    // Store the selected tab #ref in local storage, IE8+
     localStorage['selectedTab']=jQuery(e.target).attr('href');
-    
+
     // Get the selected tab from the local storage
     var selectedTab = localStorage['selectedTab'];
 
@@ -20,12 +20,12 @@ jQuery(document).ready(function(){
       if (!document.map) {
         initmap();
       }
-      
+
       // Get the search parameters, quicker to get the form and then extract the inputs?
       // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
       path ='';
       inputs = jQuery('#property-search').find(':input').each(function() {
-      
+
         id = jQuery(this).attr('id');
         value = jQuery(this).attr('value');
         if (value && id) {
@@ -35,36 +35,36 @@ jQuery(document).ready(function(){
           } else if (id == 'filter') {
             path = path + '/' + value;
           } else if (id == 'sort_by') {
-            path = path + '/' + value;         
+            path = path + '/' + value;
           } else if (id == 'min_price') {
             path = path + '/' + value;
-          } else if (id == 'max_price') { 
+          } else if (id == 'max_price') {
             path = path + '/' + value;
           } else {
             path = path+'/'+id+'_'+value;
           }
         }
       })
-      
- 
-      
+
+
+
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json",{
         s_kwds:path
       },
       function(data){
-        
+
         // Get the map instance
         map = document.map;
-        
+
         markers = {};
-        
+
         // Loop over all data (properties) and create a new marker
         for (var i = 0; i < data.length; i++) {
-          
+
           // The lat long of the propert, units will appear stacked on top...
-          var myLatlng = new google.maps.LatLng(data[i].latitude,data[i].longitude);           
-          
+          var myLatlng = new google.maps.LatLng(data[i].latitude,data[i].longitude);
+
           // Create the marker instance
           marker = new google.maps.Marker({
             position: myLatlng,
@@ -74,21 +74,21 @@ jQuery(document).ready(function(){
           marker.setTitle((i + 1).toString());
           content = '<h4>'+data[i].property_title+'</h5>'+'<a href="'+data[i].link+'"><img src="'+data[i].thumbnail+'"/></a><p>'+data[i].pricestring+'</p>';
           attachContent(marker, content);
-          
+
           markers[i] = marker;
-          
+
           //  Create a new viewpoint bound, so we can centre the map based on the markers
           var bounds = new google.maps.LatLngBounds();
-          
+
           //  Go through each...
           jQuery.each(markers, function (index, marker) {
             bounds.extend(marker.position);
           });
-          
+
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
-      });   
+      });
     }
   });
 
@@ -96,25 +96,25 @@ jQuery(document).ready(function(){
 
 
   // Get the selected tab, if any and set the tab accordingly...
-  var selectedTab = localStorage['selectedTab']; 
-  
+  var selectedTab = localStorage['selectedTab'];
+
   if (selectedTab == '#mapsearch') {
     jQuery('.nav li a[href="'+selectedTab+'"]').tab('show');
   }
-  
-  
-  
-  
+
+
+
+
   jQuery('#property-search-button').click(function(event) {
-    
+
 
     // val is the 'active' suggestion populated by typeahead
     // e.g. the option chosen should be the last active one
     var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
-   
+
     // The value contained in the typeahead field
     var chosen = jQuery(".typeahead").attr('value');
-    
+
     // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
     var count = jQuery(".typeahead.dropdown-menu li").length;
 
@@ -126,19 +126,19 @@ jQuery(document).ready(function(){
       }
     } else if (chosen == '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
       jQuery('#myModal').modal();
-      return false;      
+      return false;
     }
-    
+
     // Form checks out, looks like the user chose something from the suggestions
     // Strip the string to make it like classifications table alias
-    var query = stripVowelAccent(chosen);   
+    var query = stripVowelAccent(chosen);
 
     // The path of the search, e.g. /search or /fr/search
-    var path = '/search';  
+    var path = '/search';
 
     // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
     inputs = jQuery('#property-search').find(':input').each(function() {
-      
+
       id = jQuery(this).attr('id');
       value = jQuery(this).attr('value');
       if (value && id) {
@@ -148,46 +148,52 @@ jQuery(document).ready(function(){
         } else if (id == 'filter') {
           path = path + '/' + value;
         } else if (id == 'sort_by') {
-          path = path + '/' + value;         
+          path = path + '/' + value;
         } else if (id == 'min_price') {
           path = path + '/' + value;
-        } else if (id == 'max_price') { 
+        } else if (id == 'max_price') {
           path = path + '/' + value;
         } else {
           path = path+'/'+id+'_'+value;
         }
       }
-    });          
-    
+    });
+
     // Amend the path that the form is submitted to
     jQuery('form#property-search').attr('action', path);
 
     // Submit the form
     jQuery('form#property-search').submit();
-    
+
     return false;
-    
+
   })
-  
+
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
-     
+
     source: function (query, process) {
-      jQuery.get( '/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component', 
-      { 
+      jQuery.get( '/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
+      {
         q: query,
         items: 10
-      }, 
+      },
       function (data) {
         process(data);
       }
       )
     }
   })
+
+  jQuery(".show").click(function(event){
+    event.preventDefault();
+    jQuery(this).prev().prev().toggleClass('show');
+  })
+
 }) // End of on DOM ready
 
 function initmap() {
-  
+
   jQuery('#map_canvas').css('width','100%');
   jQuery('#map_canvas').css('height','500px');
 
@@ -221,8 +227,8 @@ function attachContent(marker, num) {
 function stripVowelAccent(str) {
 
   var s=str;
-  var rExps=[ 
-  /[\xC0-\xC2]/g, 
+  var rExps=[
+  /[\xC0-\xC2]/g,
   /[\xE0-\xE2]/g,
   /[\xC8-\xCA]/g,
   /[\xE8-\xEB]/g,
@@ -248,7 +254,7 @@ function stripVowelAccent(str) {
 
   if(typeof String.prototype.trim !== 'function') {
     String.prototype.trim = function() {
-      return this.replace(/^\s+|\s+$/g, ''); 
+      return this.replace(/^\s+|\s+$/g, '');
     }
   }
 

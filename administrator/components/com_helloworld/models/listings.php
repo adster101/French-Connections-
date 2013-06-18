@@ -138,9 +138,9 @@ class HelloWorldModelListings extends JModelList {
       b.title,
       a.created_by,
       a.published,
-      a.expiry_date,
-      a.modified,
-      a.created_on,
+      date_format(a.expiry_date, "%D %M %Y") as expiry_date,
+      date_format(a.created_on, "%D %M %Y") as created_on,
+      date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
       a.review
     ');

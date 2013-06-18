@@ -5,29 +5,13 @@
 -->
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
   <fieldset name="additional-fields">
- 
-    <field 
+
+    <field
       name="id"
       type="hidden"
-      default="">      
+      default="">
     </field>
-    <field 
-      name="title"
-      type="text"
-      readonly="true"> 
 
-    </field>
-    
-    <field 
-      name="published"
-      type="text"
-      filter="unset"/>
-      
-    <field 
-      name="expiry_date"
-      type="hidden"
-      filter="unset"/>
-    
      <field
 			name="changeover_day"
 			type="attributetype"
@@ -40,7 +24,7 @@
 			required="true"
 			default="asdasd"
       labelclass="control-label">
-		</field> 
+		</field>
   <field
       name="base_currency"
       labelclass="control-label"
@@ -52,9 +36,9 @@
       required="true"
       id="19"
       default="1"
-      placeholder="true"      
-    />    
-    <field 
+      placeholder="true"
+    />
+    <field
       name="tariff_based_on"
       type="attributetype"
       label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_LABEL"
@@ -64,8 +48,8 @@
       id="21"
       default=""
       placeholder="true">
-     
     </field>
+    
     <field
 			name="additional_price_notes"
 			type="editor"

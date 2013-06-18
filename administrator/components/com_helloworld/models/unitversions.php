@@ -11,6 +11,8 @@ jimport('joomla.application.component.modeladmin');
  */
 class HelloWorldModelUnitVersions extends JModelAdmin {
 
+  public $layout = '';
+
   /**
    * Method override to check if you can edit an existing record.
    *
@@ -56,8 +58,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     $table = $this->getTable();
 
-    $property_facilities = '';
-
     if ($pk > 0) {
       // Attempt to load the row.
       $return = $table->load($pk);
@@ -72,11 +72,52 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Convert to the JObject before adding other data.
     $properties = $table->getProperties(1);
 
+    if ($this->layout == 'tariffs') {
+
+      $properties = $this->getTariffs($pk, $properties);
+    } else {
+
+      $properties = $this->getFacilities($pk, $properties);
+    }
+
+    $item = JArrayHelper::toObject($properties, 'JObject');
+
+    return $item;
+  }
+
+  /**
+   * Get the tariffs for this unit
+   * 
+   */
+  public function getTariffs($id = '', $properties = array()) {
+
+    // get the existing tariff details for this property
+    if ($id > 0) {
+      $tariffsTable = $this->getTable('Tariffs', 'HelloWorldTable');
+      $tariffs = $tariffsTable->load($id);
+      // Check for a table object error.
+      if ($tariffs === false && $table->getError()) {
+        $this->setError($tariffs->getError());
+        return false;
+      }
+    }
+
+    $properties['tariffs'] = $tariffs;
+
+    return $properties;
+  }
+
+  /**
+   * Get the tariffs for this unit
+   * 
+   */
+  public function getFacilities($id, $properties = array()) {
+
     // Get an instance of the attributes table - Possibly need to merge this into com_attributes
     $attributesTable = $this->getTable('PropertyAttributes', 'HelloWorldTable');
-
-    if ($pk > 0) {
-      $property_facilities = $attributesTable->load($id = $pk);
+    
+    if ($id > 0) {
+      $property_facilities = $attributesTable->load($id);
 
       // Check for a table object error.
       if ($property_facilities === false && $attributesTable->getError()) {
@@ -92,10 +133,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $properties[$facility_type] = implode($value, ',');
       }
     }
-
-    $item = JArrayHelper::toObject($properties, 'JObject');
-
-    return $item;
+    
+    return $properties;
   }
 
   /**
@@ -108,8 +147,16 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    */
   public function getForm($data = array(), $loadData = true) {
 
+    $app = JFactory::getApplication();
+    print_r($app->input);die;
+    
+    if ($this->layout == 'tariffs') {
+      $form = $this->loadForm('com_helloworld.unit', 'tariffs', array('control' => 'jform', 'load_data' => $loadData));
+    } else {
+      $form = $this->loadForm('com_helloworld.unit', 'unit', array('control' => 'jform', 'load_data' => $loadData));
+    }
+
     // Get the form.
-    $form = $this->loadForm('com_helloworld.unit', 'unit', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form)) {
       return false;
     }
@@ -132,7 +179,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unitversions.data', array());
-
 
     // If nout in session then we grab the item from the database
     if (empty($data)) {
@@ -205,9 +251,155 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     parent::populateState();
   }
 
-  protected function preprocessForm(JForm $form, $data) {
+/**
+	 * Method to allow derived classes to preprocess the form.
+	 *
+	 * @param	object	A form object.
+	 * @param	mixed	The data expected for the form.
+	 * @param	string	The name of the plugin group to import (defaults to "content").
+	 * @throws	Exception if there is an error in the form event.
+	 * @since	1.6
+	 */
+	protected function preprocessForm(JForm $form, $data)
+	{
+
+    if (!empty($data) && $this->layout == 'tariffs') {
+      // Generate the XML to inject into the form
+      $XmlStr = $this->getTariffXml($form, $data);
+      $form->load($XmlStr);
+    }
+	}
+
+  /**
+   * getTariffXml - This function takes a form and some data to generate a set of XML form field definitions. These
+   * definitions are then injected into the form so they are displayed on the tariffs admin screen.
+   *
+   * @param type $form
+   * @param type $data
+   * @return string
+   */
+  protected function getTariffXml ($form, $data = array())
+  {
+
+    // Build an XML string to inject additional fields into the form
+    $XmlStr = '<form>';
+    $counter=0;
+    $XmlStr.='<fields name="tariffs">';
+
+    if (!$data['tariffs']) {
+      return false;
+    }
+
+    // Loop over the existing availability first
+    foreach ($data['tariffs'] as $tariff) {
+
+      // Ignore the first 'tariff' as it is an error counter added by the load db table instance
+      if(count($tariff)) {
+
+        $XmlStr.= '
+        <fieldset name="tariffs_'.$counter.'">
+        <field
+          id="start_date_tariff_'.$counter.'"
+          name="start_date"
+          type="text"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+          class="inputbox tariff_date input-small"
+          validate=""
+          labelclass="tariff-label"
+          required="false"
+          multiple="true"
+          default="'.$tariff->start_date.'"
+          readonly="true">
+        </field>
+
+        <field
+          id="end_date_tariff_'.$counter.'"
+          name="end_date"
+          type="text"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+          description="COM_HELLOWORLD_TARIFFS_FIELD_DATE_RANGE_DESC"
+          class="inputbox tariff_date input-small"
+          validate=""
+          labelclass="tariff-label"
+          required="false"
+          multiple="true"
+          default="'.$tariff->end_date.'"
+          readonly="true">
+        </field>
+
+        <field
+          id="tariff_'.$counter.'"
+          name="tariff"
+          type="text"
+          label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
+          description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
+          class="inputbox input-mini"
+          labelclass="tariff-label"
+          required="false"
+          default="'.$tariff->tariff.'"
+          multiple="true">
+          </field>
+        </fieldset>';
+        $counter++;
+      }
+    }
+
+    // Add some empty tariff fields (3 by default)
+    for ($i = $counter; $i <= $counter + 4; $i++) {
+      $XmlStr.= '
+      <fieldset name="tariffs_' . $i . '">
+        <field
+          id="start_date_tariff_'. $i .'"
+          name="start_date"
+          type="text"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
+          class="inputbox tariff_date input-small"
+          labelclass="tariff-label"
+          required="false"
+          multiple="true"
+          default=""
+          readonly="true">
+        </field>
+
+        <field
+          id="end_date_tariff_'.$i.'"
+          name="end_date"
+          type="text"
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
+          class="inputbox tariff_date input-small"
+          validate=""
+          labelclass="tariff-label"
+          required="false"
+          multiple="true"
+          default=""
+          readonly="true">
+        </field>
+        <field
+          id="tariff_'. $i .'"
+          name="tariff"
+          type="text"
+          label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
+          description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
+          class="inputbox input-mini"
+          validate=""
+          labelclass="tariff-label"
+          required="false"
+          default=""
+          multiple="true">
+        </field>
+      </fieldset>';
+    }
+
+
+    $XmlStr.='</fields></form>';
+
+    return $XmlStr;
 
   }
+
 
   /**
    * Overidden method to save the form data.
@@ -370,7 +562,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           // If we are updating a new unpublished version, no need to copy images
 
           if ($old_version_id != $new_version_id) {
-          JLog::add('About to copy images for unit ' . $pk, 'unitversions');
+            JLog::add('About to copy images for unit ' . $pk, 'unitversions');
 
             $this->copyUnitImages($old_version_id, $new_version_id);
           }
@@ -389,8 +581,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       // Roll back any queries executed so far
       $db->transactionRollback();
-      print_r($e->getMessage());
-      die;
+
       $this->setError($e->getMessage());
 
       // Log the exception
@@ -441,12 +632,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     if (!$db->execute($query)) {
       Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
-
     }
     return true;
-
-
-
   }
 
   /*

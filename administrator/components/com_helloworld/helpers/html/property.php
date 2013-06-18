@@ -361,7 +361,7 @@ class JHtmlProperty {
       $progress_icon = ($item->availability > 0) ? $okay_icon : $progress_icon;
       $active = true;
       $id = $unit_id;
-    } elseif (!empty($unit_id) && $controller == 'tariffs') {
+    } elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id) && $action == 'tariffs') {
 
       $active = true;
       $progress_icon = ($item->tariffs > 0) ? $okay_icon : $progress_icon;

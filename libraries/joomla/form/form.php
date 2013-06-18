@@ -132,7 +132,7 @@ class JForm
 			}
 		}
 
-		// Process the input data.
+    // Process the input data.
 		foreach ($data as $k => $v)
 		{
 

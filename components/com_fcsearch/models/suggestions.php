@@ -43,7 +43,7 @@ class FcSearchModelSuggestions extends JModelList
 		{
 			$items[$k] = $v->title;
 		}
-    
+
 		return $items;
 	}
 
@@ -61,18 +61,17 @@ class FcSearchModelSuggestions extends JModelList
 		$query = $db->getQuery(true);
 
     $input = JFactory::getApplication()->input;
-    
     $lang = $input->get('lang', 'en');
-        
+
 		// Select required fields
 		$query->select('t.title');
-    
+
     if ($lang == 'fr') {
       $query->from($db->quoteName('#__classifications_translations') . ' AS t');
     } else {
       $query->from($db->quoteName('#__classifications') . ' AS t');
     }
-    
+
 		$query->where('t.title LIKE ' . $db->quote('%'.$db->escape($this->getState('input'), true) . '%'));
 
     return $query;

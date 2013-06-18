@@ -31,9 +31,13 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
     // Set the view list - applies when saving/cancelling rather than 'inflecting' the list view
     $this->view_list = 'listing';
-
-    // Set the view item -
-    // $this->view_list = 'listing';
+    
+    // Assign the tariffs task to run the edit method.
+    // This redirects to the tariffs layout of the unitversions view
+    $this->registerTask('tariffs', 'edit');
+    
+    // Register a savetariffs task
+    $this->registerTask('applytariffs', 'save');
   }
 
   /**
@@ -172,8 +176,14 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
       case 'reviews':
         $append = '';
         if ($recordId) {
-          $append .= '&' . $urlVar . '='. $recordId;
+          $append .= '&' . $urlVar . '=' . $recordId;
         }
+        break;
+      case 'tariffs':
+        $layout = $this->input->get('layout', 'tariffs');
+
+        $append = '';
+        $append.= '&layout=' . $layout . '&' . $urlVar . '=' . $recordId;
         break;
     endswitch;
 
@@ -213,5 +223,6 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
     return $append;
   }
+
 
 }

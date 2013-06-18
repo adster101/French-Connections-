@@ -21,14 +21,14 @@ if (!empty($this->query->highlight) && empty($this->result->mime) && $this->para
   $route = '';
 }
 
-// Get the first paragraph of the description - This is a workaround for the 'property listing title' issue
-preg_match('#<p[^>]*>(.*)</p>#isU', $this->result->description, $matches);
 
 // Store the first paragraph - This should always contain something (e.g. description must start with a paragraph)
-$this->result->tagline = $matches[0];
+$this->result->tagline = $this->result->title;
 
 // Strip the first paragraph so we can deal with it separately
-$this->result->description = preg_replace('/<p>(.*)<\/p>/', '', $this->result->description);
+$this->result->description = strip_tags(stripslashes($this->result->description)); // convert to plaintext
+
+$this->result->description = substr($this->result->description, 0, strpos(wordwrap($this->result->description, 150), "\n"));
 
 $pathway = explode('/', $this->result->path);
 $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id);
@@ -64,48 +64,49 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
       </strong>
     </p>
     <p class="small">
-<?php echo $this->escape(strip_tags($this->result->description)); ?>
+      <?php echo $this->escape(strip_tags($this->result->description)); ?>&nbsp;&hellip;
     </p>
 
-
+    <hr class="condensed" />
+    <span class="small">
       <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
-
+    </span>
   </div>
   <div class="span2" style="text-align:right;">
     <p class="">
-    <?php
-    if ($this->result->price) {
-      echo JText::_('COM_FCSEARCH_SEARCH_FROM');
-      ?>
+      <?php
+      if ($this->result->price) {
+        echo JText::_('COM_FCSEARCH_SEARCH_FROM');
+        ?>
         <span class="lead">
 
-        <?php
-        if ($this->result->base_currency != '£') { // Must be  EURO
-          $this->result->price = $this->currencies['GBP']->exchange_rate * $this->result->price;
-        }
+          <?php
+          if ($this->result->base_currency != '£') { // Must be  EURO
+            $this->result->price = $this->currencies['GBP']->exchange_rate * $this->result->price;
+          }
 
-        echo '&pound;' . round($this->result->price);
-        ?>
+          echo '&pound;' . round($this->result->price);
+          ?>
         </span>
         <br />
         <span class="small"><?php echo $this->result->tariff_based_on; ?><span>
 
-  <?php
-} else {
-  echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST');
-}
-?>
+            <?php
+          } else {
+            echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST');
+          }
+          ?>
           </p>
 
           <?php if ($this->result->reviews) : ?>
             <p class="small">
-  <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
+              <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
             </p>
           <?php endif; ?>
 
 
           <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="btn  btn-primary pull-right">
-          <?php echo JText::_('VIEW') ?>
+            <?php echo JText::_('VIEW') ?>
           </a>
           </div>
           </div>

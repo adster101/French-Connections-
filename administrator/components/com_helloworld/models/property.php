@@ -31,9 +31,6 @@ class HelloWorldModelProperty extends JModelAdmin {
    */
   public $expiry_date = '';
 
-  /*
-   *
-   */
 
   /**
    * Returns a reference to the a Table object, always creating it.
@@ -493,7 +490,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     $strPost = $strPost . "&CV2=" . $data['CV2'];
 
     // Send the IP address of the person entering the card details
-    $strPost = $strPost . "&ClientIPAddress=" . $_SERVER['REMOTE_ADDR'];
+    $strPost = $strPost . "&ClientIPAddress=127.0.0.1";
     /* Allow fine control over 3D-Secure checks and rules by changing this value. 0 is Default **
      * * It can be changed dynamically, per transaction, if you wish.  See the Sage Pay Direct Protocol document */
     $strPost = $strPost . "&Apply3DSecure=0";
@@ -536,13 +533,13 @@ class HelloWorldModelProperty extends JModelAdmin {
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
     /* Analyse the response from Sage Pay Direct to check that everything is okay
      * * Registration results come back in the Status and StatusDetail fields */
-
+    
     $arrResponse['VendorTxCode'] = $VendorTxCode;
 
     $strStatus = $arrResponse["Status"];
     $strStatusDetail = $arrResponse["StatusDetail"];
     // Card details and address details have been checked. Can now process accordingly...
-
+   
     /* If this isn't 3D-Auth, then this is an authorisation result (either successful or otherwise) **
      * * Get the results form the POST if they are there */
     $strVPSTxId = $arrResponse["VPSTxId"];

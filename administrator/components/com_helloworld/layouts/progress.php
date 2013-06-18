@@ -24,7 +24,7 @@ $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data  ?>
+    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data   ?>
       <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
     <?php elseif (!empty($progress) && empty($progress[0]->unit_id)) : // Listing has been created but no unit   ?>
       <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
@@ -67,15 +67,20 @@ $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
       </div>
     <?php elseif (empty($notices) && $view == 'listing' && !$review && $days_to_renewal >= 7) : ?>
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
+    <?php elseif (empty($notices) && !$review && $days_to_renewal >= 7) : ?>
+      <div class="alert alert-notice">
+        <h4>Listing Status</h4>
+        <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_OKAY'); ?></p>
+      </div>
     <?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review) : ?>
       <div class="alert alert-danger">
-        <h4>Listing Progress</h4>
+        <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
         <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
       </div>
     <?php elseif ($review) : ?>
       <div class="alert alert-info">
-        <h4>Listing Progress</h4>
+        <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_UNSUBMITTED_CHANGES'); ?></p>
         <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=listing&id=' . (int) $id) ?>" class="btn btn-primary">
           <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
@@ -84,7 +89,7 @@ $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
       </div>
     <?php endif; ?>
   </div>
-  <?php // Need to put the following into language strings ?>
+  <?php // Need to put the following into language strings  ?>
   <div class="span3">
     <h4>Key</h4>
     <p>
