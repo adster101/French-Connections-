@@ -36,8 +36,6 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     // This redirects to the tariffs layout of the unitversions view
     $this->registerTask('tariffs', 'edit');
     
-    // Register a savetariffs task
-    $this->registerTask('applytariffs', 'save');
   }
 
   /**

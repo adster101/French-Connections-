@@ -307,6 +307,7 @@
       height="125px">
     </field>
   </fieldset>
+  
   <fieldset name="external_facilities" description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
     <field
       class="checkbox inline required"

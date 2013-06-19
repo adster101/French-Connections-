@@ -85,7 +85,7 @@ class plgContentVersion extends JPlugin {
           }
         }
       }
-
+      
       return $new_version;
     }
   }

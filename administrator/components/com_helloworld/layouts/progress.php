@@ -96,6 +96,7 @@ $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
       <i class="icon icon-warning"> </i>
       Please complete &nbsp;&nbsp;
 
+
       <i class="icon icon-publish"></i>
       Section complete
     </p>

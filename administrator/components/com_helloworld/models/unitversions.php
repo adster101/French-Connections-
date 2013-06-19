@@ -115,7 +115,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     // Get an instance of the attributes table - Possibly need to merge this into com_attributes
     $attributesTable = $this->getTable('PropertyAttributes', 'HelloWorldTable');
-    
+
     if ($id > 0) {
       $property_facilities = $attributesTable->load($id);
 
@@ -133,7 +133,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $properties[$facility_type] = implode($value, ',');
       }
     }
-    
+
     return $properties;
   }
 
@@ -147,10 +147,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    */
   public function getForm($data = array(), $loadData = true) {
 
-    $app = JFactory::getApplication();
-    print_r($app->input);die;
-    
-    if ($this->layout == 'tariffs') {
+    $input = JFactory::getApplication()->input;
+    $layout = $input->get('layout', 'edit', 'string');
+
+    if ($this->layout == 'tariffs' || $layout == 'tariffs') {
       $form = $this->loadForm('com_helloworld.unit', 'tariffs', array('control' => 'jform', 'load_data' => $loadData));
     } else {
       $form = $this->loadForm('com_helloworld.unit', 'unit', array('control' => 'jform', 'load_data' => $loadData));
@@ -180,6 +180,29 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unitversions.data', array());
 
+    // We take this opportunity to 'massage' the data into the correct format 
+    // so we can bind it to the form in getTariffsXML
+    if (array_key_exists('start_date', $data) && array_key_exists('end_date', $data) && array_key_exists('tariff', $data)) {
+      $tariffs = array();
+      $num = count($data['start_date']);
+      // Here we must have data passed in from the form validator
+      // E.g. something hasn't validated correctly
+      for ($i = 0; $i < $num; $i++) {
+        $tmp = array();
+        $tmp[] = $data['start_date'][$i];
+        $tmp[] = $data['end_date'][$i];
+        $tmp[] = $data['tariff'][$i];
+
+        $tariffs[] = JArrayHelper::toObject($tmp, 'JOBject');
+      }
+
+      $data['tariffs'] = JArrayHelper::toObject($tariffs, 'JOBject');
+      unset($data['start_date']);
+      unset($data['end_date']);
+      unset($data['tariff']);
+    }
+    
+    // Need to get the tariff data into the form here...
     // If nout in session then we grab the item from the database
     if (empty($data)) {
       $data = $this->getItem();
@@ -251,24 +274,23 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     parent::populateState();
   }
 
-/**
-	 * Method to allow derived classes to preprocess the form.
-	 *
-	 * @param	object	A form object.
-	 * @param	mixed	The data expected for the form.
-	 * @param	string	The name of the plugin group to import (defaults to "content").
-	 * @throws	Exception if there is an error in the form event.
-	 * @since	1.6
-	 */
-	protected function preprocessForm(JForm $form, $data)
-	{
+  /**
+   * Method to allow derived classes to preprocess the form.
+   *
+   * @param	object	A form object.
+   * @param	mixed	The data expected for the form.
+   * @param	string	The name of the plugin group to import (defaults to "content").
+   * @throws	Exception if there is an error in the form event.
+   * @since	1.6
+   */
+  protected function preprocessForm(JForm $form, $data) {
 
     if (!empty($data) && $this->layout == 'tariffs') {
       // Generate the XML to inject into the form
       $XmlStr = $this->getTariffXml($form, $data);
-      $form->load($XmlStr);
+      $form->load($XmlStr, true);
     }
-	}
+  }
 
   /**
    * getTariffXml - This function takes a form and some data to generate a set of XML form field definitions. These
@@ -278,128 +300,65 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    * @param type $data
    * @return string
    */
-  protected function getTariffXml ($form, $data = array())
-  {
+  protected function getTariffXml($form, $data = array()) {
 
+    // Check the format of the tariffs, if present. This is necessary as they form
+    // we construct spits them out in a different data format
     // Build an XML string to inject additional fields into the form
-    $XmlStr = '<form>';
-    $counter=0;
-    $XmlStr.='<fields name="tariffs">';
-
-    if (!$data['tariffs']) {
-      return false;
-    }
+    $XmlStr = '<form><fieldset name="tariffs">';
+    $counter = 0;
 
     // Loop over the existing availability first
-    foreach ($data['tariffs'] as $tariff) {
+    foreach ($data['tariffs']->getProperties() as $tariff) {
+      $value = $tariff->getProperties();
 
-      // Ignore the first 'tariff' as it is an error counter added by the load db table instance
-      if(count($tariff)) {
-
-        $XmlStr.= '
-        <fieldset name="tariffs_'.$counter.'">
-        <field
-          id="start_date_tariff_'.$counter.'"
-          name="start_date"
-          type="text"
-          label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
-          class="inputbox tariff_date input-small"
-          validate=""
-          labelclass="tariff-label"
-          required="false"
-          multiple="true"
-          default="'.$tariff->start_date.'"
-          readonly="true">
-        </field>
-
-        <field
-          id="end_date_tariff_'.$counter.'"
-          name="end_date"
-          type="text"
-          label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
-          description="COM_HELLOWORLD_TARIFFS_FIELD_DATE_RANGE_DESC"
-          class="inputbox tariff_date input-small"
-          validate=""
-          labelclass="tariff-label"
-          required="false"
-          multiple="true"
-          default="'.$tariff->end_date.'"
-          readonly="true">
-        </field>
-
-        <field
-          id="tariff_'.$counter.'"
-          name="tariff"
-          type="text"
-          label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
-          description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
-          class="inputbox input-mini"
-          labelclass="tariff-label"
-          required="false"
-          default="'.$tariff->tariff.'"
-          multiple="true">
-          </field>
-        </fieldset>';
-        $counter++;
-      }
-    }
-
-    // Add some empty tariff fields (3 by default)
-    for ($i = $counter; $i <= $counter + 4; $i++) {
       $XmlStr.= '
-      <fieldset name="tariffs_' . $i . '">
         <field
-          id="start_date_tariff_'. $i .'"
+          id="tariff_start_date_' . $counter . '"
           name="start_date"
           type="text"
+          default="' . $value[0] . '"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-          description="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_DESC"
-          class="inputbox tariff_date input-small"
-          labelclass="tariff-label"
-          required="false"
           multiple="true"
-          default=""
-          readonly="true">
+          description=""
+          class="inputbox tariff_date input-small"         
+          labelclass="tariff-label"
+          readonly="false">
         </field>
-
+        
         <field
-          id="end_date_tariff_'.$i.'"
+          id="tariff_end_date_' . $counter . '"
           name="end_date"
           type="text"
+          default="' . $value[1] . '"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
-          description="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_DESC"
-          class="inputbox tariff_date input-small"
-          validate=""
-          labelclass="tariff-label"
-          required="false"
           multiple="true"
-          default=""
-          readonly="true">
+          description=""
+          class="inputbox tariff_date input-small"         
+          labelclass="tariff-label"
+          readonly="false">
         </field>
+        
         <field
-          id="tariff_'. $i .'"
+          id="tariff_price_' . $counter . '"
           name="tariff"
           type="text"
+          default="' . $value[2] . '"
           label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
-          description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_DESC"
-          class="inputbox input-mini"
-          validate=""
+          multiple="true"
+          description=""
+          class="inputbox tariff_date input-small"         
           labelclass="tariff-label"
-          required="false"
-          default=""
-          multiple="true">
-        </field>
-      </fieldset>';
+          readonly="false">
+        </field>';
+      $counter++;
     }
 
 
-    $XmlStr.='</fields></form>';
 
+    $XmlStr.='</fieldset></form>';
     return $XmlStr;
-
   }
-
 
   /**
    * Overidden method to save the form data.
@@ -418,6 +377,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $isNew = true;
     $new_version_required = array('');
     $old_version_id = ($data['id']) ? $data['id'] : '';
+
 
     // Generate a logger instance for reviews
     JLog::addLogger(array('text_file' => 'unitversions.update.php'), JLog::ALL, array('unitversions'));

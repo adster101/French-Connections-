@@ -5,27 +5,25 @@
 -->
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
   <fieldset name="additional-fields">
-
     <field
-      name="id"
+      name="unit_id"
       type="hidden"
       default="">
     </field>
-
-     <field
-			name="changeover_day"
-			type="attributetype"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
-			class="required"
-			filter="int"
+    <field
+      name="changeover_day"
+      type="attributetype"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
+      class="required"
+      filter="int"
       id="20"
       placeholder="true"
-			required="true"
-			default="asdasd"
+      required="true"
+      default="asdasd"
       labelclass="control-label">
-		</field>
-  <field
+    </field>
+    <field
       name="base_currency"
       labelclass="control-label"
       label="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_LABEL"
@@ -49,21 +47,54 @@
       default=""
       placeholder="true">
     </field>
-    
+
     <field
-			name="additional_price_notes"
-			type="editor"
-			label="COM_HELLOWORLD_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
+      name="additional_price_notes"
+      type="editor"
+      label="COM_HELLOWORLD_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
       rows="3"
       class="inputbox validate-description"
-			default=""
-			filter="safehtml"
-			buttons="false"
+      default=""
+      filter="string"
+      buttons="false"
       validate="additionalpricenotes"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE" />
-	</fieldset>
+    
+ 
+  </fieldset>
+  <fieldset name="hidden-details">
 
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="unit_id"
+      type="hidden"
+      default=""
+      filter="int">
+    </field>
+    <field
+      name="review"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="parent_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+    />
+  </fieldset>
+  <fieldset name="tariffs">
+    
+  </fieldset>
 </form>
 
 

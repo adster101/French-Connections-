@@ -17,5 +17,5 @@ class JFormRuleAdditionalpricenotes extends JFormRule
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $regex = '^[a-zA-Z0-9<>/\s!()#@.,%&;-����]{0,750}+$';
+	protected $regex = '/.{0,10}/';
 }

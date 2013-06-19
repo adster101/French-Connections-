@@ -13,9 +13,8 @@ $userId = $user->get('id');
 // And determine the user groups the user is in
 
 $data = array('item' => $this->item, 'progress' => $this->progress);
-
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&task=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
@@ -158,7 +157,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <fieldset>
           <legend><?php echo JText::_('COM_HELLOWORLD_FACILITIES_LEGEND'); ?></legend>
           <p><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?></p>
-
           <div class="accordion" id="accordion1">
             <div class="accordion-group">
               <div class="accordion-heading">
@@ -249,8 +247,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
 
         </fieldset>
       </div>
-
-
       <div class="span2 form-vertical">
         <fieldset class="adminform">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_DETAILS'); ?></legend>
@@ -263,16 +259,12 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
             </div>
           <?php endforeach; ?>
         </fieldset>
-
-
       </div>
     </div>
   </div>
   <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
     <?php echo $field->input; ?>
   <?php endforeach; ?>
-
-
   <input type="hidden" name="task" value="" />
   <?php echo JHtml::_('form.token'); ?>
 </form>

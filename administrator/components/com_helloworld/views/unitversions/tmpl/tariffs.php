@@ -5,68 +5,91 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
 // Get all the fieldsets in the tariffs form group
-$tariff_field_sets = $this->form->getFieldSets('tariffs');
+$tariff_field_sets = $this->form->getFieldSet('tariffs');
+$data = array('item' => $this->item, 'progress' => $this->progress);
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=unitversions&layout=tariffs&unit_id=' . (int) $this->item->id); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=unitversions&layout=tariffs&unit_id=' . (int) $this->item->unit_id); ?>"
       method="post" name="adminForm" id="adminForm" class="form-validate">
   <div class="row-fluid">
-    <div class="span8">
-      <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
-        <p>
-          <a href="#" class="fltrt">
-            <span class="icon-16-info hasTip"
-                  title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_HELP'); ?>"></span>
-          </a>
-        </p>
-        <p class="clear"><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>
-        <?php foreach ($tariff_field_sets as $fieldset) { ?>
-          <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFF'); ?></legend>
-            <div class="tariff-range row-fluid form-inline">
-              <?php foreach ($this->form->getFieldset($fieldset->name) as $field) { ?>
-                <div class="span4">
-
-                  <?php
-                  echo $field->label;
-                  echo $field->input;
-                  ?>
-                </div>
-              <?php } // End of foreach getFieldSet fieldset name  ?>         </div>
-
-          </fieldset>
-        <?php } // End of foreach tariff field sets  ?>
-      </fieldset>
-    </div>
-
-    <div class="span4">
-      <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
+    <?php if (!empty($this->sidebar)): ?>
+      <div id="j-sidebar-container" class="span2">
+        <?php echo $this->sidebar; ?>
+      </div>
+      <div id="" class="span8">
+      <?php else : ?>
+        <div class="span10">
+        <?php endif; ?>
+        <!-- Listing status and tab layouts start -->
         <?php
-        echo $this->form->getLabel('id');
-        echo $this->form->getInput('id');
+        $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+        echo $progress->render($data);
 
-        echo $this->form->getLabel('changeover_day');
-        echo $this->form->getInput('changeover_day');
-
-        echo $this->form->getLabel('base_currency');
-        echo $this->form->getInput('base_currency');
-
-        echo $this->form->getLabel('tariff_based_on');
-        echo $this->form->getInput('tariff_based_on');
-
-        echo $this->form->getLabel('linen_costs');
-        echo $this->form->getInput('linen_costs');
-
-        echo $this->form->getLabel('additional_price_notes');
-        echo $this->form->getInput('additional_price_notes');
+        $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+        echo $layout->render($data);
         ?>
-      </fieldset>
 
+        <!-- Listing status and tab layouts end -->
 
-      <input type="hidden" name="task" value="tariffs.edit" />
-      <?php echo JHtml::_('form.token'); ?>
+        <div class="row-fluid">
+          <div class="span9">
+            <fieldset class="adminform">
+              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
+
+              <p class="clear"><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>
+
+              <div class="tariff-range row-fluid form-inline">
+                <?php foreach ($this->form->getFieldset('tariffs') as $field) : ?>
+                  <div class="span4">
+
+                    <?php
+                    echo $field->label;
+                    echo $field->input;
+                    ?>               
+                    <hr />
+
+                  </div>
+                <?php endforeach; // End of foreach getFieldSet fieldset name     ?> 
+              </div>
+
+            </fieldset>
+          </div>
+          <div class="span3">
+            <fieldset class="adminform">
+              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
+              <?php
+              echo $this->form->getLabel('id');
+              echo $this->form->getInput('id');
+
+              echo $this->form->getLabel('changeover_day');
+              echo $this->form->getInput('changeover_day');
+
+              echo $this->form->getLabel('base_currency');
+              echo $this->form->getInput('base_currency');
+
+              echo $this->form->getLabel('note21');
+
+              echo $this->form->getLabel('tariff_based_on');
+              echo $this->form->getInput('tariff_based_on');
+
+              echo $this->form->getLabel('linen_costs');
+              echo $this->form->getInput('linen_costs');
+
+              echo $this->form->getLabel('additional_price_notes');
+              echo $this->form->getInput('additional_price_notes');
+              ?>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div class="span2">
+        <h4>Extra help and what not</h4>
+      </div>
     </div>
-
   </div>
+  <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
+    <?php echo $field->input; ?>
+  <?php endforeach; ?>
+  <input type="hidden" name="task" value="" />
+  <?php echo JHtml::_('form.token'); ?>
 </form>
