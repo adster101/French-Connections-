@@ -58,15 +58,15 @@ class HelloWorldTableTariffs extends JTable {
    * 
    */
   public function save($id = null, $tariff_periods = array()) {
-    print_r($tariff_periods);
-    die;
     if (!$this->check()) {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
     } else {
       // Delete existing availability
       // Need to wrap this in some logic
-      $this->delete($id);
+      if (!$this->delete($id)) {
+        echo "WTF!?";
+      }
 
       $query = $this->_db->getQuery(true);
 

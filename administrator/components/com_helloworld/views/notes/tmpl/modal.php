@@ -34,16 +34,23 @@ $category = $this->escape($this->state->get('filter.category_id'));
   <ul class="alternating">
     <?php foreach ($this->items as $item) : ?>
       <li>
-          <?php if ($item->subject) : ?>
-            <h4>
-              <?php echo JHtml::date($item->created_time, 'D d M Y H:i'); ?>&ndash;
-              <?php echo JText::_($this->escape($item->subject)); ?></h4>
-          <?php else : ?>
-            <h4>
-              <?php echo JHtml::date($item->created_time, 'D d M Y H:i'); ?>&ndash;
-              <?php echo JText::sprintf('COM_HELLOWORLD_NOTES_SUBJECT', (int) $item->id, JText::_('COM_USERS_EMPTY_SUBJECT')); ?>
-            </h4>
-          <?php endif; ?>
+        <?php if ($item->subject) : ?>
+          <h4>
+            <?php echo JHtml::date($item->created_time, 'D d M Y H:i'); ?>&ndash;
+            <?php echo JText::_($this->escape($item->subject)); ?>
+            <small>
+              <?php echo $this->escape($item->title); ?>
+            </small>
+          </h4>
+        <?php else : ?>
+          <h4>
+            <?php echo JHtml::date($item->created_time, 'D d M Y H:i'); ?>&ndash;
+            <?php echo JText::sprintf('COM_HELLOWORLD_NOTES_SUBJECT', (int) $item->id, JText::_('COM_USERS_EMPTY_SUBJECT')); ?>
+            <small>
+              <?php echo $this->escape($item->title); ?>
+            </small>
+          </h4>
+        <?php endif; ?>
 
         <div class="ubody">
           <?php echo $item->body; ?>

@@ -13,18 +13,19 @@ $progress = $displayData['progress'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 
 $notices = HelloWorldHelper::getProgressNotices($progress); // Get an array of what units still need relevant data added...
+if (!empty($progress)) {
+  $id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
 
-$id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
-
-$review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
+  $review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
 // $expiry_date - the expiry date of this property
-$expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
-$days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
+  $expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
+  $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
+}
 ?>
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data   ?>
+    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data     ?>
       <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
     <?php elseif (!empty($progress) && empty($progress[0]->unit_id)) : // Listing has been created but no unit   ?>
       <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
@@ -89,7 +90,7 @@ $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
       </div>
     <?php endif; ?>
   </div>
-  <?php // Need to put the following into language strings  ?>
+  <?php // Need to put the following into language strings   ?>
   <div class="span3">
     <h4>Key</h4>
     <p>

@@ -780,11 +780,11 @@ abstract class JTable extends JObject
 		$query->from($this->_tbl);
 		$query->where($this->_tbl_key . ' = ' . $this->_db->quote($pk));
 		$this->_db->setQuery($query);
-
+    
 		// Check for a database error.
 		$this->_db->execute();
 
-		return true;
+    return true;
 	}
 
 	/**

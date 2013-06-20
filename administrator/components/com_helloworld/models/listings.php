@@ -182,7 +182,7 @@ class HelloWorldModelListings extends JModelList {
 
     // Filter by snooze state
     // Should only apply to users who can view and change snooze state
-    if ($canDo->get('helloworld.snooze')) {
+    if ($canDo->get('helloworld.notes.add')) {
 
       $snooze_state = $this->getState('filter.snoozed');
 

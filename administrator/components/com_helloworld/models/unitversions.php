@@ -201,7 +201,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       unset($data['end_date']);
       unset($data['tariff']);
     }
-    
+
     // Need to get the tariff data into the form here...
     // If nout in session then we grab the item from the database
     if (empty($data)) {
@@ -307,12 +307,12 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Build an XML string to inject additional fields into the form
     $XmlStr = '<form><fieldset name="tariffs">';
     $counter = 0;
+    if (array_key_exists('tariffs', $data)) {
+      // Loop over the existing availability first
+      foreach ($data['tariffs']->getProperties() as $tariff) {
+        $value = $tariff->getProperties();
 
-    // Loop over the existing availability first
-    foreach ($data['tariffs']->getProperties() as $tariff) {
-      $value = $tariff->getProperties();
-
-      $XmlStr.= '
+        $XmlStr.= '
         <field
           id="tariff_start_date_' . $counter . '"
           name="start_date"
@@ -322,7 +322,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
-          labelclass="tariff-label"
+          labelclass=""
           readonly="false">
         </field>
         
@@ -335,7 +335,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
-          labelclass="tariff-label"
+          labelclass=""
           readonly="false">
         </field>
         
@@ -348,13 +348,55 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
-          labelclass="tariff-label"
+          labelclass=""
           readonly="false">
         </field>';
-      $counter++;
+        $counter++;
+      }
     }
+    // Add some empty tariff fields (5 by default)
+    for ($i = $counter; $i <= $counter + 4; $i++) {
 
-
+      $XmlStr.= '
+         <field
+          id="tariff_start_date_' . $i . '"
+          name="start_date"
+          type="text"
+          default=""
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
+          multiple="true"
+          description=""
+          class="inputbox tariff_date input-small"         
+          labelclass=""
+          readonly="false">
+        </field>
+        
+        <field
+          id="tariff_end_date_' . $i . '"
+          name="end_date"
+          type="text"
+          default=""
+          label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
+          multiple="true"
+          description=""
+          class="inputbox tariff_date input-small"         
+          labelclass=""
+          readonly="false">
+        </field>
+        
+        <field
+          id="tariff_price_' . $i . '"
+          name="tariff"
+          type="text"
+          default=""
+          label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
+          multiple="true"
+          description=""
+          class="inputbox tariff_date input-small"         
+          labelclass=""
+          readonly="false">
+        </field>';
+    }
 
     $XmlStr.='</fieldset></form>';
     return $XmlStr;
@@ -485,6 +527,12 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       JLog::add('About to save facilities for unit version ID' . $new_version_id, JLog::ALL, 'unitversions');
 
       if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id)) {
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+      }
+
+      JLog::add('About to save tariffs for unit ID' . $table->id, JLog::ALL, 'unitversions');
+
+      if (!$this->saveTariffs($table->unit_id)) {
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
@@ -663,13 +711,28 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     return true;
   }
 
-  /*
-   *
+  /**
    * Method to create a 'unit' entry into the #__unit table.
    * This needs to be done prior to saving the version into #__unit_versions for new props
-   *
+   * 
+   * TO DO: This method isn't really needed. The unit model has a save method 
+   * which could be as follows: 
+   * 
+   * $unit = JModelLegacy::GetInstance etc
+   * $unit->save($data);
+   * public function save($data){  
+   * $return = true;
+   * if (parent::save($data)){
+   * $id =  (int) $this->getState($this->getName().'.id');
+   * //Here you can do other tasks with your newly saved record...
+   * } else {
+   * $return = false;
+   * }
+   * return $commit;
+   * }
+   * @param type $data
+   * @return mixed
    */
-
   public function createNewUnit($data = array()) {
 
     if (empty($data)) {
@@ -690,6 +753,104 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     }
 
     return $unit_table->id;
+  }
+
+  /*
+   * 
+   * 
+   */
+
+  protected function saveTariffs($unit_id = '') {
+
+    // TO DO: I think that tariffs should be modelled in a separate model file. 
+    // That is, look at moving getTariffXML, getTariffs, getTariffsByDay and this method 
+    // to a HelloWorldModelTariffs file. This would make more logical sense and make it easier
+    // to reuse those methods elsewhere (e.g. on property listing, search etc)
+    // 
+    // Similar could be considered to the facilities as well.
+    // We need to extract tariff information here, because the tariffs are filtered via the 
+    // controller validation method. Perhaps need to override the validation method for this model?
+    $input = JFactory::getApplication()->input;
+
+    $data = $input->get('jform', array(), 'array');
+
+    $tariffs = array('start_date' => $data['start_date'], 'end_date' => $data['end_date'], 'tariff' => $data['tariff']);
+
+    $tariffs_by_day = $this->getTariffsByDay($tariffs);
+
+    $tariff_periods = HelloWorldHelper::getAvailabilityByPeriod($tariffs_by_day);
+
+    // Get instance of the tariffs table
+    $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
+
+
+    // Bind the translated fields to the JTAble instance	
+    if (!$tariffsTable->save($unit_id, $tariff_periods)) {
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Generates an array containing a day for each tariff period passed in via the form. Ensure that any new periods are
+   * merged into the data before saving.
+   *
+   * Returns an array of tariffs per days based on tariff periods.
+   * 
+   * @param array $tariffs An array of tariffs periods as passed in via the tariffs admin screen
+   * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
+   * 
+   */
+  protected function getTariffsByDay($tariffs = array()) {
+    // Array to hold availability per day for each day that availability has been set for.
+    // This is needed as availability is stored by period, but displayed by day.
+    $raw_tariffs = array();
+
+    // Generate a DateInterval object which is re-used in the below loop
+    $DateInterval = new DateInterval('P1D');
+
+    // For each tariff period passed in first need to determine how many tariff periods there are
+    $tariff_periods = count($tariffs['start_date']);
+
+    for ($k = 0; $k < $tariff_periods; $k++) {
+
+      $tariff_period_start_date = '';
+      $tariff_period_end_date = '';
+      $tariff_period_length = '';
+
+      // Check that availability period is set for this loop. Possible that empty array elements exists as additional
+      // tariff fields are added to the form in case owner wants to add additional tariffs etc
+      try {
+
+        if ($tariffs['start_date'][$k] != '' && $tariffs['end_date'][$k] != '' && $tariffs['tariff'][$k] != '') {
+
+          // Convert the availability period start date to a PHP date object
+          $tariff_period_start_date = new DateTime($tariffs['start_date'][$k]);
+
+          // Convert the availability period end date to a date 
+          $tariff_period_end_date = new DateTime($tariffs['end_date'][$k]);
+
+          // Calculate the length of the availability period in days
+          $tariff_period_length = date_diff($tariff_period_start_date, $tariff_period_end_date);
+
+          // Loop from the start date to the end date adding an available day to the availability array for each availalable day
+          for ($i = 0; $i <= $tariff_period_length->days; $i++) {
+
+            // Add the day as an array key storing the availability status as the value
+            $raw_tariffs[date_format($tariff_period_start_date, 'Y-m-d')] = $tariffs['tariff'][$k];
+
+            // Add one day to the start date for each day of availability
+            $date = $tariff_period_start_date->add($DateInterval);
+          }
+        }
+      } catch (Exception $e) {
+        //TO DO - Log this
+      }
+    }
+
+    return $raw_tariffs;
   }
 
 }

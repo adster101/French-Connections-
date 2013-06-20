@@ -112,13 +112,13 @@ class HelloWorldModelProperty extends JModelAdmin {
     $vat_status = ($user->vat_status) ? $user->vat_status : 'Z';
 
     // Calculate the value of each line of the order...
-    $summary = $this->getOrderTotals($order_summary, $item_costs, $vat_status);
+    $summary_tmp = $this->getOrderTotals($order_summary, $item_costs, $vat_status);
 
     // Get vouchers, need to pick up any vouchers that are added against a property here
     // Detect the inclusion into the French site network
 
-    $summary = JArrayHelper::toObject($summary);
-
+    $summary = JArrayHelper::toObject($summary_tmp);
+    
     return $summary;
   }
 
@@ -300,7 +300,6 @@ class HelloWorldModelProperty extends JModelAdmin {
     // A unit counter
     $unit_count = 0;
 
-
     // Total images holder
     $image_count = 0;
 
@@ -343,12 +342,12 @@ class HelloWorldModelProperty extends JModelAdmin {
       if ($image_count >= 8) { // Renewal
         $item_costs['1004-009']['quantity'] = 1;
 
-        if ($unit_count > 1) {
+        if ($unit_count > 0) {
 
           $item_costs['1004-006']['quantity'] = $unit_count;
         }
       } else { // Image count must be less than 8 but still a renewal
-        if ($unit_count > 1) {
+        if ($unit_count > 0) {
           $item_costs['1004-006']['quantity'] = $unit_count;
         }
 
@@ -367,13 +366,13 @@ class HelloWorldModelProperty extends JModelAdmin {
       if ($image_count >= 8) {
         $item_costs['1005-009']['quantity'] = 1;
 
-        if ($unit_count > 1) {
+        if ($unit_count > 0) {
           $item_costs['1005-006']['quantity'] = $unit_count;
         }
       } else { // Image count must be less than 8
         // Add the base item price
         $item_costs['1005-002']['quantity'] = 1;
-        if ($unit_count > 1) {
+        if ($unit_count > 0) {
 
           $item_costs['1005-006']['quantity'] = $unit_count;
         }

@@ -19,7 +19,7 @@ $lang->load('com_fcsearch', JPATH_SITE, null, false, true);
 
 $app  = JFactory::getApplication();
 
-$regions = &modSearchHelper::getSearchRegions($params);
+$regions = &modFcSearchHelper::getSearchRegions($params);
 
 require JModuleHelper::getLayoutPath('mod_fc_search', $params->get('layout', 'default'));
 

@@ -7,6 +7,7 @@ JHtml::_('behavior.formvalidation');
 // Get all the fieldsets in the tariffs form group
 $tariff_field_sets = $this->form->getFieldSet('tariffs');
 $data = array('item' => $this->item, 'progress' => $this->progress);
+$counter = 0;
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=unitversions&layout=tariffs&unit_id=' . (int) $this->item->unit_id); ?>"
       method="post" name="adminForm" id="adminForm" class="form-validate">
@@ -37,20 +38,25 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
 
               <p class="clear"><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>
 
-              <div class="tariff-range row-fluid form-inline">
+              <div class="tariff-range row-fluid">
                 <?php foreach ($this->form->getFieldset('tariffs') as $field) : ?>
-                  <div class="span4">
-
-                    <?php
-                    echo $field->label;
-                    echo $field->input;
-                    ?>               
-                    <hr />
-
-                  </div>
-                <?php endforeach; // End of foreach getFieldSet fieldset name     ?> 
-              </div>
-
+                  <?php if ($counter % 3 === 0) : // Output a new row every third ?> 
+                    <div class="row-fluid">
+                    <?php endif; ?>
+                    <div class="span4">
+                      <?php
+                      echo $field->label;
+                      echo $field->input;
+                      ?>               
+                    </div>      
+                    <?php if (($counter % 3 === 2)) : ?>
+                      </div>
+                      <hr />
+                      <div class="row-fluid">
+                    <?php endif; ?>
+                    <?php $counter++; ?>
+                  <?php endforeach; // End of foreach getFieldSet fieldset name  ?> 
+                </div>
             </fieldset>
           </div>
           <div class="span3">

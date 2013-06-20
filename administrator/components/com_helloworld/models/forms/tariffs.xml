@@ -56,7 +56,7 @@
       rows="3"
       class="inputbox validate-description"
       default=""
-      filter="string"
+      filter="safehtml"
       buttons="false"
       validate="additionalpricenotes"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE" />

@@ -79,7 +79,6 @@ class HelloWorldViewTariffs extends JViewLegacy {
     $document = JFactory::getDocument();
     $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
 
-    //$document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-1.8.2.min.js");
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js", 'text/javascript', true);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");

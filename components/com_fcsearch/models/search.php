@@ -341,6 +341,7 @@ class FcSearchModelSearch extends JModelList {
       $query->from('#__property a');
       $query->join('left', '#__property_versions as b on ( a.id = b.parent_id and b.published_on is not null )');
       $query->join('left', '#__unit_versions as c on ( a.id = c.parent_id and c.published_on is not null )');
+      $query->join('left', '#__unit as j on ( c.unit_id = j.id )');
 
       // Need to switch these based on the language
       //if ($lang == 'fr') {
@@ -432,6 +433,7 @@ class FcSearchModelSearch extends JModelList {
 
       // Make sure we only get live properties...
       $query->where('a.expiry_date >= ' . $db->quote($date));
+      $query->where('j.published = 1');
 
       // Sort out the ordering required
       if ($sort_column) {
