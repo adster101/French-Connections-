@@ -31,7 +31,7 @@ $this->result->description = strip_tags(stripslashes($this->result->description)
 $this->result->description = substr($this->result->description, 0, strpos(wordwrap($this->result->description, 150), "\n"));
 
 $pathway = explode('/', $this->result->path);
-$route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id);
+$route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id );
 ?>
 
 <li>
@@ -54,7 +54,7 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . $thi
   <?php endforeach; ?>
 
 <div class="row-fluid">
-  <div class="span4"><a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="thumbnail pull-left">
+  <div class="span4"><a href="<?php echo $route ?>" class="thumbnail pull-left">
       <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' class="img-rounded" />
     </a>
   </div>

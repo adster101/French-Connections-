@@ -60,6 +60,7 @@ class FcSearchModelSearch extends JModelList {
    */
   public $description = '';
 
+  
   public function getLocalInfo() {
     // First off we need to get the classification detail
     // E.g. is this a department, area or town etc
