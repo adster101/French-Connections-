@@ -99,6 +99,7 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
               </div>
             </div>
           </fieldset>
+                        <input type="hidden" name="parent_id" value="<?php echo $this->unit->parent_id; ?>" />
 
         </form>
 
@@ -208,8 +209,6 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
               </table>
               <input type="hidden" name="task" value="" />
               <input type="hidden" name="boxchecked" value="0" />
-              <input type="hidden" name="jform[parent_id]" value="<?php echo $this->unit->parent_id; ?>" />
-
               <?php echo JHtml::_('form.token'); ?>
 
             </fieldset>

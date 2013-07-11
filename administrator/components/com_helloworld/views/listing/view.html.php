@@ -73,7 +73,7 @@ class HelloWorldViewListing extends JViewLegacy {
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
 
-    JToolBarHelper::cancel('listings');
+    JToolBarHelper::custom('listings','arrow-left-2','','COM_HELLOWORLD_HELLOWORLD_BACK_TO_PROPERTY_LIST',false);
 
 
 
@@ -97,7 +97,7 @@ class HelloWorldViewListing extends JViewLegacy {
 
       $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu('listings');
+      $canDo = HelloWorldHelper::addSubmenu('listing');
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();

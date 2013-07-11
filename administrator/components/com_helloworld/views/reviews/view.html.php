@@ -103,7 +103,7 @@ class HelloWorldViewReviews extends JViewLegacy {
     // Show a helpful toobar title
     JToolBarHelper::title(JText::_('COM_HELLOWORLD_REVIEWS_VIEW'));
 
-    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
 
     // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {

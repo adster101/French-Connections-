@@ -104,7 +104,7 @@ class HelloWorldViewUnitVersions extends JViewLegacy {
         //JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
       }
     } else {
-      JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
+      JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
       if ($canDo->get('core.edit.own')) {
         // We can save the new record
         JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');

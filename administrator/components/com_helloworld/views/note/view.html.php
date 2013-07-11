@@ -62,7 +62,7 @@ class HelloWorldViewNote extends JViewLegacy
 
     JToolBarHelper::save('note.save', 'JTOOLBAR_SAVE');
 
-    JToolBarHelper::cancel('note.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('note.cancel', 'JTOOLBAR_CANCEL');
 	}
 
   /**

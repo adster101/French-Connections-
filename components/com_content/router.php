@@ -264,7 +264,7 @@ function ContentParseRoute($segments)
 
 		return $vars;
 	}
-
+  
 	// if there is only one segment, then it points to either an article or a category
 	// we test it first to see if it is a category.  If the id and alias match a category
 	// then we assume it is a category.  If they don't we assume it is an article

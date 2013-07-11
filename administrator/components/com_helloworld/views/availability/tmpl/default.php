@@ -77,7 +77,9 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
                   </div></div>
               <?php endforeach; ?>
             </fieldset>
-            <input type="hidden" name="task" value="availability.apply" />
+            <input type="hidden" name="task" value="availability.apply" /> 
+            <input type="hidden" name="jform[parent_id]" value=<?php echo $this->unit->parent_id ?> /> 
+
             <?php echo JHtml::_('form.token'); ?>
           </div>
           <div class="modal-footer">

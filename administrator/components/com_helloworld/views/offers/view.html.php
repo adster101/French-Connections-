@@ -84,7 +84,7 @@ class HelloWorldViewOffers extends JViewLegacy
 		JToolBarHelper::publish('articles.publish', 'JTOOLBAR_PUBLISH', true);
 		JToolBarHelper::unpublish('articles.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 		JToolBarHelper::deletelist('offer.delete', 'JTOOLBAR_DELETE');
-    JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
 	}
 	/**
 	 * Method to set up the document properties

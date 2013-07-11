@@ -54,7 +54,7 @@ class HelloWorldController extends JControllerLegacy {
 		}
 
     // Set up an array of views to protect from direct access
-    $views_to_protect = array('availability' => 1, 'images' => 1, 'tariffs' => 1, 'offers' => 1, 'unitversions' => 1);
+    $views_to_protect = array('tariffs' => 1, 'offers' => 1, 'unitversions' => 1);
 
     // Get the document object.
     $document = JFactory::getDocument();
@@ -78,8 +78,19 @@ class HelloWorldController extends JControllerLegacy {
 
       return false;
     }
+   
+    
+    
+    if (($vName == 'images' || $vName == 'availability') && !$this->checkEditId('com_helloworld.edit.unitversions',$id)) {
+      // Somehow the person just went to the form - we don't allow that.
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+      $this->setMessage($this->getError(), 'error');
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=listings', false));
 
-    if ($vName == 'reviews' && !$this->checkEditId('com_helloworld.view.unitversions',$id)) {
+      return false;
+    }
+    
+    if ($vName == 'reviews'  && !$this->checkEditId('com_helloworld.view.unitversions',$id)) {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');

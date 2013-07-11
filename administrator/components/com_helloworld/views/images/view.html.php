@@ -27,6 +27,7 @@ class HelloWorldViewImages extends JViewLegacy
     $unit = $this->getModel('UnitVersions');
     $unit->populateState();
     $this->unit = $unit->getItem();
+    
 
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');
@@ -88,7 +89,7 @@ class HelloWorldViewImages extends JViewLegacy
 
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-		JToolBarHelper::cancel('listing.cancel', 'JTOOLBAR_CANCEL');
+		JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('', '');
 

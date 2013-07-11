@@ -91,7 +91,7 @@ class HelloWorldViewPropertyVersions extends JViewLegacy
     // Built the actions for new and existing records.
 		if ($isNew)
 		{
-			JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
+			JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 
 			// For new records, check the create permission.
 			if ($canDo->get('core.create'))
@@ -104,7 +104,7 @@ class HelloWorldViewPropertyVersions extends JViewLegacy
 		else
 		{
 			if ($canDo->get('core.edit.own'))
-        JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
+        JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 
 			{
 				// We can save the new record

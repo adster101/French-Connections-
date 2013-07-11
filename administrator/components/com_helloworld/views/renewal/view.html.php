@@ -106,7 +106,7 @@ class HelloWorldViewRenewal extends JViewLegacy {
     }
 
 
-    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
   }

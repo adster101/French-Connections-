@@ -78,7 +78,7 @@ class HelloWorldViewAvailability extends JViewLegacy {
     $bar = JToolBar::getInstance('toolbar');
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('', '');
 

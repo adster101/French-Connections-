@@ -100,7 +100,7 @@ class HelloWorldViewSummary extends JViewLegacy
 				JToolBarHelper::apply('helloworld.apply', 'JTOOLBAR_APPLY');
 				JToolBarHelper::save('helloworld.save', 'JTOOLBAR_SAVE');
 			}
-			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CLOSE');
+			JToolBarHelper::cancel('helloworld.cancel', 'JTOOLBAR_CANCEL');
 		}  
 	}
 

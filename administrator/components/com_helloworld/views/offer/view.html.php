@@ -78,7 +78,7 @@ class HelloWorldViewOffer extends JViewLegacy
     JToolBarHelper::divider();
     JToolBarHelper::save('offer.save');
     JToolBarHelper::apply('offer.apply', 'JTOOLBAR_APPLY');
- 		//JToolBarHelper::cancel('offer.cancel', 'JTOOLBAR_CLOSE');
+ 		JToolBarHelper::cancel('offer.cancel', 'JTOOLBAR_CANCEL');
 	}
 
 

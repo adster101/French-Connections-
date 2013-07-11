@@ -438,7 +438,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
       return false;
     }
 
-    $this->holdEditId('com_helloworld.edit.images',$id);
+    $this->holdEditId('com_helloworld.edit.unitversions',$id);
 
     $this->setRedirect(
             JRoute::_(

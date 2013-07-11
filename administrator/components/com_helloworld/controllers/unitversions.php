@@ -35,6 +35,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     // Assign the tariffs task to run the edit method.
     // This redirects to the tariffs layout of the unitversions view
     $this->registerTask('tariffs', 'edit');
+    $this->registerTask('images', 'edit');
     
   }
 
@@ -155,6 +156,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
 
     // Get the task, if we are 'editing' then the parent id won't be set in the form scope
     $task = $this->getTask();
+
     switch ($task) :
       case 'add':
       case 'edit':
@@ -179,7 +181,11 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
         break;
       case 'tariffs':
         $layout = $this->input->get('layout', 'tariffs');
-
+        $append = '';
+        $append.= '&layout=' . $layout . '&' . $urlVar . '=' . $recordId;
+        break;
+      case 'images':
+        $layout = $this->input->get('layout', 'images');
         $append = '';
         $append.= '&layout=' . $layout . '&' . $urlVar . '=' . $recordId;
         break;
@@ -207,6 +213,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
       case 'cancel':
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        
         $id = $data['parent_id'];
 
         break;
