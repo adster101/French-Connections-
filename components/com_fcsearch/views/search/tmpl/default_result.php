@@ -31,7 +31,7 @@ $this->result->description = strip_tags(stripslashes($this->result->description)
 $this->result->description = substr($this->result->description, 0, strpos(wordwrap($this->result->description, 150), "\n"));
 
 $pathway = explode('/', $this->result->path);
-$route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id );
+$route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id );
 ?>
 
 <li>
@@ -105,7 +105,7 @@ $route = JRoute::_('index.php?option=com_accommodation&view=property&id=' . (int
           <?php endif; ?>
 
 
-          <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $this->result->id) ?>" class="btn  btn-primary pull-right">
+          <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=listing&id=' . $this->result->id) ?>" class="btn  btn-primary pull-right">
             <?php echo JText::_('VIEW') ?>
           </a>
           </div>

@@ -8,7 +8,7 @@ jimport('joomla.error.log');
 /**
  * HelloWorld Model
  */
-class AccommodationModelProperty extends JModelForm {
+class AccommodationModelListing extends JModelForm {
 
   /**
    * @var object item
@@ -70,6 +70,7 @@ class AccommodationModelProperty extends JModelForm {
     // Get the input values etc
     $app = JFactory::getApplication();
     $input = $app->input;
+    
 
     // Get the property id
     $id = $input->get('id', '', 'int');
@@ -153,7 +154,13 @@ class AccommodationModelProperty extends JModelForm {
         g.title as property_type,
         h.title as department,
         i.title as base_currency,
-        j.title as tariffs_based_on';
+        j.title as tariffs_based_on,
+        u.name,
+        ufc.website,
+        ufc.phone_1, 
+        ufc.phone_2, 
+        ufc.phone_3,
+       	date_format(a.created_on, "%M %Y") as advertising_since';
 
       // Language logic - essentially need to do two things, if in French
       // 1. Load the attributes_translation table in the below joins
@@ -168,7 +175,7 @@ class AccommodationModelProperty extends JModelForm {
       $query = $this->_db->getQuery(true);
 
       $query->select($select);
- 
+
       // Join the units table in, only retrieves one at a time??
       $query->from('#__property as a');
       $query->leftJoin('#__unit b ON a.id = b.property_id');
@@ -188,18 +195,18 @@ class AccommodationModelProperty extends JModelForm {
       $query->where('d.review = 0');
       $query->where('a.expiry_date > now()');
 
-      //$query->leftJoin('#__attributes a ON a.id = unit.changeover_day');
-      //$query->leftJoin('#__attributes e ON e.id = unit.property_type');
       $query->leftJoin('#__classifications e ON e.id = c.city');
-      //$query->leftJoin('#__users u on pl.created_by = u.id');
-      //$query->leftJoin('#__user_profile_fc ufc on pl.created_by = ufc.user_id');
+
       $query->leftJoin('#__attributes f ON f.id = d.accommodation_type');
       $query->leftJoin('#__attributes g ON g.id = d.property_type');
       $query->leftJoin('#__classifications h ON h.id = c.department');
       $query->leftJoin('#__attributes i ON i.id = d.base_currency');
       $query->leftJoin('#__attributes j ON j.id = d.tariff_based_on');
+      $query->leftJoin('#__attributes k ON k.id = d.changeover_day');
 
-      
+      $query->leftJoin('#__users u on a.created_by = u.id');
+      $query->leftJoin('#__user_profile_fc ufc on u.id = ufc.user_id');
+
       if (!$this->item = $this->_db->setQuery($query)->loadObject()) {
         $this->setError($this->_db->getError());
       }
@@ -209,7 +216,7 @@ class AccommodationModelProperty extends JModelForm {
     if (empty($unit_id)) {
       $this->setState('unit.id', $this->item->unit_id);
     }
-
+    
     return $this->item;
   }
 

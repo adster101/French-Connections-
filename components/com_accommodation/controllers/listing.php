@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class AccommodationControllerProperty extends JControllerForm
+class AccommodationControllerListing extends JControllerForm
 {
 	public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
 	{

@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HTML View class for the HelloWorld Component
  */
-class AccommodationViewProperty extends JViewLegacy {
+class AccommodationViewListing extends JViewLegacy {
 
   // Overwriting JView display method
   function display($tpl = null) {
@@ -50,7 +50,8 @@ class AccommodationViewProperty extends JViewLegacy {
     
     // Check for errors.
     $errors = $this->get('Errors');
-    if (count($errors)) {
+
+    if (count($errors) > 0) {
       // Generate a logger instance for reviews
       JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('General'));
       JLog::add('There was a problem fetching listing details for - ' . $this->item->id . ')' . implode('<br />', $errors), JLog::ALL, 'General');

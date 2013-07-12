@@ -19,7 +19,7 @@ defined('_JEXEC') or die;
  * @since   2.5
  */
 function FcSearchBuildRoute(&$query) {
-
+  
   $segments = array();
   
   // get a menu item based on Itemid or currently active
@@ -188,6 +188,5 @@ function FcSearchParseRoute($segments) {
       $vars[$filter[0]] = str_replace(':', '-', $segment);
     }
   }
-
   return $vars;
 }

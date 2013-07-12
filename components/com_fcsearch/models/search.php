@@ -768,6 +768,7 @@ class FcSearchModelSearch extends JModelList {
     // Get the configuration options.
     $app = JFactory::getApplication();
     $input = $app->input;
+
     $params = $app->getParams();
     $user = JFactory::getUser();
     // Should apply this filter to other params here as well...
