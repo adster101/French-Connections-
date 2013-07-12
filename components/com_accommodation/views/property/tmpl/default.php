@@ -4,12 +4,14 @@ defined('_JEXEC') or die('Restricted access');
 $language = JFactory::getLanguage();
 $lang = $language->getTag();
 $price_range = array();
-foreach ($this->tariffs as $tariff) {
-  $price_range[] = $tariff->tariff;
+
+if (count($this->tariffs > 0)) {
+  foreach ($this->tariffs as $tariff) {
+    $price_range[] = $tariff[2];
+  }
 }
 
 JHTML::_('behavior.formvalidation');
-
 ?>
 
 <div class="row-fluid">
@@ -140,7 +142,7 @@ JHTML::_('behavior.formvalidation');
           </span>         
         </p>   
       <?php endif; ?>   
-     
+
       <hr class="clear" />
 
       <?php if ($this->reviews) : ?>
@@ -241,7 +243,7 @@ JHTML::_('behavior.formvalidation');
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
-      <h2><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->nearest_town, $this->item->department_as_text, 'Region') ?></h2>  
+      <h2><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, 'Region') ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->location_details) : ?>
       <?php echo $this->item->location_details; ?>
@@ -252,7 +254,7 @@ JHTML::_('behavior.formvalidation');
 
 <!--<div class="row-fluid" id="travel">
   <div class="span12">-->
-<?php //echo $this->loadTemplate('navigator');   ?>
+<?php //echo $this->loadTemplate('navigator');    ?>
 <!--</div>
 </div>-->
 
@@ -272,7 +274,7 @@ JHTML::_('behavior.formvalidation');
 
 <!--<div class="row-fluid" id="activities">
   <div class="span12">-->
-<?php //echo $this->loadTemplate('navigator');   ?>
+<?php //echo $this->loadTemplate('navigator');    ?>
 <!--</div>
 </div>-->
 <div class="row-fluid">
@@ -466,14 +468,11 @@ JHTML::_('behavior.formvalidation');
     </p>
   </div>
   <div class="span4">
-    <h4><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY') ?></h4>
     <table class="key">
       <tr>
         <td class="available"></td>
         <td>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></td>
-      </tr>
-      <tr><td>&nbsp;</td></tr>
-      <tr>
+
         <td class="unavailable">&nbsp;</td>
         <td>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></td>
       </tr>
@@ -573,34 +572,34 @@ JHTML::_('behavior.formvalidation');
 </div>
 <script>
   jQuery(document).ready(function() {
- 
-    initialize();
+
+  initialize();
   });
 
   function initialize() {
-    var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>,  <?php echo $this->item->longitude ?>);
-    var myOptions = {
-      center: myLatLng,
-      zoom: 6,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true,
-      zoomControl:true
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    var marker = new google.maps.Marker({
-      position: myLatLng,
-      map:map,
-      title:"<?php echo $this->item->unit_title ?>"
-    });
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-      // 3 seconds after the center of the map has changed, pan back to the
-      // marker.
-      window.setTimeout(function() {
-        map.panTo(marker.getPosition());
-      }, 3000);
-    });
+  var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>,  <?php echo $this->item->longitude ?>);
+  var myOptions = {
+  center: myLatLng,
+  zoom: 6,
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+  disableDefaultUI: true,
+  zoomControl:true
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  var marker = new google.maps.Marker({
+  position: myLatLng,
+  map:map,
+  title:"<?php echo $this->item->unit_title ?>"
+  });
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+  // 3 seconds after the center of the map has changed, pan back to the
+  // marker.
+  window.setTimeout(function() {
+  map.panTo(marker.getPosition());
+  }, 3000);
+  });
   }    
- 
+
 
 </script>
 

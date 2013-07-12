@@ -105,84 +105,101 @@ class AccommodationModelProperty extends JModelForm {
       $unit_id = $this->getState('unit.id', false);
 
       $select = '
-          pl.department,
-          pl.city,
-          unit.toilets,
-          unit.bathrooms,
-          unit.id as unit_id,
-          ( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms,
-          single_bedrooms,
-          double_bedrooms,
-          triple_bedrooms,
-          quad_bedrooms,
-          twin_bedrooms,
-          pl.id,
-          pl.created_by,
-          location_details,
-          internal_facilities_other,
-          external_facilities_other,
-          activities_other,
-          getting_there,
-          pl.title,
-          occupancy,
-          distance_to_coast,
-          pl.latitude,
-          pl.longitude,
-          additional_price_notes,
-          linen_costs,
-          linen_costs,
-          date_format(availability_last_updated_on, \'%D %M %Y\') as availability_last_updated_on,
-          unit.unit_title,
-          unit.description,
-          date_format(pl.created_on, \'%M %Y\') as advertising_since,
-          a.title as changeover_day,
-          ufc.phone_1,
-          ufc.phone_2,
-          ufc.phone_3,
-          ufc.website,
-          b.title as tariffs_based_on,
-          c.title as base_currency,
-          d.title as accommodation_type,
-          e.title as property_type,
-          f.title as nearest_town,
-          h.title as department_as_text';
+        a.id,
+        b.id as unit_id,
+        c.title,
+        c.location_details,
+        c.getting_there,
+        c.latitude,
+        c.longitude,
+        c.distance_to_coast,
+        c.exchange_rate_eur,
+        c.exchange_rate_usd,
+        c.video_url,
+        c.booking_form,
+        c.deposit,
+        c.security_deposit,
+        c.payment_deadline,
+        c.evening_meal,
+        c.additional_booking_info,
+        c.terms_and_conditions,
+        c.first_name,
+        c.surname,
+        c.address,
+        c.phone_1,
+        c.phone_2,
+        c.phone_3,
+        c.city as city_id,
+        d.changeover_day,
+        d.toilets,
+        d.bathrooms,
+        ( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms, 
+        d.single_bedrooms,
+        d.double_bedrooms,
+        d.triple_bedrooms,
+        d.quad_bedrooms,
+        d.twin_bedrooms,
+        d.internal_facilities_other, 
+        d.external_facilities_other, 
+        d.activities_other, 
+        d.occupancy,
+        d.additional_price_notes,
+        d.linen_costs,
+        date_format(b.availability_last_updated_on, "%D %M %Y") as availability_last_updated_on, 
+        d.unit_title,
+        d.description,
+        e.title as city,
+        f.title as accommodation_type,
+        g.title as property_type,
+        h.title as department,
+        i.title as base_currency,
+        j.title as tariffs_based_on';
 
       // Language logic - essentially need to do two things, if in French
       // 1. Load the attributes_translation table in the below joins
       // 2. Load property translations for the property
 
       if ($lang === 'fr-FR') {
-
+        // 
+        echo "Woot, Frenchy penchy!";
+        die;
       }
 
       $query = $this->_db->getQuery(true);
 
       $query->select($select);
-
-      $query->from('#__property_listings as pl');
-
+ 
       // Join the units table in, only retrieves one at a time??
-      $query->leftJoin('#__property_units unit ON pl.id = unit.parent_id');
+      $query->from('#__property as a');
+      $query->leftJoin('#__unit b ON a.id = b.property_id');
+      $query->leftJoin('#__property_versions c ON c.parent_id = a.id');
+      $query->leftJoin('#__unit_versions d ON d.unit_id = b.id');
 
       // If unit ID is specified load that unit instead of the default one
       if ($unit_id) {
-        $query->where('unit.id = ' . (int) $unit_id);
+        //$query->where('unit.id = ' . (int) $unit_id);
       }
 
-      $query->where('pl.id=' . (int) $id);
-      $query->where('pl.published = 1');
-      $query->where('unit.published = 1');
+      $query->where('a.id=' . (int) $id);
+      $query->where('b.id=' . (int) $unit_id);
+      $query->where('a.published = 1');
+      $query->where('b.published = 1');
+      $query->where('c.review = 0');
+      $query->where('d.review = 0');
+      $query->where('a.expiry_date > now()');
 
-      $query->leftJoin('#__attributes a ON a.id = unit.changeover_day');
-      $query->leftJoin('#__attributes b ON b.id = unit.tariff_based_on');
-      $query->leftJoin('#__attributes c ON c.id = unit.base_currency');
-      $query->leftJoin('#__attributes d ON d.id = unit.accommodation_type');
-      $query->leftJoin('#__attributes e ON e.id = unit.property_type');
-      $query->leftJoin('#__classifications f ON f.id = pl.city');
-      $query->leftJoin('#__classifications h ON h.id = pl.department');
-      $query->leftJoin('#__users u on pl.created_by = u.id');
-      $query->leftJoin('#__user_profile_fc ufc on pl.created_by = ufc.user_id');
+      //$query->leftJoin('#__attributes a ON a.id = unit.changeover_day');
+      //$query->leftJoin('#__attributes e ON e.id = unit.property_type');
+      $query->leftJoin('#__classifications e ON e.id = c.city');
+      //$query->leftJoin('#__users u on pl.created_by = u.id');
+      //$query->leftJoin('#__user_profile_fc ufc on pl.created_by = ufc.user_id');
+      $query->leftJoin('#__attributes f ON f.id = d.accommodation_type');
+      $query->leftJoin('#__attributes g ON g.id = d.property_type');
+      $query->leftJoin('#__classifications h ON h.id = c.department');
+      $query->leftJoin('#__attributes i ON i.id = d.base_currency');
+      $query->leftJoin('#__attributes j ON j.id = d.tariff_based_on');
 
+      
       if (!$this->item = $this->_db->setQuery($query)->loadObject()) {
         $this->setError($this->_db->getError());
       }
@@ -260,15 +277,17 @@ class AccommodationModelProperty extends JModelForm {
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('units'));
-        JLog::add('Retrieving unit for - ' . $id . ')', JLog::ALL, 'units');
+        JLog::add('Retrieving units for - ' . $id . ')', JLog::ALL, 'units');
 
         // Get the node and children as a tree.
         $query = $this->_db->getQuery(true);
-        $select = 'unit_title,id,occupancy,parent_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
+        $select = 'unit_title,a.id,occupancy,parent_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
         $query->select($select)
-                ->from('#__property_units')
-                ->where('parent_id = ' . (int) $id)
-                ->where('published = 1')
+                ->from('#__unit a')
+                ->join('left', '#__unit_versions b on a.id = b.unit_id')
+                ->where('a.property_id = ' . (int) $id)
+                ->where('a.published = 1')
+                ->where('b.review = 0')
                 ->order('ordering');
 
         return $this->_db->setQuery($query)->loadObjectList();
@@ -291,11 +310,10 @@ class AccommodationModelProperty extends JModelForm {
   public function getReviews() {
 
     if (!isset($this->reviews)) {
+      $id = $this->getState('unit.id');
 
       try {
         // Get the state for this property ID
-        $id = $this->getState('unit.id');
-
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
         JLog::add('Retrieving reviews for - ' . $id . ')', JLog::ALL, 'reviews');
@@ -336,17 +354,17 @@ class AccommodationModelProperty extends JModelForm {
 
     $unit_id = $this->getState('unit.id');
 
-// Generate a logger instance for availability
+    // Generate a logger instance for availability
     JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('availability'));
     JLog::add('Retrieving availability for - ' . $id . ')', JLog::ALL, 'availability');
 
     // First we need an instance of the availability table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
 
-    $availabilityTable = JTable::getInstance('Availability', 'HelloWorldTable', array());
+    $model = JModelLegacy::getInstance('Availability', 'HelloWorldModel', array());
 
     // Attempt to load the availability for this property
-    $availability = $availabilityTable->load($unit_id);
+    $availability = $model->getAvailability($unit_id);
 
     // Check the $availability loaded correctly
     if (!$availability) {
@@ -359,7 +377,7 @@ class AccommodationModelProperty extends JModelForm {
       } else {
         // Not fatal error
         // Log this out to property log
-        JLog::add('Problem fetching availability for - ' . $id . '(No availability?))', JLog::ERROR, 'availability');
+        JLog::add('Problem fetching availability for - ' . $unit_id . '(No availability?))', JLog::ERROR, 'availability');
       }
     }
 
@@ -382,7 +400,6 @@ class AccommodationModelProperty extends JModelForm {
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
 
     $tariffsTable = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
-
 
     // Get the state for this property ID
     $id = $this->getState('unit.id');
@@ -411,7 +428,7 @@ class AccommodationModelProperty extends JModelForm {
 
       try {
         // Get the state for this property ID
-        $id = $this->getState('unit.id');
+        $id = $this->getState('unit.id', '');
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('offers'));
@@ -462,15 +479,19 @@ class AccommodationModelProperty extends JModelForm {
 
     // Get a list of the images uploaded against this listing
     $query->select('
-      id,
-      property_id,
-      image_file_name,
-      caption,
-      ordering
+      a.id,
+      a.property_id,
+      a.image_file_name,
+      a.caption,
+      a.ordering
     ');
-    $query->from('#__property_images_library');
+    $query->from('#__property_images_library a');
+
+    // property_id actually refers to unit id
+    $query->join('left', '#__unit_versions b on a.property_id = b.unit_id');
 
     $query->where('property_id = ' . (int) $unit_id);
+    $query->where('b.review = 0'); // Should ensure we get the published images 
 
     $query->order('ordering', 'asc');
 
@@ -503,7 +524,7 @@ class AccommodationModelProperty extends JModelForm {
     $table = JTable::getInstance('Classification', 'ClassificationTable');
 
     try {
-      $crumbs = $table->getPath($pk = $this->item->city);
+      $crumbs = $table->getPath($pk = $this->item->city_id);
     } catch (Exception $e) {
 
       // Log the exception here...
@@ -535,7 +556,7 @@ class AccommodationModelProperty extends JModelForm {
 
       $query->insert('#__property_views');
 
-      $query->columns(array('property_id', 'date'));
+      $query->columns(array('property_id', 'date_created'));
 
       $date = JFactory::getDate()->toSql();
 

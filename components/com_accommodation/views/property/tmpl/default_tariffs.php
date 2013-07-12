@@ -7,15 +7,15 @@ defined('_JEXEC') or die('Restricted access');
     <th><?php echo JText::_('COM_ACCOMMODATION_PERIOD'); ?></th>
     <th><?php echo JText::_('COM_ACCOMMODATION_TARIFFS'); ?></th>
   </thead>
-  <?php foreach ($this->tariffs as $period => $tariff) : ?>
+  <?php foreach ($this->tariffs as $tariff) : ?>
   <tr>
     <td>
-      <?php echo htmlspecialchars($tariff->start_date); ?>
+      <?php echo htmlspecialchars($tariff[0]); ?>
       &ndash;
-      <?php echo htmlspecialchars($tariff->end_date); ?>
+      <?php echo htmlspecialchars($tariff[1]); ?>
     </td> 
     <td>
-      <?php echo htmlspecialchars($tariff->tariff); ?>
+      <?php echo htmlspecialchars($tariff[2]); ?>
       <?php echo htmlspecialchars($this->item->base_currency); ?>
       <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>  
     </td>

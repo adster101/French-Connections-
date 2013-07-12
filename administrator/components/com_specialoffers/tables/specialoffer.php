@@ -51,7 +51,7 @@ class SpecialOffersTableSpecialOffer extends JTable
 		$query = $this->_db->getQuery(true);
 		$query->select('title,description');
 		$query->from($this->_tbl);
-    $query->where('property_id = ' . $this->_db->quote($id));
+    $query->where('unit_id = ' . $this->_db->quote($id));
     $query->where('published = 1');
     $query->where('start_date <= ' . $this->_db->Quote(date('Y-m-d')));
     $query->where('end_date >= ' . $this->_db->Quote(date('Y-m-d')));

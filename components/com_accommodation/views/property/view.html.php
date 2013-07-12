@@ -49,10 +49,11 @@ class AccommodationViewProperty extends JViewLegacy {
 		$model->hit(); 
     
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    $errors = $this->get('Errors');
+    if (count($errors)) {
       // Generate a logger instance for reviews
-      JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('View_property'));
-      JLog::add('Problem fetching property listing details for - ' . $id . ')' . implode('<br />', $errors), JLog::ALL, 'facilities');
+      JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('General'));
+      JLog::add('There was a problem fetching listing details for - ' . $this->item->id . ')' . implode('<br />', $errors), JLog::ALL, 'General');
       JError::raiseError(500, 'Problem loading property details. Error has been logged. Please contact us if this problem persists.');
       return false;
     }
@@ -75,9 +76,9 @@ class AccommodationViewProperty extends JViewLegacy {
     $document = JFactory::getDocument();
         
     if ($this->item->accommodation_type == 'Bed and Breakfast') {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->nearest_town, $this->item->department_as_text);
+      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->city, $this->item->department);
     } else {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->nearest_town, $this->item->department_as_text);
+      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->city, $this->item->department);
     }
     
     // Set document and page titles
