@@ -175,7 +175,7 @@ else
 					<jdoc:include type="modules" name="position-3" style="none" />
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />
-					<jdoc:include type="modules" name="position-2" style="none" />
+					<jdoc:include type="modules" name="position-2" style="xhtml" />
 					<!-- End Content -->
 				</div>
 				<?php if ($this->countModules('position-7')) : ?>

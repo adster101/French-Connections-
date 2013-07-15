@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
     echo "class='active'";
   }
   ?>>
-      <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . (int) $unit->parent_id . '&unit_id=' . (int) $unit->id) ?>">
+      <a href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $unit->parent_id . '&unit_id=' . (int) $unit->id) ?>">
   <?php echo $unit->unit_title; ?><br />
           <?php if ($unit->occupancy && $unit->bedrooms) : ?>
             <span class="small">
