@@ -59,4 +59,14 @@ class HelloWorldModelSubmit extends JModelAdmin {
     return $data;
   }
 
+  
+  public function preprocessForm(\JForm $form, $data, $group = 'content') {
+
+    // Get the user
+    $user = JFactory::getUser();
+    
+    // Check whether the user can 
+    
+  }
+  
 }

@@ -99,6 +99,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
   }
 
   /**
+   * Depreciated
    * Method to get a list of units for a given property listing
    *
    * @param   integer  $pk  The id of the property listing.
@@ -136,9 +137,15 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     // Convert to the JObject before adding other data.
     $units = JArrayHelper::toObject($return, 'JObject');
 
-    return $units;
+    //return $units;
   }
 
+  /**
+   * 
+   * getProgress - depreciated use listing getListQuery instead.
+   * 
+   * @return boolean
+   */
   public function getProgress() {
 
     $return = false;
@@ -157,7 +164,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       }
     }
 
-    return $return;
+    //return $return;
   }
 
   /**

@@ -19,6 +19,7 @@
     <action name="helloworld.sort.expiry" title="COM_HELLOWORLD_SORT_BY_EXPIRY_DATE" description="" />
 		<action name="helloworld.sort.prn" title="COM_HELLOWORLD_SORT_BY_PRN" description="" />
 		<action name="helloworld.ownermenu.view" title="COM_HELLOWORLD_OWNER_MENU_VIEW" description="" />
+		<action name="helloworld.reports.renewal" title="Access to the renewal report filters" description="" />
 		<action name="helloworld.images.delete" title="COM_HELLOWORLD_HELLOWORLD_DELETE_IMAGE" description="" />
 		<action name="helloworld.images.edit" title="COM_HELLOWORLD_HELLOWORLD_EDIT_IMAGE" description="" />
 		<action name="helloworld.images.create" title="COM_HELLOWORLD_HELLOWORLD_CREATE_IMAGE" description="" />

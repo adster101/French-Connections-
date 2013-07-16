@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="COM_REVIEW_ADD_REVIEW_TITLE">
-		<message>COM_REVIEW_ADD_REVIEW_DESCRIPTION</message>
+	<layout title="Link to accommodation component">
+		<message>There ain't no params twat face...</message>
 	</layout>
 	<fields
 		name="request"

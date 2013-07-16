@@ -57,7 +57,6 @@ class HelloWorldViewListing extends JViewLegacy {
 
     // Set the document
     $this->setDocument();
-
   }
 
   /**
@@ -69,28 +68,38 @@ class HelloWorldViewListing extends JViewLegacy {
 
     $user = JFactory::getUser();
 
+    $layout = JFactory::getApplication()->input->get('layout', 'default', 'string');
+
     $canDo = HelloWorldHelper::getActions();
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
 
-    JToolBarHelper::custom('listings','arrow-left-2','','COM_HELLOWORLD_HELLOWORLD_BACK_TO_PROPERTY_LIST',false);
+    JToolBarHelper::custom('listings', 'arrow-left-2', '', 'COM_HELLOWORLD_HELLOWORLD_BACK_TO_PROPERTY_LIST', false);
 
 
+    if ($layout == 'default') {
+      // Only show the add units button if there is at least one listing
+      if (count($this->items) > 0) {
+        if ($canDo->get('core.delete')) {
+          JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
+        }
 
-    // Only show the add units button if there is at least one listing
-    if (count($this->items) > 0) {
-      if ($canDo->get('core.delete')) {
-        JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
-      }
+        if ($canDo->get('core.create')) {
+          JToolBarHelper::addNew('unitversions.add', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
+        }
 
-      if ($canDo->get('core.create')) {
-        JToolBarHelper::addNew('unitversions.add', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
-      }
-
-      if ($canDo->get('helloworld.property.preview')) {
-        JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);
+        if ($canDo->get('helloworld.property.preview')) {
+          JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);
+        }
       }
     }
+
+    if ($layout == 'review') {
+      if ($canDo->get('helloworld.property.review')) {
+        JToolBarHelper::deleteList('', 'listing.approve', 'BLAH');
+      }
+    }
+
 
     // Display a helpful navigation for the owners
     if ($canDo->get('helloworld.ownermenu.view')) {

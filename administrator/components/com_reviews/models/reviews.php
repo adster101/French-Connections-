@@ -95,7 +95,7 @@ class ReviewsModelReviews extends JModelList
 		// From the hello table
 		$query->from('#__reviews r');
 
-    $query->leftJoin('#__unit hw on hw.id = r.unit_id');
+    $query->leftJoin('#__unit hw on hw.property_id = r.unit_id');
 
     // Filter by published state
 		$published = $this->getState('filter.published');

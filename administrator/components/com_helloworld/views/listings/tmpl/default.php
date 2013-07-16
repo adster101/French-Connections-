@@ -28,16 +28,19 @@ $listing_id = '';
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
-      <hr />
-      <h4>Expiry date filters</h4>
-      <?php echo JHtml::_('calendar', $expiry_start_date, 'expiry_start_date', 'expiry_start_date', '%Y-%m-%d', array()); ?>
-      <?php echo JHtml::_('calendar', $expiry_end_date, 'expiry_end_date', 'expiry_end_date', '%Y-%m-%d', array()); ?>
+      <?php if ($canDo->get('helloworld.reports.renewal')) : ?>
+        <hr />
+        <h4>Expiry date filters</h4>
+        <?php echo JHtml::_('calendar', $expiry_start_date, 'expiry_start_date', 'expiry_start_date', '%Y-%m-%d', array()); ?>
+        <?php echo JHtml::_('calendar', $expiry_end_date, 'expiry_end_date', 'expiry_end_date', '%Y-%m-%d', array()); ?>
 
-      <div class="btn-group hidden-phone pull-right">
-        <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-        <button class="btn tip hasTooltip" type="button" onclick="document.id('expiry_start_date').value='';document.id('expiry_end_date').value='';this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-      </div>
-
+        <div class="btn-group hidden-phone pull-right">
+          <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+          <button class="btn tip hasTooltip" type="button" onclick="document.id('expiry_start_date').value = '';
+                  document.id('expiry_end_date').value = '';
+                  this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+        </div>
+      <?php endif; ?>
     </div>
     <div id="j-main-container" class="span10">
     <?php else : ?>
@@ -54,14 +57,15 @@ $listing_id = '';
         </div>
         <div class="btn-group pull-left hidden-phone">
           <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value='';this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+          <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
+              this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
         </div>
         <div class="btn-group pull-right hidden-phone">
           <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
           <?php echo $this->pagination->getLimitBox(); ?>
         </div>
       </div>
-      <?php if (empty($this->items)) : // This user doesn't have any listings against their account   ?>
+      <?php if (empty($this->items)) : // This user doesn't have any listings against their account    ?>
         <hr />
         <div class="alert alert-block">
           <strong><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_NO_LISTINGS'); ?><strong>
@@ -87,9 +91,6 @@ $listing_id = '';
                       </th>
                     <?php endif; ?>
                     <th>
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
-                    </th>
-                    <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_GREETING'); ?>
                     </th>
                     <th width="10%">
@@ -108,7 +109,11 @@ $listing_id = '';
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
                     </th>
-
+                    <?php if ($canDo->get('helloworld.property.review')) : ?>  
+                      <th>
+                        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
+                      </th>
+                    <?php endif; ?>
                     <?php if ($canDo->get('helloworld.display.owner')) : ?>
                       <th>
                         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY'); ?>
@@ -122,13 +127,13 @@ $listing_id = '';
                 $canPublish = $canDo->get('helloworld.edit.publish');
 
                 $canSubmitForReview = $canDo->get('helloworld.property.submit');
-                $canReview = $canDo->get('helloworld.property.review');
+                $canReview = $canDo->get('helloworld.property.review', false);
+                $canCheckin = true;
                 ?>
 
                 <tbody>
                   <?php foreach ($this->items as $i => $item): ?>
                     <?php
-
                     $days_to_renewal = HelloWorldHelper::getDaysToExpiry($item->expiry_date);
 
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
@@ -137,6 +142,7 @@ $listing_id = '';
                       $enabled = false;
                     } elseif ($item->review == 1) {
                       $enabled = $canDo->get('helloworld.property.submit');
+                      $enabled = false;
                     } elseif ($item->review == 2) {
                       $enabled = $canDo->get('helloworld.property.review');
                     } elseif ($item->review == -1) {
@@ -157,13 +163,7 @@ $listing_id = '';
                           </td>
                         <?php endif; ?>
                         <td>
-                          <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listings.', $enabled); ?>
-                        </td>
-                        <td>
                           <?php if ($item->review != 2) : ?>
-                            <!--
-                              <a href="<?php // echo JRoute::_('index.php?option=com_helloworld&task=property.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1';             ?>">
-                            -->
                             <?php echo $this->escape($item->title); ?>
                             <br>
                             <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
@@ -172,7 +172,6 @@ $listing_id = '';
                               <?php else: ?>
                                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_MORE_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php endif; ?>
-                              </span>
                             </a>
                           <?php else: ?>
                             <?php echo $this->escape($item->title); ?>
@@ -191,17 +190,12 @@ $listing_id = '';
                           <?php endif; ?>
                         </td>
                         <td>
-
-                          <?php if ($item->review != 2) : ?>
-                            <p>
-                              <?php echo JHtml::_('property.autorenewalstate', $auto_renew, $item->id); ?>
-                            </p>
-                            <p>
-                              <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id); ?>
-                            </p>
-                          <?php else: ?>
-                            Locked for edit
-                          <?php endif; ?>
+                          <p>
+                            <?php echo JHtml::_('property.autorenewalstate', $auto_renew, $item->id); ?>
+                          </p>
+                          <p>
+                            <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview); ?>
+                          </p>
                         </td>
                         <td>
                           <?php echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
@@ -209,6 +203,15 @@ $listing_id = '';
                         <td>
                           <?php echo JText::_($item->modified); ?>
                         </td>
+                        <?php if ($canDo->get('helloworld.property.review')): ?>
+                          <td>
+                            <?php if ($item->checked_out) : ?>
+                              <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'listing.', $canCheckin); ?>
+                            <?php else: ?>
+                              <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
+                            <?php endif; ?>
+                          </td>
+                        <?php endif ?>                        
                         <?php if ($canDo->get('helloworld.display.owner')) : ?>
                           <td>
                             <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">

@@ -172,17 +172,17 @@ JHTML::_('behavior.formvalidation');
         </p>
       <?php endif; ?>
       <p>
-        <a href="<?php echo JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $this->item->id); ?>">
+        <a href="<?php echo JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=194&id=' . $this->item->id); ?>">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
         </a>
       </p>
 
       <hr />
       <p class="center">
-        <a class="btn btn-large" href="#availability">
+        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
         </a>
-        <a class="btn btn-primary btn-large" href="#email">
+        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id); ?>#email">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
         </a>
       </p>

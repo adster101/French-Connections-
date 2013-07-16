@@ -31,6 +31,10 @@ class HelloWorldControllerListing extends JControllerForm {
     if (empty($this->extension)) {
       $this->extension = JRequest::getCmd('extension', 'com_helloworld');
     }
+    
+    $this->registerTask('checkin', 'review');
+
+    
   }
 
   /**
@@ -212,7 +216,6 @@ class HelloWorldControllerListing extends JControllerForm {
     // If the property has expired then we need to redirect the user to the renewal screen (or they will click the renewal button)
     // If not expired then we need to determine if they have added any new billable items
     // Otherwise, should just be submitted to the PFR and locked for editing.
-
     // Redirect to the renewal payment/summary form thingy...
     $this->setRedirect(
             JRoute::_(
@@ -231,6 +234,69 @@ class HelloWorldControllerListing extends JControllerForm {
     // etc
   }
 
+  /**
+   * review controller action - handles the case when a user wants to review the changes to a listing.
+   * 
+   * 
+   */
+  public function review() {
 
+    // Get the user
+    $user = JFactory::getUser();
+    $model = $this->getModel('Property', 'HelloWorldModel');
+    $table = $model->getTable('Property', 'HelloWorldTable');
+    $cid = $this->input->post->get('cid', array(), 'array');
+    $app = JFactory::getApplication();
+    $context = "$this->option.review.$this->context";
+
+    $recordId = (int) (count($cid) ? $cid[0] : 0);
+    $checkin = property_exists($table, 'checked_out');
+
+    $urlVar = 'id';
+    
+    // Check user is authed to review
+    if (!$user->authorise('helloworld.property.review', $this->option)) {
+
+      // Set the internal error and also the redirect error.
+      $this->setError(JText::_('COM_HELLOWORLD_PROPERTY_REVIEW_NOT_AUTHORISED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . $this->getRedirectToListAppend(), false
+              )
+      );
+
+      return false;
+    }
+
+    // Check property out to user reviewing
+    if ($checkin && !$model->checkout($recordId)) {
+      // Check-out failed, display a notice but allow the user to see the record.
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_CHECKOUT_FAILED', $model->getError()));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false
+              )
+      );
+
+      return false;
+    } else {
+      // Check-out succeeded, push the new record id into the session.
+      $this->holdEditId($context, $recordId);
+      $app->setUserState($context . '.data', null);
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=review&id=' . $recordId, false
+              )
+      );
+
+      return true;
+    }
+  }
 
 }

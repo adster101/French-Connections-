@@ -130,7 +130,10 @@ class JHtmlProperty {
    *
    * @since  3.0
    */
-  public static function reviewStates() {
+  public static function reviewStates($checked_out = 0) {
+        
+    
+    
     $states = array(
         -1 => array(
             'task' => '',
@@ -153,8 +156,8 @@ class JHtmlProperty {
         1 => array(
             'task' => 'submit',
             'text' => '',
-            'active_title' => 'COM_PROPERTY_TOOLBAR_ACTIVATE',
-            'inactive_title' => '',
+            'active_title' => '',
+            'inactive_title' => 'COM_HELLOWORLD_PROPERTY_NON_SUBMITTED',
             'tip' => true,
             'active_class' => 'warning',
             'inactive_class' => 'warning'
@@ -165,8 +168,8 @@ class JHtmlProperty {
             'active_title' => 'COM_HELLOWORLD_PROPERTY_LOCKED_FOR_EDITING',
             'inactive_title' => 'COM_HELLOWORLD_PROPERTY_LOCKED_FOR_EDITING',
             'tip' => true,
-            'active_class' => 'locked',
-            'inactive_class' => 'locked'
+            'active_class' => 'unpublish',
+            'inactive_class' => 'unpublish'
         ),
     );
     return $states;
@@ -176,7 +179,7 @@ class JHtmlProperty {
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
-  public static function renewalButton($days = '', $id = '') {
+  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false) {
 
     // Array of image, task, title, action.
     // Possible renewal states are
@@ -187,6 +190,7 @@ class JHtmlProperty {
 
     $value = '';
     $html = '';
+    $allowEdit = true;
 
     if ($days <= 7 && $days >= 0 && !empty($days)) { // Property about to expire
       $value = 0;
@@ -194,8 +198,13 @@ class JHtmlProperty {
       $value = 1;
     } elseif (empty($days)) { // A new sign up which has never been published...
       $value = 2;
-    } elseif ($days > 7) { // 7 days until renewal
+    } elseif ($days > 7) { // 7 days or more until renewal
       $value = 3;
+    } 
+
+    if ($review == 2 && $canReview === false) {
+      $value = 4;
+      $allowEdit = false;
     }
 
     $states = array(
@@ -226,15 +235,28 @@ class JHtmlProperty {
             'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING',
             'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON',
             'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
-            'btn-primary')
+            'btn-primary'),
+        4 => array(
+            'locked',
+            'listing.view',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_LOCKED_BUTTON_TOOLTIP',
+            'btn-primary disabled')
     );
 
     $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
+    if ($allowEdit) {
+      $html .= '<a rel="tooltip" class="btn ' . $state[5] . '" href="' . JRoute::_('index.php?option=com_helloworld&task=' . $state[1] . '&id=' . (int) $id) . '" title="' . JText::_($state[4]) . '">';
+      
+    } else {
+      $html .= '<span rel="tooltip" class="btn ' . $state[5] . '" title="' . JText::_($state[4]) . '">';
 
-    $html .= '<a rel="tooltip" class="btn ' . $state[5] . '" href="' . JRoute::_('index.php?option=com_helloworld&task=' . $state[1] . '&id=' . (int) $id) . '" title="' . JText::_($state[4]) . '">';
+    }
     $html .= '<i class=\'icon-' . $state[0] . '\'></i>&nbsp;';
     $html .= JText::_($state[3]);
-    $html .='</a>';
+    
+    $html.= ($allowEdit) ? '</a>' : '</span>';
 
     return $html;
   }

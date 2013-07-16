@@ -143,7 +143,7 @@ class HelloWorldModelListing extends JModelList {
         tariff_based_on,
         (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
         (select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) as availability,
-        (select count(*) from qitz3_tariffs where id = d.id and start_date > NOW()) as tariffs
+        (select count(*) from qitz3_tariffs where id = d.id and end_date > NOW()) as tariffs
       ');
     $query->from('#__property as a');
     $query->join('inner', '#__property_versions as b on (a.id = b.parent_id and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id))');

@@ -38,7 +38,7 @@ class HelloWorldTableTariffs extends JTable {
     $query->select("date_format(start_date, '%d-%m-%Y') as start_date, date_format(end_date, '%d-%m-%Y') as end_date, tariff");
     $query->from($this->_tbl);
     $query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
-    $query->where($this->_db->quoteName('start_date') . '>= now()');
+    $query->where($this->_db->quoteName('end_date') . '>= now()');
     $this->_db->setQuery($query);
 
     try {

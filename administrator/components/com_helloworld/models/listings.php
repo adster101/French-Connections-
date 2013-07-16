@@ -32,7 +32,7 @@ class HelloWorldModelListings extends JModelList {
           'created_time', 'a.created_time',
           'created_user_id', 'a.created_user_id',
           'snoozed', 'a.snooze_until'
-          );
+      );
     }
     parent::__construct($config);
   }
@@ -63,10 +63,10 @@ class HelloWorldModelListings extends JModelList {
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
 
-    $expiry_start_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_start_date', 'expiry_start_date', '','date');
+    $expiry_start_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_start_date', 'expiry_start_date', '', 'date');
     $this->setState('filter.expiry_start_date', $expiry_start_date);
 
-    $expiry_end_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_end_date', 'expiry_end_date', '','date');
+    $expiry_end_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_end_date', 'expiry_end_date', '', 'date');
     $this->setState('filter.expiry_end_date', $expiry_end_date);
 
     $review_state = $this->getUserStateFromRequest($this->context . '.filter.review', 'filter_review', '');
@@ -136,6 +136,8 @@ class HelloWorldModelListings extends JModelList {
     $query->select('
       a.id,
       b.title,
+      a.checked_out,
+      a.checked_out_time,
       a.created_by,
       a.published,
       date_format(a.expiry_date, "%D %M %Y") as expiry_date,
@@ -150,11 +152,18 @@ class HelloWorldModelListings extends JModelList {
       $query->select('
         u.email,
         p.phone_1,
-        u.name
+        u.name,
+        uc.name as editor
       ');
       $query->join('LEFT', '#__users AS u ON u.id = a.created_by');
       $query->join('LEFT', '#__user_profile_fc AS p ON p.user_id = u.id');
+
+      // Join over the users for the checked out user.
+      $query->select('uc.name AS editor');
+      $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
     }
+
+
 
     // Fundamental check to ensure owners only see their own listings.
     // This is an ACL check, e.g. core.edit.own and core.edit
@@ -226,7 +235,7 @@ class HelloWorldModelListings extends JModelList {
 
     // From the hello table
     $query->from('#__property as a');
-    $query->join('inner','#__property_versions as b on (
+    $query->join('inner', '#__property_versions as b on (
       a.id = b.parent_id
       and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id)
     )');
