@@ -212,8 +212,10 @@ class HelloWorldControllerListing extends JControllerForm {
 
     // It's all good.
     // Here we need to determine how to handle this submission for review.
-    // If the expiry date is imminent then we need to redirect the user to the renewal screen.
+    
+    // If the expiry date is imminent (e.g. within 7 days) then we need to redirect the user to the renewal screen.
     // If the property has expired then we need to redirect the user to the renewal screen (or they will click the renewal button)
+    // If a new property then same as above? No, expiry date should only be set after the review. But they do need to pay...
     // If not expired then we need to determine if they have added any new billable items
     // Otherwise, should just be submitted to the PFR and locked for editing.
     // Redirect to the renewal payment/summary form thingy...
@@ -289,9 +291,11 @@ class HelloWorldControllerListing extends JControllerForm {
       $this->holdEditId($context, $recordId);
       $app->setUserState($context . '.data', null);
 
+      $this->view_item = 'propertyversions';
+      
       $this->setRedirect(
               JRoute::_(
-                      'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=review&id=' . $recordId, false
+                      'index.php?option=' . $this->option . '&view=propertyversions&layout=review&parent_id=' . $recordId, false
               )
       );
 

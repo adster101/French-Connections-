@@ -66,7 +66,7 @@ class HelloWorldTablePropertyVersions extends JTable
 	 * @throws  RuntimeException
 	 * @throws  UnexpectedValueException
 	 */
-	public function load($keys = null, $reset = true, $latest=true)
+	public function load($keys = null, $reset = true, $latest = true)
 	{
 		if (empty($keys))
 		{
@@ -99,6 +99,10 @@ class HelloWorldTablePropertyVersions extends JTable
 		$query->from($this->_tbl);
     $query->order('id desc');
 
+    if (!$latest) {
+      $query->where('review = 0');
+    } 
+    
 		$fields = array_keys($this->getProperties());
 
 		foreach ($keys as $field => $value)
@@ -116,7 +120,7 @@ class HelloWorldTablePropertyVersions extends JTable
 
 		$row = $this->_db->loadAssoc();
 
-		// Check that we have a result.
+    // Check that we have a result.
 		if (empty($row))
 		{
 			return false;

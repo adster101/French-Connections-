@@ -36,7 +36,7 @@ class HelloWorldViewPropertyVersions extends JViewLegacy
 
     // Set some model options
     $model->setState('com_helloworld.' . $model->getName() . '.id', $listing_id);
-    $model->setState('list.limit', 10);
+    $model->setState('list.limit', 100);
 
     $this->progress = $model->getItems();
 

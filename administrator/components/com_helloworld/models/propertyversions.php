@@ -55,8 +55,36 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
    * @since   12.2
    */
   public function getItem($pk = null) {
+
+    $input = JFactory::getApplication()->input;
+    $keys_to_check = array(
+        'title',
+        'location_details',
+        'getting_there',
+        'video_url',
+        'deposit',
+        'security_deposit',
+        'evening_meal',
+        'additional_booking_info',
+        'terms_and_conditions',
+        'first_name',
+        'surname',
+        'address',
+        'phone_1',
+        'phone_2',
+        'phone_3',
+        'fax',
+        'email_1',
+        'email_2');
+    $diffs = array();
+
+    // Get the primary key and set it in the model state
     $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+
+    // Get the table reference
     $table = $this->getTable();
+
+    $layout = $input->get('layout', 'edit', 'string');
 
     if ($pk > 0) {
       // Attempt to load the row.
@@ -70,21 +98,34 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     }
 
     // Convert to the JObject before adding other data.
-    $properties = $table->getProperties(1);
+    $new = $table->getProperties(1);
 
     // If review flag is true, there is an unpublished version in the versions table.
-    if ($properties['review']) {
+    if ($layout == 'review') {
+
+      $return = $table->load($pk, 1, 0);
+
+      $old = $table->getProperties(1);
 
       // Need to load the new version details here to replace those loaded here.
+      foreach ($old as $key => $value) {
+
+        if (in_array($key, $keys_to_check)) {
+          $diff = $this->htmldiff(strip_tags($old[$key]), strip_tags($new[$key]));
+
+          $new[$key] = $diff;
+        }
+      }
+
+
+      $item = JArrayHelper::toObject($new, 'JObject');
+      $item->old = $old;
+      return $item;
     }
 
-    $item = JArrayHelper::toObject($properties, 'JObject');
 
-    if (property_exists($item, 'params')) {
-      $registry = new JRegistry;
-      $registry->loadString($item->params);
-      $item->params = $registry->toArray();
-    }
+
+    $item = JArrayHelper::toObject($new, 'JObject');
 
     return $item;
   }
@@ -361,10 +402,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
       // If $data['published_on'] is true we need to check whether a new version is required
       if (!empty($data['published_on'])) {
-    
+
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
-
         // $version should contain an array with one element. If the array contains true then we need to create a new version...
         if ($new_version_required[0]) {
 
@@ -529,6 +569,40 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     }
 
     return $property_table->id;
+  }
+
+  public function diff($old, $new) {
+    $matrix = array();
+    $maxlen = 0;
+    foreach ($old as $oindex => $ovalue) {
+      $nkeys = array_keys($new, $ovalue);
+      foreach ($nkeys as $nindex) {
+        $matrix[$oindex][$nindex] = isset($matrix[$oindex - 1][$nindex - 1]) ?
+                $matrix[$oindex - 1][$nindex - 1] + 1 : 1;
+        if ($matrix[$oindex][$nindex] > $maxlen) {
+          $maxlen = $matrix[$oindex][$nindex];
+          $omax = $oindex + 1 - $maxlen;
+          $nmax = $nindex + 1 - $maxlen;
+        }
+      }
+    }
+    if ($maxlen == 0)
+      return array(array('d' => $old, 'i' => $new));
+    return array_merge(
+            $this->diff(array_slice($old, 0, $omax), array_slice($new, 0, $nmax)), array_slice($new, $nmax, $maxlen), $this->diff(array_slice($old, $omax + $maxlen), array_slice($new, $nmax + $maxlen)));
+  }
+
+  public function htmlDiff($old, $new) {
+    $ret = '';
+    $diff = $this->diff(preg_split("/[\s]+/", $old), preg_split("/[\s]+/", $new));
+    foreach ($diff as $k) {
+      if (is_array($k))
+        $ret .= (!empty($k['d']) ? "<del>" . implode(' ', $k['d']) . "</del> " : '') .
+                (!empty($k['i']) ? "<ins>" . implode(' ', $k['i']) . "</ins> " : '');
+      else
+        $ret .= $k . ' ';
+    }
+    return $ret;
   }
 
 }
