@@ -116,7 +116,6 @@ class HelloWorldModelListing extends JModelList {
 
     // Get the access control permissions in a handy array
     $canDo = HelloWorldHelper::getActions();
-
     $id = $this->getState($this->context . '.id','');
 
     // Create a new query object.
@@ -129,6 +128,7 @@ class HelloWorldModelListing extends JModelList {
         a.id,
         a.expiry_date,
         a.review,
+        d.review as unit_updated,
         a.created_by,
         e.unit_id unit_id,
         e.parent_id,

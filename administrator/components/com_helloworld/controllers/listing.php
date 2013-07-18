@@ -295,7 +295,7 @@ class HelloWorldControllerListing extends JControllerForm {
       
       $this->setRedirect(
               JRoute::_(
-                      'index.php?option=' . $this->option . '&view=propertyversions&layout=review&parent_id=' . $recordId, false
+                      'index.php?option=' . $this->option . '&view=listingreview&layout=property&parent_id=' . $recordId, false
               )
       );
 

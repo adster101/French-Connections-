@@ -17,7 +17,7 @@ if (!empty($progress)) {
   $id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
 
   $review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
-// $expiry_date - the expiry date of this property
+  // $expiry_date - the expiry date of this property
   $expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
   $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
 }

@@ -33,7 +33,6 @@ $data['form'] = $this->form;
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
-      <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>
     </div>
     <div id="" class="span8">
     <?php else : ?>
