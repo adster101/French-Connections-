@@ -303,9 +303,11 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $table->load($pk);
         $isNew = false;
       }
-
-      // If $data['published_on'] is true we need to check whether a new version is required
-      if (!empty($data['published_on'])) {
+      
+      // If $data['review'] is true we need to check whether a new version is required
+      // Check published on date as well?
+      
+      if (!$data['review']) {
 
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
@@ -315,7 +317,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
           // As a new version is required amend the data array before we save
           $data['id'] = '';
           $data['review'] = '1';
-          $data['published_on'] = '';
         }
       }
 

@@ -442,8 +442,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $isNew = false;
       }
 
-      // Check whether this unit is published, if it is then we run the check to see if a new version is required.
-      if (!empty($data['published_on'])) {
+      // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
+      if (!($data['review'])) {
+        
         JLog::add('Checking if new unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
 
         // Let's have a before bind trigger
@@ -455,7 +456,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           $data['id'] = '';
           // Don't think that a review state is needed here.
           // Will always be set in the unit stub if it needs reviewing
-          // $data['review'] = '0';
+          $data['review'] = '0';
           $data['published_on'] = '';
           JLog::add('New unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
         }
@@ -530,6 +531,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
+      // TODO - Tidy this up as tariffs might not be present
       JLog::add('About to save tariffs for unit ID' . $table->id, JLog::ALL, 'unitversions');
 
       if (!$this->saveTariffs($table->unit_id)) {

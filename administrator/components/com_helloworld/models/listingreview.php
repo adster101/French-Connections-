@@ -22,13 +22,11 @@ class HelloWorldModelListingReview extends JModelAdmin {
    * @since	1.6
    */
   public function getForm($data = array(), $loadData = false) {
-
     // Get the form.
     $form = $this->loadForm('com_helloworld.listingreview', 'listingreview', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form)) {
       return false;
     }
-
     return $form;
   }
 
@@ -50,122 +48,79 @@ class HelloWorldModelListingReview extends JModelAdmin {
    * 
    * 
    */
-  public function getPropertyDiff($recordId = null) {
+  public function getListingDiff($recordId = null) {
 
-    // Get the primary key and set it in the model state
+    // Get the primary key set in the model state
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
 
-    // An array of keys to check using the htmldiff method
-    $keys_to_check = array(
-        'title', 'location_details', 'getting_there', 'video_url', 'deposit', 'security_deposit', 'evening_meal',
-        'additional_booking_info', 'terms_and_conditions', 'first_name', 'surname', 'address', 'phone_1', 'phone_2',
-        'phone_3', 'fax', 'email_1', 'email_2'
-    );
+    $input = JFactory::getApplication()->input;
+    $unitId = $input->get('unit_id', '', 'int');
+    $propertyId = $input->get('parent_id', '', 'int');
 
-    // Get the published version of this property.
-    $old_version = $this->getPropertyVersionDetail($recordId, 0);
+    if (!empty($unitId)) {
 
-    // Get the unpublished version of this property
-    $new_version = $this->getPropertyVersionDetail($recordId, 1);
+      // Must be reviewing a unit
+      $versions = $this->getVersionDetail($unitId, '#__unit', '#__unit_versions', 'unit_id');
 
-    $new_version = $this->getItemDiff($old_version, $new_version, $keys_to_check);
+      // An array of keys to check using the htmldiff method
+      $keys_to_check = array(
+          'unit_title', 'description', 'internal_facilities_other', 'external_facilities_other', 'activities_other', 'additional_price_notes'
+      );
+      
+      // Using the version IDs from the $versions array pull out the images and facilities 
+      // and append them to the $versions array...
+      
+      
+      
+    } else {
 
+      $versions = $this->getVersionDetail($propertyId, '#__property', '#__property_versions', 'parent_id');
 
-    $item = JArrayHelper::toObject($new_version, 'JObject');
-
-    $item->old = $old_version;
-
-    return $item;
-  }
-
-  public function getUnitDiff($unitId = null) {
-
-    $table = $this->getTable('UnitVersions', 'HelloWorldTable');
-    $key = $table->getKeyName();
-    $new_version = $table->getProperties();
-
-    // Get the pk of the record from the request.
-    $unitId = JFactory::getApplication()->input->getInt($key);
-
-    $this->setState($this->getName() . '.unit_id', $unitId);
-
-    // An array of keys to check using the htmldiff method
-    $keys_to_check = array(
-        'unit_title', 'description', 'internal_facilities_other', 'external_facilities_other', 'activities_other', 'additional_price_notes'
-    );
-
-    // Get the published version of this property.
-    $old_version = $this->getUnitVersionDetail($unitId, 0);
-
-    // Only need to get the new version if it's been updated.
-    if ($old_version['review'] == 1) {
-
-      // Get the unpublished version of this property
-      $new = $this->getUnitVersionDetail($unitId, 1);
-
-      $new_version = $this->getItemDiff($old_version, $new, $keys_to_check);
+      // An array of keys to check using the htmldiff method
+      $keys_to_check = array(
+          'title', 'location_details', 'getting_there', 'video_url', 'deposit', 'security_deposit', 'evening_meal',
+          'additional_booking_info', 'terms_and_conditions', 'first_name', 'surname', 'address', 'phone_1', 'phone_2',
+          'phone_3', 'fax', 'email_1', 'email_2'
+      );
     }
 
-    $item = JArrayHelper::toObject($new_version, 'JObject');
-
-    $item->old = $old_version;
-
-    return $item;
-  }
-
-  public function getUnitVersionDetail($unitId, $review_state = 0) {
-
-    $db = JFactory::getDbo();
-
-    $query = $db->getQuery(true);
-
-    // Initialise the query.
-    $query->select('a.*');
-    $query->from('#__unit_versions as a');
-    $query->where('review = ' . (int) $review_state);
-    $query->where('a.unit_id = ' . (int) $unitId);
-
-    $query->order('id desc');
-
-    $db->setQuery($query);
-
-    $row = $db->loadAssoc();
-
-    // Check that we have a result.
-    if (empty($row)) {
+    // $versions contains one or two records
+    if (!$versions) {
+      // OOoops
       return false;
     }
 
-    return $row;
+    $versions = $this->getItemDiff($versions, $keys_to_check);
+
+    return $versions;
   }
 
   /**
-   * Returns a property version based on the review state passed.
+   * getVersionDetail = returns published and update versions of either a unit or a property listing
    * 
    * @param type $recordId
-   * @param type $review_state
+   * @param type $table1
+   * @param type $table2
+   * @param type $join_field
+   * @return mixed 
+   * 
    */
-  public function getPropertyVersionDetail($recordId, $review_state = 0) {
+  public function getVersionDetail($recordId, $table1 = '', $table2 = '', $join_field) {
 
     $db = JFactory::getDbo();
 
     $query = $db->getQuery(true);
 
     // Initialise the query.
-    $query->select('a.*, b.title as country, c.title as area, d.title as region, e.title as department, f.title as city');
-    $query->from('#__property_versions as a');
-    $query->where('review = ' . (int) $review_state);
-    $query->where('a.parent_id = ' . (int) $recordId);
-    $query->leftJoin('#__classifications b ON b.id = a.country');
-    $query->leftJoin('#__classifications c ON c.id = a.area');
-    $query->leftJoin('#__classifications d ON d.id = a.region');
-    $query->leftJoin('#__classifications e ON e.id = a.department');
-    $query->leftJoin('#__classifications f ON f.id = a.city');
-    $query->order('id desc');
+    $query->select('b.*');
+    $query->from($db->quoteName($table1) . ' as a');
+    $query->join('left', $db->quoteName($table2) . ' as b on a.id = b.' . $join_field);
+    $query->where('a.id = ' . (int) $recordId);
+    $query->where('b.review in (0,1)');
 
     $db->setQuery($query);
 
-    $row = $db->loadAssoc();
+    $row = $db->loadAssocList();
 
     // Check that we have a result.
     if (empty($row)) {
@@ -175,27 +130,44 @@ class HelloWorldModelListingReview extends JModelAdmin {
     return $row;
   }
 
-  public function getItemDiff($old_version = array(), $new_version = array(), $keys_to_check = array()) {
+  
+  public function getItemDiff($versions = array(), $keys_to_check = array()) {
 
     $simplediff = new simplediff();
 
-    // Need to load the new version details here to replace those loaded here.
-    foreach ($old_version as $key => $value) {
+    // If we only have one version then don't bother with the difference
+    if (count($versions) < 2) {
+      $versions[] = array();
 
-      if (in_array($key, $keys_to_check)) {
-        $diff = $simplediff->htmldiff(strip_tags($old_version[$key]), strip_tags($new_version[$key]));
-
-        $new_version[$key] = $diff;
-      }
+      return $versions;
     }
 
-    return $new_version;
+    $old_version = $versions[0];
+    $new_version = $versions[1];
+
+    // Need to load the new version details here to replace those loaded here.
+    foreach ($old_version as $key => $value) {
+      if (in_array($key, $keys_to_check)) {
+        $diff = $simplediff->htmldiff(strip_tags($old_version[$key]), strip_tags($new_version[$key]));
+        $new_version[$key] = $diff;
+      }      
+    }
+
+    $versions[1] = $new_version;
+
+    return $versions;
   }
 
+  
+  
+  
+  
+  
+  
   public function getUnits() {
 
     $db = JFactory::getDbo();
-    
+
     // Get the primary key and set it in the model state
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
 
@@ -203,7 +175,14 @@ class HelloWorldModelListingReview extends JModelAdmin {
 
       // Get the node and children as a tree.
       $query = $this->_db->getQuery(true);
-      $select = 'unit_title,b.review as review_unit,c.review as review_property, a.id as unit_id,occupancy,parent_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
+      $select = '
+        unit_title,
+        b.review as review_unit,
+        c.review as review_property, 
+        a.id as unit_id,occupancy,
+        parent_id,
+        (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms
+      ';
       $query->select($select)
               ->from('#__unit a')
               ->join('left', '#__unit_versions b on a.id = b.unit_id')
@@ -215,12 +194,11 @@ class HelloWorldModelListingReview extends JModelAdmin {
 
       $db->setQuery($query);
       $row = $db->loadObjectList();
-      
+
       return $row;
-      
     } catch (Exception $e) {
       // Log the exception and return false
-      
+
       return false;
     }
   }
