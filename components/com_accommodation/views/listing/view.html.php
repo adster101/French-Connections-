@@ -11,6 +11,17 @@ class AccommodationViewListing extends JViewLegacy {
   // Overwriting JView display method
   function display($tpl = null) {
 
+    // TODO - Here we should add the relevant admin model and move 
+    // getAvailability
+    // getTariffs
+    // getImages
+    // getFacilities
+    // getCrumbs
+    // getReviews
+    // getUnits
+    // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
+    
+    
     // Assign data to the view
     $this->item = $this->get('Item');
 

@@ -178,7 +178,7 @@ class AccommodationModelListing extends JModelForm {
 
       // Join the units table in, only retrieves one at a time??
       $query->from('#__property as a');
-      $query->leftJoin('#__unit b ON a.id = b.property_id');
+      $query->leftJoin('#__unit b ON a.id = b.parent_id');
       $query->leftJoin('#__property_versions c ON c.parent_id = a.id');
       $query->leftJoin('#__unit_versions d ON d.unit_id = b.id');
 
@@ -372,7 +372,7 @@ class AccommodationModelListing extends JModelForm {
 
     // Attempt to load the availability for this property
     $availability = $model->getAvailability($unit_id);
-
+    
     // Check the $availability loaded correctly
     if (!$availability) {
       // Ooops, there was a problem getting the availability
