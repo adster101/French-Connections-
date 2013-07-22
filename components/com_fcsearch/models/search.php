@@ -774,15 +774,14 @@ class FcSearchModelSearch extends JModelList {
     // Should apply this filter to other params here as well...
     $filter = JFilterInput::getInstance();
     $this->setState('filter.language', $app->getLanguageFilter());
-    $request = $input->request;
 
     // Set the language in the model state
     $this->setState('list.language', $input->get('lang', 'en'));
 
     // Get each of the possible URL params
     // Get the query string.
-    $q = !is_null($request->get('s_kwds')) ? $request->get('s_kwds', '', 'string') : $params->get('s_kwds');
-    $q = $app->stringURLSafe($filter->clean($q, 'string'));
+    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', '', 'string') : $params->get('s_kwds');
+    $q = $app->stringURLSafe($filter->clean($tmp, 'string'));
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');
@@ -811,7 +810,7 @@ class FcSearchModelSearch extends JModelList {
     $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
 
     // Property type
-    $this->setState('list.property_type', $request->get('property', '', 'int'));
+    $this->setState('list.property_type', $input->get('property', '', 'int'));
     $app->setUserState('list.property_type', $input->get('property', '', 'array'));
 
     // Accommodation type
@@ -827,7 +826,7 @@ class FcSearchModelSearch extends JModelList {
     $app->setUserState('list.max_price', $input->get('max', '', 'array'));
 
     // Load the sort direction.
-    $dirn = $request->get('order', array(), 'array');
+    $dirn = $input->get('order', array(), 'array');
 
     if (!empty($dirn) && $dirn[0] !== '') {
       $sort_order = explode('_', $dirn[0]);
@@ -839,7 +838,7 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('match.limit', 1000);
 
     // Get the rest of the filter options such as property type, facilities and activites etc.
-    $activities = $request->get('activities', '', 'array');
+    $activities = $input->get('activities', '', 'array');
     $property_facilities = $input->get('internal', '', 'array');
     $external_facilities = $input->get('external', '', 'array');
     $kitchen_facilities = $input->get('kitchen', '', 'array');

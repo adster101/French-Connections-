@@ -1,17 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-  <fields name="airport">
-    <fieldset name="airport" label="PLG_CONTENT_RATING_SLIDER_LABEL">
+  <fields name="attribs">
+    <fieldset name="basic" label="PLG_CONTENT_RATING_SLIDER_LABEL">
+      <field 
+        name="airport_spacer"
+        type="spacer"
+        hr="true"
+      >
+      </field>
+        
       <field
         name="latitude"
         type="text"
         id="latitude"
-        description="PLG_CONTENT_AIRPORT_FIELD_LATITUDE_DESC"
-        label="PLG_CONTENT_RATING_FIELD_TEXTURE_LABEL"
-        message="PLG_CONTENT_RATING_FIELD_TEXTURE_MESSAGE"
-        size="30"
+        description=""
+        label="Latitude"
+        message=""
+        class=""
+        filter="string"
+        required="true"
+        labelclass="control-label"
       />
-    
+      <field
+        name="longitude"
+        type="text"
+        id="longitude"
+        description=""
+        label="Longitude"
+        message="Please enter longitude under 'Article Options'"
+        size="30"
+        filter="string"
+        required="true"
+        labelclass="control-label"
+      />
+      <field
+        name="department"
+        type="sql"
+        id="department"
+        query="select id, title as department from #__classifications where level = 4 order by title"
+        description=""
+        label="Department"
+        message=""
+        key_field="id"
+        required="true"
+        filter="int"
+        value_field="department"
+        labelclass="control-label"
+      />    
+      <field
+        name="airportcode"
+        type="text"
+        id="airportcode"
+        description=""
+        label="Airport Code"
+        message=""
+        default=""
+        required="true"
+        class="input-mini"
+        maxlength="3"
+        filter="string"
+        labelclass="control-label"
+      />    
     </fieldset>
   </fields>
 </form>

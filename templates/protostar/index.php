@@ -40,8 +40,8 @@ JHtml::_('bootstrap.framework');
 // Add Stylesheets
 $doc->addStyleSheet('templates/'.$this->template.'/css/template.css');
 
-// Load optional rtl Bootstrap css and Bootstrap bugfixes
-JHtmlBootstrap::loadCss($includeMaincss = false, $this->direction);
+// Load optional RTL Bootstrap CSS
+JHtml::_('bootstrap.loadCss', false, $this->direction);
 
 // Add current user information
 $user = JFactory::getUser();
@@ -172,10 +172,10 @@ else
 				<?php endif; ?>
 				<div id="content" class="<?php echo $span;?>">
 					<!-- Begin Content -->
-					<jdoc:include type="modules" name="position-3" style="none" />
+					<jdoc:include type="modules" name="position-3" style="xhtml" />
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />
-					<jdoc:include type="modules" name="position-2" style="xhtml" />
+					<jdoc:include type="modules" name="position-2" style="none" />
 					<!-- End Content -->
 				</div>
 				<?php if ($this->countModules('position-7')) : ?>

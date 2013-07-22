@@ -14,10 +14,12 @@
          <fields name="params">
             <fieldset name="basic">
                <field
-                  name="airportclass_sfx"
-                  type="text"
-                  label="PLG_CONTENT_RATING_ITEM_FIELD_AIRPORT_CLASS_LABEL"
-                  description="PLG_CONTENT_RATING_ITEM_FIELD_AIRPORT_CLASS_DESC"
+                  name="catid"
+                  type="category"
+                  label="Category"
+                  extension="com_content"
+                  show_root="true"
+                  description="This category is used in the backend to link to the content"
                />
             </fieldset>
          </fields>

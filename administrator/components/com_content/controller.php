@@ -40,7 +40,7 @@ class ContentController extends JControllerLegacy
 		$layout = $this->input->get('layout', 'articles');
 		$id     = $this->input->getInt('id');
 
-    // Check for edit form.
+		// Check for edit form.
 		if ($view == 'article' && $layout == 'edit' && !$this->checkEditId('com_content.edit.article', $id))
 		{
 			// Somehow the person just went to the form - we don't allow that.
