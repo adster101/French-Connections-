@@ -115,7 +115,6 @@ class plgContentAirport extends JPlugin {
     // Only going to work if we cludge the additional data into the form here....
 
     $catid = $this->params->get('catid', '');
-    $lat = '';
 
     // If data is empty, then we test to see if the additional fields are set in the application input.
     if (empty($data)) {
@@ -125,8 +124,10 @@ class plgContentAirport extends JPlugin {
       $lat = $raw['attribs']['latitude'];
       $lon = $raw['attribs']['longitude'];
       $dep = $raw['attribs']['department'];
-
-      $append_form = true;
+      
+      if ((!empty($lat) && !empty($lon) && !empty($dep))) {
+        $append_form = true;
+      }
     }
 
     // Only show the additional airport fields if the category ids match
