@@ -18,6 +18,13 @@ jimport('joomla.utilities.date');
 class plgContentAirport extends JPlugin {
 
   /**
+   * catid, the catid to process articles for
+   * 
+   * @var type 
+   */
+  var $catid = '';
+  
+  /**
    * Constructor
    *
    * @access      protected
@@ -28,6 +35,10 @@ class plgContentAirport extends JPlugin {
   public function __construct(& $subject, $config) {
     parent::__construct($subject, $config);
     $this->loadLanguage();
+    
+    // Set the cat id property
+    $this->catid = $this->params->get('catid','');
+    
   }
 
   /**
@@ -42,6 +53,8 @@ class plgContentAirport extends JPlugin {
 
     $catid = $this->params->get('catid', '');
 
+    
+    
     // Check the context 
     if ($context == 'com_content.article' && isset($data->catid)) {
 
@@ -68,6 +81,7 @@ class plgContentAirport extends JPlugin {
           $data->attribs['latitude'] = $results['latitude'];
           $data->attribs['longitude'] = $results['longitude'];
           $data->attribs['department'] = $results['department'];
+          $data->attribs['code'] = $results['code'];
         }
       }
     }
@@ -86,6 +100,8 @@ class plgContentAirport extends JPlugin {
 
     $name = $form->getName();
 
+    $append_form = false;
+
     if (!($form instanceof JForm)) {
       $this->_subject->setError('JERROR_NOT_A_FORM');
       return false;
@@ -100,18 +116,21 @@ class plgContentAirport extends JPlugin {
 
     $catid = $this->params->get('catid', '');
     $lat = '';
+
     // If data is empty, then we test to see if the additional fields are set in the application input.
-    if (empty($data) && !in_array()) {
+    if (empty($data)) {
 
       $raw = JFactory::getApplication()->input->get('jform', array(), 'array');
       // Additional fields present for this article
       $lat = $raw['attribs']['latitude'];
       $lon = $raw['attribs']['longitude'];
       $dep = $raw['attribs']['department'];
+
+      $append_form = true;
     }
 
     // Only show the additional airport fields if the category ids match
-    if ($data->catid == $catid || (isset($lat))) {
+    if ($data->catid == $catid || ($append_form)) {
 
 
 
@@ -135,42 +154,48 @@ class plgContentAirport extends JPlugin {
    */
   public function onContentAfterSave($context, $article, $isNew) {
 
-    $articleId = $article->id;
+    // The catid specified in the plugin parameters
+    $catid = $this->params->get('catid', '');
 
-    $attribs = json_decode($article->attribs);
+
+    if ($context == 'com_content.article' && ($article->catid == $catid)) {
+
+      $articleId = $article->id;
+
+      $attribs = json_decode($article->attribs);
 
 
-    if ($articleId) {
+      if ($articleId) {
 
-      try {
-        $db = JFactory::getDbo();
+        try {
+          $db = JFactory::getDbo();
 
-        $query = $db->getQuery(true);
-        $query->delete('#__airports');
-        $query->where('id = ' . $db->Quote($articleId));
+          $query = $db->getQuery(true);
+          $query->delete('#__airports');
+          $query->where('id = ' . $db->Quote($articleId));
 
-        $db->setQuery($query);
-        if (!$db->query()) {
-          throw new Exception($db->getErrorMsg());
+          $db->setQuery($query);
+          if (!$db->query()) {
+            throw new Exception($db->getErrorMsg());
+          }
+
+          $query->clear();
+          $query->insert('#__airports');
+          $query->columns('id,department,longitude,latitude');
+
+          $query->values($articleId . ', ' . $db->quote($attribs->department) . ', ' . $db->quote('1.251') . ', ' . $db->quote('2.652'));
+
+          $db->setQuery($query);
+
+          if (!$db->query()) {
+            throw new Exception($db->getErrorMsg());
+          }
+        } catch (JException $e) {
+          $this->_subject->setError($e->getMessage());
+          return false;
         }
-
-        $query->clear();
-        $query->insert('#__airports');
-        $query->columns('id,department,longitude,latitude');
-
-        $query->values($articleId . ', ' . $db->quote($attribs->department) . ', ' . $db->quote('1.251') . ', ' . $db->quote('2.652'));
-
-        $db->setQuery($query);
-
-        if (!$db->query()) {
-          throw new Exception($db->getErrorMsg());
-        }
-      } catch (JException $e) {
-        $this->_subject->setError($e->getMessage());
-        return false;
       }
     }
-
     return true;
   }
 

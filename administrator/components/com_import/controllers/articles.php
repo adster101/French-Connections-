@@ -44,7 +44,6 @@ class ImportControllerArticles extends JControllerForm {
       $data['fulltext'] = $output; 
       $data['id'] = '';
       $data['state'] = ($line[1] == 'True') ? 1 : 0;
-      $data['introtext'] = '';
       $data['title'] = $line[7];
       $data['created'] = $line[2];
       $data['catid'] = 75;
