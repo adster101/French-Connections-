@@ -35,7 +35,6 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
 
         <div class="row-fluid form-inline">
-
           <div class="span6">
             <div class="control-group">
               <?php echo $this->form->getLabel('department'); ?> 
@@ -58,7 +57,7 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         <hr />
         <div class="row-fluid">
           <div class="span8">
-            <?php if ($this->item->parent_id == 1 || $this->item->parent_id == '') : ?>
+            <?php if ($this->item->property_id == 1 || $this->item->property_id == '') : ?>
               <?php echo $this->form->getInput('map'); ?>           
             <?php else: ?>
               <p>You cannot edit the location of this property.</p>

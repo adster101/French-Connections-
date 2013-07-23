@@ -143,7 +143,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
   }
 
   /*
-   * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
+   * Augmented getRedirectToItemAppend so we can append the property_id onto the url
    * This is mostly useful for when a new unit is being created and the validation fails...
    *
    * Makes more sense to override this than the individual save/edit methods
@@ -160,8 +160,8 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
     switch ($task) :
       case 'add':
       case 'edit':
-        $recordId = JFactory::getApplication()->input->get('parent_id', 0, 'int');
-        $urlVar = '&parent_id=';
+        $recordId = JFactory::getApplication()->input->get('property_id', 0, 'int');
+        $urlVar = '&property_id=';
         if ($recordId) {
           $append .= $urlVar . $recordId;
         }
@@ -170,8 +170,8 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
       case 'save':
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-        $recordId = $data['parent_id'];
-        $urlVar = '&parent_id=';
+        $recordId = $data['property_id'];
+        $urlVar = '&property_id=';
         break;
       case 'reviews':
         $append = '';
@@ -195,7 +195,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
   }
 
   /*
-   * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
+   * Augmented getRedirectToItemAppend so we can append the property_id onto the url
    * MAkes more sense to override this than the individual save/edit methods
    *
    */
@@ -214,7 +214,7 @@ class HelloWorldControllerUnitVersions extends JControllerForm {
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
         
-        $id = $data['parent_id'];
+        $id = $data['property_id'];
 
         break;
 

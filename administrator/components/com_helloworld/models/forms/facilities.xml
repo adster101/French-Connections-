@@ -133,7 +133,7 @@
     type="hidden">
   </field>
   <field 
-    name="parent_id"
+    name="property_id"
     type="hidden"
     default="">      
   </field>

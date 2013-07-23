@@ -8,7 +8,7 @@ $input = $app->input;
 $view = $input->get('view', '', 'string');
 $languages = HelloWorldHelper::getLanguages();
 
-$listing_id = $input->get('parent_id', '', 'int');
+$listing_id = $input->get('property_id', '', 'int');
 
 $lang = HelloWorldHelper::getLang();
 
@@ -28,7 +28,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
 
 <ul class="nav nav-tabs">
   <li<?php echo ($view == 'propertyversions') ? ' class=\'active\'' : '' ?>>
-    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item, 'parent_id', '') ?>
+    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', '') ?>
   </li>
   <?php if (count($data['progress']) > 1) : ?>
     <li class="dropdown <?php echo ($view == 'unitversions') ? 'active' : '' ?>">

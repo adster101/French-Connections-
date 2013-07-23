@@ -166,7 +166,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
   /**
    * Method to get the data that should be injected in the form.
-   * If no form data is available then we set the parent_id using the
+   * If no form data is available then we set the property_id using the
    * request data.
    *
    * @return	mixed	The data for the form.
@@ -175,7 +175,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
   protected function loadFormData() {
 
     $input = JFactory::getApplication()->input;
-    $parent_id = $input->get('parent_id', '', 'int');
+    $property_id = $input->get('property_id', '', 'int');
 
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unitversions.data', array());
@@ -214,8 +214,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     }
 
     // Set the parent ID for this unit, if it's not set (e.g. for a new unit)
-    if (!isset($data['parent_id'])) {
-      $data['parent_id'] = $parent_id;
+    if (!isset($data['property_id'])) {
+      $data['property_id'] = $property_id;
     }
 
     return $data;
@@ -467,7 +467,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       if ($isNew) {
 
         // in unit table property ID refers to the parent property
-        $data['property_id'] = $data['parent_id'];
+        $data['property_id'] = $data['property_id'];
         $data['review'] = 1;
         $new_unit_id = $this->createNewUnit($data);
 
@@ -485,7 +485,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       }
 
       // Set the table model to the appropriate key
-      // If we don't do this, the model will save against the parent_id
+      // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
       $table->set('_tbl_key', 'id');
 
@@ -546,7 +546,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         // Update the existing property listing to indicate that it has been modified in a way that requires a review
         $property = $this->getTable('Property', 'HelloWorldTable');
 
-        $property->id = $table->parent_id;
+        $property->id = $table->property_id;
         $property->review = 1;
         JLog::add('About to update Property review status for ' . $property->id, 'unitversions');
 

@@ -32,7 +32,7 @@ class HelloWorldViewPropertyVersions extends JViewLegacy
 
     // Here we attempt to wedge some data into the model
     // So another method in the same model can use it.
-    $listing_id = ($this->item->parent_id) ? $this->item->parent_id : '';
+    $listing_id = ($this->item->property_id) ? $this->item->property_id : '';
 
     // Set some model options
     $model->setState('com_helloworld.' . $model->getName() . '.id', $listing_id);

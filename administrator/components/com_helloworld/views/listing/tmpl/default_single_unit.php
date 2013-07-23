@@ -57,7 +57,7 @@ $data['form'] = $this->form;
                 <?php $urlParam = (empty($item->unit_id) ? 'listing_id' : 'unit_id'); ?>
                 <tr>
                   <td>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item, 'parent_id', 'btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', 'btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', 'btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', 'btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', 'btn') ?>
@@ -78,7 +78,7 @@ $data['form'] = $this->form;
         </table>
         <?php echo $this->pagination->getListFooter(); ?>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="parent_id" value="<?php echo $item->id ?>" />
+        <input type="hidden" name="property_id" value="<?php echo $item->id ?>" />
 
         <?php echo JHtml::_('form.token'); ?> .
       </form>

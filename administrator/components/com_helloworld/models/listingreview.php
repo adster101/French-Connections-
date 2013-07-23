@@ -55,7 +55,7 @@ class HelloWorldModelListingReview extends JModelAdmin {
 
     $input = JFactory::getApplication()->input;
     $unitId = $input->get('unit_id', '', 'int');
-    $propertyId = $input->get('parent_id', '', 'int');
+    $propertyId = $input->get('property_id', '', 'int');
 
     if (!empty($unitId)) {
 
@@ -66,15 +66,12 @@ class HelloWorldModelListingReview extends JModelAdmin {
       $keys_to_check = array(
           'unit_title', 'description', 'internal_facilities_other', 'external_facilities_other', 'activities_other', 'additional_price_notes'
       );
-      
+
       // Using the version IDs from the $versions array pull out the images and facilities 
       // and append them to the $versions array...
-      
-      
-      
     } else {
 
-      $versions = $this->getVersionDetail($propertyId, '#__property', '#__property_versions', 'parent_id');
+      $versions = $this->getVersionDetail($propertyId, '#__property', '#__property_versions', 'property_id');
 
       // An array of keys to check using the htmldiff method
       $keys_to_check = array(
@@ -130,7 +127,6 @@ class HelloWorldModelListingReview extends JModelAdmin {
     return $row;
   }
 
-  
   public function getItemDiff($versions = array(), $keys_to_check = array()) {
 
     $simplediff = new simplediff();
@@ -150,7 +146,7 @@ class HelloWorldModelListingReview extends JModelAdmin {
       if (in_array($key, $keys_to_check)) {
         $diff = $simplediff->htmldiff(strip_tags($old_version[$key]), strip_tags($new_version[$key]));
         $new_version[$key] = $diff;
-      }      
+      }
     }
 
     $versions[1] = $new_version;
@@ -158,12 +154,6 @@ class HelloWorldModelListingReview extends JModelAdmin {
     return $versions;
   }
 
-  
-  
-  
-  
-  
-  
   public function getUnits() {
 
     $db = JFactory::getDbo();
@@ -180,7 +170,7 @@ class HelloWorldModelListingReview extends JModelAdmin {
         b.review as review_unit,
         c.review as review_property, 
         a.id as unit_id,occupancy,
-        parent_id,
+        property_id,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms
       ';
       $query->select($select)

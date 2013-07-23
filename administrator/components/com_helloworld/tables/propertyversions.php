@@ -20,7 +20,7 @@ class HelloWorldTablePropertyVersions extends JTable
 	 */
 	function __construct(&$db)
 	{
-		parent::__construct('#__property_versions', 'parent_id', $db);
+		parent::__construct('#__property_versions', 'property_id', $db);
 	}
 
   /*

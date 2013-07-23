@@ -236,8 +236,8 @@ class HelloWorldModelListings extends JModelList {
     // From the hello table
     $query->from('#__property as a');
     $query->join('inner', '#__property_versions as b on (
-      a.id = b.parent_id
-      and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id)
+      a.id = b.property_id
+      and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id)
     )');
     $listOrdering = $this->getState('list.ordering', '');
     $listDirn = $db->escape($this->getState('list.direction', ''));

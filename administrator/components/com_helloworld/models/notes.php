@@ -92,7 +92,7 @@ class HelloWorldModelNotes extends JModelList {
     $category = $this->state->get('filter.category_id', '');
 
     if (!empty($category)) {
-      $query->where('(a.catid = ' . $category . ' OR c.parent_id = ' . $category . ')');
+      $query->where('(a.catid = ' . $category . ' OR c.property_id = ' . $category . ')');
     }
 
     $query->order($db->escape($orderCol . ' ' . $orderDirn));

@@ -54,7 +54,7 @@ class HelloWorldViewReviews extends JViewLegacy {
     // Get an instance of the listing model
     $listing = $this->getModel('Listing');
 
-    $listing_id = ($this->unit->parent_id) ? $this->unit->parent_id : '';
+    $listing_id = ($this->unit->property_id) ? $this->unit->property_id : '';
 
 
     // Set some model options

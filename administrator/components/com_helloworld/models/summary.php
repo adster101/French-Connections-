@@ -122,10 +122,10 @@ class HelloWorldModelSummary extends JModelAdmin {
    * 
    * This can happen from two places.
    * Firstly, if a user is adding a new property they may choose a parent property
-   * in which case we take the parent_id from the user session.
+   * in which case we take the property_id from the user session.
    * 
    * Secondly, if the user is editing an existing property which already has a 
-   * parent_id set. I.e. is already marked as a unit. In this case it will be set
+   * property_id set. I.e. is already marked as a unit. In this case it will be set
    * in the $data scope.
    * 
    * param JForm $form The JForm instance for the view being edited
@@ -147,11 +147,11 @@ class HelloWorldModelSummary extends JModelAdmin {
       $canDo = HelloWorldHelper::getActions();
     }
     
-    // If $data->parent_id is set and it's not null or 1 (e.g. a unit)
-    if (isset($data->parent_id) && $data->parent_id != 1 && !empty($data->parent_id)) {
+    // If $data->property_id is set and it's not null or 1 (e.g. a unit)
+    if (isset($data->property_id) && $data->property_id != 1 && !empty($data->property_id)) {
 
       // Use getItem to get the data for the parent property if supplied
-      $parent_prop = $this->getItem($data->parent_id);
+      $parent_prop = $this->getItem($data->property_id);
 
       // Set the location details accordingly (why bother here, just unset it all?)
       $data->latitude = $parent_prop->latitude;
@@ -175,7 +175,7 @@ class HelloWorldModelSummary extends JModelAdmin {
 
       
       
-    } else if (!empty($data) && $data->parent_id == 1) {
+    } else if (!empty($data) && $data->property_id == 1) {
 
       // We are editing an existing property here which isn't a child
       $latitude = (!empty($data->latitude) ? $data->latitude : 0);
@@ -195,22 +195,22 @@ class HelloWorldModelSummary extends JModelAdmin {
   			$form->removeField('created_by');
       }
       
-    } else if (!isset($data->parent_id) && !isset($data->created_by)) { 
+    } else if (!isset($data->property_id) && !isset($data->created_by)) { 
 
-      // Only applies when a user is creating a new property as parent_id is set in the session scope in the sub controller
+      // Only applies when a user is creating a new property as property_id is set in the session scope in the sub controller
       // Otherwise if parent id not set in $data but has been taken from session scope e.g. new unit being added      
       // Use getItem to get the data for the parent property if supplied
      
-      // Scope parent_id from the user session scope
-      $parent_id = JApplication::getUserState('parent_id','');
+      // Scope property_id from the user session scope
+      $property_id = JApplication::getUserState('property_id','');
 
-      $data->parent_id = $parent_id;
+      $data->property_id = $property_id;
 
       // If parent id = 1 this is a new parent property
-      if ($parent_id !=1 && $parent_id !='') { 
+      if ($property_id !=1 && $property_id !='') { 
         
         // Get the parent details for the property id supplied
-        $parent_prop = $this->getItem($parent_id);
+        $parent_prop = $this->getItem($property_id);
       
         $form->setFieldAttribute('city', 'latitude', $parent_prop->latitude );
         $form->setFieldAttribute('city', 'longitude', $parent_prop->longitude);
@@ -263,9 +263,9 @@ class HelloWorldModelSummary extends JModelAdmin {
     }
     
     
-    // Reset the user state as otherwise parent_id in session scope will interfere
+    // Reset the user state as otherwise property_id in session scope will interfere
     // with normal editing etc
-    JApplication::setUserState('parent_id', '');
+    JApplication::setUserState('property_id', '');
   }
   
   /**
@@ -283,7 +283,7 @@ class HelloWorldModelSummary extends JModelAdmin {
     $XmlStr = '';
     
     $XmlStr .= '<field
-			name="parent_id"
+			name="property_id"
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"

@@ -37,13 +37,13 @@ class HelloWorldViewUnitVersions extends JViewLegacy {
     // So another method in the same model can use it.
     // If this is a new unit then we don't
 
-    $listing_id = ($this->item->parent_id) ? $this->item->parent_id : '';
+    $listing_id = ($this->item->property_id) ? $this->item->property_id : '';
 
     if (empty($listing_id)) {
 
       // Probably creating a new unit, listing id is in GET scope
       $input = $app->input;
-      $listing_id = $input->get('parent_id', '', 'int');
+      $listing_id = $input->get('property_id', '', 'int');
     }
 
     // Set some model options

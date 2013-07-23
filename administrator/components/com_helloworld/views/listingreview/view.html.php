@@ -29,7 +29,7 @@ class HelloWorldViewListingReview extends JViewLegacy {
    */
   public function display($tpl = null) {
 
-    $this->id = JFactory::getApplication()->input->get('parent_id', '', 'int');
+    $this->id = JFactory::getApplication()->input->get('property_id', '', 'int');
 
     // Get the input
     $input = JFactory::getApplication()->input;

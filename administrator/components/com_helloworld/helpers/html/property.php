@@ -348,7 +348,7 @@ class JHtmlProperty {
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'parent_id', $btnClass = '') {
+  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'property_id', $btnClass = '') {
     $active = false;
     $progress_icon = 'warning';
     $okay_icon = 'ok';
@@ -371,7 +371,7 @@ class JHtmlProperty {
       $progress_icon = $progress_icon;
       $id = $listing_id;
       // Set urlParam here as a new unit may need listing id in GET scope
-      $urlParam = 'parent_id';
+      $urlParam = 'property_id';
 
     } elseif (!empty($unit_id) && $controller == 'images') {
 

@@ -14,7 +14,7 @@
       onchange="updatepropertylist()"
       />
       <field
-			name="parent_id"
+			name="property_id"
 			type="UserProperties"
 			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
 			description="COM_CATEGORIES_FIELD_PARENT_DESC"

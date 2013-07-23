@@ -17,7 +17,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
 
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&parent_id=' . (int) $this->item->parent_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">

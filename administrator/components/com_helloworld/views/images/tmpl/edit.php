@@ -21,7 +21,7 @@ if (array_key_exists('gallery', $image_properties)) {
 <?php if ($format == 'html') : ?>
   <div id="collapseUpload" class="collapse row-fluid">
     <div class="span12">
-      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id) . '&parent_id=' . $this->item->parent_id; ?>" method="post" name="imageUpload" id="imageForm">
+      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&id=' . (int) $this->item->id) . '&property_id=' . $this->item->property_id; ?>" method="post" name="imageUpload" id="imageForm">
         <div class="row-fluid">
           <div class="span12">
             Some sensible image manager at last?
@@ -75,7 +75,7 @@ if (array_key_exists('gallery', $image_properties)) {
               <legend><?php echo JText::_('COM_HELLOWORLD_IMAGES_IMAGE_' . $woot); ?></legend> 
               <?php if (!count($image_properties[$woot])): ?>
                 <ul class="hero-unit" id="<?php echo $woot; ?>">
-                  <?php if ($this->item->parent_id != 1) { ?>  
+                  <?php if ($this->item->property_id != 1) { ?>  
                     <li><p class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_GALLERY_' . $woot); ?> </p></li>
                   <?php } else { ?>
                     <li><p class="no-images-in-gallery"><?php echo JText::_('COM_HELLOWORLD_IMAGES_NO_IMAGES_ASSIGNED_TO_' . $woot); ?> </p></li>
@@ -103,7 +103,7 @@ if (array_key_exists('gallery', $image_properties)) {
                           <span class="pull-right">
                             <a rel="woot" 
                                title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_DELETE_IMAGE') ?>"
-                               href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&parent_id=' . (int) $this->item->parent_id . '&property_id=' . (int) $this->item->id) . '&id=' . (int) $image->id . '&' . JSession::getFormToken() . '=1'; ?>"
+                               href="<?php echo JRoute::_('index.php?option=com_helloworld&view=deleteimage&format=raw&property_id=' . (int) $this->item->property_id . '&property_id=' . (int) $this->item->id) . '&id=' . (int) $image->id . '&' . JSession::getFormToken() . '=1'; ?>"
                                class="btn btn-danger btn-mini fltrt delete hasTip">
                               <i class="icon-trash icon-white"></i>
                             </a>
@@ -118,8 +118,8 @@ if (array_key_exists('gallery', $image_properties)) {
                           </span>
                           <!-- Note that if this is a unit we need to place the image against the parent property ID. -->
                           <?php
-                          if ($this->item->parent_id != 1) {
-                            $imgPath = JURI::root() . 'images/' . $this->item->parent_id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name);
+                          if ($this->item->property_id != 1) {
+                            $imgPath = JURI::root() . 'images/' . $this->item->property_id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name);
                           } else {
                             $imgPath = JURI::root() . 'images/' . $this->item->id . '/thumbs/' . str_replace('.', '_175x100.', $image->image_file_name);
                           }

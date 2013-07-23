@@ -78,7 +78,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
               <?php endforeach; ?>
             </fieldset>
             <input type="hidden" name="task" value="availability.apply" /> 
-            <input type="hidden" name="jform[parent_id]" value=<?php echo $this->unit->parent_id ?> /> 
+            <input type="hidden" name="jform[property_id]" value=<?php echo $this->unit->property_id ?> /> 
 
             <?php echo JHtml::_('form.token'); ?>
           </div>

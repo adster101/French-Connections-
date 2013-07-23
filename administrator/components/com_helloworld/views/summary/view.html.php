@@ -65,7 +65,7 @@ class HelloWorldViewSummary extends JViewLegacy
     HelloWorldHelper::setPropertyProgress($this->item->id,$published );
     
     // Add the submenu to the view
-    HelloWorldHelper::addSubmenu($view, $published, $this->item->parent_id);
+    HelloWorldHelper::addSubmenu($view, $published, $this->item->property_id);
 		
 		// Eventually figured out that the below hides the submenu on this view.
 		//JRequest::setVar('hidemainmenu', true);

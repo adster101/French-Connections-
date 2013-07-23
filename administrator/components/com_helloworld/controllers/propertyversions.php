@@ -84,7 +84,7 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
   }
 
   /*
-   * Augmented getRedirectToItemAppend so we can append the parent_id onto the url
+   * Augmented getRedirectToItemAppend so we can append the property_id onto the url
    * MAkes more sense to override this than the individual save/edit methods
    *
    */
@@ -102,7 +102,7 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
       case 'cancel':
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-        $id = $data['parent_id'];
+        $id = $data['property_id'];
 
         break;
 

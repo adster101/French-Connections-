@@ -34,35 +34,31 @@ class ImportControllerArticles extends JControllerForm {
     $handle = fopen($userfile['tmp_name'], "r");
 
     while (($line = fgetcsv($handle, 0, $delimiter = '|')) !== FALSE) {
-
       $data = array();
 
       $model = $this->getModel('Article', 'ContentModel');
       
-      // If column 8 is not empty then we append that to the full text as an h2.
-      if (!empty($line[8])) {
-        $data['fulltext'] = '<h2>' . $line[8] . '</h2>' . $line[10];
-      } else {
-        $data['fulltext'] = $line[10];
-      }
-
+      $output = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $line[10]);
+      
+      
+      $data['fulltext'] = $output; 
       $data['id'] = '';
-      $data['state'] = $line[1];
-      $data['introtext'] = $line[8];
+      $data['state'] = ($line[1] == 'True') ? 1 : 0;
+      $data['introtext'] = '';
       $data['title'] = $line[7];
       $data['created'] = $line[2];
-      $data['catid'] = 70;
+      $data['catid'] = 75;
       $data['language'] = 'en-GB';
       $data['metakey'] = $line[14];
       $data['metadesc'] = $line[13];
 
-
-
       if (!$model->save($data)) {
         $error = $model->getError();
       }     
-  
-    }
+      
+
+    } 
+
 
     fclose($handle);
 

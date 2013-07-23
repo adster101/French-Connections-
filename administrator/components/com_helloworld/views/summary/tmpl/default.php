@@ -57,15 +57,7 @@ $canChangeOwner = $user->authorise('core.edit.state', 'com_helloworld');
         </div>
         <hr />
         <div class="row-fluid">
-          <div class="span8">
-            <?php if ($this->item->parent_id == 1 || $this->item->parent_id == '') : ?>
-              <?php echo $this->form->getInput('map'); ?>           
-            <?php else: ?>
-              <p>You cannot edit the location of this property.</p>
-              <p>Please navigate to PRN 123456 to update the location of this and all units.</p>
-            <?php endif; ?>  
-          </div>
-
+  
 
           <div class="span4 form-inline">              
             <div class="control-group">

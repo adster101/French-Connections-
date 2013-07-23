@@ -34,7 +34,7 @@ class HelloWorldViewAvailability extends JViewLegacy {
 
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');
-    $progress->setState('com_helloworld.listing.id', $this->unit->parent_id);
+    $progress->setState('com_helloworld.listing.id', $this->unit->property_id);
     $this->progress = $progress->getItems();
 
     // Get the availability for this unit

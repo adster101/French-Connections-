@@ -24,7 +24,7 @@ class HelloWorldControllerUnits extends JControllerAdmin
   public function publish() {
 
     parent::publish();
-		$listing_id = JFactory::getApplication()->input->get('parent_id','','int');
+		$listing_id = JFactory::getApplication()->input->get('property_id','','int');
 
     $extension = $this->input->get('extension');
 		$id = ($listing_id) ? '&id=' . $listing_id: '';
@@ -36,7 +36,7 @@ class HelloWorldControllerUnits extends JControllerAdmin
 
     parent::reorder();
 
-		$listing_id = JFactory::getApplication()->input->get('parent_id','','int');
+		$listing_id = JFactory::getApplication()->input->get('property_id','','int');
 
     $extension = $this->input->get('extension');
 		$id = ($listing_id) ? '&id=' . $listing_id: '';

@@ -383,7 +383,7 @@
       readonly="true"/>
     <field
       label="COM_CATEGORIES_FIELD_PARENT_LABEL"
-      name="parent_id"
+      name="property_id"
       type="UserProperties"
       default="1"
       readonly="true"

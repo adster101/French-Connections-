@@ -131,7 +131,7 @@ class HelloWorldModelListing extends JModelList {
         d.review as unit_updated,
         a.created_by,
         e.unit_id unit_id,
-        e.parent_id,
+        e.property_id,
         d.ordering,
         e.unit_title,
         e.changeover_day,
@@ -146,8 +146,8 @@ class HelloWorldModelListing extends JModelList {
         (select count(*) from qitz3_tariffs where id = d.id and end_date > NOW()) as tariffs
       ');
     $query->from('#__property as a');
-    $query->join('inner', '#__property_versions as b on (a.id = b.parent_id and b.id = (select max(c.id) from #__property_versions as c where c.parent_id = a.id))');
-    $query->join('left','#__unit d on d.parent_id = a.id');
+    $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id))');
+    $query->join('left','#__unit d on d.property_id = a.id');
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
     $query->where('a.id = ' . (int) $id);
     $query->order('ordering');

@@ -64,7 +64,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     $units_table = $this->getTable('UnitVersions', 'HelloWorldTable');
 
     // Set the primary key to be the parent ID column, this allow us to fetch the units for this listing ID.
-    $units_table->set('_tbl_key', 'parent_id');
+    $units_table->set('_tbl_key', 'property_id');
 
     if ($id > 0) {
       // Attempt to load the row.
@@ -332,12 +332,12 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
           $this->setError('There was a problem createing your property. Please try again.');
           return false;
         } else {
-          $data['parent_id'] = $new_property_id;
+          $data['property_id'] = $new_property_id;
         }
       }
 
       // Set the table model to the appropriate key
-      // If we don't do this, the model will save against the parent_id
+      // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
       $table->set('_tbl_key', 'id');
 
@@ -377,7 +377,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         // Update the existing property listing to indicate that the listing has been updated
         $property = $this->getTable('Property', 'HelloWorldTable');
 
-        $property->id = $table->parent_id;
+        $property->id = $table->property_id;
         $property->review = 1;
 
         if (!$property->store()) {
@@ -392,7 +392,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
         $note = array();
 
-        $note['property_id'] = $data['parent_id'];
+        $note['property_id'] = $data['property_id'];
         $note['state'] = 1;
         $note['body'] = $data['note'];
         $note['created_time'] = JFactory::getDate()->toSql();
@@ -435,7 +435,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
     // Set the table key back to the parent id so it redirects based on that key
     // on not the version key id
-    $table->set('_tbl_key', 'parent_id');
+    $table->set('_tbl_key', 'property_id');
 
     $pkName = $table->getKeyName();
 

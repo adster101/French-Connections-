@@ -590,7 +590,7 @@ abstract class HelloWorldHelper {
       $listing->id = '';
       $listing->review = '';
       $listing->unit_id = '';
-      $listing->parent_id = '';
+      $listing->property_id = '';
       $listing->changeover_day = '';
       $listing->images = 0;
       $listing->tariffs = 0;
@@ -624,7 +624,7 @@ abstract class HelloWorldHelper {
     $listing->id = $listing_id;
     $listing->review = '';
     $listing->unit_id = '';
-    $listing->parent_id = $listing_id;
+    $listing->property_id = $listing_id;
     $listing->changeover_day = '';
     $listing->images = 0;
     $listing->tariffs = 0;

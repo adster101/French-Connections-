@@ -52,7 +52,7 @@ $data['form'] = $this->form;
               <strong>Property details</strong>
             </td>
             <td>
-              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0], 'parent_id', 'btn') ?>
+              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0], 'property_id', 'btn') ?>
             </td>
           </tr>
           <tfoot>
@@ -124,7 +124,7 @@ $data['form'] = $this->form;
 
         <?php echo $this->pagination->getListFooter(); ?>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="parent_id" value="<?php echo $this->id ?>" />
+        <input type="hidden" name="property_id" value="<?php echo $this->id ?>" />
         <?php echo JHtml::_('form.token'); ?>
       </form>
 
