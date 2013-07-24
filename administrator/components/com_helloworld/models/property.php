@@ -9,12 +9,20 @@ jimport('joomla.application.component.modeladmin');
  * HelloWorldList Model
  */
 class HelloWorldModelProperty extends JModelAdmin {
+  
+  /**
+   * The property listing as a list of units 
+   * 
+   * @var type 
+   */
+  protected $listing = array();
+  
   /*
    * A listing property to store the listing against
    *
    */
 
-  public $listing_id = '';
+  protected $listing_id = '';
 
   /*
    * The owner ID for the user that is renewing...taken from the listing not the session scope
@@ -24,13 +32,33 @@ class HelloWorldModelProperty extends JModelAdmin {
   /*
    * Whether this is a renewal or not - determined via the expiry date
    */
-  public $renewal_status = '';
+  protected $isRenewal = '';
 
   /*
    * The expiry date of the listing being edited
    */
-  public $expiry_date = '';
+  protected $expiry_date = '';
+  
+  
 
+  function __construct($config = array()) {
+    
+    parent::__construct($config);
+    
+    if (array_key_exists('listing',$config)) {
+      
+      // Set the model properties here.
+      $this->listing      = $config['listing'];
+      $this->owner_id     = $config['listing'][0]->created_by; 
+      $this->isRenewal    = ($config['listing'][0]->expiry_date) ? true : false; 
+      $this->listing_id   = $config['listing'][0]->id; 
+      $this->expiry_date  = $config['listing'][0]->expiry_date; 
+      
+    }
+    
+    
+  }
+  
 
   /**
    * Returns a reference to the a Table object, always creating it.
@@ -65,7 +93,7 @@ class HelloWorldModelProperty extends JModelAdmin {
   }
 
   /*
-   * Returns a list of units for a given listing id (using the units model)
+   * Returns a list of order lines for a listing based on what combination of units/images and so on the listing has
    *
    * @param int The id of the parent property listing
    * return array An array of units along with image counts...
@@ -73,37 +101,12 @@ class HelloWorldModelProperty extends JModelAdmin {
    */
 
   public function getRenewalSummary() {
-
-    // The call to getState also calls populateState (if it hasn't been called already)
-    $id = $this->getState($this->getName() . '.id', '');
-    $renewal_status = '';
-
-    if (empty($id)) {
-      // No ID
-      return false;
-    }
-
-    // Get an instance of the units model
-    $model = JModelLegacy::getInstance('listing', 'HelloWorldModel');
-
-    $listing = $model->getItems();
-
-    if (!$listing) {
-      return false;
-    }
-
-    // Get the user details based on the owner of the property
-    $this->owner_id = ($listing[0]->created_by) ? $listing[0]->created_by : '';
-
-    // Set the renewal status
-    $renewal_status = (!empty($listing[0]->expiry_date)) ? true : false;
-    $this->setRenewalStatus($renewal_status);
-
+    
     // Get the user details
     $user = $this->getUser($this->owner_id);
 
     // Get the order summary, consists of item codes and quantities
-    $order_summary = $this->summary($listing);
+    $order_summary = $this->summary($this->listing);
 
     // Get the item cost details based on the summary
     $item_costs = $this->getItemCosts($order_summary);
@@ -227,8 +230,6 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     $form->bind($data);
 
-
-
     return $form;
   }
 
@@ -315,8 +316,12 @@ class HelloWorldModelProperty extends JModelAdmin {
         ($count_additional_units) ? $unit_count++ : '';
 
         $count_additional_units = true;
+        
       } else {
-
+        
+        // TO DO - This don't work as it adds one to the unit count for a B&B where this is included in the base price...
+        // If it's only B&B then only charge for base listing plus additional images etc
+        // If it's a s/c with a B&B unit then I assume we charge for each additional B&B unit?
         (!$bed_and_breakfast) ? $unit_count++ : '';
 
         $bed_and_breakfast = true;
@@ -390,12 +395,6 @@ class HelloWorldModelProperty extends JModelAdmin {
   }
 
   public function processPayment($data) {
-
-    // Set the state for this model so it knows which listing we are looking at
-    $this->setState($this->getName() . '.id', $data['id']);
-
-    // Set the property id
-    $this->property_id = $data['id'];
 
     // Get the order summary details
     $order = $this->getRenewalSummary();
@@ -529,6 +528,7 @@ class HelloWorldModelProperty extends JModelAdmin {
      * * Your Sage Pay account MUST be set up for the account type you choose.  If in doubt, use E * */
     $strPost = $strPost . "&AccountType=E";
 
+    
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
     /* Analyse the response from Sage Pay Direct to check that everything is okay
      * * Registration results come back in the Status and StatusDetail fields */
@@ -570,7 +570,6 @@ class HelloWorldModelProperty extends JModelAdmin {
       $strDBStatus = "ERROR - There was an error during the payment process.  The error details are: " . mysql_real_escape_string($strStatusDetail);
     else
       $strDBStatus = "UNKNOWN - An unknown status was returned from Sage Pay.  The Status was: " . mysql_real_escape_string($strStatus) . ", with StatusDetail:" . mysql_real_escape_string($strStatusDetail);
-    echo $strDBStatus;
 
     // Save the transaction out to the protx table
     $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
@@ -579,7 +578,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     switch ($strStatus) {
       case 'OK':
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
-        return true;
+        return $order;
         break;
       case 'MALFORMED':
         $this->setError("MALFORMED - The StatusDetail was:" . mysql_real_escape_string(substr($strStatusDetail, 0, 255)));
@@ -622,32 +621,54 @@ class HelloWorldModelProperty extends JModelAdmin {
   /*
    * This method determines whether we have just processed a renewal or a new sign up payment
    * and does the relevant processing on the property listing.
+   * 
+   * If listing is marker for review - show the confirmation screen, inform user that property is under review
+   * Set the property status to 2 
+   * etc
    *
    */
-  public function processListing()
+  public function processListing($order = array())
   {
+   // Need to process the rest of the gubbins
+    // Essentially we need to do the following
+    // Update the expiry date to one year hence
+    // If a renewal, then no need to hold the property in the PFR, so update the expiry date and send a confirmation email and write into the admin log
+    // If a sign up, then update review status to 2, update the expiry date and send an email to confirm payment? Log payment amount against the property as well
 
-    // Okay, so we have a payment, will either be a renewal or a sign up.
-    if ($this->getRenewalStatus()) {
-
-      // Renewal, or additional payment
-      // If it's an additional payment the expiry date will be in the future
+    // We have just processed a payment. This could be
+    // 1. A renewal - needs review
+    // 2. An additional billable item to an existing listing
+    // 3. A brand new listing - needs to be reviewed 
+    
+    $total    = getOrderTotal($order);
+    
+    $renewal  = $this->getRenewalStatus();
+    
+    $review   = $this->getReviewStatus();
+    
+    $expiry   = $this->getExpiryDate();
+    die;
+    $this->updateProperty();
+    
+    // $order contains the order detail - thus the total just paid
+    
+    
+      
+      
+      
+      
+      // This is a renewal
+      // We have the order summary so update the property with the amount paid, and update the listing review status 
+      // set a redirect message, send the email etc
+      
+      
+      
 
       // Update the expiry date
       $this->updateProperty(true);
 
       // Get the expiry date etc
 
-    } else {
-
-      // This must be a sign up.
-
-      // Update the expiry date
-      $this->updateProperty(false,true);
-
-      // At this point, payment has been made, property 'locked' - email owner to notify them.
-
-    }
 
 
   }
@@ -818,8 +839,18 @@ class HelloWorldModelProperty extends JModelAdmin {
   {
 
     // Set the renewal status...
-    return $this->renewal_status;
+    return $this->isRenewal;
 
+  }
+  
+  protected function setReviewStatus($review_status = true) {
+    
+    $this->renewal_status = $review_status;
+    
+  }
+  
+  protected function getReviewStatus(){
+    return $this->renewal_status;
   }
 
 }

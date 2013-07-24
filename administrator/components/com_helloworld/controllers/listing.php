@@ -138,6 +138,12 @@ class HelloWorldControllerListing extends JControllerForm {
     return true;
   }
 
+  /**
+   * Submit - controller to determine where to go when a listing in submitted for review
+   *
+   * 
+   * @return boolean
+   */
   public function submit() {
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
@@ -213,17 +219,41 @@ class HelloWorldControllerListing extends JControllerForm {
     // It's all good.
     // Here we need to determine how to handle this submission for review.
     
-    // If the expiry date is imminent (e.g. within 7 days) then we need to redirect the user to the renewal screen.
+    // If the expiry date is within 7 days then we need to redirect the user to the renewal screen.
     // If the property has expired then we need to redirect the user to the renewal screen (or they will click the renewal button)
+    // 
     // If a new property then same as above? No, expiry date should only be set after the review. But they do need to pay...
+    // 
     // If not expired then we need to determine if they have added any new billable items
+    // 
     // Otherwise, should just be submitted to the PFR and locked for editing.
+    // 
     // Redirect to the renewal payment/summary form thingy...
-    $this->setRedirect(
-            JRoute::_(
-                    'index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false
-            )
-    );
+    
+    $listing = $this->getModel('Listing','HelloWorldModel',$config = array('ignore_request' => true));;
+    $listing->setState('com_helloworld.listing.id',$recordId);
+    
+    // Get the listing unit details
+    $listing = $listing->getItems();
+    
+    $days_to_renewal  = HelloWorldHelper::getDaysToExpiry($listing[0]->expiry_date);
+    
+    // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
+    if ($days_to_renewal < 7 || empty($days_to_renewal)) {
+      
+      $message = ($days_to_renewal > 0) ? '<7 days to renewal, please renew now' : 'Renew now, chump';
+      
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false);
+      
+    } else {
+      
+      // Need to determine whether they owe us any more wedge
+      
+       
+      
+    }
+    
+    $this->setRedirect($redirect);
 
 
 

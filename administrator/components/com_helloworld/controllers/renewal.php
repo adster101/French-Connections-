@@ -120,12 +120,14 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
 
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-    $app = JFactory::getApplication();
-    // Here, we could abstract the call the get the listing in the below processPayment method
-    // so it would be possible to pass in the data as a config option...
-    $model = $this->getModel('Property');
-    $form = $model->getPaymentForm();
+    
+    // Get an instance of the Listing model and get the listing details
+    $listing_model      = JModelLegacy::getInstance('Listing', 'HelloWorldModel');
+    $listing            = $listing_model->getItems();  
+    
+    // Instantiate an instance of the property model using the listing detail as the config
+    $model              = $this->getModel('Property','HelloWorldModel',$config=array('listing'=>$listing));
+    $form               = $model->getPaymentForm();
 
     // Data here is the clients billing address details
     $data = $this->input->post->get('jform', array(), 'array');
@@ -171,16 +173,8 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
     }
 
     // Payment has been authorised...
-    // Need to process the rest of the gubbins
-    // Essentially we need to do the following
-    // Update the expiry date to one year hence
-    // If a renewal, then no need to hold the property in the PFR, so update the expiry date and send a confirmation email and write into the admin log
-    // If a sign up, then update review status to 2, update the expiry date and send an email to confirm payment? Log payment amount against the property as well
+    $message = $model->processListing($return);
 
-    $message = $model->processListing();
-
-    // Set the success message.
-    $message = JText::_('PROPERTY HAS BEEN RENEWED. WHOOPY DOO');
 
     // Set the redirect based on the task.
     switch ($this->getTask()) {

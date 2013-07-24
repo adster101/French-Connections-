@@ -20,18 +20,19 @@ class HelloWorldViewRenewal extends JViewLegacy {
    */
   function display($tpl = null) {
 
-    $app = JFactory::getApplication();
-    $input = $app->input;
+    $input      = JFactory::getApplication()->input;
     $this->id = $input->get('id', '', 'int');
-    $this->extension = $input->get('option', '', 'string');
-
-    $layout = $input->get('layout','','string');
-
-    // Add the UserProfile model so we can get the user details and the form...
-    //$this->setModel(JModelLegacy::getInstance('UserProfile', 'HelloWorldModel'), true);
-
+    $layout   = $input->get('layout','','string');
+   
+    //$this->extension = $input->get('option', '', 'string');
+    // Get an instance of the Listing model
+    $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel'));
+    $model    = $this->getModel('Listing');
+    
+    $this->listing = $model->getItems();
+     
     // Add the Property model so we can get the renewal details...
-    $this->setModel(JModelLegacy::getInstance('Property', 'HelloWorldModel'), true);
+    $this->setModel(JModelLegacy::getInstance('Property', 'HelloWorldModel', $config = array('listing'=>$this->listing)), true);
 
     // Get an instance of the property model
     $property = $this->getModel('Property');
@@ -39,11 +40,6 @@ class HelloWorldViewRenewal extends JViewLegacy {
     // Get the units and image details they against this property
     $this->summary = $this->get('RenewalSummary');
 
-    // Get an instance of the default model
-    $user = $this->getModel();
-
-    // And set a the owner_id property so we can use it
-    $user->owner_id = $property->owner_id;
 
     if ($layout == 'payment') {
       // Get the payment form
