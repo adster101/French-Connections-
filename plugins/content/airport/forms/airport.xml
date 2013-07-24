@@ -48,7 +48,7 @@
         labelclass="control-label"
       />    
       <field
-        name="airportcode"
+        name="code"
         type="text"
         id="airportcode"
         description=""

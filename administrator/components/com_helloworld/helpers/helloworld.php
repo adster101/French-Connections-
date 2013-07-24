@@ -231,7 +231,8 @@ abstract class HelloWorldHelper {
         'helloworld.property.submit',
         'helloworld.property.review',
         'helloworld.property.autorenew',
-        'helloworld.property.preview'
+        'helloworld.property.preview',
+        'helloworld.reports.renewal'
     );
 
 

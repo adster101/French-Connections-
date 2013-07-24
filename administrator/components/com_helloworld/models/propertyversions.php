@@ -322,6 +322,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
       // If this is a new propery then we need to generate a 'stub' entry into the propery table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
+      // TODO - Move this code so that it runs when adding a new property rather than when saving for the first time
       if ($isNew) {
 
         $new_property_id = $this->createNewProperty($data);

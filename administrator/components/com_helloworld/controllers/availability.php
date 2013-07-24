@@ -104,8 +104,8 @@ class HelloWorldControllerAvailability extends JControllerForm {
     }
 
 
-    $this->holdEditId('com_helloworld.edit.availability',$id);
-    
+    $this->holdEditId('com_helloworld.edit.availability', $id);
+
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=availability&unit_id=' . (int) $id, false)

@@ -113,7 +113,7 @@ class HelloWorldModelListingReview extends JModelAdmin {
     $query->from($db->quoteName($table1) . ' as a');
     $query->join('left', $db->quoteName($table2) . ' as b on a.id = b.' . $join_field);
     $query->where('a.id = ' . (int) $recordId);
-    $query->where('b.review in (0,1)');
+    $query->where('review in (0,1)');
 
     $db->setQuery($query);
 

@@ -128,7 +128,6 @@ class HelloWorldModelListing extends JModelList {
         a.id,
         a.expiry_date,
         a.review,
-        d.review as unit_updated,
         a.created_by,
         e.unit_id unit_id,
         e.property_id,

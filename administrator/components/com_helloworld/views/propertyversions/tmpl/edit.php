@@ -101,40 +101,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
 
 
       <div class="span2 form-vertical">
-        <fieldset class="adminform">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_DETAILS'); ?></legend>
-          <?php foreach ($this->form->getFieldset('additional-details') as $field): ?>
-            <div class="control-group">
-              <?php echo $field->label; ?>
-              <div class="controls">
-                <?php echo $field->input; ?>
-              </div>
-            </div>
-          <?php endforeach; ?>
-        </fieldset>
 
-        <fieldset class="panelform">
-          <?php foreach ($this->form->getFieldset('owner') as $field): ?>
-            <div class="control-group">
-              <?php echo $field->label; ?>
-              <div class="controls">
-                <?php echo $field->input; ?>
-              </div>
-            </div>
-
-          <?php endforeach; ?>
-        </fieldset>
-        <fieldset class="panelform">
-          <?php foreach ($this->form->getFieldset('notes') as $field): ?>
-            <div class="control-group">
-              <?php echo $field->label; ?>
-              <div class="controls">
-                <?php echo $field->input; ?>
-              </div>
-            </div>
-
-          <?php endforeach; ?>
-        </fieldset>
       </div>
     </div>
   </div>

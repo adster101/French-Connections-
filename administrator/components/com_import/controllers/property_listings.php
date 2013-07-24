@@ -69,7 +69,7 @@ class ImportControllerProperty_listings extends JControllerForm {
       $query->where('level = 5');
 
       $query->having('distance < 50');
-      $query->order('distance');
+      $query->order('distance asc');
       $db->setQuery($query, 0, 1);
       $items = $db->loadRow();
 

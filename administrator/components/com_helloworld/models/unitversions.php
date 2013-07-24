@@ -420,7 +420,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $new_version_required = array('');
     $old_version_id = ($data['id']) ? $data['id'] : '';
 
-
     // Generate a logger instance for reviews
     JLog::addLogger(array('text_file' => 'unitversions.update.php'), JLog::ALL, array('unitversions'));
 
@@ -454,9 +453,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         if ($new_version_required[0] === true) {
           // As a new version is required amend the data array before we save
           $data['id'] = '';
-          // Don't think that a review state is needed here.
-          // Will always be set in the unit stub if it needs reviewing
-          $data['review'] = '0';
+          $data['review'] = 1;
           $data['published_on'] = '';
           JLog::add('New unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
         }
@@ -464,9 +461,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       // If this is a new unit then we need to generate a 'stub' entry into the unit table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
+      // TO DO - Move this code to run when user chooses add new property
       if ($isNew) {
 
-        // in unit table property ID refers to the parent property
+        // in unit table property ID refers to the parent listing id
         $data['property_id'] = $data['property_id'];
         $data['review'] = 1;
         $new_unit_id = $this->createNewUnit($data);
@@ -534,7 +532,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // TODO - Tidy this up as tariffs might not be present
       JLog::add('About to save tariffs for unit ID' . $table->id, JLog::ALL, 'unitversions');
 
-      if (!$this->saveTariffs($table->unit_id)) {
+      if (!$this->saveTariffs($table->unit_id, $data)) {
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
@@ -555,22 +553,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
         }
 
-        if (!$isNew) { // For a new unit the review status defaults to 1 so no need to update here
-          // Update the existing unit listing to indicate that it has been modified (e.g. a new one created)
-          $unit = $this->getTable('Unit', 'HelloWorldTable');
-          $unit->id = $pk;
-          $unit->review = 1;
-
-          JLog::add('About to update Unit review status for ' . $pk, 'unitversions');
-
-          if (!$unit->store()) {
-            $this->setError($unit->getError());
-            Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
-          }
+        // If this is not a new unit, then we want to copy the unit images to the new version...
+        if (!$isNew) {
 
           // Copy the images against the new version id, but only if the versions are different
           // If we are updating a new unpublished version, no need to copy images
-
           if ($old_version_id != $new_version_id) {
             JLog::add('About to copy images for unit ' . $pk, 'unitversions');
 
@@ -762,7 +749,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    * 
    */
 
-  protected function saveTariffs($unit_id = '') {
+  protected function saveTariffs($unit_id = '', $data = array()) {
 
     // TO DO: I think that tariffs should be modelled in a separate model file. 
     // That is, look at moving getTariffXML, getTariffs, getTariffsByDay and this method 
@@ -772,6 +759,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Similar could be considered to the facilities as well.
     // We need to extract tariff information here, because the tariffs are filtered via the 
     // controller validation method. Perhaps need to override the validation method for this model?
+    
+    if (!array_key_exists($data['start_date'])) {
+      return true;
+    }
+    
     $input = JFactory::getApplication()->input;
 
     $data = $input->get('jform', array(), 'array');
@@ -786,7 +778,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
 
 
-    // Bind the translated fields to the JTAble instance	
+    // Bind the translated fields to the JTable instance	
     if (!$tariffsTable->save($unit_id, $tariff_periods)) {
 
       return false;
