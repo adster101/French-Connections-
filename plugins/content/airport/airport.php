@@ -182,9 +182,9 @@ class plgContentAirport extends JPlugin {
 
           $query->clear();
           $query->insert('#__airports');
-          $query->columns('id,department,longitude,latitude');
+          $query->columns('id,department,latitude,longitude,code');
 
-          $query->values($articleId . ', ' . $db->quote($attribs->department) . ', ' . $db->quote('1.251') . ', ' . $db->quote('2.652'));
+          $query->values($articleId . ', ' . $db->quote($attribs->department) . ', ' . $db->quote($attribs->latitude) . ', ' . $db->quote($attribs->longitude) . ', ' .$db->quote($attribs->code));
 
           $db->setQuery($query);
 
