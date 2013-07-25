@@ -173,9 +173,10 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
     }
 
     // Payment has been authorised...
-    $message = $model->processListing($return);
+    $return = $model->processListing($return);
 
-
+    // $return should contain a redirect url and a message, at least
+    
     // Set the redirect based on the task.
     switch ($this->getTask()) {
 

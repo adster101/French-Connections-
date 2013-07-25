@@ -241,7 +241,7 @@ class HelloWorldControllerListing extends JControllerForm {
     // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
     if ($days_to_renewal < 7 || empty($days_to_renewal)) {
       
-      $message = ($days_to_renewal > 0) ? '<7 days to renewal, please renew now' : 'Renew now, chump';
+      $message = ($days_to_renewal > 0) ? 'Your property is expirying within 7 days - please renew now' : 'Renew now, chump';
       
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false);
       
@@ -253,17 +253,8 @@ class HelloWorldControllerListing extends JControllerForm {
       
     }
     
-    $this->setRedirect($redirect);
+    $this->setRedirect($redirect, $message, 'warning');
 
-
-
-
-    // Hand off to the model to check whether this is a new property
-    // Get the details, work out price etc
-    // Process payment
-    // Update property status (expiry date, review status etc)
-    // send confirmation email
-    // etc
   }
 
   /**
