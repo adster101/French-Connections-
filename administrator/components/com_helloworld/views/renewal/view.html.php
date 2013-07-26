@@ -38,7 +38,7 @@ class HelloWorldViewRenewal extends JViewLegacy {
     $property = $this->getModel('Property');
 
     // Get the units and image details they against this property
-    $this->summary = $this->get('RenewalSummary');
+    $this->summary = $this->get('PaymentSummary');
 
 
     if ($layout == 'payment') {

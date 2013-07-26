@@ -43,6 +43,10 @@ class HelloWorldModelProperty extends JModelAdmin {
      */
     protected $isReview = '';
 
+    /**
+     * __construct - initialise the various class properties that we need to process a listing
+     * @param type $config
+     */
     function __construct($config = array()) {
 
         parent::__construct($config);
@@ -52,8 +56,13 @@ class HelloWorldModelProperty extends JModelAdmin {
             // Set the model properties here.
             $this->listing = $config['listing'];
             $this->owner_id = $config['listing'][0]->created_by;
-            // Need to determine more accurately whether this is a renewal. E.g. test whether expiry date is future or not
-            $this->isRenewal = (!empty($config['listing'][0]->expiry_date)) ? true : false;
+
+            /*
+             * Determine whether this is a renewal. 
+             */
+            $expiry = $config['listing'][0]->expiry_date;
+            $this->setIsRenewal($expiry);
+
             $this->listing_id = $config['listing'][0]->id;
             $this->expiry_date = $config['listing'][0]->expiry_date;
             $this->isReview = $config['listing'][0]->review;
@@ -100,11 +109,13 @@ class HelloWorldModelProperty extends JModelAdmin {
      *
      */
 
-    public function getRenewalSummary() {
+    public function getPaymentSummary() {
+
 
         // Get the user details
         $user = $this->getUser($this->owner_id);
 
+        // TODO - If not a renewal 
         // Get the order summary, consists of item codes and quantities
         $order_summary = $this->summary($this->listing);
 
@@ -115,7 +126,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         $vat_status = ($user->vat_status) ? $user->vat_status : 'Z';
 
         // Calculate the value of each line of the order...
-        $summary_tmp = $this->getOrderTotals($order_summary, $item_costs, $vat_status);
+        $summary_tmp = $this->getOrderLineTotals($order_summary, $item_costs, $vat_status);
 
         // Get vouchers, need to pick up any vouchers that are added against a property here
         // Detect the inclusion into the French site network
@@ -125,12 +136,15 @@ class HelloWorldModelProperty extends JModelAdmin {
         return $summary;
     }
 
-    /*
+    /**
      * Calculate the line costs for the pro forma order
-     *
+     * 
+     * @param array $order_summary
+     * @param array $item_costs
+     * @param string $vat_status
+     * @return array 
      */
-
-    public function getOrderTotals($order_summary = array(), $item_costs = array(), $vat_status) {
+    public function getOrderLineTotals($order_summary = array(), $item_costs = array(), $vat_status) {
 
         // Get the vat rate from the item costs config params setting
         $vat = JComponentHelper::getParams('com_itemcosts')->get('vat');
@@ -151,6 +165,23 @@ class HelloWorldModelProperty extends JModelAdmin {
         }
 
         return $order_summary;
+    }
+
+    /**
+     * getOrderTotal - returns the total price for the payment
+     */
+    public function getOrderTotal($order = array()) {
+
+        $order_total = '';
+
+        /*
+         * Get the order total
+         */
+        foreach ($order as $line => $line_detail) {
+            $order_total = $order_total + $line_detail['line_value'];
+        }
+
+        return $order_total;
     }
 
     /*
@@ -198,7 +229,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     public function getUserFormDetails() {
 
-        // Get a copy of the form we are using to collect the user invoice address and vat status
+// Get a copy of the form we are using to collect the user invoice address and vat status
         $form = $this->loadForm('com_helloworld.helloworld', 'ordersummary', array('control' => 'jform', 'load_data' => false));
 
         if (empty($form)) {
@@ -291,7 +322,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         // Need to know the user invoice address and VAT status for this user
         // If we don't know the VAT status then intially apply it.
         // If the property is a B&B, then only charge for one unit, regardless of how many units are listed.
-        // If the expiry date is set then this is a renewal. Regardless of whether it has actually expired or not
+        // If the expiry date is set then this is a renewal. Regardless of whether it has actually expired or not   
         // Item codes will be dependent on whether it is a renewal or not
         // Flag to indicate whether we've alrady counted a b&B unit
 
@@ -340,7 +371,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         // Also possible the 'additional' marketing gubbins
         // Vouchers!
 
-        if ($this->getRenewalStatus()) {
+        if ($this->getIsRenewal()) {
 
             // Determine the item costs
             if ($image_count >= 8) { // Renewal
@@ -423,7 +454,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
 
 
-        // Update the data array with a few more bits and pieces
+// Update the data array with a few more bits and pieces
         $data['Amount'] = $sngTotal;
         $data['VendorTxCode'] = $VendorTxCode;
         $data['user_id'] = $this->owner_id;
@@ -432,29 +463,29 @@ class HelloWorldModelProperty extends JModelAdmin {
         $data['id'] = '';
         $data['CardLastFourDigits'] = substr($data['CardNumber'], -4, 4);
 
-        // Add the total number of items to the basket string
+// Add the total number of items to the basket string
         $strBasket = $iBasketItems . $strBasket;
 
         if (!$this->saveProtxTransaction($data)) {
-            // Error is set in the function
+// Error is set in the function
             return false;
         }
 
 
-        // So let's put the transaction into the database
+// So let's put the transaction into the database
         $table = JTable::getInstance('protxtransactionlines', 'HelloWorldTable');
 
-        // Add each of the order lines to the transaction lines table
+// Add each of the order lines to the transaction lines table
         foreach ($order as $line) {
             $line->VendorTxCode = $VendorTxCode;
             $line->id = '';
-            // Bind the data.
+// Bind the data.
             if (!$table->bind($line)) {
                 $this->setError($table->getError());
                 return false;
             }
 
-            // Store the data.
+// Store the data.
             if (!$table->store()) {
                 $this->setError($table->getError());
                 return false;
@@ -486,7 +517,7 @@ class HelloWorldModelProperty extends JModelAdmin {
             $strPost = $strPost . "&IssueNumber=" . $data['IssueNumber'];
         $strPost = $strPost . "&CV2=" . $data['CV2'];
 
-        // Send the IP address of the person entering the card details
+// Send the IP address of the person entering the card details
         $strPost = $strPost . "&ClientIPAddress=127.0.0.1";
         /* Allow fine control over 3D-Secure checks and rules by changing this value. 0 is Default **
          * * It can be changed dynamically, per transaction, if you wish.  See the Sage Pay Direct Protocol document */
@@ -495,7 +526,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         /** It can be changed dynamically, per transaction, if you wish.  See the Sage Pay Direct Protocol document */
         if ($strTransactionType !== "AUTHENTICATE")
             $strPost = $strPost . "&ApplyAVSCV2=2";
-        // Add the basket
+// Add the basket
         $strPost = $strPost . "&Basket=" . urlencode($strBasket); //As created above
 
         /* Billing Details
@@ -536,7 +567,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
         $strStatus = $arrResponse["Status"];
         $strStatusDetail = $arrResponse["StatusDetail"];
-        // Card details and address details have been checked. Can now process accordingly...
+// Card details and address details have been checked. Can now process accordingly...
 
         /* If this isn't 3D-Auth, then this is an authorisation result (either successful or otherwise) **
          * * Get the results form the POST if they are there */
@@ -550,7 +581,7 @@ class HelloWorldModelProperty extends JModelAdmin {
         $str3DSecureStatus = $arrResponse["3DSecureStatus"];
         $strCAVV = $arrResponse["CAVV"];
 
-        // Update the database and redirect the user appropriately
+// Update the database and redirect the user appropriately
         if ($strStatus == "OK")
             $strDBStatus = "AUTHORISED - The transaction was successfully authorised with the bank.";
         elseif ($strStatus == "MALFORMED")
@@ -570,13 +601,13 @@ class HelloWorldModelProperty extends JModelAdmin {
         else
             $strDBStatus = "UNKNOWN - An unknown status was returned from Sage Pay.  The Status was: " . mysql_real_escape_string($strStatus) . ", with StatusDetail:" . mysql_real_escape_string($strStatusDetail);
 
-        // Save the transaction out to the protx table
+// Save the transaction out to the protx table
         $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
 
-        // Okay now we have processed the transaction and update it in the db.
+// Okay now we have processed the transaction and update it in the db.
         switch ($strStatus) {
             case 'OK':
-                //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
+//$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
                 return $order;
                 break;
             case 'MALFORMED':
@@ -628,12 +659,72 @@ class HelloWorldModelProperty extends JModelAdmin {
 
     public function processListing($order = array()) {
 
+        // Get the user details. E.g. name, email address
+        $user = JFactory::getUser($this->getOwnerId());
+        $user_profile = $this->getUser($this->getOwnerId());
 
-        // Initialise varibales
-        $expiry_date = $this->getExpiryDate();
-        $isRenewal = $this->getIsRenewal();
-        $isReview = $this->getIsReview();
-        $listing_id = $this->getListingId();
+        $listing_id = ($this->getListingId()) ? $this->getListingId() : '';
+
+        $expiry_date = ($this->getExpiryDate()) ? $this->getExpiryDate() : '';
+
+        $params = JComponentHelper::getParams('com_helloworld');
+
+        $from = array($params->get('payment_admin_email', ''), $params->get('payment_admin_name'));
+
+        if ($this->getIsRenewal() && !$this->getIsReview()) {
+
+            // Straightforward renewal 
+            // Update the expiry date
+            $date = $this->getNewExpiryDate();
+
+            if (!$this->updateProperty($expiry_date = $date)) {
+
+                // Log this, return false?
+
+            }
+
+            /*
+             * Get the payment total that has just been processed
+             */
+            $total = $this->getOrderTotal($order);
+
+            // Send payment receipt
+            $subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_SUBJECT', $total, $listing_id);
+            $body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_BODY', $total, $listing_id, aas, asdasd, asda);
+            $this->sendEmail($from, $user->email, $subject, $body);
+
+            // Send the renewal confirmation email           
+            $subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_SUBJECT', $total, $listing_id);
+            $body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_BODY', $total, $listing_id, aas, asdasd, asda);
+            $this->sendEmail($from, $user->email, $subject, $body);
+            
+        } else if ($this->getIsRenewal() && $this->getIsReview()) {
+
+            // Renewal with amendments
+            // Just update the review status
+            // Send payment receipt
+
+            $this->updateProperty($review = 2);
+        } else if (empty($expiry_date) && !$this->getIsRenewal()) {
+
+            // New property
+            // Update the review status
+            // Send payment receipt
+            // Send confirmation of submission
+
+            $this->updateProperty($review = 2);
+        } else if (!empty($expiry_date) && !$this->getIsRenewal()) {
+
+            // Existing property that has been updated. - May not be appropriate here...or this may 
+            // only be called when they need to pay extra
+            // Update review status
+            // If payment made - send payment receipt
+
+            $this->updateProperty($review = 2);
+        }
+
+
+
 
         $order_total = $this->getOrderTotal($order);
 
@@ -652,21 +743,37 @@ class HelloWorldModelProperty extends JModelAdmin {
         if (empty($expiry_date)) {
 
             // Send an email detailing the payment made
-            
-            
             // Must be a new property - 
-            if (!$this->updateProperty($listing_id, $review = 2, $listing_charge = $order_total )) {
+            if (!$this->updateProperty($listing_id, $review = 2, $listing_charge = $order_total)) {
+
                 // TODO - Add consistent logging across the component, do it!
                 return $return;
             }
 
             // Return a message for display on the admin side
             $message = 'COM_HELLOWORLD_HELLOWORLD_PAYMENT_NEW_PROPERTY';
-            
         } else if ($isReview && $isRenewal) {
-            
+
             // A renewal with changes that need reviewing...
-            
+        }
+    }
+
+    /**
+     * 
+     */
+    public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '') {
+
+        $recipient = (JDEBUG) ? $params->get('admin_payment_email') : $to;
+
+        // Assemble the email data...the sexy way!
+        $mail = JFactory::getMailer()
+                ->setSender($from)
+                ->addRecipient($recipient)
+                ->setSubject($emailSubject)
+                ->setBody($emailBody);
+
+        if (!$mail->Send()) {
+            // Oops, log this
         }
     }
 
@@ -678,44 +785,13 @@ class HelloWorldModelProperty extends JModelAdmin {
      * @param type $renewal_status - renewal status for the listing
      * @return boolean
      */
-    public function updateProperty($listing_id = '', $review = 1, $listing_charge = '') {
+    public function updateProperty($listing_id = '', $review = 1, $cost = '', $expiry_date) {
 
         // Initialise some variable
         $data = array();
-        $date = JFactory::getDate();
         $table = JTable::getInstance('Property', 'HelloWorldTable');
 
-        /*
-         *  If this is a renewal and there is an expiry date and no review is needed
-         */
-        if ($renewal_status && !empty($expiry_date) && !$review_status) {
 
-            $date->add(new DateInterval('P365D'));
-            $new_expiry_date = $date->toSql();
-            $data['expiry_date'] = $new_expiry_date;
-        }
-
-        /*
-         *  This takes care of flagging the property as being locked for review
-         */
-        if ($review_status == true) {
-
-            $data['review'] = 2;
-        }
-
-        /*
-         * Is there an amount that has been paid for this revision?
-         */
-        if (!empty($listing_update_charge)) {
-            $data['listing_charge'] = $listing_update_charge;
-        }
-
-        $bind = $table->bind($data);
-
-        if (empty($data)) {
-            return true;
-        }
-        
         // Store the data.
         if (!$table->save($data)) {
             $this->setError($table->getError());
@@ -732,57 +808,57 @@ class HelloWorldModelProperty extends JModelAdmin {
      * *********************************************************** */
 
     public function requestPost($url, $data) {
-        // Set a one-minute timeout for this script
+// Set a one-minute timeout for this script
         set_time_limit(60);
 
-        // Initialise output variable
+// Initialise output variable
         $output = array();
 
-        // Open the cURL session
+// Open the cURL session
         $curlSession = curl_init();
 
-        // Set the URL
+// Set the URL
         curl_setopt($curlSession, CURLOPT_URL, $url);
-        // No headers, please
+// No headers, please
         curl_setopt($curlSession, CURLOPT_HEADER, 0);
-        // It's a POST request
+// It's a POST request
         curl_setopt($curlSession, CURLOPT_POST, 1);
-        // Set the fields for the POST
+// Set the fields for the POST
         curl_setopt($curlSession, CURLOPT_POSTFIELDS, $data);
-        // Return it direct, don't print it out
+// Return it direct, don't print it out
         curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);
-        // This connection will timeout in 30 seconds
+// This connection will timeout in 30 seconds
         curl_setopt($curlSession, CURLOPT_TIMEOUT, 30);
-        //The next two lines must be present for the kit to work with newer version of cURL
-        //You should remove them if you have any problems in earlier versions of cURL
+//The next two lines must be present for the kit to work with newer version of cURL
+//You should remove them if you have any problems in earlier versions of cURL
         curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($curlSession, CURLOPT_SSL_VERIFYHOST, 1);
 
-        //Send the request and store the result in an array
+//Send the request and store the result in an array
 
         $rawresponse = curl_exec($curlSession);
-        //Store the raw response for later as it's useful to see for integration and understanding
+//Store the raw response for later as it's useful to see for integration and understanding
         $_SESSION["rawresponse"] = $rawresponse;
-        //Split response into name=value pairs
+//Split response into name=value pairs
         $response = split(chr(10), $rawresponse);
-        // Check that a connection was made
+// Check that a connection was made
         if (curl_error($curlSession)) {
-            // If it wasn't...
+// If it wasn't...
             $output['Status'] = "FAIL";
             $output['StatusDetail'] = curl_error($curlSession);
         }
 
-        // Close the cURL session
+// Close the cURL session
         curl_close($curlSession);
 
-        // Tokenise the response
+// Tokenise the response
         for ($i = 0; $i < count($response); $i++) {
-            // Find position of first "=" character
+// Find position of first "=" character
             $splitAt = strpos($response[$i], "=");
-            // Create an associative (hash) array with key/value pairs ('trim' strips excess whitespace)
+// Create an associative (hash) array with key/value pairs ('trim' strips excess whitespace)
             $output[trim(substr($response[$i], 0, $splitAt))] = trim(substr($response[$i], ($splitAt + 1)));
         } // END for ($i=0; $i<count($response); $i++)
-        // Return the output
+// Return the output
         return $output;
     }
 
@@ -793,7 +869,7 @@ class HelloWorldModelProperty extends JModelAdmin {
      */
 
     public function saveProtxTransaction($data = array(), $key = '') {
-        // So let's put the transaction into the database
+// So let's put the transaction into the database
 
         $table = JTable::getInstance('protxtransactions', 'HelloWorldTable');
 
@@ -801,19 +877,45 @@ class HelloWorldModelProperty extends JModelAdmin {
             $table->set('_tbl_key', 'VendorTxCode');
         }
 
-        // Bind the data.
+// Bind the data.
         if (!$table->bind($data)) {
             $this->setError($table->getError());
             return false;
         }
 
-        // Store the data.
+// Store the data.
         if (!$table->store()) {
             $this->setError($table->getError());
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Generate a new expiry date for the property based on todays date.
+     * 
+     * @param type $period
+     * @return type
+     */
+    public function getNewExpiryDate($period = 'P365D') {
+
+        /**
+         * Get the date now
+         */
+        $date = JFactory::getDate();
+
+        /*
+         * Add the date period to it
+         */
+        $date->add(new DateInterval($period));
+
+        /*
+         * Format the new date
+         */
+        $new_expiry_date = $date->toSql();
+
+        return $new_expiry_date;
     }
 
     /**
@@ -830,7 +932,7 @@ class HelloWorldModelProperty extends JModelAdmin {
      * @since   1.6
      */
     protected function getStoreId($id = '') {
-        // Compile the store id.
+// Compile the store id.
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.active');
 
@@ -842,7 +944,59 @@ class HelloWorldModelProperty extends JModelAdmin {
      * @return boolean
      */
     public function getIsRenewal() {
-        // Set the renewal status...
+// Set the renewal status...
+        return $this->isRenewal;
+    }
+
+    /**
+     * Method to determine the renewal status based on the expiry date
+     * 
+     * @return void
+     */
+    protected function setIsRenewal($expiry_date = '') {
+
+
+        $date = strtotime($expiry_date);
+
+        /*
+         * Get the days until the properyt expires
+         */
+        $days_to_expiry = HelloWorldHelper::getDaysToExpiry($expiry_date);
+
+        if (!$date) {
+
+            /*
+             * Check that we have a valid date
+             */
+            $this->isRenewal = false;
+        } else if (empty($expiry_date)) {
+
+            /*
+             *  If there is no expiry date then not a renewal
+             */
+            $this->isRenewal = false;
+        } else if (time() > $date) {
+
+            /*
+             * If time now is greater than date, must have expired
+             */
+            $this->isRenewal = true;
+        } else if (($days_to_expiry < 7) && ($date > time())) {
+
+            /*
+             * Less than seven days to expiry, treat as renewal
+             */
+            $this->isRenewal = true;
+        } else if ($days_to_expiry > 7) {
+
+            /*
+             * Check that we are not in the seven day window.
+             */
+
+            $this->isRenewal = false;
+        }
+
+
         return $this->isRenewal;
     }
 
