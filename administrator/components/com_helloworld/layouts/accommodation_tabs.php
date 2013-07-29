@@ -24,6 +24,7 @@ $units = HelloWorldHelper::getUnitsById($data['progress']);
 
 // Set the item which is used below to output the tabs
 $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);
+
 ?>
 
 <ul class="nav nav-tabs">

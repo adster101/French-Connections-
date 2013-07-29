@@ -421,7 +421,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $old_version_id = ($data['id']) ? $data['id'] : '';
 
     // Generate a logger instance for reviews
-    JLog::addLogger(array('text_file' => 'unitversions.update.php'), JLog::ALL, array('unitversions'));
+    JLog::addLogger(array('text_file' => 'unitversions.update.php'), 'DEBUG', array('unitversions'));
 
     // Get an db instance and start a transaction
     $db = JFactory::getDBO();
@@ -444,7 +444,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
       if (!($data['review'])) {
         
-        JLog::add('Checking if new unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
+        JLog::add('Checking if new unit version is needed for ' . $pk, 'DEBUG', 'unitversions');
 
         // Let's have a before bind trigger
         $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
@@ -455,7 +455,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           $data['id'] = '';
           $data['review'] = 1;
           $data['published_on'] = '';
-          JLog::add('New unit version is needed for ' . $pk, JLog::ALL, 'unitversions');
+          JLog::add('New unit version is needed for ' . $pk, 'DEBUG', 'unitversions');
         }
       }
 
@@ -475,7 +475,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT'));
         }
 
-        JLog::add('New unit ' . $new_unit_id . 'created', JLog::ALL, 'unitversions');
+        JLog::add('New unit ' . $new_unit_id . 'created', 'DEBUG', 'unitversions');
 
         // Set the new unit id in the data array so that
         // when it is bound below it is assign to the correct property
@@ -523,14 +523,14 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // E.g. if a new unit, insert facilitites, if new version then we will
       // save the facilities against the new version id.
 
-      JLog::add('About to save facilities for unit version ID' . $new_version_id, JLog::ALL, 'unitversions');
+      JLog::add('About to save facilities for unit version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
       if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id)) {
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // TODO - Tidy this up as tariffs might not be present
-      JLog::add('About to save tariffs for unit ID' . $table->id, JLog::ALL, 'unitversions');
+      JLog::add('About to save tariffs for unit ID' . $table->id, 'DEBUG', 'unitversions');
 
       if (!$this->saveTariffs($table->unit_id, $data)) {
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
@@ -546,7 +546,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
         $property->id = $table->property_id;
         $property->review = 1;
-        JLog::add('About to update Property review status for ' . $property->id, 'unitversions');
+        JLog::add('About to update Property review status for ' . $property->id, 'DEBUG' ,'unitversions');
 
         if (!$property->store()) {
           $this->setError($property->getError());
@@ -582,7 +582,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       $this->setError($e->getMessage());
 
       // Log the exception
-      JLog::add('There was a problem: ' . $e->getMessage(), JLog::ALL, 'unitversions');
+      JLog::add('There was a problem: ' . $e->getMessage(), 'DEBUG', 'unitversions');
       return false;
     }
 

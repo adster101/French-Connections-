@@ -41,10 +41,15 @@ class HelloWorldTablePropertyVersions extends JTable
     } else {
 
       // New property version so add in the who created it and when
-
+      if (empty($this->created_by)) {
+          $this->created_by = $user->id;
+      }
+        
       if (empty($this->created_on)) {
         $this->created_on = $date->toSql();
       }
+      
+      
     }
 
     return parent::store($updateNulls);

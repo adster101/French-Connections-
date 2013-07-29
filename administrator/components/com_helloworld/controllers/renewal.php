@@ -121,6 +121,8 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
     
+    $app = JFactory::getApplication();
+    
     // Get an instance of the Listing model and get the listing details
     $listing_model      = JModelLegacy::getInstance('Listing', 'HelloWorldModel');
     $listing            = $listing_model->getItems();  
@@ -173,7 +175,7 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
     }
 
     // Payment has been authorised...
-    $return = $model->processListing($return);
+    $message = $model->processListing($return, $validData);
 
     // $return should contain a redirect url and a message, at least
     

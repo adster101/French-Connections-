@@ -76,7 +76,7 @@ class HelloWorldViewListings extends JViewLegacy {
 
     JToolBarHelper::title(JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLDS'), 'helloworld');
     if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('propertyversions.edit', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_PROPERTY', false);
+      JToolBarHelper::addNew('propertyversions.add', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_PROPERTY', false);
     }
     if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) {
       JToolBarHelper::editList('propertyversions.edit', 'JTOOLBAR_EDIT');
