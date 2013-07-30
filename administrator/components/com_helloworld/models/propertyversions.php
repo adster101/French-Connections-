@@ -122,28 +122,57 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         // Check the session for previously entered form data.
         $data = JFactory::getApplication()->getUserState('com_helloworld.edit.propertyversions.data', array());
 
-        // Load the users plugins.
-        JPluginHelper::importPlugin('user');
-
-
         if (empty($data)) {
             $data = $this->getItem();
         }
 
-        $this->preprocessData('com_helloworld.propertyversions', $data);
-
         return $data;
     }
 
-    /**
-     * 
-     * 
-     * @param type $context
-     * @param type $data
+    /*
+     * param JForm $form The JForm instance for the view being edited
+     * param array $data The form data as derived from the view (may be empty)
+     *
+     * @return void
+     *
      */
-    protected function preprocessData($context, &$data) {
 
-        parent::preprocessData($context, $data);
+    protected function preprocessForm(JForm $form, $data) {
+
+        // Convert data to array if it's an array
+        if (is_array($data)) {
+            $data = JArrayHelper::toObject($data, 'JObject');
+        }
+
+        // Call populate state to ensure state variables are set correctly when form is validated via controller
+        $this->populateState();
+
+        // Get permissions
+        $canDo = $this->getState('actions.permissions', array());
+
+        // Get the id from the state
+        $id = $this->getState($this->getName() . '.id', '');
+        $isNew = (empty($id)) ? true : false;
+
+        // If we don't come from a view then this maybe empty so we reset it.
+        if (empty($canDo)) {
+            $canDo = HelloWorldHelper::getActions();
+        }
+
+        // If not allowed to 'change owner' then set created by to user id
+        if (!$canDo->get('helloworld.edit.property.owner')) {
+
+            $user = JFactory::getUser();
+            // Set the default owner to the user creating this.
+            $form->setFieldAttribute('created_by', 'type', 'hidden');
+            $form->setFieldAttribute('created_by', 'default', $user->id);
+        } elseif ($canDo->get('helloworld.edit.property.owner') && ($isNew == true)) { // This is an admin but not a new property
+            // This user can change the owner (e.g. admin) but it's not a new property
+            $form->setFieldAttribute('created_by', 'required', 'true');
+        } elseif ($canDo->get('helloworld.edit.property.owner') && !$isNew) { // This is an admin but not a new property
+            // This user can change the owner (e.g. admin) but it's not a new property
+            $form->removeField('created_by');
+        }
 
         // Set the location details accordingly, needed for one of the form field types...
         if (!empty($data->latitude) && !empty($data->longitude)) {
@@ -382,10 +411,10 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
                     return false;
                 }
             }
-
+            
             // Commit the transaction
             $db->transactionCommit();
-
+            
             // Clean the cache.
             $this->cleanCache();
 
