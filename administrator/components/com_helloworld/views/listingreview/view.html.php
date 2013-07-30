@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class HelloWorldViewListingReview extends JViewLegacy {
+class HelloWorldViewListingreview extends JViewLegacy {
 
   /**
    * Method to display the view.

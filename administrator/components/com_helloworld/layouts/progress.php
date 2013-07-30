@@ -13,6 +13,7 @@ $progress = $displayData['progress'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 
 $notices = HelloWorldHelper::getProgressNotices($progress); // Get an array of what units still need relevant data added...
+
 if (!empty($progress)) {
   $id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
 
@@ -25,19 +26,7 @@ if (!empty($progress)) {
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (empty($progress)) : // If progress empty - brand new propery with no persistent data     ?>
-      <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
-    <?php elseif (!empty($progress) && empty($progress[0]->unit_id)) : // Listing has been created but no unit   ?>
-      <?php $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); ?>
-    <?php elseif (!empty($progress) && !empty($progress[0]->unit_id) && count($progress) >= 1) : // Multi unit with possible some units unfinished? ?>
-
-    <?php endif; ?>
-    <?php if (!empty($message)) : ?>
-      <div class="alert alert-info">
-        <h4>Listing Progress</h4>
-        <?php echo $message; ?>
-      </div>
-    <?php elseif (!empty($notices)) : ?>
+    <?php if (!empty($notices)) : ?>
       <div class="alert alert-info">
         <h4>Listing Progress</h4>
         <ul>

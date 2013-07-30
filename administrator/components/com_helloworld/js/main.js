@@ -55,6 +55,7 @@ jQuery(function () {
         
         var property_id = data.result.files[0].property_id;
         
+        
         jQuery.get(
           "/administrator/index.php?option=com_helloworld&view=images&layout=default_image_list&format=raw",
           {
@@ -72,6 +73,7 @@ jQuery(function () {
         
       } 
     } catch(err) {
+      console.log('oops');
       console.log(err.message);
     }
   }).bind('fileuploadadd', function (e,data){
@@ -91,7 +93,7 @@ jQuery(function(){
   // Add the event handlers to the save caption and delete buttons
   add_event_handlers();
   
-})
+});
 
 // Add the relevant event handlers to the save caption and delete buttons
 function add_event_handlers() {
@@ -99,7 +101,7 @@ function add_event_handlers() {
     
   jQuery('.delete').on('click', function(event) {
     if (!confirm("Really delete?")) {
-      event.preventDefault()
+      event.preventDefault();
     };
   });    
   

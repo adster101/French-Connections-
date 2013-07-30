@@ -208,7 +208,7 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
               </table>
               <input type="hidden" name="task" value="" />
               <input type="hidden" name="boxchecked" value="0" />
-              <input type="hidden" name="jform[property_id]" value="<?php echo $this->unit->parent_id; ?>" />
+              <input type="hidden" name="jform[property_id]" value="<?php echo $this->unit->property_id; ?>" />
 
               <?php echo JHtml::_('form.token'); ?>
 

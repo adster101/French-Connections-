@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewUnitVersions extends JViewLegacy {
+class HelloWorldViewUnitversions extends JViewLegacy {
 
   /**
    * display method of Hello view

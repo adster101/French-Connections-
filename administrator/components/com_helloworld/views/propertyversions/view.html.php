@@ -2,18 +2,26 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// import Joomla view library
-jimport('joomla.application.component.view');
+
 
 /**
  * HelloWorld View
  */
-class HelloWorldViewPropertyVersions extends JViewLegacy
+class HelloWorldViewPropertyversions extends JViewLegacy
 {
+  
+  public function __construct($config = array()) {
+    parent::__construct($config);
+  
+    $this->_name = 'propertyversions';
+    
+  }
+  
 	/**
 	 * display method of Hello view
 	 * @return void
 	 */
+  
 	public function display($tpl = null)
 	{
 

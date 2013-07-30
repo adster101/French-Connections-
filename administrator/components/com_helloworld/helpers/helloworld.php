@@ -41,6 +41,23 @@ abstract class HelloWorldHelper {
     if (empty($progress)) {
       return false;
     }
+    
+     if (empty($progress[0]->title)) {
+     // $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS');
+     // $notices['location'] = $message;
+ 
+     }
+     
+     
+     
+     if (empty($progress[0]->unit_title)) {
+       //$message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); 
+      
+     }
+     if (!empty($progress) && !empty($progress[0]->unit_id) && count($progress) >= 1) {
+       
+     }
+
 
     // The sections we want to check for. Tariffs needs expanding for the more detailed tariff data (changeover day etc)
     $sections = array('images' => array(), 'availability' => array(), 'tariffs' => array());

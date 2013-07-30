@@ -215,7 +215,7 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
         // Redirect to the edit screen.
         $this->setRedirect(
                 JRoute::_(
-                        'index.php?option=com_helloworld&task=listing.view&id=' . (int) $id, false
+                        'index.php?option=com_helloworld&task=propertyversions.edit&property_id=' . (int) $id, false
                 )
         );
 

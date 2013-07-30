@@ -338,6 +338,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
                     return false;
                 } else {
                     $data['property_id'] = $new_property_id;
+                    $data['review'] = 1;
                 }
             }
 

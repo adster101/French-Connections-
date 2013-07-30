@@ -12,29 +12,27 @@ jimport('joomla.application.component.controller');
 class HelloWorldController extends JControllerLegacy {
 
   /**
-	 * Checks whether a user can see this view.
-	 *
-	 * @param   string	$view	The view name.
-	 *
-	 * @return  boolean
-	 * @since   1.6
-	 */
-	protected function canView($view)
-	{
-		$canDo	= HelloWorldHelper::getActions();
+   * Checks whether a user can see this view.
+   *
+   * @param   string	$view	The view name.
+   *
+   * @return  boolean
+   * @since   1.6
+   */
+  protected function canView($view) {
+    $canDo = HelloWorldHelper::getActions();
 
-    switch ($view)
-		{
-			// Special permissions.
-			case 'notes':
-				return $canDo->get('helloworld.view.' . $view);
-				break;
+    switch ($view) {
+      // Special permissions.
+      case 'notes':
+        return $canDo->get('helloworld.view.' . $view);
+        break;
 
-			// Default permissions.
-			default:
-				return true;
-		}
-	}
+      // Default permissions.
+      default:
+        return true;
+    }
+  }
 
   /**
    * display task
@@ -43,18 +41,17 @@ class HelloWorldController extends JControllerLegacy {
    */
   function display($cachable = false) {
 
-		$view   = $this->input->get('view', '');
-		$layout = $this->input->get('layout', 'default');
-		$id     = $this->input->getInt('id');
+    $view = $this->input->get('view', '');
+    $layout = $this->input->get('layout', 'default');
+    $id = $this->input->getInt('id');
 
-    if (!$this->canView($view))
-		{
-			JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
-			return false;
-		}
+    if (!$this->canView($view)) {
+      JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+      return false;
+    }
 
     // Set up an array of views to protect from direct access
-    $views_to_protect = array('tariffs' => 1, 'offers' => 1, 'unitversions' => 1, 'availability '=> 1);
+    $views_to_protect = array('tariffs' => 1, 'offers' => 1, 'unitversions' => 1, 'availability ' => 1);
 
     // Get the document object.
     $document = JFactory::getDocument();
@@ -78,19 +75,10 @@ class HelloWorldController extends JControllerLegacy {
 
       return false;
     }
-   
-    
-    
-    if (($vName == 'images') && !$this->checkEditId('com_helloworld.edit.unitversions',$id)) {
-      // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
-      $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=listings', false));
 
-      return false;
-    }
-    
-    if ($vName == 'reviews'  && !$this->checkEditId('com_helloworld.view.unitversions',$id)) {
+
+
+    if (($vName == 'images') && !$this->checkEditId('com_helloworld.edit.unitversions', $id)) {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
@@ -99,7 +87,16 @@ class HelloWorldController extends JControllerLegacy {
       return false;
     }
 
-    if ($vName == 'stats' && !$this->checkEditId('com_helloworld.stats.view',$id)) {
+    if ($vName == 'reviews' && !$this->checkEditId('com_helloworld.view.unitversions', $id)) {
+      // Somehow the person just went to the form - we don't allow that.
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+      $this->setMessage($this->getError(), 'error');
+      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=listings', false));
+
+      return false;
+    }
+
+    if ($vName == 'stats' && !$this->checkEditId('com_helloworld.stats.view', $id)) {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
