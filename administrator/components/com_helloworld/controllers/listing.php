@@ -247,10 +247,15 @@ class HelloWorldControllerListing extends JControllerForm {
       
     } else {
       
+      
       // Need to determine whether they owe us any more wedge
       
-       
+      // Update the listing review status
+      $model = $this->getModel('Property','HelloWorldModel',$config = array('ignore_request' => true));;
+      $model->updateProperty($listing_id = $listing[0]->id, 2);
       
+      $redirect = JRoute::_('index.php?option=' . $this->extension, false);
+
     }
     
     $this->setRedirect($redirect, $message, 'warning');

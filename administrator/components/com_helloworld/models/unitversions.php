@@ -285,11 +285,13 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    */
   protected function preprocessForm(JForm $form, $data) {
 
-    if (!empty($data) && $this->layout == 'tariffs') {
+   
       // Generate the XML to inject into the form
       $XmlStr = $this->getTariffXml($form, $data);
+      
+
       $form->load($XmlStr, true);
-    }
+    
   }
 
   /**
@@ -301,7 +303,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    * @return string
    */
   protected function getTariffXml($form, $data = array()) {
-
     // Check the format of the tariffs, if present. This is necessary as they form
     // we construct spits them out in a different data format
     // Build an XML string to inject additional fields into the form
@@ -316,23 +317,22 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         <field
           id="tariff_start_date_' . $counter . '"
           name="start_date"
-          type="text"
+          type="tariff"
           default="' . $value[0] . '"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-          multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
           labelclass=""
-          readonly="false">
+          readonly="false"
+         >
         </field>
         
         <field
           id="tariff_end_date_' . $counter . '"
           name="end_date"
-          type="text"
+          type="tariff"
           default="' . $value[1] . '"
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
-          multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
           labelclass=""
@@ -342,10 +342,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         <field
           id="tariff_price_' . $counter . '"
           name="tariff"
-          type="text"
+          type="tariff"
           default="' . $value[2] . '"
           label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
-          multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
           labelclass=""
@@ -361,10 +360,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
          <field
           id="tariff_start_date_' . $i . '"
           name="start_date"
-          type="text"
+          type="tariff"
           default=""
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_START_DATE_LABEL"
-          multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
           labelclass=""
@@ -374,10 +372,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         <field
           id="tariff_end_date_' . $i . '"
           name="end_date"
-          type="text"
+          type="tariff"
           default=""
           label="COM_HELLOWORLD_AVAILABILITY_FIELD_END_DATE_LABEL"
-          multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
           labelclass=""
@@ -387,10 +384,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         <field
           id="tariff_price_' . $i . '"
           name="tariff"
-          type="text"
+          type="tariff"
           default=""
           label="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_LABEL"
-          multiple="true"
           description=""
           class="inputbox tariff_date input-small"         
           labelclass=""
@@ -760,14 +756,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // We need to extract tariff information here, because the tariffs are filtered via the 
     // controller validation method. Perhaps need to override the validation method for this model?
     
-    if (!array_key_exists($data['start_date'])) {
+    if (!array_key_exists('start_date' ,$data)) {
       return true;
     }
     
-    $input = JFactory::getApplication()->input;
-
-    $data = $input->get('jform', array(), 'array');
-
     $tariffs = array('start_date' => $data['start_date'], 'end_date' => $data['end_date'], 'tariff' => $data['tariff']);
 
     $tariffs_by_day = $this->getTariffsByDay($tariffs);

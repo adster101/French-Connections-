@@ -92,9 +92,7 @@
       filter="string"
     />
   </fieldset>
-  <fieldset name="tariffs">
-    
-  </fieldset>
+ 
 </form>
 
 
