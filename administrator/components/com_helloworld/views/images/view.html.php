@@ -118,9 +118,9 @@ class HelloWorldViewImages extends JViewLegacy
     $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
-    $document->addScript("http://blueimp.github.com/JavaScript-Templates/tmpl.min.js", 'text/javascript', true, false);
-    $document->addScript("http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js", 'text/javascript', true, false);
-    $document->addScript("http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tmpl.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/load-image.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/canvas-to-blob.min.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.iframe-transport.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-fp.js", 'text/javascript', true, false);

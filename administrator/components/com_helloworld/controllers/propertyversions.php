@@ -212,6 +212,8 @@ class HelloWorldControllerPropertyVersions extends JControllerForm {
         $this->setError(JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_SUCCESS'));
         $this->setMessage($this->getError(), 'message');
         
+        $this->holdEditId('com_helloworld.view.listing', $id);
+        
         // Redirect to the edit screen.
         $this->setRedirect(
                 JRoute::_(

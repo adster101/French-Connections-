@@ -26,6 +26,8 @@ abstract class HelloWorldHelper {
       $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
       //$days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
     }
+    
+    $days_to_renewal = ($days_to_renewal < 0) ? 0 : $days_to_renewal;
 
     return $days_to_renewal;
   }
@@ -41,22 +43,23 @@ abstract class HelloWorldHelper {
     if (empty($progress)) {
       return false;
     }
-    
-     if (empty($progress[0]->title)) {
-     // $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS');
-     // $notices['location'] = $message;
- 
-     }
-     
-     
-     
-     if (empty($progress[0]->unit_title)) {
-       //$message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); 
-      
-     }
-     if (!empty($progress) && !empty($progress[0]->unit_id) && count($progress) >= 1) {
-       
-     }
+
+    if (empty($progress[0]->title)) {
+      // $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS');
+      // $notices['location'] = $message;
+    }
+
+
+
+    if (empty($progress[0]->unit_title)) {
+      //$message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); 
+    }
+
+    foreach ($progress as $unit) {
+      if (empty($unit->unit_title)) {
+        $notices['Accommodation']['units'][] = $unit->unit_title;
+      }
+    }
 
 
     // The sections we want to check for. Tariffs needs expanding for the more detailed tariff data (changeover day etc)
@@ -65,7 +68,7 @@ abstract class HelloWorldHelper {
     foreach ($sections as $section => $value) {
 
       foreach ($progress as $key => $unit) {
-        if ($unit->$section == 0) { // If the unit doesn't have this section
+        if ($unit->$section == 0) { // If the unit doesn't have this section completed
           if (!array_key_exists($section, $notices)) {
             $notices[$section]['units'] = '';
           }
@@ -386,8 +389,8 @@ abstract class HelloWorldHelper {
         $yesterday = date('Y-m-d', gmmktime(0, 0, 0, $month, $day - 1, $year));
 
         // Check whether availability status is set for the preceeding day
-        $status = (array_key_exists($today, $availability)) ? $availability[$today] : true;
-        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : true;
+        $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
+        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
 
         if ($status) { // Availability is true, i.e. available
           if ($status_yesterday != $status) {
@@ -459,7 +462,7 @@ abstract class HelloWorldHelper {
    * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
    *
    */
-  public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability_statu = true) {
+  public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability_status = false) {
     // Array to hold availability per day for each day that availability has been set for.
     // This is needed as availability is stored by period, but displayed by day.
     $raw_availability = array();
@@ -507,7 +510,7 @@ abstract class HelloWorldHelper {
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
       for ($i = 0; $i <= $availability_period_length->days; $i++) {
 
-        $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_statu;
+        $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_status;
 
         // Add one day to the start date for each day of availability
         $date = $availability_period_start_date->add($DateInterval);
@@ -650,7 +653,5 @@ abstract class HelloWorldHelper {
 
     return $listing;
   }
-  
- 
-  
+
 }

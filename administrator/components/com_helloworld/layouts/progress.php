@@ -17,7 +17,7 @@ $notices = HelloWorldHelper::getProgressNotices($progress); // Get an array of w
 if (!empty($progress)) {
   $id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
 
-  $review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicated whether the main property listing has been flagged as needing a review
+  $review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicates whether the main property listing has been flagged as needing a review
   // $expiry_date - the expiry date of this property
   $expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
   $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
@@ -26,10 +26,16 @@ if (!empty($progress)) {
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (!empty($notices)) : ?>
+    <?php if (!empty($notices) || empty($progress[0]->title)) : ?>
       <div class="alert alert-info">
         <h4>Listing Progress</h4>
         <ul>
+          <?php if (empty($progress[0]->title)) : ?>
+            <li>
+              <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
+            </li>
+          <?php endif; ?>
+
           <?php foreach ($notices as $key => $value) : ?>
             <li>
               <?php foreach ($notices[$key] as $units) : ?>
@@ -79,16 +85,16 @@ if (!empty($progress)) {
       </div>
     <?php endif; ?>
   </div>
-  <?php // Need to put the following into language strings   ?>
+  <?php // Need to put the following into language strings    ?>
   <div class="span3">
     <h4>Key</h4>
     <p>
       <i class="icon icon-warning"> </i>
       Please complete &nbsp;&nbsp;
+    <br /><hr/>
 
-
-      <i class="icon icon-publish"></i>
-      Section complete
+    <i class="icon icon-publish"></i>
+    Section complete
     </p>
   </div>
 </div>

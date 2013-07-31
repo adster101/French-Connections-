@@ -37,17 +37,32 @@ class HelloWorldViewListingreview extends JViewLegacy {
     // Determine the layout
     $unitId = $input->get('unit_id', '', 'int');
     
-    $this->units = $this->get('Units');
-
-    // Get the appropriate diffs based on whether we have a unit ID or not - could use a set method in the controller perhaps?
+    /*
+     * Get the unit list for this property
+     */
+    $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel',array('ignore_request'=>true)));
+    $model = $this->getModel('Listing');
+    $model->setState('com_helloworld.listing.id', $this->id);
+    $this->units = $model->getItems();
+    
+    /*
+     *  Get the appropriate diffs based on whether we have a unit ID or not 
+     */
     $this->versions = $this->get('ListingDiff');
 
+    /*
+     * If the new property version is empty then there is no change for this property
+     */
+    $this->property_review = (empty($this->versions['property'][1])) ? 0 : 1;
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       JError::raiseError(500, implode("\n", $errors));
       return false;
     }
+    
+    
+    
 
     $this->addToolbar();
 
@@ -63,11 +78,10 @@ class HelloWorldViewListingreview extends JViewLegacy {
 
     JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_REVIEW_PROPERTY', $this->id));
 
-    JToolBarHelper::cancel('listings', 'JTOOLBAR_CANCEL');
+    JToolBarHelper::back('Back to property list', 'index.php?option=com_helloworld');
     JToolBarHelper::custom('listing.approve', 'publish', 'publish', 'COM_HELLOWORLD_HELLOWORLD_REVIEW_PROPERTY_APPROVE');
     JToolBarHelper::custom('listing.reject', 'unpublish', 'unpublish', 'COM_HELLOWORLD_HELLOWORLD_REVIEW_PROPERTY_REJECT');
-    JToolBarHelper::custom('listing.checkin', 'locked', 'locked', 'COM_HELLOWORLD_HELLOWORLD_REVIEW_PROPERTY_CHECKIN');
-    //JToolBarHelper::preview('http://dev.frenchconnections.co.uk/index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->id . '&unit_id=' . (int) $this->units[0]->unit_id);
+    JToolBarHelper::custom('listing.release', 'locked', 'locked', 'COM_HELLOWORLD_HELLOWORLD_REVIEW_PROPERTY_CHECKIN', false);
   }
 
   /**

@@ -48,6 +48,7 @@
       size="40"
       class="inputbox "
       filter="JComponentHelper::filterText"
+      required="true"
       buttons="false"/>
   </fieldset>
 

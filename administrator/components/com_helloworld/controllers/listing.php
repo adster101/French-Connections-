@@ -31,10 +31,8 @@ class HelloWorldControllerListing extends JControllerForm {
     if (empty($this->extension)) {
       $this->extension = JRequest::getCmd('extension', 'com_helloworld');
     }
-    
-    $this->registerTask('checkin', 'review');
 
-    
+    $this->registerTask('checkin', 'review');
   }
 
   /**
@@ -218,7 +216,6 @@ class HelloWorldControllerListing extends JControllerForm {
 
     // It's all good.
     // Here we need to determine how to handle this submission for review.
-    
     // If the expiry date is within 7 days then we need to redirect the user to the renewal screen.
     // If the property has expired then we need to redirect the user to the renewal screen (or they will click the renewal button)
     // 
@@ -229,37 +226,44 @@ class HelloWorldControllerListing extends JControllerForm {
     // Otherwise, should just be submitted to the PFR and locked for editing.
     // 
     // Redirect to the renewal payment/summary form thingy...
-    
-    $listing = $this->getModel('Listing','HelloWorldModel',$config = array('ignore_request' => true));;
-    $listing->setState('com_helloworld.listing.id',$recordId);
-    
+
+    $listing = $this->getModel('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
+    ;
+    $listing->setState('com_helloworld.listing.id', $recordId);
+
     // Get the listing unit details
     $listing = $listing->getItems();
-    
-    $days_to_renewal  = HelloWorldHelper::getDaysToExpiry($listing[0]->expiry_date);
-    
+
+    /*
+     * TO DO - Move this into the 'submit' model
+     * e.g. getSubmitRedirect();
+     * 
+     */
+    $days_to_renewal = HelloWorldHelper::getDaysToExpiry($listing[0]->expiry_date);
+
     // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
-    if ($days_to_renewal < 7 || empty($days_to_renewal)) {
-      
-      $message = ($days_to_renewal > 0) ? 'Your property is expirying within 7 days - please renew now' : 'Renew now, chump';
-      
+    if ($days_to_renewal < 7 && $days_to_renewal > 0) {
+
+      $message = ($days_to_renewal > 0) ? 'Your property is expiring within 7 days - please renew now' : 'Property expired, renew now.';
+
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false);
-      
+    } else if (empty($days_to_renewal)) {
+
+      $message = 'Oh, looks like you\'re submitting a new property. Submitted for review, etc etc ';
+
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false);
     } else {
-      
-      
+
       // Need to determine whether they owe us any more wedge
-      
       // Update the listing review status
-      $model = $this->getModel('Property','HelloWorldModel',$config = array('ignore_request' => true));;
+      $model = $this->getModel('Property', 'HelloWorldModel', $config = array('ignore_request' => true));
+      ;
       $model->updateProperty($listing_id = $listing[0]->id, 2);
-      
+
       $redirect = JRoute::_('index.php?option=' . $this->extension, false);
-
     }
-    
-    $this->setRedirect($redirect, $message, 'warning');
 
+    $this->setRedirect($redirect, $message, 'warning');
   }
 
   /**
@@ -281,7 +285,7 @@ class HelloWorldControllerListing extends JControllerForm {
     $checkin = property_exists($table, 'checked_out');
 
     $urlVar = 'id';
-    
+
     // Check user is authed to review
     if (!$user->authorise('helloworld.property.review', $this->option)) {
 
@@ -318,7 +322,7 @@ class HelloWorldControllerListing extends JControllerForm {
       $app->setUserState($context . '.data', null);
 
       $this->view_item = 'propertyversions';
-      
+
       $this->setRedirect(
               JRoute::_(
                       'index.php?option=' . $this->option . '&view=listingreview&layout=property&property_id=' . $recordId, false
@@ -327,6 +331,43 @@ class HelloWorldControllerListing extends JControllerForm {
 
       return true;
     }
+  }
+
+  public function release() {
+
+    // Get the user
+    $user = JFactory::getUser();
+    $model = $this->getModel('Property', 'HelloWorldModel');
+    $table = $model->getTable('Property', 'HelloWorldTable');
+    $cid = $this->input->post->get('cid', array(), 'array');
+    $input = JFactory::getApplication()->input;
+
+    $recordId = $input->get('id', '', 'int');
+
+    $checkin = property_exists($table, 'checked_out');
+
+    // TO DO - CHECK Edit id is in the session for this user
+    
+    // Check-in the original row.
+    if ($checkin && $model->checkin($recordId) === false) {
+      // Check-in failed. Go back to the item and display a notice.
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $model->getError()));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false
+              )
+      );
+
+      return false;
+    }
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false
+              )
+      );
+    return true;
   }
 
 }

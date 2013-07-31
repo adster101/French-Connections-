@@ -56,38 +56,65 @@ class HelloWorldModelListingReview extends JModelAdmin {
     $input = JFactory::getApplication()->input;
     $unitId = $input->get('unit_id', '', 'int');
     $propertyId = $input->get('property_id', '', 'int');
+    $versions = array();
+    $unit_versions = array();
 
     if (!empty($unitId)) {
 
       // Must be reviewing a unit
-      $versions = $this->getVersionDetail($unitId, '#__unit', '#__unit_versions', 'unit_id');
+      $unit_versions = $this->getVersionDetail($unitId, '#__unit', '#__unit_versions', 'unit_id');
 
       // An array of keys to check using the htmldiff method
       $keys_to_check = array(
           'unit_title', 'description', 'internal_facilities_other', 'external_facilities_other', 'activities_other', 'additional_price_notes'
       );
 
-      // Using the version IDs from the $versions array pull out the images and facilities 
-      // and append them to the $versions array...
-    } else {
-
-      $versions = $this->getVersionDetail($propertyId, '#__property', '#__property_versions', 'property_id');
-
-      // An array of keys to check using the htmldiff method
-      $keys_to_check = array(
-          'title', 'location_details', 'getting_there', 'video_url', 'deposit', 'security_deposit', 'evening_meal',
-          'additional_booking_info', 'terms_and_conditions', 'first_name', 'surname', 'address', 'phone_1', 'phone_2',
-          'phone_3', 'fax', 'email_1', 'email_2'
-      );
+      $versions['unit'] = $this->getItemDiff($unit_versions, $keys_to_check);
+      
+      /*
+       * Loop over the versions and add the images and facilities for each. Translations as well?
+       */
+      $model = JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel', $config=array('ignore_request'=>true)); 
+      
+      foreach ($versions['unit'] as $key => $value) {
+        
+        /*
+         * Get the images based on the version id we are looking at
+         */
+         
+        $images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
+        
+        if (!$images) {
+          continue;
+        }
+        
+        $versions['images'][$value['id']] = $images;
+        
+      }
+      
+      
+      
     }
 
+
+
+    $property_versions = $this->getVersionDetail($propertyId, '#__property', '#__property_versions', 'property_id');
+
+    // An array of keys to check using the htmldiff method
+    $keys_to_check = array(
+        'title', 'location_details', 'getting_there', 'video_url', 'deposit', 'security_deposit', 'evening_meal',
+        'additional_booking_info', 'terms_and_conditions', 'first_name', 'surname', 'address', 'phone_1', 'phone_2',
+        'phone_3', 'fax', 'email_1', 'email_2'
+    );
+
+
     // $versions contains one or two records
-    if (!$versions) {
+    if (!$property_versions) {
       // OOoops
       return false;
     }
 
-    $versions = $this->getItemDiff($versions, $keys_to_check);
+    $versions['property'] = $this->getItemDiff($property_versions, $keys_to_check);
 
     return $versions;
   }
@@ -152,45 +179,6 @@ class HelloWorldModelListingReview extends JModelAdmin {
     $versions[1] = $new_version;
 
     return $versions;
-  }
-
-  public function getUnits() {
-
-    $db = JFactory::getDbo();
-
-    // Get the primary key and set it in the model state
-    $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
-
-    try {
-
-      // Get the node and children as a tree.
-      $query = $this->_db->getQuery(true);
-      $select = '
-        unit_title,
-        b.review as review_unit,
-        c.review as review_property, 
-        a.id as unit_id,occupancy,
-        property_id,
-        (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms
-      ';
-      $query->select($select)
-              ->from('#__unit a')
-              ->join('left', '#__unit_versions b on a.id = b.unit_id')
-              ->join('left', '#__property c on c.id = a.property_id')
-              ->where('a.property_id = ' . (int) $recordId)
-              ->where('a.published = 1')
-              ->where('b.review = 0')
-              ->order('ordering');
-
-      $db->setQuery($query);
-      $row = $db->loadObjectList();
-
-      return $row;
-    } catch (Exception $e) {
-      // Log the exception and return false
-
-      return false;
-    }
   }
 
 }

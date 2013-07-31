@@ -288,7 +288,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    
       // Generate the XML to inject into the form
       $XmlStr = $this->getTariffXml($form, $data);
-      
 
       $form->load($XmlStr, true);
     
@@ -838,5 +837,40 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     return $raw_tariffs;
   }
+  
+ /**
+   * getImages = gets a list of images based on the version ID passed
+   * @param type $version_id
+   * @return type
+   */
+  public function getImages($version_id = '') {
 
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+
+    // Get a list of the images uploaded against this listing
+    $query->select('
+      id,
+      property_id,
+      image_file_name,
+      caption,
+      ordering,
+      version_id
+    ');
+    $query->from('#__property_images_library');
+
+    $query->where('version_id = ' . (int) $version_id);
+
+    $query->order('ordering', 'asc');
+
+    $db->setQuery($query);
+    
+    $images = $db->loadAssocList();
+    
+    if (empty($images)) {
+      return false;
+    }
+    
+    return $images;
+  }
 }
