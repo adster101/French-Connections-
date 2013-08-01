@@ -37,6 +37,7 @@ class HelloWorldControllerListing extends JControllerForm {
 
   /**
    * Method to check if you can View a record/resource.
+   * TODO - Expand to check if listing is checked out to a user...
    *
    * @param   array   $data  An array of input data.
    * @param   string  $key   The name of the key for the primary key.
@@ -52,6 +53,7 @@ class HelloWorldControllerListing extends JControllerForm {
     $userId = $user->get('id');
     $ownerId = '';
 
+    // Check that this property is not checked out already
     // Check general edit permission first.
     if ($user->authorise('core.edit', $this->extension)) {
       return true;
@@ -87,7 +89,15 @@ class HelloWorldControllerListing extends JControllerForm {
 
     $context = "$this->option.view.$this->context";
 
-    // $id is the listing the user is trying to edit
+    $model = $this->getModel('Property', 'HelloWorldModel');
+    $table = $model->getTable();
+    $properties = $table->getProperties();
+
+    $checkin = property_exists($table, 'checked_out');
+
+    /**
+     *  $id is the listing the user is trying to edit
+     */
     $id = $this->input->get('id', '', 'int');
 
     if (!$this->allowView($id)) {
@@ -96,10 +106,26 @@ class HelloWorldControllerListing extends JControllerForm {
                       'index.php?option=' . $this->option, false)
       );
 
-      $this->setMessage('blah', 'error');
+      $this->setMessage('You are not authorised to view this property listing at this time.', 'error');
 
       return false;
     }
+
+    // Check property out to user reviewing
+    if ($checkin && !$model->checkout($id)) {
+      // Check-out failed, display a notice but allow the user to see the record.
+      $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false
+              )
+      );
+
+      return false;
+    }
+
 
     // Hold the edit ID once the id and user have been authorised.
     $this->holdEditId($context, $id);
@@ -108,6 +134,10 @@ class HelloWorldControllerListing extends JControllerForm {
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
     );
+
+
+
+
     return true;
   }
 
@@ -139,8 +169,8 @@ class HelloWorldControllerListing extends JControllerForm {
   /**
    * Submit - controller to determine where to go when a listing in submitted for review
    *
-   * 
    * @return boolean
+   * 
    */
   public function submit() {
     // Check that this is a valid call from a logged in user.
@@ -228,7 +258,7 @@ class HelloWorldControllerListing extends JControllerForm {
     // Redirect to the renewal payment/summary form thingy...
 
     $listing = $this->getModel('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
-    ;
+
     $listing->setState('com_helloworld.listing.id', $recordId);
 
     // Get the listing unit details
@@ -257,7 +287,7 @@ class HelloWorldControllerListing extends JControllerForm {
       // Need to determine whether they owe us any more wedge
       // Update the listing review status
       $model = $this->getModel('Property', 'HelloWorldModel', $config = array('ignore_request' => true));
-      ;
+      
       $model->updateProperty($listing_id = $listing[0]->id, 2);
 
       $redirect = JRoute::_('index.php?option=' . $this->extension, false);
@@ -283,8 +313,6 @@ class HelloWorldControllerListing extends JControllerForm {
 
     $recordId = (int) (count($cid) ? $cid[0] : 0);
     $checkin = property_exists($table, 'checked_out');
-
-    $urlVar = 'id';
 
     // Check user is authed to review
     if (!$user->authorise('helloworld.property.review', $this->option)) {
@@ -333,13 +361,16 @@ class HelloWorldControllerListing extends JControllerForm {
     }
   }
 
+  /**
+   * 
+   * @return boolean
+   */
   public function release() {
 
     // Get the user
     $user = JFactory::getUser();
     $model = $this->getModel('Property', 'HelloWorldModel');
     $table = $model->getTable('Property', 'HelloWorldTable');
-    $cid = $this->input->post->get('cid', array(), 'array');
     $input = JFactory::getApplication()->input;
 
     $recordId = $input->get('id', '', 'int');
@@ -347,7 +378,6 @@ class HelloWorldControllerListing extends JControllerForm {
     $checkin = property_exists($table, 'checked_out');
 
     // TO DO - CHECK Edit id is in the session for this user
-    
     // Check-in the original row.
     if ($checkin && $model->checkin($recordId) === false) {
       // Check-in failed. Go back to the item and display a notice.
@@ -362,12 +392,56 @@ class HelloWorldControllerListing extends JControllerForm {
 
       return false;
     }
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option, false
-              )
-      );
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option, false
+            )
+    );
     return true;
   }
 
+  /**
+   * 
+   */
+  public function approve() {
+
+    $model = $this->getModel('Property', 'HelloWorldModel');
+    $table = $model->getTable();
+
+    $input = JFactory::getApplication()->input;
+    $recordId = $input->get('id', '', 'int');
+    $checkin = property_exists($table, 'checked_out');
+
+    $recordId = $input->get('id', '', 'int');
+
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . $recordId, false
+            )
+    );
+    return true;
+  }
+
+  /**
+   * 
+   */
+  public function publish() {
+    
+    $model = $this->getModel('Property', 'HelloWorldModel');
+    $table = $model->getTable();
+
+    $input = JFactory::getApplication()->input;
+    $recordId = $input->get('id', '', 'int');
+    $checkin = property_exists($table, 'checked_out');
+
+    $recordId = $input->get('id', '', 'int');
+
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . $recordId, false
+            )
+    );
+    return true;    
+  }
+  
 }

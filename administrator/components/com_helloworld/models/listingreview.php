@@ -21,13 +21,46 @@ class HelloWorldModelListingReview extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = false) {
+  public function getForm($data = array(), $loadData = true) {
+    
     // Get the form.
-    $form = $this->loadForm('com_helloworld.listingreview', 'listingreview', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_helloworld.approve_draft', 'approve_draft', array('control' => 'jform', 'load_data' => $loadData));
+    
     if (empty($form)) {
       return false;
     }
+    
     return $form;
+  }
+  
+  /**
+   * Get the message text to bind with the form
+   */
+  
+  public function loadFormData() {
+    
+    $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
+    
+    // Get the owner details etc
+    $table = $this->getTable('Property','HelloWorldTable');
+    
+    $property = $table->load($recordId);
+    
+    if (!$property) {
+      
+      Throw new Exception('Problem loading property details', 500);
+      
+    }
+    
+    $userId = ($table->created_by) ? $table->created_by : 0;
+    
+    $user = JFactory::getUser($userId);
+
+    
+    $data['body'] = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name,$recordId, 'asdasd');
+    
+    return $data;
+    
   }
 
   /**
@@ -70,30 +103,26 @@ class HelloWorldModelListingReview extends JModelAdmin {
       );
 
       $versions['unit'] = $this->getItemDiff($unit_versions, $keys_to_check);
-      
+
       /*
        * Loop over the versions and add the images and facilities for each. Translations as well?
        */
-      $model = JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel', $config=array('ignore_request'=>true)); 
-      
+      $model = JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel', $config = array('ignore_request' => true));
+
       foreach ($versions['unit'] as $key => $value) {
-        
+
         /*
          * Get the images based on the version id we are looking at
          */
-         
+
         $images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
-        
+
         if (!$images) {
           continue;
         }
-        
+
         $versions['images'][$value['id']] = $images;
-        
       }
-      
-      
-      
     }
 
 
@@ -108,7 +137,9 @@ class HelloWorldModelListingReview extends JModelAdmin {
     );
 
 
-    // $versions contains one or two records
+    /*
+     *  $versions contains one or two records
+     */
     if (!$property_versions) {
       // OOoops
       return false;

@@ -48,8 +48,8 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
         <table class="table table-bordered table-hover table-striped">
           <thead>
           <th>Field</th>
-          <th>Old</th>
-          <th>New</th>
+          <th>Current</th>
+          <th>Draft</th>
           </thead>
           <tbody>
             <?php foreach ($this->versions[$layout] as $version) : ?>

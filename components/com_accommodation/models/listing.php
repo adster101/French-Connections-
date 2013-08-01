@@ -70,7 +70,7 @@ class AccommodationModelListing extends JModelForm {
     // Get the input values etc
     $app = JFactory::getApplication();
     $input = $app->input;
-    
+
 
     // Get the property id
     $id = $input->get('id', '', 'int');
@@ -178,8 +178,8 @@ class AccommodationModelListing extends JModelForm {
 
       // Join the units table in, only retrieves one at a time??
       $query->from('#__property as a');
-      $query->leftJoin('#__unit b ON a.id = b.parent_id');
-      $query->leftJoin('#__property_versions c ON c.parent_id = a.id');
+      $query->leftJoin('#__unit b ON a.id = b.property_id');
+      $query->leftJoin('#__property_versions c ON c.property_id = a.id');
       $query->leftJoin('#__unit_versions d ON d.unit_id = b.id');
 
       // If unit ID is specified load that unit instead of the default one
@@ -216,7 +216,7 @@ class AccommodationModelListing extends JModelForm {
     if (empty($unit_id)) {
       $this->setState('unit.id', $this->item->unit_id);
     }
-    
+
     return $this->item;
   }
 
@@ -288,7 +288,7 @@ class AccommodationModelListing extends JModelForm {
 
         // Get the node and children as a tree.
         $query = $this->_db->getQuery(true);
-        $select = 'unit_title,a.id,occupancy,parent_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
+        $select = 'unit_title,a.id,occupancy,property_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
         $query->select($select)
                 ->from('#__unit a')
                 ->join('left', '#__unit_versions b on a.id = b.unit_id')
@@ -373,21 +373,6 @@ class AccommodationModelListing extends JModelForm {
     // Attempt to load the availability for this property
     $availability = $model->getAvailability($unit_id);
     
-    // Check the $availability loaded correctly
-    if (!$availability) {
-      // Ooops, there was a problem getting the availability
-      // Check that the row actually exists
-      if ($error = $availabilityTable->getError()) {
-        // Fatal error
-        $this->setError($error);
-        return false;
-      } else {
-        // Not fatal error
-        // Log this out to property log
-        JLog::add('Problem fetching availability for - ' . $unit_id . '(No availability?))', JLog::ERROR, 'availability');
-      }
-    }
-
     // Get availability as an array of days
     $this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability);
 
@@ -497,7 +482,7 @@ class AccommodationModelListing extends JModelForm {
     // property_id actually refers to unit id
     $query->join('left', '#__unit_versions b on a.property_id = b.unit_id');
 
-    $query->where('property_id = ' . (int) $unit_id);
+    $query->where('b.property_id = ' . (int) $unit_id);
     $query->where('b.review = 0'); // Should ensure we get the published images 
 
     $query->order('ordering', 'asc');

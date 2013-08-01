@@ -63,7 +63,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
       <?php endforeach; ?>
       <div class="form-actions"><button class="btn btn-primary validate" type="submit"><?php echo JText::_('COM_REVIEW_REVIEW_SUBMIT'); ?></button>
         <input type="hidden" name="option" value="com_accommodation" />
-        <input type="hidden" name="task" value="property.enquiry" />
+        <input type="hidden" name="task" value="listing.enquiry" />
         <?php echo JHtml::_('form.token'); ?>
       </div>
     </fieldset>

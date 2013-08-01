@@ -148,7 +148,7 @@ class AccommodationControllerListing extends JControllerForm
 			$app->setUserState('com_accommodation.enquiry.messages', $errors);
 
 			// Redirect back to the contact form.
-			$this->setRedirect(JRoute::_('index.php?option=com_accommodation&view=property&id='.$stub.'#email', false));
+			$this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=259&id='.$stub.'#email', false));
 			return false;
 		}
     
