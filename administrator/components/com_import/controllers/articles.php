@@ -46,10 +46,10 @@ class ImportControllerArticles extends JControllerForm {
       $data['state'] = ($line[1] == 'True') ? 1 : 0;
       $data['title'] = $line[7];
       $data['created'] = $line[2];
-      $data['catid'] = 75;
+      $data['catid'] = 68;
       $data['language'] = 'en-GB';
-      $data['metakey'] = $line[14];
-      $data['metadesc'] = $line[13];
+      $data['metakey'] = $line[13];
+      $data['metadesc'] = $line[12];
 
       if (!$model->save($data)) {
         $error = $model->getError();
