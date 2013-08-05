@@ -65,7 +65,7 @@ class iCalEvent extends JTable  {
 		$user = JFactory::getUser();
 
 		if ($this->ev_id==0){
-			$date =& JevDate::getDate();
+			$date =& JevDate::getDate("+0 seconds");
 			$this->created = $date->toMySQL();
 		}
 
@@ -129,16 +129,22 @@ class iCalEvent extends JTable  {
 			$pairs = array();
 			$order = 0;
 			foreach ($catids as $catid){
-				$pairs[] =   "($this->ev_id,$catid, $order)";
-				 $order++;
+				if ($catid==""){
+					$catid=-1;
+				}
+				else {
+					$pairs[] =   "($this->ev_id,$catid, $order)";
+					$order++;
+				}
 			}
 			$db->setQuery("DELETE FROM #__jevents_catmap where evid = ".$this->ev_id." AND catid NOT IN (".implode(",",$catids).")");
 			$sql =$db->getQuery();
 			$success = $db->query();
-			
-			$db->setQuery("Replace into #__jevents_catmap (evid, catid, ordering) VALUES ".implode(",", $pairs));
-			$sql =$db->getQuery();
-			$success = $db->query();
+			if (count($pairs)>0){
+				$db->setQuery("Replace into #__jevents_catmap (evid, catid, ordering) VALUES ".implode(",", $pairs));
+				$sql =$db->getQuery();
+				$success = $db->query();
+			}
 		}
 		
 		// I also need to store custom data - when we need the event itself and not just the detail
@@ -338,7 +344,7 @@ else $this->_detail = false;
 			return $this->_repetitions;
 		}
 		// if no rrule then only one instance
-		if (!isset($this->rrule)){
+		if (!isset($this->rrule)  || $this->rrule->freq=="none" ){
 			$db	=& JFactory::getDBO();
 			$repeat = new iCalRepetition($db);
 			$repeat->eventid = $this->ev_id;

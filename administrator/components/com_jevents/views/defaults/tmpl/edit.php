@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-if ($this->item->name == "month.calendar_cell" || $this->item->name == "month.calendar_tip" )  {
+if ($this->item->name == "month.calendar_cell" || $this->item->name == "month.calendar_tip" || $this->item->name == "icalevent.edit_page" )  {
 	$editor =& JFactory::getEditor("none");
 }
 else {
@@ -25,6 +25,9 @@ if (strpos($this->item->name, "com_")===0){
 }
 
 
+if (JVersion::isCompatible("3.0.0")){
+	if ($this->item->value=="" && file_exists(dirname(__FILE__).'/'.$this->item->name.".3.html")) $this->item->value = file_get_contents(dirname(__FILE__).'/'.$this->item->name.".3.html");
+}
 if ($this->item->value=="" && file_exists(dirname(__FILE__).'/'.$this->item->name.".html")) $this->item->value = file_get_contents(dirname(__FILE__).'/'.$this->item->name.".html");
 $this->replaceLabels($this->item->value);
 
@@ -37,17 +40,17 @@ $this->replaceLabels($this->item->value);
 		<input type="hidden" name="name" value="<?php echo $this->item->name;?>">
 		<input type="hidden" name="id" value="<?php echo $this->item->id;?>">
 		
-		<script type="text/javascript" language="Javascript">
-			<?php echo "Joomla.submitbutton = function (pressbutton) {\n"; ?>
+		<script type="text/javascript" >
+			<!--//
+			Joomla.submitbutton = function (pressbutton) {
 			var form = document.adminForm;
-			<?php echo $editor->getContent( 'value' ); ?>
 			<?php
 			// in case editor is toggled off - needed for TinyMCE
 			echo $editor->save( 'value' );
 			?>
 			submitform(pressbutton);
 		}
-
+		//-->
 		</script>
         <div class="adminform" align="left">
        	<div style="margin-bottom:20px;">
@@ -84,7 +87,7 @@ $this->replaceLabels($this->item->value);
                     <td valign="top">
 		                 <?php
 				$pattern = "#.*([0-9]*).*#";
-				$name  = preg_replace("#\.[0-9]#","",$this->item->name);
+				$name  = preg_replace("#\.[0-9]+#","",$this->item->name);
 		                 echo $this->loadTemplate($name);
 		                 ?>                    
                     </td>

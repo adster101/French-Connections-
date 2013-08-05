@@ -42,12 +42,15 @@ class AdminIcalsViewIcals extends JEventsAbstractView
 		//$section = $params->get("section",0);
 
 		JHTML::_('behavior.tooltip');
+		if (JVersion::isCompatible("3.0")){
+			$this->sidebar = JHtmlSidebar::render();					
+		}				
 	}
 
 	function edit($tpl = null)
 	{
 
-		JEVHelper::script('editical.js','administrator/components/'.JEV_COM_COMPONENT.'/assets/js/');
+		JEVHelper::script('editical.js','components/'.JEV_COM_COMPONENT.'/assets/js/');
 
 		$document =& JFactory::getDocument();
 		$document->setTitle(JText::_( 'EDIT_ICS' ));

@@ -1,4 +1,4 @@
-b<?php
+<?php
 /**
  * JEvents Component for Joomla 1.5.x
  *
@@ -73,10 +73,20 @@ class iCalImport
 
 			if (!$isFile && is_callable("curl_exec")){
 				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_URL,($isFile?"file://":"").$file);
+				
+				// Set curl option CURLOPT_HTTPAUTH, if the url includes user name and password.
+				// e.g. http://username:password@www.example.com/cal.ics
+				$username = parse_url($file, PHP_URL_USER);
+				$password = parse_url($file, PHP_URL_PASS);
+				if ($username != "" && $password != "") {
+					curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+				}
+				
+				curl_setopt($ch, CURLOPT_URL, $file);
 				curl_setopt($ch, CURLOPT_VERBOSE, 1);
 				curl_setopt($ch, CURLOPT_POST, 0);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 				$this->rawData = curl_exec($ch);
 				curl_close ($ch);
 
@@ -666,6 +676,7 @@ class iCalImport
 		$wtzdata["E. Europe Standard Time"] = "Europe/Helsinki";
 		$wtzdata["FLE Standard Time"] = "Europe/Helsinki";
 		$wtzdata["Mountain Standard Time"] = "America/Denver";
+		$wtzdata["Romance Standard Time"] = "Europe/Brussels";
 		
 		$wtzid = str_replace('"','',$wtzid);
 		return array_key_exists($wtzid,$wtzdata ) ? $wtzdata[$wtzid] : $wtzid;

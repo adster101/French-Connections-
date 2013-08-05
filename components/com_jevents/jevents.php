@@ -143,7 +143,8 @@ if (strpos($cmd, '.') != false)
 	}
 	else
 	{
-		JFactory::getApplication()->enqueueMessage('Invalid Controller - ' . $controllerName);
+		return JError::raiseError(404, 'Invalid Controller - ' . $controllerName);
+		//JFactory::getApplication()->enqueueMessage('Invalid Controller - ' . $controllerName);
 		$cmd = "month.calendar";
 		list($controllerName, $task) = explode('.', $cmd);
 		$controllerPath = JPATH_COMPONENT . '/' . 'controllers' . '/' . $controllerName . '.php';
@@ -286,7 +287,7 @@ if ($conf->get('caching', 1))
 
 	$session = JFactory::getSession();
 	$sessionregistry = $session->get('registry');
-	$sessionArray = $sessionregistry->toArray();
+	$sessionArray = isset($sessionregistry) ? $sessionregistry->toArray(): false;
 	$sessionArrayData = array();
 	if (is_array($sessionArray))
 	{
@@ -347,6 +348,20 @@ $controller->execute($task);
 //list ($usec, $sec) = explode(" ", microtime());
 //$time_end = (float) $usec + (float) $sec;
 //echo  "JEvents component post task   = ".round($time_end - $starttime, 4)."<br/>";
+
+// Set the browser title to include site name if required
+$title =  JFactory::getDocument()->GetTitle();
+$app = JFactory::getApplication();
+if (empty($title)) {
+	$title = $app->getCfg('sitename');
+}
+elseif ($app->getCfg('sitename_pagetitles', 0) == 1) {
+	$title = JText::sprintf('JPAGETITLE', $app->getCfg('sitename'), $title);
+}
+elseif ($app->getCfg('sitename_pagetitles', 0) == 2) {
+	$title = JText::sprintf('JPAGETITLE', $title, $app->getCfg('sitename'));
+}
+JFactory::getDocument()->SetTitle($title);
 
 // Redirect if set by the controller
 $controller->redirect();

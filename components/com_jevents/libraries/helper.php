@@ -344,7 +344,7 @@ class JEVHelper
 	 * @param string $name - metatag name
 	 * @param string $content - metatag value
 	 */
-	function checkRobotsMetaTag($name="robots", $content="noindex, nofollow")
+	static function checkRobotsMetaTag($name="robots", $content="noindex, nofollow")
 	{
 
 		// force robots metatag
@@ -384,6 +384,27 @@ class JEVHelper
 			}
 		}
 
+	}
+	
+	//New MetaSet Function, to set the meta tags if they exist in the Menu Item
+	
+	static function SetMetaTags()
+	{	
+		//Get Document to set the Meta Tags to.
+		$document =& JFactory::getDocument();
+		
+		//Get the Params.
+		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
+
+		if ($params->get('menu-meta_description'))
+		{
+			$document->setDescription($params->get('menu-meta_description'));
+		}
+	  
+		if ($params->get('menu-meta_keywords'))
+		{
+			$document->setMetaData('keywords', $params->get('menu-meta_keywords'));
+		}
 	}
 
 	function forceIntegerArray(&$cid, $asString=true)
@@ -470,7 +491,14 @@ class JEVHelper
 		$script.='}
 				);
 			});';
-		$document->addScriptDeclaration($script);
+
+		// stop same field script being loaded multiple times
+		static $processedfields = array();
+		if (!in_array($fieldname,$processedfields)){
+			$document->addScriptDeclaration($script);
+		}
+		$processedfields[]=$fieldname;
+		
 		if ($onchange != "")
 		{
 			$onchange = 'onchange="' . $onchange . '"';
@@ -535,9 +563,14 @@ class JEVHelper
 		if (JFactory::getApplication()->isAdmin() && $skipbackend)
 			return 0;
 		static $jevitemid;
+		$evid = $forcecheck?$forcecheck->ev_id() : 0;
 		if (!isset($jevitemid))
 		{
-			$jevitemid = 0;
+			$jevitemid = array();
+		}
+		if (!isset($jevitemid[$evid]))
+		{
+			$jevitemid[$evid] = 0;
 			$menu = & JSite::getMenu();
 			$active = $menu->getActive();
 			$Itemid = JRequest::getInt("Itemid");
@@ -545,7 +578,7 @@ class JEVHelper
 			{
 				// wierd bug in Joomla when SEF is disabled but with xhtml urls sometimes &amp;Itemid is misinterpretted !!!
 				$Itemid = JRequest::getInt("Itemid");
-				if ($Itemid > 0 && $jevitemid != $Itemid)
+				if ($Itemid > 0 && $jevitemid[$evid] != $Itemid)
 				{
 					$active = $menu->getItem($Itemid);
 				}
@@ -554,15 +587,15 @@ class JEVHelper
 			// wierd bug in Joomla when SEF is disabled but with xhtml urls sometimes &amp;Itemid is misinterpretted !!!
 			if ($Itemid == 0)
 				$Itemid = JRequest::getInt("amp;Itemid", 0);
-			if ($option == JEV_COM_COMPONENT && $Itemid > 0)
+			if ($option == JEV_COM_COMPONENT && $Itemid > 0 && JRequest::getCmd("task")!="crawler.listevents" && JRequest::getCmd("jevtask")!="crawler.listevents")
 			{
-				$jevitemid = $Itemid;
-				return $jevitemid;
+				$jevitemid[$evid] = $Itemid;
+				return $jevitemid[$evid];
 			}
-			else if (!is_null($active) && $active->component == JEV_COM_COMPONENT)
+			else if (!is_null($active) && $active->component == JEV_COM_COMPONENT && strpos($active->link, "admin") === false  && strpos($active->link, "crawler") === false)
 			{
-				$jevitemid = $active->id;
-				return $jevitemid;
+				$jevitemid[$evid] = $active->id;
+				return $jevitemid[$evid];
 			}
 			else
 			{
@@ -575,11 +608,11 @@ class JEVHelper
 					{
 						if (version_compare(JVERSION, '1.6.0', '>=') ? in_array($jevitem->access, JEVHelper::getAid($user, 'array')) : JEVHelper::getAid($user) >= $jevitem->access)
 						{
-							$jevitemid = $jevitem->id;
+							$jevitemid[$evid] = $jevitem->id;
 
 							if ($forcecheck)
 							{
-								$mparams = new JRegistry($jevitem->params);
+								$mparams = is_string($jevitem->params)  ? new JRegistry($jevitem->params) : $jevitem->params;
 								$mcatids = array();
 								// New system
 								$newcats = $mparams->get( "catidnew", false);
@@ -587,7 +620,7 @@ class JEVHelper
 									foreach ($newcats as $newcat){
 										if ($forcecheck->catid() == $newcat)
 										{
-											return $jevitemid;
+											return $jevitemid[$evid];
 										}
 
 										if ( !in_array( $newcat, $mcatids )){
@@ -606,7 +639,7 @@ class JEVHelper
 										}
 										if ($forcecheck->catid() == $mparams->get($nextCID, null))
 										{
-											return $jevitemid;
+											return $jevitemid[$evid];
 										}
 
 										if (!in_array($nextCatId, $mcatids))
@@ -618,18 +651,18 @@ class JEVHelper
 								// if no restrictions then can use this
 								if (count($mcatids) == 0)
 								{
-									return $jevitemid;
+									return $jevitemid[$evid];
 								}
 								continue;
 							}
 
-							return $jevitemid;
+							return $jevitemid[$evid];
 						}
 					}
 				}
 			}
 		}
-		return $jevitemid;
+		return $jevitemid[$evid];
 
 	}
 
@@ -750,14 +783,6 @@ class JEVHelper
 		if (!isset($isEventCreator))
 		{
 			$isEventCreator = false;
-			/*
-			  // experiment in alternative approval mechanism
-			  // just incase we don't have jevents plugins registered yet
-			  JPluginHelper::importPlugin("jevents");
-			  $dispatcher	=& JDispatcher::getInstance();
-			  $set = $dispatcher->trigger('isEventCreator', array (& $isEventCreator));
-			  if (count($set)>0) return $isEventCreator;
-			 */
 			$user = & JEVHelper::getAuthorisedUser();
 			if (is_null($user))
 			{
@@ -777,6 +802,27 @@ class JEVHelper
 						}
 					}
 					 */
+					if ($isEventCreator){
+						$okcats =  JEVHelper::getAuthorisedCategories($juser, 'com_jevents', 'core.create');
+						if (count($okcats) > 0)
+						{
+							$juser = JFactory::getUser();
+							$dataModel = new JEventsDataModel();
+							$dataModel->setupComponentCatids();
+
+							$allowedcats = explode(",",$dataModel->accessibleCategoryList());
+							$intersect = array_intersect($okcats, $allowedcats);
+							
+							if (count($intersect) == 0) {
+								$isEventCreator = false;
+							}
+							
+						}
+						else {
+							$isEventCreator = false;
+						}
+					}
+					
 				}
 			}
 			else if ($user->cancreate)
@@ -799,6 +845,22 @@ class JEVHelper
 				else
 				{
 					$isEventCreator = true;
+				}
+				// are we blocked by category or calendar constraints
+				if ($isEventCreator && $user->categories != "" && $user->categories != "all")
+				{
+					$okcats = explode("|", $user->categories);
+
+					$juser = JFactory::getUser();
+					$dataModel = new JEventsDataModel();
+					$dataModel->setupComponentCatids();
+					
+					$allowedcats = explode(",",$dataModel->accessibleCategoryList());
+					$intersect = array_intersect($okcats, $allowedcats);
+					
+					if (count($intersect) == 0) {
+						$isEventCreator = false;
+					}
 				}
 			}
 
@@ -1633,11 +1695,33 @@ class JEVHelper
 		{
 			$user = JFactory::getUser();
 		}
-                $levels = $user->getAuthorisedViewLevels();
+		$root = $user->get("isRoot");
+		if ($root){
+			static $rootlevels  = false;
+			if (!$rootlevels ){
+				// Get a database object.
+				$db = JFactory::getDBO();
 
-		if (JEVHelper::isAdminUser($user) && JFactory::getApplication()->isAdmin()){
-			$levels = array_merge($levels, JAccess::getAuthorisedViewLevels(0));
+				// Build the base query.
+				$query = $db->getQuery(true);
+				$query->select('id, rules');
+				$query->from($query->qn('#__viewlevels'));
+
+				// Set the query for execution.
+				$db->setQuery((string) $query);
+				$rootlevels = $db->loadColumn();
+				JArrayHelper::toInteger($rootlevels);
+			}
+			$levels = $rootlevels;
 		}
+		else {
+			$levels = $user->getAuthorisedViewLevels();
+			if (JEVHelper::isAdminUser($user) && JFactory::getApplication()->isAdmin()){
+				// Make sure admin users can see public events
+				$levels = array_merge($levels, JAccess::getAuthorisedViewLevels(0));
+			}
+		}
+
 		
 		if ($type == 'string')
 		{

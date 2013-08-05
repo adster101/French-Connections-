@@ -1,5 +1,4 @@
 <?php
-
 /**
  * JEvents Component for Joomla 1.5.x
  *
@@ -19,16 +18,16 @@ defined('_JEXEC') or die();
  */
 class AdminIcaleventViewIcalevent extends JEventsAbstractView
 {
-	
+
 	function overview($tpl = null)
 	{
 
 
 		$document = & JFactory::getDocument();
-		$document->setTitle(JText::_( 'ICAL_EVENTS' ));
+		$document->setTitle(JText::_('ICAL_EVENTS'));
 
 		// Set toolbar items for the page
-		JToolBarHelper::title(JText::_( 'ICAL_EVENTS' ), 'jevents');
+		JToolBarHelper::title(JText::_('ICAL_EVENTS'), 'jevents');
 
 		JToolBarHelper::addNew('icalevent.edit');
 		JToolBarHelper::editList('icalevent.edit');
@@ -43,11 +42,12 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 
 		$showUnpublishedICS = false;
 
-		$db = JFactory::getDbo();		
-		
-		if (JVersion::isCompatible("3.0")){
+		$db = JFactory::getDbo();
 
-			JSubMenuHelper::setAction('index.php?option=com_jevents&task=icalevent.list');
+		if (JVersion::isCompatible("3.0"))
+		{
+
+			JHtmlSidebar::setAction('index.php?option=com_jevents&task=icalevent.list');
 
 			// get list of ics Files
 			$query = "SELECT ics.ics_id as value, ics.label as text FROM #__jevents_icsfile as ics ";
@@ -61,24 +61,20 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 			$icsfiles = $db->loadObjectList();
 			$icsFile = intval(JFactory::getApplication()->getUserStateFromRequest("icsFile", "icsFile", 0));
 
-			JSubMenuHelper::addFilter(
-				JText::_('ALL_ICS_FILES'),
-				'icsFile',
-				JHtml::_('select.options', $icsfiles, 'value', 'text', $icsFile)
-			);			
-			
-			$state = intval(JFactory::getApplication()->getUserStateFromRequest("stateIcalEvents", 'state', 0));		
+			JHtmlSidebar::addFilter(
+					JText::_('ALL_ICS_FILES'), 'icsFile', JHtml::_('select.options', $icsfiles, 'value', 'text', $icsFile)
+			);
+
+			$state = intval(JFactory::getApplication()->getUserStateFromRequest("stateIcalEvents", 'state', 0));
 			$options = array();
 			$options[] = JHTML::_('select.option', '1', JText::_('PUBLISHED'));
 			$options[] = JHTML::_('select.option', '2', JText::_('UNPUBLISHED'));
-			JSubMenuHelper::addFilter(
-				JText::_('ALL_EVENTS'),
-				'state',
-				JHtml::_('select.options', $options, 'value', 'text', $state)
-			);			
-			
+			JHtmlSidebar::addFilter(
+					JText::_('ALL_EVENTS'), 'state', JHtml::_('select.options', $options, 'value', 'text', $state)
+			);
+
 			// get list of creators
-			$created_by = JFactory::getApplication()->getUserStateFromRequest("createdbyIcalEvents", 'created_by', 0);
+			$created_by = JFactory::getApplication()->getUserStateFromRequest("createdbyIcalEvents", 'created_by', "");
 			$sql = "SELECT distinct u.id, u.* FROM #__jevents_vevent as jev LEFT JOIN #__users as u on u.id=jev.created_by order by u.name ";
 			$db = & JFactory::getDBO();
 			$db->setQuery($sql);
@@ -86,17 +82,22 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 			$userOptions = array();
 			foreach ($users as $user)
 			{
+				if (!$user->id)
+				{
+					$user->id = 0;
+				}
 				$userOptions[] = JHTML::_('select.option', $user->id, $user->name . " ($user->username)");
 			}
-			JSubMenuHelper::addFilter(
-				JText::_('JEV_EVENT_CREATOR'),
-				'created_by',
-				JHtml::_('select.options', $userOptions, 'value', 'text', $created_by)
-			);			
-			
+
+			JHtmlSidebar::addFilter(
+					JText::_('JEV_EVENT_CREATOR'), 'created_by', JHtml::_('select.options', $userOptions, 'value', 'text', $created_by)
+			);
+
+			$this->sidebar = JHtmlSidebar::render();
 		}
-		else {
-			
+		else
+		{
+
 			// get list of ics Files
 			$query = "SELECT ics.ics_id as value, ics.label as text FROM #__jevents_icsfile as ics ";
 			if (!$showUnpublishedICS)
@@ -107,39 +108,42 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 
 			$db->setQuery($query);
 			$result = $db->loadObjectList();
-			
+
 			$icsFile = intval(JFactory::getApplication()->getUserStateFromRequest("icsFile", "icsFile", 0));
 			$icsfiles[] = JHTML::_('select.option', '-1', JText::_('ALL_ICS_FILES'));
 			$icsfiles = array_merge($icsfiles, $result);
 			$icslist = JHTML::_('select.genericlist', $icsfiles, 'icsFile', 'class="inputbox" size="1" onchange="document.adminForm.submit();"', 'value', 'text', $icsFile);
 			$this->assign('icsList', $icslist);
-		
-			$state = intval(JFactory::getApplication()->getUserStateFromRequest("stateIcalEvents", 'state', 0));		
+
+			$state = intval(JFactory::getApplication()->getUserStateFromRequest("stateIcalEvents", 'state', 0));
 			$options = array();
 			$options[] = JHTML::_('select.option', '0', JText::_('ALL_EVENTS'));
 			$options[] = JHTML::_('select.option', '1', JText::_('PUBLISHED'));
 			$options[] = JHTML::_('select.option', '2', JText::_('UNPUBLISHED'));
-			
+
 			$statelist = JHTML::_('select.genericlist', $options, 'state', 'class="inputbox" size="1" onchange="document.adminForm.submit();"', 'value', 'text', $state);
 			$this->assign('statelist', $statelist);
-			
+
 			// get list of creators
-			$created_by = JFactory::getApplication()->getUserStateFromRequest("createdbyIcalEvents", 'created_by', 0);
+			$created_by = JFactory::getApplication()->getUserStateFromRequest("createdbyIcalEvents", 'created_by', "");
 			$sql = "SELECT distinct u.id, u.* FROM #__jevents_vevent as jev LEFT JOIN #__users as u on u.id=jev.created_by order by u.name ";
 			$db = & JFactory::getDBO();
 			$db->setQuery($sql);
 			$users = $db->loadObjectList();
 			$userOptions = array();
-			$userOptions[] = JHTML::_('select.option', 0, JText::_("JEV_EVENT_CREATOR"));
+			$userOptions[] = JHTML::_('select.option', "", JText::_("JEV_EVENT_CREATOR"));
 			foreach ($users as $user)
 			{
+				if (!$user->id)
+				{
+					$user->id = 0;
+				}
 				$userOptions[] = JHTML::_('select.option', $user->id, $user->name . " ($user->username)");
 			}
 			$userlist = JHTML::_('select.genericlist', $userOptions, 'created_by', 'class="inputbox" size="1"  onchange="document.adminForm.submit();"', 'value', 'text', $created_by);
-			$this->assign('userlist', $userlist);			
-			
+			$this->assign('userlist', $userlist);
 		}
-				
+
 		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
 		//$section = $params->get("section",0);
 
@@ -154,12 +158,22 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 		$document->addScriptDeclaration($editStrings);
 
 		// WHY THE HELL DO THEY BREAK PUBLIC FUNCTIONS !!!
-		JEVHelper::script('editical.js', 'administrator/components/' . JEV_COM_COMPONENT . '/assets/js/');
+		JEVHelper::script('editical.js', 'components/' . JEV_COM_COMPONENT . '/assets/js/');
 
-		$document->setTitle(JText::_( 'EDIT_ICAL_EVENT' ));
+		if ($this->row->title() <= "")
+		{
+			$document->setTitle(JText::_('CREATE_ICAL_EVENT'));
 
-		// Set toolbar items for the page
-		JToolBarHelper::title(JText::_( 'EDIT_ICAL_EVENT' ), 'jevents');
+			// Set toolbar items for the page
+			JToolBarHelper::title(JText::_('CREATE_ICAL_EVENT'), 'jevents');
+		}
+		else
+		{
+			$document->setTitle(JText::_('EDIT_ICAL_EVENT'));
+
+			// Set toolbar items for the page
+			JToolBarHelper::title(JText::_('EDIT_ICAL_EVENT'), 'jevents');
+		}
 
 		$bar = & JToolBar::getInstance('toolbar');
 		if ($this->id > 0)
@@ -180,38 +194,40 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 		else
 		{
 			if (JEVHelper::isEventEditor())
-				JToolBarHelper::apply('icalevent.apply', "JEV_Apply");				
+				JToolBarHelper::apply('icalevent.apply', "JEV_Apply");
 			JToolBarHelper::save('icalevent.save');
-			JToolBarHelper::save('icalevent.savenew', "JEV_Save_New");
+			JToolBarHelper::save2new('icalevent.savenew', "JEV_Save_New");
 		}
 
 		JToolBarHelper::cancel('icalevent.list');
 		//JToolBarHelper::help( 'screen.icalevent.edit', true);
 
-		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
-		//$section = $params->get("section",0);
-
 		JHTML::_('behavior.tooltip');
 
+		// TODO move this into JForm field type!
 		$this->setCreatorLookup();
-                
-                if (JVersion::isCompatible("3.0")){
-                    $this->setLayout("edit");
-                }
-                else {
-                    $this->setLayout("edit16");
-                }
+
+		if (JVersion::isCompatible("3.0"))
+		{
+			$this->setLayout("edit");
+		}
+		else
+		{
+			$this->setLayout("edit16");
+		}
+
+		$this->setupEditForm();
 
 	}
-
+	
 	function csvimport($tpl = null)
 	{
 
 		$document = & JFactory::getDocument();
-		$document->setTitle(JText::_( 'CSV_IMPORT' ));
+		$document->setTitle(JText::_('CSV_IMPORT'));
 
 		// Set toolbar items for the page
-		JToolBarHelper::title(JText::_( 'CSV_IMPORT' ), 'jevents');
+		JToolBarHelper::title(JText::_('CSV_IMPORT'), 'jevents');
 
 		JToolBarHelper::cancel('icalevent.list');
 
@@ -260,16 +276,17 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 				// take the higher permission setting
 				foreach ($creatorgroups["core.create"]->getData() as $creatorgroup => $permission)
 				{
-					if ($permission){
-						$creatorgroupsdata[$creatorgroup]=$permission;
+					if ($permission)
+					{
+						$creatorgroupsdata[$creatorgroup] = $permission;
 					}
 				}
 
 				$users = array(0);
 				foreach ($creatorgroupsdata as $creatorgroup => $permission)
 				{
-									if ($permission == 1)
-										{
+					if ($permission == 1)
+					{
 						$users = array_merge(JAccess::getUsersByGroup($creatorgroup, true), $users);
 					}
 				}
@@ -277,11 +294,11 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 				$db->setQuery($sql);
 				$users = $db->loadObjectList();
 			}
-			
+
 			$userOptions[] = JHTML::_('select.option', '-1', JText::_('SELECT_USER'));
 			foreach ($users as $user)
 			{
-				$userOptions[] = JHTML::_('select.option', $user->id, $user->name. " ( ".$user->username." )");
+				$userOptions[] = JHTML::_('select.option', $user->id, $user->name . " ( " . $user->username . " )");
 			}
 			$creator = $this->row->created_by() > 0 ? $this->row->created_by() : (isset($jevuser) ? $jevuser->user_id : 0);
 			$userlist = JHTML::_('select.genericlist', $userOptions, 'jev_creatorid', 'class="inputbox" size="1" ', 'value', 'text', $creator);
@@ -291,7 +308,7 @@ class AdminIcaleventViewIcalevent extends JEventsAbstractView
 
 	}
 
-	function toolbarConfirmButton($task = '', $msg='', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
+	function toolbarConfirmButton($task = '', $msg = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
 	{
 		$bar = & JToolBar::getInstance('toolbar');
 

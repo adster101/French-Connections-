@@ -132,12 +132,12 @@ var NewCalendar = new Class({
 			};
 
 			// fix for bad element (naughty, naughty element!)
-			if (!this.element(i, obj[i], cal)) { continue; }
+			if (!this.element(i, obj[i], cal)) {  continue; }
 
 			cal.el.addClass(this.classes.calendar);
 
 			// create cal button
-			cal.button.addClass(this.classes.calendar).addEvent('click', function(cal) { this.toggle(cal); }.pass(cal, this)).inject(cal.el,"after");
+			cal.button.addClass(this.classes.calendar).addEvent('click', function(cal) {this.toggle(cal); }.pass(cal, this)).inject(cal.el,"after");
 
 			// read in default value
 			cal.val = this.read(cal);
@@ -537,7 +537,7 @@ var NewCalendar = new Class({
 			var day = i - offset;
 			var date = new Date(cal.year, cal.month, day);
 
-			td.setProperty('class', 'dashday'+(day + this.options.offset) % 7);
+			td.setProperty('class', 'dashday'+((i - 1) % 7  + this.options.offset) % 7);
 
 			var cls = '';
 

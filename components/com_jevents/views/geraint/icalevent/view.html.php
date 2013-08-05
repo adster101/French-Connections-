@@ -17,7 +17,7 @@ defined('_JEXEC') or die();
  *
  * @static
  */
-class GeraintViewICalEvent extends JEventsGeraintView 
+class GeraintViewICalevent extends JEventsGeraintView 
 {
 	
 	function detail($tpl = null)
@@ -33,5 +33,12 @@ class GeraintViewICalEvent extends JEventsGeraintView
 		
 		$this->data = $this->datamodel->getEventData( $this->evid, $this->jevtype, $this->year, $this->month, $this->day, $this->uid  );
 
+		// Dynamic pathway
+		if (isset($this->data['row'])){
+			$pathway =& JFactory::getApplication()->getPathway();
+
+			$pathway->addItem($this->data['row']->title() ,"");
+		}
+		
 	}	
 }

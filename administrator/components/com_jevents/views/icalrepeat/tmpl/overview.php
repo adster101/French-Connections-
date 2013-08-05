@@ -20,6 +20,15 @@ $pathIMG = JURI::Root() . 'administrator/images/';
 $pathJeventsIMG = JURI::Root() . "administrator/components/".JEV_COM_COMPONENT."/images/"; ?>
 
 <form action="index.php" method="post" name="adminForm" id="adminForm">
+	<?php if (!empty($this->sidebar)) : ?>
+		<div id="j-sidebar-container" class="span2">
+	<?php echo $this->sidebar; ?>
+		</div>
+		<div id="j-main-container" class="span10">
+			<?php else : ?>
+			<div id="j-main-container">
+	<?php endif; ?>
+	
 	<table cellpadding="4" cellspacing="0" border="0" width="100%">
 		<tr>
 			<td width="100%">
@@ -28,7 +37,7 @@ $pathJeventsIMG = JURI::Root() . "administrator/components/".JEV_COM_COMPONENT."
 		</tr>
 	</table>
 
-	<table cellpadding="4" cellspacing="0" border="0" width="100%" class="adminlist">
+	<table cellpadding="4" cellspacing="0" border="0" width="100%" class="adminlist table table-striped">
 		<tr>
 			<th width="20" nowrap="nowrap">
 		            <input type="checkbox" name="toggle" value="" onclick="<?php echo JVersion::isCompatible("3.0")?"Joomla.checkAll(this)":"checkAll(".count( $this->icalrows ).")"; ?>" />
@@ -72,6 +81,7 @@ $pathJeventsIMG = JURI::Root() . "administrator/components/".JEV_COM_COMPONENT."
     <input type="hidden" name="evid" value="<?php echo $this->evid;?>" />
     <input type="hidden" name="task" value="icalrepeat.list" />
     <input type="hidden" name="boxchecked" value="0" />
+			</div>
 </form>
 
 <br />

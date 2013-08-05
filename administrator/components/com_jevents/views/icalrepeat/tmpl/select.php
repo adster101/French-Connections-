@@ -33,7 +33,7 @@ $function	= JRequest::getCmd('function', 'jSelectEvent');
 		</tr>
 	</table>
 	<?php } ?>
-	<table cellpadding="4" cellspacing="0" border="0" width="100%" class="adminlist">
+	<table cellpadding="4" cellspacing="0" border="0" width="100%" class="adminlist   table table-striped">
 		<tr>
 			<th class="title" width="60%" nowrap="nowrap"><?php echo JText::_('JEV_ICAL_SUMMARY'); ?></th>
 			<th width="40%" nowrap="nowrap"><?php echo "Repeat Date/Time"; ?></th>
@@ -52,7 +52,7 @@ $function	= JRequest::getCmd('function', 'jSelectEvent');
 			?>
 			<tr class="row<?php echo $k; ?>">
 				<td width="30%">
-					<a href="#select" onclick="return window.parent.<?php echo $function;?>('<?php echo $link;?>','<?php echo addslashes($repeat->title());?>' , $('Itemid')?$('Itemid').value:0 , <?php echo $repeat->ev_id();?>, <?php echo $repeat->rp_id();?>)" title="<?php echo JText::_('JEV_SELECT_Repeat'); ?>"><?php echo $row->title(); ?></a>				</td>
+					<a href="#select" onclick="return window.parent.<?php echo $function;?>('<?php echo $link;?>','<?php echo addslashes(htmlspecialchars($repeat->title()));?>' , $('Itemid')?$('Itemid').value:0 , <?php echo $repeat->ev_id();?>, <?php echo $repeat->rp_id();?>)" title="<?php echo JText::_('JEV_SELECT_Repeat'); ?>"><?php echo $row->title(); ?></a>				</td>
 				<td width="40%">
 					<?php
 					$times = '<table style="border: 1px solid #666666; width:100%;">';

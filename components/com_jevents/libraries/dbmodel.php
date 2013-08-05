@@ -117,8 +117,8 @@ class JEventsDBModel
 					// language filter only applies when not editing
 					. ($isedit ? "" : "\n  AND c.language in (" . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')')
 					. "\n AND c.extension = '" . $sectionname . "'"
-					. "\n " . $where;
-			;
+					. "\n " . $where
+					. "\n ORDER BY c.lft asc"  ;
 
 			$db->setQuery($query);
 			$catlist = $db->loadColumn();
@@ -498,6 +498,7 @@ class JEventsDBModel
 				// published state is now handled by filter
 				. ($needsgroup ? $groupby : "");
 		$query .= " ORDER BY det.hits DESC ";
+		$query .= " LIMIT " . $limit;
 
 		$cache = JFactory::getCache(JEV_COM_COMPONENT);
 		$rows = $cache->call('JEventsDBModel::_cachedlistIcalEvents', $query, $langtag);
@@ -631,7 +632,7 @@ class JEventsDBModel
 			// Display a repeating event ONCE we group by event id selecting the most appropriate repeat for each one
 			// Find the ones after now (only if not past only)
 			$rows1 = array();
-			if ($enddate >= $t_datenowSQL && $modparams->get("pastonly", 0) != 1)
+			if ($enddate >= $t_datenowSQL && $modparams && $modparams->get("pastonly", 0) != 1)
 			{
 				$query = "SELECT rpt.*, ev.*, rr.*, det.*, ev.state as published, ev.created as created $extrafields"
 						. "\n , YEAR(rpt.startrepeat) as yup, MONTH(rpt.startrepeat ) as mup, DAYOFMONTH(rpt.startrepeat ) as dup"
@@ -674,7 +675,7 @@ class JEventsDBModel
 
 			// Before now (only if not past only == future events)
 			$rows2 = array();
-			if ($startdate <= $t_datenowSQL && $modparams->get("pastonly", 0) < 2)
+			if ($startdate <= $t_datenowSQL && $modparams && $modparams->get("pastonly", 0) < 2)
 			{
 				// note the order is the ones nearest today
 				$query = "SELECT rpt.*, ev.*, rr.*, det.*, ev.state as published, ev.created as created $extrafields"
@@ -814,7 +815,7 @@ class JEventsDBModel
 				// We therefore fetch 3 sets of possible repeats if necessary i.e. not over the limit!
 				// Find the ones after now (only if not past only)
 				$ids1 = array();
-				if ($enddate >= $t_datenowSQL && $modparams->get("pastonly", 0) != 1)
+				if ($enddate >= $t_datenowSQL && $modparams && $modparams->get("pastonly", 0) != 1)
 				{
 					$query = "SELECT DISTINCT rpt.rp_id"
 							. "\n FROM #__jevents_repetition as rpt"
@@ -846,7 +847,7 @@ class JEventsDBModel
 
 				// Before now (only if not past only == future events)
 				$ids2 = array();
-				if ($startdate <= $t_datenowSQL && $modparams->get("pastonly", 0) < 2)
+				if ($startdate <= $t_datenowSQL && $modparams && $modparams->get("pastonly", 0) < 2)
 				{
 					// note the order is the ones nearest today
 					$query = "SELECT  DISTINCT rpt.rp_id"
@@ -954,7 +955,7 @@ class JEventsDBModel
 				// We therefore fetch 3 sets of possible repeats if necessary i.e. not over the limit!
 				// Find the ones after now (only if not past only)
 				$rows1 = array();
-				if ($enddate >= $t_datenowSQL && $modparams->get("pastonly", 0) != 1)
+				if ($enddate >= $t_datenowSQL && $modparams && $modparams->get("pastonly", 0) != 1)
 				{
 					$query = "SELECT rpt.*, ev.*, rr.*, det.*, ev.state as published, ev.created as created $extrafields"
 							. "\n , YEAR(rpt.startrepeat) as yup, MONTH(rpt.startrepeat ) as mup, DAYOFMONTH(rpt.startrepeat ) as dup"
@@ -976,7 +977,8 @@ class JEventsDBModel
 							. "  AND icsf.state=1 "
 							. "\n AND icsf.access  " . (version_compare(JVERSION, '1.6.0', '>=') ? ' IN (' . JEVHelper::getAid($user) . ')' : ' <=  ' . JEVHelper::getAid($user))
 							// published state is now handled by filter
-							. "\n GROUP BY rpt.rp_id
+							// duplicating the sort in the group statements improves MySQL performance
+							. "\n GROUP BY rpt.startrepeat , rpt.rp_id
 						ORDER BY rpt.startrepeat ASC"
 					;
 
@@ -989,7 +991,7 @@ class JEventsDBModel
 
 				// Before now (only if not past only == future events)
 				$rows2 = array();
-				if ($startdate <= $t_datenowSQL && $modparams->get("pastonly", 0) < 2)
+				if ($startdate <= $t_datenowSQL && $modparams && $modparams->get("pastonly", 0) < 2)
 				{
 					// note the order is the ones nearest today
 					$query = "SELECT rpt.*, ev.*, rr.*, det.*, ev.state as published, ev.created as created $extrafields"
@@ -1012,7 +1014,8 @@ class JEventsDBModel
 							. "  AND icsf.state=1 "
 							. "\n AND icsf.access  " . (version_compare(JVERSION, '1.6.0', '>=') ? ' IN (' . JEVHelper::getAid($user) . ')' : ' <=  ' . JEVHelper::getAid($user))
 							// published state is now handled by filter
-							. "\n GROUP BY rpt.rp_id
+							// duplicating the sort in the group statements improves MySQL performance
+							. "\n GROUP BY rpt.startrepeat , rpt.rp_id
 							ORDER BY rpt.startrepeat desc"
 					;
 
@@ -1047,7 +1050,8 @@ class JEventsDBModel
 							. "  AND icsf.state=1 "
 							. "\n AND icsf.access  " . (version_compare(JVERSION, '1.6.0', '>=') ? ' IN (' . JEVHelper::getAid($user) . ')' : ' <=  ' . JEVHelper::getAid($user))
 							// published state is now handled by filter
-							. "\n GROUP BY rpt.rp_id
+							// duplicating the sort in the group statements improves MySQL performance
+							. "\n GROUP BY rpt.startrepeat , rpt.rp_id
 							ORDER BY rpt.startrepeat asc"
 					;
 
@@ -1237,8 +1241,9 @@ class JEventsDBModel
 	// Allow the passing of filters directly into this function for use in 3rd party extensions etc.
 	function listIcalEvents($startdate, $enddate, $order = "", $filters = false, $extrafields = "", $extratables = "", $limit = "")
 	{
-		//list($usec, $sec) = explode(" ", microtime());
-		//$starttime = (float) $usec + (float) $sec;
+		$debuginfo  = false;
+		list($usec, $sec) = explode(" ", microtime());
+		$starttime = (float) $usec + (float) $sec;
 
 		$user = JFactory::getUser();
 		$db = JFactory::getDBO();
@@ -1288,9 +1293,11 @@ class JEventsDBModel
 			$filters->setWhereJoin($extrawhere, $extrajoin);
 		}
 
-		//list ($usec, $sec) = explode(" ", microtime());
-		//$time_end = (float) $usec + (float) $sec;
-		//echo  "after setup filters = ".round($time_end - $starttime, 4)."<br/>";
+		if ($debuginfo){
+			list ($usec, $sec) = explode(" ", microtime());
+			$time_end = (float) $usec + (float) $sec;
+			echo  "after setup filters = ".round($time_end - $starttime, 4)."<br/>";
+		}
 		
 		$catwhere = "\n WHERE ev.catid IN(" . $this->accessibleCategoryList() . ")";
 		$params = JComponentHelper::getParams("com_jevents");
@@ -1352,9 +1359,11 @@ class JEventsDBModel
 			$db->setQuery($query);
 			$rptids = $db->loadColumn();
 
-			//list ($usec, $sec) = explode(" ", microtime());
-			//$time_end = (float) $usec + (float) $sec;
-			//echo  "after rptids  = ".round($time_end - $starttime, 4)."<br/>";
+			if ($debuginfo){
+				list ($usec, $sec) = explode(" ", microtime());
+				$time_end = (float) $usec + (float) $sec;
+				echo  "after rptids  = ".round($time_end - $starttime, 4)."<br/>";
+			}
 			
 			if (count($rptids)>0){
 
@@ -1436,17 +1445,37 @@ class JEventsDBModel
 				$query .= " LIMIT " . $limit;
 			}
 
-			// skip this cache now we have the onDisplayCustomFieldsMultiRow cache
-			$rows = $this->_cachedlistIcalEvents($query, $langtag);
-			//$cache = JFactory::getCache(JEV_COM_COMPONENT);
-			//$rows = $cache->call('JEventsDBModel::_cachedlistIcalEvents', $query, $langtag);
+			if ($debuginfo){
+				$db = JFactory::getDBO();
+				$db->setQuery($query);
+				$rows = $db->loadObjectList();
+				list ($usec, $sec) = explode(" ", microtime());
+				$time_end = (float) $usec + (float) $sec;
+				echo  "pre convert rows (".count($rows).") = ".round($time_end - $starttime, 4)."<br/>";
+
+				$icalcount = count($rows);
+				for ($i = 0; $i < $icalcount; $i++)
+				{
+					// convert rows to jIcalEvents
+					$rows[$i] = new jIcalEventRepeat($rows[$i]);
+				}
+				
+			}
+			else {
+
+				// skip this cache now we have the onDisplayCustomFieldsMultiRow cache
+				$rows = $this->_cachedlistIcalEvents($query, $langtag);			
+			}
+
 		}
 		$dispatcher = & JDispatcher::getInstance();
 		$dispatcher->trigger('onDisplayCustomFieldsMultiRowUncached', array(&$rows));
 
-		//list ($usec, $sec) = explode(" ", microtime());
-		//$time_end = (float) $usec + (float) $sec;
-		//echo  "listIcalEvents  = ".round($time_end - $starttime, 4)."<br/>";
+		if ($debuginfo){
+			list ($usec, $sec) = explode(" ", microtime());
+			$time_end = (float) $usec + (float) $sec;
+			echo  "listIcalEvents  = ".round($time_end - $starttime, 4)."<br/>";
+		}
 		
 		return $rows;
 
@@ -1454,6 +1483,10 @@ class JEventsDBModel
 
 	function _cachedlistIcalEvents($query, $langtag, $count = false)
 	{
+		$debuginfo  = false;
+		list($usec, $sec) = explode(" ", microtime());
+		$starttime = (float) $usec + (float) $sec;
+
 		$user = JFactory::getUser();
 		$db = JFactory::getDBO();
 		$adminuser = JEVHelper::isAdminUser($user);
@@ -1477,6 +1510,13 @@ class JEventsDBModel
 			echo $db->getErrorMsg();
 		}
 		$icalcount = count($icalrows);
+		
+		if ($debuginfo){
+			list ($usec, $sec) = explode(" ", microtime());
+			$time_end = (float) $usec + (float) $sec;
+			echo  "pre converting (".$icalcount.")= ".round($time_end - $starttime, 4)."<br/>";
+		}
+		
 		$valid = true;
 		for ($i = 0; $i < $icalcount; $i++)
 		{
@@ -1495,6 +1535,12 @@ class JEventsDBModel
 
 		JEVHelper::onDisplayCustomFieldsMultiRow($icalrows);
 
+		if ($debuginfo){
+			list ($usec, $sec) = explode(" ", microtime());
+			$time_end = (float) $usec + (float) $sec;
+			echo  "after converting (".$icalcount.")= ".round($time_end - $starttime, 4)."<br/>";
+		}
+		
 		return $icalrows;
 
 	}
@@ -1823,6 +1869,26 @@ class JEventsDBModel
 			$extratables = "";  // must have comma prefix
 			$extrawhere = array();
 			$extrajoin = array();
+			
+			if ($includeUnpublished){
+				$filterarray = array("justmine",  "search");
+			}
+			else {
+				$filterarray = array("published", "justmine",  "search");
+			}
+
+			// If there are extra filters from the module then apply them now
+			$reg = & JFactory::getConfig();
+			$modparams = $reg->get("jev.modparams", false);
+			if ($modparams && $modparams->get("extrafilters", false))
+			{
+				$filterarray = array_merge($filterarray, explode(",", $modparams->get("extrafilters", false)));
+			}
+
+			$filters = jevFilterProcessing::getInstance($filterarray);
+			$filters->setWhereJoin($extrawhere, $extrajoin);
+			$needsgroup = $filters->needsGroupBy();
+			
 			$dispatcher = & JDispatcher::getInstance();
 			$dispatcher->trigger('onListEventsById', array(& $extrafields, & $extratables, & $extrawhere, & $extrajoin));
 
@@ -1921,6 +1987,26 @@ class JEventsDBModel
 			$extratables = "";  // must have comma prefix
 			$extrawhere = array();
 			$extrajoin = array();
+			
+			if ($includeUnpublished){
+				$filterarray = array("justmine",  "search");
+			}
+			else {
+				$filterarray = array("published", "justmine",  "search");
+			}
+
+			// If there are extra filters from the module then apply them now
+			$reg = & JFactory::getConfig();
+			$modparams = $reg->get("jev.modparams", false);
+			if ($modparams && $modparams->get("extrafilters", false))
+			{
+				$filterarray = array_merge($filterarray, explode(",", $modparams->get("extrafilters", false)));
+			}
+
+			$filters = jevFilterProcessing::getInstance($filterarray);
+			$filters->setWhereJoin($extrawhere, $extrajoin);
+			$needsgroup = $filters->needsGroupBy();
+			
 			$dispatcher = & JDispatcher::getInstance();
 			$dispatcher->trigger('onListEventsById', array(& $extrafields, & $extratables, & $extrawhere, & $extrajoin));
 
@@ -2046,7 +2132,7 @@ class JEventsDBModel
 		}
 
 		$where = '';
-		if ($creator_id == 'ADMIN')
+		if ($creator_id == 'ADMIN' ||  JEVHelper::isEventEditor() || JEVHelper::isEventPublisher(true))
 		{
 			$where = "";
 		}
@@ -2156,7 +2242,7 @@ class JEventsDBModel
 
 		$adminCats = JEVHelper::categoryAdmin();
 		$where = '';
-		if ($creator_id == 'ADMIN')
+		if ($creator_id == 'ADMIN' ||  JEVHelper::isEventEditor() || JEVHelper::isEventPublisher(true))
 		{
 			$where = "";
 		}
@@ -2733,6 +2819,8 @@ class JEventsDBModel
 		$user = JFactory::getUser();
 		$adminuser = JEVHelper::isAdminUser($user);
 		$db = JFactory::getDBO();
+		
+		$keyword = $db->escape($keyword, true) ;
 
 		$rows_per_page = $limit;
 		if (empty($limitstart) || !$limitstart)

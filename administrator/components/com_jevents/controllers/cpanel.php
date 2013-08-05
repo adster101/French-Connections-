@@ -121,6 +121,30 @@ class AdminCpanelController extends JControllerAdmin
 		$this->view->display();
 
 	}
+	
+	function support()
+	{
+		//Get the view
+		$this->view = & $this->getView("cpanel", "html");
+		
+		// Set the layout
+		$this->view->setLayout('support');
+		$this->view->assign('title', JText::_('CONTROL_PANEL'));
+
+		$this->view->display();
+	}
+	
+	function custom_css()
+	{
+		//Get the view
+		$this->view = & $this->getView("cpanel", "html");
+		
+		// Set the layout
+		$this->view->setLayout('custom_css');
+		$this->view->assign('title', JText::_('CONTROL_PANEL'));
+
+		$this->view->display();
+	}
 
 	function fixExceptions()
 	{
@@ -364,7 +388,17 @@ class AdminCpanelController extends JControllerAdmin
 			$db->setQuery("UPDATE #__assets SET rules='".'{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}'."' WHERE name like 'com_jevents.category.%' AND rules=''");
 			$db->query();
 		}
-		
+
+		// Fix assets with no parents set!
+		$db->setQuery("SELECT * FROM #__assets WHERE name like 'com_jevents.category.%' AND parent_id=0");
+		$blankparentassets = $db->loadObjectList('id');
+		foreach ($blankparentassets as $blankparentasset){
+			$catid = str_replace('com_jevents.category.', "", $blankparentasset->name);
+			$cat = JTable::getInstance("category");
+			$cat->load($catid);
+			$cat->store();
+		}
+
 	}
 
 	private function insertAsset($object)

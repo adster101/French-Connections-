@@ -30,6 +30,7 @@ class AdminDefaultsController extends JControllerForm {
 		
 		$this->registerTask( 'list',  'overview' );
 		$this->registerTask( 'new',  'edit' );
+		$this->registerTask( 'save',  'apply' );
 		$this->registerDefaultTask("overview");
 
 		// Make sure DB is up to date
@@ -46,6 +47,19 @@ class AdminDefaultsController extends JControllerForm {
 		}
 		else {
 			$db->setQuery("UPDATE #__jev_defaults set title=".$db->Quote("JEV_EVENT_DETAIL_PAGE")." WHERE name='icalevent.detail_body'");
+			$db->query();
+		}
+
+		if (!isset($defaults['icalevent.edit_page'])){
+			$db->setQuery("INSERT INTO  #__jev_defaults set name='icalevent.edit_page',
+						title=".$db->Quote("JEV_EVENT_EDIT_PAGE").",
+						subject='',
+						value='',
+						state=0");
+			$db->query();
+		}
+		else {
+			$db->setQuery("UPDATE #__jev_defaults set title=".$db->Quote("JEV_EVENT_EDIT_PAGE")." WHERE name='icalevent.edit_page'");
 			$db->query();
 		}
 		
@@ -193,6 +207,10 @@ class AdminDefaultsController extends JControllerForm {
 			// Get/Create the model
 			if ($model = & $this->getModel("default", "defaultsModel")) {
 				if ($model->store(JRequest::get("post",JREQUEST_ALLOWRAW))){
+					if (JRequest::getCmd("task")=="defaults.apply"){
+						$this->setRedirect("index.php?option=".JEV_COM_COMPONENT."&task=defaults.edit&id=$id",JText::_("JEV_TEMPLATE_SAVED"));
+						return;
+					}					
 					$this->setRedirect("index.php?option=".JEV_COM_COMPONENT."&task=defaults.overview",JText::_("JEV_TEMPLATE_SAVED"));
 					return;
 				}

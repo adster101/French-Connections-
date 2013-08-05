@@ -15,6 +15,9 @@ defined( '_JEXEC' ) or die( 'Restricted access' );
 
 require_once (dirname(__FILE__).'/'.'helper.php');
 
+// reset filters when viewed on non-JEvents page - make this a configurable option
+
+
 $jevhelper = new modJeventsFilterHelper($params);
 
 // record what is running - used by the filters
@@ -22,6 +25,17 @@ $registry	=& JRegistry::getInstance("jevents");
 $registry->set("jevents.activeprocess","mod_jevents_filter");
 $registry->set("jevents.moduleid", $module->id);
 $registry->set("jevents.moduleparams", $params);
-
+$option = JRequest::getCmd("option");
+if ($option=="com_jevents"){
+	$menu	= JSite::getMenu();
+	$active = $menu->getActive();
+	if ($active){
+		JFactory::getApplication()->setUserState("jevents.filtermenuitem",$active->id);
+	}
+}
+if (JRequest::getCmd("task") == "icalrepeat.detail" && $params->get('showindetails', 0) == 0){ 
+	return;
+}
 require(JModuleHelper::getLayoutPath('mod_jevents_filter'));
+
 

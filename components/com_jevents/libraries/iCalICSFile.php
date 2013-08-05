@@ -262,12 +262,15 @@ RAWTEXT;
 						include_once(JEV_ADMINLIBS."categoryClass.php");
 						foreach ($evcat as $ct){
 							// if no such category then create it/them
-							if(!array_key_exists($ct,$categories)){
+							if(!array_key_exists(trim($ct),$categories)){
 								$cat = new JEventsCategory($db);
-								$cat->bind(array("title"=>$ct));
+								$cat->bind(array("title"=>trim($ct)));
 								$cat->published=1;
 								$cat->check();
-								$cat->store();
+								if (!$cat->store()){
+									var_dump($cat->getErrors());
+									die("failed to auto create category $ct");
+								}
 							}
 						}
 						// must reset  the list of categories now
@@ -279,7 +282,7 @@ RAWTEXT;
 						if ($params->get("multicategory",0) ){
 							$vevent->catid = array();
 							foreach ($evcat as $ct){
-								$vevent->catid[] =  $categories[$ct]->id;
+								$vevent->catid[] =  $categories[trim($ct)]->id;
 							}							
 						}
 						else {

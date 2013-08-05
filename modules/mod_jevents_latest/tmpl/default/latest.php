@@ -374,9 +374,9 @@ class DefaultModLatestView
 						{
 							if (($this->norepeat && $row->hasrepetition())
 									// use settings from the event - multi day event only show once
-									|| ($this->multiday == 0 && $row->ddn() != $row->dup() && $row->multiday() == 0)
+									|| ($this->multiday == 0 && ($row->ddn() != $row->dup() || $row->mdn() != $row->mup() || $row->ydn() != $row->yup()) && $row->multiday() == 0)
 									// override settings from the event - multi day event only show once/on first day
-									|| (($this->multiday == 2 || $this->multiday == 3) && $row->ddn() != $row->dup() )
+									|| (($this->multiday == 2 || $this->multiday == 3) && ($row->ddn() != $row->dup()  || $row->mdn() != $row->mup() || $row->ydn() != $row->yup()) )
 							)
 							{
 								// make sure this event has not already been used!
@@ -462,9 +462,9 @@ class DefaultModLatestView
 							{
 								if (($this->norepeat && $row->hasrepetition())
 										// use settings from the event - multi day event only show once
-										|| ($this->multiday == 0 && $row->ddn() != $row->dup() && $row->multiday() == 0)
+										|| ($this->multiday == 0 && ($row->ddn() != $row->dup() || $row->mdn() != $row->mup() || $row->ydn() != $row->yup()) && $row->multiday() == 0)
 										// override settings from the event - multi day event only show once/on first day
-										|| (($this->multiday == 2 || $this->multiday == 3) && $row->ddn() != $row->dup() )
+										|| (($this->multiday == 2 || $this->multiday == 3) && ($row->ddn() != $row->dup()  || $row->mdn() != $row->mup() || $row->ydn() != $row->yup()) )										
 								)
 								{
 									// make sure this event has not already been used!
@@ -636,7 +636,7 @@ class DefaultModLatestView
 			'createdByUserName', 'createdByUserEmail', 'createdByUserEmailLink',
 			'eventDate', 'endDate', 'startDate', 'title', 'category', 'calendar', 
 			'contact', 'addressInfo', 'location', 'extraInfo',
-			'countdown','categoryimage'
+			'countdown','categoryimage', 'duration'
 		);
 		$keywords_or = implode('|', $keywords);
 		$whsp = '[\t ]*'; // white space
@@ -674,7 +674,7 @@ class DefaultModLatestView
 		{
 			foreach ($this->splitCustomFormat[$ix]['data'] as $keyToken => $customToken)
 			{
-				if (preg_match('/\$\{' . $whsp . '(' . $keywords_or . ')(' . $datefm . ')?' . $whsp . '}/', $customToken, $matches))
+				if (preg_match('/\$\{' . $whsp . '(' . $keywords_or . ')(' . $datefm . ')?' . $whsp . '}/',trim($customToken), $matches))
 				{
 					$this->splitCustomFormat[$ix]['data'][$keyToken] = array();
 					$this->splitCustomFormat[$ix]['data'][$keyToken]['keyword'] = stripslashes($matches[1]);
@@ -919,10 +919,13 @@ class DefaultModLatestView
 					$content .= '<span class="mod_events_latest_content">';
 				if ($this->displayLinks)
 				{
-
 					$link = $dayEvent->viewDetailLink($ev_year, $ev_month, $ev_day, false, $this->myItemid);
-					$link = JRoute::_($link . $this->datamodel->getCatidsOutLink());
-
+					if ($this->modparams->get("ignorefiltermodule", 0)){
+						$link = JRoute::_($link . $this->datamodel->getCatidsOutLink()."&filter_reset=1");
+					}
+					else {
+						$link = JRoute::_($link . $this->datamodel->getCatidsOutLink());
+					}
 					$content .= $this->_htmlLinkCloaking($link, JEventsHTML::special($title));
 				}
 				else
@@ -987,6 +990,62 @@ class DefaultModLatestView
 				$content .= $dayEvent->location();
 				break;
 
+			case 'duration':				
+				$timedelta = ($dayEvent->noendtime() || $dayEvent->alldayevent()) ? "" : $dayEvent->getUnixEndTime()-$dayEvent->getUnixStartTime();
+				if ($timedelta==""){
+					break;
+				}
+				$fieldval = (isset($dateParm) && $dateParm != '') ? $dateParm : JText::_("JEV_DURATION_FORMAT");
+				$shownsign = false;
+				// whole days!
+				if (stripos($fieldval, "%wd") !== false)
+				{
+					$days = intval($timedelta / (60 * 60 * 24));
+					$timedelta -= $days * 60 * 60 * 24;
+
+					if ($timedelta>3610){
+						//if more than 1 hour and 10 seconds over a day then round up the day output
+						$days +=1;
+					}
+
+					$fieldval = str_ireplace("%wd", $days, $fieldval);
+					$shownsign = true;
+				}
+				if (stripos($fieldval, "%d") !== false)
+				{
+					$days = intval($timedelta / (60 * 60 * 24));
+					$timedelta -= $days * 60 * 60 * 24;
+/*
+					if ($timedelta>3610){
+						//if more than 1 hour and 10 seconds over a day then round up the day output
+						$days +=1;
+					}
+						*/							
+					$fieldval = str_ireplace("%d", $days, $fieldval);
+					$shownsign = true;
+				}
+				if (stripos($fieldval, "%h") !== false)
+				{
+					$hours = intval($timedelta / (60 * 60));
+					$timedelta -= $hours * 60 * 60;
+					if ($shownsign)
+						$hours = abs($hours);
+					$hours = sprintf("%02d", $hours);
+					$fieldval = str_ireplace("%h", $hours, $fieldval);
+					$shownsign = true;
+				}
+				if (stripos($fieldval, "%m") !== false)
+				{
+					$mins = intval($timedelta / 60);
+					$timedelta -= $hours * 60;
+					if ($mins)
+						$mins = abs($mins);
+					$mins = sprintf("%02d", $mins);
+					$fieldval = str_ireplace("%m", $mins, $fieldval);
+				}
+				$content .= $fieldval;
+				break;
+			
 			case 'extraInfo':
 				$this->modparams->set("image", 0);
 				$dayEvent->data->text = $dayEvent->extra_info();

@@ -11,6 +11,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.html.html.bootstrap');
+// We need to get the params first
 
 $version = JEventsVersion::getInstance();
 
@@ -24,16 +25,40 @@ foreach (JEV_CommonFunctions::getJEventsViewList() as $viewfile)
 	}
 }
 ?>
+<!-- Set Difficulty : -->
 
 <form action="index.php" method="post" name="adminForm" autocomplete="off" id="adminForm">
-
 	<fieldset class='jevconfig'>
+		<?php
+		// difficulty rating is outside the tabs!
+		$fieldSets = $this->form->getFieldsets();
+		foreach ($fieldSets as $name => $fieldSet)
+		{
+			foreach ($this->form->getFieldset($name) as $field)
+			{
+				if ($field->fieldname == "com_difficulty")
+				{
+					?>
+					<table style="text-align:left;">
+						<tr class=" difficulty1" >
+							<?php
+								echo  '<td class="paramlist_key"><span class="editlinktip">' . $field->label . '</span></td>';
+								echo  '<td class="paramlist_value">' . $field->input . '</td>';
+							?>
+						</tr>
+					</table>
+					<?php
+				}
+			}
+		}
+		?>
 		<legend>
 			<?php echo JText::_('JEV_EVENTS_CONFIG'); ?>
 		</legend>
-		<div style="float:right;margin-top:-20px;background-color:#ffffff;padding:2px;">
-			[<?php echo $version->getShortVersion(); ?>&nbsp;<a href='<?php echo $version->getURL(); ?>'><?php echo JText::_('JEV_CHECK_VERSION'); ?> </a>]
+		<div class="jev_config_version">
+			 <?php echo $version->getShortVersion(); ?>&nbsp;<a href='<?php echo $version->getURL(); ?>'><?php echo JText::_('JEV_CHECK_VERSION'); ?> </a>
 		</div>
+			
 
 		<ul class="nav nav-tabs" id="myParamsTabs">
 			<?php
@@ -46,14 +71,28 @@ foreach (JEV_CommonFunctions::getJEventsViewList() as $viewfile)
 					continue;
 				}
 				$label = empty($fieldSet->label) ? $name : $fieldSet->label;
-				if ($first)
+
+				$class = isset($field->class) ? $field->class : "";
+				if (!empty($fieldSet->difficulty))
 				{
-					$first = false;
-					$class = ' class="active"';
+					$difficultySetClass = "difficulty" . $fieldSet->difficulty;
+					if ($this->component->params->get("com_difficulty", 1) < $fieldSet->difficulty)
+					{
+						$difficultySetClass .= " hiddenDifficulty";
+					}
 				}
 				else
 				{
-					$class = '';
+					$difficultySetClass = "";
+				}
+				if ($first)
+				{
+					$first = false;
+					$class = " class= active' $class $difficultySetClass'";
+				}
+				else
+				{
+					$class = " class=' $difficultySetClass'";
 				}
 				?>
 				<li <?php echo $class; ?>><a data-toggle="tab" href="#<?php echo $name; ?>"><?php echo JText::_($label); ?></a></li>
@@ -84,13 +123,13 @@ foreach (JEV_CommonFunctions::getJEventsViewList() as $viewfile)
 			  <?php
 			  }
 			 */
-			  if ($haslayouts)
-			  {			
+			if ($haslayouts)
+			{
+				?>
+				<li ><a data-toggle="tab" href="#club_layouts"><?php echo JText::_("CLUB_LAYOUTS"); ?></a></li>
+				<?php
+			}
 			?>
-			<li ><a data-toggle="tab" href="#club_layouts"><?php echo JText::_("CLUB_LAYOUTS"); ?></a></li>
-			<?php
-			  }
-			  ?>
 		</ul>
 
 		<?php
@@ -118,16 +157,27 @@ foreach (JEV_CommonFunctions::getJEventsViewList() as $viewfile)
 
 			foreach ($this->form->getFieldset($name) as $field)
 			{
-				if ($field->hidden)
+				if ($field->hidden || $field->fieldname == "com_difficulty")
 				{
 					continue;
 				}
 				$class = isset($field->class) ? $field->class : "";
 
+				$difficultyClass = "difficulty" . $this->form->getFieldAttribute($field->fieldname, "difficulty");
+				if ($this->component->params->get("com_difficulty", 1) < $this->form->getFieldAttribute($field->fieldname, "difficulty"))
+				{
+					$difficultyClass .= " hiddenDifficulty";
+				}
+
 				if (strlen($class) > 0)
 				{
-					$class = " class='$class'";
+					$class = " class='$class $difficultyClass'";
 				}
+				else
+				{
+					$class = " class=' $difficultyClass'";
+				}
+
 				$html[] = "<tr $class>";
 				if (!isset($field->label) || $field->label == "")
 				{
@@ -197,7 +247,7 @@ foreach (JEV_CommonFunctions::getJEventsViewList() as $viewfile)
 					}
 				}
 				?>
-			</ul>	  
+			</ul>
 			<?php
 			echo JHtml::_('bootstrap.startPane', "myLayoutTabs", array('active' => $first));
 
@@ -255,10 +305,12 @@ foreach (JEV_CommonFunctions::getJEventsViewList() as $viewfile)
 						$html[] = '</table>';
 					}
 
-					if (!$hasconfig) {
+					if (!$hasconfig)
+					{
 						$x = 1;
 					}
-					if ($hasconfig) {
+					if ($hasconfig)
+					{
 						echo JHtml::_('bootstrap.addPanel', 'myLayoutTabs', $viewfile);
 						//echo JHtml::_('bootstrap.addPanel', 'myParamsTabs', $viewfile);
 

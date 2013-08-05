@@ -18,7 +18,7 @@ defined('_JEXEC') or die();
  */
 include_once(JEV_ADMINPATH . "/views/icalevent/view.html.php");
 
-class ICalEventViewIcalEvent extends AdminIcaleventViewIcalevent
+class ICalEventViewIcalevent extends AdminIcaleventViewIcalevent
 {
 
 	var $jevlayout = null;
@@ -41,13 +41,14 @@ class ICalEventViewIcalEvent extends AdminIcaleventViewIcalevent
 		include(JEV_ADMINLIBS . "/editStrings.php");
 		$document->addScriptDeclaration($editStrings);
 
-		JEVHelper::script('editical.js', 'administrator/components/' . JEV_COM_COMPONENT . '/assets/js/');
+		JEVHelper::script('editical.js', 'components/' . JEV_COM_COMPONENT . '/assets/js/');
 		//JEVHelper::script('toolbarfix.js','components/'.JEV_COM_COMPONENT.'/assets/js/');
-
-		$document->setTitle(JText::_('EDIT_ICAL_EVENT'));
 
 		// Set toolbar items for the page
 		JToolBarHelper::title(JText::_('EDIT_ICAL_EVENT'), 'jevents');
+		
+		// reset the title because JToolbar messes is up in Joomla 3.0 in the frontend !!
+		$document->setTitle(JText::_('EDIT_ICAL_EVENT'));
 
 		$bar = & JToolBar::getInstance('toolbar');
 		if ($this->id > 0)
@@ -112,6 +113,10 @@ class ICalEventViewIcalEvent extends AdminIcaleventViewIcalevent
 			$this->setLayout("edit16");
 		}
 
+		JEVHelper::componentStylesheet($this, "editextra.css");		
+
+		$this->setupEditForm();
+		
 		parent::displaytemplate($tpl);
 
 		$this->_adminEnd();
@@ -142,7 +147,7 @@ class ICalEventViewIcalEvent extends AdminIcaleventViewIcalevent
 			echo $barhtml;
 			if (JVersion::isCompatible("3.0"))
 			{
-				$title = "";//JFactory::getApplication()->JComponentTitle;
+				$title ="";// JFactory::getApplication()->JComponentTitle;
 			}
 			else
 			{

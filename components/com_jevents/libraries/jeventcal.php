@@ -256,6 +256,14 @@ class jEventCal {
 		else $this->_catname=$val;
 	}
 
+	function allcategories($val=""){
+		if (strlen($val)==0) {
+			if (!isset($this->_catname)) $this->_catname = $this->getCategoryName();
+			return $this->_catname;
+		}
+		else $this->_catname=$val;
+	}
+
 	function bgcolor($val=""){
 		if (strlen($val)==0) {
 			if (!isset($this->_bgcolor)) $this->_bgcolor = JEV_CommonFunctions::setColor($this);
@@ -663,8 +671,9 @@ class jEventCal {
 	function vCalExportLink($sef=false, $singlerecurrence=false){
 		$Itemid	= JEVHelper::getItemid();
 		$task = $singlerecurrence?"icalrepeat":"icalevent";
-		$link = "index.php?option=".JEV_COM_COMPONENT."&task=icals.$task&template=component&evid=".$this->id()
+		$link = "index.php?option=".JEV_COM_COMPONENT."&task=icals.$task&tmpl=component&evid=".$this->id()
 		. "&Itemid=".$Itemid;
+
 		// after testing set showBR = 0
 		//$link .= "&showBR=1";
 		$link = $sef?JRoute::_( $link  ):$link;
@@ -701,11 +710,11 @@ class jEventCal {
 	}
 
 	function viewDetailLink($year,$month,$day,$sef=true, $Itemid=0){
-		$Itemid	= $Itemid>0?$Itemid:JEVHelper::getItemid();
+		$Itemid	= $Itemid>0?$Itemid:JEVHelper::getItemid($this);
 		$title = JFilterOutput::stringURLSafe($this->title());
 		$link = "index.php?option=".JEV_COM_COMPONENT."&task=".$this->detailTask()."&evid=".$this->id() .'&Itemid='.$Itemid
 		."&year=$year&month=$month&day=$day" ;
-		if (JRequest::getCmd("tmpl","")=="component"){
+		if (JRequest::getCmd("tmpl","")=="component" && JRequest::getCmd('task', 'selectfunction')!='icalevent.select'  && JRequest::getCmd("option","")!="com_acymailing" && JRequest::getCmd("option","")!="com_jnews" && JRequest::getCmd("jevtask","")!="crawler.listevents"){
 			$link .= "&tmpl=component";
 		}
 		$link = $sef?JRoute::_( $link  ):$link;

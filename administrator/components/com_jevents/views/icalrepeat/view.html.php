@@ -37,6 +37,9 @@ class AdminIcalrepeatViewIcalrepeat extends JEventsAbstractView
 
 		JHTML::_('behavior.tooltip');
 
+		if (JVersion::isCompatible("3.0")){
+			$this->sidebar = JHtmlSidebar::render();					
+		}
 	}
 
 	function edit($tpl = null)
@@ -45,7 +48,7 @@ class AdminIcalrepeatViewIcalrepeat extends JEventsAbstractView
 		include(JEV_ADMINLIBS . "editStrings.php");
 		$document->addScriptDeclaration($editStrings);
 
-		JEVHelper::script('editical.js', 'administrator/components/' . JEV_COM_COMPONENT . '/assets/js/');
+		JEVHelper::script('editical.js', 'components/' . JEV_COM_COMPONENT . '/assets/js/');
 		JEVHelper::script('view_detail.js', 'components/' . JEV_COM_COMPONENT . '/assets/js/');
 
 		$document->setTitle(JText::_('EDIT_ICAL_REPEAT'));
@@ -71,6 +74,8 @@ class AdminIcalrepeatViewIcalrepeat extends JEventsAbstractView
                 else {
                     $this->setLayout("edit16");
                 }		
+
+		$this->setupEditForm();
 
 	}
 

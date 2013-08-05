@@ -39,6 +39,9 @@ class jevFilterProcessing
 			if ($moduleparams && $moduleparams->get("ignorefiltermodule",false) && $moduleid){
 				$uid="mod".$moduleid;
 			}
+			else if ($moduleid && $registry->get("getnewfilters")){
+				$uid="mod".$moduleid;
+			}
 		}
 
 		$pluginsDir = JPATH_ROOT.'/'.'plugins'.'/'.'jevents';
@@ -218,6 +221,9 @@ class jevFilterProcessing
 			$this->filterHTML = array();
 			foreach ($this->filters as $filter) {
 				$filterHTML = $filter->_createfilterHTML();
+				if (!is_array($filterHTML)){
+					continue;
+				}
 				if (array_key_exists("merge",$filterHTML)){
 					$this->filterHTML = array_merge($this->filterHTML,$filterHTML["merge"]);
 				}
@@ -281,6 +287,22 @@ class jevFilter
 		
 		// New special code in jevents.php sets the session variables in the cache id calculation!
 		$useCache =false;
+		
+		// Is the filter module setup to reset automatically
+		$module = JModuleHelper::getModule("mod_jevents_filter");
+		if ($module){
+			$modparams = new JRegistry($module->params);
+			$option = JRequest::getCmd("option");
+			if ($modparams->get("resetfilters")=="nonjevents" && $option!="com_jevents" && $option!="com_jevlocations" && $option!="com_jevpeople" && $option!="com_rsvppro"  && $option!="com_jevtags") {
+				JRequest::setVar('filter_reset',1);
+			}
+			else if ($modparams->get("resetfilters")=="newmenu") {
+				// Must use JRequest::getInt("Itemid") since missing event finder resets active menu item!
+				if (JRequest::getInt("Itemid",0) && JRequest::getInt("Itemid", 0) != JFactory::getApplication()->getUserState("jevents.filtermenuitem",0)){
+					JRequest::setVar('filter_reset',1);
+				}				
+			}
+		}
 		
 		$user = JFactory::getUser();
 		// TODO chek this logic

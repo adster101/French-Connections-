@@ -17,7 +17,7 @@ defined('_JEXEC') or die();
  *
  * @static
  */
-class AdminCPanelViewCPanel extends JEventsAbstractView
+class AdminCpanelViewCpanel extends JEventsAbstractView
 {
 
 
@@ -55,6 +55,13 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 //$section = $params->get("section",0);
 
 		JHTML::_('behavior.tooltip');
+
+		if (JVersion::isCompatible("3.0")){
+			$this->sidebar = JHtmlSidebar::render();					
+		}
+		else {
+			$this->setLayout("cpanel25");
+		}
 
 	}
 
@@ -100,7 +107,7 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			$title = str_replace(" ", "_", $rssDoc->get_title());
 			$link = $rssDoc->get_link();
 
-			$output = '<table class="adminlist">';
+			$output = '<table class="adminlist   table table-striped">';
 			$output .= '<tr><th><a href="' . $link . '" target="_blank">' . JText::_($title) . '</th></tr>';
 
 			$items = array_slice($rssDoc->get_items(), 0, 3);
@@ -339,6 +346,7 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 						$output .= '</td></tr>';
 						$k = ($k + 1) % 2;
 					}
+					
 					$output .= '</table>';
 					$needsupdate = true;
 					return $output;
@@ -352,14 +360,22 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 	private function getValidManifestFile($manifest)
 	{
 		$filecontent = JFile::read($manifest);
-		if (strpos($filecontent, "jevents.net") === false && strpos($filecontent, "gwesystems.com") === false && strpos($filecontent, "joomlacontenteditor") === false && strpos($filecontent, "virtuemart") === false)
+		if (stripos($filecontent, "jevents.net") === false && stripos($filecontent, "gwesystems.com") === false && stripos($filecontent, "joomlacontenteditor") === false && stripos($filecontent, "virtuemart") === false && stripos($filecontent, "sh404sef") === false)
 		{
 			return false;
 		}
+		// for JCE and Virtuemart only check component version number
+		if ( stripos($filecontent, "joomlacontenteditor") !== false || stripos($filecontent, "virtuemart") !== false || stripos($filecontent, "sh404sef") !== false  || strpos($filecontent, "JCE") !== false)
+		{
+			if (strpos ($filecontent, "type='component'") === false && strpos ($filecontent, 'type="component"') === false){
+				return false;
+			}
+		}
+		
 		$manifestdata = JApplicationHelper::parseXMLInstallFile($manifest);
 		if (!$manifestdata)
 			return false;
-		if (strpos($manifestdata["authorUrl"], "jevents") === false && strpos($manifestdata["authorUrl"], "gwesystems") === false && strpos($manifestdata["authorUrl"], "joomlacontenteditor") === false && strpos($manifestdata["authorUrl"], "virtuemart") === false)
+		if (strpos($manifestdata["authorUrl"], "jevents") === false && strpos($manifestdata["authorUrl"], "gwesystems") === false && strpos($manifestdata["authorUrl"], "joomlacontenteditor") === false && strpos($manifestdata["authorUrl"], "virtuemart") === false && strpos($manifestdata['name'], "sh404SEF") === false)
 		{
 			return false;
 		}
@@ -389,6 +405,18 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			$apps["layout_" . basename(dirname($manifest))] = $app;
 		}
 
+		$xmlfiles1 = JFolder::files(JPATH_MANIFESTS . "/files", "\.xml", true, true);
+		foreach ($xmlfiles1 as $manifest)
+		{
+			if (!$manifestdata = $this->getValidManifestFile($manifest))
+				continue;
+
+			$app = new stdClass();
+			$app->name = $manifestdata["name"];
+			$app->version = $manifestdata["version"];
+			$apps["layout_" . str_replace(".xml","",basename($manifest))] = $app;
+		}
+		
 // plugins
 		if (JFolder::exists(JPATH_SITE . "/plugins"))
 		{
@@ -480,7 +508,7 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			"plugin_acymailing_tagjevents" => 41,
 			"plugin_community_jevents" => 7,
 			"plugin_content_jevcreator" => 34,
-			"plugin_content_jevent_embed" => 12,
+			"plugin_content_jevent_embed" => 113,
 			"plugin_jevents_agendaminutes" => 12,
 			"plugin_jevents_jevanonuser" => 25,
 			"plugin_jevents_jevcalendar" => 15,
@@ -504,6 +532,7 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			"plugin_jevents_jevpopupdetail" => 50,
 			"plugin_jevents_jevrsvp" => 14,
 			"plugin_jevents_jevrsvppro" => 62,
+			"plugin_jevents_jevsendfb" => 45,
 			"plugin_jevents_jevsessions" => 21,
 			"plugin_jevents_jevtags" => 9,
 			"plugin_jevents_jevtimelimit" => 17,
@@ -513,7 +542,8 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			"plugin_rsvppro_manual" => 62,
 			"plugin_rsvppro_paypalipn" => 62,
 			"plugin_rsvppro_virtuemart" => 62,
-			"plugin_search_eventsearch" => 52,
+			//"plugin_search_eventsearch" => 52, // JEvents 2.2
+			"plugin_search_eventsearch" => 71,
 			"plugin_search_jevlocsearch" => 4,
 			"plugin_search_jevtagsearch" => 9,
 			"plugin_system_autotweetjevents" => 45,
@@ -521,7 +551,7 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			"component_com_attend_jevents" => 21,
 			//"component_com_jevents" => 52, // JEvents 2.0
 			//"component_com_jevents" => 65, // JEvents 2.1
-			"component_com_jevents" => 71, // JEvents 2.2
+			"component_com_jevents" => 71, // JEvents 3.0
 			"component_com_jeventstags" => 9,
 			"component_com_jevlocations-old" => 4,
 			"component_com_jevlocations" => 4,
@@ -577,7 +607,11 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 		$apps[$app->name] = $app;
 		
 // components (including JEvents
-		$xmlfiles3 = JFolder::files(JPATH_ADMINISTRATOR . "/components", "manifest\.xml", true, true);
+		$xmlfiles3 = array_merge( JFolder::files(JPATH_ADMINISTRATOR . "/components", "manifest\.xml", true, true) ,
+				JFolder::files(JPATH_ADMINISTRATOR . "/components", "sh404sef\.xml", true, true) ,
+				JFolder::files(JPATH_ADMINISTRATOR . "/components", "virtuemart.xml", true, true), 
+				JFolder::files(JPATH_ADMINISTRATOR . "/components", "jce.xml", true, true) 
+				);
 		foreach ($xmlfiles3 as $manifest)
 		{
 			if (!$manifestdata = $this->getValidManifestFile($manifest))
@@ -586,11 +620,23 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 			$app = new stdClass();
 			$app->name = $manifestdata["name"];
 			$app->version = $manifestdata["version"];
+			// is sh404sef disabled ?
+			if (basename(dirname($manifest)) == "com_sh404sef" ){
+				if (is_callable("Sh404sefFactory::getConfig")){
+					$sefConfig = &Sh404sefFactory::getConfig();
+					if (!$sefConfig->Enabled ) {
+						$app->version = $manifestdata["version"] . " (Disabled in SH404 settings)";
+					}
+				}
+				else {
+					$app->version = $manifestdata["version"] . " (sh404sef system plugins not enabled)";
+				}
+				
+			}
 			$name = "component_" . basename(dirname($manifest));
 			$apps[$name] = $app;
 		}
-
-
+		
 // modules
 		if (JFolder::exists(JPATH_SITE . "/modules"))
 		{
@@ -676,7 +722,7 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 		}
 
 		$output = "<textarea rows='40' cols='80' class='versionsinfo'>[code]\n";
-		
+		$output .=  "PHP Version : " .phpversion() . "\n";
 		foreach ($apps as $appname => $app)
 		{
 			$output .= "$appname : $app->version\n";
@@ -708,6 +754,51 @@ class AdminCPanelViewCPanel extends JEventsAbstractView
 		return $text;
 
 	}
+        
+	function getTranslatorLink()
+	{
+		$translatorUrl =  JText::_("JEV_TRANSLATION_AUTHOR");
+		//$translatorUrl = JText::_("JEV_TRANSLATION_AUTHOR_URL");
+		//$translatorUrl = "<a href=\"$translatorUrl\">$translatorName</a>";
 
+		return $translatorUrl;
+	}
+	
+	function support()
+	{
+		jimport('joomla.html.pane');
+
+		$document = & JFactory::getDocument();
+		$document->setTitle(JText::_('JEVENTS') . ' :: ' . JText::_('JEVENTS'));
+
+		JToolBarHelper::title(JText::_('JEVENTS') . ' :: ' . JText::_('JEVENTS'), 'jevents');
+
+		JEventsHelper::addSubmenu();
+
+		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
+
+		if (JVersion::isCompatible("3.0")){
+			$this->sidebar = JHtmlSidebar::render();					
+		}						
+
+	}
+		function custom_css()
+	{
+		jimport('joomla.html.pane');
+
+		$document = & JFactory::getDocument();
+		$document->setTitle(JText::_('JEVENTS') . ' :: ' . JText::_('JEVENTS'));
+
+		JToolBarHelper::title(JText::_('JEVENTS') . ' :: ' . JText::_('JEVENTS'), 'jevents');
+
+		JEventsHelper::addSubmenu();
+
+		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
+
+		if (JVersion::isCompatible("3.0")){
+			$this->sidebar = JHtmlSidebar::render();					
+		}
+	}
+	
 }
 

@@ -18,6 +18,10 @@ function JEventsBuildRoute(&$query)
 {
 	$params = JComponentHelper::getParams("com_jevents");
 
+	// Must also load backend language files
+	$lang = & JFactory::getLanguage();
+	$lang->load("com_jevents", JPATH_SITE);
+	
 	$cfg = & JEVConfig::getInstance();
 	$segments = array();
 
@@ -319,6 +323,7 @@ function JEventsParseRoute($segments)
 	$vars = array();
 
 	static $translatedTasks = false;
+	static $tasks;
 	if (!$translatedTasks)
 	{
 
@@ -373,6 +378,25 @@ function JEventsParseRoute($segments)
 	{
 		// task
 		$task = $segments[0];
+		if (translatetask("icalrepeat.detail")==""  && !in_array($task, $tasks) && !array_key_exists($task, $translatedTasks)){
+			//array_unshift($segments, "icalrepeat.detail");			
+			array_unshift($segments, "");
+			if (count($segments)==3){
+				$title = $segments[1];
+				$segments[1] = $segments[2];
+				$segments[2] = "-";
+				$segments[3] = $title;
+			}
+			else if ($segments>3){
+				$title = $segments[2];
+				$catid = $segments[1];
+				$evid = $segments[3];
+				$segments[1] = $evid;
+				$segments[2] = $catid;
+				$segments[3] = $title;
+			}
+			$task = $segments[0];
+		}
 
 		$newsef = false;
 		if (array_key_exists($task, $translatedTasks))
@@ -536,9 +560,23 @@ function JEventsBuildRouteNew(&$query, $task)
 	$segments = array();
 
 	if (count($query)==2 && isset($query['Itemid'])  && isset($query['option'])){
+
 		// special case where we do not need any information since its a menu item
-		// $segments[] = $transtask;
-		return $segments;
+		// as long as the task matches up!
+		$menu = & JSite::getMenu();
+		$menuitem = $menu->getItem($query["Itemid"]);
+		if (!is_null($menuitem) && (isset($menuitem->query["task"]) || (isset($menuitem->query["view"]) && isset($menuitem->query["layout"]))))
+		{
+			if (isset($menuitem->query["task"]) && $task == $menuitem->query["task"]){
+				return $segments;
+			}
+			else if (isset($menuitem->query["view"]) && isset($menuitem->query["layout"]) && $task == $menuitem->query["view"].".".$menuitem->query["layout"]){
+				return $segments;
+			}
+			else {
+				 $segments[] = $transtask;
+			}
+		}				
 	}
 	
 	switch ($task) {
@@ -553,7 +591,9 @@ function JEventsBuildRouteNew(&$query, $task)
 		case "search.form":
 		case "search.results":
 		case "admin.listevents": {
-				$segments[] = $transtask;
+				if (!in_array($transtask, $segments)){
+					$segments[] = $transtask;
+				}
 				$config = & JFactory::getConfig();
 				$t_datenow = JEVHelper::getNow();
 
@@ -641,14 +681,16 @@ function JEventsBuildRouteNew(&$query, $task)
 						{
 							unset($query['jevtype']);
 						}
-						if (isset($query['evid']))
-						{
-							$segments[] = $query['evid'];
-							unset($query['evid']);
-						}
-						else
-						{
-							$segments[] = "0";
+						if ($transtask!=""){						
+							if (isset($query['evid']))
+							{
+								$segments[] = $query['evid'];
+								unset($query['evid']);
+							}
+							else
+							{
+								$segments[] = "0";
+							}
 						}
 
 						break;
@@ -662,7 +704,9 @@ function JEventsBuildRouteNew(&$query, $task)
 				}
 				else
 				{
-					$segments[] = "-";
+					if ($transtask!=""){
+						$segments[] = "-";
+					}
 				}
 
 				switch ($task) {
@@ -682,6 +726,18 @@ function JEventsBuildRouteNew(&$query, $task)
 						{
 							$segments[] = "-";
 						}
+						if ($transtask==""){
+							if (isset($query['evid']))
+							{
+								$segments[] = $query['evid'];
+								unset($query['evid']);
+							}
+							else
+							{
+								$segments[] = "0";
+							}
+						}
+						
 
 						break;
 					default:

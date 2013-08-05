@@ -438,6 +438,15 @@ class AdminIcalrepeatController extends JControllerLegacy
 		$data["DESCRIPTION"] = JRequest::getVar("jevcontent", "", 'request', 'html', 2);
 		$data["publish_down"] = JRequest::getVar("publish_down", "2006-12-12");
 		$data["publish_up"] = JRequest::getVar("publish_up", "2006-12-12");
+
+		// Alternative date format handling
+		if (JRequest::getVar("publish_up2",false)){
+			$data["publish_up"] =  JRequest::getVar("publish_up2",$data["publish_up"]);
+		}
+		if (JRequest::getVar("publish_down2",false)){
+			$data["publish_down"] =  JRequest::getVar("publish_down2",$data["publish_down"]);
+		}
+		
 		$interval = JRequest::getVar("rinterval", 1);
 		$data["SUMMARY"] = JRequest::getVar("title", "");
 
@@ -485,6 +494,12 @@ class AdminIcalrepeatController extends JControllerLegacy
 			{
 				$data[$key] = $value;
 			}
+			// convert jform data to data format used before
+			if (strpos($key,"jform")===0 && is_array($value)){
+				foreach ($value as $cfkey => $cfvalue) {
+					$data["custom_".$cfkey]=$cfvalue;
+				}
+			}			
 		}
 
 		$detail = iCalEventDetail::iCalEventDetailFromData($data);

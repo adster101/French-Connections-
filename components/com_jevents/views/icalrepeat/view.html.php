@@ -19,7 +19,7 @@ defined('_JEXEC') or die();
  */
 include_once(JEV_ADMINPATH."/views/icalrepeat/view.html.php");
 
-class ICalRepeatViewICalRepeat extends AdminICalRepeatViewICalRepeat 
+class IcalrepeatViewIcalrepeat extends AdminIcalrepeatViewIcalrepeat
 {
 	var $jevlayout = null;
 	
@@ -39,7 +39,7 @@ class ICalRepeatViewICalRepeat extends AdminICalRepeatViewICalRepeat
 		include(JEV_ADMINLIBS."/editStrings.php");		
 		$document->addScriptDeclaration($editStrings);
 
-		JEVHelper::script('editical.js',  'administrator/components/'.JEV_COM_COMPONENT.'/assets/js/');  
+		JEVHelper::script('editical.js',  'components/'.JEV_COM_COMPONENT.'/assets/js/');  
 		JEVHelper::script('view_detail.js', 'components/'.JEV_COM_COMPONENT.'/assets/js/');
 		
 		$document->setTitle(JText::_( 'EDIT_ICAL_REPEAT' ));
@@ -47,27 +47,23 @@ class ICalRepeatViewICalRepeat extends AdminICalRepeatViewICalRepeat
 		// Set toolbar items for the page
 		JToolBarHelper::title( JText::_( 'EDIT_ICAL_REPEAT' ), 'jevents' );
 	
-		//JToolBarHelper::save('icalrepeat.save');
+		$bar = & JToolBar::getInstance('toolbar');
+		$this->toolbarConfirmButton("icalrepeat.save", JText::_("save_icalevent_warning"), 'save', 'save', 'Save', false);
+		if (JEVHelper::isEventEditor())
+			$this->toolbarConfirmButton("icalrepeat.apply", JText::_("save_icalevent_warning"), 'apply', 'apply', 'jev_Apply', false);
 
-		//$this->addSaveToolBarButton();
-		$submitbutton = "Joomla.submitbutton";
-		$toolbar = & JToolBar::getInstance('toolbar');
-        $html = '<a class="toolbar" onclick="javascript: '.$submitbutton.'(\'icalrepeat.save\');return false;" href="#"><span class="icon-32-save" title="Save"> </span>'.JText::_( 'SAVE' ).'</a>';
-        $toolbar->appendButton( 'Custom',$html, "customsave");
-		
-        $html = '<a class="toolbar" onclick="javascript: '.$submitbutton.'(\'icalrepeat.apply\');return false;" href="#"><span class="icon-32-apply" title="Save"> </span>'.JText::_( 'JEV_APPLY' ).'</a>';
-        $toolbar->appendButton( 'Custom',$html, "customapply");
-		
 		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
-		if ($params->get("editpopup",0)) {
-			$document->addStyleDeclaration("div#toolbar-box{margin:10px 10px 0px 10px;} div#jevents {margin:0px 10px 10px 10px;} ")	;
-			JToolBarHelper::custom("icalevent.close",'cancel','cancel','Cancel',false);
+		if ($params->get("editpopup", 0))
+		{
+			$document->addStyleDeclaration("div#toolbar-box{margin:10px 10px 0px 10px;} div#jevents {margin:0px 10px 10px 10px;} ");
+			$this->toolbarButton("icalevent.close", 'cancel', 'cancel', 'Cancel', false);
 			JRequest::setVar('tmpl', 'component'); //force the component template
 		}
-		else {	
-			$this->addCancelToolBarButton();
+		else
+		{
+			$this->toolbarButton("icalevent.detail", 'cancel', 'cancel', 'Cancel', false);
 		}
-
+		
 		//JToolBarHelper::help( 'screen.icalrepeat.edit', true);		
 	
 		$params = JComponentHelper::getParams(JEV_COM_COMPONENT);
@@ -85,7 +81,11 @@ class ICalRepeatViewICalRepeat extends AdminICalRepeatViewICalRepeat
 		{
 			$this->setLayout("edit16");
 		}
-		
+
+		$this->setupEditForm();
+
+		JEVHelper::componentStylesheet($this, "editextra.css");
+
 		parent::displaytemplate($tpl);
 		$this->_adminEnd();
 	}	
@@ -108,7 +108,15 @@ class ICalRepeatViewICalRepeat extends AdminICalRepeatViewICalRepeat
 		//$barhtml = str_replace('submitbutton','return submitbutton',$barhtml);
 		echo $barhtml;
 		
-		$title = JFactory::getApplication()->get('JComponentTitle');
+		if (JVersion::isCompatible("3.0"))
+		{
+			// JFactory::getApplication()->JComponentTitle;
+			$title ="";
+		}
+		else
+		{
+			$title = JFactory::getApplication()->get('JComponentTitle');
+		}
 		echo $title;
 ?>
 		</div>
@@ -215,6 +223,34 @@ class ICalRepeatViewICalRepeat extends AdminICalRepeatViewICalRepeat
 		}
 	}
 	
+	
+	function toolbarButton($task = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+
+		// Add a standard button
+		$bar->appendButton('Jev', $icon, $alt, $task, $listSelect);
+
+	}
+
+	function toolbarLinkButton($task = '', $icon = '', $iconOver = '', $alt = '')
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+
+		// Add a standard button
+		$bar->appendButton('Jevlink', $icon, $alt, $task, false);
+
+	}
+
+	function toolbarConfirmButton($task = '', $msg = '', $icon = '', $iconOver = '', $alt = '', $listSelect = true)
+	{
+		$bar = & JToolBar::getInstance('toolbar');
+
+		// Add a standard button - never need to check for cancelled exceptions when editing a repeat!
+		$bar->appendButton('Jevconfirm', $msg, $icon, $alt, $task, $listSelect, false, 0);
+
+	}
+
 	
 	protected function CreateClass($className, $params) {
 		switch (count($params)) {

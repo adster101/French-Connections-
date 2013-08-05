@@ -86,9 +86,7 @@ class SaveIcalEvent {
 		$data["DTEND"]		= JevDate::strtotime( $publishend );
 		// iCal for whole day uses 00:00:00 on the next day JEvents uses 23:59:59 on the same day
 		list ($h,$m,$s) = explode(":",$end_time . ':00');
-		if (($h+$m+$s)==0 && $data["allDayEvent"]=="on" && $data["DTEND"]>$data["DTSTART"]) {
-			//if (($h+$m+$s)==0 && $data["allDayEvent"]=="on" && $data["DTEND"]>=$data["DTSTART"]) {
-			//$publishend = JevDate::strftime('%Y-%m-%d 23:59:59',($data["DTEND"]-86400));
+		if (($h+$m+$s)==0 && $data["allDayEvent"]=="on" && $data["DTEND"]>=$data["DTSTART"]) {
 			$publishend = JevDate::strftime('%Y-%m-%d 23:59:59',($data["DTEND"]));
 			$data["DTEND"]		= JevDate::strtotime( $publishend );
 		}
@@ -143,14 +141,10 @@ class SaveIcalEvent {
 		// Always unpublish if no Publisher otherwise publish automatically (for new events)
 		// Should we always notify of new events
 		$notifyAdmin = $cfg->get("com_notifyallevents",0);
-		if (!JFactory::getApplication()->isAdmin()){
-			if ($frontendPublish && $ev_id==0){
-				$vevent->state = 1;
-			}else if (!$frontendPublish){
-				$vevent->state = 0;
-				// In this case we send a notification email to admin
-				$notifyAdmin = true;
-			}
+		if (!$frontendPublish){
+			$vevent->state = 0;
+			// In this case we send a notification email to admin
+			$notifyAdmin = true;
 		}
 
 		$vevent->icsid = $ics_id;
@@ -217,16 +211,26 @@ class SaveIcalEvent {
 			// reload the event to get the reptition ids
 			$evid = intval($vevent->ev_id);
 			$testevent = $queryModel->getEventById( $evid, 1, "icaldb" );
-			$rp_id = $testevent->rp_id();
 
 			list($year,$month,$day) = JEVHelper::getYMD();
 			//http://joomlacode1.5svn/index.php?option=com_jevents&task=icalevent.edit&evid=1&Itemid=68&rp_id=72&year=2008&month=09&day=10&lang=cy
 			$uri  =& JURI::getInstance(JURI::base());
 			$root = $uri->toString( array('scheme', 'host', 'port') );
 
-			$modifylink = '<a href="' . $root . JRoute::_( 'index.php?option=' .JEV_COM_COMPONENT . '&task=icalevent.edit&evid='.$evid.'&rp_id='.$rp_id. '&Itemid=' . $Itemid."&year=$year&month=$month&day=$day" ) . '"><b>' . JText::_('JEV_MODIFY') . '</b></a>' . "\n";
-			$viewlink = '<a href="' . $root . JRoute::_( 'index.php?option=' .JEV_COM_COMPONENT . '&task=icalrepeat.detail&evid='.$rp_id. '&Itemid=' . $Itemid."&year=$year&month=$month&day=$day&login=1" ) . '"><b>' . JText::_('JEV_VIEW') . '</b></a>' . "\n";
-
+			if ($testevent){
+				$rp_id = $testevent->rp_id();
+				$modifylink = '<a href="' . $root . JRoute::_( 'index.php?option=' .JEV_COM_COMPONENT . '&task=icalevent.edit&evid='.$evid.'&rp_id='.$rp_id. '&Itemid=' . $Itemid."&year=$year&month=$month&day=$day" ) . '"><b>' . JText::_('JEV_MODIFY') . '</b></a>' . "\n";
+				$viewlink = '<a href="' . $root . JRoute::_( 'index.php?option=' .JEV_COM_COMPONENT . '&task=icalrepeat.detail&evid='.$rp_id. '&Itemid=' . $Itemid."&year=$year&month=$month&day=$day&login=1" ) . '"><b>' . JText::_('JEV_VIEW') . '</b></a>' . "\n";
+				$title = $testevent->title();
+				$content = $testevent->content();
+			}
+			else {
+				$modifylink = '<a href="' . $root . JRoute::_( 'index.php?option=' .JEV_COM_COMPONENT . '&task=icalevent.edit&evid='.$evid. '&Itemid=' . $Itemid."&year=$year&month=$month&day=$day" ) . '"><b>' . JText::_('JEV_MODIFY') . '</b></a>' . "\n";
+				$viewlink = '<a href="' . $root . JRoute::_( 'index.php?option=' .JEV_COM_COMPONENT . '&task=icalevent.detail&evid='.$evid. '&Itemid=' . $Itemid."&year=$year&month=$month&day=$day&login=1" ) . '"><b>' . JText::_('JEV_VIEW') . '</b></a>' . "\n";
+				$title = $data["SUMMARY"];
+				$content = $data["DESCRIPTION"]	;
+				$subject .= " PROBLEMS SAVING THIS EVENT";
+			}
 
 			$created_by = $user->name;
 			if ($created_by==null) {
@@ -236,7 +240,7 @@ class SaveIcalEvent {
 				}
 			}
 
-			JEV_CommonFunctions::sendAdminMail( $sitename, $adminEmail, $subject, $testevent->title(), $testevent->content(), $created_by, JURI::root(), $modifylink, $viewlink , $testevent);
+			JEV_CommonFunctions::sendAdminMail( $sitename, $adminEmail, $subject, $title, $content, $created_by, JURI::root(), $modifylink, $viewlink , $testevent);
 
 		}
 		if ($success){

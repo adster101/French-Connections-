@@ -28,7 +28,8 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 			else if (is_array($templates[$template_name]) && count($templates[$template_name])==0){
 				$templates[$template_name] = null;
 			}
-			else if (is_array($templates[$template_name])){
+			else if (is_array($templates[$template_name]) && count($templates[$template_name])>0)
+			{
 				$templates[$template_name] = current($templates[$template_name]);
 			}
 			else {
@@ -116,6 +117,11 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 			case "{{TITLE}}":
 				$search[] = "{{TITLE}}";
 				$replace[] = $event->title();
+				$blank[] = "";
+				break;
+			case "{{PRIORITY}}":
+				$search[] = "{{PRIORITY}}";
+				$replace[] = $event->priority();
 				$blank[] = "";
 				break;
 
@@ -213,6 +219,32 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 					$blank[] = "";
 					break;
 
+				case "{{ALLCATEGORIES}}":
+					$search[] = "{{ALLCATEGORIES}}";
+					static $allcat_catids;
+
+					if (!isset($allcat_catids)) {
+						$db	=& JFactory::getDBO();
+						$arr_catids = array();
+						$catsql = "SELECT cat.id, cat.title as name FROM #__categories  as cat WHERE cat.extension='com_jevents' " ;
+						$db->setQuery($catsql);
+						 $allcat_catids = $db->loadObjectList('id') ;
+					}
+					$db = JFactory::getDbo();
+					$db->setQuery("Select catid from #__jevents_catmap  WHERE evid = ".$event->ev_id());
+					$allcat_eventcats = $db->loadColumn() ;
+
+					$allcats = array();
+					foreach ($allcat_eventcats as $catid){
+						if(isset($allcat_catids[$catid])){
+							$allcats[]=$allcat_catids[$catid]->name ;
+						}
+
+					}
+					$replace[] = implode(", ", $allcats);
+					$blank[] = "";
+					break;
+
 				case "{{CALENDAR}}":
 					$search[] = "{{CALENDAR}}";
 					$replace[] = $event->getCalendarName();
@@ -253,18 +285,41 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 
 				case "{{CATEGORYLNK}}":
 					$router = JRouter::getInstance("site");
-					$vars = $router->getVars();
-					$vars["catids"] = $event->catid();
-					$eventlink = "index.php?";
-					foreach ($vars as $key => $val)
-					{
-						$eventlink.= $key . "=" . $val . "&";
+					$catlinks = array();
+					if ($jevparams->get("multicategory",0)){
+						$catids = $event->catids();
+						$catdata = $event->getCategoryData();					
 					}
-					$eventlink = substr($eventlink, 0, strlen($eventlink) - 1);
-					$eventlink = JRoute::_($eventlink);
-					$catlink = '<a class="ev_link_cat" href="' . $eventlink . '"  title="' . JEventsHTML::special($event->catname()) . '">' . $event->catname() . '</a>';
+					else {
+						$catids = array($event->catid());
+						$catdata = array($event->getCategoryData());
+					}					
+					
+					$vars = $router->getVars();
+					foreach ($catids as $cat){
+						$vars["catids"] = $cat;
+						$catname = "xxx";
+						foreach ($catdata  as $cg){
+							if ($cat == $cg->id){
+								$catname = $cg->name;
+								break;
+							}
+						}
+						$eventlink = "index.php?";
+						foreach ($vars as $key => $val)
+						{
+							if ($key=="task" && ($val=="icalrepeat.detail" ||  $val=="icalevent.detail")){
+								$val = "week.listevents";
+							}
+							$eventlink.= $key . "=" . $val . "&";
+						}
+						$eventlink = substr($eventlink, 0, strlen($eventlink) - 1);
+						$eventlink = JRoute::_($eventlink);
+
+						$catlinks[] = '<a class="ev_link_cat" href="' . $eventlink . '"  title="' . JEventsHTML::special($catname) . '">' . $catname . '</a>';
+					}
 					$search[] = "{{CATEGORYLNK}}";
-					$replace[] = $catlink;
+					$replace[] = implode(", ",$catlinks);
 					$blank[] = "";
 					break;
 
@@ -315,7 +370,7 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 						ob_start();
 						?>
 						<a href="javascript:void(0)" onclick='clickIcalButton()' title="<?php echo JText::_('JEV_SAVEICAL'); ?>">
-							<img src="<?php echo JURI::root() . 'administrator/components/' . JEV_COM_COMPONENT . '/assets/images/jevents_event_sml.png' ?>" align="middle" name="image"  alt="<?php echo JText::_('JEV_SAVEICAL'); ?>" style="height:24px;"/>
+							<img src="<?php echo JURI::root() . 'components/' . JEV_COM_COMPONENT . '/assets/images/jevents_event_sml.png' ?>" align="middle" name="image"  alt="<?php echo JText::_('JEV_SAVEICAL'); ?>" style="height:24px;" class="nothumb"/>
 						</a>
 						<div class="jevdialogs">
 							<?php
@@ -396,7 +451,12 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 					break;
 
 				case "{{CREATED}}":
-					$created = JevDate::getDate($event->created());
+					$compparams = JComponentHelper::getParams(JEV_COM_COMPONENT);
+					$jtz = $compparams->get("icaltimezonelive", "");
+					if ($jtz == "" ){
+						$jtz = null;
+					}
+					$created = JevDate::getDate($event->created(), $jtz);
 					$search[] = "{{CREATED}}";
 					$replace[] = $created->toFormat(JText::_("DATE_FORMAT_CREATED"));
 					$blank[] = "";
@@ -416,6 +476,7 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 				case "{{ISOSTART}}":
 				case "{{ISOEND}}":
 				case "{{DURATION}}":
+				case "{{MULTIENDDATE}}":
 					if ($template_name == "icalevent.detail_body")
 					{
 						$search[] = "{{REPEATSUMMARY}}";
@@ -457,6 +518,9 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 						$search[] = "{{ISOEND}}";
 						$replace[] = JEventsHTML::getDateFormat($row->ydn(), $row->mdn(), $row->ddn(), "%Y-%m-%d")."T".sprintf('%02d:%02d:00', $row->hdn(),$row->mindn());
 						$blank[] = "";
+						$search[] = "{{MULTIENDDATE}}";
+						$replace[] = $row->endDate()>$row->startDate() ? $stop_date : "";
+						$blank[] = "";
 					}
 					else
 					{
@@ -483,6 +547,9 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 						$blank[] = "";
 						$search[] = "{{ENDTIME}}";
 						$replace[] = ($row->noendtime() || $row->alldayevent()) ? "" : $stop_time_midnightFix;
+						$blank[] = "";
+						$search[] = "{{MULTIENDDATE}}";
+						$replace[] = $row->endDate()>$row->startDate() ? $stop_date : "";
 						$blank[] = "";
 
 						if (strpos($template_value, "{{ISOSTART}}") !== false || strpos($template_value, "{{ISOEND}}") !== false){
@@ -582,10 +649,30 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 						$timedelta = ($row->noendtime() || $row->alldayevent()) ? "" : $row->getUnixEndTime()-$row->getUnixStartTime();
 						$fieldval = JText::_("JEV_DURATION_FORMAT");
 						$shownsign = false;
+						// whole days!
+						if (stripos($fieldval, "%wd") !== false)
+						{
+							$days = intval($timedelta / (60 * 60 * 24));
+							$timedelta -= $days * 60 * 60 * 24;
+
+							if ($timedelta>3610){
+								//if more than 1 hour and 10 seconds over a day then round up the day output
+								$days +=1;
+							}
+
+							$fieldval = str_ireplace("%d", $days, $fieldval);
+							$shownsign = true;
+						}
 						if (stripos($fieldval, "%d") !== false)
 						{
 							$days = intval($timedelta / (60 * 60 * 24));
 							$timedelta -= $days * 60 * 60 * 24;
+/*
+							if ($timedelta>3610){
+								//if more than 1 hour and 10 seconds over a day then round up the day output
+								$days +=1;
+							}
+							 */							
 							$fieldval = str_ireplace("%d", $days, $fieldval);
 							$shownsign = true;
 						}
@@ -624,6 +711,46 @@ function DefaultLoadedFromTemplate($view, $template_name, $event, $mask, $templa
 					{
 						$search[] = "{{PREVIOUSNEXT}}";
 						$replace[] = $event->previousnextLinks();
+						$blank[] = "";
+					}
+					break;
+
+				case "{{FIRSTREPEAT}}":
+					static $dofirstrepeat;
+					if (!isset($dofirstrepeat))
+					{
+						$dofirstrepeat = (strpos($template_value, "{{FIRSTREPEAT}}") !== false);
+					}
+					if ($dofirstrepeat)
+					{
+						$search[] = "{{FIRSTREPEAT}}";
+						$firstrepeat = $event->getFirstRepeat();
+						if ($firstrepeat->rp_id()==$event->rp_id()){
+							$replace[]="";
+						}
+						else {
+							$replace[] = "<a class='ev_firstrepeat' href='".$firstrepeat->viewDetailLink($firstrepeat->yup(), $firstrepeat->mup(), $firstrepeat->dup(), true)."' title='".JText::_('JEV_FIRSTREPEAT')."' >".JText::_('JEV_FIRSTREPEAT')."</a>";
+						}
+						$blank[] = "";
+					}
+					break;
+					
+				case "{{LASTREPEAT}}":
+					static $dolastrepeat;
+					if (!isset($dolastrepeat))
+					{
+						$dolastrepeat = (strpos($template_value, "{{LASTREPEAT}}") !== false);
+					}
+					if ($dolastrepeat)
+					{
+						$search[] = "{{LASTREPEAT}}";
+						$lastrepeat = $event->getLastRepeat();
+						if ($lastrepeat->rp_id()==$event->rp_id()){
+							$replace[]="";
+						}
+						else {
+							$replace[] = "<a class='ev_lastrepeat' href='".$lastrepeat->viewDetailLink($lastrepeat->yup(), $lastrepeat->mup(), $lastrepeat->dup(), true)."' title='".JText::_('JEV_LASTREPEAT')."' >".JText::_('JEV_LASTREPEAT')."</a>";
+						}
 						$blank[] = "";
 					}
 					break;
