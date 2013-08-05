@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<extension version="3.0" client="administrator" type="language" method="upgrade">
+<extension version="3.1" client="administrator" type="language" method="upgrade">
 	<name>French (fr-FR)</name>
-    <tag>fr-FR</tag>
-	<version>3.0.3.1</version>
-	<creationDate>22 jan 2013</creationDate>
+	<tag>fr-FR</tag>
+	<version>3.1.5.1</version>
+	<creationDate>3 Juillet 2013</creationDate>
 	<author>French translation team : joomla.fr</author>
 	<authorEmail>traduction@joomla.fr</authorEmail>
 	<authorUrl>www.joomla.fr</authorUrl>
@@ -57,6 +57,8 @@
 		<filename>fr-FR.com_redirect.sys.ini</filename>
 		<filename>fr-FR.com_search.ini</filename>
 		<filename>fr-FR.com_search.sys.ini</filename>
+		<filename>fr-FR.com_tags.ini</filename>
+		<filename>fr-FR.com_tags.sys.ini</filename>
 		<filename>fr-FR.com_templates.ini</filename>
 		<filename>fr-FR.com_templates.sys.ini</filename>
 		<filename>fr-FR.com_users.ini</filename>
@@ -146,6 +148,8 @@
 		<filename>fr-FR.plg_finder_content.sys.ini</filename>
 		<filename>fr-FR.plg_finder_newsfeeds.ini</filename>
 		<filename>fr-FR.plg_finder_newsfeeds.sys.ini</filename>
+		<filename>fr-FR.plg_finder_tags.ini</filename>
+		<filename>fr-FR.plg_finder_tags.sys.ini</filename>
 		<filename>fr-FR.plg_finder_weblinks.ini</filename>
 		<filename>fr-FR.plg_finder_weblinks.sys.ini</filename>
 		<filename>fr-FR.plg_quickicon_extensionupdate.ini</filename>
