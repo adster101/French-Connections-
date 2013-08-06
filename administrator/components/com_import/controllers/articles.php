@@ -43,19 +43,21 @@ class ImportControllerArticles extends JControllerForm {
       $data['fulltext'] = $output; 
       $data['id'] = '';
       $data['state'] = ($line[1] == 'True') ? 1 : 0;
-      $data['title'] = $line[7];
+      $data['title'] =  iconv("ISO-8859-1", "UTF-8//TRANSLIT", $line[7]);
       $data['created'] = $line[2];
-      $data['catid'] = 68;
+      $data['catid'] = 83;
       $data['language'] = 'en-GB';
       $data['metadesc'] = $line[12];
       $data['metakey'] = $line[13];
             
-      //$data['published_up'] = date('Y-m-d', strtotime($line[14]));
-      //$data['published_down'] = date('Y-m-d', strtotime($line[15]));
-
+      $data['published_up'] = date('Y-m-d', strtotime($line[14]));
+      $data['published_down'] = date('Y-m-d', strtotime($line[15]));
+        
       if (!$model->save($data)) {
         $error = $model->getError();
-      }     
+      } 
+      
+     
       
 
     } 
