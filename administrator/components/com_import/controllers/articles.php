@@ -38,8 +38,7 @@ class ImportControllerArticles extends JControllerForm {
 
       $model = $this->getModel('Article', 'ContentModel');
       
-      $output = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $line[10]);
-      
+      $output = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $line[9]);
       
       $data['fulltext'] = $output; 
       $data['id'] = '';
@@ -48,8 +47,11 @@ class ImportControllerArticles extends JControllerForm {
       $data['created'] = $line[2];
       $data['catid'] = 68;
       $data['language'] = 'en-GB';
-      $data['metakey'] = $line[13];
       $data['metadesc'] = $line[12];
+      $data['metakey'] = $line[13];
+            
+      //$data['published_up'] = date('Y-m-d', strtotime($line[14]));
+      //$data['published_down'] = date('Y-m-d', strtotime($line[15]));
 
       if (!$model->save($data)) {
         $error = $model->getError();
