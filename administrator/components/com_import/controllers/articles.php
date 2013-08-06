@@ -50,8 +50,8 @@ class ImportControllerArticles extends JControllerForm {
       $data['metadesc'] = $line[12];
       $data['metakey'] = $line[13];
             
-      $data['published_up'] = date('Y-m-d', strtotime($line[14]));
-      $data['published_down'] = date('Y-m-d', strtotime($line[15]));
+      $data['publish_up'] = date('Y-m-d', strtotime($line[14]));
+      $data['publish_down'] = date('Y-m-d', strtotime($line[15]));
         
       if (!$model->save($data)) {
         $error = $model->getError();
