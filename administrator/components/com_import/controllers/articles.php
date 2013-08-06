@@ -25,18 +25,18 @@ class ImportControllerArticles extends JControllerForm {
     // explicity say there here by setting root_user in config.
     $config->set('root_user', 'admin');
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
-    $data = JRequest::getVar('jform', null, 'POST', 'array');
 
     // Add the content model
     JControllerForm::addModelPath(JPATH_ADMINISTRATOR . '/components/com_content/models');
 
     // Open a handle to the import file
     $handle = fopen($userfile['tmp_name'], "r");
+    
+    $model = $this->getModel('Article', 'ContentModel');
 
     while (($line = fgetcsv($handle, 0, $delimiter = '|')) !== FALSE) {
       $data = array();
 
-      $model = $this->getModel('Article', 'ContentModel');
       
       $output = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $line[9]);
       
@@ -56,8 +56,7 @@ class ImportControllerArticles extends JControllerForm {
       if (!$model->save($data)) {
         $error = $model->getError();
       } 
-      
-     
+           
       
 
     } 
