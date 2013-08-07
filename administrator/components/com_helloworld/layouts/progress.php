@@ -6,7 +6,6 @@ defined('_JEXEC') or die('Restricted access');
 $app = JFactory::getApplication();
 $input = $app->input;
 $view = $input->get('view', '', 'string');
-$message = '';
 
 // $displayData is passed into the layout from our template
 $progress = $displayData['progress'];

@@ -112,19 +112,19 @@ class HelloWorldControllerListing extends JControllerForm {
     }
 
     // Check property out to user reviewing
-    if ($checkin && !$model->checkout($id)) {
+    //if ($checkin && !$model->checkout($id)) {
       // Check-out failed, display a notice but allow the user to see the record.
-      $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
-      $this->setMessage($this->getError(), 'error');
+      //$this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
+      //$this->setMessage($this->getError(), 'error');
 
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option, false
-              )
-      );
+      //$this->setRedirect(
+              //JRoute::_(
+                      //'index.php?option=' . $this->option, false
+              //)
+      //);
 
-      return false;
-    }
+      //return false;
+    //}
 
 
     // Hold the edit ID once the id and user have been authorised.

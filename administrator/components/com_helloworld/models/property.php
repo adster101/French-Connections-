@@ -819,14 +819,30 @@ class HelloWorldModelProperty extends JModelAdmin {
    * @param type $renewal_status - renewal status for the listing
    * @return boolean
    */
-  public function updateProperty($listing_id = '', $review = 1, $cost = '', $expiry_date = '') {
+  public function updateProperty($listing_id = '', $review = 1, $cost = '0.00', $expiry_date = '') {
 
     // Initialise some variable
     $data = array();
     $data['id'] = $listing_id;
+    
+    /*
+     * Set the review status, default to 1 if non supplied...
+     */
     $data['review'] = $review;
+    
+    /*
+     * Update the cost of this latest update
+     */
+    
     $data['cost'] = $cost;
-    $data['expiry_date'] = $expiry_date;
+    
+    /*
+     * Update the expiry date if one is passed in
+     */
+    if (!empty($expiry_date)) {
+      $data['expiry_date'] = $expiry_date;
+    }
+    
     $table = JTable::getInstance('Property', 'HelloWorldTable');
 
 

@@ -32,10 +32,10 @@ function initialise() {
   var lat = document.getElementById('jform_latitude').value;
   var lon = document.getElementById('jform_longitude').value;
 
-  if (lat == '') {
+  if (lat == '0') {
     lat = '46.589069';
   }
-  if (lon == '') {
+  if (lon == '0') {
     lon = '2.416992';
   }
 

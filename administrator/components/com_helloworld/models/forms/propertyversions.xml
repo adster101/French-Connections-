@@ -35,13 +35,13 @@
       name="map"
       id="map"
       type="map"
-      />
+    />
+    
     <field
       name="latitude"
-      type="hidden"
       extension="com_helloworld"
       class="validate-latitude "
-      default="46.589069"
+      default="0"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LATITUDE_DESC"
       required="true"
@@ -49,14 +49,15 @@
       filter="string"
       validate="latlong"
       labelclass="control-label"
-      readonly="true">
+      readonly="true"
+      type="text">
     </field>
+    
     <field
       name="longitude"
-      type="hidden"
       extension="com_helloworld"
       class="inputbox validate-longitude"
-      default="2.416992"
+      default="0"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
       required="true"
@@ -64,10 +65,11 @@
       labelclass="control-label"
       maxlength="15"
       validate="latlong"
-      readonly="true">
+      readonly="true"
+      type="text">
     </field>
 
-  <field
+    <field
       name="city"
       type="cities"
       class="inputbox validate"
@@ -75,9 +77,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
       required="true"
-      readonly="false"
-      latitude="46.589069"
-      longitude="2.416992">
+      readonly="false">
       <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
     </field>
     <field
@@ -90,7 +90,7 @@
       required="true"
       filter="int"
       id="7"
-      >
+    >
     </field>
     <field
       name="distance_to_coast"
@@ -106,28 +106,28 @@
       maxlength="2">
     </field>
     <field
-			name="location_details"
-			type="editor"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_DESC"
+      name="location_details"
+      type="editor"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_DESC"
       rows="3"
       class="inputbox validate-description"
-			default=""
-			filter="safehtml"
-			buttons="false"
+      default=""
+      filter="safehtml"
+      buttons="false"
       validate=""
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_MESSAGE">
     </field>
     <field
-			name="getting_there"
-			type="editor"
-			label="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_LABEL"
-			description="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_DESC"
+      name="getting_there"
+      type="editor"
+      label="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_LABEL"
+      description="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_DESC"
       rows="3"
       class="inputbox validate-description"
-			default=""
-			filter="safehtml"
-			buttons="false"
+      default=""
+      filter="safehtml"
+      buttons="false"
       validate=""
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_MESSAGE">
     </field>
@@ -151,17 +151,7 @@
       class="readonly input-larges"
       filter="unset"
       readonly="true" />
-    <field
-      labelclass="control-label"
-      name="created_by"
-      type="user"
-      filter="int"
-      required="false"
-      validate="nonzero"
-      message="COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_CHOOSE_OWNER"
-      label="COM_HELLOWORLD_HELLOWORLD_HEADING_CREATED_BY"
-      description="COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_CHOOSE_OWNER_DESC"
-    />
+    
   </fieldset>
 
   <fieldset name="notes">
@@ -203,6 +193,21 @@
       default=""
     />
   </fieldset>
+  
+  <fieldset name="proximity-overrides">
+    <fields name="city_id">
+    <field name="note24" type="note" class="alert alert-error" label="LOREMIPSUM" description="LOREMIPSUM_DESC" />
+    <field 
+      name="id"
+      type="text"
+      multiple="true"
+      filter="int"
+      default="123">
+    </field>
+    </fields>
+    
+  </fieldset>
+  
 
 </form>
 

@@ -105,8 +105,12 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       </div>
     </div>
   </div>
+  <?php foreach ($this->form->getFieldset('proximity-overrides') as $field): ?>
 
-
+    <?php echo $field->input; ?>
+  <?php endforeach; ?>
+  <input type="text" name="adam[0]" value="asd" />
+  <input type="text" name="adam[1]" value="asdasasd" />
   <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
 
     <?php echo $field->input; ?>

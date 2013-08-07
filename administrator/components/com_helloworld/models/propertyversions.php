@@ -126,6 +126,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
             $data = $this->getItem();
         }
 
+        
         return $data;
     }
 
@@ -139,39 +140,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
     protected function preprocessForm(JForm $form, $data) {
 
-        // Convert data to array if it's an array
+        // Convert data to object if it's an array
         if (is_array($data)) {
             $data = JArrayHelper::toObject($data, 'JObject');
-        }
-
-        // Call populate state to ensure state variables are set correctly when form is validated via controller
-        $this->populateState();
-
-        // Get permissions
-        $canDo = $this->getState('actions.permissions', array());
-
-        // Get the id from the state
-        $id = $this->getState($this->getName() . '.id', '');
-        $isNew = (empty($id)) ? true : false;
-
-        // If we don't come from a view then this maybe empty so we reset it.
-        if (empty($canDo)) {
-            $canDo = HelloWorldHelper::getActions();
-        }
-
-        // If not allowed to 'change owner' then set created by to user id
-        if (!$canDo->get('helloworld.edit.property.owner')) {
-
-            $user = JFactory::getUser();
-            // Set the default owner to the user creating this.
-            $form->setFieldAttribute('created_by', 'type', 'hidden');
-            $form->setFieldAttribute('created_by', 'default', $user->id);
-        } elseif ($canDo->get('helloworld.edit.property.owner') && ($isNew == true)) { // This is an admin but not a new property
-            // This user can change the owner (e.g. admin) but it's not a new property
-            $form->setFieldAttribute('created_by', 'required', 'true');
-        } elseif ($canDo->get('helloworld.edit.property.owner') && !$isNew) { // This is an admin but not a new property
-            // This user can change the owner (e.g. admin) but it's not a new property
-            $form->removeField('created_by');
         }
 
         // Set the location details accordingly, needed for one of the form field types...
@@ -180,6 +151,11 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
             $form->setFieldAttribute('city', 'longitude', $data->longitude);
             $form->setFieldAttribute('city', 'default', $data->city);
         }
+        
+        
+        
+        
+        
     }
 
     /**
