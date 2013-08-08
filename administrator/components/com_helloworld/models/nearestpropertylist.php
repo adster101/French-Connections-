@@ -9,34 +9,18 @@ jimport('joomla.application.component.modellist');
 class HelloWorldModelNearestPropertyList extends JModelList
 {
 
-  	/**
-	 * Method to get an array of data items.
-	 *
-	 * @return  array  An array of data items.
-	 *
-	 * @since   2.5
-	 */
-	public function getItems()
-	{
-		// Get the items.
-		$items = parent::getItems();
+  var $latitude = '';
+  
+  var $longitude = '';
+  
+  public function __construct($config = array()) {
+    parent::__construct($config);
+  
+    $this->latitude = ($config['latitude']) ? $config['latitude'] : '';
+    $this->longitude = ($config['longitude']) ? $config['longitude'] : '';
+    
+  }
 
-    $props = array();
-
-		// Convert them to a simple array.
-		foreach ($items as $k => $v)
-		{
-      $props[$k]['id'] = $v->id;
-			$props[$k]['title'] = $v->title . round($v->distance,2) . ' Miles';
-		}
-
-    $choose = array('id'=>'','title'=>'Please choose');
-
-    // Add the placeholder
-    array_unshift($props, $choose);
-
-    return $props;
-	}
 
 	/**
 	 * Method to build a database query to load the list data.
@@ -51,10 +35,8 @@ class HelloWorldModelNearestPropertyList extends JModelList
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
 
-    $input = JFactory::getApplication()->input;
-
-    $latitude = $input->get('lat','','string');
-    $longitude = $input->get('lon','','string');
+    $latitude = $this->latitude;
+    $longitude = $this->longitude;
 
     $query->select('id, title, level');
     $query->select(
@@ -70,7 +52,7 @@ class HelloWorldModelNearestPropertyList extends JModelList
     $query->from('#__classifications');
     $query->where('level = 5');
 
-    $query->having('distance < 50');
+    $query->having('distance < 25');
     $query->order('distance');
 
 		return $query;

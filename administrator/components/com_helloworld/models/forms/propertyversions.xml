@@ -195,16 +195,7 @@
   </fieldset>
   
   <fieldset name="proximity-overrides">
-    <fields name="city_id">
-    <field name="note24" type="note" class="alert alert-error" label="LOREMIPSUM" description="LOREMIPSUM_DESC" />
-    <field 
-      name="id"
-      type="text"
-      multiple="true"
-      filter="int"
-      default="123">
-    </field>
-    </fields>
+    
     
   </fieldset>
   
