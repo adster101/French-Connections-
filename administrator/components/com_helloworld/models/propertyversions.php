@@ -161,6 +161,25 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $XmlStr = $this->getProximityOverrides($data->city_overrides, $data->latitude, $data->longitude);
       $form->load($XmlStr, true);
     }
+    
+    if (!$data->latitude) {
+      
+      $addform = new SimpleXMLElement('<form />');
+      $fields = $addform->addChild('fields');
+      $fields->addAttribute('name','citiestowns');
+      //$fieldset = $fields->addChild('fieldset');
+      //$fieldset->addAttribute('name','city-overrides');
+      //$field = $fieldset->addChild('field');
+      //$field->addAttribute('name');
+      
+      $form->load($addform,true);
+      
+    }
+    
+    
+    
+
+    
   }
 
   /**
@@ -173,7 +192,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
   protected function getProximityOVerrides($overrides, $latitude, $longitude) {
 
 
-    if (empty($overrides)) {
       /*
        * Let's get the nearest cities to this property 
        */
@@ -181,11 +199,16 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
                       array('latitude' => $latitude, 'longitude' => $longitude));
 
       $overrides = $model->getItems();
+      
+      
+      
+      
       $XmlStr = '<form><fields name="citiestowns">';
 
 
       // Loop over the existing availability first
       foreach ($overrides as $counter => $city) {
+        $counter++;
         $XmlStr.= ' 
         <fieldset name="city-overrides_' . $city->id . '">
         <field 
@@ -199,7 +222,8 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
           type="proximityoverride"
           default="' . $city->id . '"
           counter="' . $counter . '"  
-          hidden="true">
+          hidden="true"
+          filter="int">
         </field>
         <field 
           id="jform_note_' . $city->title . '"
@@ -207,15 +231,20 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
           label="COM_HELLOWORLD_HELLOWORLD_CITY_OVERRIDE_NOTE"
           description="Enter the time to reach this place or a more accurate distance based on your local knowledge"
           type="proximityoverridenote"
+          maxlength="25"
+          filter="string"
+          labelclass="control-label"
           default=""
           counter="' . $counter . '"
-        /><field
-          name="sef"
-          type="radio"
+        />
+        <field
+          id="jform_visible_' . $city->title . '"
+          name="visible"
+          type="proximityoverrideradio"
           class="btn-group"
+          counter="' . $counter .'"
           default="1"
-          label="COM_CONFIG_FIELD_SEF_URL_LABEL"
-          description="COM_CONFIG_FIELD_SEF_URL_DESC"
+          label="Visible on page"
           filter="integer">
           <option value="1">JYES</option>
           <option value="0">JNO</option>
@@ -226,7 +255,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $XmlStr.='</fields></form>';
 
       return $XmlStr;
-    }
+    
   }
 
   /**

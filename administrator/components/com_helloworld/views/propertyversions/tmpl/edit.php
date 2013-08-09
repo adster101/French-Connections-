@@ -106,19 +106,23 @@ $fieldsets = $this->form->getFieldSets('citiestowns');
                 </div>
                 <div id="internal" class="accordion-body collapse in">
                   <div class="accordion-inner">
-                    <fieldset class="panelform">
+                    <fieldset class="panelform ">
                       <?php foreach ($fieldsets as $fieldset) : ?>  
                         <div class="row-fluid">
                           <?php foreach ($this->form->getFieldSet($fieldset->name) as $field) : ?>
-
                             <?php if (!$field->hidden) : ?>
-                              <div class="span3">
-                                <?php echo $field->label; ?>
-                                <?php echo $field->input; ?>
+                              <div class="span4">
+                                <div class="control-group">
+                                  <div class="control-label">
+                                    <?php echo $field->label; ?>
+                                  </div>
+                                  <div class="controls">
+                                    <?php echo $field->input; ?>
+                                  </div>
+                                </div>
                               </div>
                             <?php else: ?>
                               <?php echo $field->input; ?>
-
                             <?php endif; ?>
                           <?php endforeach; ?> 
                         </div>
