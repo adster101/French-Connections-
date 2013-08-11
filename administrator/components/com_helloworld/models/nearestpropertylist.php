@@ -14,7 +14,10 @@ class HelloWorldModelNearestPropertyList extends JModelList
   var $longitude = '';
   
   public function __construct($config = array()) {
+    
     parent::__construct($config);
+    
+    
   
     $this->latitude = ($config['latitude']) ? $config['latitude'] : '';
     $this->longitude = ($config['longitude']) ? $config['longitude'] : '';

@@ -56,7 +56,14 @@ class HelloWorldControllerHelloWorld extends JControllerLegacy {
 	{
 		$return = array();
 		
-		$model = $this->getModel('NearestPropertyList', 'HelloWorldModel');
+    $input = JFactory::getApplication()->input;
+
+    $latitude = $input->get('lat','','string');
+    $longitude = $input->get('lon','','string'); 
+    
+		$model = $this->getModel('NearestPropertyList', 'HelloWorldModel',
+            $config = array('latitude'=>$latitude, 'longitude'=>$longitude));
+    
 		$return = $model->getItems();
 
 		// Check the data.

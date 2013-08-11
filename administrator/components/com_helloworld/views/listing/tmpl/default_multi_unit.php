@@ -53,6 +53,7 @@ $data['form'] = $this->form;
                         </td>
                         <td>
                             <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $this->items[0], 'property_id', 'btn') ?>
+                            <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'contactdetails', 'edit', 'note', 'Contact Details', $this->items[0], 'property_id', 'btn') ?>
                         </td>
                     </tr>
                     <tfoot>
