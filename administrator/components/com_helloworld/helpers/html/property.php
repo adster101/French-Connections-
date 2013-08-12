@@ -353,17 +353,18 @@ class JHtmlProperty {
 
     $html = '';
 
-    $id = ($controller == 'propertyversions') ? $listing_id : $unit_id;
+    $id = ($controller == 'propertyversions' || $controller == 'contactdetails') ? $listing_id : $unit_id;
 
-    if (!empty($item->title) && ($controller == 'propertyversions')) {
+    if (!empty($item->title) && ($controller == 'propertyversions' || $controller == 'contactdetails')) {
 
       $progress_icon = $okay_icon;
       $id = $listing_id;
-    } elseif (empty($item->title) && ($controller == 'propertyversions')) {
+    } elseif (empty($item->title) && ($controller == 'propertyversions' )) {
 
       $progress_icon = $progress_icon;
       $id = $listing_id;
     } elseif (empty($item->unit_title) && $controller == 'unitversions' && !empty($listing_id) && $action == 'edit') { // This property has no unit, or unit details not completed...
+   
       $progress_icon = $progress_icon;
 
     } elseif (!empty($unit_id) && $controller == 'images') {

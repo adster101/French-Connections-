@@ -99,25 +99,25 @@ class HelloWorldViewContactdetails extends JViewLegacy
     // Built the actions for new and existing records.
 		if ($isNew)
 		{
-			JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
+			JToolBarHelper::cancel('contactdetails.cancel', 'JTOOLBAR_CANCEL');
 
 			// For new records, check the create permission.
 			if ($canDo->get('core.create'))
 			{
-				JToolBarHelper::save('propertyversions.saveandnext', 'JTOOLBAR_SAVE');
-				JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('contactdetails.saveandnext', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('contactdetails.apply', 'JTOOLBAR_APPLY');
 				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 		}
 		else
 		{
 			if ($canDo->get('core.edit.own'))
-        JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
+        JToolBarHelper::cancel('contactdetails.cancel', 'JTOOLBAR_CANCEL');
 
 			{
 				// We can save the new record
-				JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
-				JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
+				JToolBarHelper::apply('contactdetails.apply', 'JTOOLBAR_APPLY');
+				JToolBarHelper::save('contactdetails.save', 'JTOOLBAR_SAVE');
 			}
 		}
 

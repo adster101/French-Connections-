@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_helloworld/models/rules">
+  
+  <fieldset
+    name="enquiry-contact-override">
+    <field 
+      name="contact_override_note" 
+      type="note"
+      class="alert alert-notice" 
+      label=""
+      labelclass="control-label"
+      description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_OVERRIDE_OPTION" />
+    <field 
+      name="override_invoice_details"
+      type="radio"
+      default="1"      
+      filter="unset"
+      label="Use invoice address"
+      required="false"
+      labelclass="control-label">
+      <option value="1">JYES</option>
+      <option value="0">JNO</option>
+    </field>      
+    
+    <field 
+      name="first_name"
+      type="text"
+      class="input-medium"
+      filter="unset"
+      label="First name"
+      labelclass="control-label"
+      disabled="true"
+      maxlength="25"
+      required="true"
+    />
+    <field 
+      name="surname"
+      type="text"
+      class="input-medium"
+      filter="unset"
+      label="Surname"
+      labelclass="control-label"
+      disabled="true"
+      maxlength="25"
+      required="true"
+    />
+    <field 
+      name="phone_1"
+      type="text"
+      filter="unset"
+      label="Phone number"
+      maxlength="25"
+      disabled="true"
+      labelclass="control-label"
+      required="true"
+    />
+    <field 
+      name="phone_2"
+      type="text"
+      filter="unset"
+      label="Phone number"
+      maxlength="25"
+      disabled="true"
+      labelclass="control-label"
+      required="false"
+    />
+      
+    
+  </fieldset>
+  
+  <fieldset
+    name="booking-form">
+    <field 
+      name="booking_form_note" 
+      type="note"
+      class="alert alert-notice" 
+      label=""
+      description="COM_HELLOWORLD_HELLOWORLD_BOOKING_FORM_DISPLAY" />
+    <field 
+      name="booking_form"
+      type="radio"
+      default="0"
+      filter="int"
+      class="btn-group"
+      label="Show booking form?"
+      required="false"
+      labelclass="control-label">
+      <option value="1">JYES</option>
+      <option value="0">JNO</option>
+    </field>
+    
+    
+  </fieldset>
+
+
+
+  <fieldset name="hidden-details">
+    <field
+      name="property_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="published"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="review"
+      type="hidden"
+      filter="int"
+      default="" />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+      default=""
+    />
+  </fieldset>
+  
+ 
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+

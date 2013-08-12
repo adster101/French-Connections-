@@ -38,7 +38,8 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', '', $view);
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', '', $view);
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', '', $view);
-    echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'reviews', 'reviews', 'comment', 'COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWS', $item, 'unit_id', '', $view);
+    echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'contactdetails', 'edit', 'envelope', 'Contact Details', $item, 'property_id', '', $view);
+
     ?>
   </ul>
 <?php else: ?>
@@ -52,7 +53,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
     echo JHtmlProperty::progressMultiTabs('images', 'manage', 'pictures', 'IMAGE_GALLERY', $data['progress'], 'unit_id', '', $view);
     echo JHtmlProperty::progressMultiTabs('availability', 'manage', 'calendar', 'COM_HELLOWORLD_SUBMENU_MANAGE_AVAILABILITY', $data['progress'], 'unit_id', '', $view);
     echo JHtmlProperty::progressMultiTabs('unitversions', 'tariffs', 'briefcase', 'COM_HELLOWORLD_SUBMENU_MANAGE_TARIFFS', $data['progress'], 'unit_id', '', $view);
-    echo JHtmlProperty::progressMultiTabs('reviews', 'manage', 'comment', 'COM_HELLOWORLD_SUBMENU_MANAGE_REVIEWS', $data['progress'], 'unit_id', '', $view);
+    echo JHtmlProperty::progressButton($item->id, $item->unit_id,'contactdetails', 'edit', 'envelope', 'Contact Details', $item , 'property_id', '', $view);
     ?>
   </ul>
 <?php endif; ?>
