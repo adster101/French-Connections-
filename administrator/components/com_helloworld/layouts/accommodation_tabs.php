@@ -20,7 +20,7 @@ $units = HelloWorldHelper::getUnitsById($data['progress']);
 
 
 // Determine the unit id, if a new unit unit_id = 0 - the listing id is then used as parent in the create unit view
-($view == 'propertyversions') ? $unit_id = key($units) : $unit_id = $input->get('unit_id', '0', 'int');
+($view == 'propertyversions' || $view == 'contactdetails' ) ? $unit_id = key($units) : $unit_id = $input->get('unit_id', '0', 'int');
 
 // Set the item which is used below to output the tabs
 $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);

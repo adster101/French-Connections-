@@ -32,54 +32,109 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
         echo $progress_layout->render($data);
         echo $tabs_layout->render($data);
         ?>
+
+        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
+
+
+        <?php echo $this->form->getLabel('contact_override_note'); ?>
+
         <fieldset class="adminform">
-
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
-
-
-          <?php echo $this->form->getLabel('contact_override_note'); ?>
 
           <div class="control-group">
             <div class="control-label">
-              <?php echo $this->form->getLabel('override_invoice_details'); ?>
+              <?php echo $this->form->getLabel('use_invoice_details'); ?>
             </div>
             <div class="controls">
-              <?php echo $this->form->getInput('override_invoice_details'); ?>
+              <?php echo $this->form->getInput('use_invoice_details'); ?>
             </div>
+          </div>
+
+
+          <div id="demo" class="collapse <?php echo ($this->item->use_invoice_details) ? 'out' : 'in' ?> "> 
+
+            <div class="control-group">
+              <?php echo $this->form->getLabel('first_name'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('first_name'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('surname'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('surname'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('phone_1'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('phone_1'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('phone_2'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('phone_2'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('phone_3'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('phone_3'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('fax'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('fax'); ?>
+              </div>
+            </div>     
+            <div class="control-group">
+              <?php echo $this->form->getLabel('email_1'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('email_1'); ?>
+              </div>
+            </div>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('email_2'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('email_2'); ?>
+              </div>
+            </div>          
           </div>
         </fieldset>            
 
 
-        <div id="demo" class="collapse"> 
-
-          <div class="control-group">
-            <?php echo $this->form->getLabel('first_name'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('first_name'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('surname'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('surname'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('phone_1'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('phone_1'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('phone_2'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('phone_2'); ?>
-            </div>
-          </div>
-        </div>
 
 
+        <fieldset class="adminform form-horizontal">
 
+          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend> 
+
+
+          <?php echo $this->form->getLabel('smsprefs'); ?>
+
+          <div class="control-group">
+            <?php echo $this->form->getLabel('sms_alert_number'); ?>
+            <div class="controls">
+              <?php echo $this->form->getInput('sms_alert_number'); ?>
+            </div>
+          </div>
+          
+          <?php if (!$this->item->sms_valid) : ?>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('dummy_validation_code'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('dummy_validation_code'); ?>
+              </div>
+            </div>
+          <?php elseif ($this->item->sms_valid) : ?>
+            <?php echo $this->form->getLabel('sms_valid_message'); ?>
+          <?php endif; ?>
+
+
+
+
+        </fieldset>   
 
 
 
@@ -99,7 +154,6 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
               <?php echo $this->form->getInput('booking_form'); ?>
             </div>
           </div>
-          <hr />
         </fieldset>          
 
 
@@ -108,17 +162,17 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
 
 
 
-    <?php //foreach ($this->form->getFieldset('hidden-details') as $field):  ?>
+    <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
 
-    <?php //echo $field->input;  ?>
-    <?php //endforeach; ?>
+      <?php echo $field->input; ?>
+    <?php endforeach; ?>
     <input type="hidden" name="task" value="" />
     <?php echo JHtml::_('form.token'); ?>
 </form>
 <script>
   jQuery(document).ready(function() {
 
-    jQuery("input[name='jform[override_invoice_details]']").change(function(e) {
+    jQuery("input[name='jform[use_invoice_details]']").change(function(e) {
 
       console.log(e);
 
@@ -142,6 +196,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
         // Loop over and activate all form fields.
         jQuery('#demo').find(':disabled').each(function() {
           jQuery(this).removeAttr('disabled');
+
 
         })
 

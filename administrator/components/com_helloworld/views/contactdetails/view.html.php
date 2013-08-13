@@ -112,7 +112,7 @@ class HelloWorldViewContactdetails extends JViewLegacy
 		else
 		{
 			if ($canDo->get('core.edit.own'))
-        JToolBarHelper::cancel('contactdetails.cancel', 'JTOOLBAR_CANCEL');
+        JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 
 			{
 				// We can save the new record

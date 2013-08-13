@@ -315,7 +315,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $isNew = false;
       }
 
-      // If $data['review'] is true we need to check whether a new version is required
+      // If $data['review'] is false we need to check whether a new version is required
       // Check published on date as well?
 
       if (!$data['review']) {
@@ -377,13 +377,23 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
         $property->id = $table->property_id;
         $property->review = 1;
+        
+        // Update the SMS stuff
+        $property->sms_alert_number = ($data['sms_alert_number']) ? $data['sms_alert_number'] : '' ;
+        $property->sms_validation_code = ($data['sms_validation_code']) ? $data['sms_validation_code'] : '';
+        
+        
 
         if (!$property->store()) {
           $this->setError($property->getError());
           return false;
         }
       }
+      
+      
 
+ 
+      
       // Save any admin notes, if present
       if (!empty($data['note'])) {
 

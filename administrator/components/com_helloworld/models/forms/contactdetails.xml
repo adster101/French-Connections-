@@ -11,10 +11,10 @@
       labelclass="control-label"
       description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_OVERRIDE_OPTION" />
     <field 
-      name="override_invoice_details"
+      name="use_invoice_details"
       type="radio"
       default="1"      
-      filter="unset"
+      filter="int"
       label="Use invoice address"
       required="false"
       labelclass="control-label">
@@ -26,10 +26,9 @@
       name="first_name"
       type="text"
       class="input-medium"
-      filter="unset"
+      filter="string"
       label="First name"
       labelclass="control-label"
-      disabled="true"
       maxlength="25"
       required="true"
     />
@@ -37,34 +36,108 @@
       name="surname"
       type="text"
       class="input-medium"
-      filter="unset"
+      filter="string"
       label="Surname"
       labelclass="control-label"
-      disabled="true"
       maxlength="25"
       required="true"
     />
     <field 
       name="phone_1"
       type="text"
-      filter="unset"
+      filter="string"
       label="Phone number"
       maxlength="25"
-      disabled="true"
       labelclass="control-label"
       required="true"
     />
     <field 
       name="phone_2"
       type="text"
-      filter="unset"
-      label="Phone number"
+      filter="string"
+      label="Mobile number"
       maxlength="25"
-      disabled="true"
       labelclass="control-label"
       required="false"
     />
-      
+    <field 
+      name="phone_3"
+      type="text"
+      filter="string"
+      label="Other phone"
+      maxlength="25"
+      labelclass="control-label"
+      required="false"
+    />
+    <field 
+      name="fax"
+      type="text"
+      filter="string"
+      label="Fax number"
+      maxlength="25"
+      labelclass="control-label"
+      required="false"
+    />    
+    <field 
+      name="email_1"
+      type="text"
+      filter="string"
+      label="Contact email"
+      maxlength="25"
+      labelclass="control-label"
+      required="true"
+    />      
+    <field 
+      name="email_2"
+      type="text"
+      filter="string"
+      label="Alternative email"
+      maxlength="25"
+      labelclass="control-label"
+      required="false"
+    />         
+    
+  </fieldset>
+  
+  <fieldset
+    name="sms-preferences">
+    <field 
+      name="smsprefs" 
+      type="note"
+      class="alert alert-notice" 
+      labelclass="control-label"
+      description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_SMS_CONTACT_PREFERENCES" />
+    <field 
+      name="sms_valid_message" 
+      type="note"
+      class="alert alert-success" 
+      labelclass="control-label"
+      description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_SMS_CONTACT_ACTIVE" />
+    <field 
+      name="sms_alert_number" 
+      type="text"
+      label="SMS Telephone Number"
+      maxlength="25"
+      labelclass="control-label"
+      filter="string"
+      description="" 
+    />
+    <field 
+      name="dummy_validation_code" 
+      type="text"
+      label="SMS Validation code"
+      maxlength="25"
+      labelclass="control-label"
+      filter="string"
+      default=""
+      value=""
+      description="" 
+    />    
+    
+
+ 
+    
+    
     
   </fieldset>
   
@@ -89,12 +162,17 @@
       <option value="0">JNO</option>
     </field>
     
-    
   </fieldset>
 
 
 
   <fieldset name="hidden-details">
+    <field
+      name="sms_valid"
+      type="hidden"
+      filter="int"
+      default="0"
+    />    
     <field
       name="property_id"
       type="hidden"

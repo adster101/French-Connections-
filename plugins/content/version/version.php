@@ -49,11 +49,20 @@ class plgContentVersion extends JPlugin {
           'location_details' => 1,
           'getting_there' => 1,
           'additional_price_notes' => 1,
-          'linen_costs' => 1
+          'linen_costs' => 1,
+          'first_name' => 1,
+          'surname' => 1,
+          'phone_1' => 1,
+          'phone_2' => 1,
+          'phone_3' => 1,
+          'fax' => 1,
+          'email_1' => 1,
+          'email_2' => 1,
+          
       );
 
       // Check we are handling a property manager form.
-      if ($context != 'com_helloworld.unitversions' && $context != 'com_helloworld.propertyversions') {
+      if ($context != 'com_helloworld.unitversions' && $context != 'com_helloworld.propertyversions' && $context != 'com_helloworld.contactdetails') {
         return false;
       }
       // Check if this is a new article.
@@ -64,14 +73,11 @@ class plgContentVersion extends JPlugin {
 
 
 
-      $expiry_date = ($article->published_on) ? $article->published_on : '';
-      // Parse the date so we can check it's valid
-      $date = date_parse($expiry_date);
-      $check = checkdate($date['month'], $date['day'], $date['year']);
+
 
 
       //Check if there is an expiry date for this content, if not then just return out...
-      if ($check) {
+      if (!$data['review']) {
 
         // Loop over the fields that will trigger a new version and check to see if any differ
         foreach ($article as $field => $value) {

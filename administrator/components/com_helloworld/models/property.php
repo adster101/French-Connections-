@@ -824,25 +824,25 @@ class HelloWorldModelProperty extends JModelAdmin {
     // Initialise some variable
     $data = array();
     $data['id'] = $listing_id;
-    
+
     /*
      * Set the review status, default to 1 if non supplied...
      */
     $data['review'] = $review;
-    
+
     /*
      * Update the cost of this latest update
      */
-    
+
     $data['cost'] = $cost;
-    
+
     /*
      * Update the expiry date if one is passed in
      */
     if (!empty($expiry_date)) {
       $data['expiry_date'] = $expiry_date;
     }
-    
+
     $table = JTable::getInstance('Property', 'HelloWorldTable');
 
 
@@ -970,6 +970,25 @@ class HelloWorldModelProperty extends JModelAdmin {
     $new_expiry_date = $date->toSql();
 
     return $new_expiry_date;
+  }
+
+  public function getSMSDetails($id = '') {
+
+    if (empty($id)) {
+      return false;
+    }
+
+
+    // Get any SMS alert preferences set for the owner of this property
+    $table = $this->getTable();
+
+    $load = $table->load($id);
+
+
+    $data->sms_alert_number = $table->sms_alert_number;
+    $data->sms_valid = $table->sms_valid;
+    print_r($table);die;
+    return $table;
   }
 
   /**

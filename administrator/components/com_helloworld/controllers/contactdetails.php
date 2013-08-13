@@ -16,7 +16,21 @@ jimport('joomla.application.component.controllerform');
  */
 class HelloWorldControllerContactDetails extends JControllerForm {
   
+  public function postSaveHook(\JModelLegacy $model, $validData = array()) {
+    
+    $task = $this->getTask();
+    
+    if ($task == 'apply') {
+      $this->setRedirect(
+					JRoute::_(
+						'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&property_id=' . $validData['property_id'], false
+					)
+				);
+    } 
+    
   
+    
+  }
   
   
 }

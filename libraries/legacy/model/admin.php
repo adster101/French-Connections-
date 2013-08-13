@@ -827,7 +827,7 @@ abstract class JModelAdmin extends JModelForm
 			$item->params = $registry->toArray();
 		}
 
-		return $item;
+    return $item;
 	}
 
 	/**
