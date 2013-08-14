@@ -28,87 +28,77 @@
  *
  */
 
-
-
 class SendSMS {
 
+  private $username, $password, $api;
+  protected $api_url = "http://api.clickatell.com/http/auth";
+  protected $send_url = "http://api.clickatell.com/http/sendmsg";
+  private $session_id;
 
-    private $username,$password,$api;
-    protected $api_url = "http://api.clickatell.com/http/auth";
-    protected $send_url = "http://api.clickatell.com/http/sendmsg";
-    private $session_id;
+  public function __construct($username, $password, $api) {
 
-    public function __construct($username,$password,$api){
+    $this->username = $username;
+    $this->password = $password;
+    $this->api = $api;
+  }
 
-        $this->username = $username;
-        $this->password = $password;
-        $this->api = $api;
-
-    }
-
-
-    public function login () {
-            $ch = curl_init();
+  public function login() {
+    $ch = curl_init();
 
 
-            curl_setopt($ch, CURLOPT_URL,$this->api_url);
-            curl_setopt($ch, CURLOPT_POST, 3);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,"user=" . $this->username . "&password=" . $this->password . "&api_id=" . $this->api);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER  ,1);
-            $result= curl_exec ($ch);
-            curl_close ($ch);
+    curl_setopt($ch, CURLOPT_URL, $this->api_url);
+    curl_setopt($ch, CURLOPT_POST, 3);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, "user=" . $this->username . "&password=" . $this->password . "&api_id=" . $this->api);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
 
-            $ret = split(":",$result);
-            //echo $ret[0];
+    $ret = split(":", $result);
+    //echo $ret[0];
 
-            if (strcmp(trim($ret[0]),"OK") !=0 ) {
-                return 0;
-
-            }
-
-
-
-            $this->session_id = trim($ret[1]);
-
-            return 1;
-
-
-    }
-
-
-    public function send($number,$text){
-
-            $sendtext=urlencode($text);
-            $phone=urlencode($number);
-
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,$this->send_url);
-            curl_setopt($ch, CURLOPT_POST, 3);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,"session_id=" . $this->session_id . "&to=$phone&text=$sendtext");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER  ,1);
-            $result= curl_exec ($ch);
-            curl_close ($ch);
-
-            /*
-            echo $result;
-            echo "<br /><br />" . $this->session_id;
-            */
-
-            $ret = split(":",$result);
-            if (strcmp(trim($send[0]),"ID") !=0 )
-            {
-                return 0;
-
-            }
-
-            return 1;
-
-
-
+    if (strcmp(trim($ret[0]), "OK") != 0) {
+      return 0;
     }
 
 
 
+    $this->session_id = trim($ret[1]);
+
+    return 1;
+  }
+
+  public function send($number, $text) {
+
+    $sendtext = urlencode($text);
+
+    if (!JDEBUG) {
+
+      $phone = urlencode($number);
+    } else {
+
+      $phone = urlencode(JComponentHelper::getParams('com_helloworld')->get('debug_number','447799434206'));
+    }
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $this->send_url);
+    curl_setopt($ch, CURLOPT_POST, 3);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, "session_id=" . $this->session_id . "&to=$phone&text=$sendtext");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    /*
+      echo $result;
+      echo "<br /><br />" . $this->session_id;
+     */
+
+    $ret = split(":", $result);
+    if (strcmp(trim($send[0]), "ID") != 0) {
+      return 0;
+    }
+
+    return 1;
+  }
 
 }
 

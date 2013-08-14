@@ -780,7 +780,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Get each of the possible URL params
     // Get the query string.
-    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', '', 'string') : $params->get('s_kwds');
+    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', 'france', 'string') : $params->get('s_kwds','france');
     $q = $app->stringURLSafe($filter->clean($tmp, 'string'));
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on

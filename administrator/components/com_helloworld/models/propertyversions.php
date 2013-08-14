@@ -370,7 +370,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
       // If not a new property mark the property listing as for review
       // TO DO: look at this - ensure that new props can't be published without review
-      if (!$isNew) {
+      if (!$isNew) { // && $data['review'] == 0
 
         // Update the existing property listing to indicate that the listing has been updated
         $property = $this->getTable('Property', 'HelloWorldTable');
@@ -381,6 +381,8 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         // Update the SMS stuff
         $property->sms_alert_number = ($data['sms_alert_number']) ? $data['sms_alert_number'] : '' ;
         $property->sms_validation_code = ($data['sms_validation_code']) ? $data['sms_validation_code'] : '';
+        $property->sms_status = ($data['sms_status']) ? $data['sms_status'] : '';
+        $property->sms_valid = ($data['sms_valid']) ? $data['sms_valid'] : '';
         
         
 

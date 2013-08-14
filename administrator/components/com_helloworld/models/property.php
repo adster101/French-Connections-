@@ -972,24 +972,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     return $new_expiry_date;
   }
 
-  public function getSMSDetails($id = '') {
 
-    if (empty($id)) {
-      return false;
-    }
-
-
-    // Get any SMS alert preferences set for the owner of this property
-    $table = $this->getTable();
-
-    $load = $table->load($id);
-
-
-    $data->sms_alert_number = $table->sms_alert_number;
-    $data->sms_valid = $table->sms_valid;
-    print_r($table);die;
-    return $table;
-  }
 
   /**
    * Method to get a store id based on model configuration state.

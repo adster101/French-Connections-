@@ -121,6 +121,7 @@
       labelclass="control-label"
       filter="string"
       description="" 
+      validate="tel"
     />
     <field 
       name="dummy_validation_code" 
@@ -133,11 +134,6 @@
       value=""
       description="" 
     />    
-    
-
- 
-    
-    
     
   </fieldset>
   
@@ -172,7 +168,13 @@
       type="hidden"
       filter="int"
       default="0"
-    />    
+    />
+    <field
+      name="sms_status"
+      type="hidden"
+      filter="string"
+      default=""
+    />     
     <field
       name="property_id"
       type="hidden"
