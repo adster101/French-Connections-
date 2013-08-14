@@ -95,8 +95,20 @@ class HelloWorldModelContactDetails extends JModelAdmin {
 
     if (!empty($data)) {
 
-      // This is the case where data is already being passed into the form?
-      $form->setFieldAttribute('use_invoice_details', 'default', '0');
+      if ($data->use_invoice_details) { // If already set to 
+        $form->setFieldAttribute('first_name', 'disabled', 'true');
+        $form->setFieldAttribute('surname', 'disabled', 'true');
+        $form->setFieldAttribute('phone_1', 'disabled', 'true');
+        $form->setFieldAttribute('phone_2', 'disabled', 'true');
+        $form->setFieldAttribute('phone_3', 'disabled', 'true');
+        $form->setFieldAttribute('fax', 'disabled', 'true');
+        $form->setFieldAttribute('email_1', 'disabled', 'true');
+        $form->setFieldAttribute('email_2', 'disabled', 'true');
+        $form->setFieldAttribute('address', 'disabled', 'true');
+      } else {
+        // This is the case where data is already being passed into the form?
+        $form->setFieldAttribute('use_invoice_details', 'default', '0');
+      }
     } else {
 
       $form_data = JFactory::getApplication()->input->get('jform', array(), 'array');
@@ -105,6 +117,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
 
         $form->setFieldAttribute('first_name', 'required', 'false');
         $form->setFieldAttribute('surname', 'required', 'false');
+        $form->setFieldAttribute('address', 'required', 'false');
         $form->setFieldAttribute('phone_1', 'required', 'false');
         $form->setFieldAttribute('phone_2', 'default', '');
         $form->setFieldAttribute('phone_3', 'default', '');
@@ -126,7 +139,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
   public function save($data) {
 
     $params = JComponentHelper::getParams('com_helloworld');
-    
+
     /*
      * Get the property versions model
      */
@@ -136,12 +149,12 @@ class HelloWorldModelContactDetails extends JModelAdmin {
      * Get the existing SMS details for this property 
      */
     $sms_details = $this->getSMSDetails($data['property_id']);
-    
+
     /*
      * Get the SMS related values from the validated form data
      */
     $valid = $data['sms_valid'];
-    $sms_number =  $data['sms_alert_number'];
+    $sms_number = $data['sms_alert_number'];
     $sms_verification_code = $data['dummy_validation_code'];
     $sms_status = $data['sms_status'];
 
@@ -149,12 +162,19 @@ class HelloWorldModelContactDetails extends JModelAdmin {
      * Login flag to indicate whether we logged into clickatell okay
      */
     $login = false;
-    
-    if ($sms_number && !$valid && !$sms_status) {
+
+    /*
+     * If we have an sms number but it's not been validated and there we haven't send a verification code
+     * OR
+     * The sms number that has been passed is different to the one on record.
+     */
+    if (($sms_number && !$valid && !$sms_status) || (strcmp($sms_number, $sms_details->sms_alert_number) != 0)) {
 
       $code = rand(10000, 100000);
       $data['sms_validation_code'] = $code;
       $data['sms_status'] = 'VALIDATE';
+      $data['sms_valid'] = 0;
+      $data['sms_alert_number'] = $sms_number;
 
       // Clickatel baby
       $sendsms = new SendSMS($params->get('username'), $params->get('password'), $params->get('id'));
@@ -166,14 +186,13 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $login = true;
       }
 
-      /* 
+      /*
        * Send sms using the simple send() call 
        */
       if ($login) {
         $sendsms->send($sms_number, JText::sprintf('COM_HELLOWORLD_HELLOWORLD_SMS_VERIFICATION_CODE', $code));
       }
-      
-    } else if ($sms_number && !$valid && $sms_status == 'VALIDATE') {
+    } else if ($sms_number && !$valid && $sms_status == 'VALIDATE') { // The number hasn't been validated but we might have a validation code to verify
 
       /*
        * Get the validation code from the data base and compare it to that passed in via the form
@@ -186,7 +205,17 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $data['sms_status'] = 'OK';
         $data['sms_valid'] = 1;
       }
+    } else if (empty($sms_number)) { // Opt out of alerts
+      $data['sms_validation_code'] = '';
+      $data['sms_status'] = '';
+      $data['sms_valid'] = 0;
+      $data['sms_alert_number'] = '';
     }
+
+    /*
+     * SMS notification prefs are currently set in the property versions save method.
+     * TO DO - Move this update to the property model/table.
+     */
 
     if (!$model->save($data)) {
       // TO DO - Need to go trhough the property versions save model and throw exceptions rather than returing false.
@@ -206,7 +235,6 @@ class HelloWorldModelContactDetails extends JModelAdmin {
    * @param type $id
    * @return boolean
    */
-  
   public function getSMSDetails($id = '') {
 
     if (empty($id)) {

@@ -43,6 +43,16 @@
       required="true"
     />
     <field 
+      name="address"
+      type="text"
+      class="input-xxlarge"
+      filter="string"
+      label="Address"
+      labelclass="control-label"
+      maxlength="175"
+      required="true"
+    />    
+    <field 
       name="phone_1"
       type="text"
       filter="string"
@@ -132,7 +142,8 @@
       filter="string"
       default=""
       value=""
-      description="" 
+      description=""
+      class="input-small" 
     />    
     
   </fieldset>

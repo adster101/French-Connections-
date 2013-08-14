@@ -26,12 +26,7 @@ class HelloWorldControllerContactDetails extends JControllerForm {
 						'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&property_id=' . $validData['property_id'], false
 					)
 				);
-    } 
-    
-  
-    
+    }    
   }
-  
-  
 }
 
