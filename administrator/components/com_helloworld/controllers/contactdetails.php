@@ -4,7 +4,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
-jimport('joomla.application.component.controllerform');
+jimport('frenchconnections.controllers.property.base');
+
 
 // TO DO - extend this controller and other that extend from controller form
 // from another generic class which contain canEdit instead of defining in each controller
@@ -14,19 +15,32 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerContactDetails extends JControllerForm {
-  
+class HelloWorldControllerContactDetails extends HelloWorldControllerBase {
+
+  /**
+   * Constructor.
+   *
+   * @param  array  $config  An optional associative array of configuration settings.
+   *
+   * @since  1.6
+   * @see    JController
+   */
+  public function __construct($config = array()) {
+    parent::__construct($config);
+  }
+
   public function postSaveHook(\JModelLegacy $model, $validData = array()) {
-    
+
     $task = $this->getTask();
-    
+
     if ($task == 'apply') {
       $this->setRedirect(
-					JRoute::_(
-						'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&property_id=' . $validData['property_id'], false
-					)
-				);
-    }    
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&property_id=' . $validData['property_id'], false
+              )
+      );
+    }
   }
+
 }
 

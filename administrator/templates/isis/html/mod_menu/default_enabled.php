@@ -19,43 +19,91 @@ $lang = JFactory::getLanguage();
 /**
  * Property Submenu
  */
-$menu->addChild(new JMenuNode(JText::_('COM_ADMIN_PROPERTY'), '#'), true);
-
 $addRental = $user->authorise('core.add', 'com_helloworld');
+$addRealestate = $user->authorise('core.add', 'com_helloworld');
 $addOffer = $user->authorise('core.add', 'com_specialoffers');
+$addReview = $user->authorise('core.add', 'com_reviews');
 
-if ($user->authorise('core.manage', 'com_helloworld')) {
-  $menu->addChild(new JMenuNode(JText::_('COM_HELLOWORLD_MENU'), 'index.php?option=com_helloworld', 'class:property'), true);
-}
+$manage_rental = $user->authorise('core.manage', 'com_helloworld');
+$manage_realestate = $user->authorise('core.manage', 'com_realestate');
+$manage_offers = $user->authorise('core.manage', 'com_specialoffers');
 
-if ($addRental) {
+if ($manage_rental || $manage_realestate) {
+
+  $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_PROPERTY'), '#'), true);
+
+  if ($manage_rental) {
+
+    $menu->addChild(new JMenuNode(JText::_('COM_HELLOWORLD_MENU'), 'index.php?option=com_helloworld', 'class:property'), true);
+
+    if ($addRental) {
+
+      $menu->addChild(
+              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_helloworld&task=propertyversions.add', 'class:newproperty')
+      );
+    }
+
+    // Determine the parent node for whichever child element we are adding
+    $menu->getParent();
+  }
+
+  if ($manage_offers) {
+
+    $menu->addChild(new JMenuNode(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', 'class:specialoffers'), true);
+
+    if ($addOffer) {
+      $menu->addChild(
+              new JMenuNode(JText::_('COM_SPECIALOFFERS_MENU_ADD_NEW'), 'index.php?option=com_specialoffers&task=specialoffer.add', 'class:specialoffers')
+      );
+    }
+
+    // Get the parent of the above added child, if you can't create an offer this will be the special offers
+    $menu->getParent();
+  }
+
+
+
+
+  if ($manage_realestate) {
+    $menu->addSeparator();
+
+    $menu->addChild(new JMenuNode(JText::_('Real Estate Property'), '#', 'class:realestateproperty'), true);
+
+    if ($addRealestate) {
+      $menu->addChild(
+              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REAL_ESTATE_PROPERTY'), 'index.php?option=com_helloworld&task=propertyversions.add', 'class:newproperty')
+      );
+    }
+    $menu->getParent();
+  }
+
+
+
+  $menu->addSeparator();
+
   $menu->addChild(
-          new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_helloworld&task=propertyversions.add', 'class:newproperty')
+          new JMenuNode(JText::_('Enquiries'), 'index.php?option=com_enquiries', 'class:enquiries'), true
   );
+
+  $menu->getParent();
+
+  $menu->addSeparator();
+
+  $menu->addChild(new JMenuNode(JText::_('Reviews'), 'index.php?option=com_reviews', 'class:reviews'), true);
+
+  $menu->getParent();
+
+  $menu->addSeparator();
+
+  $menu->addChild(new JMenuNode(JText::_('Reviews'), 'index.php?option=com_stats', 'class:stats'), true);
+
+  $menu->getParent();
+
+
+
+  // Determine the parent of the firstly added node
+  $menu->getParent();
 }
-$menu->getParent();
-
-
-if ($user->authorise('core.manage', 'com_realestate')) {
-  $menu->addChild(new JMenuNode(JText::_('Real Estate Property'), '#', 'class:realestateproperty'));
-}
-$menu->addSeparator();
-
-if ($user->authorise('core.manage', 'com_specialoffers')) {
-  $menu->addChild(new JMenuNode(JText::_('Special offers'), '#', 'class:realestateproperty'));
-}
-
-$menu->addSeparator();
-
-
-$menu->getParent();
-
-
-
-
-
-
-
 
 /**
  * Site SubMenu

@@ -168,7 +168,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
      * OR
      * The sms number that has been passed is different to the one on record.
      */
-    if (($sms_number && !$valid && !$sms_status) || (strcmp($sms_number, $sms_details->sms_alert_number) != 0)) {
+    if (($sms_number && !$valid && !$sms_status) || (!empty($sms_number) && strcmp($sms_number, $sms_details->sms_alert_number) != 0)) {
 
       $code = rand(10000, 100000);
       $data['sms_validation_code'] = $code;
@@ -192,7 +192,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
       if ($login) {
         $sendsms->send($sms_number, JText::sprintf('COM_HELLOWORLD_HELLOWORLD_SMS_VERIFICATION_CODE', $code));
       }
-    } else if ($sms_number && !$valid && $sms_status == 'VALIDATE') { // The number hasn't been validated but we might have a validation code to verify
+    } else if (($sms_number) && !$valid && $sms_status == 'VALIDATE') { // The number hasn't been validated but we might have a validation code to verify
 
       /*
        * Get the validation code from the data base and compare it to that passed in via the form
@@ -205,6 +205,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $data['sms_status'] = 'OK';
         $data['sms_valid'] = 1;
       }
+      
     } else if (empty($sms_number)) { // Opt out of alerts
       $data['sms_validation_code'] = '';
       $data['sms_status'] = '';
