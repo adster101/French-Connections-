@@ -25,9 +25,9 @@ $fieldsets = $this->form->getFieldSets('citiestowns');
         <?php echo $this->sidebar; ?>
         <?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS_HELP'); ?>
       </div>
-      <div id="" class="span8">
+      <div id="" class="span10">
       <?php else : ?>
-        <div class="span10 form-inline">
+        <div class="span12 form-inline">
         <?php endif; ?>
         <?php
         echo $progress_layout->render($data);
@@ -93,54 +93,7 @@ $fieldsets = $this->form->getFieldSets('citiestowns');
             </div>
           </div>
         </fieldset>
-        <div class="row-fluid">
-          <div class="span12">
-            <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LOCAL_TOWNS_AND_AMENITIES'); ?></legend>
-            <p><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?></p>
-            <div class="accordion" id="accordion1">
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#internal">
-                    <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_LOCAL_CITIES_TOWNS'); ?>
-                  </a>
-                </div>
-                <div id="internal" class="accordion-body collapse in">
-                  <div class="accordion-inner">
-                    <fieldset class="panelform ">
-                      <?php foreach ($fieldsets as $fieldset) : ?>  
-                        <div class="row-fluid">
-                          <?php foreach ($this->form->getFieldSet($fieldset->name) as $field) : ?>
-                            <?php if (!$field->hidden) : ?>
-                              <div class="span4">
-                                <div class="control-group">
-                                  <div class="control-label">
-                                    <?php echo $field->label; ?>
-                                  </div>
-                                  <div class="controls">
-                                    <?php echo $field->input; ?>
-                                  </div>
-                                </div>
-                              </div>
-                            <?php else: ?>
-                              <?php echo $field->input; ?>
-                            <?php endif; ?>
-                          <?php endforeach; ?> 
-                        </div>
-                      <?php endforeach; ?> 
-                    </fieldset>
 
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-
-        <div class="span2 form-vertical">
-
-        </div>
       </div>
     </div>
 

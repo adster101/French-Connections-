@@ -57,7 +57,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $data = $this->getItem();
     }
 
-
     return $data;
   }
 
@@ -68,7 +67,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
    * @return void
    *
    */
-
   protected function preprocessForm(JForm $form, $data) {
 
     // Convert data to object if it's an array
@@ -82,112 +80,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $form->setFieldAttribute('city', 'latitude', $data->latitude);
       $form->setFieldAttribute('city', 'longitude', $data->longitude);
       $form->setFieldAttribute('city', 'default', $data->city);
-
-      /*
-       * Need to show a list of nearest towns, cities and places of interest.
-       */
-      if (empty($data->city_overrides)) {
-        
-      }
-      $XmlStr = $this->getProximityOverrides($data->city_overrides, $data->latitude, $data->longitude);
-      $form->load($XmlStr, true);
     }
-    
-    if (!$data->latitude) {
-      
-      $addform = new SimpleXMLElement('<form />');
-      $fields = $addform->addChild('fields');
-      $fields->addAttribute('name','citiestowns');
-      //$fieldset = $fields->addChild('fieldset');
-      //$fieldset->addAttribute('name','city-overrides');
-      //$field = $fieldset->addChild('field');
-      //$field->addAttribute('name');
-      
-      $form->load($addform,true);
-      
-    }
-    
-    
-    
-
-    
   }
 
-  /**
-   * Returns an XML String ready to be loaded into the edit form
-   * 
-   * @param JSON/JObject $overrides - existing overrides for this property version
-   * @param type $latitude
-   * @param type $longitude
-   */
-  protected function getProximityOVerrides($overrides, $latitude, $longitude) {
-
-
-      /*
-       * Let's get the nearest cities to this property 
-       */
-      $model = JModelLegacy::getInstance('NearestPropertyList', 'HelloWorldModel', $config =
-                      array('latitude' => $latitude, 'longitude' => $longitude));
-
-      $overrides = $model->getItems();
-      
-      
-      
-      
-      $XmlStr = '<form><fields name="citiestowns">';
-
-
-      // Loop over the existing availability first
-      foreach ($overrides as $counter => $city) {
-        $counter++;
-        $XmlStr.= ' 
-        <fieldset name="city-overrides_' . $city->id . '">
-        <field 
-          name="details_' . $city->id . '" 
-          type="note" 
-          label="' . $city->title . ', ' . round($city->distance, 0) . ' Mile(s)' . '" 
-          description="" />
-        <field
-          id="jform_city_' . $city->title . '"
-          name="city"
-          type="proximityoverride"
-          default="' . $city->id . '"
-          counter="' . $counter . '"  
-          hidden="true"
-          filter="int">
-        </field>
-        <field 
-          id="jform_note_' . $city->title . '"
-          name="note"
-          label="COM_HELLOWORLD_HELLOWORLD_CITY_OVERRIDE_NOTE"
-          description="Enter the time to reach this place or a more accurate distance based on your local knowledge"
-          type="proximityoverridenote"
-          maxlength="25"
-          filter="string"
-          labelclass="control-label"
-          default=""
-          counter="' . $counter . '"
-        />
-        <field
-          id="jform_visible_' . $city->title . '"
-          name="visible"
-          type="proximityoverrideradio"
-          class="btn-group"
-          counter="' . $counter .'"
-          default="1"
-          label="Visible on page"
-          filter="integer">
-          <option value="1">JYES</option>
-          <option value="0">JNO</option>
-        </field>
-        </fieldset>';
-      }
-
-      $XmlStr.='</fields></form>';
-
-      return $XmlStr;
-    
-  }
 
   /**
    * Method to return the location details based on the city the user has chosen
