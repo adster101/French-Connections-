@@ -112,16 +112,13 @@ class HelloWorldViewUnitversions extends JViewLegacy {
       }
     }
 
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
+    
 
-      $view = strtolower(JRequest::getVar('view'));
-
-      $canDo = HelloWorldHelper::addSubmenu($view);
+      $canDo = HelloWorldHelper::addSubmenu('listings');
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
-    }
+    
   }
 
   /**

@@ -19,22 +19,23 @@ $lang = JFactory::getLanguage();
 /**
  * Property Submenu
  */
-$addRental = $user->authorise('core.add', 'com_helloworld');
-$addRealestate = $user->authorise('core.add', 'com_helloworld');
-$addOffer = $user->authorise('core.add', 'com_specialoffers');
-$addReview = $user->authorise('core.add', 'com_reviews');
+$addRental = $user->authorise('core.create', 'com_helloworld');
+$addRealestate = $user->authorise('core.create', 'com_helloworld');
+$addOffer = $user->authorise('core.create', 'com_specialoffers');
+$addReview = $user->authorise('core.create', 'com_reviews');
 
 $manage_rental = $user->authorise('core.manage', 'com_helloworld');
-$manage_realestate = $user->authorise('core.manage', 'com_realestate');
+$manage_realestate = $user->authorise('core.manage', 'com_helloworld');
 $manage_offers = $user->authorise('core.manage', 'com_specialoffers');
 
 if ($manage_rental || $manage_realestate) {
 
-  $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_PROPERTY'), '#'), true);
+  $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_RENTAL_PROPERTY'), '#'), true);
 
   if ($manage_rental) {
 
     $menu->addChild(new JMenuNode(JText::_('COM_HELLOWORLD_MENU'), 'index.php?option=com_helloworld', 'class:property'), true);
+    $menu->addChild(new JMenuNode(JText::_('COM_HELLOWORLD_VIEW_ALL_MENU'), 'index.php?option=com_helloworld', 'class:property'));
 
     if ($addRental) {
 
@@ -48,6 +49,7 @@ if ($manage_rental || $manage_realestate) {
   }
 
   if ($manage_offers) {
+    $menu->addSeparator();
 
     $menu->addChild(new JMenuNode(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', 'class:specialoffers'), true);
 
@@ -64,8 +66,40 @@ if ($manage_rental || $manage_realestate) {
 
 
 
+
+
+
+  $menu->addSeparator();
+
+  $menu->addChild(
+          new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
+  );
+
+  $menu->getParent();
+
+  $menu->addSeparator();
+
+  $menu->addChild(new JMenuNode(JText::_('COM_REVIEWS_MENU'), 'index.php?option=com_reviews', 'class:reviews'), true);
+
+  $menu->getParent();
+
+  $menu->addSeparator();
+
+  $menu->addChild(new JMenuNode(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', 'class:stats'), true);
+
+  $menu->getParent();
+
+
+
+  // Determine the parent of the firstly added node
+  $menu->getParent();
+}
+
+if ($manage_realestate) {
+  $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_REAL_ESTATE_PROPERTY'), '#'), true);
+
+
   if ($manage_realestate) {
-    $menu->addSeparator();
 
     $menu->addChild(new JMenuNode(JText::_('Real Estate Property'), '#', 'class:realestateproperty'), true);
 
@@ -76,84 +110,71 @@ if ($manage_rental || $manage_realestate) {
     }
     $menu->getParent();
   }
-
-
-
   $menu->addSeparator();
 
   $menu->addChild(
-          new JMenuNode(JText::_('Enquiries'), 'index.php?option=com_enquiries', 'class:enquiries'), true
-  );
-
-  $menu->getParent();
+          new JMenuNode(JText::_('Enquiries'), 'index.php?option=com_enquiries', 'class:enquiries'));
 
   $menu->addSeparator();
-
-  $menu->addChild(new JMenuNode(JText::_('Reviews'), 'index.php?option=com_reviews', 'class:reviews'), true);
-
-  $menu->getParent();
-
-  $menu->addSeparator();
-
-  $menu->addChild(new JMenuNode(JText::_('Reviews'), 'index.php?option=com_stats', 'class:stats'), true);
-
-  $menu->getParent();
+  $menu->addChild(new JMenuNode(JText::_('Statistics'), 'index.php?option=com_stats', 'class:stats'));
 
 
 
-  // Determine the parent of the firstly added node
   $menu->getParent();
 }
+
+
 
 /**
  * Site SubMenu
  * */
-$menu->addChild(
-        new JMenuNode(JText::_('MOD_MENU_SYSTEM'), '#'), true
-);
-$menu->addChild(
-        new JMenuNode(JText::_('MOD_MENU_CONTROL_PANEL'), 'index.php', 'class:cpanel')
-);
+if (in_array(8, $user->getAuthorisedGroups())) {
+  $menu->addChild(
+          new JMenuNode(JText::_('MOD_MENU_SYSTEM'), '#'), true
+  );
+  $menu->addChild(
+          new JMenuNode(JText::_('MOD_MENU_CONTROL_PANEL'), 'index.php', 'class:cpanel')
+  );
 
-$menu->addSeparator();
-
-if ($user->authorise('core.admin')) {
-  $menu->addChild(new JMenuNode(JText::_('MOD_MENU_CONFIGURATION'), 'index.php?option=com_config', 'class:config'));
   $menu->addSeparator();
-}
 
-$chm = $user->authorise('core.manage', 'com_checkin');
-$cam = $user->authorise('core.manage', 'com_cache');
-
-if ($chm || $cam) {
-  // Keep this for when bootstrap supports submenus?
-  /* $menu->addChild(
-    new JMenuNode(JText::_('MOD_MENU_MAINTENANCE'), 'index.php?option=com_checkin', 'class:maintenance'), true
-    ); */
-
-  if ($chm) {
-    $menu->addChild(new JMenuNode(JText::_('MOD_MENU_GLOBAL_CHECKIN'), 'index.php?option=com_checkin', 'class:checkin'));
+  if ($user->authorise('core.admin')) {
+    $menu->addChild(new JMenuNode(JText::_('MOD_MENU_CONFIGURATION'), 'index.php?option=com_config', 'class:config'));
     $menu->addSeparator();
   }
 
-  if ($cam) {
-    $menu->addChild(new JMenuNode(JText::_('MOD_MENU_CLEAR_CACHE'), 'index.php?option=com_cache', 'class:clear'));
-    $menu->addChild(new JMenuNode(JText::_('MOD_MENU_PURGE_EXPIRED_CACHE'), 'index.php?option=com_cache&view=purge', 'class:purge'));
+  $chm = $user->authorise('core.manage', 'com_checkin');
+  $cam = $user->authorise('core.manage', 'com_cache');
+
+  if ($chm || $cam) {
+    // Keep this for when bootstrap supports submenus?
+    /* $menu->addChild(
+      new JMenuNode(JText::_('MOD_MENU_MAINTENANCE'), 'index.php?option=com_checkin', 'class:maintenance'), true
+      ); */
+
+    if ($chm) {
+      $menu->addChild(new JMenuNode(JText::_('MOD_MENU_GLOBAL_CHECKIN'), 'index.php?option=com_checkin', 'class:checkin'));
+      $menu->addSeparator();
+    }
+
+    if ($cam) {
+      $menu->addChild(new JMenuNode(JText::_('MOD_MENU_CLEAR_CACHE'), 'index.php?option=com_cache', 'class:clear'));
+      $menu->addChild(new JMenuNode(JText::_('MOD_MENU_PURGE_EXPIRED_CACHE'), 'index.php?option=com_cache&view=purge', 'class:purge'));
+    }
+
+    // $menu->getParent();
   }
 
-  // $menu->getParent();
+  $menu->addSeparator();
+
+  if ($user->authorise('core.admin')) {
+    $menu->addChild(
+            new JMenuNode(JText::_('MOD_MENU_SYSTEM_INFORMATION'), 'index.php?option=com_admin&view=sysinfo', 'class:info')
+    );
+  }
+
+  $menu->getParent();
 }
-
-$menu->addSeparator();
-
-if ($user->authorise('core.admin')) {
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_SYSTEM_INFORMATION'), 'index.php?option=com_admin&view=sysinfo', 'class:info')
-  );
-}
-
-$menu->getParent();
-
 /**
  * Users Submenu
  * */

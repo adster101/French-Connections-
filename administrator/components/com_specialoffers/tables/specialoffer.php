@@ -72,4 +72,5 @@ class SpecialOffersTableSpecialOffer extends JTable
       return false;
     }		
 	}  
+  
 }

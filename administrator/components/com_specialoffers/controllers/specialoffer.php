@@ -4,34 +4,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
-jimport('joomla.application.component.controllerform');
+jimport('frenchconnections.controllers.property.base');
 
 /**
  * HelloWorld Controller
  */
-class SpecialOffersControllerSpecialOffer extends JControllerForm {
-
-  /**
-   * Method override to check if you can edit an existing record.
-   *
-   * @param	array	$data	An array of input data.
-   * @param	string	$key	The name of the key for the primary key.
-   *
-   * @return	boolean
-   * @since	1.6
-   */
-  protected function allowEdit($data = array(), $key = 'id') {
-
-    // Check specific edit permission then general edit permission.
-    if (JFactory::getUser()->authorise('core.edit')) {
-      return true;
-    }
-
-
-
-    return false;
-  }
-
+class SpecialOffersControllerSpecialOffer extends HelloWorldControllerBase {
   /*
    * Function to expire a special offer by setting the end_date of the offer to a past date.
    * Offered to owners of an approved (active) offer rather than opening up edit or change state permissions
@@ -41,40 +19,50 @@ class SpecialOffersControllerSpecialOffer extends JControllerForm {
    */
 
   public function canceloffer() {
-    
-		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-  
-    // Id is the special offer ID
-    $input = JFactory::getApplication()->input;
 
-    $ids = $input->post->get('cid',array(),'array');
-    $id = $ids[0];
-    
+    // Check for request forgeries.
+    JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+    $model = $this->getModel();
+    $table = $model->getTable();
+    // Get the user 
+    $user = JFactory::getUser();
+    $input = JFactory::getApplication()->input;
+    $ids = $input->post->get('cid', array(), 'array');
+
+
     // If there are some IDs to process
     if (count($ids) > 0) {
-    
-      // Get the user 
-      $user = JFactory::getUser();
 
       // Get the offer details for the offer being edited.
       $table = $this->getModel()->getTable();
 
-      $offer = $table->load($id);
+      foreach ($ids as $id) {
 
-      if (empty($offer)) {
-        return false;
-      }
+        if (!$table->load($id)) {
+          continue;
+        }
 
-      // Should really loop over all ids passed in...
-      // Check that this offer is owned by this user (only applies to owners)
-      if ($table->created_by === $user->id) {
+        /*
+         * The all important property id should now be set in the table object
+         */
+        $property_id = ($table->property_id) ? $table->property_id : '';
 
-        // Get the date
-        $date = JFactory::getDate();
+        if (!$this->allowEdit(array('property_id' => $property_id))) {
+
+          $this->setMessage(JText::_('COM_SPECIALOFFERS_YOU_CANNOT_EXPIRE_THIS_OFFER'),'error');
+          // redirect back to the list of special offers for this property...
+          $this->setRedirect(
+                  JRoute::_(
+                          'index.php?option=' . $this->option, false
+                  )
+          );
+
+          return false;
+        }
 
         // Update the end_date for the offer
-        $table->end_date = $date->toSql();
+        $table->end_date = JFactory::getDate()->toSql();
 
         $table->store($id);
 
@@ -86,18 +74,9 @@ class SpecialOffersControllerSpecialOffer extends JControllerForm {
                         'index.php?option=' . $this->option, false
                 )
         );
-      } else {
-
-        $this->setMessage(JText::_('COM_SPECIALOFFERS_YOU_CANNOT_EXPIRE_THIS_OFFER'));
-        // redirect back to the list of special offers for this property...
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->option, false
-                )
-        );
       }
-  }
-    
+    }
+
     return true;
   }
 

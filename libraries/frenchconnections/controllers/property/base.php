@@ -16,22 +16,21 @@ jimport('joomla.application.component.controllerform');
  */
 class HelloWorldControllerBase extends JControllerForm {
 
-  protected function allowEdit($data = array(), $key = 'id') {
+  protected function allowEdit($data = array(), $key = 'property_id') {
     $user = JFactory::getUser();
     $userId = $user->get('id');
     
     $this->addModelPath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models', 'HelloWorldModel');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables', 'HelloWorldTable');
-   
 
     // Needs to be update as follows
     // For enquiries and special offers the $key will not point to the property table
-    if ($this->context == 'enquiry' || $this->context == 'specialoffer' || $this->context == 'unitversions') {
+    if ($this->context == 'enquiry' || $this->context == 'unitversions') {
 
       $model = $this->getModel();
       $table = $model->getTable();
 
-      if (!property_exists($table, 'property_id')) {
+      if (!property_exists($table, $key)) {
         return false;
         
         

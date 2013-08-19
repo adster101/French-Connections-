@@ -110,8 +110,7 @@ class HelloWorldViewListings extends JViewLegacy {
 
     }
 
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
+    
 
       $view = strtolower(JRequest::getVar('view'));
 
@@ -120,7 +119,7 @@ class HelloWorldViewListings extends JViewLegacy {
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
 
-    }
+    
 
 
 

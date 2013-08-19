@@ -127,27 +127,23 @@ abstract class HelloWorldHelper {
   }
 
   /**
-   * Configure the Linkbar.
+   * This submenu is used between the rental property manager, special offers, review, enquiries and stats components.
    */
   public static function addSubmenu($view = '') {
 
     //Get the current user id
     $user = JFactory::getUser();
 
-    $views = array('listings', 'realestate', 'profile', 'enquiries');
-
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_OWNERS_AREA_HOME'), '#');
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_OWNERS_HOME'), 'index.php');
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_RENTAL_ACCOMMODATION'), 'index.php?option=com_helloworld', ($view == 'listings'));
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_REALESTATE_ACCOMMODATION'), 'index.php?option=com_realestate', ($view == 'realestate'));
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_INVOICES'), 'index.php?option=com_invoices', ($view == 'profile'));
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ENQUIRIES'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_SMS_NOTIFICATIONS'), 'index.php?option=com_admin&view=profile&layout=edit&id=' . $user->id . '#sms', ($view == 'profile'));
-    if (!in_array($view, $views)) {
-      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LISTING_MENU'), '#');
-      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_ADDITIONAL_MARKETING'), 'index.php');
-      JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_LISTING_STATISTICS'), 'index.php');
-    }
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_MENU'), 'index.php?option=com_helloworld', ($view == 'listings'));
+    JHtmlSidebar::addEntry(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', ($view == 'specialoffers'));
+    JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
+    JHtmlSidebar::addEntry(JText::_('COM_REVIEWS_MENU'), 'index.php?option=com_reviews', ($view == 'reviews'));
+    JHtmlSidebar::addEntry(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', ($view == 'stats'));
+
+    
   }
 
   /*

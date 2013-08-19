@@ -83,7 +83,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
 			<option value="-2">JTRASHED</option>
 		</field></fieldset></form>';
 
-      $form->setFieldAttribute('property_id', 'type', 'text');
+      $form->setFieldAttribute('unit_id', 'type', 'text');
 
       if (!empty($data->property_id)) {
         $form->setFieldAttribute('property_id', 'readonly', 'true');
@@ -123,38 +123,35 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    */
   public function save($data) {
     
+    /*
+     * Add the helloworld tables to the JTable include path
+     */
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables', 'HelloWorldTable');
+   
     $app = JFactory::getApplication();
     
     // Get the user
     $user = JFactory::getUser();   
     
-    $property_id = $data['property_id'];
+    $unit_id = $data['unit_id'];
        
-    // Get the date
-    $date = JFactory::getDate();
-
     // Set the date created timestamp
-    $data['date_created'] = $date->toSql();
-
-    // The user who created the offer needs to be the property/unit owner
-    // Get an instance of the property table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');    
+    $data['date_created'] = JFactory::getDate()->toSql();
     
-    $table = $this->getTable('PropertyUnits', 'HelloWorldTable');
+    // Get an instance of the unit table
+    $table = $this->getTable('Unit','HelloWorldTable');
     
-    // Get the user id for the owner of this property 
-    $property = $table->load($property_id);
-        
-    if (empty($property)) {
-      // Didn't get the property details, invalid property ID?
-      // TODO log this
+    // Get the parent property id for the owner of this property 
+    if (!$table->load($unit_id)) {
+      $this->setError(JText::_('COM_SPECIAL_OFFERS_PROBLEM_CREATING_OFFER'));
       return false;
     }
     
     // Set the user ID in the data array
     $data['created_by'] = $table->created_by;
+    $data['property_id'] = $table->property_id;
     
-    // Also need to check that no active offers exist for this property already
+    // TO DO - Add a check that no active offers exist for this unit already
     
     
     if (parent::save($data)) {
@@ -171,5 +168,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
 
     return false;
   }
+
 
 }

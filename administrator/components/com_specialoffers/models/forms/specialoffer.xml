@@ -61,7 +61,7 @@
     />
         
     <field 
-      name="property_id" 
+      name="unit_id" 
       type="UserProperties" 
       filter="int"
       description="COM_SPECIALOFFERS_PROPERTY_ID_DESC"
@@ -77,8 +77,8 @@
       name="id"
       type="hidden"
       filter="int"
-      />
-  	
+    />
+    
     
   
   </fieldset>

@@ -31,7 +31,8 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
     $this->form = $form;
 
 
- 
+    $this->addSubMenu();
+    
     $this->addToolBar();
   	
     $this->setDocument();
@@ -40,7 +41,16 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
     parent::display($tpl);
 
   }
-
+  /**
+   * Adds the submenu details for this view
+   */
+  
+  protected function addSubMenu() {
+    
+    HelloWorldHelper::addSubmenu('specialoffers');
+  
+    $this->sidebar = JHtmlSidebar::render();
+  }
   /**
    * Method to set up the document properties
    *
@@ -51,7 +61,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
 
     $document = JFactory::getDocument();
     
-    JToolBarHelper::title($isNew ? JText::_('COM_SPECIALOFFER_OFFER_NEW') : JText::sprintf('COM_SPECIALOFFER_OFFER_EDIT', $this->item->title), 'helloworld');
+    JToolBarHelper::title($isNew ? JText::_('COM_SPECIALOFFER_OFFER_NEW') : JText::sprintf('COM_SPECIALOFFER_OFFER_EDIT', $this->item->id), 'helloworld');
     
  		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js",false,true);
 		

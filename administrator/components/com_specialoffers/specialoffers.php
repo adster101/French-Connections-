@@ -8,8 +8,10 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_specialoffers'))
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
   
-// Register the Helloworld helper file
+// Register the Special Offers helper file
 JLoader::register('SpecialOffersHelper', dirname(__FILE__) . '/helpers/specialoffers.php');
+
+JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

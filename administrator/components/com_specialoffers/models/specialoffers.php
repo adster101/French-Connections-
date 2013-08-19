@@ -21,13 +21,12 @@ class SpecialOffersModelSpecialOffers extends JModelList
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
-				'id', 'so.id',
-				'title', 'so.title'		,	
-				'state', 'so.state',
-				'created', 'so.date_created',
-        'title','hw.title',
-				'publish_up', 'so.publish_up',
-				'publish_down', 'so.publish_down',
+				'id', 'a.id',
+				'state', 'a.state',
+				'created', 'a.date_created',
+        'title','c.unit_title',
+				'start_date', 'a.start_date',
+				'end_date', 'a.end_date',
 			);
     }
     
@@ -60,12 +59,15 @@ class SpecialOffersModelSpecialOffers extends JModelList
 
 		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
 		$this->setState('filter.title', $title);  
+
+    $state = $this->getUserStateFromRequest($this->context.'.filter.state', 'filter_state', '');
+		$this->setState('filter.state', $state);  
 		
 	
 
     
     // List state information.
-		parent::populateState('so.date_created','desc');
+		parent::populateState();
 	}
 
   /**
@@ -86,53 +88,70 @@ class SpecialOffersModelSpecialOffers extends JModelList
 		
 		// Select some fields
 		$query->select('
-      so.id,
-      so.published,
-      so.property_id,
-      so.start_date,
-      so.end_date,
-      so.date_created,
-      so.title,
-      so.description,
-      so.status,
-      so.approved_by,
-      so.approved_date,
-      hw.unit_title as property_title
+      a.id,
+      a.published,
+      a.unit_id,
+      a.start_date,
+      a.end_date,
+      a.date_created,
+      a.title,
+      a.description,
+      a.status,
+      a.approved_by,
+      a.approved_date,
+      c.unit_title as unit_title,
+      e.id as listing_id
     ');
 		
 		// From the hello table
-		$query->from('#__special_offers so');
+		$query->from('#__special_offers a');
     
-    $query->leftJoin('#__property_units hw on hw.id = so.property_id');
+    $query->join('left', '#__unit b on b.id = a.unit_id');
+    
+
+    $query->join('left', '#__unit_versions c on (b.id = c.unit_id and c.id = (select max(d.id) from #__unit_versions d where unit_id = b.id))');
+    $query->join('left', '#__property e on e.id = b.property_id');
     
     // Filter by published state
 		$published = $this->getState('filter.published');
 
     if (is_numeric($published)) {
-			$query->where('so.published = ' . (int) $published);
+			$query->where('a.published = ' . (int) $published);
 		} else {
-			$query->where('so.published IN (0,1)');
+			$query->where('a.published IN (0,1)');
     }
     
     // Need to ensure that owners only see reviews assigned to their properties
-    if (!$user->authorise('core.edit.own','com_specialoffers')) { // User not permitted to edit their own reviews
-      $query->where('hw.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
+    if (!$user->authorise('core.edit','com_specialoffers')) { // User not permitted to edit their own reviews
+      $query->where('e.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
     } 
-        
+    
+    $state = $this->getState('filter.state',0);
+    
+    if($state == 1) {
+      $query->where('a.end_date < now()');
+    } else if ($state == 2) {
+      $query->where('a.start_date <= now() and a.end_date >= now()');
+    } else if ($state == 3) {
+      $query->where('a.start_date > now() and a.published = 1');
+    } else if ($state == 4) {
+      $query->where('a.published = 0 and a.start_date > now()');
+    }
+    
 		// Filter by search in title
 		$search = $this->getState('filter.search');
     
 		if (!empty($search)) {
       if ((int) $search ) {
-        $query->where('so.property_id = '.(int) $search);
+        $query->where('a.property_id = '.(int) $search);
 
       } else {
         $search = $db->Quote('%'.$db->escape($search, true).'%');
-        $query->where('(so.review_text LIKE '.$search.')');
+        $query->where('(a.description LIKE '.$search.')');
       }
     }
     
-    $listOrdering = $this->getState('list.ordering','date_created');
+    $listOrdering = $this->getState('list.ordering','start_date');
 		$listDirn = $db->escape($this->getState('list.direction', 'desc'));  
     $query->order($db->escape($listOrdering).' '.$listDirn);
 		

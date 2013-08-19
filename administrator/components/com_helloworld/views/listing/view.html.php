@@ -109,7 +109,7 @@ class HelloWorldViewListing extends JViewLegacy {
 
       $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu('listing');
+      $canDo = HelloWorldHelper::addSubmenu('listings');
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
