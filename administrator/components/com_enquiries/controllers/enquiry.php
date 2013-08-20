@@ -27,7 +27,6 @@ class EnquiriesControllerEnquiry extends HelloWorldControllerBase {
     // TO DO - Get the property and user contact details here.
     // Need to determine whether they have overridden the contact details
     // to an alternative one.
-    // Get the app/input details instance
     // Also, need to verify the user sending the reply is the owner. So below needs to go into the enquiry model
     
     $input = JFactory::getApplication()->input;

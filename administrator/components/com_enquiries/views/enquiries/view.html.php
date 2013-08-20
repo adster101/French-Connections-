@@ -16,23 +16,45 @@ class EnquiriesViewEnquiries extends JViewLegacy {
   protected $pagination;
 
   function display($tpl = null) {    // Gets the info from the model and displays the template 
-    
+
+    /*
+     * Get the permissions for this component
+     */
+    $canDo = EnquiriesHelper::getActions();
 
     // Get data from the model
     $this->items = $this->get('Items');
-    
+
     $this->state = $this->get('State');
 
     $this->pagination = $this->get('Pagination');
 
     $view = strtolower(JRequest::getVar('view'));
 
-
-    $this->addToolBar();
+    $this->addSubMenu($canDo);
+    
+    $this->addToolBar($canDo);
 
     $this->setDocument();
 
     parent::display($tpl);
+  }
+
+  /**
+   * Adds the submenu details for this view
+   */
+  protected function addSubMenu($canDo) {
+
+    if ($canDo->get('core.edit.state')) {
+
+      JHtmlSidebar::addFilter(
+              JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', EnquiriesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
+      );
+    }
+
+    HelloWorldHelper::addSubmenu('enquiries');
+
+    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**
@@ -58,22 +80,14 @@ class EnquiriesViewEnquiries extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar($canDo) {
 
-    $canDo = EnquiriesHelper::getActions();
 
     if ($canDo->get('core.edit')) {
       JToolBarHelper::editList('enquiry.edit', 'JTOOLBAR_EDIT');
     }
 
     if ($canDo->get('core.edit.state')) {
-
-      JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', EnquiriesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
-      );
-
-      $this->sidebar = JHtmlSidebar::render();
-
       JToolBarHelper::publish('enquiries.publish', 'COM_ENQUIRIES_MARK_AS_READ', true);
       JToolBarHelper::unpublish('enquiries.unpublish', 'COM_ENQUIRIES_MARK_AS_UNREAD', true);
       JToolBarHelper::trash('enquiries.trash');
@@ -82,11 +96,11 @@ class EnquiriesViewEnquiries extends JViewLegacy {
     if ($canDo->get('core.delete')) {
       JToolBarHelper::deleteList('Are you sure?', 'enquiries.delete', 'JTOOLBAR_DELETE');
     }
-    
+
     if ($canDo->get('core.admin')) {
       JToolBarHelper::preferences('com_enquiries');
     }
-    
+
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
   }
 

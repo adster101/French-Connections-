@@ -6,64 +6,75 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('behavior.formvalidation');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 ?>
-<form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" id="adminForm" method="post" name="adminForm">
-
-  <div id="j-main-container" class="span7">
-
-    <fieldset class="adminform">
-      <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAIL'); ?></legend>
-      <?php foreach ($this->form->getFieldset('requestor') as $field): ?>
-        <div class="control-group">
-          <?php echo $field->label; ?>
-          <div class="controls">
-            <?php echo $field->input; ?>
-          </div>
-        </div>         
-      <?php endforeach; ?>
-    </fieldset>
-    <fieldset>
-      <?php foreach ($this->form->getFieldset('details') as $field): ?>
-        <div class="control-group">
-          <?php echo $field->label; ?>
-          <div class="controls">
-            <?php echo $field->input; ?>
-          </div>
-        </div>         
-      <?php endforeach; ?>
-    </fieldset>
-    <fieldset>
-      <?php foreach ($this->form->getFieldset('themessage') as $field): ?>
-        <div class="control-group">
-          <?php echo $field->label; ?>
-          <div class="controls">
-            <?php echo $field->input; ?>
-          </div>
-        </div>         
-      <?php endforeach; ?>
-    </fieldset>
+<?php if (!empty($this->sidebar)): ?>
+  <div class="span2">
+    <?php echo $this->sidebar; ?>
   </div>
-  <div class="span5">
-    <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_RESPOND_TO_ENQUIRY'); ?></legend>
-    <fieldset>
-      <?php foreach ($this->form->getFieldset('reply') as $field): ?>
-        <div class="control-group">
-          <?php echo $field->label; ?>
-          <div class="controls">
-            <?php echo $field->input; ?>
-          </div>
-        </div>   
-      <?php endforeach; ?>
-      <hr />
-      <button class="btn btn-small pull-right" onclick="Joomla.submitbutton('enquiry.reply')" href="#">
-        <i class="icon-save ">
-        </i>
-        <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_REPLY'); ?>
-      </button>
-    </fieldset>    
-  </div>
-  <?php foreach ($this->form->getFieldset('hidden') as $field): ?>
-    <?php echo $field->input; ?>
-  <?php endforeach; ?>
-  <input type="hidden" name="task" value="" />
-  <?php echo JHtml::_('form.token'); ?>
-</form>
+  <div class="span10">
+  <?php else : ?>
+    <div id="j-main-container">
+    <?php endif; ?>
+    <div class="row-fluid">
+      <form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" id="adminForm" method="post" name="adminForm">
+
+        <div class="span6">
+          <fieldset>
+            <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAIL'); ?></legend>
+            <?php foreach ($this->form->getFieldset('requestor') as $field): ?>
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>         
+            <?php endforeach; ?>
+          </fieldset>
+          <fieldset>
+            <?php foreach ($this->form->getFieldset('details') as $field): ?>
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>         
+            <?php endforeach; ?>
+          </fieldset>
+          <fieldset>
+            <?php foreach ($this->form->getFieldset('themessage') as $field): ?>
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>         
+            <?php endforeach; ?>
+          </fieldset>
+        </div>
+
+        <div class="span6">
+          <fieldset>       
+            <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_RESPOND_TO_ENQUIRY'); ?></legend>
+            <?php foreach ($this->form->getFieldset('reply') as $field): ?>
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>   
+            <?php endforeach; ?>
+            <hr />
+            <button class="btn" onclick="Joomla.submitbutton('enquiry.reply')" href="#">
+              <i class="icon-save ">
+              </i>
+              <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_REPLY'); ?>
+            </button>
+          </fieldset>    
+        </div>
+        <?php foreach ($this->form->getFieldset('hidden') as $field): ?>
+          <?php echo $field->input; ?>
+        <?php endforeach; ?>
+        <input type="hidden" name="task" value="" />
+        <?php echo JHtml::_('form.token'); ?>
+      </form>          
+    </div>
+
