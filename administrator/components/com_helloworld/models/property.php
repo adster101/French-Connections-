@@ -795,9 +795,9 @@ class HelloWorldModelProperty extends JModelAdmin {
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '') {
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email') {
 
-    $recipient = (JDEBUG) ? $params->get('admin_payment_email', 'adamrifat@frenchconnections.co.uk') : $to;
+    $recipient = (JDEBUG) ? $params->get($parameter, 'adamrifat@frenchconnections.co.uk') : $to;
 
     // Assemble the email data...the sexy way!
     $mail = JFactory::getMailer()
@@ -807,8 +807,10 @@ class HelloWorldModelProperty extends JModelAdmin {
             ->setBody($emailBody);
 
     if (!$mail->Send()) {
-      // Oops, log this
+      return false;
     }
+    
+    return true;
   }
 
   /**

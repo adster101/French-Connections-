@@ -28,6 +28,13 @@ $manage_rental = $user->authorise('core.manage', 'com_helloworld');
 $manage_realestate = $user->authorise('core.manage', 'com_helloworld');
 $manage_offers = $user->authorise('core.manage', 'com_specialoffers');
 
+$manage_account = $user->authorise('core.manage', 'com_invoices');
+
+$manage_users = $user->authorise('core.manage', 'com_users');
+
+$menu->addChild(new JMenuNode(JText::_('COM_ADMIN_HOME'), 'index.php'),true);
+$menu->getParent();
+
 if ($manage_rental || $manage_realestate) {
 
   $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_RENTAL_PROPERTY'), '#'), true);
@@ -62,12 +69,6 @@ if ($manage_rental || $manage_realestate) {
     // Get the parent of the above added child, if you can't create an offer this will be the special offers
     $menu->getParent();
   }
-
-
-
-
-
-
 
   $menu->addSeparator();
 
@@ -105,7 +106,7 @@ if ($manage_realestate) {
 
     if ($addRealestate) {
       $menu->addChild(
-              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REAL_ESTATE_PROPERTY'), 'index.php?option=com_helloworld&task=propertyversions.add', 'class:newproperty')
+              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REAL_ESTATE_PROPERTY'), '#', 'class:newrealestateproperty')
       );
     }
     $menu->getParent();
@@ -116,14 +117,33 @@ if ($manage_realestate) {
           new JMenuNode(JText::_('Enquiries'), 'index.php?option=com_enquiries', 'class:enquiries'));
 
   $menu->addSeparator();
+
   $menu->addChild(new JMenuNode(JText::_('Statistics'), 'index.php?option=com_stats', 'class:stats'));
-
-
 
   $menu->getParent();
 }
 
+/**
+ * Account menu
+ */
+if ($manage_account) {
 
+  $menu->addChild(new JMenuNode(JText::_('COM_ACCOUNTS_MENU'), '#'), true);
+
+  if (!$manage_users) {
+
+    $menu->addChild(new JMenuNode(JText::_('Manage Account Details'), 'index.php?option=com_invoices&task=account.edit&user_id=' . (int) $user->id, 'class:accounts'));
+    $menu->addSeparator();
+  }
+
+
+
+  $menu->addChild(new JMenuNode(JText::_('Invoice History'), 'index.php?option=com_invoices&view=invoices', 'class:accounts'), true);
+
+  $menu->getParent();
+
+  $menu->getParent();
+}
 
 /**
  * Site SubMenu
@@ -175,10 +195,11 @@ if (in_array(8, $user->getAuthorisedGroups())) {
 
   $menu->getParent();
 }
+
 /**
  * Users Submenu
  * */
-if ($user->authorise('core.manage', 'com_users')) {
+if ($manage_users) {
   $menu->addChild(
           new JMenuNode(JText::_('MOD_MENU_COM_USERS_USERS'), '#'), true
   );
@@ -423,56 +444,14 @@ if ($showhelp == 1) {
           new JMenuNode(JText::_('MOD_MENU_HELP'), '#'), true
   );
   $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_JOOMLA'), 'index.php?option=com_admin&view=help', 'class:help')
+          new JMenuNode(JText::_('COM_ADMIN_MENU_HELP'), '#', 'class:help', false, '_blank')
   );
   $menu->addSeparator();
 
   $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_SUPPORT_OFFICIAL_FORUM'), 'http://forum.joomla.org', 'class:help-forum', false, '_blank')
+          new JMenuNode(JText::_('COM_ADMIN_CONTACT_US'), '/contact-us', 'class:contact-us', false, '_blank')
   );
 
-  if ($forum_url = $params->get('forum_url')) {
-    $menu->addChild(
-            new JMenuNode(JText::_('MOD_MENU_HELP_SUPPORT_CUSTOM_FORUM'), $forum_url, 'class:help-forum', false, '_blank')
-    );
-  }
 
-  $debug = $lang->setDebug(false);
-
-  if ($lang->hasKey('MOD_MENU_HELP_SUPPORT_OFFICIAL_LANGUAGE_FORUM_VALUE') && JText::_('MOD_MENU_HELP_SUPPORT_OFFICIAL_LANGUAGE_FORUM_VALUE') != '') {
-    $forum_url = 'http://forum.joomla.org/viewforum.php?f=' . (int) JText::_('MOD_MENU_HELP_SUPPORT_OFFICIAL_LANGUAGE_FORUM_VALUE');
-    $lang->setDebug($debug);
-    $menu->addChild(
-            new JMenuNode(JText::_('MOD_MENU_HELP_SUPPORT_OFFICIAL_LANGUAGE_FORUM'), $forum_url, 'class:help-forum', false, '_blank')
-    );
-  }
-
-  $lang->setDebug($debug);
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_DOCUMENTATION'), 'http://docs.joomla.org', 'class:help-docs', false, '_blank')
-  );
-  $menu->addSeparator();
-
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_EXTENSIONS'), 'http://extensions.joomla.org', 'class:help-jed', false, '_blank')
-  );
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_TRANSLATIONS'), 'http://community.joomla.org/translations.html', 'class:help-trans', false, '_blank')
-  );
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_RESOURCES'), 'http://resources.joomla.org', 'class:help-jrd', false, '_blank')
-  );
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_COMMUNITY'), 'http://community.joomla.org', 'class:help-community', false, '_blank')
-  );
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_SECURITY'), 'http://developer.joomla.org/security.html', 'class:help-security', false, '_blank')
-  );
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_DEVELOPER'), 'http://developer.joomla.org', 'class:help-dev', false, '_blank')
-  );
-  $menu->addChild(
-          new JMenuNode(JText::_('MOD_MENU_HELP_SHOP'), 'http://shop.joomla.org', 'class:help-shop', false, '_blank')
-  );
   $menu->getParent();
 }

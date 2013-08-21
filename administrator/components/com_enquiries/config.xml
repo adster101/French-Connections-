@@ -21,6 +21,16 @@
 		description="COM_ENQUIRIES_FIELD_CONFIG_ENQUIRIES_FORM"
 	>
 
+    <field
+      name="admin_enquiry_email"
+      type="text"
+      default=""
+      label="Email override"
+      description="Email address to redirect email to if in debug mode"
+      filter="string"
+    />
+  
+    
 		<field
 			name="captcha"
 			type="plugins"

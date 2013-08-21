@@ -17,10 +17,12 @@ class ReviewsViewReview extends JViewLegacy {
    */
   public function display($tpl = null) {
 
+    $canDo = ReviewsHelper::getActions();
+
     // get the Data
     $item = $this->get('Item');
     $form = $this->get('Form');
-   
+
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       JError::raiseError(500, implode('<br />', $errors));
@@ -33,14 +35,27 @@ class ReviewsViewReview extends JViewLegacy {
     $this->setDocument();
 
 
- 
-    $this->addToolBar();
-  		
+
+    $this->addToolBar($canDo);
+    
+    $this->addSubMenu($canDo);
+
     // Display the template
     parent::display($tpl);
 
     $this->setDocument();
+  }
 
+  /**
+   * Adds the submenu details for this view
+   */
+  protected function addSubMenu($canDo) {
+
+   
+
+    HelloWorldHelper::addSubmenu('reviews');
+
+    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**
@@ -51,15 +66,15 @@ class ReviewsViewReview extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('Manage review'));
- 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
+    JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
   }
 
   /**
    * Setting the toolbar
    */
   protected function addToolBar() {
-    
+
     JToolBarHelper::apply('review.apply', 'JTOOLBAR_APPLY');
     JToolBarHelper::save('review.save', 'JTOOLBAR_SAVE');
     JToolBarHelper::custom('review.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);

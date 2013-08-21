@@ -94,7 +94,9 @@ class EnquiriesModelEnquiries extends JModelList
       e.state,
       e.property_id,
       e.adults,
-      e.children
+      e.children,
+      e.replied,
+      e.date_replied
     ');
 
 		// From the hello table
@@ -129,7 +131,7 @@ class EnquiriesModelEnquiries extends JModelList
       }
     }
 
-    $listOrdering = $this->getState('list.ordering','id');
+    $listOrdering = $this->getState('list.ordering','date_created');
 		$listDirn = $db->escape($this->getState('list.direction', 'desc'));
     $query->order($db->escape($listOrdering).' '.$listDirn);
 

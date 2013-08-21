@@ -82,51 +82,53 @@ class ReviewsModelReviews extends JModelList
 
 		// Select some fields
 		$query->select('
-      r.id,
-      r.unit_id,
-      r.title,
-      r.review_text,
-      r.published,
-      r.date,
-      r.created,
-      b.unit_title
+      a.id,
+      a.unit_id,
+      a.property_id,
+      a.review_text,
+      a.published,
+      a.date,
+      a.created,
+      c.unit_title
     ');
 
 		// From the hello table
-		$query->from('#__reviews r');
+		$query->from('#__reviews a');
 
-    $query->leftJoin('#__unit hw on hw.property_id = r.unit_id');
+    
+    $query->join('left', '#__unit b on b.id = a.unit_id');
+    
 
+    $query->join('left', '#__unit_versions c on (b.id = c.unit_id and c.id = (select max(d.id) from #__unit_versions d where unit_id = b.id))');
+    $query->join('left', '#__property e on e.id = b.property_id');
     // Filter by published state
 		$published = $this->getState('filter.published');
 
     if (is_numeric($published)) {
-			$query->where('r.published = ' . (int) $published);
+			$query->where('a.published = ' . (int) $published);
 		} else {
-			$query->where('r.published IN (0,1)');
+			$query->where('a.published IN (0,1)');
     }
-
+    
     // Need to ensure that owners only see reviews assigned to their properties
-    if (!empty($unit_id)) { // User not permitted to edit their own reviews
-      $query->where('r.unit_id = ' . (int) $unit_id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
+    if (!$user->authorise('core.edit','com_review')) { // User not permitted to edit their own reviews
+      $query->where('e.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
     }
-
-    $query->join('inner', '#__unit_versions as b on (hw.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions as c where c.unit_id = hw.id))');
-
+    
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
 		if (!empty($search)) {
       if ((int) $search ) {
-        $query->where('r.property_id = '.(int) $search);
+        $query->where('a.property_id = '.(int) $search);
 
       } else {
         $search = $db->Quote('%'.$db->escape($search, true).'%');
-        $query->where('(r.review_text LIKE '.$search.')');
+        $query->where('(a.review_text LIKE '.$search.')');
       }
     }
 
-		$listOrdering = $this->getState('list.ordering','r.id');
+		$listOrdering = $this->getState('list.ordering','a.id');
 
  		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
     $query->order($listOrdering,$listDirn);

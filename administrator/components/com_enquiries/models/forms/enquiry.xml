@@ -26,7 +26,7 @@
       description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
       label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
       name="email"
-      filter="unset"
+      filter="string"
       labelclass="control-label"     
       readonly="true">
     </field>    
@@ -96,15 +96,13 @@
     />      
     
     <field 
-      name="property_id" 
+      name="unit_id" 
       type="UserProperties" 
       filter="int"
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
-      default=""
       readonly="true"
       labelclass="control-label"
-      
     />
   </fieldset>
   
@@ -118,49 +116,47 @@
            filter="unset"
            class="input-large"
            rows="10"
-           required="true"
            maxlength="150"
            labelclass="control-label"
            readonly="true"  
            disabled="true"
-		/>        
-    
+    />        
   </fieldset>
   
-	<fieldset name="reply">
-
-		<field
-			name="reply_subject"
-			type="text"
-			label="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_LABEL"
-			description="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_DESC"
-			required="true"
+  <fieldset name="reply">
+    <field
+      name="reply_subject"
+      type="text"
+      label="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_LABEL"
+      description="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_DESC"
+      required="true"
       labelclass="control-label"
     />
 
-		<field
-			name="reply_message"
-			type="textarea"
-			rows="10"
-			cols="80"
-			label="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_LABEL"
-			description="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_DESC"
-			required="true"
+    <field
+      name="reply_message"
+      type="textarea"
+      rows="10"
+      cols="80"
+      label="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_LABEL"
+      description="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_DESC"
+      required="true"
       labelclass="control-label">
-		</field>
-    
-    
-    
-	</fieldset>  
+    </field>
+  </fieldset>  
+  
   <fieldset name="hidden">
     <field 
-      name="email"
-      type="hidden">
-    </field>     
-    <field 
       name="property_id"
-      type="hidden">
-    </field>  
+      type="hidden" 
+      filter="int"
+    />
+  
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
   </fieldset>
 
 </form>

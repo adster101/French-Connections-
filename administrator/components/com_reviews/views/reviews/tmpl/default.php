@@ -44,125 +44,109 @@ $data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' 
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <?php
-      if ($option == 'com_helloworld') { // Set the data array (for the progress layout) based on the component we are in
-        $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        echo $progress->render($data);
-
-        $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
-        echo $layout->render($data);
-      }
-      ?>
-      <?php if ($option == 'com_reviews') : ?>
-        <div id="filter-bar" class="btn-toolbar">
-          <div class="filter-search btn-group pull-left">
-            <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-            <input type="text" name="filter_search"
-                   id="filter_search"
-                   value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                   title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
-                   placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />
-          </div>
-          <div class="btn-group pull-left hidden-phone">
-            <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-            <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-                this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-          </div>
-          <div class="btn-group pull-right hidden-phone">
-            <label for="limit" class="element-invisible">
-              <?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
+      <?php if (count($this->items) > 0) : ?> 
+        <?php if ($option == 'com_reviews') : ?>
+          <div id="filter-bar" class="btn-toolbar">
+            <div class="filter-search btn-group pull-left">
+              <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+              <input type="text" name="filter_search"
+                     id="filter_search"
+                     value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                     title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
+                     placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />
+            </div>
+            <div class="btn-group pull-left hidden-phone">
+              <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+              <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
+                      this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+            </div>
+            <div class="btn-group pull-right hidden-phone">
+              <label for="limit" class="element-invisible">
+                <?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
               <?php echo $this->pagination->getLimitBox(); ?>
+            </div>
           </div>
-        </div>
-      <?php endif; ?>
+        <?php endif; ?>
 
-      <table class="table table-striped" id="articleList">
-        <thead>
-          <tr>
-            <th width="1%" class="hidden-phone">
-              <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
-            </th>
-            <th>
-              <?php echo JText::_('COM_REVIEWS_PROPERTY_ID'); ?>
-
-            </th>
-            <th>
-              <?php echo JText::_('COM_REVIEWS_REVIEW_TEXT'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_REVIEWS_DATE_ADDED'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_REVIEWS_DATE_STATYED_AT_PROPERTY'); ?>
-            </th>
-            <th width="1%">
-              <?php echo JText::_('JSTATUS'); ?>
-            </th>
-            <th width="10%">
-              <?php echo JText::_('COM_REVIEW_TITLE_TEXT_LABEL'); ?>
-            </th>
-
-            <th width="1%">
-              <?php echo JText::_('JGRID_HEADING_ID'); ?>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($this->items as $i => $item): ?>
+        <table class="table table-striped" id="articleList">
+          <thead>
             <tr>
-              <td>
-                <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-              </td>
-              <td width="12%">
-                <?php echo $item->unit_title; ?>
-                (<?php echo $item->unit_id; ?>)
-              </td>
-              <td class="">
-                <?php if ($canEdit || $canEditOwn) : ?>
-                  <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                    <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->review_text)), 500); ?>
-                  </a>
-                <?php else: ?>
-                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->review_text)), 500); ?>
-                <?php endif; ?>
+              <th width="1%" class="hidden-phone">
+                <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
+              </th>
+              <th>
+                <?php echo JText::_('COM_REVIEWS_PROPERTY_ID'); ?>
 
-              </td>
-              <td width="10%">
-                <?php echo $item->created; ?>
-              </td>
-              <td width="10%">
-                <?php echo $item->date; ?>
-              </td>
-              <td>
-                <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
-              </td>
-              <td>
-                <?php if ($canEdit || $canEditOwn) : ?>
-                  <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
-                    <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
-                  </a>
-                <?php else: ?>
-                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
-                <?php endif; ?>
-              </td>
+              </th>
+              <th>
+                <?php echo JText::_('COM_REVIEWS_REVIEW_TEXT'); ?>
+              </th>
+              <th width="15%">
+                <?php echo JText::_('COM_REVIEWS_DATE_ADDED'); ?>
+              </th>
+              <th width="15%">
+                <?php echo JText::_('COM_REVIEWS_DATE_STATYED_AT_PROPERTY'); ?>
+              </th>
+              <th>
+                <?php echo JText::_('JSTATUS'); ?>
+              </th>
 
 
-              <td>
-                <?php echo $item->id; ?>
-              </td>
+              <th>
+                <?php echo JText::_('JGRID_HEADING_ID'); ?>
+              </th>
             </tr>
-          <?php endforeach; ?>
-        <input type="hidden" name="extension" value="<?php echo 'com_reviews'; ?>" />
-        </tbody>
-      </table>
-      <?php echo $this->pagination->getListFooter(); ?>
+          </thead>
+          <tbody>
+            <?php foreach ($this->items as $i => $item): ?>
+              <tr>
+                <td>
+                  <?php echo JHtml::_('grid.id', $i, $item->id); ?>
+                </td>
+                <td>
+                  <?php echo $item->unit_title; ?>
+                  (<?php echo $item->unit_id; ?>)
+                </td>
+                <td>
+                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->review_text)), 1000); ?>
+                  <?php if ($canEdit) : ?>
+                    <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
+                      <?php echo JText::_('JTOOLBAR_EDIT'); ?>
+                    </a>
+                  <?php endif; ?>  
+                </td>
+                <td>
+                  <?php echo $item->created; ?>
+                </td>
+                <td>
+                  <?php echo $item->date; ?>
+                </td>
+                <td>
+                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
+                </td>
+                <td>
+                  <?php echo $item->id; ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <input type="hidden" name="extension" value="<?php echo 'com_reviews'; ?>" />
+          </tbody>
+        </table>
+        <?php echo $this->pagination->getListFooter(); ?>
 
-      <input type="hidden" name="task" value="" />
-      <input type="hidden" name="boxchecked" value="0" />
-      <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-      <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+        <input type="hidden" name="task" value="" />
+        <input type="hidden" name="boxchecked" value="0" />
+        <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
+        <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
 
-      <?php echo JHtml::_('form.token'); ?>
+        <?php echo JHtml::_('form.token'); ?>
 
-    </div>
-</form>
+      </div>
+  </form>
+<?php else: ?>
+  <div class="alert alert-notice">
+    <h4>No Reviews</h4>
+    <p>No review were found against your account.</p>
+  </div>
+
+<?php endif; ?>

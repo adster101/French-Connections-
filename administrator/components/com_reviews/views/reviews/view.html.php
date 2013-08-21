@@ -11,26 +11,27 @@ jimport('joomla.application.component.view');
  */
 class ReviewsViewReviews extends JViewLegacy {
 
-	protected $items;
-	protected $state;
- 	protected $pagination;
+  protected $items;
+  protected $state;
+  protected $pagination;
 
   function display($tpl = null) {    // Gets the info from the model and displays the template
+    $canDo = ReviewsHelper::getActions();
+
     // Get data from the model
     $this->items = $this->get('Items');
 
     $this->state = $this->get('State');
-		$this->pagination	= $this->get('Pagination');
+    $this->pagination = $this->get('Pagination');
 
     $this->setDocument();
 
     $view = strtolower(JRequest::getVar('view'));
 
-    $this->addToolBar();
-		$this->sidebar = JHtmlSidebar::render();
+    $this->addSubMenu($canDo);
+    $this->addToolBar($canDo);
 
     parent::display($tpl);
-
   }
 
   /**
@@ -44,11 +45,25 @@ class ReviewsViewReviews extends JViewLegacy {
   }
 
   /**
+   * Adds the submenu details for this view
+   */
+  protected function addSubMenu($canDo) {
+
+    if ($canDo->get('core.edit.state')) {
+      JHtmlSidebar::addFilter(
+              JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
+      );
+    }
+
+    HelloWorldHelper::addSubmenu('reviews');
+
+    $this->sidebar = JHtmlSidebar::render();
+  }
+
+  /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
-    $document = JFactory::getDocument();
-		$canDo = ReviewsHelper::getActions();
+  protected function addToolBar($canDo) {
 
     if ($canDo->get('core.create')) {
       JToolBarHelper::addNew('review.add', 'JTOOLBAR_NEW');
@@ -73,29 +88,21 @@ class ReviewsViewReviews extends JViewLegacy {
 
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_REVIEW_VIEW_REVIEWS'));
-
-
-    JHtmlSidebar::addFilter(
-			JText::_('JOPTION_SELECT_PUBLISHED'),
-			'filter_published',
-			JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-		);
   }
 
-	/**
-	 * Returns an array of fields the table can be sorted by
-	 *
-	 * @return  array  Array containing the field name to sort by as the key and display text as value
-	 *
-	 * @since   3.0
-	 */
-	protected function getSortFields()
-	{
-		return array(
-			'a.ordering' => JText::_('JGRID_HEADING_ORDERING'),
-			'a.title' => JText::_('JGLOBAL_TITLE'),
-			'a.id' => JText::_('JGRID_HEADING_ID')
-		);
-	}
+  /**
+   * Returns an array of fields the table can be sorted by
+   *
+   * @return  array  Array containing the field name to sort by as the key and display text as value
+   *
+   * @since   3.0
+   */
+  protected function getSortFields($canDo) {
+    return array(
+        'a.ordering' => JText::_('JGRID_HEADING_ORDERING'),
+        'a.title' => JText::_('JGLOBAL_TITLE'),
+        'a.id' => JText::_('JGRID_HEADING_ID')
+    );
+  }
 
 }

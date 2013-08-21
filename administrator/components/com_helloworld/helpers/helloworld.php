@@ -136,7 +136,7 @@ abstract class HelloWorldHelper {
 
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_OWNERS_AREA_HOME'), '#');
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_OWNERS_HOME'), 'index.php');
-    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_SUBMENU_QUICK_MENU'), '#');
+    JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_PROPERTY_SUBMENU_MENU'), '#');
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_MENU'), 'index.php?option=com_helloworld', ($view == 'listings'));
     JHtmlSidebar::addEntry(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', ($view == 'specialoffers'));
     JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
