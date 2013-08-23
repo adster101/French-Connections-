@@ -66,7 +66,7 @@ class plgUserProfile_fc extends JPlugin
 	function onContentPrepareData($context, $data)
 	{
 		// Check we are manipulating a valid form.
-		if (!in_array($context, array('com_users.profile', 'com_users.user', 'com_users.registration', 'com_admin.profile')))
+		if (!in_array($context, array('com_users.registration')))
 		{
 
       return true;
@@ -213,14 +213,11 @@ class plgUserProfile_fc extends JPlugin
 		// Check we are manipulating a valid form.
 		$name = $form->getName();
     
-    if (!in_array($name, array('com_admin.profile', 'com_users.user', 'com_users.profile', 'com_users.registration')))
+    if (!in_array($name, array('com_users.registration')))
 		{
 			return true;
 		}
 
-
-
-    
     // Check which form we are manipulating, we are only interested in the com_admin.profile form
     // just now as this is the one we want the owner/public to fill out. 
     if (in_array($name, array('com_admin.profile'))){
@@ -236,15 +233,15 @@ class plgUserProfile_fc extends JPlugin
     
 		// Add the registration fields to the form.
 		JForm::addFormPath(dirname(__FILE__) . '/profiles');
+    
 		$form->loadFile('profile', false);
 
     // Add the rule path to the form so we may validate the user profile details a bit.
-    JForm::addRulePath('C:\xampp\htdocs\administrator\components\com_helloworld\models\rules');
+    JForm::addRulePath(JPATH_ADMINISTRATOR . '\components\com_helloworld\models\rules');
     
 		$tosarticle = $this->params->get('register-tos_article');
 		$tosenabled = $this->params->get('register-require_tos', 0);
    
-
 		// We need to be in the registration form, field needs to be enabled and we need an article ID
 		if (!in_array($name, array('com_users.registration', 'com_admin.profile')) || !$tosenabled || !$tosarticle)
 		{

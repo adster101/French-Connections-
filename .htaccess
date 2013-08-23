@@ -157,6 +157,8 @@ RewriteRule .* index.php [F]
 ##
 
 #RewriteBase /
+#
+
 
 ## Begin - Joomla! core SEF Section.
 #

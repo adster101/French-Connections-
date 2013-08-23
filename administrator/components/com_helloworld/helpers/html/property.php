@@ -118,7 +118,7 @@ class JHtmlProperty {
     $title = JText::_('COM_HELLOWORLD_HELLOWORLD_VIEW_PROPERTY_STATS');
 
     return '<a class="modal"'
-            . ' href="' . JRoute::_('index.php?option=com_helloworld&task=listing.stats&tmpl=component&layout=modal&id=' . (int) $id . '&u_id=' . (int) $u_id . '&' . JSession::getFormToken() . '=1') . '"'
+            . ' href="' . JRoute::_('index.php?option=com_stats&tmpl=component&layout=modal&id=' . (int) $id . '&u_id=' . (int) $u_id . '&' . JSession::getFormToken() . '=1') . '"'
             . ' rel="{handler: \'iframe\', size: {x: 800, y: 450}}">'
             . '<span class="label label-info"><i class="icon-bars"></i>' . $title . '</span></a>';
   }
