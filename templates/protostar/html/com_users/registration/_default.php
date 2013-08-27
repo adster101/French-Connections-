@@ -98,6 +98,15 @@ JHtml::_('behavior.formvalidation');
               <?php echo $this->form->getInput('phone_1'); ?>
             </div>
           </div>
+          <div class="control-group">
+            <div class="control-label">
+              <?php echo $this->form->getLabel('captcha'); ?>
+             
+            </div>
+            <div class="controls">
+              <?php echo $this->form->getInput('captcha'); ?>
+            </div>
+          </div>            
         </fieldset>
       <?php endif; ?>
     <?php endforeach; ?>

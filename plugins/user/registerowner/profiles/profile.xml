@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/administrator/components/com_helloworld/models/rules">
+		<fieldset name="default"
+			label="PLG_USER_PROFILE_SLIDER_LABEL">
+			
+			<field
+				name="phone_1"
+				type="tel"
+				id="phone_1"
+				description="PLG_USER_PROFILE_FIELD_PHONE_1_DESC"
+				filter="string"
+				label="PLG_USER_PROFILE_FIELD_PHONE_1_LABEL"
+				message="PLG_USER_PROFILE_FIELD_PHONE_1_MESSAGE"
+				size="30"
+        required="true"
+			/>
+    
+			<field
+				name="tos"
+				type="tos"
+				label="PLG_USER_PROFILE_FIELD_TOS_LABEL"
+				description="PLG_USER_PROFILE_FIELD_TOS_DESC">
+				<option value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
+			</field>  
+      
+		</fieldset>
+</form>
