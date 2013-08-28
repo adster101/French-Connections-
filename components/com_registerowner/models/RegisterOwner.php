@@ -8,114 +8,65 @@ jimport('joomla.error.log');
 /**
  * HelloWorld Model
  */
-class RegisterOwnerModelRegisterOwner extends JModelForm {
+class RegisterOwnerModelRegisterOwner extends JModelAdmin {
 
   /**
    * @var object item
    */
   protected $item;
-  
-	/**
-	 * Method to get the tetimonial item.
-	 *
-	 * The base form is loaded from XML and then an event is fired
-	 *
-	 *
-	 * @param	array	$data		An optional array of data for the form to interrogate.
-	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
-	 * @return	JForm	A JForm object on success, false on failure
-	 * @since	1.6
-	 */
-	public function getItem($data = array(), $loadData = true)
-	{
-		
-		$id = $this->getState('property.id');
-    
-    // Load the property get method to get the title and what not of the property being testimonialised
-    
-    
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
-    
-    $table = $this->getTable();
- 		
-    $lang = JFactory::getLanguage()->getDefault();
-    
-    if ($id > 0)
-		{
-			// Attempt to load the row. Need to provide the language string here...
-			$return = $table->load($id,'', $lang );
 
-			// Check for a table object error.
-			if ($return === false && $table->getError())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
-		}
-   
-    $properties = $table->getProperties(1);
+  /**
+   * Returns a reference to the a Table object, always creating it.
+   *
+   * @param	type	The table type to instantiate
+   * @param	string	A prefix for the table class name. Optional.
+   * @param	array	Configuration array for model. Optional.
+   * @return	JTable	A database object
+   * @since	1.6
+   */
+  public function getTable($type = '', $prefix = '', $config = array()) {
+    return JTable::getInstance($type, $prefix, $config);
+  }
 
-		$item = JArrayHelper::toObject($properties, 'JObject');
+  /**
+   * Method to get the contact form.
+   *
+   * The base form is loaded from XML and then an event is fired
+   *
+   *
+   * @param	array	$data		An optional array of data for the form to interrogate.
+   * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
+   * @return	JForm	A JForm object on success, false on failure
+   * @since	1.6
+   */
+  public function getForm($data = array(), $loadData = false) {
+    // Get the form.
+    $form = $this->loadForm('com_registerowner.register', 'register', array('control' => 'jform', 'load_data' => true));
+    if (empty($form)) {
+      return false;
+    }
 
-    return $item;
-	}
-  
-	/**
-	 * Returns a reference to the a Table object, always creating it.
-	 *
-	 * @param	type	The table type to instantiate
-	 * @param	string	A prefix for the table class name. Optional.
-	 * @param	array	Configuration array for model. Optional.
-	 * @return	JTable	A database object
-	 * @since	1.6
-	 */
-	public function getTable($type = 'HelloWorld', $prefix = 'HelloWorldTable', $config = array()) 
-	{
-		return JTable::getInstance($type, $prefix, $config);
-	}  
-  
-	/**
-	 * Method to get the contact form.
-	 *
-	 * The base form is loaded from XML and then an event is fired
-	 *
-	 *
-	 * @param	array	$data		An optional array of data for the form to interrogate.
-	 * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
-	 * @return	JForm	A JForm object on success, false on failure
-	 * @since	1.6
-	 */
-	public function getForm($data = array(), $loadData = false)
-	{
-		// Get the form.
-		$form = $this->loadForm('com_registerowner.register', 'register', array('control' => 'jform', 'load_data' => true));
-		if (empty($form)) {
-			return false;
-		}
 
-    
-		return $form;
-	}
-  
-	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return	mixed	The data for the form.
-	 * @since	1.6
-	 */
-	protected function loadFormData() 
-	{
-		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_reviews.review.data', array());
-		
-    if (empty($data)) 
-		{
-			$data = $this->getItem();
-		}
-    
+    return $form;
+  }
+
+  /**
+   * Method to get the data that should be injected in the form.
+   *
+   * @return	mixed	The data for the form.
+   * @since	1.6
+   */
+  protected function loadFormData() {
+    // Check the session for previously entered form data.
+    $data = JFactory::getApplication()->getUserState('com_registerowner.register.data', array());
+
+    if (empty($data)) {
+      $data = array();
+    }
+
     return $data;
-	}	   
-  
+  }
+
   /**
    * Method to auto-populate the model state.
    *
@@ -129,22 +80,80 @@ class RegisterOwnerModelRegisterOwner extends JModelForm {
    * @since	1.6
    */
   protected function populateState() {
-    
-    
+
+
     $app = JFactory::getApplication();
-    
+
     $input = $app->input;
 
     $request = $input->request;
 
     // Get the message id
     $id = $input->get('id', '', 'int');
-    
-    $this->setState('property.id', $id);
 
-    parent::populateState();
+    $this->setState('property.id', $id);
   }
 
-  
+  /**
+   * 
+   * @param type $data
+   * @return boolean
+   */
+  public function save($data) {
+
+		$user = new JUser;
+
+    $data['id'] = '';
+    $data['groups'] = array('10');
+    $data['email'] = $data['email1'];
+    $data['registerDate'] = JFactory::getDate()->toSql();
+
+    // Below should be parameterised so we can switch it off if we need to.
+    $data['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
+    $data['block'] = 1;
+
+    // Bind the data.
+    if (!$user->bind($data)) {
+      $this->setError($user->getError());
+      return false;
+    }
+
+
+    // Store the data.
+    if (!$user->save()) {
+      $this->setError($user->getError());
+      return false;
+    }
+
+    // Get the config setting to set the email details for
+    $config = JFactory::getConfig();
+    $data['fromname'] = $config->get('fromname');
+    $data['mailfrom'] = $config->get('mailfrom');
+    $data['sitename'] = $config->get('sitename');
+
+    $data['siteurl'] = JUri::root() . 'administrator';
+    // Set the link to activate the user account.
+    $uri = JUri::getInstance();
+    $base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
+    $data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
+
+    $emailSubject = JText::sprintf(
+                    'COM_USERS_EMAIL_ACCOUNT_DETAILS', $data['name'], $data['sitename']
+    );
+
+    $emailBody = JText::sprintf(
+                    'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY', $data['name'], $data['sitename'], $data['activate'], $data['siteurl'], $data['username'], $user->password_clear
+    );
+
+    // Send the registration email.
+    $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
+    
+    if (!$return) {
+      return false;
+    }
+    
+    return true;
+    
+  }
 
 }

@@ -17,16 +17,12 @@ class RegisterOwnerViewRegisterOwner extends JViewLegacy
 	// Overwriting JView display method
 	function display($tpl = null) 
 	{
-   $lang = JFactory::getLanguage();
    
-    //$lang->load('com_reviews', JPATH_ADMINISTRATOR, null, false, true);  
     
     $this->state = $this->get('State');
     
     $this->form = $this->get('Form');
-    
-    $this->item = $this->get('Item');
-    
+      
     
 		// Set the document
 		$this->setDocument();		
@@ -43,7 +39,6 @@ class RegisterOwnerViewRegisterOwner extends JViewLegacy
 	{
 		
    
-    $this->document->setTitle(JText::sprintf('COM_REVIEW_YOUR_REVIEW_FOR', $this->item->title));
 
 
   

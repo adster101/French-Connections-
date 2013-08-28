@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
   <fieldset 
-    name="register" addrulepath="/administrator/components/com_registerowner/models/rules" label="COM_CONTACT_FORM_LABEL">
+    name="register" 
+    addrulepath="/administrator/components/com_registerowner/models/rules" 
+    label="">
   
     <field 
-      name="name" type="text"
+      name="name" 
+      type="text"
       description="COM_USERS_REGISTER_NAME_DESC"
       filter="string"
       label="COM_USERS_REGISTER_NAME_LABEL"
       required="true"
       size="30"
+      labelclass="control-label"
     />
 
     <field 
-      name="username" type="text"
+      name="username" 
+      type="text"
       class="validate-username"
       description="COM_USERS_DESIRED_USERNAME"
       filter="username"
@@ -22,36 +27,13 @@
       required="true"
       size="30"
       validate="username"
+      labelclass="control-label"
     />
 
+    
     <field 
-      name="password2" type="password"
-      autocomplete="off"
-      class="validate-password"
-      description="COM_USERS_DESIRED_PASSWORD"
-      field="password1"
-      filter="raw"
-      label="COM_USERS_PROFILE_PASSWORD1_LABEL"
-      message="COM_USERS_PROFILE_PASSWORD1_MESSAGE"
-      size="30"
-      validate="equals"
-      required="true"
-    />
-
-    <field 
-      name="password1" type="password"
-      autocomplete="off"
-      class="validate-password"
-      description="COM_USERS_PROFILE_PASSWORD2_DESC"
-      filter="raw"
-      label="COM_USERS_PROFILE_PASSWORD2_LABEL"
-      size="30"
-      validate="password"
-      required="true"
-    />
-
-    <field 
-      name="email1" type="email"
+      name="email1" 
+      type="email"
       description="COM_USERS_REGISTER_EMAIL1_DESC"
       field="id"
       filter="string"
@@ -61,10 +43,12 @@
       size="30"
       unique="true"
       validate="email"
+      labelclass="control-label"
     />
 
     <field 
-      name="email2" type="email"
+      name="email2" 
+      type="email"
       description="COM_USERS_REGISTER_EMAIL2_DESC"
       field="email1"
       filter="string"
@@ -73,33 +57,72 @@
       required="true"
       size="30"
       validate="equals"
+      labelclass="control-label"
     />
+    
     <field
       name="phone_1"
       type="tel"
       id="phone_1"
-      description="PLG_USER_PROFILE_FIELD_PHONE_1_DESC"
+      description="COM_USERS_REGISTER_PHONE_DESCRIPTION"
       filter="string"
-      label="PLG_USER_PROFILE_FIELD_PHONE_1_LABEL"
-      message="PLG_USER_PROFILE_FIELD_PHONE_1_MESSAGE"
+      label="COM_USERS_REGISTER_PHONE_LABEL"
+      message="COM_USERS_REGISTER_PHONE_MESSAGE"
       size="30"
       required="true"
+      labelclass="control-label"
     />
     
+
+    
+  </fieldset>
+  
+  <fieldset>
+      
     <field
       name="tos"
       type="tos"
-      label="PLG_USER_PROFILE_FIELD_TOS_LABEL"
-      description="PLG_USER_PROFILE_FIELD_TOS_DESC">
+      class="checkbox"
+      labelclass="checkbox"
+      required="false"
+      label="COM_REGISTER_OWNER_ACCEPT_TOS"
+      description="COM_REGISTER_OWNER_ACCEPT_TOS">
       <option value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
-    </field>  
-    <field
-      name="captcha"
-      type="captcha"
-      label="COM_USERS_CAPTCHA_LABEL"
-      description="COM_USERS_CAPTCHA_DESC"
-      validate="captcha"
+    </field>
+    <field 
+      type="note"
+      name="tos"
+      label=""
+      description="COM_REGISTER_OWNER_ACCEPT_TOS_2"
+      class="alert alert-notice"
     />
-    
+    <field 
+      name="password2" 
+      type="password"
+      autocomplete="off"
+      class="validate-password"
+      description="COM_USERS_DESIRED_PASSWORD"
+      field="password1"
+      filter="raw"
+      label="COM_USERS_PROFILE_PASSWORD1_LABEL"
+      message="COM_USERS_PROFILE_PASSWORD1_MESSAGE"
+      size="30"
+      validate="equals"
+      labelclass="control-label"
+    />
+
+    <field 
+      name="password1" 
+      type="password"
+      autocomplete="off"
+      class="validate-password"
+      description="COM_USERS_PROFILE_PASSWORD2_DESC"
+      filter="raw"
+      label="COM_USERS_PROFILE_PASSWORD2_LABEL"
+      size="30"
+      validate="password"
+      labelclass="control-label"
+    />
+
   </fieldset>
 </form>

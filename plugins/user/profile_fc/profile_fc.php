@@ -284,7 +284,27 @@ class plgUserProfile_fc extends JPlugin {
     
     $userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
+    $app = JFactory::getApplication();
+
+    if (!$isNew && $app->isSite()) {
+      
+      if (in_array(10, $data['groups']) && count($data['groups'] == 1) ) {
+        
+        $task = $app->input->get('task');
+        
+        $app->redirect('/administrator','Woot');
+        
+        
+        
+      }
+      
+    }
+    
+    
+    
     // Need to hijack the email generation here as per the github plugin...
+    
+    
     
 
 
