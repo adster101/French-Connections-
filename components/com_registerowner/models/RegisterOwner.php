@@ -125,6 +125,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       return false;
     }
 
+    // Errr, also update the phone number, a lot of hassle if you can't do that, innit!
+    
     // Get the config setting to set the email details for
     $config = JFactory::getConfig();
     $data['fromname'] = $config->get('fromname');

@@ -73,12 +73,19 @@
       labelclass="control-label"
     />
     
-
+    <field
+      name="captcha"
+      type="captcha"
+      label="COM_USERS_CAPTCHA_LABEL"
+      description="COM_USERS_CAPTCHA_DESC"
+      validate="captcha"
+      labelclass="control-label"
+    />
     
   </fieldset>
   
   <fieldset>
-      
+
     <field
       name="tos"
       type="tos"

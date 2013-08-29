@@ -132,7 +132,7 @@ if ($manage_account) {
 
   if (!$manage_users) {
 
-    $menu->addChild(new JMenuNode(JText::_('Manage Account Details'), 'index.php?option=com_invoices&task=account.edit&user_id=' . (int) $user->id, 'class:accounts'));
+    $menu->addChild(new JMenuNode(JText::_('Manage Account Details'), 'index.php?option=com_accounts&task=account.edit&user_id=' . (int) $user->id, 'class:accounts'));
     $menu->addSeparator();
   }
 
@@ -198,7 +198,8 @@ if (in_array(8, $user->getAuthorisedGroups())) {
 
 /**
  * Users Submenu
- * */
+ * 
+ */
 if ($manage_users) {
   $menu->addChild(
           new JMenuNode(JText::_('MOD_MENU_COM_USERS_USERS'), '#'), true

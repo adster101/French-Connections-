@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 /**
  * invoice Table class
  */
-class InvoicesTableinvoice extends JTable {
+class InvoicesTableInvoice extends JTable {
 
     /**
      * Constructor

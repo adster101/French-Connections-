@@ -20,7 +20,15 @@ class InvoicesHelper
 	 */
 	public static function addSubmenu($vName = '')
 	{
+    $user = JFactory::getUser();
+  
 		JHtmlSidebar::addEntry(
+			JText::_('COM_INVOICES_TITLE_ACCOUNT_DETAILS'),
+			'index.php?option=com_invoices&task=account.edit&user_id = ' . (int) $user->id ,
+			$vName == 'account'
+		);
+    
+    JHtmlSidebar::addEntry(
 			JText::_('COM_INVOICES_TITLE_INVOICES'),
 			'index.php?option=com_invoices&view=invoices',
 			$vName == 'invoices'

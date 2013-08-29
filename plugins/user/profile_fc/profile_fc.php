@@ -64,7 +64,7 @@ class plgUserProfile_fc extends JPlugin {
    */
   function onContentPrepareData($context, $data) {
     // Check we are manipulating a valid form.
-    if (!in_array($context, array('com_users.registration'))) {
+    if (!in_array($context, array('com_admin.profile','com_users.user'))) {
 
       return true;
     }
@@ -185,7 +185,7 @@ class plgUserProfile_fc extends JPlugin {
     // Check we are manipulating a valid form.
     $name = $form->getName();
 
-    if (!in_array($name, array('com_users.registration'))) {
+    if (!in_array($name, array('com_admin.profile','com_users.user'))) {
       return true;
     }
 
@@ -281,31 +281,27 @@ class plgUserProfile_fc extends JPlugin {
   }
 
   function onUserAfterSave($data, $isNew, $result, $error) {
-    
+
     $userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
     $app = JFactory::getApplication();
 
     if (!$isNew && $app->isSite()) {
-      
-      if (in_array(10, $data['groups']) && count($data['groups'] == 1) ) {
-        
+
+      if (in_array(10, $data['groups']) && count($data['groups'] == 1)) {
+
         $task = $app->input->get('task');
-        
-        $app->redirect('/administrator','Woot');
-        
-        
-        
+
+        $app->redirect('/administrator', 'Woot');
       }
-      
     }
-    
-    
-    
+
+
+
     // Need to hijack the email generation here as per the github plugin...
-    
-    
-    
+
+
+
 
 
     return true;
@@ -345,7 +341,5 @@ class plgUserProfile_fc extends JPlugin {
 
     return true;
   }
-
- 
 
 }
