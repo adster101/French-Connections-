@@ -72,7 +72,23 @@
       required="true"
       labelclass="control-label"
     />
-    
+    <field
+      name="where_heard"
+      type="list"
+      id="where_heard"
+      description="PLG_USER_PROFILE_FIELD_WHERE_HEARD_DESC"
+      filter="string"
+      required="true"
+      label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
+      labelclass="control-label"
+      message="PLG_USER_PROFILE_FIELD_WHERE_HEARD_MESSAGE">
+      <option	value="">JGLOBAL_SELECT_AN_OPTION</option>
+      <option	value="WHERE_HEARD_GOOGLE">WHERE_HEARD_SEARCH_ENGINE</option>
+      <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_USED_BEFORE</option>
+      <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_NEWSPAPER</option>
+      <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_MAGAZINE</option>
+      <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_RECCOMMENDATION</option>
+    </field>
     <field
       name="captcha"
       type="captcha"

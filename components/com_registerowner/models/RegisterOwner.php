@@ -118,7 +118,6 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       return false;
     }
 
-
     // Store the data.
     if (!$user->save()) {
       $this->setError($user->getError());
