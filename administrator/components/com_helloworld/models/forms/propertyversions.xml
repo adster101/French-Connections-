@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_helloworld/models/rules">
+  
   <fieldset name="description">
     <field
       name="title"
@@ -18,6 +19,21 @@
 
 
   <fieldset name="Location">
+    <fields
+      name="amenities">
+      <field
+        name="bakery"
+        type="cities"
+        class="inputbox validate"
+        labelclass="control-label"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
+        required="true"
+        readonly="false">
+        <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
+      </field>
+
+    </fields>
     <field
       name="department"
       type="departments"
@@ -80,6 +96,7 @@
       readonly="false">
       <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
     </field>
+
     <field
       name="location_type"
       type="attributetype"
@@ -89,8 +106,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
       required="true"
       filter="int"
-      id="7"
-    >
+      id="7">
     </field>
     <field
       name="distance_to_coast"

@@ -61,7 +61,35 @@ $fieldsets = $this->form->getFieldsets();
             <?php echo $this->form->getInput('surname'); ?>
           </div>
         </div>        
-    </fieldset>
+      </fieldset>
+      <fieldset>
+        <legend>Login Details</legend>
+        <div class="control-group">
+          <div class="control-label">
+            <?php echo $this->form->getLabel('username'); ?>
+          </div>
+          <div class="controls">
+            <?php echo $this->form->getInput('username'); ?>
+          </div>
+        </div>            
+        <div class="control-group">
+          <div class="control-label">
+            <?php echo $this->form->getLabel('password2'); ?>
+          </div>
+          <div class="controls">
+            <?php echo $this->form->getInput('password2'); ?>
+          </div>
+        </div>  
+        <div class="control-group">
+          <div class="control-label">
+            <?php echo $this->form->getLabel('password1'); ?>
+          </div>
+          <div class="controls">
+            <?php echo $this->form->getInput('password1'); ?>
+          </div>
+        </div>     
+       
+      </fieldset>
       <fieldset>
         <legend>Contact Details</legend>
         <div class="control-group">
@@ -99,7 +127,7 @@ $fieldsets = $this->form->getFieldsets();
       </fieldset>
       <fieldset>
         <legend>VAT Status</legend>
-            <?php echo $this->form->getLabel('vat_status_note'); ?>
+        <?php echo $this->form->getLabel('vat_status_note'); ?>
 
         <div class="control-group">
           <div class="control-label">
@@ -125,7 +153,7 @@ $fieldsets = $this->form->getFieldsets();
             <?php echo $this->form->getInput('company_number'); ?>
           </div>
         </div>                
-        
+
       </fieldset>
       <fieldset>
         <legend>Invoice Address</legend>

@@ -118,9 +118,6 @@ class plgUserProfile_fc extends JPlugin {
     // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
-    // Below should really be done via a ACL rule
-    $isOwner = HelloWorldHelper::isOwner();
-
     if (!($form instanceof JForm)) {
       $this->_subject->setError('JERROR_NOT_A_FORM');
       return false;
@@ -136,10 +133,6 @@ class plgUserProfile_fc extends JPlugin {
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.
     $form->removeField('name');
 
-
-
-
-
     // Add the additional progile fields to the form.
     JForm::addFormPath(dirname(__FILE__) . '/profiles');
     $form->loadFile('profile', false);
@@ -147,19 +140,11 @@ class plgUserProfile_fc extends JPlugin {
     // Add the rule path to the form so we may validate the user profile details a bit.
     JForm::addRulePath('C:\xampp\htdocs\administrator\components\com_helloworld\models\rules');
 
-
-
-
-
-
-
-
-
     return true;
   }
 
   function onUserAfterSave($data, $isNew, $result, $error) {
-   
+
     // Get the inputs so we can see whether we need to process anything or not
     $input = JFactory::getApplication()->input;
     $task = $input->get('task', '', 'string');
@@ -177,16 +162,29 @@ class plgUserProfile_fc extends JPlugin {
       try {
 
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
-        $table = JTable::getInstance('UserProfileFc','HelloWorldTable');
-        
+        $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
+
         //$table->delete($userId);
         $data['user_id'] = $data['id'];
-        
+
         $table->save($data);
-        
+
         // TO DO - Concatenate the first and last names and update the joomla user 'name' field.
+        $user = new JUser($userId);
+
+        $userdata['name'] = $data['firstname'] . ' ' . $data['surname'];
+        // Bind the data.
         
-        
+        if (!$user->bind($userdata)) {
+          $this->setError($user->getError());
+          return false;
+        }
+
+        // Store the data.
+        if (!$user->save()) {
+          $this->setError($user->getError());
+          return false;
+        }
       } catch (JException $e) {
         $this->_subject->setError($e->getMessage());
         return false;

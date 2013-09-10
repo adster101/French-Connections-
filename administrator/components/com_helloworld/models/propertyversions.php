@@ -286,11 +286,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
           return false;
         }
       }
-      
-      
-
- 
-      
+            
       // Save any admin notes, if present
       if (!empty($data['note'])) {
 

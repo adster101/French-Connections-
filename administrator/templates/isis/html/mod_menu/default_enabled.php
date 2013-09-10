@@ -132,7 +132,7 @@ if ($manage_account) {
 
   if (!$manage_users) {
 
-    $menu->addChild(new JMenuNode(JText::_('Manage Account Details'), 'index.php?option=com_accounts&task=account.edit&user_id=' . (int) $user->id, 'class:accounts'));
+    $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
     $menu->addSeparator();
   }
 

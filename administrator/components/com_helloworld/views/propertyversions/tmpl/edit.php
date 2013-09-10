@@ -16,9 +16,10 @@ $tabs_layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTR
 $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
 
 $fieldsets = $this->form->getFieldSets('citiestowns');
+$amenities = $this->form->getGroup('amenities');
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate ">
+<form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
@@ -47,14 +48,15 @@ $fieldsets = $this->form->getFieldSets('citiestowns');
         <fieldset>
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
           <div class="row-fluid">
-            <div class="span8">
+            <div class="span5"> 
+              <div class="alert alert-notice">
+                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>             
+              </div>
               <?php echo $this->form->getInput('map'); ?>
               <?php echo $this->form->getInput('latitude'); ?>
               <?php echo $this->form->getInput('longitude'); ?>
             </div>
-            <div class="span4 form-inline">
-              <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>
-              <hr />
+            <div class="span6 offset1">
               <div class="control-group">
                 <?php echo $this->form->getLabel('department'); ?>
                 <div class="controls">
@@ -79,8 +81,45 @@ $fieldsets = $this->form->getFieldSets('citiestowns');
                   <?php echo $this->form->getInput('distance_to_coast'); ?>
                 </div>
               </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('1', 'amenities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('1', 'amenities'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('2', 'amenities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('2', 'amenities'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
+                </div>
+              </div>
             </div>
           </div>
+
           <hr />
           <div class="row-fluid">
             <div class="span6">

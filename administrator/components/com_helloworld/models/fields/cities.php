@@ -41,7 +41,7 @@ class JFormFieldCities extends JFormFieldList {
     if (!empty($latitude) && !empty($longitude)) {
 
 
-      // Initialize variables.
+      // Initialize variables. // Cache the db result here so it can be reused - or rely on sql cache?
       $options = array();
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);

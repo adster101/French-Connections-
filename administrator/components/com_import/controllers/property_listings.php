@@ -37,14 +37,6 @@ class ImportControllerProperty_listings extends JControllerForm {
 
 
     while (($line = fgetcsv($handle,0,$delimiter='|')) !== FALSE) {
-      // Insert a placeholder row for the user
-      // Do this so we can set a primary key of our choice.
-      // Otherwise, joomla insists on generating a new user id
-      $db = JFactory::getDBO();
-
-      $query = $db->getQuery(true);
-
-
 
       // Get the nearest city/town based on the lat and long
       $db = JFactory::getDbo();
@@ -124,7 +116,7 @@ class ImportControllerProperty_listings extends JControllerForm {
       // May need revising
       $insert_string .= $line[0];
       $insert_string .= ',' . $db->quote($line[1]);
-      $insert_string .= ',' . 158052;
+      $insert_string .= ',' . 158052; // France
       $insert_string .= ',' . $line[2];
       $insert_string .= ',' . $line[3];
       $insert_string .= ',' . $line[4];
