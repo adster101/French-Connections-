@@ -34,29 +34,29 @@ $amenities = $this->form->getGroup('amenities');
         echo $progress_layout->render($data);
         echo $tabs_layout->render($data);
         ?>
-        <fieldset class="adminform form-horizontal">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS'); ?></legend>
+        <!--<fieldset class="adminform form-horizontal">
+          <legend><?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS');                   ?></legend>
           <div class="control-group">
-            <?php echo $this->form->getLabel('title'); ?>
+        <?php //echo $this->form->getLabel('title');  ?>
             <div class="controls">
-              <?php echo $this->form->getInput('title'); ?>
+        <?php // echo $this->form->getInput('title');  ?>
             </div>
           </div>
           <hr />
-        </fieldset>
-
-        <fieldset>
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
-          <div class="row-fluid">
-            <div class="span5"> 
+        </fieldset>-->
+        <div class="row-fluid">
+          <div class="span9">
+            <fieldset>
+              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
               <div class="alert alert-notice">
-                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>             
-              </div>
+                <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>   
+              </div>          
               <?php echo $this->form->getInput('map'); ?>
+
               <?php echo $this->form->getInput('latitude'); ?>
               <?php echo $this->form->getInput('longitude'); ?>
-            </div>
-            <div class="span6 offset1">
+
+
               <div class="control-group">
                 <?php echo $this->form->getLabel('department'); ?>
                 <div class="controls">
@@ -67,6 +67,19 @@ $amenities = $this->form->getGroup('amenities');
                 <?php echo $this->form->getLabel('city'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('city'); ?>
+                </div>
+              </div>
+
+            </fieldset>
+            <fieldset>
+              <legend>Surrounding area</legend>
+              <div class="alert alert-notice">
+                <i class="icon-flag"></i> <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_DESC'); ?>
+              </div>           
+              <div class="control-group">
+                <?php echo $this->form->getLabel('location_details'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('location_details'); ?>
                 </div>
               </div>
               <div class="control-group">
@@ -81,67 +94,54 @@ $amenities = $this->form->getGroup('amenities');
                   <?php echo $this->form->getInput('distance_to_coast'); ?>
                 </div>
               </div>
-              <div class="control-group">
-                <?php echo $this->form->getLabel('1', 'amenities'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('1', 'amenities'); ?>
-                </div>
-              </div>
-              <div class="control-group">
-                <?php echo $this->form->getLabel('2', 'amenities'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('2', 'amenities'); ?>
-                </div>
-              </div>
-              <div class="control-group">
-                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
-                </div>
-              </div>
-              <div class="control-group">
-                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
-                </div>
-              </div>
-              <div class="control-group">
-                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
-                </div>
-              </div>
-              <div class="control-group">
-                <?php echo $this->form->getLabel('bakery', 'amenities'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('bakery', 'amenities'); ?>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <hr />
-          <div class="row-fluid">
-            <div class="span6">
-              <?php echo $this->form->getLabel('location_details'); ?>
-              <?php echo $this->form->getInput('location_details'); ?>
-            </div>
-            <div class="span6">
+          </fieldset>
+          <fieldset>
+            <legend>Getting there</legend>
+            <div class="alert alert-notice">
+              <i class="icon-flag"></i> <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_DESC'); ?>
+            </div>          
+            <div class="control-group">
               <?php echo $this->form->getLabel('getting_there'); ?>
-              <?php echo $this->form->getInput('getting_there'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('getting_there'); ?>
+              </div>
             </div>
-          </div>
-        </fieldset>
+            <div class="control-group">
+              <?php echo $this->form->getLabel('airport'); ?>
+              <div class="controls">
+                <?php echo $this->form->getInput('airport'); ?>
+              </div>
+            </div>
+          </fieldset>
 
+          <fieldset>
+            <legend>Local Amenities</legend>
+            <div class="alert alert-notice">
+              <i class="icon-flag"></i> You can specify additional local amenities here. If completed these will appear on your property listing
+            </div>
+            <?php foreach ($this->form->getGroup('amenities') as $field) : ?>
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </fieldset>
+        </div>
+        <div class="span3"></div>
       </div>
     </div>
+  </div>
+</div>
+</div>
 
 
 
-    <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
+<?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
 
-      <?php echo $field->input; ?>
-    <?php endforeach; ?>
-    <input type="hidden" name="task" value="" />
-    <?php echo JHtml::_('form.token'); ?>
+  <?php echo $field->input; ?>
+<?php endforeach; ?>
+<input type="hidden" name="task" value="" />
+<?php echo JHtml::_('form.token'); ?>
 </form>

@@ -12,28 +12,107 @@
       maxlength="75"
       class="input-xxlarge validate-greeting"
       validate="greeting"
-      required="true"
+      required="false"
       filter="string"/>
   </fieldset>
 
 
 
   <fieldset name="Location">
+    
     <fields
       name="amenities">
+      <field 
+        type="note"
+        class="alert alert-notice"
+        description=""
+      />
       <field
-        name="bakery"
-        type="cities"
-        class="inputbox validate"
         labelclass="control-label"
-        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
-        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
-        required="true"
-        readonly="false">
-        <option value="">COM_HELLOWORLD_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
-      </field>
-
+        name="amenity_bakery"
+        filter="string"
+        type="text"
+        class="validate input-xxlarge"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTBABKERY_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTBAKERY_DESC"
+        required="false"
+        maxlength="55"
+        validate="short"
+      />
+      <field
+        labelclass="control-label"
+        name="amenity_supermarket"
+        type="text"
+        class="validate input-xxlarge"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTSUPERMARKET_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTSUPERMARKET_DESC"
+        required="false"
+        maxlength="50"
+        validate="short"
+        filter="string"
+     />
+      <field
+        labelclass="control-label"
+        name="amenity_market"
+        type="text"
+        class="validate input-xxlarge"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTMARKET_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTMARKET_DESC"
+        required="false"
+        maxlength="50"
+        validate="short"
+        filter="string"
+      />
+      <field
+        labelclass="control-label"
+        name="amenity_pharmacy"
+        type="text"
+        class="validate input-xxlarge"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTPHARMACY_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTPHARMACY_DESC"
+        required="false"
+        maxlength="50"
+        validate="short"
+        filter="string"
+      />
+      <field
+        labelclass="control-label"
+        name="amenity_bar"
+        type="text"
+        class="validate input-xxlarge"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTBAR_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTBAR_DESC"
+        required="false"
+        maxlength="50"
+        validate="short"
+        filter="string"
+      />
+      <field
+        labelclass="control-label"
+        name="amenity_tourist"
+        type="text"
+        class="validate input-xxlarge"
+        label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOURIST_LABEL"
+        description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOURIST_DESC"
+        required="false" 
+        maxlength="50"
+        validate="short"
+        filter="string"
+      />      
     </fields>
+    
+    <field
+      name="airport"
+      type="airport"
+      class="input"
+      required="false"
+      filter="int"
+      validate="nonzero"
+      label="Nearest Airport"
+      description=""
+      labelclass="control-label"
+    />
+    
     <field
       name="department"
       type="departments"
@@ -66,7 +145,7 @@
       validate="latlong"
       labelclass="control-label"
       readonly="true"
-      type="text">
+      type="hidden">
     </field>
     
     <field
@@ -82,7 +161,7 @@
       maxlength="15"
       validate="latlong"
       readonly="true"
-      type="text">
+      type="hidden">
     </field>
 
     <field
@@ -104,7 +183,7 @@
       labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
-      required="true"
+      required="false"
       filter="int"
       id="7">
     </field>
@@ -132,6 +211,7 @@
       filter="safehtml"
       buttons="false"
       validate=""
+      labelclass="control-label"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_MESSAGE">
     </field>
     <field
@@ -144,6 +224,7 @@
       default=""
       filter="safehtml"
       buttons="false"
+      labelclass="control-label"
       validate=""
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_MESSAGE">
     </field>
@@ -183,6 +264,11 @@
   </fieldset>
 
   <fieldset name="hidden-details">
+    <field 
+      name="expiry_date"
+      filter="unset"
+      type="hidden"
+    />
     <field
       name="property_id"
       type="hidden"

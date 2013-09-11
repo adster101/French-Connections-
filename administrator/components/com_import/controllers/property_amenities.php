@@ -25,8 +25,8 @@ class ImportControllerProperty_amenities extends JControllerForm {
 
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
     $table = JTable::getInstance('PropertyVersions', 'HelloWorldTable');
-    
-    
+
+    $lang = JFactory::getLanguage();
 
     // Get the nearest city/town based on the lat and long
     $db = JFactory::getDbo();
@@ -38,6 +38,7 @@ class ImportControllerProperty_amenities extends JControllerForm {
 
     $query->from('#__property');
 
+    $key = array('1' => 'amenity_bakery', '2' => 'amenity_bar', '3' => 'amenity_market', '4' => 'amenity_pharmacy', '5' => 'amenity_supermarket', '6' => 'amenity_tourist');
 
     $db->setQuery($query);
     $properties = $db->loadObjectList();
@@ -56,23 +57,34 @@ class ImportControllerProperty_amenities extends JControllerForm {
 
       if (count($amenities) > 0) {
 
-        $tmp = array();
+        $tmp = array('amenity_bakery' => '', 'amenity_bar' => '', 'amenity_market' => '', 'amenity_pharmacy' => '', 'amenity_supermarket' => '', 'amenity_tourist' => '');
 
         $data['property_id'] = $property->id;
 
         foreach ($amenities as $amenity) {
-          
-          $tmp[$amenity->type_id]['type_id'] = $amenity->type_id; 
-          $tmp[$amenity->type_id]['city'] = $amenity->city;
-          $tmp[$amenity->type_id]['note'] = $amenity->notes;
-          
+
+          // Get the name of the town from the classification table
+          $query->clear();
+          $query->select('title');
+          $query->from('#__classifications');
+          $query->where('id = ' . $amenity->city);
+          $db->setQuery($query);
+          $result = $db->loadRow();
+
+          // Replace accented characters with utf8 safe equivalents
+          $town = $lang->transliterate($result[0]);
+
+
+          // Get the notes field, prepending a dash if not empty
+          $notes = ($amenity->notes) ? ' - ' . $amenity->notes : '';
+
+          // Concat the town and notes and assign it to the relevent key
+          $tmp[$key[$amenity->type_id]] = $town . $notes;
         }
-        // Sort on the type id
-        sort($tmp);
-        
+
         // Encode it to json and then updte the property id.
         $data['local_amenities'] = json_encode($tmp);
-        
+
         $table->save($data);
       }
     }

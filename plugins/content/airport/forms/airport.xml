@@ -61,6 +61,20 @@
         filter="string"
         labelclass="control-label"
       />    
+      <field
+        name="name"
+        type="text"
+        id="name"
+        description=""
+        label="Name/Label"
+        message=""
+        default=""
+        required="true"
+        class="input"
+        maxlength="25"
+        filter="string"
+        labelclass="control-label"
+      />          
     </fieldset>
   </fields>
 </form>

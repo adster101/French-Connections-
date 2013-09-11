@@ -87,13 +87,18 @@ if (!empty($progress)) {
   <?php // Need to put the following into language strings    ?>
   <div class="span3">
     <h4>Key</h4>
-    <p>
-      <i class="icon icon-warning"> </i>
-      Please complete &nbsp;&nbsp;
-    <br /><hr/>
+    <div class="row-fluid">
+      <div class="span6">
+        <p>
+          <i class="icon icon-warning"> </i>
+          Please complete
+      </div>
+      <div class="span6">
 
-    <i class="icon icon-publish"></i>
-    Section complete
-    </p>
+        <i class="icon icon-publish"></i>
+        Section complete
+        </p>
+      </div>
+    </div>
   </div>
 </div>

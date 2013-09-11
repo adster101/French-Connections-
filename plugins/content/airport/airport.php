@@ -51,7 +51,7 @@ class plgContentAirport extends JPlugin {
   function onContentPrepareData($context, $data) {
 
     // Check if we're in the site app, otherwise, do nothing
-    if (!JFactory::getApplication()->isSite()) {
+    if (JFactory::getApplication()->isSite()) {
       return true;
     }
 
@@ -68,7 +68,7 @@ class plgContentAirport extends JPlugin {
           // Load the data from the database.
           $db = JFactory::getDbo();
           $query = $db->getQuery(true);
-          $query->select('latitude, longitude, department, code');
+          $query->select('latitude, longitude, department, code, name');
           $query->from('#__airports');
           $query->where('id = ' . $db->Quote($articleId));
           $db->setQuery($query);
@@ -86,6 +86,7 @@ class plgContentAirport extends JPlugin {
           $data->attribs['longitude'] = $results['longitude'];
           $data->attribs['department'] = $results['department'];
           $data->attribs['code'] = $results['code'];
+          $data->attribs['name'] = $results['name'];
         }
       }
     }
@@ -103,14 +104,10 @@ class plgContentAirport extends JPlugin {
   function onContentPrepareForm($form, $data) {
     
     // Check if we're in the site app, otherwise, do nothing
-    if (!JFactory::getApplication()->isSite()) {
+    if (JFactory::getApplication()->isSite()) {
       return true;
     }
     
-    // Check if we're in the site app, otherwise, do nothing
-    if (!JFactory::getApplication()->isSite()) {
-      return true;
-    }
 
     $name = $form->getName();
 
@@ -196,9 +193,9 @@ class plgContentAirport extends JPlugin {
 
           $query->clear();
           $query->insert('#__airports');
-          $query->columns('id,department,latitude,longitude,code');
+          $query->columns('id,department,latitude,longitude,code,name');
 
-          $query->values($articleId . ', ' . $db->quote($attribs->department) . ', ' . $db->quote($attribs->latitude) . ', ' . $db->quote($attribs->longitude) . ', ' . $db->quote($attribs->code));
+          $query->values($articleId . ', ' . $db->quote($attribs->department) . ', ' . $db->quote($attribs->latitude) . ', ' . $db->quote($attribs->longitude) . ', ' . $db->quote($attribs->code) . ', ' . $db->quote($attribs->name));
 
           $db->setQuery($query);
 

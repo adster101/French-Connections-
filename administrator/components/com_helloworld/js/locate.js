@@ -59,6 +59,8 @@ function initialise() {
     draggable: true
   })
 
+
+
   google.maps.event.addListener(marker, "dragend", function() {
 
     map.panTo(marker.getPosition());

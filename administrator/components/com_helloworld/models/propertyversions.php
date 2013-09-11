@@ -60,6 +60,23 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     return $data;
   }
 
+  public function getItem($pk = null) {
+    
+    if ($item = parent::getItem($pk)) {
+      
+      $registry = new JRegistry;
+      $registry->loadString($item->local_amenities);
+      $item->amenities = $registry->toArray();
+    }
+
+    /*
+     * Explode the local_amenities to individual fields so we can use then in the location view.
+     * 
+     */
+    
+    return $item;
+  }
+
   /*
    * param JForm $form The JForm instance for the view being edited
    * param array $data The form data as derived from the view (may be empty)
@@ -67,6 +84,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
    * @return void
    *
    */
+
   protected function preprocessForm(JForm $form, $data) {
 
     // Convert data to object if it's an array
@@ -82,7 +100,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $form->setFieldAttribute('city', 'default', $data->city);
     }
   }
-
 
   /**
    * Method to return the location details based on the city the user has chosen
@@ -199,6 +216,14 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       $data['city'] = $location_details[4];
     }
 
+    // Wrap up the amenities if they are present and save 'em
+    if (isset($data['amenities']) && is_array($data['amenities']))
+		{
+			$registry = new JRegistry;
+			$registry->loadArray($data['amenities']);
+			$data['local_amenities'] = (string) $registry;
+		}
+    
     // Include the content plugins for the on save events.
     JPluginHelper::importPlugin('content');
 
@@ -266,27 +291,26 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       // If not a new property mark the property listing as for review
       // TO DO: look at this - ensure that new props can't be published without review
       if (!$isNew) { // && $data['review'] == 0
-
         // Update the existing property listing to indicate that the listing has been updated
         $property = $this->getTable('Property', 'HelloWorldTable');
 
         $property->id = $table->property_id;
         $property->review = 1;
-        
+
         // Update the SMS stuff
-        $property->sms_alert_number = ($data['sms_alert_number']) ? $data['sms_alert_number'] : '' ;
+        $property->sms_alert_number = ($data['sms_alert_number']) ? $data['sms_alert_number'] : '';
         $property->sms_validation_code = ($data['sms_validation_code']) ? $data['sms_validation_code'] : '';
         $property->sms_status = ($data['sms_status']) ? $data['sms_status'] : '';
         $property->sms_valid = ($data['sms_valid']) ? $data['sms_valid'] : '';
-        
-        
+
+
 
         if (!$property->store()) {
           $this->setError($property->getError());
           return false;
         }
       }
-            
+
       // Save any admin notes, if present
       if (!empty($data['note'])) {
 
