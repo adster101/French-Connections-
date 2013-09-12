@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset
+    name="voucher">
+    
+    <field 
+      name="item_cost_id"
+      type="sql"
+      query="select code as id, description from #__item_costs where catid in (66,50) order by catid, id asc"
+      labelclass="control-label"
+      label="Item code"
+      required="true"
+      class="input-xxxlarge"
+      filter="string"
+      value_field="description"
+      key_field="id"
+      default=""
+    />
+    
+    <field
+      name="property_id"
+      type="text"
+      labelclass="control-label"
+      label="COM_INVOICES_FORM_LBL_INVOICE_PROPERTY_ID"
+      description="COM_INVOICES_FORM_DESC_INVOICE_PROPERTY_ID"
+      required="true"
+      class="input-small"
+      filter="int"
+      default=""
+    />
+    
+    <field 
+      type="integer"
+      default="1"
+      label="Quantity"
+      first="1"
+      last="10"
+      step="1"
+      name="quantity"
+      class="input-mini"
+      labelclass="control-label"
+    />
+    
+    <field 
+      labelclass="control-label"
+      name="end_date" 
+      type="calendar"
+      label="Expires"
+      description=""
+      required="false"
+      class="input-mini"
+      filter="string" 
+    />
+        
+    <field 
+      name="date_created" 
+      type="calendar" 
+      labelclass="control-label"
+      class="input-small"
+      label="Date created"
+      description=""
+      default=""
+      readonly="true"
+      filter="safehtml"
+    />
+
+    <field 
+      name="created_by" 
+      type="user"
+      label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL"
+      labelclass="control-label"
+      description=""
+      class="input-small"
+      filter="int" 
+      readonly="true"
+    />
+    
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+      default=""
+      label="COM_INVOICES_FORM_LBL_INVOICE_ID"
+      class="readonly input-mini"
+      labelclass="control-label"
+      description="JGLOBAL_FIELD_ID_DESC"
+    />
+    
+  </fieldset>
+
+</form>

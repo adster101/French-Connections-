@@ -91,9 +91,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
 
       $form->load($field);
     }
-
-    //print_r($form);die;
-    //parent::preprocessForm($form, $data, $group);
   }
 
   /**
