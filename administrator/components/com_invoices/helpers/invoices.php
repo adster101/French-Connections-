@@ -25,7 +25,9 @@ class InvoicesHelper {
     JHtmlSidebar::addEntry(JText::_('COM_HELLOWORLD_ACCOUNT_SUBMENU_MENU'), '#');
     JHtmlSidebar::addEntry(JText::_('COM_ADMIN_USER_ACCOUNT_DETAILS'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, $vName == 'account');
     JHtmlSidebar::addEntry(JText::_('COM_INVOICES_TITLE_INVOICES'), 'index.php?option=com_invoices&view=invoices', $vName == 'invoices');
-    JHtmlSidebar::addEntry(JText::_('COM_INVOICES_TITLE_VOUCHERS'), 'index.php?option=com_vouchers&view=vouchers', $vName == 'vouchers');
+    if ($user->authorise('core.manage', 'com_vouchers')) {
+      JHtmlSidebar::addEntry(JText::_('COM_INVOICES_TITLE_VOUCHERS'), 'index.php?option=com_vouchers&view=vouchers', $vName == 'vouchers');
+    }
   }
 
   /**

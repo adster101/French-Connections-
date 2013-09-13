@@ -18,13 +18,9 @@ $document = JFactory::getDocument();
 $document->addStyleSheet('components/com_vouchers/assets/css/invoices.css');
 
 $user = JFactory::getUser();
-$userId = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
-$canOrder = $user->authorise('core.edit.state', 'com_vouchers');
-$saveOrder = $listOrder == 'a.ordering';
 
-$sortFields = $this->getSortFields();
 ?>
 
 <?php
@@ -85,7 +81,7 @@ if (!empty($this->extra_sidebar)) {
               <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_VOUCHERS_PROPERTY_ID', 'a.property_id', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_VOUCHERS_ITEM_CODE_ID', 'a.item_code_id', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_VOUCHERS_ITEM_CODE_ID', 'a.item_cost_id', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
               <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_VOUCHERS_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>

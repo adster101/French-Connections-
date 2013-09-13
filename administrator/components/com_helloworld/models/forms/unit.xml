@@ -3,7 +3,6 @@
   <fieldset name="description">
     <field
       name="unit_title"
-      labelclass="control-label"
       type="text"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_UNIT_TITLE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_UNIT_TITLE_DESC"
@@ -12,11 +11,13 @@
       class="input-large validate-greeting"
       validate="greeting"
       required="true"
-      default=""/>
+      labelclass="control-label"
+      default=""
+    />
 
     <field
-      name="accommodation_type"
       labelclass="control-label"
+      name="accommodation_type"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
@@ -27,8 +28,8 @@
     />
 
     <field
-      name="property_type"
       labelclass="control-label"
+      name="property_type"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
@@ -94,7 +95,7 @@
       default=""
       filter="">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-      <option value="0">None</option>
+      <option value="0">0</option>
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -115,7 +116,7 @@
       required="true"
       default="">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
-      <option value="0">None</option>
+      <option value="0">0</option>
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -376,7 +377,7 @@
     </field>
   </fieldset>
   <fieldset name="hidden-details">
-     <field
+    <field
       name="id"
       type="hidden"
       filter="int"
@@ -404,7 +405,7 @@
     />
   </fieldset>
 
-  <fieldset name="additional-details">
+  <fieldset name="">
     <field
       name="created_on"
       labelclass="control-label"

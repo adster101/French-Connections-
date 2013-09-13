@@ -32,7 +32,11 @@ $manage_account = $user->authorise('core.manage', 'com_invoices');
 
 $manage_users = $user->authorise('core.manage', 'com_users');
 
-$menu->addChild(new JMenuNode(JText::_('COM_ADMIN_HOME'), 'index.php'),true);
+$manage_vouchers = $user->authorise('core.manage', 'com_vouchers');
+
+
+
+$menu->addChild(new JMenuNode(JText::_('COM_ADMIN_HOME'), 'index.php'), true);
 $menu->getParent();
 
 if ($manage_rental || $manage_realestate) {
@@ -141,6 +145,10 @@ if ($manage_account) {
   $menu->addChild(new JMenuNode(JText::_('Invoice History'), 'index.php?option=com_invoices&view=invoices', 'class:accounts'), true);
 
   $menu->getParent();
+  if ($manage_vouchers) {
+    $menu->addChild(new JMenuNode(JText::_('Voucher Management'), 'index.php?option=com_vouchers&view=vouchers', 'class:accounts'), true);
+    $menu->getParent();
+  }
 
   $menu->getParent();
 }

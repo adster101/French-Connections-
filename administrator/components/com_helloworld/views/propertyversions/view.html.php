@@ -108,7 +108,7 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
       }
     }
     
-    $canDo = HelloWorldHelper::addSubmenu('listings');
+    HelloWorldHelper::addSubmenu('listings');
 
     // Add the side bar
     $this->sidebar = JHtmlSidebar::render();

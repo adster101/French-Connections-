@@ -285,12 +285,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    */
   protected function preprocessForm(JForm $form, $data) {
 
-   
-      // Generate the XML to inject into the form
-      $XmlStr = $this->getTariffXml($form, $data);
 
-      $form->load($XmlStr, true);
-    
+    // Generate the XML to inject into the form
+    $XmlStr = $this->getTariffXml($form, $data);
+
+    $form->load($XmlStr, true);
   }
 
   /**
@@ -409,6 +408,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
   public function save($data) {
     $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
+    $model = JModelLegacy::getInstance('Property', 'HelloWorldModel', $config = array('ignore_request' => 'true'));
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
@@ -422,9 +422,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $db = JFactory::getDBO();
     $db->transactionStart();
 
-    // Include the content plugins for the on save events.
-    JPluginHelper::importPlugin('content');
-
     // Allow an exception to be thrown.
     try {
 
@@ -435,25 +432,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $table->load($pk);
         $isNew = false;
       }
-
-      // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
-      if (!($data['review'])) {
-        
-        JLog::add('Checking if new unit version is needed for ' . $pk, 'DEBUG', 'unitversions');
-
-        // Let's have a before bind trigger
-        $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
-
-        // $version should contain an array with one element. If the array contains true then we need to create a new version...
-        if ($new_version_required[0] === true) {
-          // As a new version is required amend the data array before we save
-          $data['id'] = '';
-          $data['review'] = 1;
-          $data['published_on'] = '';
-          JLog::add('New unit version is needed for ' . $pk, 'DEBUG', 'unitversions');
-        }
-      }
-
+      
       // If this is a new unit then we need to generate a 'stub' entry into the unit table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       // TO DO - Move this code to run when user chooses add new property
@@ -476,6 +455,26 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         // when it is bound below it is assign to the correct property
         $data['unit_id'] = $new_unit_id;
       }
+      
+      // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
+      if (!($data['review'])) {
+
+        // Need to verify the expiry date for this property. If no expiry date then no new version is required.
+        // New method - getExpiryDate(); returns the expiry date of the property.
+        $expiry_date = $model->getPropertyDetails($data['property_id']);
+
+        if (is_integer($expiry_date)) {
+          // As a new version is required amend the data array before we save
+          $data['id'] = '';
+          $data['review'] = 1;
+          $data['published_on'] = '';
+          
+          // Set the new version required flag to true
+          $new_version_required = true;
+          
+          JLog::add('New unit version is needed for ' . $pk, 'DEBUG', 'unitversions');
+        }
+      }
 
       // Set the table model to the appropriate key
       // If we don't do this, the model will save against the property_id
@@ -493,14 +492,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       // Check the data. Use this to increment the counter for unit?
       if (!$table->check()) {
-        $this->setError($table->getError());
-        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
-      }
-
-      // Trigger the onContentBeforeSave event.
-      $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
-
-      if (in_array(false, $result, true)) {
         $this->setError($table->getError());
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
@@ -532,7 +523,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       }
 
       // When a new version is created or a new unit is created
-      if ($new_version_required[0] === true || $isNew) {
+      if ($new_version_required === true || $isNew) {
 
         // Here we have created a new version or a new unit
         // TO DO: Wrap the below into a function
@@ -541,7 +532,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
         $property->id = $table->property_id;
         $property->review = 1;
-        JLog::add('About to update Property review status for ' . $property->id, 'DEBUG' ,'unitversions');
+        JLog::add('About to update Property review status for ' . $property->id, 'DEBUG', 'unitversions');
 
         if (!$property->store()) {
           $this->setError($property->getError());
@@ -598,8 +589,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
   public function copyUnitImages($old_version_id = '', $new_version_id = '') {
 
     // Get a list of all images stored against the old version
-    $image = JModelLegacy::getInstance('Images', 'HelloWorldModel');
-    $image->setState('listlimit', '10000');
+    $image = JModelLegacy::getInstance('Images', 'HelloWorldModel', $config = array('ignore_request'=>true));
+
     $image->setState('version_id', $old_version_id);
 
     // Get the images assigned to this old unit version id
@@ -754,11 +745,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Similar could be considered to the facilities as well.
     // We need to extract tariff information here, because the tariffs are filtered via the 
     // controller validation method. Perhaps need to override the validation method for this model?
-    
-    if (!array_key_exists('start_date' ,$data)) {
+
+    if (!array_key_exists('start_date', $data)) {
       return true;
     }
-    
+
     $tariffs = array('start_date' => $data['start_date'], 'end_date' => $data['end_date'], 'tariff' => $data['tariff']);
 
     $tariffs_by_day = $this->getTariffsByDay($tariffs);
@@ -837,8 +828,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     return $raw_tariffs;
   }
-  
- /**
+
+  /**
    * getImages = gets a list of images based on the version ID passed
    * @param type $version_id
    * @return type
@@ -864,13 +855,14 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $query->order('ordering', 'asc');
 
     $db->setQuery($query);
-    
+
     $images = $db->loadAssocList();
-    
+
     if (empty($images)) {
       return false;
     }
-    
+
     return $images;
   }
+
 }

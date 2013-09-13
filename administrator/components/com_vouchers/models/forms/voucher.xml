@@ -10,7 +10,7 @@
       labelclass="control-label"
       label="Item code"
       required="true"
-      class="input-xxxlarge"
+      class="input-xlarge"
       filter="string"
       value_field="description"
       key_field="id"
@@ -51,17 +51,24 @@
       class="input-mini"
       filter="string" 
     />
-        
     <field 
       name="date_created" 
-      type="calendar" 
+      type="text" 
       labelclass="control-label"
-      class="input-small"
+      class="input-large"
       label="Date created"
       description=""
-      default=""
       readonly="true"
-      filter="safehtml"
+      filter="string"
+    />
+    <field 
+      name="date_redeemed" 
+      type="text" 
+      labelclass="control-label"
+      class="input-large"
+      label="Date redeemed"
+      readonly="true"
+      filter="string"
     />
 
     <field 

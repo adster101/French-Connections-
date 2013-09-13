@@ -264,11 +264,6 @@
   </fieldset>
 
   <fieldset name="hidden-details">
-    <field 
-      name="expiry_date"
-      filter="unset"
-      type="hidden"
-    />
     <field
       name="property_id"
       type="hidden"
@@ -292,7 +287,6 @@
       name="published_on"
       type="hidden"
       filter="string"
-      default=""
     />
   </fieldset>
   

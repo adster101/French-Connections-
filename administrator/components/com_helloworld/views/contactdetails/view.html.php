@@ -126,7 +126,7 @@ class HelloWorldViewContactdetails extends JViewLegacy
 
       $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu($view);
+      $canDo = HelloWorldHelper::addSubmenu('listings');
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();

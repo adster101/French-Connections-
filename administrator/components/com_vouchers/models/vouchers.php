@@ -33,6 +33,7 @@ class VouchersModelVouchers extends JModelList {
           'state', 'a.state',
           'property_id', 'a.property_id',
           'due_date', 'a.due_date',
+          'item_cost_id', 'a.item_cost_id'
       );
     }
 
@@ -107,7 +108,7 @@ class VouchersModelVouchers extends JModelList {
     $query->from('`#__vouchers` AS a');
 
     $query->leftJoin('#__item_costs b on a.item_cost_id = b.code');
-      
+
     // Filter by published state
     $published = $this->getState('filter.state');
     if (is_numeric($published)) {
@@ -119,9 +120,14 @@ class VouchersModelVouchers extends JModelList {
     // Filter by search on property number
     $search = $this->getState('filter.search');
     if (!empty($search)) {
-      if ((int) $search) {
-        $query->where('a.property_id = ' . (int) $search . ' or a.item_cost_id like (\'%' . (string) $search . '%\')');
-      } 
+
+      if (stripos($search, 'itc:') === 0) {
+        $search = $db->Quote('%' . $db->escape(substr($search, 4), true) . '%');
+        $query->where('(a.item_cost_id like ' . $search . ' OR b.description LIKE ' . $search . ')');
+      } else {
+
+        $query->where('a.property_id = ' . (int) $search);
+      }
     }
 
     //Filtering due_date

@@ -61,9 +61,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
   }
 
   public function getItem($pk = null) {
-    
+
     if ($item = parent::getItem($pk)) {
-      
+
       $registry = new JRegistry;
       $registry->loadString($item->local_amenities);
       $item->amenities = $registry->toArray();
@@ -73,7 +73,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
      * Explode the local_amenities to individual fields so we can use then in the location view.
      * 
      */
-    
+
     return $item;
   }
 
@@ -194,6 +194,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
     $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
+    $model = JModelLegacy::getInstance('Property', 'HelloWorldModel', $config = array('ignore_request' => 'true'));
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
@@ -217,15 +218,11 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     }
 
     // Wrap up the amenities if they are present and save 'em
-    if (isset($data['amenities']) && is_array($data['amenities']))
-		{
-			$registry = new JRegistry;
-			$registry->loadArray($data['amenities']);
-			$data['local_amenities'] = (string) $registry;
-		}
-    
-    // Include the content plugins for the on save events.
-    JPluginHelper::importPlugin('content');
+    if (isset($data['amenities']) && is_array($data['amenities'])) {
+      $registry = new JRegistry;
+      $registry->loadArray($data['amenities']);
+      $data['local_amenities'] = (string) $registry;
+    }
 
     // Allow an exception to be thrown.
     try {
@@ -235,25 +232,10 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $isNew = false;
       }
 
-      // If $data['review'] is false we need to check whether a new version is required
-      // Check published on date as well?
-
-      if (!$data['review']) {
-
-        // Let's have a before bind trigger
-        $new_version_required = $dispatcher->trigger('onContentBeforeBind', array($this->option . '.' . $this->name, $table, $isNew, $data));
-        // $version should contain an array with one element. If the array contains true then we need to create a new version...
-        if ($new_version_required[0]) {
-
-          // As a new version is required amend the data array before we save
-          $data['id'] = '';
-          $data['review'] = '1';
-        }
-      }
-
       // If this is a new propery then we need to generate a 'stub' entry into the propery table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       // TODO - Move this code so that it runs when adding a new property rather than when saving for the first time
+
       if ($isNew) {
 
         $new_property_id = $this->createNewProperty($data);
@@ -261,7 +243,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         if (!$new_property_id) {
 
           // Problem creating the new property stub...
-          $this->setError('There was a problem createing your property. Please try again.');
+          $this->setError('There was a problem creating your property. Please try again.');
           return false;
         } else {
           $data['property_id'] = $new_property_id;
@@ -269,18 +251,28 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         }
       }
 
+      // If $data['review'] is not set we need to check whether a new version is required
+      if (!$data['review']) {
+
+        // Need to verify the expiry date for this property. If no expiry date then no new version is required.
+        // New method - getExpiryDate(); returns the expiry date of the property.
+        $expiry_date = $model->getPropertyDetails($data['property_id']);
+
+        if (is_integer($expiry_date)) {
+
+          // As a new version is required amend the data array before we save
+          // id here refers to the version id. Unsetting this effectively forces the table class to 
+          // create a new entry rather than updating an existing row.
+          $data['id'] = '';
+          $data['review'] = '1';
+          $data['published_on'] = '';
+        }
+      }
+
       // Set the table model to the appropriate key
       // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
       $table->set('_tbl_key', 'id');
-
-      // Trigger the onContentBeforeSave event.
-      $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
-
-      if (in_array(false, $result, true)) {
-        $this->setError($table->getError());
-        return false;
-      }
 
       // Store the data.
       if (!$table->save($data)) {
@@ -290,6 +282,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
       // If not a new property mark the property listing as for review
       // TO DO: look at this - ensure that new props can't be published without review
+
       if (!$isNew) { // && $data['review'] == 0
         // Update the existing property listing to indicate that the listing has been updated
         $property = $this->getTable('Property', 'HelloWorldTable');
@@ -303,46 +296,8 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $property->sms_status = ($data['sms_status']) ? $data['sms_status'] : '';
         $property->sms_valid = ($data['sms_valid']) ? $data['sms_valid'] : '';
 
-
-
         if (!$property->store()) {
           $this->setError($property->getError());
-          return false;
-        }
-      }
-
-      // Save any admin notes, if present
-      if (!empty($data['note'])) {
-
-
-        $note = array();
-
-        $note['property_id'] = $data['property_id'];
-        $note['state'] = 1;
-        $note['body'] = $data['note'];
-        $note['created_time'] = JFactory::getDate()->toSql();
-
-        // $this->saveAdminNote($note);
-
-        $note_table = $this->getTable('Note', 'HelloWorldTable');
-
-        // Bind the data.
-        if (!$note_table->bind($note)) {
-          $this->setError($note_table->getError());
-          return false;
-        }
-
-        // Prepare the row for saving
-        $this->prepareTable($note_table);
-
-        // Check the data.
-        if (!$note_table->check()) {
-          $this->setError($note_table->getError());
-          return false;
-        }
-        // Store the data.
-        if (!$note_table->store()) {
-          $this->setError($note_table->getError());
           return false;
         }
       }
@@ -352,9 +307,6 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
       // Clean the cache.
       $this->cleanCache();
-
-      // Trigger the onContentAfterSave event.
-      $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
     } catch (Exception $e) {
 
       // Roll back any queries executed so far
@@ -393,6 +345,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     if (empty($data)) {
       return false;
     }
+
+    // Explicityly set the review status to 1
+    $data['review'] = 1;
 
     $property_table = $this->getTable('Property', 'HelloWorldTable');
 

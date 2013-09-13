@@ -31,8 +31,10 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
         echo $layout->render($data);
         ?>
-        <fieldset class="adminform">
+
+        <fieldset class="adminform form-inline">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>
+
           <div class="control-group">
             <?php echo $this->form->getLabel('unit_title'); ?>
             <div class="controls">
@@ -52,15 +54,17 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
             </div>
           </div>
           <hr />
-          <?php echo $this->form->getLabel('description'); ?>
-          <div class="clearfix"></div>
-          <?php echo $this->form->getInput('description'); ?>
+          <div class="control-group">
+            <?php echo $this->form->getLabel('description'); ?>
+            <div class="controls">
+              <?php echo $this->form->getInput('description'); ?>
+            </div>
         </fieldset>
 
         <fieldset class="adminform form-vertical">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_OCCUPANCY_DETAILS'); ?></legend>
           <div class="row-fluid">
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('occupancy'); ?>
                 <div class="controls">
@@ -68,7 +72,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('single_bedrooms'); ?>
                 <div class="controls">
@@ -76,7 +80,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('double_bedrooms'); ?>
                 <div class="controls">
@@ -84,7 +88,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('triple_bedrooms'); ?>
                 <div class="controls">
@@ -92,9 +96,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row-fluid">
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('quad_bedrooms'); ?>
                 <div class="controls">
@@ -102,7 +104,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('twin_bedrooms'); ?>
                 <div class="controls">
@@ -110,7 +112,10 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+          </div>
+          <div class="row-fluid">
+
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('childrens_beds'); ?>
                 <div class="controls">
@@ -118,7 +123,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('cots'); ?>
                 <div class="controls">
@@ -126,9 +131,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row-fluid">
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('extra_beds'); ?>
                 <div class="controls">
@@ -136,7 +139,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('bathrooms'); ?>
                 <div class="controls">
@@ -144,7 +147,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 </div>
               </div>
             </div>
-            <div class="span3">
+            <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('toilets'); ?>
                 <div class="controls">
@@ -247,19 +250,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
 
         </fieldset>
       </div>
-      <div class="span2 form-vertical">
-        <fieldset class="adminform">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_DETAILS'); ?></legend>
-          <?php foreach ($this->form->getFieldset('additional-details') as $field): ?>
-            <div class="control-group">
-              <?php echo $field->label; ?>
-              <div class="controls">
-                <?php echo $field->input; ?>
-              </div>
-            </div>
-          <?php endforeach; ?>
-        </fieldset>
-      </div>
+
     </div>
   </div>
   <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>

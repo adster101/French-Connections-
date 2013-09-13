@@ -60,7 +60,7 @@ class VouchersViewVoucher extends JViewLegacy {
    */
   protected function addToolbar($canDo) {
 
-    JToolBarHelper::title(JText::sprintf('COM_INVOICES_TITLE_INVOICE_LINES', $this->id), 'invoice_lines.png');
+    JToolBarHelper::title(JText::sprintf('COM_VOUCHERS_VOUCHER_TITLE', $this->id));
 
     if ($canDo->get('core.create')) {
       JToolBarHelper::apply('voucher.apply', 'JTOOLBAR_APPLY');

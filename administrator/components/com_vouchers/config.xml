@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-  <fieldset
-    name="component"
-    label="COM_INVOICES_COMPONENT_LABEL"
-    description="COM_INVOICES_COMPONENT_DESC"
-  >
 
  
 
-  </fieldset>
-
   <fieldset name="permissions"
             description="JCONFIG_PERMISSIONS_DESC"
-            label="JCONFIG_PERMISSIONS_LABEL"
-  >
+            label="JCONFIG_PERMISSIONS_LABEL">
 
     <field
       name="rules"
       type="rules"
-      component="com_invoices"
+      component="com_vouchers"
       class="inputbox"
       filter="rules"
       validate="rules"

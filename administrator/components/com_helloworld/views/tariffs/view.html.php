@@ -16,27 +16,57 @@ class HelloWorldViewTariffs extends JViewLegacy {
    * @return void
    */
   public function display($tpl = null) {
-    // Get the property ID we are editing.
-    $this->item->id = JRequest::getVar('id');
+    $app = JFactory::getApplication();
 
-    // Get the custom script path for this screen
-    $script = $this->get('Script');
+    $layout = $app->input->get('layout', '', 'string');
 
-    // Get the item data
+    // Set the layout property of the unitversions model
+    $this->getModel()->layout = $layout;
+
+
+    $this->state = $this->get('State');
+
+    // Get the unit item...
     $this->item = $this->get('Item');
 
+    // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
+    $model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', array('ignore_request' => true));
 
-    // Get the form
-    $form = $this->get('Form');
+    // Here we attempt to wedge some data into the model
+    // So another method in the same model can use it.
+    // If this is a new unit then we don't
 
-    // Assign the Data
-    $this->form = $form;
+    $listing_id = ($this->item->property_id) ? $this->item->property_id : '';
+
+    if (empty($listing_id)) {
+
+      // Probably creating a new unit, listing id is in GET scope
+      $input = $app->input;
+      $listing_id = $input->get('property_id', '', 'int');
+    }
+
+    // Set some model options
+    $model->setState('com_helloworld.' . $model->getName() . '.id', $listing_id);
+    $model->setState('list.limit', 10);
+
+    // Get the unit progress...
+    $this->progress = $model->getItems();
+
+
+    // Get the unit edit form
+    $this->form = $this->get('Form');
+
+    $this->languages = HelloWorldHelper::getLanguages();
+    $this->lang = HelloWorldHelper::getLang();
+
+    // Check for errors.
+    if (count($errors = $this->get('Errors'))) {
+      JError::raiseError(500, implode('<br />', $errors));
+      return false;
+    }
 
     // Set the toolbar
     $this->addToolBar();
-
-    // Set the custom script
-    $this->script = $script;
 
     // Display the template
     parent::display($tpl);
@@ -59,7 +89,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title( JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title)  );
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title));
 
     if ($canDo->get('core.edit.own'))
       JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE'); {
@@ -67,6 +97,11 @@ class HelloWorldViewTariffs extends JViewLegacy {
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
     }
+
+    HelloWorldHelper::addSubmenu('listings');
+
+    // Add the side bar
+    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**

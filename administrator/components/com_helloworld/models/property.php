@@ -229,7 +229,7 @@ class HelloWorldModelProperty extends JModelAdmin {
 
   public function getUserFormDetails() {
 
-// Get a copy of the form we are using to collect the user invoice address and vat status
+    // Get a copy of the form we are using to collect the user invoice address and vat status
     $form = $this->loadForm('com_helloworld.helloworld', 'ordersummary', array('control' => 'jform', 'load_data' => false));
 
     if (empty($form)) {
@@ -809,7 +809,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     if (!$mail->Send()) {
       return false;
     }
-    
+
     return true;
   }
 
@@ -974,7 +974,41 @@ class HelloWorldModelProperty extends JModelAdmin {
     return $new_expiry_date;
   }
 
+  /**
+   * 
+   * @param type $property_id
+   * @return type
+   */
+  public function getPropertyDetails($property_id = '') {
 
+    if (!$property_id) {
+      return false;
+    }
+    
+    // Get the table instance
+    $property = $this->getTable('Property', 'HelloWorldTable');
+
+    // And then set the property ID 
+    $property->id = $property_id;
+    
+    // Load the data up
+    if (!$property->load()) {
+      return false;
+    }
+    
+    if (!empty($property->expiry_date)) {
+      $date = new JDate($property->expiry_date);
+      $expiry_date = $date->toUnix();
+
+    } else {
+      $expiry_date = false;
+    }
+    
+    
+    return $expiry_date;
+    
+    
+  }
 
   /**
    * Method to get a store id based on model configuration state.

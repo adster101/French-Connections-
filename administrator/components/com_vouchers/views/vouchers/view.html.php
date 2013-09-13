@@ -53,7 +53,7 @@ class VouchersViewVouchers extends JViewLegacy {
   protected function addToolbar($canDo = '') {
 
 
-    JToolBarHelper::title(JText::_('COM_INVOICES_TITLE_INVOICES'), 'invoices.png');
+    JToolBarHelper::title(JText::_('COM_VOUCHERS_VOUCHERS_TITLE'));
 
     //Check if the form exists before showing the add/edit buttons
     $formPath = JPATH_COMPONENT_ADMINISTRATOR . '/models/forms/voucher.xml';
@@ -111,16 +111,6 @@ class VouchersViewVouchers extends JViewLegacy {
     );
 
   
-  }
-
-  protected function getSortFields() {
-    return array(
-        'a.id' => JText::_('JGRID_HEADING_ID'),
-        'a.date_created' => JText::_('COM_INVOICES_INVOICES_DATE_CREATED'),
-        'a.state' => JText::_('JSTATUS'),
-        'a.property_id' => JText::_('COM_INVOICES_INVOICES_PROPERTY_ID'),
-        'a.due_date' => JText::_('COM_INVOICES_INVOICES_DUE_DATE')
-    );
   }
 
 }
