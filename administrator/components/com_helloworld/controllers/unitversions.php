@@ -118,20 +118,15 @@ class HelloWorldControllerUnitVersions extends HelloWorldControllerBase {
       case 'apply':
       case 'save':
         // Derive the parent id from the form data
-        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-        $recordId = $data['property_id'];
-        $urlVar = '&property_id=';
+        //$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        //$recordId = $data['property_id'];
+        //$urlVar = '&property_id=';
         break;
       case 'reviews':
         $append = '';
         if ($recordId) {
           $append .= '&' . $urlVar . '=' . $recordId;
         }
-        break;
-      case 'tariffs':
-        $layout = $this->input->get('layout', 'tariffs');
-        $append = '';
-        $append.= '&layout=' . $layout . '&' . $urlVar . '=' . $recordId;
         break;
       case 'images':
         $layout = $this->input->get('layout', 'images');

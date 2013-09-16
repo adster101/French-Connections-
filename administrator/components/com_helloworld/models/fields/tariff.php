@@ -18,7 +18,7 @@ defined('JPATH_PLATFORM') or die;
  * @link        http://www.w3.org/TR/html-markup/input.text.html#input.text
  * @since       11.1
  */
-class JFormFieldText extends JFormField
+class JFormFieldTariff extends JFormField
 {
 	/**
 	 * The form field type.
@@ -27,7 +27,7 @@ class JFormFieldText extends JFormField
 	 *
 	 * @since  11.1
 	 */
-	protected $type = 'Text';
+	protected $type = 'Tariff';
 
 	/**
 	 * Method to get the field input markup.

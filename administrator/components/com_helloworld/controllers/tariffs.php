@@ -1,35 +1,46 @@
 <?php
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
- 
+
 // import Joomla controllerform library
 jimport('frenchconnections.controllers.property.base');
- 
+
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerTariffs extends HelloWorldControllerBase
-{
-  
-	protected $extension;
+class HelloWorldControllerTariffs extends HelloWorldControllerBase {
 
-	/**
-	 * Constructor.
-	 *
-	 * @param  array  $config  An optional associative array of configuration settings.
-	 *
-	 * @since  1.6
-	 * @see    JController
-	 */
-	public function __construct($config = array())
-	{
-		parent::__construct($config);
+  protected $extension;
 
-		// Guess the JText message prefix. Defaults to the option.
-		if (empty($this->extension))
-		{
-			$this->extension = JRequest::getCmd('extension', 'com_helloworld');
-		}
-	}
+  /**
+   * Constructor.
+   *
+   * @param  array  $config  An optional associative array of configuration settings.
+   *
+   * @since  1.6
+   * @see    JController
+   */
+  public function __construct($config = array()) {
+    parent::__construct($config);
+
+    // Guess the JText message prefix. Defaults to the option.
+    if (empty($this->extension)) {
+      $this->extension = JRequest::getCmd('extension', 'com_helloworld');
+    }
+  }
+
+  public function postSaveHook(\JModelLegacy $model, $validData = array()) {
+
+    $task = $this->getTask();
+
+    if ($task == 'apply') {
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&unit_id=' . $validData['unit_id'], false
+              )
+      );
+    }
+  }
 
 }

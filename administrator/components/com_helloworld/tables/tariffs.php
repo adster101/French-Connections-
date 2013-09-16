@@ -22,34 +22,9 @@ class HelloWorldTableTariffs extends JTable {
    * @param object Database connector object
    */
   function __construct(&$db) {
-    parent::__construct('#__tariffs', 'id', $db);
+    parent::__construct('#__tariffs', 'unit_id', $db);
   }
 
-  /**
-   * Overloaded load function. This load the tariffs for the given property ID.
-   *
-   * @param       int $id property id, not primary key in this case
-   * @param       boolean $reset reset data
-   * @return      boolean
-   * @see JTable:load
-   */
-  public function load($id = null, $reset = true) {
-    $query = $this->_db->getQuery(true);
-    $query->select("date_format(start_date, '%d-%m-%Y') as start_date, date_format(end_date, '%d-%m-%Y') as end_date, tariff");
-    $query->from($this->_tbl);
-    $query->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($id));
-    $query->where($this->_db->quoteName('end_date') . '>= now()');
-    $this->_db->setQuery($query);
-
-    try {
-      $result = $this->_db->loadRowList();
-      return $result;
-    } catch (RuntimeException $e) {
-      $je = new JException($e->getMessage());
-      $this->setError($je);
-      return false;
-    }
-  }
 
   /**
    * Overloaded save function
@@ -98,6 +73,14 @@ class HelloWorldTableTariffs extends JTable {
    * @return boolean 
    */
   public function check() {
+    
+    $start_date = JFactory::getDate($this->start_date)->toUnix();
+    $end_date = JFactory::getDate($this->end_date)->toUnix();
+
+    if ($start_date > $end_date) {
+      return false;
+    }
+    
     return true;
   }
 
