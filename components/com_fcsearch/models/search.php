@@ -637,7 +637,6 @@ class FcSearchModelSearch extends JModelList {
 
       $facilities = $db->loadObjectList();
 
-
       foreach ($facilities as $facility) {
         if (!array_key_exists($facility->facility_type, $attributes)) {
           $attributes[$facility->facility_type] = array();
@@ -829,7 +828,7 @@ class FcSearchModelSearch extends JModelList {
     $dirn = $input->get('order', array(), 'array');
 
     if (!empty($dirn) && $dirn[0] !== '') {
-      $sort_order = explode('_', $dirn[0]);
+      $sort_order = explode('-', $dirn[0]);
       $this->setState('list.sort_column', $sort_order[1]);
       $this->setState('list.direction', $sort_order[2]);
     }
@@ -870,7 +869,7 @@ class FcSearchModelSearch extends JModelList {
 
       foreach ($input as $filter) {
         // Assume that this is in the form of e.g. activity_Golf_51
-        $id = (int) array_pop(explode('_', $filter));
+        $id = (int) array_pop(explode('-', $filter));
 
         $ids[] = $id;
       }
@@ -878,7 +877,7 @@ class FcSearchModelSearch extends JModelList {
       $this->setState('list.' . $label, $ids);
     } elseif (!empty($input)) {
 
-      $id = (int) array_pop(explode('_', $input));
+      $id = (int) array_pop(explode('-', $input));
 
       $this->setState('list.' . $label, $id);
     }

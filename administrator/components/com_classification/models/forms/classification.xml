@@ -49,7 +49,6 @@
       default=""
       label="COM_CLASSIFICATION_FIELD_LATITUDE_LABEL"
       description="COM_CLASSIFICATION_FIELD_LATITUDE_DESC"
-      required="true"
       maxlength="15"
       filter="string"
       labelclass="control-label">
@@ -63,7 +62,6 @@
       default=""
       label="COM_CLASSIFICATION_FIELD_LONGITUDE_LABEL"
       description="COM_CLASSIFICATION_FIELD_LONGITUDE_DESC"
-      required="true"
       filter="string"
       labelclass="control-label"
       maxlength="15">

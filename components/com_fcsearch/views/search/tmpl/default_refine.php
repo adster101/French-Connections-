@@ -76,7 +76,7 @@ $hide = '';
               $tmp = array_flip(explode('/', $uri));
               $remove = false;
 
-              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($key)) . '_' . $value['id'];
+              $filter_string = $value['search_code'] . JStringNormalise::toDashSeparated(JApplication::stringURLSafe($key)) . '-' . $value['id'];
 
               if (array_key_exists($filter_string, $tmp)) {
                 unset($tmp[$filter_string]);

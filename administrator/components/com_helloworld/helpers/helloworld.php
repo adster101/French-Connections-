@@ -523,7 +523,7 @@ abstract class HelloWorldHelper {
    * @return array An array of availability periods
    *
    */
-  public static function getAvailabilityByPeriod($availability_by_day = array()) {
+  public static function getAvailabilityByPeriod($availability_by_day = array(),$key='status') {
     $current_status = '';
     $availability_by_period = array();
     $counter = 0;
@@ -535,7 +535,7 @@ abstract class HelloWorldHelper {
         $counter++;
         $availability_by_period[$counter]['start_date'] = $day;
         $availability_by_period[$counter]['end_date'] = $day;
-        $availability_by_period[$counter]['status'] = $status;
+        $availability_by_period[$counter][$key] = $status;
       } else {
         $availability_by_period[$counter]['end_date'] = $day;
       }

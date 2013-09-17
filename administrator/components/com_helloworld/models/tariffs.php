@@ -11,8 +11,6 @@ jimport('joomla.application.component.modeladmin');
  */
 class HelloWorldModelTariffs extends JModelAdmin {
 
-
-  
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -60,7 +58,7 @@ class HelloWorldModelTariffs extends JModelAdmin {
     // That is, it gets called when the item is being loaded or when the user is being redirected after a failed save attempt.
     // Yes, it doesn't look pretty, but it seems necessary to put the submitted form data back into 
     // the format required by the getTariffsXml method below.
-    // TO DO - Make this a bit prettier, neater or more elegent...
+    // TO DO - Make this a bit prettier, neater or more elegent...use JInput here...
     if (array_key_exists('start_date', $data) && array_key_exists('end_date', $data) && array_key_exists('tariff', $data)) {
 
       $tariffs = $this->getTariffsFromPost($data);
@@ -126,7 +124,7 @@ class HelloWorldModelTariffs extends JModelAdmin {
       ");
     $query->from('#__tariffs');
     $query->where($this->_db->quoteName('unit_id') . ' = ' . $this->_db->quote($id));
-    $query->where($this->_db->quoteName('end_date') . '>= now()');
+
     $this->_db->setQuery($query);
 
     try {
@@ -261,14 +259,106 @@ class HelloWorldModelTariffs extends JModelAdmin {
   }
 
   /**
+   * Method to save tariffs and additional tariff info.
    * 
    * @param type $data
    */
-  public function save($data) {
+  public function save($data = array()) {
+
+    // Get the relevant data up front
+    $table = $this->getTable('Tariffs', 'HelloWorldTable');
+    $tariffs = $this->getTariffsFromPost($data);
+    $model = $this->getInstance('UnitVersions', 'HelloWorldModel');
+    $pk = ($data['unit_id']) ? $data['unit_id'] : '';
+    $tariffs_by_day = $this->getTariffsByDay($tariffs);
+    $tariff_periods = HelloWorldHelper::getAvailabilityByPeriod($tariffs_by_day, 'tariff');
+
+    // We've checked all tariffs, need to save 'em
+    // Generate a logger instance for tariffs
+    JLog::addLogger(array('text_file' => 'tariffs.update.php'), 'DEBUG', array('tariffs'));
+
+    // Get an db instance and start a transaction
+    $db = JFactory::getDBO();
+    $db->transactionStart();
+
+    try {
+
+      JLog::add('About to delete tariffs for unit ' . $pk, 'DEBUG', 'tariffs');
+
+      //Delete existing tariffs for this unit
+      $table->delete($pk);
+
+      JLog::add('Tariffs deleted for unit ' . $pk, 'DEBUG', 'tariffs');
+
+      // Set the Tariff table key to id. Sigh, we do this so that the save method inserts a new record
+      // against the id rather than trying to update the unit_id record, which we've just deleted.
+      $table->set('_tbl_key', 'id');
+      
+      // Save each, which also binds, checks and stores the tariff
+      foreach ($tariff_periods as $tariff_period) {
+
+        $tariff_period[unit_id] = $pk;
+        $tariff_period['id'] = '';
+
+        JLog::add('About to save tariff ( ' . $tariff_period['start_date'] . ' - ' . $tariff_period['end_date'] . ' - ' . $tariff_period['tariff'] . ' for unit ' . $pk, 'DEBUG', 'tariffs');
+
+        // Check that each tariff is valid
+        if (!$table->save($tariff_period)) {
+
+          // Log it baby
+          JLog::add('Problem saving above tariff for unit' . $pk, 'DEBUG', 'tariffs');
+
+          // Rollback any db changes
+          $db->transactionRollback();
+
+          // Set an error message
+          $this->setError(JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_TARIFF_START_DATE'));
+          return false;
+        }
+        
+        // Flush the table ready for the next lot...
+        $table->reset();
+        
+      }
+
+      // Commit the transaction
+      $db->transactionCommit();
+    } catch (Exception $e) {
+
+      // Roll back any queries executed so far
+      $db->transactionRollback();
+
+      $this->setError($e->getMessage());
+
+      // Log the exception
+      JLog::add('There was a problem: ' . $e->getMessage(), 'DEBUG', 'tariffs');
+      return false;
+    }
+
+    
+    
+    // Tariffs are saved, now save the rest of the unit information by handing it off to the unitversions model
+    unset($data['start_date']);
+    unset($data['end_date']);
+    unset($data['tariff']);
+    
+    $blah = $model->save($data);
+    
+    
 
 
+    // Set the table key back to unit_id
+    $table->set('_tbl_key', 'unit_id');
 
+    $pkName = $table->getKeyName();
 
+    $table->unit_id = $data['unit_id'];
+
+    // Important - need to set the model state here so that the controller redirects accordingly.
+    if (isset($table->$pkName)) {
+      $this->setState($this->getName() . '.id', $table->$pkName);
+    }
+    $this->setState($this->getName() . '.new', $isNew);
 
     return true;
   }
@@ -280,11 +370,6 @@ class HelloWorldModelTariffs extends JModelAdmin {
 
   protected function saveTariffs($unit_id = '', $data = array()) {
 
-    // TO DO: I think that tariffs should be modelled in a separate model file. 
-    // That is, look at moving getTariffXML, getTariffs, getTariffsByDay and this method 
-    // to a HelloWorldModelTariffs file. This would make more logical sense and make it easier
-    // to reuse those methods elsewhere (e.g. on property listing, search etc)
-    // 
     // Similar could be considered to the facilities as well.
     // We need to extract tariff information here, because the tariffs are filtered via the 
     // controller validation method. Perhaps need to override the validation method for this model?
@@ -295,9 +380,7 @@ class HelloWorldModelTariffs extends JModelAdmin {
 
     $tariffs = array('start_date' => $data['start_date'], 'end_date' => $data['end_date'], 'tariff' => $data['tariff']);
 
-    $tariffs_by_day = $this->getTariffsByDay($tariffs);
 
-    $tariff_periods = HelloWorldHelper::getAvailabilityByPeriod($tariffs_by_day);
 
     // Get instance of the tariffs table
     $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
@@ -330,10 +413,8 @@ class HelloWorldModelTariffs extends JModelAdmin {
     // Generate a DateInterval object which is re-used in the below loop
     $DateInterval = new DateInterval('P1D');
 
-    // For each tariff period passed in first need to determine how many tariff periods there are
-    $tariff_periods = count($tariffs['start_date']);
 
-    for ($k = 0; $k < $tariff_periods; $k++) {
+    foreach ($tariffs as $tariff) {
 
       $tariff_period_start_date = '';
       $tariff_period_end_date = '';
@@ -343,13 +424,13 @@ class HelloWorldModelTariffs extends JModelAdmin {
       // tariff fields are added to the form in case owner wants to add additional tariffs etc
       try {
 
-        if ($tariffs['start_date'][$k] != '' && $tariffs['end_date'][$k] != '' && $tariffs['tariff'][$k] != '') {
+        if ($tariff->start_date != '' && $tariff->end_date != '' && $tariff->tariff != '') {
 
           // Convert the availability period start date to a PHP date object
-          $tariff_period_start_date = new DateTime($tariffs['start_date'][$k]);
+          $tariff_period_start_date = new DateTime($tariff->start_date);
 
           // Convert the availability period end date to a date 
-          $tariff_period_end_date = new DateTime($tariffs['end_date'][$k]);
+          $tariff_period_end_date = new DateTime($tariff->end_date);
 
           // Calculate the length of the availability period in days
           $tariff_period_length = date_diff($tariff_period_start_date, $tariff_period_end_date);
@@ -358,7 +439,7 @@ class HelloWorldModelTariffs extends JModelAdmin {
           for ($i = 0; $i <= $tariff_period_length->days; $i++) {
 
             // Add the day as an array key storing the availability status as the value
-            $raw_tariffs[date_format($tariff_period_start_date, 'Y-m-d')] = $tariffs['tariff'][$k];
+            $raw_tariffs[date_format($tariff_period_start_date, 'Y-m-d')] = $tariff->tariff;
 
             // Add one day to the start date for each day of availability
             $date = $tariff_period_start_date->add($DateInterval);

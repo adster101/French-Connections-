@@ -114,7 +114,6 @@ class HelloWorldModelListing extends JModelList {
         e.changeover_day,
         d.published,
         d.availability_last_updated_on,
-        e.accommodation_type,
         e.created_on,
         base_currency,
         tariff_based_on,

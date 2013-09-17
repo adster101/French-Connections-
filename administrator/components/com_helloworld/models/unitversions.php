@@ -53,30 +53,22 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
   public function getItem($pk = null) {
 
-    // Initialise variables.
-    $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+    // Get the unit version detail.
+    if ($item = parent::getItem($pk)) {
 
-    $table = $this->getTable();
+      // Use the primary key (in this case unit id) to pull out any existing tariffs for this property
+      $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
 
-    if ($pk > 0) {
-      // Attempt to load the row.
-      $return = $table->load($pk);
+      $attributes = $this->getFacilities($pk, $item->id);
 
-      // Check for a table object error.
-      if ($return === false && $table->getError()) {
-        $this->setError($table->getError());
-        return false;
+      foreach($attributes as $key => $values) {
+      $item->$key = $values;
+        
       }
+       // Add any tariffs to the unit data for display on the view
     }
 
-    // Convert to the JObject before adding other data.
-    $properties = $table->getProperties(1);
-
-
-    $properties = $this->getFacilities($pk, $properties);
-
-
-    $item = JArrayHelper::toObject($properties, 'JObject');
+    //$item = JArrayHelper::toObject($properties, 'JObject');
 
     return $item;
   }
@@ -85,25 +77,48 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    * Get the tariffs for this unit
    * 
    */
-  public function getFacilities($id, $properties = array()) {
+  public function getFacilities($id, $version) {
 
-    // Get an instance of the attributes table - Possibly need to merge this into com_attributes
-    $attributesTable = $this->getTable('PropertyAttributes', 'HelloWorldTable');
+    // Array to hold the result list
+    $property_attributes = array();
 
-    if ($id > 0) {
-      $property_facilities = $attributesTable->load($id);
+    // Loads a list of the attributes that we are interested in
+    // This is probably reused on the search part
+    $query = $this->_db->getQuery(true);
+    
+    $query->select('d.field_name, b.attribute_id');
+    $query->from('#__property_attributes b');
+    $query->join('left', '#__attributes c on c.id = b.attribute_id');
 
-      // Check for a table object error.
-      if ($property_facilities === false && $attributesTable->getError()) {
-        $this->setError($attributesTable->getError());
-        return false;
+    $query->leftJoin('#__attributes_type d on d.id = c.attribute_type_id');
+
+    $query->where($this->_db->quoteName('b.property_id') . ' = ' . (int) $id);
+    
+    $query->where($this->_db->quoteName('b.version_id') . ' = ' . (int) $version);
+    
+    $this->_db->setQuery($query);
+
+    // Execute the db query, returns an iterator object.
+    $result = $this->_db->getIterator();
+
+    // Loop over the iterator and do stuff with it
+    foreach ($result as $row) {
+      $tmp = JArrayHelper::fromObject($row);
+
+      // If the facility type already exists
+      if (!array_key_exists($tmp['field_name'], $property_attributes)) {
+        $property_attributes[$tmp['field_name']] = array();
       }
+
+      $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
     }
+
+
 
     // Load returns an array for each facility type
     // We need to append each one to item so that they may be bound to the form
-    if (!empty($property_facilities)) {
-      foreach ($property_facilities as $facility_type => $value) {
+    if (!empty($property_attributes)) {
+      foreach ($property_attributes as $facility_type => $value) {
         $properties[$facility_type] = implode($value, ',');
       }
     }
@@ -148,48 +163,14 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
    */
   protected function loadFormData() {
 
-    $input = JFactory::getApplication()->input;
-    $property_id = $input->get('property_id', '', 'int');
-
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_helloworld.edit.unitversions.data', array());
 
-    // We take this opportunity to 'massage' the data into the correct format 
-    // so we can bind it to the form in getTariffsXML
-    if (array_key_exists('start_date', $data) && array_key_exists('end_date', $data) && array_key_exists('tariff', $data)) {
-      $tariffs = array();
-      $num = count($data['start_date']);
-      // Here we must have data passed in from the form validator
-      // E.g. something hasn't validated correctly
-      for ($i = 0; $i < $num; $i++) {
-        $tmp = array();
-        $tmp[] = $data['start_date'][$i];
-        $tmp[] = $data['end_date'][$i];
-        $tmp[] = $data['tariff'][$i];
-
-        $tariffs[] = JArrayHelper::toObject($tmp, 'JOBject');
-      }
-
-      $data['tariffs'] = JArrayHelper::toObject($tariffs, 'JOBject');
-      unset($data['start_date']);
-      unset($data['end_date']);
-      unset($data['tariff']);
-    }
 
     // Need to get the tariff data into the form here...
     // If nout in session then we grab the item from the database
     if (empty($data)) {
       $data = $this->getItem();
-    }
-
-    // If data is not an array convert it from object
-    if (!is_array($data)) {
-      $data = $data->getProperties();
-    }
-
-    // Set the parent ID for this unit, if it's not set (e.g. for a new unit)
-    if (!isset($data['property_id'])) {
-      $data['property_id'] = $property_id;
     }
 
     return $data;
@@ -243,7 +224,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $listing_id = $input->get('listing_id', '', 'int');
     $this->setState('unitversions.listing_id', $listing_id);
 
-
     // List state information.
     parent::populateState();
   }
@@ -264,7 +244,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
-    $new_version_required = array('');
+    $new_version_required = false;
     $old_version_id = ($data['id']) ? $data['id'] : '';
 
     // Generate a logger instance for reviews
@@ -364,13 +344,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       JLog::add('About to save facilities for unit version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
       if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id)) {
-        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
-      }
-
-      // TODO - Tidy this up as tariffs might not be present
-      JLog::add('About to save tariffs for unit ID' . $table->id, 'DEBUG', 'unitversions');
-
-      if (!$this->saveTariffs($table->unit_id, $data)) {
         Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
@@ -491,7 +464,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...access options need adding.
-    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability');
+    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability', 'accommodation_type', 'property_type');
 
     // Loop over the data and prepare an array to save
     foreach ($data as $key => $value) {
@@ -580,45 +553,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     }
 
     return $unit_table->id;
-  }
-
-  /*
-   * 
-   * 
-   */
-
-  protected function saveTariffs($unit_id = '', $data = array()) {
-
-    // TO DO: I think that tariffs should be modelled in a separate model file. 
-    // That is, look at moving getTariffXML, getTariffs, getTariffsByDay and this method 
-    // to a HelloWorldModelTariffs file. This would make more logical sense and make it easier
-    // to reuse those methods elsewhere (e.g. on property listing, search etc)
-    // 
-    // Similar could be considered to the facilities as well.
-    // We need to extract tariff information here, because the tariffs are filtered via the 
-    // controller validation method. Perhaps need to override the validation method for this model?
-
-    if (!array_key_exists('start_date', $data)) {
-      return true;
-    }
-
-    $tariffs = array('start_date' => $data['start_date'], 'end_date' => $data['end_date'], 'tariff' => $data['tariff']);
-
-    $tariffs_by_day = $this->getTariffsByDay($tariffs);
-
-    $tariff_periods = HelloWorldHelper::getAvailabilityByPeriod($tariffs_by_day);
-
-    // Get instance of the tariffs table
-    $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'HelloWorldTable', $config = array());
-
-
-    // Bind the translated fields to the JTable instance	
-    if (!$tariffsTable->save($unit_id, $tariff_periods)) {
-
-      return false;
-    }
-
-    return true;
   }
 
   /**

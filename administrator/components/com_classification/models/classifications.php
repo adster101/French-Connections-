@@ -99,9 +99,9 @@ class ClassificationModelClassifications extends JModelList {
     // Select some fields
     $query->select(
             'id,title,parent_id,level,lft,rgt,alias,access,published');
-    
+
     // From the hello table
-    $query->from('#__classifications');
+    $query->from('#__classifications a');
 
     $query->where('parent_id > 0');
 
@@ -111,6 +111,20 @@ class ClassificationModelClassifications extends JModelList {
     if (is_numeric($published)) {
       $query->where('published = ' . (int) $published);
     }
+
+
+    $search = $this->getState('filter.search');
+
+    if (!empty($search)) {
+
+      if (stripos($search, 'id:') === 0) {
+        $query->where('a.property_id = ' . (int) $search);
+      } else {
+        $search = $db->Quote('%' . $db->escape($search, true) . '%');
+        $query->where('(title like ' . $search . ' OR alias LIKE ' . $search . ')');
+      }
+    }
+
 
     $listOrdering = $this->getState('list.ordering', 'title');
     $listDirn = $db->escape($this->getState('list.direction', 'ASC'));

@@ -21,56 +21,6 @@ class HelloWorldTablePropertyAttributes extends JTable {
   }
 
   /**
-   * Overloaded load function
-   *
-   * @param       int $id primary key in this case
-   * @param       boolean $reset reset data
-   * @return      boolean
-   * @see JTable:load
-   */
-  public function load($id = null, $reset = true) {
-
-    // Array to hold the result list
-    $property_attributes = array();
-
-    // Loads a list of the attributes that we are interested in
-    // This is probably reused on the search part
-    $query = $this->_db->getQuery(true);
-    $query->select('at.field_name,pa.attribute_id');
-    $query->from('#__property_attributes as pa');
-    $query->leftJoin('#__attributes a on a.id = pa.attribute_id');
-
-    $query->leftJoin('#__attributes_type at on at.id = a.attribute_type_id');
-
-    $query->where($this->_db->quoteName('property_id') . ' = ' . (int) $id);
-    $this->_db->setQuery($query);
-
-    try {
-
-      // Execute the db query, returns an iterator object.
-      $result = $this->_db->getIterator();
-
-      // Loop over the iterator and do stuff with it
-      foreach ($result as $row) {
-        $tmp = JArrayHelper::fromObject($row);
-
-        // If the facility type already exists
-        if (!array_key_exists($tmp['field_name'], $property_attributes)) {
-          $property_attributes[$tmp['field_name']] = array();
-        }
-
-        $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
-      }
-
-      return $property_attributes;
-    } catch (RuntimeException $e) {
-      $je = new JException($e->getMessage());
-      $this->setError($je);
-      return false;
-    }
-  }
-
-  /**
    * Overloaded save function
    * Takes the facilities and saves them into the availability table.
    *
