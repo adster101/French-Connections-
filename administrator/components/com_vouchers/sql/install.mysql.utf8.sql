@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `#__vouchers` (
 `state` TINYINT(1)  NOT NULL DEFAULT '1',
 `property_id` VARCHAR(255)  NOT NULL ,
 `end_date` DATE NOT NULL,
+`date_redeemed` DATETIME NOT NULL,
 
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT COLLATE=utf8_general_ci;

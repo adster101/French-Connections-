@@ -16,16 +16,20 @@ defined('_JEXEC') or die;
       if ($item->title) {
         ?>
         <div class="span3"> 
-          <a href="index.php?option=com_accommodation&view=property&id=<?php echo $item->id ?>&lang=<?php echo $this->lang ?>">
-            <large><?php echo $item->title ?></large>
+          <a class="thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
+            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="img-rounded" />
           </a>
-          <a class="thumbnail" href="index.php?option=com_accommodation&view=property&id=<?php echo $item->id ?>&lang=<?php echo $this->lang ?>">
-              <img src='/images/property/<?php echo $item->id . '/thumb/' . $item->thumbnail ?>' class="img-rounded" />
-          </a>
-          <p><?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); echo $item->occupancy;?></p>
+          <p>
+            <strong><?php echo $item->unit_title; ?></strong> | 
+            <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
+            <?php echo $item->occupancy; ?>
+            <?php if (!empty($item->price)) : ?> |
+              <?php echo '&pound;' . $item->price; ?>
+            <?php endif; ?>
+          </p>
         </div>
       <?php } ?>
-    <?php } ?>	
+    <?php } ?>
   </div>
 </div>
 

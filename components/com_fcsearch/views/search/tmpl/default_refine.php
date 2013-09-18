@@ -19,10 +19,57 @@ $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 $min_budget = $app->input->request->get('min');
 $max_budget = $app->input->request->get('max');
 $hide = '';
+$searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
+$bedrooms = $this->state->get('list.bedrooms');
+$occupancy = $this->state->get('list.occupancy');
+$arrival = $this->state->get('list.arrival');
+$departure = $this->state->get('list.departure');
 ?>
 
 
+<div class="well well-small clearfix">
+  <label class="small" for="q">
+    <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
+  </label>
+  <input id="s_kwds" class="typeahead span12" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>"/>
+  <div class="span6">
+    <label class="small" for="arrival">
+      <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
+    </label>
+    <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="input-mini start_date" autocomplete="Off" />
+  </div>
+  <div class="row-fluid">
+    <div class="span6">
+      <label class="small" for="departure">
+        <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
+      </label>
+      <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure; ?>" class="end_date input-mini " autocomplete="Off"/>
+    </div>
+    <div class="row-fluid">
 
+      <div class="span6">
+        <label class="small" for="occupancy">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
+        </label>
+        <select id="occupancy" class="span12" name="occupancy">
+          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
+        </select>
+      </div>
+      <div class="span6">
+        <label class="small" for="bedrooms">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
+        </label>
+        <select id="bedrooms" class="span12" name="bedrooms">
+          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
+        </select>
+      </div>
+    </div>
+    <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#" style="margin-top:18px;">
+      <i class="icon-search icon-white"> </i>
+      <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
+    </button>
+  </div>
+</div>
 <div class="refine">
 
   <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
@@ -76,7 +123,7 @@ $hide = '';
               $tmp = array_flip(explode('/', $uri));
               $remove = false;
 
-              $filter_string = $value['search_code'] . JStringNormalise::toDashSeparated(JApplication::stringURLSafe($key)) . '-' . $value['id'];
+              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($key)) . '_' . $value['id'];
 
               if (array_key_exists($filter_string, $tmp)) {
                 unset($tmp[$filter_string]);
@@ -88,7 +135,7 @@ $hide = '';
               }
               ?>
               <?php if ($counter >= 7 && $hide) : ?>
-                  <?php $hide = false; ?>
+                <?php $hide = false; ?>
                 <div class="hide ">
                 <?php endif; ?>
                 <p>
@@ -100,11 +147,11 @@ $hide = '';
                 <?php if ($counter == count($values)) : ?>
                 </div>
               <?php endif; ?>
-                <?php if ($counter == count($values) && !$hide) : ?>
-                  <hr class="condensed" />
+              <?php if ($counter == count($values) && !$hide) : ?>
+                <hr class="condensed" />
 
-                  <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
-                <?php endif; ?>
+                <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+              <?php endif; ?>
             <?php endforeach; ?>
           </div>
         </div>

@@ -130,18 +130,6 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['external']);
   }
-  
-  if (!empty($query['property'])) {
-
-    if (is_array($query['property'])) {
-      foreach ($query['property'] as $segment) {
-        $segments[] = $segment;
-      }
-    } else {
-      $segments[] = $query['property'];
-    }
-    unset($query['property']);
-  }
 
   return $segments;
 }
@@ -173,11 +161,9 @@ function FcSearchParseRoute($segments) {
   // i.e. the dates, occupancy, bedrooms, property type, activities, facilities etc
   // Loop over each remaining segment
   foreach ($segments as $segment) {
-    
-    $segment = str_replace(':','-',$segment);
-    
+
     // We know that all filter will be _ separated, so let's explode it into an array .
-    $filter = explode('-', $segment);
+    $filter = explode('_', $segment);
 
     // If the array key already exisis, then it means there are more than one filter of this type being applied in this search
     if (array_key_exists($filter[0], $vars)) {
@@ -202,6 +188,5 @@ function FcSearchParseRoute($segments) {
       $vars[$filter[0]] = str_replace(':', '-', $segment);
     }
   }
-
   return $vars;
 }

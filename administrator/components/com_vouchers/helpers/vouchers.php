@@ -38,5 +38,4 @@ class VouchersHelper {
 
     return $result;
   }
-
 }

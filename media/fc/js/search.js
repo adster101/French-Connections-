@@ -134,7 +134,7 @@ jQuery(document).ready(function(){
     var query = stripVowelAccent(chosen);
 
     // The path of the search, e.g. /search or /fr/search
-    var path = '/search';
+    var path = '/accommodation';
 
     // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
     inputs = jQuery('#property-search').find(':input').each(function() {

@@ -329,12 +329,12 @@ class FcSearchModelSearch extends JModelList {
         c.occupancy,
         i.path,
         left(c.description,500) as description,
-        d.title as location_title,
+        i.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-        (select min(tariff) from qitz3_tariffs where id = c.unit_id and end_date > now() group by id) as price,
+        (select min(tariff) from qitz3_tariffs where j.id = c.unit_id and end_date > now() and c.review = 0 group by id limit 0,1) as price,
         (select count(unit_id) from qitz3_reviews where unit_id = c.unit_id ) as reviews,
-        e.title as accommodation_type,
-        f.title as property_type,
+        l.title as accommodation_type,
+        k.title as property_type,
         g.title as tariff_based_on,
         h.title as base_currency
       ');
@@ -366,8 +366,13 @@ class FcSearchModelSearch extends JModelList {
         $query->where('b.department = ' . $this->location);
       }
 
-      $query->join('left', '#__attributes e on e.id = c.accommodation_type');
-      $query->join('left', '#__attributes f on f.id = c.property_type');
+      $query->join('left', '#__property_attributes e on e.property_id = j.id');
+      $query->join('left', '#__attributes k on k.id = e.attribute_id');
+      
+      $query->join('left', '#__property_attributes f on f.property_id = j.id');
+      $query->join('left', '#__attributes l on l.id = f.attribute_id');
+      
+      
       $query->join('left', '#__attributes g on g.id = c.tariff_based_on');
       $query->join('left', '#__attributes h on h.id = c.base_currency');
       $query->join('left', '#__classifications i ON i.id = b.city');
@@ -390,11 +395,7 @@ class FcSearchModelSearch extends JModelList {
 
 
       // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g.
-      // the type of property and whether it is self catering etc. Another option is to populate this in the property table
-      // Perhaps (I suppose) as some sort of param field?
-      //$query->where('a.attribute_type_id = 1');
-      //$query->where('a2.attribute_type_id = 2');
-      // Get the property type filter
+      // the type of property and whether it is self catering etc.
       if ($this->getState('list.property_type', '')) {
         $query->where('a.id = ' . $this->getState('list.property_type'));
       }
@@ -425,6 +426,7 @@ class FcSearchModelSearch extends JModelList {
       $query = $this->getFilterState('property_facilities', $query);
       $query = $this->getFilterState('external_facilities', $query);
       $query = $this->getFilterState('kitchen', $query);
+      $query = $this->getFilterState('property', $query);
 
 
       if ($this->level == 5) {
@@ -435,12 +437,15 @@ class FcSearchModelSearch extends JModelList {
       // Make sure we only get live properties...
       $query->where('a.expiry_date >= ' . $db->quote($date));
       $query->where('j.published = 1');
-
+      $query->where('k.attribute_type_id = 1');
+      $query->where('l.attribute_type_id = 2');
+      
       // Sort out the ordering required
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
       }
 
+      
 
       // Sort out the budget requirements
       $min_price = $this->getState('list.min_price', '');
@@ -841,12 +846,14 @@ class FcSearchModelSearch extends JModelList {
     $property_facilities = $input->get('internal', '', 'array');
     $external_facilities = $input->get('external', '', 'array');
     $kitchen_facilities = $input->get('kitchen', '', 'array');
+    $property_type = $input->get('property', '', 'array');
 
     // populateFilterState pushes all the filter IDs into the state
     $this->populateFilterState($activities, 'activities');
     $this->populateFilterState($property_facilities, 'property_facilities');
     $this->populateFilterState($external_facilities, 'external_facilities');
     $this->populateFilterState($kitchen_facilities, 'kitchen_facilities');
+    $this->populateFilterState($property_type, 'kitchen_facilities');
 
     // Load the parameters.
     $this->setState('params', $params);

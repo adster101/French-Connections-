@@ -16,14 +16,10 @@ $app = JFactory::getApplication();
 
 $uri = JUri::current();
 
-$bedrooms = $this->state->get('list.bedrooms');
-$occupancy = $this->state->get('list.occupancy');
-$arrival = $this->state->get('list.arrival');
-$departure = $this->state->get('list.departure');
+
 
 $ordering = $app->input->request->get('order');
 
-$searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 
 $sortFields = $this->getSortFields();
 $listOrder = $this->escape($this->state->get('list.ordering'));
@@ -44,51 +40,7 @@ if ($pagdata->previous->link) {
   </h1>
   <div id="search-form" >
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165') ?>" method="POST" class="form-vertical">
-      <div class="row-fluid">
-        <div class="well well-small clearfix">
-          <div class="span4">
-            <label class="small" for="q">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
-            </label>
-            <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>"/>
-          </div>
-          <div class="span2">
-            <label class="small" for="arrival">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
-            </label>
-            <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="start_date span9" autocomplete="Off" />
-          </div>
-          <div class="span2">
-            <label class="small" for="departure">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
-            </label>
-            <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure; ?>" class="end_date span9" autocomplete="Off"/>
-          </div>
-          <div class="span1">
-            <label class="small" for="occupancy">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
-            </label>
-            <select id="occupancy" class="span12" name="occupancy">
-              <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
-            </select>
-          </div>
-          <div class="span1">
-            <label class="small" for="bedrooms">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
-            </label>
-            <select id="bedrooms" class="span12" name="bedrooms">
-              <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
-            </select>
-          </div>
-
-          <div class="span2">
-            <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#" style="margin-top:18px;">
-              <i class="icon-search icon-white"> </i>
-              <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-            </button>
-          </div>
-        </div>
-      </div>
+    
       <?php
       if (0):
         ?>
