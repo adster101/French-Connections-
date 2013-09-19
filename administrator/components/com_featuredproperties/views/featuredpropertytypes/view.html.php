@@ -23,7 +23,7 @@ class FeaturedPropertiesViewFeaturedPropertyTypes extends JViewLegacy {
 
     $view = strtolower(JRequest::getVar('view'));
     
-    FeaturedPropertiesHelper::addSubmenu('featuredpropertytypes');
+    FeaturedPropertiesHelper::addSubmenu($view);
 
     $this->addToolBar();
     $this->sidebar = JHtmlSidebar::render();

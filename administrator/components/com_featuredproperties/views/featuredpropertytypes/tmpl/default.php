@@ -21,8 +21,8 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
             <th width="1%" class="hidden-phone">
               <?php echo JHtml::_('grid.checkall'); ?>
             </th>
-            <th width="1%" class="nowrap center">
-              <?php echo JText::_('JSTATUS'); ?>
+            <th>
+              <?php echo JText::_('JGLOBAL_FIELD_ID_LABEL'); ?>
             </th>
             <th class="title">
               <?php echo JText::_('JGLOBAL_TITLE'); ?>
@@ -42,7 +42,7 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
                   <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                 </td>
                 <td>
-                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'attributetypes.', $canChange, 'cb'); ?>
+                  <?php echo $this->escape($item->id) ?>
                 </td>
                 <td class="">
                   <a href="<?php echo JRoute::_('index.php?option=com_attributes&task=attributetype.edit&id=' . (int) $item->id); ?>">
@@ -50,7 +50,7 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
                   </a>
                 </td>
                 <td>
-                  <?php echo $item->id; ?>
+                  <?php echo $item->date_created ?>
                 </td>
               </tr>					
             <?php endforeach; ?>

@@ -1,48 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
-  <fieldset 
-    name="requestor" 
-    label="">
+  <fieldset name="featured-property-type" label="">
     <field 
-      description="COM_ENQUIRIES_ENQUIRY_FORENAME_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_FORENAME_LABEL"    
-      name="forename"
-      labelclass="control-label"
+      type="text"
+      name="id"
       readonly="true"
-      filter="unset">
-    </field>
-    <field 
-      description="COM_ENQUIRIES_ENQUIRY_SURNAME_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_SURNAME_LABEL"
-      name="surname"
+      disabled="true"
+      filter="int"
       labelclass="control-label"
-      readonly="true"
-      filter="unset">
-    </field>    
-    <field 
-      description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
-      name="email"
+      label="Id"
+    />
+    <field
+      name="title"
+      type="text"
+      label="Featured property type"
+      description="The name of the featured property type"
+      maxlength="50"
+      size="30"
+      required="true"
+      class="inputbox input-xlarge"
       filter="string"
-      labelclass="control-label"     
-      readonly="true">
-    </field>    
-    <field 
-      description="COM_ENQUIRIES_ENQUIRY_DATE_CREATEED_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_DATE_CREATED_LABEL"
-      name="date_created"
       labelclass="control-label"
-      readonly="true"
-      filter="unset"
-      type="calendar">
-    </field>        
-    <field 
-      description="COM_ENQUIRIES_ENQUIRY_PHONE_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_PHONE_LABEL"    
-      name="phone"
-      filter="unset"
-      labelclass="control-label"     
-      readonly="true">
-    </field>        
+    /> 
+     
+     
   </fieldset>
 </form>

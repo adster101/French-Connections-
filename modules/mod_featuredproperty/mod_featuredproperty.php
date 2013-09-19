@@ -17,7 +17,7 @@ require_once(JPATH_SITE.'/components/com_content/helpers/route.php');
 
 $helper = new modFeaturedPropertyHelper();
 
-$helper->getFeaturedProperties();
+$helper->getFeaturedProperties($params);
 
 $helper->renderLayout($params);
 

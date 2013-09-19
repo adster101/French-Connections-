@@ -240,23 +240,14 @@ class FcSearchModelSearch extends JModelList {
       $query->where('occupancy >= ' . $this->getState('list.occupancy', ''));
     }
 
-    // Filter on property type
-    if ($this->getState('list.property_type', '')) {
-      $query->join('left', '#__property_attributes ap on ap.property_id = h.id');
-      $query->where('ap.attribute_id = ' . $this->getState('list.property_type'));
-    }
 
-    // Filter on property type
-    if ($this->getState('list.accommodation_type', '')) {
-      $query->join('left', '#__property_attributes ap2 on ap2.property_id = h.id');
-      $query->where('ap2.attribute_id = ' . $this->getState('list.accommodation_type'));
-    }
 
     // Apply the rest of the filter, if there are any
     $query = $this->getFilterState('activities', $query);
     $query = $this->getFilterState('property_facilities', $query);
     $query = $this->getFilterState('external_facilities', $query);
     $query = $this->getFilterState('kitchen', $query);
+    $query = $this->getFilterState('property_type', $query);
 
     // Sort out the budget requirements
     if (!empty($min_price)) {
@@ -396,14 +387,14 @@ class FcSearchModelSearch extends JModelList {
 
       // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g.
       // the type of property and whether it is self catering etc.
-      if ($this->getState('list.property_type', '')) {
-        $query->where('a.id = ' . $this->getState('list.property_type'));
-      }
+      //if ($this->getState('list.property_type', '')) {
+        //$query->where('a.id = ' . $this->getState('list.property_type'));
+      //}
 
       // Get the property type filter
-      if ($this->getState('list.accommodation_type', '')) {
-        $query->where('a2.id = ' . $this->getState('list.accommodation_type'));
-      }
+      //if ($this->getState('list.accommodation_type', '')) {
+        //$query->where('a2.id = ' . $this->getState('list.accommodation_type'));
+      //}
 
       if ($this->getState('list.arrival')) {
         $query->join('left', '#__availability arr on c.unit_id = arr.unit_id');
@@ -426,7 +417,7 @@ class FcSearchModelSearch extends JModelList {
       $query = $this->getFilterState('property_facilities', $query);
       $query = $this->getFilterState('external_facilities', $query);
       $query = $this->getFilterState('kitchen', $query);
-      $query = $this->getFilterState('property', $query);
+      $query = $this->getFilterState('property_type', $query);
 
 
       if ($this->level == 5) {
@@ -853,7 +844,7 @@ class FcSearchModelSearch extends JModelList {
     $this->populateFilterState($property_facilities, 'property_facilities');
     $this->populateFilterState($external_facilities, 'external_facilities');
     $this->populateFilterState($kitchen_facilities, 'kitchen_facilities');
-    $this->populateFilterState($property_type, 'kitchen_facilities');
+    $this->populateFilterState($property_type, 'property_type');
 
     // Load the parameters.
     $this->setState('params', $params);
@@ -876,7 +867,7 @@ class FcSearchModelSearch extends JModelList {
 
       foreach ($input as $filter) {
         // Assume that this is in the form of e.g. activity_Golf_51
-        $id = (int) array_pop(explode('-', $filter));
+        $id = (int) array_pop(explode('_', $filter));
 
         $ids[] = $id;
       }
@@ -884,7 +875,7 @@ class FcSearchModelSearch extends JModelList {
       $this->setState('list.' . $label, $ids);
     } elseif (!empty($input)) {
 
-      $id = (int) array_pop(explode('-', $input));
+      $id = (int) array_pop(explode('_', $input));
 
       $this->setState('list.' . $label, $id);
     }

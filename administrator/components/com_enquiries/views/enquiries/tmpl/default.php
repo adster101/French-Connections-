@@ -10,10 +10,6 @@ JHtml::_('bootstrap.tooltip');
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $user = JFactory::getUser();
-$userId = $user->get('id');
-$saveOrder = $listOrder == 'r.ordering';
-$disableClassName = '';
-$disabledLabel = '';
 
 // Check relevant permissions for this user
 $canChangeState = $user->authorise('core.edit.state', 'com_enquiries');

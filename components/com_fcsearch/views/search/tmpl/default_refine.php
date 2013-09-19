@@ -27,48 +27,47 @@ $departure = $this->state->get('list.departure');
 ?>
 
 
-<div class="well well-small clearfix">
+<div class="well well-small">
   <label class="small" for="q">
     <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
   </label>
   <input id="s_kwds" class="typeahead span12" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>"/>
-  <div class="span6">
-    <label class="small" for="arrival">
-      <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
-    </label>
-    <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="input-mini start_date" autocomplete="Off" />
-  </div>
   <div class="row-fluid">
+    <div class="span6">
+      <label class="small" for="arrival">
+        <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
+      </label>
+      <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="input-mini start_date" autocomplete="Off" />
+    </div>
     <div class="span6">
       <label class="small" for="departure">
         <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
       </label>
       <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure; ?>" class="end_date input-mini " autocomplete="Off"/>
     </div>
-    <div class="row-fluid">
-
-      <div class="span6">
-        <label class="small" for="occupancy">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
-        </label>
-        <select id="occupancy" class="span12" name="occupancy">
-          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
-        </select>
-      </div>
-      <div class="span6">
-        <label class="small" for="bedrooms">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
-        </label>
-        <select id="bedrooms" class="span12" name="bedrooms">
-          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
-        </select>
-      </div>
-    </div>
-    <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#" style="margin-top:18px;">
-      <i class="icon-search icon-white"> </i>
-      <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-    </button>
   </div>
+  <div class="row-fluid">
+    <div class="span6">
+      <label class="small" for="occupancy">
+        <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
+      </label>
+      <select id="occupancy" class="span12" name="occupancy">
+        <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
+      </select>
+    </div>
+    <div class="span6">
+      <label class="small" for="bedrooms">
+        <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
+      </label>
+      <select id="bedrooms" class="span12" name="bedrooms">
+        <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
+      </select>
+    </div>
+  </div>
+  <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#" style="margin-top:18px;">
+    <i class="icon-search icon-white"> </i>
+    <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
+  </button>
 </div>
 <div class="refine">
 
@@ -101,8 +100,6 @@ $departure = $this->state->get('list.departure');
       </div>
     </div>
 
-
-
     <?php foreach ($this->refine_options as $key => $values) : ?>
       <?php
       $counter = 0;
@@ -114,16 +111,16 @@ $departure = $this->state->get('list.departure');
             <?php echo $key; ?>
           </a>
         </div>
-        <div id="<?php echo $app->stringURLSafe($key) ?>" class="accordion-body collapse in">
+        <div id="<?php echo $app->stringURLSafe($key) ?>" class="accordion-body collapse">
           <div class="accordion-inner">
             <?php
             // Below should be abstracted into a helper function
-            foreach ($values as $key => $value) :
+            foreach ($values as $filter => $value) :
 
               $tmp = array_flip(explode('/', $uri));
               $remove = false;
 
-              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($key)) . '_' . $value['id'];
+              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($filter)) . '_' . $value['id'];
 
               if (array_key_exists($filter_string, $tmp)) {
                 unset($tmp[$filter_string]);
@@ -140,11 +137,12 @@ $departure = $this->state->get('list.departure');
                 <?php endif; ?>
                 <p>
                   <a class="muted" href="<?php echo JRoute::_('http://' . $new_uri) ?>">
-                    <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $key; ?> (<?php echo $value['count']; ?>)
+                    <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $filter; ?> (<?php echo $value['count']; ?>)
                   </a>
                 </p>
                 <?php $counter++; ?>
-                <?php if ($counter == count($values)) : ?>
+                <?php if ($counter == count($values) && !$hide) : ?>
+
                 </div>
               <?php endif; ?>
               <?php if ($counter == count($values) && !$hide) : ?>

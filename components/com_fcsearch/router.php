@@ -59,11 +59,6 @@ function FcSearchBuildRoute(&$query) {
     unset($query['bedrooms']);
   }
 
-  if (!empty($query['property'])) {
-    $segments[] = $query['property'];
-    unset($query['property']);
-  }
-
   if (!empty($query['order'])) {
     $segments[] = $query['order'];
     unset($query['order']);
@@ -129,6 +124,18 @@ function FcSearchBuildRoute(&$query) {
       $segments[] = $query['external'];
     }
     unset($query['external']);
+  }
+  
+  if (!empty($query['property'])) {
+
+    if (is_array($query['property'])) {
+      foreach ($query['property'] as $segment) {
+        $segments[] = $segment;
+      }
+    } else {
+      $segments[] = $query['property'];
+    }
+    unset($query['property']);
   }
 
   return $segments;

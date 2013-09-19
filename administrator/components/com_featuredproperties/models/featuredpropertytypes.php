@@ -54,6 +54,7 @@ class FeaturedPropertiesModelFeaturedPropertyTypes extends JModelList
 
 		// From the hello table
 		$query->from('#__featured_property_types a');
+    $query->where('published = 1');
 
     return $query;
 	}

@@ -21,10 +21,11 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
-				'id', 'e.id',
-				'state', 'e.state',
-				'created', 'e.date_created',
-        'title','hw.title',
+				'id', 'a.id',
+				'state', 'a.state',
+				'start_date', 'a.start_date',
+        'end_date', 'a.end_date',
+        'featured_property_type'
 			);
     }
 
@@ -58,11 +59,8 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
 		$this->setState('filter.title', $title);
 
-
-
-
     // List state information.
-		parent::populateState('e.id','desc');
+		parent::populateState('a.start_date','asc');
 	}
 
   /**
@@ -83,19 +81,28 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 
 		// Select some fields
 		$query->select('
-      *
+      a.id,
+      a.property_id,
+      a.start_date,
+      a.end_date,
+      a.notes,
+      a.published,
+      b.title
     ');
 
 		// From the hello table
-		$query->from('#__featured_properties e');
+		$query->from('#__featured_properties a');
+    
+    // Join the category 
+    $query->join('left', '#__categories b on b.id = a.featured_property_type');
 
     // Filter by published state
 		$published = $this->getState('filter.published');
 
     if (is_numeric($published)) {
-			$query->where('e.state = ' . (int) $published);
+			$query->where('a.published = ' . (int) $published);
 		} else {
-			$query->where('e.state IN (0,1)');
+			$query->where('a.published IN (0,1)');
     }
 
 		// Filter by search in title
@@ -103,11 +110,11 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 
 		if (!empty($search)) {
       if ((int) $search ) {
-        $query->where('e.property_id = '.(int) $search);
+        $query->where('a.property_id = '.(int) $search);
 
       } else {
         $search = $db->Quote('%'.$db->escape($search, true).'%');
-        $query->where('(e.message LIKE '.$search.')');
+        $query->where('(a.notes LIKE '.$search.')');
       }
     }
 

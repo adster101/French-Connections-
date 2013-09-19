@@ -32,14 +32,19 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
 
     FeaturedPropertiesHelper::addSubmenu('featuredproperties');
 
+    // Include the component HTML helpers.
+    JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+
     $this->addToolbar($canDo);
+
+    JHtmlSidebar::addFilter(
+            JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', FeaturedPropertiesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
+    );
 
     $this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);
   }
-
-
 
   /**
    * Method to set up the document properties
@@ -52,7 +57,6 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
 
     // Set the title property
     // $this->title = JText::_('COM_ENQUIRIES_ENQUIRIES_MANAGE');
-
     // Set the document title
     $this->document->setTitle($this->title);
 
@@ -65,6 +69,9 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
    */
   protected function addToolBar($canDo) {
 
+    if ($canDo->get('core.create')) {
+      JToolbarHelper::addNew('featuredproperty.add', 'JTOOLBAR_NEW');
+    }
 
     if ($canDo->get('core.edit')) {
       JToolBarHelper::editList('featuredproperty.edit', 'JTOOLBAR_EDIT');

@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * Classification View
  */
-class FeaturedPropertiesViewFeaturedPropertyType extends JViewLegacy {
+class FeaturedPropertiesViewFeaturedProperty extends JViewLegacy {
 
   /**
    * display method of Attribute view
@@ -37,6 +37,7 @@ class FeaturedPropertiesViewFeaturedPropertyType extends JViewLegacy {
     
     $canDo = FeaturedPropertiesHelper::getActions();
 
+
     FeaturedPropertiesHelper::addSubmenu($view);
     $this->sidebar = JHtmlSidebar::render();
 
@@ -53,17 +54,23 @@ class FeaturedPropertiesViewFeaturedPropertyType extends JViewLegacy {
    */
   protected function setDocument() {
     $document = JFactory::getDocument();
-    $document->setTitle(JText::_('Manage featured property types'));
+    $document->setTitle(JText::_('Manage featured property slot'));
   }
 
   /**
    * Setting the toolbar
    */
   protected function addToolBar() {
-    JToolBarHelper::apply('featuredpropertytype.apply', 'JTOOLBAR_APPLY');
-    JToolBarHelper::save('featuredpropertytype.save', 'JTOOLBAR_SAVE');
-    JToolBarHelper::custom('featuredpropertytype.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-    JToolBarHelper::cancel('featuredpropertytype.cancel', 'JTOOLBAR_CLOSE');
+    
+    // Is this a new property?
+    $isNew = $this->item->id == 0;
+
+    JToolBarHelper::title($isNew ? JText::_('COM_FEATUREDPROPERTY_ADDING_NEW') : JText::sprintf('COM_FEATUREDPROPERTY_EDITING_SLOT', $this->item->property_id), '');
+
+    JToolBarHelper::apply('featuredproperty.apply', 'JTOOLBAR_APPLY');
+    JToolBarHelper::save('featuredproperty.save', 'JTOOLBAR_SAVE');
+    JToolBarHelper::custom('featuredproperty.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+    JToolBarHelper::cancel('featuredproperty.cancel', 'JTOOLBAR_CLOSE');
   }
 
 }

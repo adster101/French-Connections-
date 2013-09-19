@@ -32,10 +32,11 @@ class EnquiriesViewEnquiries extends JViewLegacy {
     $view = strtolower(JRequest::getVar('view'));
 
     $this->addSubMenu($canDo);
-    
+
     $this->addToolBar($canDo);
 
     $this->setDocument();
+    
 
     parent::display($tpl);
   }
