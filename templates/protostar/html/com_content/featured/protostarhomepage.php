@@ -1,0 +1,50 @@
+<?php
+/**
+ * @package     Joomla.Site
+ * @subpackage  com_content
+ *
+ * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+defined('_JEXEC') or die;
+
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
+
+JHtml::_('behavior.caption');
+
+// If the page class is defined, add to class as suffix.
+// It will be a separate class if the user starts it with a space
+?>
+<div class="blog-featured<?php echo $this->pageclass_sfx;?>">
+<?php if ($this->params->get('show_page_heading') != 0) : ?>
+<div class="page-header">
+	<h1>
+	<?php echo $this->escape($this->params->get('page_heading')); ?>
+	</h1>
+</div>
+<?php endif; ?>
+
+<?php $leadingcount = 0; ?>
+<?php if (!empty($this->lead_items)) : ?>
+<div id="myCarousel" class="carousel slide"><!-- Carousel items -->
+<div class="carousel-inner">	<?php foreach ($this->lead_items as &$item) : ?>
+		<div class="leading-<?php echo $leadingcount; ?><?php echo $item->state == 0 ? ' system-unpublished' : null; ?> clearfix">
+			<?php
+				$this->item = &$item;
+				echo $this->loadTemplate('item');
+			?>
+		<?php
+			$leadingcount++;
+		?>
+	<?php endforeach; ?>
+</div>
+</div>
+<?php endif; ?>
+<?php
+	$introcount = (count($this->intro_items));
+	$counter = 0;
+?>
+
+
+</div>
