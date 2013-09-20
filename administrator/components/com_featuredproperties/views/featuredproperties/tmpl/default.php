@@ -6,7 +6,7 @@ $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
 $canChange = $user->authorise('core.edit.state', 'com_featuredproperties');
 
-$colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : $colspan = 7;
+$colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0]))+1 : $colspan = 7;
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_featuredproperties'); ?>" method="post" name="adminForm" id="adminForm">
@@ -45,10 +45,12 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
               <?php echo JText::_('COM_FEATUREDPROPERTY_PAID_STATUS'); ?>
             </th>
             <th class="title">
+              <?php //echo JText::_('Start date'); ?>
               <?php echo JHtml::_('grid.sort', 'Start date', 'a.start_date', $listDirn, $listOrder); ?>
             </th>
             <th class="title">
-              <?php echo JHtml::_('grid.sort', 'End date', 'a.end_date', $listDirn, $listOrder); ?>
+              <?php echo JText::_('End date'); ?>
+              <?php // echo JHtml::_('grid.sort', 'End date', 'a.end_date', $listDirn, $listOrder); ?>
             </th>
             <th class="title">
               <?php echo JText::_('Featured on'); ?>
@@ -58,17 +60,11 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
             </th>
           </tr>
         </thead>
-        <tfoot>
-          <tr>
-            <td colspan="<?php echo $colspan ?>">
-              <?php echo $this->pagination->getListFooter(); ?>
-            </td>
-          </tr>
-        </tfoot>
+
         <tbody>      
           <?php if (!empty($this->items)) : ?>
             <?php foreach ($this->items as $i => $item): ?>
-              <tr class="row<?php echo $i % 2; ?>">
+              <tr>
                 <td>
                   <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                 </td>
@@ -81,8 +77,7 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
                   </a>
                 </td>
                 <td>
-                  <?php echo JHtml::_('jgrid.state',  FeaturedPropertiesHelper::getPaidStates(), $item->published, $i, 'featuredproperties.', $canChange, true, 'cb') ?>
-
+                  <?php echo JHtml::_('jgrid.state', FeaturedPropertiesHelper::getPaidStates(), $item->published, $i, 'featuredproperties.', $canChange, true, 'cb') ?>
                 </td>
                 <td>
                   <?php echo $item->start_date ?>
@@ -109,6 +104,13 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) : 
 
 
         </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="<?php echo $colspan ?>">
+              <?php echo $this->pagination->getListFooter(); ?>
+            </td>
+          </tr>
+        </tfoot>
       </table>
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />

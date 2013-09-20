@@ -63,16 +63,17 @@ $departure = $this->state->get('list.departure');
         <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
       </select>
     </div>
+    <button id="property-search-button" class="btn btn-large btn-primary pull-right clear" href="#" style="margin-top:18px;">
+      <i class="icon-search icon-white"> </i>
+      <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
+    </button>
   </div>
-  <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#" style="margin-top:18px;">
-    <i class="icon-search icon-white"> </i>
-    <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-  </button>
 </div>
 <div class="refine">
 
   <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 
+  <?php echo JHtml::_('refine.removeFilters', $this->refine_options, $uri); ?>
   <div class="accordion" id="accordion2">
     <div class="accordion-group">
       <div class="accordion-heading">
@@ -135,12 +136,16 @@ $departure = $this->state->get('list.departure');
                 <?php $hide = false; ?>
                 <div class="hide ">
                 <?php endif; ?>
-                <p>
-                  <a class="muted" href="<?php echo JRoute::_('http://' . $new_uri) ?>">
-                    <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $filter; ?> (<?php echo $value['count']; ?>)
-                  </a>
-                </p>
-                <?php $counter++; ?>
+                <?php if (!$remove) : ?>  
+                  <p>
+                    <a class="muted" href="<?php echo JRoute::_('http://' . $new_uri) ?>">
+                      <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $filter; ?> (<?php echo $value['count']; ?>)
+                    </a>
+                  </p>
+
+                <?php endif; ?>
+                  <?php $counter++; ?>
+
                 <?php if ($counter == count($values) && !$hide) : ?>
 
                 </div>

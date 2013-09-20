@@ -57,6 +57,8 @@ class FcSearchViewSearch extends JViewLegacy {
     // Has to be done after getState, as with all really.
     $refine_options = $this->get('RefineOptions');
 
+    // Include the component HTML helpers.
+    JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {

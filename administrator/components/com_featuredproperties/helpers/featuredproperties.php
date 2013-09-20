@@ -46,13 +46,20 @@ abstract class FeaturedPropertiesHelper {
     $options[] = JHtml::_('select.option', '-2', JText::_('JTRASHED'));
     return $options;
   }
-  
+
+  public static function getFeaturedPropertyTypeOptions() {
+
+		$options = JHtml::_('category.options', 'com_featuredproperties');
+    
+    return $options;
+    
+  }
+
   /**
    * This simply returns an array of states for the list view. Essentially, it just overrides the default 'published', 'unpublished' labels
    * so we can tailor the labels to the component.
    * @return array
    */
-
   public static function getPaidStates() {
     $states = array(
         1 => array(
@@ -72,7 +79,7 @@ abstract class FeaturedPropertiesHelper {
             true,
             'unpublish',
             'unpublish'
-        ),-2 => array(
+        ), -2 => array(
             'publish',
             'COM_BANNERS_BANNERS_UNPINNED',
             'COM_BANNERS_BANNERS_HTML_UNPIN_BANNER',

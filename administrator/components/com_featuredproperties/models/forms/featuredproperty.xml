@@ -61,16 +61,7 @@
       labelclass="control-label"
       filter="string"
       name="notes"
-    />
-  
-    <field 
-      label="Created on"    
-      name="date_created"
-      filter="string"
-      labelclass="control-label"     
-      readonly="true"
-      type="text"
-    />                  
+    />       
     <field 
       type="hidden"
       name="id"

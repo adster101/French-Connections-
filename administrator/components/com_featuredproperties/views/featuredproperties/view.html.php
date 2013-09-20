@@ -41,6 +41,9 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
             JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', FeaturedPropertiesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
     );
 
+    JHtmlSidebar::addFilter(
+            JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_type', JHtml::_('select.options', FeaturedPropertiesHelper::getFeaturedPropertyTypeOptions(), 'value', 'text', $this->state->get('filter.type'), true)
+    );
     $this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);

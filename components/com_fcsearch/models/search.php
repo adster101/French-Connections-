@@ -60,7 +60,6 @@ class FcSearchModelSearch extends JModelList {
    */
   public $description = '';
 
-  
   public function getLocalInfo() {
     // First off we need to get the classification detail
     // E.g. is this a department, area or town etc
@@ -359,11 +358,11 @@ class FcSearchModelSearch extends JModelList {
 
       $query->join('left', '#__property_attributes e on e.property_id = j.id');
       $query->join('left', '#__attributes k on k.id = e.attribute_id');
-      
+
       $query->join('left', '#__property_attributes f on f.property_id = j.id');
       $query->join('left', '#__attributes l on l.id = f.attribute_id');
-      
-      
+
+
       $query->join('left', '#__attributes g on g.id = c.tariff_based_on');
       $query->join('left', '#__attributes h on h.id = c.base_currency');
       $query->join('left', '#__classifications i ON i.id = b.city');
@@ -388,12 +387,11 @@ class FcSearchModelSearch extends JModelList {
       // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g.
       // the type of property and whether it is self catering etc.
       //if ($this->getState('list.property_type', '')) {
-        //$query->where('a.id = ' . $this->getState('list.property_type'));
+      //$query->where('a.id = ' . $this->getState('list.property_type'));
       //}
-
       // Get the property type filter
       //if ($this->getState('list.accommodation_type', '')) {
-        //$query->where('a2.id = ' . $this->getState('list.accommodation_type'));
+      //$query->where('a2.id = ' . $this->getState('list.accommodation_type'));
       //}
 
       if ($this->getState('list.arrival')) {
@@ -430,13 +428,13 @@ class FcSearchModelSearch extends JModelList {
       $query->where('j.published = 1');
       $query->where('k.attribute_type_id = 1');
       $query->where('l.attribute_type_id = 2');
-      
+
       // Sort out the ordering required
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
       }
 
-      
+
 
       // Sort out the budget requirements
       $min_price = $this->getState('list.min_price', '');
@@ -609,9 +607,9 @@ class FcSearchModelSearch extends JModelList {
 
       // Retrieve based on the language
       if ($lang == 'fr') {
-        $query->select('a.id,count(attribute_id) as count, c.title as attribute, a.published, at.title as facility_type, at.search_code');
+        $query->select('a.id,count(attribute_id) as count, c.title as attribute, a.published, at.order, at.title as facility_type, at.search_code');
       } else {
-        $query->select('a.id,count(attribute_id) as count, a.title AS attribute, a.published, at.title as facility_type, at.search_code');
+        $query->select('a.id,count(attribute_id) as count, a.title AS attribute, a.published, at.order, at.title as facility_type, at.search_code');
       }
 
       $query->from('#__attributes AS a');
@@ -643,8 +641,33 @@ class FcSearchModelSearch extends JModelList {
         $attributes[$facility->facility_type][$facility->attribute]['id'] = $facility->id;
       }
 
+      /*
+       * Wrap this into a db query so we can use the ordering set on the component, or parameterise it.
+       */
+      $order = array(
+      1 => 'Property Type',
+      2 => 'Accommodation Type',
+      3 => 'Suitability',
+      4 => 'External Facilities',
+      5 => 'Property Facilities',
+      6 => 'Activities nearby',
+      7 => 'Kitchen features',
+      8 => 'Location Type'
+      );
+
+      $output = array();
+      
+      foreach($attributes as $array) {
+        foreach ($order as $field) {
+          $output[$field] = $attributes[$field];
+        }
+        
+      }
+      
+      $sorted_attributes = $output;
+      
       // Push the results into cache.
-      $this->store($store, $attributes);
+      $this->store($store, $sorted_attributes);
 
       // Return the total.
       return $this->retrieve($store);
@@ -775,7 +798,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Get each of the possible URL params
     // Get the query string.
-    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', 'france', 'string') : $params->get('s_kwds','france');
+    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', 'france', 'string') : $params->get('s_kwds', 'france');
     $q = $app->stringURLSafe($filter->clean($tmp, 'string'));
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on

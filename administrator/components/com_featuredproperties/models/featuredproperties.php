@@ -58,6 +58,9 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 
 		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
 		$this->setState('filter.title', $title);
+    
+    $type = $this->getUserStateFromRequest($this->context . '.filter.type', 'filter_type','');
+    $this->setState('filter.type', $type);
 
     // List state information.
 		parent::populateState('a.start_date','asc');
@@ -82,6 +85,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 		// Select some fields
 		$query->select('
       a.id,
+      a.date_updated,
       a.property_id,
       a.start_date,
       a.end_date,
@@ -116,6 +120,12 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
         $search = $db->Quote('%'.$db->escape($search, true).'%');
         $query->where('(a.notes LIKE '.$search.')');
       }
+    }
+    
+    $type = $this->getState('filter.type');
+    
+    if (!empty($type)){
+      $query->where('a.featured_property_type = ' . (int) $type);
     }
 
     $listOrdering = $this->getState('list.ordering','date_created');
