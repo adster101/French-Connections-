@@ -10,12 +10,10 @@ defined('_JEXEC') or die;
 ?>
 
 <div class="well well-small">
-  <div class="row-fluid">
     <?php
     foreach ($this->items as $item) {
       if ($item->title) {
         ?>
-        <div class="span3"> 
           <a class="thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
             <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="img-rounded" />
           </a>
@@ -27,10 +25,8 @@ defined('_JEXEC') or die;
               <?php echo '&pound;' . $item->price; ?>
             <?php endif; ?>
           </p>
-        </div>
       <?php } ?>
     <?php } ?>
-  </div>
 </div>
 
 

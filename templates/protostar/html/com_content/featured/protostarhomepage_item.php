@@ -11,35 +11,33 @@ defined('_JEXEC') or die;
 // Create a shortcut for params.
 $params = &$this->item->params;
 $images = json_decode($this->item->images);
+
 $canEdit = $this->item->params->get('access-edit');
 $info = $this->item->params->get('info_block_position', 0);
+
 ?>
-<?php if ($this->item->state == 0) : ?>
-  <div class="system-unpublished">
+
+<div class="item <?php echo ($this->item_number == 0) ? 'active' : '' ?>">
+  <?php if (isset($images->image_fulltext) && !empty($images->image_fulltext)) : ?>
+    <img src="<?php echo htmlspecialchars($images->image_fulltext); ?>" alt="<?php echo htmlspecialchars($images->image_intro_alt); ?>"/>
   <?php endif; ?>
-  <div class="item">
-
+  <div class="carousel-caption">
     <?php if ($params->get('show_title')) : ?>
-      <div class="carousel-caption">
-        <h4 class="item-title">
-          <?php if ($params->get('link_titles') && $params->get('access-view')) : ?>
-            <a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid)); ?>"> <?php echo $this->escape($this->item->title); ?></a>
-          <?php else : ?>
-            <?php echo $this->escape($this->item->title); ?>
-          <?php endif; ?>
-        </h4>
-      <?php endif; ?>
+      <h1 class="item-title">
+        <?php if ($params->get('link_titles') && $params->get('access-view')) : ?>
+          <a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid)); ?>"> <?php echo $this->escape($this->item->title); ?></a>
+        <?php else : ?>
+          <?php echo $this->escape($this->item->title); ?>
+        <?php endif; ?>
+      </h1>
 
-      <?php if ($this->item->state == 0) : ?>
-        <span class="label label-warning"><?php echo JText::_('JUNPUBLISHED'); ?></span>
-      <?php endif; ?>
+    <?php endif; ?>
 
-      <?php if (!$params->get('show_intro')) : ?>
-        <?php echo $this->item->event->afterDisplayTitle; ?>
-      <?php endif; ?>
-      <?php echo $this->item->event->beforeDisplayContent; ?> <?php echo $this->item->introtext; ?>
+    <?php if ($this->item->state == 0) : ?>
+      <span class="label label-warning"><?php echo JText::_('JUNPUBLISHED'); ?></span>
+    <?php endif; ?>
 
-    </div>
+
     <?php
     if ($params->get('show_readmore') && $this->item->readmore) :
       if ($params->get('access-view')) :
@@ -55,30 +53,18 @@ $info = $this->item->params->get('info_block_position', 0);
       endif;
       ?>
 
-      <p class="readmore"><a class="btn" href="<?php echo $link; ?>"> <span class="icon-chevron-right"></span>
+      <p class="lead">          
+        <?php 
+        echo JHtml::_('string.truncate', ($this->item->text), $params->get('readmore_limit')); ?>
 
-          <?php
-          if (!$params->get('access-view')) :
-            echo JText::_('COM_CONTENT_REGISTER_TO_READ_MORE');
-          elseif ($readmore = $this->item->alternative_readmore) :
-            echo $readmore;
-            if ($params->get('show_readmore_title', 0) != 0) :
-              echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit'));
-            endif;
-          elseif ($params->get('show_readmore_title', 0) == 0) :
-            echo JText::sprintf('COM_CONTENT_READ_MORE_TITLE');
-          else :
-            echo JText::_('COM_CONTENT_READ_MORE');
-            echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit'));
-          endif;
-          ?>
+        <a class="btn btn-primary" href="<?php echo $link; ?>"> 
+          <?php echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit')); ?>
 
-        </a></p>
+          <span class="icon-chevron-right"></span>
 
-  <?php endif; ?>
+        </a>
+      </p>
 
-  <?php if ($this->item->state == 0) : ?>
-    </div>
-  <?php endif; ?>
-
-<?php echo $this->item->event->afterDisplayContent; ?>
+    <?php endif; ?>
+  </div>
+</div>
