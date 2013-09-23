@@ -15,6 +15,16 @@ defined('_JEXEC') or die;
  */
 class RegisterOwnerControllerRegisterOwner extends JControllerForm {
 
+  public function activate() {
+
+    $app = JApplication::getInstance('administrator');
+    
+    $app->enqueueMessage('Blah', 'success');
+    $app->redirect('/administrator');
+    return true;
+    
+  }
+  
   public function register() {
     // Check for request forgeries.
     JSession::checkToken('POST') or jexit(JText::_('JINVALID_TOKEN'));
@@ -71,20 +81,12 @@ class RegisterOwnerControllerRegisterOwner extends JControllerForm {
     
     // Flush the data from the session
     $app->setUserState('com_registerowner.register.data', null);
+    
+    $msg = JText::_('COM_REGISTER_SUCCESS');
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&id=1134', false), $msg, 'success');
+    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&Itemid=435', false));
 
     return true;
   }
-  
-  public function activate (){
-    echo "WTF!?";
-
-    $this->setRedirect('/administrator');
-    return true;
-  }
-  
-
- 
 }

@@ -18,18 +18,18 @@ $info = $this->item->params->get('info_block_position', 0);
 ?>
 
 <div class="item <?php echo ($this->item_number == 0) ? 'active' : '' ?>">
-  <?php if (isset($images->image_fulltext) && !empty($images->image_fulltext)) : ?>
-    <img src="<?php echo htmlspecialchars($images->image_fulltext); ?>" alt="<?php echo htmlspecialchars($images->image_intro_alt); ?>"/>
+  <?php if (isset($images->image_slider) && !empty($images->image_slider)) : ?>
+    <img src="<?php echo htmlspecialchars($images->image_slider); ?>" alt="<?php echo htmlspecialchars($images->image_slider_alt); ?>"/>
   <?php endif; ?>
   <div class="carousel-caption">
     <?php if ($params->get('show_title')) : ?>
-      <h1 class="item-title">
+      <h4 class="item-title">
         <?php if ($params->get('link_titles') && $params->get('access-view')) : ?>
           <a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid)); ?>"> <?php echo $this->escape($this->item->title); ?></a>
         <?php else : ?>
           <?php echo $this->escape($this->item->title); ?>
         <?php endif; ?>
-      </h1>
+      </h4>
 
     <?php endif; ?>
 
@@ -53,9 +53,10 @@ $info = $this->item->params->get('info_block_position', 0);
       endif;
       ?>
 
-      <p class="lead">          
+      <p>          
         <?php 
-        echo JHtml::_('string.truncate', ($this->item->text), $params->get('readmore_limit')); ?>
+        echo JHtml::_('string.truncate', (strip_tags($this->item->text)), $params->get('readmore_limit')); ?>
+      </p>
 
         <a class="btn btn-primary" href="<?php echo $link; ?>"> 
           <?php echo JHtml::_('string.truncate', ($this->item->title), $params->get('readmore_limit')); ?>
@@ -63,7 +64,6 @@ $info = $this->item->params->get('info_block_position', 0);
           <span class="icon-chevron-right"></span>
 
         </a>
-      </p>
 
     <?php endif; ?>
   </div>

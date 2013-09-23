@@ -25,6 +25,11 @@ JHtml::_('behavior.caption');
   <?php $leadingcount = 0; ?>
   <?php if (!empty($this->lead_items)) : ?>
     <div id="myCarousel" class="carousel slide"><!-- Carousel items -->
+      <ol class="carousel-indicators">
+        <?php for ($x = 0; $x < count($this->lead_items); $x++) : ?>
+          <li data-target="#myCarousel" data-slide-to="<?php echo $x ?>" class="<?php echo ($x == 0) ? 'active' : '' ?>"></li>
+        <?php endfor; ?>
+      </ol>
       <div class="carousel-inner">
         <?php foreach ($this->lead_items as &$item) : ?>
           <?php

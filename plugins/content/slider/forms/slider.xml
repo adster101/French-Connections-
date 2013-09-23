@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fields name="images">
+<field
+				name="spacer2"
+				type="spacer"
+				hr="true"
+				/>
+			<field
+				name="image_slider"
+				type="media"
+				label="Featured slider image"
+				description="If this article is featured on the homepage then please specify a full width image."
+				labelclass="control-label"/>
+			
+			<field name="image_slider_alt"
+				type="text"
+				label="COM_CONTENT_FIELD_IMAGE_ALT_LABEL"
+				description="COM_CONTENT_FIELD_IMAGE_ALT_DESC"
+				class="inputbox"
+				size="20"
+				labelclass="control-label"/>
+
+  </fields>
+</form>

@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.keepalive');
 JHtml::_('bootstrap.tooltip');
 ?>
-<form action="<?php echo JRoute::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="login-form" class="form-inline">
+<form action="<?php echo JRoute::_('/administrator/index.php', true, $params->get('usesecure')); ?>" method="post" id="login-form" class="form-inline">
 	<?php if ($params->get('pretext')) : ?>
 		<div class="pretext">
 		<p><?php echo $params->get('pretext'); ?></p>
@@ -82,8 +82,8 @@ JHtml::_('bootstrap.tooltip');
 
 			</ul>
 		<?php endif; ?>
-		<input type="hidden" name="option" value="com_users" />
-		<input type="hidden" name="task" value="user.login" />
+		<input type="hidden" name="option" value="com_login" />
+		<input type="hidden" name="task" value="login" />
 		<input type="hidden" name="return" value="<?php echo $return; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>

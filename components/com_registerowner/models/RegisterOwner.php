@@ -100,61 +100,92 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @return boolean
    */
   public function save($data) {
+    $db = JFactory::getDBO();
 
-		$user = new JUser;
+    try {
 
-    $data['id'] = '';
-    $data['groups'] = array('10');
-    $data['email'] = $data['email1'];
-    $data['registerDate'] = JFactory::getDate()->toSql();
+      // Get an db instance and start a transaction
+      $db->transactionStart();
 
-    // Below should be parameterised so we can switch it off if we need to.
-    $data['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
-    $data['block'] = 1;
+      $user = new JUser;
 
-    // Bind the data.
-    if (!$user->bind($data)) {
-      $this->setError($user->getError());
-      return false;
+      $data['id'] = '';
+      $data['groups'] = array('10');
+      $data['email'] = $data['email1'];
+      $data['registerDate'] = JFactory::getDate()->toSql();
+      $data['name'] = $data['firstname'] . ' ' . $data['surname'];
+
+      // Below should be parameterised so we can switch it off if we need to.
+      //$data['activation'] = JApplication::getHash(JUserHelper::genRandomPassword());
+      $data['block'] = 0;
+
+      // Bind the data.
+      if (!$user->bind($data)) {
+        $this->setError($user->getError());
+        return false;
+      }
+
+      // Store the data.
+      if (!$user->save()) {
+        $this->setError($user->getError());
+        return false;
+      }
+
+      // Also would be a good idea to insert a row into the profile db table
+      JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components//com_helloworld/tables');
+      $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
+      
+      // Set the table key to id so we ensure a new record is generated.
+      $table->set('_tbl_key', 'id');
+
+      $user_profile['user_id'] = $user->id;
+      $user_profile['firstname'] = $data['firstname'];
+      $user_profile['surname'] = $data['surname'];
+
+      if (!$table->save($user_profile)) {
+        $this->setError($table->getError());
+        Throw new Exception('Problem creating user profile');
+      }
+
+      // Commit the transaction
+      $db->transactionCommit();
+
+      // Get the config setting to set the email details for
+      $config = JFactory::getConfig();
+      $data['fromname'] = $config->get('fromname');
+      $data['mailfrom'] = $config->get('mailfrom');
+      $data['sitename'] = $config->get('sitename');
+
+      $data['siteurl'] = JUri::root() . 'administrator';
+      // Set the link to activate the user account.
+      $uri = JUri::getInstance();
+      
+      $base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
+      //$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'] . '&advertiser=true', false);
+
+      $emailSubject = JText::sprintf(
+                      'COM_USERS_EMAIL_ACCOUNT_DETAILS', $data['name'], $data['sitename']
+      );
+
+      $emailBody = JText::sprintf(
+                      'COM_REGISTEROWNER_EMAIL_REGISTERED_BODY', $data['name'], $data['sitename'],$data['siteurl'], $data['siteurl'], $data['username'], $user->password_clear
+      );
+
+      // Send the registration email. the true argument means it will go as HTML
+      $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody, true);
+
+      if (!$return) {
+        return false;
+      }
+
+      return true;
+    } catch (Exception $e) {
+
+      // Roll back any queries executed so far
+      $db->transactionRollback();
+
+      $this->setError($e->getMessage());
     }
-
-    // Store the data.
-    if (!$user->save()) {
-      $this->setError($user->getError());
-      return false;
-    }
-
-    // Errr, also update the phone number, a lot of hassle if you can't do that, innit!
-    
-    // Get the config setting to set the email details for
-    $config = JFactory::getConfig();
-    $data['fromname'] = $config->get('fromname');
-    $data['mailfrom'] = $config->get('mailfrom');
-    $data['sitename'] = $config->get('sitename');
-
-    $data['siteurl'] = JUri::root() . 'administrator';
-    // Set the link to activate the user account.
-    $uri = JUri::getInstance();
-    $base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
-    $data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'], false);
-
-    $emailSubject = JText::sprintf(
-                    'COM_USERS_EMAIL_ACCOUNT_DETAILS', $data['name'], $data['sitename']
-    );
-
-    $emailBody = JText::sprintf(
-                    'COM_USERS_EMAIL_REGISTERED_WITH_ACTIVATION_BODY', $data['name'], $data['sitename'], $data['activate'], $data['siteurl'], $data['username'], $user->password_clear
-    );
-
-    // Send the registration email.
-    $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody);
-    
-    if (!$return) {
-      return false;
-    }
-    
-    return true;
-    
   }
 
 }
