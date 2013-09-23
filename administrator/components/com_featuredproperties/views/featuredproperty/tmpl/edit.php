@@ -36,7 +36,7 @@ JHtml::_('behavior.formvalidation');
 <script type="text/javascript">
   Joomla.submitbutton = function(task)
   {
-    if (task == 'article.cancel' || document.formvalidator.isValid(document.id('adminForm')))
+    if (task == 'featuredproperty.cancel' || document.formvalidator.isValid(document.id('adminForm')))
     {
       Joomla.submitform(task, document.getElementById('adminForm'));
     }

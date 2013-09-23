@@ -36,7 +36,7 @@ class modFeaturedPropertyHelper {
       c.unit_title,
       c.occupancy,
       g.title,
-      (select min(tariff) from qitz3_tariffs h where h.unit_id = b.id and end_date > now() group by unit_id ) as price
+      (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');
     $query->from('#__property as a');
     $query->join('left', '#__unit b ON a.id = b.property_id');

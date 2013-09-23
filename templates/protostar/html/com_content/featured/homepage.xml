@@ -301,6 +301,12 @@
 				<option value="0">JHIDE</option>
 				<option value="1">JSHOW</option>
 			</field>
+      <field
+        name="readmore_limit"
+        type="text"
+        label="Readmore limit"
+        
+      />
 
 			<field name="show_icons" type="list"
 				description="JGLOBAL_SHOW_ICONS_DESC"
