@@ -372,7 +372,7 @@ class AccommodationModelListing extends JModelForm {
 
     // Attempt to load the availability for this property
     $availability = $model->getAvailability($unit_id);
-    
+
     // Get availability as an array of days
     $this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability);
 
@@ -481,11 +481,15 @@ class AccommodationModelListing extends JModelForm {
 
     // property_id actually refers to unit id
     $query->join('left', '#__unit_versions b on a.property_id = b.unit_id');
-
+    $query->join('left', '#__unit_versions c on c.id = b.version_id');
     $query->where('b.property_id = ' . (int) $unit_id);
     $query->where('b.review = 0'); // Should ensure we get the published images 
 
-    $query->order('ordering', 'asc');
+    if ($preview) {
+      $query->order('c.version_id', 'desc');
+    } else {
+      $query->order('ordering', 'asc');
+    }
 
     $db->setQuery($query);
 
