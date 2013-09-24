@@ -97,7 +97,6 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
       if ($canDo->get('core.create')) {
         JToolBarHelper::save('propertyversions.saveandnext', 'JTOOLBAR_SAVE');
         JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
-        //JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
       }
     } else {
       if ($canDo->get('core.edit.own'))
@@ -105,6 +104,8 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
         // We can save the new record
         JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
         JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
+        JToolBarHelper::custom('propertyversions.saveandnext', 'next', 'next', 'COM_HELLOWORLD_HELLOWORLD_SAVE_AND_NEXT', false);
+
       }
     }
     

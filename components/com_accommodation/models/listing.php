@@ -539,7 +539,11 @@ class AccommodationModelListing extends JModelForm {
     $query->where('a.id = ' . (int) $unit_id);
     //$query->where('b.review = 0'); // Should ensure we get the published images 
 
-    $query->order('ordering', 'asc');
+    if ($preview) {
+      $query->order('c.version_id', 'desc');
+    } else {
+      $query->order('ordering', 'asc');
+    }
 
     $db->setQuery($query);
 

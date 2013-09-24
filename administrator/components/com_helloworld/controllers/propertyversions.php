@@ -10,6 +10,7 @@ jimport('frenchconnections.controllers.property.base');
  * HelloWorld Controller
  */
 class HelloWorldControllerPropertyVersions extends HelloWorldControllerBase {
+ 
 
   public function cancel($key = null) {
     parent::cancel($key);
@@ -159,6 +160,30 @@ class HelloWorldControllerPropertyVersions extends HelloWorldControllerBase {
     );
 
     return true;
+  }
+
+  public function saveandnext($key = null, $urlVar = null) {
+
+    $return = parent::save($key, $urlVar);
+
+    $id = JFactory::getApplication()->input->get('property_id','','int');
+    
+    if ($return && (int) $id && $id > 0) {
+
+      // Derive the first unit for this property and redirect
+      // getDefaultUnit - useful method for a property view also
+      // Get unit where ordering = 1 for this property id
+      // ensure that it is the latest version though, unless doing a preview
+
+      
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=com_helloworld&task=unitversions.edit&unit_id=' . (int) $unit_id, false
+              )
+      );
+    }
+
+    return $return;
   }
 
 }
