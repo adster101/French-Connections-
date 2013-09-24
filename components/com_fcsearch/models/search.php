@@ -356,10 +356,10 @@ class FcSearchModelSearch extends JModelList {
         $query->where('b.department = ' . $this->location);
       }
 
-      $query->join('left', '#__property_attributes e on e.property_id = j.id');
+      $query->join('left', '#__property_attributes e on (e.property_id = j.id and e.version_id = c.id)');
       $query->join('left', '#__attributes k on k.id = e.attribute_id');
 
-      $query->join('left', '#__property_attributes f on f.property_id = j.id');
+      $query->join('left', '#__property_attributes f on (f.property_id = j.id and e.version_id = c.id)');
       $query->join('left', '#__attributes l on l.id = f.attribute_id');
 
 

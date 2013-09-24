@@ -56,7 +56,6 @@ class HelloWorldModelProperty extends JModelAdmin {
       // Set the model properties here.
       $this->listing = $config['listing'];
       $this->owner_id = $config['listing'][0]->created_by;
-
       /*
        * Determine whether this is a renewal. 
        */

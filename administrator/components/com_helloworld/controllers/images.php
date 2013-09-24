@@ -37,6 +37,47 @@ class HelloWorldControllerImages extends JControllerAdmin {
   }
 
   /**
+   * Changes the order of one or more records.
+   *
+   * @return  boolean  True on success
+   *
+   * @since   12.2
+   */
+  public function reorder() {
+    // Check for request forgeries.
+    JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+    $unit_id = JFactory::getApplication()->input->get('unit_id','','int');
+    $ids = JFactory::getApplication()->input->post->get('cid', array(), 'array');
+    $inc = ($this->getTask() == 'orderup') ? -1 : +1;
+
+    $model = $this->getModel();
+    $return = $model->reorder($ids, $inc);
+    if ($return === false) {
+      // Reorder failed.
+      $message = JText::sprintf('JLIB_APPLICATION_ERROR_REORDER_FAILED', $model->getError());
+      $this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . '&unit_id=' . (int) $unit_id, false), $message, 'error');
+      return false;
+    } else {
+      // Reorder succeeded.
+      $message = JText::_('JLIB_APPLICATION_SUCCESS_ITEM_REORDERED');
+      $this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . '&unit_id=' . (int) $unit_id, false), $message);
+      return true;
+    }
+  }
+
+  /**
+   * Proxy for getModel.
+   * @since	1.6
+   */
+  public function getModel($name = 'Image', $prefix = 'HelloWorldModel') {
+    $model = parent::getModel($name, $prefix, array('ignore_request' => true));
+    return $model;
+  }
+
+
+
+  /**
    *
    * The folder we are uploading into
    */
@@ -115,24 +156,21 @@ class HelloWorldControllerImages extends JControllerAdmin {
 
     // Build up the data
     $data['property_id'] = $input->get('property_id', '', 'int');
-    $data['caption'] = $input->get('caption','','string');
-    $data['id'] = $input->get('id','','int');
+    $data['caption'] = $input->get('caption', '', 'string');
+    $data['id'] = $input->get('id', '', 'int');
 
     // Check that this user is authorised to edit (i.e. owns) this this property
-    if (!$this->allowEdit($data, 'property_id'))
-    {
+    if (!$this->allowEdit($data, 'property_id')) {
       $response = JText::_('NOT_AUTHORISED');
       echo $response;
       jexit(); // Exit this request now as results passed back to client via xhr transport.
-
     }
 
 
 
     // Need to ensure the caption is filtered at some point
-
     // Load the relevant model(s) so we can save the data back to the db
-    $model = $this->getModel('Image','HelloWorldModel');
+    $model = $this->getModel('Image', 'HelloWorldModel');
 
     // If we are happy to save and have something to save
     if (!$model->save($data)) {
@@ -140,7 +178,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
       echo $response;
       jexit(); // Exit this request now as results passed back to client via xhr transport.
-
     }
 
 
@@ -149,7 +186,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
     echo $response;
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
-
     // Log out to a file
     // User ID updates caption ID from to on this
   }
@@ -166,7 +202,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Build up the data
 
     $data['property_id'] = $input->get('property_id', '', 'int');
-    $data['id'] = $input->get('id','','int');
+    $data['id'] = $input->get('id', '', 'int');
 
     // Check that this user is authorised to edit (i.e. owns) this this asset
     if (!$this->allowEdit($data, 'property_id')) {
@@ -182,7 +218,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $table = $model->getTable();
 
     if (!$table->delete($data['id'])) {
-       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'message');
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'message');
     } else {
       // Set the message
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
@@ -211,7 +247,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $property_id = $app->input->get('property_id', '', 'GET', 'int');
 
     // Get the version id
-    $version_id = $app->input->get('version_id','','GET','int');
+    $version_id = $app->input->get('version_id', '', 'GET', 'int');
 
     // Set the filepath for the images to be moved into
     $this->folder = JPATH_SITE . '/images/property/' . $property_id . '/';
@@ -309,14 +345,13 @@ class HelloWorldControllerImages extends JControllerAdmin {
         // primarily so we can get the ordering
         $model = $this->getModel('Images');
 
-        $model->setState('version_id',$version_id);
+        $model->setState('version_id', $version_id);
 
         $existing_images = $model->getItems();
 
         if (empty($existing_images)) {
 
           $ordering = 1;
-
         } else {
 
           $last = array_pop($existing_images);
@@ -379,37 +414,35 @@ class HelloWorldControllerImages extends JControllerAdmin {
     );
   }
 
-	/**
-	 * Method to save the submitted ordering values for records via AJAX.
-	 *
-	 * @return  void
-	 *
-	 * @since   3.0
-	 */
-	public function saveOrderAjax()
-	{
-		$pks = $this->input->post->get('cid', array(), 'array');
-		$order = $this->input->post->get('order', array(), 'array');
+  /**
+   * Method to save the submitted ordering values for records via AJAX.
+   *
+   * @return  void
+   *
+   * @since   3.0
+   */
+  public function saveOrderAjax() {
+    $pks = $this->input->post->get('cid', array(), 'array');
+    $order = $this->input->post->get('order', array(), 'array');
 
 
-		// Sanitize the input
-		JArrayHelper::toInteger($pks);
-		JArrayHelper::toInteger($order);
+    // Sanitize the input
+    JArrayHelper::toInteger($pks);
+    JArrayHelper::toInteger($order);
 
-		// Get the model
-		$model = $this->getModel('Image');
+    // Get the model
+    $model = $this->getModel('Image');
 
-		// Save the ordering
-		$return = $model->saveorder($pks, $order);
+    // Save the ordering
+    $return = $model->saveorder($pks, $order);
 
-		if ($return)
-		{
-			echo "1";
-		}
+    if ($return) {
+      echo "1";
+    }
 
-		// Close the application
-		JFactory::getApplication()->close();
-	}
+    // Close the application
+    JFactory::getApplication()->close();
+  }
 
   /*
    * View action - checks ownership of record sets the edit id in session and redirects to the view
@@ -438,7 +471,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
       return false;
     }
 
-    $this->holdEditId('com_helloworld.edit.unitversions',$id);
+    $this->holdEditId('com_helloworld.edit.unitversions', $id);
 
     $this->setRedirect(
             JRoute::_(

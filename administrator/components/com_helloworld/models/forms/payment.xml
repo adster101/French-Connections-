@@ -10,7 +10,7 @@
             name="CardType"
             type="list"
             required="true"
-            default="VISA"
+            default=""
             filter="string"
             labelclass="control-label"
             label="COM_HELLOWORLD_HELLOWORLD_PAYMENT_CARD_TYPE">
@@ -27,7 +27,7 @@
             name="CardNumber"
             type="text"
             required="true"
-            default="4659467892306199"
+            default=""
             filter="string"
             class="input-medium"
             labelclass="control-label"
@@ -50,13 +50,13 @@
             size="30"
             labelclass="control-label"
             required="true"
-            default="Mr A Rifat"
+            default=""
         />
 
         <field
             name="CardStartDate"
             type="text"
-            default="1211"
+            default=""
             class="input-mini"
             id="CardStartDate"
             size="5"
@@ -78,7 +78,7 @@
             required="true"
             label="COM_HELLOWORLD_HELLOWORLD_CARD_EXPIRY_DATE"
             filter="int"
-            default="1214"
+            default=""
         />
         <field
             name="IssueNumber"
@@ -120,7 +120,7 @@
             size="30"
             required="true"
             labelclass="control-label"
-            default="Adam"
+            default=""
         />
         <field
             name="BillingSurname"
@@ -134,7 +134,7 @@
             size="30"
             required="true"
             labelclass="control-label"
-            default="Rifat"
+            default=""
         />
         <field
             name="BillingAddress1"
@@ -148,7 +148,7 @@
             size="30"
             required="true"
             labelclass="control-label"
-            default="56 St Thomas's Road"
+            default=""
         />
         <field
             name="BillingAddress2"
@@ -174,7 +174,7 @@
             size="30"
             labelclass="control-label"
             required="true"
-            default="Hastings"
+            default=""
         />
 
         <field
@@ -188,7 +188,7 @@
             size="30"
             labelclass="control-label"
             required="true"
-            default="TN34 3LQ"
+            default=""
             class="input-small"
         />
         <field 
@@ -202,14 +202,14 @@
             label="PLG_USER_PROFILE_FIELD_EMAIL_LABEL"
             message="PLG_USER_PROFILE_FIELD_EMAIL_MESSAGE"            
             description="PLG_USER_PROFILE_FIELD_EMAIL_DESC"
-            default="adam@littledonkey.net"
+            default=""
         />
         
         <field
             name="BillingCountry"
             type="list"
             required="true"
-            default="GB"
+            default=""
             filter="string"
             labelclass="control-label"
             label="COM_HELLOWORLD_HELLOWORLD_PAYMENT_BILLING_COUNTRY">

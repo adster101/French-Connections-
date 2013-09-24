@@ -36,6 +36,7 @@ $app = JFactory::getApplication();
 
 
 $id = $this->item->id ? $this->item->id : '';
+$unit_id = $this->item->unit_id ? $this->item->unit_id : '';
 
 $errors = $app->getUserState('com_accommodation.enquiry.messages');
 
@@ -51,7 +52,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
 
 <div class="well">
   
-  <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&view=property&id=' . $id); ?>" method="post" class="form-validate form-horizontal">
+  <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&id=' . (int) $id . '&unit_id=' . (int) $unit_id) . '#email'; ?>" method="post" class="form-validate form-horizontal">
     <fieldset class="adminform">
       <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
         <div class="control-group">
@@ -61,7 +62,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
           </div>
         </div>         
       <?php endforeach; ?>
-      <div class="form-actions"><button class="btn btn-primary validate" type="submit"><?php echo JText::_('COM_REVIEW_REVIEW_SUBMIT'); ?></button>
+      <div class="form-actions"><button class="btn btn-primary validate" type="submit"><?php echo JText::_('JSUBMIT'); ?></button>
         <input type="hidden" name="option" value="com_accommodation" />
         <input type="hidden" name="task" value="listing.enquiry" />
         <?php echo JHtml::_('form.token'); ?>

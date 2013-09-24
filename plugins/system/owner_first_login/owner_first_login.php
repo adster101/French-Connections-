@@ -94,7 +94,8 @@ class plgSystemOwner_first_login extends JPlugin {
             .'</div>
             <div class="modal-footer">
               <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-              <a class="btn btn-primary" aria-hidden="true" href="/administrator/index.php?option=com_helloworld">'.JText::_('PLG_OWNER_FIRST_LOGIN_PROCEED_TO_PROPERTY_MANAGER').'</a>
+              <a class="btn btn-primary" aria-hidden="true" href="/administrator/index.php?option=com_helloworld&task=propertyversions.add">'.JText::_('PLG_OWNER_FIRST_LOGIN_PROCEED_TO_PROPERTY_MANAGER').'</a>
+              <a class="btn btn-primary" aria-hidden="true" href="#">'.JText::_('PLG_OWNER_FIRST_LOGIN_PROCEED_TO_REALESTATE_PROPERTY_MANAGER').'</a>
             </div>
           </div>
         </body>';

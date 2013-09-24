@@ -64,10 +64,10 @@ jQuery(function () {
         .done(function(data) {
           jQuery('.ui-sortable').empty();
           jQuery('.ui-sortable').html(data);
-          
+
           // Bind the caption save event to the 
           add_event_handlers();
-          
+                    
         });
       } else {
         

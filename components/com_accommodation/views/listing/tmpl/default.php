@@ -7,7 +7,7 @@ $price_range = array();
 
 if (count($this->tariffs > 0)) {
   foreach ($this->tariffs as $tariff) {
-    $price_range[] = $tariff[2];
+    $price_range[] = $tariff->tariff;
   }
 }
 
@@ -493,17 +493,16 @@ JHTML::_('behavior.formvalidation');
     <?php echo $this->loadTemplate('navigator'); ?>
   </div>
 </div>
-<div class="row-fluid">
-  <div class="span12">
-    <?php if ($this->item->unit_title) : ?>
-      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h2> 
-    <?php endif; ?>
-  </div>
-</div>
+
 <div class="row-fluid">
   <div class="span8">
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h2> 
+    <?php endif; ?>    
     <?php if ($this->tariffs) : ?>
       <?php echo $this->loadTemplate('tariffs'); ?>
+    <?php else: ?>
+    <p>No tariffs were found for this property. Please enquire with the owner for rental rates for this property</p>
     <?php endif; ?>
   </div>
   <div class="span4">

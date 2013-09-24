@@ -81,6 +81,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     // Array to hold the result list
     $property_attributes = array();
+    
+    $properties = array();
 
     // Loads a list of the attributes that we are interested in
     // This is probably reused on the search part

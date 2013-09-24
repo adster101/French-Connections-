@@ -350,15 +350,20 @@ class JHtmlProperty {
 
     $progress_icon = 'warning';
     $okay_icon = 'ok';
+    $optional = 'wrench';
 
     $html = '';
 
     $id = ($controller == 'propertyversions' || $controller == 'contactdetails') ? $listing_id : $unit_id;
 
-    if (!empty($item->title) && ($controller == 'propertyversions' || $controller == 'contactdetails')) {
+    if (!empty($item->latitude) && ($controller == 'propertyversions')) {
 
       $progress_icon = $okay_icon;
       $id = $listing_id;
+    } elseif ($controller == 'contactdetails') {
+      $progress_icon = $optional;
+      $id = $listing_id;
+      
     } elseif (empty($item->title) && ($controller == 'propertyversions' )) {
 
       $progress_icon = $progress_icon;

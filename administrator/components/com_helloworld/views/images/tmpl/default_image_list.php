@@ -25,7 +25,6 @@ $app = JFactory::getApplication();
 $input = $app->input;
 
 $id = $input->get('property_id', '', 'int');
-
 ?>
 
 
@@ -40,13 +39,14 @@ $originalOrders = array();
 foreach ($this->items as $i => $item):
   ?>
   <tr>
-    <td class="hidden-phone">
-      <span class="sortable-handler hasTooltip" style="display:block">
-        <i class="icon-move"></i>
-      </span>
-      <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
+    <td class="hide">
       <?php echo JHtml::_('grid.id', $i, $item->id); ?>
 
+    </td>
+    <td>
+      <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
+      <?php echo $this->pagination->orderUpIcon($i, true, 'images.orderup', 'JLIB_HTML_MOVE_UP', 1); ?>
+      <?php echo $this->pagination->orderDownIcon($i, count($this->items), true, 'images.orderdown', 'JLIB_HTML_MOVE_DOWN', 1); ?>
     </td>
     <td>
       <input type="radio" name="image_id[]" size="5" value="" class="width-20 text-area-order " />
@@ -57,7 +57,7 @@ foreach ($this->items as $i => $item):
     </td>
     <td class="caption">
       <input  class="input input-xlarge" type="text" name="jform[caption]" value="<?php echo $this->escape($item->caption); ?>" maxlength="75" />
-       <a style="margin-bottom:9px;" class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_helloworld&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&property_id=' . (int) $this->items[0]->property_id ?>" >
+      <a style="margin-bottom:9px;" class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_helloworld&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&property_id=' . (int) $this->items[0]->property_id ?>" >
         <i class="icon-pencil-2 icon-white"></i>
         <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_UPDATE_CAPTION'); ?>
       </a>
@@ -69,5 +69,6 @@ foreach ($this->items as $i => $item):
         <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_DELETE_IMAGE'); ?>
       </a>
     </td>
+
   </tr>
 <?php endforeach; ?>

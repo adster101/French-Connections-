@@ -109,6 +109,7 @@ class HelloWorldViewUnitversions extends JViewLegacy {
         // We can save the new record
         JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
         JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
+        
       }
     }
 

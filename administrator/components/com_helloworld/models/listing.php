@@ -10,8 +10,6 @@ jimport('joomla.application.component.modellist');
  */
 class HelloWorldModelListing extends JModelList {
 
-  
-
   /**
    * Method to auto-populate the model state.
    *
@@ -91,7 +89,7 @@ class HelloWorldModelListing extends JModelList {
 
     // Get the access control permissions in a handy array
     $canDo = HelloWorldHelper::getActions();
-    $id = $this->getState($this->context . '.id','');
+    $id = $this->getState($this->context . '.id', '');
 
     // Create a new query object.
     $db = JFactory::getDBO();
@@ -104,6 +102,9 @@ class HelloWorldModelListing extends JModelList {
         a.expiry_date,
         a.review,
         b.review as property_review,
+        b.latitude, 
+        b.longitude,
+        b.department,
         e.review as unit_review,
         b.title,
         a.created_by,
@@ -117,14 +118,21 @@ class HelloWorldModelListing extends JModelList {
         e.created_on,
         base_currency,
         tariff_based_on,
+        h.id as accommodation_type,
         (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
         (select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) as availability,
-        (select count(*) from qitz3_tariffs where id = d.id and end_date > NOW()) as tariffs
+        (select count(*) from qitz3_tariffs where unit_id = d.id and end_date > NOW()) as tariffs
       ');
     $query->from('#__property as a');
     $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id))');
-    $query->join('left','#__unit d on d.property_id = a.id');
+    $query->join('left', '#__unit d on d.property_id = a.id');
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
+
+    // Join the property type through the property attributes table
+    $query->join('left', '#__property_attributes g on (g.property_id = d.id and g.version_id = e.id)');
+    $query->join('left', '#__attributes h on h.id = g.attribute_id');
+    $query->where('h.attribute_type_id = 2');
+
     $query->where('a.id = ' . (int) $id);
     $query->order('ordering');
 
@@ -153,5 +161,6 @@ class HelloWorldModelListing extends JModelList {
 
     return $return;
   }
+
 }
 

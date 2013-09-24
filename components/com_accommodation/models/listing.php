@@ -16,6 +16,20 @@ class AccommodationModelListing extends JModelForm {
   protected $item;
 
   /**
+   * @var boolean review
+   */
+  protected $preview = false;
+
+  public function __construct($config = array()) {
+
+    parent::__construct($config = array());
+
+    $input = JFactory::getApplication()->input;
+
+    $this->preview = ($input->get('preview', 0, 'boolean')) ? true : false;
+  }
+
+  /**
    * Method to get the contact form.
    *
    * The base form is loaded from XML and then an event is fired
@@ -150,8 +164,8 @@ class AccommodationModelListing extends JModelForm {
         d.unit_title,
         d.description,
         e.title as city,
-        f.title as accommodation_type,
         g.title as property_type,
+        m.title as accommodation_type,
         h.title as department,
         i.title as base_currency,
         j.title as tariffs_based_on,
@@ -176,29 +190,38 @@ class AccommodationModelListing extends JModelForm {
 
       $query->select($select);
 
-      // Join the units table in, only retrieves one at a time??
       $query->from('#__property as a');
       $query->leftJoin('#__unit b ON a.id = b.property_id');
-      $query->leftJoin('#__property_versions c ON c.property_id = a.id');
-      $query->leftJoin('#__unit_versions d ON d.unit_id = b.id');
+      if (!$this->preview) {
+        $query->leftJoin('#__property_versions c ON (c.property_id = a.id and c.id = (select max(n.id) from #__property_versions as n where n.property_id = a.id and n.review = 0))');
+      } else {
+        $query->leftJoin('#__property_versions c ON (c.property_id = a.id and c.id = (select max(n.id) from #__property_versions as n where n.property_id = a.id))');
+      }
 
+      if (!$this->preview) {
+        $query->leftJoin('#__unit_versions d ON (d.unit_id = b.id and d.id = (select max(o.id) from #__unit_versions o where unit_id = b.id and o.review = 0))');
+      } else {
+        $query->leftJoin('#__unit_versions d ON (d.unit_id = b.id and d.id = (select max(o.id) from #__unit_versions o where unit_id = b.id))');
+      }
       // If unit ID is specified load that unit instead of the default one
       if ($unit_id) {
         //$query->where('unit.id = ' . (int) $unit_id);
       }
 
-      $query->where('a.id=' . (int) $id);
-      $query->where('b.id=' . (int) $unit_id);
-      $query->where('a.published = 1');
-      $query->where('b.published = 1');
-      $query->where('c.review = 0');
-      $query->where('d.review = 0');
-      $query->where('a.expiry_date > now()');
-
       $query->leftJoin('#__classifications e ON e.id = c.city');
 
-      $query->leftJoin('#__attributes f ON f.id = d.accommodation_type');
-      $query->leftJoin('#__attributes g ON g.id = d.property_type');
+      // Join the property type through the property attributes table
+      $query->join('left', '#__property_attributes f on (f.property_id = b.id and f.version_id = d.id)');
+      $query->join('left', '#__attributes g on g.id = f.attribute_id');
+      $query->where('g.attribute_type_id = 1');
+
+
+      // Join the attributes a second time to get at the accommodation type
+      // This join is also based on version id to ensure we only get the version we are interested in
+      $query->join('left', '#__property_attributes l on (l.property_id = b.id and l.version_id = d.id)');
+      $query->join('left', '#__attributes m on m.id = l.attribute_id');
+      $query->where('m.attribute_type_id = 2');
+
       $query->leftJoin('#__classifications h ON h.id = c.department');
       $query->leftJoin('#__attributes i ON i.id = d.base_currency');
       $query->leftJoin('#__attributes j ON j.id = d.tariff_based_on');
@@ -207,12 +230,26 @@ class AccommodationModelListing extends JModelForm {
       $query->leftJoin('#__users u on a.created_by = u.id');
       $query->leftJoin('#__user_profile_fc ufc on u.id = ufc.user_id');
 
+      // Refine the query based on the various parameters
+      $query->where('a.id=' . (int) $id);
+      $query->where('b.id=' . (int) $unit_id);
+
+      if (!$this->preview) {
+        $query->where('a.published = 1');
+        $query->where('b.published = 1');
+      } else {
+        $query->where('a.published in (0,1)');
+        $query->where('b.published in (0,1)');
+      }
+      if (!$this->preview) {
+        $query->where('a.expiry_date > ' . JFactory::getDate()->calendar('Y-m-d'));
+      }
       if (!$this->item = $this->_db->setQuery($query)->loadObject()) {
         $this->setError($this->_db->getError());
       }
     }
 
-    // Update the unit id into the model state
+    // Update the unit id into the model state for use later on in the model
     if (empty($unit_id)) {
       $this->setState('unit.id', $this->item->unit_id);
     }
@@ -231,20 +268,31 @@ class AccommodationModelListing extends JModelForm {
     if (!isset($this->facilities)) {
       try {
         // Get the state for this property ID
-        $id = $this->getState('unit.id');
+        $unit_id = $this->getState('unit.id');
 
         $attributes = array();
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('facilities'));
-        JLog::add('Retrieving facilities for - ' . $id . ')', JLog::ALL, 'facilities');
+        JLog::add('Retrieving facilities for - ' . $unit_id . ')', JLog::ALL, 'facilities');
 
         $query = $this->_db->getQuery(true);
-        $query->select('a.title as attribute,at.title as attribute_type');
-        $query->from('#__property_attributes ap');
-        $query->join('left', '#__attributes a on a.id = ap.attribute_id');
-        $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
-        $query->where('ap.property_id = ' . $id);
+        $query->select('
+            e.title as attribute,
+            f.title as attribute_type
+          ');
+        $query->from('#__unit a');
+        if (!$this->preview) {
+          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
+        } else {
+          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
+        }
+
+        $query->join('left', '#__property_attributes d on (d.property_id = a.id and d.version_id = b.id)');
+        $query->join('left', '#__attributes e on e.id = d.attribute_id');
+        $query->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
+
+        $query->where('a.id = ' . $unit_id);
 
         $results = $this->_db->setQuery($query)->loadObjectList();
 
@@ -262,7 +310,7 @@ class AccommodationModelListing extends JModelForm {
         return $this->facilities;
       } catch (Exception $e) {
         // Log the exception and return false
-        JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
+        JLog::add('Problem fetching facilities for - ' . $unit_id . $e->getMessage(), JLOG::ERROR, 'facilities');
         return false;
       }
     }
@@ -317,25 +365,30 @@ class AccommodationModelListing extends JModelForm {
   public function getReviews() {
 
     if (!isset($this->reviews)) {
-      $id = $this->getState('unit.id');
+      $unit_id = $this->getState('unit.id');
 
       try {
         // Get the state for this property ID
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
-        JLog::add('Retrieving reviews for - ' . $id . ')', JLog::ALL, 'reviews');
+        JLog::add('Retrieving reviews for - ' . $unit_id . ')', JLog::ALL, 'reviews');
 
-        // Load the reviews model from Property manager
-        JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+        // Create a new query object.
+        $db = JFactory::getDBO();
+        $query = $db->getQuery(true);
 
-        $model = JModelLegacy::getInstance('Reviews', 'HelloWorldModel');
+        // Select some fields
+        $query->select('*');
 
-        // Attempt to load the reviews for this property
-        // Need to get only the published reviews
-        $model->getListQuery();
+        // From the special offers table
+        $query->from('#__reviews as a');
 
-        // Get the items, sweet!
-        $reviews = $model->getItems();
+        // Only want those assigned to the current property
+        $query->where('unit_id = ' . $unit_id);
+
+        $db->setQuery($query);
+
+        $reviews = $db->loadAssocList();
 
         $this->reviews = $reviews;
 
@@ -343,7 +396,7 @@ class AccommodationModelListing extends JModelForm {
         return $this->reviews;
       } catch (Exception $e) {
         // Log the exception and return false
-        JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
+        JLog::add('Problem fetching reviews for - ' . $unit_id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
       }
     }
@@ -372,7 +425,7 @@ class AccommodationModelListing extends JModelForm {
 
     // Attempt to load the availability for this property
     $availability = $model->getAvailability($unit_id);
-    
+
     // Get availability as an array of days
     $this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability);
 
@@ -388,23 +441,20 @@ class AccommodationModelListing extends JModelForm {
 
   public function getTariffs() {
 
-    // First we need an instance of the availability table
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
-
-    $tariffsTable = JTable::getInstance('Tariffs', 'HelloWorldTable', array());
-
     // Get the state for this property ID
-    $id = $this->getState('unit.id');
+    $unit_id = $this->getState('unit.id');
 
-    // Attempt to load the availability for this property
-    $tariffs = $tariffsTable->load($id);
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+    $model = JModelLegacy::getInstance('Tariffs', 'HelloWorldModel');
+
+    $tariffs = $model->getTariffs($unit_id);
+
+
 
     // Check the $availability loaded correctly
     if (!$tariffs) {
 
-      // Ooops, there was a problem getting the availability
-      // Check that the row actually exists
-      // Log it baby...
+      $tariffs = array();
     }
 
     return $tariffs;
@@ -471,19 +521,23 @@ class AccommodationModelListing extends JModelForm {
 
     // Get a list of the images uploaded against this listing
     $query->select('
-      a.id,
-      a.property_id,
-      a.image_file_name,
-      a.caption,
-      a.ordering
+      d.property_id,
+      d.image_file_name,
+      d.caption,
+      d.ordering
     ');
-    $query->from('#__property_images_library a');
 
-    // property_id actually refers to unit id
-    $query->join('left', '#__unit_versions b on a.property_id = b.unit_id');
+    $query->from('#__unit a');
+    if (!$this->preview) {
+      $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
+    } else {
+      $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
+    }
 
-    $query->where('b.property_id = ' . (int) $unit_id);
-    $query->where('b.review = 0'); // Should ensure we get the published images 
+    $query->join('left', '#__property_images_library d on (d.property_id = a.id and d.version_id = b.id)');
+
+    $query->where('a.id = ' . (int) $unit_id);
+    //$query->where('b.review = 0'); // Should ensure we get the published images 
 
     $query->order('ordering', 'asc');
 

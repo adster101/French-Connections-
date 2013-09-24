@@ -25,11 +25,11 @@ if (!empty($progress)) {
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (!empty($notices) || empty($progress[0]->title)) : ?>
+    <?php if (!empty($notices) ) : ?>
       <div class="alert alert-info">
         <h4>Listing Progress</h4>
         <ul>
-          <?php if (empty($progress[0]->title)) : ?>
+          <?php if (empty($progress[0]->latitude) && empty($progress[0]->longitude)) : ?>
             <li>
               <?php echo JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
             </li>
@@ -87,18 +87,18 @@ if (!empty($progress)) {
   <?php // Need to put the following into language strings    ?>
   <div class="span3">
     <h4>Key</h4>
-    <div class="row-fluid">
-      <div class="span6">
-        <p>
-          <i class="icon icon-warning"> </i>
-          Please complete
-      </div>
-      <div class="span6">
+    <p>
+      <i class="icon icon-warning"> </i>
+      Please complete
+    </p>
+    <p>
 
-        <i class="icon icon-publish"></i>
-        Section complete
-        </p>
-      </div>
-    </div>
+      <i class="icon icon-publish"></i>
+      Section complete
+    </p>
+    <p>
+      <i class="icon icon-wrench"></i>
+      Optional
+    </p>
   </div>
 </div>
