@@ -820,7 +820,7 @@ class HelloWorldModelProperty extends JModelAdmin {
    * @param type $renewal_status - renewal status for the listing
    * @return boolean
    */
-  public function updateProperty($listing_id = '', $review = 1, $cost = '0.00', $expiry_date = '') {
+  public function updateProperty($listing_id = '', $review = 1, $cost = '', $expiry_date = '') {
 
     // Initialise some variable
     $data = array();

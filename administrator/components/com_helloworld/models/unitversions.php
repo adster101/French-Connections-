@@ -12,6 +12,7 @@ jimport('joomla.application.component.modeladmin');
 class HelloWorldModelUnitVersions extends JModelAdmin {
 
   public $layout = '';
+  public $new_version_required = false;
 
   /**
    * Method override to check if you can edit an existing record.
@@ -61,11 +62,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       $attributes = $this->getFacilities($pk, $item->id);
 
-      foreach($attributes as $key => $values) {
-      $item->$key = $values;
-        
+      foreach ($attributes as $key => $values) {
+        $item->$key = $values;
       }
-       // Add any tariffs to the unit data for display on the view
+      // Add any tariffs to the unit data for display on the view
     }
 
     //$item = JArrayHelper::toObject($properties, 'JObject');
@@ -81,13 +81,13 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     // Array to hold the result list
     $property_attributes = array();
-    
+
     $properties = array();
 
     // Loads a list of the attributes that we are interested in
     // This is probably reused on the search part
     $query = $this->_db->getQuery(true);
-    
+
     $query->select('d.field_name, b.attribute_id');
     $query->from('#__property_attributes b');
     $query->join('left', '#__attributes c on c.id = b.attribute_id');
@@ -95,9 +95,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $query->leftJoin('#__attributes_type d on d.id = c.attribute_type_id');
 
     $query->where($this->_db->quoteName('b.property_id') . ' = ' . (int) $id);
-    
+
     $query->where($this->_db->quoteName('b.version_id') . ' = ' . (int) $version);
-    
+
     $this->_db->setQuery($query);
 
     // Execute the db query, returns an iterator object.
@@ -204,33 +204,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
   }
 
   /**
-   * Method to auto-populate the model state.
-   *
-   * Note. Calling getState in this method will result in recursion.
-   *
-   * @param	string	An optional ordering field.
-   * @param	string	An optional direction (asc|desc).
-   *
-   * @return	void
-   * @since	1.6
-   */
-  public function populateState($ordering = null, $direction = null) {
-
-    $canDo = HelloWorldHelper::getActions();
-    $this->setState('actions.permissions', $canDo);
-
-    // Set the model state for this unit
-    $app = JFactory::getApplication();
-    $input = $app->input;
-
-    $listing_id = $input->get('listing_id', '', 'int');
-    $this->setState('unitversions.listing_id', $listing_id);
-
-    // List state information.
-    parent::populateState();
-  }
-
-  /**
    * Overidden method to save the form data.
    *
    * @param   array  $data  The form data.
@@ -246,8 +219,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
-    $new_version_required = false;
-    $old_version_id = ($data['id']) ? $data['id'] : '';
 
     // Generate a logger instance for reviews
     JLog::addLogger(array('text_file' => 'unitversions.update.php'), 'DEBUG', array('unitversions'));
@@ -267,13 +238,16 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
         $isNew = false;
       }
 
+      $old_version_id = ($table->id) ? $table->id : '';
+
       // If this is a new unit then we need to generate a 'stub' entry into the unit table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       // TO DO - Move this code to run when user chooses add new property
       if ($isNew) {
 
         // in unit table property ID refers to the parent listing id
-        $data['property_id'] = $data['property_id'];
+        // $data['property_id'] = $data['property_id'];
+        // Pass the review state in as an argument
         $data['review'] = 1;
         $new_unit_id = $this->createNewUnit($data);
 
@@ -287,6 +261,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
         // Set the new unit id in the data array so that
         // when it is bound below it is assign to the correct property
+        // Set unit id as a model property?
         $data['unit_id'] = $new_unit_id;
       }
 
@@ -294,7 +269,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       if (!($data['review'])) {
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
-        // New method - getExpiryDate(); returns the expiry date of the property.
+        // New method - getPropertyDetails(); returns the expiry date of the property.
         $expiry_date = $model->getPropertyDetails($data['property_id']);
 
         if (is_integer($expiry_date)) {
@@ -304,7 +279,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
           $data['published_on'] = '';
 
           // Set the new version required flag to true
-          $new_version_required = true;
+          $this->new_version_required = true;
 
           JLog::add('New unit version is needed for ' . $pk, 'DEBUG', 'unitversions');
         }
@@ -339,6 +314,8 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // The version id is the id of the version created/updated in the _unit_versions table
       $new_version_id = ($table->id) ? $table->id : '';
 
+      $this->setState('new.version.id', $new_version_id);
+
       // We will always want to update the facilities relating to the version id
       // E.g. if a new unit, insert facilitites, if new version then we will
       // save the facilities against the new version id.
@@ -350,10 +327,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       }
 
       // When a new version is created or a new unit is created
-      if ($new_version_required === true || $isNew) {
+      if ($this->new_version_required === true || $isNew) {
 
         // Here we have created a new version or a new unit
-        // TO DO: Wrap the below into a function
+        // TO DO: Wrap the below into a function - reuse the updateProperty method from the Property model
         // Update the existing property listing to indicate that it has been modified in a way that requires a review
         $property = $this->getTable('Property', 'HelloWorldTable');
 
@@ -429,11 +406,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     $query->insert('#__property_images_library');
 
-    $query->columns(array('version_id', 'property_id', 'image_file_name', 'caption', ordering));
+    $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', ordering));
 
     foreach ($images as $image) {
       // Only insert if there are some images
-      $insert_string = "$new_version_id, '" . $image->property_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
+      $insert_string = "$new_version_id, '" . $image->unit_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
       $query->values($insert_string);
     }
 
@@ -570,7 +547,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Get a list of the images uploaded against this listing
     $query->select('
       id,
-      property_id,
+      unit_id,
       image_file_name,
       caption,
       ordering,

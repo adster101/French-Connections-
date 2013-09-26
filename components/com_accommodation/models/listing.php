@@ -537,13 +537,7 @@ class AccommodationModelListing extends JModelForm {
     $query->join('left', '#__property_images_library d on (d.property_id = a.id and d.version_id = b.id)');
 
     $query->where('a.id = ' . (int) $unit_id);
-    //$query->where('b.review = 0'); // Should ensure we get the published images 
-
-    if ($preview) {
-      $query->order('c.version_id', 'desc');
-    } else {
-      $query->order('ordering', 'asc');
-    }
+  
 
     $db->setQuery($query);
 

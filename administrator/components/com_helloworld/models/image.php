@@ -25,6 +25,52 @@ class HelloWorldModelImage extends JModelAdmin {
     return JFactory::getUser()->authorise('core.edit', 'com_helloworld.message.' . ((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
   }
 
+  public function delete($pks) {
+
+    $db = JFactory::getDbo();
+    $db->transactionStart();
+    $image_profiles = array('', 'gallery', 'thumb', 'thumbs');
+    $image_file_path = '';
+    $image = '';
+
+    try {
+
+      $table = $this->getTable();
+
+      $image = $table->load($pks);
+
+      if (!$image) {
+        Throw new Exception('Problem loading image before deleting');
+      }
+
+      // Delete the image from the database
+      if (parent::delete($pks)) {
+        // Need to delete the main image, the gallery image and thumbs
+        $path = JPATH_SITE . '/images/property/' . $table->property_id . '/';
+        // Delete the actual image file from the file system
+
+
+        foreach ($image_profiles as $profile) {
+          $image_file_path = $path . $profile . '/' . $table->image_file_name;
+          if (JFile::exists($image_file_path)) {
+            if (!JFile::delete($image_file_path)) {
+              Throw new Exception('Problem deleting image from file system');
+            }
+          }
+        }
+      }
+    } catch (Exception $e) {
+
+      $this->setError($e->getMessage());
+      $db->transactionRollback();
+      return false;
+    }
+
+    $db->transactionCommit();
+
+    return true;
+  }
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -46,10 +92,10 @@ class HelloWorldModelImage extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = false) {
 
     // Get the form.
-    $form = $this->loadForm('com_helloworld.imageupload', 'imageupload', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_helloworld.caption', 'caption', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form)) {
       return false;
     }
@@ -81,7 +127,7 @@ class HelloWorldModelImage extends JModelAdmin {
       $table->reset();
 
       if ($table->load($pk) && $this->checkout($pk)) {
-        
+
         $where = $this->getReorderConditions($table);
 
         if (!$table->move($delta, $where)) {
@@ -137,6 +183,158 @@ class HelloWorldModelImage extends JModelAdmin {
     $condition = array();
     $condition[] = 'property_id = ' . (int) $table->property_id;
     return $condition;
+  }
+
+  /**
+   * Save method to save an newly upload image file, taking into account a new version if necessary.
+   * 
+   * @param type $data
+   */
+  public function save($data) {
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $table = $this->getTable();
+
+    $model = JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel');
+
+    $data['unit_id'] = $data['unit_id'];
+    
+    if (!$model->save($data)) {
+      return false;
+    }
+
+    // Now just need to save the new image against the newly created version
+    $new_version_id = $model->getState('version.id', '');
+
+    $data['version_id'] = (!empty($new_version_id)) ? $new_version_id : $data['version_id'];
+    
+    $table->save($data);
+
+    return true;
+  }
+
+  /*
+   * Method to generate a set of profile images for images being uploaded via the image manager
+   *
+   *
+   */
+
+  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 550, $max_height = 375) {
+
+    if (empty($image)) {
+      return false;
+    }
+
+    if (!file_exists($image)) {
+      return false;
+    }
+
+    if (!$profile) {
+      return false;
+    }
+
+    // Create a new image object ready for processing
+    $imgObj = new JImage($image);
+
+    // Create a folder for the profile, if it doesn't exist
+    $dir = COM_IMAGE_BASE . '/' . $property_id . '/' . $profile;
+    if (!file_exists($dir)) {
+      jimport('joomla.filesystem.folder');
+      JFolder::create($dir);
+    }
+
+    $file_path = COM_IMAGE_BASE . '/' . $property_id . '/' . $profile . '/' . $image_file_name;
+    if (!file_exists($file_path)) {
+      try {
+
+        $width = $imgObj->getWidth();
+        $height = $imgObj->getHeight();
+
+        // If the width is greater than the height just create it
+        if (($width > $height) && $width > $max_width) {
+
+          // This image is roughly landscape orientated with a width greater than max width allowed
+          $profile = $imgObj->resize($max_width, $max_height, true, 3);
+
+          // Check the aspect ratio. I.e. we want to retain a 4:3 aspect ratio
+          if ($profile->getHeight() > $max_height) {
+
+            // Crop out the extra height
+            $profile = $profile->crop($max_width, $max_height, 0, ($profile->getHeight() - $max_height) / 2, false);
+          } else if ($profile->getWidth() > $max_width) {
+
+            // Crop out the extra width
+            $profile = $profile->crop($max_width, $max_height, ($profile->getWidth() - $max_width) / 2, 0, false);
+          }
+
+          // Put it out to a file
+          $profile->tofile($file_path);
+        } else if ($width < $height) {
+
+          // This image is roughly portrait orientated with a width greater than the max width allowed
+          $profile = $imgObj->resize($max_width, $max_height, false, 2);
+
+          // Check the resultant width
+          if ($profile->getWidth() < $max_width) {
+
+            $blank_image = $this->createBlankImage($max_width, $max_height);
+
+            // Write out the gallery file
+            // Need to do this as imagecopy requires a handle
+            $profile->tofile($file_path);
+
+            // Load the existing image
+            $existing_image = imagecreatefromjpeg($file_path);
+
+            // Copy the existing image into the new one
+            imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
+
+            // Save it out
+            imagejpeg($blank_image, $file_path, 100);
+          } else {
+
+            // Width is okay, just write it out
+            $profile->tofile($file_path);
+          }
+        } else if ((($width > $height) && $width < $max_width) || (($width < $height) && $height < $max_height)) {
+
+          // This image is landscape orientated with a width less than 500px
+          // Create a blank image
+          $blank_image = $this->createBlankImage($max_width, $max_height);
+
+          // Write out the gallery file, unprocessed
+          $imgObj->tofile($file_path);
+
+          // Load the existing image
+          $existing_image = imagecreatefromjpeg($file_path);
+
+          // Copy the existing image into the new one
+          imagecopy($blank_image, $existing_image, ($max_width - $imgObj->getWidth()) / 2, ($max_height - $imgObj->getHeight()) / 2, 0, 0, $imgObj->getWidth(), $imgObj->getHeight());
+
+          // Save it out
+          imagejpeg($blank_image, $file_path, 100);
+        }
+      } catch (Exception $e) {
+        
+      }
+    }
+  }
+
+  /*
+   * Method to generate a blank image for use in the above profile creation method.
+   */
+
+  public function createBlankImage($max_width = '', $max_height = '', $red = 255, $green = 255, $blue = 255) {
+
+    // Create a new image with dimensions as provided
+    $blank_image = imagecreatetruecolor($max_width, $max_height);
+
+    // Set it's background to white
+    $color = imageColorAllocate($blank_image, $red, $green, $blue);
+    imagefill($blank_image, 0, 0, $color);
+
+    return $blank_image;
   }
 
 }

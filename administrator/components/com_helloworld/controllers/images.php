@@ -47,7 +47,7 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-    $unit_id = JFactory::getApplication()->input->get('unit_id','','int');
+    $unit_id = JFactory::getApplication()->input->get('unit_id', '', 'int');
     $ids = JFactory::getApplication()->input->post->get('cid', array(), 'array');
     $inc = ($this->getTask() == 'orderup') ? -1 : +1;
 
@@ -74,8 +74,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $model = parent::getModel($name, $prefix, array('ignore_request' => true));
     return $model;
   }
-
-
 
   /**
    *
@@ -143,43 +141,45 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
 
-    // Set up some arrays
-    // Data is used to check the ownership and also passed to the model save method...
-    $data = array();
-
-    // Response is used to send a message back to the client
-    $response = array();
-
-    // Get the input data
     $app = JFactory::getApplication();
     $input = $app->input;
+    $model = $this->getModel('Caption', 'HelloWorldModel');
+    $data = array();
+    $response = array();
 
     // Build up the data
-    $data['property_id'] = $input->get('property_id', '', 'int');
+    $data['unit_id'] = $input->get('unit_id', '', 'int');
     $data['caption'] = $input->get('caption', '', 'string');
     $data['id'] = $input->get('id', '', 'int');
 
     // Check that this user is authorised to edit (i.e. owns) this this property
-    if (!$this->allowEdit($data, 'property_id')) {
+    if (!$this->allowEdit($data, 'unit_id')) {
       $response = JText::_('NOT_AUTHORISED');
       echo $response;
       jexit(); // Exit this request now as results passed back to client via xhr transport.
     }
 
+    // Consider running this through $model->validate to more carefully check the caption details
+    $form = $model->getForm();
 
+    $validData = $model->validate($form, $data);
+
+    if (!$validData) {
+      // Problem saving, oops
+      $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_IS_INVALID');
+      echo $response;
+      jexit(); // Exit this request now as results passed back to client via xhr transport.     
+    }
 
     // Need to ensure the caption is filtered at some point
-    // Load the relevant model(s) so we can save the data back to the db
-    $model = $this->getModel('Image', 'HelloWorldModel');
-
     // If we are happy to save and have something to save
+    // Also, need to amend the save method so that it triggers a new version
     if (!$model->save($data)) {
       // Problem saving, oops
       $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
       echo $response;
       jexit(); // Exit this request now as results passed back to client via xhr transport.
     }
-
 
     $response = JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGES_CAPTION_UPDATED');
 
@@ -195,36 +195,31 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
 
-    // Get the application instance
     $app = JFactory::getApplication();
     $input = $app->input;
+    $model = $this->getModel('Image', 'HelloWorldModel');
 
     // Build up the data
 
-    $data['property_id'] = $input->get('property_id', '', 'int');
-    $data['id'] = $input->get('id', '', 'int');
+    $unit_id = $input->get('unit_id', '', 'int');
+    $id = $input->get('id', '', 'int');
 
     // Check that this user is authorised to edit (i.e. owns) this this asset
-    if (!$this->allowEdit($data, 'property_id')) {
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
-      $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) $data['property_id'], false));
-      return false;
-    }
+    // TO DO - Need to validate robustly that the user is authorised to delete (this) image(s).
+    //if (!$this->allowEdit($data, 'property_id')) {
+    //$app->enqueueMessage(JText::_('COM_HELLOWORLD_NOT_PERMITTED_TO_EDIT_THIS_PROPERTY'), 'message');
+    //$this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&id=' . (int) , false));
+    //return false;
+    //}
 
-    // Get the image model
-    $model = $this->getModel('Image', 'HelloWorldModel');
-
-    // Let's delete this puppy...first we need to get the file details
-    $table = $model->getTable();
-
-    if (!$table->delete($data['id'])) {
-      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'message');
+    if (!$model->delete($id)) {
+      $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'error');
     } else {
       // Set the message
       $app->enqueueMessage(JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
     }
     // Set the redirection once the delete has completed...
-    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $data['property_id'], false));
+    $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $unit_id, false));
   }
 
   /*
@@ -239,7 +234,9 @@ class HelloWorldControllerImages extends JControllerAdmin {
     // Get the app and user instances
     $app = JFactory::getApplication($initialise = false);
     $user = JFactory::getUser();
-
+    // Load the relevant model(s) so we can save the data back to the db
+    $model = $this->getModel('Image');
+    
     // Get the id, which is the unit ID we are uploading the image against
     $unit_id = $app->input->get('unit_id', '', 'GET', 'int');
 
@@ -247,10 +244,10 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $property_id = $app->input->get('property_id', '', 'GET', 'int');
 
     // Get the version id
-    $version_id = $app->input->get('version_id', '', 'GET', 'int');
+    $id = $app->input->get('id', '', 'GET', 'int');
 
     // Set the filepath for the images to be moved into
-    $this->folder = JPATH_SITE . '/images/property/' . $property_id . '/';
+    $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
 
     // An array to hold the that are good to save against the property
     $images = array();
@@ -264,7 +261,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
     }
 
-
     // Get the media component parameters
     $params = JComponentHelper::getParams('com_media');
 
@@ -277,12 +273,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $uploaded_file = array_map(
             array($this, 'reformatFilesArray'), (array) $files['name'], (array) $files['type'], (array) $files['tmp_name'], (array) $files['size']
     );
-
-    // Set FTP credentials, if given
-    JClientHelper::setCredentialsFromRequest('ftp');
-    JPluginHelper::importPlugin('content');
-
-    $dispatcher = JDispatcher::getInstance();
 
     foreach ($uploaded_file as &$file) {
 
@@ -301,7 +291,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['error'] = JText::_('COM_HELLOWORLD_IMAGES_TOTAL_FILE_SIZE_TOO_LARGE');
       }
 
-
       // Check that it has a valid name
       if (!isset($file['name'])) {
         // This file doesn't have a filename after running through make path safe
@@ -318,7 +307,6 @@ class HelloWorldControllerImages extends JControllerAdmin {
       }
 
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
-
       if (empty($file['error'])) {
 
         // Move the file from the tmp location to the property image folder
@@ -331,60 +319,42 @@ class HelloWorldControllerImages extends JControllerAdmin {
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
       if (empty($file['error'])) {
         // Add the url to the uploaded files array
-        $file['url'] = JURI::root() . 'images/property/' . $property_id . '/' . $file['name'];
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
-        $file['property_id'] = $unit_id;
-        $file['version_id'] = $version_id;
+        $file['unit_id'] = $unit_id;
+        $file['property_id'] = $property_id;
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
-        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $property_id . '/thumb/' . $file['name'];
-
-        // Get an instance of the images model file so we can load the existing images for this unit
-        // primarily so we can get the ordering
-        $model = $this->getModel('Images');
-
-        $model->setState('version_id', $version_id);
-
-        $existing_images = $model->getItems();
-
-        if (empty($existing_images)) {
-
-          $ordering = 1;
-        } else {
-
-          $last = array_pop($existing_images);
-          $ordering = $last->ordering + 1;
-        }
-
-        // Set the ordering on the image being uploaded
-        $file['ordering'] = $ordering;
+        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
 
         // Image has been uploaded, let's create some image profiles...
-        $model->generateImageProfile($file['filepath'], (int) $file['property_id'], $file['image_file_name'], 'gallery', 578, 435);
-        $model->generateImageProfile($file['filepath'], (int) $file['property_id'], $file['image_file_name'], 'thumbs', 100, 100);
-        $model->generateImageProfile($file['filepath'], (int) $file['property_id'], $file['image_file_name'], 'thumb', 210, 120);
-
-        // Load the relevant model(s) so we can save the data back to the db
-        $model = $this->getModel('Image');
-
+        $model->generateImageProfile($file['filepath'], (int) $file['unit_id'], $file['image_file_name'], 'gallery', 578, 435);
+        $model->generateImageProfile($file['filepath'], (int) $file['unit_id'], $file['image_file_name'], 'thumbs', 100, 100);
+        $model->generateImageProfile($file['filepath'], (int) $file['unit_id'], $file['image_file_name'], 'thumb', 210, 120);
 
         // If we are happy to save and have something to save
         if (!$model->save($file)) {
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_SAVE_FILE');
         }
+
+        $version_id = $model->getState('version.id');
+        
+        // Get an instance of the images model file so we can load the existing images for this unit
+        // primarily so we can get the ordering
+        $model = $this->getModel('Images');
+
+        $existing_images = $model->getItems();
       }
     }
 
 
 
 
-    $files = array();
 
-    $files['files'] = $uploaded_file;
-
-    echo json_encode($files);
+    // $files = array();
+    // $files['files'] = $uploaded_file;
+    // echo json_encode($existing_images);
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
   }

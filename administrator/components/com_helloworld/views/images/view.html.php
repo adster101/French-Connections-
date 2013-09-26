@@ -25,9 +25,7 @@ class HelloWorldViewImages extends JViewLegacy
 
     // Get the unitversions instance so we can get the unit detail
     $unit = $this->getModel('UnitVersions');
-    $unit->populateState();
-    $this->unit = $unit->getItem();
-    
+    $this->unit = $unit->getItem();    
 
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');
@@ -38,11 +36,15 @@ class HelloWorldViewImages extends JViewLegacy
     $this->state = $this->get('State');
     $images = $this->getModel();
     $images->setState('version_id',$this->unit->id);
-
+    // Set the list limit model state so that we return all available images.
+    $images->setState('list.limit');
+    
+        
     // Get the images associated with this unit version
     $this->items = $this->get('Items');
-
+    
     $this->pagination = $this->get('Pagination');
+
 
 		// Set the toolbar
 		$this->addToolBar();
@@ -93,17 +95,15 @@ class HelloWorldViewImages extends JViewLegacy
 
     JToolBarHelper::help('', '');
 
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
 
-      $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu($view);
+
+      $canDo = HelloWorldHelper::addSubmenu('listings');
 
       // Add the side bar
       $this->sidebar = JHtmlSidebar::render();
 
-    }
+    
   }
 
 	/**

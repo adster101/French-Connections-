@@ -354,7 +354,7 @@ class JHtmlProperty {
 
     $html = '';
 
-    $id = ($controller == 'propertyversions' || $controller == 'contactdetails') ? $listing_id : $unit_id;
+    $id = ($controller == 'propertyversions') ? $listing_id : $unit_id;
 
     if (!empty($item->latitude) && ($controller == 'propertyversions')) {
 
@@ -378,12 +378,12 @@ class JHtmlProperty {
     } elseif (!empty($unit_id) && $controller == 'availability') {
 
       $progress_icon = ($item->availability > 0) ? $okay_icon : $progress_icon;
-    } elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id) && $action == 'tariffs') {
-
-      $progress_icon = ($item->tariffs > 0) ? $okay_icon : $progress_icon;
-    } elseif (!empty($unit_id) && $controller == 'unitversions') {
+    } elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id)) {
 
       $progress_icon = $okay_icon;
+    } elseif (!empty($unit_id) && $controller == 'tariffs') {
+
+      $progress_icon = ($item->tariffs > 0) ? $okay_icon : $progress_icon;
     } else if ($controller == 'reviews') {
 
       $id = $unit_id;

@@ -33,7 +33,7 @@ class HelloWorldModelCaption extends JModelAdmin
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
-	public function getTable($type = 'Images', $prefix = 'HelloWorldTable', $config = array()) 
+	public function getTable($type = 'Image', $prefix = 'HelloWorldTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
@@ -45,7 +45,7 @@ class HelloWorldModelCaption extends JModelAdmin
 	 * @return	mixed	A JForm object on success, false on failure
 	 * @since	1.6
 	 */
-	public function getForm($data = array(), $loadData = true) 
+	public function getForm($data = array(), $loadData = false) 
 	{	
 
 		// Get the form.
@@ -58,20 +58,4 @@ class HelloWorldModelCaption extends JModelAdmin
 		return $form;
 	}
   
-  /**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return	mixed	The data for the form.
-	 * @since	1.6
-	 */
-	protected function loadFormData() 
-	{
-		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_helloworld.edit.helloworld.data', array());
-		if (empty($data)) 
-		{
-			$data = $this->getItem();
-		}
-		return $data;
-	}	
 }
