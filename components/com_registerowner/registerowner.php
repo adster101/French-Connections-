@@ -14,6 +14,6 @@ defined('_JEXEC') or die;
     $lang = JFactory::getLanguage();
 
     $lang->load('com_users', JPATH_SITE, null, false, true);
-$controller = JControllerLegacy::getInstance('RegisterOwner');
+$controller = JControllerLegacy::getInstance('registerowner');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
