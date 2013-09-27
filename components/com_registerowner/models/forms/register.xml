@@ -109,52 +109,5 @@
     
   </fieldset>
   
-  <fieldset>
-
-    <field
-      name="tos"
-      type="tos"
-      class="checkbox"
-      labelclass="checkbox"
-      required="false"
-      label="COM_REGISTER_OWNER_ACCEPT_TOS"
-      description="COM_REGISTER_OWNER_ACCEPT_TOS">
-      <option value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
-    </field>
-    <field 
-      type="note"
-      name="tos"
-      label=""
-      description="COM_REGISTER_OWNER_ACCEPT_TOS_2"
-      class="alert alert-notice"
-    />
-    <field 
-      name="password2" 
-      type="password"
-      autocomplete="off"
-      class="validate-password"
-      description="COM_USERS_DESIRED_PASSWORD"
-      field="password1"
-      filter="raw"
-      label="COM_USERS_PROFILE_PASSWORD1_LABEL"
-      message="COM_USERS_PROFILE_PASSWORD1_MESSAGE"
-      size="30"
-      validate="equals"
-      labelclass="control-label"
-    />
-
-    <field 
-      name="password1" 
-      type="password"
-      autocomplete="off"
-      class="validate-password"
-      description="COM_USERS_PROFILE_PASSWORD2_DESC"
-      filter="raw"
-      label="COM_USERS_PROFILE_PASSWORD2_LABEL"
-      size="30"
-      validate="password"
-      labelclass="control-label"
-    />
-
-  </fieldset>
+  
 </form>
