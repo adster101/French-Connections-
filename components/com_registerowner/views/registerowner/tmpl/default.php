@@ -10,6 +10,8 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.tooltip');
+    php print_r($this);
+
 ?>
 
 <h1>
@@ -25,7 +27,6 @@ JHtml::_('behavior.tooltip');
 <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_registerowner'); ?>" method="post" class="form-validate form-horizontal">
   <legend><?php echo JText::_('COM_REGISTER_OWNER_LEGEND'); ?></legend>
   <fieldset class="adminform">
-    <?php print_r($this->form);die; ?>
     <?php foreach ($this->form->getFieldset('register') as $field): ?>
       <div class="control-group">
         <?php echo $field->label; ?>
