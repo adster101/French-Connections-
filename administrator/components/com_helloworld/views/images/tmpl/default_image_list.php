@@ -18,7 +18,6 @@ if ($saveOrder) {
   JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
-$app = JFactory::getApplication();
 ?>
 
 
@@ -36,7 +35,7 @@ $app = JFactory::getApplication();
       <input type="radio" name="image_id[]" size="5" value="<?php echo (int) $item->id ?>" class="width-20 text-area-order " />
     </td>
     <td>
-      <img src="<?php echo '/images/property/' . (int) $this->items[0]->unit_id . '/thumb/' . $item->image_file_name; ?>" />
+      <img src="<?php echo '/images/property/' . (int) $item->unit_id . '/thumb/' . $item->image_file_name; ?>" />
     </td>
     <td class="caption">
       <input  class="input input-xlarge" type="text" name="jform[caption]" value="<?php echo $this->escape($item->caption); ?>" maxlength="75" />
