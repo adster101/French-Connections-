@@ -46,7 +46,7 @@ class HelloWorldModelImage extends JModelAdmin {
       // Delete the image from the database
       if (parent::delete($pks)) {
         // Need to delete the main image, the gallery image and thumbs
-        $path = JPATH_SITE . '/images/property/' . $table->property_id . '/';
+        $path = JPATH_SITE . '/images/property/' . $table->unit_id . '/';
         // Delete the actual image file from the file system
 
 
@@ -181,7 +181,8 @@ class HelloWorldModelImage extends JModelAdmin {
    */
   protected function getReorderConditions($table) {
     $condition = array();
-    $condition[] = 'property_id = ' . (int) $table->property_id;
+    $condition[] = 'unit_id = ' . (int) $table->unit_id;
+    $condition[] = 'version_id = ' . (int) $table->version_id;
     return $condition;
   }
 
@@ -192,24 +193,33 @@ class HelloWorldModelImage extends JModelAdmin {
    */
   public function save($data) {
 
-    $app = JFactory::getApplication();
-    $input = $app->input;
-    $table = $this->getTable();
+    $unit = JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel');
 
-    $model = JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel');
+    // Image has been uploaded, let's create some image profiles...
+    // TO DO - Put the image dimensions in as params against the component
+    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'gallery', 578, 435);
+    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumbs', 100, 100);
+    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumb', 210, 120);
 
-    $data['unit_id'] = $data['unit_id'];
-    
-    if (!$model->save($data)) {
+    // Hit up the unit versions save method to determine if a new version is needed.
+    if (!$unit->save($data)) {
       return false;
     }
 
-    // Now just need to save the new image against the newly created version
-    $new_version_id = $model->getState('version.id', '');
+    // Arrange the data for saving into the images table
+    $data['id'] = '';
+    $data['version_id'] = $unit->getState($unit->getName() . '.version_id');
 
-    $data['version_id'] = (!empty($new_version_id)) ? $new_version_id : $data['version_id'];
+    // Call the parent save method to save the actual image data to the images table
+    if (!parent::save($data)) {
+      return false;
+    }
     
-    $table->save($data);
+		$this->setState($this->getName() . '.version_id', $unit->getState($unit->getName() . '.version_id'));
+		$this->setState($this->getName() . '.review', $unit->getState($unit->getName() . '.review'));
+    
+
+    // Return to the controller
 
     return true;
   }

@@ -20,9 +20,6 @@ class HelloWorldModelImages extends JModelList {
    */
   public function getListQuery() {
 
-    // Get the listing details from the model state...
-    $app = JFactory::getApplication();
-
     $id = $this->getState('version_id','');
 
     $db = $this->getDbo();

@@ -521,7 +521,7 @@ class AccommodationModelListing extends JModelForm {
 
     // Get a list of the images uploaded against this listing
     $query->select('
-      d.property_id,
+      d.unit_id,
       d.image_file_name,
       d.caption,
       d.ordering
@@ -534,7 +534,7 @@ class AccommodationModelListing extends JModelForm {
       $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
     }
 
-    $query->join('left', '#__property_images_library d on (d.property_id = a.id and d.version_id = b.id)');
+    $query->join('left', '#__property_images_library d on (d.unit_id = a.id and d.version_id = b.id)');
 
     $query->where('a.id = ' . (int) $unit_id);
   

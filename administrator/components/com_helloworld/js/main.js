@@ -45,21 +45,15 @@ jQuery(function () {
         .addClass("alert alert-success show")
         .html(data.result.files[0].message);
 
-        // Will be the place to alert about submitting for approval etc
+        var id = jQuery('input[name=id').val();
+        var id = data.result.files[0].version_id;
         
-        // Empty the exisiting image list
-        // Show a spinner bar
-        // Get the new list
-        // Show the new list
-        // Hide the spinner bar
-        
-        var property_id = data.result.files[0].property_id;
-        
+        jQuery('input[name=id]').val(id);
         
         jQuery.get(
           "/administrator/index.php?option=com_helloworld&view=images&layout=default_image_list&format=raw",
           {
-            id:property_id
+            id:id
           })
         .done(function(data) {
           jQuery('.ui-sortable').empty();

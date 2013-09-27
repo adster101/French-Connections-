@@ -236,15 +236,20 @@ class HelloWorldControllerImages extends JControllerAdmin {
     $user = JFactory::getUser();
     // Load the relevant model(s) so we can save the data back to the db
     $model = $this->getModel('Image');
-    
+    // Initialise an array to return the info about the uploaded image
+    $return = array();
+
     // Get the id, which is the unit ID we are uploading the image against
-    $unit_id = $app->input->get('unit_id', '', 'GET', 'int');
+    $unit_id = $app->input->get('unit_id', '', 'int');
 
     // Get the id, which is the unit ID we are uploading the image against
     $property_id = $app->input->get('property_id', '', 'GET', 'int');
 
-    // Get the version id
-    $id = $app->input->get('id', '', 'GET', 'int');
+    // Get the unit version id
+    $id = $app->input->get('id', '', 'int');
+
+    // Get the unit version id
+    $review = $app->input->get('review', '', 'boolean');
 
     // Set the filepath for the images to be moved into
     $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
@@ -322,41 +327,32 @@ class HelloWorldControllerImages extends JControllerAdmin {
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
         $file['unit_id'] = $unit_id;
+        $file['id'] = $id;
         $file['property_id'] = $property_id;
+        $file['review'] = $review;
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_HELLOWORLD_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
         $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
-
-        // Image has been uploaded, let's create some image profiles...
-        $model->generateImageProfile($file['filepath'], (int) $file['unit_id'], $file['image_file_name'], 'gallery', 578, 435);
-        $model->generateImageProfile($file['filepath'], (int) $file['unit_id'], $file['image_file_name'], 'thumbs', 100, 100);
-        $model->generateImageProfile($file['filepath'], (int) $file['unit_id'], $file['image_file_name'], 'thumb', 210, 120);
 
         // If we are happy to save and have something to save
         if (!$model->save($file)) {
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_SAVE_FILE');
         }
 
-        $version_id = $model->getState('version.id');
-        
-        // Get an instance of the images model file so we can load the existing images for this unit
-        // primarily so we can get the ordering
-        $model = $this->getModel('Images');
-
-        $existing_images = $model->getItems();
+        // Update the file array so we can in turn update the form so that subsequent images are upload to a new version
+        $file['version_id'] = $model->getState($model->getName() . '.version_id');
+        $file['review'] = $model->getState($model->getName() . '.review');
       }
     }
 
-
-
-
-
-    // $files = array();
-    // $files['files'] = $uploaded_file;
-    // echo json_encode($existing_images);
+    $return['files'][] = $file;
+    $blah = json_encode($return);
+    
+    echo json_encode($return);
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
+    
   }
 
   /**

@@ -10,8 +10,6 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.multiselect');
-$listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 
 $saveOrder = true;
@@ -21,27 +19,13 @@ if ($saveOrder) {
 }
 
 $app = JFactory::getApplication();
-
-$input = $app->input;
-
-$id = $input->get('property_id', '', 'int');
 ?>
 
 
-<?php
-$listOrder = $this->escape($this->state->get('list.ordering'));
-$user = JFactory::getUser();
-$userId = $user->id;
-$groups = $user->getAuthorisedGroups();
-$ordering = ($listOrder == 'a.lft');
-$originalOrders = array();
-
-foreach ($this->items as $i => $item):
-  ?>
+<?php foreach ($this->items as $i => $item): ?>
   <tr>
     <td class="hide">
       <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-
     </td>
     <td>
       <input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order " />
@@ -49,8 +33,7 @@ foreach ($this->items as $i => $item):
       <?php echo $this->pagination->orderDownIcon($i, count($this->items), true, 'images.orderdown', 'JLIB_HTML_MOVE_DOWN', 1); ?>
     </td>
     <td>
-      <input type="radio" name="image_id[]" size="5" value="" class="width-20 text-area-order " />
-
+      <input type="radio" name="image_id[]" size="5" value="<?php echo (int) $item->id ?>" class="width-20 text-area-order " />
     </td>
     <td>
       <img src="<?php echo '/images/property/' . (int) $this->items[0]->unit_id . '/thumb/' . $item->image_file_name; ?>" />

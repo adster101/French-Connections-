@@ -51,12 +51,6 @@ $amenities = $this->form->getGroup('amenities');
               <div class="alert alert-notice">
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>   
               </div>          
-              <?php echo $this->form->getInput('map'); ?>
-
-              <?php echo $this->form->getInput('latitude'); ?>
-              <?php echo $this->form->getInput('longitude'); ?>
-
-
               <div class="control-group">
                 <?php echo $this->form->getLabel('department'); ?>
                 <div class="controls">
@@ -69,6 +63,13 @@ $amenities = $this->form->getGroup('amenities');
                   <?php echo $this->form->getInput('city'); ?>
                 </div>
               </div>
+              <?php echo $this->form->getInput('map'); ?>
+
+              <?php echo $this->form->getInput('latitude'); ?>
+              <?php echo $this->form->getInput('longitude'); ?>
+
+
+
 
             </fieldset>
             <fieldset>

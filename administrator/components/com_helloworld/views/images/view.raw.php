@@ -16,19 +16,26 @@ class HelloWorldViewImages extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+    
 
-    // Get the property ID we are editing.
-		$this->item->id = JRequest::getVar('id');
-    $app = JFactory::getApplication();
+    $input = JFactory::getApplication()->input;
+    $id = $input->get('id','','int');
+ 
 
-    // Get the item data
-    $items = $this->get('Items');
+     
+    // populateState for the images model
+    $this->state = $this->get('State');
+    $images = $this->getModel();
+    $images->setState('version_id',$id);
+    // Set the list limit model state so that we return all available images.
+    $images->setState('list.limit');
 
     // Assign the Item
-		$this->items = $items;
+		$this->items = $this->get('Items');
 
-    // Get the state
-    $this->state = $this->get('State');
+
+    
+    $this->pagination = $this->get('Pagination');
 
 		// Display the template
 		parent::display($tpl);

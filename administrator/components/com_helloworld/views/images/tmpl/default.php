@@ -49,7 +49,7 @@ $data = array('progress' => $this->progress);
       ?>
       <div id="collapseUpload" class="in collapse">
         <!-- The file upload form used as target for the file upload widget -->
-        <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1&property_id=' . (int) $this->unit->property_id . '&unit_id=' . $this->unit->unit_id); ?>" method="GET" enctype="multipart/form-data">
+        <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1') ?>" method="GET" enctype="multipart/form-data">
           <!-- Redirect browsers with JavaScript disabled to the origin page -->
           <noscript><input type="hidden" name="redirect" value="/"></noscript>
           <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -94,7 +94,10 @@ $data = array('progress' => $this->progress);
               </div>
             </div>
           </fieldset>
-
+          <input type="hidden" name="review" value="<?php echo $this->unit->review ?>" />
+          <input type="hidden" name="id" value="<?php echo $this->unit->id ?>" />
+          <input type="hidden" name="property_id" value="<?php echo $this->unit->property_id ?>" />
+          <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
         </form>
 
       </div>
@@ -189,8 +192,8 @@ $data = array('progress' => $this->progress);
           </table>
           <input type="hidden" name="task" value="" />
           <input type="hidden" name="boxchecked" value="0" />
-          <input type="hidden" name="review" value="<?php echo $this->unit->review; ?>" />
-          <input type="hidden" name="id" value="<?php echo $this->unit->id; ?>" />
+          <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
+          <input type="hidden" name="id" value="<?php echo $this->unit->id ?>" />
 
           <?php echo JHtml::_('form.token'); ?>
 

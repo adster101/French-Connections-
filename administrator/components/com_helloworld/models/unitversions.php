@@ -386,6 +386,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       $this->setState($this->getName() . '.id', $table->$pkName);
     }
     $this->setState($this->getName() . '.new', $isNew);
+    $this->setState($this->getName() . '.review', $table->review);
+    $this->setState($this->getName() . '.version_id', $table->id);
+    
 
     return true;
   }
