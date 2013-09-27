@@ -4,8 +4,7 @@
     name="register" 
     addrulepath="/administrator/components/com_registerowner/models/rules" 
     label="">
-  
-    <field 
+  <field 
       name="firstname" 
       type="text"
       description="COM_USERS_REGISTER_FIRST_NAME_DESC"
@@ -38,8 +37,6 @@
       validate="username"
       labelclass="control-label"
     />
-
-    
     <field 
       name="email1" 
       type="email"
@@ -54,7 +51,6 @@
       validate="email"
       labelclass="control-label"
     />
-
     <field 
       name="email2" 
       type="email"
@@ -68,7 +64,6 @@
       validate="equals"
       labelclass="control-label"
     />
-    
     <field
       name="phone_1"
       type="tel"
@@ -106,8 +101,7 @@
       validate="captcha"
       labelclass="control-label"
     />
-    
-  </fieldset>
+    </fieldset>
   
   
 </form>

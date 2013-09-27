@@ -7,7 +7,6 @@ defined('_JEXEC') or die('Restricted access');
  * HTML View class for the HelloWorld Component
  */
 class RegisterOwnerViewRegisterowner extends JViewLegacy {
-
   protected $state;
   protected $form;
   protected $item;
