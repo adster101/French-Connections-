@@ -13,17 +13,8 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class RegisterOwnerControllerRegisterOwner extends JControllerForm {
+class RegisterOwnerControllerRegisterowner extends JControllerForm {
 
-  public function activate() {
-
-    $app = JApplication::getInstance('administrator');
-    
-    $app->enqueueMessage('Blah', 'success');
-    $app->redirect('/administrator');
-    return true;
-    
-  }
   
   public function register() {
     // Check for request forgeries.
