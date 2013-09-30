@@ -60,6 +60,7 @@
       labelclass="control-label"
       filter="int"
       required="true"
+      default=""
       extension="com_tickets"
       class="required">
       <option value="">JSELECT</option>

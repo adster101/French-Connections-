@@ -12,7 +12,7 @@
 defined('_JEXEC') or die;
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.admin', 'com_tickets')) 
+if (!JFactory::getUser()->authorise('core.manage', 'com_tickets')) 
 {
 	throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
 }
