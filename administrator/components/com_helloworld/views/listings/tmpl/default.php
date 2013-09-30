@@ -164,8 +164,7 @@ $listing_id = '';
                         <?php endif; ?>
                         <td>
                           <?php if ($item->review != 2) : ?>
-                            <?php echo $this->escape($item->title); ?>
-                            <br>
+                            <?php //echo $this->escape($item->id); ?>
                             <a href="<?php echo JRoute::_('index.php?option=com_helloworld&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
                                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
@@ -174,7 +173,7 @@ $listing_id = '';
                               <?php endif; ?>
                             </a>
                           <?php else: ?>
-                            <?php echo $this->escape($item->title); ?>
+                            <?php //echo $this->escape($item->id); ?>
                           <?php endif; ?>
                         </td>
                         <td>

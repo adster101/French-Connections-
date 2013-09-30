@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset
+    name="ticket">
+    <field 
+      name="title"
+      type="text"
+      labelclass="control-label"
+      description=""
+      fiter="string"
+      required="true"
+      label="Ticket title"
+    />
+    <field 
+      name="description"
+      type="textarea"
+      cols="10"
+      rows="10"
+      filter="JFilter::safeHTML()"
+      required="true"
+      label="Description"
+      class="input-xxlarge"
+      labelclass="control-label"
+      
+    />
+    <field 
+      name="severity"
+      required="true"
+      type="list"
+      labelclass="control-label"
+      label="Severity"
+      filter="int"
+      default=""
+      description="">
+      <option value="">JSELECT</option>
+      <option value="1">COM_TICKETS_CRITICAL</option>
+      <option value="2">COM_TICKETS_HIGH</option>
+      <option value="3">COM_TICKETS_MEDIUM</option>
+      <option value="4">COM_TICKETS_LOW</option>
+      <option value="5">COM_TICKETS_MINOR</option>
+    </field>    
+    <field 
+      name="state"
+      type="list"
+      required="true"
+      label="State"
+      filter="int"
+      labelclass="control-label"
+      description="">
+      <option value="">JSELECT</option>
+      <option value="1">COM_TICKETS_OPEN</option>
+      <option value="0">COM_TICKETS_CLOSED</option>
+      <option value="2">COM_TICKETS_TESTING_FILTER</option>
+    </field>
+   
+    <field
+      type="category"
+      name="area"
+      label="Project area"
+      labelclass="control-label"
+      filter="int"
+      required="true"
+      extension="com_tickets"
+      class="required">
+      <option value="">JSELECT</option>
+
+    </field>  
+    <field
+      name="assigned_to"
+      type="user"
+      labelclass="control-label"
+      label="Assigned to"
+      description=""
+      required="true"
+      class="input-small"
+      filter="int"
+      default="1"
+    />
+    
+ 
+   
+
+    
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+      default=""
+      label="COM_INVOICES_FORM_LBL_INVOICE_ID"
+      class="readonly input-mini"
+      labelclass="control-label"
+      description="JGLOBAL_FIELD_ID_DESC"
+    />
+    
+  </fieldset>
+
+</form>
