@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class RegisterOwnerControllerRegisterowner extends JControllerForm {
+class RegisterownerControllerRegisterowner extends JControllerForm {
 
   
   public function register() {
