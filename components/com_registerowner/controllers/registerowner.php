@@ -76,7 +76,7 @@ class RegisterOwnerControllerRegisterowner extends JControllerForm {
     $msg = JText::_('COM_REGISTER_SUCCESS');
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&Itemid=435', false));
+    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&Itemid=448', false));
 
     return true;
   }
