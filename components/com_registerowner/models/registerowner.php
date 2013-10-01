@@ -141,6 +141,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       $user_profile['user_id'] = $user->id;
       $user_profile['firstname'] = $data['firstname'];
       $user_profile['surname'] = $data['surname'];
+      $user_profile['phone_1'] = $data['phone_1'];
 
       if (!$table->save($user_profile)) {
         $this->setError($table->getError());

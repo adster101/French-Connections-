@@ -16,12 +16,23 @@
       type="textarea"
       cols="10"
       rows="10"
-      filter="JFilter::safeHTML()"
+      filter="JComponentHelper::filterText"
       required="true"
       label="Description"
       class="input-xxlarge"
       labelclass="control-label"
       
+    />
+    <field 
+      name="note"
+      type="textarea"
+      cols="8"
+      rows="4"
+      filter="JComponentHelper::filterText"
+      label="Note"
+      class="input-xlarge"
+      labelclass="control-label"
+      default=""
     />
     <field 
       name="severity"
@@ -78,7 +89,6 @@
       default="1"
     />
     
- 
    
 
     

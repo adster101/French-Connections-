@@ -16,12 +16,12 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tickets&id=' . (int) $this->item->id ); ?>" method="post" name="adminForm" id="adminForm" class="validate form-horizontal">
+<form action="<?php echo JRoute::_('index.php?option=com_tickets&id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="validate form-horizontal">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="j-main-container" class="span10">
+    <div id="j-main-container" class="span7">
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
@@ -38,7 +38,20 @@ $userId = $user->get('id');
       </fieldset>     
 
     </div>
-      <input type="hidden" name="boxchecked" value="0" />
+    <div class="span3">
+      <h3>Notes</h3>
+      <?php if (!empty($this->item->notes)) : ?>
+        <div class="notes" style="max-height: 700px;overflow-y: auto">
+          <?php asort($this->item->notes, SORT_NUMERIC); ?>
+          <?php foreach ($this->item->notes as $note): ?>
+            <p><strong><?php echo $note['date']; ?> - <?php echo $note['user'] ?></strong></p>
+            <p><?php echo $note['description']; ?></p>
+            <hr />
+          <?php endforeach; ?>
+        <?php endif; ?>
+      </div>
+    </div>
+    <input type="hidden" name="boxchecked" value="0" />
 
     <?php echo JHtml::_('form.token'); ?>
     <input type="hidden" name="task" value="" />

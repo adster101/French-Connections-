@@ -16,6 +16,18 @@ jimport('joomla.application.component.modelform');
  */
 class TicketsModelTicket extends JModelAdmin {
 
+  public function getItem($pk = null) {
+    if ($item = parent::getItem($pk)) {
+
+      // Decode any notes that have been saved against this issue
+      $registry = new JRegistry;
+      $registry->loadString($item->notes);
+      $item->notes = $registry->toArray();
+    }
+
+    return $item;
+  }
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -46,6 +58,7 @@ class TicketsModelTicket extends JModelAdmin {
     }
     return $form;
   }
+
   /**
    * Method to get the data that should be injected in the form.
    *
@@ -62,4 +75,37 @@ class TicketsModelTicket extends JModelAdmin {
 
     return $data;
   }
+
+  public function save($data) {
+
+    $data['notes'] = array();
+    $registry = new JRegistry;
+    $note = array();
+    $user = JFactory::getUser();
+
+
+    if (isset($data['note'])) {
+      // If we have an id and it's not empty
+      if (isset($data['id']) && !empty($data['id'])) {
+
+        // Attempt to load the existing item
+        $item = $this->getItem($data['id']);
+
+        // Decode any notes that have been saved against this issue
+        $data['notes'] = $item->notes;
+        
+        $note['user'] = $user->get('name');
+        $note['description'] = $data['note'];
+        $note['date'] = JFactory::getDate()->calendar('d-m-Y');
+
+        $data['notes'][] = $note;
+
+        $registry->loadArray($data['notes']);
+        $data['notes'] = (string) $registry;
+      }
+    }
+
+    return parent::save($data);
+  }
+
 }
