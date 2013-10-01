@@ -99,9 +99,7 @@
       filter="unset"
       readonly="true"
     />    
-  
-
-    
+     
     <field
       name="id"
       type="hidden"

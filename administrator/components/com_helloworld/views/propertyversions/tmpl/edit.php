@@ -57,14 +57,16 @@ $amenities = $this->form->getGroup('amenities');
                   <?php echo $this->form->getInput('department'); ?>
                 </div>
               </div>
+
+              <?php echo $this->form->getInput('map'); ?>
+              
               <div class="control-group">
                 <?php echo $this->form->getLabel('city'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('city'); ?>
                 </div>
               </div>
-              <?php echo $this->form->getInput('map'); ?>
-
+              
               <?php echo $this->form->getInput('latitude'); ?>
               <?php echo $this->form->getInput('longitude'); ?>
 

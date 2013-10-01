@@ -102,12 +102,12 @@ class plgContentAirport extends JPlugin {
    * @since	1.6
    */
   function onContentPrepareForm($form, $data) {
-    
+
     // Check if we're in the site app, otherwise, do nothing
     if (JFactory::getApplication()->isSite()) {
       return true;
     }
-    
+
 
     $name = $form->getName();
 
@@ -155,6 +155,39 @@ class plgContentAirport extends JPlugin {
     return true;
   }
 
+  public function onContentAfterDelete($context, $article) {
+
+
+    // The catid specified in the plugin parameters
+    $catid = $this->params->get('catid', '');
+
+
+    if ($context == 'com_content.article' && ($article->catid == $catid)) {
+
+      $articleId = $article->id;
+
+      if ($articleId) {
+
+        try {
+          $db = JFactory::getDbo();
+
+          $query = $db->getQuery(true);
+          $query->delete('#__airports');
+          $query->where('id = ' . $db->Quote($articleId));
+
+          $db->setQuery($query);
+          if (!$db->query()) {
+            throw new Exception($db->getErrorMsg());
+          }
+        } catch (Exception $e) {
+          $this->_subject->setError($e->getMessage());
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   /**
    * onContentAfterSave - saves out the additional airport info to a separate table.
    * 
@@ -166,7 +199,7 @@ class plgContentAirport extends JPlugin {
    */
   public function onContentAfterSave($context, $article, $isNew) {
 
-    // The catid specified in the plugin parameters
+// The catid specified in the plugin parameters
     $catid = $this->params->get('catid', '');
 
 
@@ -202,7 +235,7 @@ class plgContentAirport extends JPlugin {
           if (!$db->query()) {
             throw new Exception($db->getErrorMsg());
           }
-        } catch (JException $e) {
+        } catch (Exception $e) {
           $this->_subject->setError($e->getMessage());
           return false;
         }
@@ -212,3 +245,4 @@ class plgContentAirport extends JPlugin {
   }
 
 }
+
