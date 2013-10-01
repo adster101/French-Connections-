@@ -74,6 +74,7 @@ class TicketsHelper {
     $options[] = JHtml::_('select.option', '1', JText::_('COM_TICKETS_OPEN'));
     $options[] = JHtml::_('select.option', '0', JText::_('COM_TICKETS_CLOSED'));
     $options[] = JHtml::_('select.option', '2', JText::_('COM_TICKETS_TESTING_FILTER'));
+    $options[] = JHtml::_('select.option', '3', JText::_('COM_TICKETS_PENDING_FILTER'));
     return $options;
   }
 }

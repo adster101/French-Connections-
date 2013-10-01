@@ -46,11 +46,21 @@ class JHtmlTickets
           'testing',
           'COM_TICKETS_TESTING',
           'COM_TICKETS_TESTING',
-          'COM_TICKETSs_TESTING',
+          'COM_TICKETS_TESTING',
           true,
           'pending',
           'pending'
-      )
+      ),
+      3 => array(
+          'pending',
+          'COM_TICKETS_PENDING',
+          'COM_TICKETS_PENDING',
+          'COM_TICKETSs_PENDING',
+          true,
+          'help',
+          'help'
+      ),
+        
         
 		);
 

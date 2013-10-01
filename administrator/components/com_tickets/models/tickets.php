@@ -126,6 +126,8 @@ class TicketsModelTickets extends JModelList {
     $published = $this->getState('filter.state');
     if (is_numeric($published)) {
       $query->where('a.state = ' . (int) $published);
+    } else {
+      $query->where('a.state in (1,2,3)');
     }
     
     // Filter by project area

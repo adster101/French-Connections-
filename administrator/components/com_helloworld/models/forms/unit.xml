@@ -12,7 +12,6 @@
       validate="greeting"
       required="true"
       labelclass="control-label"
-      default=""
     />
 
     <field

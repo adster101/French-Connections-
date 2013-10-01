@@ -62,6 +62,7 @@
       <option value="1">COM_TICKETS_OPEN</option>
       <option value="0">COM_TICKETS_CLOSED</option>
       <option value="2">COM_TICKETS_TESTING_FILTER</option>
+      <option value="3">COM_TICKETS_PENDING_FILTER</option>
     </field>
    
     <field
@@ -88,8 +89,17 @@
       filter="int"
       default="1"
     />
-    
-   
+    <field
+      name="created_by"
+      type="user"
+      labelclass="control-label"
+      label="Created by"
+      description=""
+      class="input-small"
+      filter="unset"
+      readonly="true"
+    />    
+  
 
     
     <field
