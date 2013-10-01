@@ -16,7 +16,8 @@ JHtml::_('bootstrap.tooltip');
 $document = JFactory::getDocument();
 $document->addStyleSheet('components/com_vouchers/assets/css/invoices.css');
 
-$user = JFactory::getUser();
+$user		= JFactory::getUser();
+$userId		= $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
 ?>
@@ -117,6 +118,8 @@ if (!empty($this->extra_sidebar)) {
           <?php
           foreach ($this->items as $i => $item) :
             $canChange = $user->authorise('core.edit.state', 'com_vouchers');
+          	$canCheckin = $user->authorise('core.manage',     'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
+
             ?>
             <tr class="row<?php echo $i % 2; ?>">
               <td class="center hidden-phone">
@@ -135,8 +138,11 @@ if (!empty($this->extra_sidebar)) {
                 </td>
               <?php endif; ?>
               <td>
+                <?php if ($item->checked_out) : ?>
+                  <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'tickets.', $canCheckin); ?>
+                <?php endif; ?>
                 <a href="<?php echo JRoute::_('index.php?option=com_tickets&task=ticket.edit&id=' . (int) $item->id) ?>">
-									<?php echo $this->escape($item->title); ?>
+                  <?php echo $this->escape($item->title); ?>
                 </a>
               </td>
               <td>
