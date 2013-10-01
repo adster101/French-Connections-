@@ -110,12 +110,15 @@ class TicketsModelTickets extends JModelList {
                     a.title,
                     a.description,
                     d.title as area,
-                    
+                    a.checked_out,
+                    e.name as editor,
+                    a.checked_out_time,
                     b.name')
     );
     $query->from('`#__tickets` AS a');
 
     $query->leftJoin('#__users b on a.assigned_to = b.id');
+    $query->leftJoin('#__users e on a.checked_out = e.id');
     $query->leftJoin('#__tickets_severity c on a.severity = c.id');
     $query->leftJoin('#__categories d on a.area = d.id');
 

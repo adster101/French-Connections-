@@ -36,7 +36,6 @@ $userId = $user->get('id');
           </div>
         <?php endforeach; ?>
       </fieldset>     
-
     </div>
     <div class="span3">
       <h3>Notes</h3>
