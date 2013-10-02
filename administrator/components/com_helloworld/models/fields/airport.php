@@ -40,8 +40,7 @@ class JFormFieldAirport extends JFormFieldList
 
     $query->select('a.id,a.code,a.name');
     $query->from('#__airports AS a');
-    $query->
-    $query->order('a.title asc');
+    $query->order('a.name asc');
 
 
     $db->setQuery($query);
