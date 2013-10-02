@@ -58,7 +58,7 @@ class AdminModelProfile extends UsersModelUser
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_users.edit.user.data', array());
+		$data = JFactory::getApplication()->getUserState('com_admin.edit.profile.data', array());
 
 		if (empty($data))
 		{

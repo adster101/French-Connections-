@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.tooltip');
 
+
 ?>
 
 <h1>
@@ -25,14 +26,55 @@ JHtml::_('behavior.tooltip');
 <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_registerowner'); ?>" method="post" class="form-validate form-horizontal">
   <legend><?php echo JText::_('COM_REGISTER_OWNER_LEGEND'); ?></legend>
   <fieldset class="adminform">
-    <?php foreach ($this->form->getFieldset('register') as $field): ?>
-      <div class="control-group">
-        <?php echo $field->label; ?>
-        <div class="controls">
-          <?php echo $field->input; ?>
-        </div>
-      </div>         
-    <?php endforeach; ?>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('firstname'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('firstname'); ?>
+      </div>
+    </div>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('surname'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('surname'); ?>
+      </div>
+    </div>    
+    <div class="control-group">
+      <?php echo $this->form->getLabel('username'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('username'); ?>
+      </div>
+    </div>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('email1'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('email1'); ?>
+      </div>
+    </div>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('email2'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('email2'); ?>
+      </div>
+    </div>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('phone_1'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('dialling_code'); ?>
+        <?php echo $this->form->getInput('phone_1'); ?>
+      </div>
+    </div>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('where_heard'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('where_heard'); ?>
+      </div>
+    </div>
+    <div class="control-group">
+      <?php echo $this->form->getLabel('captcha'); ?>
+      <div class="controls">
+        <?php echo $this->form->getInput('captcha'); ?>
+      </div>
+    </div>
     <div class="form-actions">
       <button class="btn btn-primary btn-large " type="submit">
         <?php echo JText::_('JSUBMIT'); ?>

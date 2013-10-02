@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidation');
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
@@ -57,5 +58,14 @@ $userId = $user->get('id');
 
 </form>
 
+<script type="text/javascript">
+  Joomla.submitbutton = function(task)
+  {
+    if (task == 'ticket.cancel' || document.formvalidator.isValid(document.id('adminForm')))
+    {
+      Joomla.submitform(task, document.getElementById('adminForm'));
+    }
+  }
+</script>
 
 
