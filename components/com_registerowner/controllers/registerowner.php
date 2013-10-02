@@ -25,10 +25,9 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
 		$state = $model->get('state');
     $params = $state->get('parameters.menu');
     $success_article = $params->get('success_article');
-    $link = 'index.php?option=com_content&view=article&id=' . (int) $success_article;
-    $menu = JFactory::getApplication()->getMenu();
-    $menuItem = $menu->getItems('link',$link,true);
-    $ItemId = $menuItem->id;
+    // Include the content helper so we can get the route of the success article
+    require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+
                 
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
@@ -82,7 +81,7 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
     $msg = JText::_('COM_REGISTER_SUCCESS');
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&ItemId=' . $ItemId , false));
+    $this->setRedirect(JRoute::_(ContentHelperRoute::getArticleRoute($success_article) , false));
 
     return true;
   }

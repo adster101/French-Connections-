@@ -52,8 +52,8 @@ class modFeaturedPropertyHelper {
     $query->where('a.expiry_date >= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
     $query->where('h.published = 1');
     $query->where('h.featured_property_type = ' . $type);
-    $query->where('h.start_date < ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')) );
-    $query->where('h.end_date > ' . $db->quote(JFActory::getDate()->calendar('Y-m-d')));
+    $query->where('h.start_date <= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')) );
+    $query->where('h.end_date >= ' . $db->quote(JFActory::getDate()->calendar('Y-m-d')));
     $query->order('rand()');
     $db->setQuery($query, 0,$count);
 
