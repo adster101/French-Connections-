@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <layout title="Register owner menu item">
+    <message>There ain't no params twat face...</message>
+  </layout>
+  <fields
+    name="params"
+    addfieldpath="/administrator/components/com_reviews/models/fields"
+  >
+    <fieldset name="basic">
+      <field 
+        type="text"
+        name="success_article"
+        default=""
+        filter="int"
+        label="Success article"
+        description="The ID of the article the user is redirected to after a successful registration."
+      />
+    </fieldset>
+  </fields>
+</metadata>
+

@@ -22,8 +22,14 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
 
     $app = JFactory::getApplication();
     $model = $this->getModel();
-    $params = JComponentHelper::getParams('com_registerowner');
-
+		$state = $model->get('state');
+    $params = $state->get('parameters.menu');
+    $success_article = $params->get('success_article');
+    $link = 'index.php?option=com_content&view=article&id=' . (int) $success_article;
+    $menu = JFactory::getApplication()->getMenu();
+    $menuItem = $menu->getItems('link',$link,true);
+    $ItemId = $menuItem->id;
+                
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
 
@@ -76,7 +82,7 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
     $msg = JText::_('COM_REGISTER_SUCCESS');
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&Itemid=448', false));
+    $this->setRedirect(JRoute::_('index.php?option=com_content&view=article&ItemId=' . $ItemId , false));
 
     return true;
   }

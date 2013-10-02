@@ -80,18 +80,10 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @since	1.6
    */
   protected function populateState() {
+    
+    return true;
 
-
-    $app = JFactory::getApplication();
-
-    $input = $app->input;
-
-    $request = $input->request;
-
-    // Get the message id
-    $id = $input->get('id', '', 'int');
-
-    $this->setState('property.id', $id);
+   
   }
 
   /**

@@ -15,7 +15,7 @@ class RegisterownerViewRegisterowner extends JViewLegacy {
 // Overwriting JView display method
   function display($tpl = null) {
 
-
+    
     $this->state = $this->get('State');
 
     $this->form = $this->get('Form');
