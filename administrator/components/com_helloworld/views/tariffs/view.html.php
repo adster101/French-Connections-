@@ -113,6 +113,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+    $document->addScript(JURI::root() . "/media/fc/js/general.js");
 
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js", 'text/javascript', true);
@@ -121,6 +122,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
   }
 
 }

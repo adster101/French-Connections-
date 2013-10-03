@@ -8,7 +8,8 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
 // Get the input data
 $app = JFactory::getApplication();
 $input = $app->input;
-$view = $input->get('view', '', 'string');$languages = HelloWorldHelper::getLanguages();
+$view = $input->get('view', '', 'string');
+$languages = HelloWorldHelper::getLanguages();
 
 // Process the units into a keyed array (useful so we can get at individual units)
 // Easier to just foreach ?
@@ -21,7 +22,6 @@ $units = HelloWorldHelper::getUnitsById($data['progress']);
 $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($listing_id);
 
 $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $item->availability_last_updated_on : '';
-
 ?>
 
 <div class="row-fluid">
@@ -40,6 +40,9 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
       echo $layout->render($data);
       ?>
       <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->unit->unit_title); ?></legend>
+      <div class="clear alert alert-notice">
+        <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY_INSTRUCTIONS'); ?>
+      </div>
       <div class="row-fluid">
         <div class="span8">
           <p class="pull-left">
@@ -58,6 +61,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
           </table>
         </div>
       </div>
+
       <?php echo $this->calendar; ?>
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=availability&unit_id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <div id="availabilityModal" class="hide fade modal">

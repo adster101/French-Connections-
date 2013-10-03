@@ -127,7 +127,7 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
 
     $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title, $this->item->id), 'helloworld');
 
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/helloworld.js");
+    $document->addScript(JURI::root() . "/media/fc/js/general.js");
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
 
     $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
@@ -137,6 +137,7 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
   }
 
 }

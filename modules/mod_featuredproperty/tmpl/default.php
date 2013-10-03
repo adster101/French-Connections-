@@ -26,7 +26,7 @@ defined('_JEXEC') or die;
             </div>
             <div class="span6">
               <p>
-                <strong><?php echo $item->unit_title; ?></strong> | 
+                <strong><?php echo $item->title; ?></strong> | 
                 <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
                 <?php echo $item->occupancy; ?>
                 <?php if (!empty($item->price)) : ?> |

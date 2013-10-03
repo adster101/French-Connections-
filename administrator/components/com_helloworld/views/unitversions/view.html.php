@@ -109,17 +109,15 @@ class HelloWorldViewUnitversions extends JViewLegacy {
         // We can save the new record
         JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
         JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
-        
       }
     }
 
-    
 
-      $canDo = HelloWorldHelper::addSubmenu('listings');
 
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-    
+    $canDo = HelloWorldHelper::addSubmenu('listings');
+
+    // Add the side bar
+    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**
@@ -131,14 +129,15 @@ class HelloWorldViewUnitversions extends JViewLegacy {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) );
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/models/forms/helloworld.js");
+    //$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
+    $document->addScript(JURI::root() . "/media/fc/js/general.js");
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js", 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
   }
 
 }

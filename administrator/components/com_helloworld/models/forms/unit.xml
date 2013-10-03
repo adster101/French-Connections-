@@ -8,10 +8,12 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_UNIT_TITLE_DESC"
       size="25"
       maxlength="25"
-      class="input-large validate-greeting"
+      class="input-large"
       validate="greeting"
       required="true"
       labelclass="control-label"
+      hint="COM_HELLOWORLD_HELLOWORLD_FIELD_UNIT_TITLE_PLACEHOLDER"
+      translateHint="true"
     />
 
     <field

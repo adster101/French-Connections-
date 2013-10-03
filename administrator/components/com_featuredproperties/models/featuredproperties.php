@@ -87,8 +87,8 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
       a.id,
       a.date_updated,
       a.property_id,
-      a.start_date,
-      a.end_date,
+      date_format(a.start_date, "%d/%m/%Y") as start_date,
+      date_format(a.end_date, "%d/%m/%Y") as end_date,
       a.notes,
       a.published,
       b.title
@@ -109,6 +109,8 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 			$query->where('a.published IN (0,1)');
     }
 
+    $query->where('a.end_date >= ' . $db->quote(JFactory::getDate()));
+    
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
