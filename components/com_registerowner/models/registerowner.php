@@ -80,10 +80,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @since	1.6
    */
   protected function populateState() {
-    
-    return true;
 
-   
+    return true;
   }
 
   /**
@@ -126,7 +124,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       // Also would be a good idea to insert a row into the profile db table
       JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components//com_helloworld/tables');
       $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
-      
+
       // Set the table key to id so we ensure a new record is generated.
       $table->set('_tbl_key', 'id');
 
@@ -142,18 +140,19 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
 
       // Commit the transaction
       $db->transactionCommit();
-
+      // Get the menu based params 
+      $params = $this->state->get('parameters.menu');
+      
       // Get the config setting to set the email details for
       $config = JFactory::getConfig();
       $data['fromname'] = $config->get('fromname');
-      $data['mailfrom'] = $config->get('mailfrom');
+      $data['mailfrom'] = $params->get('email_from');
       $data['sitename'] = $config->get('sitename');
 
       $data['siteurl'] = JUri::root() . 'administrator';
       // Set the link to activate the user account.
       $uri = JUri::getInstance();
-      
-      $base = $uri->toString(array('scheme', 'user', 'pass', 'host', 'port'));
+
       //$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'] . '&advertiser=true', false);
 
       $emailSubject = JText::sprintf(
@@ -161,11 +160,11 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       );
 
       $emailBody = JText::sprintf(
-                      'COM_REGISTEROWNER_EMAIL_REGISTERED_BODY', $data['name'], $data['sitename'],$data['siteurl'], $data['siteurl'], $data['username'], $user->password_clear
+                      'COM_REGISTEROWNER_EMAIL_REGISTERED_BODY', $data['name'], $data['sitename'], $data['siteurl'], $data['siteurl'], $data['username'], $user->password_clear
       );
 
       // Send the registration email. the true argument means it will go as HTML
-      $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody, true);
+      $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody, true, $data['mailfrom']);
 
       if (!$return) {
         return false;

@@ -32,15 +32,12 @@ class HelloWorldControllerUnitVersions extends HelloWorldControllerBase {
 
     // Set the view list - applies when saving/cancelling rather than 'inflecting' the list view
     $this->view_list = 'listing';
-    
+
     // Assign the tariffs task to run the edit method.
     // This redirects to the tariffs layout of the unitversions view
     $this->registerTask('tariffs', 'edit');
     $this->registerTask('images', 'edit');
-    
   }
-
-
 
   /*
    * Method to check that the user can view the reviews, and if so redirect to the correct view
@@ -157,7 +154,7 @@ class HelloWorldControllerUnitVersions extends HelloWorldControllerBase {
       case 'cancel':
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-        
+
         $id = $data['property_id'];
 
         break;
@@ -173,5 +170,68 @@ class HelloWorldControllerUnitVersions extends HelloWorldControllerBase {
     return $append;
   }
 
+  public function add() {
+    $app = JFactory::getApplication();
+    $context = "$this->option.edit.$this->context";
+    $model = $this->getModel('UnitVersions');
+    $table = $model->getTable();
+    $id = JFactory::getApplication()->input->getInt('property_id');
+    $data = $table->getProperties();
+
+    // Access check.
+    if (!$this->allowAdd()) {
+      // Set the internal error and also the redirect error.
+      $this->setError(JText::_('JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . $this->getRedirectToListAppend(), false
+              )
+      );
+
+      return false;
+    }
+
+    /*
+     * Pump the dummy unit data into the unit model...
+     */
+    $data['property_id'] = $id;
+
+    if (!$model->save($data)) {
+
+      // Set an error based on like what happened...
+      $this->setError(JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_PROPERTY_FAILURE'));
+      $this->setMessage($this->getError(), 'error');
+
+      // Redirect to the edit screen.
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . $this->getRedirectToListAppend(), false
+              )
+      );
+
+      return false;
+    }
+
+    // Set a message indicating success...
+    $this->setError(JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_UNIT_SUCCESS'));
+    $this->setMessage($this->getError(), 'message');
+
+    $this->holdEditId('com_helloworld.view.listing', $id);
+    
+    $unit_id = $model->getState($model->getName() . '.id');
+
+    // Redirect to the edit screen.
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=com_helloworld&task=unitversions.edit&unit_id=' . (int) $unit_id, false
+            )
+    );
+
+    return true;
+  }
 
 }

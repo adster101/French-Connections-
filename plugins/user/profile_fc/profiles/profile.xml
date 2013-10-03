@@ -172,7 +172,7 @@
       label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
       message="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_MESSAGE"
       size="30"
-      validate="email"
+      validate="company"
       required="false"
     />
 			

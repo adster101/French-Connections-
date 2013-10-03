@@ -118,6 +118,8 @@ class plgUserProfile_fc extends JPlugin {
     // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
+  
+
     if (!($form instanceof JForm)) {
       $this->_subject->setError('JERROR_NOT_A_FORM');
       return false;
@@ -129,17 +131,30 @@ class plgUserProfile_fc extends JPlugin {
     if (!in_array($name, array('com_admin.profile', 'com_users.user'))) {
       return true;
     }
-
+    
+    $doc = JFactory::getDocument();
+    $doc->addScript(JURI::root() . 'media/fc/js/general.js', false, true);
+    
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.
     $form->removeField('name');
-
+    
     // Add the additional progile fields to the form.
     JForm::addFormPath(dirname(__FILE__) . '/profiles');
     $form->loadFile('profile', false);
 
     // Add the rule path to the form so we may validate the user profile details a bit.
     JForm::addRulePath('C:\xampp\htdocs\administrator\components\com_helloworld\models\rules');
+    $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
+    if ($vat_status == 'ZA') {
+      $form->setFieldAttribute('company_number', 'required', true);
+    }
+    
+    if ($vat_status == 'ECS') {
+      $form->setFieldAttribute('vat_number', 'required', true);
+    }
 
+    
+    
     return true;
   }
 
@@ -174,7 +189,7 @@ class plgUserProfile_fc extends JPlugin {
 
         $userdata['name'] = $data['firstname'] . ' ' . $data['surname'];
         // Bind the data.
-        
+
         if (!$user->bind($userdata)) {
           $this->setError($user->getError());
           return false;
@@ -228,4 +243,6 @@ class plgUserProfile_fc extends JPlugin {
     return true;
   }
 
+  
+  
 }

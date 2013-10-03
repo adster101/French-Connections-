@@ -13,8 +13,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 JHtml::_('behavior.formvalidation');
 
-// Load chosen.css
-JHtml::_('formbehavior.chosen', 'select');
 
 $lang = JFactory::getLanguage();
 $lang->load('com_invoices', JPATH_ADMINISTRATOR, null, false, true);
@@ -25,6 +23,13 @@ InvoicesHelper::addSubmenu('account');
 
 // Get the form fieldsets.
 $fieldsets = $this->form->getFieldsets();
+
+$company_number = $this->form->getValue('company_number');
+$vat_status =  $this->form->getValue('vat_status');
+
+$show_vat_number = ($this->item->vat_status == 'ECS') ? true : false;
+$show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true : false;
+
 ?>
 
 <script type="text/javascript">
@@ -35,6 +40,11 @@ $fieldsets = $this->form->getFieldsets();
       Joomla.submitform(task, document.getElementById('profile-form'));
     }
   }
+
+
+
+
+
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="profile-form" class="form-validate form-horizontal" enctype="multipart/form-data">
@@ -88,7 +98,7 @@ $fieldsets = $this->form->getFieldsets();
             <?php echo $this->form->getInput('password1'); ?>
           </div>
         </div>     
-       
+
       </fieldset>
       <fieldset>
         <legend>Contact Details</legend>
@@ -137,22 +147,26 @@ $fieldsets = $this->form->getFieldsets();
             <?php echo $this->form->getInput('vat_status'); ?>
           </div>
         </div>          
-        <div class="control-group">
-          <div class="control-label">
-            <?php echo $this->form->getLabel('vat_number'); ?>
+        <div id="vat_number" class="<?php echo ($show_vat_number) ? '' : 'hide' ?> "> 
+          <div class="control-group">
+            <div class="control-label">
+              <?php echo $this->form->getLabel('vat_number'); ?>
+            </div>
+            <div class="controls">
+              <?php echo $this->form->getInput('vat_number'); ?>
+            </div>
           </div>
-          <div class="controls">
-            <?php echo $this->form->getInput('vat_number'); ?>
-          </div>
-        </div>                
-        <div class="control-group">
-          <div class="control-label">
-            <?php echo $this->form->getLabel('company_number'); ?>
-          </div>
-          <div class="controls">
-            <?php echo $this->form->getInput('company_number'); ?>
-          </div>
-        </div>                
+        </div>
+        <div id="company_number" class="<?php echo ($show_company_number) ? '' : 'hide' ?> "> 
+          <div class="control-group">
+            <div class="control-label">
+              <?php echo $this->form->getLabel('company_number'); ?>
+            </div>
+            <div class="controls">
+              <?php echo $this->form->getInput('company_number'); ?>
+            </div>
+          </div>    
+        </div>
 
       </fieldset>
       <fieldset>
@@ -206,14 +220,6 @@ $fieldsets = $this->form->getFieldsets();
           </div>
         </div> 
       </fieldset>
-
-
-
-
-
-
-
-
     </div>
   </div>
 

@@ -1,20 +1,5 @@
 jQuery(document).ready(function() {
 
-// Iterate over all the form fields in the contact form 
-  jQuery('#adminForm label').each(function() {
-    // Get the id of the label element and split it - derived the input field id
-    var id = this.id.split('-');
-    // Get the title and content 
-    var text = this.title.split('::');
-    // Prime each element with a popover on focus
-    popover = jQuery('#' + id[0]).popover({
-      title: text[0],
-      content: text[1],
-      placement: 'right',
-      trigger: 'focus'
-    });
-  });
-
   if (jQuery('#map').length) {
     initialise();
   }

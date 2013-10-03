@@ -180,8 +180,6 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
 
     jQuery("input[name='jform[use_invoice_details]']").change(function(e) {
 
-      console.log(e);
-
       var el = e.target;
 
       var checked = jQuery(el).val();
