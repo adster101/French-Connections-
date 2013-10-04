@@ -29,8 +29,8 @@ class HelloWorldModelListings extends JModelList {
           'expiry_date', 'a.expiry_date',
           'checked_out', 'a.checked_out',
           'checked_out_time', 'a.checked_out_time',
-          'created_time', 'a.created_time',
           'created_user_id', 'a.created_user_id',
+          'a.created_on', 'a.created_on',
           'snoozed', 'a.snooze_until'
       );
     }
@@ -223,13 +223,13 @@ class HelloWorldModelListings extends JModelList {
         $query->where('a.id = ' . (int) $search);
       } elseif (stripos($search, 'account:') === 0) {
         $search = $db->Quote('%' . $db->escape(substr($search, 8), true) . '%');
-        $query->where('(u.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
+        $query->where('(u.name LIKE ' . $search . ' OR u.username LIKE ' . $search . ' OR u.email LIKE ' . $search . ')');
       } elseif (stripos($search, 'accid:') === 0) {
         $search = substr($search, 6);
         $query->where('(u.id = ' . $search . ')');
       } else {
         $search = $db->Quote('%' . $db->escape($search, true) . '%');
-        $query->where('(a.title LIKE ' . $search . ')');
+        $query->where('(b.title LIKE ' . $search . ')');
       }
     }
 

@@ -117,7 +117,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
 
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tariffs.js", 'text/javascript', true);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/submitbutton.js");
+    $document->addScript(JURI::root() . "/media/fc/js/general.js");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
 

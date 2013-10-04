@@ -109,6 +109,9 @@ $listing_id = '';
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
                     </th>
+                    <th>
+                      <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on',$listDirn,$listOrder); ?>
+                    </th>
                     <?php if ($canDo->get('helloworld.property.review')) : ?>  
                       <th>
                         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
@@ -201,6 +204,9 @@ $listing_id = '';
                         </td>
                         <td>
                           <?php echo JText::_($item->modified); ?>
+                        </td>
+                        <td>
+                          <?php echo JText::_($item->created_on); ?>
                         </td>
                         <?php if ($canDo->get('helloworld.property.review')): ?>
                           <td>
