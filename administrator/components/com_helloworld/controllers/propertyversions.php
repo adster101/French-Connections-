@@ -33,7 +33,7 @@ class HelloWorldControllerPropertyVersions extends HelloWorldControllerBase {
   public function getRedirectToListAppend($recordId = null, $urlVar = 'id') {
 
     // Get the default append string
-    $append = parent::getRedirectToListAppend($recordId, $urlVar);
+    //$append = parent::getRedirectToListAppend($recordId, $urlVar);
 
     // Get the task, if we are 'editing' then the parent id won't be set in the form scope
     $task = $this->getTask();
@@ -49,7 +49,7 @@ class HelloWorldControllerPropertyVersions extends HelloWorldControllerBase {
 
     // If parent ID is set in form data also append to the url
     if ($id > 0) {
-      $append .= '&id=' . $id;
+      $append .= '&view=listing&id=' . $id;
     }
 
     return $append;

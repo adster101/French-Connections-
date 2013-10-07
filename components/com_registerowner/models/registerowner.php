@@ -122,7 +122,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       }
 
       // Also would be a good idea to insert a row into the profile db table
-      JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components//com_helloworld/tables');
+      JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
       $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
 
       // Set the table key to id so we ensure a new record is generated.
@@ -136,7 +136,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       if (!$table->save($user_profile)) {
         $this->setError($table->getError());
         Throw new Exception('Problem creating user profile');
-      }
+      }      
 
       // Commit the transaction
       $db->transactionCommit();

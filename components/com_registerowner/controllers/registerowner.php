@@ -15,20 +15,19 @@ defined('_JEXEC') or die;
  */
 class RegisterownerControllerRegisterowner extends JControllerForm {
 
-  
   public function register() {
     // Check for request forgeries.
     JSession::checkToken('POST') or jexit(JText::_('JINVALID_TOKEN'));
 
     $app = JFactory::getApplication();
     $model = $this->getModel();
-		$state = $model->get('state');
+    $state = $model->get('state');
     $params = $state->get('parameters.menu');
     $success_article = $params->get('success_article');
     // Include the content helper so we can get the route of the success article
     require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
-                
+
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
 
@@ -70,19 +69,20 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
       $app->setUserState('com_registerowner.register.data', $data);
 
       $this->setRedirect(JRoute::_('index.php?option=com_registerowner', false), $this->getError(), 'error');
-      
+
       return false;
     }
-        
-    
+
+
     // Flush the data from the session
     $app->setUserState('com_registerowner.register.data', null);
-    
+
     $msg = JText::_('COM_REGISTER_SUCCESS');
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    $this->setRedirect(JRoute::_(ContentHelperRoute::getArticleRoute($success_article) , false));
+    $this->setRedirect(JRoute::_(ContentHelperRoute::getArticleRoute($success_article), false));
 
     return true;
   }
+
 }

@@ -30,6 +30,35 @@ class HelloWorldControllerTariffs extends HelloWorldControllerBase {
     }
   }
 
+  /*
+   * Augmented getRedirectToItemAppend so we can append the property_id onto the url
+   * MAkes more sense to override this than the individual save/edit methods
+   *
+   */
 
+  public function getRedirectToListAppend($recordId = null, $urlVar = 'id') {
+
+    // Get the default append string
+    $append = '';
+
+    // Get the task, if we are 'editing' then the parent id won't be set in the form scope
+    $task = $this->getTask();
+
+    switch ($task) :
+      case 'save':
+        // Derive the parent id from the form data
+        $data = JFactory::getApplication()->input->get('jform', array(), 'array');
+        $id = $data['property_id'];
+        break;
+
+    endswitch;
+
+    // If parent ID is set in form data also append to the url
+    if ($id > 0) {
+      $append .= '&view=listing&id=' . $id;
+    }
+
+    return $append;
+  }
 
 }

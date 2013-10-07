@@ -108,7 +108,7 @@
       type="text"
       filter="string"
       label="Contact email"
-      maxlength="25"
+      maxlength="75"
       labelclass="control-label"
       required="true"
     />      

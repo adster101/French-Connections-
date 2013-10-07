@@ -50,16 +50,18 @@
 
     <field
       name="additional_price_notes"
-      type="editor"
+      type="textarea"
       label="COM_HELLOWORLD_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
-      rows="3"
-      class="inputbox validate-description"
+      rows="6"
+      class="input-xxlarge validate-description"
       default=""
-      filter="safehtml"
+      filter="string"
       buttons="false"
       validate="additionalpricenotes"
-      message="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE" />
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE"
+      labelclass="control-label"
+    />
     
  
   </fieldset>

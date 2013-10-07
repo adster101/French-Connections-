@@ -92,7 +92,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
     JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title));
 
     if ($canDo->get('core.edit.own'))
-      JToolBarHelper::cancel('property.cancel', 'JTOOLBAR_CLOSE'); {
+      JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
       // We can save the new record
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');

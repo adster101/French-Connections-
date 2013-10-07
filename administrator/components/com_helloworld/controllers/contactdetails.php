@@ -33,13 +33,24 @@ class HelloWorldControllerContactDetails extends HelloWorldControllerBase {
 
     $task = $this->getTask();
 
-    if ($task == 'apply') {
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&property_id=' . $validData['property_id'], false
-              )
-      );
-    }
+    switch ($task) :
+      case 'save':
+        $this->setRedirect(
+                JRoute::_(
+                        'index.php?option=' . $this->option . '&view=listing&id=' . $validData['property_id'], false
+                )
+        );
+        break;
+      case 'apply':
+        $this->setRedirect(
+                JRoute::_(
+                        'index.php?option=' . $this->option . '&view=' . $this->view_item . '&layout=edit&property_id=' . $validData['property_id'], false
+                )
+        );
+        break;
+
+    endswitch;
+    
   }
 
 }
