@@ -34,6 +34,21 @@
       labelclass="control-label"
       default=""
     />
+  
+    <field 
+      name="state"
+      type="list"
+      required="true"
+      label="State"
+      filter="int"
+      labelclass="control-label"
+      description="">
+      <option value="">JSELECT</option>
+      <option value="1">COM_TICKETS_OPEN</option>
+      <option value="0">COM_TICKETS_CLOSED</option>
+      <option value="2">COM_TICKETS_TESTING_FILTER</option>
+      <option value="3">COM_TICKETS_PENDING_FILTER</option>
+    </field>
     <field 
       name="severity"
       required="true"
@@ -49,22 +64,7 @@
       <option value="3">COM_TICKETS_MEDIUM</option>
       <option value="4">COM_TICKETS_LOW</option>
       <option value="5">COM_TICKETS_MINOR</option>
-    </field>    
-    <field 
-      name="state"
-      type="list"
-      required="true"
-      label="State"
-      filter="int"
-      labelclass="control-label"
-      description="">
-      <option value="">JSELECT</option>
-      <option value="1">COM_TICKETS_OPEN</option>
-      <option value="0">COM_TICKETS_CLOSED</option>
-      <option value="2">COM_TICKETS_TESTING_FILTER</option>
-      <option value="3">COM_TICKETS_PENDING_FILTER</option>
-    </field>
-   
+    </field>     
     <field
       type="category"
       name="area"

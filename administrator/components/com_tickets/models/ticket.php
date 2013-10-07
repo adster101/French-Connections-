@@ -84,7 +84,7 @@ class TicketsModelTicket extends JModelAdmin {
     $user = JFactory::getUser();
 
 
-    if (isset($data['note'])) {
+    if (isset($data['note']) && !empty($data['note'])) {
       // If we have an id and it's not empty
       if (isset($data['id']) && !empty($data['id'])) {
 
