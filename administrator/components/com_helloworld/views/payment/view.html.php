@@ -6,10 +6,13 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla view library
 jimport('joomla.application.component.view');
 
+// import our payment library class
+jimport('frenchconnections.models.payment');
+
 /**
  * HelloWorlds View
  */
-class HelloWorldViewRenewal extends JViewLegacy {
+class HelloWorldViewPayment extends JViewLegacy {
 
   /**
    * HelloWorld raw view display method
@@ -20,31 +23,32 @@ class HelloWorldViewRenewal extends JViewLegacy {
    */
   function display($tpl = null) {
 
-    $input      = JFactory::getApplication()->input;
+    $input = JFactory::getApplication()->input;
     $this->id = $input->get('id', '', 'int');
-    $layout   = $input->get('layout','','string');
-   
+    $layout = $input->get('layout', '', 'string');
+
     //$this->extension = $input->get('option', '', 'string');
     // Get an instance of the Listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel'));
-    $model    = $this->getModel('Listing');
-    
-    $this->listing = $model->getItems();
-     
-    // Add the Property model so we can get the renewal details...
-    $this->setModel(JModelLegacy::getInstance('Property', 'HelloWorldModel', $config = array('listing'=>$this->listing)), true);
+    $model = $this->getModel('Listing');
 
-    // Get an instance of the property model
-    $property = $this->getModel('Property');
+    $this->listing = $model->getItems();
+
+    // Add the Property model so we can get the renewal details...
+    $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $this->listing));
 
     // Get the units and image details they against this property
-    $this->summary = $this->get('PaymentSummary');
+    $this->summary = $listing->getPaymentSummary();
 
-
-    if ($layout == 'payment') {
+    if ($layout == 'account') {
+      
+      // Get the account form
+      $this->form = $this->get('Form');
+    } elseif ($layout == 'payment') {
       // Get the payment form
       $this->form = $this->get('PaymentForm');
     }
+
 
     // Set the document
     $this->setDocument();
@@ -54,7 +58,6 @@ class HelloWorldViewRenewal extends JViewLegacy {
 
     // Display the template
     parent::display($tpl);
-
   }
 
   /**
@@ -66,15 +69,13 @@ class HelloWorldViewRenewal extends JViewLegacy {
     $document = JFactory::getDocument();
 
     // Set the page title
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY',$this->id));
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
 
     //$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", true, false);
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/vat.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "/media/fc/js/general.js", false, true);
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
-
+    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
   }
 
   /**
@@ -88,18 +89,17 @@ class HelloWorldViewRenewal extends JViewLegacy {
     $canDo = HelloWorldHelper::getActions();
 
     $document = JFactory::getDocument();
-		$document->setTitle(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY',$this->id));
+    $document->setTitle(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
 
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
 
-      $view = strtolower(JRequest::getVar('view'));
 
-      $canDo = HelloWorldHelper::addSubmenu($view);
+    $view = strtolower(JRequest::getVar('listings'));
 
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-    }
+    $canDo = HelloWorldHelper::addSubmenu('listings');
+
+    // Add the side bar
+    $this->sidebar = JHtmlSidebar::render();
+
 
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');

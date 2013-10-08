@@ -2,13 +2,14 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-// import the Joomla modellist library
-jimport('joomla.application.component.modeladmin');
+
+// import the Joomla modeladmin library
+jimport('joomla.application.component.modellegacy');
 
 /**
  * HelloWorldList Model
  */
-class HelloWorldModelProperty extends JModelAdmin {
+class FrenchConnectionsModelPayment extends JModelLegacy {
 
   /**
    * The property listing as a list of units 
@@ -42,6 +43,11 @@ class HelloWorldModelProperty extends JModelAdmin {
    * The review status of the property
    */
   protected $isReview = '';
+
+  /*
+   * The property type payment is being calculated for.
+   */
+  protected $property_type = '';
 
   /**
    * __construct - initialise the various class properties that we need to process a listing
@@ -81,25 +87,6 @@ class HelloWorldModelProperty extends JModelAdmin {
     return JTable::getInstance($type, $prefix, $config);
   }
 
-  /**
-   * Method to get the record form.
-   *
-   * @param	array	$data		Data for the form.
-   * @param	boolean	$loadData	True if the form is to load its own data (default case), false if not.
-   * @return	mixed	A JForm object on success, false on failure
-   * @since	1.6
-   */
-  public function getForm($data = array(), $loadData = true, $form = '') {
-
-    // Get the form.
-    $form = $this->loadForm('com_helloworld.property', 'property', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
-      return false;
-    }
-
-    return $form;
-  }
-
   /*
    * Returns a list of order lines for a listing based on what combination of units/images and so on the listing has
    *
@@ -122,7 +109,7 @@ class HelloWorldModelProperty extends JModelAdmin {
     $item_costs = $this->getItemCosts($order_summary);
 
     // Add the VAT status to the order summary
-    $vat_status = ($user->vat_status) ? $user->vat_status : 'Z';
+    $vat_status = ($user->vat_status) ? $user->vat_status : 'S2';
 
     // Calculate the value of each line of the order...
     $summary_tmp = $this->getOrderLineTotals($order_summary, $item_costs, $vat_status);
@@ -319,17 +306,14 @@ class HelloWorldModelProperty extends JModelAdmin {
     // $units contains the listing including all the units and so on.
     // From this we can generate our pro forma order
     // Need to know the user invoice address and VAT status for this user
-    // If we don't know the VAT status then intially apply it.
-    // If the property is a B&B, then only charge for one unit, regardless of how many units are listed.
+    // If the property is a B&B, then don't charge for any additional units unless the additional units are self-catering
     // If the expiry date is set then this is a renewal. Regardless of whether it has actually expired or not   
     // Item codes will be dependent on whether it is a renewal or not
-    // Flag to indicate whether we've alrady counted a b&B unit
 
-    $bed_and_breakfast = false;
-    $count_additional_units = false;
-
-    // A unit counter
-    $unit_count = 0;
+    // Units counters
+    $bandb = 0;
+    $selfcatering = 0;
+    $mixed_units = false;
 
     // Total images holder
     $image_count = 0;
@@ -343,38 +327,40 @@ class HelloWorldModelProperty extends JModelAdmin {
     foreach ($units as $unit) {
 
       if ($unit->accommodation_type == 25) {
-        ($count_additional_units) ? $unit_count++ : '';
 
-        $count_additional_units = true;
-      } else {
+        $selfcatering++;
+      } elseif ($unit->accommodation_type == 24) {
 
-        // TO DO - This don't work as it adds one to the unit count for a B&B where this is included in the base price...
-        // If it's only B&B then only charge for base listing plus additional images etc
-        // If it's a s/c with a B&B unit then I assume we charge for each additional B&B unit?
-        (!$bed_and_breakfast) ? $unit_count++ : '';
-
-        $bed_and_breakfast = true;
+        $bandb++;
       }
 
-      // If image count less than number of images on this unit, update image count
-      ($image_count < $unit->images) ? $image_count = $unit->images : '';
+      // Images are done as a total. So 5 images on each unit with 3 units would give 15 images. And so on.
+      $image_count = $image_count + $unit->images;
     }
+
+    if ($bandb > 0 && $selfcatering > 0) {
+      $unit_count = $selfcatering;
+      $mixed_units = true;
+    } elseif ($bandb == 0 && $selfcatering > 0) {
+      $unit_count = ( $selfcatering - 1 );
+    } elseif ($bandb > 0 && $selfcatering == 0) {
+      $unit_count = 0;
+    }
+
 
     // Below covers most cases
     // Need to also consider
-    // Site network, e.g. French Translations
-    // Video
-    // Booking form, although not counted at renewal
-    // Link to personal site
-    // Special offers - figure out how to deal with
+    // Site network, e.g. French Translations (*)
+    // Video (*)
     // Also possible the 'additional' marketing gubbins
-    // Vouchers!
+    // Vouchers! (*)
 
     if ($this->getIsRenewal()) {
 
+      // Get the component params - for e.g. the number of images they're entitled to
       // Determine the item costs
-      if ($image_count >= 8) { // Renewal
-        $item_costs['1004-009']['quantity'] = 1;
+      if ($image_count >= 20) {
+        $item_costs['1004-009']['quantity'] = 1; // Renewal
 
         if ($unit_count > 0) {
 
@@ -386,18 +372,10 @@ class HelloWorldModelProperty extends JModelAdmin {
         }
 
         $item_costs['1004-002']['quantity'] = 1;
-
-        if ($image_count > 4 && $image_count <= 7) {
-
-          // Additional images
-          $additional_images = $image_count - 4;
-
-          $item_costs['1004-005']['quantity'] = $additional_images;
-        }
       }
     } else { // New property being published for first time
       // Determine the item costs
-      if ($image_count >= 8) {
+      if ($image_count >= 20) {
         $item_costs['1005-009']['quantity'] = 1;
 
         if ($unit_count > 0) {
@@ -418,6 +396,10 @@ class HelloWorldModelProperty extends JModelAdmin {
 
           $item_costs['1005-005']['quantity'] = $additional_images;
         }
+      }
+
+      if ($mixed_units) {
+        $item_costs['1005-014']['quantity'] = 1;
       }
     }
     return $item_costs;
@@ -971,63 +953,6 @@ class HelloWorldModelProperty extends JModelAdmin {
     $new_expiry_date = $date->toSql();
 
     return $new_expiry_date;
-  }
-
-  /**
-   * 
-   * @param type $property_id
-   * @return type
-   */
-  public function getPropertyDetails($property_id = '') {
-
-    if (!$property_id) {
-      return false;
-    }
-    
-    // Get the table instance
-    $property = $this->getTable('Property', 'HelloWorldTable');
-
-    // And then set the property ID 
-    $property->id = $property_id;
-    
-    // Load the data up
-    if (!$property->load()) {
-      return false;
-    }
-    
-    if (!empty($property->expiry_date)) {
-      $date = new JDate($property->expiry_date);
-      $expiry_date = $date->toUnix();
-
-    } else {
-      $expiry_date = false;
-    }
-    
-    
-    return $expiry_date;
-    
-    
-  }
-
-  /**
-   * Method to get a store id based on model configuration state.
-   *
-   * This is necessary because the model is used by the component and
-   * different modules that might need different sets of data or different
-   * ordering requirements.
-   *
-   * @param   string  $id  A prefix for the store id.
-   *
-   * @return  string  A store id.
-   *
-   * @since   1.6
-   */
-  protected function getStoreId($id = '') {
-// Compile the store id.
-    $id .= ':' . $this->getState('filter.search');
-    $id .= ':' . $this->getState('filter.active');
-
-    return parent::getStoreId($id);
   }
 
   /**

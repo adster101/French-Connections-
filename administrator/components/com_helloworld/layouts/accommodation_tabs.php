@@ -43,10 +43,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : HelloWorldHelper::getEmptyUnit($
     ?>
   </ul>
 <?php else: ?>
-
   <ul class="nav nav-tabs">
-      
-    
     <?php
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_HELLOWORLD_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', '', $view);
     echo JHtmlProperty::progressMultiTabs('unitversions', 'edit', 'home', 'COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DETAILS', $data['progress'], 'unit_id', '', $view);

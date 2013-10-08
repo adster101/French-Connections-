@@ -29,6 +29,7 @@ class HelloWorldModelSubmit extends JModelAdmin {
     if (empty($form)) {
       return false;
     }
+    
 
     return $form;
   }
@@ -41,32 +42,33 @@ class HelloWorldModelSubmit extends JModelAdmin {
    * @since   12.2
    */
   protected function loadFormData() {
-    // Initialise an array to hold the data
-    $data = array();
+   
 
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_helloworld.view.listing.data', array());
 
     if (empty($data)) {
+      
+      // Load the VAT status details from the user profile table...
+      
+      
       // Here we simply bind the propery ID being edited to the form.
       $input = JFactory::getApplication()->input;
 
       $id = $input->get('id', '', 'int');
 
-      $data['id'] = $id;
     }
 
     return $data;
   }
-
   
-  public function preprocessForm(\JForm $form, $data, $group = 'content') {
-
-    // Get the user
-    $user = JFactory::getUser();
-    
-    // Check whether the user can 
-    
+  /**
+   * TO DO - implement this so that the submisssion notes are saved
+   * @param type $data
+   */
+  public function save($data) {
+    parent::save($data);
   }
+
   
 }

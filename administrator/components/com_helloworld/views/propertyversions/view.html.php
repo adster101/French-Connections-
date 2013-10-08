@@ -32,6 +32,10 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
 
     // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
     $model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', array('ignore_request' => true));
+    
+    // Switch to the revised listing class
+    // $model = JModelLegacy::getInstance('Listing_proper', 'HelloWorldModel', array('id' => $this->item->property_id));
+
 
     // Here we attempt to wedge some data into the model
     // So another method in the same model can use it.

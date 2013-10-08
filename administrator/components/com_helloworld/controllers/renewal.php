@@ -120,16 +120,18 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
 
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-    
+
     $app = JFactory::getApplication();
-    
+
     // Get an instance of the Listing model and get the listing details
-    $listing_model      = JModelLegacy::getInstance('Listing', 'HelloWorldModel');
-    $listing            = $listing_model->getItems();  
+    $listing_model = JModelLegacy::getInstance('Listing', 'HelloWorldModel');
+    $listing = $listing_model->getItems();
+
+    $id = $this->input->getInt('id');
     
     // Instantiate an instance of the property model using the listing detail as the config
-    $model              = $this->getModel('Property','HelloWorldModel',$config=array('listing'=>$listing));
-    $form               = $model->getPaymentForm();
+    $model = $this->getModel('Payment', 'HelloWorldModel', $config = array('listing' => $listing));
+    $form = $model->getPaymentForm();
 
     // Data here is the clients billing address details
     $data = $this->input->post->get('jform', array(), 'array');
@@ -159,6 +161,10 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
       $this->setRedirect(JRoute::_('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'], false));
       return false;
     }
+    // import our payment library class
+    jimport('frenchconnections.models.payment');
+
+    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $this->listing));
 
     // Attempt to save the configuration.
     $return = $model->processPayment($validData);
@@ -170,15 +176,17 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
 
       // Save failed, go back to the screen and display a notice.
       $message = JText::sprintf('JERROR_SAVE_FAILED', $model->getError());
-      $this->setRedirect('index.php?option=com_helloworld&view=renewal&layout=payment&id=' . (int) $data['id'], $message, 'error');
+      $this->setRedirect('index.php?option=com_helloworld&view=payment&layout=payment&id=' . (int) $data['id'], $message, 'error');
       return false;
     }
 
     // Payment has been authorised...
     $message = $model->processListing($return, $validData);
 
-    // $return should contain a redirect url and a message, at least
+    // Empty the data stored in the session...
+    $app->setUserState('com_helloworld.renewal.data', $data);
     
+    // $return should contain a redirect url and a message, at least
     // Set the redirect based on the task.
     switch ($this->getTask()) {
 

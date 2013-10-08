@@ -7,6 +7,8 @@ $app = JFactory::getApplication();
 $input = $app->input;
 $view = $input->get('view', '', 'string');
 
+
+
 // $displayData is passed into the layout from our template
 $progress = $displayData['progress'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
@@ -25,7 +27,7 @@ if (!empty($progress)) {
 
 <div class="row-fluid">
   <div class="span9">
-    <?php if (!empty($notices) ) : ?>
+    <?php if (!empty($notices)) : ?>
       <div class="alert alert-info">
         <h4>Listing Progress</h4>
         <ul>
@@ -45,16 +47,25 @@ if (!empty($progress)) {
           <?php endforeach; ?>
         </ul>
       </div>
-    <?php elseif ((empty($notices) && $view == 'listing') && $review) : ?>
+    <?php elseif ((empty($notices) && $view == 'listing') && $review) : //No notices, listing view for a property that needs review ?>
       <div class="well well-small">
         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
         <hr />
         <fieldset class="panelform">
-          <?php echo $form->getLabel('admin_notes'); ?>
-          <?php echo $form->getInput('admin_notes'); ?>
+          <div class="control-group">   
+
+            <?php echo $form->getLabel('admin_notes'); ?>
+            <div class="controls">   
+
+              <?php echo $form->getInput('admin_notes'); ?>
+            </div>
+          </div>
+         
 
           <?php echo $form->getInput('tos'); ?>
-          <?php echo $form->getInput('id'); ?>
+          <hr />
+
+
         </fieldset>
         <button class="btn btn-primary" onclick="Joomla.submitbutton('listing.submit')">
           <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
@@ -67,7 +78,7 @@ if (!empty($progress)) {
         <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_OKAY'); ?></p>
       </div>
-    <?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review) : ?>
+    <?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review && empty($expiry_date)) : ?>
       <div class="alert alert-danger">
         <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
@@ -94,7 +105,7 @@ if (!empty($progress)) {
     <p>
 
       <i class="icon icon-publish"></i>
-      Section complete
+      Required fields complete
     </p>
     <p>
       <i class="icon icon-wrench"></i>

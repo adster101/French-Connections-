@@ -65,7 +65,6 @@ var show_vat = function(vatID) {
 var toggle = function(elem, show) {
 
   field = jQuery(elem);
-  console.log(field);
   if (show) {
     field.addClass('required');
     field.attr('required', 'required');
@@ -131,6 +130,7 @@ Joomla.submitbutton = function(task)
   {
     var isValid = true;
     var action = task.split('.');
+
     if (action[1] != 'cancel' && action[1] != 'close')
     {
       var forms = $$('form.form-validate');
@@ -152,7 +152,7 @@ Joomla.submitbutton = function(task)
     }
     else
     {
-      alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES', 'Are you sure?'));
+      alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE', ''));
       return false;
     }
   }

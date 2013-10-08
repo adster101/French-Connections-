@@ -39,7 +39,7 @@ $data['form'] = $this->form;
       <div class="span10 form-inline">
       <?php endif; ?>
 
-      <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
+      <form action="<?php echo JRoute::_('index.php?option=com_helloworld'); ?>" method="post" name="adminForm" class="form-validate form-horizontal" id="adminForm">
 
         <?php
         $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
