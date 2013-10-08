@@ -9,7 +9,7 @@ jimport('joomla.form.formrule');
 /**
  * Form Rule class for the Joomla Framework.
  */
-class JFormRuleVat extends JFormRule {
+class JFormRulevat extends JFormRule {
 
   /**
    * The regular expression.
