@@ -143,7 +143,8 @@ class plgUserProfile_fc extends JPlugin {
     $form->loadFile('profile', false);
 
     // Add the rule path to the form so we may validate the user profile details a bit.
-    JForm::addRulePath('C:\xampp\htdocs\administrator\components\com_helloworld\models\rules');
+    JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models/rules');
+    
     $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
     if ($vat_status == 'ZA') {
       $form->setFieldAttribute('company_number', 'required', true);
