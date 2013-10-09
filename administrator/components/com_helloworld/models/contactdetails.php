@@ -93,39 +93,19 @@ class HelloWorldModelContactDetails extends JModelAdmin {
    */
   public function preprocessForm(\JForm $form, $data, $group = 'content') {
 
-    if (!empty($data)) {
-
-      if ($data->use_invoice_details) { // If already set to 
-        $form->setFieldAttribute('first_name', 'disabled', 'true');
-        $form->setFieldAttribute('surname', 'disabled', 'true');
-        $form->setFieldAttribute('phone_1', 'disabled', 'true');
-        $form->setFieldAttribute('phone_2', 'disabled', 'true');
-        $form->setFieldAttribute('phone_3', 'disabled', 'true');
-        $form->setFieldAttribute('fax', 'disabled', 'true');
-        $form->setFieldAttribute('email_1', 'disabled', 'true');
-        $form->setFieldAttribute('email_2', 'disabled', 'true');
-        $form->setFieldAttribute('address', 'disabled', 'true');
-      } else {
-        // This is the case where data is already being passed into the form?
-        $form->setFieldAttribute('use_invoice_details', 'default', '0');
-      }
-    } else {
-
-      $form_data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
-      if ($form_data['use_invoice_details']) {
-
-        $form->setFieldAttribute('first_name', 'required', 'false');
-        $form->setFieldAttribute('surname', 'required', 'false');
-        $form->setFieldAttribute('address', 'required', 'false');
-        $form->setFieldAttribute('phone_1', 'required', 'false');
-        $form->setFieldAttribute('phone_2', 'default', '');
-        $form->setFieldAttribute('phone_3', 'default', '');
-        $form->setFieldAttribute('fax', 'default', '');
-        $form->setFieldAttribute('email_1', 'required', 'false');
-        $form->setFieldAttribute('email_2', 'default', '');
-      }
+    $input = JFactory::getApplication()->input->get('jform',false,'array');
+    
+    if (empty($input['use_invoice_details']) && ($input) ) {
+      // User has selected not to use the invoice address. Therefore these fields are required.
+      $form->setFieldAttribute('first_name', 'required', 'true');
+      $form->setFieldAttribute('surname', 'required', 'true');
+      $form->setFieldAttribute('phone_1', 'required', 'true');
+      $form->setFieldAttribute('email_1', 'required', 'true');
+      
     }
+    
+    
+    
   }
 
   /**
@@ -205,7 +185,6 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $data['sms_status'] = 'OK';
         $data['sms_valid'] = 1;
       }
-      
     } else if (empty($sms_number)) { // Opt out of alerts
       $data['sms_validation_code'] = '';
       $data['sms_status'] = '';
@@ -214,9 +193,20 @@ class HelloWorldModelContactDetails extends JModelAdmin {
     }
 
     /*
+     * Lastly, we need to check if the use_invoice_details flag is set. If not present then need to update the field
+     */
+    if (empty($data['use_invoice_details'])) {
+      $data['use_invoice_details'] = false;
+    } 
+    
+    if (empty($data[''])) {
+      $data['booking_form'] = false;
+    }     
+    /*
      * SMS notification prefs are currently set in the property versions save method.
      * TO DO - Move this update to the property model/table.
      */
+    
 
     if (!$model->save($data)) {
       // TO DO - Need to go trhough the property versions save model and throw exceptions rather than returing false.

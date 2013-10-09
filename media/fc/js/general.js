@@ -1,19 +1,33 @@
 jQuery(document).ready(function() {
+  if (jQuery("#contactDetails").length) {
+
+    var checked = jQuery('input[name="jform[use_invoice_details]"');
+    
+    show_contact(checked);
+
+    jQuery("input[name='jform[use_invoice_details]']").on('click', function(e) {
+
+      show_contact(this);
+
+    })
+  }
 
   if (jQuery("#jform_vat_status").length) {
+    // Init the VAT field if it's found on the page. In an ideal world this would only be loaded on the pages that need it, via require.js
     var vatID = jQuery("#jform_vat_status")[0].value;
     show_vat(vatID);
 
     jQuery("#jform_vat_status").change(function(e) {
-
       // Get the selected vat_aid_id code
       var vatID = jQuery(this)[0].value;
       show_vat(vatID);
-
     });
 
   }
 
+
+  // Bind a change function to all forms that need validation.
+  // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
     window.onbeforeunload = function() {
       return Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES', 'Some values are unacceptable');
@@ -34,34 +48,30 @@ var show_vat = function(vatID) {
 
     // Need to remove any hidden fields from VATNUMBER field that make it required.
     vat_number.hide();
-
     toggle('#jform_vat_number', false);
     toggle('#jform_company_number', true);
-
 
   } else if (vatID === 'ECS') {
 
     // Add hidden input field for company number 
     vat_number.show();
-
     toggle('#jform_vat_number', true);
     toggle('#jform_company_number', false);
 
-
-    // Need to remove any hidden fields from COMPANYNUMBER field that make it required.
     company_number.hide();
 
   } else {
-
+    // Hide the non required fields and toggle the validation attributed
     company_number.hide();
     vat_number.hide();
-
     toggle('#jform_vat_number', false);
     toggle('#jform_company_number', false);
   }
-
 };
 
+/* 
+ * Simple function which adds or removed the required class and toggles the required attribute
+ */
 var toggle = function(elem, show) {
 
   field = jQuery(elem);
@@ -71,55 +81,29 @@ var toggle = function(elem, show) {
   } else {
     field.removeClass('required');
     field.removeAttr('required');
-    field.val('');
   }
-
-
 }
 
-window.addEvent('domready', function() {
+var show_contact = function(that) {
 
-  document.formvalidator.setHandler('name',
-          function(value) {
-            regex = /^[a-zA-Z]+$/;
-            console.log(regex.test(value));
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('telephone',
-          function(value) {
-            // Only allow digits, spaces and pluses
-            regex = /^[\d +]{11,25}$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('message',
-          function(value) {
-            regex = /^[\w-\/., !"'\n]+$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('date',
-          function(value) {
-            regex = /^(\d{4})-(\d{2})-(\d{2})$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('numeric',
-          function(value) {
-            regex = /^[0-9]{1,2}/;
-            return regex.test(value);
-          });
 
-  document.formvalidator.setHandler('occupancy',
-          function(value) {
-            regex = /^[^a-z]+$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('swimming',
-          function(value) {
-            regex = /^[0-1]+$/;
-            return regex.test(value);
-          });
+  if (jQuery(that).is(':checked')) {
+    jQuery("#contactDetails").hide();
 
-});
+    // Loop over and deactivate all form fields.
+    jQuery('#contactDetails').find('input[type=text]').each(function() {
+      toggle(this, false);
+    })
+  } else {
+    jQuery("#contactDetails").show();
+    jQuery('#contactDetails').find('input[type=text]').each(function() {
+      toggle(this, true);
+    })
+  }
+}
 
+
+// Fires on occasion when a button has it bound to it's onclick event
 Joomla.submitbutton = function(task)
 {
   if (task == '')
@@ -146,6 +130,7 @@ Joomla.submitbutton = function(task)
 
     if (isValid)
     {
+      // Unbind the onbeforeunload event
       window.onbeforeunload = null;
       Joomla.submitform(task);
       return true;

@@ -71,7 +71,6 @@ class HelloWorldViewPayment extends JViewLegacy {
     // Set the page title
     JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
 
-    //$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js", true, false);
     $document->addScript(JURI::root() . "/media/fc/js/general.js", false, true);
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');

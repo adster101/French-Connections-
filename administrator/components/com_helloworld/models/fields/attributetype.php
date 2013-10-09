@@ -77,8 +77,8 @@ class JFormFieldAttributeType extends JFormFieldList
 		}
     
     // Show a 'please choose' placeholder for single select drop downs
-    if ($showPlaceHolder == 'true') {
-      // Add an initial 'please choose' option
+    if ($showPlaceHolder) {
+      // Add an initial 'please choose' option, can be done in the XML form field declaration
     	array_unshift($options, JHtml::_('select.option', '', JText::_('COM_HELLOWORLD_PLEASE_CHOOSE')));
     }
 		// Merge any additional options in the XML definition.

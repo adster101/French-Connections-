@@ -20,15 +20,7 @@ $canDo = UsersHelper::getActions();
 $fieldsets = $this->form->getFieldsets();
 ?>
 
-<script type="text/javascript">
-	Joomla.submitbutton = function(task)
-	{
-		if (task == 'user.cancel' || document.formvalidator.isValid(document.id('user-form')))
-		{
-			Joomla.submitform(task, document.getElementById('user-form'));
-		}
-	}
-</script>
+
 
 <form action="<?php echo JRoute::_('index.php?option=com_users&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
 

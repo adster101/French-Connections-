@@ -51,7 +51,7 @@ class JFormFieldInlineCheckbox extends JFormField
 		$class = $this->element['class'] ? ' class="' . (string) $this->element['class'] . '"' : '';
 		$disabled = ((string) $this->element['disabled'] == 'true') ? ' disabled="disabled"' : '';
 		$value = $this->element['value'] ? (string) $this->element['value'] : '1';
-    $label = $this->element['label'] ? (string) $this->element['label'] : '';
+    $label = $this->element['label'] ? JText::_((string) $this->element['label'] ) : '';
 
 		if (empty($this->value))
 		{

@@ -118,6 +118,8 @@ class plgUserProfile_fc extends JPlugin {
     // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
+    $lang = JFactory::getLanguage();
+    $lang->load('com_helloworld');
   
 
     if (!($form instanceof JForm)) {
@@ -133,7 +135,10 @@ class plgUserProfile_fc extends JPlugin {
     }
     
     $doc = JFactory::getDocument();
-    $doc->addScript(JURI::root() . 'media/fc/js/general.js', false, true);
+    $doc->addScript(JURI::root() . 'media/fc/js/general.js', false, true);  
+    
+    JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
     
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.
     $form->removeField('name');
@@ -182,6 +187,7 @@ class plgUserProfile_fc extends JPlugin {
 
         //$table->delete($userId);
         $data['user_id'] = $data['id'];
+        unset($data['id']);
 
         $table->save($data);
 

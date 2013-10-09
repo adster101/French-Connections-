@@ -81,6 +81,7 @@
       size="30"
       required="true"
       labelclass="control-label"
+      validate="tel"
     />
     <field
       name="where_heard"
