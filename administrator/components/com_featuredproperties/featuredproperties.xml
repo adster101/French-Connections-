@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="1.6.0" method="upgrade">
+  <name>com_featuredproperties</name>
+  <creationDate>2013-05-14</creationDate>
+  <copyright>Copyright (C) 2013. All rights reserved.</copyright>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <author>Adam Rifat</author>
+  <authorEmail>adam@littledonkey.net</authorEmail>
+  <authorUrl>http://</authorUrl>
+  <version>1.0.0</version>
+  <description>This component allows you to view and manage featured properties.</description>
+  <install> <!-- Runs on install -->
+    <sql>
+      <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+    </sql>
+  </install>
+  <uninstall> <!-- Runs on uninstall -->
+    <sql>
+      <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+    </sql>
+  </uninstall>
+  <administration>
+    <menu>COM_FEATUREDPROPERTIES</menu>
+    <languages folder="administrator">
+      <language tag="en-GB">language/en-GB.com_featuredproperties.sys.ini</language>
+      <language tag="en-GB">language/en-GB.com_featuredproperties.sys.ini</language>
+      <language tag="fr-FR">language/fr-FR.com_featuredproperties.ini</language>
+      <language tag="fr-FR">language/fr-FR.com_featuredproperties.sys.ini</language>
+    </languages>
+  </administration>
+</extension>
