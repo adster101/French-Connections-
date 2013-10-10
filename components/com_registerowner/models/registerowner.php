@@ -156,11 +156,11 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       //$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'] . '&advertiser=true', false);
 
       $emailSubject = JText::sprintf(
-                      'COM_USERS_EMAIL_ACCOUNT_DETAILS', $data['name'], $data['sitename']
+                      'COM_REGISTER_OWNER_EMAIL_ACCOUNT_DETAILS', $data['name'], $data['sitename'], $user->id
       );
 
       $emailBody = JText::sprintf(
-                      'COM_REGISTEROWNER_EMAIL_REGISTERED_BODY', $data['name'], $data['sitename'], $data['siteurl'], $data['siteurl'], $data['username'], $user->password_clear
+                      'COM_REGISTEROWNER_EMAIL_REGISTERED_BODY', $data['name'], $data['sitename'], $data['username'], $user->password_clear, $user->id, $data['siteurl'] 
       );
 
       // Send the registration email. the true argument means it will go as HTML

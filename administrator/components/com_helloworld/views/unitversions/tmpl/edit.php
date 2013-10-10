@@ -34,7 +34,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
 
         <fieldset class="adminform form-inline">
           <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>
-
           <div class="control-group">
             <?php echo $this->form->getLabel('unit_title'); ?>
             <div class="controls">
@@ -159,19 +158,21 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         </fieldset>
         <fieldset>
           <legend><?php echo JText::_('COM_HELLOWORLD_FACILITIES_LEGEND'); ?></legend>
-          <p><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?></p>
+          <div class="alert alert-notice">
+            <span class="icon icon-flag">&nbsp</span><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?>
+          </div>
           <div class="accordion" id="accordion1">
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#internal">
-                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES'); ?>
+                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES'); ?>;
                 </a>
               </div>
               <div id="internal" class="accordion-body collapse in">
                 <div class="accordion-inner">
                   <fieldset class="panelform">
                     <?php foreach ($this->form->getFieldset('internal_facilities') as $field) : ?>
-                      <p><?php echo $field->label; ?></p>
+                      <?php echo $field->label; ?>
                       <?php echo $field->input; ?>
                     <?php endforeach; ?>
                   </fieldset>
@@ -188,8 +189,8 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
                 <div class="accordion-inner">
                   <fieldset class="panelform">
                     <?php foreach ($this->form->getFieldset('external_facilities') as $field) : ?>
-                      <p><?php echo $field->label; ?></p>
-                      <?php echo $field->input; ?>
+                      <p><?php echo $field->label; ?>
+                        <?php echo $field->input; ?></p>
                     <?php endforeach; ?>
                   </fieldset>
                 </div>

@@ -128,6 +128,8 @@ class JFormFieldFacilities extends JFormField
     
 		$query->where('b.id='.$classificationID);
     $query->where('a.published = 1');
+    
+    $query->order('text');
 		
     
     

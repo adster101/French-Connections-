@@ -1,6 +1,12 @@
 jQuery(document).ready(function() {
 
 
+  jQuery(function() {
+    jQuery(".hasdatepicker").datepicker({dateFormat:'yy-mm-dd'});
+  });
+
+
+
   if (jQuery("#contactDetails").length) {
 
     var checked = jQuery('input[name="jform[use_invoice_details]"');
@@ -26,10 +32,6 @@ jQuery(document).ready(function() {
     });
 
   }
-
-
-
-
 
   // Bind a change function to all forms that need validation.
   // Gives an alert if unsaved changes will be lost.

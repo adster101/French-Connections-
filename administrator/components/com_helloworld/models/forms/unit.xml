@@ -25,8 +25,9 @@
       type="attributetype"
       filter="integer"
       required="true"
-      id="2"
-    />     
+      id="2">
+      <option value="">JSELECT</option>
+    </field>     
 
     <field
       labelclass="control-label"
@@ -37,9 +38,9 @@
       type="attributetype"
       filter="integer"
       required="true"
-      id="1"
-    />
-
+      id="1">
+      <option value="">JSELECT</option>
+    </field>
     <field
       name="description"
       labelclass="control-label"

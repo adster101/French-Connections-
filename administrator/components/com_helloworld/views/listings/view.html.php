@@ -134,6 +134,7 @@ class HelloWorldViewListings extends JViewLegacy {
     $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
     $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
+    $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
   }

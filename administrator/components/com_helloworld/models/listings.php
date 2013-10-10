@@ -26,7 +26,7 @@ class HelloWorldModelListings extends JModelList {
           'review', 'a.review',
           'access', 'a.access', 'access_level',
           'language', 'a.language',
-          'expiry_date', 'a.expiry_date',
+          'a.expiry_date', 'a.expiry_date',
           'checked_out', 'a.checked_out',
           'checked_out_time', 'a.checked_out_time',
           'created_user_id', 'a.created_user_id',
