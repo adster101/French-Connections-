@@ -28,43 +28,52 @@ $listing_id = '';
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
-      <?php if ($canDo->get('helloworld.reports.renewal')) : ?>
-        <hr />
-        <h4>Expiry date filters</h4>
-        <?php echo JHtml::_('calendar', $expiry_start_date, 'expiry_start_date', 'expiry_start_date', '%Y-%m-%d', array()); ?>
-        <?php echo JHtml::_('calendar', $expiry_end_date, 'expiry_end_date', 'expiry_end_date', '%Y-%m-%d', array()); ?>
 
-        <div class="btn-group hidden-phone pull-right">
-          <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn tip hasTooltip" type="button" onclick="document.id('expiry_start_date').value = '';
-                  document.id('expiry_end_date').value = '';
-                  this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-        </div>
-      <?php endif; ?>
     </div>
     <div id="j-main-container" class="span10">
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <div id="filter-bar" class="btn-toolbar">
-        <div class="filter-search btn-group pull-left">
-          <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-          <input type="text" name="filter_search"
-                 id="filter_search"
-                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                 title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
-                 placeholder="<?php echo JText::_('COM_HELLOWORLD_PROPERTY_SEARCH_FILTER'); ?>" />
+      <?php if ($canDo->get('helloworld.reports.renewal')) : // Don't show this for owners ?>
+        <div id="filter-bar" class="btn-toolbar">
+          <div class="filter-search btn-group pull-left">
+            <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
+            <input type="text" name="filter_search"
+                   id="filter_search"
+                   value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+                   title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
+                   placeholder="<?php echo JText::_('COM_HELLOWORLD_PROPERTY_SEARCH_FILTER'); ?>" />
+            
+                  <input 
+                    type="text" 
+                    name="expiry_start_date" 
+                    id="" 
+                    value="<?php echo $expiry_start_date ?>" 
+                    class="input-small hasDatepicker" 
+                    placeholder="From" />
+                  <input 
+                    type="text" 
+                    name="expiry_end_date" 
+                    id="" 
+                    value="<?php echo $expiry_end_date ?>" 
+                    class="input-small hasDatepicker" 
+                    placeholder="To" />
+                
+          </div>
+          <div class="btn-group pull-left hidden-phone">
+            <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
+            <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
+                this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+          </div>
+          
+          <div class="btn-group pull-right hidden-phone">
+            <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
+            <?php echo $this->pagination->getLimitBox(); ?>
+          </div>
         </div>
-        <div class="btn-group pull-left hidden-phone">
-          <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-              this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-        </div>
-        <div class="btn-group pull-right hidden-phone">
-          <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-          <?php echo $this->pagination->getLimitBox(); ?>
-        </div>
-      </div>
+        <hr />     
+      <?php endif; ?>
+
       <?php if (empty($this->items)) : // This user doesn't have any listings against their account    ?>
         <hr />
         <div class="alert alert-block">
@@ -110,7 +119,7 @@ $listing_id = '';
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
                     </th>
                     <th>
-                      <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on',$listDirn,$listOrder); ?>
+                      <?php echo JHtml::_('grid.sort', 'COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
                     </th>
                     <?php if ($canDo->get('helloworld.property.review')) : ?>  
                       <th>

@@ -62,7 +62,6 @@ class HelloWorldViewListings extends JViewLegacy {
    */
   protected function addToolBar() {
     $document = JFactory::getDocument();
-    $document->addStyleDeclaration('.icon-48-helloworld {background-image: url(../media/com_helloworld/images/fc-logo-48x48.png);}');
 
     $user = JFactory::getUser();
 
@@ -133,7 +132,8 @@ class HelloWorldViewListings extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_HELLOWORLD_ADMINISTRATION'));
-    $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
+    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
   }

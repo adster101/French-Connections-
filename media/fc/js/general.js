@@ -1,8 +1,10 @@
 jQuery(document).ready(function() {
+
+
   if (jQuery("#contactDetails").length) {
 
     var checked = jQuery('input[name="jform[use_invoice_details]"');
-    
+
     show_contact(checked);
 
     jQuery("input[name='jform[use_invoice_details]']").on('click', function(e) {
@@ -26,14 +28,42 @@ jQuery(document).ready(function() {
   }
 
 
+
+
+
   // Bind a change function to all forms that need validation.
   // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
-    window.onbeforeunload = function() {
-      return Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES', 'Some values are unacceptable');
-    };
+    window.onbeforeunload = youSure;
   });
+
+  if (window.tinymce) {
+    tinymce.onAddEditor.add(function(sender, editor) {
+      editor.onKeyUp.add(function(editor, event) {
+        if (editor.isDirty())
+          window.onbeforeunload = youSure;
+      });
+      editor.onChange.add(function(editor) {
+        if (editor.isDirty() && !$('body').data('isSaving'))
+          window.onbeforeunload = youSure;
+        ;
+      });
+    });
+  }
+
+
 });
+
+var youSure = function() {
+  return Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
+
+}
+
+
+
+var checkEditor = function(elements, index, array) {
+  console.log(index);
+}
 
 /* define some useful functions, innit! */
 var show_vat = function(vatID) {
@@ -106,6 +136,7 @@ var show_contact = function(that) {
 // Fires on occasion when a button has it bound to it's onclick event
 Joomla.submitbutton = function(task)
 {
+
   if (task == '')
   {
     return false;
@@ -114,7 +145,6 @@ Joomla.submitbutton = function(task)
   {
     var isValid = true;
     var action = task.split('.');
-
     if (action[1] != 'cancel' && action[1] != 'close')
     {
       var forms = $$('form.form-validate');
