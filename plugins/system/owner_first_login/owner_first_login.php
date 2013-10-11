@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.plugin.plugin');
 
 $lang = JFactory::getLanguage();
-$lang->load('plg_system_Owner_first_login');
+$lang->load('plg_system_owner_first_login');
 
 class plgSystemOwner_first_login extends JPlugin {
 
