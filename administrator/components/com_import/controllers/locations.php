@@ -32,7 +32,7 @@ class ImportControllerLocations extends JControllerForm {
     $level_1_parent_id = 1;
 
 
-    while (($line = fgetcsv($handle)) !== FALSE) {
+    while (($line = fgetcsv($handle,0,$delimiter="|")) !== FALSE) {
       // Insert a placeholder row for the user
       // Do this so we can set a primary key of our choice.
       // Otherwise, joomla insists on generating a new user id

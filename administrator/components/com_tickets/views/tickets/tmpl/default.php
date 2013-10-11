@@ -146,7 +146,7 @@ if (!empty($this->extra_sidebar)) {
                 </a>
               </td>
               <td>
-                <?php echo $this->escape($item->description); ?>
+                <?php echo JHtml::_('string.truncate', $item->description, 250); ?>
 
               </td>
               <td>
