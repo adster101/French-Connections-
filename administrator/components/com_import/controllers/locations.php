@@ -21,12 +21,14 @@ class ImportControllerLocations extends JControllerForm {
     $config = JFactory::getConfig();
 
     $config->set('root_user', 'admin');
-    $userfile = JRequest::getVar('import_file', null, 'files', 'array');
+    
+    //$userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     $userfile = '/www/sysadmin/Documents/qitz3_classifcations.csv';
     
     
     $handle = fopen($userfile, "r");
+    
     $db = JFactory::getDBO();
 
     $db->truncateTable('#__classifications');
@@ -34,7 +36,7 @@ class ImportControllerLocations extends JControllerForm {
     $query = $db->getQuery(true);
     $query->insert('#__classifications');
     $query->columns(array('id', 'parent_id', 'title', 'description', 'path', 'alias', 'access', 'published', 'longitude', 'latitude'));
-    $query->values("'1',  '',  'root',  '0',  '',  '',  '',  '',  '',  '0'");
+    $query->values('"1","","root","0","","","","","","0"');
     $db->setQuery($query);
 
     $db->execute();
