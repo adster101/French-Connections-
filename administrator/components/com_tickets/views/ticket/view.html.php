@@ -61,7 +61,7 @@ class TicketsViewTicket extends JViewLegacy {
     
 		$isNew		= ($this->item->id == 0);
 
-    $title = ($isNew) ? JText::_('COM_TICKETS_TICKET_NEW') : JText::sprintf('COM_TICKETS_TICKET_TITLE', $this->item->title);
+    $title = ($isNew) ? JText::_('COM_TICKETS_TICKET_NEW') : JText::sprintf('COM_TICKETS_TICKET_TITLE', $this->item->title, $this->item->id);
     
     JToolBarHelper::title($title);
 

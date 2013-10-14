@@ -2,6 +2,18 @@
 <form>
   <fieldset
     name="ticket">
+    <field
+      name="id"
+      type="text"
+      filter="int"
+      default=""
+      label="COM_INVOICES_FORM_LBL_INVOICE_ID"
+      class="readonly input-mini"
+      labelclass="control-label"
+      description="JGLOBAL_FIELD_ID_DESC"
+      readonly="true"
+      
+    />
     <field 
       name="title"
       type="text"
@@ -100,16 +112,7 @@
       readonly="true"
     />    
      
-    <field
-      name="id"
-      type="hidden"
-      filter="int"
-      default=""
-      label="COM_INVOICES_FORM_LBL_INVOICE_ID"
-      class="readonly input-mini"
-      labelclass="control-label"
-      description="JGLOBAL_FIELD_ID_DESC"
-    />
+
     
   </fieldset>
 

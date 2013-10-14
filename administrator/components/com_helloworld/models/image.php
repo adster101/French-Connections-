@@ -38,7 +38,7 @@ class HelloWorldModelImage extends JModelAdmin {
 	{
     // This need expanding to check the user is not only authorise but actually owns the resource.
 		$user = JFactory::getUser();
-		return $user->authorise('helloworld.image.delete', $this->option);
+		return $user->authorise('helloworld.images.delete', $this->option);
 	}
   
   public function delete($pks) {
