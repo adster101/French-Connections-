@@ -27,9 +27,9 @@ jQuery(function () {
     //url: 'index.php?option=com_helloworld&task=images.upload'
     //downloadTemplateId:null,
     //uploadTemplateId:null,
-    previewMaxWidth:230,
+    previewMaxWidth:125,
     previewAsCanvas:false,
-    previewMaxHeight:120,
+    previewMaxHeight:7,
     maxFileSize:4000000,
     singleFileUploads:true, 
     sequentialUploads:true,
