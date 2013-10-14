@@ -23,7 +23,10 @@ class ImportControllerLocations extends JControllerForm {
     $config->set('root_user', 'admin');
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
-    $handle = fopen($userfile['tmp_name'], "r");
+    $userfile = '/www/sysadmin/Documents/qitz3_classifcations.csv';
+    
+    
+    $handle = fopen($userfile, "r");
     $db = JFactory::getDBO();
 
     $db->truncateTable('#__classifications');
@@ -86,8 +89,6 @@ class ImportControllerLocations extends JControllerForm {
       if (($current_level + 1) == 4) {
         $level_4_parent_id = $line[0];
       }
-
-      unset($title);
     }
 
     fclose($handle);
