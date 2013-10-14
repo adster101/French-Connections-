@@ -10,7 +10,6 @@ defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
 JHtml::_('behavior.tooltip');
-JHtml::_('behavior.multiselect');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
@@ -18,7 +17,7 @@ $saveOrder = true;
 
 if ($saveOrder) {
   $saveOrderingUrl = 'index.php?option=com_helloworld&task=images.saveOrderAjax&tmpl=component';
-  JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+  JHtml::_('fcsortablelist.fcsortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false);
 }
 
 $app = JFactory::getApplication();

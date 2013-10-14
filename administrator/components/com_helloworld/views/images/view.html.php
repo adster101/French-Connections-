@@ -1,4 +1,5 @@
 <?php
+
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
@@ -8,112 +9,107 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class HelloWorldViewImages extends JViewLegacy
-{
-	/**
-	 * display method of Availability View
-	 * @return void
-	 */
-	public function display($tpl = null)
-	{
+class HelloWorldViewImages extends JViewLegacy {
+
+  /**
+   * display method of Availability View
+   * @return void
+   */
+  public function display($tpl = null) {
 
     // Add the Listing model to this view, so we can get the progress stuff
-    $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel',array('ignore_request'=>true)));
+    $this->setModel(JModelLegacy::getInstance('Listing', 'HelloWorldModel', array('ignore_request' => true)));
 
     // Add the Listing unitversions model to this view, so we can get the unit detail
     $this->setModel(JModelLegacy::getInstance('UnitVersions', 'HelloWorldModel'));
 
     // Get the unitversions instance so we can get the unit detail
     $unit = $this->getModel('UnitVersions');
-    $this->unit = $unit->getItem();    
+    $this->unit = $unit->getItem();
 
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');
-    $progress->setState('com_helloworld.listing.id',$this->unit->property_id);
+    $progress->setState('com_helloworld.listing.id', $this->unit->property_id);
     $this->progress = $progress->getItems();
 
     // populateState for the images model
     $this->state = $this->get('State');
     $images = $this->getModel();
-    $images->setState('version_id',$this->unit->id);
+    $images->setState('version_id', $this->unit->id);
     // Set the list limit model state so that we return all available images.
     $images->setState('list.limit');
-    
-        
+
+
     // Get the images associated with this unit version
     $this->items = $this->get('Items');
-    
+
     $this->pagination = $this->get('Pagination');
 
 
-		// Set the toolbar
-		$this->addToolBar();
+    // Set the toolbar
+    $this->addToolBar();
+    // Set the document
+    $this->setDocument();
+    
+    // Display the template
+    parent::display($tpl);
 
-		// Display the template
-		parent::display($tpl);
 
-		// Set the document
-		$this->setDocument();
-	}
+  }
 
-	/**
-	 * Setting the toolbar
-	 */
-	protected function addToolBar()
-	{
-		// Determine the layout we are using.
-		// Should this be done with views?
-		$view = strtolower(JRequest::getVar('view'));
+  /**
+   * Setting the toolbar
+   */
+  protected function addToolBar() {
+    // Determine the layout we are using.
+    // Should this be done with views?
+    $view = strtolower(JRequest::getVar('view'));
 
-		$user = JFactory::getUser();
-		$userId = $user->id;
+    $user = JFactory::getUser();
+    $userId = $user->id;
 
     // Get component level permissions
-		$canDo = HelloWorldHelper::getActions();
+    $canDo = HelloWorldHelper::getActions();
 
     JToolBarHelper::title(($this->unit->unit_title) ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
- 		$bar = JToolBar::getInstance('toolbar');
+    $bar = JToolBar::getInstance('toolbar');
 
 
-		// Add a upload button
+    // Add a upload button
     if ($canDo->get('helloworld.images.create')) {
 
-			$title = JText::_('JTOOLBAR_UPLOAD');
-			$dhtml = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"btn btn-small btn-success\">
+      $title = JText::_('JTOOLBAR_UPLOAD');
+      $dhtml = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"btn btn-small btn-success\">
 						<i class=\"icon-plus icon-white\" title=\"$title\"></i>
 						$title</button>";
-			//$bar->appendButton('Custom', $dhtml, 'upload');
-
-		}
+      //$bar->appendButton('Custom', $dhtml, 'upload');
+    }
 
 
 
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-		JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
+    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('', '');
 
 
 
 
-      $canDo = HelloWorldHelper::addSubmenu('listings');
+    $canDo = HelloWorldHelper::addSubmenu('listings');
 
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-
-    
+    // Add the side bar
+    $this->sidebar = JHtmlSidebar::render();
   }
 
-	/**
-	 * Method to set up the document properties
-	 *
-	 * @return void
-	 */
-	protected function setDocument()
-	{
-		$document = JFactory::getDocument();
+  /**
+   * Method to set up the document properties
+   *
+   * @return void
+   */
+  protected function setDocument() {
+    $document = JFactory::getDocument();
 
     $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
@@ -130,8 +126,12 @@ class HelloWorldViewImages extends JViewLegacy
 
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery.fileupload-ui.css", 'text/css', "screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css",'text/css',"screen");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
-	}
+
+    // Register the JHtmlProperty class
+    JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/html/fcsortablelist.php');
+  }
+
 }

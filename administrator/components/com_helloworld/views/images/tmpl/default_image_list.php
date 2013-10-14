@@ -12,11 +12,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.tooltip');
 $listDirn = $this->escape($this->state->get('list.direction'));
 
-$saveOrder = true;
-if ($saveOrder) {
-  $saveOrderingUrl = 'index.php?option=com_content&task=articles.saveOrderAjax&tmpl=component';
-  JHtml::_('sortablelist.sortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
-}
 
 ?>
 

@@ -26,7 +26,7 @@ abstract class HelloWorldHelper {
       $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
       //$days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
     }
-    
+
     $days_to_renewal = ($days_to_renewal < 0) ? 0 : $days_to_renewal;
 
     return $days_to_renewal;
@@ -45,20 +45,17 @@ abstract class HelloWorldHelper {
     }
 
     if (empty($progress[0]->title)) {
-      // $message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS');
-      // $notices['location'] = $message;
+      
     }
 
 
 
     if (empty($progress[0]->unit_title)) {
-      //$message = JText::_('COM_HELLOWORLD_LISTING_COMPLETE_PLEASE_COMPLETE_ACCOMMODATION_DETAILS'); 
+      
     }
 
     foreach ($progress as $unit) {
-      if (empty($unit->unit_title)) {
-        $notices['Accommodation']['units'][] = $unit->unit_title;
-      }
+      $notices['Accommodation']['units'][] = (!empty($unit->unit_title)) ? $unit->unit_title : 'New Unit';
     }
 
 
@@ -74,7 +71,7 @@ abstract class HelloWorldHelper {
           }
 
           // Add the unit that is failing to the list
-          $notices[$section]['units'][] = $unit->unit_title;
+          $notices[$section]['units'][] = (!empty($unit->unit_title)) ? $unit->unit_title : 'New Unit';
         }
       }
     }
@@ -142,8 +139,6 @@ abstract class HelloWorldHelper {
     JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
     JHtmlSidebar::addEntry(JText::_('COM_REVIEWS_MENU'), 'index.php?option=com_reviews', ($view == 'reviews'));
     JHtmlSidebar::addEntry(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', ($view == 'stats'));
-
-    
   }
 
   /*
@@ -523,7 +518,7 @@ abstract class HelloWorldHelper {
    * @return array An array of availability periods
    *
    */
-  public static function getAvailabilityByPeriod($availability_by_day = array(),$key='status') {
+  public static function getAvailabilityByPeriod($availability_by_day = array(), $key = 'status') {
     $current_status = '';
     $availability_by_period = array();
     $counter = 0;

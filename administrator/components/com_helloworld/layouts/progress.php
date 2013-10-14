@@ -39,10 +39,7 @@ if (!empty($progress)) {
 
           <?php foreach ($notices as $key => $value) : ?>
             <li>
-              <?php foreach ($notices[$key] as $units) : ?>
-                <?php $units = implode(', ', $units); ?>
-                <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_PROGRESS_NOTICES', $key, $units); ?>
-              <?php endforeach; ?>
+                <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_PROGRESS_NOTICES', $key); ?>
             </li>
           <?php endforeach; ?>
         </ul>

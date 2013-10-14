@@ -30,7 +30,7 @@ class ClassificationControllerClassifications extends JControllerAdmin {
   public function rebuild() {
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-    $this->setRedirect(JRoute::_('index.php?option=com_classifications', false));
+    $this->setRedirect(JRoute::_('index.php?option=com_classification', false));
 
     $model = $this->getModel();
 

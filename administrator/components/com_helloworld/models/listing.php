@@ -111,7 +111,7 @@ class HelloWorldModelListing extends JModelList {
         e.unit_id unit_id,
         e.property_id,
         d.ordering,
-        ifnull(e.unit_title, \'New unit\') as unit_title,
+        e.unit_title,
         e.changeover_day,
         d.published,
         d.availability_last_updated_on,
