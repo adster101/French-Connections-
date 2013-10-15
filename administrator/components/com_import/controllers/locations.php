@@ -36,9 +36,18 @@ class ImportControllerLocations extends JControllerForm {
 
     $db->execute();
 
+    $query = $db->getQuery(true);
+    // Insert France
+    $query->insert('#__classifications');
+    $query->columns(array('id', 'parent_id', 'title', 'description', 'path', 'alias', 'access', 'published', 'longitude', 'latitude'));
+    $query->values("'2',  '1',  'France',  'France',  'France',  'france',  '1',  '1',  '0',  '0'");
+    $db->setQuery($query);
 
-    $current_level = 1;
-    $level_1_parent_id = 1;
+
+    $db->execute();
+
+
+    $current_level = 2;
 
     $lang = JFactory::getLanguage();
 
@@ -54,18 +63,18 @@ class ImportControllerLocations extends JControllerForm {
 
       $current_level = $line[1];
 
-      if ($current_level == 2) {
+      if ($current_level == 3) {
         $parent_id = $level_2_parent_id;
-      } elseif ($current_level == 3) {
-        $parent_id = $level_3_parent_id;
       } elseif ($current_level == 4) {
+        $parent_id = $level_3_parent_id;
+      } elseif ($current_level == 5) {
         $parent_id = $level_4_parent_id;
       } else {
-        $parent_id = 1;
+        $parent_id = 2;
       }
 
       $alias = JApplication::stringURLSafe($line[2]);
-      $title = mysql_escape_string($lang->transliterate($line[2]));
+      $title = mysql_escape_string(JLanguageTransliterate::utf8_latin_to_ascii($line[2]));
 
       $description = mysql_escape_string(($line[5]));
       $query->values("$line[0],$parent_id,'$title','$description','$alias','$alias',1,1,$line[3],$line[4]");
@@ -77,13 +86,13 @@ class ImportControllerLocations extends JControllerForm {
         die;
       }
 
-      if (($current_level + 1) == 2) {
+      if (($current_level + 1) == 3) {
         $level_2_parent_id = $line[0];
       }
-      if (($current_level + 1) == 3) {
+      if (($current_level + 1) == 4) {
         $level_3_parent_id = $line[0];
       }
-      if (($current_level + 1) == 4) {
+      if (($current_level + 1) == 5) {
         $level_4_parent_id = $line[0];
       }
     }

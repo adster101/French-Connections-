@@ -1,7 +1,17 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-$route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id);
+
+$input = JFactory::getApplication()->input;
+$preview = $input->get('preview','','int');
+
+$link = 'index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id;
+
+if ((int) $preview && $preview == 1 ) {
+  $link .= '&preview=1';
+}
+
+$route = JRoute::_( $link ) ;
 
 ?>
 

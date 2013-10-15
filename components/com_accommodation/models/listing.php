@@ -213,14 +213,13 @@ class AccommodationModelListing extends JModelForm {
       // Join the property type through the property attributes table
       $query->join('left', '#__property_attributes f on (f.property_id = b.id and f.version_id = d.id)');
       $query->join('left', '#__attributes g on g.id = f.attribute_id');
-      $query->where('g.attribute_type_id = 1');
-
+      $query->where('(g.attribute_type_id = 1 or g.id is null)');
 
       // Join the attributes a second time to get at the accommodation type
       // This join is also based on version id to ensure we only get the version we are interested in
       $query->join('left', '#__property_attributes l on (l.property_id = b.id and l.version_id = d.id)');
       $query->join('left', '#__attributes m on m.id = l.attribute_id');
-      $query->where('m.attribute_type_id = 2');
+      $query->where('(m.attribute_type_id = 2 or m.id is null)');
 
       $query->leftJoin('#__classifications h ON h.id = c.department');
       $query->leftJoin('#__attributes i ON i.id = d.base_currency');

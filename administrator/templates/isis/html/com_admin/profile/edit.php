@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 
 // Include the component HTML helpers.
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-    
+
 
 JHtml::_('behavior.formvalidation');
 
@@ -26,11 +26,10 @@ InvoicesHelper::addSubmenu('account');
 $fieldsets = $this->form->getFieldsets();
 
 $company_number = $this->form->getValue('company_number');
-$vat_status =  $this->form->getValue('vat_status');
+$vat_status = $this->form->getValue('vat_status');
 
 $show_vat_number = ($this->item->vat_status == 'ECS') ? true : false;
 $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true : false;
-
 ?>
 
 <script type="text/javascript">
@@ -91,15 +90,14 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
             <?php echo $this->form->getInput('password2'); ?>
           </div>
         </div>  
-        <div class="control-group">
+                <div class="control-group">
           <div class="control-label">
-            <?php echo $this->form->getLabel('password1'); ?>
+            <?php echo $this->form->getLabel('password'); ?>
           </div>
           <div class="controls">
-            <?php echo $this->form->getInput('password1'); ?>
+            <?php echo $this->form->getInput('password'); ?>
           </div>
-        </div>     
-
+        </div>  
       </fieldset>
       <fieldset>
         <legend>Contact Details</legend>

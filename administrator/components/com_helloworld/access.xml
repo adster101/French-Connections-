@@ -22,6 +22,7 @@
 		<action name="helloworld.reports.renewal" title="Access to the renewal report filters" description="" />
 		<action name="helloworld.images.delete" title="COM_HELLOWORLD_HELLOWORLD_DELETE_IMAGE" description="Whether the user has specific permission to delete an image" />
 		<action name="helloworld.images.edit" title="COM_HELLOWORLD_HELLOWORLD_EDIT_IMAGE" description="" />
+		<action name="helloworld.images.reorder" title="Reorder images" description="Whether the user group is allowed to reorder images or not." />
 		<action name="helloworld.images.create" title="COM_HELLOWORLD_HELLOWORLD_CREATE_IMAGE" description="" />
 		<action name="helloworld.property.submit" title="Submit for review" description="" />
 		<action name="helloworld.property.review" title="Review and approve changes" description="" />

@@ -7,8 +7,6 @@ $app = JFactory::getApplication();
 $input = $app->input;
 $view = $input->get('view', '', 'string');
 
-
-
 // $displayData is passed into the layout from our template
 $progress = $displayData['progress'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
@@ -23,12 +21,20 @@ if (!empty($progress)) {
   $expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
   $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
 }
+
+$link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]->unit_id . '&preview=1';
+
 ?>
 
 <div class="row-fluid">
   <div class="span9">
     <?php if (!empty($notices)) : ?>
       <div class="alert alert-info">
+        <?php if ($progress[0]->review) : ?>
+        <div class="pull-right">
+          <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
+        </div>
+        <?php endif; ?>
         <h4>Listing Progress</h4>
         <ul>
           <?php if (empty($progress[0]->latitude) && empty($progress[0]->longitude)) : ?>

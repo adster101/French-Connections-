@@ -135,7 +135,7 @@ class plgUserProfile_fc extends JPlugin {
     }
     
     $doc = JFactory::getDocument();
-    $doc->addScript('/media/fc/js/general.js', 'text/javascript', true, true);  
+    $doc->addScript('/media/fc/js/general.js', 'text/javascript', true);  
     
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
     JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
