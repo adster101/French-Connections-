@@ -55,10 +55,23 @@ class FeaturedPropertiesModelFeaturedProperty extends JModelAdmin {
 
     if (empty($data)) {
       $data = $this->getItem();
+      if (!empty($data->start_date) && !empty($data->end_date)) {
+        $data->start_date = JFactory::getDate($data->start_date)->calendar('d-m-Y');
+        $data->end_date = JFactory::getDate($data->end_date)->calendar('d-m-Y');
+      }
     }
+
+
 
     return $data;
   }
 
- 
+  public function save($data) {
+
+    $data['start_date'] = JFactory::getDate($data['start_date'])->toSql();
+    $data['end_date'] = JFactory::getDate($data['end_date'])->toSql();
+
+    return parent::save($data);
+  }
+
 }

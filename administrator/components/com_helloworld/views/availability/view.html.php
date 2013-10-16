@@ -73,7 +73,7 @@ class HelloWorldViewAvailability extends JViewLegacy {
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title(($this->unit->unit_title) ? JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AVAILABILITY', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
 
     $bar = JToolBar::getInstance('toolbar');
 
@@ -102,7 +102,7 @@ class HelloWorldViewAvailability extends JViewLegacy {
   protected function setDocument() {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
-    $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+    $document->setTitle(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/availability.js", false, true);
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_helloworld/css/availability.css", 'text/css', "screen");

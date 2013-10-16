@@ -50,11 +50,9 @@ class HelloWorldViewImages extends JViewLegacy {
     $this->addToolBar();
     // Set the document
     $this->setDocument();
-    
+
     // Display the template
     parent::display($tpl);
-
-
   }
 
   /**
@@ -71,10 +69,9 @@ class HelloWorldViewImages extends JViewLegacy {
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title(($this->unit->unit_title) ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
+    JToolBarHelper::title( JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
 
     $bar = JToolBar::getInstance('toolbar');
-
 
     // Add a upload button
     if ($canDo->get('helloworld.images.create')) {
@@ -83,19 +80,12 @@ class HelloWorldViewImages extends JViewLegacy {
       $dhtml = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"btn btn-small btn-success\">
 						<i class=\"icon-plus icon-white\" title=\"$title\"></i>
 						$title</button>";
-      //$bar->appendButton('Custom', $dhtml, 'upload');
     }
-
-
-
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
 
     JToolBarHelper::help('', '');
-
-
-
 
     $canDo = HelloWorldHelper::addSubmenu('listings');
 

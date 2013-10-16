@@ -87,8 +87,8 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
       a.id,
       a.date_updated,
       a.property_id,
-      date_format(a.start_date, "%d/%m/%Y") as start_date,
-      date_format(a.end_date, "%d/%m/%Y") as end_date,
+      date_format(a.start_date, "%d-%m-%Y") as start_date,
+      date_format(a.end_date, "%d-%m-%Y") as end_date,
       a.notes,
       a.published,
       b.title

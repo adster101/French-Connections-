@@ -27,9 +27,9 @@ jQuery(function () {
     //url: 'index.php?option=com_helloworld&task=images.upload'
     //downloadTemplateId:null,
     //uploadTemplateId:null,
-    previewMaxWidth:125,
+    previewMaxWidth:210,
     previewAsCanvas:false,
-    previewMaxHeight:7,
+    previewMaxHeight:120,
     maxFileSize:4000000,
     singleFileUploads:true, 
     sequentialUploads:true,
@@ -119,6 +119,9 @@ function add_event_handlers() {
     });
   })
   
+  // Remove the uploaded images from the queue
+  jQuery('tr.template-download').css('position','static').delay(5000).fadeOut(1500);
+
   // Bind a click event to the update-caption buttons
   jQuery('.update-caption').each(function(){
     

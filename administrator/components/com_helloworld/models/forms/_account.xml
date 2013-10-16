@@ -28,6 +28,7 @@
       validate="vat"
       labelclass="control-label"
       required="false"
+      class="validate validate-vat"
     />
       
     <field
@@ -40,6 +41,7 @@
       validate="company"
       labelclass="control-label"
       required="false"
+      class="validate validate-company"
     />   
 
 

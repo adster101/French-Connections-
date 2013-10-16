@@ -101,8 +101,8 @@ $data['form'] = $this->form;
                     </td>
                   <?php endif; ?>                  
                   <td>
-                    <?php echo $this->pagination->orderUpIcon($i, true, 'images.orderup', 'JLIB_HTML_MOVE_UP', 1); ?>
-                    <?php echo $this->pagination->orderDownIcon($i, count($this->items), true, 'images.orderdown', 'JLIB_HTML_MOVE_DOWN', 1); ?>
+                    <?php echo $this->pagination->orderUpIcon($i, true, 'units.orderup', 'JLIB_HTML_MOVE_UP', 1); ?>
+                    <?php echo $this->pagination->orderDownIcon($i, count($this->items), true, 'units.orderdown', 'JLIB_HTML_MOVE_DOWN', 1); ?>
                   </td>
                   <td>
                     <?php echo JHtml::_('grid.id', $i, $item->unit_id); ?>

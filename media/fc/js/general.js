@@ -1,6 +1,12 @@
 jQuery(document).ready(function() {
 
-
+   // popover demo
+    jQuery("a[data-toggle=popover]")
+      .popover()
+      .click(function(e) {
+        e.preventDefault()
+      });
+      
   jQuery(function() {
     jQuery(".hasdatepicker").datepicker({dateFormat:'yy-mm-dd'});
   });
@@ -175,5 +181,24 @@ Joomla.submitbutton = function(task)
   }
 }
 
+/* 
+ *  Add some validation rules - can't do any harm
+ */
+window.addEvent('domready', function() {
+  
+  /* Validate the company number, must be 13 digits or so */
+  document.formvalidator.setHandler('company',
+    function (value) {
+      regex=/^[0-9]{14}$/;
+      return regex.test(value);
+    });
+    
+  /* Validate the vat number */
+  document.formvalidator.setHandler('vat',
+    function (value) {
+      regex=/^([a-zA-Z]{2})([1-9]{7,13})$/;
+      return regex.test(value);
+    }); 
+});
 
   

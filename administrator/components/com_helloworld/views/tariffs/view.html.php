@@ -89,7 +89,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title));
+    JToolBarHelper::title(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
 
     if ($canDo->get('core.edit.own'))
       JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
@@ -112,7 +112,7 @@ class HelloWorldViewTariffs extends JViewLegacy {
   protected function setDocument() {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
-    $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+    $document->setTitle(JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
     $document->addScript(JURI::root() . "/media/fc/js/general.js");
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
     JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');

@@ -99,6 +99,11 @@
 					root.showSameLevelChildrenNodes(ui.item);
 					$(tableWrapper).sortable('refresh');
 				}
+        
+      $('.ui-sortable tr td.thumbnail-default').empty();
+        
+        $('.ui-sortable tr:nth-child(1) td.thumbnail-default').html('<span class="lead icon-default"> </span>');
+        
 			}
 		});
 		

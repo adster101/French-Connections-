@@ -34,6 +34,7 @@
       required="true"
       class="required"
       default=""
+      format="%d-%m-%Y"
     />        
     <field 
       label="End date"
@@ -44,6 +45,7 @@
       type="calendar"
       class="required"
       default=""
+      format="%d-%m-%Y"
     />        
     <field 
       label="Paid status"    

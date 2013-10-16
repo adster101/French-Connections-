@@ -317,8 +317,6 @@ class AccommodationModelListing extends JModelForm {
 
   /*
    * Function to return a list of units for a given property
-   *
-   *
    */
 
   public function getUnits() {
@@ -335,15 +333,25 @@ class AccommodationModelListing extends JModelForm {
 
         // Get the node and children as a tree.
         $query = $this->_db->getQuery(true);
-        $select = 'unit_title,a.id,occupancy,property_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
-        $query->select($select)
-                ->from('#__unit a')
-                ->join('left', '#__unit_versions b on a.id = b.unit_id')
-                ->where('a.property_id = ' . (int) $id)
-                ->where('a.published = 1')
-                ->where('b.review = 0')
-                ->order('ordering');
+        $select = 'unit_title,a.id,occupancy,a.property_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
+        $query->select($select);
+        $query->from('#__unit a');
+        if (!$this->preview) {
 
+          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
+        } else {
+          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
+        }
+
+        //$query->join('left', '#__unit_versions b on a.id = b.unit_id');
+        $query->where('a.property_id = ' . (int) $id);
+        //$query->where('a.published = 1');
+        $query->order('ordering');
+        if (!$this->preview) {
+          $query->where('a.published = 1');
+        } else {
+          $query->where('a.published in (0,1)');
+        }
         return $this->_db->setQuery($query)->loadObjectList();
 
         return $this->units;
@@ -536,7 +544,7 @@ class AccommodationModelListing extends JModelForm {
     $query->join('left', '#__property_images_library d on (d.unit_id = a.id and d.version_id = b.id)');
 
     $query->where('a.id = ' . (int) $unit_id);
-  
+
 
     $db->setQuery($query);
 

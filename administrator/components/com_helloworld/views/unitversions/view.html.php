@@ -92,7 +92,7 @@ class HelloWorldViewUnitversions extends JViewLegacy {
     // Get component level permissions
     $canDo = HelloWorldHelper::getActions();
 
-    JToolBarHelper::title(($isNew) ? JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) );
+    JToolBarHelper::title( JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id) );
 
     // Built the actions for new and existing records.
     if ($isNew) {
@@ -128,7 +128,7 @@ class HelloWorldViewUnitversions extends JViewLegacy {
   protected function setDocument() {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
-    $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->unit_title) );
+    $document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id) );
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
     JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
     $document->addScript(JURI::root() . "/media/fc/js/general.js");

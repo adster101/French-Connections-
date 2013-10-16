@@ -523,14 +523,11 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     $unit_table = $this->getTable('Unit', 'HelloWorldTable');
 
-    if (!$unit_table->bind($data)) {
-      $this->setErrro($unit_table->getError());
-      return false;
-    }
+
 
     // Optional further sanity check after data has been validated, filtered, and about to be checked...
     //$this->prepareTable($property_table);
-    if (!$unit_table->store()) {
+    if (!$unit_table->save($data)) {
       return false;
     }
 

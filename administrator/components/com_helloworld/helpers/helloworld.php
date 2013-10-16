@@ -55,7 +55,9 @@ abstract class HelloWorldHelper {
     }
 
     foreach ($progress as $unit) {
-      $notices['Accommodation']['units'][] = (!empty($unit->unit_title)) ? $unit->unit_title : 'New Unit';
+      if (empty($unit->unit_title)) {
+        $notices['Accommodation']['units'][] = (!empty($unit->unit_title)) ? $unit->unit_title : 'New Unit';
+      }
     }
 
 

@@ -18,7 +18,7 @@ class JFormRuleVat extends JFormRule {
    * @var		string
    * @since	1.6
    */
-  protected $regex = '^([GB])*(([1-9]\d{8})|([1-9]\d{11})|(GD[1-9]\d{2})|(HA[1-9]\d{2}))$';
+  protected $regex = '^([a-zA-Z]{2})([1-9]{7,13})$';
 
   public function test(\SimpleXMLElement $element, $value, $group = null, \JRegistry $input = null, \JForm $form = null) { 
 

@@ -101,18 +101,15 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
   <?php // Need to put the following into language strings    ?>
   <div class="span3">
     <h4>Key</h4>
-    <p>
+    <span>
       <i class="icon icon-warning"> </i>
       Please complete
-    </p>
-    <p>
+    </span>
+    <span>
 
       <i class="icon icon-publish"></i>
       Required fields complete
-    </p>
-    <p>
-      <i class="icon icon-wrench"></i>
-      Optional
-    </p>
+    </span>
+
   </div>
 </div>

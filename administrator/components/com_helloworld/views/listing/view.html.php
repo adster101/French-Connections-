@@ -95,9 +95,7 @@ class HelloWorldViewListing extends JViewLegacy {
           JToolBarHelper::addNew('unitversions.add', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT', false);
         }
 
-        if ($canDo->get('helloworld.property.preview')) {
-          JToolBarHelper::preview('/component/accommodation/?view=property&id=' . (int) $this->id);
-        }
+        
       }
     }
 

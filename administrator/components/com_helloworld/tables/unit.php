@@ -56,6 +56,15 @@ class HelloWorldTableUnit extends JTable
     return parent::store($updateNulls);
   }
 
+  public function check() {
 
+    //If there is an ordering column and this is a new row then get the next ordering value
+    if (property_exists($this, 'ordering') && $this->id == 0) {
+      $this->ordering = self::getNextOrder('property_id = ' . (int) $this->property_id);
+    }
+   
+      
+    return parent::check();
+  }
 
 }

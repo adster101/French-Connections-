@@ -1,6 +1,15 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+
+$input = JFactory::getApplication()->input;
+$preview = $input->get('preview','','int');
+
+if ((int) $preview && $preview == 1) {
+  $append = '&preview=1';
+}
+
 ?>
 
 <ul class="nav nav-tabs">
@@ -10,7 +19,7 @@ defined('_JEXEC') or die('Restricted access');
     echo "class='active'";
   }
   ?>>
-      <a href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $unit->parent_id . '&unit_id=' . (int) $unit->id) ?>">
+      <a href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $unit->property_id . '&unit_id=' . (int) $unit->id) . $append ?>">
   <?php echo $unit->unit_title; ?><br />
           <?php if ($unit->occupancy && $unit->bedrooms) : ?>
             <span class="small">
