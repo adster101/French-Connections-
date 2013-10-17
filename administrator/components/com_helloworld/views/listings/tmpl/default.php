@@ -10,8 +10,9 @@ $arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
-$expiry_start_date = $this->state->get('filter.expiry_start_date');
-$expiry_end_date = $this->state->get('filter.expiry_end_date');
+$start_date = $this->state->get('filter.start_date');
+$end_date = $this->state->get('filter.end_date');
+$date_filter = $this->state->get('filter.date_filter');
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
@@ -48,31 +49,39 @@ $listing_id = '';
           <div class="btn-group pull-left">
             <input 
               type="text" 
-              name="expiry_start_date" 
-              id="expiry_start_date" 
-              value="<?php echo $expiry_start_date ?>" 
+              name="start_date" 
+              id="start_date" 
+              value="<?php echo $start_date ?>" 
               class="input-small prepend-1 hasdatepicker" 
               placeholder="From"
               autocomplete="false"
-            />
+              />
           </div>
           <div class="btn-group pull-left">
 
             <input 
               type="text" 
-              name="expiry_end_date" 
-              id="expiry_end_date" 
-              value="<?php echo $expiry_end_date ?>" 
+              name="end_date" 
+              id="end_date" 
+              value="<?php echo $end_date ?>" 
               class="input-small hasdatepicker" 
               placeholder="To" 
               autocomplete="false"
-            />
+              />
+          </div>
+          <div class="btn-group pull-left">
+            <select class="input-large" name="date_filter" id="date_filter">
+              <?php echo JHtml::_('select.options', HelloWorldHelper::getDateFilterOptions(), 'value', 'text', $date_filter, true) ?>
+            </select>
           </div>
 
           <div class="btn-group pull-left hidden-phone">
             <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-            <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';document.id('expiry_start_date').value = '';document.id('expiry_end_date').value = '';
-                  this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+            <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
+                document.id('start_date').value = '';
+                document.id('end_date').value = '';
+                document.id('date_filter').value = '';
+                this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
           </div>
 
           <div class="btn-group pull-right hidden-phone">
@@ -83,7 +92,7 @@ $listing_id = '';
         <hr />     
       <?php endif; ?>
 
-      <?php if (empty($this->items)) : // This user doesn't have any listings against their account    ?>
+      <?php if (empty($this->items)) : // This user doesn't have any listings against their account     ?>
         <hr />
         <div class="alert alert-block">
           <strong><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_NO_LISTINGS'); ?><strong>
@@ -120,9 +129,6 @@ $listing_id = '';
                     </th>
                     <th width="15%">
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_LISTING_STATUS'); ?>
-                    </th>
-                    <th width="10%">
-                      <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_LISTING_STATS'); ?>
                     </th>
                     <th>
                       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
@@ -194,7 +200,7 @@ $listing_id = '';
                               <?php endif; ?>
                             </a>
                           <?php else: ?>
-                            <?php //echo $this->escape($item->id); ?>
+                            <?php //echo $this->escape($item->id);  ?>
                           <?php endif; ?>
                         </td>
                         <td>
@@ -216,9 +222,6 @@ $listing_id = '';
                           <p>
                             <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview); ?>
                           </p>
-                        </td>
-                        <td>
-                          <?php echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
                         </td>
                         <td>
                           <?php echo JText::_($item->modified); ?>
@@ -251,6 +254,9 @@ $listing_id = '';
                                 <?php echo JHtml::_('property.notes', $item->id); ?>
                                 &nbsp;
                                 <?php echo JHtml::_('property.addNote', $item->id); ?>
+                                &nbsp;
+                                <?php echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
+
                               </p>
 
                             <?php endif; ?>

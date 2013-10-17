@@ -124,7 +124,22 @@ abstract class HelloWorldHelper {
     $options[] = JHtml::_('select.option', '2', JText::_('COM_HELLOWORLD_HELLOWORLD_SHOW_SNOOZED'));
     return $options;
   }
+  
+  /*
+   * Get a list of filter options for the snooze state of a property
+   *
+   * @return  array An array of JHtmlOption elements
+   */
 
+  public static function getDateFilterOptions() {
+    // Build the filter options.
+    $options = array();
+    $options[] = JHtml::_('select.option', '', JText::_('JSELECT'));
+    $options[] = JHtml::_('select.option', 'expiry_date', 'Expiry date');
+    $options[] = JHtml::_('select.option', 'created_on', 'Date created');
+    return $options;
+  }
+  
   /**
    * This submenu is used between the rental property manager, special offers, review, enquiries and stats components.
    */
@@ -143,74 +158,9 @@ abstract class HelloWorldHelper {
     JHtmlSidebar::addEntry(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', ($view == 'stats'));
   }
 
-  /*
-   * Method to get and check the status of the various key sections of a property listing
-   * I.E. Property details, availability, tariffs and images.
-   *
-   * params int id The property id of the property being editied
-   *
-   * return void
-   *
-   */
-
-  public static function getPropertyProgress($id = '') {
-    
-  }
-
-  /*
-   * Helper function to update the state of the listing the user is currently editing.
-   * N.B. This is only responsible for updating the parent listing details
-   *
-   * @param JObject item The item (the property) being edited
-   * @param JObject units The list of units assigned to a particular property
-   *
-   * return void
-   *
-   */
-
-  public static function setPropertyProgress($items = array()) {
-
-    // Collect the input from the request
-    $input = JFactory::getApplication()->input;
-
-    // Basic idea is that all edits of a listing must setup this data object.
-    // This will mean that all units and the listing data is available for any unit being editied
-    // The id of the item being edited, could be unit or listing
-    $id = $input->get('id', '', 'int');
-
-    // Create the 'progress' array.object
-    $progress = array();
-
-    foreach ($items as $key => $value) {
-
-      if (!array_key_exists('listing', $progress)) {
-        $progress['listing'] = $value->id;
-      }
-
-      if (!array_key_exists('review', $progress)) {
-        $progress['review'] = $value->review;
-      }
 
 
-
-      // Only store the unit details if there is a unit
-      if (!empty($value->unit_id)) {
-        if (!array_key_exists('units', $progress)) {
-          $progress['units'] = array();
-        }
-
-        $progress['units'][$value->unit_title] = array();
-        $progress['units'][$value->unit_title]['images'] = ($value->images > 0) ? 1 : 0;
-        $progress['units'][$value->unit_title]['availability'] = ($value->availability > 0) ? 1 : 0;
-        $progress['units'][$value->unit_title]['tariffs'] = ($value->tariffs > 0) ? 1 : 0;
-      }
-    }
-
-    // Check that this doesn't already exist in the session scope
-    //$progress->setProperties($listing_progress_array);
-    return $progress;
-  }
-
+ 
   /**
    * Get the actions
    */
@@ -240,6 +190,7 @@ abstract class HelloWorldHelper {
         'helloworld.snooze',
         'helloworld.images.delete',
         'helloworld.images.edit',
+        'helloworld.images.reorder',
         'helloworld.images.create',
         'helloworld.property.submit',
         'helloworld.property.review',

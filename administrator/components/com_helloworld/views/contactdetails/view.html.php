@@ -106,7 +106,6 @@ class HelloWorldViewContactdetails extends JViewLegacy
 			{
 				JToolBarHelper::save('contactdetails.saveandnext', 'JTOOLBAR_SAVE');
 				JToolBarHelper::apply('contactdetails.apply', 'JTOOLBAR_APPLY');
-				//JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 			}
 		}
 		else

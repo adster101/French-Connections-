@@ -63,12 +63,15 @@ class HelloWorldModelListings extends JModelList {
     $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
 
-    $expiry_start_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_start_date', 'expiry_start_date', '', 'date');
-    $this->setState('filter.expiry_start_date', $expiry_start_date);
+    $start_date = $this->getUserStateFromRequest($this->context . '.filter.start_date', 'start_date', '', 'date');
+    $this->setState('filter.start_date', $start_date);
 
-    $expiry_end_date = $this->getUserStateFromRequest($this->context . '.filter.expiry_end_date', 'expiry_end_date', '', 'date');
-    $this->setState('filter.expiry_end_date', $expiry_end_date);
-
+    $end_date = $this->getUserStateFromRequest($this->context . '.filter.end_date', 'end_date', '', 'date');
+    $this->setState('filter.end_date', $end_date);
+   
+    $date_filter = $this->getUserStateFromRequest($this->context . '.filter.date_filter', 'date_filter', '', 'string');
+    $this->setState('filter.date_filter', $date_filter);
+    
     $review_state = $this->getUserStateFromRequest($this->context . '.filter.review', 'filter_review', '');
     $this->setState('filter.review', $review_state);
 
@@ -179,7 +182,7 @@ class HelloWorldModelListings extends JModelList {
     $published = $this->getState('filter.published');
     if (is_numeric($published)) {
       $query->where('a.published = ' . (int) $published);
-    } elseif ($published == '') {
+    } elseif ($published === '') {
       $query->where('(a.published = 0 OR a.published = 1)');
     }
 
@@ -207,11 +210,12 @@ class HelloWorldModelListings extends JModelList {
     }
 
     // Filter on expiry date
-    $expiry_start_date = $this->getState('filter.expiry_start_date');
-    $expiry_end_date = $this->getState('filter.expiry_end_date');
-
-    if ($expiry_start_date && $expiry_end_date) {
-      $query->where('a.expiry_date >=' . $db->quote($expiry_start_date) . ' and a.expiry_date <=' . $db->quote($expiry_end_date));
+    $start_date = $this->getState('filter.start_date');
+    $end_date = $this->getState('filter.end_date');
+    $date_filter = $this->getState('filter.date_filter');
+    
+    if ($start_date && $end_date && $date_filter) {
+      $query->where('a.' . $db->escape($date_filter) .  ' >=' . $db->quote($start_date) . ' and a.' . $db->escape($date_filter) . ' <=' . $db->quote($end_date));
     }
 
     // Filter by search in title
