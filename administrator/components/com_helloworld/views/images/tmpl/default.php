@@ -26,9 +26,7 @@ $data = array('progress' => $this->progress);
 ?>
 
 <div class="row-fluid">
-
   <?php if (!empty($this->sidebar)): ?>
-
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
@@ -44,7 +42,7 @@ $data = array('progress' => $this->progress);
       echo $layout->render($data);
       ?>
       <!-- The file upload form used as target for the file upload widget -->
-      <form class="form-validate" id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1') ?>" method="GET" enctype="multipart/form-data">
+      <form id="fileupload" action="<?php echo JRoute::_('index.php?option=com_helloworld&task=images.upload&' . JSession::getFormToken() . '=1') ?>" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <noscript><input type="hidden" name="redirect" value="/"></noscript>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -85,18 +83,15 @@ $data = array('progress' => $this->progress);
                 <div class="fileupload-loading"></div>
                 <!-- The table listing the files available for upload/download -->
                 <table role="presentation" class="table">
-                  <tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody>
+                  <tbody class="files"></tbody>
                 </table>
               </div>
               <div class="span3">
                 <div class="alert alert-notice">
                   <?php echo Jtext::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_UPLOAD_HELP'); ?>
+
                 </div>
-                <a href="#" class="btn" data-toggle="popover" data-placement="top" 
-                   data-content="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_UPLOAD_MORE_HELP') ?>" 
-                   title="<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_MORE_IMAGES_HELP') ?>">
-                  <span class="icon-help"></span>&nbsp;<?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_MORE_HELP') ?>
-                </a>     
+
               </div>
             </div>
         </fieldset>
@@ -108,65 +103,88 @@ $data = array('progress' => $this->progress);
 
 
 
-
-      <!-- The template to display files available for upload -->
-      <script id="template-upload" type="text/x-tmpl">
-        {% for (var i=0, file; file=o.files[i]; i++) { %}
-        <tr class="template-upload fade">
-        <td class="preview">
-        <span class="fade"></span>
-        </td>
-        <td class="name"><span>{%=file.name%}</span> - <span>{%=o.formatFileSize(file.size)%}</span></td>
-
-        {% if (file.error) { %}
-        <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-        {% } else if (o.files.valid && !i) { %}
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
         <td>
-        <div class="progress progress-success progress-striped active" style="margin-bottom:0" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+            <span class="preview"></span>
         </td>
-        <td class="start">{% if (!o.options.autoUpload) { %}
-        <button class="btn btn-primary start">
-        <i class="icon-upload icon-white"></i>
-        <span>Start</span>
-        </button>
-        {% } %}</td>
-        {% } else { %}
-        <td colspan="2">
-
+        <td>
+            <p class="name">{%=file.name%}</p>
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
         </td>
-        {% } %}
+        <td>
+            <p class="size">{%=o.formatFileSize(file.size)%}</p>
+            {% if (!o.files.error) { %}
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+            {% } %}
+        </td>
+        <td>
+            {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% if (file.thumbnail_url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnail_url?'data-gallery':''%}>{%=file.name%}
+                      <img src="{%=file.thumbnail_url%}" />
+                    </a>
+                {% } else { %}
+                    <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            {% if (file.deleteUrl) { %}
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" name="delete" value="1" class="toggle">
+            {% } else { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Clear</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
 
-        <td class="cancel">{% if (!i) { %}
-        <button class="close pull-right">
-        &times;
-        </button>
-        {% } %}</td>
-        </tr>
-        {% } %}
-      </script>
-
-
-      <!-- The template to display files available for download -->
-      <script id="template-download" type="text/x-tmpl">
-        {% for (var i=0, file; file=o.files[i]; i++) { %}
-        <tr class="template-download fade">
-        {% if (file.error) { %}
-        <td></td>
-        <td class="error" colspan="2"><span class="label label-important">Error</span> {%=file.error%}</td>
-        {% } else { %}
-        <td class="preview">{% if (file.thumbnail_url) { %}
-        <a href="{%=file.url%}" title="{%=file.name%}" data-gallery="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
-        {% } %}</td>
-        <td class="notice" colspan="2"><span class="label label-success">Success!</span> {%=file.message%}</td>
-
-
-        {% } %}
-
-        </tr>
-        {% } %}
-      </script>
-
-      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
+      <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form">
         <fieldset>
           <legend>
             <?php echo JText::_('COM_HELLOWORLD_IMAGES_EXISTING_IMAGE_LIST'); ?>
@@ -178,11 +196,11 @@ $data = array('progress' => $this->progress);
 
                 </th>
                 <th>
-            <div class="hidden-desktop">
+            <div>
               <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_IMAGE_ORDERING'); ?>
             </div>
             </th>
-            <th>
+            <th class="center">
               <?php echo JText::_('COM_HELLOWORLD_IMAGES_CHOOSE_THUMBNAIL'); ?>
             </th>
             <th>

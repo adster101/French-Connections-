@@ -361,7 +361,7 @@ class JHtmlProperty {
       $progress_icon = $okay_icon;
       $id = $listing_id;
     } elseif ($controller == 'contactdetails') {
-      $progress_icon = $optional;
+      $progress_icon = '';
       $id = $listing_id;
       
     } elseif (empty($item->title) && ($controller == 'propertyversions' )) {

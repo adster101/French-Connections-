@@ -15,23 +15,22 @@
       type="attributetype"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
-      class="required"
+      class="required input-medium"
       filter="int"
       id="20"
       placeholder="true"
       required="true"
-      default="asdasd"
-      labelclass="control-label">
+      >
     </field>
     <field
       name="base_currency"
-      labelclass="control-label"
       label="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_LABEL"
       description="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_MESSAGE"
       message="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_DESC"
       type="attributetype"
       filter="integer"
       required="true"
+      class="input-medium"
       id="19"
       default="1"
       placeholder="true"
@@ -43,6 +42,7 @@
       description="COM_HELLOWORLD_TARIFFS_FIELD_TARIFF_BASED_ON_DESC"
       required="true"
       filter="int"
+      class="input-large"
       id="21"
       default=""
       placeholder="true">
@@ -54,13 +54,12 @@
       label="COM_HELLOWORLD_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
       rows="6"
-      class="input-xxlarge validate-description"
+      class="input-xlarge validate-description"
       default=""
       filter="string"
       buttons="false"
       validate="additionalpricenotes"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE"
-      labelclass="control-label"
     />
     
  

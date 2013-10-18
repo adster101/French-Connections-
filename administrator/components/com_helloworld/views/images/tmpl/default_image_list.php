@@ -19,14 +19,14 @@ JHtml::_('behavior.tooltip');
         </td>
         <td>
           <input type="text" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="text-area-order hidden-desktop hidden-phone hidden-tablet" />
-          <div class="hidden-desktop">
+          <div>
             <?php echo $this->pagination->orderUpIcon($i, true, 'images.orderup', 'JLIB_HTML_MOVE_UP', 1); ?>
           <?php echo $this->pagination->orderDownIcon($i, count($this->items), true, 'images.orderdown', 'JLIB_HTML_MOVE_DOWN', 1); ?>
           </div>
         </td>
-        <td class="thumbnail-default">
+        <td class="thumbnail-default" align="center">
           <?php if ($i == 0) : ?>
-            <span class="icon-default lead">&nbsp;</span>
+            <p class="center"><span class="icon-default lead">&nbsp;</span></p>
           <?php endif; ?>
         </td>
         <td>

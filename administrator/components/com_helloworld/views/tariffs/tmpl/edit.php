@@ -31,79 +31,75 @@ $counter = 0;
         <div class="alert alert-notice">
           <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>
         </div>
-        <!-- Listing status and tab layouts end -->
-        <fieldset class="adminform">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('id'); ?> 
-            <div class="controls">
-              <?php echo $this->form->getInput('id'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('changeover_day'); ?> 
-            <div class="controls">
-              <?php echo $this->form->getInput('changeover_day'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('base_currency'); ?> 
-            <div class="controls">
-              <?php echo $this->form->getInput('base_currency'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('tariff_based_on'); ?> 
-            <div class="controls">
-              <?php echo $this->form->getInput('tariff_based_on'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('linen_costs'); ?> 
-            <div class="controls">
-              <?php echo $this->form->getInput('linen_costs'); ?>
-            </div>
-          </div>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('additional_price_notes'); ?> 
-            <div class="controls">
-              <?php echo $this->form->getInput('additional_price_notes'); ?>
-            </div>
-          </div>
-  
-        </fieldset>
-        <fieldset class="adminform">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
-
-          <div class="tariff-range row-fluid">
-            <?php foreach ($this->form->getFieldset('unit-tariffs') as $field) : ?>
-                <?php if ($counter % 3 === 0) : // Output a new row every third  ?> 
-                <div class="row-fluid">
-                  <?php endif; ?>
-                <div class="span4">
-                  <?php
-                  echo $field->label;
-                  echo $field->input;
-                  ?>               
-                </div>      
-  <?php if (($counter % 3 === 2)) : ?>
+        <div class="row-fluid">
+          <div class="span4">
+            <!-- Listing status and tab layouts end -->
+            <fieldset class="adminform form-vertical">
+              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
+             
+              <div class="control-group ">
+                <?php echo $this->form->getLabel('changeover_day'); ?> 
+                <div class="controls">
+                  <?php echo $this->form->getInput('changeover_day'); ?>
                 </div>
-                <hr />
-                <div class="row-fluid">
-                <?php endif; ?>
-                <?php $counter++; ?>
-<?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
-            </div>
-        </fieldset>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('base_currency'); ?> 
+                <div class="controls">
+                  <?php echo $this->form->getInput('base_currency'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('tariff_based_on'); ?> 
+                <div class="controls">
+                  <?php echo $this->form->getInput('tariff_based_on'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('linen_costs'); ?> 
+                <div class="controls">
+                  <?php echo $this->form->getInput('linen_costs'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('additional_price_notes'); ?> 
+                <div class="controls">
+                  <?php echo $this->form->getInput('additional_price_notes'); ?>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="span8">
+            <fieldset class="adminform">
+              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
+              <div class="tariff-range">
+                <?php foreach ($this->form->getFieldset('unit-tariffs') as $field) : ?>                
 
-      </div>
+                  <?php if ($counter % 3 === 0) : // Output a new row every third  ?> 
+                    <div class="row-fluid">
+                    <?php endif; ?>
+                    <div class="span4">
+                      <?php
+                      echo $field->label;
+                      echo $field->input;
+                      ?>               
+                    </div>      
+                    <?php if (($counter % 3 === 2)) : ?>
+                    </div>
+                    <hr />
+                    <?php endif; ?>
+                    <?php $counter++; ?>
+                  <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
+                </div>
+            </fieldset>
 
-
+          </div>
+        </div>        </div>
     </div>
   </div>
   <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
     <?php echo $field->input; ?>
   <?php endforeach; ?>
   <input type="hidden" name="task" value="" />
-<?php echo JHtml::_('form.token'); ?>
+  <?php echo JHtml::_('form.token'); ?>
 </form>

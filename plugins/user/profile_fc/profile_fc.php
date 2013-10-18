@@ -143,6 +143,7 @@ class plgUserProfile_fc extends JPlugin {
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.
     $form->removeField('name');
     
+    
     // Add the additional progile fields to the form.
     JForm::addFormPath(dirname(__FILE__) . '/profiles');
     $form->loadFile('profile', false);
@@ -158,9 +159,7 @@ class plgUserProfile_fc extends JPlugin {
     if ($vat_status == 'ECS') {
       $form->setFieldAttribute('vat_number', 'required', true);
     }
-
-    
-    
+   
     return true;
   }
 

@@ -103,16 +103,20 @@ class HelloWorldViewImages extends JViewLegacy {
 
     $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
 
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/tmpl.min.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/load-image.min.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/canvas-to-blob.min.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.iframe-transport.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-fp.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/jquery.fileupload-ui.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "administrator/components/com_helloworld/js/main.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true);
+    $document->addScript(JURI::root() . "media/fc/js/images/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/tmpl.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/load-image.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/canvas-to-blob.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/jquery.iframe-transport.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-process.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-image.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-validate.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-ui.js", 'text/javascript', true, false);
+    
+    $document->addScript(JURI::root() . "media/fc/js/images/main.js", 'text/javascript', true, false);
+    
+    $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
 
 
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
@@ -120,6 +124,7 @@ class HelloWorldViewImages extends JViewLegacy {
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
 
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
 
     // Register the JHtmlProperty class
     JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/html/fcsortablelist.php');

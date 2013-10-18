@@ -7,9 +7,9 @@ jQuery(document).ready(function() {
         e.preventDefault()
       });
       
-  jQuery(function() {
+  if (jQuery('.hasdatepicker').length) {
     jQuery(".hasdatepicker").datepicker({dateFormat:'yy-mm-dd'});
-  });
+  };
 
 
 

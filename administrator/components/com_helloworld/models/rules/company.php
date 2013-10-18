@@ -18,7 +18,7 @@ class JFormRuleCompany extends JFormRule {
    * @var		string
    * @since	1.6
    */
-  protected $regex = '^([0-9]\d{14})$';
+  protected $regex = '^([0-9]{14})$';
 
   public function test(\SimpleXMLElement $element, $value, $group = null, \JRegistry $input = null, \JForm $form = null) {
 

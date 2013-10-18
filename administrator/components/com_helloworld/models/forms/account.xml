@@ -27,8 +27,9 @@
       size="30"
       validate="vat"
       labelclass="control-label"
-      required="false"
       class="validate validate-vat"
+      required="false"
+
     />
       
     <field
@@ -40,8 +41,9 @@
       size="30"
       validate="company"
       labelclass="control-label"
-      required="false"
       class="validate validate-company"
+      required="false"
+
     />   
 
 
