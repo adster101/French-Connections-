@@ -36,7 +36,6 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
     // Switch to the revised listing class
     // $model = JModelLegacy::getInstance('Listing_proper', 'HelloWorldModel', array('id' => $this->item->property_id));
 
-
     // Here we attempt to wedge some data into the model
     // So another method in the same model can use it.
     $listing_id = ($this->item->property_id) ? $this->item->property_id : '';

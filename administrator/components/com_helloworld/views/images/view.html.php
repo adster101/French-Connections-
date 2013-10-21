@@ -26,6 +26,7 @@ class HelloWorldViewImages extends JViewLegacy {
     // Get the unitversions instance so we can get the unit detail
     $unit = $this->getModel('UnitVersions');
     $this->unit = $unit->getItem();
+    $this->unit->unit_title = (!empty($this->unit->unit_title)) ? $this->unit->unit_title : 'New unit';
 
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');

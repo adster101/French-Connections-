@@ -23,7 +23,6 @@ if (!empty($progress)) {
 }
 
 $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]->unit_id . '&preview=1';
-
 ?>
 
 <div class="row-fluid">
@@ -31,9 +30,9 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
     <?php if (!empty($notices)) : ?>
       <div class="alert alert-info">
         <?php if ($progress[0]->review) : ?>
-        <div class="pull-right">
-          <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
-        </div>
+          <div class="pull-right">
+            <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
+          </div>
         <?php endif; ?>
         <h4>Listing Progress</h4>
         <ul>
@@ -45,30 +44,24 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
 
           <?php foreach ($notices as $key => $value) : ?>
             <li>
-                <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_PROGRESS_NOTICES', $key); ?>
+              <?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_PROGRESS_NOTICES', $key); ?>
             </li>
           <?php endforeach; ?>
         </ul>
       </div>
-    <?php elseif ((empty($notices) && $view == 'listing') && $review) : //No notices, listing view for a property that needs review ?>
+    <?php elseif ((empty($notices) && $view == 'listing') && $review) : //No notices, listing view for a property that needs review  ?>
       <div class="well well-small">
         <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
         <hr />
         <fieldset class="panelform">
           <div class="control-group">   
-
             <?php echo $form->getLabel('admin_notes'); ?>
             <div class="controls">   
-
               <?php echo $form->getInput('admin_notes'); ?>
             </div>
           </div>
-         
-
           <?php echo $form->getInput('tos'); ?>
           <hr />
-
-
         </fieldset>
         <button class="btn btn-primary" onclick="Joomla.submitbutton('listing.submit')">
           <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
@@ -78,17 +71,33 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
     <?php elseif (empty($notices) && !$review && $days_to_renewal >= 7) : ?>
       <div class="alert alert-notice">
+        <?php if ($progress[0]->review) : ?>
+          <div class="pull-right">
+            <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
+          </div>
+        <?php endif; ?>
         <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_OKAY'); ?></p>
       </div>
     <?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review && empty($expiry_date)) : ?>
       <div class="alert alert-danger">
+        <?php if ($progress[0]->review) : ?>
+          <div class="pull-right">
+            <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
+          </div>
+        <?php endif; ?>        
         <h4>Listing Status</h4>
+
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
         <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
       </div>
     <?php elseif ($review) : ?>
       <div class="alert alert-info">
+        <?php if ($progress[0]->review) : ?>
+          <div class="pull-right">
+            <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
+          </div>
+        <?php endif; ?>
         <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_UNSUBMITTED_CHANGES'); ?></p>
         <a href="<?php echo JRoute::_('index.php?option=com_helloworld&view=listing&id=' . (int) $id) ?>" class="btn btn-primary">
@@ -98,7 +107,7 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
       </div>
     <?php endif; ?>
   </div>
-  <?php // Need to put the following into language strings    ?>
+  <?php // Need to put the following into language strings     ?>
   <div class="span3">
     <h4>Key</h4>
     <span>

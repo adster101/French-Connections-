@@ -28,6 +28,8 @@ class HelloWorldViewTariffs extends JViewLegacy {
 
     // Get the unit item...
     $this->item = $this->get('Item');
+    
+    $this->item->unit_title = (!empty($this->item->unit_title)) ? $this->item->unit_title : 'New unit';
 
     // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
     $model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', array('ignore_request' => true));

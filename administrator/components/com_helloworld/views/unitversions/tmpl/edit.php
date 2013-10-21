@@ -33,7 +33,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         ?>
 
         <fieldset class="adminform form-inline">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION'); ?></legend>
+          <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_DESCRIPTION', $this->item->unit_title); ?></legend>
           <div class="control-group">
             <?php echo $this->form->getLabel('unit_title'); ?>
             <div class="controls">
@@ -61,7 +61,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         </fieldset>
 
         <fieldset class="adminform form-vertical">
-          <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_OCCUPANCY_DETAILS'); ?></legend>
+          <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_OCCUPANCY_DETAILS', $this->item->unit_title); ?></legend>
           <div class="row-fluid">
             <div class="span2">
               <div class="control-group">
@@ -157,7 +157,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
           </div>
         </fieldset>
         <fieldset>
-          <legend><?php echo JText::_('COM_HELLOWORLD_FACILITIES_LEGEND'); ?></legend>
+          <legend><?php echo JText::sprintf('COM_HELLOWORLD_FACILITIES_LEGEND', $this->item->unit_title); ?></legend>
           <div class="alert alert-notice">
             <span class="icon icon-flag">&nbsp</span><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?>
           </div>

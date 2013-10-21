@@ -25,6 +25,8 @@ class HelloWorldViewAvailability extends JViewLegacy {
 
     // Get the unit item we are editing the availability for...
     $this->unit = $this->get('Item');
+    
+    $this->unit->unit_title = (!empty($this->unit->unit_title)) ? $this->unit->unit_title : 'New unit';
 
     //Populate the availability model state
     $this->state = $this->get('State');

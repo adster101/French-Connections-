@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
 		jQuery('.start_date').datepicker({
 			numberOfMonths: 1,
       showOn:"both",
-      dateFormat:"yy-mm-dd",
+      dateFormat:"dd-mm-yy",
       buttonImageOnly:true,
      	buttonImage: "/media/system/images/calendar.png",
       showButtonPanel: true,
@@ -25,7 +25,7 @@ jQuery(document).ready(function(){
     
 		jQuery('.end_date').datepicker({
 			numberOfMonths: 1,
-      dateFormat:"yy-mm-dd",
+      dateFormat:"dd-mm-yy",
       showOn:"both",
       buttonImageOnly:true,
      	buttonImage: "/media/system/images/calendar.png",

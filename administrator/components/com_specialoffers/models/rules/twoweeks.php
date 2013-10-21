@@ -59,13 +59,14 @@ class JFormRuleTwoWeeks extends JFormRule
 		}
    
     $start_date = new DateTime($value);
+    $start_date->format('Y-m-d');
     $end_date = new DateTime($input->get($field));
+    $end_date->format('Y-m-d');
     $interval = $start_date->diff($end_date);
 		$length = $interval->format('%a');
     // Test the two values against each other.
 		if ($length < 15)
 		{
-      
 			return true;
 		}
 

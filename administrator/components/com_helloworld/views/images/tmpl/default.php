@@ -187,7 +187,7 @@ $data = array('progress' => $this->progress);
       <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=images&unit_id=' . (int) $unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form">
         <fieldset>
           <legend>
-            <?php echo JText::_('COM_HELLOWORLD_IMAGES_EXISTING_IMAGE_LIST'); ?>
+            <?php echo JText::sprintf('COM_HELLOWORLD_IMAGES_EXISTING_IMAGE_LIST', $this->unit->unit_title); ?>
           </legend>
           <table id="articleList" class="table table-striped">
             <thead>

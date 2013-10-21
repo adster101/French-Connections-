@@ -35,7 +35,7 @@ $counter = 0;
           <div class="span4">
             <!-- Listing status and tab layouts end -->
             <fieldset class="adminform form-vertical">
-              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL'); ?></legend>
+              <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL', $this->item->unit_title); ?></legend>
              
               <div class="control-group ">
                 <?php echo $this->form->getLabel('changeover_day'); ?> 
@@ -71,7 +71,7 @@ $counter = 0;
           </div>
           <div class="span8">
             <fieldset class="adminform">
-              <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS'); ?></legend>
+              <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_TARIFFS', $this->item->unit_title); ?></legend>
               <div class="tariff-range">
                 <?php foreach ($this->form->getFieldset('unit-tariffs') as $field) : ?>                
 
