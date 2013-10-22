@@ -32,7 +32,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       echo $tabs_layout->render($data);
       ?>
 
-      <legend><?php echo JText::sprintf('COM_HELLOWORLD_HELLOWORLD_LISTING_CONTACT_DETAILS', $this->item->unit_title); ?></legend> 
+      <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
 
 
       <?php echo $this->form->getLabel('contact_override_note'); ?>

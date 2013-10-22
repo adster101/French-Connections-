@@ -102,7 +102,6 @@ class TicketsModelTicket extends JModelAdmin {
           $note['user'] = $user->get('name');
           $note['description'] = 'Status changed from ' . $states[$item->state] . ' to ' . $states[$data['state']];
           $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
-
           $data['notes'][] = $note;
         }
 

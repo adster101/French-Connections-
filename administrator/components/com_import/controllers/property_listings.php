@@ -42,8 +42,8 @@ class ImportControllerProperty_listings extends JControllerForm {
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
-      $latitude = ($line[8] > 0) ? $line[8] : '46.589069';
-      $longitude = ($line[9] > 0) ? $line[9] : '2.416992';
+      $latitude = ($line[10] > 0) ? $line[10] : '46.589069';
+      $longitude = ($line[11] > 0) ? $line[11] : '2.416992';
 
       $query->select('id, title, level');
       $query->select(
@@ -66,50 +66,37 @@ class ImportControllerProperty_listings extends JControllerForm {
       $items = $db->loadRow();
 
       $query->clear();
+      
+      // Do the same for airports
+      $query->select('id');
+      $query->select(
+              '(
+        3959 * acos( cos( radians(' . $longitude . ') )
+        * cos( radians( latitude ) )
+        * cos( radians( longitude ) -
+        radians(' . $latitude . ') ) +
+        sin( radians(' . $longitude . ') )
+        * sin( radians( latitude ) ) ) )
+        AS distance
+            ');
+
+      $query->from('#__airports');
+
+      $query->order('distance asc');
+      $db->setQuery($query, 0, 1);
+      $airport = $db->loadRow();
+      
 
       $query->insert('#__property_versions');
 
       $query->columns(array(
-          'parent_id',
-          'title',
-          'country',
-          'area',
-          'region',
-          'department',
-          'city',
-          'location_details',
-          'getting_there',
-          'location_type',
-          'latitude',
-          'longitude',
-          'distance_to_coast',
-          'exchange_rate_eur',
-          'exchange_rate_usd',
-          'video_url',
-          'booking_form',
-          'deposit_currency',
-          'security_currency',
-          'deposit',
-          'security_deposit',
-          'payment_deadline',
-          'evening_meal',
-          'additional_booking_info',
-          'terms_and_conditions',
-          'first_name',
-          'surname',
-          'address',
-          'phone_1',
-          'phone_2',
-          'phone_3',
-          'fax',
-          'email_1',
-          'email_2',
-          'review',
-          'created_on',
-          'created_by',
-          'modified_on',
-          'modified_by',
-          'published_on'
+          'property_id','title','country','area','region','department','city','location_details',
+          'local_amenities','getting_there','airport','location_type','latitude','longitude',
+          'distance_to_coast','video_url','booking_form','deposit_currency','security_currency',
+          'deposit','security_deposit','payment_deadline','evening_meal','additional_booking_info',
+          'terms_and_conditions','use_invoice_details','first_name','surname','address','phone_1',
+          'phone_2','phone_3','fax','email_1','email_2','website','review','created_on','created_by',
+          'modified_on','modified_by','published_on'
       ));
       $insert_string = '';
 
@@ -117,30 +104,30 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= $line[0];
       $insert_string .= ',' . $db->quote($line[1]);
       $insert_string .= ',' . 158052; // France
-      $insert_string .= ',' . $line[2];
-      $insert_string .= ',' . $line[3];
-      $insert_string .= ',' . $line[4];
-      $insert_string .= ',' . $db->quote($items[0]);
-      $insert_string .= ',' . $db->quote($line[5]);
-      $insert_string .= ',' . $db->quote($line[6]);
-      $insert_string .= ',' . $db->quote($line[7]);
-      $insert_string .= ',' . $db->quote($line[8]);
-      $insert_string .= ',' . $line[9];
-      $insert_string .= ',' . $db->quote($line[10]);
-      $insert_string .= ',' . $db->quote($line[11]);
-      $insert_string .= ',' . $db->quote($line[12]);
-      $insert_string .= ',' . $db->quote($line[13]);
-      $insert_string .= ',' . $db->quote($line[14]);
-      $insert_string .= ',' . $db->quote($line[15]);
-      $insert_string .= ',' . $db->quote($line[16]);
-      $insert_string .= ',' . $db->quote($line[17]);
-      $insert_string .= ',' . $db->quote($line[18]);
-      $insert_string .= ',' . $db->quote($line[19]);
-      $insert_string .= ',' . $db->quote($line[20]);
-      $insert_string .= ',' . $db->quote($line[21]);
-      $insert_string .= ',' . $db->quote($line[22]);
-      $insert_string .= ',' . $db->quote($line[23]);
-      $insert_string .= ',' . $db->quote($line[24]);
+      $insert_string .= ',' . $line[2]; 
+      $insert_string .= ',' . $line[3]; 
+      $insert_string .= ',' . $line[4]; 
+      $insert_string .= ',' . $db->quote($items[0]); 
+      $insert_string .= ',' . $db->quote($line[5]); // Location details
+      $insert_string .= ',' . $db->quote($line[6]); // Local amenities
+      $insert_string .= ',' . $db->quote($line[7]); // Getting there
+      $insert_string .= ',' . $db->quote($airport[0]); // Airport - sql this as per city
+      $insert_string .= ',' . $db->quote($line[9]); // Location type
+      $insert_string .= ',' . $line[10]; // Latitude
+      $insert_string .= ',' . $db->quote($line[11]); // Longitude
+      $insert_string .= ',' . $db->quote($line[12]); // Distance to coast
+      $insert_string .= ',' . $db->quote($line[13]); // video url
+      $insert_string .= ',' . $db->quote($line[14]); // Booking form
+      $insert_string .= ',' . $db->quote($line[15]); // Deposit currency
+      $insert_string .= ',' . $db->quote($line[16]); // security deposit currency
+      $insert_string .= ',' . $db->quote($line[17]); // deposit
+      $insert_string .= ',' . $db->quote($line[18]); // security deposit
+      $insert_string .= ',' . $db->quote($line[19]); // payment deadline
+      $insert_string .= ',' . $db->quote($line[20]); // evening meal
+      $insert_string .= ',' . $db->quote($line[21]); // additional booking info
+      $insert_string .= ',' . $db->quote($line[22]); // tandc
+      $insert_string .= ',' . $db->quote($line[23]); // use invoice details
+      $insert_string .= ',' . $db->quote($line[24]); 
       $insert_string .= ',' . $db->quote($line[25]);
       $insert_string .= ',' . $db->quote($line[26]);
       $insert_string .= ',' . $db->quote($line[27]);
@@ -149,11 +136,13 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $db->quote($line[30]);
       $insert_string .= ',' . $db->quote($line[31]);
       $insert_string .= ',' . $db->quote($line[32]);
-      $insert_string .= ',' . $db->quote($line[33]);
-      $insert_string .= ',' . $db->quote($line[34]);
-      $insert_string .= ',' . $db->quote($line[35]);
-      $insert_string .= ',1';
-      $insert_string .= ',' . $db->quote($line[36]);
+      $insert_string .= ',' . $db->quote($line[33]); // website
+      $insert_string .= ',0'; // Review     
+      $insert_string .= ',' . $db->quote($line[34]); // date created
+      $insert_string .= ',' . $db->quote($line[35]); // owner
+      $insert_string .= ',' . $db->quote($line[36]); // modified
+      $insert_string .= ',1'; // Modified by
+      $insert_string .= ',' . $db->quote($line[37]); // published on
 
       $query->values($insert_string);
       $db->setQuery($query);

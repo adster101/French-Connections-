@@ -70,7 +70,7 @@ class ImportControllerAttributes extends JControllerForm {
       $query->clear();
 
       // The list of property attributes is a comma separated list so it is exploded to an array
-      $property_attributes = explode(',', $line[2]);
+      $property_attributes = explode(',', $line[1]);
 
       $go = false;
 
