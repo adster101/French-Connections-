@@ -88,6 +88,9 @@ class TicketsModelTicket extends JModelAdmin {
     // Attempt to load the existing item
     $item = $this->getItem($data['id']);
 
+    // Set the updated data and time
+    $data['date_updated'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
+    
     if (isset($data['note']) && !empty($data['note']) || $data['state'] != $item->state) {
       // If we have an id and it's not empty
       if (isset($data['id']) && !empty($data['id'])) {
