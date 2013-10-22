@@ -83,23 +83,33 @@ class TicketsModelTicket extends JModelAdmin {
     $note = array();
     $user = JFactory::getUser();
 
+    $states = array('closed', 'open', 'testing', 'pending');
 
-    if (isset($data['note']) && !empty($data['note'])) {
+    // Attempt to load the existing item
+    $item = $this->getItem($data['id']);
+
+    if (isset($data['note']) && !empty($data['note']) || $data['state'] != $item->state) {
       // If we have an id and it's not empty
       if (isset($data['id']) && !empty($data['id'])) {
-
-        // Attempt to load the existing item
-        $item = $this->getItem($data['id']);
 
         // Decode any notes that have been saved against this issue
         $data['notes'] = $item->notes;
         
-        $note['user'] = $user->get('name');
-        $note['description'] = $data['note'];
-        $note['date'] = JFactory::getDate()->calendar('d-m-Y');
+        if ($data['state'] != $item->state) {
+          $note['user'] = $user->get('name');
+          $note['description'] = 'Status changed from ' . $states[$item->state] . ' to ' . $states[$data['state']];
+          $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
 
-        $data['notes'][] = $note;
+          $data['notes'][] = $note;
+        }
 
+        if (!empty($data['note'])) {
+          $note['user'] = $user->get('name');
+          $note['description'] = $data['note'];
+          $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
+          $data['notes'][] = $note;
+        }
+        
         $registry->loadArray($data['notes']);
         $data['notes'] = (string) $registry;
       }

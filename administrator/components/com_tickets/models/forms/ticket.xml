@@ -108,7 +108,7 @@
       label="Created by"
       description=""
       class="input-small"
-      filter="unset"
+      filter="int"
       readonly="true"
     />    
      

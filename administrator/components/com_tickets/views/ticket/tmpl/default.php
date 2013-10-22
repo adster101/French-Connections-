@@ -42,7 +42,8 @@ $userId = $user->get('id');
       <h3>Notes</h3>
       <?php if (!empty($this->item->notes)) : ?>
         <div class="notes" style="max-height: 700px;overflow-y: auto">
-          <?php asort($this->item->notes, SORT_NUMERIC); ?>
+          <?php 
+            krsort($this->item->notes, 1); ?>
           <?php foreach ($this->item->notes as $note): ?>
             <p><strong><?php echo $note['date']; ?> - <?php echo $note['user'] ?></strong></p>
             <p><?php echo $note['description']; ?></p>
