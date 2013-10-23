@@ -166,7 +166,7 @@ class ImportControllerImages extends JControllerForm {
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumbs', 100, 100);
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumb', 210, 120);
         } catch (Exception $e) {
-
+          print_r($e);die;
         }
       }
     }
