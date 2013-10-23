@@ -32,7 +32,7 @@ class modFeaturedPropertyHelper {
     $query->select('
       a.id,
       b.id as unit_id,
-      c.thumbnail,
+      -- c.thumbnail,
       c.unit_title,
       c.occupancy,
       g.title,

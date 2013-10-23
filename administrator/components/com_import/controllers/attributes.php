@@ -34,7 +34,7 @@ class ImportControllerAttributes extends JControllerForm {
 
     $query->select('id');
     $query->from('#__attributes');
-    $query->where("attribute_type_id in (1,2,7,8,9,10,11,12,28)");
+    $query->where("attribute_type_id in (2,7,8,9,10,11,12,28)");
 
     // Set the query.
     $db->setQuery($query);
@@ -71,7 +71,8 @@ class ImportControllerAttributes extends JControllerForm {
 
       // The list of property attributes is a comma separated list so it is exploded to an array
       $property_attributes = explode(',', $line[1]);
-
+      $property_type = $property_attributes[1];
+      
       $go = false;
 
       $property_id = $line[0];
@@ -95,7 +96,13 @@ class ImportControllerAttributes extends JControllerForm {
 
       if (!empty($version_id[0])) {
 
-
+      // Add the property type as well
+      if ($go) {
+        $insert_string = '';
+        $insert_string = "$version_id[0],$property_id,$property_type";
+        $query->values($insert_string);
+      }
+        
       // Set and execute the query
       $db->setQuery($query);
       if ($go) {

@@ -128,8 +128,8 @@ class AccommodationModelListing extends JModelForm {
         c.latitude,
         c.longitude,
         c.distance_to_coast,
-        c.exchange_rate_eur,
-        c.exchange_rate_usd,
+        -- c.exchange_rate_eur,
+        -- c.exchange_rate_usd,
         c.video_url,
         c.booking_form,
         c.deposit,
@@ -170,7 +170,7 @@ class AccommodationModelListing extends JModelForm {
         i.title as base_currency,
         j.title as tariffs_based_on,
         u.name,
-        ufc.website,
+        c.website,
         ufc.phone_1, 
         ufc.phone_2, 
         ufc.phone_3,
@@ -395,7 +395,7 @@ class AccommodationModelListing extends JModelForm {
 
         $db->setQuery($query);
 
-        $reviews = $db->loadAssocList();
+        $reviews = $db->loadObjectList();
 
         $this->reviews = $reviews;
 

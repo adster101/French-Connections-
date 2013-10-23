@@ -33,35 +33,12 @@ class ImportControllerTariffs extends JControllerForm {
     
     while (($line = fgetcsv($handle)) !== FALSE) {
 
-      // This is another line of availability for the same unit and property
-      if ($previous_property_id == $line[1] && $previous_unit_id == $line[0]) {
-        
-        // If unit count is one, we must be dealing with the first unit of the property...
-        if ($unit_count == 1) {
-          // So set the property ID accordingly. Caveat here is that prn becomes the parent property id for co located properties.
-          $property_id = $line[1];
-        } else {
-          $property_id = $line[0];
-        }
-        
-      } else if ($previous_property_id == $line[1] && $previous_unit_id != $line[0]) {
-        
-        // Must be a new unit of the same property, so we also increment the unit count (as we know this is a multi unit property)
-        $property_id = $line[0];
-        $unit_count++;
-        
-      } else {
-
-        // Only happens when we deal with a new property/unit combo
-        $property_id = $line[1];
-        $unit_count = 1; // reset the unit count as this must be a new prn
-      }
-      
+     
       // Determine the tariff based on the rate per, this should match to the imported property data...
-      if ($line[6] == 'night') {
-        $tariff = $line[4];
+      if ($line[5] == 'night') {
+        $tariff = $line[3];
       } else {
-        $tariff = $line[5];
+        $tariff = $line[4];
       }
 
       // Start building a new query to insert any attributes... 
@@ -69,12 +46,12 @@ class ImportControllerTariffs extends JControllerForm {
       
       $query->insert('#__tariffs');
       
-			$query->columns(array('id','start_date','end_date','tariff'));
+			$query->columns(array('unit_id','start_date','end_date','tariff'));
       
       // Loop over the list of attributes for the property and check if each attribute is in the attributes list
       $insert_string = '';
       
-      $insert_string = "$property_id,'$line[2]','$line[3]',$tariff";
+      $insert_string = "$line[0],'$line[1]','$line[2]',$tariff";
       $query->values($insert_string);      
                
       // Set and execute the query

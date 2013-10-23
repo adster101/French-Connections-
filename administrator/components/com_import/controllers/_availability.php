@@ -62,7 +62,7 @@ class ImportControllerAvailability extends JControllerForm {
       
       $query->insert('#__availability');
       
-			$query->columns(array('id','start_date','end_date','availability'));
+			$query->columns(array('unit_id','start_date','end_date','availability'));
       
       // Loop over the list of attributes for the property and check if each attribute is in the attributes list
       $insert_string = '';
