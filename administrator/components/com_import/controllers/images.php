@@ -22,7 +22,7 @@ class ImportControllerImages extends JControllerForm {
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     // Open a handle to the import file
-    $handle = fopen($userfile['tmp_name'], "r");
+    $handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
 
     // Get a db instance
     $db = JFactory::getDBO();
@@ -155,7 +155,7 @@ class ImportControllerImages extends JControllerForm {
           $move = copy('/home/sysadmin/Pictures/' . $value['fde_filename'], $filepath . '/' . $value['fde_filename']);
 
           if (!$move) {
-            JLog::add('Unable to move/locate image - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+            JLog::add('Unable to move/locate image - ' . $value['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
           }
         }
 
@@ -165,7 +165,7 @@ class ImportControllerImages extends JControllerForm {
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumbs', 100, 100);
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumb', 210, 120);
         } catch (Exception $e) {
-            JLog::add($e->getMessage() . ' - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+            JLog::add($e->getMessage() . ' - ' . $value['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
 
         }
       }
