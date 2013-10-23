@@ -106,7 +106,7 @@ class ImportControllerImages extends JControllerForm {
       $query = $db->getQuery(true);
 
       $query->insert('#__property_images_library');
-      $query->columns(array('version_id', 'property_id', 'image_file_name', 'caption', 'ordering'));
+      $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', 'ordering'));
 
       // Loop over the list of images and insert them...
       // Need to select them all from the file_details table first...
