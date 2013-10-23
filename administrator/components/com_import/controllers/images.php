@@ -41,7 +41,7 @@ class ImportControllerImages extends JControllerForm {
 
     $model = JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
 
-    $model = JModelLegacy::getInstance('Images', 'HelloWorldModel');
+    $model = JModelLegacy::getInstance('Image', 'HelloWorldModel');
 
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
