@@ -36,7 +36,6 @@ class ImportControllerImages extends JControllerForm {
 
     jimport('joomla.filesystem.folder');
 
-
     JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
 
     $model = JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
@@ -135,13 +134,13 @@ class ImportControllerImages extends JControllerForm {
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
 
-
       /* Create folders for each of the profiles for the property, if they don't exist */
       foreach ($baseDir as $dir) {
         if (!file_exists($dir)) {
           JFolder::create($dir);
         }
       }
+      
 
       // Move each image and create the profile images
       foreach ($existing_images as $key => $value) {
@@ -166,7 +165,8 @@ class ImportControllerImages extends JControllerForm {
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumbs', 100, 100);
           $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumb', 210, 120);
         } catch (Exception $e) {
-          print_r($e);die;
+            JLog::add($e->message . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
+
         }
       }
     }
