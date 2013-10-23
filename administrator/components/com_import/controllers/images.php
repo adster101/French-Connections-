@@ -102,9 +102,6 @@ class ImportControllerImages extends JControllerForm {
         $value['ordering'] = $position + 1;
       }
 
-
-
-
       $query->clear();
       $query = $db->getQuery(true);
 
@@ -134,14 +131,12 @@ class ImportControllerImages extends JControllerForm {
         }
       }
 
-
-
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
 
 
-      /* Create folders for each of the profiles for the property, if they don't exist
+      /* Create folders for each of the profiles for the property, if they don't exist */
       foreach ($baseDir as $dir) {
         if (!file_exists($dir)) {
           JFolder::create($dir);
@@ -158,7 +153,7 @@ class ImportControllerImages extends JControllerForm {
         // Move the image into the relevant folder, if we don't have it already...
         if (!file_exists($image)) {
 
-          $move = copy('D:\\\Pics/_images/' . $value['fde_filename'], $filepath . '/' . $value['fde_filename']);
+          $move = copy('/home/sysadmin/Pictures/' . $value['fde_filename'], $filepath . '/' . $value['fde_filename']);
 
           if (!$move) {
             JLog::add('Unable to move/locate image - ' . $image['image_file_name'] . '(' . $image['id'] . ')', JLog::ERROR, 'import_images');
@@ -173,7 +168,7 @@ class ImportControllerImages extends JControllerForm {
         } catch (Exception $e) {
 
         }
-      }*/
+      }
     }
 
 
