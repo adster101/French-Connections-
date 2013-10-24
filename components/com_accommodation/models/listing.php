@@ -164,6 +164,7 @@ class AccommodationModelListing extends JModelForm {
         d.unit_title,
         d.description,
         e.title as city,
+        n.title as region,
         g.title as property_type,
         m.title as accommodation_type,
         h.title as department,
@@ -222,6 +223,7 @@ class AccommodationModelListing extends JModelForm {
       $query->where('(m.attribute_type_id = 2 or m.id is null)');
 
       $query->leftJoin('#__classifications h ON h.id = c.department');
+      $query->leftJoin('#__classifications n ON n.id = c.region');
       $query->leftJoin('#__attributes i ON i.id = d.base_currency');
       $query->leftJoin('#__attributes j ON j.id = d.tariff_based_on');
       $query->leftJoin('#__attributes k ON k.id = d.changeover_day');

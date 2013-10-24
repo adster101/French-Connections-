@@ -2,8 +2,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-if ($this->crumbs) : // Loop over the crumbs trail, if there is one  
-  ?>
+if ($this->crumbs) : // Loop over the crumbs trail, if there is one ?>
   <ul class="breadcrumb">
 
     <?php foreach ($this->crumbs as $key => $value) : ?>
