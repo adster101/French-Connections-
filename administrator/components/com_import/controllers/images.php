@@ -22,14 +22,15 @@ class ImportControllerImages extends JControllerForm {
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     // Open a handle to the import file
-    $handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
+     $handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
+    // $handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv',"r");
 
     // Get a db instance
     $db = JFactory::getDBO();
 
     $previous_property_id = '';
 
-    $db->truncateTable('#__property_images_library');
+    // $db->truncateTable('#__property_images_library');
 
     // Create a log file for the email kickers
     jimport('joomla.error.log');
@@ -142,34 +143,35 @@ class ImportControllerImages extends JControllerForm {
       }
       
 
-      // Move each image and create the profile images
-      foreach ($existing_images as $key => $value) {
+      /* Move each image and create the profile images */
+      foreach ($existing_images as $key => $blah) {
 
         $filepath = COM_IMAGE_BASE . $line[0];
 
-        $image = $filepath . '/' . $value['fde_filename'];
+        $image_path = $filepath . '/' . $blah['fde_filename'];
 
         // Move the image into the relevant folder, if we don't have it already...
-        if (!file_exists($image)) {
+        if (!file_exists($image_path)) {
 
           $move = copy('/home/sysadmin/Pictures/' . $value['fde_filename'], $filepath . '/' . $value['fde_filename']);
+          //$move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
 
           if (!$move) {
-            JLog::add('Unable to move/locate image - ' . $value['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
+            JLog::add('Unable to move/locate image - ' . $blah['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
           }
         }
 
         // Image has been uploaded, let's create some image profiles...
         try {
-          $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'gallery', 578, 435);
-          $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumbs', 100, 100);
-          $model->generateImageProfile($image, (int) $line[0], $value['fde_filename'], 'thumb', 210, 120);
+          $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'gallery', 578, 435);
+          $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'thumbs', 100, 100);
+          $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'thumb', 210, 120);
         } catch (Exception $e) {
-            JLog::add($e->getMessage() . ' - ' . $value['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
+            JLog::add($e->getMessage() . ' - ' . $blah['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
 
         }
-      }
-    }
+      } 
+    } 
 
 
 
