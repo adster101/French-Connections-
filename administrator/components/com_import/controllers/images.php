@@ -25,6 +25,7 @@ class ImportControllerImages extends JControllerForm {
     $handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
     
     //$handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
+    
     // Get a db instance
     $db = JFactory::getDBO();
 
@@ -105,7 +106,8 @@ class ImportControllerImages extends JControllerForm {
       }
 
       $query->clear();
-      $query = $db->getQuery(true);
+      
+      /*$query = $db->getQuery(true);
 
       $query->insert('#__property_images_library');
       $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', 'ordering'));
@@ -131,7 +133,7 @@ class ImportControllerImages extends JControllerForm {
           print_r($insert_string);
           die;
         }
-      }
+      } */
 
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
@@ -171,6 +173,11 @@ class ImportControllerImages extends JControllerForm {
         } catch (Exception $e) {
           JLog::add($e->getMessage() . ' - ' . $blah['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
         }
+        
+        unset($move);
+        unset($image_path);
+        unset($images_to_insert);
+        
       }
     }
 
