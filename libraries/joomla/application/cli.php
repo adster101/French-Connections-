@@ -123,11 +123,12 @@ class JApplicationCli extends JApplicationBase
 	 */
 	public static function getInstance($name = null)
 	{
-		// Only create the object if it doesn't exist.
+
+    // Only create the object if it doesn't exist.
 		if (empty(self::$instance))
 		{
 			if (class_exists($name) && (is_subclass_of($name, 'JApplicationCli')))
-			{
+			{  
 				self::$instance = new $name;
 			}
 			else
