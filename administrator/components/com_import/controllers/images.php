@@ -30,7 +30,8 @@ class ImportControllerImages extends JControllerForm {
 
     $previous_property_id = '';
 
-    // $db->truncateTable('#__property_images_library');
+    $db->truncateTable('#__property_images_library');
+    
     // Create a log file for the email kickers
     jimport('joomla.error.log');
 
@@ -98,14 +99,14 @@ class ImportControllerImages extends JControllerForm {
       
       $order = explode(',',$images);
       
+      $images_to_insert = array();
+      
       foreach ($order as $key => $value) {
 
         $existing_images[$value]['ordering'] = $key + 1;
         $images_to_insert[$value] = $existing_images[$value];
         
       }
-
-
 
       $query->clear();
       $query = $db->getQuery(true);
@@ -116,7 +117,6 @@ class ImportControllerImages extends JControllerForm {
       // Loop over the list of images and insert them...
       // Need to select them all from the file_details table first...
       $insert_string = '';
-
 
       foreach ($images_to_insert as $images => $image) {
         $insert_string = "$version_id[0],$line[0],'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'," . (int) $image['ordering'];
