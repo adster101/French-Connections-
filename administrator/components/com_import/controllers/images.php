@@ -23,6 +23,7 @@ class ImportControllerImages extends JControllerForm {
 
     // Open a handle to the import file
     $handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
+    
     //$handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
     // Get a db instance
     $db = JFactory::getDBO();
@@ -65,7 +66,6 @@ class ImportControllerImages extends JControllerForm {
         continue;
       }
 
-      $ordering = 1;
 
       // Firstly, get all the images associated with this unit
       $external_images = explode(',', $line[2]);
