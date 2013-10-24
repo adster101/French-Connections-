@@ -155,7 +155,7 @@ class ImportControllerImages extends JControllerForm {
         // Move the image into the relevant folder, if we don't have it already...
         if (!file_exists($image_path)) {
 
-          $move = copy('/home/sysadmin/Pictures/' . $value['fde_filename'], $filepath . '/' . $value['fde_filename']);
+          $move = copy('/home/sysadmin/Pictures/' . $blah['fde_filename'], $filepath . '/' . $blah['fde_filename']);
           //$move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
 
           if (!$move) {
