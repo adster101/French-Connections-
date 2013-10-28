@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       2.5
  */
-class JHtmlProperty {
+class JHtmlGeneral {
 
   /**
    * Display an image.

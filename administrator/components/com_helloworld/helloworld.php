@@ -14,6 +14,9 @@ JLoader::register('HelloWorldHelper', dirname(__FILE__) . '/helpers/helloworld.p
 // Register the JHtmlProperty class
 JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
+// Register the Special Offers helper file
+JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/html/helpers/general.php');
+
 // import joomla controller library
 jimport('joomla.application.component.controller');
 
