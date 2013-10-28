@@ -53,7 +53,7 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
       <?php if (count($this->items) == 0) : ?>
 
 
-        <div class="alert alert-notice">
+        <div class="alert alert-info">
           <?php echo JText::_('COM_SPECIALOFFERS_NO_OFFERS_FOUND'); ?>
         </div>
 

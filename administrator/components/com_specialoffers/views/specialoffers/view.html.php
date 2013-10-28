@@ -75,7 +75,7 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
     $document = JFactory::getDocument();
 
     if ($canDo->get('core.create')) {
-      JToolBarHelper::addNew('specialoffer.add', 'JTOOLBAR_NEW');
+      JToolBarHelper::addNew('specialoffer.add', 'COM_SPECIAL_OFFERS_NEW_OFFER');
     }
 
     if ($canDo->get('core.edit')) {

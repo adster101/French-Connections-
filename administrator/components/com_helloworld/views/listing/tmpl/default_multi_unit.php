@@ -109,10 +109,20 @@ $data['form'] = $this->form;
                   </td>
 
 
+
                 </tr>
               <?php else : ?>
               <?php endif; ?>
             <?php endforeach; ?>
+            <tr>
+              <td colspan="7">
+                <?php echo 
+                <button class="btn  btn-success pull-right" onclick="Joomla.submitbutton('unitversions.add')">
+                  <i class="icon icon-plus"></i> 
+                    <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT'); ?>
+                </button>
+              </td>
+            </tr>
           </tbody>
           <tfoot>
             <tr>

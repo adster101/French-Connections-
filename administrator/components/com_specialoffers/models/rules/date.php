@@ -38,7 +38,6 @@ class JFormRuleDate extends JFormRuleEmail
    if (preg_match("/^(\d{2})-(\d{2})-(\d{4})$/", $value, $matches)) {
 
      if (checkdate($matches[2], $matches[1], $matches[3])) {
-          
             return true;
         }
     }

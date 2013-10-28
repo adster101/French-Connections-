@@ -107,7 +107,7 @@ class ImportControllerImages extends JControllerForm {
 
       $query->clear();
       
-      /*$query = $db->getQuery(true);
+      $query = $db->getQuery(true);
 
       $query->insert('#__property_images_library');
       $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', 'ordering'));
@@ -133,13 +133,15 @@ class ImportControllerImages extends JControllerForm {
           print_r($insert_string);
           die;
         }
-      } */
+      } 
 
-      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
+      /* 
+      
+      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';       
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
 
-      /* Create folders for each of the profiles for the property, if they don't exist */
+      // Create folders for each of the profiles for the property, if they don't exist 
       foreach ($baseDir as $dir) {
         if (!file_exists($dir)) {
           JFolder::create($dir);
@@ -147,7 +149,7 @@ class ImportControllerImages extends JControllerForm {
       }
 
 
-      /* Move each image and create the profile images */
+      // Move each image and create the profile images 
       foreach ($images_to_insert as $key => $blah) {
 
         $filepath = COM_IMAGE_BASE . $line[0];
@@ -178,7 +180,9 @@ class ImportControllerImages extends JControllerForm {
         unset($image_path);
         unset($images_to_insert);
         
-      }
+        // Delete the original image here - space becomes an issue otherwise.
+        
+      }*/
     }
 
 

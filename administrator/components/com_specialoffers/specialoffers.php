@@ -11,6 +11,10 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_specialoffers'))
 // Register the Special Offers helper file
 JLoader::register('SpecialOffersHelper', dirname(__FILE__) . '/helpers/specialoffers.php');
 
+// Register the Special Offers helper file
+JLoader::register('JHtmlGeneral', JPATH_SITE . 'libraries/frenchconnections/html/helpers/general.php');
+
+// Register the helloworld helper for the side navigation.
 JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
 
 // import joomla controller library
