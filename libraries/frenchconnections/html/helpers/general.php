@@ -38,7 +38,7 @@ class JHtmlGeneral {
       return '';
     }
 
-    return '<img src="' . JUri::root() . $src . '" alt="" />';
+    return '<img src="' . JUri::root() . $src . '" alt="" class="thumbnail" />';
   }
 
   /*
