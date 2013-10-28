@@ -65,8 +65,14 @@ $data['form'] = $this->form;
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'contactdetails', 'edit', 'envelope', 'Contact Details', $item, 'property_id', 'btn') ?>
 
                   </td>
+                <tr>
+                  <td colspan="7">
+                    <?php echo JHtml::_('general.button', 'btn btn-success pull-right', 'unitversions.add','icon icon-plus', 'COM_HELLOWORLD_HELLOWORLD_ADD_NEW_UNIT'); ?>
+
+                  </td>
                 </tr>
-                
+                </tr>
+
               <?php else : ?>
               <?php endif; ?>
             <?php endforeach; ?>

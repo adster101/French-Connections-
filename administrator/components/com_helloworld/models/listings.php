@@ -20,7 +20,7 @@ class HelloWorldModelListings extends JModelList {
   public function __construct($config = array()) {
     if (empty($config['filter_fields'])) {
       $config['filter_fields'] = array(
-          'id', 'a.id',
+          'a.id', 'a.id',
           'title', 'a.title',
           'alias', 'a.alias',
           'review', 'a.review',
@@ -147,7 +147,9 @@ class HelloWorldModelListings extends JModelList {
       date_format(a.created_on, "%D %M %Y") as created_on,
       date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
-      a.review
+      a.review,
+      d.id as unit_id,
+      f.image_file_name as thumbnail
     ');
 
     // Join the user details if the user has the ACL rights.
@@ -202,7 +204,7 @@ class HelloWorldModelListings extends JModelList {
       if ($snooze_state == false || $snooze_state == 1) {
 
         // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
-        $query->where('(a.snooze_until < NOW() OR a.snooze_until is null)');
+        $query->where('(a.snooze_until < ' . JFactory::getDate()->calendar("Y-m-d") . ' OR a.snooze_until is null)');
       } elseif ($snooze_state == 2) {
 
         // Don't filter, user wants to see all snoozed props as well as not snoozed etc
@@ -243,7 +245,17 @@ class HelloWorldModelListings extends JModelList {
       a.id = b.property_id
       and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id)
     )');
-    $listOrdering = $this->getState('list.ordering', '');
+    
+    // Join the units for the image
+    $query->join('left', '#__unit d on d.property_id = a.id');
+    $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
+    $query->where('d.ordering = 1');
+    
+    // Join the images, innit!
+    $query->join('left', '#__property_images_library f on e.id = f.version_id' );
+    $query->where('f.ordering = 1');
+    
+    $listOrdering = $this->getState('list.ordering', 'a.id');
     $listDirn = $db->escape($this->getState('list.direction', ''));
 
     // Order if we have a specific ordering.
