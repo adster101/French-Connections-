@@ -12,6 +12,9 @@ if (count($this->tariffs > 0)) {
 }
 
 JHTML::_('behavior.formvalidation');
+
+// Register the Special Offers helper file
+JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 ?>
 
 <div class="row-fluid">
@@ -61,13 +64,11 @@ JHTML::_('behavior.formvalidation');
         <span class="lead large">
           <?php if ($this->tariffs) { ?>
             <strong>
-              <?php
-              if (min($price_range) == max($price_range)) {
-                echo htmlspecialchars($this->item->base_currency) . min($price_range);
-              } else {
-                echo htmlspecialchars($this->item->base_currency) . min($price_range) . ' - ' . htmlspecialchars($this->item->base_currency) . max($price_range);
-              }
-              ?>
+              <?php if (min($price_range) == max($price_range)) : ?>
+                &pound; <?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id)); ?>
+              <?php else: ?>
+                &pound;<?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id)) . ' - &pound;' . htmlspecialchars(JHtmlGeneral::price(max($price_range), $this->item->base_currency_id)); ?>
+              <?php endif; ?>
             </strong> 
           </span>
           <?php if ($this->item->tariffs_based_on) : ?>
@@ -267,12 +268,6 @@ JHTML::_('behavior.formvalidation');
   </div>
 </div>
 
-<!--<div class="row-fluid" id="travel">
-  <div class="span12">-->
-<?php //echo $this->loadTemplate('navigator');    ?>
-<!--</div>
-</div>-->
-
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
@@ -286,13 +281,12 @@ JHTML::_('behavior.formvalidation');
 
   </div>
 </div>
-
-<!--<div class="row-fluid" id="activities">
-  <div class="span12">-->
-<?php //echo $this->loadTemplate('navigator');    ?>
-<!--</div>
-</div>-->
 <div class="row-fluid" id="activities">
+  <div class="span12">
+    <?php echo $this->loadTemplate('navigator'); ?>
+  </div>
+</div>
+<div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->unit_title)) ?></h3> 

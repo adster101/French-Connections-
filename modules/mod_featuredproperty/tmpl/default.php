@@ -36,7 +36,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
                 <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
                 <?php echo $item->occupancy; ?>
                 <?php if (!empty($item->price)) : ?> |
-                  <?php echo JHtml::_('general.price',$item->price, $item->base_currency); ?>
+                  &pound; <?php echo JHtml::_('general.price',$item->price, $item->base_currency); ?>
                 <?php endif; ?>
               </p>
             </div>      

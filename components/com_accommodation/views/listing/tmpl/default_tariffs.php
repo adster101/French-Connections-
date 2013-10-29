@@ -17,6 +17,9 @@ defined('_JEXEC') or die('Restricted access');
     <td>
       <?php echo htmlspecialchars($this->item->base_currency); ?>
       <?php echo htmlspecialchars($tariff->tariff); ?>
+      <?php if ($this->item->base_currency_id == 439) : ?>
+        (&pound;<?php echo htmlspecialchars(JHtml::_('general.price', $tariff->tariff, $this->item->base_currency_id)); ?>)
+      <?php endif; ?>
       <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>  
     </td>
   </tr>

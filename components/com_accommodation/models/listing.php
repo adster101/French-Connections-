@@ -169,6 +169,7 @@ class AccommodationModelListing extends JModelForm {
         m.title as accommodation_type,
         h.title as department,
         i.title as base_currency,
+        i.id as base_currency_id,
         j.title as tariffs_based_on,
         u.name,
         c.website,
