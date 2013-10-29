@@ -93,9 +93,9 @@
     />
   
 		<field name="redirect"
-			type="text"
+			type="menuitem"
 			size="30"
-			label="COM_ENQUIRIES_FIELD_CONFIG_REDIRECT_LABEL"
+			label="Menu item to redirect to after a successful enquiry"
 			description="COM_ENQUIRIES_FIELD_CONFIG_REDIRECT_DESC" />
       
   </fieldset> 

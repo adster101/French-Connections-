@@ -1,4 +1,5 @@
 <?php
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -11,90 +12,93 @@ jimport('joomla.application.component.model');
 /**
  * Hello Table class
  */
-class EnquiriesTableEnquiry extends JTable
-{
+class EnquiriesTableEnquiry extends JTable {
 
-	/**
-	 * Constructor
-	 *
-	 * @param object Database connector object
-	 */
-	function __construct(&$db)
-	{
-		parent::__construct('#__enquiries', 'id', $db);
-	}
+  /**
+   * Constructor
+   *
+   * @param object Database connector object
+   */
+  function __construct(&$db) {
+    parent::__construct('#__enquiries', 'id', $db);
+  }
 
-  public function load($pk = null, $reset = true)
-	{
-		if (parent::load($pk, $reset))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-	/**
-	 * Method to set the publishing state for a row or list of rows in the database
-	 * table.  The method respects checked out rows by other users and will attempt
-	 * to checkin rows that it can after adjustments are made.
-	 *
-	 * @param	mixed	An optional array of primary key values to update.  If not
-	 *					set the instance property value is used.
-	 * @param	integer The publishing state. eg. [0 = unpublished, 1 = published]
-	 * @param	integer The user id of the user performing the operation.
-	 * @return	boolean	True on success.
-	 * @since	1.6
-	 */
-	public function publish($pks = null, $state = 1, $userId = 0)
-	{
-		$k = $this->_tbl_key;
+  public function load($pk = null, $reset = true) {
+    if (parent::load($pk, $reset)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-		// Sanitize input.
-		JArrayHelper::toInteger($pks);
-		$userId = (int) $userId;
-		$state  = (int) $state;
+  /**
+   * Method to set the publishing state for a row or list of rows in the database
+   * table.  The method respects checked out rows by other users and will attempt
+   * to checkin rows that it can after adjustments are made.
+   *
+   * @param	mixed	An optional array of primary key values to update.  If not
+   * 					set the instance property value is used.
+   * @param	integer The publishing state. eg. [0 = unpublished, 1 = published]
+   * @param	integer The user id of the user performing the operation.
+   * @return	boolean	True on success.
+   * @since	1.6
+   */
+  public function publish($pks = null, $state = 1, $userId = 0) {
+    $k = $this->_tbl_key;
 
-		// If there are no primary keys set check to see if the instance key is set.
-		if (empty($pks))
-		{
-			if ($this->$k) {
-				$pks = array($this->$k);
-			}
-			// Nothing to set publishing state on, return false.
-			else {
-				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
-				return false;
-			}
-		}
+    // Sanitize input.
+    JArrayHelper::toInteger($pks);
+    $userId = (int) $userId;
+    $state = (int) $state;
 
-		// Build the WHERE clause for the primary keys.
-		$where = $k.' IN ('.implode(',', $pks).')';
+    // If there are no primary keys set check to see if the instance key is set.
+    if (empty($pks)) {
+      if ($this->$k) {
+        $pks = array($this->$k);
+      }
+      // Nothing to set publishing state on, return false.
+      else {
+        $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+        return false;
+      }
+    }
 
-		// Update the publishing state for rows with the given primary keys.
-		$this->_db->setQuery(
-			'UPDATE '.$this->_db->quoteName($this->_tbl).
-			' SET '.$this->_db->quoteName('state').' = '.(int) $state .
-			' WHERE ('.$where.')'
-		);
+    // Build the WHERE clause for the primary keys.
+    $where = $k . ' IN (' . implode(',', $pks) . ')';
 
-		try
-		{
-			$this->_db->execute();
-		}
-		catch (RuntimeException $e)
-		{
-			$this->setError($e->getMessage());
-			return false;
-		}
+    // Update the publishing state for rows with the given primary keys.
+    $this->_db->setQuery(
+            'UPDATE ' . $this->_db->quoteName($this->_tbl) .
+            ' SET ' . $this->_db->quoteName('state') . ' = ' . (int) $state .
+            ' WHERE (' . $where . ')'
+    );
 
-		// If the JTable instance value is in the list of primary keys that were set, set the instance.
-		if (in_array($this->$k, $pks)) {
-			$this->state = $state;
-		}
+    try {
+      $this->_db->execute();
+    } catch (RuntimeException $e) {
+      $this->setError($e->getMessage());
+      return false;
+    }
 
-		$this->setError('');
-		return true;
-	}
+    // If the JTable instance value is in the list of primary keys that were set, set the instance.
+    if (in_array($this->$k, $pks)) {
+      $this->state = $state;
+    }
+
+    $this->setError('');
+    return true;
+  }
+
+  public function check() {
+
+    if (isset($this->start_date) && isset($this->end_date)) {
+      $this->start_date = JFactory::getDate($this->start_date)->calendar('Y-m-d');
+      $this->end_date = JFactory::getDate($this->end_date)->calendar('Y-m-d');
+      return true;
+    }
+
+    return false;
+  }
+
 }
+

@@ -145,7 +145,7 @@ class AccommodationModelListing extends JModelForm {
         c.phone_2,
         c.phone_3,
         c.city as city_id,
-        d.changeover_day,
+        k.title as changeover_day,
         d.toilets,
         d.bathrooms,
         ( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms, 

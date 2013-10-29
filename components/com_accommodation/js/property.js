@@ -47,7 +47,7 @@ window.addEvent('domready', function() {
   document.formvalidator.setHandler('telephone',
     function (value) {
       // Only allow digits, spaces and pluses
-      regex=/^[\d +]{11,25}$/;
+      regex=/^[\d\s()+]{11,25}$/;
       return regex.test(value);
     });
   document.formvalidator.setHandler('message',
@@ -55,9 +55,9 @@ window.addEvent('domready', function() {
       regex=/^[\w-\/., !"'\n]+$/;
       return regex.test(value);
     });
-  document.formvalidator.setHandler('date',
+  document.formvalidator.setHandler('ukdate',
     function (value) {
-      regex=/^(\d{4})-(\d{2})-(\d{2})$/;
+      regex=/^(\d{2})-(\d{2})-(\d{4})$/;
       return regex.test(value);
     });
  document.formvalidator.setHandler('numeric',

@@ -133,15 +133,30 @@ JHTML::_('behavior.formvalidation');
           <span class="pull-right"><?php echo $this->item->property_type; ?></span>
         </p>
       <?php endif; ?>
+      <!-- Accommodation type -->
+      <?php if ($this->item->accommodation_type) : ?>
+        <p class="dotted">
+          <?php echo JText::_('COM_ACCOMMODATION_SITE_ACCOMMODATION_TYPE'); ?>
+          <span class="pull-right"><?php echo $this->item->accommodation_type; ?></span>
+        </p>
+      <?php endif; ?>
       <!-- External facilities inc pool type-->
-      <?php if (array_key_exists('External Facilities', $this->facilities)) : ?>
+      <?php if (array_key_exists('External Facilities', $this->facilities) || (array_key_exists('Suitability', $this->facilities))) : ?>
         <p class="dotted clearfix">
-          <span>
-            <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
-            <?php echo implode(',', $this->facilities['External Facilities']) ?>
-          </span>         
+          <?php if (array_key_exists('External Facilities', $this->facilities)) : ?> 
+            <span>
+              <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
+              <?php echo implode(', ', $this->facilities['External Facilities']) ?>
+            </span><br />
+          <?php endif; ?>  
+          <?php if (array_key_exists('Suitability', $this->facilities)) : ?>
+            <span>
+              <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY'); ?></strong>
+              <?php echo implode(', ', $this->facilities['Suitability']) ?>
+            </span>         
+          <?php endif; ?>      
         </p>   
-      <?php endif; ?>   
+      <?php endif; ?>
 
       <hr class="clear" />
 
@@ -227,7 +242,7 @@ JHTML::_('behavior.formvalidation');
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
-      <h2><?php echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->unit_title) ?></h2>  
+      <h2><?php echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->accommodation_type, $this->item->unit_title) ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->description) : ?>
       <?php echo $this->item->description; ?>
@@ -261,7 +276,7 @@ JHTML::_('behavior.formvalidation');
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
-      <h3><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN')) ?></h3>  
+      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h3>  
     <?php endif; ?>
     <?php if ($this->item->getting_there) : ?>
       <?php echo $this->item->getting_there; ?>
@@ -277,14 +292,19 @@ JHTML::_('behavior.formvalidation');
 <?php //echo $this->loadTemplate('navigator');    ?>
 <!--</div>
 </div>-->
-<div class="row-fluid">
+<div class="row-fluid" id="activities">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->unit_title)) ?></h3> 
     <?php endif; ?>
+    <!-- Activities list -->
+    <?php if (array_key_exists('Activities nearby', $this->facilities)) : ?>
+      <p><?php echo implode(', ', $this->facilities['Activities nearby']) ?></p>         
+    <?php endif; ?>
     <?php if ($this->item->activities_other) : ?>
       <?php echo $this->item->activities_other; ?>
     <?php endif; ?>      
+
   </div>
   <div class="span4"> 
 
@@ -388,7 +408,7 @@ JHTML::_('behavior.formvalidation');
       <?php if (array_key_exists('Suitability', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY') ?></td>
-          <td><?php echo implode(',', $this->facilities['Suitability']) ?></td>         
+          <td><?php echo implode(', ', $this->facilities['Suitability']) ?></td>         
         </tr>
       <?php endif; ?>
 
@@ -403,7 +423,7 @@ JHTML::_('behavior.formvalidation');
       <?php if (array_key_exists('Property Facilities', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
-          <td><?php echo implode(',', $this->facilities['Property Facilities']) ?></td>         
+          <td><?php echo implode(', ', $this->facilities['Property Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
 
@@ -416,7 +436,7 @@ JHTML::_('behavior.formvalidation');
       <?php if (array_key_exists('External Facilities', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
-          <td><?php echo implode(',', $this->facilities['External Facilities']) ?></td>         
+          <td><?php echo implode(', ', $this->facilities['External Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
       <?php if ($this->item->external_facilities_other) : ?>
@@ -428,7 +448,7 @@ JHTML::_('behavior.formvalidation');
       <?php if (array_key_exists('Kitchen features', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
-          <td><?php echo implode(',', $this->facilities['Kitchen features']) ?></td>         
+          <td><?php echo implode(', ', $this->facilities['Kitchen features']) ?></td>         
         </tr>      
       <?php endif; ?>       
     </table>
@@ -501,7 +521,7 @@ JHTML::_('behavior.formvalidation');
     <?php if ($this->tariffs) : ?>
       <?php echo $this->loadTemplate('tariffs'); ?>
     <?php else: ?>
-    <p>No tariffs were found for this property. Please enquire with the owner for rental rates for this property</p>
+      <p>No tariffs were found for this property. Please enquire with the owner for rental rates for this property</p>
     <?php endif; ?>
   </div>
   <div class="span4">
@@ -571,32 +591,32 @@ JHTML::_('behavior.formvalidation');
 <script>
   jQuery(document).ready(function() {
 
-  initialize();
+    initialize();
   });
 
   function initialize() {
-  var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>,  <?php echo $this->item->longitude ?>);
-  var myOptions = {
-  center: myLatLng,
-  zoom: 6,
-  mapTypeId: google.maps.MapTypeId.ROADMAP,
-  disableDefaultUI: true,
-  zoomControl:true
-  };
-  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  var marker = new google.maps.Marker({
-  position: myLatLng,
-  map:map,
-  title:"<?php echo $this->item->unit_title ?>"
-  });
-  google.maps.event.addListener(map, 'zoom_changed', function() {
-  // 3 seconds after the center of the map has changed, pan back to the
-  // marker.
-  window.setTimeout(function() {
-  map.panTo(marker.getPosition());
-  }, 3000);
-  });
-  }    
+    var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>, <?php echo $this->item->longitude ?>);
+    var myOptions = {
+      center: myLatLng,
+      zoom: 6,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      zoomControl: true
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: "<?php echo $this->item->unit_title ?>"
+    });
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+      // 3 seconds after the center of the map has changed, pan back to the
+      // marker.
+      window.setTimeout(function() {
+        map.panTo(marker.getPosition());
+      }, 3000);
+    });
+  }
 
 
 </script>
