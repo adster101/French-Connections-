@@ -234,7 +234,7 @@ JHTML::_('behavior.formvalidation');
     </div>
   </div>
 </div>
-<div class="row-fluid" id="description">
+<div class="row-fluid" id="about">
   <div class="span12">
     <?php echo $this->loadTemplate('navigator'); ?>
   </div>

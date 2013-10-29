@@ -58,4 +58,42 @@ class JHtmlGeneral {
     return $html;
   }
 
+  /**
+   * Returns the price in GBP dependent on the base currency and exchange rate.
+   * 
+   * @param type $price
+   * @param type $baseCurrency
+   * @param type $exchangeRate
+   */
+  public static function price($price = '', $baseCurrency = 438, $exchangeRate = '') {
+
+    if ($baseCurrency == 439) {
+      $exchange_rate = $this->getExchangeRate($baseCurrency);
+    }
+    // Default currency is GBP
+    // If base currency is not GBP e.g. 439
+    // then convert EUR price to GBP
+  }
+
+  /**
+   * Method to get the exchange rate for the currency given
+   * 
+   * @param type $currencyID
+   */
+  public function getExchangeRate($currencyID = '') {
+
+    // TO DO - mem cache this
+    $db = JFactory::getDbo();
+
+    $query = $db->getQuery(true);
+
+    $query->select(exchange_rate);
+    $query->from('#__currency_conversion');
+    $query->where('id=' . (int) $currencyId);
+
+    $exchange_rate = $db->loadObject();
+
+    return $exchange_rate;
+  }
+
 }

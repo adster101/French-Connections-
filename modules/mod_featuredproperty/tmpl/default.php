@@ -7,6 +7,12 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+
+// Register the Special Offers helper file
+JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
+
+
+
 ?>
 
 <div class="row-fluid">
@@ -30,10 +36,9 @@ defined('_JEXEC') or die;
                 <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
                 <?php echo $item->occupancy; ?>
                 <?php if (!empty($item->price)) : ?> |
-                  <?php echo '&pound;' . $item->price; ?>
+                  <?php echo JHtml::_('general.price',$item->price, $item->base_currency); ?>
                 <?php endif; ?>
               </p>
-
             </div>      
           </div>
           <?php if ($key+1 != count($this->items)) : ?>

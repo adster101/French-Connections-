@@ -625,6 +625,5 @@ class AccommodationModelListing extends JModelForm {
       }
     }
     return true;
-  }
-
+  }  
 }
