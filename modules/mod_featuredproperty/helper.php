@@ -46,7 +46,7 @@ class modFeaturedPropertyHelper {
     $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))' );
     $query->join('left', '#__classifications g ON g.id = e.department');
     $query->join('left', '#__featured_properties h on h.property_id = a.id');
-    $query->join('left', '#__property_images_library i on e.id = i.version_id');
+    $query->join('left', '#__property_images_library i on c.id = i.version_id');
     $query->where('b.ordering = 1');
     $query->where('a.published = 1');
     $query->where('b.published = 1');
