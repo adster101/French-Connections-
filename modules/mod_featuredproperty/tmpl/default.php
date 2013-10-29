@@ -33,8 +33,10 @@ defined('_JEXEC') or die;
                   <?php echo '&pound;' . $item->price; ?>
                 <?php endif; ?>
               </p>
+
             </div>      
-          </div>
+          </div>  
+          <hr />
         <?php } ?>
       <?php } ?>
     </div>
