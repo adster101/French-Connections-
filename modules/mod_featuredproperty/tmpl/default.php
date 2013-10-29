@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
             <div class="span6"> 
               <p>
                 <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
-                  <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="img-rounded thumbnail" />
+                  <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="img-rounded" />
                 </a>
               </p>
             </div>
@@ -36,7 +36,7 @@ defined('_JEXEC') or die;
 
             </div>      
           </div>
-          <?php if ($key == count($this->items)) : ?>
+          <?php if ($key+1 != count($this->items)) : ?>
             <hr />
           <?php endif; ?>
         <?php } ?>
