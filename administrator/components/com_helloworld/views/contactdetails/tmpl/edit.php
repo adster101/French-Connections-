@@ -32,13 +32,37 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       echo $tabs_layout->render($data);
       ?>
 
-      <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
+
+      <fieldset class="adminform form-horizontal">
+
+        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend> 
 
 
-      <?php echo $this->form->getLabel('contact_override_note'); ?>
+        <?php echo $this->form->getLabel('smsprefs'); ?>
 
-      <fieldset class="adminform">
+        <div class="control-group">
+          <?php echo $this->form->getLabel('sms_alert_number'); ?>
+          <div class="controls">
+            <?php echo $this->form->getInput('sms_alert_number'); ?>
+          </div>
+        </div>
 
+        <?php if (!$this->item->sms_valid) : ?>
+          <div class="control-group">
+            <?php echo $this->form->getLabel('dummy_validation_code'); ?>
+            <div class="controls">
+              <?php echo $this->form->getInput('dummy_validation_code'); ?>
+            </div>
+          </div>
+        <?php elseif ($this->item->sms_valid) : ?>
+          <?php echo $this->form->getLabel('sms_valid_message'); ?>
+        <?php endif; ?>
+      </fieldset>   
+
+      <fieldset class="adminform">      
+
+        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
+        <?php echo $this->form->getLabel('contact_override_note'); ?>
         <div class="control-group">
           <div class="control-label">
           </div>
@@ -77,34 +101,18 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
         </div>
       </fieldset>            
 
-
-
-
       <fieldset class="adminform form-horizontal">
-
-        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend> 
-
-
-        <?php echo $this->form->getLabel('smsprefs'); ?>
+        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_PERSONAL_WEBSITE'); ?></legend>
+        <?php echo $this->form->getLabel('website_note'); ?>
 
         <div class="control-group">
-          <?php echo $this->form->getLabel('sms_alert_number'); ?>
+          <?php echo $this->form->getLabel('website'); ?>
           <div class="controls">
-            <?php echo $this->form->getInput('sms_alert_number'); ?>
+            <?php echo $this->form->getInput('website'); ?>
           </div>
         </div>
 
-        <?php if (!$this->item->sms_valid) : ?>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('dummy_validation_code'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('dummy_validation_code'); ?>
-            </div>
-          </div>
-        <?php elseif ($this->item->sms_valid) : ?>
-          <?php echo $this->form->getLabel('sms_valid_message'); ?>
-        <?php endif; ?>
-      </fieldset>   
+      </fieldset>
 
       <fieldset class="adminform form-horizontal">
         <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_BOOKING_FORM_LEGEND'); ?></legend> 

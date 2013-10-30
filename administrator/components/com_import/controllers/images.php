@@ -22,9 +22,9 @@ class ImportControllerImages extends JControllerForm {
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     // Open a handle to the import file
-    $handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
+    //$handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
 
-    //$handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
+    $handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
 
     // Get a db instance
     $db = JFactory::getDBO();
@@ -159,8 +159,8 @@ class ImportControllerImages extends JControllerForm {
         // Move the image into the relevant folder, if we don't have it already...
         if (!file_exists($image_path)) {
 
-          $move = copy('/home/sysadmin/Pictures/' . $blah['fde_filename'], $filepath . '/' . $blah['fde_filename']);
-          //$move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
+          //$move = copy('/home/sysadmin/Pictures/' . $blah['fde_filename'], $filepath . '/' . $blah['fde_filename']);
+          $move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
 
           if (!$move) {
             JLog::add('Unable to move/locate image - ' . $blah['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
@@ -174,10 +174,13 @@ class ImportControllerImages extends JControllerForm {
           $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'thumb', 210, 120);
           
           // Delete the original image here - space becomes an issue otherwise.
-          unlink('/home/sysadmin/Pictures/' . $blah['fde_filename']);
-          
+          //unlink('/home/sysadmin/Pictures/' . $blah['fde_filename']);
+          unlink('D:\\\Pics/_images/' . $blah['fde_filename']);
+ 
         } catch (Exception $e) {
           JLog::add($e->getMessage() . ' - ' . $blah['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
+
+          print_r($e);die;
         }
 
         unset($move);

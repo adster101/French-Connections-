@@ -128,7 +128,7 @@ class HelloWorldViewImages extends JViewLegacy {
     JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
 
     // Register the JHtmlProperty class
-    JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/html/fcsortablelist.php');
+    JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/helpers/html/fcsortablelist.php');
   }
 
 }

@@ -3,15 +3,24 @@
   
   <fieldset
     name="website">
+    <field 
+      name="website_note" 
+      type="note"
+      class="alert alert-notice" 
+      label=""
+      labelclass="control-label"
+      description="COM_HELLOWORLD_HELLOWORLD_WEBSITE_NOTE" />
     <field
       name="website"
       type="url"
       id="website"
-      description="PLG_USER_PROFILE_FIELD_WEB_SITE_DESC"
       filter="string"
-      label="PLG_USER_PROFILE_FIELD_WEB_SITE_LABEL"
-      message="PLG_USER_PROFILE_FIELD_WEB_SITE_MESSAGE"
+      label="COM_HELLOWORLD_HELLOWORLD_WEBSITE"
+      message="COM_HELLOWORLD_HELLOWORLD_WEBSITE_VALIDATION"
       size="30"
+      class="validate-url input-xlarge"
+      validate="url"
+      labelclass="control-label"
     />
    
   </fieldset> 

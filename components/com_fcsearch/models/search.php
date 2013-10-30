@@ -67,6 +67,11 @@ class FcSearchModelSearch extends JModelList {
     // Make this a call to get the crumbs trail?
     // Reuse the classification table instance
     // TODO - Cache the result
+    
+    if ((int) $this->getState('list.searchterm', '')) {
+      $app = JFactory::getApplication();
+      $app->redirect('/listing/' . $this->getState('list.searchterm', ''));
+    }
 
     $input = JFactory::getApplication()->input;
 
