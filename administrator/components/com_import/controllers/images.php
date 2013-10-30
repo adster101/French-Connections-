@@ -23,9 +23,9 @@ class ImportControllerImages extends JControllerForm {
 
     // Open a handle to the import file
     //$handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
-    
+
     $handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
-    
+
     // Get a db instance
     $db = JFactory::getDBO();
 
@@ -105,39 +105,39 @@ class ImportControllerImages extends JControllerForm {
         $images_to_insert[$value] = $existing_images[$value];
       }
 
-      $query->clear();
-      
-      $query = $db->getQuery(true);
+      /* $query->clear();
 
-      $query->insert('#__property_images_library');
-      $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', 'ordering'));
+        $query = $db->getQuery(true);
 
-      // Loop over the list of images and insert them...
-      // Need to select them all from the file_details table first...
-      $insert_string = '';
+        $query->insert('#__property_images_library');
+        $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', 'ordering'));
 
-      foreach ($images_to_insert as $images => $image) {
+        // Loop over the list of images and insert them...
+        // Need to select them all from the file_details table first...
+        $insert_string = '';
+
+        foreach ($images_to_insert as $images => $image) {
         $insert_string = "$version_id[0],$line[0],'" . mysql_escape_string($image['fde_filename']) . "','" . mysql_escape_string($image['fde_description']) . "'," . (int) $image['ordering'];
         $query->values($insert_string);
-      }
+        }
 
-      // Set and execute the query
-      $db->setQuery($query);
+        // Set and execute the query
+        $db->setQuery($query);
 
-      // Only do this is we find a unit version for this unit (e.g. import units first)
-      if (!empty($version_id[0]) && !empty($existing_images)) {
+        // Only do this is we find a unit version for this unit (e.g. import units first)
+        if (!empty($version_id[0]) && !empty($existing_images)) {
 
         if (!$db->execute()) {
-          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-          print_r($db->getErrorMsg());
-          print_r($insert_string);
-          die;
+        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
+        print_r($db->getErrorMsg());
+        print_r($insert_string);
+        die;
         }
-      } 
+        } */
 
-      /* 
-      
-      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';       
+
+
+      $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';
 
@@ -172,17 +172,18 @@ class ImportControllerImages extends JControllerForm {
           $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'gallery', 578, 435);
           $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'thumbs', 100, 100);
           $model->generateImageProfile($image_path, (int) $line[0], $blah['fde_filename'], 'thumb', 210, 120);
+          
+          // Delete the original image here - space becomes an issue otherwise.
+          unlink('/home/sysadmin/Pictures/' . $blah['fde_filename']);
+          
         } catch (Exception $e) {
           JLog::add($e->getMessage() . ' - ' . $blah['fde_filename'] . '(' . $line[0] . ')', JLog::ERROR, 'import_images');
         }
-        
+
         unset($move);
         unset($image_path);
         unset($images_to_insert);
-        
-        // Delete the original image here - space becomes an issue otherwise.
-        
-      }*/
+      }
     }
 
 
