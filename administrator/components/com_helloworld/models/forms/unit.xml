@@ -239,16 +239,7 @@
       multiple="true"
       id="9">
     </field>
-    <field type="spacer" name="internal_facilities_spacer" hr="true" />
-    <field
-      name="internal_facilities_other"
-      type="editor"
-      label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_LABEL"
-      description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_DESC"
-      filter="JComponentHelper::filterText"
-      buttons="false"
-      height="125px">
-    </field>
+   
   </fieldset>
   
   <fieldset name="external_facilities" description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES">
@@ -261,16 +252,6 @@
       description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
       multiple="true"
       id="10">
-    </field>
-    <field type="spacer" name="external_facilities_spacer" hr="true" />
-    <field
-      name="external_facilities_other"
-      type="editor"
-      label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_LABEL"
-      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_DESC"
-      filter="JComponentHelper::filterText"
-      buttons="false"
-      height="125px">
     </field>
   </fieldset>
   <fieldset name="kitchen_facilities" description="COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES">
@@ -341,6 +322,26 @@
   </fieldset>
 
   <fieldset name="">
+        <field type="spacer" name="external_facilities_spacer" hr="true" />
+    <field
+      name="external_facilities_other"
+      type="editor"
+      label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>
+     <field type="spacer" name="internal_facilities_spacer" hr="true" />
+    <field
+      name="internal_facilities_other"
+      type="editor"
+      label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>
     <field
       name="created_on"
       labelclass="control-label"

@@ -90,7 +90,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
             <?php echo $this->form->getInput('password2'); ?>
           </div>
         </div>  
-                <div class="control-group">
+        <div class="control-group">
           <div class="control-label">
             <?php echo $this->form->getLabel('password'); ?>
           </div>
@@ -216,6 +216,25 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
           </div>
           <div class="controls">
             <?php echo $this->form->getInput('postal_code'); ?>
+          </div>
+        </div> 
+      </fieldset>
+      <fieldset>
+        <legend><?php echo JText::_('COM_ADMIN_OVERRIDE_EXCHANGE_RATE') ?></legend>
+        <div class="control-group">
+          <div class="control-label">
+            <?php echo $this->form->getLabel('exchange_rate_eur'); ?>
+          </div>
+          <div class="controls">
+            <?php echo $this->form->getInput('exchange_rate_eur'); ?>
+          </div>
+        </div> 
+        <div class="control-group">
+          <div class="control-label">
+            <?php echo $this->form->getLabel('exchange_rate_usd'); ?>
+          </div>
+          <div class="controls">
+            <?php echo $this->form->getInput('exchange_rate_usd'); ?>
           </div>
         </div> 
       </fieldset>

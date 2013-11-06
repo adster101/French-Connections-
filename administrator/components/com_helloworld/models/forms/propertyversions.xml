@@ -50,7 +50,7 @@
         maxlength="50"
         validate="short"
         filter="string"
-     />
+      />
       <field
         labelclass="control-label"
         name="amenity_market"
@@ -144,8 +144,7 @@
       filter="string"
       validate="latlong"
       labelclass="control-label"
-      readonly="true"
-      type="hidden">
+      readonly="true">
     </field>
     
     <field
@@ -160,8 +159,7 @@
       labelclass="control-label"
       maxlength="15"
       validate="latlong"
-      readonly="true"
-      type="hidden">
+      readonly="true">
     </field>
 
     <field
@@ -213,6 +211,16 @@
       validate=""
       labelclass="control-label"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_MESSAGE">
+    </field>
+    <field
+      class="checkbox inline"
+      name="activities"
+      type="facilities"
+      label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
+      multiple="true"
+      labelclass="control-label"
+      id="8">
     </field>
     <field
       name="getting_there"

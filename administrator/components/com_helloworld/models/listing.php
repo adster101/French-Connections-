@@ -131,7 +131,7 @@ class HelloWorldModelListing extends JModelList {
     $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
 
     // Join the property type through the property attributes table
-    $query->join('left', '#__property_attributes h on (h.property_id = d.id and h.version_id = e.id)');
+    $query->join('left', '#__unit_attributes h on (h.property_id = d.id and h.version_id = e.id)');
     $query->join('left', '#__attributes i on i.id = h.attribute_id');
     $query->where('(i.attribute_type_id = 2 or i.id is null)');
 

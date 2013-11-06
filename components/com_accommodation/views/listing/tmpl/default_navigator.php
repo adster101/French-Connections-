@@ -15,11 +15,11 @@ $route = JRoute::_( $link ) ;
 
 ?>
 
-<ul class="nav nav-tabs">
-  <li><a href="<?php echo $route ?>#top">Top</a></li>
+<ul class="nav nav-tabs hidden-phone">
+  <li class="active"><a href="<?php echo $route ?>#top">Top</a></li>
   <li><a href="<?php echo $route ?>#about">Description</a></li>
   <li><a href="<?php echo $route ?>#location">Locality</a></li>
-  <li><a href="<?php echo $route ?>#activities">Activities</a></li>
+  <li><a href="<?php echo $route ?>#gettingthere">Travel</a></li>
   <?php if ($this->reviews && count($this->reviews) > 0) : ?>
     <li><a href="<?php echo $route ?>#reviews">Reviews(<?php echo count($this->reviews) ?>)</a></li>
   <?php endif; ?>

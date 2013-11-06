@@ -35,8 +35,9 @@ class ImportControllerProperty_listings extends JControllerForm {
     $handle = fopen($userfile['tmp_name'], "r");
 
 
+    $registry = new JRegistry;
 
-    while (($line = fgetcsv($handle,0,$delimiter='|')) !== FALSE) {
+    while (($line = fgetcsv($handle, 0, $delimiter = '|')) !== FALSE) {
 
       // Get the nearest city/town based on the lat and long
       $db = JFactory::getDbo();
@@ -66,7 +67,7 @@ class ImportControllerProperty_listings extends JControllerForm {
       $items = $db->loadRow();
 
       $query->clear();
-      
+
       // Do the same for airports
       $query->select('id');
       $query->select(
@@ -85,18 +86,21 @@ class ImportControllerProperty_listings extends JControllerForm {
       $query->order('distance asc');
       $db->setQuery($query, 0, 1);
       $airport = $db->loadRow();
-      
+
+      $languages_spoken = json_encode(array_unique(explode(',', $line[38])));
+      $registry->loadArray($languages_spoken);
+      $languages = (string) $registry;
 
       $query->insert('#__property_versions');
 
       $query->columns(array(
-          'property_id','title','country','area','region','department','city','location_details',
-          'local_amenities','getting_there','airport','location_type','latitude','longitude',
-          'distance_to_coast','video_url','booking_form','deposit_currency','security_currency',
-          'deposit','security_deposit','payment_deadline','evening_meal','additional_booking_info',
-          'terms_and_conditions','use_invoice_details','first_name','surname','address','phone_1',
-          'phone_2','phone_3','fax','email_1','email_2','website','review','created_on','created_by',
-          'modified_on','modified_by','published_on'
+          'property_id', 'title', 'country', 'area', 'region', 'department', 'city', 'location_details',
+          'local_amenities', 'getting_there', 'airport', 'location_type', 'latitude', 'longitude',
+          'distance_to_coast', 'video_url', 'booking_form', 'deposit_currency', 'security_currency',
+          'deposit', 'security_deposit', 'payment_deadline', 'evening_meal', 'additional_booking_info',
+          'terms_and_conditions', 'use_invoice_details', 'first_name', 'surname', 'address', 'phone_1',
+          'phone_2', 'phone_3', 'fax', 'email_1', 'email_2', 'website', 'review', 'created_on', 'created_by',
+          'modified_on', 'modified_by', 'published_on', 'languages_spoken'
       ));
       $insert_string = '';
 
@@ -104,10 +108,10 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= $line[0];
       $insert_string .= ',' . $db->quote($line[1]);
       $insert_string .= ',' . 158052; // France
-      $insert_string .= ',' . $line[2]; 
-      $insert_string .= ',' . $line[3]; 
-      $insert_string .= ',' . $line[4]; 
-      $insert_string .= ',' . $db->quote($items[0]); 
+      $insert_string .= ',' . $line[2];
+      $insert_string .= ',' . $line[3];
+      $insert_string .= ',' . $line[4];
+      $insert_string .= ',' . $db->quote($items[0]);
       $insert_string .= ',' . $db->quote($line[5]); // Location details
       $insert_string .= ',' . $db->quote($line[6]); // Local amenities
       $insert_string .= ',' . $db->quote($line[7]); // Getting there
@@ -127,7 +131,7 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $db->quote($line[21]); // additional booking info
       $insert_string .= ',' . $db->quote($line[22]); // tandc
       $insert_string .= ',' . $db->quote($line[23]); // use invoice details
-      $insert_string .= ',' . $db->quote($line[24]); 
+      $insert_string .= ',' . $db->quote($line[24]);
       $insert_string .= ',' . $db->quote($line[25]);
       $insert_string .= ',' . $db->quote($line[26]);
       $insert_string .= ',' . $db->quote($line[27]);
@@ -143,6 +147,7 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $db->quote($line[36]); // modified
       $insert_string .= ',1'; // Modified by
       $insert_string .= ',' . $db->quote($line[37]); // published on
+      $insert_string .= ',' . $db->quote($languages); // json encoded languages spoken
 
       $query->values($insert_string);
       $db->setQuery($query);

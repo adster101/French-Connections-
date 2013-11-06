@@ -361,10 +361,10 @@ class FcSearchModelSearch extends JModelList {
         $query->where('b.department = ' . $this->location);
       }
 
-      $query->join('left', '#__property_attributes e on (e.property_id = j.id and e.version_id = c.id)');
+      $query->join('left', '#__unit_attributes e on (e.property_id = j.id and e.version_id = c.id)');
       $query->join('left', '#__attributes k on k.id = e.attribute_id');
 
-      $query->join('left', '#__property_attributes f on (f.property_id = j.id and e.version_id = c.id)');
+      $query->join('left', '#__unit_attributes f on (f.property_id = j.id and e.version_id = c.id)');
       $query->join('left', '#__attributes l on l.id = f.attribute_id');
 
 
@@ -619,7 +619,7 @@ class FcSearchModelSearch extends JModelList {
 
       $query->from('#__attributes AS a');
       $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
-      $query->join('left', '#__property_attributes ap on ap.attribute_id = a.id');
+      $query->join('left', '#__unit_attributes ap on ap.attribute_id = a.id');
 
       // If any other language that en-GB load in the translation based on the lang->getTag() function...
       if ($lang == 'fr') {
@@ -935,11 +935,11 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($filters)) {
 
         foreach ($filters as $key => $value) {
-          $query->join('left', '#__property_attributes ap' . $value . ' ON ap' . $value . '.property_id = c.unit_id');
+          $query->join('left', '#__unit_attributes ap' . $value . ' ON ap' . $value . '.property_id = c.unit_id');
           $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
         }
       } else {
-        $query->join('left', '#__property_attributes ' . $filter . ' ON apact.property_id = c.unit_id');
+        $query->join('left', '#__unit_attributes ' . $filter . ' ON apact.property_id = c.unit_id');
         $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
       }
     }

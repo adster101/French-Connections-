@@ -24,7 +24,9 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 </div>
 <div class="page-header">
   <h1>
-    <?php echo $this->document->title; ?>
+    <small>
+      <?php echo $this->document->title; ?>
+    </small>
   </h1>
 </div>
 <?php if (count($this->offer)) : ?>
@@ -65,9 +67,9 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
           <?php if ($this->tariffs) { ?>
             <strong>
               <?php if (min($price_range) == max($price_range)) : ?>
-                &pound; <?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id)); ?>
+                &pound; <?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->exchange_rate_usd)); ?>
               <?php else: ?>
-                &pound;<?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id)) . ' - &pound;' . htmlspecialchars(JHtmlGeneral::price(max($price_range), $this->item->base_currency_id)); ?>
+                &pound;<?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->exchange_rate_usd)) . ' - &pound;' . htmlspecialchars(JHtmlGeneral::price(max($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->exchange_rate_usd)); ?>
               <?php endif; ?>
             </strong> 
           </span>
@@ -264,14 +266,23 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
     <?php if ($this->item->location_details) : ?>
       <?php echo $this->item->location_details; ?>
     <?php endif; ?>
+  </div>
+  <div class="span4">
+    <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
+
     <div id="map_canvas" style="width:100%; height:370px"></div>
   </div>
 </div>
 
+<div class="row-fluid" id="gettingthere">
+  <div class="span12">
+    <?php echo $this->loadTemplate('navigator'); ?>
+  </div>
+</div>
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
-      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h3>  
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->getting_there) : ?>
       <?php echo $this->item->getting_there; ?>
@@ -282,9 +293,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
   </div>
 </div>
 <div class="row-fluid" id="activities">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+
 </div>
 <div class="row-fluid">
   <div class="span8">
@@ -295,10 +304,6 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
     <?php if (array_key_exists('Activities nearby', $this->facilities)) : ?>
       <p><?php echo implode(', ', $this->facilities['Activities nearby']) ?></p>         
     <?php endif; ?>
-    <?php if ($this->item->activities_other) : ?>
-      <?php echo $this->item->activities_other; ?>
-    <?php endif; ?>      
-
   </div>
   <div class="span4"> 
 
@@ -421,24 +426,14 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
         </tr>      
       <?php endif; ?>   
 
-      <?php if ($this->item->internal_facilities_other) : ?>
-        <tr>
-          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_OTHER_INTERNAL') ?></td>
-          <td><?php echo $this->item->internal_facilities_other; ?></td>        
-        </tr>      
-      <?php endif; ?>       
+
       <?php if (array_key_exists('External Facilities', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
           <td><?php echo implode(', ', $this->facilities['External Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
-      <?php if ($this->item->external_facilities_other) : ?>
-        <tr>
-          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_OTHER_EXTERNAL') ?></td>
-          <td><?php echo $this->item->external_facilities_other; ?></td>        
-        </tr>      
-      <?php endif; ?>       
+
       <?php if (array_key_exists('Kitchen features', $this->facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>

@@ -128,8 +128,6 @@ class AccommodationModelListing extends JModelForm {
         c.latitude,
         c.longitude,
         c.distance_to_coast,
-        -- c.exchange_rate_eur,
-        -- c.exchange_rate_usd,
         c.video_url,
         c.booking_form,
         c.deposit,
@@ -154,9 +152,6 @@ class AccommodationModelListing extends JModelForm {
         d.triple_bedrooms,
         d.quad_bedrooms,
         d.twin_bedrooms,
-        d.internal_facilities_other, 
-        d.external_facilities_other, 
-        d.activities_other, 
         d.occupancy,
         d.additional_price_notes,
         d.linen_costs,
@@ -176,6 +171,8 @@ class AccommodationModelListing extends JModelForm {
         ufc.phone_1, 
         ufc.phone_2, 
         ufc.phone_3,
+        ufc.exchange_rate_eur,
+        ufc.exchange_rate_usd,
        	date_format(a.created_on, "%M %Y") as advertising_since';
 
       // Language logic - essentially need to do two things, if in French
@@ -213,13 +210,13 @@ class AccommodationModelListing extends JModelForm {
       $query->leftJoin('#__classifications e ON e.id = c.city');
 
       // Join the property type through the property attributes table
-      $query->join('left', '#__property_attributes f on (f.property_id = b.id and f.version_id = d.id)');
+      $query->join('left', '#__unit_attributes f on (f.property_id = b.id and f.version_id = d.id)');
       $query->join('left', '#__attributes g on g.id = f.attribute_id');
       $query->where('(g.attribute_type_id = 1 or g.id is null)');
 
       // Join the attributes a second time to get at the accommodation type
       // This join is also based on version id to ensure we only get the version we are interested in
-      $query->join('left', '#__property_attributes l on (l.property_id = b.id and l.version_id = d.id)');
+      $query->join('left', '#__unit_attributes l on (l.property_id = b.id and l.version_id = d.id)');
       $query->join('left', '#__attributes m on m.id = l.attribute_id');
       $query->where('(m.attribute_type_id = 2 or m.id is null)');
 
@@ -269,8 +266,10 @@ class AccommodationModelListing extends JModelForm {
 
     if (!isset($this->facilities)) {
       try {
+        
         // Get the state for this property ID
         $unit_id = $this->getState('unit.id');
+        $property_id = $this->getState('property.id');
 
         $attributes = array();
 
@@ -290,14 +289,35 @@ class AccommodationModelListing extends JModelForm {
           $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
         }
 
-        $query->join('left', '#__property_attributes d on (d.property_id = a.id and d.version_id = b.id)');
+        $query->join('left', '#__unit_attributes d on (d.property_id = a.id and d.version_id = b.id)');
         $query->join('left', '#__attributes e on e.id = d.attribute_id');
         $query->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
 
-        $query->where('a.id = ' . $unit_id);
+        $query->where('a.id = ' . (int) $unit_id);
 
+        $query2 = $this->_db->getQuery(true);
+        
+        
+        $query2->select('e.title as attribute,f.title as attribute_type');
+        $query2->from('#__property a');
+        
+        if (!$this->preview) {
+          $query2->leftJoin('#__property_versions b ON (b.property_id = a.id and b.id = (select max(c.id) from #__property_versions c where property_id = a.id and c.review = 0))');
+        } else {
+          $query2->leftJoin('#__property_versions b ON (b.property_id = a.id and b.id = (select max(c.id) from #__property_versions c where property_id = a.id))');
+        }
+
+        $query2->join('left', '#__property_attributes d on (d.property_id = a.id and d.version_id = b.id)');
+        $query2->join('left', '#__attributes e on e.id = d.attribute_id');
+        $query2->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
+
+        $query2->where('a.id = ' . (int) $property_id);
+        
+        $query->union($query2);
+        
         $results = $this->_db->setQuery($query)->loadObjectList();
-
+        
+        
         foreach ($results as $attribute) {
           if (!array_key_exists($attribute->attribute_type, $attributes)) {
             $attributes[$attribute->attribute_type] = array();

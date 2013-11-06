@@ -275,11 +275,11 @@ class FcSearchModelMarkers extends JModelList
       if (is_array($activities)) {
 
         foreach ($activities as $activity => $id) {
-          $query->join('left', '#__property_attributes ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
+          $query->join('left', '#__unit_attributes ap' . $activity . ' ON ap' . $activity . '.property_id = h.id');
           $query->where('ap' . $activity . '.attribute_id = ' . (int) $id);
         }
       } elseif ($this->getState('list.activities')) {
-        $query->join('left', '#__property_attributes apact ON apact.property_id = h.id');
+        $query->join('left', '#__unit_attributes apact ON apact.property_id = h.id');
         $query->where('apact.attribute_id = ' . $this->getState('list.activities'));
       }
     }
@@ -292,11 +292,11 @@ class FcSearchModelMarkers extends JModelList
       if (is_array($facilities)) {
 
         foreach ($facilities as $facility => $id) {
-          $query->join('left', '#__property_attributes ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
+          $query->join('left', '#__unit_attributes ap' . $facility . ' ON ap' . $facility . '.property_id = h.id');
           $query->where('ap' . $facility . '.attribute_id = ' . (int) $id);
         }
       } elseif ($this->getState('list.property_facilities')) {
-        $query->join('left', '#__property_attributes apfac ON apfac.property_id = h.id');
+        $query->join('left', '#__unit_attributes apfac ON apfac.property_id = h.id');
         $query->where('apfac.attribute_id = ' . $this->getState('list.property_facilities'));
       }
     }

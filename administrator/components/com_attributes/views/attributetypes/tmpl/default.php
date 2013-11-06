@@ -79,11 +79,12 @@ $userId = $user->get('id');
             </tr>					
           <?php endforeach; ?>
         <input type="hidden" name="extension" value="<?php echo 'com_classification'; ?>" />
-        <input type="hidden" name="original_order_values" value="<?php echo implode($originalOrders, ','); ?>" />
         </tbody>
 
 
       </table>
+              <?php echo $this->pagination->getListFooter(); ?>
+
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />
       <?php echo JHtml::_('form.token'); ?>

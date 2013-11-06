@@ -60,26 +60,34 @@ class JHtmlGeneral {
 
   /**
    * Returns the price in GBP dependent on the base currency and exchange rate.
-   * 
+   * TO DO this might need to return an array of prices...
    * @param type $price
    * @param type $baseCurrency
    * @param type $exchangeRate
    */
-  public static function price($price = '', $baseCurrency = 438) {
+  public static function price($price = '', $baseCurrency = 438, $exchange_rate_eur, $exchange_rate_usd) {
+
+    $prices = array();
+    $rates = JHtmlGeneral::getExchangeRates();
+  
 
     // If the base currency is set in pounds then do nout
     if ($baseCurrency == 438) {
-     return $price; 
+      $prices['GBP'] = $price;
+      $prices['EUR'] = ($exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : round((($rates['EUR']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+      $prices['USD'] = ($exchange_rate_usd > 0) ? round(($exchange_rate_usd * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : round((($rates['USD']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+    } elseif ($baseCurrency == 439) { // Base rate is in euros
+      $prices['EUR'] = $price;
+      $prices['GBP'] = ($exchange_rate_eur > 0) ? round(($exchange_rate_eur / $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : round((($rates['GBP']->exchange_rate) / $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+      // To convert into USD we need to convert from GBP
+      $prices['USD'] = ($exchange_rate_usd > 0) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) : round((($rates['USD']->exchange_rate) / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP);
     }
-    
-    // Otherwise get the exchange rate
-    $exchange_rate = JHtmlGeneral::getExchangeRate($baseCurrency);
-    
+
+
+
     // And convert the price to the pound equivalent
-    $price = round(($exchange_rate * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
-    
-    return $price;
-    
+
+    return $prices;
   }
 
   /**
@@ -87,26 +95,27 @@ class JHtmlGeneral {
    * 
    * @param type $currencyID
    */
-  public static function getExchangeRate($currencyID = '') {
+  public static function getExchangeRates($currencyID = '') {
 
     $exchange_rate = '';
-    
+
     // TO DO - *cache* this - although query should already be cached
     $db = JFactory::getDbo();
 
     $query = $db->getQuery(true);
 
-    $query->select('exchange_rate');
+    $query->select('currency,exchange_rate');
     $query->from('#__currency_conversion');
-    $query->where('id=' . (int) $currencyID);
 
     $db->setQuery($query);
-    
-    $result = $db->loadObject();
 
-    $exchange_rate = $result->exchange_rate;
-    
-    return $exchange_rate;
+    $result = $db->loadObjectList($key = 'currency');
+
+
+    $exchange_rates = $result;
+
+    return $exchange_rates;
   }
 
 }
+

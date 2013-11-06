@@ -17,7 +17,7 @@ class HelloWorldTablePropertyAttributes extends JTable {
    * @param object Database connector object
    */
   function __construct(&$db) {
-    parent::__construct('#__property_attributes', 'property_id', $db);
+    parent::__construct('#__unit_attributes', 'property_id', $db);
   }
 
   /**
@@ -39,7 +39,7 @@ class HelloWorldTablePropertyAttributes extends JTable {
 
       if ($old_version_id == $new_version_id) {
 
-        $query->delete('#__property_attributes')->where('version_id = ' . $old_version_id);
+        $query->delete('#__unit_attributes')->where('version_id = ' . $old_version_id);
         $this->_db->setQuery($query);
 
         if (!$this->_db->execute()) {
@@ -55,7 +55,7 @@ class HelloWorldTablePropertyAttributes extends JTable {
 
       $query = $this->_db->getQuery(true);
 
-      $query->insert('#__property_attributes');
+      $query->insert('#__unit_attributes');
 
       $query->columns(array('version_id', 'property_id', 'attribute_id'));
 

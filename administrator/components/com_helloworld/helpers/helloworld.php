@@ -93,7 +93,7 @@ abstract class HelloWorldHelper {
     $options = array();
     $options[] = JHtml::_('select.option', '1', JText::_('COM_HELLOWORLD_HELLOWORLD_ACTIVE'));
     $options[] = JHtml::_('select.option', '0', JText::_('COM_HELLOWORLD_HELLOWORLD_INACTIVE'));
-    $options[] = JHtml::_('select.option', '-2', JText::_('JTRASHED'));
+    $options[] = JHtml::_('select.option', '-1', JText::_('JTRASHED'));
     return $options;
   }
 

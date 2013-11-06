@@ -34,24 +34,30 @@ class HelloWorldModelContactDetails extends JModelAdmin {
    */
   public function getItem($pk = null) {
 
-    $data = parent::getItem($pk);
+    if ($data = parent::getItem($pk)) {
 
-    $id = ($data->property_id) ? $data->property_id : '';
+      $id = ($data->property_id) ? $data->property_id : '';
 
-    $sms_details = $this->getSMSDetails($id);
+      $sms_details = $this->getSMSDetails($id);
 
 
-    /*
-     * See if there are any SMS prefs saved against this property
-     */
-    if (!empty($sms_details)) {
+      /*
+       * See if there are any SMS prefs saved against this property
+       */
+      if (!empty($sms_details)) {
 
-      $data->sms_alert_number = $sms_details->sms_alert_number;
-      $data->sms_valid = $sms_details->sms_valid;
-      $data->sms_status = $sms_details->sms_status;
+        $data->sms_alert_number = $sms_details->sms_alert_number;
+        $data->sms_valid = $sms_details->sms_valid;
+        $data->sms_status = $sms_details->sms_status;
+      }
+
+      if (!empty($data->languages_spoken)) {
+        // Convert the urls field to an array.
+        $registry = new JRegistry;
+        $registry->loadString($data->languages_spoken);
+        $data->languages_spoken = $registry->toArray();
+      }
     }
-
-
     return $data;
   }
 
@@ -93,19 +99,15 @@ class HelloWorldModelContactDetails extends JModelAdmin {
    */
   public function preprocessForm(\JForm $form, $data, $group = 'content') {
 
-    $input = JFactory::getApplication()->input->get('jform',false,'array');
-    
-    if (empty($input['use_invoice_details']) && ($input) ) {
+    $input = JFactory::getApplication()->input->get('jform', false, 'array');
+
+    if (empty($input['use_invoice_details']) && ($input)) {
       // User has selected not to use the invoice address. Therefore these fields are required.
       $form->setFieldAttribute('first_name', 'required', 'true');
       $form->setFieldAttribute('surname', 'required', 'true');
       $form->setFieldAttribute('phone_1', 'required', 'true');
       $form->setFieldAttribute('email_1', 'required', 'true');
-      
     }
-    
-    
-    
   }
 
   /**
@@ -152,7 +154,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
 
       $code = rand(10000, 100000);
       $data['sms_validation_code'] = $code;
-      $data['sms_status'] = 'VALIDATE';
+      $data['sms_status'] = 'VALIDATION';
       $data['sms_valid'] = 0;
       $data['sms_alert_number'] = $sms_number;
 
@@ -172,7 +174,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
       if ($login) {
         $sendsms->send($sms_number, JText::sprintf('COM_HELLOWORLD_HELLOWORLD_SMS_VERIFICATION_CODE', $code));
       }
-    } else if (($sms_number) && !$valid && $sms_status == 'VALIDATE') { // The number hasn't been validated but we might have a validation code to verify
+    } else if (($sms_number) && !$valid && $sms_status == 'VALIDATION') { // The number hasn't been validated but we might have a validation code to verify
 
       /*
        * Get the validation code from the data base and compare it to that passed in via the form
@@ -182,7 +184,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
       $data['sms_valid'] = 0;
 
       if ($sms_verification_code == $sms_details->sms_validation_code) {
-        $data['sms_status'] = 'OK';
+        $data['sms_status'] = 'ACTIVE';
         $data['sms_valid'] = 1;
       }
     } else if (empty($sms_number)) { // Opt out of alerts
@@ -197,16 +199,16 @@ class HelloWorldModelContactDetails extends JModelAdmin {
      */
     if (empty($data['use_invoice_details'])) {
       $data['use_invoice_details'] = false;
-    } 
-    
+    }
+
     if (empty($data[''])) {
       $data['booking_form'] = false;
-    }     
+    }
     /*
      * SMS notification prefs are currently set in the property versions save method.
      * TO DO - Move this update to the property model/table.
      */
-    
+
 
     if (!$model->save($data)) {
       // TO DO - Need to go trhough the property versions save model and throw exceptions rather than returing false.

@@ -16,7 +16,8 @@ abstract class ImportHelper {
     $id = JRequest::getVar('id');
     JHtmlSidebar::addEntry(JText::_('Import'), 'index.php?option=com_import', $submenu == 'import');
     JHtmlSidebar::addEntry(JText::_('Articles'), 'index.php?option=com_import&view=articles', $submenu == 'articles');
-    JHtmlSidebar::addEntry(JText::_('Attributes'), 'index.php?option=com_import&view=propertyattributes', $submenu == 'propertyattributes');
+    JHtmlSidebar::addEntry(JText::_('Unit attributes'), 'index.php?option=com_import&view=unitattributes', $submenu == 'unitattributes');
+    JHtmlSidebar::addEntry(JText::_('Property attributes'), 'index.php?option=com_import&view=propertyattributes', $submenu == 'propertyattributes');
     JHtmlSidebar::addEntry(JText::_('Availability'), 'index.php?option=com_import&view=availability', $submenu == 'availability');
     JHtmlSidebar::addEntry(JText::_('Enquiries'), 'index.php?option=com_import&view=enquiries', $submenu == 'enquiries');
     JHtmlSidebar::addEntry(JText::_('Images'), 'index.php?option=com_import&view=images', $submenu == 'images');

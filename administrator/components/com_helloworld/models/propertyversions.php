@@ -63,10 +63,19 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
   public function getItem($pk = null) {
 
     if ($item = parent::getItem($pk)) {
-
+      
       $registry = new JRegistry;
       $registry->loadString($item->local_amenities);
       $item->amenities = $registry->toArray();
+      
+      // Use the primary key (in this case unit id) to pull out any existing tariffs for this property
+      $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+      
+      $attributes = $this->getFacilities($pk, $item->id);
+
+      foreach ($attributes as $key => $values) {
+        $item->$key = $values;
+      }
     }
 
     /*
@@ -75,6 +84,59 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
      */
 
     return $item;
+  }
+
+  /**
+   * Get the tariffs for this unit
+   * 
+   */
+  public function getFacilities($id, $version) {
+
+    // Array to hold the result list
+    $property_attributes = array();
+
+    $properties = array();
+
+    // Loads a list of the attributes that we are interested in
+    // This is probably reused on the search part
+    $query = $this->_db->getQuery(true);
+
+    $query->select('d.field_name, b.attribute_id');
+    $query->from('#__property_attributes b');
+    $query->join('left', '#__attributes c on c.id = b.attribute_id');
+
+    $query->leftJoin('#__attributes_type d on d.id = c.attribute_type_id');
+
+    $query->where($this->_db->quoteName('b.property_id') . ' = ' . (int) $id);
+
+    $query->where($this->_db->quoteName('b.version_id') . ' = ' . (int) $version);
+
+    $this->_db->setQuery($query);
+
+    // Execute the db query, returns an iterator object.
+    $result = $this->_db->getIterator();
+
+    // Loop over the iterator and do stuff with it
+    foreach ($result as $row) {
+      $tmp = JArrayHelper::fromObject($row);
+
+      // If the facility type already exists
+      if (!array_key_exists($tmp['field_name'], $property_attributes)) {
+        $property_attributes[$tmp['field_name']] = array();
+      }
+
+      $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
+    }
+
+    // Load returns an array for each facility type
+    // We need to append each one to item so that they may be bound to the form
+    if (!empty($property_attributes)) {
+      foreach ($property_attributes as $facility_type => $value) {
+        $properties[$facility_type] = implode($value, ',');
+      }
+    }
+
+    return $properties;
   }
 
   /*

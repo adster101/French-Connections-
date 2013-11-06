@@ -35,7 +35,7 @@ $amenities = $this->form->getGroup('amenities');
         echo $tabs_layout->render($data);
         ?>
         <!--<fieldset class="adminform form-horizontal">
-          <legend><?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS');                   ?></legend>
+          <legend><?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS');                     ?></legend>
           <div class="control-group">
         <?php //echo $this->form->getLabel('title');  ?>
             <div class="controls">
@@ -59,20 +59,15 @@ $amenities = $this->form->getGroup('amenities');
               </div>
 
               <?php echo $this->form->getInput('map'); ?>
-              
+              <?php echo $this->form->getInput('latitude'); ?>
+              <?php echo $this->form->getInput('longitude'); ?>
+
               <div class="control-group">
                 <?php echo $this->form->getLabel('city'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('city'); ?>
                 </div>
               </div>
-              
-              <?php echo $this->form->getInput('latitude'); ?>
-              <?php echo $this->form->getInput('longitude'); ?>
-
-
-
-
             </fieldset>
             <fieldset>
               <legend>Surrounding area</legend>
@@ -83,6 +78,12 @@ $amenities = $this->form->getGroup('amenities');
                 <?php echo $this->form->getLabel('location_details'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('location_details'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('activities'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('activities'); ?>
                 </div>
               </div>
               <div class="control-group">
@@ -97,46 +98,48 @@ $amenities = $this->form->getGroup('amenities');
                   <?php echo $this->form->getInput('distance_to_coast'); ?>
                 </div>
               </div>
-          </fieldset>
-          <fieldset>
-            <legend>Getting there</legend>
-            <div class="alert alert-notice">
-              <i class="icon-flag"></i> <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_DESC'); ?>
-            </div>          
-            <div class="control-group">
-              <?php echo $this->form->getLabel('getting_there'); ?>
-              <div class="controls">
-                <?php echo $this->form->getInput('getting_there'); ?>
-              </div>
-            </div>
-            <div class="control-group">
-              <?php echo $this->form->getLabel('airport'); ?>
-              <div class="controls">
-                <?php echo $this->form->getInput('airport'); ?>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>Local Amenities</legend>
-            <div class="alert alert-notice">
-              <i class="icon-flag"></i> You can specify additional local amenities here. If completed these will appear on your property listing
-            </div>
-            <?php foreach ($this->form->getGroup('amenities') as $field) : ?>
+            </fieldset>
+            <fieldset>
+              <legend>Getting there</legend>
+              <div class="alert alert-notice">
+                <i class="icon-flag"></i> <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_DESC'); ?>
+              </div>          
               <div class="control-group">
-                <?php echo $field->label; ?>
+                <?php echo $this->form->getLabel('getting_there'); ?>
                 <div class="controls">
-                  <?php echo $field->input; ?>
+                  <?php echo $this->form->getInput('getting_there'); ?>
                 </div>
               </div>
-            <?php endforeach; ?>
-          </fieldset>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('airport'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('airport'); ?>
+                </div>
+              </div>
+            </fieldset>
+
+
+
+            <fieldset>
+              <legend>Local Amenities</legend>
+              <div class="alert alert-notice">
+                <i class="icon-flag"></i> You can specify additional local amenities here. If completed these will appear on your property listing
+              </div>
+              <?php foreach ($this->form->getGroup('amenities') as $field) : ?>
+                <div class="control-group">
+                  <?php echo $field->label; ?>
+                  <div class="controls">
+                    <?php echo $field->input; ?>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            </fieldset>
+          </div>
+          <div class="span3"></div>
         </div>
-        <div class="span3"></div>
       </div>
     </div>
   </div>
-</div>
 </div>
 
 

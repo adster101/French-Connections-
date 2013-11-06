@@ -189,7 +189,38 @@
       value="1"
       default="1"
     />
-      
+    
+    <field
+      name="vat_number"
+      type="text"
+      description="PLG_USER_PROFILE_FIELD_VAT_NUMBER_DESC"
+      label="PLG_USER_PROFILE_FIELD_VAT_NUMBER_LABEL"
+      message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
+      size="30"
+      validate="vat"
+      required="false"
+      class="validate validate-vat"
+    />
+          
+    <field 
+      name="exchange_rate_eur"
+      type="text"
+      label="PLG_USER_PROFILE_FIELD_EXCHANGE_RATE_EUR_LABEL"
+      description=""
+      validate="exchange"
+      required="false"
+      class="validate validate-exchange"
+    />
+              
+    <field 
+      name="exchange_rate_usd"
+      type="text"
+      description=""
+      label="PLG_USER_PROFILE_FIELD_EXCHANGE_RATE_USD_LABEL"
+      validate="exchange"
+      required="false"
+      class="validate validate-exchange"
+    />
   </fieldset>
     
   

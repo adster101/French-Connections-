@@ -185,7 +185,7 @@ class HelloWorldModelListings extends JModelList {
     if (is_numeric($published)) {
       $query->where('a.published = ' . (int) $published);
     } elseif ($published === '') {
-      $query->where('(a.published = 0 OR a.published = 1)');
+      $query->where('a.published in (0,1)');
     }
 
     // Filter by review state
@@ -204,7 +204,7 @@ class HelloWorldModelListings extends JModelList {
       if ($snooze_state == false || $snooze_state == 1) {
 
         // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
-        $query->where('(a.snooze_until < ' . JFactory::getDate()->calendar("Y-m-d") . ' OR a.snooze_until is null)');
+        $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
       } elseif ($snooze_state == 2) {
 
         // Don't filter, user wants to see all snoozed props as well as not snoozed etc
@@ -249,11 +249,11 @@ class HelloWorldModelListings extends JModelList {
     // Join the units for the image
     $query->join('left', '#__unit d on d.property_id = a.id');
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
-    $query->where('d.ordering = 1');
+    $query->where('(d.ordering = 1 or d.ordering is null)');
     
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id' );
-    $query->where('f.ordering = 1');
+    $query->where('(f.ordering = 1 or f.ordering is null)');
     
     $listOrdering = $this->getState('list.ordering', 'a.id');
     $listDirn = $db->escape($this->getState('list.direction', ''));

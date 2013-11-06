@@ -89,7 +89,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $query = $this->_db->getQuery(true);
 
     $query->select('d.field_name, b.attribute_id');
-    $query->from('#__property_attributes b');
+    $query->from('#__unit_attributes b');
     $query->join('left', '#__attributes c on c.id = b.attribute_id');
 
     $query->leftJoin('#__attributes_type d on d.id = c.attribute_type_id');
@@ -114,8 +114,6 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
       $property_attributes[$tmp['field_name']][] = $tmp['attribute_id'];
     }
-
-
 
     // Load returns an array for each facility type
     // We need to append each one to item so that they may be bound to the form

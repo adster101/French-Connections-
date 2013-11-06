@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class ImportViewPropertyAttributes extends JViewLegacy {
+class ImportViewUnitAttributes extends JViewLegacy {
 
   /**
    *  view display method
@@ -29,13 +29,12 @@ class ImportViewPropertyAttributes extends JViewLegacy {
     $this->form = $this->get('Form');
     
     $document = JFactory::getDocument();
- 		$document->setTitle(JText::_('Import property attributes'));
+ 		$document->setTitle(JText::_('Import unit attributes'));
 
-    JToolBarHelper::title(JText::_('Import property attributes'));
-		JToolBarHelper::apply('attributes.import', 'JTOOLBAR_APPLY');
+    JToolBarHelper::title(JText::_('Import unit attributes'));
+		JToolBarHelper::apply('attributes.importunit', 'JTOOLBAR_APPLY');
     // Display the template
     parent::display($tpl);
-    
     
   }
   
