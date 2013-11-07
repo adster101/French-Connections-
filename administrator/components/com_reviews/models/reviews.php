@@ -88,7 +88,7 @@ class ReviewsModelReviews extends JModelList
       a.review_text,
       a.published,
       a.date,
-      a.created,
+      a.guest_name,
       c.unit_title
     ');
 

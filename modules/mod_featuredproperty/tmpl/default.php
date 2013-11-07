@@ -10,18 +10,14 @@ defined('_JEXEC') or die;
 
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
-
-
-
 ?>
 
 <div class="row-fluid">
   <div class="span12">
     <div class="well well-small">
-      <?php
-      foreach ($this->items as $key => $item) {
-        if ($item->title) {
-          ?>     
+      <?php foreach ($this->items as $key => $item) : ?>
+        <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, 0, 0); ?>
+        <?php if ($item->title) : ?>     
           <div class="row-fluid">
             <div class="span6"> 
               <p>
@@ -36,16 +32,16 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
                 <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
                 <?php echo $item->occupancy; ?>
                 <?php if (!empty($item->price)) : ?> |
-                  &pound; <?php echo JHtml::_('general.price',$item->price, $item->base_currency); ?>
+                  &pound; <?php echo $prices['GBP'] ?>
                 <?php endif; ?>
               </p>
             </div>      
           </div>
-          <?php if ($key+1 != count($this->items)) : ?>
+          <?php if ($key + 1 != count($this->items)) : ?>
             <hr />
           <?php endif; ?>
-        <?php } ?>
-      <?php } ?>
+        <?php endif; ?>
+      <?php endforeach; ?>
     </div>
   </div>
 </div>

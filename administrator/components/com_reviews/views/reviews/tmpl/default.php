@@ -44,7 +44,6 @@ $data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' 
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <?php if (count($this->items) > 0) : ?> 
         <?php if ($option == 'com_reviews') : ?>
           <div id="filter-bar" class="btn-toolbar">
             <div class="filter-search btn-group pull-left">
@@ -67,6 +66,7 @@ $data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' 
             </div>
           </div>
         <?php endif; ?>
+      <?php if (count($this->items) > 0) : ?> 
 
         <table class="table table-striped" id="articleList">
           <thead>
@@ -82,7 +82,7 @@ $data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' 
                 <?php echo JText::_('COM_REVIEWS_REVIEW_TEXT'); ?>
               </th>
               <th width="15%">
-                <?php echo JText::_('COM_REVIEWS_DATE_ADDED'); ?>
+                <?php echo JText::_('COM_REVIEWS_REVIEWER'); ?>
               </th>
               <th width="15%">
                 <?php echo JText::_('COM_REVIEWS_DATE_STATYED_AT_PROPERTY'); ?>
@@ -108,7 +108,7 @@ $data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' 
                   (<?php echo $item->unit_id; ?>)
                 </td>
                 <td>
-                  <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->review_text)), 1000); ?>
+                  <?php echo JHtml::_('string.truncate', $item->review_text,0,true,false); // Don't allow html here. ?>
                   <?php if ($canEdit) : ?>
                     <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
                       <?php echo JText::_('JTOOLBAR_EDIT'); ?>
@@ -116,10 +116,10 @@ $data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' 
                   <?php endif; ?>  
                 </td>
                 <td>
-                  <?php echo $item->created; ?>
+                  <?php echo $this->escape($item->guest_name); ?>
                 </td>
                 <td>
-                  <?php echo $item->date; ?>
+                  <?php echo JFactory::getDate($item->date)->calendar('d M Y'); ?>
                 </td>
                 <td>
                   <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>

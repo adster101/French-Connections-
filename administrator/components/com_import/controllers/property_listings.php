@@ -69,9 +69,10 @@ class ImportControllerProperty_listings extends JControllerForm {
       $query->clear();
 
       // Do the same for airports
-      $query->select('id');
-      $query->select(
-              '(
+      if (empty($line[8])) {
+        $query->select('id');
+        $query->select(
+                '(
         3959 * acos( cos( radians(' . $longitude . ') )
         * cos( radians( latitude ) )
         * cos( radians( longitude ) -
@@ -81,9 +82,15 @@ class ImportControllerProperty_listings extends JControllerForm {
         AS distance
             ');
 
-      $query->from('#__airports');
+        $query->from('#__airports');
 
-      $query->order('distance asc');
+        $query->order('distance asc');
+      } else { // Loop up the airport from the airport table.
+        $query->select('id');
+        $query->from('#__airports');
+        $query->where('existing_id = ' . (int) $line[8]);
+      }
+
       $db->setQuery($query, 0, 1);
       $airport = $db->loadRow();
 

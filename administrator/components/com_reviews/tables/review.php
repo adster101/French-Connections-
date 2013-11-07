@@ -29,7 +29,7 @@ class ReviewTableReview extends JTable
 		if (parent::load($pk, $reset)) 
 		{    
       // Set the title here so we can see what attribute we are editing
-      JToolBarHelper::title(JText::_('Manage review ('. $this->title.')'));
+      JToolBarHelper::title(JText::_('Manage review ('. $this->id.')'));
      
 			return true;
 		}

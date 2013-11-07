@@ -15,6 +15,9 @@ JHTML::_('behavior.formvalidation');
 
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
+
+$min_prices = JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
+$max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
 ?>
 
 <div class="row-fluid">
@@ -63,22 +66,28 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
         </p>
       </div>
       <p>
-        <span class="lead large">
-          <?php if ($this->tariffs) { ?>
-            <strong>
-              <?php if (min($price_range) == max($price_range)) : ?>
-                &pound; <?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->exchange_rate_usd)); ?>
-              <?php else: ?>
-                &pound;<?php echo htmlspecialchars(JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->exchange_rate_usd)) . ' - &pound;' . htmlspecialchars(JHtmlGeneral::price(max($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->exchange_rate_usd)); ?>
-              <?php endif; ?>
-            </strong> 
-          </span>
-          <?php if ($this->item->tariffs_based_on) : ?>
-            <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
+        <?php if ($this->tariffs) : ?> 
+          <?php if (min($price_range) == max($price_range)) : ?>
+            <span class="lead large">
+              <strong>&pound;<?php echo $min_prices['GBP'] ?></strong> 
+            </span>               
+            <?php if ($this->item->tariffs_based_on) : ?>
+              <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
+            <?php endif; ?>
+            <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)</span>
+
+          <?php else: ?>
+            <span class="lead large">
+              <strong>&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong> 
+            </span>    
+            <?php if ($this->item->tariffs_based_on) : ?>
+              <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
+            <?php endif; ?>
+            <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR'] ; ?>)</span>
           <?php endif; ?>
-        <?php } else { ?>
+        <?php else: ?>
           <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
-        <?php } ?>
+        <?php endif; ?>
       </p>
       <!-- Max capacity/occupancy -->
       <?php if ($this->item->occupancy) : ?>

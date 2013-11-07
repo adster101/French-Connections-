@@ -35,7 +35,7 @@ $amenities = $this->form->getGroup('amenities');
         echo $tabs_layout->render($data);
         ?>
         <!--<fieldset class="adminform form-horizontal">
-          <legend><?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS');                     ?></legend>
+          <legend><?php //echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_DETAILS');                      ?></legend>
           <div class="control-group">
         <?php //echo $this->form->getLabel('title');  ?>
             <div class="controls">
@@ -114,6 +114,12 @@ $amenities = $this->form->getGroup('amenities');
                 <?php echo $this->form->getLabel('airport'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('airport'); ?>
+                </div>
+              </div>
+              <div class="control-group">
+                <?php echo $this->form->getLabel('access'); ?>
+                <div class="controls">
+                  <?php echo $this->form->getInput('access'); ?>
                 </div>
               </div>
             </fieldset>

@@ -150,7 +150,7 @@ class ImportControllerAttributes extends JControllerForm {
     $query->select('id');
     $query->from('#__attributes');
     // attribute types 8 and 
-    $query->where("attribute_type_id in (8)");
+    $query->where("attribute_type_id in (8,28)");
 
     // Set the query.
     $db->setQuery($query);
@@ -168,8 +168,10 @@ class ImportControllerAttributes extends JControllerForm {
 
     $previous_property_id = '';
 
-    while (($line = fgetcsv($handle,0,"|")) !== FALSE) {
-
+    while (($line = fgetcsv($handle, 0, "|")) !== FALSE) {
+      if ($previous_property_id == $line[1]) {
+        continue;
+      }
       // Initially we need to get the unit version id from the #__unit_versions table
       $query = $db->getQuery(true);
 
@@ -224,6 +226,8 @@ class ImportControllerAttributes extends JControllerForm {
           }
         }
       }
+
+      $previous_property_id = $line[1];
     }
 
 
@@ -231,7 +235,7 @@ class ImportControllerAttributes extends JControllerForm {
 
     $this->setMessage('Unit attributes imported, hooray!');
 
-    $this->setRedirect('index.php?option=com_import&view=unitattributes');
+    $this->setRedirect('index.php?option=com_import&view=propertyattributes');
   }
 
 }

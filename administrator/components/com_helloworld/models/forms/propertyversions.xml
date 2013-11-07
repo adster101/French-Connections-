@@ -185,6 +185,7 @@
       filter="int"
       id="7">
     </field>
+    
     <field
       name="distance_to_coast"
       type="text"
@@ -198,6 +199,7 @@
       filter="int"
       maxlength="2">
     </field>
+    
     <field
       name="location_details"
       type="editor"
@@ -212,16 +214,28 @@
       labelclass="control-label"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_MESSAGE">
     </field>
+    
     <field
       class="checkbox inline"
       name="activities"
       type="facilities"
       label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL"
-      description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
+      description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_DESC"
       multiple="true"
       labelclass="control-label"
       id="8">
     </field>
+     <field
+      class="checkbox inline"
+      name="access"
+      type="facilities"
+      label="COM_HELLOWORLD_ACCOMMODATION_ACCESS_LABEL"
+      description="COM_HELLOWORLD_ACCOMMODATION_ACCESS_DESC"
+      multiple="true"
+      labelclass="control-label"
+      id="28">
+    </field>   
+    
     <field
       name="getting_there"
       type="editor"

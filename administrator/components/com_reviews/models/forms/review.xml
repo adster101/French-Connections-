@@ -30,19 +30,7 @@
       labelclass="control-label"
 
     />
-    <field 
-      name="title"
-      type="text"
-      id="reviews-title"
-      size="60"
-      description="COM_REVIEW_TITLE_TEXT_DESC"
-      label="COM_REVIEW_TITLE_TEXT_LABEL"
-      filter="string"
-      validate="reviewtitle"
-      required="true"
-      message="COM_REVIEW_TITLE_VALIDATION_MESSAGE"
-      labelclass="control-label"
-    />
+
     <field 
       name="review_text"
       type="editor"
@@ -86,6 +74,7 @@
       required="true"
       message="Please supply a property ID"
       labelclass="control-label"
+      label="Unit ID for review"
     />
 
     <field 
@@ -95,6 +84,7 @@
       description="JFIELD_PUBLISHED_DESC" 
       class="input-medium"
       filter="intval" 
+      labelclass="control-label"
       size="1" 
       default="" 
       required="true">
@@ -112,7 +102,7 @@
     <field 
       name="created" 
       type="calendar" 
-      label="COM_CONTENT_FIELD_CREATED_LABEL"
+      label="Date created"
       description="COM_CONTENT_FIELD_CREATED_DESC" 
       class="inputbox readonly" 
       size="22"
