@@ -252,6 +252,11 @@ class AccommodationModelListing extends JModelForm {
     if (empty($unit_id)) {
       $this->setState('unit.id', $this->item->unit_id);
     }
+    
+    if (!empty($this->item->city)) {
+      $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
+      
+    }
 
     return $this->item;
   }

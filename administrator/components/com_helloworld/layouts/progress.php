@@ -22,7 +22,10 @@ if (!empty($progress)) {
   $days_to_renewal = HelloWorldHelper::getDaysToExpiry($expiry_date);
 }
 
-$link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]->unit_id . '&preview=1';
+$preview = ($review) ? '&preview=1' : '';
+
+
+$link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]->unit_id . $preview;
 ?>
 
 <div class="row-fluid">
@@ -70,12 +73,10 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
     <?php elseif (empty($notices) && $view == 'listing' && !$review && $days_to_renewal >= 7) : ?>
       <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_BLURB'); ?>
     <?php elseif (empty($notices) && !$review && $days_to_renewal >= 7) : ?>
-      <div class="alert alert-notice">
-        <?php if ($progress[0]->review) : ?>
+      <div class="alert alert-info">
           <div class="pull-right">
             <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
           </div>
-        <?php endif; ?>
         <h4>Listing Status</h4>
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_OKAY'); ?></p>
       </div>

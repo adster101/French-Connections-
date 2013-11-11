@@ -72,8 +72,8 @@ class ImportControllerNotes extends JControllerForm {
     }
 
     fclose($handle);
-    $this->setMessage('Special offers imported, hooray!');
-    $this->setRedirect('index.php?option=com_import&view=specialoffers');
+    $this->setMessage('Notes imported, hooray!');
+    $this->setRedirect('index.php?option=com_import&view=notes');
   }
 
 }

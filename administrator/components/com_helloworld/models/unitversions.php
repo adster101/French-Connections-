@@ -444,7 +444,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...access options need adding.
-    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'activities', 'suitability', 'accommodation_type', 'property_type');
+    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'suitability', 'accommodation_type', 'property_type');
 
     // Loop over the data and prepare an array to save
     foreach ($data as $key => $value) {

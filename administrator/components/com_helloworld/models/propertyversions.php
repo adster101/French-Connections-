@@ -10,7 +10,37 @@ jimport('joomla.application.component.modeladmin');
  * HelloWorld Model
  */
 class HelloWorldModelPropertyVersions extends JModelAdmin {
+  /*
+   *
+   * Method to create a 'parent' entry into the #__property table.
+   * This needs to be done prior to saving the version into #__property_versions for new props
+   *
+   */
 
+  public function createNewProperty($data = array()) {
+
+    if (empty($data)) {
+      return false;
+    }
+
+    // Explicityly set the review status to 1
+    $data['review'] = 1;
+
+    $property_table = $this->getTable('Property', 'HelloWorldTable');
+
+    if (!$property_table->bind($data)) {
+      $this->setErrro($property_table->getError());
+      return false;
+    }
+
+    // Optional further sanity check after data has been validated, filtered, and about to be checked...
+    //$this->prepareTable($property_table);
+    if (!$property_table->store()) {
+      return false;
+    }
+
+    return $property_table->id;
+  }
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -63,14 +93,14 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
   public function getItem($pk = null) {
 
     if ($item = parent::getItem($pk)) {
-      
+
       $registry = new JRegistry;
       $registry->loadString($item->local_amenities);
       $item->amenities = $registry->toArray();
-      
+
       // Use the primary key (in this case unit id) to pull out any existing tariffs for this property
       $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
-      
+
       $attributes = $this->getFacilities($pk, $item->id);
 
       foreach ($attributes as $key => $values) {
@@ -87,10 +117,10 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
   }
 
   /**
-   * Get the tariffs for this unit
+   * Get the facilities for this property
    * 
    */
-  public function getFacilities($id, $version) {
+  public function getFacilities($id, $version, $table = '#__property_attributes b') {
 
     // Array to hold the result list
     $property_attributes = array();
@@ -102,7 +132,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     $query = $this->_db->getQuery(true);
 
     $query->select('d.field_name, b.attribute_id');
-    $query->from('#__property_attributes b');
+    $query->from($table);
     $query->join('left', '#__attributes c on c.id = b.attribute_id');
 
     $query->leftJoin('#__attributes_type d on d.id = c.attribute_type_id');
@@ -139,6 +169,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     return $properties;
   }
 
+ 
   /*
    * param JForm $form The JForm instance for the view being edited
    * param array $data The form data as derived from the view (may be empty)
@@ -294,6 +325,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $isNew = false;
       }
 
+      // Get the version id of the property being editied.
+      $old_version_id = ($table->id) ? $table->id : '';
+
       // If this is a new propery then we need to generate a 'stub' entry into the propery table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       // TODO - Move this code so that it runs when adding a new property rather than when saving for the first time
@@ -363,7 +397,22 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
           return false;
         }
       }
+      
+      // The version id is the id of the version created/updated in the _unit_versions table
+      $new_version_id = ($table->id) ? $table->id : '';
 
+      $this->setState('new.version.id', $new_version_id);
+      
+      // We will always want to update the facilities relating to the version id
+      // E.g. if a new unit, insert facilitites, if new version then we will
+      // save the facilities against the new version id.
+
+      JLog::add('About to save facilities for property (' . $table->property_id . 'version ID' . $new_version_id, 'DEBUG', 'unitversions');
+
+      if (!$this->savePropertyFacilities($data, $table->property_id, $old_version_id, $new_version_id,'#__property_attributes', array('activities','access'))) {
+        Throw New Exception(JText::_('COM_HELLOWORLD_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+      }
+      
       // Commit the transaction
       $db->transactionCommit();
 
@@ -395,36 +444,102 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
     return true;
   }
 
-  /*
+
+ /*
+   * Method to save the property attributes into the #__attribute_property table.
    *
-   * Method to create a 'parent' entry into the #__property table.
-   * This needs to be done prior to saving the version into #__property_versions for new props
+   *
    *
    */
 
-  public function createNewProperty($data = array()) {
+  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $table = '', $attribute_liat = array()) {
 
-    if (empty($data)) {
-      return false;
+    if (!is_array($data) || empty($data)) {
+      return true;
     }
 
-    // Explicityly set the review status to 1
-    $data['review'] = 1;
+    if (empty($old_version_id) || empty($new_version_id)) {
+      return true;
+    }
+    
+    
 
-    $property_table = $this->getTable('Property', 'HelloWorldTable');
+    $attributes = array();
 
-    if (!$property_table->bind($data)) {
-      $this->setErrro($property_table->getError());
-      return false;
+
+    // Loop over the data and prepare an array to save
+    foreach ($data as $key => $value) {
+
+      if (!in_array($key, $attribute_liat)) {
+        continue;
+      }
+
+      // We're not interested in the 'other' fields E.g. external_facilities_other
+      if (strpos($key, 'other') == 0 && !empty($value)) {
+
+        // Location, property and accommodation types are all single integers and not arrays
+        if (is_array($value)) {
+          // We want to save this in one go so we make an array
+          foreach ($value as $facility) {
+            // Facilities should be integers
+            if ((int) $facility) {
+              $attributes[] = $facility;
+            }
+          }
+        } else {
+          $attributes[] = $value;
+        }
+      }
     }
 
-    // Optional further sanity check after data has been validated, filtered, and about to be checked...
-    //$this->prepareTable($property_table);
-    if (!$property_table->store()) {
-      return false;
+    // If we have any attributes
+    if (count($attributes) > 0) {
+
+      // Firstly need to delete these...in a transaction would be better
+      $query = $this->_db->getQuery(true);
+
+      if ($old_version_id == $new_version_id) {
+
+        $query->delete($table)->where('version_id = ' . $old_version_id);
+        $this->_db->setQuery($query);
+
+        if (!$this->_db->execute()) {
+
+          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+
+          $this->setError($e);
+          return false;
+        }
+      }
+
+
+
+      $query = $this->_db->getQuery(true);
+
+      $query->insert($table);
+
+      $query->columns(array('version_id', 'property_id', 'attribute_id'));
+
+      foreach ($attributes as $attribute) {
+        $insert_string = "$new_version_id, $id," . $attribute . "";
+        $query->values($insert_string);
+      }
+
+      $this->_db->setQuery($query);
+
+      if (!$this->_db->execute()) {
+        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+        $this->setError($e);
+        return false;
+      }
+
+  
+      return true;
     }
 
-    return $property_table->id;
+
+    return true;
   }
 
 }
+
