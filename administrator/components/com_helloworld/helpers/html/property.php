@@ -179,7 +179,7 @@ class JHtmlProperty {
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
-  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false) {
+  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false, $expiry_date) {
 
     // Array of image, task, title, action.
     // Possible renewal states are
@@ -191,14 +191,14 @@ class JHtmlProperty {
     $value = '';
     $html = '';
     $allowEdit = true;
-    
+
     if (empty($days)) { // A new sign up which has never been published...
       $value = 2;
-    } elseif ($days <= 7 && $days >= 0 ) { // Property about to expire
+    } elseif ($days <= 7 && $days >= 0) { // Property about to expire
       $value = 0;
     } elseif ($days < 0 && !empty($days)) { // Property has expired
       $value = 1;
-    } elseif ($days > 7) { // 7 days or more until renewal
+    } elseif ($days >= 7 && $days <= 28) { // More than seven days but expiring within the month.
       $value = 3;
     }
 
@@ -220,7 +220,7 @@ class JHtmlProperty {
             'renewal.summary',
             'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW',
             'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW_BUTTON',
-            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
+            'COM_HELLOWORLD_HELLOWORLD_RENEW_NOW_BUTTON_TOOLTIP',
             'btn-danger'),
         2 => array(
             'chevron-right',
@@ -234,8 +234,8 @@ class JHtmlProperty {
             'listing.view',
             'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING',
             'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON',
-            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
-            'btn-primary'),
+            'COM_HELLOWORLD_HELLOWORLD_EDIT_LISTING_BUTTON_DUE_FOR_RENEWAL_TOOLTIP',
+            'btn-warning'),
         4 => array(
             'locked',
             'listing.view',
@@ -363,15 +363,12 @@ class JHtmlProperty {
     } elseif ($controller == 'contactdetails') {
       $progress_icon = '';
       $id = $listing_id;
-      
     } elseif (empty($item->title) && ($controller == 'propertyversions' )) {
 
       $progress_icon = $progress_icon;
       $id = $listing_id;
     } elseif (empty($item->unit_title) && $controller == 'unitversions' && !empty($listing_id) && $action == 'edit') { // This property has no unit, or unit details not completed...
-   
       $progress_icon = $progress_icon;
-
     } elseif (!empty($unit_id) && $controller == 'images') {
 
       $progress_icon = ($item->images > 0) ? $okay_icon : $progress_icon;
@@ -423,7 +420,7 @@ class JHtmlProperty {
     $html.='<li class="dropdown ' . $active . '">'
             . '<a class="dropdown-toggle"'
             . 'data-toggle="dropdown"'
-            . 'href="#"> <i class="icon icon-' . $icon .  '"></i>'
+            . 'href="#"> <i class="icon icon-' . $icon . '"></i>'
             . '';
     $html.= JText::_($button_text)
             . '<b class="caret"></b></a>'

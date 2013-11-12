@@ -220,7 +220,7 @@ $listing_id = '';
                             <?php echo JHtml::_('property.autorenewalstate', $auto_renew, $item->id); ?>
                           </p>
                           <p>
-                            <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview); ?>
+                            <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview, $item->expiry_date); ?>
                           </p>
                         </td>
                         <td>

@@ -101,9 +101,11 @@ class HelloWorldViewImages extends JViewLegacy {
    */
   protected function setDocument() {
     $document = JFactory::getDocument();
-
+    
+    JHtml::_('bootstrap.framework');
+    //JHtml::_('behavior.framework');
+    
     $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT'));
-
     $document->addScript(JURI::root() . "media/fc/js/images/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/tmpl.min.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/load-image.min.js", 'text/javascript', true, false);
@@ -115,7 +117,7 @@ class HelloWorldViewImages extends JViewLegacy {
     $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-validate.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-ui.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/main.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
+    //$document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/jquery.fileupload-ui.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/helloworld.css", 'text/css', "screen");

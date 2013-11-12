@@ -16,7 +16,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
   <div class="span12">
     <div class="well well-small">
       <?php foreach ($this->items as $key => $item) : ?>
-        <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, 0, 0); ?>
+        <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
         <?php if ($item->title) : ?>     
           <div class="row-fluid">
             <div class="span6"> 

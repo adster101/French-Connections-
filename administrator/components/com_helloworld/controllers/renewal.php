@@ -55,7 +55,7 @@ class HelloWorldControllerRenewal extends JControllerLegacy {
     // Redirect to the renewal payment/summary form thingy...
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->extension . '&view=renewal&id=' . (int) $recordId, false
+                    'index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false
             )
     );
 
