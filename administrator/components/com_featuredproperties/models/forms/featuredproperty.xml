@@ -7,7 +7,7 @@
     <field 
       label="Property id"    
       name="property_id"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="int"
       type="text"
       required="true"
@@ -18,7 +18,7 @@
       type="category"
       name="featured_property_type"
       label="Featured property type"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="int"
       required="true"
       extension="com_featuredproperties"
@@ -28,7 +28,7 @@
     <field 
       label="Start date"
       name="start_date"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="string"
       type="calendar"
       required="true"
@@ -39,7 +39,7 @@
     <field 
       label="End date"
       name="end_date"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="string"
       required="true"
       type="calendar"
@@ -52,7 +52,7 @@
       name="published"
       filter="int"
       type="list"
-      labelclass="control-label">
+      labelClass="control-label">
       <option value="">JGLOBAL_SELECT_AN_OPTION</option>    
       <option value="1">Paid</option>    
       <option value="0">Unpaid</option>    
@@ -60,7 +60,7 @@
     <field
       label="Notes"
       type="textarea"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="string"
       name="notes"
     />       

@@ -46,7 +46,7 @@ $amenities = $this->form->getGroup('amenities');
         </fieldset>-->
         <div class="row-fluid">
           <div class="span9">
-            <fieldset>
+            <fieldset class="form-horizontal">
               <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ACCOMMODATION_LOCATION_DETAILS'); ?></legend>
               <div class="alert alert-notice">
                 <?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_EDIT_LOCATION_INSTRUCTIONS'); ?>   

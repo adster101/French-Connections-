@@ -14,7 +14,7 @@
 			required="true"
 			default=""
       readonly="true"
-      labelclass="control-label">
+      labelClass="control-label">
     </field>
 		<field
 			name="end_date"
@@ -27,7 +27,7 @@
 			required="true"
 			default=""
       readonly="true"
-      labelclass="control-label">
+      labelClass="control-label">
     </field>
 		<field
 			name="availability"
@@ -38,7 +38,7 @@
 			validate=""
 			required="true"
 			default=""
-      labelclass="control-label"
+      labelClass="control-label"
       filter="int">
 				<option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
 				<option value="1">COM_HELLOWORLD_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>

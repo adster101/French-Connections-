@@ -215,23 +215,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
             </div>
             <div class="accordion-group">
               <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#activities">
-                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_FACILITIES'); ?>
-                </a>
-              </div>
-              <div id="activities" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  <fieldset class="panelform">
-                    <?php foreach ($this->form->getFieldset('activities') as $field) : ?>
-                      <p><?php echo $field->label; ?></p>
-                      <?php echo $field->input; ?>
-                    <?php endforeach; ?>
-                  </fieldset>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#suitability">
                   <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_FACILITIES'); ?>
                 </a>

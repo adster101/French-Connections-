@@ -286,7 +286,9 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
       // Set the table model to the appropriate key
       // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
-      $table->set('_tbl_key', 'id');
+      //$table->set('_tbl_key', 'id');
+      $table->set('_tbl_keys', array('id'));
+ 
 
       // Bind the data.
       if (!$table->bind($data)) {
@@ -376,8 +378,10 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
     // Set the table key back to the parent id so it redirects based on that key
     // on not the version key id
-    $table->set('_tbl_key', 'unit_id');
+    //$table->set('_tbl_key', 'unit_id');
+    $table->set('_tbl_keys', array('property_id'));
 
+    
     $pkName = $table->getKeyName();
 
     if (isset($table->$pkName)) {
@@ -386,6 +390,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $this->setState($this->getName() . '.new', $isNew);
     $this->setState($this->getName() . '.review', $table->review);
     $this->setState($this->getName() . '.version_id', $table->id);
+    $this->setState($this->getName() . '.unit_id', $table->unit_id);
     
 
     return true;

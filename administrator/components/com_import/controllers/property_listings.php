@@ -73,11 +73,11 @@ class ImportControllerProperty_listings extends JControllerForm {
         $query->select('id');
         $query->select(
                 '(
-        3959 * acos( cos( radians(' . $longitude . ') )
+        3959 * acos( cos( radians(' . $latitude . ') )
         * cos( radians( latitude ) )
         * cos( radians( longitude ) -
-        radians(' . $latitude . ') ) +
-        sin( radians(' . $longitude . ') )
+        radians(' . $longitude . ') ) +
+        sin( radians(' . $latitude . ') )
         * sin( radians( latitude ) ) ) )
         AS distance
             ');
@@ -91,9 +91,9 @@ class ImportControllerProperty_listings extends JControllerForm {
         $query->where('existing_id = ' . (int) $line[8]);
       }
 
-      $db->setQuery($query, 0, 1);
-      $airport = $db->loadRow();
-
+      $db->setQuery($query, 0, 10);
+      $airport = $db->loadRowList();
+      print_r($airport);die;
       $languages_spoken = json_encode(array_unique(explode(',', $line[38])));
       $registry->loadArray($languages_spoken);
       $languages = (string) $registry;

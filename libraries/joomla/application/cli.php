@@ -44,7 +44,7 @@ class JApplicationCli extends JApplicationBase
 	 *                              the application's event dispatcher, if it is null then the default event dispatcher
 	 *                              will be created based on the application's loadDispatcher() method.
 	 *
-	 * @see     loadDispatcher()
+	 * @see     JApplicationBase::loadDispatcher()
 	 * @since   11.1
 	 */
 	public function __construct(JInputCli $input = null, JRegistry $config = null, JEventDispatcher $dispatcher = null)
@@ -123,12 +123,11 @@ class JApplicationCli extends JApplicationBase
 	 */
 	public static function getInstance($name = null)
 	{
-
-    // Only create the object if it doesn't exist.
+		// Only create the object if it doesn't exist.
 		if (empty(self::$instance))
 		{
 			if (class_exists($name) && (is_subclass_of($name, 'JApplicationCli')))
-			{  
+			{
 				self::$instance = new $name;
 			}
 			else

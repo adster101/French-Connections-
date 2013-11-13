@@ -51,7 +51,7 @@
       description="COM_CLASSIFICATION_FIELD_LATITUDE_DESC"
       maxlength="15"
       filter="string"
-      labelclass="control-label">
+      labelClass="control-label">
     </field>
     
     <field
@@ -63,7 +63,7 @@
       label="COM_CLASSIFICATION_FIELD_LONGITUDE_LABEL"
       description="COM_CLASSIFICATION_FIELD_LONGITUDE_DESC"
       filter="string"
-      labelclass="control-label"
+      labelClass="control-label"
       maxlength="15">
     </field>
     <field

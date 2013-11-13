@@ -192,7 +192,7 @@ class JHtmlProperty {
     $html = '';
     $allowEdit = true;
 
-    if (empty($days)) { // A new sign up which has never been published...
+    if (empty($days) || $days > 28) { // A new sign up which has never been published...
       $value = 2;
     } elseif ($days <= 7 && $days >= 0) { // Property about to expire
       $value = 0;

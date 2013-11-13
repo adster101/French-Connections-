@@ -1,15 +1,16 @@
 jQuery(document).ready(function() {
 
-   // popover demo
-    jQuery("a[data-toggle=popover]")
-      .popover()
-      .click(function(e) {
-        e.preventDefault()
-      });
-      
+  // popover demo
+  jQuery("a[data-toggle=popover]")
+          .popover()
+          .click(function(e) {
+    e.preventDefault()
+  });
+
   if (jQuery('.hasdatepicker').length) {
-    jQuery(".hasdatepicker").datepicker({dateFormat:'yy-mm-dd'});
-  };
+    jQuery(".hasdatepicker").datepicker({dateFormat: 'yy-mm-dd'});
+  }
+  ;
 
 
 
@@ -45,18 +46,23 @@ jQuery(document).ready(function() {
     window.onbeforeunload = youSure;
   });
 
-  if (window.tinymce) {
-    tinymce.onAddEditor.add(function(sender, editor) {
-      editor.onKeyUp.add(function(editor, event) {
-        if (editor.isDirty())
-          window.onbeforeunload = youSure;
+  try {
+    // If the tinymce editor is loaded
+    if (window.tinymce) {
+      // Bind the addEditor event to editor(s)
+      tinymce.on('addEditor', function(editor) {
+        // Bind the blur event to editor(s)
+        tinyMCE.activeEditor.on('blur', function(e) {
+          // Check whether the actie editor 'is dirty'
+          if (tinyMCE.activeEditor.isDirty()) {
+            // If so, do the business on before unload
+            window.onbeforeunload = youSure;
+          }
+        });
       });
-      editor.onChange.add(function(editor) {
-        if (editor.isDirty() && !$('body').data('isSaving'))
-          window.onbeforeunload = youSure;
-        ;
-      });
-    });
+    }
+  } catch (e) {
+    // what to do!?
   }
 
 
@@ -185,20 +191,20 @@ Joomla.submitbutton = function(task)
  *  Add some validation rules - can't do any harm
  */
 window.addEvent('domready', function() {
-  
+
   /* Validate the company number, must be 13 digits or so */
   document.formvalidator.setHandler('company',
-    function (value) {
-      regex=/^[0-9]{14}$/;
-      return regex.test(value);
-    });
-    
+          function(value) {
+            regex = /^[0-9]{14}$/;
+            return regex.test(value);
+          });
+
   /* Validate the vat number */
   document.formvalidator.setHandler('vat',
-    function (value) {
-      regex=/^([a-zA-Z]{2})([1-9]{7,13})$/;
-      return regex.test(value);
-    }); 
+          function(value) {
+            regex = /^([a-zA-Z]{2})([1-9]{7,13})$/;
+            return regex.test(value);
+          });
 });
 
   

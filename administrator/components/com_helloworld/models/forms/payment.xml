@@ -12,7 +12,7 @@
             required="true"
             filter="string"
             class="required"
-            labelclass="control-label"
+            labelClass="control-label"
             label="COM_HELLOWORLD_HELLOWORLD_PAYMENT_CARD_TYPE">
             <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
             <option value="VISA">Visa </option>
@@ -29,7 +29,7 @@
             required="true"
             filter="string"
             class="required"
-            labelclass="control-label"
+            labelClass="control-label"
             label="COM_HELLOWORLD_HELLOWORLD_CARD_NUMBER"
             maxlength="24"
             size="25"
@@ -45,7 +45,7 @@
             label="PLG_USER_PROFILE_FIELD_NAME_LABEL"
             message="PLG_USER_PROFILE_FIELD_NAME_MESSAGE"
             size="30"
-            labelclass="control-label"
+            labelClass="control-label"
             required="true"
         />
 
@@ -55,7 +55,7 @@
             class="input-mini"
             size="5"
             maxlength="4"
-            labelclass="control-label"
+            labelClass="control-label"
             required="false"
             filter="string"
             label="COM_HELLOWORLD_HELLOWORLD_CARD_START_DATE"
@@ -67,7 +67,7 @@
             class="input-mini"
             size="5"
             maxlength="4"
-            labelclass="control-label"
+            labelClass="control-label"
             required="true"
             label="COM_HELLOWORLD_HELLOWORLD_CARD_EXPIRY_DATE"
             filter="string"
@@ -81,7 +81,7 @@
             maxlength="2"
             size="2"
             class="input-mini"
-            labelclass="control-label"
+            labelClass="control-label"
         />
         <field
             name="CV2"
@@ -92,7 +92,7 @@
             maxlength="3"
             size="3"
             class="input-mini"
-            labelclass="control-label"
+            labelClass="control-label"
         />
     </fieldset>
 
@@ -109,7 +109,7 @@
             message=""
             size="30"
             required="true"
-            labelclass="control-label"
+            labelClass="control-label"
         />
         <field
             name="BillingSurname"
@@ -122,7 +122,7 @@
             message=""
             size="30"
             required="true"
-            labelclass="control-label"
+            labelClass="control-label"
         />
         <field
             name="BillingAddress1"
@@ -135,7 +135,7 @@
             message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
             size="30"
             required="true"
-            labelclass="control-label"
+            labelClass="control-label"
         />
         <field
             name="BillingAddress2"
@@ -147,7 +147,7 @@
             label="PLG_USER_PROFILE_FIELD_ADDRESS2_LABEL"
             message="PLG_USER_PROFILE_FIELD_ADDRESS2_MESSAGE"
             size="30"
-            labelclass="control-label"
+            labelClass="control-label"
         />
 
         <field
@@ -159,7 +159,7 @@
             label="PLG_USER_PROFILE_FIELD_CITY_LABEL"
             message="PLG_USER_PROFILE_FIELD_CITY_MESSAGE"
             size="30"
-            labelclass="control-label"
+            labelClass="control-label"
             required="true"
         />
 
@@ -172,7 +172,7 @@
             label="PLG_USER_PROFILE_FIELD_POSTAL_CODE_LABEL"
             message="PLG_USER_PROFILE_FIELD_POSTAL_CODE_MESSAGE"
             size="30"
-            labelclass="control-label"
+            labelClass="control-label"
             required="true"
             class="input-small"
         />
@@ -183,7 +183,7 @@
             maxlength="75"
             required="true"
             class="input-medium"
-            labelclass="control-label"
+            labelClass="control-label"
             label="PLG_USER_PROFILE_FIELD_EMAIL_LABEL"
             message="PLG_USER_PROFILE_FIELD_EMAIL_MESSAGE"            
             description="PLG_USER_PROFILE_FIELD_EMAIL_DESC"
@@ -194,7 +194,7 @@
             type="list"
             required="true"
             filter="string"
-            labelclass="control-label"
+            labelClass="control-label"
             label="COM_HELLOWORLD_HELLOWORLD_PAYMENT_BILLING_COUNTRY">
 
             <option value="">Please select...</option>

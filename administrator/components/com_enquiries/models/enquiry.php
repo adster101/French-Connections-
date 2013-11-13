@@ -25,6 +25,21 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     return JTable::getInstance($type, $prefix, $config);
   }
 
+  /*
+   * Override getItem so we can set the date format
+   */
+  public function getItem($pk = null) {
+    if ($item = parent::getItem($pk)) {
+      
+      $item->date_created = JFactory::getDate($item->date_created)->calendar('m D Y');
+      $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('m D Y') : 'N/A';
+      $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('m D Y') : 'N/A';
+      
+    }
+    
+    return $item;
+  }
+  
   /**
    * Method to get the record form.
    *
@@ -149,10 +164,10 @@ class EnquiriesModelEnquiry extends JModelAdmin {
      */
     $params = JComponentHelper::getParams('com_enquiries');
 
-    // Get an instance of the property model, so we can use the sendMail function there.
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+    // import our payment library class
+    jimport('frenchconnections.models.payment');
 
-    $model = JModelLegacy::getInstance('Property', 'HelloWorldModel', array('ignore_request' => true));
+    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', array('ignore_request' => true));
 
     $from = ($data['from_email']) ? $data['from_email'] : '';
     $to = ($data['email']) ? $data['email'] : '';

@@ -7,7 +7,7 @@
       readonly="true"
       disabled="true"
       filter="int"
-      labelclass="control-label"
+      labelClass="control-label"
       label="Id"
     />
     <field
@@ -20,7 +20,7 @@
       required="true"
       class="inputbox input-xlarge"
       filter="string"
-      labelclass="control-label"
+      labelClass="control-label"
     /> 
      
      

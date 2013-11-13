@@ -9,7 +9,7 @@
       default=""
       label="COM_INVOICES_FORM_LBL_INVOICE_ID"
       class="readonly input-mini"
-      labelclass="control-label"
+      labelClass="control-label"
       description="JGLOBAL_FIELD_ID_DESC"
       readonly="true"
       
@@ -17,7 +17,7 @@
     <field 
       name="title"
       type="text"
-      labelclass="control-label"
+      labelClass="control-label"
       description=""
       fiter="string"
       required="true"
@@ -32,7 +32,7 @@
       required="true"
       label="Description"
       class="input-xxlarge"
-      labelclass="control-label"
+      labelClass="control-label"
       
     />
     <field 
@@ -43,7 +43,7 @@
       filter="JComponentHelper::filterText"
       label="Note"
       class="input-xlarge"
-      labelclass="control-label"
+      labelClass="control-label"
       default=""
     />
   
@@ -53,7 +53,7 @@
       required="true"
       label="State"
       filter="int"
-      labelclass="control-label"
+      labelClass="control-label"
       description="">
       <option value="">JSELECT</option>
       <option value="1">COM_TICKETS_OPEN</option>
@@ -65,7 +65,7 @@
       name="severity"
       required="true"
       type="list"
-      labelclass="control-label"
+      labelClass="control-label"
       label="Severity"
       filter="int"
       default=""
@@ -81,7 +81,7 @@
       type="category"
       name="area"
       label="Project area"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="int"
       required="true"
       default=""
@@ -93,7 +93,7 @@
     <field
       name="assigned_to"
       type="user"
-      labelclass="control-label"
+      labelClass="control-label"
       label="Assigned to"
       description=""
       required="true"
@@ -104,7 +104,7 @@
     <field
       name="created_by"
       type="user"
-      labelclass="control-label"
+      labelClass="control-label"
       label="Created by"
       description=""
       class="input-small"

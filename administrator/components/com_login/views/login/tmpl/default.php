@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_login
@@ -7,6 +6,7 @@
  * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
+
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.noframes');
@@ -25,6 +25,7 @@ $modules = JModuleHelper::getModules('login');
 
 foreach ($modules as $module)
 // Render the login modules
-  if ($module->module != 'mod_login') {
-    echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box'));
-  }
+
+if ($module->module != 'mod_login'){
+	echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box'));
+}

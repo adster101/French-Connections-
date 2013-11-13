@@ -11,7 +11,7 @@
       filter="string"
       required="true"
       maxlength="30"
-      labelclass="control-label"
+      labelClass="control-label"
 		/>
     <field 
       name="guest_email"
@@ -23,7 +23,7 @@
       filter="string"
       validate="reviewemail"
       required="true"
-      labelclass="control-label"
+      labelClass="control-label"
 
 		/>
     <field 
@@ -37,7 +37,7 @@
       validate="reviewtitle"
       required="true"
       message="COM_REVIEW_TITLE_VALIDATION_MESSAGE"
-      labelclass="control-label"
+      labelClass="control-label"
 
 		/>
     <field 
@@ -52,7 +52,7 @@
       validate="reviewtext"
       required="true"
       message="COM_REVIEW_TEXT_VALIDATION_MESSAGE"
-      labelclass="control-label"
+      labelClass="control-label"
 
 		/>
     <field name="date"
@@ -65,7 +65,7 @@
            validate="reviewdate"
            required="true"
            message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
-           labelclass="control-label"
+           labelClass="control-label"
 
       />
   

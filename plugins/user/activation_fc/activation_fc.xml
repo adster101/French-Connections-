@@ -24,7 +24,7 @@
           type="text"
           label="Redirect URL"
           class="input-xxlarge"
-          labelclass="control-label"
+          labelClass="control-label"
         />
           
         
