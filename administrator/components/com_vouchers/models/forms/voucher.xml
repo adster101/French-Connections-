@@ -7,7 +7,7 @@
       name="item_cost_id"
       type="sql"
       query="select code as id, description from #__item_costs where catid in (66,50) order by catid, id asc"
-      labelclass="control-label"
+      labelClass="control-label"
       label="Item code"
       required="true"
       class="input-xlarge"
@@ -20,7 +20,7 @@
     <field
       name="property_id"
       type="text"
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_INVOICES_FORM_LBL_INVOICE_PROPERTY_ID"
       description="COM_INVOICES_FORM_DESC_INVOICE_PROPERTY_ID"
       required="true"
@@ -38,11 +38,11 @@
       step="1"
       name="quantity"
       class="input-mini"
-      labelclass="control-label"
+      labelClass="control-label"
     />
     
     <field 
-      labelclass="control-label"
+      labelClass="control-label"
       name="end_date" 
       type="calendar"
       label="Expires"
@@ -54,7 +54,7 @@
     <field 
       name="date_created" 
       type="text" 
-      labelclass="control-label"
+      labelClass="control-label"
       class="input-large"
       label="Date created"
       description=""
@@ -64,7 +64,7 @@
     <field 
       name="date_redeemed" 
       type="text" 
-      labelclass="control-label"
+      labelClass="control-label"
       class="input-large"
       label="Date redeemed"
       readonly="true"
@@ -75,7 +75,7 @@
       name="created_by" 
       type="user"
       label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL"
-      labelclass="control-label"
+      labelClass="control-label"
       description=""
       class="input-small"
       filter="int" 
@@ -89,7 +89,7 @@
       default=""
       label="COM_INVOICES_FORM_LBL_INVOICE_ID"
       class="readonly input-mini"
-      labelclass="control-label"
+      labelClass="control-label"
       description="JGLOBAL_FIELD_ID_DESC"
     />
     

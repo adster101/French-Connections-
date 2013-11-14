@@ -8,7 +8,7 @@
       default=""
       class="vat_status input-xxlarge"
       label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
-      labelclass="control-label"
+      labelClass="control-label"
       description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
       <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
       <option	value="S2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
@@ -26,7 +26,7 @@
       message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
       size="30"
       validate="vat"
-      labelclass="control-label"
+      labelClass="control-label"
       class="validate validate-vat"
       required="false"
 
@@ -40,7 +40,7 @@
       message="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_MESSAGE"
       size="30"
       validate="company"
-      labelclass="control-label"
+      labelClass="control-label"
       class="validate validate-company"
       required="false"
 

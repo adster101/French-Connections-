@@ -16,8 +16,8 @@ JHtml::_('bootstrap.tooltip');
 $document = JFactory::getDocument();
 $document->addStyleSheet('components/com_vouchers/assets/css/invoices.css');
 
-$user		= JFactory::getUser();
-$userId		= $user->get('id');
+$user = JFactory::getUser();
+$userId = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
 ?>
@@ -118,8 +118,7 @@ if (!empty($this->extra_sidebar)) {
           <?php
           foreach ($this->items as $i => $item) :
             $canChange = $user->authorise('core.edit.state', 'com_vouchers');
-          	$canCheckin = $user->authorise('core.manage',     'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-
+            $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
             ?>
             <tr class="row<?php echo $i % 2; ?>">
               <td class="center hidden-phone">
@@ -172,6 +171,8 @@ if (!empty($this->extra_sidebar)) {
           <?php endforeach; ?>
         </tbody>
       </table>
+      <?php //Load the batch processing form.  ?>
+      <?php echo $this->loadTemplate('batch'); ?>
 
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />

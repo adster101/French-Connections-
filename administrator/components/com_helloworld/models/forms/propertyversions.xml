@@ -4,7 +4,7 @@
   <fieldset name="description">
     <field
       name="title"
-      labelclass="control-label"
+      labelClass="control-label"
       type="text"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
@@ -27,10 +27,12 @@
         class="alert alert-notice"
         description=""
       />
+      
       <field
-        labelclass="control-label"
+        labelClass="control-label"
         name="amenity_bakery"
         filter="string"
+        hint=""
         type="text"
         class="validate input-xxlarge"
         label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTBABKERY_LABEL"
@@ -39,8 +41,9 @@
         maxlength="55"
         validate="short"
       />
+      
       <field
-        labelclass="control-label"
+        labelClass="control-label"
         name="amenity_supermarket"
         type="text"
         class="validate input-xxlarge"
@@ -52,7 +55,7 @@
         filter="string"
       />
       <field
-        labelclass="control-label"
+        labelClass="control-label"
         name="amenity_market"
         type="text"
         class="validate input-xxlarge"
@@ -64,7 +67,7 @@
         filter="string"
       />
       <field
-        labelclass="control-label"
+        labelClass="control-label"
         name="amenity_pharmacy"
         type="text"
         class="validate input-xxlarge"
@@ -76,7 +79,7 @@
         filter="string"
       />
       <field
-        labelclass="control-label"
+        labelClass="control-label"
         name="amenity_bar"
         type="text"
         class="validate input-xxlarge"
@@ -88,7 +91,7 @@
         filter="string"
       />
       <field
-        labelclass="control-label"
+        labelClass="control-label"
         name="amenity_tourist"
         type="text"
         class="validate input-xxlarge"
@@ -110,7 +113,7 @@
       validate="nonzero"
       label="Nearest Airport"
       description=""
-      labelclass="control-label"
+      labelClass="control-label"
     />
     
     <field
@@ -122,7 +125,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_DESC"
       required="true"
-      labelclass="control-label">
+      labelClass="control-label">
       <option value="">JOPTION_SELECT_CATEGORY</option>
     </field>
 
@@ -143,7 +146,7 @@
       maxlength="15"
       filter="string"
       validate="latlong"
-      labelclass="control-label"
+      labelClass="control-label"
       readonly="true">
     </field>
     
@@ -156,7 +159,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
       required="true"
       filter="string"
-      labelclass="control-label"
+      labelClass="control-label"
       maxlength="15"
       validate="latlong"
       readonly="true">
@@ -166,7 +169,7 @@
       name="city"
       type="cities"
       class="inputbox validate"
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
       required="true"
@@ -178,7 +181,7 @@
       name="location_type"
       type="attributetype"
       class="inputbox validate"
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
       required="false"
@@ -192,7 +195,7 @@
       extension="com_helloworld"
       class="inputbox validate-distance-to-coast"
       default=""
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
       required="false"
@@ -211,7 +214,7 @@
       filter="safehtml"
       buttons="false"
       validate=""
-      labelclass="control-label"
+      labelClass="control-label"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_DETAILS_MESSAGE">
     </field>
     
@@ -222,7 +225,7 @@
       label="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_LABEL"
       description="COM_HELLOWORLD_ACCOMMODATION_ACTIVITIES_DESC"
       multiple="true"
-      labelclass="control-label"
+      labelClass="control-label"
       id="8">
     </field>
      <field
@@ -232,7 +235,7 @@
       label="COM_HELLOWORLD_ACCOMMODATION_ACCESS_LABEL"
       description="COM_HELLOWORLD_ACCOMMODATION_ACCESS_DESC"
       multiple="true"
-      labelclass="control-label"
+      labelClass="control-label"
       id="28">
     </field>   
     
@@ -246,7 +249,7 @@
       default=""
       filter="safehtml"
       buttons="false"
-      labelclass="control-label"
+      labelClass="control-label"
       validate=""
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_GETTING_THERE_MESSAGE">
     </field>
@@ -255,7 +258,7 @@
 
   <fieldset name="owner">
     <field
-      labelclass="control-label"
+      labelClass="control-label"
       name="modified_by"
       type="user"
       label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
@@ -263,7 +266,7 @@
       readonly="true"
       filter="unset"/>
     <field
-      labelclass="control-label"
+      labelClass="control-label"
       name="modified_on"
       type="text"
       label="JGLOBAL_FIELD_MODIFIED_LABEL"
@@ -275,7 +278,7 @@
 
   <fieldset name="notes">
     <field
-      labelclass="control-label"
+      labelClass="control-label"
       name="note"
       filter="string"
       type="textarea"
@@ -304,7 +307,7 @@
       name="review"
       type="hidden"
       filter="int"
-      default="" />
+    />
     <field
       name="published_on"
       type="hidden"

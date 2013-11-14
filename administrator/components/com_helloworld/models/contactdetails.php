@@ -49,6 +49,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $data->sms_alert_number = $sms_details->sms_alert_number;
         $data->sms_valid = $sms_details->sms_valid;
         $data->sms_status = $sms_details->sms_status;
+        $data->sms_nightwatchman = $sms_details->sms_nightwatchman;
       }
 
       if (!empty($data->languages_spoken)) {
@@ -239,7 +240,7 @@ class HelloWorldModelContactDetails extends JModelAdmin {
     $query = $db->getQuery(true);
 
     // Initialise the query.
-    $query->select('sms_alert_number, sms_valid, sms_status, sms_validation_code');
+    $query->select('sms_alert_number, sms_valid, sms_status, sms_validation_code,sms_nightwatchman');
     $query->from('#__property' . ' as a');
     $query->where('a.id = ' . (int) $id);
 

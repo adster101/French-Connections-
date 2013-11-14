@@ -8,7 +8,7 @@
       type="note"
       class="alert alert-notice" 
       label=""
-      labelclass="control-label"
+      labelClass="control-label"
       description="COM_HELLOWORLD_HELLOWORLD_WEBSITE_NOTE" />
     <field
       name="website"
@@ -20,7 +20,7 @@
       size="30"
       class="validate-url input-xlarge"
       validate="url"
-      labelclass="control-label"
+      labelClass="control-label"
     />
    
   </fieldset> 
@@ -32,7 +32,7 @@
       type="note"
       class="alert alert-notice" 
       label=""
-      labelclass="control-label"
+      labelClass="control-label"
       description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_OVERRIDE_OPTION" />
     
     <field 
@@ -41,7 +41,7 @@
       filter="int"
       label="COM_HELLOWORLD_HELLOWORLD_USE_INVOICE_DETAILS"
       required="false"
-      labelclass="control-label">
+      labelClass="control-label">
     </field>      
     
     <field 
@@ -50,7 +50,7 @@
       class="input-mini"
       filter="string"
       label="First name"
-      labelclass="control-label"
+      labelClass="control-label"
       maxlength="25"
     />
     <field 
@@ -59,7 +59,7 @@
       class="input-small"
       filter="string"
       label="Surname"
-      labelclass="control-label"
+      labelClass="control-label"
       maxlength="25"
     />
 
@@ -69,7 +69,7 @@
       filter="string"
       label="Phone number"
       maxlength="25"
-      labelclass="control-label"
+      labelClass="control-label"
       class="validate validate-tel"
     />
 
@@ -80,7 +80,7 @@
       filter="string"
       label="Contact email"
       maxlength="75"
-      labelclass="control-label"
+      labelClass="control-label"
       class="validate validate-email"
       validate="email"
     />      
@@ -94,21 +94,21 @@
       name="smsprefs" 
       type="note"
       class="alert alert-notice" 
-      labelclass="control-label"
+      labelClass="control-label"
       description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_SMS_CONTACT_PREFERENCES" />
     <field 
       name="sms_valid_message" 
       type="note"
       class="alert alert-success" 
-      labelclass="control-label"
+      labelClass="control-label"
       description="COM_HELLOWORLD_HELLOWORLD_ENQUIRY_SMS_CONTACT_ACTIVE" />
     <field 
       name="sms_alert_number" 
       type="text"
       label="SMS Telephone Number"
       maxlength="25"
-      hint="e.g. 441234123456" 
-      labelclass="control-label"
+      hint="e.g. 44 (0) 1234 123456" 
+      labelClass="control-label"
       filter="string"
       description="" 
       validate="tel"
@@ -118,20 +118,29 @@
       type="text"
       label="SMS Validation code"
       maxlength="25"
-      labelclass="control-label"
+      labelClass="control-label"
       filter="string"
       default=""
       value=""
       description=""
       class="input-small" 
     />    
+    <field 
+      name="sms_nightwatchman"
+      type="inlinecheckbox"
+      label="COM_HELLOWORLD_CONTACT_DETAILS_SMS_NIGHTWATCHMAN"
+      description=""
+      class="inline"
+      required="false"
+      filter="int"
+      default=""
+      labelClass="control-label"
+    />
     
   </fieldset>
   
   <fieldset
-    name="booking-form"
-    
-  >
+    name="booking-form">
 
     <field 
       name="booking_form"
@@ -140,7 +149,7 @@
       class="btn-group"
       label="COM_HELLOWORLD_HELLOWORLD_BOOKING_FORM_SHOW"
       required="false"
-      labelclass="control-label">
+      labelClass="control-label">
       <option value="1">JYES</option>
       <option value="0">JNO</option>
     </field>    
@@ -151,14 +160,14 @@
       class="input-xxlarge"
       filter="string"
       label="COM_HELLOWORLD_HELLOWORLD_BOOKING_FORM_ADDRESS"
-      labelclass="control-label"
+      labelClass="control-label"
       maxlength="175"
     />    
 
     
     <field
       name="deposit_currency"
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_BOOKING_FORM_FIELD_BASE_CURRENCY_LABEL"
       description="COM_HELLOWORLD_BOOKING_FORM_FIELD_BASE_CURRENCY_MESSAGE"
       message="COM_HELLOWORLD_TARIFFS_BOOKING_FORM_FIELD_BASE_CURRENCY_DESC"
@@ -176,7 +185,7 @@
       maxlength="5"
       filter="string"
       class="input-mini"
-      labelclass="control-label"
+      labelClass="control-label"
     />
     <field
       name="security_deposit"
@@ -185,7 +194,7 @@
       maxlength="5"
       filter="string"
       class="input-mini"  
-      labelclass="control-label"
+      labelClass="control-label"
     />    
     <field
       name="payment_deadline"
@@ -194,7 +203,7 @@
       maxlength="25"
       filter="string"
       class="input-mini"
-      labelclass="control-label"
+      labelClass="control-label"
     />    
     <field 
       name="evening_meal"
@@ -205,7 +214,7 @@
       class="input-xxlarge"
       cols="10"
       rows="5"
-      labelclass="control-label"
+      labelClass="control-label"
     />
     <field 
       name="additional_booking_info"
@@ -215,7 +224,7 @@
       class="input-xxlarge"
       cols="10"
       rows="5"
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_BOOKING_FORM_FIELD_ADDITIONAL_BOOKING_INFO"
 
     />    
@@ -226,7 +235,7 @@
       cols="10"
       rows="5"
       filter="safehtml"
-      labelclass="control-label"     
+      labelClass="control-label"     
       buttons="false"
     />    
   </fieldset>

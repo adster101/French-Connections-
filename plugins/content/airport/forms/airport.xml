@@ -19,7 +19,7 @@
         class=""
         filter="string"
         required="true"
-        labelclass="control-label"
+        labelClass="control-label"
       />
       <field
         name="longitude"
@@ -31,7 +31,7 @@
         size="30"
         filter="string"
         required="true"
-        labelclass="control-label"
+        labelClass="control-label"
       />
       <field
         name="department"
@@ -45,7 +45,7 @@
         required="true"
         filter="int"
         value_field="department"
-        labelclass="control-label"
+        labelClass="control-label"
       />    
       <field
         name="code"
@@ -59,7 +59,7 @@
         class="input-mini"
         maxlength="3"
         filter="string"
-        labelclass="control-label"
+        labelClass="control-label"
       />    
       <field
         name="name"
@@ -73,7 +73,7 @@
         class="input"
         maxlength="25"
         filter="string"
-        labelclass="control-label"
+        labelClass="control-label"
       />          
     </fieldset>
   </fields>

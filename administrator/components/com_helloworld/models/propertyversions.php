@@ -368,7 +368,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
       // Set the table model to the appropriate key
       // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
-      $table->set('_tbl_key', 'id');
+      
+
+      $table->set('_tbl_keys', array('id'));
 
       // Store the data.
       if (!$table->save($data)) {
@@ -391,6 +393,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $property->sms_validation_code = ($data['sms_validation_code']) ? $data['sms_validation_code'] : '';
         $property->sms_status = ($data['sms_status']) ? $data['sms_status'] : '';
         $property->sms_valid = ($data['sms_valid']) ? $data['sms_valid'] : '';
+        $property->sms_nightwatchman = ($data['sms_nightwatchman']) ? $data['sms_nightwatchman'] : '';
 
         if (!$property->store()) {
           $this->setError($property->getError());
@@ -432,8 +435,9 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
 
     // Set the table key back to the parent id so it redirects based on that key
     // on not the version key id
-    $table->set('_tbl_key', 'property_id');
-
+    //$table->set('_tbl_key', 'property_id');
+    $table->set('_tbl_keys', array('property_id'));
+    
     $pkName = $table->getKeyName();
 
     if (isset($table->$pkName)) {

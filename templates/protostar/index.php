@@ -89,7 +89,7 @@ else
 	if ($this->params->get('googleFont'))
 	{
 	?>
-		<link href='http://fonts.googleapis.com/css?family=<?php echo $this->params->get('googleFontName');?>' rel='stylesheet' type='text/css' />
+		<link href='//fonts.googleapis.com/css?family=<?php echo $this->params->get('googleFontName');?>' rel='stylesheet' type='text/css' />
 		<style type="text/css">
 			h1,h2,h3,h4,h5,h6,.site-title{
 				font-family: '<?php echo str_replace('+', ' ', $this->params->get('googleFontName'));?>', sans-serif;
@@ -176,9 +176,7 @@ else
 					<jdoc:include type="modules" name="position-3" style="xhtml" />
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />
-          <div class="row-fluid">
-					<jdoc:include type="modules" name="position-2" style="html5" />
-          </div>
+					<jdoc:include type="modules" name="position-2" style="none" />
 					<!-- End Content -->
 				</main>
 				<?php if ($this->countModules('position-7')) : ?>

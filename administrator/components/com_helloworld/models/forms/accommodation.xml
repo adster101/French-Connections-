@@ -3,7 +3,7 @@
   <fieldset name="description">
     <field
       name="title"
-      labelclass="control-label"
+      labelClass="control-label"
       type="text"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_GREETING_DESC"
@@ -16,7 +16,7 @@
       
     <field
       name="description"
-      labelclass="control-label"
+      labelClass="control-label"
       type="editor"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
@@ -38,7 +38,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_DESC"
       required="true"
-      labelclass="control-label">
+      labelClass="control-label">
       <option value="0">JOPTION_SELECT_CATEGORY</option>
     </field>		
   
@@ -59,7 +59,7 @@
       maxlength="15"
       filter="string"
       validate="latlong"
-      labelclass="control-label"
+      labelClass="control-label"
       readonly="true">
     </field>
     <field
@@ -72,7 +72,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LONGITUDE_DESC"
       required="true"
       filter="string"
-      labelclass="control-label"
+      labelClass="control-label"
       maxlength="15"
       validate="latlong"
       readonly="true">
@@ -82,7 +82,7 @@
       name="city"
       type="cities"
       class="inputbox validate"
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
       required="true"
@@ -98,7 +98,7 @@
       extension="com_helloworld"
       class="inputbox validate-distance-to-coast"
       default=""
-      labelclass="control-label"
+      labelClass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
       required="false"
@@ -141,7 +141,7 @@
       class="inputbox validate-occupancy"
       validate="occupancy"
       required="true"
-      labelclass="control-label"
+      labelClass="control-label"
       default="">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
       <option value="1">1</option>
@@ -167,7 +167,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
       class="validate-bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       validate="singlebedrooms"
       required="true"
       message=""
@@ -191,7 +191,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="true"
       default="">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -212,7 +212,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_TRIPLE_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="false"
       default="0">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -232,7 +232,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_QUAD_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="false"
       default="0">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -251,7 +251,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       validate="bedrooms"
       default="">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -271,7 +271,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHILD_BEDS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       default="">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
       <option value="1">1</option>
@@ -290,7 +290,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_COTS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="false"
       default="">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -310,7 +310,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_BEDS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="false"
       default="">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -330,7 +330,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="true"
       default="">
       <option value="">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -350,7 +350,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
       class="bedrooms-select validate-bedrooms"
       validate="bedrooms"
-      labelclass="control-label"
+      labelClass="control-label"
       required="false"
       default="">
       <option value="0">COM_HELLOWORLD_PLEASE_CHOOSE</option>
@@ -378,7 +378,7 @@
       label="COM_HELLOWORLD_FIELD_PROPERTY_ID_LABEL"
       description ="COM_HELLOWORLD_FIELD_PROPERTY_ID_DESC"
       class="readonly input-mini"
-      labelclass=""
+      labelClass=""
       readonly="true"/>
     <field
       label="COM_CATEGORIES_FIELD_PARENT_LABEL"
@@ -386,7 +386,7 @@
       type="UserProperties"
       default="1"
       readonly="true"
-      labelclass=""
+      labelClass=""
       user=""/>     
     <field 
       name="expiry_date"
@@ -396,11 +396,11 @@
       label="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_LABEL"
       description="COM_HELLOWORLD_FIELD_PROPERTY_EXPIRY_DATE_DESC"
       filter="unset"
-      labelclass=""/>
+      labelClass=""/>
   </fieldset>
   <fieldset name="owner">
     <field
-      labelclass="control-label"
+      labelClass="control-label"
       name="created_by"
       type="user"
       readonly="true"
@@ -410,14 +410,14 @@
       />
     <field
       name="created_on"
-      labelclass="control-label"
+      labelClass="control-label"
       type="text"
       label="JGLOBAL_CREATED_DATE"
       class="readonly input-small"
       filter="unset"
       readonly="true" />
     <field
-      labelclass="control-label"
+      labelClass="control-label"
       name="modified_by"
       type="user"
       label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
@@ -425,7 +425,7 @@
       readonly="true"
       filter="unset"/>
     <field
-      labelclass="control-label"
+      labelClass="control-label"
       name="modified"
       type="text"
       label="JGLOBAL_FIELD_MODIFIED_LABEL"

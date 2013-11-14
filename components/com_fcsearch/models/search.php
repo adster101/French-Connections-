@@ -98,6 +98,7 @@ class FcSearchModelSearch extends JModelList {
 
     // No results found, return an empty array
     if (empty($row)) {
+      // Here we should throw an exception and redirect to a helpful page with most popular searches etc.
       return array();
     } else {
       $this->location = $row->id;
@@ -791,7 +792,7 @@ class FcSearchModelSearch extends JModelList {
     // Get the configuration options.
     $app = JFactory::getApplication();
     $input = $app->input;
-
+            
     $params = $app->getParams();
     $user = JFactory::getUser();
     // Should apply this filter to other params here as well...
@@ -804,7 +805,7 @@ class FcSearchModelSearch extends JModelList {
     // Get each of the possible URL params
     // Get the query string.
     $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', 'france', 'string') : $params->get('s_kwds', 'france');
-    $q = $app->stringURLSafe($filter->clean($tmp, 'string'));
+    $q = JApplication::stringURLSafe($filter->clean($tmp, 'string'));
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
     $this->setState('list.searchterm', $q, 'string');

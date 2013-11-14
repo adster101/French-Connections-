@@ -10,7 +10,7 @@
       description="COM_ENQUIRIES_ENQUIRY_FORENAME_DESC"
       label="COM_ENQUIRIES_ENQUIRY_FORENAME_LABEL"    
       name="forename"
-      labelclass="control-label"
+      labelClass="control-label"
       readonly="true"
       filter="unset">
     </field>
@@ -18,7 +18,7 @@
       description="COM_ENQUIRIES_ENQUIRY_SURNAME_DESC"
       label="COM_ENQUIRIES_ENQUIRY_SURNAME_LABEL"
       name="surname"
-      labelclass="control-label"
+      labelClass="control-label"
       readonly="true"
       filter="unset">
     </field>    
@@ -26,25 +26,25 @@
       description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
       label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
       name="email"
-      filter="string"
-      labelclass="control-label"     
+      filter="unset"
+      labelClass="control-label"     
       readonly="true">
     </field>    
     <field 
       description="COM_ENQUIRIES_ENQUIRY_DATE_CREATEED_DESC"
       label="COM_ENQUIRIES_ENQUIRY_DATE_CREATED_LABEL"
       name="date_created"
-      labelclass="control-label"
+      labelClass="control-label"
       readonly="true"
       filter="unset"
-      type="calendar">
+      type="text">
     </field>        
     <field 
       description="COM_ENQUIRIES_ENQUIRY_PHONE_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PHONE_LABEL"    
       name="phone"
       filter="unset"
-      labelclass="control-label"     
+      labelClass="control-label"     
       readonly="true">
     </field>        
   </fieldset>
@@ -58,7 +58,7 @@
            label="COM_ENQUIRIES_ENQUIRY_START_DATE_LABEL"
            filter="unset"
            field="end_date"
-           labelclass="control-label"
+           labelClass="control-label"
            readonly="true"
     />
       
@@ -69,7 +69,7 @@
            description="COM_ENQUIRIES_ENQUIRY_END_DATE_DESC"
            label="COM_ENQUIRIES_ENQUIRY_END_DATE_LABEL"
            filter="unset"
-           labelclass="control-label"          
+           labelClass="control-label"          
            readonly="true"
     />
     
@@ -80,18 +80,18 @@
            description="COM_ENQUIRIES_ENQUIRY_ADULTS_DESC"
            label="COM_ENQUIRIES_ENQUIRY_ADULTS_LABEL"
            filter="unset"
-           labelclass="control-label"          
+           labelClass="control-label"          
            readonly="true"
     />
     
-    <field name="adults"
+    <field name="children"
            type="text"
            id="children"
            class="input-small end_date"
            description="COM_ENQUIRIES_ENQUIRY_CHILDREN_DESC"
            label="COM_ENQUIRIES_ENQUIRY_CHILDREN_LABEL"
            filter="unset"
-           labelclass="control-label"          
+           labelClass="control-label"          
            readonly="true"
     />      
     
@@ -102,7 +102,7 @@
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
       readonly="true"
-      labelclass="control-label"
+      labelClass="control-label"
     />
   </fieldset>
   
@@ -117,7 +117,7 @@
            class="input-large"
            rows="10"
            maxlength="150"
-           labelclass="control-label"
+           labelClass="control-label"
            readonly="true"  
            disabled="true"
     />        
@@ -130,7 +130,8 @@
       label="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_LABEL"
       description="COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT_DESC"
       required="true"
-      labelclass="control-label"
+      class="input-xlarge"
+      labelClass="control-label"
     />
 
     <field
@@ -141,7 +142,7 @@
       label="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_LABEL"
       description="COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE_DESC"
       required="true"
-      labelclass="control-label">
+      labelClass="control-label">
     </field>
   </fieldset>  
   

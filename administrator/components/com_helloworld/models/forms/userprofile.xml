@@ -16,7 +16,7 @@
       message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
       size="30"
       required="true"
-      labelclass="control-label"
+      labelClass="control-label"
 			/>
     <field
       name="address2"
@@ -28,7 +28,7 @@
       label="PLG_USER_PROFILE_FIELD_ADDRESS2_LABEL"
       message="PLG_USER_PROFILE_FIELD_ADDRESS2_MESSAGE"
       size="30"
-      labelclass="control-label"
+      labelClass="control-label"
       />
 
     <field
@@ -40,7 +40,7 @@
       label="PLG_USER_PROFILE_FIELD_CITY_LABEL"
       message="PLG_USER_PROFILE_FIELD_CITY_MESSAGE"
       size="30"
-      labelclass="control-label"
+      labelClass="control-label"
       required="true"
       />
     <field
@@ -52,7 +52,7 @@
       label="PLG_USER_PROFILE_FIELD_REGION_LABEL"
       message="PLG_USER_PROFILE_FIELD_REGION_MESSAGE"
       size="30"
-      labelclass="control-label"
+      labelClass="control-label"
       required="true"
       />
 
@@ -65,7 +65,7 @@
       label="PLG_USER_PROFILE_FIELD_POSTAL_CODE_LABEL"
       message="PLG_USER_PROFILE_FIELD_POSTAL_CODE_MESSAGE"
       size="30"
-      labelclass="control-label"
+      labelClass="control-label"
       required="true"
       class="input-small"
 			/>
@@ -78,7 +78,7 @@
       filter="string"
       label="PLG_USER_PROFILE_FIELD_COUNTRY_LABEL"
       message="PLG_USER_PROFILE_FIELD_COUNTRY_MESSAGE"
-      labelclass="control-label"
+      labelClass="control-label"
       required="true"
       class="input-large">
         <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
@@ -101,7 +101,7 @@
         class="input-xxlarge"
         label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
         description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC"
-        labelclass="control-label">
+        labelClass="control-label">
         <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
         <option	value="S2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
         <option	value="S2A">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
@@ -120,7 +120,7 @@
         message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
         size="30"
         class="input-small"
-        labelclass="control-label"
+        labelClass="control-label"
         maxlength="10"
         default=""
 			/>
@@ -134,7 +134,7 @@
         label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
         message="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_MESSAGE"
         size="30"
-        labelclass="control-label"
+        labelClass="control-label"
         class="input-small"
         maxlength="10"
         default=""

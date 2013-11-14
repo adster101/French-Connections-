@@ -11,7 +11,7 @@
       filter="string"
       required="true"
       maxlength="20"
-      labelclass="control-label"
+      labelClass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_VALIDATION_MESSAGE"
       validate="name"
 		/>
@@ -26,7 +26,7 @@
       filter="string"
       required="true"
       maxlength="20"
-      labelclass="control-label"
+      labelClass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_VALIDATION_MESSAGE"
       validate="name"
     />    
@@ -42,7 +42,7 @@
       filter="string"
       validate="enquiryemail"
       required="true"
-      labelclass="control-label"
+      labelClass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
 		/>
     
@@ -58,7 +58,7 @@
       filter="ALNUM"
       validate="telephone"
       required="true"
-      labelclass="control-label"
+      labelClass="control-label"
     />
       
     <field 
@@ -74,7 +74,7 @@
       validate="message"
       required="required"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
-      labelclass="control-label"
+      labelClass="control-label"
 		/>
     
     <field name="start_date"
@@ -87,7 +87,7 @@
       validate="date"
       required="true"
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
-      labelclass="control-label"
+      labelClass="control-label"
     />
     
     <field name="end_date"
@@ -100,7 +100,7 @@
       validate="date"
       required="true"
       message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
-      labelclass="control-label"
+      labelClass="control-label"
     />  
  
     <field 
@@ -112,7 +112,7 @@
       description="COM_ACCOMMODATION_ENQUIRY_ADULTS_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_ADULTS_LABEL"
       filter="integer"
-      labelclass="control-label"
+      labelClass="control-label"
       validate="adults"
     /> 
     
@@ -125,7 +125,7 @@
       description="COM_ACCOMMODATION_ENQUIRY_CHILDREN_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_CHILDREN_LABEL"
       filter="integer"
-      labelclass="control-label"
+      labelClass="control-label"
       validate="adults"
     /> 
     
@@ -145,7 +145,7 @@
       label="COM_ACCOMMODATION_CAPTCHA_LABEL"
       description="COM_ACCOMMODATION_CAPTCHA_DESC"
       validate="captcha"
-      labelclass="control-label"
+      labelClass="control-label"
     />
     
   </fieldset>

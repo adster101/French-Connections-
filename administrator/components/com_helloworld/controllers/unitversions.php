@@ -215,6 +215,7 @@ class HelloWorldControllerUnitVersions extends HelloWorldControllerBase {
 
       return false;
     }
+    $unit_id = $model->getState($model->getName() . '.id');
 
     // Set a message indicating success...
     $this->setError(JText::_('COM_HELLOWORLD_HELLOWORLD_CREATE_NEW_UNIT_SUCCESS'));
@@ -222,7 +223,7 @@ class HelloWorldControllerUnitVersions extends HelloWorldControllerBase {
 
     $this->holdEditId('com_helloworld.view.listing', $id);
     
-    $unit_id = $model->getState($model->getName() . '.id');
+    $unit_id = $model->getState($model->getName() . '.unit_id');
 
     // Redirect to the edit screen.
     $this->setRedirect(

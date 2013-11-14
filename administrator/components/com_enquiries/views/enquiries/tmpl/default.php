@@ -110,14 +110,14 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <?php endif; ?>
               </td>
               <td>
-                <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_PERIOD_FROM_TO', $item->start_date, $item->end_date); ?>
+                <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_PERIOD_FROM_TO', JFactory::getDate($item->start_date)->calendar('d M Y'), JFactory::getDate($item->end_date)->calendar('d M Y')); ?>
               </td>
               <td>
-                <?php echo $item->date_created; ?>
+                <?php echo JFactory::getDate($item->date_created)->calendar('d M Y'); ?>
               </td>
               <td>
                 <?php if ($item->replied): ?>
-                  <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_SENT_ON', $item->date_replied); ?>
+                  <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_SENT_ON', JFactory::getDate($item->date_replied)->calendar('d M Y')) ?>
                 <?php endif; ?>
               </td>
               <td>
