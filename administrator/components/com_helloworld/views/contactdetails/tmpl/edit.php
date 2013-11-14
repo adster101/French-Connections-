@@ -57,6 +57,11 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
         <?php elseif ($this->item->sms_valid) : ?>
           <?php echo $this->form->getLabel('sms_valid_message'); ?>
         <?php endif; ?>
+        <div class="control-group">
+          <div class="controls">
+            <?php echo $this->form->getInput('sms_nightwatchman'); ?>
+          </div>
+        </div>
       </fieldset>   
 
       <fieldset class="adminform">      

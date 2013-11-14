@@ -107,7 +107,7 @@
       type="text"
       label="SMS Telephone Number"
       maxlength="25"
-      hint="e.g. 441234123456" 
+      hint="e.g. 44 (0) 1234 123456" 
       labelClass="control-label"
       filter="string"
       description="" 
@@ -125,13 +125,22 @@
       description=""
       class="input-small" 
     />    
+    <field 
+      name="sms_nightwatchman"
+      type="inlinecheckbox"
+      label="COM_HELLOWORLD_CONTACT_DETAILS_SMS_NIGHTWATCHMAN"
+      description=""
+      class="inline"
+      required="false"
+      filter="int"
+      default=""
+      labelClass="control-label"
+    />
     
   </fieldset>
   
   <fieldset
-    name="booking-form"
-    
-  >
+    name="booking-form">
 
     <field 
       name="booking_form"

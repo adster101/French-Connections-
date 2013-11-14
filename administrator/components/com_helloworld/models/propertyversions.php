@@ -393,6 +393,7 @@ class HelloWorldModelPropertyVersions extends JModelAdmin {
         $property->sms_validation_code = ($data['sms_validation_code']) ? $data['sms_validation_code'] : '';
         $property->sms_status = ($data['sms_status']) ? $data['sms_status'] : '';
         $property->sms_valid = ($data['sms_valid']) ? $data['sms_valid'] : '';
+        $property->sms_nightwatchman = ($data['sms_nightwatchman']) ? $data['sms_nightwatchman'] : '';
 
         if (!$property->store()) {
           $this->setError($property->getError());

@@ -73,4 +73,7 @@ class SpecialOffersTableSpecialOffer extends JTable
     }		
 	}  
   
+  
+  
+  
 }

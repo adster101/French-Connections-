@@ -25,7 +25,7 @@ class TicketsViewTickets extends JViewLegacy {
    * Display the view
    */
   public function display($tpl = null) {
-    
+
     $this->state = $this->get('State');
     $this->items = $this->get('Items');
     $this->pagination = $this->get('Pagination');
@@ -34,7 +34,7 @@ class TicketsViewTickets extends JViewLegacy {
     if (count($errors = $this->get('Errors'))) {
       throw new Exception(implode("\n", $errors));
     }
-    
+
     $canDo = TicketsHelper::getActions();
 
     TicketsHelper::addSubmenu('tickets');
@@ -52,8 +52,8 @@ class TicketsViewTickets extends JViewLegacy {
    */
   protected function addToolbar($canDo = '') {
 
-
     JToolBarHelper::title(JText::_('COM_TICKETS_TICKETS_TITLE'));
+    $user = JFactory::getUser();
 
     //Check if the form exists before showing the add/edit buttons
     $formPath = JPATH_COMPONENT_ADMINISTRATOR . '/models/forms/ticket.xml';
@@ -83,6 +83,7 @@ class TicketsViewTickets extends JViewLegacy {
         JToolBarHelper::divider();
         JToolBarHelper::archiveList('tickets.archive', 'JTOOLBAR_ARCHIVE');
       }
+
       if (isset($this->items[0]->checked_out)) {
         JToolBarHelper::custom('tickets.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
       }
@@ -97,6 +98,20 @@ class TicketsViewTickets extends JViewLegacy {
         JToolBarHelper::trash('tickets.trash', 'JTOOLBAR_TRASH');
         JToolBarHelper::divider();
       }
+    }
+
+    // Add a batch button
+    if ($user->authorise('core.create', 'com_tickets') && $user->authorise('core.edit', 'com_tickets') && $user->authorise('core.edit.state', 'com_tickets')) {
+      // Get the toolbar object instance
+      $bar = JToolBar::getInstance('toolbar');
+      JHtml::_('bootstrap.modal', 'collapseModal');
+      $title = JText::_('JTOOLBAR_BATCH');
+
+      // Instantiate a new JLayoutFile instance and render the batch button
+      $layout = new JLayoutFile('joomla.toolbar.batch');
+
+      $dhtml = $layout->render(array('title' => $title));
+      $bar->appendButton('Custom', $dhtml, 'batch');
     }
 
     if ($canDo->get('core.admin')) {
@@ -116,7 +131,6 @@ class TicketsViewTickets extends JViewLegacy {
     JHtmlSidebar::addFilter(
             JText::_('COM_TICKETS_SEVERITY'), 'filter_severity', JHtml::_('select.options', TicketsHelper::getSeverities(), 'value', 'text', $this->state->get('filter.severity'), true)
     );
-  
   }
 
 }

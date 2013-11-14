@@ -91,9 +91,9 @@ class ImportControllerProperty_listings extends JControllerForm {
         $query->where('existing_id = ' . (int) $line[8]);
       }
 
-      $db->setQuery($query, 0, 10);
-      $airport = $db->loadRowList();
-      print_r($airport);die;
+      $db->setQuery($query, 0, 1);
+      $airport = $db->loadRow();
+
       $languages_spoken = json_encode(array_unique(explode(',', $line[38])));
       $registry->loadArray($languages_spoken);
       $languages = (string) $registry;
