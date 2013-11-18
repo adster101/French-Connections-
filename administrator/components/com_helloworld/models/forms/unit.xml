@@ -204,7 +204,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      validate="occupancy"
       labelClass="control-label"
       required="true"
       filter="int">

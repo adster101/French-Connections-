@@ -52,9 +52,7 @@ class ImportControllerAttributes extends JControllerForm {
       }
     }
 
-    $previous_property_id = '';
-
-    while (($line = fgetcsv($handle)) !== FALSE) {
+    while (($line = fgetcsv($handle, 0, "|")) !== FALSE) {
 
       // Initially we need to get the unit version id from the #__unit_versions table
       $query = $db->getQuery(true);
@@ -74,7 +72,7 @@ class ImportControllerAttributes extends JControllerForm {
       // The list of property attributes is a comma separated list so it is exploded to an array
       // The property type isn't listed in the slp_tax_id bit but is appended as the first entry in the list.
       $property_attributes = explode(',', $line[2]);
-      $property_type = $property_attributes[2];
+      $property_type = $property_attributes[1];
 
       $go = false;
 
@@ -190,7 +188,6 @@ class ImportControllerAttributes extends JControllerForm {
       // The list of property attributes is a comma separated list so it is exploded to an array
       // The property type isn't listed in the slp_tax_id bit but is appended as the first entry in the list.
       $property_attributes = explode(',', $line[2]);
-      $property_type = $property_attributes[2];
 
       $go = false;
 
@@ -214,7 +211,7 @@ class ImportControllerAttributes extends JControllerForm {
       }
 
       if (!empty($version_id[0])) {
-
+        
         // Set and execute the query
         $db->setQuery($query);
         if ($go) {

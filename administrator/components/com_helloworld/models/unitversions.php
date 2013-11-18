@@ -379,7 +379,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Set the table key back to the parent id so it redirects based on that key
     // on not the version key id
     //$table->set('_tbl_key', 'unit_id');
-    $table->set('_tbl_keys', array('property_id'));
+    $table->set('_tbl_keys', array('unit_id'));
 
     
     $pkName = $table->getKeyName();

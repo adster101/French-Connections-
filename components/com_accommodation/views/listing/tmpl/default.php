@@ -83,7 +83,7 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
             <?php if ($this->item->tariffs_based_on) : ?>
               <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
             <?php endif; ?>
-            <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR'] ; ?>)</span>
+            <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)</span>
           <?php endif; ?>
         <?php else: ?>
           <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
@@ -295,6 +295,11 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
     <?php endif; ?>
     <?php if ($this->item->getting_there) : ?>
       <?php echo $this->item->getting_there; ?>
+    <?php endif; ?>
+    <!-- Access options -->
+    <?php if (array_key_exists('Location access', $this->facilities)) : ?>
+      <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
+      <p><?php echo implode(', ', $this->facilities['Location access']) ?></p>         
     <?php endif; ?>
   </div>
   <div class="span4"> 
