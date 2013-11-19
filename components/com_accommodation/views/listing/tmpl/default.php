@@ -261,6 +261,17 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
       <?php echo $this->item->description; ?>
     <?php endif; ?>
   </div>
+  <div class="span4">
+    <jdoc:include type="modules" name="position-7" style="html5" />
+
+    <?php
+    jimport('joomla.application.module.helper');
+    $modules = JModuleHelper::getModule('mod_OpenX_spc', 'MPU-LISTING');
+    $attribs['style'] = 'html5';
+
+    echo JModuleHelper::renderModule($modules, $attribs);
+    ?>
+  </div>
 </div>
 <div class="row-fluid" id="location">
   <div class="span12">
@@ -305,7 +316,7 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
     <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
     <p>
       <?php $airport_route = JRoute::_(ContentHelperRoute::getArticleRoute((int) $this->item->airport_id)); ?>
-      <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code)  ?>
+      <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
     </p>
   </div>
   <div class="span4"> 
