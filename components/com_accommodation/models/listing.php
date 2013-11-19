@@ -168,6 +168,9 @@ class AccommodationModelListing extends JModelForm {
         j.title as tariffs_based_on,
         u.name,
         c.website,
+        air.name as airport,
+        air.code as airport_code,
+        air.id as airport_id,
         ufc.phone_1, 
         ufc.phone_2, 
         ufc.phone_3,
@@ -228,6 +231,8 @@ class AccommodationModelListing extends JModelForm {
 
       $query->leftJoin('#__users u on a.created_by = u.id');
       $query->leftJoin('#__user_profile_fc ufc on u.id = ufc.user_id');
+      
+      $query->leftJoin('#__airports air on air.id = c.airport');
 
       // Refine the query based on the various parameters
       $query->where('a.id=' . (int) $id);

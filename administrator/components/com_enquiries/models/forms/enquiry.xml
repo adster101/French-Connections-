@@ -26,7 +26,7 @@
       description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
       label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
       name="email"
-      filter="unset"
+      filter="email"
       labelClass="control-label"     
       readonly="true">
     </field>    
@@ -110,7 +110,6 @@
     
     <field name="message"
            type="textarea"
-           id="offer-description"
            description="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_DESC"
            label="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_LABEL"
            filter="unset"
@@ -144,7 +143,16 @@
       required="true"
       labelClass="control-label">
     </field>
-  </fieldset>  
+
+  </fieldset>      
+  <field 
+    name="cc_message"
+    type="inlinecheckbox"
+    label="Send me a copy of this message"
+    required="false" 
+    labelClass="checkbox"
+    default="1"
+  />
   
   <fieldset name="hidden">
     <field 

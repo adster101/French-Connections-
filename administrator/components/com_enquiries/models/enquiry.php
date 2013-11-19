@@ -28,18 +28,18 @@ class EnquiriesModelEnquiry extends JModelAdmin {
   /*
    * Override getItem so we can set the date format
    */
+
   public function getItem($pk = null) {
     if ($item = parent::getItem($pk)) {
-      
-      $item->date_created = JFactory::getDate($item->date_created)->calendar('m D Y');
-      $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('m D Y') : 'N/A';
-      $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('m D Y') : 'N/A';
-      
+
+      $item->date_created = JFactory::getDate($item->date_created)->calendar('d M Y');
+      $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('d M Y') : 'N/A';
+      $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('d M Y') : 'N/A';
     }
-    
+
     return $item;
   }
-  
+
   /**
    * Method to get the record form.
    *
@@ -163,31 +163,61 @@ class EnquiriesModelEnquiry extends JModelAdmin {
      * Get the component params
      */
     $params = JComponentHelper::getParams('com_enquiries');
-
-    // import our payment library class
-    jimport('frenchconnections.models.payment');
-
-    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', array('ignore_request' => true));
-
+    // From details are taken from the owners user account 
     $from = ($data['from_email']) ? $data['from_email'] : '';
+    $from_name = ($data['from_name']) ? $data['from_name'] : '';
+    // To is the holiday maker who made the initial enquiry
     $to = ($data['email']) ? $data['email'] : '';
+
     $subject = $data['reply_subject'];
     $body = $data['reply_message'];
 
-    if (!$model->sendEmail($from, $to, $subject, $body, $params, 'admin_enquiry_email')) {
+    $recipient = (JDEBUG) ? $params->get('admin_enquiry_email', 'adamrifat@frenchconnections.co.uk') : $to;
+
+    // Assemble the email data...
+    $mail = JFactory::getMailer()
+            ->addRecipient($recipient)
+            ->setSubject($subject)
+            ->setBody($body);
+    $mail->setFrom($from, $from_name);
+
+
+    if (!$mail->Send()) {
       return false;
     }
 
-    /*
-     * It's all gravy - do we want to add a reply sent on field to the database?
-     */ 
-     $reply = array();
-     $reply['id'] = $data['id'];
-     $reply['replied'] = 1;
-     $reply['date_replied'] = JFactory::getDate()->toSql();
-     $this->save($reply);
-    
-    return true;
+    // Add the bcc if the owners want a copy of the email.
+    if (!empty($data['cc_message'])) {
+      // If the owner wants a copy then this is 'cced' to the owner in a separate email.
+      $cc_email_from = $params->get('admin_enquiry_no_reply', 'adamrifat@frenchconnections.co.uk');
+      $cc_recipient = (JDEBUG) ? $params->get('admin_enquiry_email', 'adamrifat@frenchconnections.co.uk') : $from;
 
+      // Assemble the email data...
+      $mail = JFactory::getMailer()
+              ->setSender($cc_email_from)
+              ->addRecipient($cc_recipient)
+              ->setSubject($subject)
+              ->setBody($body);
+
+      if (!$mail->Send()) {
+        //Log this out to a log file, not major, owner won't get email is all...
+      }
+    }
+
+
+
+    /*
+     * It's all gravy 
+     */
+    $reply = array();
+    $reply['id'] = $data['id'];
+    $reply['replied'] = 1;
+    $reply['date_replied'] = JFactory::getDate()->toSql();
+
+    // Make this a bit more elegant
+    $this->save($reply);
+
+    return true;
   }
+
 }

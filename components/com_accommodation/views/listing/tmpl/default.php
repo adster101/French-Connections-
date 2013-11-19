@@ -12,7 +12,8 @@ if (count($this->tariffs > 0)) {
 }
 
 JHTML::_('behavior.formvalidation');
-
+// Include the content helper so we can get the route of the success article
+require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 
@@ -261,7 +262,6 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
     <?php endif; ?>
   </div>
 </div>
-
 <div class="row-fluid" id="location">
   <div class="span12">
     <?php echo $this->loadTemplate('navigator'); ?>
@@ -280,6 +280,7 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
     <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
 
     <div id="map_canvas" style="width:100%; height:370px"></div>
+
   </div>
 </div>
 
@@ -301,28 +302,17 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
       <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
       <p><?php echo implode(', ', $this->facilities['Location access']) ?></p>         
     <?php endif; ?>
+    <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
+    <p>
+      <?php $airport_route = JRoute::_(ContentHelperRoute::getArticleRoute((int) $this->item->airport_id)); ?>
+      <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code)  ?>
+    </p>
   </div>
   <div class="span4"> 
 
   </div>
 </div>
-<div class="row-fluid" id="activities">
 
-</div>
-<div class="row-fluid">
-  <div class="span8">
-    <?php if ($this->item->unit_title) : ?>
-      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ACTIVITIES_AT', $this->item->unit_title)) ?></h3> 
-    <?php endif; ?>
-    <!-- Activities list -->
-    <?php if (array_key_exists('Activities nearby', $this->facilities)) : ?>
-      <p><?php echo implode(', ', $this->facilities['Activities nearby']) ?></p>         
-    <?php endif; ?>
-  </div>
-  <div class="span4"> 
-
-  </div>
-</div>
 <?php if ($this->reviews) { ?>
   <div class="row-fluid" id="reviews">
     <div class="span12">

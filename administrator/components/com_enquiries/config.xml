@@ -30,7 +30,15 @@
       filter="string"
     />
   
-    
+    <field
+      name="admin_enquiry_email_no_reply"
+      type="text"
+      default=""
+      label="No reply email for cced enquiries"
+      description="Email address cced enquiry appears to be from"
+      filter="string"
+    />
+      
 		<field
 			name="captcha"
 			type="plugins"

@@ -14,9 +14,8 @@ if ((int) $preview && $preview == 1 ) {
 $route = JRoute::_( $link ) ;
 
 ?>
-
-<ul class="nav nav-tabs hidden-phone">
-  <li class="active"><a href="<?php echo $route ?>#top">Top</a></li>
+<ul class="nav nav-tabs hidden-phone" id="navigator">
+  <li><a href="<?php echo $route ?>#top">Top</a></li>
   <li><a href="<?php echo $route ?>#about">Description</a></li>
   <li><a href="<?php echo $route ?>#location">Locality</a></li>
   <li><a href="<?php echo $route ?>#gettingthere">Travel</a></li>

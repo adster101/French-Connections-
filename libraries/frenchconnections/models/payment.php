@@ -785,7 +785,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->setSender($from)
             ->addRecipient($recipient)
             ->setSubject($emailSubject)
-            ->setBody($emailBody);
+            ->setBody($emailBody)
+            ->addBCC($cc, $name);
 
     if (!$mail->Send()) {
       return false;

@@ -111,6 +111,8 @@ class EnquiriesControllerEnquiry extends HelloWorldControllerBase {
     // Clear the record id and data from the session.
     $this->releaseEditId($context, $recordId);
     $app->setUserState($context . '.data', null);
+    
+    $this->setMessage(JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SENT'));
 
     // Redirect to the list screen.
     $this->setRedirect(
