@@ -45,10 +45,11 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
 ?>
 <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165') ?>" method="POST" class="form-vertical">
   <div class="well well-small clearfix">
+
     <h4 class="bottom"><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
   
     <div class="mapContainer">
- <img class="map" name="map_regions_Small_s1" src="/images/general/map_regions_small.gif" width="168" height="180" border="0" id="map_regions_Small_s1" usemap="#m_map_regions_Small" alt="" >
+      <img class="map" name="map_regions_Small_s1" src="/images/general/map_regions_small.gif" width="168" height="180" border="0" id="map_regions_Small_s1" usemap="#m_map_regions_Small" alt="" >
       <map name="m_map_regions_Small" id="m_map_regions_Small">	
         <?php foreach ($regions as $region) : ?>
         <area 

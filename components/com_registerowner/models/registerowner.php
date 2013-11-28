@@ -126,7 +126,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
 
       // Set the table key to id so we ensure a new record is generated.
-      $table->set('_tbl_key', 'id');
+      // $table->set('_tbl_key', 'id');
+      $table->set('_tbl_keys', array('id'));
 
       $user_profile['user_id'] = $user->id;
       $user_profile['firstname'] = $data['firstname'];

@@ -94,6 +94,10 @@ class HelloWorldTablePropertyVersions extends JTable {
     $query->select('*');
     $query->from($this->_tbl);
     $query->order('id desc');
+    
+    if (!$latest) {
+      $query->where('review = 0');
+    }
 
     $fields = array_keys($this->getProperties());
 

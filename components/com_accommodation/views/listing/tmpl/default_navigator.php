@@ -5,7 +5,7 @@ defined('_JEXEC') or die('Restricted access');
 $input = JFactory::getApplication()->input;
 $preview = $input->get('preview','','int');
 
-$link = 'index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id;
+$link = 'index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
 
 if ((int) $preview && $preview == 1 ) {
   $link .= '&preview=1';

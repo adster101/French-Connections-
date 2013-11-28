@@ -193,6 +193,13 @@ Joomla.submitbutton = function(task)
 window.addEvent('domready', function() {
 
   /* Validate the company number, must be 13 digits or so */
+  document.formvalidator.setHandler('occupancy',
+          function(value) {
+            regex = /^[0-9]{1}$/;
+            return regex.test(value);
+          });
+
+  /* Validate the company number, must be 13 digits or so */
   document.formvalidator.setHandler('company',
           function(value) {
             regex = /^[0-9]{14}$/;

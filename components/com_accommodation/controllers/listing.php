@@ -82,7 +82,6 @@ class AccommodationControllerListing extends JControllerForm {
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
     $model = $this->getModel();
-    $property_model = $this->getModel('Property', 'HelloWorldModel');
     $params = JComponentHelper::getParams('com_enquiries');
     $id = $this->input->get('id', '', 'int');
     $unit_id = $this->input->get('unit_id', '', 'int');
@@ -91,7 +90,6 @@ class AccommodationControllerListing extends JControllerForm {
     $data = $this->input->post->get('jform', array(), 'array');
 
     // Get the property details we are adding an enquiry for.
-    //$property = $model->getItem($id);
     // Check for a valid session cookie
     if ($params->get('validate_session', 0)) {
       if (JFactory::getSession()->getState() != 'active') {
@@ -142,72 +140,20 @@ class AccommodationControllerListing extends JControllerForm {
 
 
     // Write the review into the reviews table...
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
-
-    $table = JTable::getInstance('Enquiry', 'EnquiriesTable');
-
-    if (!$table) {
-      JError::raiseWarning(403, JText::_('COM_ENQUIRY_TABLE_NOT_FOUND'));
-
+    if (!$model->processEnquiry($data, $params)) {
+      
+      // Set the message
+      $msg = JText::_('COM_ENQUIRY_PROBLEM_SENDING_ENQUIRY');
+      
       // Save the data in the session.
       $app->setUserState('com_accommodation.enquiry.data', $data);
 
       // Redirect back to the contact form.
-      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false), $msg);
+      
       return false;
     }
 
-    // Set propertyID to same as ID
-    $data['property_id'] = $data['id'];
-
-    // And unset id incase it gets bound somehow...
-    unset($data['id']);
-
-    // Get the date
-    $date = JFactory::getDate();
-
-    // Set the date created timestamp
-    $data['date_created'] = $date->toSql();
-
-    // Get the property details
-    $property = $property_model->getItem($id);
-
-    // Set the owner id
-    $data['owner_id'] = $property->created_by;
-
-    // Check that we can save the data.
-    if (!$table->save($data)) {
-
-      $errors = $table->getErrors();
-
-      // Push up to three validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-        if ($errors[$i] instanceof Exception) {
-          $app->enqueueMessage($errors[$i]->getMessage(), 'error');
-        } else {
-          $app->enqueueMessage($errors[$i], 'error');
-        }
-      }
-
-      // Save the data in the session.
-      $app->setUserState('com_accommodation.enquiry.data', $data);
-      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
-
-      return false;
-    }
-
-    // Send the email
-    $sent = false;
-
-    $sent = $this->_sendEmail($data, $params, $property);
-
-    // Also need to send a notification email to the holiday maker?
-    // Set the success message if it was a success
-    if (!($sent instanceof Exception)) {
-      $msg = JText::_('COM_REVIEWS_EMAIL_THANKS');
-    } else {
-      $msg = '';
-    }
 
     // Flush the data from the session
     $app->setUserState('com_accommodation.enquiry.data', null);
@@ -222,56 +168,6 @@ class AccommodationControllerListing extends JControllerForm {
     return true;
   }
 
-  private function _sendEmail($data, $params, $property) {
-
-    $app = JFactory::getApplication();
-
-    // If there is a valid user for this property then get the email address
-    if ($property->created_by != 0) {
-      $property_user = JUser::getInstance($property->created_by);
-
-      // If in DEBUG mode, redirect email to me!
-      $property->email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $property_user->get('email');
-      $property->name = $property_user->get('name');
-
-      // A bit of work to do here to tidy this all up. 
-      // Need to check whether the contact details have been overriden in the contact screen
-      // Need to send an SMS if a valid SMS number has been setup.
-    }
-
-
-
-    // The details of where who is sending the email (e.g. FC in this case).
-    $mailfrom = $app->getCfg('mailfrom');
-    $fromname = $app->getCfg('fromname');
-    $sitename = $app->getCfg('sitename');
-
-
-    // The details of the enquiry as submitted by the holiday maker
-    $firstname = $data['forename'];
-    $surname = $data['surname'];
-    $email = $data['email'];
-    $phone = $data['phone'];
-    $body = $data['message'];
-    $arrival = $data['start_date'];
-    $end = $data['end_date'];
-    $adults = $data['adults'];
-    $children = $data['children'];
-
-    // Prepare email body
-    $body = JText::sprintf($params->get('owner_email_enquiry_template'), $property->name, $firstname, $surname, $email, $phone, stripslashes($body), $arrival, $end, $adults, $children);
-
-    $mail = JFactory::getMailer();
-
-    $mail->addRecipient($property->email, $property->name);
-    $mail->addReplyTo(array($mailfrom, $fromname));
-    $mail->setSender(array($mailfrom, $fromname));
-    $mail->addBCC($mailfrom, $fromname);
-    $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $property->title));
-    $mail->setBody($body);
-    $sent = $mail->Send();
-
-    return $sent;
-  }
+ 
 
 }

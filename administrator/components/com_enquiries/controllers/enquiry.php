@@ -124,5 +124,31 @@ class EnquiriesControllerEnquiry extends HelloWorldControllerBase {
 
     return true;
   }
+  
+  /**
+   * This method extends the edit method and updates the state to 'read'
+   * 
+   * @param type $key
+   * @param type $urlVar
+   * @return boolean
+   */
+  public function edit($key = null, $urlVar = null) {
+    
+    if (parent::edit($key, $urlVar)) {
+      
+      // Update the status of the enquiry to indicate that it's been read.
+      $model = $this->getModel();
+      $id = $this->input->getInt('id');
+      
+      if ($model->publish($id)) {
+        return true;
+      }
+      
+    }
+  
+    return true;
+    
+  }
+  
 
 }

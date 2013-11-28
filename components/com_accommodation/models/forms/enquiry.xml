@@ -29,18 +29,15 @@
       labelClass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_VALIDATION_MESSAGE"
       validate="name"
-    />    
+    />   
     
     <field 
       name="email"
       type="email"
-      id="enquiry-email"
-      class="validate-email"
       maxlength="75"
       description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_LABEL"
       filter="string"
-      validate="enquiryemail"
       required="true"
       labelClass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
@@ -130,7 +127,7 @@
     /> 
     
     <field 
-      name="id" 
+      name="property_id" 
       type="hidden" 
       filter="int" 
     />  
@@ -139,6 +136,9 @@
       type="hidden" 
       filter="int" 
     />    
+
+    
+  </fieldset>
     <field
       name="captcha"
       type="captcha"
@@ -147,6 +147,4 @@
       validate="captcha"
       labelClass="control-label"
     />
-    
-  </fieldset>
 </form>

@@ -292,8 +292,9 @@ class HelloWorldModelTariffs extends JModelAdmin {
 
       // Set the Tariff table key to id. Sigh, we do this so that the save method inserts a new record
       // against the id rather than trying to update the unit_id record, which we've just deleted.
-      $table->set('_tbl_key', 'id');
-      
+      //$table->set('_tbl_key', 'id');
+      $table->set('_tbl_keys', array('id'));
+
       // Save each, which also binds, checks and stores the tariff
       foreach ($tariff_periods as $tariff_period) {
 
@@ -348,7 +349,8 @@ class HelloWorldModelTariffs extends JModelAdmin {
 
 
     // Set the table key back to unit_id
-    $table->set('_tbl_key', 'unit_id');
+    //$table->set('_tbl_key', 'unit_id');
+    $table->set('_tbl_keys', array('unit_id'));
 
     $pkName = $table->getKeyName();
 

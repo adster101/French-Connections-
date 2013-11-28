@@ -98,7 +98,7 @@ class AccommodationViewListing extends JViewLegacy {
     $this->document->setDescription($this->title);
     $this->document->setMetaData('keywords', $this->title);
 
-    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
+    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections", 'text/javascript', true, true);
     $document->addScript("components/com_accommodation/js/jquery.flexslider-min.js", 'text/javascript', true, false);
     $document->addScript("components/com_accommodation/js/property.js", 'text/javascript', true, false);

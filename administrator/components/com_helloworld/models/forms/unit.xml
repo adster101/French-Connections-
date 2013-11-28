@@ -9,7 +9,6 @@
       size="25"
       maxlength="25"
       class="input-large"
-      validate="greeting"
       required="true"
       labelClass="control-label"
       hint="COM_HELLOWORLD_HELLOWORLD_FIELD_UNIT_TITLE_PLACEHOLDER"
@@ -23,8 +22,10 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
       type="attributetype"
-      filter="integer"
       required="true"
+      validate="nonzero"
+      filter="int"
+      default=""
       id="2">
       <option value="">JSELECT</option>
     </field>     
@@ -36,8 +37,9 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
       type="attributetype"
-      filter="integer"
       required="true"
+      validate="nonzero"
+      filter="int"
       id="1">
       <option value="">JSELECT</option>
     </field>
@@ -48,7 +50,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
       size="40"
-      class="inputbox "
+      class="inputbox"
       filter="JComponentHelper::filterText"
       required="true"
       buttons="false"/>
@@ -63,11 +65,11 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_DESC"
+      message="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_MESSAGE"
       class="inputbox validate-occupancy input-small"
-      validate="occupancy"
       required="true"
       labelClass="control-label"
-      default=""
+      validate="nonzero"
       filter="int">
       <option value="">JSELECT</option>
     </field>
@@ -82,8 +84,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
       class="validate-bedrooms input-small"
       labelClass="control-label"
-      validate="bedrooms"
-      default=""
+      validate="nonzero"
       filter="int">
       <option value="">JSELECT</option>
     </field>
@@ -204,12 +205,12 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
       class="bedrooms-select validate-bedrooms input-small"
-      validate="occupancy"
+      validate="nonzero"
       labelClass="control-label"
       required="true"
       filter="int">
       <option value="">JSELECT</option>
-      </field>
+    </field>
     <field
       name="toilets"
       type="integer"
@@ -224,7 +225,7 @@
       required="false"
       filter="int">
       <option value="0">JSELECT</option>
-      </field>
+    </field>
   </fieldset>
 
 
@@ -301,7 +302,7 @@
   </fieldset>
 
   <fieldset name="">
-        <field type="spacer" name="external_facilities_spacer" hr="true" />
+    <field type="spacer" name="external_facilities_spacer" hr="true" />
     <field
       name="external_facilities_other"
       type="editor"
@@ -311,7 +312,7 @@
       buttons="false"
       height="125px">
     </field>
-     <field type="spacer" name="internal_facilities_spacer" hr="true" />
+    <field type="spacer" name="internal_facilities_spacer" hr="true" />
     <field
       name="internal_facilities_other"
       type="editor"

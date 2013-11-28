@@ -133,7 +133,7 @@ class HelloWorldViewPropertyversions extends JViewLegacy {
     JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
     $document->addScript(JURI::root() . "/media/fc/js/general.js");
 
-    $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
+    $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/locate.js", 'text/javascript', true, false);
     //$document->addScript("http://help.frenchconnections.co.uk/JavaScript.ashx?fileMask=Optional/ChatScripting",'text/javascript',false, false);
 

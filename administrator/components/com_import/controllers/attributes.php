@@ -36,7 +36,7 @@ class ImportControllerAttributes extends JControllerForm {
     $query->select('id');
     $query->from('#__attributes');
     // Remove 8 from the list here as this attribute is stored against the property not the unit
-    $query->where("attribute_type_id in (2,7,9,10,11,12,28)");
+    $query->where("attribute_type_id in (2,7,9,10,11,12)");
 
     // Set the query.
     $db->setQuery($query);

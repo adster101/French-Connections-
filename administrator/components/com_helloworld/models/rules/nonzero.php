@@ -17,5 +17,5 @@ class JFormRuleNonzero extends JFormRule
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $regex = '^[1-9][0-9]*$';
+	protected $regex = '^[1-9]{1,9}+$';
 }

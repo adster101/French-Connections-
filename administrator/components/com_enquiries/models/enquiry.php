@@ -30,6 +30,7 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    */
 
   public function getItem($pk = null) {
+    
     if ($item = parent::getItem($pk)) {
 
       $item->date_created = JFactory::getDate($item->date_created)->calendar('d M Y');
@@ -75,6 +76,34 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     return $data;
   }
 
+  
+  public function markAsRead($id = '') {
+  
+    if (empty($id)) {
+      return true;
+    }
+    
+    // Need to check the current status of this enquiry. If already read, just do nout.
+    if ($enquiry = $this->getItem($id)){
+      
+      if ($enquiry->state == 0) {
+        $enquiry->state = 1;
+        
+        $enquiry = $enquiry->getProperties();
+        
+        if ($this->save($enquiry)){
+          return true;
+        }
+        
+        
+      }
+      
+    }
+    
+    
+    return true;
+  }
+  
   /*
    * Method to preprocess the special offer edit form
    *

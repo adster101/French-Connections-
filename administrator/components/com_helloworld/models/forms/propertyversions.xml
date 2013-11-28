@@ -120,7 +120,6 @@
       name="department"
       type="departments"
       extension="com_helloworld"
-      class="list validate"
       default="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DEPARTMENT_DESC"

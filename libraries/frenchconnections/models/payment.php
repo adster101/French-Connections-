@@ -912,7 +912,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $table = JTable::getInstance('protxtransactions', 'HelloWorldTable');
 
     if (!empty($key)) {
-      $table->set('_tbl_key', 'VendorTxCode');
+      $table->set('_tbl_keys', array('VendorTxCode'));
     }
 
     // Bind the data.

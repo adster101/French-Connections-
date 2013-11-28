@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
       <?php endif; ?>
     <?php endforeach; ?>
     <li>
-      <?php echo $this->escape($this->item->id) ?>
+      <?php echo $this->escape($this->item->property_id) ?>
     </li>
   </ul>
 <?php endif; ?> 

@@ -4,8 +4,7 @@ defined('_JEXEC') or die('Restricted access');
 $language = JFactory::getLanguage();
 $lang = $language->getTag();
 $price_range = array();
-
-if (count($this->tariffs > 0)) {
+if (!empty($this->tariffs)) {
   foreach ($this->tariffs as $tariff) {
     $price_range[] = $tariff->tariff;
   }
@@ -17,8 +16,9 @@ require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 
-$min_prices = JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
-$max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
+$min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
+$max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
+
 ?>
 
 <div class="row-fluid">
@@ -200,17 +200,17 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
         </p>
       <?php endif; ?>
       <p>
-        <a href="<?php echo JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=194&id=' . $this->item->id); ?>">
+        <a href="<?php echo JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=194&id=' . $this->item->property_id); ?>">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
         </a>
       </p>
 
       <hr />
       <p class="center">
-        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
+        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
         </a>
-        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->id . '&unit_id=' . (int) $this->item->unit_id); ?>#email">
+        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id); ?>#email">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
         </a>
       </p>
@@ -262,13 +262,10 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
     <?php endif; ?>
   </div>
   <div class="span4">
-    <jdoc:include type="modules" name="position-7" style="html5" />
-
     <?php
     jimport('joomla.application.module.helper');
     $modules = JModuleHelper::getModule('mod_OpenX_spc', 'MPU-LISTING');
     $attribs['style'] = 'html5';
-
     echo JModuleHelper::renderModule($modules, $attribs);
     ?>
   </div>
@@ -581,7 +578,7 @@ $max_prices = JHtmlGeneral::price(max($price_range), $this->item->base_currency_
     <?php if ($this->item->website) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
-        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&task=property.viewsite&id=' . ($this->item->id)) . '&' . JSession::getFormToken() . '=1'; ?>">
+        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&task=property.viewsite&id=' . ($this->item->property_id)) . '&' . JSession::getFormToken() . '=1'; ?>">
           <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
         </a>
       </p>

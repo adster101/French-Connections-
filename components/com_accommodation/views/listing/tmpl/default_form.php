@@ -35,7 +35,7 @@ defined('_JEXEC') or die;
 $app = JFactory::getApplication();
 
 
-$id = $this->item->id ? $this->item->id : '';
+$id = $this->item->property_id ? $this->item->property_id : '';
 $unit_id = $this->item->unit_id ? $this->item->unit_id : '';
 
 $errors = $app->getUserState('com_accommodation.enquiry.messages');
@@ -50,7 +50,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
 
 <?php endif; ?>
 
-<div class="well">
+<div class="well well-small">
   
   <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&id=' . (int) $id . '&unit_id=' . (int) $unit_id) . '#email'; ?>" method="post" class="form-validate form-horizontal">
     <fieldset class="adminform">
@@ -61,13 +61,17 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
             <?php echo $field->input; ?>
           </div>
         </div>         
-      <?php endforeach; ?>
-      <div class="form-actions"><button class="btn btn-primary validate" type="submit"><?php echo JText::_('JSUBMIT'); ?></button>
+      <?php endforeach; ?> 
+    </fieldset>
+    <fieldset class="form-inline">
+
+    </fieldset>
+      <div class="form-actions"><button class="btn btn-primary btn-large validate" type="submit"><?php echo JText::_('JSUBMIT'); ?></button>
         <input type="hidden" name="option" value="com_accommodation" />
         <input type="hidden" name="task" value="listing.enquiry" />
         <?php echo JHtml::_('form.token'); ?>
       </div>
-    </fieldset>
+
   </form>
 
 </div>

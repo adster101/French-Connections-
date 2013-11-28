@@ -30,6 +30,19 @@ class AccommodationModelListing extends JModelForm {
   }
 
   /**
+   * Returns a reference to the a Table object, always creating it.
+   *
+   * @param	type	The table type to instantiate
+   * @param	string	A prefix for the table class name. Optional.
+   * @param	array	Configuration array for model. Optional.
+   * @return	JTable	A database object
+   * @since	1.6
+   */
+  public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array()) {
+    return JTable::getInstance($type, $prefix, $config);
+  }
+
+  /**
    * Method to get the contact form.
    *
    * The base form is loaded from XML and then an event is fired
@@ -120,11 +133,14 @@ class AccommodationModelListing extends JModelForm {
       $unit_id = $this->getState('unit.id', false);
 
       $select = '
-        a.id,
+        a.id as property_id,
+        a.sms_alert_number,
+        a.sms_valid,
+        a.sms_nightwatchman,
         b.id as unit_id,
-        c.title,
         c.location_details,
         c.getting_there,
+        c.use_invoice_details,
         c.latitude,
         c.longitude,
         c.distance_to_coast,
@@ -139,6 +155,8 @@ class AccommodationModelListing extends JModelForm {
         c.first_name,
         c.surname,
         c.address,
+        c.email_1,
+        c.email_2,
         c.phone_1,
         c.phone_2,
         c.phone_3,
@@ -167,6 +185,7 @@ class AccommodationModelListing extends JModelForm {
         i.id as base_currency_id,
         j.title as tariffs_based_on,
         u.name,
+        u.email,
         c.website,
         air.name as airport,
         air.code as airport_code,
@@ -174,6 +193,8 @@ class AccommodationModelListing extends JModelForm {
         ufc.phone_1, 
         ufc.phone_2, 
         ufc.phone_3,
+        ufc.firstname,
+        ufc.surname,
         ufc.exchange_rate_eur,
         ufc.exchange_rate_usd,
        	date_format(a.created_on, "%M %Y") as advertising_since';
@@ -231,7 +252,7 @@ class AccommodationModelListing extends JModelForm {
 
       $query->leftJoin('#__users u on a.created_by = u.id');
       $query->leftJoin('#__user_profile_fc ufc on u.id = ufc.user_id');
-      
+
       $query->leftJoin('#__airports air on air.id = c.airport');
 
       // Refine the query based on the various parameters
@@ -257,10 +278,9 @@ class AccommodationModelListing extends JModelForm {
     if (empty($unit_id)) {
       $this->setState('unit.id', $this->item->unit_id);
     }
-    
+
     if (!empty($this->item->city)) {
       $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
-      
     }
 
     return $this->item;
@@ -276,7 +296,7 @@ class AccommodationModelListing extends JModelForm {
 
     if (!isset($this->facilities)) {
       try {
-        
+
         // Get the state for this property ID
         $unit_id = $this->getState('unit.id');
         $property_id = $this->getState('property.id');
@@ -305,29 +325,14 @@ class AccommodationModelListing extends JModelForm {
 
         $query->where('a.id = ' . (int) $unit_id);
 
-        $query2 = $this->_db->getQuery(true);
-        
-        
-        $query2->select('e.title as attribute,f.title as attribute_type');
-        $query2->from('#__property a');
-        
-        if (!$this->preview) {
-          $query2->leftJoin('#__property_versions b ON (b.property_id = a.id and b.id = (select max(c.id) from #__property_versions c where property_id = a.id and c.review = 0))');
-        } else {
-          $query2->leftJoin('#__property_versions b ON (b.property_id = a.id and b.id = (select max(c.id) from #__property_versions c where property_id = a.id))');
-        }
+       
 
-        $query2->join('left', '#__property_attributes d on (d.property_id = a.id and d.version_id = b.id)');
-        $query2->join('left', '#__attributes e on e.id = d.attribute_id');
-        $query2->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
+        $query->union('select * from #__property');
 
-        $query2->where('a.id = ' . (int) $property_id);
-        
-        $query->union($query2);
-        
         $results = $this->_db->setQuery($query)->loadObjectList();
-        
-        
+
+        print_r($results);die;
+
         foreach ($results as $attribute) {
           if (!array_key_exists($attribute->attribute_type, $attributes)) {
             $attributes[$attribute->attribute_type] = array();
@@ -656,5 +661,117 @@ class AccommodationModelListing extends JModelForm {
       }
     }
     return true;
-  }  
+  }
+
+  /**
+   * Function to process and send an enquiry onto an owner...
+   * 
+   * Also need to send an email to the holiday maker as an acknowledgement
+   * 
+   * Filter the message based on the banned text phrases and banned email addresses. This seems futile.
+   * How easy is it to generate a new email address or alter the phrasing. 
+   * More robust would be to require a user account, keep a track of how many email a user is sending in a 
+   * certain timeframe and trap any for manual review above that number. Similar to what happens now. 
+   * 
+   * @param array $data
+   * @param type $params
+   * @return boolean
+   */
+  public function processEnquiry($data = array(), $params = '') {
+  
+    // Set up the variables we need to process this enquiry
+    $app = JFactory::getApplication();
+    $date = JFactory::getDate();
+    $owner_email = '';
+    $owner_name = '';
+    jimport('clickatell.SendSMS');
+    $sms_params = JComponentHelper::getParams('com_helloworld');
+    
+    $banned_emails = explode(',',$params->get('banned_email'));
+
+    if (in_array($data['email'], $banned_emails)) {
+      return false;
+    }
+    
+    // Add enquiries and property manager table paths
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
+
+    $table = $this->getTable();
+
+    // Check that we can save the data and save it out to the enquiry table
+    if (!$table->save($data)) {
+      return false;
+    }
+
+    // Set the date created timestamp
+    $data['date_created'] = $date->toSql();
+
+    // If the property is set to use invoice details
+    // Override anything set in the property version 
+    if ($this->item->use_invoice_details) {
+
+      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $this->item->email;
+      // This assumes that name is in synch with the user profile table first and last name fields...
+      $owner_name = $this->item->name;
+    } else {
+      // We just use the details from the contact page
+      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $this->item->email_1;
+      $owner_name = $this->item->firstname . '&nbsp;' . $this->item->surname;
+    }
+
+    // Need to send an SMS if a valid SMS number has been setup.
+    // The details of where who is sending the email (e.g. FC in this case).
+    $mailfrom = $app->getCfg('mailfrom');
+    $fromname = $app->getCfg('fromname');
+    $sitename = $app->getCfg('sitename');
+
+
+    // The details of the enquiry as submitted by the holiday maker
+    $firstname = $data['forename'];
+    $surname = $data['surname'];
+    $email = $data['email'];
+    $phone = $data['phone'];
+    $message = $data['message'];
+    $arrival = $data['start_date'];
+    $end = $data['end_date'];
+    $adults = $data['adults'];
+    $children = $data['children'];
+
+    // Prepare email body
+    $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, stripslashes($message), $arrival, $end, $adults, $children);
+
+    $mail = JFactory::getMailer();
+
+    $mail->addRecipient($owner_email, $owner_name);
+    $mail->addReplyTo(array($mailfrom, $fromname));
+    $mail->setSender(array($mailfrom, $fromname));
+    $mail->addBCC($mailfrom, $fromname);
+    $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $this->item->unit_title));
+    $mail->setBody($body);
+
+    if (!$mail->Send()) {
+      return false;
+    }
+
+    $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
+
+    /*
+     *  if the login return 0, means that login failed, you cant send sms after this 
+     */
+    if (!$sms->login()) {
+      return false;
+    }
+
+    /*
+     * Send sms using the simple send() call 
+     */
+    if (!$sms->send($this->item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $this->item->unit_title))) {
+      return false;
+    }
+
+    // We are done.
+    // TO DO: Should add some logging of the different failure points above.
+    return true;
+  }
+
 }

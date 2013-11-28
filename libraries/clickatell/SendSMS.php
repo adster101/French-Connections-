@@ -57,14 +57,14 @@ class SendSMS {
     //echo $ret[0];
 
     if (strcmp(trim($ret[0]), "OK") != 0) {
-      return 0;
+      return false;
     }
 
 
 
     $this->session_id = trim($ret[1]);
 
-    return 1;
+    return true;
   }
 
   public function send($number, $text) {
@@ -93,11 +93,11 @@ class SendSMS {
      */
 
     $ret = split(":", $result);
-    if (strcmp(trim($send[0]), "ID") != 0) {
-      return 0;
+    if (strcmp(trim($ret[0]), "ID") != 0) {
+      return false;
     }
 
-    return 1;
+    return true;
   }
 
 }
