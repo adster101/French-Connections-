@@ -55,7 +55,7 @@ class AccommodationModelListing extends JModelForm {
    */
   public function getForm($data = array(), $loadData = false) {
     // Get the form.
-    $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => true));
+    $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form)) {
       return false;
     }
@@ -286,70 +286,84 @@ class AccommodationModelListing extends JModelForm {
     return $this->item;
   }
 
+  /**
+   * Couple of functions to return the faciliies for unit and property
+   * Required 'cos the native union bit in joomla doesn't work.
+   * 
+   * @return type
+   * 
+   */
+  public function getUnitFacilities() {
+
+    return $this->getFacilities('#__unit','#__unit_versions', 'unit_id', '#__unit_attributes');
+  }
+
+  public function getPropertyFacilities() {
+
+    return $this->getFacilities('#__property', '#__property_versions', 'property_id', '#__property_attributes');
+  }
+
   /*
    * Function to return a list of facilities for a given property
    *
    *
    */
 
-  public function getFacilities() {
+  public function getFacilities($table1 = '', $table2 = '', $field = '', $table3 = '') {
 
-    if (!isset($this->facilities)) {
-      try {
 
-        // Get the state for this property ID
-        $unit_id = $this->getState('unit.id');
-        $property_id = $this->getState('property.id');
 
-        $attributes = array();
 
-        // Generate a logger instance for reviews
-        JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('facilities'));
-        JLog::add('Retrieving facilities for - ' . $unit_id . ')', JLog::ALL, 'facilities');
+    try {
 
-        $query = $this->_db->getQuery(true);
-        $query->select('
+      // Get the state for this property ID
+      $unit_id = $this->getState('unit.id');
+      $property_id = $this->getState('property.id');
+      
+      $id = ($field == 'unit_id') ? $unit_id : $property_id;
+
+      $attributes = array();
+
+      // Generate a logger instance for reviews
+      JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('facilities'));
+      JLog::add('Retrieving facilities for - ' . $id . ')', JLog::ALL, 'facilities');
+
+      $query = $this->_db->getQuery(true);
+      $query->select('
             e.title as attribute,
             f.title as attribute_type
           ');
-        $query->from('#__unit a');
-        if (!$this->preview) {
-          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
-        } else {
-          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
-        }
-
-        $query->join('left', '#__unit_attributes d on (d.property_id = a.id and d.version_id = b.id)');
-        $query->join('left', '#__attributes e on e.id = d.attribute_id');
-        $query->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
-
-        $query->where('a.id = ' . (int) $unit_id);
-
-       
-
-        $query->union('select * from #__property');
-
-        $results = $this->_db->setQuery($query)->loadObjectList();
-
-        print_r($results);die;
-
-        foreach ($results as $attribute) {
-          if (!array_key_exists($attribute->attribute_type, $attributes)) {
-            $attributes[$attribute->attribute_type] = array();
-          }
-
-          $attributes[$attribute->attribute_type][] = $attribute->attribute;
-        }
-
-        $this->facilities = $attributes;
-
-
-        return $this->facilities;
-      } catch (Exception $e) {
-        // Log the exception and return false
-        JLog::add('Problem fetching facilities for - ' . $unit_id . $e->getMessage(), JLOG::ERROR, 'facilities');
-        return false;
+      $query->from($table1 . ' a');
+      if (!$this->preview) {
+        $query->leftJoin($table2 . ' b ON (b.' . $field . ' = a.id and b.id = (select max(c.id) from ' . $table2 . ' c where ' . $field . ' = a.id and c.review = 0))');
+      } else {
+        $query->leftJoin($table2 . ' b ON (b.' .$field. ' = a.id and b.id = (select max(c.id) from ' . $table2 . ' c where ' . $field . ' = a.id))');
       }
+
+      $query->join('left', $table3 . ' d on (d.property_id = a.id and d.version_id = b.id)');
+      $query->join('left', '#__attributes e on e.id = d.attribute_id');
+      $query->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
+
+      $query->where('a.id = ' . (int) $id);
+
+      $results = $this->_db->setQuery($query)->loadObjectList();
+
+      foreach ($results as $attribute) {
+        if (!array_key_exists($attribute->attribute_type, $attributes)) {
+          $attributes[$attribute->attribute_type] = array();
+        }
+
+        $attributes[$attribute->attribute_type][] = $attribute->attribute;
+      }
+
+      $this->facilities = $attributes;
+
+
+      return $this->facilities;
+    } catch (Exception $e) {
+      // Log the exception and return false
+      JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
+      return false;
     }
   }
 
@@ -475,7 +489,7 @@ class AccommodationModelListing extends JModelForm {
     $this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability);
 
     // Build the calendar taking into account current availability...
-    $calendar = HelloWorldHelper::getAvailabilityCalendar($months = 18, $availability = $this->availability_array);
+    $calendar = HelloWorldHelper::getAvailabilityCalendar($months = 18, $availability = $this->availability_array, $link = false);
 
     return $calendar;
   }
@@ -678,7 +692,7 @@ class AccommodationModelListing extends JModelForm {
    * @return boolean
    */
   public function processEnquiry($data = array(), $params = '') {
-  
+
     // Set up the variables we need to process this enquiry
     $app = JFactory::getApplication();
     $date = JFactory::getDate();
@@ -686,13 +700,13 @@ class AccommodationModelListing extends JModelForm {
     $owner_name = '';
     jimport('clickatell.SendSMS');
     $sms_params = JComponentHelper::getParams('com_helloworld');
-    
-    $banned_emails = explode(',',$params->get('banned_email'));
+
+    $banned_emails = explode(',', $params->get('banned_email'));
 
     if (in_array($data['email'], $banned_emails)) {
       return false;
     }
-    
+
     // Add enquiries and property manager table paths
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 

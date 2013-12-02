@@ -58,7 +58,12 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $registry->loadString($data->languages_spoken);
         $data->languages_spoken = $registry->toArray();
       }
+      
+
+      
+      
     }
+    
     return $data;
   }
 

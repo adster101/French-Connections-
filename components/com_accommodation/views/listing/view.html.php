@@ -20,8 +20,6 @@ class AccommodationViewListing extends JViewLegacy {
     // getReviews
     // getUnits
     // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
-    
-    
     // Assign data to the view
     $this->item = $this->get('Item');
 
@@ -34,8 +32,11 @@ class AccommodationViewListing extends JViewLegacy {
     // Get the tariffs for this property
     $this->images = $this->get('Images');
 
-    // Get the facilities for this property
-    $this->facilities = $this->get('Facilities');
+    // Get the unit facilities for this property
+    $this->unit_facilities = $this->get('UnitFacilities');
+
+    // Get the proprety facilities for this property
+    $this->property_facilities = $this->get('PropertyFacilities');
 
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');
@@ -51,14 +52,13 @@ class AccommodationViewListing extends JViewLegacy {
 
     // Get the special offer is one is current
     $this->offer = $this->get('Offers');
-    
+
     // Get component params
     // Think of some params to store for this component?
-    
     // Update the hit counter for this view
     $model = $this->getModel();
-		$model->hit(); 
-    
+    $model->hit();
+
     // Check for errors.
     $errors = $this->get('Errors');
 
@@ -69,30 +69,29 @@ class AccommodationViewListing extends JViewLegacy {
       JError::raiseError(500, 'Problem loading property details. Error has been logged. Please contact us if this problem persists.');
       return false;
     }
-    
+
     // Set the document
     $this->setDocument();
-    
+
     // Display the view
     parent::display($tpl);
-
   }
 
-/**
-  * Method to set up the document properties
-  *
-  * @return void
-  */
+  /**
+   * Method to set up the document properties
+   *
+   * @return void
+   */
   protected function setDocument() {
-    
+
     $document = JFactory::getDocument();
-        
+
     if ($this->item->accommodation_type == 'Bed and Breakfast') {
       $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->city, $this->item->department);
     } else {
       $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->city, $this->item->department);
     }
-    
+
     // Set document and page titles
     $this->document->setTitle($this->title);
     $this->document->setDescription($this->title);
@@ -110,4 +109,5 @@ class AccommodationViewListing extends JViewLegacy {
     $document->addStyleSheet(JURI::root() . "components/com_accommodation/css/flexslider.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "media/fc/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
   }
+
 }

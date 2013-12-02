@@ -33,7 +33,29 @@ class ImportControllerProperty_listings extends JControllerForm {
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     $handle = fopen($userfile['tmp_name'], "r");
-
+    $langs = array(
+        1 => 'LANGUAGE_ENGLISH',
+        2 => 'LANGUAGE_FRENCH',
+        3 => 'LANGUAGE_ITALIAN',
+        4 => 'LANGUAGE_GERMAN',
+        5 => 'LANGUAGE_SPANISH',
+        6 => 'LANGUAGE_DUTCH',
+        7 => 'LANGUAGE_GREEK',
+        8 => 'LANGUAGE_POLISH',
+        9 => 'LANGUAGE_HUNGARIAN',
+        10 => 'LANGUAGE_PORTUGESE',
+        11 => 'LANGUAGE_RUSSIAN',
+        12 => 'LANGUAGE_WELSH',
+        13 => 'LANGUAGE_DANISH',
+        14 => 'LANGUAGE_CZECH',
+        15=> 'LANGUAGE_NORWEGIAN',
+        16 => 'LANGUAGE_SWEDISH',
+        17 => 'LANGUAGE_IRISH',
+        18 => 'LANGUAGE_JAPANESE',
+        19 => 'LANGUAGE_FINNISH',
+        20 => 'LANGUAGE_CHINESE',
+        21 => 'LANGUAGE_CATALAN'
+    );
 
     $registry = new JRegistry;
 
@@ -94,8 +116,15 @@ class ImportControllerProperty_listings extends JControllerForm {
       $db->setQuery($query, 0, 1);
       $airport = $db->loadRow();
 
-      $languages_spoken = json_encode(array_unique(explode(',', $line[38])));
-      $registry->loadArray($languages_spoken);
+      $languages_spoken = array_unique(explode(',', $line[38]));
+
+      $languages_spoken_array['language_1'] = $langs[$languages_spoken[0]];
+      $languages_spoken_array['language_2'] = (array_key_exists(1, $languages_spoken)) ? ($langs[$languages_spoken[1]]) : '';
+      $languages_spoken_array['language_3'] = (array_key_exists(2, $languages_spoken)) ? ($langs[$languages_spoken[2]]) : '';
+      $languages_spoken_array['language_4'] = (array_key_exists(3, $languages_spoken)) ? ($langs[$languages_spoken[3]]) : '';
+      
+      $registry->loadArray($languages_spoken_array);
+      
       $languages = (string) $registry;
 
       $query->insert('#__property_versions');

@@ -275,7 +275,7 @@ abstract class HelloWorldHelper {
    * @param type $first_day
    * @return string False on failure or error, true otherwise.
    */
-  public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0) {
+  public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true) {
 
     // Get the view
     $app = JFactory::getApplication();
@@ -338,17 +338,17 @@ abstract class HelloWorldHelper {
 
         if ($status) { // Availability is true, i.e. available
           if ($status_yesterday != $status) {
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable-available', 'small'), $showlinks);
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
           } else {
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available', 'small'), $showlinks);
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available'), $showlinks);
           }
         } else { // Availability is false i.e. unavailable
           if ($status_yesterday != $status) {
 
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available-unavailable', 'small'), $showlinks);
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
           } else {
 
-            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable', 'small'), $showlinks);
+            $calendar .= HelloWorldHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
           }
         }
       }

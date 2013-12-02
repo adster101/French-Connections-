@@ -118,7 +118,14 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
         </div>
 
       </fieldset>
+		<fieldset class="adminform">
+			<legend><?php echo JText::_( 'COM_HELLOWORLD_HELLOWORLD_OFFER_DETAILS_DATE' ); ?></legend>
+      					<?php echo $this->form->getControlGroup('images'); ?>
 
+					<?php foreach ($this->form->getGroup('languages') as $field) : ?>
+						<?php echo $field->getControlGroup(); ?>
+					<?php endforeach; ?>
+		</fieldset>
       <fieldset class="adminform form-horizontal">
         <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_BOOKING_FORM_LEGEND'); ?></legend> 
         <div class="alert alert-notice">

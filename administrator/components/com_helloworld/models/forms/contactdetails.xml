@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
   
+  <fields
+    name="languages_spoken">
+      
+    <field
+      name="language_1"
+      label="COM_HELLOWORLD_CONTACT_DETAILS_PRIMARY_LANGUAGE"
+      type="languages"
+      filter="string">
+      <option>JSELECT</option>
+    </field>
+    <field
+      name="language_2"
+      label="COM_HELLOWORLD_CONTACT_DETAILS_SECONDARY_LANGUAGE"
+      type="languages">
+      <option>JSELECT</option>
+    </field>
+    <field
+      name="language_3"
+      label="COM_HELLOWORLD_CONTACT_DETAILS_TERTIARY_LANGUAGE"
+      type="languages">
+      <option>JSELECT</option>
+    </field>
+    <field
+      name="language_4"
+      label="COM_HELLOWORLD_CONTACT_DETAILS_QUANTERNARY_LANGUAGE"
+      type="languages">
+      <option>JSELECT</option>
+    </field>
+
+  </fields>
+  
   <fieldset
     name="website">
     <field 

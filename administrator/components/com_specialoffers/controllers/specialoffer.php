@@ -48,6 +48,9 @@ class SpecialOffersControllerSpecialOffer extends HelloWorldControllerBase {
          */
         $property_id = ($table->property_id) ? $table->property_id : '';
 
+        // Need to refine this so that:
+        // i. Additional permission for 'cancel offer' is granted to owners
+        // ii.Check that the offer being edited is owned by owner 
         if (!$this->allowEdit(array('property_id' => $property_id))) {
 
           $this->setMessage(JText::_('COM_SPECIALOFFERS_YOU_CANNOT_EXPIRE_THIS_OFFER'),'error');

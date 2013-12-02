@@ -126,10 +126,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         </p>
       <?php endif; ?>
       <!-- Location type -->
-      <?php if (array_key_exists('Location Type', $this->facilities)) : ?>
+      <?php if (array_key_exists('Location Type', $this->unit_facilities)) : ?>
         <p class="dotted">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_LOCATION_TYPE'); ?>
-          <span class="pull-right"><?php echo $this->facilities['Location Type'][0] ?></span>
+          <span class="pull-right"><?php echo $this->unit_facilities['Location Type'][0] ?></span>
         </p>
       <?php endif; ?>
       <!-- Changeover day -->
@@ -154,18 +154,18 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         </p>
       <?php endif; ?>
       <!-- External facilities inc pool type-->
-      <?php if (array_key_exists('External Facilities', $this->facilities) || (array_key_exists('Suitability', $this->facilities))) : ?>
+      <?php if (array_key_exists('External Facilities', $this->unit_facilities) || (array_key_exists('Suitability', $this->unit_facilities))) : ?>
         <p class="dotted clearfix">
-          <?php if (array_key_exists('External Facilities', $this->facilities)) : ?> 
+          <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?> 
             <span>
               <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
-              <?php echo implode(', ', $this->facilities['External Facilities']) ?>
+              <?php echo implode(', ', $this->unit_facilities['External Facilities']) ?>
             </span><br />
           <?php endif; ?>  
-          <?php if (array_key_exists('Suitability', $this->facilities)) : ?>
+          <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
             <span>
               <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY'); ?></strong>
-              <?php echo implode(', ', $this->facilities['Suitability']) ?>
+              <?php echo implode(', ', $this->unit_facilities['Suitability']) ?>
             </span>         
           <?php endif; ?>      
         </p>   
@@ -306,9 +306,9 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->item->getting_there; ?>
     <?php endif; ?>
     <!-- Access options -->
-    <?php if (array_key_exists('Location access', $this->facilities)) : ?>
+    <?php if (array_key_exists('Location access', $this->unit_facilities)) : ?>
       <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
-      <p><?php echo implode(', ', $this->facilities['Location access']) ?></p>         
+      <p><?php echo implode(', ', $this->unit_facilities['Location access']) ?></p>         
     <?php endif; ?>
     <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
     <p>
@@ -364,10 +364,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 <div class="row-fluid">
   <div class="span8">
     <table class="table table-striped">
-      <?php if (array_key_exists('Property Type', $this->facilities) && array_key_exists('Accommodation Type', $this->facilities)) : ?>
+      <?php if (array_key_exists('Property Type', $this->unit_facilities) && array_key_exists('Accommodation Type', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE') ?></td>
-          <td><?php echo $this->facilities['Property Type'][0] . ' (' . $this->facilities['Accommodation Type'][0] . ')'; ?></td>        
+          <td><?php echo $this->unit_facilities['Property Type'][0] . ' (' . $this->unit_facilities['Accommodation Type'][0] . ')'; ?></td>        
         </tr>
       <?php endif; ?>
 
@@ -416,10 +416,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php endif; ?>
 
       <!-- Suitability -->
-      <?php if (array_key_exists('Suitability', $this->facilities)) : ?>
+      <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY') ?></td>
-          <td><?php echo implode(', ', $this->facilities['Suitability']) ?></td>         
+          <td><?php echo implode(', ', $this->unit_facilities['Suitability']) ?></td>         
         </tr>
       <?php endif; ?>
 
@@ -431,25 +431,30 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         </tr>
       <?php endif; ?>       
 
-      <?php if (array_key_exists('Property Facilities', $this->facilities)) : ?>
+      <?php if (array_key_exists('Property Facilities', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
-          <td><?php echo implode(', ', $this->facilities['Property Facilities']) ?></td>         
+          <td><?php echo implode(', ', $this->unit_facilities['Property Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
+      <?php if (array_key_exists('Activities nearby', $this->property_facilities)) : ?>
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_ACTIVITIES_NEARBY') ?></td>
+          <td><?php echo implode(', ', $this->property_facilities['Activities nearby']) ?></td>         
+        </tr>      
+      <?php endif; ?>  
 
-
-      <?php if (array_key_exists('External Facilities', $this->facilities)) : ?>
+      <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
-          <td><?php echo implode(', ', $this->facilities['External Facilities']) ?></td>         
+          <td><?php echo implode(', ', $this->unit_facilities['External Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
 
-      <?php if (array_key_exists('Kitchen features', $this->facilities)) : ?>
+      <?php if (array_key_exists('Kitchen features', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
-          <td><?php echo implode(', ', $this->facilities['Kitchen features']) ?></td>         
+          <td><?php echo implode(', ', $this->unit_facilities['Kitchen features']) ?></td>         
         </tr>      
       <?php endif; ?>       
     </table>
@@ -578,7 +583,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <?php if ($this->item->website) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
-        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&task=property.viewsite&id=' . ($this->item->property_id)) . '&' . JSession::getFormToken() . '=1'; ?>">
+        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
           <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
         </a>
       </p>

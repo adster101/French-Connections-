@@ -24,7 +24,7 @@ class AccommodationControllerListing extends JControllerForm {
     JSession::checkToken('GET') or jexit(JText::_('JINVALID_TOKEN'));
 
     $stub = $this->input->get('id', '', 'int');
-
+    $ip = $_SERVER['REMOTE_ADDR'];
     $id = (int) $stub;
 
     // Prepare a db query so we can get the website address
@@ -32,11 +32,10 @@ class AccommodationControllerListing extends JControllerForm {
 
     $query = $db->getQuery(true);
 
-    $query->select('upf.website')
-            ->from('#__helloworld hw')
-            ->leftJoin('#__user_profile_fc upf on upf.user_id = hw.created_by')
-            ->where('hw.id = ' . $id)
-            ->where('upf.website !=\'\'');
+    $query->select('a.website')
+            ->from('#__property_versions a')
+            ->where('a.property_id = ' . $id)
+            ->where('a.website !=\'\'');
 
     $db->setQuery($query);
 
@@ -50,16 +49,18 @@ class AccommodationControllerListing extends JControllerForm {
         // Log the view
         $query->getQuery(true);
 
-        $columns = array('property_id', 'date');
+        $columns = array('property_id', 'date_created', 'url', 'ip');
 
         $query->insert('#__website_views');
         $query->columns($columns);
 
         // Get the date
         $date = JFactory::getDate()->toSql();
-
+        
+        $data = array($db->quote($id), $db->quote($date), $db->quote($webiste), $db->quote($ip));
+        
         // Update the value in the db        
-        $query->values("$id,'$date'");
+        $query->values(implode(',',$data));
 
         $db->setQuery($query);
 
@@ -69,8 +70,9 @@ class AccommodationControllerListing extends JControllerForm {
         $this->setRedirect(JRoute::_($website, false));
       }
     } catch (Exception $e) {
-      // Log error
-      print_r($e->getMessage());
+      // Log error   
+      throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR',$id, $e->getMessage()), 500);
+      
     }
   }
 

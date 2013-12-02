@@ -67,7 +67,7 @@ class SpecialOffersModelSpecialOffers extends JModelList
 
     
     // List state information.
-		parent::populateState();
+		parent::populateState('a.date_created','desc');
 	}
 
   /**
@@ -151,7 +151,7 @@ class SpecialOffersModelSpecialOffers extends JModelList
       }
     }
     
-    $listOrdering = $this->getState('list.ordering','start_date');
+    $listOrdering = $this->getState('list.ordering','date_created');
 		$listDirn = $db->escape($this->getState('list.direction', 'desc'));  
     $query->order($db->escape($listOrdering).' '.$listDirn);
 		

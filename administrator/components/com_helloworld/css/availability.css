@@ -22,7 +22,7 @@ table.avCalendar td span{
 
 table.avCalendar td.available:hover,
 table.avCalendar td.unavailable:hover {
-  cursor:pointer;
+  /*cursor:pointer;*/
 
 }
 

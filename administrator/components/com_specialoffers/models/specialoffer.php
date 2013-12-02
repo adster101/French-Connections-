@@ -24,7 +24,22 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
     // Check specific edit permission then general edit permission.
     return JFactory::getUser()->authorise('core.edit');
   }
+  
+  /*
+   * Override getItem so we can set the date format
+   */
 
+  public function getItem($pk = null) {
+    
+    if ($item = parent::getItem($pk)) {
+
+      $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('d-m-Y') : '';
+      $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('d-m-Y') : '';
+    }
+
+    return $item;
+  }
+  
   /**
    * Returns a reference to the a Table object, always creating it.
    *
