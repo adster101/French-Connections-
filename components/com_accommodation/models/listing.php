@@ -151,6 +151,7 @@ class AccommodationModelListing extends JModelForm {
         c.payment_deadline,
         c.evening_meal,
         c.additional_booking_info,
+        c.deposit_currency,
         c.terms_and_conditions,
         c.first_name,
         c.surname,
@@ -161,6 +162,7 @@ class AccommodationModelListing extends JModelForm {
         c.phone_2,
         c.phone_3,
         c.city as city_id,
+        c.languages_spoken,
         k.title as changeover_day,
         d.toilets,
         d.bathrooms,
@@ -197,6 +199,12 @@ class AccommodationModelListing extends JModelForm {
         ufc.surname,
         ufc.exchange_rate_eur,
         ufc.exchange_rate_usd,
+        ufc.address1,
+        ufc.address2,
+        ufc.city,
+        ufc.region,
+        ufc.country,
+        ufc.postal_code,
        	date_format(a.created_on, "%M %Y") as advertising_since';
 
       // Language logic - essentially need to do two things, if in French
@@ -267,6 +275,7 @@ class AccommodationModelListing extends JModelForm {
         $query->where('b.published in (0,1)');
       }
       if (!$this->preview) {
+        // TO DO: We should check the expiry date at some point.
         $query->where('a.expiry_date > ' . JFactory::getDate()->calendar('Y-m-d'));
       }
       if (!$this->item = $this->_db->setQuery($query)->loadObject()) {
@@ -282,6 +291,7 @@ class AccommodationModelListing extends JModelForm {
     if (!empty($this->item->city)) {
       $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
     }
+    
 
     return $this->item;
   }

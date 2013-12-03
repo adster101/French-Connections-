@@ -82,7 +82,7 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
-      class="validate-bedrooms input-small"
+      class="input-small"
       labelClass="control-label"
       validate="nonzero"
       filter="int">
@@ -97,8 +97,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DOUBLE_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       filter="int">
       <option value="">JSELECT</option>
@@ -112,8 +112,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_TRIPLE_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_TRIPLE_ROOMS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       required="false"
       default="0"
@@ -128,8 +128,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_QUAD_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_QUAD_ROOMS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       filter="int">
       <option value="">JSELECT</option>
@@ -142,9 +142,9 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
+      class="bedrooms-select input-small"
       labelClass="control-label"
-      validate="bedrooms"
+      validate="nonzero"
       default=""
       filter="int">
       <option value="">JSELECT</option>
@@ -158,8 +158,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_CHILD_BEDS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHILD_BEDS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       filter="int">
       <option value="">JSELECT</option>
@@ -173,8 +173,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_COTS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_COTS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       required="false"
       filter="int">
@@ -189,8 +189,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_BEDS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_BEDS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       required="false"
       filter="int">
@@ -204,7 +204,7 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
+      class="bedrooms-select input-small"
       validate="nonzero"
       labelClass="control-label"
       required="true"
@@ -219,8 +219,8 @@
       step="1"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_TOILETS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
-      class="bedrooms-select validate-bedrooms input-small"
-      validate="bedrooms"
+      class="bedrooms-select input-small"
+      validate="nonzero"
       labelClass="control-label"
       required="false"
       filter="int">

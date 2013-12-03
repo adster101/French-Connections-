@@ -195,7 +195,7 @@ window.addEvent('domready', function() {
   /* Validate the company number, must be 13 digits or so */
   document.formvalidator.setHandler('occupancy',
           function(value) {
-            regex = /^[0-9]{1}$/;
+            regex = /^0*[1-9]\d*$/;
             return regex.test(value);
           });
 

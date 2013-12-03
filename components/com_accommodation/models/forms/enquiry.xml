@@ -125,7 +125,14 @@
       labelClass="control-label"
       validate="adults"
     /> 
-    
+    <field
+      name="captcha"
+      type="captcha"
+      label="COM_ACCOMMODATION_CAPTCHA_LABEL"
+      description="COM_ACCOMMODATION_CAPTCHA_DESC"
+      validate="captcha"
+      labelClass="control-label"
+    />    
     <field 
       name="property_id" 
       type="hidden" 
@@ -139,12 +146,5 @@
 
     
   </fieldset>
-    <field
-      name="captcha"
-      type="captcha"
-      label="COM_ACCOMMODATION_CAPTCHA_LABEL"
-      description="COM_ACCOMMODATION_CAPTCHA_DESC"
-      validate="captcha"
-      labelClass="control-label"
-    />
+
 </form>

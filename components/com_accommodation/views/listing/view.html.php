@@ -53,6 +53,8 @@ class AccommodationViewListing extends JViewLegacy {
     // Get the special offer is one is current
     $this->offer = $this->get('Offers');
 
+    // Check the expiry date here. If not valid throw an error with a 403 code?
+    
     // Get component params
     // Think of some params to store for this component?
     // Update the hit counter for this view

@@ -58,12 +58,8 @@ class HelloWorldModelContactDetails extends JModelAdmin {
         $registry->loadString($data->languages_spoken);
         $data->languages_spoken = $registry->toArray();
       }
-      
-
-      
-      
     }
-    
+
     return $data;
   }
 
@@ -210,6 +206,14 @@ class HelloWorldModelContactDetails extends JModelAdmin {
     if (empty($data[''])) {
       $data['booking_form'] = false;
     }
+
+    if (isset($data['languages_spoken']) && is_array($data['languages_spoken'])) {
+      // Convert the urls field to an array.
+      $registry = new JRegistry;
+      $registry->loadArray($data['languages_spoken']);
+      $data['languages_spoken'] = (string) $registry;
+    }
+    
     /*
      * SMS notification prefs are currently set in the property versions save method.
      * TO DO - Move this update to the property model/table.
