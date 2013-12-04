@@ -611,9 +611,6 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </div>
 
 </div>
-<?php if ($this->item->booking_form) : ?>
-  <?php echo $this->loadTemplate('bookingform'); ?>
-<?php endif; ?>
 
 <script>
   jQuery(document).ready(function() {
