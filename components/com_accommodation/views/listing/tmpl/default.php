@@ -264,7 +264,8 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
-      <h2><?php echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->accommodation_type, $this->item->unit_title) ?></h2>  
+      <h2><?php echo $this->escape($this->item->unit_title) ?>
+        <?php //echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->accommodation_type, $this->item->unit_title) ?></h2>  
     <?php endif; ?>
     <?php if ($this->item->description) : ?>
       <?php echo $this->item->description; ?>
