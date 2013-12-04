@@ -278,9 +278,13 @@ class AccommodationModelListing extends JModelForm {
         // TO DO: We should check the expiry date at some point.
         $query->where('a.expiry_date > ' . JFactory::getDate()->calendar('Y-m-d'));
       }
-      if (!$this->item = $this->_db->setQuery($query)->loadObject()) {
+      
+      $this->item = $this->_db->setQuery($query)->loadObject();
+      
+      if (!$this->item) {
         $this->setError($this->_db->getError());
       }
+      
     }
 
     // Update the unit id into the model state for use later on in the model

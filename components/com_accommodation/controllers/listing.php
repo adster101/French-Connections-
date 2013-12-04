@@ -44,7 +44,11 @@ class AccommodationControllerListing extends JControllerForm {
       $result = $db->loadRow();
 
       if (parse_url($result[0])) { // We have a valid web address 
+        
         $website = $result[0];
+        
+        // Check that the http:// bit is present, if not add it. Should validate urls better 
+        $website = (strpos($website, 'http://') === 0) ? $website : 'http://' . $website; 
 
         // Log the view
         $query->getQuery(true);
@@ -57,7 +61,7 @@ class AccommodationControllerListing extends JControllerForm {
         // Get the date
         $date = JFactory::getDate()->toSql();
         
-        $data = array($db->quote($id), $db->quote($date), $db->quote($webiste), $db->quote($ip));
+        $data = array($db->quote($id), $db->quote($date), $db->quote($website), $db->quote($ip));
         
         // Update the value in the db        
         $query->values(implode(',',$data));

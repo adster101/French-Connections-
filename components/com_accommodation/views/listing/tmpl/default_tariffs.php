@@ -18,10 +18,10 @@ defined('_JEXEC') or die('Restricted access');
     <td>
       <?php if ($this->item->base_currency_id == 438) : ?>
         &pound;<?php echo $prices['GBP'] . htmlspecialchars($this->item->tariffs_based_on); ?>  
-        <br /> <span class="muted">(<i>Approximately:</i> &euro;<?php echo $prices['EUR']; ?> / &dollar;<?php echo $prices['USD']; ?></span>
+        <br /> <span class="muted">(<i>Approximately:</i> &euro;<?php echo $prices['EUR']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>
       <?php else: ?>
         &euro;<?php echo $prices['EUR'] . htmlspecialchars($this->item->tariffs_based_on); ?>  
-        <br /> <span class="muted">(<i>Approximately:</i> &pound;<?php echo $prices['GBP']; ?> / &dollar;<?php echo $prices['USD']; ?></span>  
+        <br /> <span class="muted">(<i>Approximately:</i> &pound;<?php echo $prices['GBP']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>  
       <?php endif; ?>
     </td>
   </tr>

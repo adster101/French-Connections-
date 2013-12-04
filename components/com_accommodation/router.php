@@ -80,7 +80,8 @@ function AccommodationParseRoute($segments) {
     $query->select('id');
     $query->from('#__unit');
     $query->where('property_id = ' . (int) $segments[0]);
-    $query->and('ordering = 1');
+    $query->where('ordering = 1');
+    $query->where('published = 1');
     $db->setQuery($query);
 
     $unit = $db->loadObject();
