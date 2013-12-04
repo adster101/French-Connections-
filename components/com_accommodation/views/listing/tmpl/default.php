@@ -315,9 +315,9 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->item->getting_there; ?>
     <?php endif; ?>
     <!-- Access options -->
-    <?php if (array_key_exists('Location access', $this->unit_facilities)) : ?>
+    <?php if (array_key_exists('Location access', $this->property_facilities)) : ?>
       <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
-      <p><?php echo implode(', ', $this->unit_facilities['Location access']) ?></p>         
+      <p><?php echo implode(', ', $this->property_facilities['Location access']) ?></p>         
     <?php endif; ?>
     <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
     <p>
