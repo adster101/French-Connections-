@@ -4,6 +4,7 @@
 // Core variables and mixins
 @import "variables.less"; // Custom for this template
 @import "../../../media/jui/less/mixins.less";
+@import "mixins.less";
 
 // Grid system and page structure
 @import "../../../media/jui/less/scaffolding.less";
@@ -85,9 +86,17 @@
 // Icon Font
 @import "icomoon.less";
 
+/* Panel styles */
+
+.panel-default {
+  .panel-variant(@defaultBorder; @textColor; @bodyBackground; @defaultBorder);
+}
+
+.panel-default {
+  .panel-variant(@defaultBorder; @textColor; @bodyBackground; @defaultBorder);
+}
 /* Site Body Styles */
 body.site{
-	border-top:3px solid #0088cc;
 	padding: 20px;
 	background-color: #f4f6f7;
 }
@@ -126,10 +135,10 @@ body.site.fluid{
 }
 /* Nav */
 .navigation{
-	padding: 5px 0;
+	/*padding: 5px 0;
 	border-top: 1px solid rgba(0, 0, 0, 0.075);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.075);
-	margin-bottom: 10px;
+	margin-bottom: 10px;*/
 }
 .navigation .nav-pills{
 	margin-bottom: 0;

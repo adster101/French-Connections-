@@ -51,9 +51,7 @@
 	<config>
 		<fields name="params">
 			<fieldset name="advanced">
-				<field name="templateColor" class="" type="color" default="#08C"
-					label="TPL_FRENCHCONNECTIONS_COLOR_LABEL"
-					description="TPL_FRENCHCONNECTIONS_COLOR_DESC" />
+			
 
 				<field name="templateBackgroundColor" class="" type="color" default="#F4F6F7"
 					label="TPL_FRENCHCONNECTIONS_BACKGROUND_COLOR_LABEL"

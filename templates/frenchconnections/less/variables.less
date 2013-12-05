@@ -28,7 +28,8 @@
 @orange:                #f89406;
 @pink:                  #c3325f;
 @purple:                #7a43b6;
-
+@brown:                 #807c46;
+@defaultBorder:         #e7eae3;
 
 // Scaffolding
 // -------------------------
@@ -38,7 +39,7 @@
 
 // Links
 // -------------------------
-@linkColor:             #08c;
+@linkColor:             #039;
 @linkColorHover:        darken(@linkColor, 15%);
 
 
@@ -57,9 +58,9 @@
 // < Joomla JUI
 @altFontFamily:         @serifFontFamily;
 
-@headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
+@headingsFontFamily:    @baseFontFamily; // empty to use BS default, @baseFontFamily
 @headingsFontWeight:    bold;    // instead of browser default, bold
-@headingsColor:         inherit; // empty to use BS default, @textColor
+@headingsColor:         @textColor; // empty to use BS default, @
 
 
 // Component sizing
@@ -84,9 +85,9 @@
 // Tables
 // -------------------------
 @tableBackground:                   transparent; // overall background-color
-@tableBackgroundAccent:             #f9f9f9; // for striping
+@tableBackgroundAccent:             #eaf3fe; // for striping
 @tableBackgroundHover:              #f5f5f5; // for hover
-@tableBorder:                       #ddd; // table and cell border
+@tableBorder:                       #d7e1f2; // table and cell border
 
 // Buttons
 // -------------------------
@@ -178,7 +179,7 @@
 
 // Wells
 // -------------------------
-@wellBackground:                  #f5f5f5;
+@wellBackground:                  #eaf3fe;
 
 
 // Navbar
@@ -187,15 +188,15 @@
 @navbarCollapseDesktopWidth:      @navbarCollapseWidth + 1;
 
 @navbarHeight:                    40px;
-@navbarBackgroundHighlight:       #ffffff;
-@navbarBackground:                darken(@navbarBackgroundHighlight, 5%);
-@navbarBorder:                    darken(@navbarBackground, 12%);
+@navbarBackgroundHighlight:       #fffbd7;
+@navbarBackground:                darken(@navbarBackgroundHighlight, 30%);
+@navbarBorder:                    darken(@navbarBackground, 10%);
 
-@navbarText:                      @gray;
-@navbarLinkColor:                 @gray;
-@navbarLinkColorHover:            @grayDark;
-@navbarLinkColorActive:           @gray;
-@navbarLinkBackgroundHover:       transparent;
+@navbarText:                      @brown;
+@navbarLinkColor:                 @brown;
+@navbarLinkColorHover:            darken(@brown,25%);
+@navbarLinkColorActive:           @brown;
+@navbarLinkBackgroundHover:       darken(@navbarBackgroundHighlight, 50%);
 @navbarLinkBackgroundActive:      darken(@navbarBackground, 5%);
 
 @navbarBrandColor:                @navbarLinkColor;

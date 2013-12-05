@@ -100,29 +100,13 @@ else
 	?>
 	<?php
 	// Template color
-	if ($this->params->get('templateColor'))
+	if ($this->params->get('templateBackgroundColor'))
 	{
 	?>
 	<style type="text/css">
 		body.site
 		{
-			border-top: 3px solid <?php echo $this->params->get('templateColor');?>;
 			background-color: <?php echo $this->params->get('templateBackgroundColor');?>
-		}
-		a
-		{
-			color: <?php echo $this->params->get('templateColor');?>;
-		}
-		.navbar-inner, .nav-list > .active > a, .nav-list > .active > a:hover, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .nav-pills > .active > a, .nav-pills > .active > a:hover,
-		.btn-primary
-		{
-			background: <?php echo $this->params->get('templateColor');?>;
-		}
-		.navbar-inner
-		{
-			-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-			-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-			box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
 		}
 	</style>
 	<?php
@@ -157,7 +141,7 @@ else
 			</header>
 			<?php if ($this->countModules('position-1')) : ?>
 			<nav class="navigation" role="navigation">
-				<jdoc:include type="modules" name="position-1" style="none" />
+				<jdoc:include type="modules" name="position-1" style="nav" />
 			</nav>
 			<?php endif; ?>
 			<jdoc:include type="modules" name="banner" style="xhtml" />
@@ -176,7 +160,16 @@ else
 					<jdoc:include type="modules" name="position-3" style="xhtml" />
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />
-					<jdoc:include type="modules" name="position-2" style="none" />
+          <?php if ($this->countModules('position-2')) : ?>
+          <div class="row-fluid">
+            <jdoc:include type="modules" name="position-2" style="html5" />
+          </div>
+          <?php endif; ?>
+          <?php if ($this->countModules('position-13')) : ?>
+          <div class="row-fluid">
+            <jdoc:include type="modules" name="position-13" style="html5" />
+          </div>
+          <?php endif; ?>          
 					<!-- End Content -->
 				</main>
 				<?php if ($this->countModules('position-7')) : ?>

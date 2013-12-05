@@ -92,6 +92,18 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
         <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
         <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
       </div>
+   <?php elseif (empty($notices) && $days_to_renewal < 0  && !empty($expiry_date)) : ?>
+      <div class="alert alert-danger">
+        <?php if ($progress[0]->review) : ?>
+          <div class="pull-right">
+            <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_HELLOWORLD_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
+          </div>
+        <?php endif; ?>        
+        <h4>Listing Status</h4>
+
+        <p><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_LISTING_EXPIRED'); ?></p>
+        <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
+      </div>    
     <?php elseif ($review) : ?>
       <div class="alert alert-info">
         <?php if ($progress[0]->review) : ?>

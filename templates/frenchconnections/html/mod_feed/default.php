@@ -55,7 +55,7 @@ else
 		$iUrl	= isset($feed->image)	? $feed->image	: null;
 		$iTitle = isset($feed->imagetitle) ? $feed->imagetitle : null;
 		?>
-		<div style="direction: <?php echo $rssrtl ? 'rtl' :'ltr'; ?>; text-align: <?php echo $rssrtl ? 'right' :'left'; ?> ! important"  class="feed<?php echo $moduleclass_sfx; ?>">
+		<div style="direction: <?php echo $rssrtl ? 'rtl' :'ltr'; ?>; text-align: <?php echo $rssrtl ? 'right' :'left'; ?> ! important"  class="feed">
 		<?php
 		// feed description
 		if (!is_null($feed->title) && $params->get('rsstitle', 1))
@@ -83,7 +83,7 @@ else
 	<!-- Show items -->
 	<?php if (!empty($feed))
 	{ ?>
-	<ul class="newsfeed<?php echo $params->get('moduleclass_sfx'); ?>">
+	<ul class="newsfeed">
 		<?php for  ($i = 0; $i < $params->get('rssitems', 5); $i++)
 		{  ?>
 			<?php

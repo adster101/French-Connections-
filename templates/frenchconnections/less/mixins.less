@@ -1,0 +1,59 @@
+//
+// Panels - nicked from bootstrap 3
+// ----------------------------------------------------------------
+
+// Base class
+.panel {
+  margin-bottom: @baseLineHeight;
+  background-color: @white;
+  border: 1px solid transparent;
+  border-radius: @baseBorderRadius;
+  .box-shadow(0 1px 1px rgba(0,0,0,.05));
+}
+
+// Panel contents
+.panel-body {
+  padding: 15px;
+  .clearfix();
+}
+
+// Panels
+// -------------------------
+.panel-variant(@border; @heading-text-color; @heading-bg-color; @heading-border) {
+  border-color: @border;
+
+  & > .panel-heading {
+    color: @heading-text-color;
+    background-color: @heading-bg-color;
+    border-color: @heading-border;
+
+    + .panel-collapse .panel-body {
+      border-top-color: @border;
+    }
+  }
+  & > .panel-footer {
+    + .panel-collapse .panel-body {
+      border-bottom-color: @border;
+    }
+  }
+}
+
+// Within heading, strip any `h*` tag of it's default margins for spacing.
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: ceil((@baseFontSize * 1.125));
+  color: inherit;
+
+  > a {
+    color: inherit;
+  }
+}
+
+// Optional footer (stays gray in every modifier class)
+.panel-footer {
+  padding: 10px 15px;
+  background-color: @bodyBackground;
+  border-top: 1px solid #defaultBorder;
+  .border-bottom-radius(@baseBorderRadius - 1);
+}

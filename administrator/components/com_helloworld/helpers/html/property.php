@@ -179,7 +179,7 @@ class JHtmlProperty {
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
-  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false, $expiry_date) {
+  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false) {
 
     // Array of image, task, title, action.
     // Possible renewal states are
