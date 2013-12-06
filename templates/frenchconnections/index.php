@@ -160,16 +160,25 @@ else
 					<jdoc:include type="modules" name="position-3" style="xhtml" />
 					<jdoc:include type="message" />
 					<jdoc:include type="component" />
-          <?php if ($this->countModules('position-2')) : ?>
-          <div class="row-fluid">
-            <jdoc:include type="modules" name="position-2" style="html5" />
-          </div>
+          <?php if ($this->countModules('position-2') && $this->countModules('position-13')) : ?>
+            <div class="row-fluid">
+              <div class="span6">
+                <jdoc:include type="modules" name="position-2" style="none" />
+              </div>
+              <div class="span6">
+                <jdoc:include type="modules" name="position-13" style="none" />
+              </div>       
+            </div>
+          <?php elseif ($this->countModules('position-2') && !$this->countModules('position-13')) :?>
+            <div class="span12">
+              <jdoc:include type="modules" name="position-2" style="html5" />
+            </div>
+           <?php elseif (!$this->countModules('position-2') && $this->countModules('position-13')) :?>
+            <div class="span12">
+              <jdoc:include type="modules" name="position-13" style="html5" />
+            </div>
           <?php endif; ?>
-          <?php if ($this->countModules('position-13')) : ?>
-          <div class="row-fluid">
-            <jdoc:include type="modules" name="position-13" style="html5" />
-          </div>
-          <?php endif; ?>          
+               
 					<!-- End Content -->
 				</main>
 				<?php if ($this->countModules('position-7')) : ?>

@@ -183,6 +183,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <hr class="clear" />
 
       <?php if ($this->reviews) : ?>
+      <div class="quote">
         <blockquote>
           <p>
             <?php echo strip_tags(JHtml::_('string.truncate', $this->reviews[0]->review_text, 125)); ?>
@@ -201,7 +202,8 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
             </a>
 
           </small>
-        </blockquote>   
+        </blockquote> 
+      </div>
 
       <?php else: ?>
         <p>

@@ -62,9 +62,9 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     </div>
 
     <label for="s_kwds">
-      <?php echo JText::_('COM_FCSEARCH_SEARCH_DESTINATION') ?>
+      <?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?>
     </label>
-    <input id="s_kwds" class="input-medium typeahead" type="text" name="s_kwds" autocomplete="Off" value=""/> 
+    <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>"/> 
     <div class="row-fluid">
       <div class="span6">
         <label for="arrival">
