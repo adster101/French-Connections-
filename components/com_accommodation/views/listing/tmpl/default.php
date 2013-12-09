@@ -169,7 +169,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
             <span>
               <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
               <?php echo implode(', ', $this->unit_facilities['External Facilities']) ?>
-            </span><br />
+            </span><br /><br />
           <?php endif; ?>  
           <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
             <span>
@@ -183,28 +183,27 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <hr class="clear" />
 
       <?php if ($this->reviews) : ?>
-      <div class="quote">
-        <blockquote>
-          <p>
-            <?php echo strip_tags(JHtml::_('string.truncate', $this->reviews[0]->review_text, 125)); ?>
-          </p>
-          <small>
-            <?php echo $this->reviews[0]->guest_name; ?>
-            <cite title="Date Stayed">
+        <figure>
+          <blockquote class="quote">
+            <?php echo strip_tags(JHtml::_('string.truncate', $this->reviews[0]->review_text, 100)); ?>
+
+            <p>
+              <a href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#reviews">
+                <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_READ_MORE_REVIEWS', count($this->reviews)); ?>
+              </a>
+            </p>
+          </blockquote> 
+          <figcaption>
+            <cite>
+
+              <?php echo $this->reviews[0]->guest_name; ?>
               <?php
               $date = new DateTime($this->reviews[0]->date);
-
               echo $date->format('D, d M Y');
               ?>
-            </cite>  
-            <a href="#reviews">
-              <?php echo JText::_('COM_ACCOMMODATION_SITE_READ_MORE'); ?>
-            </a>
-
-          </small>
-        </blockquote> 
-      </div>
-
+            </cite> 
+          </figcaption>
+        </figure>
       <?php else: ?>
         <p>
           <?php echo JText::_('COM_ACCOMMODATION_SITE_NO_REVIEWS'); ?>
@@ -345,17 +344,22 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php if ($this->item->unit_title) : ?>
         <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->unit_title)) ?></h2> 
       <?php endif; ?>
-      <?php foreach ($this->reviews as $review) : ?>
-        <blockquote>
-          <?php echo $review->review_text; ?>
-          <small>
-            <?php echo $review->guest_name; ?>
-            <cite title="<?php echo JText::_('COM_ACCOMMODATION_SITE_DATE_OF_STAY'); ?>">
-              <?php echo $review->date; ?>
-            </cite>  
-          </small>
-        </blockquote>         
-      <?php endforeach; ?>
+      <div class="well well-small">
+        <?php foreach ($this->reviews as $review) : ?>
+          <figure>
+            <blockquote class="quote">
+              <?php echo strip_tags($review->review_text, '<p>,<br>'); ?> 
+            </blockquote>  
+            <figcaption>
+              <cite>  
+                <?php echo $review->guest_name; ?>
+                <?php echo JFactory::getDate($review->date)->calendar('D, d M Y'); ?>
+              </cite> 
+            </figcaption>
+          </figure>
+        <?php endforeach; ?>
+      </div>
+
     </div>
     <div class="span4"></div>
   </div>

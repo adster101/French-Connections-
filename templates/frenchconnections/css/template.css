@@ -232,6 +232,9 @@ textarea {
   -moz-border-radius-bottomleft: 3px;
   border-bottom-left-radius: 3px;
 }
+cite:before {
+  content: '\2014 \00A0';
+}
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -7079,60 +7082,54 @@ div.modal.fade.in {
   border-bottom-color: #e7eae3;
 }
 /* Speech bubble for blockqotes */
-.quote {
+.quote,
+.well .quote {
   position: relative;
-  border: 1px solid #049cdb;
-  padding: 6.25px 25px 12.5px;
-  margin: 20px auto;
-  font-family: 'Open Sans Condensed', sans-serif;
-  color: #333333;
+  border: 1px solid #70adf8;
+  padding: 15px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   background: #ffffff;
   margin-bottom: 20px;
 }
-.quote :before {
+.quote p,
+.well .quote p {
+  font-size: 13px;
+}
+.quote:before,
+.well .quote:before {
   content: "";
   position: absolute;
-  top: 105%;
-  right: 20px;
-  border-width: 20px 20px 0;
+  bottom: -20px;
+  left: 25px;
+  border-width: 10px;
   border-style: solid;
-  border-color: #ffffff transparent;
+  border-color: #70adf8 transparent transparent #70adf8;
 }
-.quote :after {
+.quote:after,
+.well .quote:after {
   content: "";
   position: absolute;
-  top: 100%;
-  right: 25px;
-  border-width: 20px 20px 0 0;
+  bottom: -18px;
+  left: 26px;
+  border-width: 10px;
   border-style: solid;
-  border-color: #ffffff transparent;
-  /* css3 extras */
-  -webkit-transform: skewX(-15deg);
-  -moz-transform: skewX(-15deg);
-  -ms-transform: skewX(-15deg);
-  -o-transform: skewX(-15deg);
-  transform: skewX(-15deg);
-}
-.quote .credit {
-  margin: 1em 0 0;
-  font: 14px/1.2 Arial, sans-serif;
-}
-.quote .credit :before {
-  content: "— ";
-}
-.quote blockquote,
-.quote p {
-  border: 0;
-  padding: 0;
-  margin: 0;
+  border-color: #ffffff transparent transparent #ffffff;
 }
 .navbar .nav > li > a {
   font-weight: bold;
 }
+.affix {
+  top: 0;
+  width: 50%;
+  background: #fff;
+}
 /* Site Body Styles */
+figure {
+  margin: 0 0 9px 0;
+  padding: 0;
+}
 body.site {
   padding: 20px;
   background-color: #f4f6f7;

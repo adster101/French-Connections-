@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
     itemMargin: 5,
     asNavFor: '#slider'
   });
-              
+
   jQuery('#slider').flexslider({
     animation: "slide",
     controlNav: false,
@@ -26,45 +26,45 @@ jQuery(document).ready(function() {
     // Get the title and content 
     var text = this.title.split('::');
     // Prime each element with a popover on focus
-    popover = jQuery('#'+id[0]).popover({
-      title:text[0],
-      content:text[1],
-      placement:'right',
-      trigger:'focus'
+    popover = jQuery('#' + id[0]).popover({
+      title: text[0],
+      content: text[1],
+      placement: 'right',
+      trigger: 'focus'
     });
-  });
+  });  
 });
 
 
 window.addEvent('domready', function() {
-  
+
   document.formvalidator.setHandler('name',
-    function (value) {
-      regex=/^[a-zA-Z]+$/;
-      console.log(regex.test(value));
-      return regex.test(value);
-    });
+          function(value) {
+            regex = /^[a-zA-Z]+$/;
+            console.log(regex.test(value));
+            return regex.test(value);
+          });
   document.formvalidator.setHandler('telephone',
-    function (value) {
-      // Only allow digits, spaces and pluses
-      regex=/^[\d\s()+]{11,25}$/;
-      return regex.test(value);
-    });
+          function(value) {
+            // Only allow digits, spaces and pluses
+            regex = /^[\d\s()+]{11,25}$/;
+            return regex.test(value);
+          });
   document.formvalidator.setHandler('message',
-    function (value) {
-      regex=/^[\w-\/., !"'\n]+$/;
-      return regex.test(value);
-    });
+          function(value) {
+            regex = /^[\w-\/., !"'\n]+$/;
+            return regex.test(value);
+          });
   document.formvalidator.setHandler('ukdate',
-    function (value) {
-      regex=/^(\d{2})-(\d{2})-(\d{4})$/;
-      return regex.test(value);
-    });
- document.formvalidator.setHandler('numeric',
-    function (value) {
-      regex=/^[0-9]{1,2}/;
-      return regex.test(value);
-    });
-}); 
+          function(value) {
+            regex = /^(\d{2})-(\d{2})-(\d{4})$/;
+            return regex.test(value);
+          });
+  document.formvalidator.setHandler('numeric',
+          function(value) {
+            regex = /^[0-9]{1,2}/;
+            return regex.test(value);
+          });
+});
 
   

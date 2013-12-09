@@ -70,52 +70,41 @@
             transform:skewX(@deg);
 }
 
-.quote(@speechBubbleText: #fff, @speechBubbleBackground : #245991, @padding: 25px, @bubblePointHeight: 20px, @bubblePointPadding: 0px, @bubblePointAngle: -15deg)
+.quote(@speechBubbleBackground: #fff, @padding: 25px, @bubblePointHeight: 20px, @bubblePointPadding: 0px, @bubblePointAngle: -35deg, @borderColour: @wellBackground)
 {
-    position:relative;
-    border: 1px solid @blue;
-    padding: @padding - (@padding*.75) @padding @padding - (@padding*.5);
-    margin: 20px auto;
-    font-family: 'Open Sans Condensed', sans-serif; 
-    color: @speechBubbleText;
-    .border-radius(@baseBorderRadius);
-    background: @speechBubbleBackground;
-        margin-bottom: @bubblePointHeight + @bubblePointPadding;
+  position:relative;
+  border: 1px solid darken(@borderColour, 25%);
+  padding: @padding;
+  .border-radius(@baseBorderRadius);
+  background: @speechBubbleBackground;
+  margin-bottom: @bubblePointHeight + @bubblePointPadding;
 
-        :before {
-          content:"";
-          position:absolute;
-          top:105%;
-          right:20px;
-                 border-width: @bubblePointHeight @bubblePointHeight 0;
-                border-style: solid;
-                border-color: @speechBubbleBackground transparent;         
-        }
+  p {    
+      font-size: @baseFontSize;
+  }
 
-        :after {
-                content:"";
-                position: absolute;
-                top: 100%;
-                right: 25px;
-                border-width: @bubblePointHeight @bubblePointHeight 0 0;
-                border-style: solid;
-                border-color: @speechBubbleBackground transparent;
-                /* css3 extras */
-                .skewX(@bubblePointAngle);
-        }
-        
-        .credit {
-                margin:1em 0 0;
-                font:14px/1.2 Arial, sans-serif;
-                
-                :before {
-                        content:"— ";
-                }
-        }
+  &:before {
+    content:"";
+    position:absolute;
+    bottom:-20px;
+    left:25px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: darken(@borderColour, 25%) transparent transparent darken(@borderColour, 25%);  
+  }
 
-        blockquote, p {
-                border: 0;
-                padding:0; 
-                margin:0;
-        }
+  &:after {
+    content:"";
+    position: absolute;
+    bottom: -18px;
+    left: 26px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: @white transparent transparent @white;
+  }
 }
+
+cite:before {
+  content: '\2014 \00A0';
+}
+
