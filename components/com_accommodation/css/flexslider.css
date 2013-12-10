@@ -75,7 +75,7 @@ html[xmlns] .slides {display: block;}
   .flex-direction-nav .flex-next {opacity: 1; right: 0;}
 }
 
-.flex-caption {text-align: center;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);margin:0;}
+.flex-caption {text-align: center;margin:0;}
 
 #slider {margin: 0 0 10px!important;}
 #carousel li {margin-right: 5px;}

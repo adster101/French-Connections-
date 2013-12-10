@@ -145,6 +145,24 @@ else
 			</nav>
 			<?php endif; ?>
 			<jdoc:include type="modules" name="banner" style="xhtml" />
+          <?php if ($this->countModules('position-11') && $this->countModules('position-12')) : ?>
+            <div class="row-fluid">
+              <div class="span6">
+                <jdoc:include type="modules" name="position-11" style="none" />
+              </div>
+              <div class="span6">
+                <jdoc:include type="modules" name="position-12" style="none" />
+              </div>       
+            </div>
+          <?php elseif ($this->countModules('position-11') && !$this->countModules('position-12')) :?>
+            <div class="span12">
+              <jdoc:include type="modules" name="position-2" style="html5" />
+            </div>
+           <?php elseif (!$this->countModules('position-11') && $this->countModules('position-12')) :?>
+            <div class="span12">
+              <jdoc:include type="modules" name="position-12" style="html5" />
+            </div>
+          <?php endif; ?>
 			<div class="row-fluid">
 				<?php if ($this->countModules('position-8')) : ?>
 				<!-- Begin Sidebar -->

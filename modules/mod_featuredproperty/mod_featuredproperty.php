@@ -14,10 +14,13 @@ require_once (dirname(__FILE__).'/helper.php');
 
 require_once(JPATH_SITE.'/components/com_content/helpers/route.php');
 
+// Register the Special Offers helper file
+JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 
 $helper = new modFeaturedPropertyHelper();
 
-$helper->getFeaturedProperties($params);
+$items = $helper->getFeaturedProperties($params);
 
-$helper->renderLayout($params);
+require JModuleHelper::getLayoutPath('mod_featuredproperty', $params->get('layout', 'default'));
+
 

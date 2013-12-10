@@ -49,7 +49,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <h4 class="bottom"><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
   
     <div class="mapContainer">
-      <img class="map" name="map_regions_Small_s1" src="/images/general/map_regions_small.gif" width="168" height="180" border="0" id="map_regions_Small_s1" usemap="#m_map_regions_Small" alt="" >
+      <img class="map" style="margin:0pt auto;display:block" name="map_regions_Small_s1" src="/images/general/map_regions_small.gif" width="168" height="180" border="0" id="map_regions_Small_s1" usemap="#m_map_regions_Small" alt="" >
       <map name="m_map_regions_Small" id="m_map_regions_Small">	
         <?php foreach ($regions as $region) : ?>
         <area 
@@ -66,34 +66,33 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     </label>
     <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>"/> 
     <div class="row-fluid">
-      <div class="span6">
+      <div class="span3">
         <label for="arrival">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
         </label>
         <input id="arrival" class="span9 start_date" type="text" name="arrival" autocomplete="Off" value="<?php echo $arrival; ?>"/>    
       </div>
-      <div class="span6">
+      <div class="span3">
         <label for="departure">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
         </label>
         <input id="departure" class="span9 end_date" type="text" name="departure" autocomplete="Off" value="<?php echo $departure; ?>" />    
       </div>
-    </div>
-    <div class="row-fluid">
+    
 
-      <div class="span6">
+      <div class="span3">
         <label for="occupancy">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
         </label>
-        <select id="occupancy" class="input-mini" name="occupancy">
+        <select id="occupancy" class="span12" name="occupancy">
           <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>          
         </select>
       </div>
-      <div class="span6">
+      <div class="span3">
         <label for="bedrooms">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
         </label>
-        <select id="bedrooms" class="input-mini" name="bedrooms">
+        <select id="bedrooms" class="span12" name="bedrooms">
           <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, '10+' => 10), 'value', 'text', $bedrooms); ?>
         </select>
       </div>

@@ -51,7 +51,6 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
 <?php endif; ?>
 
 <div class="well well-small">
-  
   <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&id=' . (int) $id . '&unit_id=' . (int) $unit_id) . '#email'; ?>" method="post" class="form-validate form-horizontal">
     <fieldset class="adminform">
       <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
@@ -71,7 +70,6 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
         <input type="hidden" name="task" value="listing.enquiry" />
         <?php echo JHtml::_('form.token'); ?>
       </div>
-
   </form>
 
 </div>

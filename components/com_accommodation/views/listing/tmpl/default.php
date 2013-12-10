@@ -21,6 +21,13 @@ if (!empty($this->item->languages_spoken)) {
   }
 }
 
+// The layout for the anchor based navigation on the property listing
+$navigator = new JLayoutFile('navigator', $basePath = JPATH_SITE . '/components/com_accommodation/layouts');
+
+// Add the reviews to item for the above layout.
+// TO DO - refactor so that $this->item contains all elements of the listing for use in layouts?
+$this->item->reviews = $this->reviews;
+
 JHTML::_('behavior.formvalidation');
 // Include the content helper so we can get the route of the success article
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
@@ -134,25 +141,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <span class="pull-right"><?php echo $this->item->distance_to_coast; ?></span>
         </p>
       <?php endif; ?>
-      <!-- Location type -->
-      <?php if (array_key_exists('Location Type', $this->unit_facilities)) : ?>
-        <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_LOCATION_TYPE'); ?>
-          <span class="pull-right"><?php echo $this->unit_facilities['Location Type'][0] ?></span>
-        </p>
-      <?php endif; ?>
+  
       <!-- Changeover day -->
       <?php if ($this->item->changeover_day) : ?>
         <p class="dotted">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHANGEOVER_DAY'); ?>
           <span class="pull-right"><?php echo $this->item->changeover_day; ?></span>
-        </p>
-      <?php endif; ?>
-      <!-- Property tyep -->
-      <?php if ($this->item->property_type) : ?>
-        <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE'); ?>
-          <span class="pull-right"><?php echo $this->item->property_type; ?></span>
         </p>
       <?php endif; ?>
       <!-- Accommodation type -->
@@ -257,13 +251,15 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     </div>
   </div>
 </div>
+
+
+
 <div class="row-fluid" id="about">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+  <?php $this->item->navigator = 'about'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
 <div class="row-fluid">
-  <div class="span8">
+  <div class="span8" >
     <?php if ($this->item->unit_title) : ?>
       <h2><?php echo $this->escape($this->item->unit_title) ?>
         <?php //echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->accommodation_type, $this->item->unit_title) ?></h2>  
@@ -281,10 +277,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     ?>
   </div>
 </div>
+
 <div class="row-fluid" id="location">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+  <?php $this->item->navigator = 'location'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
 <div class="row-fluid">
   <div class="span8">
@@ -293,20 +289,20 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <?php endif; ?>
     <?php if ($this->item->location_details) : ?>
       <?php echo $this->item->location_details; ?>
-    <?php endif; ?>
+    <?php endif; ?> 
+    <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
+    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix"></div>
+    <p>Other stuff here</p>
   </div>
   <div class="span4">
-    <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
-
-    <div id="map_canvas" style="width:100%; height:370px"></div>
 
   </div>
 </div>
 
+
 <div class="row-fluid" id="gettingthere">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+  <?php $this->item->navigator = 'gettingthere'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
 <div class="row-fluid">
   <div class="span8">
@@ -332,12 +328,11 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </div>
 </div>
 
-<?php if ($this->reviews) { ?>
+<?php if ($this->reviews) : ?>
+
   <div class="row-fluid" id="reviews">
-    <div class="span12">
-      <?php echo $this->loadTemplate('navigator');
-      ?>
-    </div>
+    <?php $this->item->navigator = 'reviews'; ?>
+    <?php echo $navigator->render($this->item); ?>
   </div>
   <div class="row-fluid">
     <div class="span8">
@@ -363,22 +358,17 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     </div>
     <div class="span4"></div>
   </div>
-<?php } ?>
+<?php endif; ?>
+
 <div class="row-fluid" id="facilities">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator');
-    ?>
-  </div>
-</div>
-<div class="row-fluid">
-  <div class="span-12">
-    <?php if ($this->item->unit_title) : ?>
-      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h2> 
-    <?php endif; ?>
-  </div>
+  <?php $this->item->navigator = 'facilities'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
 <div class="row-fluid">
   <div class="span8">
+    <?php if ($this->item->unit_title) : ?>
+      <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h2> 
+    <?php endif; ?>
     <table class="table table-striped">
       <?php if (array_key_exists('Property Type', $this->unit_facilities) && array_key_exists('Accommodation Type', $this->unit_facilities)) : ?>
         <tr>
@@ -482,20 +472,16 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
 
 
-<div class="row-fluid" id="availability">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+
+<div class="row-fluid" id="availability">  
+  <?php $this->item->navigator = 'availability'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
-<div class="row-fluid">
+<div clas="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
       <h2><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
     <?php endif; ?>
-  </div>
-</div>
-<div clas="row-fluid">
-  <div class="span8">
     <?php if ($this->item->changeover_day) : ?>
       <p>
         <strong>
@@ -526,15 +512,14 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->availability; ?>
     <?php endif; ?>
   </div>
-
 </div>
+
+
 
 <div class="row-fluid" id="tariffs">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+  <?php $this->item->navigator = 'tariffs'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
-
 <div class="row-fluid">
   <div class="span8">
     <?php if ($this->item->unit_title) : ?>
@@ -555,10 +540,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <?php endif; ?>
   </div>
 </div>
+
 <div class="row-fluid" id="email">
-  <div class="span12">
-    <?php echo $this->loadTemplate('navigator'); ?>
-  </div>
+  <?php $this->item->navigator = 'email'; ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
 <div class="row-fluid">
   <div class="span12">

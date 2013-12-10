@@ -9,14 +9,16 @@ defined('_JEXEC') or die('Restricted access');
     </p>
     <h1><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_TITLE', $this->item->unit_title) ?></h1>
     <p class="lead">Print this form, fill it in and post to the address shown below.</p>
-    <hr />
-    <button class="btn btn-primary btn-large" onclick="window.print()">
-      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_PRINT'); ?>
-    </button>&nbsp;&nbsp;
-    <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '#email'; ?>">
-      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_BACK_TO_PROPERTY'); ?>
-    </a>
-    <hr />
+    <div class="print-button-bar">  
+      <hr />
+      <button class="btn btn-primary btn-large" onclick="window.print()">
+        <?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_PRINT'); ?>
+      </button>&nbsp;&nbsp;
+      <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '#email'; ?>">
+        <?php echo JText::_('COM_ACCOMMODATION_BOOKING_BACK_TO_PROPERTY'); ?>
+      </a>
+      <hr />
+    </div>
     <p>
       <?php echo ($this->item->firstname) ? $this->escape($this->item->firstname) : '' ?> 
       <?php echo ($this->item->surname) ? $this->escape($this->item->surname) . '<br />' : '' ?> 
@@ -87,18 +89,18 @@ defined('_JEXEC') or die('Restricted access');
     <?php if (!empty($this->item->terms_and_conditions)) : ?>
       <?php echo $this->item->terms_and_conditions ?>
     <?php endif; ?>
-
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_ARRANGE_INSURANCE'); ?></p>
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_SIGNATURE'); ?></p>
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_DATE'); ?></p>
-
-    <hr />
-    <button class="btn btn-primary btn-large" onclick="window.print()">
-      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_PRINT'); ?>
-    </button>&nbsp;&nbsp;
-    <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '#email'; ?>">
-      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_BACK_TO_PROPERTY'); ?>
-    </a>
-    <hr />
+    <div class="print-button-bar">  
+      <hr />
+      <button class="btn btn-primary btn-large" onclick="window.print()">
+        <?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_PRINT'); ?>
+      </button>&nbsp;&nbsp;
+      <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '#email'; ?>">
+        <?php echo JText::_('COM_ACCOMMODATION_BOOKING_BACK_TO_PROPERTY'); ?>
+      </a>
+      <hr />
+    </div>
   </div>
 <?php endif; ?>

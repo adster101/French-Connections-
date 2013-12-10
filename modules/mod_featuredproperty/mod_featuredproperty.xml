@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="2.5.0" method="upgrade">
+<extension 
+  type="module" 
+  version="3.1" 
+  method="upgrade" 
+  client="site">
   <name>mod_featuredproperty</name>
   <!-- The following elements are optional and free of formatting constraints -->
   <creationDate>23 May 2012</creationDate>
@@ -9,7 +13,7 @@
   <copyright>Copyright Info</copyright>
   <license>License Info</license>
   <!--  The version string is stored in the extension table -->
-  <version>1.0.1</version>
+  <version>3.0.0</version>
   <!-- The description is optional and defaults to the name -->
   <description>Shows a list of featured properties.</description>
 

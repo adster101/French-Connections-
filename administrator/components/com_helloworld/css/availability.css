@@ -58,7 +58,7 @@ tr.days th {
 }
 
 .month-year {
-  background:#d7e1f2;
+  background:#eaf3fe;
   margin-bottom:1px;
   font-weight:bold;
   padding:3px 0 6px 3px;
@@ -66,7 +66,6 @@ tr.days th {
 
 td.available {
   color: #333;
-  background-color: #eee !important;
 }
 
 td.unavailable {
@@ -76,7 +75,7 @@ td.unavailable {
 }
 
 td.unavailable a,
-table.avCalendar td.unavailable span {
+table.avCalendar td.unavailable span, table.avCalendar td.unavailable-available span {
   color:#eee;
 }
 

@@ -106,11 +106,36 @@
   font-weight:bold;
 }
 
-.affix {
-  top:0;
-  width:50%;
-  background:#fff;
+.navigator {
+  padding:3px 0;
 }
+
+.navigator > li > a {
+  color:#525f79;
+  #gradient > .vertical(#fff, #e7eae3);
+  border:1px solid darken(#e7eae3, 5%);
+  i {
+    .opacity(50);
+  }
+  padding-left:9px;
+  padding-right:9px;
+}
+
+.navigator > .active > a, .navigator > .active > a:hover, .navigator > li > a:hover {
+  #gradient > .vertical(#fff, #fff);
+  border:1px solid darken(#e7eae3, 10%);
+  color:#525f79;
+  i {
+    .opacity(100);
+  }
+}
+
+@media print {
+  .print-button-bar {
+    display:none;
+  }
+}
+
 
 /* Site Body Styles */
 figure {

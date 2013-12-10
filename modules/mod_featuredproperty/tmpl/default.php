@@ -13,7 +13,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 ?>
 
 
-      <?php foreach ($this->items as $key => $item) : ?>
+      <?php foreach ($items as $key => $item) : ?>
         <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
         <?php if ($item->title) : ?>     
           <div class="row-fluid">
@@ -35,7 +35,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
               </p>
             </div>      
           </div>
-          <?php if ($key + 1 != count($this->items)) : ?>
+          <?php if ($key + 1 != count($items)) : ?>
             <hr />
           <?php endif; ?>
         <?php endif; ?>

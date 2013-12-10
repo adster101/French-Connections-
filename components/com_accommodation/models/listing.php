@@ -202,7 +202,7 @@ class AccommodationModelListing extends JModelForm {
         ufc.address1,
         ufc.address2,
         ufc.city,
-        ufc.region,
+        ufc.region as county,
         ufc.country,
         ufc.postal_code,
        	date_format(a.created_on, "%M %Y") as advertising_since';
