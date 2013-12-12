@@ -130,11 +130,14 @@ else
 		<div class="container<?php echo ($params->get('fluidContainer') ? '-fluid' : '');?>">
 			<!-- Header -->
 			<header class="header" role="banner">
-				<div class="header-inner clearfix">
+				<div class="row-fluid">
+          <div class="span5">
 					<a class="brand pull-left" href="<?php echo $this->baseurl; ?>">
 						<?php echo $logo;?> <?php if ($this->params->get('sitedescription')) { echo '<div class="site-description">'. htmlspecialchars($this->params->get('sitedescription')) .'</div>'; } ?>
 					</a>
-					<div class="header-search pull-right">
+          </div>
+          
+					<div class="span7 header-search">
 						<jdoc:include type="modules" name="position-0" style="none" />
 					</div>
 				</div>
@@ -177,7 +180,9 @@ else
 					<!-- Begin Content -->
 					<jdoc:include type="modules" name="position-3" style="xhtml" />
 					<jdoc:include type="message" />
+  
 					<jdoc:include type="component" />
+
           <?php if ($this->countModules('position-2') && $this->countModules('position-13')) : ?>
             <div class="row-fluid">
               <div class="span6">

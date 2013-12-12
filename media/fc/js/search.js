@@ -2,7 +2,7 @@
 jQuery(document).ready(function() {
 
   // Maphilight is used to highlight the area maps on the map search graphic
-  jQuery('.map').maphilight();
+  //jQuery('.map').maphilight();
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {

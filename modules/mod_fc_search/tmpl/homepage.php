@@ -8,10 +8,9 @@
  */
 defined('_JEXEC') or die;
 
-
 $document = JFactory::getDocument();
 $app = JFactory::getApplication();
-$lang = $app->input->get('lang','en');
+$lang = $app->input->get('lang', 'en');
 
 $bedrooms = $app->getUserState('list.bedrooms');
 $occupancy = $app->getUserState('list.occupancy');
@@ -41,26 +40,31 @@ $area_map[151] = "80,21,80,21,79,22,78,22,78,22,78,22,77,23,75,23,75,24,74,23,73
 $area_map[154] = "82,15,82,16,83,17,83,18,82,18,81,18,81,20,82,22,83,24,85,26,84,27,84,28,84,28,83,29,84,31,84,31,84,32,85,32,84,33,85,36,84,36,84,37,85,38,86,37,88,37,90,38,91,37,92,38,93,38,93,39,94,38,95,39,95,39,96,39,97,39,98,39,99,39,100,39,101,39,102,39,102,40,102,40,104,42,105,42,106,44,107,42,107,42,108,40,107,40,108,39,107,38,109,37,108,37,108,36,108,35,109,34,110,34,110,33,111,33,112,33,113,33,112,32,113,31,113,30,112,29,113,28,115,26,115,25,115,25,115,24,114,23,115,22,114,22,113,22,112,22,111,21,110,21,108,21,107,21,106,21,102,22,101,21,98,21,98,20,96,21,97,20,96,19,96,20,94,19,94,20,93,19,93,20,92,20,92,19,93,18,93,17,92,17,91,17,89,18,87,16,86,16,85,15,83,16,82,15";
 $area_map[152] = "94,2,93,2,92,2,91,2,91,2,90,2,88,3,87,3,87,3,85,3,83,5,82,5,82,6,83,7,82,9,83,11,83,12,82,12,82,14,83,15,85,15,86,16,87,16,87,16,88,17,89,18,90,17,91,17,92,17,93,18,92,19,92,20,92,20,93,19,94,19,94,19,96,20,96,19,97,20,96,21,98,20,98,21,101,21,102,21,107,21,107,21,108,20,111,21,111,21,111,21,113,22,114,22,113,21,115,20,113,18,113,17,114,16,113,16,112,15,109,15,108,16,107,15,107,13,107,13,106,12,105,12,105,12,103,12,103,11,102,10,102,9,103,9,101,7,100,7,99,7,98,8,98,8,97,7,96,6,95,6,94,6,94,4,95,4,95,2,94,2,94,2";
 $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96,39,100,39,101,39,102,39,102,40,106,44,105,45,105,45,106,46,106,47,105,47,106,48,107,48,105,50,105,52,102,53,101,53,100,53,100,54,100,55,99,57,98,57,98,57,97,57,96,58,94,57,94,58,94,56,94,55,93,55,92,54,92,54,91,54,90,53,89,54,88,55,87,54,87,54,87,53,86,51,86,51,85,50,85,49,83,49,84,48,82,47,83,46,82,45,82,44,81,42,81,41,81,41,81,40,81,40,82,40,83,37";
-
 ?>
 <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165') ?>" method="POST" class="form-vertical">
   <div class="well well-small clearfix">
 
     <h4 class="bottom"><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
-  
-    <div class="mapContainer">
-      <img class="map" style="margin:0pt auto;display:block" name="map_regions_Small_s1" src="/images/general/map_regions_small.gif" width="168" height="180" border="0" id="map_regions_Small_s1" usemap="#m_map_regions_Small" alt="" >
-      <map name="m_map_regions_Small" id="m_map_regions_Small">	
+    <div class="search-map" style="margin:0pt auto;width:300px;">
+      <svg version = "1.1" width="100%" height="200px">
         <?php foreach ($regions as $region) : ?>
-        <area 
-          shape="poly" 
-          coords="<?php echo $area_map[$region->id] ?>"
-          href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds='. $region->alias .'&lang=' . $lang . '&Itemid=165'); ?>" 
-          alt="<?php echo $region->title ?>">
-       <?php endforeach; ?>
-      </map>
-    </div>
+          <a xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=165'); ?>" xlink:title="">
+            <polygon points="<?php echo $area_map[$region->id] ?>" fill="#c0d0eb" class="woot">
+              <title><?php echo $region->title ?></title>
+              <animate attributeName="fill"
+                            from="#c0d0eb" to="#647cb6"
+                            begin="mouseover" dur="0.5s"
+                            fill="freeze"/>
+              <animate attributeName="fill"
+                            from="#647cb6" to="#c0d0eb"
+                            begin="mouseout" dur="0.5s"
+                            fill="freeze"/>
 
+            </polygon>
+          </a>
+        <?php endforeach; ?>
+      </svg>
+    </div>
     <label for="s_kwds">
       <?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?>
     </label>
@@ -78,7 +82,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         </label>
         <input id="departure" class="span9 end_date" type="text" name="departure" autocomplete="Off" value="<?php echo $departure; ?>" />    
       </div>
-    
+
 
       <div class="span3">
         <label for="occupancy">
@@ -97,6 +101,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         </select>
       </div>
     </div>
+    <hr class="spacer" />
     <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#">
       <i class="icon-search icon-white"> </i>
       <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
