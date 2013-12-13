@@ -233,7 +233,6 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->document->setDescription($explained);
     }
 
-
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/jquery.maphilight.min.js', 'text/javascript', true);
@@ -241,7 +240,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $document->addScript(JURI::root() . 'media/fc/js/date-range.js', 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.10.1.custom.min.css');
     $document->addStyleSheet(JURI::root() . 'media/fc/css/general.css');
-    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAwnosMJfizqEmuQs-WsJRyHKqEsU9G-DI&sensor=true");
+    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
 
     JHtmlSidebar::addFilter(
             JText::_('JOPTION_SELECT_PUBLISHED'), 'sort_by', JHtml::_('select.options', array('beds' => 'Bedrooms'), 'value', 'text', $this->state->get('filter.published'), true)

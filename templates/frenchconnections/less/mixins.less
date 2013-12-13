@@ -13,14 +13,14 @@
 
 // Panel contents
 .panel-body {
-  padding: 15px;
+  padding: 9px;
   .clearfix();
 }
 
 // Panels
 // -------------------------
 .panel-variant(@border; @heading-text-color; @heading-bg-color; @heading-border) {
-  border-color: @border;
+  border-color: darken(@border, 10%);
 
   & > .panel-heading {
     color: @heading-text-color;

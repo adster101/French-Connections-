@@ -36,6 +36,7 @@ class modFeaturedPropertyHelper {
       c.occupancy,
       i.image_file_name as thumbnail,
       g.title,
+      g.alias,
       j.id as base_currency,
       (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');

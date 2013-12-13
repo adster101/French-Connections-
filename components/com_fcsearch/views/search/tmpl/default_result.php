@@ -55,7 +55,7 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $
 
 <div class="row-fluid">
   <div class="span4"><a href="<?php echo $route ?>" class="thumbnail pull-left">
-      <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' class="img-rounded" />
+      <img src='/images/property/<?php //echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' class="img-rounded" />
     </a>
   </div>
   <div class="span6">
