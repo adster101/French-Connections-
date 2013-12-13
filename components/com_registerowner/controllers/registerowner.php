@@ -27,7 +27,6 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
     // Include the content helper so we can get the route of the success article
     require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
-
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
 

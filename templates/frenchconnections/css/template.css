@@ -7256,6 +7256,14 @@ body.site.fluid {
 /* Header */
 .header {
   margin-bottom: 10px;
+  background-color: #f7faff;
+  background-image: -moz-linear-gradient(top, #ffffff, #eaf3fe);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#eaf3fe));
+  background-image: -webkit-linear-gradient(top, #ffffff, #eaf3fe);
+  background-image: -o-linear-gradient(top, #ffffff, #eaf3fe);
+  background-image: linear-gradient(to bottom, #ffffff, #eaf3fe);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeaf3fe', GradientType=0);
 }
 .header .finder {
   margin-top: 14px;

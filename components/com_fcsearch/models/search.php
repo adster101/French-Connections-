@@ -67,9 +67,10 @@ class FcSearchModelSearch extends JModelList {
     // Make this a call to get the crumbs trail?
     // Reuse the classification table instance
     // TODO - Cache the result
-    
+    // If the search term is an int then we just redirect to the accommodation view
+    $app = JFactory::getApplication();
+
     if ((int) $this->getState('list.searchterm', '')) {
-      $app = JFactory::getApplication();
       $app->redirect('/listing/' . $this->getState('list.searchterm', ''));
     }
 
@@ -90,24 +91,20 @@ class FcSearchModelSearch extends JModelList {
     // Load the result (should only be one) from the database.
     $db->setQuery($query);
 
-    try {
-      $row = $db->loadObject();
-    } catch (Exception $e) {
-      // Log any exception
-    }
+    // See if we got a valid search 
+    $row = $db->loadObject();
 
-    // No results found, return an empty array
+    // If no results then throw an exception 
     if (empty($row)) {
-      // Here we should throw an exception and redirect to a helpful page with most popular searches etc.
-      return array();
-    } else {
-      $this->location = $row->id;
-      $this->level = $row->level;
-      $this->latitude = $row->latitude;
-      $this->longitude = $row->longitude;
-      //$this->description = $row[4];
-      //$this->title = $row[5];
-      return $row;
+      $params = $this->state->get('parameters.menu');
+      $redirect = $params->get('redirect');
+
+      // Include the content helper so we can get the route of the success article
+      require_once JPATH_SITE . '/components/com_content/helpers/route.php';
+
+      // Redirect if it is set in the parameters, otherwise redirect back to where we came from
+      $app->redirect(JRoute::_('index.php?option=com_content&Itemid=' . (int) $redirect), false);
+      return false;
     }
   }
 
@@ -314,7 +311,6 @@ class FcSearchModelSearch extends JModelList {
         c.unit_id,
         c.unit_title,
         b.published_on,
-        c.thumbnail,
         b.title,
         b.area,
         b.region,
@@ -651,27 +647,26 @@ class FcSearchModelSearch extends JModelList {
        * Wrap this into a db query so we can use the ordering set on the component, or parameterise it.
        */
       $order = array(
-      1 => 'Property Type',
-      2 => 'Accommodation Type',
-      3 => 'Suitability',
-      4 => 'External Facilities',
-      5 => 'Property Facilities',
-      6 => 'Activities nearby',
-      7 => 'Kitchen features',
-      8 => 'Location Type'
+          1 => 'Property Type',
+          2 => 'Accommodation Type',
+          3 => 'Suitability',
+          4 => 'External Facilities',
+          5 => 'Property Facilities',
+          6 => 'Activities nearby',
+          7 => 'Kitchen features',
+          8 => 'Location Type'
       );
 
       $output = array();
-      
-      foreach($attributes as $array) {
+
+      foreach ($attributes as $array) {
         foreach ($order as $field) {
           $output[$field] = $attributes[$field];
         }
-        
       }
-      
+
       $sorted_attributes = $output;
-      
+
       // Push the results into cache.
       $this->store($store, $sorted_attributes);
 
@@ -792,7 +787,7 @@ class FcSearchModelSearch extends JModelList {
     // Get the configuration options.
     $app = JFactory::getApplication();
     $input = $app->input;
-            
+
     $params = $app->getParams();
     $user = JFactory::getUser();
     // Should apply this filter to other params here as well...

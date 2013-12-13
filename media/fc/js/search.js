@@ -1,8 +1,4 @@
-
 jQuery(document).ready(function() {
-
-  // Maphilight is used to highlight the area maps on the map search graphic
-  //jQuery('.map').maphilight();
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
@@ -102,46 +98,42 @@ jQuery(document).ready(function() {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
 
-
-
-
   jQuery('#property-search-button').click(function(event) {
-
 
     // val is the 'active' suggestion populated by typeahead
     // e.g. the option chosen should be the last active one
-    var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
+    //var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
 
     // The value contained in the typeahead field
-    var chosen = jQuery(".typeahead").attr('value');
+    //var chosen = jQuery(".typeahead").attr('value');
 
     // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
-    var count = jQuery(".typeahead.dropdown-menu li").length;
+    //var count = jQuery(".typeahead.dropdown-menu li").length;
 
     // A regex to check for an integer
-    var intRegex = new RegExp('^\\d+$');
+    //var intRegex = new RegExp('^\\d+$');
     
-    if (intRegex.test(chosen)) {
+    //if (intRegex.test(chosen)) {
       // Let it through
-      return true;
-    } else if (chosen !== '' && count !== 0) {
-      if (val !== chosen) {
-        jQuery('#myModal').modal();
-        event.preventDefault();
-        return false;
-      }
-    } else if (chosen === '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
-      jQuery('#myModal').modal();
-      event.preventDefault();
-      return false;
-    }
+      //return true;
+    //} else if (chosen !== '' && count !== 0) {
+      //if (val !== chosen) {
+        //jQuery('#myModal').modal();
+        //event.preventDefault();
+        //return false;
+      //}
+    //} else if (chosen === '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
+      //jQuery('#myModal').modal();
+      //event.preventDefault();
+      //return false;
+    //}
 
     // Form checks out, looks like the user chose something from the suggestions
     // Strip the string to make it like classifications table alias
-    var query = stripVowelAccent(chosen);
+    //var query = stripVowelAccent(chosen);
 
     // The path of the search, e.g. /search or /fr/search
-    var path = '/accommodation';
+    //var path = '/accommodation';
 
     // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
     inputs = jQuery('#property-search').find(':input').each(function() {
