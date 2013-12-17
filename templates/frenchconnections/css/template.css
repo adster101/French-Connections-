@@ -7096,7 +7096,10 @@ div.modal.fade.in {
   background: rgba(234, 243, 254, 0.75);
 }
 .homepage-fp .carousel-caption a {
-  color: #ffffff;
+  color: #525f79;
+}
+.homepage-fp .carousel-caption h5 {
+  margin-bottom: 0;
 }
 /* Panel styles */
 .panel-default {
