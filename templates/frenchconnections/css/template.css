@@ -3253,7 +3253,7 @@ input[type="submit"].btn.btn-mini {
   *z-index: 2;
 }
 .navbar-inner {
-  min-height: 40px;
+  min-height: 30px;
   padding-left: 20px;
   padding-right: 20px;
   background-color: #fff490;
@@ -3292,7 +3292,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .brand {
   float: left;
   display: block;
-  padding: 11px 20px 11px;
+  padding: 6px 20px 6px;
   margin-left: -20px;
   font-size: 20px;
   font-weight: 200;
@@ -3305,7 +3305,7 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-text {
   margin-bottom: 0;
-  line-height: 40px;
+  line-height: 30px;
   color: #807c46;
 }
 .navbar-link {
@@ -3316,14 +3316,14 @@ input[type="submit"].btn.btn-mini {
   color: #2e2c19;
 }
 .navbar .divider-vertical {
-  height: 40px;
+  height: 30px;
   margin: 0 9px;
   border-left: 1px solid #ffe925;
   border-right: 1px solid #fffbd7;
 }
 .navbar .btn,
 .navbar .btn-group {
-  margin-top: 5px;
+  margin-top: 0px;
 }
 .navbar .btn-group .btn,
 .navbar .input-prepend .btn,
@@ -3349,7 +3349,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-form select,
 .navbar-form .radio,
 .navbar-form .checkbox {
-  margin-top: 5px;
+  margin-top: 0px;
 }
 .navbar-form input,
 .navbar-form select,
@@ -3374,7 +3374,7 @@ input[type="submit"].btn.btn-mini {
 .navbar-search {
   position: relative;
   float: left;
-  margin-top: 5px;
+  margin-top: 0px;
   margin-bottom: 0;
 }
 .navbar-search .search-query {
@@ -3458,7 +3458,7 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar .nav > li > a {
   float: none;
-  padding: 11px 15px 11px;
+  padding: 6px 15px 6px;
   color: #807c46;
   text-decoration: none;
   text-shadow: 0 1px 0 #fffbd7;
@@ -7085,6 +7085,19 @@ div.modal.fade.in {
   content: "\e602";
   color: #55acee;
 }
+.typeahead {
+  margin-top: 0;
+}
+.homepage-fp .carousel {
+  margin-bottom: 0;
+}
+.homepage-fp .carousel-caption {
+  background: #eaf3fe;
+  background: rgba(234, 243, 254, 0.75);
+}
+.homepage-fp .carousel-caption a {
+  color: #ffffff;
+}
 /* Panel styles */
 .panel-default {
   border-color: #ced4c6;
@@ -7153,6 +7166,11 @@ div.modal.fade.in {
 .navbar .nav > li > a {
   font-weight: bold;
 }
+.navbar-inner {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
 .navigator {
   padding: 3px 0;
 }
@@ -7202,6 +7220,7 @@ div.modal.fade.in {
 }
 .header-nav li a {
   padding: 0 9px;
+  color: #fffbd7;
 }
 .header-nav li a:hover {
   background: transparent;
@@ -7255,15 +7274,11 @@ body.site.fluid {
 }
 /* Header */
 .header {
-  margin-bottom: 10px;
-  background-color: #f7faff;
-  background-image: -moz-linear-gradient(top, #ffffff, #eaf3fe);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#eaf3fe));
-  background-image: -webkit-linear-gradient(top, #ffffff, #eaf3fe);
-  background-image: -o-linear-gradient(top, #ffffff, #eaf3fe);
-  background-image: linear-gradient(to bottom, #ffffff, #eaf3fe);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffeaf3fe', GradientType=0);
+  padding-bottom: 9px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  background: url('/templates/frenchconnections/images/header-bg.jpg') center no-repeat;
 }
 .header .finder {
   margin-top: 14px;
@@ -7298,7 +7313,7 @@ body.site.fluid {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
-  padding: 20px;
+  padding: 18px;
   border: 1px solid rgba(0, 0, 0, 0.15);
   -moz-box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);

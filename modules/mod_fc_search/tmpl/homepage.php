@@ -68,7 +68,12 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <label for="s_kwds">
       <?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?>
     </label>
-    <input id="s_kwds" class="span12 typeahead" type="text" name="s_kwds" autocomplete="Off" value="" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>"/> 
+    <input id="s_kwds" class="span9 typeahead" type="text" name="s_kwds" autocomplete="Off" value="" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>"/> 
+    <button id="property-search-button" class="btn btn-primary pull-right" href="#">
+      <i class="icon-search icon-white"> </i>
+      <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
+    </button>
+
     <div class="row-fluid">
       <div class="span3">
         <label for="arrival">
@@ -82,7 +87,6 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         </label>
         <input id="departure" class="span9 end_date" type="text" name="departure" autocomplete="Off" value="<?php echo $departure; ?>" />    
       </div>
-
 
       <div class="span3">
         <label for="occupancy">
@@ -101,11 +105,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         </select>
       </div>
     </div>
-    <hr class="spacer" />
-    <button id="property-search-button" class="btn btn-large btn-primary pull-right" href="#">
-      <i class="icon-search icon-white"> </i>
-      <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-    </button>
+
   </div>
   <input type="hidden" name="option" value="com_fcsearch" />
 </form>

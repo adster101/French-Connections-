@@ -28,13 +28,14 @@ $lang = $app->input->get('lang', 'en');
 
         <div class = "item <?php echo ($leadingcount == 0) ? 'active' : '' ?>">
           <?php if (isset($item->thumbnail) && !empty($item->thumbnail)) : ?>
-            <p>
+            
               <a class="" href="<?php echo $property ?>">
                 <img src='/images/property/<?php echo $item->unit_id . '/gallery/' . $item->thumbnail ?>' class="img-rounded" />
               </a>
-            </p>            <?php endif; ?>
-          <div class="">
-            <p>            
+            
+         <?php endif; ?>
+          <div class="carousel-caption">
+                       
               <a class="" href="<?php echo $property ?>">
                 <strong><?php echo $item->unit_title; ?></strong>
               </a> | 
@@ -44,7 +45,7 @@ $lang = $app->input->get('lang', 'en');
               <?php if (!empty($item->price)) : ?> |
                 &pound; <?php echo $prices['GBP'] ?>
               <?php endif; ?>
-            </p>
+            
             <h5 class="item-title muted">
               <a href="<?php echo $region ?>">
                 Holiday accommodation in 
