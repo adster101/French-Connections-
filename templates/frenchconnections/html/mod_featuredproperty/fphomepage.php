@@ -35,24 +35,13 @@ $lang = $app->input->get('lang', 'en');
             
          <?php endif; ?>
           <div class="carousel-caption">
-                       
-              <a class="" href="<?php echo $property ?>">
-                <strong><?php echo $item->unit_title; ?></strong>
-              </a> | 
-              <strong><?php echo htmlspecialchars($item->title) ?></strong> | 
-              <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
+              <a class="" href="<?php echo $property ?>"><strong><?php echo $item->unit_title; ?></strong></a>&nbsp;|
+              &nbsp;<a href="<?php echo $region ?>"><?php echo htmlspecialchars($item->title); ?></a>
+              <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>&nbsp;
               <?php echo $item->occupancy; ?>
-              <?php if (!empty($item->price)) : ?> |
-                &pound; <?php echo $prices['GBP'] ?>
-              <?php endif; ?>
-            
-            <h5 class="item-title muted">
-              <a href="<?php echo $region ?>">
-                Holiday accommodation in 
-                <?php echo htmlspecialchars($item->title); ?>
-                &gt;&gt;
-              </a>
-            </h5>
+              <?php if (!empty($item->price)) : ?>|&nbsp;
+                &pound;<?php echo $prices['GBP'] ?>
+              <?php endif; ?>        
           </div>
         </div>
 
