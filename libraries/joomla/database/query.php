@@ -554,7 +554,7 @@ abstract class JDatabaseQuery
 	 *
 	 * @return  string  The required char length call.
 	 *
-	 * @since 11.1
+	 * @since   11.1
 	 */
 	public function charLength($field, $operator = null, $condition = null)
 	{
@@ -1539,14 +1539,13 @@ abstract class JDatabaseQuery
 	 */
 	public function union($query, $distinct = false, $glue = '')
 	{
-        
 		// Clear any ORDER BY clause in UNION query
 		// See http://dev.mysql.com/doc/refman/5.0/en/union.html
 		if (!is_null($this->order))
 		{
 			$this->clear('order');
 		}
-    
+
 		// Set up the DISTINCT flag, the name with parentheses, and the glue.
 		if ($distinct)
 		{

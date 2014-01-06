@@ -7,8 +7,10 @@ defined('_JEXEC') or die('Restricted access');
  * Hello World Component Controller
  */
 class AccommodationController extends JControllerLegacy {
-
-  public function display($cachable = true, $urlparams = array()) {
+  /*
+   * Cache is marked as false here so we can control it in the component directly
+   */
+  public function display($cachable = false, $urlparams = array()) {
     $input = JFactory::getApplication()->input;
 
     // Set the default view name and format from the Request.

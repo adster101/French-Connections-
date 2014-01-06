@@ -41,22 +41,30 @@ class FcSearchViewSearch extends JViewLegacy {
     $this->currencies = $this->getCurrencyConversions();
 
     // Get view data.
-    $state = $this->get('State');
+    $this->state = $this->get('State');
 
-    $localinfo = $this->get('LocalInfo');
+    $this->localinfo = $this->get('LocalInfo');
 
-    $property_list = $this->get('PropertyList');
+    if ($this->localinfo === false) {
 
-    $results = $this->get('Results');
+      $this->results = false;
+      $this->total = 0;
+      
+    } else {
 
-    $total = $this->get('Total');
-
-    $pagination = $this->get('Pagination');
 
 
-    // Has to be done after getState, as with all really.
-    $refine_options = $this->get('RefineOptions');
+      $property_list = $this->get('PropertyList');
 
+      $this->results = $this->get('Results');
+
+      $this->total = $this->get('Total');
+
+      $this->pagination = $this->get('Pagination');
+
+      // Has to be done after getState, as with all really.
+      $this->refine_options = $this->get('RefineOptions');
+    }
     // Include the component HTML helpers.
     JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
@@ -71,16 +79,7 @@ class FcSearchViewSearch extends JViewLegacy {
       $app->getPathWay()->addItem($this->escape($query->input));
     }
 
-    // Push out the view data.
-    $this->state = &$state;
 
-    $this->results = &$results;
-
-
-    $this->total = &$total;
-    $this->pagination = &$pagination;
-    $this->localinfo = $localinfo;
-    $this->refine_options = $refine_options;
 
     $this->prepareDocument();
     $this->sidebar = JHtmlSidebar::render();
@@ -135,7 +134,7 @@ class FcSearchViewSearch extends JViewLegacy {
     }
 
 
-    $fields = implode('/',$filter_str);
+    $fields = implode('/', $filter_str);
     $fields .= '<input type="hidden" name="filter" value="' . $fields . '" id="filter" />';
 
     return $fields;
@@ -235,12 +234,10 @@ class FcSearchViewSearch extends JViewLegacy {
 
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
-    $document->addScript(JURI::root() . 'media/fc/js/jquery.maphilight.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/date-range.js', 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.10.1.custom.min.css');
     $document->addStyleSheet(JURI::root() . 'media/fc/css/general.css');
-    $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
 
     JHtmlSidebar::addFilter(
             JText::_('JOPTION_SELECT_PUBLISHED'), 'sort_by', JHtml::_('select.options', array('beds' => 'Bedrooms'), 'value', 'text', $this->state->get('filter.published'), true)
@@ -275,8 +272,8 @@ class FcSearchViewSearch extends JViewLegacy {
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
 
-    for ($i=$start;$i<$end;$i=$i+$step) {
-      $options[] = JHtml::_('select.option', $budget.$i, JText::_($i));
+    for ($i = $start; $i < $end; $i = $i + $step) {
+      $options[] = JHtml::_('select.option', $budget . $i, JText::_($i));
     }
 
     return $options;
@@ -288,6 +285,7 @@ class FcSearchViewSearch extends JViewLegacy {
    * @return object An object containing the conversion rates from EUR to GBP and USD
    *
    */
+
   protected function getCurrencyConversions() {
 
     $db = JFactory::getDbo();
@@ -300,15 +298,13 @@ class FcSearchViewSearch extends JViewLegacy {
 
       $db->setQuery($query);
 
-      $results = $db->loadObjectList($key='currency');
-
+      $results = $db->loadObjectList($key = 'currency');
     } catch (Exception $e) {
       // Log this error
     }
 
 
     return $results;
-
   }
 
 }

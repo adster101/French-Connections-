@@ -143,7 +143,7 @@ class ImportControllerProperty_listings extends JControllerForm {
       // May need revising
       $insert_string .= $line[0];
       $insert_string .= ',' . $db->quote($line[1]);
-      $insert_string .= ',' . 158052; // France
+      $insert_string .= ',' . 2; // France
       $insert_string .= ',' . $line[2];
       $insert_string .= ',' . $line[3];
       $insert_string .= ',' . $line[4];

@@ -41,9 +41,8 @@ $area_map[154] = "82,15,82,16,83,17,83,18,82,18,81,18,81,20,82,22,83,24,85,26,84
 $area_map[152] = "94,2,93,2,92,2,91,2,91,2,90,2,88,3,87,3,87,3,85,3,83,5,82,5,82,6,83,7,82,9,83,11,83,12,82,12,82,14,83,15,85,15,86,16,87,16,87,16,88,17,89,18,90,17,91,17,92,17,93,18,92,19,92,20,92,20,93,19,94,19,94,19,96,20,96,19,97,20,96,21,98,20,98,21,101,21,102,21,107,21,107,21,108,20,111,21,111,21,111,21,113,22,114,22,113,21,115,20,113,18,113,17,114,16,113,16,112,15,109,15,108,16,107,15,107,13,107,13,106,12,105,12,105,12,103,12,103,11,102,10,102,9,103,9,101,7,100,7,99,7,98,8,98,8,97,7,96,6,95,6,94,6,94,4,95,4,95,2,94,2,94,2";
 $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96,39,100,39,101,39,102,39,102,40,106,44,105,45,105,45,106,46,106,47,105,47,106,48,107,48,105,50,105,52,102,53,101,53,100,53,100,54,100,55,99,57,98,57,98,57,97,57,96,58,94,57,94,58,94,56,94,55,93,55,92,54,92,54,91,54,90,53,89,54,88,55,87,54,87,54,87,53,86,51,86,51,85,50,85,49,83,49,84,48,82,47,83,46,82,45,82,44,81,42,81,41,81,41,81,40,81,40,82,40,83,37";
 ?>
-<form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165') ?>" method="POST" class="form-vertical">
+<form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT') ) ?>" method="POST" class="form-vertical">
   <div class="well well-small clearfix">
-
     <h4 class="bottom"><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
     <div class="search-map" style="margin:0pt auto;width:300px;">
       <svg version = "1.1" width="100%" height="200px">
@@ -59,7 +58,6 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
                             from="#647cb6" to="#c0d0eb"
                             begin="mouseout" dur="0.5s"
                             fill="freeze"/>
-
             </polygon>
           </a>
         <?php endforeach; ?>
@@ -112,7 +110,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
     <h3 id="myModalLabel">
       <?php echo JText::_('COM_FCSEARCH_SEARCH_PLEASE_ENTER_A_DESTINATION'); ?>
     </h3>
@@ -128,4 +126,3 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     </button>
   </div>
 </div>
-

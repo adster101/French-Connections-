@@ -159,7 +159,7 @@ else
             </div>
           <?php elseif ($this->countModules('position-11') && !$this->countModules('position-12')) :?>
             <div class="span12">
-              <jdoc:include type="modules" name="position-2" style="html5" />
+              <jdoc:include type="modules" name="position-11" style="html5" />
             </div>
            <?php elseif (!$this->countModules('position-11') && $this->countModules('position-12')) :?>
             <div class="span12">

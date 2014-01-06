@@ -11,7 +11,7 @@
       label="COM_USERS_REGISTER_FIRST_NAME_DESC"
       required="true"
       size="30"
-      labelClass="control-label"
+      labelclass="control-label"
     />
     <field 
       name="surname" 
@@ -21,7 +21,7 @@
       label="COM_USERS_REGISTER_SURNAME_DESC"
       required="true"
       size="30"
-      labelClass="control-label"
+      labelclass="control-label"
     />
     <field 
       name="username" 
@@ -34,7 +34,7 @@
       required="true"
       size="30"
       validate="username"
-      labelClass="control-label"
+      labelclass="control-label"
     />
     <field 
       name="email1" 
@@ -48,7 +48,7 @@
       size="30"
       unique="true"
       validate="email"
-      labelClass="control-label"
+      labelclass="control-label"
     />
     <field 
       name="email2" 
@@ -61,7 +61,7 @@
       required="true"
       size="30"
       validate="equals"
-      labelClass="control-label"
+      labelclass="control-label"
     />
     <field 
       name="dialling_code"
@@ -80,7 +80,7 @@
       message="COM_USERS_REGISTER_PHONE_MESSAGE"
       size="30"
       required="true"
-      labelClass="control-label"
+      labelclass="control-label"
       validate="tel"
     />
     <field
@@ -91,7 +91,7 @@
       filter="string"
       required="true"
       label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
-      labelClass="control-label"
+      labelclass="control-label"
       message="PLG_USER_PROFILE_FIELD_WHERE_HEARD_MESSAGE">
       <option	value="">JGLOBAL_SELECT_AN_OPTION</option>
       <option	value="WHERE_HEARD_GOOGLE">WHERE_HEARD_SEARCH_ENGINE</option>
@@ -106,7 +106,7 @@
       label="COM_USERS_CAPTCHA_LABEL"
       description="COM_USERS_CAPTCHA_DESC"
       validate="captcha"
-      labelClass="control-label"
+      labelclass="control-label"
     />
     </fieldset>
   

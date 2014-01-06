@@ -10,7 +10,7 @@
       readonly="true"
       label="COM_HELLOWORLD_SNOOZE_PROPERTY_ID"
 			description =""      
-      labelClass="control-label">
+      labelclass="control-label">
     </field>
     <field
 			name="snooze_until"
@@ -21,13 +21,13 @@
       size="80"
       maxlength="75"
       class="validate"
-      labelClass="control-label">
+      labelclass="control-label">
     </field>
     <field 
       name="subject"
       type="input"
       label="Note subject"
-      labelClass="control-label"
+      labelclass="control-label"
       class="input"
       filter="string"
       required="true">
@@ -37,7 +37,7 @@
       type="textarea"
 			label="COM_HELLOWORLD_SNOOZE_CONTACT_NOTES"
 			description ="COM_HELLOWORLD_IMAGES_EDIT_CAPTION_IMAGE_DESC"      
-      labelClass="control-label"
+      labelclass="control-label"
       class="input-xlarge"
       filter="string">
     </field>
@@ -49,7 +49,7 @@
 			label="COM_HELLOWORLD_ADMIN_NOTES_CATEGORY"
 			description ="" 
       message="COM_HELLOWORLD_ADMIN_NOTES_CATEGORY_VALIDATION"
-      labelClass="control-label"
+      labelclass="control-label"
       class="input-large"
       filter="int"
       validate="nonzero"

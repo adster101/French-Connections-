@@ -74,6 +74,10 @@ class FcSearchModelSearch extends JModelList {
       $app->redirect('/listing/' . $this->getState('list.searchterm', ''));
     }
 
+    if (!$this->getState('list.searchterm', '')) {
+      return false;
+    }
+
     $input = JFactory::getApplication()->input;
 
     $lang = $input->get('lang', 'en');
@@ -96,16 +100,17 @@ class FcSearchModelSearch extends JModelList {
 
     // If no results then throw an exception 
     if (empty($row)) {
-      $params = $this->state->get('parameters.menu');
-      $redirect = $params->get('redirect');
 
-      // Include the content helper so we can get the route of the success article
-      require_once JPATH_SITE . '/components/com_content/helpers/route.php';
-
-      // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-      $app->redirect(JRoute::_('index.php?option=com_content&Itemid=' . (int) $redirect), false);
       return false;
     }
+    
+    // Must have a result set
+    // Stash it in the model state
+    $this->setState('search.location', $row->id);
+    $this->setState('search.level', $row->level);
+    
+    return true;
+    
   }
 
   /**
@@ -192,18 +197,18 @@ class FcSearchModelSearch extends JModelList {
     //$query->from('#__classifications c');
     //}
     // Need to switch the below based on the level e.g. department or whatever
-    if ($this->level == 1) { // Country level
+    if ($this->getState('search.level') == 1) { // Country level
       $query->join('left', '#__classifications as d on d.id = b.country');
-      $query->where('b.country = ' . $this->location);
-    } elseif ($this->level == 2) { // Area level
+      $query->where('b.country = ' . $this->getState('search.location',''));
+    } elseif ($this->getState('search.level') == 2) { // Area level
       $query->join('left', '#__classifications as d on d.id = b.area');
-      $query->where('b.area = ' . $this->location);
-    } elseif ($this->level == 3) { // Region level
+      $query->where('b.area = ' . $this->getState('search.location',''));
+    } elseif ($this->getState('search.level') == 3) { // Region level
       $query->join('left', '#__classifications as d on d.id = b.region');
-      $query->where('b.region= ' . $this->location);
-    } elseif ($this->level == 4) { // Department level
+      $query->where('b.region= ' . $this->getState('search.location',''));
+    } elseif ($this->getState('search.level') == 4) { // Department level
       $query->join('left', '#__classifications as d on d.id = b.department');
-      $query->where('b.department = ' . $this->location);
+      $query->where('b.department = ' . $this->getState('search.location',''));
     }
 
     // Is this a map marker request?
@@ -323,12 +328,13 @@ class FcSearchModelSearch extends JModelList {
         left(c.description,500) as description,
         i.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-        (select min(tariff) from qitz3_tariffs where j.id = c.unit_id and end_date > now() and c.review = 0 group by id limit 0,1) as price,
+        (select min(tariff) from qitz3_tariffs t where j.id = t.unit_id and end_date > ' . $db->quote($date) . ' and c.review = 0 group by id limit 0,1) as price,
         (select count(unit_id) from qitz3_reviews where unit_id = c.unit_id ) as reviews,
         l.title as accommodation_type,
         k.title as property_type,
         g.title as tariff_based_on,
-        h.title as base_currency
+        h.title as base_currency,
+        m.image_file_name as thumbnail
       ');
 
       $query->from('#__property a');
@@ -336,6 +342,9 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__unit_versions as c on ( a.id = c.property_id and c.published_on is not null )');
       $query->join('left', '#__unit as j on ( c.unit_id = j.id )');
 
+      // Join the images, innit!
+      $query->join('left', '#__property_images_library m on j.id = m.unit_id');
+      $query->where('(m.ordering = 1 or m.ordering is null)');
       // Need to switch these based on the language
       //if ($lang == 'fr') {
       //$query->from('#__classifications_translations c');
@@ -344,18 +353,18 @@ class FcSearchModelSearch extends JModelList {
       //}
       // Need to switch the below based on the level e.g. department or whatever
 
-      if ($this->level == 1) { // Country level
+      if ($this->getState('search.level') == 1) { // Country level
         $query->join('left', '#__classifications as d on d.id = b.country');
-        $query->where('b.country = ' . $this->location);
-      } elseif ($this->level == 2) { // Area level
+        $query->where('b.country = ' . $this->getState('search.location',''));
+      } elseif ($this->getState('search.level') == 2) { // Area level
         $query->join('left', '#__classifications as d on d.id = b.area');
-        $query->where('b.area = ' . $this->location);
-      } elseif ($this->level == 3) { // Region level
+        $query->where('b.area = ' . $this->getState('search.location',''));
+      } elseif ($this->getState('search.level') == 3) { // Region level
         $query->join('left', '#__classifications as d on d.id = b.region');
-        $query->where('b.region= ' . $this->location);
-      } elseif ($this->level == 4) { // Department level
+        $query->where('b.region= ' . $this->getState('search.location',''));
+      } elseif ($this->getState('search.level') == 4) { // Department level
         $query->join('left', '#__classifications as d on d.id = b.department');
-        $query->where('b.department = ' . $this->location);
+        $query->where('b.department = ' . $this->getState('search.location',''));
       }
 
       $query->join('left', '#__unit_attributes e on (e.property_id = j.id and e.version_id = c.id)');
@@ -372,7 +381,7 @@ class FcSearchModelSearch extends JModelList {
 
 
 
-      if ($this->level == 5) {
+      if ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
         $query->select('
         ( 3959 * acos(cos(radians(' . $this->longitude . ')) *
@@ -420,7 +429,7 @@ class FcSearchModelSearch extends JModelList {
       $query = $this->getFilterState('property_type', $query);
 
 
-      if ($this->level == 5) {
+      if ($this->getState('search.level') == 5) {
         $query->order('distance');
         $query->having('distance < 25');
       }
@@ -435,8 +444,6 @@ class FcSearchModelSearch extends JModelList {
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
       }
-
-
 
       // Sort out the budget requirements
       $min_price = $this->getState('list.min_price', '');
@@ -799,7 +806,7 @@ class FcSearchModelSearch extends JModelList {
 
     // Get each of the possible URL params
     // Get the query string.
-    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', 'france', 'string') : $params->get('s_kwds', 'france');
+    $tmp = !is_null($input->get('s_kwds')) ? $input->get('s_kwds', '', 'string') : $params->get('s_kwds', 'france');
     $q = JApplication::stringURLSafe($filter->clean($tmp, 'string'));
 
     // Set the search term to the state, this will remember the search term (destination) the user is searching on
@@ -848,13 +855,13 @@ class FcSearchModelSearch extends JModelList {
     $dirn = $input->get('order', array(), 'array');
 
     if (!empty($dirn) && $dirn[0] !== '') {
-      $sort_order = explode('-', $dirn[0]);
+      $sort_order = explode('_', $dirn[0]);
       $this->setState('list.sort_column', $sort_order[1]);
       $this->setState('list.direction', $sort_order[2]);
     }
 
     // Set the match limit.
-    $this->setState('match.limit', 1000);
+    $this->setState('match.limit', 10000);
 
     // Get the rest of the filter options such as property type, facilities and activites etc.
     $activities = $input->get('activities', '', 'array');

@@ -1,4 +1,6 @@
 jQuery(document).ready(function() {
+  
+  loadScript();
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
@@ -100,12 +102,14 @@ jQuery(document).ready(function() {
 
   jQuery('#property-search-button').click(function(event) {
 
+    event.preventDefault();
+
     // val is the 'active' suggestion populated by typeahead
     // e.g. the option chosen should be the last active one
     //var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
 
     // The value contained in the typeahead field
-    //var chosen = jQuery(".typeahead").attr('value');
+    var chosen = jQuery(".typeahead").attr('value');
 
     // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
     //var count = jQuery(".typeahead.dropdown-menu li").length;
@@ -127,36 +131,51 @@ jQuery(document).ready(function() {
       //event.preventDefault();
       //return false;
     //}
-
-    // Form checks out, looks like the user chose something from the suggestions
-    // Strip the string to make it like classifications table alias
-    //var query = stripVowelAccent(chosen);
+    
+    if (chosen === '') {
+      jQuery(".typeahead").attr('value', 'france');
+     
+    }
 
     // The path of the search, e.g. /search or /fr/search
-    //var path = '/accommodation';
+    var path = '/accommodation';
 
     // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
-    inputs = jQuery('#property-search').find(':input').each(function() {
+    var inputs = jQuery('#property-search').find(':input');
+    
+    // Get each of the values we're interested in adding to the search string
+    var s_kwds = inputs.filter('#s_kwds').prop('value');
+    var sort_by = inputs.filter('#sort_by').prop('value');
+    var min_price = inputs.filter('#min_price').prop('value');
+    var max_price = inputs.filter('#max_price').prop('value');
+    var occupancy = inputs.filter('#occupancy').prop('value');
+    var bedrooms = inputs.filter('#bedrooms').prop('value');
 
-      id = jQuery(this).attr('id');
-      value = jQuery(this).attr('value');
-      if (value && id) {
-        if (id == 's_kwds') {
-          value = stripVowelAccent(value);
-          path = path + '/' + value;
-        } else if (id == 'filter') {
-          path = path + '/' + value;
-        } else if (id == 'sort_by') {
-          path = path + '/' + value;
-        } else if (id == 'min_price') {
-          path = path + '/' + value;
-        } else if (id == 'max_price') {
-          path = path + '/' + value;
-        } else {
-          path = path + '/' + id + '_' + value;
-        }
-      }
-    });
+    path = path + '/' + stripVowelAccent(s_kwds);
+    
+    if (sort_by !== '') {
+      console.log(sort_by);
+      path = path + '/' + sort_by; 
+    }
+    
+    if (min_price !== '') {
+      path = path + '/' + min_price;
+    }
+    
+    if (max_price !== '') {
+      path = path + '/' + max_price;
+    }    
+               
+    if (bedrooms !== '') {
+      path = path + '/bedrooms_' + bedrooms;
+    }
+
+    if (occupancy !== '') {
+      path = path + '/occupancy_' + occupancy;
+    }   
+    
+    
+    
 
     // Amend the path that the form is submitted to
     jQuery('form#property-search').attr('action', path);
@@ -164,7 +183,6 @@ jQuery(document).ready(function() {
     // Submit the form
     jQuery('form#property-search').submit();
 
-    return false;
 
   })
 
@@ -219,6 +237,13 @@ function attachContent(marker, num) {
   });
 }
 
+function loadScript() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
+      'callback=initmap';
+  document.body.appendChild(script);
+}
 
 // Function removes and replaces all French accented characters with non accented characters
 // as well as removing spurious characters and replacing spaces with dashes...innit!

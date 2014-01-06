@@ -17,7 +17,7 @@
       maxlength="50"
       class="required validate-title"
       validate="title"
-      labelClass="control-label"
+      labelclass="control-label"
 		/>
  
     <field 
@@ -31,7 +31,7 @@
       required="true"
       maxlength="150"
       class="required validate-description"
-      labelClass="control-label"
+      labelclass="control-label"
 		/>
     
     <field 
@@ -47,7 +47,7 @@
       field="end_date"
       required="true"
       message="COM_SPECIALOFFERS_START_DATE_VALIDATION_MESSAGE"
-      labelClass="control-label"
+      labelclass="control-label"
     />
       
     <field 
@@ -62,7 +62,7 @@
       hint="dd-mm-yyyy"
       required="true"
       message="COM_SPECIALOFFERS_END_DATE_VALIDATION_MESSAGE"
-      labelClass="control-label"           
+      labelclass="control-label"           
     />
         
     <field 
@@ -74,7 +74,7 @@
       default=""
       required="true"
       message="COM_SPECIALOFFERS_PROPERTY_ID_VALIDATION_MESSAGE"
-      labelClass="control-label"
+      labelclass="control-label"
       class="required validate-prn"
     />
       

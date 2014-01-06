@@ -14,7 +14,7 @@
       label="COM_REVIEW_NAME_LABEL"
       filter="string"
       required="true"
-      labelClass="control-label"
+      labelclass="control-label"
       maxlength="30"
     />
     <field 
@@ -27,7 +27,7 @@
       filter="string"
       validate="reviewemail"
       required="true"
-      labelClass="control-label"
+      labelclass="control-label"
 
     />
 
@@ -42,7 +42,7 @@
       required="true"
       message="COM_REVIEW_TEXT_VALIDATION_MESSAGE"
       class="input-xxlarge"
-      labelClass="control-label"
+      labelclass="control-label"
 
     />
 
@@ -57,7 +57,7 @@
       validate="reviewdate"
       required="true"
       message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
-      labelClass="control-label"
+      labelclass="control-label"
     />
 
     <field
@@ -73,7 +73,7 @@
       default=""
       required="true"
       message="Please supply a property ID"
-      labelClass="control-label"
+      labelclass="control-label"
       label="Unit ID for review"
     />
 
@@ -84,7 +84,7 @@
       description="JFIELD_PUBLISHED_DESC" 
       class="input-medium"
       filter="intval" 
-      labelClass="control-label"
+      labelclass="control-label"
       size="1" 
       default="" 
       required="true">
@@ -108,7 +108,7 @@
       size="22"
       format="%Y-%m-%d %H:%M:%S" 
       filter="user_utc" 
-      labelClass="control-label" 
+      labelclass="control-label" 
       default="NOW" 
       readonly="false"
     />

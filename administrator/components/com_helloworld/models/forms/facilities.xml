@@ -6,7 +6,7 @@
       <field
       name="location_type"
       type="attributetype"
-      labelClass="control-label"
+      labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_LOCATION_TYPE_DESC"
       class="required"
@@ -17,7 +17,7 @@
     </field>    
     <field
       name="accommodation_type"
-      labelClass="control-label"
+      labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
@@ -29,7 +29,7 @@
     
     <field
       name="property_type"
-      labelClass="control-label"
+      labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"

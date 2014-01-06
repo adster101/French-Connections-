@@ -201,7 +201,7 @@ class AccommodationModelListing extends JModelForm {
         ufc.exchange_rate_usd,
         ufc.address1,
         ufc.address2,
-        ufc.city,
+        ufc.city as owner_city,
         ufc.region as county,
         ufc.country,
         ufc.postal_code,

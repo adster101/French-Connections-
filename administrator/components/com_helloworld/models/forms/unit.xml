@@ -10,13 +10,13 @@
       maxlength="25"
       class="input-large"
       required="true"
-      labelClass="control-label"
+      labelclass="control-label"
       hint="COM_HELLOWORLD_HELLOWORLD_FIELD_UNIT_TITLE_PLACEHOLDER"
       translateHint="true"
     />
 
     <field
-      labelClass="control-label"
+      labelclass="control-label"
       name="accommodation_type"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
@@ -31,7 +31,7 @@
     </field>     
 
     <field
-      labelClass="control-label"
+      labelclass="control-label"
       name="property_type"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
@@ -45,7 +45,7 @@
     </field>
     <field
       name="description"
-      labelClass="control-label"
+      labelclass="control-label"
       type="editor"
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DESCRIPTION_DESC"
@@ -68,7 +68,7 @@
       message="COM_HELLOWORLD_HELLOWORLD_FIELD_OCCUPANCY_MESSAGE"
       class="inputbox validate-occupancy input-small"
       required="true"
-      labelClass="control-label"
+      labelclass="control-label"
       validate="nonzero"
       filter="int">
       <option value="">JSELECT</option>
@@ -83,7 +83,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
       class="input-small"
-      labelClass="control-label"
+      labelclass="control-label"
       validate="nonzero"
       filter="int">
       <option value="">JSELECT</option>
@@ -99,7 +99,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       filter="int">
       <option value="">JSELECT</option>
 
@@ -114,7 +114,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_TRIPLE_ROOMS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       required="false"
       default="0"
       filter="int">
@@ -130,7 +130,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_QUAD_ROOMS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       filter="int">
       <option value="">JSELECT</option>
     </field>
@@ -143,7 +143,7 @@
       label="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_LABEL"
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_TWIN_ROOMS_DESC"
       class="bedrooms-select input-small"
-      labelClass="control-label"
+      labelclass="control-label"
       validate="nonzero"
       default=""
       filter="int">
@@ -160,7 +160,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_CHILD_BEDS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       filter="int">
       <option value="">JSELECT</option>
     
@@ -175,7 +175,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_COTS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       required="false"
       filter="int">
       <option value="">JSELECT</option>
@@ -191,7 +191,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_BEDS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       required="false"
       filter="int">
       <option value="">JSELECT</option>
@@ -206,7 +206,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       required="true"
       filter="int">
       <option value="">JSELECT</option>
@@ -221,7 +221,7 @@
       description="COM_HELLOWORLD_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
-      labelClass="control-label"
+      labelclass="control-label"
       required="false"
       filter="int">
       <option value="0">JSELECT</option>
@@ -324,7 +324,7 @@
     </field>
     <field
       name="created_on"
-      labelClass="control-label"
+      labelclass="control-label"
       type="text"
       label="JGLOBAL_CREATED_DATE"
       class="readonly input-small"
@@ -332,7 +332,7 @@
       readonly="true"
     />
     <field
-      labelClass="control-label"
+      labelclass="control-label"
       name="modified_by"
       type="user"
       label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
@@ -340,7 +340,7 @@
       readonly="true"
       filter="unset"/>
     <field
-      labelClass="control-label"
+      labelclass="control-label"
       name="modified_on"
       type="text"
       label="JGLOBAL_FIELD_MODIFIED_LABEL"

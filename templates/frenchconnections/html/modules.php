@@ -91,10 +91,13 @@ function modChrome_no($module, &$params, &$attribs) {
 }
 
 function modChrome_well($module, &$params, &$attribs) {
+
+	$headerTag      = htmlspecialchars($params->get('header_tag', 'h3'));
+
   if ($module->content) {
     echo "<div class=\"well " . htmlspecialchars($params->get('moduleclass_sfx')) . "\">";
     if ($module->showtitle) {
-      echo "<h3 class=\"page-header\">" . $module->title . "</h3>";
+      echo '<' . $headerTag . ' class=\'page-header\'>' . $module->title . '</' . $headerTag . '>';
     }
     echo $module->content;
     echo "</div>";

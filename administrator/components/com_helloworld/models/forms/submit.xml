@@ -5,7 +5,7 @@
       name="admin_notes"
       type="textarea"
       default=""
-      labelClass="control-label"
+      labelclass="control-label"
       label="COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_NOTES_FIELD"
       description ="COM_HELLOWORLD_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_NOTES_DESCRIPTION"
       maxlength="75"
@@ -20,7 +20,7 @@
       type="inlinecheckbox"
       default=""
       required="true"
-      labelClass="checkbox required"
+      labelclass="checkbox required"
       filter="int"
       message="Please confirm that you accept the terms and conditions"
       label="By checking this box I confirm that I have read and agree to be bound by all of the French Connections Terms and Conditions.">

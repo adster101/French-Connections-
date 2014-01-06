@@ -24,8 +24,8 @@ defined('_JEXEC') or die('Restricted access');
       <?php echo ($this->item->surname) ? $this->escape($this->item->surname) . '<br />' : '' ?> 
       <?php echo ($this->item->address1) ? $this->escape($this->item->address1) . '<br />' : '' ?> 
       <?php echo ($this->item->address2) ? $this->escape($this->item->address2) . '<br />' : '' ?> 
-      <?php echo ($this->item->city) ? $this->escape($this->item->city) . '<br />' : '' ?> 
-      <?php echo ($this->item->region) ? $this->escape($this->item->region) . '<br />' : '' ?> 
+      <?php echo ($this->item->city) ? $this->escape($this->item->owner_city) . '<br />' : '' ?> 
+      <?php echo ($this->item->region) ? $this->escape($this->item->county) . '<br />' : '' ?> 
       <?php echo ($this->item->postal_code) ? $this->escape($this->item->postal_code) . '<br />' : '' ?> 
       <?php echo ($this->item->country) ? $this->escape($this->item->country) . '<br />' : '' ?> 
     </p>
