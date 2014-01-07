@@ -108,11 +108,11 @@ $departure = $this->state->get('list.departure');
       ?>
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" href="#<?php echo $app->stringURLSafe($key) ?>">
+          <a class="accordion-toggle" data-toggle="collapse" href="#<?php echo JApplication::stringURLSafe($key) ?>">
             <?php echo $key; ?>
           </a>
         </div>
-        <div id="<?php echo $app->stringURLSafe($key) ?>" class="accordion-body collapse">
+        <div id="<?php echo JApplication::stringURLSafe($key) ?>" class="accordion-body collapse">
           <div class="accordion-inner">
             <?php
             // Below should be abstracted into a helper function

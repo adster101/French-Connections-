@@ -60,13 +60,20 @@ class FcSearchModelSearch extends JModelList {
    */
   public $description = '';
 
+  public function __construct($config = array()) {
+
+    parent::__construct($config);
+
+    // Set the default search and what not here?
+  }
+
+  /**
+   * Get the information about the area which is being searched on.
+   *  
+   * @return boolean
+   */
   public function getLocalInfo() {
-    // First off we need to get the classification detail
-    // E.g. is this a department, area or town etc
-    // Create the query to get the search results.
-    // Make this a call to get the crumbs trail?
-    // Reuse the classification table instance
-    // TODO - Cache the result
+
     // If the search term is an int then we just redirect to the accommodation view
     $app = JFactory::getApplication();
 
@@ -78,6 +85,8 @@ class FcSearchModelSearch extends JModelList {
       return false;
     }
 
+
+    // No cached data available so load it up.
     $input = JFactory::getApplication()->input;
 
     $lang = $input->get('lang', 'en');
@@ -103,14 +112,13 @@ class FcSearchModelSearch extends JModelList {
 
       return false;
     }
-    
+
     // Must have a result set
     // Stash it in the model state
     $this->setState('search.location', $row->id);
     $this->setState('search.level', $row->level);
-    
-    return true;
-    
+
+    return $row;
   }
 
   /**
@@ -174,7 +182,7 @@ class FcSearchModelSearch extends JModelList {
     }
 
     // Get the date
-    $date = JFactory::getDate();
+    $date = JFactory::getDate()->calendar('Y-m-d');
 
     // Create a new query object.
     $db = $this->getDbo();
@@ -188,8 +196,9 @@ class FcSearchModelSearch extends JModelList {
     $query->select('c.id as id');
 
     $query->from('#__property a');
-    $query->join('left', '#__property_versions as b on ( a.id = b.property_id and b.published_on is not null )');
-    $query->join('left', '#__unit_versions as c on ( a.id = c.property_id and c.published_on is not null )');
+    $query->join('left', '#__property_versions as b on ( a.id = b.property_id and b.review = 0 )');
+    $query->join('left', '#__unit_versions as c on ( a.id = c.property_id and c.review = 0 )');
+    
     // Need to switch these based on the language
     //if ($lang == 'fr') {
     //$query->from('#__classifications_translations c');
@@ -199,16 +208,16 @@ class FcSearchModelSearch extends JModelList {
     // Need to switch the below based on the level e.g. department or whatever
     if ($this->getState('search.level') == 1) { // Country level
       $query->join('left', '#__classifications as d on d.id = b.country');
-      $query->where('b.country = ' . $this->getState('search.location',''));
+      $query->where('b.country = ' . $this->getState('search.location', ''));
     } elseif ($this->getState('search.level') == 2) { // Area level
       $query->join('left', '#__classifications as d on d.id = b.area');
-      $query->where('b.area = ' . $this->getState('search.location',''));
+      $query->where('b.area = ' . $this->getState('search.location', ''));
     } elseif ($this->getState('search.level') == 3) { // Region level
       $query->join('left', '#__classifications as d on d.id = b.region');
-      $query->where('b.region= ' . $this->getState('search.location',''));
+      $query->where('b.region= ' . $this->getState('search.location', ''));
     } elseif ($this->getState('search.level') == 4) { // Department level
       $query->join('left', '#__classifications as d on d.id = b.department');
-      $query->where('b.department = ' . $this->getState('search.location',''));
+      $query->where('b.department = ' . $this->getState('search.location', ''));
     }
 
     // Is this a map marker request?
@@ -222,9 +231,8 @@ class FcSearchModelSearch extends JModelList {
 
     // Are we refining on the budget?
     if (!empty($max_price) || !empty($min_price)) {
-      $query->select('
-        (select min(tariff) from qitz3_tariffs where id = c.unit_id and end_date > now() group by id) as price
-      ');
+      $query->select('(select min(tariff) from qitz3_tariffs where unit_id = c.unit_id and end_date > ' . 
+              $db->quote($date) . ' group by id) as price');
     }
 
 
@@ -255,6 +263,8 @@ class FcSearchModelSearch extends JModelList {
     $query = $this->getFilterState('external_facilities', $query);
     $query = $this->getFilterState('kitchen', $query);
     $query = $this->getFilterState('property_type', $query);
+    $query = $this->getFilterState('accommodation_type', $query);
+
 
     // Sort out the budget requirements
     if (!empty($min_price)) {
@@ -267,7 +277,7 @@ class FcSearchModelSearch extends JModelList {
     }
 
     // Make sure we only get live properties...
-    $query->where('a.expiry_date >= ' . $db->quote($date->toSql()));
+    $query->where('a.expiry_date >= ' . $db->quote($date));
 
     // Push the query into the cache.
     $this->store($store, $query, true);
@@ -328,23 +338,24 @@ class FcSearchModelSearch extends JModelList {
         left(c.description,500) as description,
         i.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-        (select min(tariff) from qitz3_tariffs t where j.id = t.unit_id and end_date > ' . $db->quote($date) . ' and c.review = 0 group by id limit 0,1) as price,
+        (select min(tariff) from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1) as price,
         (select count(unit_id) from qitz3_reviews where unit_id = c.unit_id ) as reviews,
         l.title as accommodation_type,
         k.title as property_type,
         g.title as tariff_based_on,
         h.title as base_currency,
-        m.image_file_name as thumbnail
+        o.image_file_name as thumbnail
       ');
 
       $query->from('#__property a');
-      $query->join('left', '#__property_versions as b on ( a.id = b.property_id and b.published_on is not null )');
-      $query->join('left', '#__unit_versions as c on ( a.id = c.property_id and c.published_on is not null )');
-      $query->join('left', '#__unit as j on ( c.unit_id = j.id )');
+      $query->join('left', '#__unit j on a.id = j.property_id');
+
+      $query->join('left', '#__property_versions b on ( b.property_id = a.id and b.review = 0 )'); // This should be okay here as should only ever have one version with review = 
+      $query->join('left', '#__unit_versions c on ( c.unit_id = j.id and c.review = 0)');
 
       // Join the images, innit!
-      $query->join('left', '#__property_images_library m on j.id = m.unit_id');
-      $query->where('(m.ordering = 1 or m.ordering is null)');
+      $query->join('left', '#__property_images_library o on c.id = o.version_id');
+      $query->where('(o.ordering = 1 or o.ordering is null)');
       // Need to switch these based on the language
       //if ($lang == 'fr') {
       //$query->from('#__classifications_translations c');
@@ -355,22 +366,22 @@ class FcSearchModelSearch extends JModelList {
 
       if ($this->getState('search.level') == 1) { // Country level
         $query->join('left', '#__classifications as d on d.id = b.country');
-        $query->where('b.country = ' . $this->getState('search.location',''));
+        $query->where('b.country = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 2) { // Area level
         $query->join('left', '#__classifications as d on d.id = b.area');
-        $query->where('b.area = ' . $this->getState('search.location',''));
+        $query->where('b.area = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 3) { // Region level
         $query->join('left', '#__classifications as d on d.id = b.region');
-        $query->where('b.region= ' . $this->getState('search.location',''));
+        $query->where('b.region= ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 4) { // Department level
         $query->join('left', '#__classifications as d on d.id = b.department');
-        $query->where('b.department = ' . $this->getState('search.location',''));
+        $query->where('b.department = ' . $this->getState('search.location', ''));
       }
 
       $query->join('left', '#__unit_attributes e on (e.property_id = j.id and e.version_id = c.id)');
       $query->join('left', '#__attributes k on k.id = e.attribute_id');
 
-      $query->join('left', '#__unit_attributes f on (f.property_id = j.id and e.version_id = c.id)');
+      $query->join('left', '#__unit_attributes f on (f.property_id = j.id and f.version_id = c.id)');
       $query->join('left', '#__attributes l on l.id = f.attribute_id');
 
 
@@ -422,11 +433,12 @@ class FcSearchModelSearch extends JModelList {
       }
 
       // Apply the rest of the filter, if there are any
-      $query = $this->getFilterState('activities', $query);
+      $query = $this->getFilterState('activities', $query, '#__property_attributes');
       $query = $this->getFilterState('property_facilities', $query);
-      $query = $this->getFilterState('external_facilities', $query);
+      $query = $this->getFilterState('external_facilities', $query, '#__property_attributes');
       $query = $this->getFilterState('kitchen', $query);
       $query = $this->getFilterState('property_type', $query);
+      $query = $this->getFilterState('accommodation_type', $query);
 
 
       if ($this->getState('search.level') == 5) {
@@ -616,9 +628,9 @@ class FcSearchModelSearch extends JModelList {
 
       // Retrieve based on the language
       if ($lang == 'fr') {
-        $query->select('a.id,count(attribute_id) as count, c.title as attribute, a.published, at.order, at.title as facility_type, at.search_code');
+        $query->select('a.id,count(attribute_id) as count, c.title as attribute, a.published, at.title as facility_type, at.search_code');
       } else {
-        $query->select('a.id,count(attribute_id) as count, a.title AS attribute, a.published, at.order, at.title as facility_type, at.search_code');
+        $query->select('a.id,count(attribute_id) as count, a.title AS attribute, a.published, at.title as facility_type, at.search_code');
       }
 
       $query->from('#__attributes AS a');
@@ -659,7 +671,7 @@ class FcSearchModelSearch extends JModelList {
           3 => 'Suitability',
           4 => 'External Facilities',
           5 => 'Property Facilities',
-          6 => 'Activities nearby',
+        
           7 => 'Kitchen features',
           8 => 'Location Type'
       );
@@ -680,7 +692,6 @@ class FcSearchModelSearch extends JModelList {
       // Return the total.
       return $this->retrieve($store);
     } catch (Exception $e) {
-
       // Log the exception and return false
       //JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
@@ -733,14 +744,21 @@ class FcSearchModelSearch extends JModelList {
    *
    * @since   2.5
    */
-  protected function store($id, $data, $persistent = true) {
+  protected function store($id, $data) {
 
     // Store the data in internal cache.
     $this->cache[$id] = $data;
 
+    $params = $this->state->get('parameters.menu');
+    $lifetime = $params->get('cache_time', '');
+    $persistent = $params->get('cache', '');
+
     // Store the data in external cache if data is persistent.
     if ($persistent) {
-      return JFactory::getCache($this->context, 'output')->store(serialize($data), $id);
+      $cache = JFactory::getCache($this->context, 'output');
+      $cache->setCaching(true);
+      $cache->setLifeTime($lifetime);
+      return $cache->store(serialize($data), $id);
     }
 
     return true;
@@ -765,9 +783,11 @@ class FcSearchModelSearch extends JModelList {
       return $this->cache[$id];
     }
 
+    $params = $this->state->get('parameters.menu');
+    $persistent = $params->get('cache', '');
+
     // Use the external cache if data is persistent.
     if ($persistent) {
-
       $data = JFactory::getCache($this->context, 'output')->get($id);
       $data = $data ? unserialize($data) : null;
     }
@@ -869,6 +889,7 @@ class FcSearchModelSearch extends JModelList {
     $external_facilities = $input->get('external', '', 'array');
     $kitchen_facilities = $input->get('kitchen', '', 'array');
     $property_type = $input->get('property', '', 'array');
+    $accommodation_type = $input->get('accommodation', '', 'array');
 
     // populateFilterState pushes all the filter IDs into the state
     $this->populateFilterState($activities, 'activities');
@@ -876,6 +897,7 @@ class FcSearchModelSearch extends JModelList {
     $this->populateFilterState($external_facilities, 'external_facilities');
     $this->populateFilterState($kitchen_facilities, 'kitchen_facilities');
     $this->populateFilterState($property_type, 'property_type');
+    $this->populateFilterState($accommodation_type, 'accommodation_type');
 
     // Load the parameters.
     $this->setState('params', $params);
@@ -920,7 +942,7 @@ class FcSearchModelSearch extends JModelList {
    *
    */
 
-  private function getFilterState($filter = '', JDatabaseQueryMysqli $query) {
+  private function getFilterState($filter = '', JDatabaseQueryMysqli $query, $attributes_table = '#__unit_attributes') {
 
     if (empty($filter)) {
       return false;
@@ -938,11 +960,11 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($filters)) {
 
         foreach ($filters as $key => $value) {
-          $query->join('left', '#__unit_attributes ap' . $value . ' ON ap' . $value . '.property_id = c.unit_id');
+          $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.property_id = c.unit_id');
           $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
         }
       } else {
-        $query->join('left', '#__unit_attributes ' . $filter . ' ON apact.property_id = c.unit_id');
+        $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.property_id = c.unit_id');
         $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
       }
     }

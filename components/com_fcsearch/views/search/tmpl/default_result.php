@@ -54,7 +54,8 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $
   <?php endforeach; ?>
 
 <div class="row-fluid">
-  <div class="span4"><a href="<?php echo $route ?>" class="thumbnail pull-left">
+  <div class="span4">
+    <a href="<?php echo $route ?>" class="thumbnail pull-left">
       <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' class="img-rounded" />
     </a>
   </div>
@@ -80,13 +81,7 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $
         ?>
         <span class="lead">
 
-          <?php
-          if ($this->result->base_currency != '£') { // Must be  EURO
-            $this->result->price = $this->currencies['GBP']->exchange_rate * $this->result->price;
-          }
-
-          echo '&pound;' . round($this->result->price);
-          ?>
+          <?php echo '&pound;' . round($this->result->price); ?>
         </span>
         <br />
         <span class="small"><?php echo $this->result->tariff_based_on; ?><span>

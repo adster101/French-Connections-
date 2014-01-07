@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-  
+
   loadScript();
 
   // Works on the tabs on the search results page. Needs to be made more generic
@@ -116,25 +116,25 @@ jQuery(document).ready(function() {
 
     // A regex to check for an integer
     //var intRegex = new RegExp('^\\d+$');
-    
+
     //if (intRegex.test(chosen)) {
-      // Let it through
-      //return true;
+    // Let it through
+    //return true;
     //} else if (chosen !== '' && count !== 0) {
-      //if (val !== chosen) {
-        //jQuery('#myModal').modal();
-        //event.preventDefault();
-        //return false;
-      //}
-    //} else if (chosen === '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
-      //jQuery('#myModal').modal();
-      //event.preventDefault();
-      //return false;
+    //if (val !== chosen) {
+    //jQuery('#myModal').modal();
+    //event.preventDefault();
+    //return false;
     //}
-    
+    //} else if (chosen === '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
+    //jQuery('#myModal').modal();
+    //event.preventDefault();
+    //return false;
+    //}
+
     if (chosen === '') {
       jQuery(".typeahead").attr('value', 'france');
-     
+
     }
 
     // The path of the search, e.g. /search or /fr/search
@@ -142,7 +142,7 @@ jQuery(document).ready(function() {
 
     // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
     var inputs = jQuery('#property-search').find(':input');
-    
+
     // Get each of the values we're interested in adding to the search string
     var s_kwds = inputs.filter('#s_kwds').prop('value');
     var sort_by = inputs.filter('#sort_by').prop('value');
@@ -152,30 +152,31 @@ jQuery(document).ready(function() {
     var bedrooms = inputs.filter('#bedrooms').prop('value');
 
     path = path + '/' + stripVowelAccent(s_kwds);
-    
+ 
+    if (occupancy !== '') {
+      path = path + '/occupancy_' + occupancy;
+    }
+
+    if (bedrooms !== '') {
+      path = path + '/bedrooms_' + bedrooms;
+    }
+
     if (sort_by !== '') {
       console.log(sort_by);
-      path = path + '/' + sort_by; 
+      path = path + '/' + sort_by;
     }
     
     if (min_price !== '') {
       path = path + '/' + min_price;
     }
-    
+
     if (max_price !== '') {
       path = path + '/' + max_price;
-    }    
-               
-    if (bedrooms !== '') {
-      path = path + '/bedrooms_' + bedrooms;
     }
 
-    if (occupancy !== '') {
-      path = path + '/occupancy_' + occupancy;
-    }   
-    
-    
-    
+
+
+
 
     // Amend the path that the form is submitted to
     jQuery('form#property-search').attr('action', path);
@@ -241,7 +242,7 @@ function loadScript() {
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-      'callback=initmap';
+          'callback=initmap';
   document.body.appendChild(script);
 }
 

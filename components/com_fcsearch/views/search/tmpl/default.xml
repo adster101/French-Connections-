@@ -84,11 +84,21 @@
         <option value="">JGLOBAL_USE_GLOBAL</option>
       </field>
       <field type="spacer" />
-          <field name="redirect"
-             type="menuitem"
+          <field name="cache"
+             type="radio"
+             class="btn-group"
+             default="0"
+             validate="options"
+             label="Cache results"
+             description="Switch on the cache or not">
+        <option value="1">JYES</option>
+        <option value="0">JNO</option>
+      </field>
+        <field name="cache_time"
+             type="text"
+             label="Cache time in minutes"
              size="30"
-             label="Menu item to redirect to after a failed search"
-             description="" />
+      />
     </fieldset>
     <fieldset name="advanced">
       <field name="show_pagination_limit" type="list"

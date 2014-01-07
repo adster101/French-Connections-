@@ -239,11 +239,10 @@ class HelloWorldModelListings extends JModelList {
       }
     }
 
-    // From the hello table
     $query->from('#__property as a');
     $query->join('inner', '#__property_versions as b on (
       a.id = b.property_id
-      and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id)
+      and b.id = (select max(c.id) from #__property_versions c where c.property_id = a.id)
     )');
     
     // Join the units for the image

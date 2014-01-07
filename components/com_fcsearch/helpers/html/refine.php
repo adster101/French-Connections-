@@ -36,6 +36,7 @@ abstract class JHtmlRefine {
     if (!empty($refine_options)) {
 
       foreach ($refine_options as $option => $filters) {
+        if(!empty($filters)) {
         foreach ($filters as $filter => $value) {
           
 
@@ -56,6 +57,8 @@ abstract class JHtmlRefine {
           // Increment the filter counter
           $filter_counter++;
         }
+        
+          }
       }
 
       if (count($filters_to_remove) > 0) {
