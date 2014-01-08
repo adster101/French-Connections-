@@ -16,6 +16,13 @@ $app = JFactory::getApplication();
 
 $uri = JUri::current();
 
+if (JDEBUG)
+{
+	$_PROFILER = JProfiler::getInstance('Application');
+}
+
+JDEBUG ? $_PROFILER->mark('Start process search results template') : null;
+
 
 $ordering = 'order_' . $this->state->get('list.sort_column') . '_' . $this->state->get('list.direction');
 
@@ -33,7 +40,7 @@ if ($pagdata->previous->link) {
 ?>
 <div class="finder">
   <h1>
-    <small><?php echo $this->document->title; ?></small>
+    <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
   </h1>
   <div id="search-form" >
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
@@ -149,3 +156,5 @@ if ($pagdata->previous->link) {
   </div>
 
 </div>
+<?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
+

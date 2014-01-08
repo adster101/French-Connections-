@@ -65,20 +65,22 @@ class JHtmlGeneral {
    * @param type $baseCurrency
    * @param type $exchangeRate
    */
-  public static function price($price = '', $baseCurrency = 438, $exchange_rate_eur = '', $exchange_rate_usd = '') {
+  public static function price($price = '', $baseCurrency = 'GBP', $exchange_rate_eur = '', $exchange_rate_usd = '') {
 
     $prices = array();
     $rates = JHtmlGeneral::getExchangeRates();
   
 
-    // If the base currency is set in pounds then do nout
-    if ($baseCurrency == 438) {
-      $prices['GBP'] = $price;
+    // If the base currency is set in pounds 
+    if ($baseCurrency == 'GBP') {
+      $prices['GBP'] = $price; 
+      // Check whether we have an owner currency override (!?). If so then calculate the euro rate based on that 
       $prices['EUR'] = ($exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['EUR']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+      // Likewise for the USD rate
       $prices['USD'] = ($exchange_rate_usd > 0) ? round(($exchange_rate_usd * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['USD']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
-    } elseif ($baseCurrency == 439) { // Base rate is in euros
+    } elseif ($baseCurrency == 'EUR') { // Base rate is in euros
       $prices['EUR'] = $price;
       $prices['GBP'] = (!empty($exchange_rate_eur)) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['GBP']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);

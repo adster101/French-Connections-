@@ -150,9 +150,18 @@ jQuery(document).ready(function() {
     var max_price = inputs.filter('#max_price').prop('value');
     var occupancy = inputs.filter('#occupancy').prop('value');
     var bedrooms = inputs.filter('#bedrooms').prop('value');
+    var arrival = inputs.filter('#arrival').prop('value');
+    var departure = inputs.filter('#departure').prop('value');
 
     path = path + '/' + stripVowelAccent(s_kwds);
- 
+    
+    if (arrival !== '') {
+      path = path + '/arrival_' + arrival;
+    }    
+    
+    if (departure !== '') {
+      path = path + '/departure_' + departure;
+    }
     if (occupancy !== '') {
       path = path + '/occupancy_' + occupancy;
     }
@@ -161,8 +170,7 @@ jQuery(document).ready(function() {
       path = path + '/bedrooms_' + bedrooms;
     }
 
-    if (sort_by !== '') {
-      console.log(sort_by);
+    if (typeof sort_by !== 'undefined') {
       path = path + '/' + sort_by;
     }
     

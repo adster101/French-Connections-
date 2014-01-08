@@ -15,9 +15,12 @@ $doc = JFactory::getDocument();
 $app = JFactory::getApplication();
 
 $uri = JUri::current();
+// System profiler
+
 
 if ($this->results === false || $this->total == 0) { 
   echo $this->loadTemplate('no_results');
 } else {
   echo $this->loadTemplate('results');
 }
+

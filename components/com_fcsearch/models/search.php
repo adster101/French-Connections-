@@ -59,10 +59,13 @@ class FcSearchModelSearch extends JModelList {
    * Description, the description of the locality being searched on.
    */
   public $description = '';
+  public $currencies = '';
 
   public function __construct($config = array()) {
 
     parent::__construct($config);
+
+    $this->currencies = $this->getCurrencyConversions();
 
     // Set the default search and what not here?
   }
@@ -117,6 +120,8 @@ class FcSearchModelSearch extends JModelList {
     // Stash it in the model state
     $this->setState('search.location', $row->id);
     $this->setState('search.level', $row->level);
+    $this->setState('search.latitude', $row->latitude);
+    $this->setState('search.longitude', $row->longitude);
 
     return $row;
   }
@@ -198,7 +203,7 @@ class FcSearchModelSearch extends JModelList {
     $query->from('#__property a');
     $query->join('left', '#__property_versions as b on ( a.id = b.property_id and b.review = 0 )');
     $query->join('left', '#__unit_versions as c on ( a.id = c.property_id and c.review = 0 )');
-    
+
     // Need to switch these based on the language
     //if ($lang == 'fr') {
     //$query->from('#__classifications_translations c');
@@ -218,6 +223,16 @@ class FcSearchModelSearch extends JModelList {
     } elseif ($this->getState('search.level') == 4) { // Department level
       $query->join('left', '#__classifications as d on d.id = b.department');
       $query->where('b.department = ' . $this->getState('search.location', ''));
+    } elseif ($this->getState('search.level') == 5) { // Town level
+      // Add the distance based bit in as this is a town/city search
+      $query->select('
+        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(b.latitude)) *
+          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(b.latitude)))) AS distance
+        ');
+      $query->having('distance < 25');
     }
 
     // Is this a map marker request?
@@ -231,8 +246,18 @@ class FcSearchModelSearch extends JModelList {
 
     // Are we refining on the budget?
     if (!empty($max_price) || !empty($min_price)) {
-      $query->select('(select min(tariff) from qitz3_tariffs where unit_id = c.unit_id and end_date > ' . 
-              $db->quote($date) . ' group by id) as price');
+      $query->join('left', '#__unit j on a.id = j.property_id');
+
+      $query->select('
+          case 
+          when c.base_currency = \'EUR\'
+             THEN 
+               (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+             ELSE
+              (select min(tariff) from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+
+             END as price
+             ');
     }
 
 
@@ -297,7 +322,6 @@ class FcSearchModelSearch extends JModelList {
 
   protected function getListQuery() {
 
-
     $date = date('Y-m-d');
 
     // Get the store id.
@@ -338,12 +362,19 @@ class FcSearchModelSearch extends JModelList {
         left(c.description,500) as description,
         i.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-        (select min(tariff) from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1) as price,
+        case 
+          when c.base_currency = \'EUR\'
+             THEN 
+               (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+             ELSE
+              (select min(tariff) from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+
+             END as price,
+        
         (select count(unit_id) from qitz3_reviews where unit_id = c.unit_id ) as reviews,
         l.title as accommodation_type,
         k.title as property_type,
         g.title as tariff_based_on,
-        h.title as base_currency,
         o.image_file_name as thumbnail
       ');
 
@@ -384,27 +415,19 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__unit_attributes f on (f.property_id = j.id and f.version_id = c.id)');
       $query->join('left', '#__attributes l on l.id = f.attribute_id');
 
-
       $query->join('left', '#__attributes g on g.id = c.tariff_based_on');
-      $query->join('left', '#__attributes h on h.id = c.base_currency');
       $query->join('left', '#__classifications i ON i.id = b.city');
-
-
-
 
       if ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
         $query->select('
-        ( 3959 * acos(cos(radians(' . $this->longitude . ')) *
-          cos(radians(h.latitude)) *
-          cos(radians(h.longitude) - radians(' . $this->latitude . '))
-          + sin(radians(' . $this->longitude . '))
-          * sin(radians(h.latitude)))) AS distance
+        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(b.latitude)) *
+          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(b.latitude)))) AS distance
         ');
       }
-
-
-
 
       // Filter out the property and accommodation attribute types...this is necessary to pull in the title for e.g.
       // the type of property and whether it is self catering etc.
@@ -418,6 +441,9 @@ class FcSearchModelSearch extends JModelList {
 
       if ($this->getState('list.arrival')) {
         $query->join('left', '#__availability arr on c.unit_id = arr.unit_id');
+        
+        
+        
         $query->where('arr.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
         $query->where('arr.end_date >= ' . $db->quote($this->getState('list.departure', '')));
 
@@ -435,16 +461,13 @@ class FcSearchModelSearch extends JModelList {
       // Apply the rest of the filter, if there are any
       $query = $this->getFilterState('activities', $query, '#__property_attributes');
       $query = $this->getFilterState('property_facilities', $query);
-      $query = $this->getFilterState('external_facilities', $query, '#__property_attributes');
+      $query = $this->getFilterState('external_facilities', $query);
       $query = $this->getFilterState('kitchen', $query);
       $query = $this->getFilterState('property_type', $query);
       $query = $this->getFilterState('accommodation_type', $query);
 
 
-      if ($this->getState('search.level') == 5) {
-        $query->order('distance');
-        $query->having('distance < 25');
-      }
+
 
       // Make sure we only get live properties...
       $query->where('a.expiry_date >= ' . $db->quote($date));
@@ -455,6 +478,9 @@ class FcSearchModelSearch extends JModelList {
       // Sort out the ordering required
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
+      } elseif ($this->getState('search.level') == 5) {
+        $query->order('distance');
+        $query->having('distance < 25');
       }
 
       // Sort out the budget requirements
@@ -671,8 +697,8 @@ class FcSearchModelSearch extends JModelList {
           3 => 'Suitability',
           4 => 'External Facilities',
           5 => 'Property Facilities',
-        
-          7 => 'Kitchen features',
+          //6 => 'Activities nearby',
+          //7 => 'Kitchen features',
           8 => 'Location Type'
       );
 
@@ -841,10 +867,16 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.limit', $input->get('limit', $app->getCfg('list_limit', 10), 'uint'));
 
     // Will come from the search results page.
-    $this->setState('list.arrival', str_replace('arrival_', '', $input->get('arrival', '', 'date')));
+    $arrival = str_replace('arrival_', '', $input->get('arrival', '', 'date'));
+    $arrival_date = JFactory::getDate($arrival)->calendar('Y-m-d');
+
+    $departure = str_replace('departure_', '', $input->get('departure', '', 'date'));
+    $departure_date = JFactory::getDate($departure)->calendar('Y-m-d');
+      
+    $this->setState('list.arrival', $arrival_date );
     $app->setUserState('list.arrival', str_replace('arrival_', '', $input->get('arrival', '', 'date')));
 
-    $this->setState('list.departure', str_replace('departure_', '', $input->get('departure', '', 'date')));
+    $this->setState('list.departure', $departure_date);
     $app->setUserState('list.departure', str_replace('departure_', '', $input->get('departure', '', 'date')));
 
     // Bedrooms search options
@@ -1055,6 +1087,34 @@ class FcSearchModelSearch extends JModelList {
     }
 
     return $id;
+  }
+
+  /*
+   * Get a list of the currency conversions
+   *
+   * @return object An object containing the conversion rates from EUR to GBP and USD
+   *
+   */
+
+  protected function getCurrencyConversions() {
+
+    $db = JFactory::getDbo();
+
+    $query = $db->getQuery(true);
+
+    try {
+      $query->select('currency, exchange_rate');
+      $query->from('#__currency_conversion');
+
+      $db->setQuery($query);
+
+      $results = $db->loadObjectList($key = 'currency');
+    } catch (Exception $e) {
+      // Log this error
+    }
+
+
+    return $results;
   }
 
 }

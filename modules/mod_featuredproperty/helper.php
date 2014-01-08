@@ -37,7 +37,7 @@ class modFeaturedPropertyHelper {
       i.image_file_name as thumbnail,
       g.title,
       g.alias,
-      j.id as base_currency,
+      c.base_currency,
       (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');
     $query->from('#__property as a');
@@ -50,8 +50,6 @@ class modFeaturedPropertyHelper {
     $query->join('left', '#__featured_properties h on h.property_id = a.id');
     $query->join('left', '#__property_images_library i on c.id = i.version_id');
     
-    $query->leftJoin('#__attributes j ON j.id = c.base_currency');
-
     $query->where('b.ordering = 1');
     $query->where('a.published = 1');
     $query->where('b.published = 1');

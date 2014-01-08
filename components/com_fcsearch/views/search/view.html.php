@@ -38,8 +38,6 @@ class FcSearchViewSearch extends JViewLegacy {
     $app = JFactory::getApplication();
 
     // Get the currencies
-    $this->currencies = $this->getCurrencyConversions();
-
     // Get view data.
     $this->state = $this->get('State');
 
@@ -49,7 +47,6 @@ class FcSearchViewSearch extends JViewLegacy {
 
       $this->results = false;
       $this->total = 0;
-      
     } else {
 
 
@@ -96,6 +93,7 @@ class FcSearchViewSearch extends JViewLegacy {
       // We need to set the layout in case this is an alternative menu item (with an alternative layout)
       $this->setLayout($active->query['layout']);
     }
+
 
     // Need to set valid meta data for the page here, load any JS, CSS Etc
     parent::display($tpl);
@@ -183,6 +181,7 @@ class FcSearchViewSearch extends JViewLegacy {
 
 
     $property_type = $app->input->get('property', '', 'string');
+    $accommodation_type = $app->input->get('accommodation', '', 'string');
 
     if ($property_type) {
       $parts = explode('_', $property_type);
@@ -190,9 +189,17 @@ class FcSearchViewSearch extends JViewLegacy {
       array_shift($parts);
       $type = implode(' ', $parts);
       $type = JStringNormalise::toSpaceSeparated($type);
-      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', $title, $type);
+      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($type), ucwords($title), ucwords($title), ucfirst($type)) . ' - ' . $app->getCfg('sitename');
+    } elseif ($accommodation_type) {
+      $parts = explode('_', $accommodation_type);
+      array_pop($parts);
+      array_shift($parts);
+      array_shift($parts);
+      $type = implode(' ', $parts);
+      $type = JStringNormalise::toSpaceSeparated($type);
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($type), ucwords($title), ucwords($title), ucfirst($type)) . ' - ' . $app->getCfg('sitename');
     } else {
-      $title = JText::sprintf('COM_FCSEARCH_TITLE', $title);
+      $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($title), ucwords($title)) . ' - ' . $app->getCfg('sitename');
     }
 
     $bedrooms = $this->state->get('list.bedrooms');
@@ -218,8 +225,6 @@ class FcSearchViewSearch extends JViewLegacy {
     $title = ($bedrooms ? $title . ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : $title);
     $title = ($occupancy ? $title . ' | ' . $occupancy . ' ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') : $title);
     $title = ($activityStr ? $title . $activityStr : $title);
-
-
 
     $this->document->setTitle($title);
 
@@ -250,7 +255,7 @@ class FcSearchViewSearch extends JViewLegacy {
    * @return	array	An array of JHtmlOption elements.
    */
   protected function getSortFields() {
-    // Build the filter options.
+// Build the filter options.
     $options = array();
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_PLEASE_CHOOSE'));
@@ -267,7 +272,7 @@ class FcSearchViewSearch extends JViewLegacy {
    * @return	array	An array of JHtmlOption elements.
    */
   protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_') {
-    // Build the filter options.
+// Build the filter options.
     $options = array();
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
@@ -277,34 +282,6 @@ class FcSearchViewSearch extends JViewLegacy {
     }
 
     return $options;
-  }
-
-  /*
-   * Get a list of the currency conversions
-   *
-   * @return object An object containing the conversion rates from EUR to GBP and USD
-   *
-   */
-
-  protected function getCurrencyConversions() {
-
-    $db = JFactory::getDbo();
-
-    $query = $db->getQuery(true);
-
-    try {
-      $query->select('currency, exchange_rate');
-      $query->from('#__currency_conversion');
-
-      $db->setQuery($query);
-
-      $results = $db->loadObjectList($key = 'currency');
-    } catch (Exception $e) {
-      // Log this error
-    }
-
-
-    return $results;
   }
 
 }

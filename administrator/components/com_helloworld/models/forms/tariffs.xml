@@ -27,14 +27,15 @@
       label="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_LABEL"
       description="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_MESSAGE"
       message="COM_HELLOWORLD_TARIFFS_FIELD_BASE_CURRENCY_DESC"
-      type="attributetype"
-      filter="integer"
+      type="list"
+      filter="string"
       required="true"
-      class="input-medium"
-      id="19"
-      default="1"
-      placeholder="true"
-    />
+      class="input-medium">
+          <option value="">JSELECT</option>
+          <option value="GBP">GBP</option>
+          <option value="EUR">EUR</option>
+
+    </field>
     <field
       name="tariff_based_on"
       type="attributetype"
