@@ -90,6 +90,7 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['internal']);
   }
+  
   if (!empty($query['kitchen'])) {
 
     if (is_array($query['kitchen'])) {
@@ -100,6 +101,18 @@ function FcSearchBuildRoute(&$query) {
       $segments[] = $query['kitchen'];
     }
     unset($query['kitchen']);
+  }
+  
+  if (!empty($query['suitability'])) {
+
+    if (is_array($query['suitability'])) {
+      foreach ($query['suitability'] as $segment) {
+        $segments[] = $segment;
+      }
+    } else {
+      $segments[] = $query['suitability'];
+    }
+    unset($query['suitability']);
   }
 
   if (!empty($query['activities'])) {

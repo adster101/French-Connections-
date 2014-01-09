@@ -63,45 +63,34 @@ $departure = $this->state->get('list.departure');
         <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
       </select>
     </div>
-    <button id="property-search-button" class="btn btn-large btn-primary pull-right clear" href="#" style="margin-top:18px;">
+    <div class="row-fluid">
+      <div class="span6">
+        <label class="small" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
+        <select id="min_price" name="min" class="span12">
+          <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', $min_budget); ?>
+        </select>
+      </div>
+      <div class="span6">
+        <label class="small" for="max_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE'); ?></label>
+        <select id="max_price" name="max" class="span12">
+          <?php echo JHtml::_('select.options', $refine_budget_max, 'value', 'text', $max_budget); ?>
+        </select>
+      </div>
+    </div>
+    <button id="property-search-button" class="btn btn-primary pull-right clear" href="#" style="margin-top:18px;">
       <i class="icon-search icon-white"> </i>
       <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
     </button>
-  </div>
+  </div>  
 </div>
 <div class="refine">
 
   <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 
-  <?php echo JHtml::_('refine.removeFilters', $this->refine_options, $uri); ?>
+  <?php echo JHtml::_('refine.removeFilters', $this->attribute_options, $uri); ?>
   <div class="accordion" id="accordion2">
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#budget">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_BUDGET'); ?>
-        </a>
-      </div>
-      <div id="budget" class="accordion-body collapse in">
-        <div class="accordion-inner">
-          <div class="row-fluid">
-            <div class="span6">
-              <label for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
-              <select id="min_price" name="min" class="span12">
-                <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', $min_budget); ?>
-              </select>
-            </div>
-            <div class="span6">
-              <label for="max_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE'); ?></label>
-              <select id="max_price" name="max" class="span12">
-                <?php echo JHtml::_('select.options', $refine_budget_max, 'value', 'text', $max_budget); ?>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <?php foreach ($this->refine_options as $key => $values) : ?>
+    <?php foreach ($this->attribute_options as $key => $values) : ?>
       <?php
       $counter = 0;
       $hide = true // Init a counter so we don't show all the options at once
@@ -144,7 +133,7 @@ $departure = $this->state->get('list.departure');
                   </p>
 
                 <?php endif; ?>
-                  <?php $counter++; ?>
+                <?php $counter++; ?>
 
                 <?php if ($counter == count($values) && !$hide) : ?>
 
