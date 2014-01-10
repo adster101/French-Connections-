@@ -88,7 +88,38 @@ $departure = $this->state->get('list.departure');
   <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 
   <?php echo JHtml::_('refine.removeFilters', $this->attribute_options, $uri); ?>
+
+
+
+
   <div class="accordion" id="accordion2">
+    <?php if ($this->localinfo->level < 5) : ?>
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" href="#location">
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_LOCATION'); ?>
+        </a>
+      </div>
+      <div id="location" class="accordion-body collapse in">
+        <div class="accordion-inner">
+          <?php foreach ($this->location_options as $key => $value) : ?>
+            <?php
+            $remove = false;
+            $tmp = explode('/', $uri); // Split the url out on the slash
+            $filters = array_slice($tmp,3); // Remove the first 3 value of the URI
+            $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . '/' . implode('/',$filters);
+            ?>
+            <p>
+              <a href="<?php echo JRoute::_($route) ?>">
+                <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
+                <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+              </a>
+            </p>          
+          <?php endforeach ?>
+        </div>
+      </div>
+    </div>
+    <?php endif; ?>
 
     <?php foreach ($this->attribute_options as $key => $values) : ?>
       <?php
@@ -111,23 +142,19 @@ $departure = $this->state->get('list.departure');
               $remove = false;
 
               $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($filter)) . '_' . $value['id'];
-
-              if (array_key_exists($filter_string, $tmp)) {
-                unset($tmp[$filter_string]);
-                $new_uri = implode('/', array_flip($tmp));
-                $remove = true;
-              } else {
+              // If the filter string doesn't already exist in the url, then append it to the end
+              if (!array_key_exists($filter_string, $tmp)) {
                 $new_uri = implode('/', array_flip($tmp));
                 $new_uri = $new_uri . '/' . $filter_string;
               }
               ?>
-              <?php if ($counter >= 7 && $hide) : ?>
+              <?php if ($counter >= 5 && $hide) : ?>
                 <?php $hide = false; ?>
                 <div class="hide ">
                 <?php endif; ?>
                 <?php if (!$remove) : ?>  
                   <p>
-                    <a class="muted" href="<?php echo JRoute::_('http://' . $new_uri) ?>">
+                    <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
                       <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $filter; ?> (<?php echo $value['count']; ?>)
                     </a>
                   </p>
@@ -151,4 +178,3 @@ $departure = $this->state->get('list.departure');
     <?php endforeach; ?>
   </div>
 </div>
-

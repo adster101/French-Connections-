@@ -61,8 +61,9 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->pagination = $this->get('Pagination');
 
       // Has to be done after getState, as with all really.
-      $this->attribute_options = $this->get('AttributeOptions');
-      $this->location_options = $this->get('LocationOptions');
+      $this->attribute_options = $this->get('RefineAttributeOptions');
+      $this->location_options = $this->get('RefineLocationOptions');
+      $this->property_options = $this->get('RefinePropertyOptions');
     }
     // Include the component HTML helpers.
     JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
