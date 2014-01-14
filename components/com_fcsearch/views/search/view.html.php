@@ -47,14 +47,12 @@ class FcSearchViewSearch extends JViewLegacy {
 
       $this->results = false;
       $this->total = 0;
+      
     } else {
 
 
-
-
       $this->results = $this->get('Results');
-      
-      $property_list = $this->get('PropertyList');
+
 
       $this->total = $this->get('Total');
 
@@ -62,7 +60,7 @@ class FcSearchViewSearch extends JViewLegacy {
 
       // Has to be done after getState, as with all really.
       $this->attribute_options = $this->get('RefineAttributeOptions');
-      $this->location_options = $this->get('RefineLocationOptions');
+      //$this->location_options = $this->get('RefineLocationOptions');
       $this->property_options = $this->get('RefinePropertyOptions');
     }
     // Include the component HTML helpers.
@@ -135,8 +133,7 @@ class FcSearchViewSearch extends JViewLegacy {
     }
 
 
-    $fields = implode('/', $filter_str);
-    $fields .= '<input type="hidden" name="filter" value="' . $fields . '" id="filter" />';
+    $fields = '<input type="hidden" name="filter" value="' . implode('/', $filter_str) . '" id="filter" />';
 
     return $fields;
   }
@@ -183,18 +180,18 @@ class FcSearchViewSearch extends JViewLegacy {
     $title = UCFirst($title);
 
 
-    $property_type = $app->input->get('property', '', 'string');
-    $accommodation_type = $app->input->get('accommodation', '', 'string');
+    $property_type = $app->input->get('property', '', 'array');
+    $accommodation_type = $app->input->get('accommodation', '', 'array');
 
     if ($property_type) {
-      $parts = explode('_', $property_type);
+      $parts = explode('_', $property_type[0]);
       array_pop($parts);
       array_shift($parts);
       $type = implode(' ', $parts);
       $type = JStringNormalise::toSpaceSeparated($type);
       $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($type), ucwords($title), ucwords($title), ucfirst($type)) . ' - ' . $app->getCfg('sitename');
     } elseif ($accommodation_type) {
-      $parts = explode('_', $accommodation_type);
+      $parts = explode('_', $accommodation_type[0]);
       array_pop($parts);
       array_shift($parts);
       array_shift($parts);

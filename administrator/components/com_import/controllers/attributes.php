@@ -36,7 +36,7 @@ class ImportControllerAttributes extends JControllerForm {
     $query->select('id');
     $query->from('#__attributes');
     // Remove 8 from the list here as this attribute is stored against the property not the unit
-    $query->where("attribute_type_id in (2,7,9,10,11,12)");
+    $query->where("attribute_type_id in (7,9,10,11,12)");
 
     // Set the query.
     $db->setQuery($query);
@@ -51,9 +51,14 @@ class ImportControllerAttributes extends JControllerForm {
         $attributes[] = $value->id;
       }
     }
-
+    
     while (($line = fgetcsv($handle, 0, "|")) !== FALSE) {
+      $go = false;
 
+      if (empty($line[2])) {
+        continue;
+      }
+      
       // Initially we need to get the unit version id from the #__unit_versions table
       $query = $db->getQuery(true);
 
@@ -67,14 +72,15 @@ class ImportControllerAttributes extends JControllerForm {
       // Do it, baby!
       $version_id = $db->loadRow();
 
+      if (!$version_id){ 
+        continue;
+      }
+      
       $query->clear();
 
       // The list of property attributes is a comma separated list so it is exploded to an array
       // The property type isn't listed in the slp_tax_id bit but is appended as the first entry in the list.
       $property_attributes = explode(',', $line[2]);
-      $property_type = $property_attributes[1];
-
-      $go = false;
 
       $property_id = $line[0];
 
@@ -94,27 +100,18 @@ class ImportControllerAttributes extends JControllerForm {
           $go = true;
         }
       }
+      
 
-      if (!empty($version_id[0])) {
-
-        // Add the property type as well
-        if ($go) {
-          $insert_string = '';
-          $insert_string = "$version_id[0],$property_id,$property_type";
-          $query->values($insert_string);
-        }
+      if ($go && !empty($version_id)) {      
 
         // Set and execute the query
         $db->setQuery($query);
-        if ($go) {
           if (!$db->execute()) {
-            $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));
-            print_r($db->getErrorMsg());
-            print_r($insert_string);
-            die;
+     
           }
-        }
+        
       }
+      
     }
 
 

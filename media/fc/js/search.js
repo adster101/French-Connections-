@@ -170,15 +170,16 @@ jQuery(document).ready(function() {
       path = path + '/bedrooms_' + bedrooms;
     }
 
-    if (typeof sort_by !== 'undefined') {
+    // These fields are not present on the homepage search so they can be undefined as well as empty
+    if (sort_by !== '' && typeof(sort_by) !=='undefined') {
       path = path + '/' + sort_by;
     }
     
-    if (min_price !== '') {
+    if (min_price !== '' && typeof(min_price) !=='undefined') {
       path = path + '/' + min_price;
     }
 
-    if (max_price !== '') {
+    if (max_price !== ''  && typeof(max_price) !=='undefined') {
       path = path + '/' + max_price;
     }
 

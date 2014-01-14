@@ -39,6 +39,7 @@ if ($pagdata->previous->link) {
 }
 ?>
 <div class="finder">
+  <?php print_r($this->localinfo); ?>
   <h1>
     <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
   </h1>
@@ -95,12 +96,16 @@ if ($pagdata->previous->link) {
               </div>
               <ul class="search-results list-striped">
                 <?php
+                JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
+
                 for ($i = 0, $n = count($this->results); $i < $n; $i++) {
                   $this->result = &$this->results[$i];
                   if (!empty($this->result->id)) {
                     echo $this->loadTemplate('result');
                   }
                 }
+                JDEBUG ? $_PROFILER->mark('End process individual results (*10)') : null;
+
                 ?>
               </ul>
               <div class="search-pagination">
@@ -121,7 +126,11 @@ if ($pagdata->previous->link) {
             </div>
           </div>
           <div class="span3">
-            <?php echo $this->loadTemplate('refine'); ?>
+            <?php 
+              JDEBUG ? $_PROFILER->mark('Start process refine') : null;
+              echo $this->loadTemplate('refine'); 
+              JDEBUG ? $_PROFILER->mark('End process refine') : null;
+            ?>
           </div>
         </div>
         <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -17,8 +17,7 @@ $app = JFactory::getApplication();
 $uri = JUri::current();
 // System profiler
 
-
-if ($this->results === false || $this->total == 0) { 
+if ($this->results === false) { 
   echo $this->loadTemplate('no_results');
 } else {
   echo $this->loadTemplate('results');

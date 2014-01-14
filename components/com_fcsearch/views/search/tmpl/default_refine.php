@@ -22,8 +22,8 @@ $hide = '';
 $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $bedrooms = $this->state->get('list.bedrooms');
 $occupancy = $this->state->get('list.occupancy');
-$arrival = $this->state->get('list.arrival');
-$departure = $this->state->get('list.departure');
+$arrival = ($this->state->get('list.arrival', '')) ? JFactory::getDate($this->state->get('list.arrival'))->calendar('d-m-Y') : '';
+$departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this->state->get('list.departure'))->calendar('d-m-Y') : '';
 ?>
 
 
@@ -37,13 +37,13 @@ $departure = $this->state->get('list.departure');
       <label class="small" for="arrival">
         <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
       </label>
-      <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival; ?>" class="input-mini start_date" autocomplete="Off" />
+      <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival ?>" class="input-mini start_date small" autocomplete="Off" />
     </div>
     <div class="span6">
       <label class="small" for="departure">
         <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
       </label>
-      <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure; ?>" class="end_date input-mini " autocomplete="Off"/>
+      <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure ?>" class="end_date input-mini small" autocomplete="Off"/>
     </div>
   </div>
   <div class="row-fluid">
@@ -94,20 +94,49 @@ $departure = $this->state->get('list.departure');
 
   <div class="accordion" id="accordion2">
     <?php if ($this->localinfo->level < 5) : ?>
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class="accordion-toggle" data-toggle="collapse" href="#location">
+            <?php echo JText::_($this->escape($this->localinfo->title)); ?>
+
+          </a>
+        </div>
+        <div id="location" class="accordion-body collapse in">
+          <div class="accordion-inner">
+            <?php foreach ($this->location_options as $key => $value) : ?>
+              <?php
+              $remove = false;
+              $tmp = explode('/', $uri); // Split the url out on the slash
+              $filters = array_slice($tmp, 3); // Remove the first 3 value of the URI
+              $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . '/' . implode('/', $filters);
+              ?>
+              <p>
+                <a href="<?php echo JRoute::_($route) ?>">
+                  <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
+                  <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+                </a>
+              </p>          
+            <?php endforeach ?>
+          </div>
+        </div>
+      </div>
+    <?php endif; ?>
     <div class="accordion-group">
       <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#location">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_LOCATION'); ?>
+        <a class="accordion-toggle" data-toggle="collapse" href="#property">       
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
         </a>
       </div>
-      <div id="location" class="accordion-body collapse in">
+      <div id="property" class="accordion-body collapse in">
         <div class="accordion-inner">
-          <?php foreach ($this->location_options as $key => $value) : ?>
+          <?php foreach ($this->property_options as $key => $value) : ?>
             <?php
             $remove = false;
             $tmp = explode('/', $uri); // Split the url out on the slash
-            $filters = array_slice($tmp,3); // Remove the first 3 value of the URI
-            $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . '/' . implode('/',$filters);
+            $filters = array_slice($tmp, 3); // Remove the first 3 value of the URI
+            $filter = 'property_' . JApplication::stringURLSafe($this->escape($value->title)) . '_' . (int) $value->id;
+            $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' .
+                    JApplication::stringURLSafe($this->escape($this->localinfo->title)) . '/' . $filter . '/' . implode('/', $filters);
             ?>
             <p>
               <a href="<?php echo JRoute::_($route) ?>">
@@ -119,8 +148,6 @@ $departure = $this->state->get('list.departure');
         </div>
       </div>
     </div>
-    <?php endif; ?>
-
     <?php foreach ($this->attribute_options as $key => $values) : ?>
       <?php
       $counter = 0;
@@ -136,12 +163,12 @@ $departure = $this->state->get('list.departure');
           <div class="accordion-inner">
             <?php
             // Below should be abstracted into a helper function
-            foreach ($values as $filter => $value) :
+            foreach ($values as $key => $value) :
 
               $tmp = array_flip(explode('/', $uri));
               $remove = false;
 
-              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($filter)) . '_' . $value['id'];
+              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
               // If the filter string doesn't already exist in the url, then append it to the end
               if (!array_key_exists($filter_string, $tmp)) {
                 $new_uri = implode('/', array_flip($tmp));
@@ -155,7 +182,7 @@ $departure = $this->state->get('list.departure');
                 <?php if (!$remove) : ?>  
                   <p>
                     <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
-                      <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $filter; ?> (<?php echo $value['count']; ?>)
+                      <i class="<?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
                     </a>
                   </p>
 

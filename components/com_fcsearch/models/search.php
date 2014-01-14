@@ -196,7 +196,6 @@ class FcSearchModelSearch extends JModelList {
 
     try {
 
-
       $sort_column = $this->getState('list.sort_column', '');
       $sort_order = $this->getState('list.direction', '');
 
@@ -206,47 +205,45 @@ class FcSearchModelSearch extends JModelList {
 
       $query->select('
         a.id,
-        c.unit_id,
-        c.unit_title,
-        b.published_on,
-        b.title,
-        b.area,
-        b.region,
-        b.department,
-        b.latitude,
-        b.longitude,
-        b.city,
-        c.occupancy,
-        i.path,
-        left(c.description,500) as description,
-        i.title as location_title,
+        d.unit_id,
+        d.unit_title,
+        c.published_on,
+        c.title,
+        c.area,
+        c.region,
+        c.department,
+        c.latitude,
+        c.longitude,
+        c.city,
+        d.occupancy,
+        j.path,
+        left(d.description,500) as description,
+        j.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
         case 
-          when c.base_currency = \'EUR\'
-             THEN 
-               (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1)
-             ELSE
-              (select min(tariff) from qitz3_tariffs t where t.unit_id = j.id and end_date > ' . $db->quote($date) . ' limit 0,1)
-
-             END as price,
-        
-        (select count(unit_id) from qitz3_reviews where unit_id = c.unit_id ) as reviews,
-        l.title as accommodation_type,
-        k.title as property_type,
-        g.title as tariff_based_on,
-        o.image_file_name as thumbnail
+          when d.base_currency = \'EUR\'
+          THEN 
+            (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+          ELSE
+            (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+        END as price,
+        (select count(unit_id) from qitz3_reviews where unit_id = d.unit_id ) as reviews,
+        h.title as accommodation_type,
+        g.title as property_type,
+        i.title as tariff_based_on,
+        e.image_file_name as thumbnail
       ');
 
       $query->from('#__property a');
-      $query->join('left', '#__unit j on a.id = j.property_id');
+      $query->join('left', '#__unit b on b.property_id = a.id');
 
-      $query->join('left', '#__property_versions b on ( b.property_id = a.id and b.review = 0 )'); // This should be okay here as should only ever have one version with review = 
-      $query->join('left', '#__unit_versions c on ( c.unit_id = j.id and c.review = 0)');
+      $query->join('left', '#__property_versions c on c.property_id = a.id'); // This should be okay here as should only ever have one version with review = 
+      $query->join('left', '#__unit_versions d on d.unit_id = b.id');
 
       // Join the images, innit!
-      $query->join('left', '#__property_images_library o on c.id = o.version_id');
-      $query->where('(o.ordering = 1 or o.ordering is null)');
-            
+      $query->join('left', '#__property_images_library e on d.id = e.version_id');
+      $query->where('(e.ordering = 1)');
+
       // Need to switch these based on the language
       //if ($lang == 'fr') {
       //$query->from('#__classifications_translations c');
@@ -256,25 +253,25 @@ class FcSearchModelSearch extends JModelList {
       // Need to switch the below based on the level e.g. department or whatever
 
       if ($this->getState('search.level') == 1) { // Country level
-        $query->join('left', '#__classifications as d on d.id = b.country');
-        $query->where('b.country = ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.country');
+        $query->where('c.country = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 2) { // Area level
-        $query->join('left', '#__classifications as d on d.id = b.area');
-        $query->where('b.area = ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.area');
+        $query->where('c.area = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 3) { // Region level
-        $query->join('left', '#__classifications as d on d.id = b.region');
-        $query->where('b.region= ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.region');
+        $query->where('c.region= ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 4) { // Department level
-        $query->join('left', '#__classifications as d on d.id = b.department');
-        $query->where('b.department = ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.department');
+        $query->where('c.department = ' . $this->getState('search.location', ''));
       }
 
-      $query->join('left', '#__attributes k on k.id = c.property_type');
+      $query->join('left', '#__attributes g on g.id = d.property_type');
 
-      $query->join('left', '#__attributes l on l.id = c.accommodation_type');
+      $query->join('left', '#__attributes h on h.id = d.accommodation_type');
 
-      $query->join('left', '#__attributes g on g.id = c.tariff_based_on');
-      $query->join('left', '#__classifications i ON i.id = b.city');
+      $query->join('left', '#__attributes i on i.id = d.tariff_based_on');
+      $query->join('left', '#__classifications j ON j.id = c.city');
 
       if ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
@@ -287,26 +284,50 @@ class FcSearchModelSearch extends JModelList {
         ');
       }
 
-      if ($this->getState('list.arrival')) {
-        $query->join('left', '#__availability arr on c.unit_id = arr.unit_id');
-        $query->where('arr.start_date <= ' . $db->quote($this->getState('list.arrival', '')));
-        $query->where('arr.end_date >= ' . $db->quote($this->getState('list.departure', '')));
-        $query->where('arr.availability = 1');
+      /*
+       * This section deals with the filtering options.
+       * Filters are applied via functions as they are reused in the getPropertyType filter methods
+       */
+      if ($this->getState('list.arrival') || $this->getState('list.departure')) {
+
+        $arrival = $this->getState('list.arrival', '');
+        $departure = $this->getState('list.departure', '');
+        $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
       }
 
       if ($this->getState('list.bedrooms')) {
-        $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . $this->getState('list.bedrooms', ''));
+        $bedrooms = $this->getState('list.bedrooms', '');
+        $query = $this->getFilterBedrooms($query, $bedrooms, $db);
       }
 
       if ($this->getState('list.occupancy')) {
-        $query->where('c.occupancy >= ' . $this->getState('list.occupancy', ''));
+        $occupancy = $this->getState('list.occupancy', '');
+        $query = $this->getFilterOccupancy($query, $occupancy, $db);
       }
 
       if ($this->getState('list.property_type')) {
-        $query->where('c.property_type in (10)');
+        $property_type = $this->getState('list.property_type');
+        $query = $this->getFilterPropertyType($query, $property_type, $db);
       }
 
-      // Sort out the ordering required
+      // Sort out the budget requirements
+      if ($this->getState('list.min_price') || $this->getState('list.max_price')) {
+        $min_price = $this->getState('list.min_price', '');
+        $max_price = $this->getState('list.max_price', '');
+        $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
+      }
+
+      // Apply the rest of the filter, if there are any
+      //$query = $this->getFilterState('property_type', $query);
+      //$query = $this->getFilterState('accommodation_type', $query);
+      //$query = $this->getFilterState('kitchen', $query);
+      $query = $this->getFilterState('activities', $query, '#__property_attributes');
+      $query = $this->getFilterState('suitability', $query);
+      $query = $this->getFilterState('external_facilities', $query);
+      $query = $this->getFilterState('property_facilities', $query);
+
+      // Sort out the ordering required      
+      // No filter function needed here as ordering can simplt be cleared and reinstated, if needed.
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
       } elseif ($this->getState('search.level') == 5) {
@@ -314,33 +335,12 @@ class FcSearchModelSearch extends JModelList {
         $query->having('distance < 30');
       }
 
-      // Sort out the budget requirements
-      $min_price = $this->getState('list.min_price', '');
-      if (!empty($min_price)) {
-        $query->having('price > ' . $min_price);
-      }
-
-      // Sort out the budget requirements
-      $max_price = $this->getState('list.max_price', '');
-      if (!empty($max_price)) {
-        $query->having('price < ' . $max_price);
-      }
-      
-
-      // Apply the rest of the filter, if there are any
-      $query = $this->getFilterState('activities', $query, '#__property_attributes');
-      $query = $this->getFilterState('suitability', $query);
-      $query = $this->getFilterState('external_facilities', $query);
-      $query = $this->getFilterState('property_facilities', $query);
-      $query = $this->getFilterState('kitchen', $query);
-      
-      //$query = $this->getFilterState('property_type', $query);
-      //$query = $this->getFilterState('accommodation_type', $query);
       // Make sure we only get live properties...
       $query->where('a.expiry_date >= ' . $db->quote($date));
-      $query->where('j.published = 1');
-      $query->where('c.unit_id is not null');
-
+      $query->where('b.published = 1');
+      $query->where('d.unit_id is not null');
+      $query->where('c.review = 0');
+      $query->where('d.review = 0');
       // Push the query into the cache.
       $this->store($store, $query, true);
 
@@ -411,75 +411,9 @@ class FcSearchModelSearch extends JModelList {
     }
 
     // Push the total into cache.
-    $this->store($store, min($total, $limit));
+    $this->store($store, min(1000, $limit));
 
     // Return the total.
-    return $this->retrieve($store);
-  }
-
-  /*
-   * Method to return a list of propery IDs based on the search filter applied by the user
-   * This list is then used to populate the new search filter with counts etc
-   *
-   * @return  array   The list of property results.
-   *
-   * @throws  Exception on database error.
-   *
-   */
-
-  public function getPropertyList($markers = false) {
-
-    // Get the store ID
-    $store = $this->getStoreId('getPropertyList');
-
-    // Use the cached data if possible.
-    if ($this->retrieve($store)) {
-      return $this->retrieve($store);
-    }
-
-    // Property list array
-    $property_list = array();
-
-    // Get the query to run
-    $query = $this->getListQuery();
-
-    $query->clear('select');
-    $query->clear('order');
-
-    $query->select('c.id');
-
-    if ($this->getState('search.level') == 5) {
-      // Add the distance based bit in as this is a town/city search
-      $query->select('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude)))) AS distance
-        ');
-      $query->order('distance asc');
-      $query->having('distance < 30');
-    }
-
-    // No cached results so proceed
-    $db = $this->getDbo();
-
-    // Load the results from the database.
-    $db->setQuery($query);
-
-    // Get the flipping results
-    $rows = $db->loadObjectList();
-
-    foreach ($rows as $result) {
-      $property_list[] = $result->id;
-    }
-
-    $property_list_str = implode(',', $property_list);
-
-    // Push the results into cache.
-    $this->store($store, $property_list_str);
-
-    // Return the results.
     return $this->retrieve($store);
   }
 
@@ -487,15 +421,122 @@ class FcSearchModelSearch extends JModelList {
    * Method to pull out the property type based drilldowns
    */
   public function getRefinePropertyOptions() {
-    
+
     // Okay, so we can't use the 'property list' technique here because we're actually interested
     // in the properties not in the property list. If that makes sense?
     // E.g. 200 props in a search, 50 of which are villas, we are interested in the 150 that aren't
     // villas so we can refine further on those if we want to?
-    
+
+    $date = date('Y-m-d');
+
+    // Get the store id.
+    $store = $this->getStoreId('getRefinePropertyOptions');
+
+    // Get the language from the state
+    $lang = $this->getState('list.language', 'en');
+
+    // Use the cached data if possible.
+    if ($this->retrieve($store, true)) {
+      return clone($this->retrieve($store, false));
+    }
+
+    try {
+
+      // Create a new query object.
+      $db = $this->getDbo();
+      $query = $db->getQuery(true);
+
+      $query->select('e.id, e.title, count(*) as count');
+
+      $query->from('#__property a');
+      $query->leftJoin('#__unit b on a.id = b.property_id');
+      $query->leftJoin('#__unit_versions c on (c.unit_id = b.id and c.review = 0)');
+
+      $query->leftJoin('#__property_versions d on d.property_id = a.id and d.review = 0');
+      $query->leftJoin('#__attributes e on e.id = c.property_type');
+      if ($this->getState('search.level') == 1) { // Country level
+        $query->join('left', '#__classifications as f on f.id = d.country');
+        $query->where('d.country = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 2) { // Area level
+        $query->join('left', '#__classifications as f on f.id = d.area');
+        $query->where('d.area = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 3) { // Region level
+        $query->join('left', '#__classifications as f on f.id = d.region');
+        $query->where('d.region= ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 4) { // Department level
+        $query->join('left', '#__classifications as f on f.id = d.department');
+        $query->where('d.department = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 5) {
+        // Add the distance based bit in as this is a town/city search
+        $query->select('
+        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(b.latitude)) *
+          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(b.latitude)))) AS distance
+        ');
+        $query->having('distance < 30');
+      }
+
+      /*
+       * This section deals with the filtering options.
+       * Filters are applied via functions as they are reused in the getPropertyType filter methods
+       */
+      if ($this->getState('list.arrival') || $this->getState('list.departure')) {
+
+        $arrival = $this->getState('list.arrival', '');
+        $departure = $this->getState('list.departure', '');
+        $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
+      }
+
+      if ($this->getState('list.bedrooms')) {
+        $bedrooms = $this->getState('list.bedrooms', '');
+        $query = $this->getFilterBedrooms($query, $bedrooms, $db);
+      }
+
+      if ($this->getState('list.occupancy')) {
+        $occupancy = $this->getState('list.occupancy', '');
+        $query = $this->getFilterOccupancy($query, $occupancy, $db);
+      }
+
+      // Sort out the budget requirements
+      if ($this->getState('list.min_price') || $this->getState('list.max_price')) {
+        $min_price = $this->getState('list.min_price', '');
+        $max_price = $this->getState('list.max_price', '');
+        $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
+      }
+
+      // Apply the rest of the filter, if there are any
+      //$query = $this->getFilterState('property_type', $query);
+      //$query = $this->getFilterState('accommodation_type', $query);
+      //$query = $this->getFilterState('kitchen', $query);
+      $query = $this->getFilterState('activities', $query, '#__property_attributes');
+      $query = $this->getFilterState('suitability', $query);
+      $query = $this->getFilterState('external_facilities', $query);
+      $query = $this->getFilterState('property_facilities', $query);
+
+      // Make sure we only get live properties...
+      $query->where('a.expiry_date >= ' . $db->quote($date));
+      $query->where('b.published = 1');
+      $query->where('c.unit_id is not null');
+      $query->group('c.property_type');
+
+      // Get the options.
+      $db->setQuery($query);
+
+      $properties = $db->loadObjectList();
+
+      // Push the query into the cache.
+      $this->store($store, $properties, true);
+
+      // Return a copy of the query object.
+      return $this->retrieve($store, true);
+    } catch (Exception $e) {
+
+      // Catch and log the error.
+    }
   }
-  
-  
+
   /**
    * Method to pull out the location based drilldowns for refine search
    * 
@@ -506,7 +547,7 @@ class FcSearchModelSearch extends JModelList {
     $store_list = $this->getStoreId('getPropertyList');
 
     // Create a store ID to get the actual options, if they are already cached, which they might be
-    $store = $this->getStoreId('getRefineOptions');
+    $store = $this->getStoreId('getRefineLocationOptions');
 
     // Get the cached data for this method
     if ($this->retrieve($store)) {
@@ -523,6 +564,7 @@ class FcSearchModelSearch extends JModelList {
     $query = $db->getQuery(true);
 
     $query->select('c.title, count(*) as count');
+
     $query->from('#__property_versions a');
     $query->join('left', '#__unit_versions b on a.property_id = b.property_id');
     if ($this->getState('search.level') == 1) { // Country level
@@ -562,8 +604,8 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getRefineAttributeOptions() {
 
-    // The query resultset should be stored in the local model cache already
-    $store_list = $this->getStoreId('getPropertyList');
+    $db = JFactory::getDbo();
+    $date = JFactory::getDate()->calendar('Y-m-d');
 
     // Create a store ID to get the actual options, if they are already cached, which they might be
     $store = $this->getStoreId('getAttributeRefineOptions');
@@ -574,77 +616,149 @@ class FcSearchModelSearch extends JModelList {
     }
 
     // Cached data not available so proceed
-    // Retrieve the list of properties for this search from the cache
-    if ($this->retrieve($store_list)) {
-      $property_list = $this->retrieve($store_list);
-    }
-
     try {
 
       $attributes = array();
       $lang = $this->getState('list.language', 'en');
       $db = JFactory::getDbo();
+
       $query = $db->getQuery(true);
 
-      // Retrieve based on the language
-      if ($lang == 'fr') {
-        $query->select('a.id,count(attribute_id) as count, c.title as attribute, a.published, at.title as facility_type, at.search_code');
-      } else {
-        $query->select('a.id,count(attribute_id) as count, a.title AS attribute, a.published, at.title as facility_type, at.search_code');
-      }
+      $query->select('e.attribute_id, count(e.attribute_id) as count,
+        case 
+          when d.base_currency = \'EUR\'
+             THEN 
+               (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($date) . ' limit 0,1)
+             ELSE
+              (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($date) . ' limit 0,1)
 
-      $query->from('#__attributes AS a');
-      $query->join('left', '#__attributes_type at on at.id = a.attribute_type_id');
-      $query->join('left', '#__unit_attributes ap on ap.attribute_id = a.id');
+             END as price
+        ');
+      $query->from('#__property a');
+      $query->innerJoin('#__unit b on b.property_id = a.id');
+      $query->innerJoin('#__property_versions c on c.property_id = a.id');
+      $query->innerJoin('#__unit_versions d on d.unit_id = b.id');
+      $query->innerJoin('#__unit_attributes e on e.version_id = d.id');
 
-      // If any other language that en-GB load in the translation based on the lang->getTag() function...
-      if ($lang == 'fr') {
-        $query->join('LEFT', $db->quoteName('#__attributes_translation') . ' c on c.id = a.id');
-      }
-
-      $query->where('search_filter = 1');
-      $query->where('a.published = 1');
-      $query->where('version_id in (' . $property_list . ')');
-      $query->group('a.id');
-      //$query->order('count desc');
-      // Get the options.
-      $db->setQuery($query);
-
-      $facilities = $db->loadObjectList();
-
-      foreach ($facilities as $facility) {
-        if (!array_key_exists($facility->facility_type, $attributes)) {
-          $attributes[$facility->facility_type] = array();
-        }
-
-        $attributes[$facility->facility_type][$facility->attribute]['count'] = $facility->count;
-        $attributes[$facility->facility_type][$facility->attribute]['search_code'] = $facility->search_code;
-        $attributes[$facility->facility_type][$facility->attribute]['id'] = $facility->id;
+      if ($this->getState('search.level') == 1) { // Country level
+        $query->join('left', '#__classifications as f on f.id = c.country');
+        $query->where('c.country = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 2) { // Area level
+        $query->join('left', '#__classifications as f on f.id = c.area');
+        $query->where('c.area = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 3) { // Region level
+        $query->join('left', '#__classifications as f on f.id = c.region');
+        $query->where('c.region = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 4) { // Department level
+        $query->join('left', '#__classifications as f on f.id = c.department');
+        $query->where('c.department = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 5) {
+        // Add the distance based bit in as this is a town/city search
+        $query->select('
+        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(b.latitude)) *
+          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(b.latitude)))) AS distance
+        ');
+        $query->having('distance < 30');
       }
 
       /*
-       * Wrap this into a db query so we can use the ordering set on the component, or parameterise it.
+       * This section deals with the filtering options.
+       * Filters are applied via functions as they are reused in the getPropertyType filter methods
        */
+      if ($this->getState('list.arrival') || $this->getState('list.departure')) {
+
+        $arrival = $this->getState('list.arrival', '');
+        $departure = $this->getState('list.departure', '');
+        $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
+      }
+
+      if ($this->getState('list.bedrooms')) {
+        $bedrooms = $this->getState('list.bedrooms', '');
+        $query = $this->getFilterBedrooms($query, $bedrooms, $db);
+      }
+
+      if ($this->getState('list.occupancy')) {
+        $occupancy = $this->getState('list.occupancy', '');
+        $query = $this->getFilterOccupancy($query, $occupancy, $db);
+      }
+
+      if ($this->getState('list.property_type')) {
+        $property_type = $this->getState('list.property_type');
+        $query = $this->getFilterPropertyType($query, $property_type, $db);
+      }
+
+      // Sort out the budget requirements
+      if ($this->getState('list.min_price') || $this->getState('list.max_price')) {
+        $min_price = $this->getState('list.min_price', '');
+        $max_price = $this->getState('list.max_price', '');
+        $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
+      }
+
+      // Apply the rest of the filter, if there are any
+      //$query = $this->getFilterState('property_type', $query);
+      //$query = $this->getFilterState('accommodation_type', $query);
+      //$query = $this->getFilterState('kitchen', $query);
+      $query = $this->getFilterState('activities', $query, '#__property_attributes');
+      $query = $this->getFilterState('suitability', $query);
+      $query = $this->getFilterState('external_facilities', $query);
+      $query = $this->getFilterState('property_facilities', $query);
+
+      $query->where('a.expiry_date >= ' . $db->quote($date));
+      $query->where('c.review = 0');
+      $query->where('b.published = 1');
+      $query->where('d.review = 0');
+      $query->group('e.attribute_id');
+
+      $db->setQuery($query);
+
+      // This var holds the list of attributes available for the current resultset
+      $property_attributes = $db->loadObjectList($key = 'attribute_id');
+
+      // Lists all the attributes available
+      $attributes = $this->getAttributes(array(9, 10, 12));
+
+
+      $filter_attributes = array();
+
+      foreach ($attributes as $attribute) {
+        if (!array_key_exists($attribute->field_name, $filter_attributes)) {
+          $filter_attributes[$attribute->field_name] = array();
+        }
+
+        if (array_key_exists($attribute->id, $property_attributes)) {
+          $filter_attributes[$attribute->field_name][$attribute->id]['count'] = $property_attributes[$attribute->id]->count;
+          $filter_attributes[$attribute->field_name][$attribute->id]['search_code'] = $attribute->search_code;
+          $filter_attributes[$attribute->field_name][$attribute->id]['id'] = $attribute->id;
+          $filter_attributes[$attribute->field_name][$attribute->id]['title'] = $attribute->attribute;
+        }
+      }
+
+      
+
       $order = array(
-          1 => 'Property Type',
-          2 => 'Accommodation Type',
-          3 => 'Suitability',
-          4 => 'External Facilities',
-          5 => 'Property Facilities',
-          //6 => 'Activities nearby',
+          //1 => 'Property Type',
+          //2 => 'Accommodation Type',
+          3 => 'suitability',
+          4 => 'internal_facilities',
+          5 => 'external_facilities',
+              //6 => 'Activities nearby',
               //7 => 'Kitchen features',
               //8 => 'Location Type'
       );
 
       $output = array();
 
-      foreach ($attributes as $array) {
+      foreach ($filter_attributes as $array) {
         foreach ($order as $field) {
-          $output[$field] = $attributes[$field];
+          $output[$field] = $filter_attributes[$field];
         }
       }
 
       $sorted_attributes = $output;
+      
 
       // Push the results into cache.
       $this->store($store, $sorted_attributes);
@@ -902,12 +1016,120 @@ class FcSearchModelSearch extends JModelList {
     }
   }
 
+  /**
+   * Adds the availability filters to the results query
+   * @param JDatabaseQueryMysqli $query
+   * @param type $arrival
+   * @param type $departure
+   * @param type $db
+   * @return \JDatabaseQueryMysqli
+   */
+  private function getFilterAvailability(JDatabaseQueryMysqli $query, $arrival = '', $departure = '', $db = '') {
+
+    if (empty($arrival) && empty($departure)) {
+      return $query;
+    }
+
+    // Join the availability table
+    $query->join('left', '#__availability arr on d.unit_id = arr.unit_id');
+    $query->where('arr.availability = 1');
+
+    if ($arrival) {
+      $query->where('arr.start_date <= ' . $db->quote($arrival));
+    }
+
+    if ($departure) {
+      $query->where('arr.end_date >= ' . $db->quote($departure));
+    }
+
+    return $query;
+  }
+
+  /**
+   * Add bedroom count filter
+   * @param JDatabaseQueryMysqli $query
+   * @param type $bedrooms
+   * @param type $db
+   * @return \JDatabaseQueryMysqli
+   */
+  private function getFilterBedrooms(JDatabaseQueryMysqli $query, $bedrooms = '', $db = '') {
+
+    if (empty($bedrooms)) {
+      return $query;
+    }
+
+    $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . (int) $bedrooms);
+
+    return $query;
+  }
+
+  /**
+   * 
+   * @param JDatabaseQueryMysqli $query
+   * @param type $occupancy
+   * @param type $db
+   * @return \JDatabaseQueryMysqli
+   */
+  private function getFilterOccupancy(JDatabaseQueryMysqli $query, $occupancy = '', $db = '') {
+    if (empty($occupancy)) {
+      return $query;
+    }
+
+    $query = $query->where('d.occupancy >= ' . (int) $occupancy);
+
+    return $query;
+  }
+
+  /**
+   * 
+   * @param JDatabaseQueryMysqli $query
+   * @param type $property_type
+   * @param type $db
+   * @return \JDatabaseQueryMysqli
+   */
+  private function getFilterPropertyType(JDatabaseQueryMysqli $query, $property_type = array(), $db) {
+
+    if (empty($property_type)) {
+      return $query;
+    }
+
+    $types = array();
+
+    // Get each of the property attribute id we are filtering on.
+    foreach ($property_type as $type) {
+      $ids = explode('_', $type);
+      $types[] = $ids[2];
+    }
+
+    $query = $query->where('d.property_type in (' . implode(',', $types) . ')');
+
+    return $query;
+  }
+
+  private function getFilterPrice(JDatabaseQueryMysqli $query, $min_price, $max_price, $db) {
+
+    if (empty($min_price) && empty($min_price)) {
+      return $query;
+    }
+
+    if (is_int($min_price)) {
+
+      $query = $query->having('price > ' . (int) $min_price);
+    }
+
+    if (is_int($max_price)) {
+
+      $query = $query->having('price < ' . (int) $max_price);
+    }
+
+    return $query;
+  }
+
   /*
-   * Method to generate the various filter options,
+   * Method to generate various attribute filter options,
    * add them to the query and then return the query object
    *
    * @return  query  The search query being built
-   *
    */
 
   private function getFilterState($filter = '', JDatabaseQueryMysqli $query, $attributes_table = '#__unit_attributes') {
@@ -928,11 +1150,11 @@ class FcSearchModelSearch extends JModelList {
       if (is_array($filters)) {
 
         foreach ($filters as $key => $value) {
-          $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.property_id = c.unit_id');
+          $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.property_id = d.unit_id');
           $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
         }
       } else {
-        $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.property_id = c.unit_id');
+        $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.property_id = d.unit_id');
         $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
       }
     }
@@ -1051,6 +1273,51 @@ class FcSearchModelSearch extends JModelList {
 
 
     return $results;
+  }
+
+  /**
+   * Get a list of attributes based on the ids passed in
+   * 
+   * @param type $ids
+   * @return boolean
+   */
+  private function getAttributes($ids = array()) {
+
+    $lang = JFactory::getLanguage();
+
+    // The query resultset should be stored in the local model cache already
+    $store = $lang->getTag() . '-' . implode('-', $ids);
+
+    // Get the info from the cache if we can
+    if ($this->retrieve($store)) {
+      return $this->retrieve($store);
+    }
+
+    $db = JFactory::getDbo();
+    $attributes = array();
+    $query = $db->getQuery(true);
+
+    $query->select('a.id, a.title as attribute, b.search_code, b.field_name, b.title');
+    $query->from('#__attributes a');
+    $query->leftJoin('#__attributes_type b on a.attribute_type_id = b.id');
+    $query->where('b.id in (' . implode(',', $ids) . ')');
+    $db->setQuery($query);
+
+    $attributes = $db->loadObjectList($key = 'id');
+
+    // Check for a database error.
+    if ($db->getErrorNum()) {
+      JError::raiseWarning(500, $db->getErrorMsg());
+      return false;
+    }
+
+    return $attributes;
+
+    // Push the results into cache.
+    $this->store($store, $attributes);
+
+    // Return the total.
+    return $this->retrieve($store);
   }
 
 }
