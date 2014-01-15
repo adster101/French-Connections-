@@ -168,7 +168,7 @@ function FcSearchParseRoute($segments) {
   $vars = array();
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
-
+ 
   // Count segments
   $count = count($segments);
 

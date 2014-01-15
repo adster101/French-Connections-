@@ -56,6 +56,12 @@ class FcSearchModelSearch extends JModelList {
   public $title = '';
 
   /*
+   * The date which we check the expiry date against.
+   */
+  public $data = '';
+
+
+  /*
    * Description, the description of the locality being searched on.
    */
   public $description = '';
@@ -66,6 +72,8 @@ class FcSearchModelSearch extends JModelList {
     parent::__construct($config);
 
     $this->currencies = $this->getCurrencyConversions();
+
+    $this->date = JFactory::getDate()->calendar('Y-m-d');
 
     // Set the default search and what not here?
   }
@@ -277,10 +285,10 @@ class FcSearchModelSearch extends JModelList {
         // Add the distance based bit in as this is a town/city search
         $query->select('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude)))) AS distance
+          * sin(radians(c.latitude)))) AS distance
         ');
       }
 
@@ -450,22 +458,23 @@ class FcSearchModelSearch extends JModelList {
 
       $query->from('#__property a');
       $query->leftJoin('#__unit b on a.id = b.property_id');
-      $query->leftJoin('#__unit_versions c on (c.unit_id = b.id and c.review = 0)');
 
-      $query->leftJoin('#__property_versions d on d.property_id = a.id and d.review = 0');
-      $query->leftJoin('#__attributes e on e.id = c.property_type');
+      $query->leftJoin('#__property_versions c on c.property_id = a.id');
+      $query->leftJoin('#__unit_versions d on d.unit_id = b.id');
+
+      $query->leftJoin('#__attributes e on e.id = d.property_type');
       if ($this->getState('search.level') == 1) { // Country level
-        $query->join('left', '#__classifications as f on f.id = d.country');
-        $query->where('d.country = ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.country');
+        $query->where('c.country = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 2) { // Area level
-        $query->join('left', '#__classifications as f on f.id = d.area');
-        $query->where('d.area = ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.area');
+        $query->where('c.area = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 3) { // Region level
-        $query->join('left', '#__classifications as f on f.id = d.region');
-        $query->where('d.region= ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.region');
+        $query->where('c.region= ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 4) { // Department level
-        $query->join('left', '#__classifications as f on f.id = d.department');
-        $query->where('d.department = ' . $this->getState('search.location', ''));
+        $query->join('left', '#__classifications as f on f.id = c.department');
+        $query->where('c.department = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
         $query->select('
@@ -506,20 +515,19 @@ class FcSearchModelSearch extends JModelList {
         $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
       }
 
-      // Apply the rest of the filter, if there are any
-      //$query = $this->getFilterState('property_type', $query);
-      //$query = $this->getFilterState('accommodation_type', $query);
-      //$query = $this->getFilterState('kitchen', $query);
+      
       $query = $this->getFilterState('activities', $query, '#__property_attributes');
       $query = $this->getFilterState('suitability', $query);
       $query = $this->getFilterState('external_facilities', $query);
       $query = $this->getFilterState('property_facilities', $query);
 
-      // Make sure we only get live properties...
+      // Make sure we only get live properties with no pending changes...
       $query->where('a.expiry_date >= ' . $db->quote($date));
       $query->where('b.published = 1');
-      $query->where('c.unit_id is not null');
-      $query->group('c.property_type');
+      $query->where('c.review = 0');
+      $query->where('d.review = 0');
+      $query->where('d.unit_id is not null');
+      $query->group('d.property_type');
 
       // Get the options.
       $db->setQuery($query);
@@ -543,9 +551,6 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getRefineLocationOptions() {
 
-    // The query resultset should be stored in the local model cache already
-    $store_list = $this->getStoreId('getPropertyList');
-
     // Create a store ID to get the actual options, if they are already cached, which they might be
     $store = $this->getStoreId('getRefineLocationOptions');
 
@@ -556,40 +561,97 @@ class FcSearchModelSearch extends JModelList {
 
     // Cached data not available so proceed
     // Retrieve the list of properties for this search from the cache
-    if ($this->retrieve($store_list)) {
-      $property_list = $this->retrieve($store_list);
+    if ($this->retrieve($store)) {
+      $locations = $this->retrieve($store);
     }
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('c.title, count(*) as count');
+    $query->select('e.title, count(e.id) as count');
 
-    $query->from('#__property_versions a');
-    $query->join('left', '#__unit_versions b on a.property_id = b.property_id');
+    $query->from('#__property a');
+    $query->leftJoin('#__unit b on b.property_id = a.id');
+    $query->leftJoin('#__property_versions c on c.property_id = a.id');
+
+    $query->leftJoin('#__unit_versions d on d.unit_id = b.id');
+
     if ($this->getState('search.level') == 1) { // Country level
-      $query->join('left', '#__classifications c on c.id = a.area');
-      $query->group('a.area');
+      $query->join('left', '#__classifications e on e.id = c.area');
+      $query->group('c.area');
+      $query->where('c.country = ' . (int) $this->getState('search.location'));
     } elseif ($this->getState('search.level') == 2) { // Area level
-      $query->join('left', '#__classifications c on c.id = a.region');
-      $query->group('a.region');
+      $query->join('left', '#__classifications e on e.id = c.region');
+      $query->group('c.region');
+      $query->where('c.area = ' . (int) $this->getState('search.location'));
     } elseif ($this->getState('search.level') == 3) { // Region level
-      $query->join('left', '#__classifications c on c.id = a.department');
-      $query->group('a.department');
+      $query->join('left', '#__classifications e on e.id = c.department');
+      $query->group('c.department');
+      $query->where('c.region = ' . (int) $this->getState('search.location'));
     } elseif ($this->getState('search.level') == 4) { // Department level
-      $query->join('left', '#__classifications c on c.id = a.city');
-      $query->group('a.city');
+      $query->join('left', '#__classifications e on e.id = c.city');
+      $query->group('c.city');
+      $query->where('c.department = ' . (int) $this->getState('search.location'));
     } elseif ($this->getState('search.level') == 5) { // City level
-      $query->join('left', '#__classifications c on c.id = a.city');
-      $query->group('a.city');
+      $query->join('left', '#__classifications e on e.id = c.city');
+      $query->group('c.city');
     }
-    $query->where('b.id in (' . $property_list . ')');
+
+    /*
+     * This section deals with the filtering options.
+     * Filters are applied via functions as they are reused in the getPropertyType filter methods
+     */
+    if ($this->getState('list.arrival') || $this->getState('list.departure')) {
+
+      $arrival = $this->getState('list.arrival', '');
+      $departure = $this->getState('list.departure', '');
+      $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
+    }
+
+    if ($this->getState('list.bedrooms')) {
+      $bedrooms = $this->getState('list.bedrooms', '');
+      $query = $this->getFilterBedrooms($query, $bedrooms, $db);
+    }
+
+    if ($this->getState('list.occupancy')) {
+      $occupancy = $this->getState('list.occupancy', '');
+      $query = $this->getFilterOccupancy($query, $occupancy, $db);
+    }
+
+    // Sort out the budget requirements
+    if ($this->getState('list.min_price') || $this->getState('list.max_price')) {
+      $min_price = $this->getState('list.min_price', '');
+      $max_price = $this->getState('list.max_price', '');
+      $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
+    }
+
+    if ($this->getState('list.property_type')) {
+      $property_type = $this->getState('list.property_type');
+      $query = $this->getFilterPropertyType($query, $property_type, $db);
+    }
+
+    // Apply the rest of the filter, if there are any
+    //$query = $this->getFilterState('property_type', $query);
+    //$query = $this->getFilterState('accommodation_type', $query);
+    //$query = $this->getFilterState('kitchen', $query);
+    $query = $this->getFilterState('activities', $query, '#__property_attributes');
+    $query = $this->getFilterState('suitability', $query);
+    $query = $this->getFilterState('external_facilities', $query);
+    $query = $this->getFilterState('property_facilities', $query);
+    // Make sure we only get live properties...
+    $query->where('a.expiry_date >= ' . $db->quote($this->date));
+    $query->where('b.published = 1');
+    $query->where('c.review = 0');
+    $query->where('d.review = 0');
+    $query->where('d.unit_id is not null');
 
 
     // Get the options.
     $db->setQuery($query);
 
     $locations = $db->loadObjectList();
+
+
 
     if (!$locations) {
       return false;
@@ -736,7 +798,7 @@ class FcSearchModelSearch extends JModelList {
         }
       }
 
-      
+
 
       $order = array(
           //1 => 'Property Type',
@@ -758,7 +820,7 @@ class FcSearchModelSearch extends JModelList {
       }
 
       $sorted_attributes = $output;
-      
+
 
       // Push the results into cache.
       $this->store($store, $sorted_attributes);
@@ -789,9 +851,15 @@ class FcSearchModelSearch extends JModelList {
       return $this->retrieve($store);
     }
 
-    // No data in the cache so let's get the list of markers.
-    $markers = $this->getPropertyList($markers = true);
+    $db = JFactory::getDbo();
 
+    // No data in the cache so let's get the list of markers.
+    $markers = $this->getListQuery($markers = true);
+
+
+    $db->setQuery($markers, 0, 10000);
+
+    $markers = $db->loadObjectList();
 
     // Push the results into cache.
     $this->store($store, $markers);
@@ -824,8 +892,8 @@ class FcSearchModelSearch extends JModelList {
     $this->cache[$id] = $data;
 
     $params = $this->state->get('parameters.menu');
-    $lifetime = $params->get('cache_time', '');
-    $persistent = $params->get('cache', '');
+    $lifetime = ($params) ? $params->get('cache_time', '') : 10800;
+    $persistent = ($params) ? $params->get('cache', '') : false;
 
     // Store the data in external cache if data is persistent.
     if ($persistent) {
@@ -857,8 +925,9 @@ class FcSearchModelSearch extends JModelList {
       return $this->cache[$id];
     }
 
-    $params = $this->state->get('parameters.menu');
-    $persistent = $params->get('cache', '');
+    $params = $this->state->get('parameters.menu', '');
+
+    $persistent = ($params) ? $params->get('cache', '') : false;
 
     // Use the external cache if data is persistent.
     if ($persistent) {
@@ -1273,6 +1342,29 @@ class FcSearchModelSearch extends JModelList {
 
 
     return $results;
+  }
+
+  /**
+   * Get the path of the current search. Useful to go back up a level in the search etc
+   * @return boolean
+   */
+  public function getCrumbs() {
+
+    $db = JFactory::getDbo();
+
+    $id = $this->getState('search.location');
+
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
+
+    $table = JTable::getInstance('Classification', 'ClassificationTable');
+
+    $tree = $table->getPath($id);
+
+    if (!$tree) {
+      return false;
+    }
+
+    return $tree;
   }
 
   /**

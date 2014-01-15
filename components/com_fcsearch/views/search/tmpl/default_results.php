@@ -16,9 +16,8 @@ $app = JFactory::getApplication();
 
 $uri = JUri::current();
 
-if (JDEBUG)
-{
-	$_PROFILER = JProfiler::getInstance('Application');
+if (JDEBUG) {
+  $_PROFILER = JProfiler::getInstance('Application');
 }
 
 JDEBUG ? $_PROFILER->mark('Start process search results template') : null;
@@ -39,10 +38,24 @@ if ($pagdata->previous->link) {
 }
 ?>
 <div class="finder">
-  <?php print_r($this->localinfo); ?>
+
   <h1>
     <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
   </h1>
+  <p>
+    <i class="icon icon-location muted"></i>
+    <?php foreach ($this->crumbs as $crumb) : ?>
+      <?php if ($crumb->parent_id) : ?>
+        <a href="<?php echo JRoute::_('index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($crumb->alias)) ?>">
+          <strong>
+            <?php echo JString::ucwords(str_replace('-', ' ', $crumb->title)) ?>
+          </strong>   
+
+        </a> 
+        &raquo;
+      <?php endif; ?>
+    <?php endforeach; ?>
+  </p>
   <div id="search-form" >
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
 
@@ -83,14 +96,14 @@ if ($pagdata->previous->link) {
             <div class="tab-pane active" id="list">
               <div class="row-fluid">
                 <div class="span9">
-                  <div class="search-pagination">
-                    <div class="pagination small">
+                  <div class="search-pagination hidden-phone">
+                    <div class="pagination small ">
                       <?php echo $this->pagination->getPagesLinks(); ?>
                     </div>
                   </div>
                 </div>
                 <div class="span3">
-                  <p class="small pull-right" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
+                  <p class="small" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
 
                 </div>
               </div>
@@ -105,7 +118,6 @@ if ($pagdata->previous->link) {
                   }
                 }
                 JDEBUG ? $_PROFILER->mark('End process individual results (*10)') : null;
-
                 ?>
               </ul>
               <div class="search-pagination">
@@ -126,10 +138,10 @@ if ($pagdata->previous->link) {
             </div>
           </div>
           <div class="span3">
-            <?php 
-              JDEBUG ? $_PROFILER->mark('Start process refine') : null;
-              echo $this->loadTemplate('refine'); 
-              JDEBUG ? $_PROFILER->mark('End process refine') : null;
+            <?php
+            JDEBUG ? $_PROFILER->mark('Start process refine') : null;
+            echo $this->loadTemplate('refine');
+            JDEBUG ? $_PROFILER->mark('End process refine') : null;
             ?>
           </div>
         </div>
@@ -156,8 +168,8 @@ if ($pagdata->previous->link) {
 
       <input type="hidden" name="option" value="com_fcsearch" />
       <?php
-      // Following method adds a hidden field which essentially tracks the state of the search
-      // Possibly, this could/would be better in session scope?
+// Following method adds a hidden field which essentially tracks the state of the search
+// Possibly, this could/would be better in session scope?
       echo $this->getFilters();
       ?>
 

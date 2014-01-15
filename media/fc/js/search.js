@@ -1,9 +1,12 @@
 jQuery(document).ready(function() {
 
-  loadScript();
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
+    
+    jQuery('#map_canvas').hide();
+    
+    loadScript(); // Asych load the google maps stuff
 
     // Store the selected tab #ref in local storage, IE8+
     localStorage['selectedTab'] = jQuery(e.target).attr('href');
@@ -14,37 +17,7 @@ jQuery(document).ready(function() {
     // If the selected tab is the map tag then grab the markers
     if (selectedTab == '#mapsearch') {
 
-      // Get jiggy with the Google Maps, innit!
-      if (!document.map) {
-        initmap();
-      }
-
-      // Get the search parameters, quicker to get the form and then extract the inputs?
-      // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
-      path = '';
-      inputs = jQuery('#property-search').find(':input').each(function() {
-
-        id = jQuery(this).attr('id');
-        value = jQuery(this).attr('value');
-        if (value && id) {
-          if (id == 's_kwds') {
-            value = stripVowelAccent(value);
-            path = path + value;
-          } else if (id == 'filter') {
-            path = path + '/' + value;
-          } else if (id == 'sort_by') {
-            path = path + '/' + value;
-          } else if (id == 'min_price') {
-            path = path + '/' + value;
-          } else if (id == 'max_price') {
-            path = path + '/' + value;
-          } else {
-            path = path + '/' + id + '_' + value;
-          }
-        }
-      })
-
-
+      var path = window.location.pathname.replace('/accommodation/','');
 
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json", {
@@ -70,7 +43,7 @@ jQuery(document).ready(function() {
           });
 
           marker.setTitle((i + 1).toString());
-          content = '<h4>' + data[i].property_title + '</h5>' + '<a href="' + data[i].link + '"><img src="' + data[i].thumbnail + '"/></a><p>' + data[i].pricestring + '</p>';
+          content = '<h4>' + data[i].title + '</h5>' + '<a href="' + data[i].link + '"><img src="' + data[i].thumbnail + '"/></a><p>' + data[i].description + '</p>';
           attachContent(marker, content);
 
           markers[i] = marker;
@@ -88,6 +61,9 @@ jQuery(document).ready(function() {
         }
       });
     }
+    
+    jQuery('#map_canvas').show();
+
   });
 
 
@@ -100,92 +76,11 @@ jQuery(document).ready(function() {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
 
-  jQuery('#property-search-button').click(function(event) {
+  jQuery('#property-search-button').on('click', function() {
 
     event.preventDefault();
 
-    // val is the 'active' suggestion populated by typeahead
-    // e.g. the option chosen should be the last active one
-    //var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
-
-    // The value contained in the typeahead field
-    var chosen = jQuery(".typeahead").attr('value');
-
-    // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
-    //var count = jQuery(".typeahead.dropdown-menu li").length;
-
-    // A regex to check for an integer
-    //var intRegex = new RegExp('^\\d+$');
-
-    //if (intRegex.test(chosen)) {
-    // Let it through
-    //return true;
-    //} else if (chosen !== '' && count !== 0) {
-    //if (val !== chosen) {
-    //jQuery('#myModal').modal();
-    //event.preventDefault();
-    //return false;
-    //}
-    //} else if (chosen === '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
-    //jQuery('#myModal').modal();
-    //event.preventDefault();
-    //return false;
-    //}
-
-    if (chosen === '') {
-      jQuery(".typeahead").attr('value', 'france');
-
-    }
-
-    // The path of the search, e.g. /search or /fr/search
-    var path = '/accommodation';
-
-    // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
-    var inputs = jQuery('#property-search').find(':input');
-
-    // Get each of the values we're interested in adding to the search string
-    var s_kwds = inputs.filter('#s_kwds').prop('value');
-    var sort_by = inputs.filter('#sort_by').prop('value');
-    var min_price = inputs.filter('#min_price').prop('value');
-    var max_price = inputs.filter('#max_price').prop('value');
-    var occupancy = inputs.filter('#occupancy').prop('value');
-    var bedrooms = inputs.filter('#bedrooms').prop('value');
-    var arrival = inputs.filter('#arrival').prop('value');
-    var departure = inputs.filter('#departure').prop('value');
-
-    path = path + '/' + stripVowelAccent(s_kwds);
-    
-    if (arrival !== '') {
-      path = path + '/arrival_' + arrival;
-    }    
-    
-    if (departure !== '') {
-      path = path + '/departure_' + departure;
-    }
-    if (occupancy !== '') {
-      path = path + '/occupancy_' + occupancy;
-    }
-
-    if (bedrooms !== '') {
-      path = path + '/bedrooms_' + bedrooms;
-    }
-
-    // These fields are not present on the homepage search so they can be undefined as well as empty
-    if (sort_by !== '' && typeof(sort_by) !=='undefined') {
-      path = path + '/' + sort_by;
-    }
-    
-    if (min_price !== '' && typeof(min_price) !=='undefined') {
-      path = path + '/' + min_price;
-    }
-
-    if (max_price !== ''  && typeof(max_price) !=='undefined') {
-      path = path + '/' + max_price;
-    }
-
-
-
-
+    var path = getPath();
 
     // Amend the path that the form is submitted to
     jQuery('form#property-search').attr('action', path);
@@ -193,8 +88,7 @@ jQuery(document).ready(function() {
     // Submit the form
     jQuery('form#property-search').submit();
 
-
-  })
+  });
 
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
@@ -217,6 +111,92 @@ jQuery(document).ready(function() {
   })
 
 }) // End of on DOM ready
+
+function getPath(event) {
+
+  // val is the 'active' suggestion populated by typeahead
+  // e.g. the option chosen should be the last active one
+  //var val = jQuery(".typeahead.dropdown-menu").find('.active').attr('data-value');
+
+  // The value contained in the typeahead field
+  var chosen = jQuery(".typeahead").attr('value');
+
+  // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
+  //var count = jQuery(".typeahead.dropdown-menu li").length;
+
+  // A regex to check for an integer
+  //var intRegex = new RegExp('^\\d+$');
+
+  //if (intRegex.test(chosen)) {
+  // Let it through
+  //return true;
+  //} else if (chosen !== '' && count !== 0) {
+  //if (val !== chosen) {
+  //jQuery('#myModal').modal();
+  //event.preventDefault();
+  //return false;
+  //}
+  //} else if (chosen === '') { // otherwise, just check that the chosen field isn't empty...check the q var on the server side
+  //jQuery('#myModal').modal();
+  //event.preventDefault();
+  //return false;
+  //}
+
+  if (chosen === '') {
+    jQuery(".typeahead").attr('value', 'france');
+
+  }
+
+  // The path of the search, e.g. /search or /fr/search
+  var path = '/accommodation';
+
+  // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
+  var inputs = jQuery('#property-search').find(':input');
+
+  // Get each of the values we're interested in adding to the search string
+  var s_kwds = inputs.filter('#s_kwds').prop('value');
+  var sort_by = inputs.filter('#sort_by').prop('value');
+  var min_price = inputs.filter('#min_price').prop('value');
+  var max_price = inputs.filter('#max_price').prop('value');
+  var occupancy = inputs.filter('#occupancy').prop('value');
+  var bedrooms = inputs.filter('#bedrooms').prop('value');
+  var arrival = inputs.filter('#arrival').prop('value');
+  var departure = inputs.filter('#departure').prop('value');
+
+  path = path + '/' + stripVowelAccent(s_kwds);
+
+  if (arrival !== '') {
+    path = path + '/arrival_' + arrival;
+  }
+
+  if (departure !== '') {
+    path = path + '/departure_' + departure;
+  }
+  if (occupancy !== '') {
+    path = path + '/occupancy_' + occupancy;
+  }
+
+  if (bedrooms !== '') {
+    path = path + '/bedrooms_' + bedrooms;
+  }
+
+  // These fields are not present on the homepage search so they can be undefined as well as empty
+  if (sort_by !== '' && typeof(sort_by) !== 'undefined') {
+    path = path + '/' + sort_by;
+  }
+
+  if (min_price !== '' && typeof(min_price) !== 'undefined') {
+    path = path + '/' + min_price;
+  }
+
+  if (max_price !== '' && typeof(max_price) !== 'undefined') {
+    path = path + '/' + max_price;
+  }
+
+  return path;
+
+
+}
 
 function initmap() {
 
