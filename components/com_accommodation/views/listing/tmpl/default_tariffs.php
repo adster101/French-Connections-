@@ -8,7 +8,7 @@ defined('_JEXEC') or die('Restricted access');
   <th><?php echo JText::_('COM_ACCOMMODATION_TARIFFS'); ?></th>
 </thead>
 <?php foreach ($this->tariffs as $tariff) : ?>
-  <?php $prices = JHtml::_('general.price', $tariff->tariff, $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd); ?>
+  <?php $prices = JHtml::_('general.price', $tariff->tariff, 'GBP', $this->item->base_currency, $this->item->exchange_rate_usd); ?>
   <tr>
     <td>
       <?php echo htmlspecialchars(JFactory::getDate($tariff->start_date)->calendar('d F Y')); ?>
@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
       <?php echo htmlspecialchars(JFactory::getDate($tariff->end_date)->calendar('d F Y')); ?>
     </td> 
     <td>
-      <?php if ($this->item->base_currency_id == 438) : ?>
+      <?php if ($this->item->base_currency == 'GBP') : ?>
         &pound;<?php echo $prices['GBP'] . htmlspecialchars($this->item->tariffs_based_on); ?>  
         <br /> <span class="muted">(<i>Approximately:</i> &euro;<?php echo $prices['EUR']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>
       <?php else: ?>

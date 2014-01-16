@@ -34,8 +34,8 @@ require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 
-$min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
-$max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency_id, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
+$min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
+$max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 ?>
 <div class="row-fluid">
   <div class="span12">

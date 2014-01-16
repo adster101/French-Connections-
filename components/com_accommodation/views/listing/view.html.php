@@ -21,7 +21,11 @@ class AccommodationViewListing extends JViewLegacy {
     // getUnits
     // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
     // Assign data to the view
-    $this->item = $this->get('Item');
+    
+    if (!$this->item = $this->get('Item')) {
+      
+      throw new Exception(JText::_('WOOT'), 410);
+    }
 
     // Get the availability for this property
     $this->availability = $this->get('Availability');
@@ -60,17 +64,13 @@ class AccommodationViewListing extends JViewLegacy {
     // Update the hit counter for this view
     $model = $this->getModel();
     $model->hit();
-
-    // Check for errors.
-    $errors = $this->get('Errors');
-
-    if (count($errors) > 0) {
-      // Generate a logger instance for reviews
-      JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('General'));
-      JLog::add('There was a problem fetching listing details for - ' . $this->item->id . ')' . implode('<br />', $errors), JLog::ALL, 'General');
-      JError::raiseError(500, 'Problem loading property details. Error has been logged. Please contact us if this problem persists.');
-      return false;
-    }
+   
+		// Check for errors.
+		if (count($errors = $this->get('Errors')))
+		{
+			JError::raiseWarning(404, implode("\n", $errors));
+			return false;
+		}
 
     // Set the document
     $this->setDocument();
