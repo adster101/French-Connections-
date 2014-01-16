@@ -50,16 +50,12 @@ class FcSearchViewSearch extends JViewLegacy {
       
     } else {
 
-
       $this->results = $this->get('Results');
-
-      $this->total = $this->get('Total');
 
       $this->pagination = $this->get('Pagination');
 
       // Has to be done after getState, as with all really.
       $this->attribute_options = $this->get('RefineAttributeOptions');
-      
       $this->location_options = $this->get('RefineLocationOptions');
       $this->property_options = $this->get('RefinePropertyOptions');
     

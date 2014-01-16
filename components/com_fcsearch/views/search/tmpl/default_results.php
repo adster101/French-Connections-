@@ -103,8 +103,7 @@ if ($pagdata->previous->link) {
                   </div>
                 </div>
                 <div class="span3">
-                  <p class="small" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
-
+                  <p class="" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
                 </div>
               </div>
               <ul class="search-results list-striped">
