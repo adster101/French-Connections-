@@ -1,23 +1,27 @@
+			var infowindow;
+
 jQuery(document).ready(function() {
 
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
-    
-    jQuery('#map_canvas').hide();
-    
-    loadScript(); // Asych load the google maps stuff
 
+    jQuery('#map_canvas').hide();
+
+    if (!window.google) {
+      loadScript(); // Asych load the google maps stuff
+    }
     // Store the selected tab #ref in local storage, IE8+
     localStorage['selectedTab'] = jQuery(e.target).attr('href');
 
     // Get the selected tab from the local storage
     var selectedTab = localStorage['selectedTab'];
+    var infowindow;
 
     // If the selected tab is the map tag then grab the markers
     if (selectedTab == '#mapsearch') {
 
-      var path = window.location.pathname.replace('/accommodation/','');
+      var path = window.location.pathname.replace('/accommodation/', '');
 
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json", {
@@ -43,7 +47,7 @@ jQuery(document).ready(function() {
           });
 
           marker.setTitle((i + 1).toString());
-          content = '<h4>' + data[i].title + '</h5>' + '<a href="' + data[i].link + '"><img src="' + data[i].thumbnail + '"/></a><p>' + data[i].description + '</p>';
+          content = '<div class="media"><a class="pull-left" href="' + data[i].link + '"><img class="media-object" src="' + data[i].thumbnail + '"/></a><div class="media-body"><h4 class="media-heading"><a href="' + data[i].link + '">' + data[i].unit_title + '</a></h4><p>' + data[i].description + '</p></div></div>';
           attachContent(marker, content);
 
           markers[i] = marker;
@@ -61,7 +65,7 @@ jQuery(document).ready(function() {
         }
       });
     }
-    
+
     jQuery('#map_canvas').show();
 
   });
@@ -200,9 +204,9 @@ function getPath(event) {
 
 function initmap() {
 
-  jQuery('#map_canvas').css('width', '100%');
-  jQuery('#map_canvas').css('height', '500px');
 
+  jQuery('#map_canvas').css('width', '100%');
+  jQuery('#map_canvas').css('height', '600px');
   var myLatLng = new google.maps.LatLng(46.8, 2.8);
   var myOptions = {
     center: myLatLng,
@@ -218,11 +222,15 @@ function initmap() {
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
 function attachContent(marker, num) {
-  var infowindow = new google.maps.InfoWindow({
-    content: num
-  });
-
   google.maps.event.addListener(marker, 'click', function() {
+
+    if (infowindow)
+      infowindow.close();
+
+    infowindow = new google.maps.InfoWindow({
+      content: num,
+      maxWidth: 300
+    });
     infowindow.open(marker.get('map'), marker);
   });
 }

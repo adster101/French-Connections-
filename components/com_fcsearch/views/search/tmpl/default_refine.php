@@ -16,9 +16,9 @@ $uri = str_replace('http://', '', JUri::current());
 $refine_budget_min = $this->getBudgetFields();
 $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 
-$min_budget = $app->input->request->get('min');
-$max_budget = $app->input->request->get('max');
-$hide = '';
+$min_budget = $this->state->get('list.min_price');
+$max_budget = $this->state->get('list.max_price');
+
 $searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $bedrooms = $this->state->get('list.bedrooms');
 $occupancy = $this->state->get('list.occupancy');
@@ -67,13 +67,13 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
       <div class="span6">
         <label class="small" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
         <select id="min_price" name="min" class="span12">
-          <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', $min_budget); ?>
+          <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', 'min_' . $min_budget); ?>
         </select>
       </div>
       <div class="span6">
         <label class="small" for="max_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE'); ?></label>
         <select id="max_price" name="max" class="span12">
-          <?php echo JHtml::_('select.options', $refine_budget_max, 'value', 'text', $max_budget); ?>
+          <?php echo JHtml::_('select.options', $refine_budget_max, 'value', 'text', 'max_' . $max_budget); ?>
         </select>
       </div>
     </div>

@@ -4724,6 +4724,35 @@ a.badge:focus {
 .hero-unit li {
   line-height: 27px;
 }
+.media,
+.media-body {
+  overflow: hidden;
+  *overflow: visible;
+  zoom: 1;
+}
+.media,
+.media .media {
+  margin-top: 15px;
+}
+.media:first-child {
+  margin-top: 0;
+}
+.media-object {
+  display: block;
+}
+.media-heading {
+  margin: 0 0 5px;
+}
+.media > .pull-left {
+  margin-right: 10px;
+}
+.media > .pull-right {
+  margin-left: 10px;
+}
+.media-list {
+  margin-left: 0;
+  list-style: none;
+}
 .pull-right {
   float: right;
 }
@@ -7065,6 +7094,9 @@ div.modal.fade.in {
   font-family: 'IcoMoon', 'social';
   font-style: normal;
   speak: none;
+}
+input[type='text'].hasDatepicker {
+  font-size: 11px;
 }
 .icon-google-plus,
 .icon-facebook,

@@ -12,10 +12,10 @@ $document = JFactory::getDocument();
 $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 
-$bedrooms = $app->getUserState('list.bedrooms');
-$occupancy = $app->getUserState('list.occupancy');
-$arrival = $app->getUserState('list.arrival');
-$departure = $app->getUserState('list.departure');
+$bedrooms = '';
+$occupancy = '';
+$arrival = '';
+$departure = '';
 
 
 // The following are coordinates that trace out the outline shape of a region. They should really be stored in the classifications table
