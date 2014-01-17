@@ -7408,7 +7408,10 @@ h6 {
 }
 /* Breadcrumbs */
 .breadcrumb {
-  margin: 10px 0;
+  padding: 3px;
+}
+.breadcrumb > ul {
+  margin-bottom: 0;
 }
 /* Caption fixes */
 .img_caption .left {
