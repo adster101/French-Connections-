@@ -80,7 +80,7 @@ class ImportControllerAttributes extends JControllerForm {
 
       // The list of property attributes is a comma separated list so it is exploded to an array
       // The property type isn't listed in the slp_tax_id bit but is appended as the first entry in the list.
-      $property_attributes = explode(',', $line[2]);
+      $property_attributes = array_unique(explode(',', $line[2]));
 
       $property_id = $line[0];
 

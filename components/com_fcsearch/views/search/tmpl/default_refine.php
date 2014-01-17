@@ -91,13 +91,13 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
 
 
 
-  <div class="accordion" id="accordion2">
+  <div class="" id="">
     <?php if ($this->localinfo->level < 5) : ?>
       <div class="accordion-group">
         <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" href="#location">
+          <span class="accordion-toggle">
             <?php echo JText::_($this->escape($this->localinfo->title)); ?>
-          </a>
+          </span>
         </div>
         <div id="location" class="accordion-body collapse in">
           <div class="accordion-inner">
