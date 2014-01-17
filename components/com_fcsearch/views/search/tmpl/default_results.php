@@ -38,27 +38,11 @@ if ($pagdata->previous->link) {
 }
 ?>
 <div class="finder">
-
   <h1>
     <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
   </h1>
-  <p>
-    <i class="icon icon-location muted"></i>
-    <?php foreach ($this->crumbs as $crumb) : ?>
-      <?php if ($crumb->parent_id) : ?>
-        <a href="<?php echo JRoute::_('index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($crumb->alias)) ?>">
-          <strong>
-            <?php echo JString::ucwords(str_replace('-', ' ', $crumb->title)) ?>
-          </strong>   
-
-        </a> 
-        &raquo;
-      <?php endif; ?>
-    <?php endforeach; ?>
-  </p>
   <div id="search-form" >
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
-
       <?php
       if (0):
         ?>

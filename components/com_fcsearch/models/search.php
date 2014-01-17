@@ -78,6 +78,34 @@ class FcSearchModelSearch extends JModelList {
     // Set the default search and what not here?
   }
 
+  public function getLogSearch() {
+
+    $db = JFactory::getDbo();
+
+    $query = $db->getQuery(true);
+
+    $query->insert('#__search_log');
+    $query->columns('location_id, bedrooms, occupancy, date_created');
+
+    $location_id = $this->getState('search.location', '');
+    $bedrooms = $this->getState('search.bedrooms', '');
+    $occupancy = $this->getState('search.occupancy', '');
+    $date = JFactory::getDate()->calendar('Y-m-d');
+
+    $query->values((int) $location_id . ',' . (int) $bedrooms . ',' . (int) $occupancy . ',' . $db->quote($date));
+
+    $db->setQuery($query);
+
+    try {
+      $db->execute();
+    } catch (RuntimeException $e) {
+      // TO DO log me baby
+      return false;
+    }
+
+    return true;
+  }
+
   /**
    * Get the information about the area which is being searched on.
    *  
@@ -414,10 +442,10 @@ class FcSearchModelSearch extends JModelList {
       // Add the distance based bit in as this is a town/city search
       $query->select('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude)))) AS distance
+          * sin(radians(c.latitude)))) AS distance
         ');
       $query->having('distance < 30');
     }
@@ -546,10 +574,10 @@ class FcSearchModelSearch extends JModelList {
         // Add the distance based bit in as this is a town/city search
         $query->select('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude)))) AS distance
+          * sin(radians(c.latitude)))) AS distance
         ');
         $query->having('distance < 30');
       }
@@ -1364,7 +1392,7 @@ class FcSearchModelSearch extends JModelList {
       $facilities[] = $this->getState('list.accommodation_type');
 
       foreach ($facilities as $key => $value) {
-        
+
         // For the activities...
         if (is_array($value) && !empty($value)) {
           foreach ($value as $x => $y) {
@@ -1417,7 +1445,7 @@ class FcSearchModelSearch extends JModelList {
     $db = JFactory::getDbo();
     $id = $this->getState('search.location');
     $lang = JFactory::getLanguage();
-
+    $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
     // The query resultset should be stored in the local model cache already
     $store = $this->getStoreId('getCrumbs');
 
@@ -1431,13 +1459,21 @@ class FcSearchModelSearch extends JModelList {
     $table = JTable::getInstance('Classification', 'ClassificationTable');
 
     $path = $table->getPath($id);
-
     if (!$path) {
-      $path = false;
+      return false;
+    }
+
+    array_shift($path); // Remove the first element as it's the root of the NST
+    // Put the path into a std class obj which is passed into the getPathway method.
+    foreach ($path as $k => $v) {
+      if ($v->parent_id) {
+        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->name = $v->title;
+      }
     }
 
     // Push the results into cache.
-    $this->store($store, $path);
+    $this->store($store, $pathArr);
 
     // Return the path.
     return $this->retrieve($store);

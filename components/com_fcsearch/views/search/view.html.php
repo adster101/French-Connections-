@@ -40,14 +40,12 @@ class FcSearchViewSearch extends JViewLegacy {
     // Get the currencies
     // Get view data.
     $this->state = $this->get('State');
-
     $this->localinfo = $this->get('LocalInfo');
 
     if ($this->localinfo === false) {
 
       $this->results = false;
       $this->total = 0;
-      
     } else {
 
       $this->results = $this->get('Results');
@@ -58,10 +56,20 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->attribute_options = $this->get('RefineAttributeOptions');
       $this->location_options = $this->get('RefineLocationOptions');
       $this->property_options = $this->get('RefinePropertyOptions');
-    
+
       // Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');
+      
+      // Configure the pathway.
+      if (!empty($this->crumbs)) {
+        $app->getPathWay()->setPathway($this->crumbs);
+      }
+      
+      
     }
+
+    $this->get('LogSearch');
+    
     // Include the component HTML helpers.
     JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
@@ -71,10 +79,7 @@ class FcSearchViewSearch extends JViewLegacy {
       return false;
     }
 
-    // Configure the pathway.
-    if (!empty($query->input)) {
-      $app->getPathWay()->addItem($this->escape($query->input));
-    }
+
 
 
 
