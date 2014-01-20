@@ -30,14 +30,15 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $
       </a>
     </div>
     <div class="span6">
-
-      <?php echo JHtml::_('string.truncate', $this->result->description, 175, true, false); ?>
+      <span class="">
+        <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
+      </span>
 
 
       <hr class="condensed" />
-      <span class="small">
-        <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
-      </span>
+      <p class="">
+        <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
+      </p>
     </div>
     <div class="span2" style="text-align:right;">
       <p class="">

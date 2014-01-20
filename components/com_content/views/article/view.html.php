@@ -38,7 +38,6 @@ class ContentViewArticle extends JViewLegacy
 		$this->print	= $app->input->getBool('print');
 		$this->state	= $this->get('State');
 		$this->user		= $user;
-    var_dump($this->get('Errors'));die;
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
