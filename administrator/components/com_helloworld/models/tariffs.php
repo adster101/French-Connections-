@@ -272,7 +272,8 @@ class HelloWorldModelTariffs extends JModelAdmin {
     $pk = ($data['unit_id']) ? $data['unit_id'] : '';
     $tariffs_by_day = $this->getTariffsByDay($tariffs);
     $tariff_periods = HelloWorldHelper::getAvailabilityByPeriod($tariffs_by_day, 'tariff');
-
+    $unit_data = array(); // An array to hold data about the base unit to update
+    $from_price = false; // Holds the minimum price for a unit based on the set of tariffs being saved.
     // We've checked all tariffs, need to save 'em
     // Generate a logger instance for tariffs
     JLog::addLogger(array('text_file' => 'tariffs.update.php'), 'DEBUG', array('tariffs'));
@@ -316,10 +317,17 @@ class HelloWorldModelTariffs extends JModelAdmin {
           $this->setError(JText::_('COM_HELLOWORLD_HELLOWORLD_TARIFFS_TARIFF_START_DATE'));
           return false;
         }
-        
+
+        if (!$from_price) {
+          $from_price = $tariff_period['tariff'];
+        } else {
+          $from_price = ($tariff_period['tariff'] < $from_price) ? $tariff_period['tariff'] : $from_price;
+        }
+
+
+
         // Flush the table ready for the next lot...
         $table->reset();
-        
       }
 
       // Commit the transaction
@@ -336,17 +344,23 @@ class HelloWorldModelTariffs extends JModelAdmin {
       return false;
     }
 
-    
-    
     // Tariffs are saved, now save the rest of the unit information by handing it off to the unitversions model
     unset($data['start_date']);
     unset($data['end_date']);
     unset($data['tariff']);
-    
-    $blah = $model->save($data);
-    
-    
 
+
+    // Get an instance of the unit model
+    $unit = JModelLegacy::getInstance('Unit', 'HelloWorldModel');
+    
+    // Set the data and save the from price against the unit
+    $unit_data['from_price'] = $from_price;
+    $unit_data['id'] = $pk;
+
+    $unit->save($unit_data);
+
+    // Proceed and save the rest of the submitted data against the unit version (creating a new one if necessary)
+    $blah = $model->save($data);
 
     // Set the table key back to unit_id
     //$table->set('_tbl_key', 'unit_id');

@@ -253,17 +253,11 @@ class FcSearchModelSearch extends JModelList {
         c.longitude,
         c.city,
         d.occupancy,
+        b.from_price as price,
         j.path,
         left(d.description,500) as description,
         j.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
-        case 
-          when d.base_currency = \'EUR\'
-          THEN 
-            (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-          ELSE
-            (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-        END as price,
         (select count(unit_id) from qitz3_reviews where unit_id = d.unit_id ) as reviews,
         h.title as accommodation_type,
         g.title as property_type,
@@ -301,6 +295,22 @@ class FcSearchModelSearch extends JModelList {
       } elseif ($this->getState('search.level') == 4) { // Department level
         $query->join('left', '#__classifications as f on f.id = c.department');
         $query->where('c.department = ' . $this->getState('search.location', ''));
+      } elseif ($this->getState('search.level') == 5) {
+        // Add the distance based bit in as this is a town/city search
+        $query->where('
+        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(c.latitude))) < 30)
+        ');
+        $query->order('
+        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(c.latitude))) )
+        ');
       }
 
       $query->join('left', '#__attributes g on g.id = d.property_type');
@@ -310,16 +320,7 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__attributes i on i.id = d.tariff_based_on');
       $query->join('left', '#__classifications j ON j.id = c.city');
 
-      if ($this->getState('search.level') == 5) {
-        // Add the distance based bit in as this is a town/city search
-        $query->select('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude)))) AS distance
-        ');
-      }
+   
 
       /*
        * This section deals with the filtering options.
@@ -367,9 +368,9 @@ class FcSearchModelSearch extends JModelList {
       // No filter function needed here as ordering can simplt be cleared and reinstated, if needed.
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
-      } elseif ($this->getState('search.level') == 5) {
-        $query->order('distance');
-        $query->having('distance < 30');
+      }
+      
+      if ($this->getState('search.level') == 5) {
       }
 
       // Make sure we only get live properties...
@@ -388,129 +389,7 @@ class FcSearchModelSearch extends JModelList {
     }
   }
 
-  /**
-   * Method to get the total number of results.
-   *
-   * @return  integer  The total number of results.
-   *
-   * @since   2.5
-   * @throws  Exception on database error.
-   */
-  public function getTotal() {
 
-    // Get the store id.
-    $store = $this->getStoreId('getTotal');
-
-    $db = JFactory::getDbo();
-
-    // Use the cached data if possible.
-    if ($this->retrieve($store)) {
-      return $this->retrieve($store);
-    }
-
-    $query = $db->getQuery(true);
-
-    $query->select('count(*),
-      case 
-        when d.base_currency = \'EUR\'
-          THEN 
-            (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-          ELSE
-            (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-        END as price   
-    ');
-
-    $query->from('#__property a');
-    $query->leftJoin('#__unit b on b.property_id = a.id');
-    $query->leftJoin('#__property_versions c on c.property_id = a.id');
-
-    $query->leftJoin('#__unit_versions d on d.unit_id = b.id');
-    $query->leftJoin('#__attributes e on e.id = d.property_type');
-    if ($this->getState('search.level') == 1) { // Country level
-      $query->join('left', '#__classifications as f on f.id = c.country');
-      $query->where('c.country = ' . $this->getState('search.location', ''));
-    } elseif ($this->getState('search.level') == 2) { // Area level
-      $query->join('left', '#__classifications as f on f.id = c.area');
-      $query->where('c.area = ' . $this->getState('search.location', ''));
-    } elseif ($this->getState('search.level') == 3) { // Region level
-      $query->join('left', '#__classifications as f on f.id = c.region');
-      $query->where('c.region= ' . $this->getState('search.location', ''));
-    } elseif ($this->getState('search.level') == 4) { // Department level
-      $query->join('left', '#__classifications as f on f.id = c.department');
-      $query->where('c.department = ' . $this->getState('search.location', ''));
-    } elseif ($this->getState('search.level') == 5) {
-      // Add the distance based bit in as this is a town/city search
-      $query->select('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude)))) AS distance
-        ');
-      $query->having('distance < 30');
-    }
-
-    /*
-     * This section deals with the filtering options.
-     * Filters are applied via functions as they are reused in the getPropertyType filter methods
-     */
-    if ($this->getState('list.arrival') || $this->getState('list.departure')) {
-
-      $arrival = $this->getState('list.arrival', '');
-      $departure = $this->getState('list.departure', '');
-      $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
-    }
-
-    if ($this->getState('list.bedrooms')) {
-      $bedrooms = $this->getState('list.bedrooms', '');
-      $query = $this->getFilterBedrooms($query, $bedrooms, $db);
-    }
-
-    if ($this->getState('list.occupancy')) {
-      $occupancy = $this->getState('list.occupancy', '');
-      $query = $this->getFilterOccupancy($query, $occupancy, $db);
-    }
-
-    // Sort out the budget requirements
-    if ($this->getState('list.min_price') || $this->getState('list.max_price')) {
-      $min_price = $this->getState('list.min_price', '');
-      $max_price = $this->getState('list.max_price', '');
-      $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
-    }
-
-    if ($this->getState('list.property_type')) {
-      $property_type = $this->getState('list.property_type');
-      $query = $this->getFilterPropertyType($query, $property_type, $db);
-    }
-
-
-    $query = $this->getFilterState('activities', $query, '#__property_attributes');
-    $query = $this->getFilterState('suitability', $query);
-    $query = $this->getFilterState('external_facilities', $query);
-    $query = $this->getFilterState('property_facilities', $query);
-
-    // Make sure we only get live properties with no pending changes...
-    $query->where('a.expiry_date >= ' . $db->quote($this->date));
-    $query->where('b.published = 1');
-    $query->where('c.review = 0');
-    $query->where('d.review = 0');
-    $query->where('d.unit_id is not null');
-
-
-    try {
-      $total = (int) $this->_getListCount($query);
-    } catch (RuntimeException $e) {
-      $this->setError($e->getMessage());
-
-      return false;
-    }
-
-    // Push the total into cache.
-    $this->store($store, $total);
-
-    // Return the total.
-    return $this->retrieve($store);
-  }
 
   /**
    * Method to pull out the property type based drilldowns
@@ -541,15 +420,7 @@ class FcSearchModelSearch extends JModelList {
       $db = $this->getDbo();
       $query = $db->getQuery(true);
 
-      $query->select('e.id, e.title, count(*) as count,
-              case 
-        when d.base_currency = \'EUR\'
-          THEN 
-            (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-          ELSE
-            (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-        END as price   
-    ');
+      $query->select('e.id, e.title, count(*) as count');
 
       $query->from('#__property a');
       $query->leftJoin('#__unit b on a.id = b.property_id');
@@ -572,14 +443,12 @@ class FcSearchModelSearch extends JModelList {
         $query->where('c.department = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
-        $query->select('
+        $query->where('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude)))) AS distance
-        ');
-        $query->having('distance < 30');
+          * sin(radians(c.latitude))) < 30)');
       }
 
       /*
@@ -622,6 +491,7 @@ class FcSearchModelSearch extends JModelList {
       $query->where('c.review = 0');
       $query->where('d.review = 0');
       $query->where('d.unit_id is not null');
+      $query->where('d.property_type is not null');
       $query->group('d.property_type');
 
       // Get the options.
@@ -663,16 +533,7 @@ class FcSearchModelSearch extends JModelList {
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('e.title, count(e.id) as count,
-      case 
-        when d.base_currency = \'EUR\'
-          THEN 
-            (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-          ELSE
-            (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-        END as price   
-    ');
-
+    $query->select('e.title, count(e.id) as count');
     $query->from('#__property a');
     $query->leftJoin('#__unit b on b.property_id = a.id');
     $query->leftJoin('#__property_versions c on c.property_id = a.id');
@@ -792,16 +653,7 @@ class FcSearchModelSearch extends JModelList {
 
       $query = $db->getQuery(true);
 
-      $query->select('e.attribute_id, count(e.attribute_id) as count,
-        case 
-          when d.base_currency = \'EUR\'
-             THEN 
-               (select min(tariff) * ' . $this->currencies["GBP"]->exchange_rate . ' from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-             ELSE
-              (select min(tariff) from qitz3_tariffs t where t.unit_id = b.id and end_date > ' . $db->quote($this->date) . ' limit 0,1)
-
-             END as price
-        ');
+      $query->select('e.attribute_id, count(e.attribute_id) as count');
       $query->from('#__property a');
       $query->innerJoin('#__unit b on b.property_id = a.id');
       $query->innerJoin('#__property_versions c on c.property_id = a.id');
@@ -822,14 +674,13 @@ class FcSearchModelSearch extends JModelList {
         $query->where('c.department = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
-        $query->select('
+         $query->where('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
-          cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude)))) AS distance
+          * sin(radians(c.latitude))) < 30)
         ');
-        $query->having('distance < 30');
       }
 
       /*
@@ -1294,12 +1145,12 @@ class FcSearchModelSearch extends JModelList {
 
     if ($min_price) {
 
-      $query = $query->having('price > ' . (int) $min_price);
+      $query = $query->where('from_price >= ' . (int) $min_price);
     }
 
     if ($max_price) {
 
-      $query = $query->having('price < ' . (int) $max_price);
+      $query = $query->where('from_price <= ' . (int) $max_price);
     }
 
     return $query;

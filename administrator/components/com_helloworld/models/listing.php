@@ -119,7 +119,6 @@ class HelloWorldModelListing extends JModelList {
         g.vat_status,
         base_currency,
         tariff_based_on,
-        i.id as accommodation_type,
         (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
         (select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) as availability,
         (select count(*) from qitz3_tariffs where unit_id = d.id and end_date > NOW()) as tariffs
@@ -129,11 +128,6 @@ class HelloWorldModelListing extends JModelList {
     $query->join('left', '#__unit d on d.property_id = a.id');
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
     $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
-
-    // Join the property type through the property attributes table
-    $query->join('left', '#__unit_attributes h on (h.property_id = d.id and h.version_id = e.id)');
-    $query->join('left', '#__attributes i on i.id = h.attribute_id');
-    $query->where('(i.attribute_type_id = 2 or i.id is null)');
 
     $query->where('a.id = ' . (int) $id);
     $query->order('ordering');

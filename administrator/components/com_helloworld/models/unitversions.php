@@ -336,6 +336,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
 
         $property->id = $table->property_id;
         $property->review = 1;
+        $property->modified = JFactory::getDate();
         JLog::add('About to update Property review status for ' . $property->id, 'DEBUG', 'unitversions');
 
         if (!$property->store()) {
