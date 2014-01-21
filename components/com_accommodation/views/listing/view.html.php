@@ -103,7 +103,7 @@ class AccommodationViewListing extends JViewLegacy {
 
     $document->addScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections", 'text/javascript', true, true);
-    $document->addScript("components/com_accommodation/js/jquery.flexslider-min.js", 'text/javascript', true, false);
+    $document->addScript("components/com_accommodation/js/jquery.flexslider.js", 'text/javascript', true, false);
     $document->addScript("components/com_accommodation/js/property.js", 'text/javascript', true, false);
     $document->addScript("media/fc/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true, false);
     $document->addScript("media/fc/js/date-range.js", 'text/javascript', true, false);

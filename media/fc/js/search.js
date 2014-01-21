@@ -3,6 +3,10 @@
 jQuery(document).ready(function() {
 
 
+  jQuery('#sort_by').on('change', function() {
+    alert('Poop');
+  });
+
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
 

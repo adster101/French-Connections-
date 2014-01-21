@@ -8,7 +8,8 @@ jQuery(document).ready(function() {
     slideshow: false,
     itemWidth: 100,
     itemMargin: 5,
-    asNavFor: '#slider'
+    asNavFor: '#slider',
+    allowOneSlide: false
   });
 
   jQuery('#slider').flexslider({
@@ -16,8 +17,13 @@ jQuery(document).ready(function() {
     controlNav: false,
     animationLoop: false,
     slideshow: false,
-    sync: "#carousel"
+    sync: "#carousel",
+    video: "true",
+    minItems: 1
   });
+
+
+
 
   // Iterate over all the form fields in the contact form 
   jQuery('#contact-form label').each(function() {
@@ -32,7 +38,7 @@ jQuery(document).ready(function() {
       placement: 'right',
       trigger: 'focus'
     });
-  });  
+  });
 });
 
 

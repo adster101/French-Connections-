@@ -141,7 +141,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <span class="pull-right"><?php echo $this->item->distance_to_coast; ?></span>
         </p>
       <?php endif; ?>
-  
+
       <!-- Changeover day -->
       <?php if ($this->item->changeover_day) : ?>
         <p class="dotted">
@@ -225,29 +225,45 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <!-- Image gallery -->
     <!-- Needs go into a separate template -->
     <div id="main" role="main">
-      <section class="slider">
-        <div id="slider" class="flexslider">
+      <?php if (count($this->images) > 1) : ?>
+
+        <section class="slider">
+          <div id="slider" class="flexslider">
+            <ul class="slides">
+              <?php foreach ($this->images as $images => $image) : ?> 
+                <li>
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
+                  <p class="flex-caption">
+                    <?php echo $image->caption; ?>
+                  </p>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+          <div id="carousel" class="flexslider">
+            <ul class="slides">
+              <?php foreach ($this->images as $images => $image) : ?> 
+                <li>
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name ?>" /> 
+                </li>     
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        </section>
+      <?php else : ?>
+        <div class="panel panel-default">
           <ul class="slides">
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
                 <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
                 <p class="flex-caption">
-                  <?php echo $image->caption; ?>
+                  <?php echo $this->escape($image->caption); ?>
                 </p>
               </li>
             <?php endforeach; ?>
           </ul>
         </div>
-        <div id="carousel" class="flexslider">
-          <ul class="slides">
-            <?php foreach ($this->images as $images => $image) : ?> 
-              <li>
-                <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name ?>" /> 
-              </li>     
-            <?php endforeach; ?>
-          </ul>
-        </div>
-      </section>
+      <?php endif; ?>
     </div>
   </div>
 </div>
@@ -607,31 +623,31 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 <script>
   jQuery(document).ready(function() {
 
-    initialize();
+  initialize();
   });
 
   function initialize() {
-    var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>, <?php echo $this->item->longitude ?>);
-    var myOptions = {
-      center: myLatLng,
-      zoom: 6,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true,
-      zoomControl: true
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    var marker = new google.maps.Marker({
-      position: myLatLng,
-      map: map,
-      title: "<?php echo $this->item->unit_title ?>"
-    });
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-      // 3 seconds after the center of the map has changed, pan back to the
-      // marker.
-      window.setTimeout(function() {
-        map.panTo(marker.getPosition());
-      }, 3000);
-    });
+  var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>, <?php echo $this->item->longitude ?>);
+  var myOptions = {
+  center: myLatLng,
+  zoom: 6,
+  mapTypeId: google.maps.MapTypeId.ROADMAP,
+  disableDefaultUI: true,
+  zoomControl: true
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  var marker = new google.maps.Marker({
+  position: myLatLng,
+  map: map,
+  title: "<?php echo $this->item->unit_title ?>"
+  });
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+  // 3 seconds after the center of the map has changed, pan back to the
+  // marker.
+  window.setTimeout(function() {
+  map.panTo(marker.getPosition());
+  }, 3000);
+  });
   }
 
 
