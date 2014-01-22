@@ -35,10 +35,9 @@ $lang = $app->input->get('lang', 'en');
             
          <?php endif; ?>
           <div class="carousel-caption">
-              <a class="" href="<?php echo $property ?>"><strong><?php echo $item->unit_title; ?></strong></a>&nbsp;|
+              <a href="<?php echo $property ?>"><strong><?php echo $item->unit_title; ?></strong></a>&nbsp;|
               &nbsp;<a href="<?php echo $region ?>"><?php echo htmlspecialchars($item->title); ?></a>
-              <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>&nbsp;
-              <?php echo $item->occupancy; ?>
+              <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?><?php echo trim($item->occupancy); ?>
               <?php if (!empty($item->price)) : ?>|&nbsp;
                 &pound;<?php echo $prices['GBP'] ?>
               <?php endif; ?>        

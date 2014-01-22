@@ -128,37 +128,34 @@ if ($pagdata->previous->link) {
             ?>
           </div>
         </div>
-        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_PLEASE_ENTER_A_DESTINATION'); ?>
-            </h3>
-          </div>
-          <div class="modal-body">
-            <p>
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_PLEASE_ENTER_A_DESTINATION_BODY'); ?>
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_PLEASE_ENTER_A_DESTINATION_CLOSE'); ?>
-            </button>
-          </div>
-        </div>
+      
       <?php endif; ?>
 
 
       <input type="hidden" name="option" value="com_fcsearch" />
       <?php
-// Following method adds a hidden field which essentially tracks the state of the search
-// Possibly, this could/would be better in session scope?
+      // Following method adds a hidden field which essentially tracks the state of the search
+      // Possibly, this could/would be better in session scope?
       echo $this->getFilters();
       ?>
 
     </form>
   </div>
 
+</div>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel"><?php echo JText::_('COM_SHORTLIST_PLEASE_LOGIN') ?></h3>
+  </div>
+  <div class="modal-body">
+    <p>Login chump!</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
 </div>
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
 

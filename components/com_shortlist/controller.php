@@ -16,7 +16,8 @@ class ShortlistController extends JControllerLegacy {
 
       $safeurlparams = array(
         'id' => 'INT',
-        'lang' => 'CMD'
+        'lang' => 'CMD',
+        'user_id' => 'INT'
     );
 
     // Set the default view name and format from the Request.

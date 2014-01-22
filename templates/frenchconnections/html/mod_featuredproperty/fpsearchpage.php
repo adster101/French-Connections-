@@ -28,8 +28,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
             <strong><?php echo $item->title; ?></strong> | 
             <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
             <?php echo $item->occupancy; ?>
-            <?php if (!empty($item->price)) : ?> |
-              &pound; <?php echo $prices['GBP'] ?>
+            <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
             <?php endif; ?>
           </p>
         </div>

@@ -1,4 +1,4 @@
-			var infowindow;
+var infowindow;
 
 jQuery(document).ready(function() {
 
@@ -113,12 +113,39 @@ jQuery(document).ready(function() {
     }
   })
 
+
+  jQuery('.shortlist-login').on('click', function() {
+
+    jQuery('#myModal').modal({
+      remote: '/my-account?tmpl=component&layout=modal'
+    });
+
+  });
+
+
+
+  jQuery('.shortlist-manage').each(function() {
+    
+    jQuery(this).popover();
+    
+    jQuery(this).on('click', function(event){
+      event.preventDefault();
+    });
+
+  });
+  
+  
+
   jQuery(".show").click(function(event) {
     event.preventDefault();
     jQuery(this).prev().prev().toggleClass('show');
   })
 
 }) // End of on DOM ready
+
+function success(data) {
+
+}
 
 function getPath(event) {
 
