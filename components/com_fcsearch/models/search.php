@@ -320,7 +320,7 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__attributes i on i.id = d.tariff_based_on');
       $query->join('left', '#__classifications j ON j.id = c.city');
 
-   
+
 
       /*
        * This section deals with the filtering options.
@@ -369,8 +369,9 @@ class FcSearchModelSearch extends JModelList {
       if ($sort_column) {
         $query->order($sort_column . ' ' . $sort_order);
       }
-      
+
       if ($this->getState('search.level') == 5) {
+        
       }
 
       // Make sure we only get live properties...
@@ -388,8 +389,6 @@ class FcSearchModelSearch extends JModelList {
       // Oops, exceptional
     }
   }
-
-
 
   /**
    * Method to pull out the property type based drilldowns
@@ -674,7 +673,7 @@ class FcSearchModelSearch extends JModelList {
         $query->where('c.department = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
-         $query->where('
+        $query->where('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
@@ -789,6 +788,32 @@ class FcSearchModelSearch extends JModelList {
       //JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
     }
+  }
+
+  public function getShortlist() {
+
+    $db = JFactory::getDbo();
+    
+    $user = JFactory::getUser();
+    
+    $query = $db->getQuery(true);
+    
+    $query->select('property_id');
+    $query->from('#__shortlist');
+    $query->where('user_id = ' . (int) $user->id);
+    
+    $db->setQuery($query);
+    
+    try {
+    
+    $rows = $db->loadObjectList('property_id');
+    } catch (Exception $e) {
+      
+      return false;
+    }
+    
+    return $rows;
+    
   }
 
   /*

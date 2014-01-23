@@ -23,16 +23,18 @@ class ShortlistModelShortlist extends JModelList {
    * @since   2.5
    *
    */
-
   protected function getListQuery() {
     
     $db = JFactory::getDbo();
     
     $query = $db->getQuery(true);
     
-    $query->select('id, user_id, property_id, date_created');
-    $query->from('#__shortlist');
-    $query->where('user_id = ' . (int) JFactory::getUser()->id); 
+    $query->select('a.user_id, a.property_id, a.date_created, b.unit_title');
+    $query->from('#__shortlist a');
+    // left join property etc
+    $query->leftJoin('#__unit_versions b on b.property_id = a.property_id');
+    $query->where('a.user_id = ' . (int) JFactory::getUser()->id); 
+    $query->where('b.review = 0'); 
  
     $db->setQuery($query);
     

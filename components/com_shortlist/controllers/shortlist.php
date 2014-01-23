@@ -15,9 +15,9 @@ defined('_JEXEC') or die;
  */
 class ShortlistControllerShortlist extends JControllerLegacy {
 
-  protected $isLoggedIn = false;
+  protected $success = false;
 
-  public function isLoggedIn() {
+  public function update() {
 
     // Get the app object
     $app = JFactory::getApplication();
@@ -39,19 +39,21 @@ class ShortlistControllerShortlist extends JControllerLegacy {
     $model = $this->getModel('ShortlistItem', 'ShortlistModel');
 
     // Check whether the user is logged in.
-    if (!$user->guest) {
-      $this->isLoggedIn = true;
+    if (!$user->guest) { // I.e. user is logged in (not a guest)
 
-      if (!$model->updateShortlist($user_id, $id, $action)) {
-        // Update failed for whatever reason and has been logged.
+      if ($model->updateShortlist($user_id, $id, $action)) { // Explicity check on shortlist component permissions?
+        // Updated okay
+        $this->success = (int) 1;
       }
-    } 
-    
+    }
+
+    echo json_encode($this->success);
+
     $app->close();
-    
-    
-    
-    
+
+
+
+
 
 
 

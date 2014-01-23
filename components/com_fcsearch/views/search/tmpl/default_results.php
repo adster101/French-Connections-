@@ -41,7 +41,7 @@ if ($pagdata->previous->link) {
   <h1>
     <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
   </h1>
-  <div id="search-form" >
+  <div id="search-form">
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
       <?php
       if (0):
