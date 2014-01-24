@@ -10,11 +10,9 @@ defined('_JEXEC') or die;
 
 $lang = JFactory::getLanguage();
 $lang->load('com_accommodation', JPATH_SITE, null, false, true);
+$lang->load('com_shortlist', JPATH_SITE, null, false, true);
 
 $doc = JFactory::getDocument();
-$app = JFactory::getApplication();
-
-$uri = JUri::current();
 
 if (JDEBUG) {
   $_PROFILER = JProfiler::getInstance('Application');

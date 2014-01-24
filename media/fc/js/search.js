@@ -115,7 +115,8 @@ jQuery(document).ready(function() {
 
 
   jQuery('.shortlist-login').on('click', function() {
-
+    
+    // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
       remote: '/my-account?tmpl=component&layout=modal'
     });

@@ -60,6 +60,12 @@ class FcSearchViewSearch extends JViewLegacy {
       // Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');
       
+      $uri = JUri::getInstance();
+      $search_url = $uri->current() . '?' . $uri->getQuery();
+      
+      // Save the search url into the session scope
+      $app->setUserState('user.search', $search_url);
+      
       // Configure the pathway.
       if (!empty($this->crumbs)) {
         $app->getPathWay()->setPathway($this->crumbs);

@@ -59,7 +59,7 @@ if (!$user->guest) {
       ?>
     </ul>
   <?php else : ?> 
-    <div class="dropdown">
+    <div class="dropdown my-french">
 
       <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
         <?php echo htmlspecialchars($user->name); ?>

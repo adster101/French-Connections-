@@ -22,8 +22,10 @@ class AccommodationViewListing extends JViewLegacy {
     // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
     // Assign data to the view
     
+    $app = JFactory::getApplication();
+
     if (!$this->item = $this->get('Item')) {
-      
+
       throw new Exception(JText::_('WOOT'), 410);
     }
 
@@ -58,19 +60,22 @@ class AccommodationViewListing extends JViewLegacy {
     $this->offer = $this->get('Offers');
 
     // Check the expiry date here. If not valid throw an error with a 403 code?
-    
     // Get component params
     // Think of some params to store for this component?
     // Update the hit counter for this view
     $model = $this->getModel();
     $model->hit();
-   
-		// Check for errors.
-		if (count($errors = $this->get('Errors')))
-		{
-			JError::raiseWarning(404, implode("\n", $errors));
-			return false;
-		}
+
+    // Check for errors.
+    if (count($errors = $this->get('Errors'))) {
+      JError::raiseWarning(404, implode("\n", $errors));
+      return false;
+    }
+
+    // Configure the pathway.
+    if (!empty($this->crumbs)) {
+      $app->getPathWay()->setPathway($this->crumbs);
+    }
 
     // Set the document
     $this->setDocument();
@@ -89,11 +94,9 @@ class AccommodationViewListing extends JViewLegacy {
     $document = JFactory::getDocument();
 
     if ($this->item->accommodation_type == 'Bed and Breakfast') {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', 
-              $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->city, $this->item->department);
+      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->city, $this->item->department);
     } else {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', 
-              $this->item->unit_title, $this->item->property_type, $this->item->accommodation_type, $this->item->city, $this->item->department);
+      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->city, $this->item->department);
     }
 
     // Set document and page titles

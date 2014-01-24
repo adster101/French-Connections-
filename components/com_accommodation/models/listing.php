@@ -267,7 +267,7 @@ class AccommodationModelListing extends JModelForm {
         $query->where('c.review in (0,1)');
         $query->where('d.review in (0,1)');
       }
-      
+
       if (!$this->preview) {
         // TO DO: We should check the expiry date at some point.
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
@@ -640,16 +640,27 @@ class AccommodationModelListing extends JModelForm {
 
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
     $table = JTable::getInstance('Classification', 'ClassificationTable');
+    $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
 
     try {
-      $crumbs = $table->getPath($pk = $this->item->city_id);
+      $path = $table->getPath($pk = $this->item->city_id);
     } catch (Exception $e) {
 
       // Log the exception here...
       return false;
     }
 
-    return $crumbs;
+    array_shift($path); // Remove the first element as it's the root of the NST
+    // Put the path into a std class obj which is passed into the getPathway method.
+    foreach ($path as $k => $v) {
+      if ($v->parent_id) {
+        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->name = $v->title;
+      }
+    }
+
+
+    return $pathArr;
   }
 
   /**

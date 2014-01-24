@@ -3,6 +3,8 @@
 defined('_JEXEC') or die('Restricted access');
 $language = JFactory::getLanguage();
 $lang = $language->getTag();
+$app = JFactory::getApplication();
+
 $price_range = array();
 if (!empty($this->tariffs)) {
   foreach ($this->tariffs as $tariff) {
@@ -29,26 +31,27 @@ $navigator = new JLayoutFile('navigator', $basePath = JPATH_SITE . '/components/
 $this->item->reviews = $this->reviews;
 
 JHTML::_('behavior.formvalidation');
+
 // Include the content helper so we can get the route of the success article
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
-// Register the Special Offers helper file
+
+// Register the general helper class
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 ?>
-<div class="row-fluid">
-  <div class="span12">
-    <?php echo $this->loadTemplate('crumbs'); ?>
-  </div>  
-</div>
-<div class="page-header">
+
+
+<div class="page-header"> 
+  <?php echo $this->loadTemplate('social'); ?>
+
   <h1>
-    <small>
-      <?php echo $this->document->title; ?>
-    </small>
+    <?php echo $this->document->title; ?>
   </h1>
+
 </div>
+
 <?php if (count($this->offer)) : ?>
   <div class="well well-small">
     <h5>   
@@ -64,48 +67,77 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   <?php echo $this->loadTemplate('units'); ?>
 <?php endif; ?>
 <div class="row-fluid">
+  <div class="span7">
+    <!-- Image gallery -->
+    <!-- Needs go into a separate template -->
+    <div id="main" role="main">
+      <?php if (count($this->images) > 1) : ?>
+
+        <section class="slider">
+          <div id="slider" class="flexslider">
+            <ul class="slides">
+              <?php foreach ($this->images as $images => $image) : ?> 
+                <li>
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
+                  <p class="flex-caption">
+                    <?php echo $image->caption; ?>
+                  </p>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+          <div id="carousel" class="flexslider">
+            <ul class="slides">
+              <?php foreach ($this->images as $images => $image) : ?> 
+                <li>
+                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name ?>" /> 
+                </li>     
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        </section>
+      <?php else : ?>
+        <div class="panel panel-default">
+          <ul class="slides">
+            <?php foreach ($this->images as $images => $image) : ?> 
+              <li>
+                <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
+                <p class="flex-caption">
+                  <?php echo $this->escape($image->caption); ?>
+                </p>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
   <div class="span5 key-facts">
     <div class="well">
-      <div class="clearfix">	
-        <p class="pull-left">
-          <a class="btn btn-small" href="#">
-            <i class="icon-bookmark"> </i><?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_TO_FAVOURITES') ?>
-          </a>
-        </p>
-        <p class="pull-right addthis_default_style">
-          <!-- AddThis Button BEGIN -->
-          <a class="addthis_button_print " title="Print" href="#"></a>
-          <a class="addthis_button_facebook " title="Send to Facebook" href="#"></a>
-          <a class="addthis_button_twitter " title="Tweet This" href="#"></a>
-          <a class="addthis_button_email " title="Email" href="#"></a>
-          <a class="addthis_button_compact" href="#"></a>          
-          <!-- AddThis Button END -->	
-        </p>
-      </div>
-      <p>
-        <?php if ($this->tariffs) : ?> 
-          <?php if (min($price_range) == max($price_range)) : ?>
-            <span class="lead large">
-              <strong>&pound;<?php echo $min_prices['GBP'] ?></strong> 
-            </span>               
-            <?php if ($this->item->tariffs_based_on) : ?>
-              <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
-            <?php endif; ?>
-            <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)</span>
 
-          <?php else: ?>
-            <span class="lead large">
-              <strong>&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong> 
-            </span>    
+      <?php if ($this->tariffs) : ?> 
+        <?php if (min($price_range) == max($price_range)) : ?>
+          <p>
+            <span class="lead large"><strong>&pound;<?php echo $min_prices['GBP'] ?></strong></span> 
+            <span class="muted" style="text-align: right">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)</span>
+            <br />
             <?php if ($this->item->tariffs_based_on) : ?>
-              <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
+              <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
             <?php endif; ?>
-            <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)</span>
-          <?php endif; ?>
+          </p>             
+
         <?php else: ?>
-          <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
+          <span class="lead large">
+            <strong>&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong> 
+          </span>    
+          <?php if ($this->item->tariffs_based_on) : ?>
+            <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
+          <?php endif; ?>
+          <br /><span class="muted">(<i>Approx:</i> &euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)</span>
         <?php endif; ?>
-      </p>
+      <?php else: ?>
+        <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
+      <?php endif; ?>
       <!-- Max capacity/occupancy -->
       <?php if ($this->item->occupancy) : ?>
         <p class="dotted">
@@ -220,52 +252,6 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       </p>
     </div>  
   </div> 
-
-  <div class="span7">
-    <!-- Image gallery -->
-    <!-- Needs go into a separate template -->
-    <div id="main" role="main">
-      <?php if (count($this->images) > 1) : ?>
-
-        <section class="slider">
-          <div id="slider" class="flexslider">
-            <ul class="slides">
-              <?php foreach ($this->images as $images => $image) : ?> 
-                <li>
-                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
-                  <p class="flex-caption">
-                    <?php echo $image->caption; ?>
-                  </p>
-                </li>
-              <?php endforeach; ?>
-            </ul>
-          </div>
-          <div id="carousel" class="flexslider">
-            <ul class="slides">
-              <?php foreach ($this->images as $images => $image) : ?> 
-                <li>
-                  <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name ?>" /> 
-                </li>     
-              <?php endforeach; ?>
-            </ul>
-          </div>
-        </section>
-      <?php else : ?>
-        <div class="panel panel-default">
-          <ul class="slides">
-            <?php foreach ($this->images as $images => $image) : ?> 
-              <li>
-                <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
-                <p class="flex-caption">
-                  <?php echo $this->escape($image->caption); ?>
-                </p>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-      <?php endif; ?>
-    </div>
-  </div>
 </div>
 
 
@@ -623,31 +609,31 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 <script>
   jQuery(document).ready(function() {
 
-  initialize();
+    initialize();
   });
 
   function initialize() {
-  var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>, <?php echo $this->item->longitude ?>);
-  var myOptions = {
-  center: myLatLng,
-  zoom: 6,
-  mapTypeId: google.maps.MapTypeId.ROADMAP,
-  disableDefaultUI: true,
-  zoomControl: true
-  };
-  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  var marker = new google.maps.Marker({
-  position: myLatLng,
-  map: map,
-  title: "<?php echo $this->item->unit_title ?>"
-  });
-  google.maps.event.addListener(map, 'zoom_changed', function() {
-  // 3 seconds after the center of the map has changed, pan back to the
-  // marker.
-  window.setTimeout(function() {
-  map.panTo(marker.getPosition());
-  }, 3000);
-  });
+    var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>, <?php echo $this->item->longitude ?>);
+    var myOptions = {
+      center: myLatLng,
+      zoom: 6,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      zoomControl: true
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: "<?php echo $this->item->unit_title ?>"
+    });
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+      // 3 seconds after the center of the map has changed, pan back to the
+      // marker.
+      window.setTimeout(function() {
+        map.panTo(marker.getPosition());
+      }, 3000);
+    });
   }
 
 

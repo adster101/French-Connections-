@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.keepalive');
-$lang = JFactory::getLanguage();
+
 
 ?>
 <div class="login <?php echo $this->pageclass_sfx?>">

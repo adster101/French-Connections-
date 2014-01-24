@@ -395,10 +395,9 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getRefinePropertyOptions() {
 
-    // Okay, so we can't use the 'property list' technique here because we're actually interested
-    // in the properties not in the property list. If that makes sense?
-    // E.g. 200 props in a search, 50 of which are villas, we are interested in the 150 that aren't
-    // villas so we can refine further on those if we want to?
+    // This basically does the same as the getListQuery only without the refinement on property type
+    // Effectively tots up the count of all property types for the props that are returned.
+    // Filter in getListQuery maybe applying one of more of these 
 
     $date = date('Y-m-d');
 
@@ -793,27 +792,26 @@ class FcSearchModelSearch extends JModelList {
   public function getShortlist() {
 
     $db = JFactory::getDbo();
-    
+
     $user = JFactory::getUser();
-    
+
     $query = $db->getQuery(true);
-    
+
     $query->select('property_id');
     $query->from('#__shortlist');
     $query->where('user_id = ' . (int) $user->id);
-    
+
     $db->setQuery($query);
-    
+
     try {
-    
-    $rows = $db->loadObjectList('property_id');
+
+      $rows = $db->loadObjectList('property_id');
     } catch (Exception $e) {
-      
+
       return false;
     }
-    
+
     return $rows;
-    
   }
 
   /*
@@ -1020,23 +1018,27 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('match.limit', 10000);
 
     // Get the rest of the filter options such as property type, facilities and activites etc.
+    // populateFilterState is effectively setState as above only the input may be an array 
     $activities = $input->get('activities', '', 'array');
-    $property_facilities = $input->get('internal', '', 'array');
-    $external_facilities = $input->get('external', '', 'array');
-    $kitchen_facilities = $input->get('kitchen', '', 'array');
-    //$property_type = $input->get('property', '', 'array');
-    //$accommodation_type = $input->get('accommodation', '', 'array');
-    $suitability = $input->get('suitability', '', 'array');
-
-    // populateFilterState pushes all the filter IDs into the state
     $this->populateFilterState($activities, 'activities');
+    $app->setUserState('list.activities', $activities);
+    
+    $property_facilities = $input->get('internal', '', 'array');
     $this->populateFilterState($property_facilities, 'property_facilities');
-    $this->populateFilterState($external_facilities, 'external_facilities');
-    $this->populateFilterState($kitchen_facilities, 'kitchen_facilities');
-    //$this->populateFilterState($property_type, 'property_type');
-    //$this->populateFilterState($accommodation_type, 'accommodation_type');
-    $this->populateFilterState($suitability, 'suitability');
+    $app->setUserState('list.facilities', $property_facilities);
 
+    $external_facilities = $input->get('external', '', 'array');
+    $this->populateFilterState($external_facilities, 'external_facilities');
+    $app->setUserState('list.external_facilities', $external_facilities);
+
+    $kitchen_facilities = $input->get('kitchen', '', 'array');
+    $this->populateFilterState($kitchen_facilities, 'kitchen_facilities');
+    $app->setUserState('list.kitchen_facilities', $kitchen_facilities);
+
+    $suitability = $input->get('suitability', '', 'array');
+    $this->populateFilterState($suitability, 'suitability');
+    $app->setUserState('list.suitability', $suitability);
+    
     // Load the parameters.
     $this->setState('params', $params);
 
