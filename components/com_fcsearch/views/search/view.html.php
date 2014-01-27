@@ -59,23 +59,21 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->shortlist = $this->get('Shortlist');
       // Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');
-      
+
       $uri = JUri::getInstance();
       $search_url = $uri->current() . '?' . $uri->getQuery();
-      
+
       // Save the search url into the session scope
       $app->setUserState('user.search', $search_url);
-      
+
       // Configure the pathway.
       if (!empty($this->crumbs)) {
         $app->getPathWay()->setPathway($this->crumbs);
       }
-      
-      
     }
 
     $this->get('LogSearch');
-    
+
     // Include the component HTML helpers.
     JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
@@ -253,6 +251,8 @@ class FcSearchViewSearch extends JViewLegacy {
     $document->addScript(JURI::root() . 'media/fc/js/date-range.js', 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.10.1.custom.min.css');
     $document->addStyleSheet(JURI::root() . 'media/fc/css/general.css');
+    JText::script('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
+    JText::script('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS');
 
     JHtmlSidebar::addFilter(
             JText::_('JOPTION_SELECT_PUBLISHED'), 'sort_by', JHtml::_('select.options', array('beds' => 'Bedrooms'), 'value', 'text', $this->state->get('filter.published'), true)
@@ -288,7 +288,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
 
     for ($i = $start; $i < $end; $i = $i + $step) {
-      $options[] = JHtml::_('select.option', $budget . $i,$i);
+      $options[] = JHtml::_('select.option', $budget . $i, $i);
     }
 
     return $options;

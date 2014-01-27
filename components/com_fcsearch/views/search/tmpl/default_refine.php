@@ -83,154 +83,137 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
     </button>
   </div>  
 </div>
-<div class="refine">
 
-  <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
-
+<h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 
 
-
-
-  <div class="" id="">
-    <?php if ($this->localinfo->level < 5) : ?>
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <span class="accordion-toggle">
-            <?php echo JText::_($this->escape($this->localinfo->title)); ?>
-          </span>
-        </div>
-        <div id="location" class="accordion-body collapse in">
-          <div class="accordion-inner">
-            <?php foreach ($this->location_options as $key => $value) : ?>
-              <?php
-              $remove = false;
-              $tmp = explode('/', $uri); // Split the url out on the slash
-              $filters = array_slice($tmp, 3); // Remove the first 3 value of the URI
-              $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . '/' . implode('/', $filters);
-              ?>
-
-              <p>
-                <a href="<?php echo JRoute::_($route) ?>">
-                  <i class="muted <?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
-                  <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
-                </a>
-              </p>          
-            <?php endforeach ?>
-          </div>
-        </div>
+<div class="" id="">
+  <?php if ($this->localinfo->level < 5) : ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <?php echo JText::_($this->escape($this->localinfo->title)); ?>
       </div>
-    <?php endif; ?>
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#property">       
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
-        </a>
-      </div>
-      <div id="property" class="accordion-body collapse in">
-        <div class="accordion-inner">
+      <div class="panel-body">
+        <?php foreach ($this->location_options as $key => $value) : ?>
           <?php
-          $counter = 0;
-          $hide = true;
-          foreach ($this->property_options as $key => $value) :
-            ?>
-            <?php
-            $remove = false;
-            $tmp = explode('/', $uri); // Split the url out on the slash
-            $filters = array_flip(array_slice($tmp, 3)); // Remove the first 3 values of the URI
-            $filter_string = 'property_' . JApplication::stringURLSafe($this->escape($value->title)) . '_' . (int) $value->id;
+          $remove = false;
+          $tmp = explode('/', $uri); // Split the url out on the slash
+          $filters = array_slice($tmp, 3); // Remove the first 3 value of the URI
+          $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . '/' . implode('/', $filters);
+          ?>
 
-            if (!array_key_exists($filter_string, $filters)) {
-              $new_uri = implode('/', array_flip($filters));
+          <p>
+            <a href="<?php echo JRoute::_($route) ?>">
+              <i class="muted <?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
+              <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+            </a>
+          </p>          
+        <?php endforeach ?>
+      </div>
+    </div>
+  <?php endif; ?>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
+    </div>
+    <div id="property" class="panel-body">
+      <?php
+      $counter = 0;
+      $hide = true;
+      foreach ($this->property_options as $key => $value) :
+        ?>
+        <?php
+        $remove = false;
+        $tmp = explode('/', $uri); // Split the url out on the slash
+        $filters = array_flip(array_slice($tmp, 3)); // Remove the first 3 values of the URI
+        $filter_string = 'property_' . JApplication::stringURLSafe($this->escape($value->title)) . '_' . (int) $value->id;
+
+        if (!array_key_exists($filter_string, $filters)) {
+          $new_uri = implode('/', array_flip($filters));
+          $new_uri = $new_uri . '/' . $filter_string;
+          $remove = false;
+        } else {
+          unset($filters[$filter_string]);
+          $new_uri = implode('/', array_flip($filters));
+          $remove = true;
+        }
+        $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' .
+                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . '/' . $new_uri . '/' . implode('/', $filters);
+        ?>
+        <?php if ($counter >= 5 && $hide) : ?>
+          <?php $hide = false; ?>
+          <div class="hide ">
+          <?php endif; ?>
+          <p>
+            <a href="<?php echo JRoute::_($route) ?>">
+              <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>
+              <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+            </a>
+          </p>          
+          <?php $counter++; ?>
+          <?php if ($counter == count($this->property_options) && !$hide) : ?>
+          </div>
+        <?php endif; ?>
+        <?php if ($counter == count($this->property_options) && !$hide) : ?>
+          <hr class="condensed" />
+          <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+        <?php endif; ?>
+      <?php endforeach ?>
+    </div>
+  </div>
+  <?php foreach ($this->attribute_options as $key => $values) : ?>
+    <?php
+    $counter = 0;
+    $hide = true // Init a counter so we don't show all the options at once
+    ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <?php echo $this->escape($key); ?>
+      </div>
+      <div class="panel-body">
+        <?php if (count($values)) : ?>
+          <?php
+          foreach ($values as $key => $value) :
+            $new_uri = '';
+            $tmp = array_flip(explode('/', $uri));
+            $remove = '';
+
+            $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
+            // If the filter string doesn't already exist in the url, then append it to the end
+            if (!array_key_exists($filter_string, $tmp)) {
+              $new_uri = implode('/', array_flip($tmp));
               $new_uri = $new_uri . '/' . $filter_string;
               $remove = false;
             } else {
-              unset($filters[$filter_string]);
-              $new_uri = implode('/', array_flip($filters));
+              unset($tmp[$filter_string]);
+              $new_uri = implode('/', array_flip($tmp));
               $remove = true;
             }
-            $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' .
-                    JApplication::stringURLSafe($this->escape($this->localinfo->title)) . '/' . $new_uri . '/' . implode('/', $filters);
             ?>
             <?php if ($counter >= 5 && $hide) : ?>
               <?php $hide = false; ?>
               <div class="hide ">
               <?php endif; ?>
               <p>
-                <a href="<?php echo JRoute::_($route) ?>">
-                  <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>
-                  <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+                <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
+                  <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
                 </a>
-              </p>          
+              </p>
+
               <?php $counter++; ?>
-              <?php if ($counter == count($this->property_options) && !$hide) : ?>
+
+              <?php if ($counter == count($values) && !$hide) : ?>
+
               </div>
             <?php endif; ?>
-            <?php if ($counter == count($this->property_options) && !$hide) : ?>
+            <?php if ($counter == count($values) && !$hide) : ?>
               <hr class="condensed" />
+
               <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
             <?php endif; ?>
-          <?php endforeach ?>
+          <?php endforeach; ?>
         </div>
       </div>
-    </div>
-    <?php foreach ($this->attribute_options as $key => $values) : ?>
-      <?php
-      $counter = 0;
-      $hide = true // Init a counter so we don't show all the options at once
-      ?>
-      <div class="accordion-group">
-        <div class="accordion-heading">
-          <a class="accordion-toggle" data-toggle="collapse" href="#<?php echo JApplication::stringURLSafe($key) ?>">
-            <?php echo $key; ?>
-          </a>
-        </div>
-        <div id="<?php echo JApplication::stringURLSafe($key) ?>" class="accordion-body collapse in">
-          <div class="accordion-inner">
-            <?php if (count($values)) : ?>
-              <?php
-              foreach ($values as $key => $value) :
-                $new_uri = '';
-                $tmp = array_flip(explode('/', $uri));
-                $remove = '';
-
-                $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
-                // If the filter string doesn't already exist in the url, then append it to the end
-                if (!array_key_exists($filter_string, $tmp)) {
-                  $new_uri = implode('/', array_flip($tmp));
-                  $new_uri = $new_uri . '/' . $filter_string;
-                  $remove = false;
-                } else {
-                  unset($tmp[$filter_string]);
-                  $new_uri = implode('/', array_flip($tmp));
-                  $remove = true;
-                }
-                ?>
-                <?php if ($counter >= 5 && $hide) : ?>
-                  <?php $hide = false; ?>
-                  <div class="hide ">
-                  <?php endif; ?>
-                  <p>
-                    <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
-                      <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
-                    </a>
-                  </p>
-
-                  <?php $counter++; ?>
-
-                  <?php if ($counter == count($values) && !$hide) : ?>
-
-                  </div>
-                <?php endif; ?>
-                <?php if ($counter == count($values) && !$hide) : ?>
-                  <hr class="condensed" />
-
-                  <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
-                <?php endif; ?>
-              <?php endforeach; ?>
-            </div>
-          </div>
-        </div>
-      <?php endif; ?>
-    <?php endforeach; ?>
-  </div>
+    <?php endif; ?>
+  <?php endforeach; ?>
 </div>

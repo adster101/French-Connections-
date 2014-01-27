@@ -4,7 +4,7 @@
 
 // Base class
 .panel {
-  margin-bottom: @baseLineHeight;
+  margin-bottom: 18px;;
   background-color: @white;
   border: 1px solid transparent;
   border-radius: @baseBorderRadius;
@@ -35,6 +35,17 @@
     + .panel-collapse .panel-body {
       border-bottom-color: @border;
     }
+  }
+}
+
+// Optional heading
+.panel-heading {
+  padding: 9px 15px;
+  border-bottom: 1px solid transparent;
+  .border-top-radius(@baseBorderRadius);
+
+  > .dropdown .dropdown-toggle {
+    color: inherit;
   }
 }
 

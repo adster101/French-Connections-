@@ -212,6 +212,19 @@ textarea {
 .panel-body:after {
   clear: both;
 }
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-right-radius: 4px;
+  -webkit-border-top-left-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  border-top-left-radius: 4px;
+}
+.panel-heading > .dropdown .dropdown-toggle {
+  color: inherit;
+}
 .panel-title {
   margin-top: 0;
   margin-bottom: 0;
@@ -7140,21 +7153,7 @@ input[type='text'].hasDatepicker {
 }
 .panel-default > .panel-heading {
   color: #333333;
-  background-color: #ffffff;
-  border-color: #e7eae3;
-}
-.panel-default > .panel-heading + .panel-collapse .panel-body {
-  border-top-color: #e7eae3;
-}
-.panel-default > .panel-footer + .panel-collapse .panel-body {
-  border-bottom-color: #e7eae3;
-}
-.panel-default {
-  border-color: #ced4c6;
-}
-.panel-default > .panel-heading {
-  color: #333333;
-  background-color: #ffffff;
+  background-color: #f2f5f1;
   border-color: #e7eae3;
 }
 .panel-default > .panel-heading + .panel-collapse .panel-body {
@@ -7365,42 +7364,6 @@ body.site.fluid {
 /* Wells */
 .well .page-header {
   margin: 0px 0px 5px 0px;
-}
-/* Headings */
-h1,
-h2,
-h3 {
-  line-height: 27px;
-}
-h1 {
-  font-size: 22.75px;
-}
-h2 {
-  font-size: 19.5px;
-}
-h3 {
-  font-size: 16.25px;
-}
-h4 {
-  font-size: 14.3px;
-}
-h5 {
-  font-size: 13px;
-}
-h6 {
-  font-size: 9.75px;
-}
-h1 small {
-  font-size: 19.5px;
-}
-h2 small {
-  font-size: 16.25px;
-}
-h3 small {
-  font-size: 13px;
-}
-h4 small {
-  font-size: 13px;
 }
 .social-row {
   padding-bottom: 9px;

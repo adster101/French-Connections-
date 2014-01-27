@@ -2,11 +2,6 @@ var infowindow;
 
 jQuery(document).ready(function() {
 
-
-  jQuery('#sort_by').on('change', function() {
-    alert('Poop');
-  });
-
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
 
@@ -98,6 +93,20 @@ jQuery(document).ready(function() {
 
   });
 
+  jQuery('#sort_by').on('change', function() {
+
+    event.preventDefault();
+
+    var path = getPath();
+
+    // Amend the path that the form is submitted to
+    jQuery('form#property-search').attr('action', path);
+
+    // Submit the form
+    jQuery('form#property-search').submit();
+
+  });
+
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
     source: function(query, process) {
@@ -115,7 +124,7 @@ jQuery(document).ready(function() {
 
 
   jQuery('.shortlist-login').on('click', function() {
-    
+
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
       remote: '/my-account?tmpl=component&layout=modal'
@@ -172,15 +181,30 @@ jQuery(document).ready(function() {
 
 
       } else {
-        jQuery('.shortlist').addClass('muted'); 
+        jQuery('.shortlist').addClass('muted');
         el.removeClass('icon-checkbox icon-checkbox-unchecked').html('<p>Session expired.<br /> Please login.</p>');
       }
     })
   });
 
+  // Deal with the more/less options for the refine search bit.
   jQuery(".show").click(function(event) {
+
+    // Get the containing element that we want to show/hide
+    var el = jQuery(this).prev().prev();
+
+    // Prevent the default click behaviour
     event.preventDefault();
-    jQuery(this).prev().prev().toggleClass('show');
+
+    // Toggle the containing class 
+    el.toggleClass('show');
+
+    // Check the open/closed state
+    if (el.hasClass('show')) { // Must be 'open' so we want to show less options text
+      jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS);
+    } else if (el.hasClass('hide')) { // Must be 'closed' so we want to show more options texts
+      jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS);
+    }
   })
 
 }) // End of on DOM ready
