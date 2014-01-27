@@ -93,7 +93,7 @@ jQuery(document).ready(function() {
 
   });
 
-  jQuery('#sort_by').on('change', function() {
+  jQuery('#sort_by').on('change', function(event) {
 
     event.preventDefault();
 
