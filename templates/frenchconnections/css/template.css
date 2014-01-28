@@ -7130,6 +7130,10 @@ input[type='text'].hasDatepicker {
   content: "\e602";
   color: #55acee;
 }
+a.show,
+a.hide {
+  outline: none;
+}
 .typeahead,
 .pagination {
   margin-top: 0;
