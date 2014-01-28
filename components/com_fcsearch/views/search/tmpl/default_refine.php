@@ -86,14 +86,14 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
 
 <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 
+<?php if ($this->localinfo->level < 5) : ?>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <?php echo JText::_($this->escape($this->localinfo->title)); ?>
+    </div>
+    <div class="panel-body">
+      <?php if (!empty($this->location_options)) : ?>
 
-<div class="" id="">
-  <?php if ($this->localinfo->level < 5) : ?>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <?php echo JText::_($this->escape($this->localinfo->title)); ?>
-      </div>
-      <div class="panel-body">
         <?php foreach ($this->location_options as $key => $value) : ?>
           <?php
           $remove = false;
@@ -109,14 +109,20 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
             </a>
           </p>          
         <?php endforeach ?>
-      </div>
+      <?php else : ?>
+        <?php echo '...'; ?>
+      <?php endif; ?>
     </div>
-  <?php endif; ?>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
-    </div>
-    <div id="property" class="panel-body">
+  </div>
+<?php endif; ?>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
+  </div>
+  <div id="property" class="panel-body">
+    <?php if (!empty($this->location_options)) : ?>
+
       <?php
       $counter = 0;
       $hide = true;
@@ -159,61 +165,67 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
           <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
         <?php endif; ?>
       <?php endforeach ?>
+    <?php else: ?>
+      <?php echo '...'; ?>
+    <?php endif; ?>
+  </div>
+</div>
+<?php foreach ($this->attribute_options as $key => $values) : ?>
+  <?php
+  $counter = 0;
+  $hide = true // Init a counter so we don't show all the options at once
+  ?>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <?php echo JTEXT::_($this->escape($key)); ?>
+    </div>
+    <div class="panel-body">
+      <?php if (!empty($values)) : ?>
+        <?php
+        foreach ($values as $key => $value) :
+          $new_uri = '';
+          $tmp = array_flip(explode('/', $uri));
+          $remove = '';
+
+          $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
+          // If the filter string doesn't already exist in the url, then append it to the end
+          if (!array_key_exists($filter_string, $tmp)) {
+            $new_uri = implode('/', array_flip($tmp));
+            $new_uri = $new_uri . '/' . $filter_string;
+            $remove = false;
+          } else {
+            unset($tmp[$filter_string]);
+            $new_uri = implode('/', array_flip($tmp));
+            $remove = true;
+          }
+          ?>
+          <?php if ($counter >= 5 && $hide) : ?>
+            <?php $hide = false; ?>
+            <div class="hide ">
+            <?php endif; ?>
+            <p>
+              <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
+                <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
+              </a>
+            </p>
+
+            <?php $counter++; ?>
+
+            <?php if ($counter == count($values) && !$hide) : ?>
+
+            </div>
+          <?php endif; ?>
+          <?php if ($counter == count($values) && !$hide) : ?>
+            <hr class="condensed" />
+
+            <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+          <?php endif; ?>      
+
+        <?php endforeach; ?>
+      <?php else: ?>
+        <?php echo '...'; ?>
+      <?php endif; ?> 
     </div>
   </div>
-  <?php foreach ($this->attribute_options as $key => $values) : ?>
-    <?php
-    $counter = 0;
-    $hide = true // Init a counter so we don't show all the options at once
-    ?>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <?php echo JTEXT::_($this->escape($key)); ?>
-      </div>
-      <div class="panel-body">
-        <?php if (count($values)) : ?>
-          <?php
-          foreach ($values as $key => $value) :
-            $new_uri = '';
-            $tmp = array_flip(explode('/', $uri));
-            $remove = '';
 
-            $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
-            // If the filter string doesn't already exist in the url, then append it to the end
-            if (!array_key_exists($filter_string, $tmp)) {
-              $new_uri = implode('/', array_flip($tmp));
-              $new_uri = $new_uri . '/' . $filter_string;
-              $remove = false;
-            } else {
-              unset($tmp[$filter_string]);
-              $new_uri = implode('/', array_flip($tmp));
-              $remove = true;
-            }
-            ?>
-            <?php if ($counter >= 5 && $hide) : ?>
-              <?php $hide = false; ?>
-              <div class="hide ">
-              <?php endif; ?>
-              <p>
-                <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
-                  <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
-                </a>
-              </p>
-
-              <?php $counter++; ?>
-
-              <?php if ($counter == count($values) && !$hide) : ?>
-
-              </div>
-            <?php endif; ?>
-            <?php if ($counter == count($values) && !$hide) : ?>
-              <hr class="condensed" />
-
-              <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
-            <?php endif; ?>
-          <?php endforeach; ?>
-        </div>
-      </div>
-    <?php endif; ?>
-  <?php endforeach; ?>
-</div>
+<?php endforeach; ?>

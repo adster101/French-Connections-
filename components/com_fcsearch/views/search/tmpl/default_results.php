@@ -43,15 +43,7 @@ if ($pagdata->previous->link) {
     <?php echo JHtml::_('form.token'); ?>
 
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
-      <?php
-      if (0):
-        ?>
-        <div id="search-result-empty">
-          <h2><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_HEADING'); ?></h2>
-          <p><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_BODY'); ?></p>
-        </div>
-        <?php
-      else:
+        <?php 
         // Prepare the pagination string.  Results X - Y of Z
         $start = (int) $this->pagination->get('limitstart') + 1;
         $total = (int) $this->pagination->get('total');
@@ -90,6 +82,7 @@ if ($pagdata->previous->link) {
                   <p class="" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
                 </div>
               </div>
+              <?php if (count($this->results) > 0) : ?>
               <ul class="search-results list-striped">
                 <?php
                 JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
@@ -103,6 +96,11 @@ if ($pagdata->previous->link) {
                 JDEBUG ? $_PROFILER->mark('End process individual results (*10)') : null;
                 ?>
               </ul>
+              <?php else: ?>
+                <p> <strong><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_HEADING');?></strong></p>
+                          <p><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_BODY'); ?></p>
+
+              <?php endif;?> 
               <div class="search-pagination">
                 <div class="pagination">
                   <?php echo $this->pagination->getPagesLinks(); ?>
@@ -129,7 +127,6 @@ if ($pagdata->previous->link) {
           </div>
         </div>
 
-      <?php endif; ?>
 
 
       <input type="hidden" name="option" value="com_fcsearch" />

@@ -618,10 +618,6 @@ class FcSearchModelSearch extends JModelList {
       return flase;
     }
 
-    if (!$locations) {
-      return false;
-    }
-
     return $locations;
   }
 
