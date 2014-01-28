@@ -153,10 +153,13 @@ jQuery(document).ready(function() {
     var favourite = el.parent().parent().siblings('a');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
+    var userToken = document.getElementsByTagName("input")[0].name;
+
     url_params.id = dataObj.id;
     url_params.action = dataObj.action;
 
-    var url = 'index.php?option=com_shortlist&task=shortlist.update&tmpl=component';
+
+    var url = 'index.php?option=com_shortlist&task=shortlist.update&tmpl=component&' + userToken + '=1';
     jQuery.ajax({
       dateType: "json",
       url: url,

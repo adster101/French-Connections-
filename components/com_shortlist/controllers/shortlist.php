@@ -20,11 +20,11 @@ class ShortlistControllerShortlist extends JControllerLegacy {
   public function update() {
 
     // Check for request forgeries.
-    if (!JSession::checkToken()) {
-      $this->app->enqueueMessage(JText::_('JINVALID_TOKEN'));
-      $this->app->close();
+    if (!JSession::checkToken('GET')) {
+      return $this->success;
     }
-    // Get the app object
+
+// Get the app object
     $app = JFactory::getApplication();
 
     // Get the input

@@ -40,6 +40,8 @@ if ($pagdata->previous->link) {
     <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
   </h1>
   <div id="search-form">
+    <?php echo JHtml::_('form.token'); ?>
+
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
       <?php
       if (0):
@@ -126,7 +128,7 @@ if ($pagdata->previous->link) {
             ?>
           </div>
         </div>
-      
+
       <?php endif; ?>
 
 
@@ -136,12 +138,11 @@ if ($pagdata->previous->link) {
       // Possibly, this could/would be better in session scope?
       echo $this->getFilters();
       ?>
-      <?php echo JHtml::_('form.token'); ?>
     </form>
   </div>
 
 </div>
- 
+
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">

@@ -213,7 +213,7 @@ textarea {
   clear: both;
 }
 .panel-heading {
-  padding: 10px 15px;
+  padding: 9px 15px;
   border-bottom: 1px solid transparent;
   -webkit-border-top-right-radius: 4px;
   -moz-border-radius-topright: 4px;
@@ -2069,7 +2069,7 @@ table th[class*="span"],
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
 .dropdown-menu > .active > a:focus {
-  color: #333333;
+  color: #ffffff;
   text-decoration: none;
   outline: 0;
   background-color: #00308f;

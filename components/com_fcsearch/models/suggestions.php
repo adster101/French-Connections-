@@ -72,7 +72,7 @@ class FcSearchModelSuggestions extends JModelList
       $query->from($db->quoteName('#__classifications') . ' AS t');
     }
 
-		$query->where('t.title LIKE ' . $db->quote('%'.$db->escape($this->getState('input'), true) . '%'));
+		$query->where('t.title LIKE ' . $db->quote($db->escape($this->getState('input'), true) . '%'));
 
     return $query;
 	}
