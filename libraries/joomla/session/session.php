@@ -317,6 +317,7 @@ class JSession implements IteratorAggregate
 	{
 		$token = self::getFormToken();
 		$app = JFactory::getApplication();
+			$session = JFactory::getSession();
 
 		if (!$app->input->$method->get($token, '', 'alnum'))
 		{

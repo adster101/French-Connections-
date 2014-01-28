@@ -19,6 +19,11 @@ class ShortlistControllerShortlist extends JControllerLegacy {
 
   public function update() {
 
+    // Check for request forgeries.
+    if (!JSession::checkToken()) {
+      $this->app->enqueueMessage(JText::_('JINVALID_TOKEN'));
+      $this->app->close();
+    }
     // Get the app object
     $app = JFactory::getApplication();
 
@@ -81,7 +86,7 @@ class ShortlistControllerShortlist extends JControllerLegacy {
         $this->setMessage('Property removed from shortlist');
         $this->setRedirect(
                 JRoute::_(
-                        'index.php?option=' . $this->option )
+                        'index.php?option=' . $this->option)
         );
       }
     }

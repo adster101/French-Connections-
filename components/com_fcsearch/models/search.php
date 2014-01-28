@@ -758,9 +758,9 @@ class FcSearchModelSearch extends JModelList {
       $order = array(
           //1 => 'Property Type',
           //2 => 'Accommodation Type',
-          3 => 'suitability',
-          4 => 'internal_facilities',
-          5 => 'external_facilities',
+          3 => 'COM_FCSEARCH_SUITABILITY',
+          4 => 'COM_FCSEARCH_INTERNAL',
+          5 => 'COM_FCSEARCH_EXTERNAL',
               //6 => 'Activities nearby',
               //7 => 'Kitchen features',
               //8 => 'Location Type'

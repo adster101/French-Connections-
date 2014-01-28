@@ -79,7 +79,7 @@ jQuery(document).ready(function() {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
 
-  jQuery('#property-search-button').on('click', function() {
+  jQuery('#property-search-button').on('click', function(event) {
 
     event.preventDefault();
 
@@ -123,7 +123,7 @@ jQuery(document).ready(function() {
   })
 
 
-  jQuery('.shortlist-login').on('click', function() {
+  jQuery('.shortlist-login').on('click', function(event) {
 
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
@@ -173,12 +173,9 @@ jQuery(document).ready(function() {
         } else {
           el.addClass('icon-checkbox-unchecked');
           el.removeClass('icon-checkbox');
-
         } // If action is remove then add icon-checkbox else remove it
         (dataObj.action == 'remove') ? favourite.toggleClass('muted', false) : favourite.toggleClass('muted', true); // If action is remove then add icon-checkbox else remove it
-
         favourite.attr('data-action', dataObj.action);
-
 
       } else {
         jQuery('.shortlist').addClass('muted');

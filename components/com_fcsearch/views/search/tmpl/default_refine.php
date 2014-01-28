@@ -168,7 +168,7 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
     ?>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <?php echo $this->escape($key); ?>
+        <?php echo JTEXT::_($this->escape($key)); ?>
       </div>
       <div class="panel-body">
         <?php if (count($values)) : ?>

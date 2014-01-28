@@ -136,7 +136,7 @@ if ($pagdata->previous->link) {
       // Possibly, this could/would be better in session scope?
       echo $this->getFilters();
       ?>
-
+      <?php echo JHtml::_('form.token'); ?>
     </form>
   </div>
 
@@ -149,7 +149,7 @@ if ($pagdata->previous->link) {
     <h3 id="myModalLabel"><?php echo JText::_('COM_SHORTLIST_PLEASE_LOGIN') ?></h3>
   </div>
   <div class="modal-body">
-    <p>Login chump!</p>
+    <div class="loading">Please wait...</div>
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
