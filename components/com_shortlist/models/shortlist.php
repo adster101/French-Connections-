@@ -50,7 +50,7 @@ class ShortlistModelShortlist extends JModelList {
       ');
     $query->from('#__shortlist a');
     // left join property etc
-    $query->leftJoin('#__unit_versions b on b.property_id = a.property_id');
+    $query->leftJoin('#__unit_versions b on b.unit_id = a.property_id');
     $query->leftJoin('#__property c on c.id = b.property_id');
     $query->leftJoin('#__property_versions d on d.property_id = c.id');
     $query->leftJoin('#__property_images_library e on e.version_id = b.id');

@@ -43,33 +43,34 @@ if ($pagdata->previous->link) {
     <?php echo JHtml::_('form.token'); ?>
 
     <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-vertical">
-        <?php 
-        // Prepare the pagination string.  Results X - Y of Z
-        $start = (int) $this->pagination->get('limitstart') + 1;
-        $total = (int) $this->pagination->get('total');
-        $limit = (int) $this->pagination->get('limit') * $this->pagination->pagesTotal;
-        $limit = (int) ($limit > $total ? $total : $limit);
-        $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
-        ?>
-        <div class="row-fluid">
-          <div class="span-12">
-            <ul class="nav nav-tabs">
-              <li class="active"><a href="#list" data-toggle="tab">List</a></li>
-              <li><a href="#mapsearch" data-toggle="tab">Map</a></li>
-              <li><a href="#localinfo" data-toggle="tab">Info</a></li>
-              <li class="pull-right form-inline">
-                <label for="sort_by" class="control-label small">
-                  <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
-                </label>
-                <select id="sort_by" class="small input-medium" name="order">
-                  <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
-                </select>
-            </ul>
-          </div>
+      <?php
+      // Prepare the pagination string.  Results X - Y of Z
+      $start = (int) $this->pagination->get('limitstart') + 1;
+      $total = (int) $this->pagination->get('total');
+      $limit = (int) $this->pagination->get('limit') * $this->pagination->pagesTotal;
+      $limit = (int) ($limit > $total ? $total : $limit);
+      $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
+      ?>
+      <div class="row-fluid">
+        <div class="span-12">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#list" data-toggle="tab">List</a></li>
+            <li><a href="#mapsearch" data-toggle="tab">Map</a></li>
+            <li><a href="#localinfo" data-toggle="tab">Info</a></li>
+            <li class="pull-right form-inline">
+              <label for="sort_by" class="control-label small">
+                <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
+              </label>
+              <select id="sort_by" class="small input-medium" name="order">
+                <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
+              </select>
+          </ul>
         </div>
-        <div class="row-fluid">
-          <div class="tab-content span9">
-            <div class="tab-pane active" id="list">
+      </div>
+      <div class="row-fluid">
+        <div class="tab-content span9">
+          <div class="tab-pane active" id="list">
+            <?php if (count($this->results) > 0) : ?>
               <div class="row-fluid">
                 <div class="span9">
                   <div class="search-pagination hidden-phone">
@@ -79,10 +80,9 @@ if ($pagdata->previous->link) {
                   </div>
                 </div>
                 <div class="span3">
-                  <p class="" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
+                  <p class="" style="line-height:34px;text-align: right;"><?php echo $this->pagination->getResultsCounter(); ?></p>
                 </div>
               </div>
-              <?php if (count($this->results) > 0) : ?>
               <ul class="search-results list-striped">
                 <?php
                 JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
@@ -96,43 +96,48 @@ if ($pagdata->previous->link) {
                 JDEBUG ? $_PROFILER->mark('End process individual results (*10)') : null;
                 ?>
               </ul>
-              <?php else: ?>
-                <p> <strong><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_HEADING');?></strong></p>
-                          <p><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_BODY'); ?></p>
-
-              <?php endif;?> 
-              <div class="search-pagination">
-                <div class="pagination">
-                  <?php echo $this->pagination->getPagesLinks(); ?>
-                </div>
-              </div>
-
-            </div>
-            <div class="tab-pane" id="mapsearch">
-              <div id="map_canvas"></div>
-            </div>
-            <div class="tab-pane" id="localinfo">
-              <div class="row-fluid">
-                <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
-                <?php echo $this->localinfo->description; ?>
+            <?php else: ?>
+              <p class='lead'>
+                <strong><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_HEADING'); ?></strong>
+              </p>
+              <p><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_BODY'); ?></p>
+              <?php // Load the most popular search module 
+                $module = JModuleHelper::getModule('mod_popular_search');
+                echo JModuleHelper::renderModule($module);
+              ?>
+            <?php endif; ?> 
+            <div class="search-pagination">
+              <div class="pagination">
+                <?php echo $this->pagination->getPagesLinks(); ?>
               </div>
             </div>
+
           </div>
-          <div class="span3">
-            <?php
-            JDEBUG ? $_PROFILER->mark('Start process refine') : null;
-            echo $this->loadTemplate('refine');
-            JDEBUG ? $_PROFILER->mark('End process refine') : null;
-            ?>
+          <div class="tab-pane" id="mapsearch">
+            <div id="map_canvas"></div>
+          </div>
+          <div class="tab-pane" id="localinfo">
+            <div class="row-fluid">
+              <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
+              <?php echo $this->localinfo->description; ?>
+            </div>
           </div>
         </div>
+        <div class="span3">
+          <?php
+          JDEBUG ? $_PROFILER->mark('Start process refine') : null;
+          echo $this->loadTemplate('refine');
+          JDEBUG ? $_PROFILER->mark('End process refine') : null;
+          ?>
+        </div>
+      </div>
 
 
 
       <input type="hidden" name="option" value="com_fcsearch" />
       <?php
-      // Following method adds a hidden field which essentially tracks the state of the search
-      // Possibly, this could/would be better in session scope?
+// Following method adds a hidden field which essentially tracks the state of the search
+// Possibly, this could/would be better in session scope?
       echo $this->getFilters();
       ?>
     </form>

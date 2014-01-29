@@ -121,7 +121,7 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
     <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
   </div>
   <div id="property" class="panel-body">
-    <?php if (!empty($this->location_options)) : ?>
+    <?php if (!empty($this->property_options)) : ?>
 
       <?php
       $counter = 0;
@@ -131,20 +131,20 @@ $departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this
         <?php
         $remove = false;
         $tmp = explode('/', $uri); // Split the url out on the slash
-        $filters = array_flip(array_slice($tmp, 3)); // Remove the first 3 values of the URI
+        $filters = array_flip(array_slice($tmp, 3)); // The filters being applied in the current URL
         $filter_string = 'property_' . JApplication::stringURLSafe($this->escape($value->title)) . '_' . (int) $value->id;
 
-        if (!array_key_exists($filter_string, $filters)) {
-          $new_uri = implode('/', array_flip($filters));
-          $new_uri = $new_uri . '/' . $filter_string;
+        if (!array_key_exists($filter_string, $filters)) { // This property filter isn't currently applied
+          $new_uri = implode('/', array_flip($filters)); // Take the existing filters 
+          $new_uri = $filter_string . '/' . $new_uri; // And append the new filter
           $remove = false;
-        } else {
-          unset($filters[$filter_string]);
-          $new_uri = implode('/', array_flip($filters));
+        } else { // This property type filter is already being applied
+          unset($filters[$filter_string]); // Remove it from the filters array
+          $new_uri = implode('/', array_flip($filters));  // The new filter part is generated so without this filter which effectively removes the filter from the search
           $remove = true;
         }
         $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' .
-                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . '/' . $new_uri . '/' . implode('/', $filters);
+                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . '/' . $new_uri;
         ?>
         <?php if ($counter >= 5 && $hide) : ?>
           <?php $hide = false; ?>

@@ -46,6 +46,8 @@ class FcSearchViewSearch extends JViewLegacy {
 
       $this->results = false;
       $this->total = 0;
+      $this->document->setMetaData('robots', 'noindex, nofollow');
+
     } else {
 
       $this->results = $this->get('Results');

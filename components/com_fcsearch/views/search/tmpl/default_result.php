@@ -12,13 +12,13 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $
 $user = JFactory::getUser();
 
 $logged_in = ($user->guest) ? false : true;
-$action = (array_key_exists( $this->result->id,$this->shortlist)) ? 'remove' : 'add';
+$action = (array_key_exists( $this->result->unit_id,$this->shortlist)) ? 'remove' : 'add';
 ?>
 
 <li>
   <p class="pull-right">
     <?php if ($logged_in) : ?>
-    <a class="shortlist lead <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->id ?>' data-action='<?php echo $action ?>' href="#">
+    <a class="shortlist lead <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-action='<?php echo $action ?>' href="#">
       <i class="icon-heart"></i>
     </a>
     <?php else : ?>

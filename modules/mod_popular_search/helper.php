@@ -23,36 +23,7 @@ class modFcSearchHelper {
    * @return aww
    */
 
-  public static function getSearchRegions() {
 
-    $input = JFactory::getApplication()->input;
-
-    $lang = $input->get('lang', 'en');
-
-    // Get the list of regions, which are at level 2
-    $db = JFactory::getDbo();
-
-    $query = $db->getQuery(true);
-
-    $query->select('id,alias, title');
-
-    if ($lang == 'fr') {
-      $query->from($db->quoteName('#__classifications_translations') . ' AS t');
-    } else {
-      $query->from($db->quoteName('#__classifications') . ' AS t');
-    }
-
-    $query->where('level = 3');
-
-    $db->setQuery($query);
-
-    try {
-      $regions = $db->loadObjectList($key = 'id');
-    } catch (Exception $e) {
-      // Log any exception
-    }
-    return $regions;
-  }
 
   /*
    * Get the list of regions alias so we can plug those into the search map - language aware!
@@ -60,7 +31,7 @@ class modFcSearchHelper {
    * @return aww
    */
 
-  public static function getPopularSearches() {
+  public static function getPopularSearches($level = '') {
 
 
     $lang = JFactory::getLanguage()->getTag();
@@ -78,10 +49,16 @@ class modFcSearchHelper {
     } else {
       $query->join('left',$db->quoteName('#__classifications') . ' as c on c.id = a.location_id');
     }
+    
+    if (!empty($level)) {
+      $query->where('c.level = ' . (int) $level);
+    }
+    
+    $query->where('c.title is not null');
+    
     $query->group('a.location_id');
     $query->order('count desc');
-      $query->where('c.title is not null');
-  
+    
     $db->setQuery($query, 0,8);
 
     try {
