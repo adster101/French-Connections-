@@ -1,18 +1,8 @@
 jQuery(document).ready(function() {
 
-  // popover demo
-  jQuery("a[data-toggle=popover]")
-          .popover()
-          .click(function(e) {
-    e.preventDefault()
-  });
-
   if (jQuery('.hasdatepicker').length) {
     jQuery(".hasdatepicker").datepicker({dateFormat: 'yy-mm-dd'});
-  }
-  ;
-
-
+  };
 
   if (jQuery("#contactDetails").length) {
 

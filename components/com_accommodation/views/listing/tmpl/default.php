@@ -293,8 +293,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->item->location_details; ?>
     <?php endif; ?> 
     <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
-    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix"></div>
-    <p>Other stuff here</p>
+    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
   </div>
   <div class="span4">
 
@@ -605,41 +604,6 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </div>
 
 </div>
-
-<script>
-  jQuery(document).ready(function() {
-
-    initialize();
-  });
-
-  function initialize() {
-    var myLatLng = new google.maps.LatLng(<?php echo $this->item->latitude ?>, <?php echo $this->item->longitude ?>);
-    var myOptions = {
-      center: myLatLng,
-      zoom: 6,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true,
-      zoomControl: true
-    };
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    var marker = new google.maps.Marker({
-      position: myLatLng,
-      map: map,
-      title: "<?php echo $this->item->unit_title ?>"
-    });
-    google.maps.event.addListener(map, 'zoom_changed', function() {
-      // 3 seconds after the center of the map has changed, pan back to the
-      // marker.
-      window.setTimeout(function() {
-        map.panTo(marker.getPosition());
-      }, 3000);
-    });
-  }
-
-
-
-
-</script>
 
 
 

@@ -124,12 +124,10 @@ jQuery(document).ready(function() {
 
 
   jQuery('.shortlist-login').on('click', function(event) {
-
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
       remote: '/my-account?tmpl=component&layout=modal'
     });
-
   });
 
   jQuery('.shortlist').each(function() { // For each result

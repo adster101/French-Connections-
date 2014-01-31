@@ -63,7 +63,8 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->crumbs = $this->get('Crumbs');
 
       $uri = JUri::getInstance();
-      $search_url = $uri->current() . '?' . $uri->getQuery();
+      $query = ($uri->getQuery()) ? '?' . $uri->getQuery() : '';
+      $search_url = $uri->current() . $query;
 
       // Save the search url into the session scope
       $app->setUserState('user.search', $search_url);

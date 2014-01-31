@@ -7111,13 +7111,14 @@ div.modal.fade.in {
 input[type='text'].hasDatepicker {
   font-size: 11px;
 }
+/*
 .icon-google-plus,
 .icon-facebook,
 .icon-twitter {
   width: 28px;
   height: 28px;
   font-size: 19.5px;
-}
+}*/
 .icon-google-plus:before {
   content: "\e600";
   color: #dd4b39 ;

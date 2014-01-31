@@ -1,5 +1,41 @@
-jQuery(document).ready(function() {
+jQuery(window).load(function(){
+  loadGoogleMaps();
+  !function(d,s,id){
+    var js,fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){
+      js=d.createElement(s);
+      js.id=id;
+      js.src="https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js,fjs);
+    }
+  }(document,"script","twitter-wjs");
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+})
 
+
+jQuery(document).ready(function() {
+ jQuery('.shortlist').each(function() { // For each result
+
+    // Get the data-action state
+    jQuery(this).popover({// Initialise a popover
+      trigger: 'manual' // Take control of when the popover is opened
+    }).click(function(event) {
+
+      event.preventDefault(); // Prevent the default click behaviour
+      jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
+      popover = jQuery(this).data('popover'); // Get the popover data attributes
+      popover.options.content = getContent(this); // Update the content by calling getContent
+      jQuery(this).popover('toggle'); // Manually open the popover 
+    });
+
+  })
   // The slider being synced must be initialized first
   jQuery('#carousel').flexslider({
     animation: "slide",
@@ -23,54 +59,56 @@ jQuery(document).ready(function() {
   });
 
 
+});
+
+function getContent(that) {
+
+  action = jQuery(that).data('action');
+
+  if (action == 'remove') {
+    return "<span class=\'icon icon-checkbox\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+
+  }
+  return "<span class=\'icon icon-checkbox-unchecked\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
 
 
-  // Iterate over all the form fields in the contact form 
-  jQuery('#contact-form label').each(function() {
-    // Get the id of the label element and split it - derived the input field id
-    var id = this.id.split('-');
-    // Get the title and content 
-    var text = this.title.split('::');
-    // Prime each element with a popover on focus
-    popover = jQuery('#' + id[0]).popover({
-      title: text[0],
-      content: text[1],
-      placement: 'right',
-      trigger: 'focus'
-    });
+}
+
+function loadGoogleMaps() {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
+  'callback=initialize';
+  document.body.appendChild(script);
+}
+
+function initialize() {
+  var data = jQuery('#map_canvas').data();
+  var lat = data.lat;
+  var lon = data.lon;
+  var myLatLng = new google.maps.LatLng(lat,lon);
+  var myOptions = {
+    center: myLatLng,
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: true,
+    zoomControl: true
+  };
+  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: "<?php echo $this->item->unit_title ?>"
   });
-});
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    // 3 seconds after the center of the map has changed, pan back to the
+    // marker.
+    window.setTimeout(function() {
+      map.panTo(marker.getPosition());
+    }, 3000);
+  });
+}
 
-
-window.addEvent('domready', function() {
-
-  document.formvalidator.setHandler('name',
-          function(value) {
-            regex = /^[a-zA-Z]+$/;
-            console.log(regex.test(value));
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('telephone',
-          function(value) {
-            // Only allow digits, spaces and pluses
-            regex = /^[\d\s()+]{11,25}$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('message',
-          function(value) {
-            regex = /^[\w-\/., !"'\n]+$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('ukdate',
-          function(value) {
-            regex = /^(\d{2})-(\d{2})-(\d{4})$/;
-            return regex.test(value);
-          });
-  document.formvalidator.setHandler('numeric',
-          function(value) {
-            regex = /^[0-9]{1,2}/;
-            return regex.test(value);
-          });
-});
 
   
