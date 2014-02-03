@@ -1,5 +1,106 @@
 jQuery(document).ready(function() {
 
+
+
+  jQuery('.shortlist-login').on('click', function(event) {
+
+    event.preventDefault();
+    // TO DO - add the property clicked on to the shortlist in the background...
+    jQuery('#myModal').modal({
+      remote: '/my-account?tmpl=component&layout=modal'
+    });
+  });
+
+  jQuery('.shortlist').each(function() { // For each result
+
+    // Get the data-action state
+    jQuery(this).popover({// Initialise a popover
+      trigger: 'manual' // Take control of when the popover is opened
+    }).click(function(event) {
+
+      event.preventDefault(); // Prevent the default click behaviour
+      jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
+      popover = jQuery(this).data('popover'); // Get the popover data attributes
+      popover.options.content = getContent(this); // Update the content by calling getContent
+      jQuery(this).popover('toggle'); // Manually open the popover 
+    });
+
+  })
+  
+
+
+  jQuery('body').on('click', '.popover span', function(ev) { // When a pop over span is clicked
+    var el = jQuery(this);
+    var favourite = el.parent().parent().siblings('a');
+    var dataObj = favourite.data(); // Get the data attributes of the parent a element
+    var url_params = {};
+    var userToken = document.getElementsByTagName("input")[0].name;
+
+    url_params.id = dataObj.id;
+    url_params.action = dataObj.action;
+
+
+    var url = '/index.php?option=com_shortlist&task=shortlist.update&tmpl=component&' + userToken + '=1';
+    jQuery.ajax({
+      dateType: "json",
+      url: url,
+      data: url_params
+    }).done(function(data) {
+
+      if (data == 1) {
+        dataObj.action = (dataObj.action === 'add') ? 'remove' : 'add'; // action is the state the object is changing *to* not what what it is now...
+        favourite.data(dataObj);
+
+        if (dataObj.action == 'remove') {
+          el.addClass('icon-checkbox');
+          el.removeClass('icon-checkbox-unchecked');
+        } else {
+          el.addClass('icon-checkbox-unchecked');
+          el.removeClass('icon-checkbox');
+        } // If action is remove then add icon-checkbox else remove it
+        (dataObj.action == 'remove') ? favourite.toggleClass('muted', false) : favourite.toggleClass('muted', true); // If action is remove then add icon-checkbox else remove it
+        favourite.attr('data-action', dataObj.action);
+
+      } else {
+        jQuery('.shortlist').addClass('muted');
+        el.removeClass('icon-checkbox icon-checkbox-unchecked').html('<p>Session expired.<br /> Please login.</p>');
+      }
+    })
+  });
+
+
+  jQuery(function() {
+
+    var start_date = jQuery('.start_date').attr('value');
+
+    if (start_date == '') {
+      start_date = new Date();
+    }
+
+    jQuery('.start_date').datepicker({
+      numberOfMonths: 1,
+      showOn: "both",
+      dateFormat: "dd-mm-yy",
+      buttonImageOnly: true,
+      buttonImage: "/media/system/images/calendar.png",
+      showButtonPanel: true,
+      onSelect: function(selectedDate) {
+        jQuery('.end_date').datepicker("option", "minDate", selectedDate);
+      },
+      minDate: new Date()
+    });
+
+    jQuery('.end_date').datepicker({
+      numberOfMonths: 1,
+      dateFormat: "dd-mm-yy",
+      showOn: "both",
+      buttonImageOnly: true,
+      buttonImage: "/media/system/images/calendar.png",
+      minDate: start_date,
+      showButtonPanel: true
+    });
+  });
+
   if (jQuery('.hasdatepicker').length) {
     jQuery(".hasdatepicker").datepicker({dateFormat: 'yy-mm-dd'});
   };
@@ -63,7 +164,18 @@ var youSure = function() {
 
 }
 
+var getContent = function(that) {
 
+  action = jQuery(that).data('action');
+
+  if (action == 'remove') {
+    return "<span class=\'click icon icon-checkbox\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+
+  }
+  return "<span class=\'click icon icon-checkbox-unchecked\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+
+
+}
 
 var checkEditor = function(elements, index, array) {
   console.log(index);
@@ -177,31 +289,5 @@ Joomla.submitbutton = function(task)
   }
 }
 
-/* 
- *  Add some validation rules - can't do any harm
- */
-window.addEvent('domready', function() {
-
-  /* Validate the company number, must be 13 digits or so */
-  document.formvalidator.setHandler('occupancy',
-          function(value) {
-            regex = /^0*[1-9]\d*$/;
-            return regex.test(value);
-          });
-
-  /* Validate the company number, must be 13 digits or so */
-  document.formvalidator.setHandler('company',
-          function(value) {
-            regex = /^[0-9]{14}$/;
-            return regex.test(value);
-          });
-
-  /* Validate the vat number */
-  document.formvalidator.setHandler('vat',
-          function(value) {
-            regex = /^([a-zA-Z]{2})([1-9]{7,13})$/;
-            return regex.test(value);
-          });
-});
 
   

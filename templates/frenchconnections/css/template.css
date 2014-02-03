@@ -7111,14 +7111,18 @@ div.modal.fade.in {
 input[type='text'].hasDatepicker {
   font-size: 11px;
 }
-/*
-.icon-google-plus,
-.icon-facebook,
-.icon-twitter {
-  width: 28px;
-  height: 28px;
-  font-size: 19.5px;
+/* remove this and override using a more specific selector for homepage
+.icon-google-plus, .icon-facebook, .icon-twitter {
+  width:28px;
+  height:28px;
+  font-size:@baseFontSize * 1.5
 }*/
+.social-row a.shortlist i {
+  color: #003399;
+}
+.social-row a.muted i {
+  color: inherit;
+}
 .icon-google-plus:before {
   content: "\e600";
   color: #dd4b39 ;
@@ -7131,6 +7135,13 @@ input[type='text'].hasDatepicker {
   content: "\e602";
   color: #55acee;
 }
+.social-row {
+  padding: 0 0 18px;
+  box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.2);
+}
+.social-item {
+  padding: 9px;
+}
 a.show,
 a.hide {
   outline: none;
@@ -7138,6 +7149,9 @@ a.hide {
 .typeahead,
 .pagination {
   margin-top: 0;
+}
+.click {
+  cursor: pointer;
 }
 .homepage-fp .carousel {
   margin-bottom: 0;
@@ -7213,6 +7227,7 @@ a.hide {
 }
 .navigator {
   padding: 3px 0;
+  margin-top: 45px;
 }
 .navigator > li > a {
   color: #525f79;
@@ -7371,7 +7386,6 @@ body.site.fluid {
   margin: 0px 0px 5px 0px;
 }
 .social-row {
-  padding-bottom: 9px;
   -webkit-box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);

@@ -37,7 +37,7 @@ if ($pagdata->previous->link) {
 ?>
 <div class="finder">
   <h1>
-    <small><?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?></small>
+    <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
   </h1>
   <div id="search-form">
     <?php echo JHtml::_('form.token'); ?>

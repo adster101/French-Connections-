@@ -19,7 +19,7 @@ $logged_in = ($user->guest) ? false : true;
 
 <li>
   <p class="pull-right">
-    <a class="btn btn-primary btn-small" data-id='<?php echo $this->result->id ?>' href="<?php echo JRoute::_('index.php?option=com_shortlist&task=shortlist.remove&id=' . (int) $this->result->id . '&action=remove') ?>">
+    <a class="btn btn-primary btn-small" data-id='<?php echo $this->result->id ?>' href="<?php echo JRoute::_('index.php?option=com_shortlist&task=shortlist.remove&id=' . (int) $this->result->unit_id . '&action=remove') ?>">
       <i class="icon-delete small"></i>
     </a>
 
@@ -64,7 +64,7 @@ $logged_in = ($user->guest) ? false : true;
                 </a>
               </p>
             <?php endif; ?>
-            <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=listing&id=' . $this->result->id) ?>" class="btn  btn-primary pull-right">
+            <a href="<?php echo JRoute::_($route) ?>" class="btn  btn-primary pull-right">
               <?php echo JText::_('VIEW') ?>
             </a>
             </div>

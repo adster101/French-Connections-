@@ -2,14 +2,29 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 $params = $this->state->get('parameters.menu');
+$app = JFactory::getApplication();
+$search_url = $app->getUserState('user.search');
+$lang = JFactory::getLanguage();
+$lang->load('com_accommodation', JPATH_SITE);
 ?>
 
-<h1>
-  <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
-</h1>
-
-<hr />
-
+<div class="page-header">
+  <div class="row-fluid">
+    <div class="span9">
+      <h1>
+        <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
+      </h1>
+    </div>
+    <?php if (!empty($search_url)) : ?>
+      <div class="span3">
+        <a class="btn btn-large" href="<?php echo $search_url ?>" title="">    
+          <i class="icon icon-backward-2"></i>
+          <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
+        </a>
+      </div>
+    <?php endif; ?>
+  </div>
+</div>
 <?php if (count($this->items) > 0) : ?>
 
   <div class="row-fluid">

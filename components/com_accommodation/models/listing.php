@@ -29,6 +29,20 @@ class AccommodationModelListing extends JModelForm {
     $this->preview = ($input->get('preview', 0, 'boolean')) ? true : false;
   }
 
+  public function getShortlist() {
+
+    // Get an instance of the shortlist model
+    JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_shortlist/models');
+    $model = JModelLegacy::getInstance('Shortlist', 'ShortlistModel');
+
+    $user = JFactory::getUser();
+    $user_id = $user->id;
+
+    $shortlist = $model->getShortlist($user_id);
+
+    return $shortlist;
+  }
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *

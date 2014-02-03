@@ -20,6 +20,8 @@ class ShortlistModelShortlistItem extends JModelItem {
    */
   public function updateShortlist($user_id = '', $id = '', $action = 'remove') {
 
+    $app = JFactory::getApplication();
+
     if ($user_id > 0 and $id > 0) {
 
       // Initialize variables.
@@ -29,7 +31,7 @@ class ShortlistModelShortlistItem extends JModelItem {
 
       if ($action == 'remove') {
         $query->delete('#__shortlist')
-                ->where($db->quotename('user_id') . '=' . (int) $user_id . ' AND ' . $db->quotename('property_id') . '=' . $id);
+                ->where($db->quotename('user_id') . '=' . (int) $user_id . ' AND ' . $db->quotename('property_id') . '=' . (int) $id);
         // Set the query and execute the delete.
         $db->setQuery($query);
 
@@ -37,8 +39,18 @@ class ShortlistModelShortlistItem extends JModelItem {
           $db->execute();
         } catch (RuntimeException $e) {
           // Generate a logger instance for shortlist
-          JLog::add('Problem deleting property (' . $id . ') from shortlist for user (' . $user_id . ') - ' . $e->getMessage(), JLog::ALL, 'shortlist');
+          JLog::add('Problem deleting property (' . (int) $id . ') from shortlist for user (' . (int) $user_id . ') - ' . $e->getMessage(), JLog::ALL, 'shortlist');
           return false;
+        }
+
+        // Update the session
+        $shortlist = $app->getUserState('user.shortlist');
+
+        if ($shortlist) {
+          if (array_key_exists($id, $shortlist)) {
+            unset($shortlist[$id]);
+            $app->setUserState('user.shortlist', $shortlist);
+          }
         }
 
         return true;
@@ -46,7 +58,7 @@ class ShortlistModelShortlistItem extends JModelItem {
         // Create the base insert statement.
         $query->insert($db->quoteName('#__shortlist'))
                 ->columns(array($db->quoteName('user_id'), $db->quoteName('property_id'), $db->quoteName('date_created')))
-                ->values((int) $user_id . ', ' . $id . ',' . $db->quote(JFactory::getDate()));
+                ->values((int) $user_id . ', ' . (int) $id . ',' . $db->quote(JFactory::getDate()));
 
         // Set the query and execute the insert.
         $db->setQuery($query);
@@ -57,6 +69,17 @@ class ShortlistModelShortlistItem extends JModelItem {
           // Generate a logger instance for reviews
           JLog::add('Problem adding property (' . $id . ')to shortlist for user (' . $user_id . ') - ' . $e->getMessage(), JLog::ALL, 'shortlist');
           return false;
+        }
+
+        // Update the session
+        $shortlist = $app->getUserState('user.shortlist');
+
+        if ($shortlist) {
+         if (!array_key_exists($id, $shortlist)) {
+            $shortlist[$id] = $id;
+            $app->setUserState('user.shortlist', $shortlist);
+
+          }         
         }
 
         return true;

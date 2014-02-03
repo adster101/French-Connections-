@@ -24,7 +24,7 @@ class ShortlistControllerShortlist extends JControllerLegacy {
       return $this->success;
     }
 
-// Get the app object
+    // Get the app object
     $app = JFactory::getApplication();
 
     // Get the input

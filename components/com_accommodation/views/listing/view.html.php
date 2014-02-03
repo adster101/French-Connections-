@@ -58,6 +58,9 @@ class AccommodationViewListing extends JViewLegacy {
 
     // Get the special offer is one is current
     $this->offer = $this->get('Offers');
+    
+    // Get the current list of shortlisted properties for this user
+    $this->shortlist = $this->get('Shortlist');
 
     // Check the expiry date here. If not valid throw an error with a 403 code?
     // Get component params
@@ -104,14 +107,12 @@ class AccommodationViewListing extends JViewLegacy {
     $this->document->setDescription($this->title);
     $this->document->setMetaData('keywords', $this->title);
 
-    //$document->addScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=frenchconnections#async=1", 'text/javascript', true, true);
-    $document->addScript("components/com_accommodation/js/jquery.flexslider.js", 'text/javascript', true, false);
-    $document->addScript("components/com_accommodation/js/property.js", 'text/javascript', true, false);
+    $document->addScript("media/fc/js/jquery.flexslider.js", 'text/javascript', true, false);
+    $document->addScript("media/fc/js/general.js", 'text/javascript', true, false);
+    $document->addScript("media/fc/js/property.js", 'text/javascript', true, false);
     $document->addScript("media/fc/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/date-range.js", 'text/javascript', true, false);
-    $document->addStyleSheet(JURI::root() . "components/com_accommodation/css/styles.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "media/fc/css/styles.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/availability.css", 'text/css', "screen");
-    $document->addStyleSheet(JURI::root() . "components/com_accommodation/css/flexslider.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "media/fc/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
   }
 

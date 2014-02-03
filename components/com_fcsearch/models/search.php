@@ -786,28 +786,17 @@ class FcSearchModelSearch extends JModelList {
   }
 
   public function getShortlist() {
-
-    $db = JFactory::getDbo();
-
+    
+    // Get an instance of the shortlist model
+    JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_shortlist/models');
+    $model = JModelLegacy::getInstance('Shortlist', 'ShortlistModel');
+    
     $user = JFactory::getUser();
-
-    $query = $db->getQuery(true);
-
-    $query->select('property_id');
-    $query->from('#__shortlist');
-    $query->where('user_id = ' . (int) $user->id);
-
-    $db->setQuery($query);
-
-    try {
-
-      $rows = $db->loadObjectList('property_id');
-    } catch (Exception $e) {
-
-      return false;
-    }
-
-    return $rows;
+    $user_id = $user->id;
+    
+    $shortlist = $model->getShortlist($user_id);
+    
+    return $shortlist;
   }
 
   /*
