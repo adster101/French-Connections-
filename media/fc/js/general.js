@@ -8,6 +8,8 @@ jQuery(document).ready(function() {
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
       remote: '/my-account?tmpl=component&layout=modal'
+    }).on('hidden', function(){
+      
     });
   });
 

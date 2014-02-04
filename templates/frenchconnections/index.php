@@ -30,15 +30,8 @@ if ($task == "edit" || $layout == "form") {
   $fullWidth = 0;
 }
 
-// Add JavaScript Frameworks
-JHtml::_('bootstrap.framework');
-$doc->addScript('templates/' . $this->template . '/js/template.js');
-
 // Add Stylesheets
 $doc->addStyleSheet('templates/' . $this->template . '/css/template.css');
-
-// Load optional RTL Bootstrap CSS
-JHtml::_('bootstrap.loadCss', false, $this->direction);
 
 // Add current user information
 $user = JFactory::getUser();

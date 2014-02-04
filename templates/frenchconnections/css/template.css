@@ -7111,6 +7111,31 @@ div.modal.fade.in {
 input[type='text'].hasDatepicker {
   font-size: 11px;
 }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 9px 0;
+}
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small {
+  color: #333333;
+}
+.homepage h1 {
+  font-size: 22.75px;
+  background: url('/images/general/medium-sunflower.png') 0 0 no-repeat;
+  padding-left: 38px;
+}
+.blog-featured.homepage .pull-left,
+.blog-featured.homepage .pull-right {
+  margin: 0;
+}
 /* remove this and override using a more specific selector for homepage
 .icon-google-plus, .icon-facebook, .icon-twitter {
   width:28px;
@@ -7136,8 +7161,9 @@ input[type='text'].hasDatepicker {
   color: #55acee;
 }
 .social-row {
-  padding: 0 0 18px;
+  padding: 0 0 18px 0;
   box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.2);
+  margin-bottom: 18px;
 }
 .social-item {
   padding: 9px;

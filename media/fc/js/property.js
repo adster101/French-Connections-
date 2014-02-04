@@ -33,22 +33,17 @@ jQuery(document).ready(function() {
   // The slider being synced must be initialized first
   jQuery('#carousel').flexslider({
     animation: "slide",
-    controlNav: false,
-    animationLoop: false,
-    slideshow: false,
     itemWidth: 100,
     itemMargin: 5,
-    asNavFor: '#slider',
-    allowOneSlide: false
+    asNavFor: '#slider'
   });
 
   jQuery('#slider').flexslider({
-    animation: "slide",
-    controlNav: false,
+    animation: "fade",
     animationLoop: false,
     slideshow: false,
-    sync: "#carousel",
     video: "true",
+    sync:'#carousel',
     minItems: 1
   });
 });
