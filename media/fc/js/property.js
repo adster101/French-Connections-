@@ -35,7 +35,8 @@ jQuery(document).ready(function() {
     animation: "slide",
     itemWidth: 100,
     itemMargin: 5,
-    asNavFor: '#slider'
+    asNavFor: '#slider',
+    controlNav: false,
   });
 
   jQuery('#slider').flexslider({
@@ -44,7 +45,10 @@ jQuery(document).ready(function() {
     slideshow: false,
     video: "true",
     sync:'#carousel',
-    minItems: 1
+    minItems: 1,
+    controlNav: false,
+
+    
   });
 });
 
