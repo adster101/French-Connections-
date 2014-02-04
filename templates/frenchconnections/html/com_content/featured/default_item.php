@@ -250,7 +250,7 @@ $info = $this->item->params->get('info_block_position', 0);
     endif;
     ?>
 
-    <p class="readmore"><a class="" href="<?php echo $link; ?>"> <span class="icon-chevron-right"></span>
+    <p class="readmore"><a class="" href="<?php echo $link; ?>">
 
         <?php
         if (!$params->get('access-view')) :
