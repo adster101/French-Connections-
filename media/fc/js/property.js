@@ -37,6 +37,7 @@ jQuery(document).ready(function() {
     itemMargin: 5,
     asNavFor: '#slider',
     controlNav: false,
+    slideshow: false
   });
 
   jQuery('#slider').flexslider({

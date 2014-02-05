@@ -48,7 +48,7 @@ class ImportControllerProperty_listings extends JControllerForm {
         12 => 'LANGUAGE_WELSH',
         13 => 'LANGUAGE_DANISH',
         14 => 'LANGUAGE_CZECH',
-        15=> 'LANGUAGE_NORWEGIAN',
+        15 => 'LANGUAGE_NORWEGIAN',
         16 => 'LANGUAGE_SWEDISH',
         17 => 'LANGUAGE_IRISH',
         18 => 'LANGUAGE_JAPANESE',
@@ -65,12 +65,15 @@ class ImportControllerProperty_listings extends JControllerForm {
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
-      $latitude = ($line[10] > 0) ? $line[10] : '46.589069';
-      $longitude = ($line[11] > 0) ? $line[11] : '2.416992';
+      $latitude = ($line[11]) ? $line[11] : '46.589069';
+      $longitude = ($line[12]) ? $line[12] : '2.416992';
 
-      $query->select('id, title, level');
-      $query->select(
-              '(
+      if (empty($line[5])) { // If the nearest town hasn't been picked up for whatever reason, try and guess it
+
+
+        $query->select('id, title, level');
+        $query->select(
+                '(
         3959 * acos( cos( radians(' . $longitude . ') )
         * cos( radians( latitude ) )
         * cos( radians( longitude ) -
@@ -80,15 +83,20 @@ class ImportControllerProperty_listings extends JControllerForm {
         AS distance
             ');
 
-      $query->from('#__classifications');
-      $query->where('level = 5');
+        $query->from('#__classifications');
+        $query->where('level = 5');
 
-      $query->having('distance < 50');
-      $query->order('distance asc');
-      $db->setQuery($query, 0, 1);
-      $items = $db->loadRow();
+        $query->having('distance < 50');
+        $query->order('distance asc');
+        $db->setQuery($query, 0, 1);
+        $items = $db->loadRow();
 
-      $query->clear();
+        $query->clear();
+      } else { // Nearest town as per the TMG CMS
+        $items[0] = $line[5];
+      }
+
+
 
       // Do the same for airports
       if (empty($line[8])) {
@@ -107,7 +115,7 @@ class ImportControllerProperty_listings extends JControllerForm {
         $query->from('#__airports');
 
         $query->order('distance asc');
-      } else { // Loop up the airport from the airport table.
+      } else { // Look up the airport from the airport table.
         $query->select('id');
         $query->from('#__airports');
         $query->where('existing_id = ' . (int) $line[8]);
@@ -122,9 +130,9 @@ class ImportControllerProperty_listings extends JControllerForm {
       $languages_spoken_array['language_2'] = (array_key_exists(1, $languages_spoken)) ? ($langs[$languages_spoken[1]]) : '';
       $languages_spoken_array['language_3'] = (array_key_exists(2, $languages_spoken)) ? ($langs[$languages_spoken[2]]) : '';
       $languages_spoken_array['language_4'] = (array_key_exists(3, $languages_spoken)) ? ($langs[$languages_spoken[3]]) : '';
-      
+
       $registry->loadArray($languages_spoken_array);
-      
+
       $languages = (string) $registry;
 
       $query->insert('#__property_versions');
@@ -148,26 +156,25 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $line[3];
       $insert_string .= ',' . $line[4];
       $insert_string .= ',' . $db->quote($items[0]);
-      $insert_string .= ',' . $db->quote($line[5]); // Location details
-      $insert_string .= ',' . $db->quote($line[6]); // Local amenities
-      $insert_string .= ',' . $db->quote($line[7]); // Getting there
+      $insert_string .= ',' . $db->quote($line[6]); // Location details
+      $insert_string .= ',' . $db->quote($line[7]); // Local amenities
+      $insert_string .= ',' . $db->quote($line[8]); // Getting there
       $insert_string .= ',' . $db->quote($airport[0]); // Airport - sql this as per city
-      $insert_string .= ',' . $db->quote($line[9]); // Location type
-      $insert_string .= ',' . $line[10]; // Latitude
-      $insert_string .= ',' . $db->quote($line[11]); // Longitude
-      $insert_string .= ',' . $db->quote($line[12]); // Distance to coast
-      $insert_string .= ',' . $db->quote($line[13]); // video url
-      $insert_string .= ',' . $db->quote($line[14]); // Booking form
-      $insert_string .= ',' . $db->quote($line[15]); // Deposit currency
-      $insert_string .= ',' . $db->quote($line[16]); // security deposit currency
-      $insert_string .= ',' . $db->quote($line[17]); // deposit
-      $insert_string .= ',' . $db->quote($line[18]); // security deposit
-      $insert_string .= ',' . $db->quote($line[19]); // payment deadline
-      $insert_string .= ',' . $db->quote($line[20]); // evening meal
-      $insert_string .= ',' . $db->quote($line[21]); // additional booking info
-      $insert_string .= ',' . $db->quote($line[22]); // tandc
-      $insert_string .= ',' . $db->quote($line[23]); // use invoice details
-      $insert_string .= ',' . $db->quote($line[24]);
+      $insert_string .= ',' . $db->quote($line[10]); // Location type
+      $insert_string .= ',' . $line[11]; // Latitude
+      $insert_string .= ',' . $db->quote($line[12]); // Longitude
+      $insert_string .= ',' . $db->quote($line[13]); // Distance to coast
+      $insert_string .= ',' . $db->quote($line[14]); // video url
+      $insert_string .= ',' . $db->quote($line[15]); // Booking form
+      $insert_string .= ',' . $db->quote($line[16]); // Deposit currency
+      $insert_string .= ',' . $db->quote($line[17]); // security deposit currency
+      $insert_string .= ',' . $db->quote($line[18]); // deposit
+      $insert_string .= ',' . $db->quote($line[19]); // security deposit
+      $insert_string .= ',' . $db->quote($line[20]); // payment deadline
+      $insert_string .= ',' . $db->quote($line[21]); // evening meal
+      $insert_string .= ',' . $db->quote($line[22]); // additional booking info
+      $insert_string .= ',' . $db->quote($line[23]); // tandc
+      $insert_string .= ',' . $db->quote($line[24]); // use invoice details
       $insert_string .= ',' . $db->quote($line[25]);
       $insert_string .= ',' . $db->quote($line[26]);
       $insert_string .= ',' . $db->quote($line[27]);
@@ -176,13 +183,14 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $db->quote($line[30]);
       $insert_string .= ',' . $db->quote($line[31]);
       $insert_string .= ',' . $db->quote($line[32]);
-      $insert_string .= ',' . $db->quote($line[33]); // website
+      $insert_string .= ',' . $db->quote($line[33]);
+      $insert_string .= ',' . $db->quote($line[34]); // website
       $insert_string .= ',0'; // Review     
-      $insert_string .= ',' . $db->quote($line[34]); // date created
-      $insert_string .= ',' . $db->quote($line[35]); // owner
-      $insert_string .= ',' . $db->quote($line[36]); // modified
+      $insert_string .= ',' . $db->quote($line[35]); // date created
+      $insert_string .= ',' . $db->quote($line[36]); // owner
+      $insert_string .= ',' . $db->quote($line[37]); // modified
       $insert_string .= ',1'; // Modified by
-      $insert_string .= ',' . $db->quote($line[37]); // published on
+      $insert_string .= ',' . $db->quote($line[38]); // published on
       $insert_string .= ',' . $db->quote($languages); // json encoded languages spoken
 
       $query->values($insert_string);

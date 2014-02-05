@@ -84,9 +84,9 @@ class EnquiriesModelEnquiries extends JModelList
 		// Select some fields
 		$query->select('
       e.id,
-      e.forename,
-      e.surname,
-      e.email,
+      e.guest_firstname as forename,
+      e.guest_surname as surname,
+      e.guest_email as email,
       e.message,
       e.start_date,
       e.end_date,

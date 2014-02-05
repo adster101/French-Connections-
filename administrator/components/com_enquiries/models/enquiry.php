@@ -117,7 +117,7 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
 
     $subject = JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT');
-    $message = JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE', ucfirst($data->forename));
+    $message = JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE', ucfirst($data->guest_firstname));
 
     $form->setValue('reply_subject', null, $subject);
 
@@ -129,7 +129,7 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     /*
      * Check that we have the details we need to proceed
      */
-    if (empty($data['email']) || empty($data['reply_subject']) || empty($data['reply_message'])) {
+    if (empty($data['guest_email']) || empty($data['reply_subject']) || empty($data['reply_message'])) {
 
       return false;
     }

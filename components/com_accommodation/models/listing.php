@@ -67,9 +67,11 @@ class AccommodationModelListing extends JModelForm {
    * @return	JForm	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = false) {
+  public function getForm($data = array(), $loadData = true) {
+
     // Get the form.
     $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
+
     if (empty($form)) {
       return false;
     }
@@ -731,7 +733,7 @@ class AccommodationModelListing extends JModelForm {
    * @param type $params
    * @return boolean
    */
-  public function processEnquiry($data = array(), $params = '') {
+  public function processEnquiry($data = array(), $params = '', $id = '', $unit_id = '') {
 
     // Set up the variables we need to process this enquiry
     $app = JFactory::getApplication();
@@ -743,7 +745,7 @@ class AccommodationModelListing extends JModelForm {
 
     $banned_emails = explode(',', $params->get('banned_email'));
 
-    if (in_array($data['email'], $banned_emails)) {
+    if (in_array($data['guest_email'], $banned_emails)) {
       return false;
     }
 
@@ -752,25 +754,30 @@ class AccommodationModelListing extends JModelForm {
 
     $table = $this->getTable();
 
+    // Set the date created timestamp
+    $data['date_created'] = $date->toSql();
+    $data['property_id'] = $id;
+    $data['unit_id'] = $unit_id;
+
     // Check that we can save the data and save it out to the enquiry table
     if (!$table->save($data)) {
       return false;
     }
-
-    // Set the date created timestamp
-    $data['date_created'] = $date->toSql();
+    
+    // Need to get the contact detail preferences for this property/user combo
+    $item = $this->getItem();
 
     // If the property is set to use invoice details
     // Override anything set in the property version 
-    if ($this->item->use_invoice_details) {
+    if ($item->use_invoice_details) {
 
-      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $this->item->email;
+      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email;
       // This assumes that name is in synch with the user profile table first and last name fields...
-      $owner_name = $this->item->name;
+      $owner_name = htmlspecialchars($item->name);
     } else {
       // We just use the details from the contact page
-      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $this->item->email_1;
-      $owner_name = $this->item->firstname . '&nbsp;' . $this->item->surname;
+      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
+      $owner_name = htmlspecialchars($item->firstname) . '&nbsp;' . htmlspecialchars($item->surname);
     }
 
     // Need to send an SMS if a valid SMS number has been setup.
@@ -781,15 +788,16 @@ class AccommodationModelListing extends JModelForm {
 
 
     // The details of the enquiry as submitted by the holiday maker
-    $firstname = $data['forename'];
-    $surname = $data['surname'];
-    $email = $data['email'];
-    $phone = $data['phone'];
+    $firstname = $data['guest_firstname'];
+    $surname = $data['guest_surname'];
+    $email = $data['guest_email'];
+    $phone = $data['guest_phone'];
     $message = $data['message'];
     $arrival = $data['start_date'];
     $end = $data['end_date'];
     $adults = $data['adults'];
     $children = $data['children'];
+    $full_name = $firstname . ' ' . $surname;
 
     // Prepare email body
     $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, stripslashes($message), $arrival, $end, $adults, $children);
@@ -800,7 +808,7 @@ class AccommodationModelListing extends JModelForm {
     $mail->addReplyTo(array($mailfrom, $fromname));
     $mail->setSender(array($mailfrom, $fromname));
     $mail->addBCC($mailfrom, $fromname);
-    $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $this->item->unit_title));
+    $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title));
     $mail->setBody($body);
 
     if (!$mail->Send()) {
@@ -819,7 +827,7 @@ class AccommodationModelListing extends JModelForm {
     /*
      * Send sms using the simple send() call 
      */
-    if (!$sms->send($this->item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $this->item->unit_title))) {
+    if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email))) {
       return false;
     }
 

@@ -30,7 +30,6 @@ $navigator = new JLayoutFile('navigator', $basePath = JPATH_SITE . '/components/
 // TO DO - refactor so that $this->item contains all elements of the listing for use in layouts?
 $this->item->reviews = $this->reviews;
 
-JHTML::_('behavior.formvalidation');
 
 // Include the content helper so we can get the route of the success article
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
@@ -558,9 +557,9 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <?php echo $this->loadTemplate('form'); ?>
   </div>
   <div class="span4">
-    <h3><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h3> 
+    <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4> 
     <p>
-      <?php echo $this->item->name; ?><br />
+      <?php echo $this->escape($this->item->firstname); ?>&nbsp;<?php echo $this->escape($this->item->surname); ?><br />
       <span class="small">(<?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ADVERTISING_SINCE', $this->item->advertising_since)); ?>)</span>
     </p>
 

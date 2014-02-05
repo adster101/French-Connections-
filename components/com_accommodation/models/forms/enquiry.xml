@@ -2,7 +2,7 @@
 <form>
   <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
     <field 
-      name="forename"
+      name="guest_firstname"
       type="text"
       id="first-name"
       class="validate-name input-small"
@@ -17,7 +17,7 @@
 		/>
     
     <field 
-      name="surname"
+      name="guest_surname"
       type="text"
       id="last-name"
       class="validate-name input-small"
@@ -32,7 +32,7 @@
     />   
     
     <field 
-      name="email"
+      name="guest_email"
       type="email"
       maxlength="75"
       description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
@@ -44,15 +44,15 @@
 		/>
     
     <field 
-      name="phone"
-      type="text"
+      name="guest_phone"
+      type="tel"
       id="guest-telephone"
-      class="validate-telephone input-medium"
+      class="input-medium"
       maxlength="20"
       description="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_LABEL"
       message="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_VALIDATION_MESSAGE"
-      filter="ALNUM"
+      filter="tel"
       validate="telephone"
       required="true"
       labelclass="control-label"
@@ -67,11 +67,12 @@
       cols="8"
       description="COM_ACCOMMODATION_ENQUIRY_MESSAGE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
-      filter="htmlsafe"
+      filter="string"
       validate="message"
       required="required"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
+      maxlength="250"
 		/>
     
     <field name="start_date"
@@ -133,16 +134,7 @@
       validate="captcha"
       labelclass="control-label"
     />    
-    <field 
-      name="property_id" 
-      type="hidden" 
-      filter="int" 
-    />  
-    <field 
-      name="unit_id" 
-      type="hidden" 
-      filter="int" 
-    />    
+
 
     
   </fieldset>

@@ -7108,8 +7108,16 @@ div.modal.fade.in {
   font-style: normal;
   speak: none;
 }
+/* Make the date text size smaller for date pickers */
 input[type='text'].hasDatepicker {
   font-size: 11px;
+}
+/* Hide the google privacy link on the recaptcha */
+#recaptcha_privacy {
+  display: none;
+}
+#recaptcha_area {
+  background: #fff;
 }
 h1,
 h2,

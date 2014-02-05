@@ -9,7 +9,7 @@
     <field 
       description="COM_ENQUIRIES_ENQUIRY_FORENAME_DESC"
       label="COM_ENQUIRIES_ENQUIRY_FORENAME_LABEL"    
-      name="forename"
+      name="guest_firstname"
       labelclass="control-label"
       readonly="true"
       filter="unset">
@@ -17,7 +17,7 @@
     <field 
       description="COM_ENQUIRIES_ENQUIRY_SURNAME_DESC"
       label="COM_ENQUIRIES_ENQUIRY_SURNAME_LABEL"
-      name="surname"
+      name="guest_surname"
       labelclass="control-label"
       readonly="true"
       filter="unset">
@@ -25,7 +25,7 @@
     <field 
       description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
       label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
-      name="email"
+      name="guest_email"
       filter="email"
       labelclass="control-label"     
       readonly="true">
@@ -42,7 +42,7 @@
     <field 
       description="COM_ENQUIRIES_ENQUIRY_PHONE_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PHONE_LABEL"    
-      name="phone"
+      name="guest_phone"
       filter="unset"
       labelclass="control-label"     
       readonly="true">

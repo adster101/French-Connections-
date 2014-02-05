@@ -33,6 +33,8 @@ class JFormRuleTelephone extends JFormRule
 	public function test(& $element, $value, $group = null, &$input = null, &$form = null)
 	{     
 
+    $value = (string) preg_replace('/[^\d]/', '', $value);
+
     // $value is prefiltered by Jform and will only contain alpha numeric chars (+ and spaces are stripped).
     // Test that the string matches the pattern
     if (preg_match('/^[0-9]{11,25}$/', $value, $matches)) {

@@ -121,7 +121,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <?php endif; ?>
               </td>
               <td>
-                <?php echo $this->escape($item->property_id); ?>
+                <?php echo (int) $item->property_id; ?>
               </td>
 
             </tr>

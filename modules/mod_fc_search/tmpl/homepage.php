@@ -43,9 +43,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
 ?>
 <div class="well well-small clearfix">  
   <h4>Search accommodation</h4>
-
   <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>" method="POST" class="form-vertical">
-
     <label for="s_kwds" class="element-invisible">
       <?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?>
     </label>
@@ -54,7 +52,6 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
       <i class="icon-search icon-white"> </i>
       <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
     </button>
-
     <div class="row-fluid">
       <div class="span3">
         <label for="arrival">
@@ -68,7 +65,6 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         </label>
         <input id="departure" class="span9 end_date" type="text" name="departure" autocomplete="Off" value="<?php echo $departure; ?>" />    
       </div>
-
       <div class="span3">
         <label for="occupancy">
           <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
@@ -89,9 +85,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <input type="hidden" name="option" value="com_fcsearch" />
   </form>
   <div class="row-fluid">
-
     <div class="span8"> 
-
       <div class="search-map">
         <svg version = "1.1" width="100%" height="180px">
           <?php foreach ($regions as $region) : ?>
@@ -115,14 +109,9 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <div class="span4 hidden-phone">
       <p><strong><?php echo JText::_('COM_FCSEARCH_POPULAR_SEARCHES') ?></strong></p>
       <?php foreach ($popular as $k => $v) : ?>
-      <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars($v->alias). '&lang=' . $lang . '&Itemid=165'); ?>'>
-        <?php echo htmlspecialchars($v->title); ?>
-      </a>
+      <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars(trim($v->alias)). '&lang=' . $lang . '&Itemid=165');?>'><?php echo htmlspecialchars($v->title); ?></a>
       <br />
       <?php endforeach; ?>
     </div>
   </div>
 </div>
-
-
-

@@ -47,10 +47,12 @@ class ImportControllerUsers extends JControllerForm {
     JLog::addLogger(array('text_file' => 'user.import.php'), JLog::ALL, array('import_user'));
 
     $db = JFactory::getDBO();
+    
+    
 
     while (($line = fgetcsv($handle)) !== FALSE) {
 
-      // If property owners group - harcoded, oh dear
+      // If property owners group
       if ($data['user_group'] == 10) {
         // Insert a placeholder row for the user
         // Do this so we can set a primary key of our choice.

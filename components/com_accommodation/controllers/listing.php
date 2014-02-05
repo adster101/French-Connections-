@@ -102,7 +102,7 @@ class AccommodationControllerListing extends JControllerForm {
         JError::raiseWarning(403, JText::_('COM_CONTACT_SESSION_INVALID'));
 
         // Save the data in the session.
-        $app->setUserState('com_enquiry.enquiry.data', $data);
+        $app->setUserState('com_accommodation.enquiry.data', $data);
 
         // Redirect back to the contact form.
         $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
@@ -117,7 +117,11 @@ class AccommodationControllerListing extends JControllerForm {
       return false;
     }
 
+    // Validate the data. 
+    // Returns either false or the validated, filtered data.
     $validate = $model->validate($form, $data);
+    
+    // TO DO - Possibly better to move save from model to here?
 
 
     if ($validate === false) {
@@ -146,7 +150,7 @@ class AccommodationControllerListing extends JControllerForm {
 
 
     // Write the review into the reviews table...
-    if (!$model->processEnquiry($data, $params)) {
+    if (!$model->processEnquiry($validate, $params, $id, $unit_id)) {
       
       // Set the message
       $msg = JText::_('COM_ENQUIRY_PROBLEM_SENDING_ENQUIRY');
@@ -162,7 +166,7 @@ class AccommodationControllerListing extends JControllerForm {
 
 
     // Flush the data from the session
-    $app->setUserState('com_accommodation.enquiry.data', null);
+    // $app->setUserState('com_accommodation.enquiry.data', null);
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
     if ($params->get('redirect')) {
