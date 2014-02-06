@@ -1,70 +1,49 @@
 <?php
-/**
- * @package     Joomla.Site
- * @subpackage  com_contact
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
-
-defined('_JEXEC') or die;
-
-// Below will be useful to be able to use the same params for enquiries as well as reviews
-// $cparams = JComponentHelper::getParams('com_media');
-
+// No direct access to this file
+defined('_JEXEC') or die('Restricted access');
+$params = $this->state->get('parameters.menu');
 $app = JFactory::getApplication();
-
-$id = $this->state->get('property.id');
-
-
-
-jimport('joomla.html.html.bootstrap');
+$search_url = $app->getUserState('user.search');
+$lang = JFactory::getLanguage();
+$lang->load('com_accommodation', JPATH_SITE);
 ?>
 
-<h1>
-  <?php echo $this->document->title; ?>
-</h1>
+<div class="page-header">
+  <h1>
+    <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
+  </h1>
+</div>
+<?php if (count($this->items) > 0) : ?>
 
-<?php echo JText::sprintf('COM_REVIEW_SUBMIT_TESTIMONIAL_BLURB', $this->item->title); ?>
-
-
-<?php
-/**
- * @package     Joomla.Site
- * @subpackage  com_contact
- *
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
-
-defined('_JEXEC') or die;
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.formvalidation');
-JHtml::_('behavior.tooltip');
-
-$id = $this->item->id ? $this->item->id : '' ;
-
-if (isset($this->error)) : ?>
-	<div class="contact-error">
-		<?php echo $this->error; ?>
-	</div>
+  <div class="row-fluid">
+    <div class="span9">
+      <div class="search-pagination hidden-phone">
+        <div class="pagination small ">
+          <?php echo $this->pagination->getPagesLinks(); ?>
+        </div>
+      </div>
+    </div>
+    <div class="span3">
+      <p class="" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
+    </div>
+  </div>
+  <ol class="search-results">
+    <?php
+    for ($i = 0, $n = count($this->items); $i < $n; $i++) {
+      $this->result = &$this->items[$i];
+      if (!empty($this->result->id)) {
+        echo $this->loadTemplate('reviews');
+      }
+    }
+    ?>
+  </ol>
+  <div class="search-pagination">
+    <div class="pagination">
+      <?php echo $this->pagination->getPagesLinks(); ?>
+    </div>
+  </div>
+<?php else: ?>
+  <p class="lead"><?php echo JText::_('COM_REVIEWS_NO_REVIEWS'); ?></p>
 <?php endif; ?>
 
-	<form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_review&view=reviews&Itemid=167&id='.$id); ?>" method="post" class="form-validate form-horizontal">
-			<legend><?php echo JText::_('COM_REVIEWS_TESTIMONIAL_DETAILS'); ?></legend>
-			<fieldset class="adminform">
-      <?php foreach ($this->form->getFieldset('review') as $field): ?>
-        <div class="control-group">
-          <?php echo $field->label; ?>
-          <div class="controls">
-            <?php echo $field->input; ?>
-          </div>
-        </div>         
-      <?php endforeach; ?>
-			<div class="form-actions"><button class="btn btn-primary validate" type="submit"><?php echo JText::_('COM_REVIEW_REVIEW_SUBMIT'); ?></button>
-				<input type="hidden" name="option" value="com_reviews" />
-				<input type="hidden" name="task" value="reviews.submit" />
-				<?php echo JHtml::_('form.token'); ?>
-			</div>
-		</fieldset>
-	</form>
+

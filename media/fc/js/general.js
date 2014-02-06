@@ -2,15 +2,20 @@ jQuery(document).ready(function() {
 
 
 
-  jQuery('.shortlist-login').on('click', function(event) {
+  jQuery('.login').on('click', function(event) {
 
-    event.preventDefault();
+    var data = jQuery(this).data();
+    var url = data.return;
+
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
-      remote: '/my-account?tmpl=component&layout=modal'
+      remote: '/my-account?tmpl=component&layout=modal&return=' + url
     }).on('hidden', function(){
       
     });
+    
+    event.preventDefault();
+
   });
 
   jQuery('.shortlist').each(function() { // For each result

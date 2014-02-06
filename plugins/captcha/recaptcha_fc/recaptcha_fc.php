@@ -83,30 +83,38 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
       <div id="recaptcha_widget" style="display:none">
       <div class="panel panel-default">
       <div class="panel-body">
-        <div id="recaptcha_image"></div>
+      <div class="row-fluid">
+      <div class="span9">
+<div id="recaptcha_image"></div>
+</div>
+<div class="offset1 span2">
+    <a class="btn btn-small" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
+            <i class="icon icon-loop">&nbsp;</i>
+          </a>
+          
+          <a title="Get an audio CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_image btn btn-small" href="javascript:Recaptcha.switch_type(\'audio\')">
+            <i class="icon icon-music">&nbsp;</i>      
+          </a>
+          
+          <a title="Get an image CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_audio btn btn-small" href="javascript:Recaptcha.switch_type(\'image\')">
+            <i class="icon icon-picture">&nbsp;</i>      
+          </a>
+
+          <a href="javascript:Recaptcha.showhelp()">
+            Help
+          </a>
+          </div>
+          </div>
         <hr />
         <div class="recaptcha_only_if_incorrect_sol" style="color:red">
           Incorrect please try again
         </div>
-        <span class="recaptcha_only_if_image">Enter the words above:</span>
-        <span class="recaptcha_only_if_audio">Enter the numbers you hear:</span><br />
-        <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
-          <a class="btn" href="javascript:Recaptcha.reload()">
-            <i class="icon icon-loop"></i>&nbsp;Get another CAPTCHA
-          </a>
-          
-          <a class="recaptcha_only_if_image btn" href="javascript:Recaptcha.switch_type(\'audio\')">
-            <i class="icon icon-music"></i>&nbsp;           
-            Get an audio CAPTCHA
-          </a>
-          
-          <a class="recaptcha_only_if_audio btn" href="javascript:Recaptcha.switch_type(\'image\')">
-            Get an image CAPTCHA
-          </a>
-          </p>
-          <a href="javascript:Recaptcha.showhelp()">
-            Help
-          </a>
+        <!--<label class="recaptcha_only_if_image">Enter the words above:</label>
+        <label class="recaptcha_only_if_audio">Enter the numbers you hear:</label><br />-->
+        
+        <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" />
+        <img id="recaptcha_logo" alt="" width="71" height="36" src="http://www.google.com/recaptcha/api/img/clean/logo.png" class="pull-right">
+      
     <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Lcn8uoSAAAAAKOMUkucId275W171KEZk02l6cgm"></script>
     <noscript>
       <iframe 

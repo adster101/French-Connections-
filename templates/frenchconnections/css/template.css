@@ -7101,6 +7101,12 @@ div.modal.fade.in {
   font-weight: normal;
   font-style: normal;
 }
+.search-field {
+  display: inline-block;
+}
+.no-bottom-margin {
+  margin-bottom: 0;
+}
 /* Use the following CSS code if you want to have a class per icon */
 [class^="icon-"]:before,
 [class*=" icon-"]:before {
@@ -7140,6 +7146,10 @@ h6 small {
   background: url('/images/general/medium-sunflower.png') 0 0 no-repeat;
   padding-left: 38px;
 }
+.small-h1 {
+  font-size: 16.25px;
+  line-height: 18px;
+}
 .blog-featured.homepage .pull-left,
 .blog-featured.homepage .pull-right {
   margin: 0;
@@ -7169,8 +7179,8 @@ h6 small {
   color: #55acee;
 }
 .social-row {
-  padding: 0 0 18px 0;
-  box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.2);
+  padding: 0 0 9px 0;
+  box-shadow: 0px 4px 4px -2px rgba(0, 0, 0, 0.1);
   margin-bottom: 18px;
 }
 .social-item {
@@ -7417,11 +7427,6 @@ body.site.fluid {
 /* Wells */
 .well .page-header {
   margin: 0px 0px 5px 0px;
-}
-.social-row {
-  -webkit-box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
 }
 /* Module */
 .module-header {

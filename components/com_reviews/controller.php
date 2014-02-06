@@ -8,21 +8,16 @@ defined('_JEXEC') or die('Restricted access');
  */
 class ReviewsController extends JControllerLegacy {
 
-  public function display($cachable = false, $urlparams = array()) {
+  public function display($cachable = true, $urlparams = array()) {
+    
     $input = JFactory::getApplication()->input;
 
 
     $user = JFactory::getUser();
 
-    // Not really the appropriate place to check create permissions for reviews
-    if (!$user->authorise('review.submit.new', 'com_reviews')) {
-
-      //throw new Exception(JText::_('COM_REVIEW_URL_INCORRECT'), 404);
-    }
-
     $safeurlparams = array(
         'id' => 'INT',
-        'lang' => 'CMD'
+        'lang' => 'CMD',
     );
 
     // Set the default view name and format from the Request.

@@ -22,7 +22,7 @@ $action = (array_key_exists( $this->result->unit_id,$this->shortlist)) ? 'remove
       <i class="icon-heart"></i>
     </a>
     <?php else : ?>
-    <a class="shortlist-login lead" href="#">
+    <a class="login lead" href="#" data-return="<?php echo base64_encode('/shortlist'); ?>">
       <i class="icon-heart muted"></i>
     </a>    
     <?php endif; ?>

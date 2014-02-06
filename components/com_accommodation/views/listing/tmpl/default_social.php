@@ -4,12 +4,11 @@ defined('_JEXEC') or die('Restricted access');
 
 $app = JFactory::getApplication();
 $user = JFactory::getUser();
-$action = 'add';
 $uri = JUri::current();
-$search_url = $app->getUserState('user.search');
 $logged_in = ($user->guest) ? false : true;
-// Amend below to check a sessions var
 $action = (array_key_exists( $this->item->unit_id,$this->shortlist)) ? 'remove' : 'add';
+$search_url = $app->getUserState('user.search');
+
 
 // The layout for the anchor based navigation on the property listing
 $modal = new JLayoutFile('shortlist_modal', $basePath = JPATH_SITE . '/components/com_accommodation/layouts');
@@ -19,7 +18,7 @@ $modal = new JLayoutFile('shortlist_modal', $basePath = JPATH_SITE . '/component
   <div class="social-row clearfix">
     <?php if (!empty($search_url)) : ?>
       <div class="span9">
-        <a class="btn" href="<?php echo $search_url ?>" title="">    
+        <a class="btn btn-small" href="<?php echo $search_url ?>" title="">    
           <i class="icon icon-backward-2"></i>
           <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
         </a>
@@ -27,18 +26,18 @@ $modal = new JLayoutFile('shortlist_modal', $basePath = JPATH_SITE . '/component
     <?php endif; ?>
     <div class="span3 <?php echo ($search_url) ? '' : 'offset9'; ?>">
       <?php if ($logged_in) : ?>
-        <a class="btn pull-left shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="#">
+        <a class="btn btn-small pull-left shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="#">
           <i class="icon-heart"></i>
           <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
         </a>
       <?php else : ?>
-        <a class="btn shortlist-login" href="#">
+        <a class="btn btn-small login" href="#">
           <i class="icon-heart muted"></i>
           <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
         </a>    
       <?php endif; ?>
       <div class="dropdown pull-right">
-        <a class="dropdown-toggle btn" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
+        <a class="dropdown-toggle btn btn-small" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
           <i class="icon icon-facebook"></i>
           <i class="icon icon-twitter"></i>
           <i class="icon icon-google-plus"></i>

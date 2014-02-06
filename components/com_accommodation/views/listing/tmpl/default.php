@@ -45,7 +45,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 <div class="page-header"> 
   <?php echo $this->loadTemplate('social'); ?>
 
-  <h1>
+  <h1 class="small-h1">
     <?php echo $this->document->title; ?>
   </h1>
 
@@ -189,13 +189,15 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php endif; ?>
       <!-- External facilities inc pool type-->
       <?php if (array_key_exists('External Facilities', $this->unit_facilities) || (array_key_exists('Suitability', $this->unit_facilities))) : ?>
-        <p class="dotted clearfix">
+        <p class=" clearfix">
           <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?> 
             <span>
               <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
               <?php echo implode(', ', $this->unit_facilities['External Facilities']) ?>
-            </span><br /><br />
+            </span>
           <?php endif; ?>  
+        </p>
+        <p>
           <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
             <span>
               <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY'); ?></strong>
@@ -206,41 +208,8 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php endif; ?>
 
       <hr class="clear" />
-
-      <?php if ($this->reviews) : ?>
-        <figure>
-          <blockquote class="quote">
-            <?php echo strip_tags(JHtml::_('string.truncate', $this->reviews[0]->review_text, 100)); ?>
-
-            <p>
-              <a href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#reviews">
-                <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_READ_MORE_REVIEWS', count($this->reviews)); ?>
-              </a>
-            </p>
-          </blockquote> 
-          <figcaption>
-            <cite>
-
-              <?php echo $this->reviews[0]->guest_name; ?>
-              <?php
-              $date = new DateTime($this->reviews[0]->date);
-              echo $date->format('D, d M Y');
-              ?>
-            </cite> 
-          </figcaption>
-        </figure>
-      <?php else: ?>
-        <p>
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_NO_REVIEWS'); ?>
-        </p>
-      <?php endif; ?>
-      <p>
-        <a href="<?php echo JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=194&id=' . $this->item->property_id); ?>">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
-        </a>
-      </p>
-
-      <hr />
+      <?php echo $this->loadTemplate('reviews'); ?>
+    
       <p class="center">
         <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  

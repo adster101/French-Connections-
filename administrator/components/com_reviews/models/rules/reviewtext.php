@@ -40,7 +40,7 @@ class JFormRuleReviewText extends JFormRule
 					return false;
 		}
 
-    if (strlen($value) > 1000 ) {   
+    if (strlen($value) > 1250 ) {   
       return false;
     }
     

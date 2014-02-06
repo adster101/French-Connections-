@@ -65,7 +65,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
     <fieldset class="form-inline">
 
     </fieldset>
-    <div class="form-actions"><button class="btn btn-primary btn-large validate" type="submit"><?php echo JText::_('JSUBMIT'); ?></button>
+    <div class="form-actions"><button class="btn btn-primary btn-large validate pull-right" type="submit"><?php echo JText::_('COM_ACCOMMODATION_SEND_ENQUIRY'); ?></button>
       <input type="hidden" name="option" value="com_accommodation" />
       <input type="hidden" name="task" value="listing.enquiry" />
     </div>

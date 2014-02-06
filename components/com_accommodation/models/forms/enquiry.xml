@@ -83,7 +83,6 @@
       label="COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL"
       filter="string"
       validate="date"
-      required="true"
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
@@ -96,7 +95,6 @@
       label="COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL"
       filter="string"
       validate="date"
-      required="true"
       message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />  

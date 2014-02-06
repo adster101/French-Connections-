@@ -30,6 +30,9 @@ jQuery(window).load(function() {
 })
 
 jQuery(document).ready(function() {
+
+  jQuery('#recaptcha_widget a').tooltip();
+  
   // The slider being synced must be initialized first
   jQuery('#carousel').flexslider({
     animation: "slide",
