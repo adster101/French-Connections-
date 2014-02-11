@@ -32,15 +32,12 @@ $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove
       <?php endif; ?>
     </p> 
     <h3>
-      <a href="<?php echo JRoute::_($route); ?>">
-        <?php echo $this->escape($this->result->unit_title); ?>
-      </a>
+      <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->unit_title)); ?></a>
       <small>
         <?php echo $this->result->property_type . ', ' . $this->result->location_title ?>
       </small>
     </h3>
   </div>
-
   <div class="row-fluid">
     <div class="span10 clearfix">
       <a href="<?php echo $route ?>" class="thumbnail pull-left">
@@ -52,7 +49,7 @@ $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove
       <?php echo JHtml::_('string.truncate', $this->result->description, 175, true, false); ?>
       </p>
     </div>
-    <div class="span2 right result-links">
+    <div class="span2 align-right result-links">
       <p>
         <a href="<?php echo JRoute::_('index.php?option=com_accommodation&view=listing&id=' . $this->result->id) ?>" class="btn btn-primary">
           <?php echo JText::_('VIEW') ?>

@@ -83,52 +83,51 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
 
     return '
       <div id="recaptcha_widget" style="display:none">
-      <div class="panel panel-default">
-      <div class="panel-body">
-      <div class="row-fluid">
-      <div class="span9">
-<div id="recaptcha_image"></div>
-</div>
-<div class="offset1 span2">
-    <a class="btn btn-small" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
-            <i class="icon icon-loop">&nbsp;</i>
-          </a>
-          
-          <a title="Get an audio CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_image btn btn-small" href="javascript:Recaptcha.switch_type(\'audio\')">
-            <i class="icon icon-music">&nbsp;</i>      
-          </a>
-          
-          <a title="Get an image CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_audio btn btn-small" href="javascript:Recaptcha.switch_type(\'image\')">
-            <i class="icon icon-picture">&nbsp;</i>      
-          </a>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="row-fluid">
+              <div class="span9">
+                <div id="recaptcha_image"></div>
+              </div>
+              <div class="offset1 span2">
+                <a class="btn btn-small" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
+                  <i class="icon icon-loop">&nbsp;</i>
+                </a>
+                <a title="Get an audio CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_image btn btn-small" href="javascript:Recaptcha.switch_type(\'audio\')">
+                  <i class="icon icon-music">&nbsp;</i>      
+                </a>
+                <a title="Get an image CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_audio btn btn-small" href="javascript:Recaptcha.switch_type(\'image\')">
+                  <i class="icon icon-picture">&nbsp;</i>      
+                </a>
 
-          <a href="javascript:Recaptcha.showhelp()">
-            Help
-          </a>
+                <a href="javascript:Recaptcha.showhelp()">
+                  Help
+                </a>
+              </div>
+            </div>
+          <hr />
+          <div class="recaptcha_only_if_incorrect_sol" style="color:red">
+            Incorrect please try again
           </div>
-          </div>
-        <hr />
-        <div class="recaptcha_only_if_incorrect_sol" style="color:red">
-          Incorrect please try again
-        </div>
-        <!--<label class="recaptcha_only_if_image">Enter the words above:</label>
-        <label class="recaptcha_only_if_audio">Enter the numbers you hear:</label><br />-->
+          <!--<label class="recaptcha_only_if_image">Enter the words above:</label>
+          <label class="recaptcha_only_if_audio">Enter the numbers you hear:</label><br />-->
         
-        <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" />
-        <img id="recaptcha_logo" alt="" width="71" height="36" src="http://www.google.com/recaptcha/api/img/clean/logo.png" class="pull-right">
+          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" />
+          <img id="recaptcha_logo" alt="" width="71" height="36" src="http://www.google.com/recaptcha/api/img/clean/logo.png" class="pull-right" />
       
-    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=' . $pubkey . '"></script>
-    <noscript>
-      <iframe 
-        src="http://www.google.com/recaptcha/api/noscript?k=' .$pubkey . '" 
-        height="300" 
-        width="500" 
-        frameborder="0">
-      </iframe><br>
-      <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-      <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
-    </noscript>
-    </div>
+          <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=' . $pubkey . '"></script>
+          <noscript>
+            <iframe 
+              src="http://www.google.com/recaptcha/api/noscript?k=' .$pubkey . '" 
+              height="300" 
+              width="500" 
+              frameborder="0">
+            </iframe><br>
+            <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+            <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+          </noscript>
+        </div>
+      </div>
     </div>';
   }
 

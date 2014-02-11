@@ -54,9 +54,7 @@ $limit = (int) $this->pagination->get('limit') * $this->pagination->pagesTotal;
 $limit = (int) ($limit > $total ? $total : $limit);
 $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
 ?>
-<h1 class="small-h1">
-  <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
-</h1>
+
 
 <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="form-inline-header">
   <?php echo JHtml::_('form.token'); ?>
@@ -124,7 +122,9 @@ $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
     <input type="hidden" name="option" value="com_fcsearch" />
   </div>
 </form>
-
+<h1 class="small-h1">
+  <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
+</h1>
 <div class="row-fluid">
   <div class="span-12">
     <ul class="nav nav-tabs">
