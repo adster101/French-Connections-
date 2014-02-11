@@ -136,13 +136,6 @@ $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
   </div>
 </div>
 <div class="row-fluid">
-  <div class="span3">
-    <?php
-    JDEBUG ? $_PROFILER->mark('Start process refine') : null;
-    echo $this->loadTemplate('refine');
-    JDEBUG ? $_PROFILER->mark('End process refine') : null;
-    ?>
-  </div>
   <div class="tab-content span9">
     <div class="tab-pane active" id="list">
       <?php if (count($this->results) > 0) : ?>
@@ -188,7 +181,13 @@ $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
       </div>
     </div>
   </div>
-
+  <div class="span3">
+    <?php
+    JDEBUG ? $_PROFILER->mark('Start process refine') : null;
+    echo $this->loadTemplate('refine');
+    JDEBUG ? $_PROFILER->mark('End process refine') : null;
+    ?>
+  </div>
 </div>
 
 

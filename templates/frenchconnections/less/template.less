@@ -113,14 +113,36 @@
 	speak: none;
 }
 
+/* 
+  Styling for search results 
+*/
+
+.right {
+  text-align:right;
+}
+
+.result-links .icon {
+  width:20px;
+  height:20px;
+  line-height:20px;
+}
+
+/* Adjust the search results slight for different viewports */
+@media (max-width: 767px) {
+
+  .right { 
+    text-align:left;
+  }
+  
+  .search-results .result-links p {
+    float:right;
+    margin-left:10px;
+  }
+}
+
 /* Make the date text size smaller for date pickers */
 input[type='text'].hasDatepicker {
   font-size:11px;
-}
-
-/* Hide the google privacy link on the recaptcha */
-#recaptcha_privacy {
-  display:none;
 }
 
 #recaptcha_area {

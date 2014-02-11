@@ -1,5 +1,6 @@
 jQuery(document).ready(function() {
 
+  jQuery('.result-links a.login').tooltip({animation:false});
 
 
   jQuery('.login').on('click', function(event) {
