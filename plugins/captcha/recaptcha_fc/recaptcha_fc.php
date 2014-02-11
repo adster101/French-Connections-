@@ -79,6 +79,8 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    * @since  2.5
    */
   public function onDisplay($name, $id, $class) {
+    $pubkey = $this->params->get('public_key', '');
+
     return '
       <div id="recaptcha_widget" style="display:none">
       <div class="panel panel-default">
@@ -115,10 +117,10 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
         <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" />
         <img id="recaptcha_logo" alt="" width="71" height="36" src="http://www.google.com/recaptcha/api/img/clean/logo.png" class="pull-right">
       
-    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6Lcn8uoSAAAAAKOMUkucId275W171KEZk02l6cgm"></script>
+    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=" ' . $pubkey . ' ""></script>
     <noscript>
       <iframe 
-        src="http://www.google.com/recaptcha/api/noscript?k=6Lcn8uoSAAAAAKOMUkucId275W171KEZk02l6cgm" 
+        src="http://www.google.com/recaptcha/api/noscript?k="' .$pubkey . '"" 
         height="300" 
         width="500" 
         frameborder="0">

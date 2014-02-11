@@ -257,7 +257,7 @@ var show_contact = function(that) {
 }
 
 
-// Fires on occasion when a button has it bound to it's onclick event
+/* Fires on occasion when a button has it bound to it's onclick event
 Joomla.submitbutton = function(task)
 {
 
@@ -295,7 +295,7 @@ Joomla.submitbutton = function(task)
       return false;
     }
   }
-}
+}*/
 
 
   
