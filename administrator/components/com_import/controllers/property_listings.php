@@ -58,19 +58,19 @@ class ImportControllerProperty_listings extends JControllerForm {
     );
 
     $registry = new JRegistry;
-
+    // Get the nearest city/town based on the lat and long
+    $db = JFactory::getDbo();
+    $db->truncateTable('#__property_versions');
+    
     while (($line = fgetcsv($handle, 0, $delimiter = '|')) !== FALSE) {
 
-      // Get the nearest city/town based on the lat and long
-      $db = JFactory::getDbo();
+
       $query = $db->getQuery(true);
 
       $latitude = ($line[11]) ? $line[11] : '46.589069';
       $longitude = ($line[12]) ? $line[12] : '2.416992';
 
       if (empty($line[5])) { // If the nearest town hasn't been picked up for whatever reason, try and guess it
-
-
         $query->select('id, title, level');
         $query->select(
                 '(
@@ -99,7 +99,7 @@ class ImportControllerProperty_listings extends JControllerForm {
 
 
       // Do the same for airports
-      if (empty($line[8])) {
+      if (empty($line[9])) {
         $query->select('id');
         $query->select(
                 '(
@@ -118,13 +118,13 @@ class ImportControllerProperty_listings extends JControllerForm {
       } else { // Look up the airport from the airport table.
         $query->select('id');
         $query->from('#__airports');
-        $query->where('existing_id = ' . (int) $line[8]);
+        $query->where('existing_id = ' . (int) $line[9]);
       }
 
       $db->setQuery($query, 0, 1);
       $airport = $db->loadRow();
 
-      $languages_spoken = array_unique(explode(',', $line[38]));
+      $languages_spoken = array_unique(explode(',', $line[39]));
 
       $languages_spoken_array['language_1'] = $langs[$languages_spoken[0]];
       $languages_spoken_array['language_2'] = (array_key_exists(1, $languages_spoken)) ? ($langs[$languages_spoken[1]]) : '';

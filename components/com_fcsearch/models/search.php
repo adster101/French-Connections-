@@ -1034,6 +1034,7 @@ class FcSearchModelSearch extends JModelList {
 
   /*
    * Method to generate the filter state ids for later filtering in the db
+   * TO DO - Modify this function to return an array of attribute 'aliases' 
    *
    */
 
@@ -1045,6 +1046,7 @@ class FcSearchModelSearch extends JModelList {
 
       foreach ($input as $filter) {
         // Assume that this is in the form of e.g. activity_Golf_51
+        // Can easily be adjusted to return alias instead of id
         $id = (int) array_pop(explode('_', $filter));
 
         $ids[] = $id;
@@ -1171,7 +1173,8 @@ class FcSearchModelSearch extends JModelList {
   /*
    * Method to generate various attribute filter options,
    * add them to the query and then return the query object
-   *
+   * TO DO - Modify this function to join on attribute rather than ID 
+   * 
    * @return  query  The search query being built
    */
 

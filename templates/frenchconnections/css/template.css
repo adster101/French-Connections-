@@ -7101,6 +7101,14 @@ div.modal.fade.in {
   font-weight: normal;
   font-style: normal;
 }
+.offscreen {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .search-field {
   display: inline-block;
 }
@@ -7136,9 +7144,6 @@ div.modal.fade.in {
   }
 }
 /* Make the date text size smaller for date pickers */
-input[type='text'].hasDatepicker {
-  font-size: 11px;
-}
 #recaptcha_area {
   background: #fff;
 }

@@ -49,7 +49,7 @@ class JFormFieldClassificationParent extends JFormFieldList
 		if ($id = $this->form->getValue('id')) {    
       $query->where('a.id != ' . $id);
     }
-          $query->where('a.level < 4');
+          $query->where('a.level < 5');
 
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
 		$query->order('a.lft ASC');

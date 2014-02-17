@@ -12,15 +12,42 @@ $app = JFactory::getApplication();
 
 
 $uri = str_replace('http://', '', JUri::current());
+$refine_budget_min = $this->getBudgetFields();
+$refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 
-
+$min_budget = $this->state->get('list.min_price');
+$max_budget = $this->state->get('list.max_price');
 ?>
 
 
 
 
 <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <?php echo JText::_('COM_FCSEARCH_REFINE_PRICE'); ?>
+  </div>
+  <div class="panel-body">
+    <div class="search-field">
+      <label class="" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
+      <select id="min_price" name="min" class="span12">
+        <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', 'min_' . $min_budget); ?>
+      </select>
+    </div>
+    <div class="search-field">
+      <label class="" for="max_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE'); ?></label>
+      <select id="max_price" name="max" class="span12">
+        <?php echo JHtml::_('select.options', $refine_budget_max, 'value', 'text', 'max_' . $max_budget); ?>
+      </select>
+    </div>
+    <div class="search-field">
+      <button class="property-search-button btn btn-primary btn-small pull-right" href="#">
+        <?php echo JText::_('COM_FCSEARCH_UPDATE') ?>
+      </button>     
+    </div>
 
+  </div>
+</div>
 <?php if ($this->localinfo->level < 5) : ?>
   <div class="panel panel-default">
     <div class="panel-heading">

@@ -83,7 +83,7 @@ class ClassificationTableClassification extends JTableNested
     
     if ($return) {
       // Rebuild the path for this classification
-      //$this->rebuildPath($this->id);      
+      $this->rebuildPath($this->id);      
     }
     
     return $return;

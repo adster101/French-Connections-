@@ -155,6 +155,7 @@ class AccommodationModelListing extends JModelForm {
         a.sms_nightwatchman,
         b.id as unit_id,
         c.location_details,
+        c.local_amenities,
         c.getting_there,
         c.use_invoice_details,
         c.latitude,
@@ -675,6 +676,10 @@ class AccommodationModelListing extends JModelForm {
       }
     }
 
+    // Add the PRN as the final element
+    $total = count($path);
+    $pathArr->$total->link = '';
+    $pathArr->$total->name = JText::sprintf('COM_ACCOMMODATION_PROPERTY_REFERENCE', (int) $this->item->property_id);
 
     return $pathArr;
   }

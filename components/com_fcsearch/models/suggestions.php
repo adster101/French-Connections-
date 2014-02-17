@@ -73,7 +73,7 @@ class FcSearchModelSuggestions extends JModelList
     }
 
 		$query->where('t.title LIKE ' . $db->quote($db->escape($this->getState('input'), true) . '%'));
-
+    $query->Where('t.published = 1');
     return $query;
 	}
 

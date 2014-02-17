@@ -98,8 +98,20 @@
 	font-style: normal;
 }
 
+
+.offscreen {
+  position:absolute;
+  left:-10000px; 
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
 .search-field {
   display: inline-block;
+
+
 }
 
 .no-bottom-margin { 
@@ -142,7 +154,7 @@
 
 /* Make the date text size smaller for date pickers */
 input[type='text'].hasDatepicker {
-  font-size:11px;
+  //font-size:11px;
 }
 
 #recaptcha_area {

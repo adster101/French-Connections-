@@ -17,6 +17,14 @@ $occupancy = '';
 $arrival = '';
 $departure = '';
 
+// The layout for the anchor based navigation on the property listing
+$search_layout = new JLayoutFile('search', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
+$search_data = new stdClass;
+$search_data->searchterm = '';
+$search_data->bedrooms = '';
+$search_data->occupancy = '';
+$search_data->arrival = '';
+$search_data->departure = '';
 
 // The following are coordinates that trace out the outline shape of a region. They should really be stored in the classifications table
 $area_map[146] = "106,118,105,119,104,119,103,120,102,119,102,120,102,121,101,122,101,124,102,126,102,126,103,129,103,130,103,131,103,132,104,133,106,132,106,133,105,135,107,136,106,137,106,138,104,139,104,140,104,140,103,140,102,140,102,140,102,142,100,142,97,144,96,143,96,144,96,145,96,146,96,147,95,148,94,147,92,148,91,147,90,148,89,148,89,148,87,147,86,148,85,148,85,148,85,149,83,149,83,151,83,152,84,153,86,153,86,153,86,154,87,155,87,156,86,157,87,157,87,158,85,159,87,161,88,160,90,161,89,162,87,162,86,163,85,164,83,164,83,165,84,165,85,166,86,166,87,165,87,167,87,168,88,168,89,167,90,167,91,166,93,167,94,168,96,168,96,167,97,166,98,167,100,165,101,165,103,167,103,165,102,164,101,163,102,157,101,156,102,156,102,155,101,154,101,152,102,153,107,150,107,150,109,149,108,148,110,146,110,147,113,146,113,145,115,144,115,144,116,144,117,145,117,146,118,146,118,146,119,145,120,144,121,142,122,141,123,141,124,138,126,136,125,135,124,134,124,132,121,129,121,131,120,130,119,130,118,131,116,130,115,130,115,129,114,128,114,127,113,124,112,122,110,120,109,120,109,121,108,121,107,121,106,119,106,118,106,118";
@@ -43,49 +51,14 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
 ?>
 <div class="well well-small clearfix">  
   <h4>Search accommodation</h4>
+
   <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>" method="POST" class="form-vertical">
-    <label for="s_kwds" class="element-invisible">
-      <?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?>
-    </label>
-    <input id="s_kwds" class="span9 typeahead" type="text" name="s_kwds" autocomplete="Off" value="" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>"/> 
-    <button id="property-search-button" class="btn btn-primary pull-right" href="#">
-      <i class="icon-search icon-white"> </i>
-      <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-    </button>
-    <div class="row-fluid">
-      <div class="span3">
-        <label for="arrival">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
-        </label>
-        <input id="arrival" class="span9 start_date" type="text" name="arrival" autocomplete="Off" value="<?php echo $arrival; ?>"/>    
-      </div>
-      <div class="span3">
-        <label for="departure">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
-        </label>
-        <input id="departure" class="span9 end_date" type="text" name="departure" autocomplete="Off" value="<?php echo $departure; ?>" />    
-      </div>
-      <div class="span3">
-        <label for="occupancy">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
-        </label>
-        <select id="occupancy" class="span12" name="occupancy">
-          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>          
-        </select>
-      </div>
-      <div class="span3">
-        <label for="bedrooms">
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
-        </label>
-        <select id="bedrooms" class="span12" name="bedrooms">
-          <?php echo JHtml::_('select.options', array('' => '...', 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, '10+' => 10), 'value', 'text', $bedrooms); ?>
-        </select>
-      </div>
-    </div>
+     <?php echo $search_layout->render($search_data); ?>
+
     <input type="hidden" name="option" value="com_fcsearch" />
   </form>
   <div class="row-fluid">
-    <div class="span8"> 
+    <div class="span7"> 
       <div class="search-map">
         <svg version = "1.1" width="100%" height="180px">
           <?php foreach ($regions as $region) : ?>
@@ -106,7 +79,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
         </svg>
       </div>
     </div>
-    <div class="span4 hidden-phone">
+    <div class="span5">
       <p><strong><?php echo JText::_('COM_FCSEARCH_POPULAR_SEARCHES') ?></strong></p>
       <?php foreach ($popular as $k => $v) : ?>
       <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars(trim($v->alias)). '&lang=' . $lang . '&Itemid=165');?>'><?php echo htmlspecialchars($v->title); ?></a>

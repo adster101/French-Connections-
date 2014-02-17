@@ -79,7 +79,7 @@ jQuery(document).ready(function() {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
 
-  jQuery('#property-search-button').on('click', function(event) {
+  jQuery('.property-search-button').on('click', function(event) {
 
     event.preventDefault();
 
