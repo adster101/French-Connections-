@@ -23,6 +23,8 @@ if (!empty($this->item->languages_spoken)) {
   }
 }
 
+$amenities = ($this->item->local_amenities) ? json_decode($this->item->local_amenities) : array();
+
 // The layout for the anchor based navigation on the property listing
 $navigator = new JLayoutFile('navigator', $basePath = JPATH_SITE . '/components/com_accommodation/layouts');
 
@@ -207,7 +209,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
       <hr class="clear" />
       <?php echo $this->loadTemplate('reviews'); ?>
-    
+
       <p class="center">
         <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
@@ -258,11 +260,16 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <?php if ($this->item->location_details) : ?>
       <?php echo $this->item->location_details; ?>
     <?php endif; ?> 
-    <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
-    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+    <?php if (!empty($amenities)) : ?>
+      <h4>Local amenities</h4>
+      <?php foreach ($amenities as $k => $v) : ?>
+        <p><strong><?php echo JText::_('COM_ACCOMMODATION_' . $this->escape(strtoupper($k))); ?></strong>
+        <?php echo JString::ucwords($this->escape($v)); ?></p>
+      <?php endforeach; ?>
+    <?php endif; ?>
   </div>
-  <div class="span4">
-    <?php var_dump($this->item->local_amenities); ?>
+  <div class="span4">   
+    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
   </div>
 </div>
 
