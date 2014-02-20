@@ -47,7 +47,7 @@ jQuery(document).ready(function() {
 
           marker.setTitle((i + 1).toString());
           content = '<div class="media"><a class="pull-left" href="' + data[i].link + '"><img class="media-object" src="' + data[i].thumbnail + '"/></a><div class="media-body"><h4 class="media-heading"><a href="' + data[i].link + '">' + data[i].unit_title + '</a></h4><p>' + data[i].description + '</p></div></div>';
-          attachContent(marker, content);
+          attachContent(marker, content,300);
 
           markers[i] = marker;
 
@@ -62,7 +62,9 @@ jQuery(document).ready(function() {
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
-      });
+      }).done(function(){
+
+    });
     }
 
     jQuery('#map_canvas').show();

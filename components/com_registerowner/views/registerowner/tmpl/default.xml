@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-  <layout title="Register owner menu item">
-    <message>There ain't no params twat face...</message>
+  <layout title="COM_REGISTEROWNER_VIEW_DEFAULT">
+    <message>
+      <![CDATA[COM_REGISTEROWNER_VIEW_DEFAULT_DESC]]>
+    </message>
   </layout>
   <fields
     name="params"

@@ -1,7 +1,13 @@
 jQuery(document).ready(function() {
 
-  jQuery('.result-links a.login').tooltip({animation:false});
 
+  // Load the google maps crap, only if there is a #map on the page.
+  // Use #map generically and #location_map for property specific pages etc
+  if (jQuery('#map').length) {
+    loadGoogleMaps('initialise');
+  }
+
+  jQuery('.result-links a.login').tooltip({animation: false});
 
   jQuery('.login').on('click', function(event) {
 
@@ -11,10 +17,10 @@ jQuery(document).ready(function() {
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
       remote: '/my-account?tmpl=component&layout=modal&return=' + url
-    }).on('hidden', function(){
-      
+    }).on('hidden', function() {
+
     });
-    
+
     event.preventDefault();
 
   });
@@ -34,7 +40,7 @@ jQuery(document).ready(function() {
     });
 
   })
-  
+
 
 
   jQuery('body').on('click', '.popover span', function(ev) { // When a pop over span is clicked
@@ -77,41 +83,46 @@ jQuery(document).ready(function() {
   });
 
 
+
+
+
   jQuery(function() {
+    if (jQuery('.start_date').length) {
 
-    var start_date = jQuery('.start_date').attr('value');
+      jQuery(".hasdatepicker").datepicker({dateFormat: 'yy-mm-dd'});
 
-    if (start_date == '') {
-      start_date = new Date();
+      var start_date = jQuery('.start_date').attr('value');
+
+      if (start_date == '') {
+        start_date = new Date();
+      }
+
+      jQuery('.start_date').datepicker({
+        numberOfMonths: 1,
+        showOn: "both",
+        dateFormat: "dd-mm-yy",
+        buttonImageOnly: true,
+        buttonImage: "/media/system/images/calendar.png",
+        showButtonPanel: true,
+        onSelect: function(selectedDate) {
+          jQuery('.end_date').datepicker("option", "minDate", selectedDate);
+        },
+        minDate: new Date()
+      });
+
+      jQuery('.end_date').datepicker({
+        numberOfMonths: 1,
+        dateFormat: "dd-mm-yy",
+        showOn: "both",
+        buttonImageOnly: true,
+        buttonImage: "/media/system/images/calendar.png",
+        minDate: start_date,
+        showButtonPanel: true
+      });
     }
-
-    jQuery('.start_date').datepicker({
-      numberOfMonths: 1,
-      showOn: "both",
-      dateFormat: "dd-mm-yy",
-      buttonImageOnly: true,
-      buttonImage: "/media/system/images/calendar.png",
-      showButtonPanel: true,
-      onSelect: function(selectedDate) {
-        jQuery('.end_date').datepicker("option", "minDate", selectedDate);
-      },
-      minDate: new Date()
-    });
-
-    jQuery('.end_date').datepicker({
-      numberOfMonths: 1,
-      dateFormat: "dd-mm-yy",
-      showOn: "both",
-      buttonImageOnly: true,
-      buttonImage: "/media/system/images/calendar.png",
-      minDate: start_date,
-      showButtonPanel: true
-    });
+    ;
   });
 
-  if (jQuery('.hasdatepicker').length) {
-    jQuery(".hasdatepicker").datepicker({dateFormat: 'yy-mm-dd'});
-  };
 
   if (jQuery("#contactDetails").length) {
 
@@ -166,6 +177,65 @@ jQuery(document).ready(function() {
 
 
 });
+
+  var infowindow;
+
+// The five markers show a secret message when clicked
+// but that message is not within the marker's instance data
+function attachContent(marker, num, width) {
+  google.maps.event.addListener(marker, 'click', function() {
+
+    if (infowindow)
+      infowindow.close();
+
+    infowindow = new google.maps.InfoWindow({
+      content: num,
+      maxWidth: width
+    });
+    infowindow.open(marker.get('map'), marker);
+  });
+}
+
+var loadGoogleMaps = function(func) {
+
+  if (typeof google === 'object' && typeof google.maps === 'object') {
+    window[func];
+  } else {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
+            'callback=' + func;
+    document.body.appendChild(script);
+  }
+}
+
+function initialise() {
+  var data = jQuery('#map').data();
+  var lat = data.lat;
+  var lon = data.lon;
+  var myLatLng = new google.maps.LatLng(lat, lon);
+  var myOptions = {
+    center: myLatLng,
+    zoom: 6,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    disableDefaultUI: false,
+    zoomControl: true
+  };
+  console.log(myOptions);
+  var map = new google.maps.Map(document.getElementById("map"), myOptions);
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map
+  });
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    // 3 seconds after the center of the map has changed, pan back to the
+    // marker.
+    window.setTimeout(function() {
+      map.panTo(marker.getPosition());
+    }, 1500);
+  });
+}
 
 var youSure = function() {
   return Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
@@ -258,44 +328,44 @@ var show_contact = function(that) {
 
 
 /* Fires on occasion when a button has it bound to it's onclick event
-Joomla.submitbutton = function(task)
-{
-
-  if (task == '')
-  {
-    return false;
-  }
-  else
-  {
-    var isValid = true;
-    var action = task.split('.');
-    if (action[1] != 'cancel' && action[1] != 'close')
-    {
-      var forms = $$('form.form-validate');
-      for (var i = 0; i < forms.length; i++)
-      {
-        if (!document.formvalidator.isValid(forms[i]))
-        {
-          isValid = false;
-          break;
-        }
-      }
-    }
-
-    if (isValid)
-    {
-      // Unbind the onbeforeunload event
-      window.onbeforeunload = null;
-      Joomla.submitform(task);
-      return true;
-    }
-    else
-    {
-      alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE', ''));
-      return false;
-    }
-  }
-}*/
+ Joomla.submitbutton = function(task)
+ {
+ 
+ if (task == '')
+ {
+ return false;
+ }
+ else
+ {
+ var isValid = true;
+ var action = task.split('.');
+ if (action[1] != 'cancel' && action[1] != 'close')
+ {
+ var forms = $$('form.form-validate');
+ for (var i = 0; i < forms.length; i++)
+ {
+ if (!document.formvalidator.isValid(forms[i]))
+ {
+ isValid = false;
+ break;
+ }
+ }
+ }
+ 
+ if (isValid)
+ {
+ // Unbind the onbeforeunload event
+ window.onbeforeunload = null;
+ Joomla.submitform(task);
+ return true;
+ }
+ else
+ {
+ alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE', ''));
+ return false;
+ }
+ }
+ }*/
 
 
   

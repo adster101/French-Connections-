@@ -319,6 +319,39 @@ class AccommodationModelListing extends JModelForm {
   }
 
   /**
+   * Function to get maps items to show on the location map.
+   * At present, is only 'places of interest'
+   * 
+   */
+  public function getMapItems($lat = '', $lon = '') {
+
+    $db = JFactory::getDbo();
+
+    $query = $db->getQuery(true);
+
+    $query->select("id, left(description, 125) as description, title, latitude, longitude, alias");
+
+    $query->from('#__places_of_interest a');
+
+    $query->where('
+        ( 3959 * acos(cos(radians(' . $lat . ')) *
+          cos(radians(a.latitude)) *
+          cos(radians(a.longitude) - radians(' . $lon . '))
+          + sin(radians(' . $lat . '))
+          * sin(radians(a.latitude))) < 50)
+        ');
+
+    $db->setQuery($query);
+    $rows = $db->loadObjectList();
+    foreach($rows as $k=>$v) { 
+      $rows[$k]->description =JHtml::_('string.truncate', $v->description, 75, true, false);
+      $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=456&place=' . $v->alias);
+    }
+    
+    return $rows;
+  }
+
+  /**
    * Couple of functions to return the faciliies for unit and property
    * Required 'cos the native union bit in joomla doesn't work.
    * 
@@ -768,7 +801,7 @@ class AccommodationModelListing extends JModelForm {
     if (!$table->save($data)) {
       return false;
     }
-    
+
     // Need to get the contact detail preferences for this property/user combo
     $item = $this->getItem();
 

@@ -76,7 +76,7 @@ class FcSearchControllerMapSearch extends JControllerLegacy {
     foreach ($results as &$result) {
       $result->link = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $result->id . '&unit_id=' . (int) $result->unit_id);
       $result->thumbnail = '/images/property/' . $result->unit_id . '/thumbs/' . $result->thumbnail;
-      $result->description = JHtml::_('string.truncate', $result->description, 175, true, false);
+      $result->description = JHtml::_('string.truncate', $result->description, 125, true, false);
     }
 
 

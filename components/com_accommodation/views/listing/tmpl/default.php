@@ -32,7 +32,6 @@ $navigator = new JLayoutFile('navigator', $basePath = JPATH_SITE . '/components/
 // TO DO - refactor so that $this->item contains all elements of the listing for use in layouts?
 $this->item->reviews = $this->reviews;
 
-
 // Include the content helper so we can get the route of the success article
 require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
@@ -42,7 +41,6 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 ?>
-
 
 <div class="page-header"> 
   <?php echo $this->loadTemplate('social'); ?>
@@ -264,12 +262,19 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <h4>Local amenities</h4>
       <?php foreach ($amenities as $k => $v) : ?>
         <p><strong><?php echo JText::_('COM_ACCOMMODATION_' . $this->escape(strtoupper($k))); ?></strong>
-        <?php echo JString::ucwords($this->escape($v)); ?></p>
+          <?php echo JString::ucwords($this->escape($v)); ?></p>
       <?php endforeach; ?>
     <?php endif; ?>
   </div>
   <div class="span4">   
-    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+    <p class="key text-right">
+      <span>
+        <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
+        &nbsp;&ndash;&nbsp;
+        <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
+      </span>
+    </p>
   </div>
 </div>
 

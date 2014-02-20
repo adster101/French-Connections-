@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-  <layout title="Link to accommodation component">
-    <message>There ain't no params twat face...</message>
+  <layout title="COM_ACCOMMODATION_VIEW_DEFAULT">
+    <message>
+      <![CDATA[COM_ACCOMMODATION_VIEW_DEFAULT_DESC]]>
+    </message>
   </layout>
   <fields
-    name="params"
-    addfieldpath="/administrator/components/com_reviews/models/fields"
-  >
+    name="params" 
+    addfieldpath="/administrator/components/com_reviews/models/fields">
     <fieldset name="basic">
       <field
         name="exchange_rate_eur"

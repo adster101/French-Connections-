@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-  <layout title="COM_FINDER_MENU_SEARCH_VIEW_DEFAULT_TITLE">
-    <help
-      key = "JHELP_MENUS_MENU_ITEM_FINDER_SEARCH"
-    />
+  <layout title="COM_FCSEARCH_MENU_SEARCH_VIEW_DEFAULT_TITLE">
+    <help key = "JHELP_MENUS_MENU_ITEM_FINDER_SEARCH" />
     <message>
-			<![CDATA[COM_FINDER_MENU_SEARCH_VIEW_DEFAULT_TEXT]]>
+			<![CDATA[COM_FCSEARCH_MENU_SEARCH_VIEW_DEFAULT_TEXT]]>
     </message>
   </layout>
 
@@ -84,20 +82,20 @@
         <option value="">JGLOBAL_USE_GLOBAL</option>
       </field>
       <field type="spacer" />
-          <field name="cache"
-             type="radio"
-             class="btn-group"
-             default="0"
-             validate="options"
-             label="Cache results"
-             description="Switch on the cache or not">
+      <field name="cache"
+                 type="radio"
+                 class="btn-group"
+                 default="0"
+                 validate="options"
+                 label="Cache results"
+                 description="Switch on the cache or not">
         <option value="1">JYES</option>
         <option value="0">JNO</option>
       </field>
-        <field name="cache_time"
-             type="text"
-             label="Cache time in minutes"
-             size="30"
+      <field name="cache_time"
+               type="text"
+               label="Cache time in minutes"
+               size="30"
       />
     </fieldset>
     <fieldset name="advanced">

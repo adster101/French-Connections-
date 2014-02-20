@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-        <layout title="COM_SHORTLIST_VIEW_DEFAULT_TITLE">
-                <message>
-                        <![CDATA[COM_SHORTLIST_VIEW_DEFAULT_DESC]]>
-                </message>
-        </layout>
+	<layout title="COM_REVIEWS_VIEW_DEFAULT">
+		<message>COM_REVIEWS_VIEW_DEFAULT_DESC</message>
+	</layout>
+	<fields
+		name="request"
+		addfieldpath="/administrator/components/com_reviews/models/fields"
+	>
+	</fields>
 </metadata>
+
