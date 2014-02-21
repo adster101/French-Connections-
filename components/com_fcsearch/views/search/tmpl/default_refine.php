@@ -61,7 +61,8 @@ $max_budget = $this->state->get('list.max_price');
           $remove = false;
           $tmp = explode('/', $uri); // Split the url out on the slash
           $filters = array_slice($tmp, 3); // Remove the first 3 value of the URI
-          $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . '/' . implode('/', $filters);
+          $filters = (!empty($filters)) ? '/' . implode('/', $filters) : '';
+          $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters;
           ?>
 
           <p>
@@ -98,15 +99,16 @@ $max_budget = $this->state->get('list.max_price');
 
         if (!array_key_exists($filter_string, $filters)) { // This property filter isn't currently applied
           $new_uri = implode('/', array_flip($filters)); // Take the existing filters 
-          $new_uri = $filter_string . '/' . $new_uri; // And append the new filter
+          $new_uri = (!empty($filters)) ? '/' . $filter_string . '/' . $new_uri : '/' . $filter_string; // And append the new filter only adding new uri it it's not empty
           $remove = false;
         } else { // This property type filter is already being applied
           unset($filters[$filter_string]); // Remove it from the filters array
           $new_uri = implode('/', array_flip($filters));  // The new filter part is generated so without this filter which effectively removes the filter from the search
+          $new_uri = ($new_uri) ? '/' . $new_uri : '';
           $remove = true;
         }
         $route = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' .
-                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . '/' . $new_uri;
+                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . $new_uri;
         ?>
         <?php if ($counter >= 5 && $hide) : ?>
           <?php $hide = false; ?>

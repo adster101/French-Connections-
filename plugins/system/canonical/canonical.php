@@ -9,10 +9,6 @@
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
 
-// Set the separator as some idiot removed it from the core
-if (!defined('DS'))
-  define('DS', DIRECTORY_SEPARATOR);
-
 jimport('joomla.plugin.plugin');
 
 class plgSystemCanonical extends JPlugin {

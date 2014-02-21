@@ -47,7 +47,7 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->results = false;
       $this->total = 0;
       $this->document->setMetaData('robots', 'noindex, nofollow');
-
+      $this->pagination = '';
     } else {
 
       $this->results = $this->get('Results');
@@ -143,31 +143,9 @@ class FcSearchViewSearch extends JViewLegacy {
       }
     }
 
-
     $fields = '<input type="hidden" name="filter" value="' . implode('/', $filter_str) . '" id="filter" />';
 
     return $fields;
-  }
-
-  /**
-   * Method to get the layout file for a search result object.
-   *
-   * @param   string  $layout  The layout file to check. [optional]
-   *
-   * @return  string  The layout file to use.
-   *
-   * @since   2.5
-   */
-  protected function getLayoutFile($layout = null) {
-    // Create and sanitize the file name.
-    $file = $this->_layout . '_' . preg_replace('/[^A-Z0-9_\.-]/i', '', $layout);
-
-    // Check if the file exists.
-    jimport('joomla.filesystem.path');
-    $filetofind = $this->_createFileName('template', array('name' => $file));
-    $exists = JPath::find($this->_path['template'], $filetofind);
-
-    return ($exists ? $layout : 'result');
   }
 
   /**
@@ -181,18 +159,27 @@ class FcSearchViewSearch extends JViewLegacy {
    */
   protected function prepareDocument() {
 
-    $app = JFactory::getApplication();
     $document = JFactory::getDocument();
+    $app = JFactory::getApplication();
+    $input = $app->input;
 
-    $title = null;
+    // Get the pagination object 
+    if ($this->pagination) {
+      $pages = $this->pagination->getData();
+    }
+    
+    $property_type = $input->get('property', '', 'array');
+    $accommodation_type = $input->get('accommodation', '', 'array');
 
-    $title = JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm'));
+    // Add next and prev links to head
+    $this->addHeadLinks($pages, $document);
 
-    $title = UCFirst($title);
+    // Add canonical link depending on the property type
+    //$this->addCanonicalLink($property_type, $document);
+    // Location title - e.g. the location being searched on
+    $title = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 
 
-    $property_type = $app->input->get('property', '', 'array');
-    $accommodation_type = $app->input->get('accommodation', '', 'array');
 
     if ($property_type) {
       $parts = explode('_', $property_type[0]);
@@ -216,9 +203,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $bedrooms = $this->state->get('list.bedrooms');
     $occupancy = $this->state->get('list.occupancy');
 
-
     $activities = $app->input->get('activities', array(), 'array');
-
 
     $activityStr = (string) '';
 
@@ -239,9 +224,6 @@ class FcSearchViewSearch extends JViewLegacy {
 
     $this->document->setTitle($title);
 
-
-
-
     // Configure the document meta-description.
     if (!empty($this->explained)) {
       $explained = $this->escape(html_entity_decode(strip_tags($this->explained), ENT_QUOTES, 'UTF-8'));
@@ -260,6 +242,51 @@ class FcSearchViewSearch extends JViewLegacy {
     JHtmlSidebar::addFilter(
             JText::_('JOPTION_SELECT_PUBLISHED'), 'sort_by', JHtml::_('select.options', array('beds' => 'Bedrooms'), 'value', 'text', $this->state->get('filter.published'), true)
     );
+  }
+
+  /**
+   * Given the property_type datadetermines if the user is searching on more than one property type
+   * and if so adds a canonical link to indicate which page is the 'master'
+   * 
+   * @param type $pages
+   * @param type $document
+   * 
+   * @return void
+   */
+  private function addCanonicalLink(array $property_type, $document) {
+
+    if (count($property_type) > 1) {
+
+      //$uri = str_replace('http://', '', JUri::current());
+      //array_pop($property_type);
+      //$document->addHeadLink($pages->next->link, 'next', 'rel');
+    }
+
+    // If we have next links then add a rel=next head link
+    //if ($pages->next->link) {
+    //}
+  }
+
+  /**
+   * Given the pagination object determines if there are next/previous links and adjusts the head 
+   * part of the document accordingly
+   * 
+   * @param type $pages
+   * @param type $document
+   * 
+   * @return void
+   */
+  private function addHeadLinks($pages, $document) {
+
+    // If we have next links then add a rel=next head link
+    if ($pages->next->link) {
+      $document->addHeadLink($pages->next->link, 'next', 'rel');
+    }
+
+    // If we have next links then add a rel=prev head link
+    if ($pages->previous->link) {
+      $document->addHeadLink($pages->previous->link, 'prev', 'rel');
+    }
   }
 
   /**

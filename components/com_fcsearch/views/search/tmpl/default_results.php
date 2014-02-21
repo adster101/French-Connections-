@@ -12,7 +12,6 @@ $lang = JFactory::getLanguage();
 $lang->load('com_accommodation', JPATH_SITE, null, false, true);
 $lang->load('com_shortlist', JPATH_SITE, null, false, true);
 
-$doc = JFactory::getDocument();
 
 if (JDEBUG) {
   $_PROFILER = JProfiler::getInstance('Application');
@@ -25,15 +24,6 @@ $ordering = 'order_' . $this->state->get('list.sort_column') . '_' . $this->stat
 
 $sortFields = $this->getSortFields();
 $s_kwds = $this->state->get('list.searchterm', '');
-$pagdata = $this->pagination->getData();
-
-if ($pagdata->next->link) {
-  $doc->addHeadLink($pagdata->next->link, 'next', 'rel');
-}
-
-if ($pagdata->previous->link) {
-  $doc->addHeadLink($pagdata->previous->link, 'prev', 'rel');
-}
 
 // The layout for the anchor based navigation on the property listing
 $search_layout = new JLayoutFile('search', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
