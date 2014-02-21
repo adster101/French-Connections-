@@ -345,7 +345,7 @@ class AccommodationModelListing extends JModelForm {
     $rows = $db->loadObjectList();
     foreach($rows as $k=>$v) { 
       $rows[$k]->description =JHtml::_('string.truncate', $v->description, 75, true, false);
-      $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=456&place=' . $v->alias);
+      $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=453&place=' . $v->alias);
     }
     
     return $rows;

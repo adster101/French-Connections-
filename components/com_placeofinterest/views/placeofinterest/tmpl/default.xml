@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-        <layout title="COM_PLACEOFINTEREST_VIEW_DEFAULT_TITLE">
-                <message>
+  <layout title="COM_PLACEOFINTEREST_VIEW_DEFAULT_TITLE">
+    <message>
                         <![CDATA[COM_PLACEOFINTEREST_VIEW_DEFAULT_DESC]]>
-                </message>
-        </layout>
+    </message>
+  </layout>
+  <fields
+    name="params" 
+    addfieldpath="/administrator/components/com_reviews/models/fields">
+    <fieldset name="basic">
+      <field
+        name="exchange_rate_eur"
+        type="text"
+        label="EUR exchange rate"
+      />
+     
+    </fieldset>
+  </fields>
 </metadata>
