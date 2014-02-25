@@ -26,8 +26,9 @@ function FcSearchBuildRoute(&$query) {
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
 
-  $uri = JFactory::getUri();
-
+  $uri = JUri::getInstance();
+  $uri->setPath('');
+  
   if (empty($query['Itemid'])) {
     $menuItem = $menu->getActive();
   } else {  

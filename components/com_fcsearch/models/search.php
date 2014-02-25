@@ -117,7 +117,7 @@ class FcSearchModelSearch extends JModelList {
     $app = JFactory::getApplication();
 
     if ((int) $this->getState('list.searchterm', '')) {
-      $app->redirect('/listing/' . $this->getState('list.searchterm', ''));
+      $app->redirect('/listing/' . $this->getState('list.searchterm', ''), true);
     }
 
     if (!$this->getState('list.searchterm', '')) {
@@ -259,6 +259,7 @@ class FcSearchModelSearch extends JModelList {
         j.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
         (select count(unit_id) from qitz3_reviews where unit_id = d.unit_id ) as reviews,
+        (select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) as offer,
         h.title as accommodation_type,
         g.title as property_type,
         i.title as tariff_based_on,
@@ -372,6 +373,10 @@ class FcSearchModelSearch extends JModelList {
 
       if ($this->getState('search.level') == 5) {
         
+      }
+      
+      if ($this->getState('list.offers')) {
+        $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
       }
 
       // Make sure we only get live properties...
@@ -936,6 +941,9 @@ class FcSearchModelSearch extends JModelList {
 
     // Set the language in the model state
     $this->setState('list.language', $input->get('lang', 'en'));
+    
+    // Determine whether we want to show only special offers or not
+    $this->setState('list.offers', $input->get('offers', 'false','boolean'));
 
     // Get each of the possible URL params
     // Get the query string.
