@@ -3,7 +3,7 @@
  * @package     Joomla.Platform
  * @subpackage  Session
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -317,7 +317,6 @@ class JSession implements IteratorAggregate
 	{
 		$token = self::getFormToken();
 		$app = JFactory::getApplication();
-			$session = JFactory::getSession();
 
 		if (!$app->input->$method->get($token, '', 'alnum'))
 		{

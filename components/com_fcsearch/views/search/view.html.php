@@ -62,7 +62,7 @@ class FcSearchViewSearch extends JViewLegacy {
       // Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');
 
-      $uri = JUri::getInstance();
+      $uri = JUri::getInstance('');
       $query = ($uri->getQuery()) ? '?' . $uri->getQuery() : '';
       $search_url = $uri->current() . $query;
 

@@ -3,7 +3,7 @@
  * @package     Joomla.Libraries
  * @subpackage  Component
  *
- * @copyright   Copyright (C) 2005 - 2013 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -229,6 +229,7 @@ class JComponentHelper
 				{
 					$filter->tagBlacklist = $customListTags;
 				}
+
 				if ($customListAttributes)
 				{
 					$filter->attrBlacklist = $customListAttributes;
@@ -315,7 +316,7 @@ class JComponentHelper
 
 		$path = JPATH_COMPONENT . '/' . $file . '.php';
 
-    // If component is disabled throw error
+		// If component is disabled throw error
 		if (!static::isEnabled($option) || !file_exists($path))
 		{
 			throw new Exception(JText::_('JLIB_APPLICATION_ERROR_COMPONENT_NOT_FOUND'), 404);

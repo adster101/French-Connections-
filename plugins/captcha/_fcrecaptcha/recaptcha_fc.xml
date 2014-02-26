@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.1" type="plugin" group="captcha">
-	<name>plg_captcha_recaptcha</name>
+	<name>plg_captcha_recaptcha_fc</name>
 	<version>3.0.0</version>
 	<creationDate>December 2011</creationDate>
 	<author>Joomla! Project</author>
@@ -11,7 +11,7 @@
 	<description>PLG_CAPTCHA_RECAPTCHA_XML_DESCRIPTION</description>
 	<files>
 		<filename
-			plugin="recaptcha">recaptcha.php</filename>
+			plugin="fcrecaptcha">recaptcha_fc.php</filename>
 	</files>
 	<config>
 	<fields name="params">
@@ -20,8 +20,8 @@
 			name="public_key"
 			type="text"
 			default=""
-			label="PLG_RECAPTCHA_PUBLIC_KEY_LABEL"
-			description="PLG_RECAPTCHA_PUBLIC_KEY_DESC"
+			label="PLG_RECAPTCHA_FC_PUBLIC_KEY_LABEL"
+			description="PLG_RECAPTCHA_FC_PUBLIC_KEY_DESC"
 			required="true"
 			filter="string"
 			size="50" />
@@ -30,8 +30,8 @@
 			name="private_key"
 			type="text"
 			default=""
-			label="PLG_RECAPTCHA_PRIVATE_KEY_LABEL"
-			description="PLG_RECAPTCHA_PRIVATE_KEY_DESC"
+			label="PLG_RECAPTCHA_FC_PRIVATE_KEY_LABEL"
+			description="PLG_RECAPTCHA_FC_PRIVATE_KEY_DESC"
 			required="true"
 			filter="string"
 			size="50" />
@@ -40,18 +40,20 @@
 			name="theme"
 			type="list"
 			default="clean"
-			label="PLG_RECAPTCHA_THEME_LABEL"
-			description="PLG_RECAPTCHA_THEME_DESC"
+			label="PLG_RECAPTCHA_FC_THEME_LABEL"
+			description="PLG_RECAPTCHA_FC_THEME_DESC"
 			required="true"
 			filter="">
 			<option
-				value="clean">PLG_RECAPTCHA_THEME_CLEAN</option>
+				value="clean">PLG_RECAPTCHA_FC_THEME_CLEAN</option>
 			<option
-				value="white">PLG_RECAPTCHA_THEME_WHITE</option>
+				value="white">PLG_RECAPTCHA_FC_THEME_WHITE</option>
 			<option
-				value="blackglass">PLG_RECAPTCHA_THEME_BLACKGLASS</option>
+				value="blackglass">PLG_RECAPTCHA_FC_THEME_BLACKGLASS</option>
 			<option
-				value="red">PLG_RECAPTCHA_THEME_RED</option>
+				value="red">PLG_RECAPTCHA_FC_THEME_RED</option>
+			<option
+				value="custom">PLG_RECAPTCHA_FC_THEME_CUSTOM</option>        
 			</field>
 		</fieldset>
 	</fields>

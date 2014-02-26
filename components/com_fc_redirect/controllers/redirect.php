@@ -55,6 +55,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy {
       } else {
         $query->where('a.id = 2'); // If no areas are present, and no keywords are present then default to France? Could redirect to homepage
       }
+    } else {
+      $query->where('a.id = 2'); // Final case where no location parms have been supplied.
     }
 
     if (!empty($params_present->s_ptype)) {
@@ -93,7 +95,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy {
       JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
       JLog::add('Problem 301 redirecting old search type url: ' . $e->getMessage() . ' :: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
       $app->redirect('/');
-    }
+    } 
   }
 }
 

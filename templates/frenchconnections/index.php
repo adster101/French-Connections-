@@ -30,6 +30,10 @@ if ($task == "edit" || $layout == "form") {
   $fullWidth = 0;
 }
 
+// Ensure we load the bootstrap framework
+JHtml::_('bootstrap.framework');
+
+
 // Add Stylesheets
 $doc->addStyleSheet('templates/' . $this->template . '/css/template.css');
 
