@@ -14,33 +14,9 @@ $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
 ?>
-<style>
-  /* containing element */
-  p.offer
-  {
-    position: relative;
-    padding: 3px 0px 3px 9px;
-    margin: 18px 0 18px -22px;
-    color: #fff;
-    background-color: #cd3e3f;
-    width:100%;
-  } 
-  p.offer:after
-  {
-    content: ' ';
-    position: absolute;
-    height: 0;
-    left: 0px;
-    top: 100%;
-    border-width: 7px 7px;
-    border-style: solid;
-    border-color: #7b6c50 #7b6c50 transparent transparent;
-  }
-</style>
+
 <li>
-
   <div class="results-header clearfix">
-
     <p class="pull-right" style="text-align:right">
       <?php if ($this->result->price) : ?>
         <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
@@ -61,13 +37,17 @@ $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove
         <?php echo $this->result->property_type . ', ' . $this->result->location_title ?>
       </small>
     </h3>
-    <p class="offer"><strong>Special offer - </strong> asasdasd asdasdasd asdasdasd asd</p>
-
+    <?php if (!empty($this->result->offer)) : ?>
+    <p class="offer">
+      <strong><?php echo JText::_('COM_FCSEARCH_SPECIALOFFER'); ?></strong>
+      <?php echo $this->escape($this->result->offer); ?>
+    </p>
+    <?php endif; ?>
   </div>
-  <div class="row-fluid">   
+  <div class="row-fluid">
     <div class="span10 clearfix">
       <a href="<?php echo $route ?>" class="thumbnail pull-left">
-        <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />     
+        <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
       </a>
       <p>
         <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>

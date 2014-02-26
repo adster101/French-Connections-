@@ -7101,6 +7101,32 @@ div.modal.fade.in {
   font-weight: normal;
   font-style: normal;
 }
+p.offer {
+  position: relative;
+  padding: 3px 0px 5px 9px;
+  margin: 18px 0 18px -22px;
+  color: #fff;
+  background-color: #cd3e3f;
+  width: 100%;
+  background-color: #d04a4b;
+  background-image: -moz-linear-gradient(top, #d25253, #cd3e3f);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d25253), to(#cd3e3f));
+  background-image: -webkit-linear-gradient(top, #d25253, #cd3e3f);
+  background-image: -o-linear-gradient(top, #d25253, #cd3e3f);
+  background-image: linear-gradient(to bottom, #d25253, #cd3e3f);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd25253', endColorstr='#ffcd3e3f', GradientType=0);
+}
+p.offer:after {
+  content: ' ';
+  position: absolute;
+  height: 0;
+  left: 0px;
+  top: 100%;
+  border-width: 7px 7px;
+  border-style: solid;
+  border-color: #7b6c50 #7b6c50 transparent transparent;
+}
 .offscreen {
   position: absolute;
   left: -10000px;

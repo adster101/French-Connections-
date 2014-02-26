@@ -375,7 +375,7 @@ class FcSearchModelSearch extends JModelList {
         
       }
       
-      if ($this->getState('list.offers')) {
+      if ($this->getState('list.offers','')) {
         $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
       }
 
@@ -943,7 +943,7 @@ class FcSearchModelSearch extends JModelList {
     $this->setState('list.language', $input->get('lang', 'en'));
     
     // Determine whether we want to show only special offers or not
-    $this->setState('list.offers', $input->get('offers', 'false','boolean'));
+    $this->setState('list.offers', $input->get('offers', '','boolean'));
 
     // Get each of the possible URL params
     // Get the query string.
