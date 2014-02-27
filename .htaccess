@@ -148,14 +148,6 @@ RewriteRule .* index.php [F]
 # www redirect (or vice versa), place that code here. Ensure those
 # redirects use the correct RewriteRule syntax and the [R=301,L] flags.
 #
-
-# Remove Trailing Slash (Normally would be the opposite)
-# Excluding the administrator and other folders to prevent infinite redirect issue.
-# N.B. May or may nor need this in production. Don't really like it but seems to work.
-# Only required for the edge case where existing urls have a trailing slash
-RewriteCond %{REQUEST_URI} !administrator|images|cache|layouts|bin|cli|components|includes|language|layouts|libraries|logs|media|modules|plugins|templates|tmp|phpmyadmin
-RewriteRule ^(.+)/$ $1 [R=301,L]
-
 ## End - Custom redirects
 
 # Forbids any uri containing the pipe separated gubbins 

@@ -43,9 +43,12 @@ class modFeaturedPropertyHelper {
     $query->from('#__property as a');
     $query->join('left', '#__unit b ON a.id = b.property_id');
     // Here we only join the unit version where review is 0. Should ensure that we only take published units
+    
     $query->join('left', '#__unit_versions c on (b.id = c.unit_id and c.id = (select max(d.id) from qitz3_unit_versions d where unit_id = b.id and review = 0))');
+    
     // Same goes for the property version, which we join to get the location
     $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))' );
+    
     $query->join('left', '#__classifications g ON g.id = e.department');
     $query->join('left', '#__featured_properties h on h.property_id = a.id');
     $query->join('left', '#__property_images_library i on c.id = i.version_id');

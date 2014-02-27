@@ -246,6 +246,7 @@ class ImportControllerProperty_listings extends JControllerForm {
 
     $this->setRedirect('index.php?option=com_import&view=property_listings');
   }
+  
 
 }
 

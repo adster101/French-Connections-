@@ -25,9 +25,6 @@ function FcSearchBuildRoute(&$query) {
   // get a menu item based on Itemid or currently active
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
-
-  $uri = JUri::getInstance();
-  $uri->setPath('');
   
   if (empty($query['Itemid'])) {
     $menuItem = $menu->getActive();

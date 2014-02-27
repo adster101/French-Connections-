@@ -10,7 +10,6 @@ defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
 
-
 $uri = str_replace('http://', '', JUri::current());
 $refine_budget_min = $this->getBudgetFields();
 $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
