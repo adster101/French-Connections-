@@ -19,18 +19,17 @@ defined('_JEXEC') or die;
  * @since   2.5
  */
 function FcSearchBuildRoute(&$query) {
-  
+
   $segments = array();
-  
+
   // get a menu item based on Itemid or currently active
-  $app = JFactory::getApplication();
-  $menu = $app->getMenu();
-  
-  if (empty($query['Itemid'])) {
-    $menuItem = $menu->getActive();
-  } else {  
-    $menuItem = $menu->getItem($query['Itemid']);
-  }
+  //$app = JFactory::getApplication();
+  //$menu = $app->getMenu();
+  //if (empty($query['Itemid'])) {
+  //$menuItem = $menu->getActive();
+  //} else {  
+  //$menuItem = $menu->getItem($query['Itemid']);
+  //}
 
   if (!empty($query['s_kwds'])) {
     $segments[] = $query['s_kwds'];
@@ -61,12 +60,12 @@ function FcSearchBuildRoute(&$query) {
     $segments[] = $query['order'];
     unset($query['order']);
   }
-  
+
   if (!empty($query['min'])) {
     $segments[] = $query['min'];
     unset($query['min']);
   }
-  
+
   if (!empty($query['max'])) {
     $segments[] = $query['max'];
     unset($query['max']);
@@ -76,9 +75,8 @@ function FcSearchBuildRoute(&$query) {
     $segments[] = $query['accommodation'];
     unset($query['accommodation']);
   }
-  
-  if (!empty($query['internal'])) {
 
+  if (!empty($query['internal'])) {
     if (is_array($query['internal'])) {
       foreach ($query['internal'] as $segment) {
         $segments[] = $segment;
@@ -88,9 +86,8 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['internal']);
   }
-  
-  if (!empty($query['kitchen'])) {
 
+  if (!empty($query['kitchen'])) {
     if (is_array($query['kitchen'])) {
       foreach ($query['kitchen'] as $segment) {
         $segments[] = $segment;
@@ -100,9 +97,8 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['kitchen']);
   }
-  
-  if (!empty($query['suitability'])) {
 
+  if (!empty($query['suitability'])) {
     if (is_array($query['suitability'])) {
       foreach ($query['suitability'] as $segment) {
         $segments[] = $segment;
@@ -114,7 +110,6 @@ function FcSearchBuildRoute(&$query) {
   }
 
   if (!empty($query['activities'])) {
-
     if (is_array($query['activities'])) {
       foreach ($query['activities'] as $segment) {
         $segments[] = $segment;
@@ -124,9 +119,8 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['activities']);
   }
-  
-  if (!empty($query['external'])) {
 
+  if (!empty($query['external'])) {
     if (is_array($query['external'])) {
       foreach ($query['external'] as $segment) {
         $segments[] = $segment;
@@ -136,9 +130,8 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['external']);
   }
-  
-  if (!empty($query['property'])) {
 
+  if (!empty($query['property'])) {
     if (is_array($query['property'])) {
       foreach ($query['property'] as $segment) {
         $segments[] = $segment;
@@ -148,6 +141,7 @@ function FcSearchBuildRoute(&$query) {
     }
     unset($query['property']);
   }
+
 
   return $segments;
 }
@@ -166,7 +160,7 @@ function FcSearchParseRoute($segments) {
   $vars = array();
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
- 
+
   // Count segments
   $count = count($segments);
 

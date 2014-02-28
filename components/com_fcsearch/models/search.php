@@ -71,9 +71,14 @@ class FcSearchModelSearch extends JModelList {
 
     parent::__construct($config);
 
+    // Register the JHtmlProperty class
+    JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
+
     $this->currencies = $this->getCurrencyConversions();
 
     $this->date = JFactory::getDate()->calendar('Y-m-d');
+
+    $this->itemid = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
 
     // Set the default search and what not here?
   }
@@ -218,13 +223,14 @@ class FcSearchModelSearch extends JModelList {
 
   protected function getListQuery() {
 
-    $date = date('Y-m-d');
-
     // Get the store id.
     $store = $this->getStoreId('getListQuery');
 
     // Get the language from the state
-    $lang = $this->getState('list.language', 'en');
+    $app = JFactory::getApplication();
+    $lang = $app->getLanguage()->getTag();
+
+    $classification_table = ($lang == 'fr-FR') ? '#__classifications_translations' : '#__classifications';
 
     // Use the cached data if possible.
     if ($this->retrieve($store, true)) {
@@ -240,13 +246,14 @@ class FcSearchModelSearch extends JModelList {
       $db = $this->getDbo();
       $query = $db->getQuery(true);
 
+      // TO DO - Not sure that c.area, c.region, c.department are needed here?
       $query->select('
         a.id,
         d.unit_id,
         d.unit_title,
         c.published_on,
         c.title,
-        c.area,
+        c.area, 
         c.region,
         c.department,
         c.latitude,
@@ -269,20 +276,22 @@ class FcSearchModelSearch extends JModelList {
       $query->from('#__property a');
       $query->join('left', '#__unit b on b.property_id = a.id');
 
-      $query->join('left', '#__property_versions c on c.property_id = a.id'); // This should be okay here as should only ever have one version with review = 
+      $query->join('left', '#__property_versions c on c.property_id = a.id');
       $query->join('left', '#__unit_versions d on d.unit_id = b.id');
+
 
       // Join the images, innit!
       $query->join('left', '#__property_images_library e on d.id = e.version_id');
       $query->where('(e.ordering = 1)');
 
-      // Need to switch these based on the language
-      //if ($lang == 'fr') {
-      //$query->from('#__classifications_translations c');
-      //} //else {
-      //$query->from('#__classifications c');
-      //}
-      // Need to switch the below based on the level e.g. department or whatever
+      // Join the translations table to pick up any translations 
+      if ($lang == 'fr-FR') {
+        $query->select('k.unit_title, k.description');
+        $query->join('left', '#__unit_versions_translations k on k.version_id = d.id');
+        $query->join('left', '#__classifications_translations j ON j.id = c.city');
+      } else {
+        $query->join('left', '#__classifications j ON j.id = c.city');
+      }
 
       if ($this->getState('search.level') == 1) { // Country level
         $query->join('left', '#__classifications as f on f.id = c.country');
@@ -319,7 +328,6 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__attributes h on h.id = d.accommodation_type');
 
       $query->join('left', '#__attributes i on i.id = d.tariff_based_on');
-      $query->join('left', '#__classifications j ON j.id = c.city');
 
 
 
@@ -374,8 +382,8 @@ class FcSearchModelSearch extends JModelList {
       if ($this->getState('search.level') == 5) {
         
       }
-      
-      if ($this->getState('list.offers','')) {
+
+      if ($this->getState('list.offers', '')) {
         $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
       }
 
@@ -482,6 +490,9 @@ class FcSearchModelSearch extends JModelList {
         $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
       }
 
+      if ($this->getState('list.offers', '')) {
+        $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
+      }
 
       $query = $this->getFilterState('activities', $query, '#__property_attributes');
       $query = $this->getFilterState('suitability', $query);
@@ -595,6 +606,10 @@ class FcSearchModelSearch extends JModelList {
     if ($this->getState('list.property_type')) {
       $property_type = $this->getState('list.property_type');
       $query = $this->getFilterPropertyType($query, $property_type, $db);
+    }
+
+    if ($this->getState('list.offers', '')) {
+      $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
     }
 
     // Apply the rest of the filter, if there are any
@@ -715,6 +730,10 @@ class FcSearchModelSearch extends JModelList {
         $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
       }
 
+      if ($this->getState('list.offers', '')) {
+        $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
+      }
+
       // Apply the rest of the filter, if there are any
       //$query = $this->getFilterState('property_type', $query);
       //$query = $this->getFilterState('accommodation_type', $query);
@@ -791,16 +810,16 @@ class FcSearchModelSearch extends JModelList {
   }
 
   public function getShortlist() {
-    
+
     // Get an instance of the shortlist model
     JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_shortlist/models');
     $model = JModelLegacy::getInstance('Shortlist', 'ShortlistModel');
-    
+
     $user = JFactory::getUser();
     $user_id = $user->id;
-    
+
     $shortlist = $model->getShortlist($user_id);
-    
+
     return $shortlist;
   }
 
@@ -941,9 +960,9 @@ class FcSearchModelSearch extends JModelList {
 
     // Set the language in the model state
     $this->setState('list.language', $input->get('lang', 'en'));
-    
+
     // Determine whether we want to show only special offers or not
-    $this->setState('list.offers', $input->get('offers', '','boolean'));
+    $this->setState('list.offers', $input->get('offers', '', 'boolean'));
 
     // Get each of the possible URL params
     // Get the query string.
@@ -1015,7 +1034,7 @@ class FcSearchModelSearch extends JModelList {
     $activities = $input->get('activities', '', 'array');
     $this->populateFilterState($activities, 'activities');
     $app->setUserState('list.activities', $activities);
-    
+
     $property_facilities = $input->get('internal', '', 'array');
     $this->populateFilterState($property_facilities, 'property_facilities');
     $app->setUserState('list.facilities', $property_facilities);
@@ -1031,7 +1050,7 @@ class FcSearchModelSearch extends JModelList {
     $suitability = $input->get('suitability', '', 'array');
     $this->populateFilterState($suitability, 'suitability');
     $app->setUserState('list.suitability', $suitability);
-    
+
     // Load the parameters.
     $this->setState('params', $params);
 
@@ -1318,7 +1337,7 @@ class FcSearchModelSearch extends JModelList {
 
     $db = JFactory::getDbo();
     $id = $this->getState('search.location');
-    $lang = JFactory::getLanguage();
+    $lang = JFactory::getLanguage()->getTag();
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
     // The query resultset should be stored in the local model cache already
     $store = $this->getStoreId('getCrumbs');
@@ -1330,8 +1349,11 @@ class FcSearchModelSearch extends JModelList {
 
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
 
-    $table = JTable::getInstance('Classification', 'ClassificationTable');
-
+    if ($lang == 'fr-FR') {
+      $table = JTable::getInstance('ClassificationTranslations', 'ClassificationTable');
+    } else {
+      $table = JTable::getInstance('Classification', 'ClassificationTable');
+    }
     $path = $table->getPath($id);
     if (!$path) {
       return false;
@@ -1341,7 +1363,7 @@ class FcSearchModelSearch extends JModelList {
     // Put the path into a std class obj which is passed into the getPathway method.
     foreach ($path as $k => $v) {
       if ($v->parent_id) {
-        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=' . (int) $this->itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
         $pathArr->$k->name = $v->title;
       }
     }

@@ -12,6 +12,10 @@ $document = JFactory::getDocument();
 $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 
+$menus = $app->getMenu('site');
+
+$Itemid = FCSearchHelperRoute::getItemid(array('component','com_fcsearch'));
+
 $bedrooms = '';
 $occupancy = '';
 $arrival = '';
@@ -50,9 +54,9 @@ $area_map[152] = "94,2,93,2,92,2,91,2,91,2,90,2,88,3,87,3,87,3,85,3,83,5,82,5,82
 $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96,39,100,39,101,39,102,39,102,40,106,44,105,45,105,45,106,46,106,47,105,47,106,48,107,48,105,50,105,52,102,53,101,53,100,53,100,54,100,55,99,57,98,57,98,57,97,57,96,58,94,57,94,58,94,56,94,55,93,55,92,54,92,54,91,54,90,53,89,54,88,55,87,54,87,54,87,53,86,51,86,51,85,50,85,49,83,49,84,48,82,47,83,46,82,45,82,44,81,42,81,41,81,41,81,40,81,40,82,40,83,37";
 ?>
 <div class="well well-small clearfix">  
-  <h4>Search accommodation</h4>
+  <h4><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
 
-  <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=165&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>" method="POST" class="form-vertical">
+  <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid='. (int) $Itemid .'&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>" method="POST" class="form-vertical">
      <?php echo $search_layout->render($search_data); ?>
 
     <input type="hidden" name="option" value="com_fcsearch" />
@@ -62,7 +66,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
       <div class="search-map">
         <svg version = "1.1" width="100%" height="180px">
           <?php foreach ($regions as $region) : ?>
-            <a xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=165'); ?>" xlink:title="">
+            <a xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=' . (int) $Itemid); ?>" xlink:title="">
               <polygon points="<?php echo $area_map[$region->id] ?>" fill="#c0d0eb" class="woot">
                 <title><?php echo $region->title ?></title>
                 <animate attributeName="fill"
@@ -82,7 +86,7 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <div class="span5">
       <p><strong><?php echo JText::_('COM_FCSEARCH_POPULAR_SEARCHES') ?></strong></p>
       <?php foreach ($popular as $k => $v) : ?>
-      <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars(trim($v->alias)). '&lang=' . $lang . '&Itemid=165');?>'><?php echo htmlspecialchars($v->title); ?></a>
+      <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars(trim($v->alias)). '&Itemid=' . (int) $Itemid);?>'><?php echo htmlspecialchars($v->title); ?></a>
       <br />
       <?php endforeach; ?>
     </div>

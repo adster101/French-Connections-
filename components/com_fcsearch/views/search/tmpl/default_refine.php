@@ -16,6 +16,7 @@ $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 
 $min_budget = $this->state->get('list.min_price');
 $max_budget = $this->state->get('list.max_price');
+$offers = ($this->state->get('list.offers')) ? '/offers' : '';
 ?>
 
 
@@ -80,7 +81,7 @@ $max_budget = $this->state->get('list.max_price');
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_PROPERTY_TYPE'); ?>
+    <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH_PROPERTY_TYPE'); ?>
   </div>
   <div id="property" class="panel-body">
     <?php if (!empty($this->property_options)) : ?>

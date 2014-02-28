@@ -20,19 +20,35 @@ class ImportControllerLocationsTranslations extends JControllerForm {
 
     $config = JFactory::getConfig();
 
-
-   
     $config->set('root_user', 'admin');
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     $handle = fopen($userfile['tmp_name'], "r");
+    $db = JFactory::getDBO();
+
+    $db->truncateTable('#__classifications_translations');
+
+    $query = $db->getQuery(true);
+    $query->insert('#__classifications_translations');
+    $query->columns(array('id', 'parent_id', 'title', 'description', 'path', 'alias', 'access', 'published', 'longitude', 'latitude'));
+    $query->values("'1',  '',  'root',  '0',  '',  '',  '',  '',  '',  '0'");
+    $db->setQuery($query);
+
+    $db->execute();
+
+    $query = $db->getQuery(true);
+    // Insert France
+    $query->insert('#__classifications_translations');
+    $query->columns(array('id', 'parent_id', 'title', 'description', 'path', 'alias', 'access', 'published', 'longitude', 'latitude'));
+    $query->values("'2',  '1',  'France',  'France',  'France',  'france',  '1',  '1',  '0',  '0'");
+    $db->setQuery($query);
 
 
-    $current_level = 1;
-    $level_1_parent_id = 1;
+    $db->execute();
 
+    $current_level = 2;
 
-    while (($line = fgetcsv($handle)) !== FALSE) {
+    while (($line = fgetcsv($handle, 0, $delimiter = "|")) !== FALSE) {
       // Insert a placeholder row for the user
       // Do this so we can set a primary key of our choice.
       // Otherwise, joomla insists on generating a new user id
@@ -41,25 +57,25 @@ class ImportControllerLocationsTranslations extends JControllerForm {
       $query = $db->getQuery(true);
 
       $query->insert('#__classifications_translations');
-      $query->columns(array('id', 'parent_id', 'title', 'description', 'path','alias', 'access', 'published', 'longitude', 'latitude'));
+      $query->columns(array('id', 'parent_id', 'title', 'description', 'path', 'alias', 'access', 'published', 'longitude', 'latitude'));
 
       $current_level = $line[1];
 
-      if ($current_level == 2) {
+      if ($current_level == 3) {
         $parent_id = $level_2_parent_id;
-      } elseif ($current_level == 3) {
-        $parent_id = $level_3_parent_id;
       } elseif ($current_level == 4) {
+        $parent_id = $level_3_parent_id;
+      } elseif ($current_level == 5) {
         $parent_id = $level_4_parent_id;
       } else {
-        $parent_id = 1;
+        $parent_id = 2;
       }
 
       $alias = JApplication::stringURLSafe($line[2]);
       $title = mysql_escape_string($line[2]);
 
-      $query->values("$line[0],$parent_id,'$title','".  mysql_real_escape_string($line[5])."','$alias','$alias',1,1,$line[3],$line[4]");
-     
+      $query->values("$line[0],$parent_id,'$title','" . mysql_real_escape_string($line[5]) . "','$alias','$alias',1,1,$line[3],$line[4]");
+
 
       $db->setQuery($query);
 
@@ -67,32 +83,29 @@ class ImportControllerLocationsTranslations extends JControllerForm {
         echo "Problem inserting item into classifications table on locations import.";
         die;
       }
-   
-      if (($current_level+1) == 2) {
+
+      if (($current_level + 1) == 3) {
         $level_2_parent_id = $line[0];
       }
-      if (($current_level+1) == 3) {
+      if (($current_level + 1) == 4) {
         $level_3_parent_id = $line[0];
-      }      
-      if (($current_level+1) == 4) {
+      }
+      if (($current_level + 1) == 5) {
         $level_4_parent_id = $line[0];
-      }           
+      }
     }
 
     fclose($handle);
-    
+
     JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_classification/tables');
 
     $classification = JTable::getInstance('ClassificationTranslations', 'ClassificationTable');
-    
+
     $classification->rebuild();
-    
+
     $this->setMessage('Properties imported, hooray!');
 
     $this->setRedirect('index.php?option=com_import&view=locations');
-    
   }
-
-
 
 }

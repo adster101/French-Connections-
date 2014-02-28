@@ -74,7 +74,7 @@ class modFcSearchHelper {
     $query->from($db->quoteName('#__search_log') . ' as a');    
 
     if ($lang == 'fr-FR') {
-      $query->join('left',$db->quoteName('#__classifications_translations') . ' on c.id = a.location_id');
+      $query->join('left',$db->quoteName('#__classifications_translations') . ' c on c.id = a.location_id');
     } else {
       $query->join('left',$db->quoteName('#__classifications') . ' as c on c.id = a.location_id');
     }
