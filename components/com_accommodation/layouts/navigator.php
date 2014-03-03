@@ -7,7 +7,7 @@ if (!empty($displayData)) {
   $input = JFactory::getApplication()->input;
   $preview = $input->get('preview', '', 'int');
 
-  $link = 'index.php?option=com_accommodation&Itemid=259&id=' . (int) $displayData->property_id . '&unit_id=' . (int) $displayData->unit_id;
+  $link = 'index.php?option=com_accommodation&Itemid=' . (int) $displayData->itemid . '&id=' . (int) $displayData->property_id . '&unit_id=' . (int) $displayData->unit_id;
 
   if ((int) $preview && $preview == 1) {
     $link .= '&preview=1';
@@ -25,16 +25,20 @@ if (!empty($displayData)) {
   <li <?php echo ($displayData->navigator == 'about') ? 'class="active"' : '' ?>>
     <a href="<?php echo $route ?>#about"><?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?></a>
   </li>
-  <li <?php echo ($displayData->navigator == 'location') ? 'class="active"' : '' ?>>
-    <a href="<?php echo $route ?>#location">
-      <i class="icon icon-location"></i>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_LOCATION'); ?>
-    </a>
-  </li>
-  <li <?php echo ($displayData->navigator == 'gettingthere') ? 'class="active"' : '' ?>>
-    <a href="<?php echo $route ?>#gettingthere">
-      <i class="icon icon-compass"></i>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TRAVEL'); ?>
-    </a>
-  </li>
+  <?php if (!empty($displayData->location)) : ?>
+    <li <?php echo ($displayData->navigator == 'location') ? 'class="active"' : '' ?>>
+      <a href="<?php echo $route ?>#location">
+        <i class="icon icon-location"></i>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_LOCATION'); ?>
+      </a>
+    </li>
+  <?php endif; ?>
+  <?php if (!empty($displayData->gettingthere)) : ?>
+    <li <?php echo ($displayData->navigator == 'gettingthere') ? 'class="active"' : '' ?>>
+      <a href="<?php echo $route ?>#gettingthere">
+        <i class="icon icon-compass"></i>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TRAVEL'); ?>
+      </a>
+    </li>
+  <?php endif; ?>
   <?php if ($displayData->reviews && count($displayData->reviews) > 0) : ?>
     <li <?php echo ($displayData->navigator == 'reviews') ? 'class="active"' : '' ?>>
       <a href="<?php echo $route ?>#reviews">

@@ -14,11 +14,11 @@ class modFeaturedPropertyHelper {
   var $items;
 
   public function getFeaturedProperties(&$params) {
-    
-    $count = $params->get('count',4);
-    
+
+    $count = $params->get('count', 4);
+
     $type = $params->get('type');
-    
+
     $lang = JFactory::getLanguage()->getTag();
 
     //if ($lang === 'fr-FR') {
@@ -43,16 +43,24 @@ class modFeaturedPropertyHelper {
     $query->from('#__property as a');
     $query->join('left', '#__unit b ON a.id = b.property_id');
     // Here we only join the unit version where review is 0. Should ensure that we only take published units
-    
+
     $query->join('left', '#__unit_versions c on (b.id = c.unit_id and c.id = (select max(d.id) from qitz3_unit_versions d where unit_id = b.id and review = 0))');
-    
+
     // Same goes for the property version, which we join to get the location
-    $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))' );
+    $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))');
+
+    // Join the translations table to pick up any translations 
+    if ($lang == 'fr-FR') {
+      $query->select('j.unit_title');
+      $query->join('left', '#__unit_versions_translations j on j.version_id = c.id');
+      $query->join('left', '#__classifications_translations g ON g.id = e.department');
+    } else {
+      $query->join('left', '#__classifications g ON g.id = e.department');
+    }
     
-    $query->join('left', '#__classifications g ON g.id = e.department');
     $query->join('left', '#__featured_properties h on h.property_id = a.id');
     $query->join('left', '#__property_images_library i on c.id = i.version_id');
-    
+
     $query->where('b.ordering = 1');
     $query->where('a.published = 1');
     $query->where('b.published = 1');
@@ -60,10 +68,10 @@ class modFeaturedPropertyHelper {
     $query->where('a.expiry_date >= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
     $query->where('h.published = 1');
     $query->where('h.featured_property_type = ' . $type);
-    $query->where('h.start_date <= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')) );
+    $query->where('h.start_date <= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
     $query->where('h.end_date >= ' . $db->quote(JFActory::getDate()->calendar('Y-m-d')));
     $query->order('rand()');
-    $db->setQuery($query, 0,$count);
+    $db->setQuery($query, 0, $count);
 
     // Load the JSON string
     //$params = new JRegistry;
@@ -73,6 +81,8 @@ class modFeaturedPropertyHelper {
     $items = ($items = $db->loadObjectList()) ? $items : array();
     $this->items = $items;
     $this->lang = $lang;
+    
+    
     
     return $items;
   }

@@ -5,21 +5,6 @@
       <![CDATA[COM_ACCOMMODATION_VIEW_DEFAULT_DESC]]>
     </message>
   </layout>
-  <fields
-    name="params" 
-    addfieldpath="/administrator/components/com_reviews/models/fields">
-    <fieldset name="basic">
-      <field
-        name="exchange_rate_eur"
-        type="text"
-        label="EUR exchange rate"
-      />
-      <field
-        name="exchange_rate_usd"
-        type="text"
-        label="USD exchange rate"
-      />
-    </fieldset>
-  </fields>
+ 
 </metadata>
 

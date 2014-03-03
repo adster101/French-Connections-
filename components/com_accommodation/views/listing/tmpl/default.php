@@ -1,9 +1,14 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
 $language = JFactory::getLanguage();
 $lang = $language->getTag();
 $app = JFactory::getApplication();
+
+$Itemid = FCSearchHelperRoute::getItemid(array('component','com_accommodation'));
+
+$this->item->itemid = $Itemid;
 
 $price_range = array();
 if (!empty($this->tariffs)) {
@@ -174,7 +179,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <!-- Changeover day -->
       <?php if ($this->item->changeover_day) : ?>
         <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_CHANGEOVER_DAY'); ?>
+          <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY'); ?>
           <span class="pull-right"><?php echo $this->item->changeover_day; ?></span>
         </p>
       <?php endif; ?>
@@ -209,10 +214,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->loadTemplate('reviews'); ?>
 
       <p class="center">
-        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
+        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
         </a>
-        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id); ?>#email">
+        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id); ?>#email">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
         </a>
       </p>
@@ -245,67 +250,71 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     ?>
   </div>
 </div>
-
-<div class="row-fluid" id="location">
-  <?php $this->item->navigator = 'location'; ?>
-  <?php echo $navigator->render($this->item); ?>
-</div>
-<div class="row-fluid">
-  <div class="span8">
-    <?php if ($this->item->unit_title) : ?>
-      <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
-    <?php endif; ?>
-    <?php if ($this->item->location_details) : ?>
-      <?php echo $this->item->location_details; ?>
-    <?php endif; ?> 
-    <?php if (!empty($amenities)) : ?>
-      <h4>Local amenities</h4>
-      <?php foreach ($amenities as $k => $v) : ?>
-        <p><strong><?php echo JText::_('COM_ACCOMMODATION_' . $this->escape(strtoupper($k))); ?></strong>
-          <?php echo JString::ucwords($this->escape($v)); ?></p>
-      <?php endforeach; ?>
-    <?php endif; ?>
+<?php if (!empty($this->item->location_details)) : ?>
+  <div class="row-fluid" id="location">
+    <?php $this->item->navigator = 'location'; ?>
+    <?php echo $navigator->render($this->item); ?>
   </div>
-  <div class="span4">   
-    <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
-    <p class="key text-right">
-      <span>
-        <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
-        &nbsp;&ndash;&nbsp;
-        <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
-      </span>
-    </p>
+  <div class="row-fluid">
+    <div class="span8">
+      <?php if ($this->item->unit_title) : ?>
+        <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
+      <?php endif; ?>
+      <?php if ($this->item->location_details) : ?>
+        <?php echo $this->item->location_details; ?>
+      <?php endif; ?> 
+      <?php if (!empty($amenities)) : ?>
+        <h4>Local amenities</h4>
+        <?php foreach ($amenities as $k => $v) : ?>
+          <p><strong><?php echo JText::_('COM_ACCOMMODATION_' . $this->escape(strtoupper($k))); ?></strong>
+            <?php echo JString::ucwords($this->escape($v)); ?></p>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div>
+    <div class="span4">   
+      <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+      <p class="key text-right">
+        <span>
+          <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
+          &nbsp;&ndash;&nbsp;
+          <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
+        </span>
+      </p>
+    </div>
   </div>
-</div>
+<?php endif; ?>
 
+<?php if (!empty($this->item->getting_there)) : ?>
 
-<div class="row-fluid" id="gettingthere">
-  <?php $this->item->navigator = 'gettingthere'; ?>
-  <?php echo $navigator->render($this->item); ?>
-</div>
-<div class="row-fluid">
-  <div class="span8">
-    <?php if ($this->item->unit_title) : ?>
-      <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h3>  
-    <?php endif; ?>
-    <?php if ($this->item->getting_there) : ?>
-      <?php echo $this->item->getting_there; ?>
-    <?php endif; ?>
-    <!-- Access options -->
-    <?php if (array_key_exists('Location access', $this->property_facilities)) : ?>
-      <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
-      <p><?php echo implode(', ', $this->property_facilities['Location access']) ?></p>         
-    <?php endif; ?>
-    <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
-    <p>
-      <?php $airport_route = JRoute::_(ContentHelperRoute::getArticleRoute((int) $this->item->airport_id)); ?>
-      <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
-    </p>
+  <div class="row-fluid" id="gettingthere">
+    <?php $this->item->navigator = 'gettingthere'; ?>
+    <?php echo $navigator->render($this->item); ?>
   </div>
-  <div class="span4"> 
+  <div class="row-fluid">
+    <div class="span8">
+      <?php if ($this->item->unit_title) : ?>
+        <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h3>  
+      <?php endif; ?>
+      <?php if ($this->item->getting_there) : ?>
+        <?php echo $this->item->getting_there; ?>
+      <?php endif; ?>
+      <!-- Access options -->
+      <?php if (array_key_exists('Location access', $this->property_facilities)) : ?>
+        <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
+        <p><?php echo implode(', ', $this->property_facilities['Location access']) ?></p>         
+      <?php endif; ?>
+      <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
+      <p>
+        <?php $airport_route = JRoute::_(ContentHelperRoute::getArticleRoute((int) $this->item->airport_id)); ?>
+        <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
+      </p>
+    </div>
+    <div class="span4"> 
 
+    </div>
   </div>
-</div>
+<?php endif; ?>
+
 
 <?php if ($this->reviews) : ?>
 
@@ -510,14 +519,13 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <p>No tariffs were found for this property. Please enquire with the owner for rental rates for this property</p>
     <?php endif; ?>
   </div>
-  <div class="span4">
-    <h3><?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?></h3>
+  <div class="span4">  
     <?php if ($this->item->additional_price_notes) : ?>
+      <h3><?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?></h3>
       <?php echo $this->item->additional_price_notes ?>
-    <?php else: ?>
-      <?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES_NONE') ?>
     <?php endif; ?>
-  </div>
+  </div>  
+
 </div>
 
 <div class="row-fluid" id="email">
@@ -563,7 +571,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <p><?php echo JText::sprintf('COM_ACCOMMODATION_LANGUAGES_SPOKEN', implode(', ', $langs_array)); ?></p>
     <?php endif; ?>
     <?php if ($this->item->booking_form) : ?>
-      <?php $link = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&tmpl=component&view=bookingform'; ?>
+      <?php $link = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&tmpl=component&view=bookingform'; ?>
       <p><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_VIEW', $link); ?></p>
     <?php endif; ?>
 

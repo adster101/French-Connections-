@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
+$Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
 ?>
 
   <div class="row-fluid">
@@ -19,7 +20,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
       <?php if ($item->title) : ?>     
         <div class="span3"> 
           <p>
-            <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
+            <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
               <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded" />
             </a>
           </p>

@@ -230,8 +230,6 @@ class FcSearchModelSearch extends JModelList {
     $app = JFactory::getApplication();
     $lang = $app->getLanguage()->getTag();
 
-    $classification_table = ($lang == 'fr-FR') ? '#__classifications_translations' : '#__classifications';
-
     // Use the cached data if possible.
     if ($this->retrieve($store, true)) {
       return clone($this->retrieve($store, false));
@@ -278,7 +276,6 @@ class FcSearchModelSearch extends JModelList {
 
       $query->join('left', '#__property_versions c on c.property_id = a.id');
       $query->join('left', '#__unit_versions d on d.unit_id = b.id');
-
 
       // Join the images, innit!
       $query->join('left', '#__property_images_library e on d.id = e.version_id');
@@ -418,11 +415,14 @@ class FcSearchModelSearch extends JModelList {
     $store = $this->getStoreId('getRefinePropertyOptions');
 
     // Get the language from the state
-    $lang = $this->getState('list.language', 'en');
+    $lang = JFactory::getLanguage()->getTag();
 
+    // Set the classifications table to use
+    $classification_table = ($lang == 'fr-FR') ? '#__classifications' : '#__classifications_translations';
+     
     // Use the cached data if possible.
     if ($this->retrieve($store, true)) {
-      return clone($this->retrieve($store, false));
+      return $this->retrieve($store, true);
     }
 
     try {
@@ -438,19 +438,23 @@ class FcSearchModelSearch extends JModelList {
 
       $query->leftJoin('#__property_versions c on c.property_id = a.id');
       $query->leftJoin('#__unit_versions d on d.unit_id = b.id');
-
-      $query->leftJoin('#__attributes e on e.id = d.property_type');
+     
+      if ($lang == 'fr-FR') {
+        $query->leftJoin('#__attributes_translation e on e.id = d.property_type');
+      } else {
+        $query->leftJoin('#__attributes e on e.id = d.property_type');
+      }
       if ($this->getState('search.level') == 1) { // Country level
-        $query->join('left', '#__classifications as f on f.id = c.country');
+        $query->join('left', $classification_table . ' as f on f.id = c.country');
         $query->where('c.country = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 2) { // Area level
-        $query->join('left', '#__classifications as f on f.id = c.area');
+        $query->join('left', $classification_table . ' as f on f.id = c.area');
         $query->where('c.area = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 3) { // Region level
-        $query->join('left', '#__classifications as f on f.id = c.region');
+        $query->join('left', $classification_table . ' as f on f.id = c.region');
         $query->where('c.region= ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 4) { // Department level
-        $query->join('left', '#__classifications as f on f.id = c.department');
+        $query->join('left', $classification_table . ' as f on f.id = c.department');
         $query->where('c.department = ' . $this->getState('search.location', ''));
       } elseif ($this->getState('search.level') == 5) {
         // Add the distance based bit in as this is a town/city search
@@ -647,9 +651,6 @@ class FcSearchModelSearch extends JModelList {
    */
   public function getRefineAttributeOptions() {
 
-    $db = JFactory::getDbo();
-    $date = JFactory::getDate()->calendar('Y-m-d');
-
     // Create a store ID to get the actual options, if they are already cached, which they might be
     $store = $this->getStoreId('getRefineAttributeOptions');
 
@@ -662,7 +663,8 @@ class FcSearchModelSearch extends JModelList {
     try {
 
       $attributes = array();
-      $lang = $this->getState('list.language', 'en');
+      $app = JFactory::getApplication();
+      $lang = $app->getLanguage()->getTag();
       $db = JFactory::getDbo();
 
       $query = $db->getQuery(true);
@@ -1383,7 +1385,7 @@ class FcSearchModelSearch extends JModelList {
    */
   private function getAttributes($ids = array()) {
 
-    $lang = JFactory::getLanguage();
+    $lang = JFactory::getLanguage()->getTag();
 
     // The query resultset should be stored in the local model cache already
     $store = $this->getStoreId('getAttributes');
@@ -1398,7 +1400,11 @@ class FcSearchModelSearch extends JModelList {
     $query = $db->getQuery(true);
 
     $query->select('a.id, a.title as attribute, b.search_code, b.field_name, b.title');
-    $query->from('#__attributes a');
+    if ($lang == 'fr-FR') {
+      $query->from('#__attributes_translation a');
+    } else {
+      $query->from('#__attributes a');
+    }
     $query->leftJoin('#__attributes_type b on a.attribute_type_id = b.id');
     $query->where('b.id in (' . implode(',', $ids) . ')');
     $db->setQuery($query);

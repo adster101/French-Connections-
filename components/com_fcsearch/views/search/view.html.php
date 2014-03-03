@@ -36,7 +36,7 @@ class FcSearchViewSearch extends JViewLegacy {
 
     // Get the app instance
     $app = JFactory::getApplication();
-
+    
     // Get the currencies
     // Get view data.
     $this->state = $this->get('State');
@@ -167,7 +167,7 @@ class FcSearchViewSearch extends JViewLegacy {
     if ($this->pagination) {
       $pages = $this->pagination->getData();
     }
-    
+
     $property_type = $input->get('property', '', 'array');
     $accommodation_type = $input->get('accommodation', '', 'array');
 

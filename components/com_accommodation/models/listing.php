@@ -183,7 +183,7 @@ class AccommodationModelListing extends JModelForm {
         k.title as changeover_day,
         d.toilets,
         d.bathrooms,
-        ( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) AS bedrooms, 
+        (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) AS bedrooms, 
         d.single_bedrooms,
         d.double_bedrooms,
         d.triple_bedrooms,
@@ -223,16 +223,6 @@ class AccommodationModelListing extends JModelForm {
         ufc.postal_code,
        	date_format(a.created_on, "%M %Y") as advertising_since';
 
-      // Language logic - essentially need to do two things, if in French
-      // 1. Load the attributes_translation table in the below joins
-      // 2. Load property translations for the property
-
-      if ($lang === 'fr-FR') {
-        // 
-        echo "Woot, Frenchy penchy!";
-        die;
-      }
-
       $query = $this->_db->getQuery(true);
 
       $query->select($select);
@@ -250,23 +240,43 @@ class AccommodationModelListing extends JModelForm {
       } else {
         $query->leftJoin('#__unit_versions d ON (d.unit_id = b.id and d.id = (select max(o.id) from #__unit_versions o where unit_id = b.id))');
       }
-      // If unit ID is specified load that unit instead of the default one
-      if ($unit_id) {
-        //$query->where('unit.id = ' . (int) $unit_id);
+
+      // Join the translations table to pick up any translations 
+      if ($lang === 'fr-FR') {
+
+        $query->select('p.unit_title, p.description, p.additional_price_notes, p.linen_costs');
+        $query->join('left', '#__unit_versions_translations p on p.version_id = d.id');
+
+        $query->select('q.getting_there, q.location_details');
+        $query->join('left', '#__property_versions_translations q on q.version_id = c.id');
+
+        $query->leftJoin('#__classifications_translations e ON e.id = c.city');
+
+        // Join the property type through the property attributes table
+        $query->join('left', '#__attributes_translation g on g.id = d.property_type');
+
+        // Join the attributes a second time to get at the accommodation type
+        // This join is also based on version id to ensure we only get the version we are interested in
+        $query->join('left', '#__attributes_translation m on m.id = d.accommodation_type');
+        $query->leftJoin('#__classifications_translations h ON h.id = c.department');
+        $query->leftJoin('#__classifications_translations n ON n.id = c.region');
+        $query->leftJoin('#__attributes_translation j ON j.id = d.tariff_based_on');
+        $query->leftJoin('#__attributes_translation k ON k.id = d.changeover_day');
+      } else {
+        $query->leftJoin('#__classifications e ON e.id = c.city');
+
+        // Join the property type through the property attributes table
+        $query->join('left', '#__attributes g on g.id = d.property_type');
+
+        // Join the attributes a second time to get at the accommodation type
+        // This join is also based on version id to ensure we only get the version we are interested in
+        $query->join('left', '#__attributes m on m.id = d.accommodation_type');
+        $query->leftJoin('#__classifications h ON h.id = c.department');
+        $query->leftJoin('#__classifications n ON n.id = c.region');
+        $query->leftJoin('#__attributes j ON j.id = d.tariff_based_on');
+        $query->leftJoin('#__attributes k ON k.id = d.changeover_day');
       }
 
-      $query->leftJoin('#__classifications e ON e.id = c.city');
-
-      // Join the property type through the property attributes table
-      $query->join('left', '#__attributes g on g.id = d.property_type');
-
-      // Join the attributes a second time to get at the accommodation type
-      // This join is also based on version id to ensure we only get the version we are interested in
-      $query->join('left', '#__attributes m on m.id = d.accommodation_type');
-      $query->leftJoin('#__classifications h ON h.id = c.department');
-      $query->leftJoin('#__classifications n ON n.id = c.region');
-      $query->leftJoin('#__attributes j ON j.id = d.tariff_based_on');
-      $query->leftJoin('#__attributes k ON k.id = d.changeover_day');
 
       $query->leftJoin('#__users u on a.created_by = u.id');
       $query->leftJoin('#__user_profile_fc ufc on u.id = ufc.user_id');
@@ -343,11 +353,11 @@ class AccommodationModelListing extends JModelForm {
 
     $db->setQuery($query);
     $rows = $db->loadObjectList();
-    foreach($rows as $k=>$v) { 
-      $rows[$k]->description =JHtml::_('string.truncate', $v->description, 75, true, false);
+    foreach ($rows as $k => $v) {
+      $rows[$k]->description = JHtml::_('string.truncate', $v->description, 75, true, false);
       $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=453&place=' . $v->alias);
     }
-    
+
     return $rows;
   }
 
@@ -375,6 +385,8 @@ class AccommodationModelListing extends JModelForm {
    */
 
   public function getFacilities($table1 = '', $table2 = '', $field = '', $table3 = '') {
+
+    $lang = JFactory::getLanguage()->getTag();
 
 
 
@@ -406,7 +418,11 @@ class AccommodationModelListing extends JModelForm {
       }
 
       $query->join('left', $table3 . ' d on (d.property_id = a.id and d.version_id = b.id)');
-      $query->join('left', '#__attributes e on e.id = d.attribute_id');
+      if ($lang === 'fr-FR') {
+        $query->join('left', '#__attributes_translation e on e.id = d.attribute_id');
+      } else {
+        $query->join('left', '#__attributes e on e.id = d.attribute_id');
+      }
       $query->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
 
       $query->where('a.id = ' . (int) $id);

@@ -1,6 +1,8 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+$Itemid = FCSearchHelperRoute::getItemid(array('component','com_accommodation'));
+
 ?>
 <?php if ($this->item->booking_form) : ?>
   <div class="container">  
@@ -14,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
       <button class="btn btn-primary btn-large" onclick="window.print()">
         <?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_PRINT'); ?>
       </button>&nbsp;&nbsp;
-      <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '#email'; ?>">
+      <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '#email'; ?>">
         <?php echo JText::_('COM_ACCOMMODATION_BOOKING_BACK_TO_PROPERTY'); ?>
       </a>
       <hr />
