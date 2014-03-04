@@ -121,7 +121,8 @@ jQuery(document).ready(function() {
         process(data);
       }
       )
-    }
+    },
+    items:10
   })
 
 

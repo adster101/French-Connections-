@@ -127,7 +127,7 @@ class FcSearchModelSuggestions extends JModelList
 
 		// Load the list state.
 		$this->setState('list.start', 0);
-		$this->setState('list.limit', 10);
+		$this->setState('list.limit', $input->get('items','10','int'));
 
 		// Load the parameters.
 		$this->setState('params', $params);
