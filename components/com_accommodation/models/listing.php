@@ -336,7 +336,11 @@ class AccommodationModelListing extends JModelForm {
   public function getMapItems($lat = '', $lon = '') {
 
     $db = JFactory::getDbo();
-
+    $app = JFactory::getApplication('site');
+    $menus = $app->getMenu();
+    $items = $menus->getItems('component', 'com_placeofinterest');
+		$items = is_array($items) ? $items : array();
+    $itemid = $items[0]->id;
     $query = $db->getQuery(true);
 
     $query->select("id, left(description, 125) as description, title, latitude, longitude, alias");
@@ -355,7 +359,7 @@ class AccommodationModelListing extends JModelForm {
     $rows = $db->loadObjectList();
     foreach ($rows as $k => $v) {
       $rows[$k]->description = JHtml::_('string.truncate', $v->description, 75, true, false);
-      $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=453&place=' . $v->alias);
+      $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=' . $itemid . '&place=' . $v->alias);
     }
 
     return $rows;

@@ -25,14 +25,14 @@ if (!empty($displayData)) {
   <li <?php echo ($displayData->navigator == 'about') ? 'class="active"' : '' ?>>
     <a href="<?php echo $route ?>#about"><?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?></a>
   </li>
-  <?php if (!empty($displayData->location)) : ?>
+  <?php if (!empty($displayData->location_details)) : ?>
     <li <?php echo ($displayData->navigator == 'location') ? 'class="active"' : '' ?>>
       <a href="<?php echo $route ?>#location">
         <i class="icon icon-location"></i>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_LOCATION'); ?>
       </a>
     </li>
   <?php endif; ?>
-  <?php if (!empty($displayData->gettingthere)) : ?>
+  <?php if (!empty($displayData->getting_there)) : ?>
     <li <?php echo ($displayData->navigator == 'gettingthere') ? 'class="active"' : '' ?>>
       <a href="<?php echo $route ?>#gettingthere">
         <i class="icon icon-compass"></i>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TRAVEL'); ?>
