@@ -38,7 +38,7 @@ $logged_in = ($user->guest) ? false : true;
     </div>
     <div class="span6">
       <span class="">
-        <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
+        <?php echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
       </span>
       <hr class="condensed" />
       <p class="">

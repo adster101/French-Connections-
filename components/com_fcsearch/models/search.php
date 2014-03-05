@@ -309,7 +309,7 @@ class FcSearchModelSearch extends JModelList {
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude))) < 30)
+          * sin(radians(c.latitude))) < 10)
         ');
         $query->order('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
@@ -352,6 +352,11 @@ class FcSearchModelSearch extends JModelList {
       if ($this->getState('list.property_type')) {
         $property_type = $this->getState('list.property_type');
         $query = $this->getFilterPropertyType($query, $property_type, $db);
+      }
+
+      if ($this->getState('list.accommodation_type')) {
+        $accommodation_type = $this->getState('list.accommodation_type');
+        $query = $this->getFilterAccommodationType($query, $accommodation_type, $db);
       }
 
       // Sort out the budget requirements
@@ -401,9 +406,47 @@ class FcSearchModelSearch extends JModelList {
   }
 
   /**
-   * Method to pull out the property type based drilldowns
+   * Proxy for getRefineByTypeOptions which returns data for refinements on filter lists
+   * 
+   * @return mixed
    */
   public function getRefinePropertyOptions() {
+
+    try {
+
+      $return = $this->getRefineByTypeOptions('property_type', 'getRefinePropertyOptions');
+
+      return $return;
+    } catch (Exception $e) {
+
+      // Catch and log the error.
+      return false;
+    }
+  }
+
+  /**
+   * Proxy for getRefineByTypeOptions which returns data for refinements on filter lists
+   * 
+   * @return mixed
+   */
+  public function getRefineAccommodationOptions() {
+
+    try {
+
+      $return = $this->getRefineByTypeOptions('accommodation_type', 'getRefineAccommodationOptions');
+
+      return $return;
+    } catch (Exception $e) {
+
+      // Catch and log the error.
+      return false;
+    }
+  }
+
+  /**
+   * Method to pull out the data for the property/accommodation type based drilldowns
+   */
+  public function getRefineByTypeOptions($type = '', $storeId = '') {
 
     // This basically does the same as the getListQuery only without the refinement on property type
     // Effectively tots up the count of all property types for the props that are returned.
@@ -412,14 +455,14 @@ class FcSearchModelSearch extends JModelList {
     $date = date('Y-m-d');
 
     // Get the store id.
-    $store = $this->getStoreId('getRefinePropertyOptions');
+    $store = $this->getStoreId($storeId);
 
     // Get the language from the state
     $lang = JFactory::getLanguage()->getTag();
 
     // Set the classifications table to use
     $classification_table = ($lang == 'fr-FR') ? '#__classifications' : '#__classifications_translations';
-     
+
     // Use the cached data if possible.
     if ($this->retrieve($store, true)) {
       return $this->retrieve($store, true);
@@ -438,12 +481,13 @@ class FcSearchModelSearch extends JModelList {
 
       $query->leftJoin('#__property_versions c on c.property_id = a.id');
       $query->leftJoin('#__unit_versions d on d.unit_id = b.id');
-     
+
       if ($lang == 'fr-FR') {
-        $query->leftJoin('#__attributes_translation e on e.id = d.property_type');
+        $query->leftJoin('#__attributes_translation e on e.id = d.' . (string) $type);
       } else {
-        $query->leftJoin('#__attributes e on e.id = d.property_type');
+        $query->leftJoin('#__attributes e on e.id = d.' . (string) $type);
       }
+
       if ($this->getState('search.level') == 1) { // Country level
         $query->join('left', $classification_table . ' as f on f.id = c.country');
         $query->where('c.country = ' . $this->getState('search.location', ''));
@@ -463,7 +507,7 @@ class FcSearchModelSearch extends JModelList {
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude))) < 30)');
+          * sin(radians(c.latitude))) < 10)');
       }
 
       /*
@@ -471,7 +515,6 @@ class FcSearchModelSearch extends JModelList {
        * Filters are applied via functions as they are reused in the getPropertyType filter methods
        */
       if ($this->getState('list.arrival') || $this->getState('list.departure')) {
-
         $arrival = $this->getState('list.arrival', '');
         $departure = $this->getState('list.departure', '');
         $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
@@ -509,12 +552,13 @@ class FcSearchModelSearch extends JModelList {
       $query->where('c.review = 0');
       $query->where('d.review = 0');
       $query->where('d.unit_id is not null');
-      $query->where('d.property_type is not null');
-      $query->group('d.property_type');
+      $query->where('d.' . (string) $type . ' is not null');
+      $query->group('d.' . (string) $type);
 
       // Get the options.
       $db->setQuery($query);
 
+      // Get the properties
       $properties = $db->loadObjectList();
 
       // Push the query into the cache.
@@ -525,6 +569,7 @@ class FcSearchModelSearch extends JModelList {
     } catch (Exception $e) {
 
       // Catch and log the error.
+      return false;
     }
   }
 
@@ -695,7 +740,7 @@ class FcSearchModelSearch extends JModelList {
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude))) < 30)
+          * sin(radians(c.latitude))) < 10)
         ');
       }
 
@@ -1161,7 +1206,7 @@ class FcSearchModelSearch extends JModelList {
    * @param type $db
    * @return \JDatabaseQueryMysqli
    */
-  private function getFilterPropertyType(JDatabaseQueryMysqli $query, $property_type = array(), $db) {
+  private function getFilterPropertyType(JDatabaseQueryMysqli $query, $property_type = array()) {
 
     if (empty($property_type)) {
       return $query;
@@ -1176,6 +1221,32 @@ class FcSearchModelSearch extends JModelList {
     }
 
     $query = $query->where('d.property_type in (' . implode(',', $types) . ')');
+
+    return $query;
+  }
+
+  /**
+   * 
+   * @param JDatabaseQueryMysqli $query
+   * @param type $property_type
+   * @param type $db
+   * @return \JDatabaseQueryMysqli
+   */
+  private function getFilterAccommodationType(JDatabaseQueryMysqli $query, $accommodation_type = array()) {
+
+    if (empty($accommodation_type)) {
+      return $query;
+    }
+
+    $types = array();
+
+    // Get each of the property attribute id we are filtering on.
+    foreach ($accommodation_type as $type) {
+      $ids = explode('_', $type);
+      $types[] = $ids[2];
+    }
+
+    $query = $query->where('d.accommodation_type in (' . implode(',', $types) . ')');
 
     return $query;
   }

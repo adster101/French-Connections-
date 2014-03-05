@@ -17,14 +17,13 @@ $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 
 $min_budget = $this->state->get('list.min_price');
 $max_budget = $this->state->get('list.max_price');
-$offers = ($this->state->get('list.offers')) ? '/offers' : '';
+// $offers = ($this->state->get('list.offers')) ? '/offers' : '';
 
 $Itemid_search = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
 
+// The layout for the anchor based navigation on the property listing
+$refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 ?>
-
-
-
 
 <h4><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 <div class="panel panel-default">
@@ -64,7 +63,7 @@ $Itemid_search = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch
           <?php
           $remove = false;
           $tmp = explode('/', $uri); // Split the url out on the slash
-          $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp,4); // Remove the first 3 value of the URI
+          $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // Remove the first 3 value of the URI
           $filters = (!empty($filters)) ? '/' . implode('/', $filters) : '';
           $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters;
           ?>
@@ -82,6 +81,25 @@ $Itemid_search = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch
     </div>
   </div>
 <?php endif; ?>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH_ACCOMMODATION_TYPE'); ?>
+  </div>
+  <div class="panel-body">
+    <?php
+    echo $refine_type_layout->render(
+            array(
+                'data' => $this->accommodation_options,
+                'location' => $this->localinfo->title,
+                'itemid' => $Itemid_search,
+                'uri' => $uri,
+                'lang' => $lang,
+                'type' => 'accommodation_'
+    ));
+    ?>
+  </div>
+</div>
 
 <div class="panel panel-default">
   <div class="panel-heading">

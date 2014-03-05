@@ -85,6 +85,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                   <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
                   <p class="flex-caption">
                     <?php echo $image->caption; ?>
+                    <span class="muted small">(<?php echo $images+1 ?> / <?php echo count($this->images) ?>)</span>
                   </p>
                 </li>
               <?php endforeach; ?>

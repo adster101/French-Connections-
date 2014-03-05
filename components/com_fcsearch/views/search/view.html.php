@@ -58,6 +58,7 @@ class FcSearchViewSearch extends JViewLegacy {
       $this->attribute_options = $this->get('RefineAttributeOptions');
       $this->location_options = $this->get('RefineLocationOptions');
       $this->property_options = $this->get('RefinePropertyOptions');
+      $this->accommodation_options = $this->get('RefineAccommodationOptions');
       $this->shortlist = $this->get('Shortlist');
       // Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');

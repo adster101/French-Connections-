@@ -75,5 +75,7 @@ abstract class JHtmlRefine {
       return $html;
     }
   }
+  
+  
 
 }

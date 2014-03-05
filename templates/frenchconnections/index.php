@@ -177,13 +177,10 @@ if ($this->params->get('logoFile')) {
                 </div>       
               </div>
             <?php elseif ($this->countModules('position-2') && !$this->countModules('position-13')) : ?>
-              <div class="span12">
+            
                 <jdoc:include type="modules" name="position-2" style="html5" />
-              </div>
             <?php elseif (!$this->countModules('position-2') && $this->countModules('position-13')) : ?>
-              <div class="span12">
                 <jdoc:include type="modules" name="position-13" style="html5" />
-              </div>
             <?php endif; ?>
 
             <!-- End Content -->

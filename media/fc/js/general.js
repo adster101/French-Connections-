@@ -45,11 +45,11 @@ jQuery(document).ready(function() {
 
   jQuery('body').on('click', '.popover span', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
-    var favourite = el.parent().parent().siblings('a');
+    var favourite = el.parent().parent().siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
     var userToken = document.getElementsByTagName("input")[0].name;
-
+    console.log(dataObj);
     url_params.id = dataObj.id;
     url_params.action = dataObj.action;
 
