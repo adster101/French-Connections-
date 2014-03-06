@@ -7,7 +7,9 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
+
 ?>
+
 <script type="text/javascript">
   var myDate = new Date();
   var myStamp =
@@ -39,3 +41,13 @@ defined('_JEXEC') or die;
 // ----- optional custom events to proceed this line -----
 // -->
 </script>
+<p>If you are looking for fantastic rates on car hire in France then look no further. French Connections now offers great online deals on car hire from all the major providers, powered by CarTrawler.</p>
+<ul class="tick-list large">
+<li><strong>Unbeatable Price Promise</strong></li>
+<li><strong>No Hidden Charges</strong></li>
+<li><strong>Instant Online Quotes</strong></li>
+<li><strong>No Credit Card Fees</strong></li>
+<li><strong>Break Down Assistance</strong></li>
+<li><strong>UK Based Customer Service</strong></li>
+</ul>
+<img src="http://www.frenchconnections.co.uk/_format/_images/general/hertz.gif" alt="Hertz Logo" /> <img src="http://www.frenchconnections.co.uk/_format/_images/general/europcar_logo.gif" alt="Europcar Logo" /><img src="http://www.frenchconnections.co.uk/_format/_images/general/avis_logo.gif" alt="Avis Logo" /><img src="http://www.frenchconnections.co.uk/_format/_images/general/enterprise_logos_v3.jpg" alt="Car Hire Companies Logos" /> <img src="http://www.frenchconnections.co.uk/_format/_images/general/budget-logo.jpg" alt="Budget Logo" />

@@ -47,8 +47,7 @@ class plgSystemDisable_mootools extends JPlugin {
           unset($doc->_scripts[$relativeScript]);
         }
 
-        $doc->addScript('https://ajaxgeo.cartrawler.com/cartrawlerabe/abe/js/abeSVNInfo.js', 'text/javascript');
-        $doc->addScript('https://ajaxgeo.cartrawler.com/cartrawlerabe/abe/js/ct_abe.js', 'text/javascript');
+
         
         //	set the new head data
         $doc->setHeadData($headers);
