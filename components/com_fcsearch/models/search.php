@@ -541,6 +541,16 @@ class FcSearchModelSearch extends JModelList {
         $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
       }
 
+      if ($this->getState('list.accommodation_type')) {
+        $accommodation_type = $this->getState('list.accommodation_type');
+        $query = $this->getFilterAccommodationType($query, $accommodation_type, $db);
+      }
+
+      if ($this->getState('list.property_type')) {
+        $property_type = $this->getState('list.property_type');
+        $query = $this->getFilterPropertyType($query, $property_type, $db);
+      }
+      
       $query = $this->getFilterState('activities', $query, '#__property_attributes');
       $query = $this->getFilterState('suitability', $query);
       $query = $this->getFilterState('external_facilities', $query);

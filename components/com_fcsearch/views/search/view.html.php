@@ -176,7 +176,7 @@ class FcSearchViewSearch extends JViewLegacy {
     $this->addHeadLinks($pages, $document);
 
     // Add canonical link depending on the property type
-    //$this->addCanonicalLink($property_type, $document);
+    // $this->addCanonicalLink($property_type, $document);
     // Location title - e.g. the location being searched on
     $title = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 
