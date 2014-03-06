@@ -8,7 +8,11 @@
  */
 defined('_JEXEC') or die;
 ?>
-
+<script type="text/javascript">
+  var myDate = new Date();
+  var myStamp =
+          "" + myDate.getDate() + myDate.getMonth() + myDate.getFullYear() + myDate.getHours() + myDate.getMinutes();
+  document.write('<script type="text/javascript" src="https://ajaxgeo.cartrawler.com/cartrawlerabe/abe/js/abeSVNInfo.js?' + myStamp + '"><\/script>');</script>
 <script type="text/javascript">
   document.write('<script type="text/javascript" src="https://ajaxgeo.cartrawler.com/cartrawlerabe/abe/js/ct_abe.js?' + CARTRAWLER.SVNInfo.revision + '"><\/script>');
 </script>
