@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted access');
 
 $app = JFactory::getApplication();
 $user = JFactory::getUser();
-$uri = JUri::current();
+$uri = JUri::getInstance()->toString();
 $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $search_url = $app->getUserState('user.search');
@@ -28,12 +28,12 @@ $modal = new JLayoutFile('shortlist_modal', $basePath = JPATH_SITE . '/component
       </a>
     <?php endif; ?>
     <div class="dropdown pull-right">
-      <a class="dropdown-toggle btn btn-small" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
-        <i class="icon icon-facebook"></i>
+      <button class="dropdown-toggle btn btn-small" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
+        <i class="icon icon-facebook"></i> 
         <i class="icon icon-twitter"></i>
         <i class="icon icon-google-plus"></i>
         <?php echo JText::_('COM_ACCOMMODATION_SHARE') ?>
-      </a> 
+      </button> 
       <!-- Link or button to toggle dropdown -->
       <div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
         <div class="social-item"> 
@@ -46,15 +46,15 @@ $modal = new JLayoutFile('shortlist_modal', $basePath = JPATH_SITE . '/component
       </div>
     </div>
     <?php if ($logged_in) : ?>
-      <a class="btn btn-small pull-right shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="#">
+    <a class="btn btn-small pull-right shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="<?php echo $uri ?>">
         <i class="icon-heart"></i>
         <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
       </a>
     <?php else : ?>
-      <a class="btn btn-small pull-right login" href="#">
+      <button class="btn btn-small pull-right login" href="<?php echo $uri ?>">
         <i class="icon-heart muted"></i>
         <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
-      </a>    
+      </button>    
     <?php endif; ?>
   </div>
 </div>
