@@ -7110,6 +7110,12 @@ div#abe_ABE .label {
   display: block;
   white-space: wrap;
 }
+div#abe_ABE select {
+  width: auto;
+}
+input#abe_driverAge {
+  width: 80%;
+}
 @font-face {
   font-family: 'social';
   src: url('../../../../media/fc/fonts/social.eot');
