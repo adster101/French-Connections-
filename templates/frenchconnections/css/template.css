@@ -7100,21 +7100,21 @@ div.modal.fade.in {
 div#abe_ABE .ct_box_title_content_span {
   float: none;
   width: auto;
-  background: transparent;
-  text-shadow: 0;
 }
 div#abe_ABE {
   width: auto;
 }
 div#abe_ABE .label {
   display: block;
-  white-space: wrap;
+  white-space: normal;
+  background-color: transparent;
+  text-shadow: inherit;
 }
 div#abe_ABE select {
   width: auto;
 }
 input#abe_driverAge {
-  width: 80%;
+  width: 80% !important;
 }
 @font-face {
   font-family: 'social';
