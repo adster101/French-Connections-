@@ -18,14 +18,10 @@ class modFeaturedPropertyHelper {
     $count = $params->get('count', 4);
 
     $type = $params->get('type');
-
+    $offers = $params->get('offers');
+    
     $lang = JFactory::getLanguage()->getTag();
-
-    //if ($lang === 'fr-FR') {
-    //$select = 'c.title,hel.id,trans.title,trans.description,occupancy, thumbnail';
-    //} else {
-    //$select = 'c.title,hel.id,unit.unit_title,unit.description,occupancy, thumbnail';
-    //}
+    $date = JFactory::getDate()->calendar('Y-m-d');
 
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
@@ -40,6 +36,11 @@ class modFeaturedPropertyHelper {
       c.base_currency,
       (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');
+
+    if ($offers) {
+      $query->select('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) as offer');
+    }
+
     $query->from('#__property as a');
     $query->join('left', '#__unit b ON a.id = b.property_id');
     // Here we only join the unit version where review is 0. Should ensure that we only take published units
@@ -57,19 +58,30 @@ class modFeaturedPropertyHelper {
     } else {
       $query->join('left', '#__classifications g ON g.id = e.department');
     }
-    
-    $query->join('left', '#__featured_properties h on h.property_id = a.id');
+
+
     $query->join('left', '#__property_images_library i on c.id = i.version_id');
 
     $query->where('b.ordering = 1');
     $query->where('a.published = 1');
     $query->where('b.published = 1');
     $query->where('i.ordering = 1');
-    $query->where('a.expiry_date >= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
-    $query->where('h.published = 1');
-    $query->where('h.featured_property_type = ' . $type);
-    $query->where('h.start_date <= ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
-    $query->where('h.end_date >= ' . $db->quote(JFActory::getDate()->calendar('Y-m-d')));
+    $query->where('a.expiry_date >= ' . $db->quote($date));
+
+    // Only join on the featured property table if we're not looking for offers. 
+    if (!$offers) {
+      $query->join('left', '#__featured_properties h on h.property_id = a.id');
+
+      $query->where('h.published = 1');
+      $query->where('h.featured_property_type = ' . $type);
+      $query->where('h.start_date <= ' . $db->quote($date));
+      $query->where('h.end_date >= ' . $db->quote($date));
+    }
+
+    if ($offers) {
+      $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) is not null');
+    }
+
     $query->order('rand()');
     $db->setQuery($query, 0, $count);
 
@@ -79,11 +91,12 @@ class modFeaturedPropertyHelper {
     //$this->item->params = $params;
 
     $items = ($items = $db->loadObjectList()) ? $items : array();
+
     $this->items = $items;
     $this->lang = $lang;
-    
-    
-    
+
+
+
     return $items;
   }
 

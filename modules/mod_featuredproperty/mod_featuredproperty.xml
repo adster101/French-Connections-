@@ -54,7 +54,16 @@
           <option 
             value="vertical">Vertical</option>
         </field>
-          
+        <field 
+          type="list"
+          name="offers"
+          label="With offer"
+          description="Show properties with a current special offer"
+          default="0">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </field>
+     
       </fieldset>
       <fieldset name="advanced">
         <field
