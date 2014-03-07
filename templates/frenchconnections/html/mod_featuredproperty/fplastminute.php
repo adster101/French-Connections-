@@ -27,7 +27,7 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
         <?php endif; ?>
         <p>
           <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
-            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded pull-right" />
+            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded" />
           </a>
         </p>
         <p>
