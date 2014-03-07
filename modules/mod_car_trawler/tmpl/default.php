@@ -50,4 +50,9 @@ defined('_JEXEC') or die;
 <li><strong>Break Down Assistance</strong></li>
 <li><strong>UK Based Customer Service</strong></li>
 </ul>
-<img src="http://www.frenchconnections.co.uk/_format/_images/general/hertz.gif" alt="Hertz Logo" /> <img src="http://www.frenchconnections.co.uk/_format/_images/general/europcar_logo.gif" alt="Europcar Logo" /><img src="http://www.frenchconnections.co.uk/_format/_images/general/avis_logo.gif" alt="Avis Logo" /><img src="http://www.frenchconnections.co.uk/_format/_images/general/enterprise_logos_v3.jpg" alt="Car Hire Companies Logos" /> <img src="http://www.frenchconnections.co.uk/_format/_images/general/budget-logo.jpg" alt="Budget Logo" />
+
+<img src="http://www.frenchconnections.co.uk/_format/_images/general/hertz.gif" alt="Hertz Logo" />
+<img src="http://www.frenchconnections.co.uk/_format/_images/general/europcar_logo.gif" alt="Europcar Logo" />
+<img src="http://www.frenchconnections.co.uk/_format/_images/general/avis_logo.gif" alt="Avis Logo" />
+<img src="http://www.frenchconnections.co.uk/_format/_images/general/enterprise_logos_v3.jpg" alt="Car Hire Companies Logos" /> 
+<img src="http://www.frenchconnections.co.uk/_format/_images/general/budget-logo.jpg" alt="Budget Logo" />
