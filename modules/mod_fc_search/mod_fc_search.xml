@@ -27,33 +27,7 @@
 	<config>
 		<fields name="params">
 			<fieldset name="basic">
-				<field
-					name="label"
-					type="label"
-					label="MOD_SEARCH_FIELD_LABEL_TEXT_LABEL"
-					description="MOD_SEARCH_FIELD_LABEL_TEXT_DESC" />
-				<field
-					name="width"
-					type="text"
-					default="20"
-					label="MOD_SEARCH_FIELD_BOXWIDTH_LABEL"
-					description="MOD_SEARCH_FIELD_BOXWIDTH_DESC" />
-				<field
-					name="text"
-					type="text"
-					label="MOD_SEARCH_FIELD_TEXT_LABEL"
-					description="MOD_SEARCH_FIELD_TEXT_DESC" />
-				<field
-					name="button"
-					type="radio"
-					class="btn-group"
-					label="MOD_SEARCH_FIELD_BUTTON_LABEL"
-					description="MOD_SEARCH_FIELD_BUTTON_DESC">
-					<option
-						value="">JNO</option>
-					<option
-						value="1">JYES</option>
-				</field>
+				
 				<field
 					name="button_pos"
 					type="list"
@@ -69,44 +43,14 @@
 					<option
 						value="bottom">MOD_SEARCH_FIELD_VALUE_BOTTOM</option>
 				</field>
-				<field
-					name="imagebutton"
-					type="radio"
-					class="btn-group"
-					label="MOD_SEARCH_FIELD_IMAGEBUTTON_LABEL"
-					description="MOD_SEARCH_FIELD_IMAGEBUTTON_DESC">
-					<option
-						value="">JNO</option>
-					<option
-						value="1">JYES</option>
-				</field>
-				<field
-					name="button_text"
-					type="text"
-					label="MOD_SEARCH_FIELD_BUTTONTEXT_LABEL"
-					description="MOD_SEARCH_FIELD_BUTTONTEXT_DESC" />
-				<field
-					name="opensearch"
-					type="radio"
-					class="btn-group"
-					label="MOD_SEARCH_FIELD_OPENSEARCH_LABEL"
-					description="MOD_SEARCH_FIELD_OPENSEARCH_DESC"
-					default="1">
-					<option
-						value="0">JNO</option>
-					<option
-						value="1">JYES</option>
-				</field>
-				<field
-					name="opensearch_title"
-					type="text"
-					label="MOD_SEARCH_FIELD_OPENSEARCH_TEXT_LABEL"
-					description="MOD_SEARCH_FIELD_OPENSEARCH_TEXT_DESC" />
-				<field
-					name="set_itemid"
-					type="text"
-					label="MOD_SEARCH_FIELD_SETITEMID_LABEL"
-					description="MOD_SEARCH_FIELD_SETITEMID_DESC" />
+        <field 
+          name="lastminute"
+          type="list"
+          default="0"
+          label="Show links for last minute availability?">
+          <option value="0">No</option>
+          <option value="1">Yes</option>
+        </field>
 			</fieldset>
 			<fieldset
 				name="advanced">

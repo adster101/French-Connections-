@@ -7,7 +7,8 @@ $bedrooms = $displayData->bedrooms;
 $occupancy = $displayData->occupancy;
 $arrival = $displayData->arrival;
 $departure = $displayData->departure;
-$lastminute = $displayData->lastminute;
+
+
 ?>
 <?php echo JHtml::_('form.token'); ?>
 
@@ -47,7 +48,7 @@ $lastminute = $displayData->lastminute;
   <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure ?>" 
          class="end_date input-small" autocomplete="off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DEPARTURE_DATE') ?>" />
 </div>
-<?php if ($lastminute) :?>
+
 <ul class="unstyled">
   <?php for ($i = 0; $i < 6; $i++) : ?>
   <?php $days = $i * 7; // Determine number of days to add to the next changeover day to get the nth week (assuming 6 weeks) ?>
@@ -62,11 +63,12 @@ $lastminute = $displayData->lastminute;
   </li>
   <?php endfor; ?>
 </ul>
-<?php endif; ?>
+
 <button class="property-search-button btn btn-primary pull-right" href="#">
   <i class="icon-search icon-white"> </i>
   <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
 </button>
+
 <input type="hidden" name="option" value="com_fcsearch" />
 
 

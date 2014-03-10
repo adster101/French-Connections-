@@ -47,7 +47,7 @@ jQuery(document).ready(function() {
 
           marker.setTitle((i + 1).toString());
           content = '<div class="media"><a class="pull-left" href="' + data[i].link + '"><img class="media-object" src="' + data[i].thumbnail + '"/></a><div class="media-body"><h4 class="media-heading"><a href="' + data[i].link + '">' + data[i].unit_title + '</a></h4><p>' + data[i].description + '</p></div></div>';
-          attachContent(marker, content,300);
+          attachContent(marker, content, 300);
 
           markers[i] = marker;
 
@@ -62,9 +62,9 @@ jQuery(document).ready(function() {
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
-      }).done(function(){
+      }).done(function() {
 
-    });
+      });
     }
 
     jQuery('#map_canvas').show();
@@ -72,6 +72,27 @@ jQuery(document).ready(function() {
   });
 
 
+  jQuery('.lastminute-date-search-link').each(function() {
+
+    jQuery(this).on('click', function(event) {
+
+      var data = jQuery(this).data();
+      var start = data.start;
+      var end = data.end;
+      jQuery('.start_date').attr('value', start);
+      jQuery('.end_date').attr('value', end);
+      var path = getPath();
+
+      // Amend the path that the form is submitted to
+      jQuery('form#property-search').attr('action', path);
+
+      // Submit the form
+      jQuery('form#property-search').submit();
+      event.preventDefault();
+    });
+
+
+  });
 
 
   // Get the selected tab, if any and set the tab accordingly...
@@ -122,7 +143,7 @@ jQuery(document).ready(function() {
       }
       )
     },
-    items:10
+    items: 10
   })
 
 
