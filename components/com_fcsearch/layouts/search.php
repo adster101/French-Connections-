@@ -7,7 +7,7 @@ $bedrooms = $displayData->bedrooms;
 $occupancy = $displayData->occupancy;
 $arrival = $displayData->arrival;
 $departure = $displayData->departure;
-$lastminute = $displayData->lastminute;
+$lastminute = ($displayData->lastminute) ? $displayData->lastminute : false;
 ?>
 <?php echo JHtml::_('form.token'); ?>
 
