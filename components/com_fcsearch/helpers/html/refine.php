@@ -19,16 +19,9 @@ defined('_JEXEC') or die;
 abstract class JHtmlRefine {
 
   /**
-   * Method to generate fields for filtering dates
-   *
-   * @param   FinderIndexerQuery  $query    A FinderIndexerQuery object.
-   * @param   array               $options  An array of options.
-   *
-   * @return  mixed  A rendered HTML widget on success, null otherwise.
-   *
-   * @since   2.5
+   * 
    */
-  public static function removeFilters($refine_options, $uri) {
+  public static function removeAttributeFilters($refine_options, $uri) {
     $html = '';
     $filter_counter = 1;
     $filters_to_remove = array();
@@ -38,19 +31,18 @@ abstract class JHtmlRefine {
       foreach ($refine_options as $option => $filters) {
         if (!empty($filters)) {
           foreach ($filters as $filter => $value) {
-
-
             $tmp = array_flip(explode('/', $uri));
+
             $remove = false;
 
-            $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($filter)) . '_' . $value['id'];
+            $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $value['id'];
 
             if (array_key_exists($filter_string, $tmp)) {
               unset($tmp[$filter_string]);
               $new_uri = implode('/', array_flip($tmp));
 
               $filters_to_remove[$filter_counter]['url'] = $new_uri;
-              $filters_to_remove[$filter_counter]['filter'] = $filter;
+              $filters_to_remove[$filter_counter]['filter'] = $value['title'];
               $filters_to_remove[$filter_counter]['count'] = $value['count'];
             }
 
@@ -62,20 +54,63 @@ abstract class JHtmlRefine {
 
       if (count($filters_to_remove) > 0) {
 
-        $html .='<p>';
+        $html .='<span>';
         foreach ($filters_to_remove as $filter_to_remove) {
 
           $html .='<a class="muted" href="' . JRoute::_('http://' . $filter_to_remove['url']) . '">';
           $html .='<span class="label"><i class="icon-delete"> </i>&nbsp; ' . $filter_to_remove['filter'];
           $html .='</span></a>&nbsp;';
         }
-        $html .='</p><hr />';
+        $html .='</span>';
       }
 
       return $html;
     }
   }
-  
-  
+
+  public static function removeTypeFilters($refine_options, $uri, $type) {
+    $html = '';
+    $filter_counter = 1;
+    $filters_to_remove = array();
+
+    if (!empty($refine_options)) {
+
+      foreach ($refine_options as $filter => $value) {
+        $tmp = array_flip(explode('/', $uri));
+
+        $remove = false;
+
+        $filter_string = $type . JStringNormalise::toDashSeparated(JApplication::stringURLSafe($value->title)) . '_' . $value->id;
+
+        if (array_key_exists($filter_string, $tmp)) {
+          unset($tmp[$filter_string]);
+          $new_uri = implode('/', array_flip($tmp));
+
+          $filters_to_remove[$filter_counter]['url'] = $new_uri;
+          $filters_to_remove[$filter_counter]['filter'] = $value->title;
+          $filters_to_remove[$filter_counter]['count'] = $value->count;
+        }
+
+        // Increment the filter counter
+        $filter_counter++;
+      }
+
+
+
+      if (count($filters_to_remove) > 0) {
+
+        $html .='<span>';
+        foreach ($filters_to_remove as $filter_to_remove) {
+
+          $html .='<a class="muted" href="' . JRoute::_('http://' . $filter_to_remove['url']) . '">';
+          $html .='<span class="label"><i class="icon-delete"> </i>&nbsp; ' . $filter_to_remove['filter'];
+          $html .='</span></a>&nbsp;';
+        }
+        $html .='</span>';
+      }
+
+      return $html;
+    }
+  }
 
 }

@@ -9,6 +9,9 @@
 defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
+$pathway = $app->getPathway();
+$items = $pathway->getPathWay();
+
 $lang = $app->getLanguage()->getTag();
 
 $uri = str_replace('http://', '', JUri::current());
@@ -48,36 +51,70 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         <?php echo JText::_('COM_FCSEARCH_UPDATE') ?>
       </button>     
     </div>
-
   </div>
 </div>
-<?php if ($this->localinfo->level < 5) : ?>
+
+<?php if ($this->localinfo->level) : ?>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <?php echo JText::_($this->escape($this->localinfo->title)); ?>
+      Location
+      <?php // echo JText::_($this->escape($this->localinfo->title));  ?>
     </div>
     <div class="panel-body">
-      <?php if (!empty($this->location_options)) : ?>
-
-        <?php foreach ($this->location_options as $key => $value) : ?>
-          <?php
-          $remove = false;
-          $tmp = explode('/', $uri); // Split the url out on the slash
-          $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // Remove the first 3 value of the URI
-          $filters = (!empty($filters)) ? '/' . implode('/', $filters) : '';
-          $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters;
-          ?>
-
-          <p>
-            <a href="<?php echo JRoute::_($route) ?>">
-              <i class="muted <?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
-              <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+      <?php foreach ($items as $key => $value) : ?> 
+        <?php if ($key > 0) : ?>
+          <p><a class="btn btn-small" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
+              <?php echo $value->name = stripslashes(htmlspecialchars($value->name, ENT_COMPAT, 'UTF-8')); ?>
+              &nbsp;<i class="icon icon-remove muted small"></i>
             </a>
-          </p>          
-        <?php endforeach ?>
-      <?php else : ?>
-        <?php echo '...'; ?>
+          </p> 
+          <?php if (($key + 1) == count($items)) : ?>
+            <hr />
+          <?php endif; ?>
+        <?php endif; ?>
+
+      <?php endforeach; ?>
+      <?php if ($this->localinfo->level < 5) : ?>
+
+        <?php if (!empty($this->location_options)) : ?>
+
+          <?php
+          $counter = 0;
+          $hide = true;
+          foreach ($this->location_options as $key => $value) :
+            ?>
+            <?php
+            $remove = false;
+            $tmp = explode('/', $uri); // Split the url out on the slash
+            $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // Remove the first 3 value of the URI
+            $filters = (!empty($filters)) ? '/' . implode('/', $filters) : '';
+            $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters;
+            ?>
+
+            <?php if ($counter >= 5 && $hide) : ?>
+              <?php $hide = false; ?>
+              <div class="hide ">
+              <?php endif; ?>
+              <p>
+                <a href="<?php echo JRoute::_($route) ?>">
+                  <i class="muted <?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
+                  <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
+                </a>
+              </p>      
+              <?php $counter++; ?>
+              <?php if ($counter == count($this->location_options) && !$hide) : ?>
+              </div>
+            <?php endif; ?>
+            <?php if ($counter == count($this->location_options) && !$hide) : ?>
+              <hr class="condensed" />
+              <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+            <?php endif; ?>
+          <?php endforeach ?>
+        <?php else : ?>
+          <?php echo '...'; ?>
+        <?php endif; ?> 
       <?php endif; ?>
+
     </div>
   </div>
 <?php endif; ?>

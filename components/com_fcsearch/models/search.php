@@ -259,6 +259,9 @@ class FcSearchModelSearch extends JModelList {
         c.city,
         d.occupancy,
         b.from_price as price,
+        -- if (d.accommodation_type = \'24\', b.from_price * 7, b.from_price) as price,
+        -- b.from_price as nightly_price,
+        d.accommodation_type as accommodation_id,
         j.path,
         left(d.description,500) as description,
         j.title as location_title,
@@ -270,6 +273,13 @@ class FcSearchModelSearch extends JModelList {
         i.title as tariff_based_on,
         e.image_file_name as thumbnail
       ');
+      if ($this->getState('search.level') == 5) {
+        $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+          cos(radians(c.latitude)) *
+          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
+          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          * sin(radians(c.latitude))),1)  as distance');
+      }
 
       $query->from('#__property a');
       $query->join('left', '#__unit b on b.property_id = a.id');
@@ -316,7 +326,7 @@ class FcSearchModelSearch extends JModelList {
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(c.latitude))) )
+          * sin(radians(c.latitude))) ) 
         ');
       }
 
@@ -541,16 +551,21 @@ class FcSearchModelSearch extends JModelList {
         $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
       }
 
-      if ($this->getState('list.accommodation_type')) {
-        $accommodation_type = $this->getState('list.accommodation_type');
-        $query = $this->getFilterAccommodationType($query, $accommodation_type, $db);
-      }
 
-      if ($this->getState('list.property_type')) {
+      $accommodation_type = $this->getState('list.accommodation_type');
+      $query = $this->getFilterAccommodationType($query, $accommodation_type, $db);
+
+      if ($type == 'accommodation_type') {
         $property_type = $this->getState('list.property_type');
         $query = $this->getFilterPropertyType($query, $property_type, $db);
       }
-      
+
+
+      //if ($this->getState('list.property_type')) {
+      //$property_type = $this->getState('list.property_type');
+      //$query = $this->getFilterPropertyType($query, $property_type, $db);
+      //}
+
       $query = $this->getFilterState('activities', $query, '#__property_attributes');
       $query = $this->getFilterState('suitability', $query);
       $query = $this->getFilterState('external_facilities', $query);
@@ -685,7 +700,10 @@ class FcSearchModelSearch extends JModelList {
     $query->where('c.review = 0');
     $query->where('d.review = 0');
     $query->where('d.unit_id is not null');
-
+    
+    if ($this->getState('search.level') == 5) { // City level
+      $query->where('c.city = ' . (int) $this->getState('search.location', ''));
+    }
 
     // Get the options.
     $db->setQuery($query);
@@ -780,6 +798,11 @@ class FcSearchModelSearch extends JModelList {
         $query = $this->getFilterPropertyType($query, $property_type, $db);
       }
 
+      if ($this->getState('list.accommodation_type')) {
+        $accommodation_type = $this->getState('list.accommodation_type');
+        $query = $this->getFilterAccommodationType($query, $accommodation_type, $db);
+      }
+
       // Sort out the budget requirements
       if ($this->getState('list.min_price') || $this->getState('list.max_price')) {
         $min_price = $this->getState('list.min_price', '');
@@ -834,10 +857,10 @@ class FcSearchModelSearch extends JModelList {
 
       $order = array(
           //1 => 'Property Type',
-          //2 => 'Accommodation Type',
+          //2 => 'Accommodation Type',  
+          2 => 'COM_FCSEARCH_EXTERNAL',
           3 => 'COM_FCSEARCH_SUITABILITY',
           4 => 'COM_FCSEARCH_INTERNAL',
-          5 => 'COM_FCSEARCH_EXTERNAL',
               //6 => 'Activities nearby',
               //7 => 'Kitchen features',
               //8 => 'Location Type'

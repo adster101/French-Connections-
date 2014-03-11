@@ -221,6 +221,7 @@ textarea {
   -webkit-border-top-left-radius: 4px;
   -moz-border-radius-topleft: 4px;
   border-top-left-radius: 4px;
+  font-weight: bold;
 }
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;

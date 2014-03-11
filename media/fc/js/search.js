@@ -69,8 +69,7 @@ jQuery(document).ready(function() {
 
     jQuery('#map_canvas').show();
 
-  });
-
+  }); 
 
   jQuery('.lastminute-date-search-link').each(function() {
 
@@ -169,6 +168,7 @@ jQuery(document).ready(function() {
 
 }) // End of on DOM ready
 
+
 function getPath(event) {
 
   // val is the 'active' suggestion populated by typeahead
@@ -242,11 +242,11 @@ function getPath(event) {
   }
 
   if (min_price !== '' && typeof(min_price) !== 'undefined') {
-    path = path + '/' + min_price;
+    path = path + '/' + 'min_' + min_price;
   }
 
   if (max_price !== '' && typeof(max_price) !== 'undefined') {
-    path = path + '/' + max_price;
+    path = path + '/' + 'max_ ' + max_price;
   }
 
   return path;

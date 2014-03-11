@@ -13,7 +13,6 @@ $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
-
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
 ?>
 
@@ -52,7 +51,10 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_proper
         <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
       </a>
       <p>
-        <?php echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
+        <?php
+        echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy);
+        echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->result->location_title) : '';
+        ?>
       <hr />
       <?php echo JHtml::_('string.truncate', $this->result->description, 175, true, false); ?>
       </p>

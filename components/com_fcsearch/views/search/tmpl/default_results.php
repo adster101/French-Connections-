@@ -33,6 +33,7 @@ $search_data->bedrooms = $this->state->get('list.bedrooms');
 $search_data->occupancy = $this->state->get('list.occupancy');
 $search_data->arrival = ($this->state->get('list.arrival', '')) ? JFactory::getDate($this->state->get('list.arrival'))->calendar('d-m-Y') : '';
 $search_data->departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this->state->get('list.departure'))->calendar('d-m-Y') : '';
+$uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path', 'query', 'fragment'));
 
 // Prepare the pagination string.  Results X - Y of Z
 // $start = (int) $this->pagination->get('limitstart') + 1;
@@ -44,15 +45,25 @@ $search_data->departure = ($this->state->get('list.departure', '')) ? JFactory::
 
 
 <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST" class="">
-  <div class="well well-small clearfix">  
 
-
-    <?php echo $search_layout->render($search_data); ?>
-
-  </div>
-  <h1 class="small-h1">
+  <h1 class="small-h1 page-header">
     <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
   </h1>
+  <div class="well well-small clearfix form-inline">  
+    <?php echo $search_layout->render($search_data); ?>
+  </div>
+
+  <?php $attribute_filter = JHtml::_('refine.removeAttributeFilters', $this->attribute_options, $uri); ?>
+  <?php $property_filter = JHtml::_('refine.removeTypeFilters', $this->property_options, $uri, 'property_'); ?>
+  <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
+
+  <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter)) : ?>
+
+    <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
+    <?php echo $attribute_filter, $property_filter, $accommodation_filter; ?>
+    <hr />
+  <?php endif; ?>
+
   <div class="row-fluid">
     <div class="span-12">
       <ul class="nav nav-tabs">
