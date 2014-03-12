@@ -58,14 +58,15 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
   <div class="panel panel-default">
     <div class="panel-heading">
       Location
-      <?php // echo JText::_($this->escape($this->localinfo->title));  ?>
+      <?php //echo JText::_($this->escape($this->localinfo->title));  ?>
     </div>
     <div class="panel-body">
       <?php foreach ($items as $key => $value) : ?> 
         <?php if ($key > 0) : ?>
-          <p><a class="btn btn-small" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
+          <p>
+            <a class="btn btn-small" style="display:block;text-align:left; text-wrap: no-wrap; overflow:hidden" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
               <?php echo $value->name = stripslashes(htmlspecialchars($value->name, ENT_COMPAT, 'UTF-8')); ?>
-              &nbsp;<i class="icon icon-remove muted small"></i>
+              &nbsp;<button class="close"> &times;</button><span class="small pull-right muted">Remove</span>
             </a>
           </p> 
           <?php if (($key + 1) == count($items)) : ?>
@@ -75,7 +76,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
 
       <?php endforeach; ?>
       <?php if ($this->localinfo->level < 5) : ?>
-
+            <p>Refine location</p>
         <?php if (!empty($this->location_options)) : ?>
 
           <?php

@@ -14,6 +14,7 @@ $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
+$location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 ?>
 
 <li>
@@ -52,11 +53,11 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_proper
       </a>
       <p>
         <?php
-        echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy);
-        echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->result->location_title) : '';
+        echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->occupancy, $this->result->bathrooms);
+        echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
         ?>
       <hr />
-      <?php echo JHtml::_('string.truncate', $this->result->description, 175, true, false); ?>
+      <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
       </p>
     </div>
     <div class="span2 align-right result-links">

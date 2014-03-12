@@ -14,7 +14,7 @@ $lang = $app->input->get('lang', 'en');
 
 $menus = $app->getMenu('site');
 
-$Itemid = FCSearchHelperRoute::getItemid(array('component','com_fcsearch'));
+$Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
 
 $bedrooms = '';
 $occupancy = '';
@@ -57,14 +57,17 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
 <div class="well well-small clearfix">  
   <h4><?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_SEARCH') ?></h4>
 
-  <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid='. (int) $Itemid .'&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>" method="POST" class="form-vertical">
-     <?php echo $search_layout->render($search_data); ?>
-
+  <form id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>" method="POST" class="form-vertical">
+    <?php echo $search_layout->render($search_data); ?>
     <input type="hidden" name="option" value="com_fcsearch" />
   </form>
+  <hr />
   <div class="row-fluid">
     <div class="span7"> 
+      <p><strong><?php echo JText::_('COM_FCSEARCH_MAP_SEARCH') ?></strong></p>
+
       <div class="search-map">
+
         <svg version = "1.1" width="100%" height="180px">
           <?php foreach ($regions as $region) : ?>
             <a xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=' . (int) $Itemid); ?>" xlink:title="">
@@ -87,8 +90,8 @@ $area_map[145] = "83,37,84,38,87,38,88,37,90,38,91,38,92,38,93,39,95,39,95,39,96
     <div class="span5">
       <p><strong><?php echo JText::_('COM_FCSEARCH_POPULAR_SEARCHES') ?></strong></p>
       <?php foreach ($popular as $k => $v) : ?>
-      <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars(trim($v->alias)). '&Itemid=' . (int) $Itemid);?>'><?php echo htmlspecialchars($v->title); ?></a>
-      <br />
+        <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . htmlspecialchars(trim($v->alias)) . '&Itemid=' . (int) $Itemid); ?>'><?php echo htmlspecialchars($v->title); ?></a>
+        <br />
       <?php endforeach; ?>
     </div>
   </div>

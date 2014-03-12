@@ -258,6 +258,7 @@ class FcSearchModelSearch extends JModelList {
         c.longitude,
         c.city,
         d.occupancy,
+        d.bathrooms,
         b.from_price as price,
         -- if (d.accommodation_type = \'24\', b.from_price * 7, b.from_price) as price,
         -- b.from_price as nightly_price,
@@ -271,7 +272,8 @@ class FcSearchModelSearch extends JModelList {
         h.title as accommodation_type,
         g.title as property_type,
         i.title as tariff_based_on,
-        e.image_file_name as thumbnail
+        e.image_file_name as thumbnail,
+        j.title as changeover_day
       ');
       if ($this->getState('search.level') == 5) {
         $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
@@ -331,12 +333,8 @@ class FcSearchModelSearch extends JModelList {
       }
 
       $query->join('left', '#__attributes g on g.id = d.property_type');
-
       $query->join('left', '#__attributes h on h.id = d.accommodation_type');
-
       $query->join('left', '#__attributes i on i.id = d.tariff_based_on');
-
-
 
       /*
        * This section deals with the filtering options.
