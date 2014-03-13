@@ -129,12 +129,4 @@
 
     
   </fieldset>
-<field
-      name="captcha"
-      type="captcha"
-      label="COM_ACCOMMODATION_CAPTCHA_LABEL"
-      description="COM_ACCOMMODATION_CAPTCHA_DESC"
-      validate="captcha"
-      labelclass="control-label"
-    />    
 </form>
