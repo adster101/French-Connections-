@@ -124,7 +124,12 @@
       labelclass="control-label"
       validate="adults"
     /> 
-    <field
+    
+
+
+    
+  </fieldset>
+<field
       name="captcha"
       type="captcha"
       label="COM_ACCOMMODATION_CAPTCHA_LABEL"
@@ -132,9 +137,4 @@
       validate="captcha"
       labelclass="control-label"
     />    
-
-
-    
-  </fieldset>
-
 </form>
