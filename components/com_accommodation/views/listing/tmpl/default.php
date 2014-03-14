@@ -76,7 +76,6 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     <!-- Needs go into a separate template -->
     <div id="main" role="main">
       <?php if (count($this->images) > 1) : ?>
-
         <section class="slider">
           <div id="slider" class="flexslider">
             <ul class="slides">
@@ -91,7 +90,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
               <?php endforeach; ?>
             </ul>
           </div>
-          <div id="carousel" class="flexslider">
+          <div id="carousel" class="flexslider carousel">
             <ul class="slides">
               <?php foreach ($this->images as $images => $image) : ?> 
                 <li>

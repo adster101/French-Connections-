@@ -2,7 +2,7 @@ jQuery(window).load(function() {
 
   // Load the google maps crap
   loadGoogleMaps('initPropertyMap');
-
+  
   // Load the twitter crap
   !function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -26,8 +26,8 @@ jQuery(window).load(function() {
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
-  // Done loading crap
-
+// Done loading crap
+  
 })
 
 jQuery(document).ready(function() {
@@ -39,8 +39,9 @@ jQuery(document).ready(function() {
     animation: "slide",
     itemWidth: 100,
     itemMargin: 5,
+    animationLoop: false,
     asNavFor: '#slider',
-     controlNav: false,
+    controlNav: false,
     slideshow: false
   });
 
@@ -48,10 +49,9 @@ jQuery(document).ready(function() {
     animation: "fade",
     animationLoop: false,
     slideshow: false,
-    video: "true",
     sync: '#carousel',
-    minItems: 1,
-     controlNav: false,
+    animationLoop: false,
+    controlNav: false
   });
 });
 
@@ -127,9 +127,9 @@ function initPropertyMap() {
 
     
   }).fail(function(e) {
-  }).always(function() {
+    }).always(function() {
 
-  });
+    });
 
 
 }  

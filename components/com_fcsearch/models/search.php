@@ -273,7 +273,7 @@ class FcSearchModelSearch extends JModelList {
         g.title as property_type,
         i.title as tariff_based_on,
         e.image_file_name as thumbnail,
-        j.title as changeover_day
+        k.title as changeover_day
       ');
       if ($this->getState('search.level') == 5) {
         $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
@@ -335,6 +335,8 @@ class FcSearchModelSearch extends JModelList {
       $query->join('left', '#__attributes g on g.id = d.property_type');
       $query->join('left', '#__attributes h on h.id = d.accommodation_type');
       $query->join('left', '#__attributes i on i.id = d.tariff_based_on');
+      // Take this out by storing changeover day as an int 0-6 etc
+      $query->join('left', '#__attributes k on k.id = d.changeover_day');
 
       /*
        * This section deals with the filtering options.
