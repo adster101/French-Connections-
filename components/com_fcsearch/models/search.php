@@ -578,8 +578,9 @@ class FcSearchModelSearch extends JModelList {
       $query->where('d.review = 0');
       $query->where('d.unit_id is not null');
       $query->where('d.' . (string) $type . ' is not null');
+      $query->where('e.id is not null');
       $query->group('d.' . (string) $type);
-
+      
       // Get the options.
       $db->setQuery($query);
 

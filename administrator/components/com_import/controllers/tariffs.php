@@ -26,10 +26,10 @@ class ImportControllerTariffs extends JControllerForm {
 
     // Get a db instance
     $db = JFactory::getDBO();
+    $db->truncateTable('#__tariffs');
     
     $previous_property_id = '';
     $previous_unit_id = '';
-    $unit_count = 1; // All imported properties must have at least one unit of reference  
     
     while (($line = fgetcsv($handle)) !== FALSE) {
 
@@ -71,6 +71,6 @@ class ImportControllerTariffs extends JControllerForm {
             
     fclose($handle);
     $this->setMessage('Properties imported, hooray!');
-    $this->setRedirect('index.php?option=com_import&view=availability');
+    $this->setRedirect('index.php?option=com_import&view=tariffs');
   }
 }
