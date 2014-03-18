@@ -82,7 +82,7 @@ class JHtmlGeneral {
         round((($rates['USD']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
     } elseif ($baseCurrency == 'EUR') { // Base rate is in euros
       $prices['EUR'] = $price;
-      $prices['GBP'] = (!empty($exchange_rate_eur)) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
+      $prices['GBP'] = (((float) $exchange_rate_eur > 0)) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['GBP']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
       // To convert into USD we need to convert from GBP
       $prices['USD'] = (!empty($exchange_rate_usd)) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
