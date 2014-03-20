@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="1.6.0" method="upgrade">
+<extension type="component" version="1.6.1" method="upgrade">
   <name>com_featuredproperties</name>
   <creationDate>2013-05-14</creationDate>
   <copyright>Copyright (C) 2013. All rights reserved.</copyright>
@@ -7,7 +7,7 @@
   <author>Adam Rifat</author>
   <authorEmail>adam@littledonkey.net</authorEmail>
   <authorUrl>http://</authorUrl>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <description>This component allows you to view and manage featured properties.</description>
   <install> <!-- Runs on install -->
     <sql>
@@ -22,10 +22,8 @@
   <administration>
     <menu>COM_FEATUREDPROPERTIES</menu>
     <languages folder="administrator">
+      <language tag="en-GB">language/en-GB.com_featuredproperties.ini</language>
       <language tag="en-GB">language/en-GB.com_featuredproperties.sys.ini</language>
-      <language tag="en-GB">language/en-GB.com_featuredproperties.sys.ini</language>
-      <language tag="fr-FR">language/fr-FR.com_featuredproperties.ini</language>
-      <language tag="fr-FR">language/fr-FR.com_featuredproperties.sys.ini</language>
     </languages>
   </administration>
 </extension>

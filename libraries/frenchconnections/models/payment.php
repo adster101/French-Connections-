@@ -61,7 +61,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
       // Set the model properties here.
       $this->listing = $config['listing'];
-      $this->owner_id = $config['listing'][0]->created_by;
+      $this->owner_id = ($config['listing'][0]->created_by) ? $config['listing'][0]->created_by : '';
       /*
        * Determine whether this is a renewal. 
        */
@@ -82,6 +82,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    * @param	array	Configuration array for model. Optional.
    * @return	JTable	A database object
    * @since	1.6
+   * 
    */
   public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);

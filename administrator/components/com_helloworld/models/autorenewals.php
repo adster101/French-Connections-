@@ -93,8 +93,8 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
       // Loop over the existing availability first
       foreach ($data->VendorTxCodes as $transaction) {
 
-        $XmlStr.= '<option value="' . $transaction[0] . '"> ' .
-                JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_CARD_DETAILS',$transaction[1], $transaction[2],$transaction[3]) .
+        $XmlStr.= '<option value="' . $transaction->id . '"> ' .
+                JText::sprintf('COM_HELLOWORLD_HELLOWORLD_AUTORENEWAL_CARD_DETAILS',$transaction->CardType, $transaction->CardLastFourDigits,$transaction->CardExpiryDate) .
                 ' </option>';
       }
       $XmlStr .= '<option value=\'0\'>None/opt out</option>';
@@ -138,6 +138,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
     $query = $db->getQuery(true);
 
     $query->select('
+      id,
       VendorTxCode,
       CardType,
       CardExpiryDate,
@@ -150,7 +151,7 @@ class HelloWorldModelAutoRenewals extends JModelAdmin {
     //$query->where('CardExpiryDate > now()');
     $db->setQuery($query);
 
-    $rows = $db->loadRowList();
+    $rows = $db->loadObjectList();
 
     if (!$rows) {
       return false;

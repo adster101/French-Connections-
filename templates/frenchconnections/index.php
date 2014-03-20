@@ -63,37 +63,38 @@ if ($this->params->get('logoFile')) {
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <jdoc:include type="head" />
-    <?php
-// Use of Google Font
-    if ($this->params->get('googleFont')) {
-      ?>
-      <link href='//fonts.googleapis.com/css?family=<?php echo $this->params->get('googleFontName'); ?>' rel='stylesheet' type='text/css' />
-      <style type="text/css">
-        h1,h2,h3,h4,h5,h6,.site-title{
-          font-family: '<?php echo str_replace('+', ' ', $this->params->get('googleFontName')); ?>', sans-serif;
-        }
-      </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <jdoc:include type="head" />
       <?php
-    }
-    ?>
-    <?php
-// Template color
-    if ($this->params->get('templateBackgroundColor')) {
+      // Use of Google Font
+      if ($this->params->get('googleFont')) {
+        ?>
+        <link href='//fonts.googleapis.com/css?family=<?php echo $this->params->get('googleFontName'); ?>' rel='stylesheet' type='text/css' />
+        <style type="text/css">
+          h1,h2,h3,h4,h5,h6,.site-title{
+            font-family: '<?php echo str_replace('+', ' ', $this->params->get('googleFontName')); ?>', sans-serif;
+          }
+        </style>
+        <?php
+      }
       ?>
-      <style type="text/css">
-        body.site
-        {
-          background-color: <?php echo $this->params->get('templateBackgroundColor'); ?>
-        }
-      </style>
       <?php
-    }
-    ?>
-    <!--[if lt IE 9]>
-      <script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
-    <![endif]-->
+      // Template color
+      if ($this->params->get('templateBackgroundColor')) {
+        ?>
+        <style type="text/css">
+          body.site
+          {
+            background-color: <?php echo $this->params->get('templateBackgroundColor'); ?>
+          }
+        </style>
+        <?php
+      }
+      ?>
+      <!--[if lt IE 9]>
+        <script src="<?php echo $this->baseurl ?>/media/jui/js/html5.js"></script>
+      <![endif]-->
   </head>
 
   <body class="site <?php
@@ -177,10 +178,10 @@ if ($this->params->get('logoFile')) {
                 </div>       
               </div>
             <?php elseif ($this->countModules('position-2') && !$this->countModules('position-13')) : ?>
-            
-                <jdoc:include type="modules" name="position-2" style="html5" />
+
+              <jdoc:include type="modules" name="position-2" style="html5" />
             <?php elseif (!$this->countModules('position-2') && $this->countModules('position-13')) : ?>
-                <jdoc:include type="modules" name="position-13" style="html5" />
+              <jdoc:include type="modules" name="position-13" style="html5" />
             <?php endif; ?>
 
             <!-- End Content -->

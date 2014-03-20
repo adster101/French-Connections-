@@ -7,6 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Adam Rifat <adam@littledonkey.net> - http://
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
