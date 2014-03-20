@@ -98,4 +98,4 @@ class CliTest extends JApplicationCli {
 
 }
 
-JApplicationCli::getInstance('GarbageCron')->execute();
+JApplicationCli::getInstance('CliTest')->execute();
