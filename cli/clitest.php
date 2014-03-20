@@ -73,7 +73,7 @@ class GarbageCron extends JApplicationCli {
       $rows = $db->loadObjectList();
       
     } catch (Exception $e) {
-      var_dunp($e);
+      var_dump($e);
       return false;
     }
     
