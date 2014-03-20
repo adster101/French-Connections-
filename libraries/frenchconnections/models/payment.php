@@ -257,7 +257,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    */
 
   protected function getUser($user_id = '') {
-
+    
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables' );
+    
     // Now get the user details
     $table = $this->getTable('UserProfileFc', 'HelloWorldTable');
 
@@ -302,7 +304,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    *
    */
 
-  protected function summary($units = array()) {
+  public function summary($units = array()) {
 
     // $units contains the listing including all the units and so on.
     // From this we can generate our pro forma order
@@ -778,7 +780,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    * 
    */
   public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email') {
-
+    
     $recipient = (JDEBUG) ? $params->get($parameter, 'adamrifat@frenchconnections.co.uk') : $to;
 
     // Assemble the email data...the sexy way!
@@ -786,9 +788,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->setSender($from)
             ->addRecipient($recipient)
             ->setSubject($emailSubject)
-            ->setBody($emailBody)
-            ->addBCC($cc, $name);
-
+            ->setBody($emailBody);
+    
     if (!$mail->Send()) {
       return false;
     }

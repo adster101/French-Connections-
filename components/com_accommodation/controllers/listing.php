@@ -15,6 +15,59 @@ defined('_JEXEC') or die;
  */
 class AccommodationControllerListing extends JControllerForm {
 
+  public function renewals() {
+    $props = $this->_getProps();
+
+    require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
+    require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
+
+    $params = JComponentHelper::getParams('com_helloworld');
+
+    foreach ($props as $k => $v) {
+      $listing_model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
+
+      $listing_model->setState('com_helloworld.listing.id', $v->id);
+
+      $listing = $listing_model->getItems();
+
+      $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
+      $details = $payment->getPaymentSummary();
+      
+      $payment->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', 'Test renewal reminder for ' . $v->id, 'Test renewal reminder', $params);
+
+    }
+    
+  }
+
+  /*
+   * Get a list of properties due for renewal
+   */
+
+  private function _getProps() {
+
+    //$this->out('Getting props...');
+
+    $db = JFactory::getDBO();
+
+    $query = $db->getQuery(true);
+    $query->select('id, datediff(expiry_date, now()) as days');
+    $query->from('#__property');
+    $query->where('expiry_date > ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
+    $query->where('datediff(expiry_date, now()) in (1,7,14,21,30)');
+    $query->where('VendorTxCode = \'\'');
+
+    $db->setQuery($query);
+
+    try {
+      $rows = $db->loadObjectList();
+    } catch (Exception $e) {
+      var_dump($e);
+      return false;
+    }
+
+    return $rows;
+  }
+
   public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true)) {
     return parent::getModel($name, $prefix, array('ignore_request' => false));
   }
@@ -44,11 +97,10 @@ class AccommodationControllerListing extends JControllerForm {
       $result = $db->loadRow();
 
       if (parse_url($result[0])) { // We have a valid web address 
-        
         $website = $result[0];
-        
+
         // Check that the http:// bit is present, if not add it. Should validate urls better 
-        $website = (strpos($website, 'http://') === 0) ? $website : 'http://' . $website; 
+        $website = (strpos($website, 'http://') === 0) ? $website : 'http://' . $website;
 
         // Log the view
         $query->getQuery(true);
@@ -60,11 +112,11 @@ class AccommodationControllerListing extends JControllerForm {
 
         // Get the date
         $date = JFactory::getDate()->toSql();
-        
+
         $data = array($db->quote($id), $db->quote($date), $db->quote($website), $db->quote($ip));
-        
+
         // Update the value in the db        
-        $query->values(implode(',',$data));
+        $query->values(implode(',', $data));
 
         $db->setQuery($query);
 
@@ -75,8 +127,7 @@ class AccommodationControllerListing extends JControllerForm {
       }
     } catch (Exception $e) {
       // Log error   
-      throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR',$id, $e->getMessage()), 500);
-      
+      throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR', $id, $e->getMessage()), 500);
     }
   }
 
@@ -120,7 +171,7 @@ class AccommodationControllerListing extends JControllerForm {
     // Validate the data. 
     // Returns either false or the validated, filtered data.
     $validate = $model->validate($form, $data);
-    
+
     // TO DO - Possibly better to move save from model to here?
 
 
@@ -151,23 +202,22 @@ class AccommodationControllerListing extends JControllerForm {
 
     // Write the review into the reviews table...
     if (!$model->processEnquiry($validate, $params, $id, $unit_id)) {
-      
+
       // Set the message
       $msg = JText::_('COM_ENQUIRY_PROBLEM_SENDING_ENQUIRY');
-      
+
       // Save the data in the session.
       $app->setUserState('com_accommodation.enquiry.data', $data);
 
       // Redirect back to the contact form.
       $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false), $msg);
-      
+
       return false;
     }
 
 
     // Flush the data from the session
     // $app->setUserState('com_accommodation.enquiry.data', null);
-
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
     if ($params->get('redirect')) {
       $this->setRedirect(JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('redirect')));
@@ -177,7 +227,5 @@ class AccommodationControllerListing extends JControllerForm {
 
     return true;
   }
-
- 
 
 }
