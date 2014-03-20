@@ -41,9 +41,44 @@ class GarbageCron extends JApplicationCli {
    * @since   2.5
    */
   public function doExecute() {
-    $this->out('   .           .     .__       |      | ');
-    $this->out('   | _  _ ._ _ | _.  [__) _  _.|_/ __ | ');
-    $this->out('\__|(_)(_)[ | )|(_]  |  \(_)(_.| \_)  * ');
+
+    $props = $this->_getProps();
+    
+    foreach($props as $prop) {
+      $this->out($prop);
+    }
+    
+  }
+
+  /*
+   * Get a list of properties due for renewal
+   */
+
+  private function _getProps() {
+
+    $this->out('Getting props...');
+
+    $db = JFactory::getDBO();
+
+    $query = $db->getQuery(true);
+    $query->select('id');
+    $query->from('#__property');
+    $query->where('expiry_date > ' . $db->quote(JFactory::getDate()->calendar('Y-m-D')));
+    $query->where('datediff(expiry_date, now() in (1,7,14,21,30');
+    $query->where('VendorTxId = \'\'');
+
+    $db->setQuery($query);
+
+    try {
+      $rows = $db->loadObjectList();
+      
+    } catch (Exception $e) {
+      var_dunp($e);
+      return false;
+    }
+    
+    return $rows;
+    
   }
 
 }
