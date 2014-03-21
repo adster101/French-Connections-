@@ -46,7 +46,7 @@ class CliTest extends JApplicationCli {
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
     JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . 'components/com_helloworld/helpers/helloworld.php');
-    $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+    $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
 
     // Get a list of properties for renewals
     $props = $this->_getProps();
@@ -78,35 +78,35 @@ class CliTest extends JApplicationCli {
       SWITCH ($v->days) {
         case 1:
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $this->payment_summary->render($payment_summary), $total, $expiry_date
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $expiry_date
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_1_DAYS'), $v->id);
 
           break;
         case 7:
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $this->payment_summary->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
           );
           break;
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
 
         case 14:
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $v->id, $this->payment_summary->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
 
           break;
         case 21:
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $v->id, $this->payment_summary->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_21_DAYS'), $v->id);
 
           break;
         case 30:
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $v->id, $this->payment_summary->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_30_DAYS'), $v->id);
           break;
