@@ -21,34 +21,69 @@
     description="Update the email settings for manual renewals"
     label="Manual renewal emails">
     <field 
-      name="COM_MANUAL_RENEWALS_M01" 
+      name="RENEWAL_REMINDER_SUBJECT_30_DAYS"
+      type="text"
+      label="30 day reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REMINDER_DAYS_30" 
       type="editor" default="default" 
-      label="30 day reminder (manual)" 
+      label="30 day reminder (body)" 
       filter="safehtml"
     />
     <field 
-      name="COM_MANUAL_RENEWALS_M02" 
+      name="RENEWAL_REMINDER_SUBJECT_21_DAYS"
+      type="text"
+      label="21 day reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REMINDER_DAYS_21" 
       type="editor" default="default" 
-      label="21 day reminder (manual)" 
+      label="21 day reminder (body)" 
       description="" 
       filter="safehtml"
     /> 
     <field 
-      name="COM_MANUAL_RENEWALS_M03" 
+      name="RENEWAL_REMINDER_SUBJECT_14_DAYS"
+      type="text"
+      label="14 day reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REMINDER_DAYS_14" 
       type="editor" default="default" 
-      label="14 day reminder (manual)" 
+      label="14 day reminder (body)" 
       filter="safehtml"
     />  
     <field 
-      name="COM_MANUAL_RENEWALS_M04" 
+      name="RENEWAL_REMINDER_SUBJECT_7_DAYS"
+      type="text"
+      label="7 day reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REMINDER_DAYS_7" 
       type="editor" default="default" 
-      label="7 day reminder (manual)" 
+      label="7 day reminder (body)" 
       filter="safehtml"
     />  
     <field 
-      name="COM_MANUAL_RENEWALS_M05" 
+      name="RENEWAL_REMINDER_SUBJECT_1_DAYS"
+      type="text"
+      label="1 day reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REMINDER_DAYS_1" 
       type="editor" default="default" 
-      label="1 day reminder (manual)" 
+      label="1 day reminder (body)" 
       filter="safehtml"
     />
   </fieldset>

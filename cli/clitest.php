@@ -42,28 +42,79 @@ class CliTest extends JApplicationCli {
    */
   public function doExecute() {
 
-    // Get a list of the properties that are due for renewal reminders
-    $props = $this->_getProps();
-
+    // Include all the model and helper files we need to process 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
-    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
+    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . 'components/com_helloworld/helpers/helloworld.php');
+    $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
 
-    $params = JComponentHelper::getParams('com_helloworld');
+    // Get a list of properties for renewals
+    $props = $this->_getProps();
 
+    // Get the parameters for use in processing the renewal reminders
+    $params = JComponentHelper::getParams('com_helloworld'); // These are the email params. 
+    $renewal_template = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
+    // Put the below into a separate method?
     foreach ($props as $k => $v) {
+
+      $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
+
+      // Get an instance of the listing model
       $listing_model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
 
+      // Set the listing ID we are sending the reminder to 
       $listing_model->setState('com_helloworld.listing.id', $v->id);
 
+      // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();
 
-      $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
-      $details = $payment->getPaymentSummary();
+      // Get an instance of the payment model
+      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
 
-      $payment->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', 'Test renewal reminder for ' . $v->id, 'Test renewal reminder', $params);
+      $user = $payment_model->getUser($listing[0]->created_by);
+      $payment_summary = $payment_model->getPaymentSummary();
+      $total = $payment_model->getOrderTotal($payment_summary);
+
+      SWITCH ($v->days) {
+        case 1:
+          $body = JText::sprintf(
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $this->payment_summary->render($payment_summary), $total, $expiry_date
+          );
+          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_1_DAYS'), $v->id);
+
+          break;
+        case 7:
+          $body = JText::sprintf(
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $this->payment_summary->render($payment_summary), $total
+          );
+          break;
+          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
+
+        case 14:
+          $body = JText::sprintf(
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $v->id, $this->payment_summary->render($payment_summary), $total
+          );
+          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
+
+          break;
+        case 21:
+          $body = JText::sprintf(
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $v->id, $this->payment_summary->render($payment_summary), $total
+          );
+          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_21_DAYS'), $v->id);
+
+          break;
+        case 30:
+          $body = JText::sprintf(
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $v->id, $this->payment_summary->render($payment_summary), $total
+          );
+          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_30_DAYS'), $v->id);
+          break;
+      }
+
+      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', $subject, $body, $params);
     }
-
+    
     $this->out('We done...');
   }
 

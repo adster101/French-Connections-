@@ -12,6 +12,14 @@ jimport('joomla.application.component.modellegacy');
 class FrenchConnectionsModelPayment extends JModelLegacy {
 
   /**
+   * Internal memory based cache array of data.
+   *
+   * @var    array
+   * @since  12.2
+   */
+  protected $cache = array();
+
+  /**
    * The property listing as a list of units 
    * 
    * @var type 
@@ -256,10 +264,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    *
    */
 
-  protected function getUser($user_id = '') {
-    
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables' );
-    
+  public function getUser($user_id = '') {
+
+    // Use the cached data if possible.
+    if ($this->retrieve($user_id)) {
+      return $this->retrieve($user_id);
+    }
+
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+
     // Now get the user details
     $table = $this->getTable('UserProfileFc', 'HelloWorldTable');
 
@@ -295,7 +308,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
     $item->invoice_address = $invoice_address;
 
-    return $item;
+    $this->store($user_id, $item);
+
+    return $this->retrieve($user_id);
   }
 
   /*
@@ -312,7 +327,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     // If the property is a B&B, then don't charge for any additional units unless the additional units are self-catering
     // If the expiry date is set then this is a renewal. Regardless of whether it has actually expired or not   
     // Item codes will be dependent on whether it is a renewal or not
-
     // Units counters
     $bandb = 0;
     $selfcatering = 0;
@@ -780,7 +794,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    * 
    */
   public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email') {
-    
+
     $recipient = (JDEBUG) ? $params->get($parameter, 'adamrifat@frenchconnections.co.uk') : $to;
 
     // Assemble the email data...the sexy way!
@@ -788,8 +802,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->setSender($from)
             ->addRecipient($recipient)
             ->setSubject($emailSubject)
-            ->setBody($emailBody);
-    
+            ->setBody($emailBody)
+            ->isHtml(true);
+
     if (!$mail->Send()) {
       return false;
     }
@@ -1058,6 +1073,52 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    */
   protected function getOwnerId() {
     return $this->owner_id;
+  }
+
+  /**
+   * Method to retrieve data from cache.
+   *
+   * @param   string   $id          The cache store id.
+   * @param   boolean  $persistent  Flag to enable the use of external cache. [optional]
+   *
+   * @return  mixed  The cached data if found, null otherwise.
+   *
+   * @since   2.5
+   *
+   */
+  public function retrieve($id) {
+
+    $data = null;
+
+    // Use the internal cache if possible.
+    if (isset($this->cache[$id])) {
+      return $this->cache[$id];
+    }
+
+    // Store the data in internal cache.
+    if ($data) {
+      $this->cache[$id] = $data;
+    }
+
+    return $data;
+  }
+
+  /**
+   * Method to store data in cache.
+   *
+   * @param   string   $id          The cache store id.
+   * @param   mixed    $data        The data to cache.
+   *
+   * @return  boolean  True on success, false on failure.
+   *
+   * @since   2.5
+   */
+  protected function store($id, $data) {
+
+    // Store the data in internal cache.
+    $this->cache[$id] = $data;
+
+    return true;
   }
 
 }
