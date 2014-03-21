@@ -48,7 +48,7 @@ class CliTest extends JApplicationCli {
     // Include all the model and helper files we need to process 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
-    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . 'components/com_helloworld/helpers/helloworld.php');
+    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
     $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
 
     // Get a list of properties for renewals
