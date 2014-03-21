@@ -42,6 +42,9 @@ class CliTest extends JApplicationCli {
    */
   public function doExecute() {
 
+    // Create an instance of the site application 
+    JFactory::getApplication('site');
+    
     // Include all the model and helper files we need to process 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
