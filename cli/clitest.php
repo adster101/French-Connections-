@@ -42,10 +42,12 @@ class CliTest extends JApplicationCli {
    */
   public function doExecute() {
 
-     $props = $this->_getProps();
+    // Get a list of the properties that are due for renewal reminders
+    $props = $this->_getProps();
 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
+    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . 'components/com_helloworld/helpers/helloworld.php');
 
     $params = JComponentHelper::getParams('com_helloworld');
 
@@ -58,13 +60,11 @@ class CliTest extends JApplicationCli {
 
       $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
       $details = $payment->getPaymentSummary();
-      
-      $payment->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', 'Test renewal reminder for ' . $v->id, 'Test renewal reminder', $params);
 
+      $payment->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', 'Test renewal reminder for ' . $v->id, 'Test renewal reminder', $params);
     }
-    
+
     $this->out('We done...');
-    
   }
 
   /*

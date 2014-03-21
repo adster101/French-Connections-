@@ -20,7 +20,8 @@ class AccommodationControllerListing extends JControllerForm {
 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
-
+    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . 'components/com_helloworld/helpers/helloworld.php');
+  
     $params = JComponentHelper::getParams('com_helloworld');
 
     foreach ($props as $k => $v) {
