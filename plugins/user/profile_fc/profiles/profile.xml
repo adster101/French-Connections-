@@ -4,7 +4,12 @@
   <fieldset 
     name="user_details"
     label="PLG_USER_PROFILE_SLIDER_LABEL">
-      
+    <field 
+      name="name" 
+      type="hidden"
+      required="false"
+      default="asd"
+    />
     <field
       name="firstname"
       type="text"
@@ -222,27 +227,5 @@
       class="validate validate-exchange"
     />
   </fieldset>
-    
-  
-  <fields name="temp">
-    <field
-      name="aboutme"
-      type="textarea"
-      description="PLG_USER_PROFILE_FIELD_ABOUT_ME_DESC"
-      label="PLG_USER_PROFILE_FIELD_ABOUT_ME_LABEL"
-      message="PLG_USER_PROFILE_FIELD_ABOUT_ME_MESSAGE"
-      cols="30"
-      rows="5"
-      filter="safehtml"
-    />     
-    
-    <field
-      name="tos"
-      type="tos"
-      label="PLG_USER_PROFILE_FIELD_TOS_LABEL"
-      description="PLG_USER_PROFILE_FIELD_TOS_DESC">
-      <option value="1">PLG_USER_PROFILE_OPTION_AGREE</option>
-    </field>     
-    
-  </fields>
+ 
 </form>

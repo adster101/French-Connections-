@@ -121,7 +121,8 @@ class plgUserProfile_fc extends JPlugin {
 
     $lang = JFactory::getLanguage();
     $lang->load('com_helloworld');
-  
+
+    // Only do this is we're editing a property owner?
 
     if (!($form instanceof JForm)) {
       $this->_subject->setError('JERROR_NOT_A_FORM');
@@ -134,33 +135,33 @@ class plgUserProfile_fc extends JPlugin {
     if (!in_array($name, array('com_admin.profile', 'com_users.user'))) {
       return true;
     }
-    
+
     $doc = JFactory::getDocument();
-    $doc->addScript('/media/fc/js/general.js', 'text/javascript', true);  
-    
+    //$doc->addScript('/media/fc/js/general.js', 'text/javascript', true);  
+
     JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
     JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
-    
+
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.
-    $form->removeField('name');
-    
-    
+    $form->setFieldAttribute('name', 'required', 'false');
+    $form->setFieldAttribute('name', 'hidden', 'true');
+
     // Add the additional progile fields to the form.
     JForm::addFormPath(dirname(__FILE__) . '/profiles');
     $form->loadFile('profile', false);
 
     // Add the rule path to the form so we may validate the user profile details a bit.
     JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models/rules');
-    
+
     $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
     if ($vat_status == 'ZA') {
       $form->setFieldAttribute('company_number', 'required', true);
     }
-    
+
     if ($vat_status == 'ECS') {
       $form->setFieldAttribute('vat_number', 'required', true);
     }
-   
+
     return true;
   }
 
@@ -185,11 +186,16 @@ class plgUserProfile_fc extends JPlugin {
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
         $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
 
+        $table->set('_tbl_keys', array('id'));
+
         //$table->delete($userId);
         $data['user_id'] = $data['id'];
         unset($data['id']);
 
-        $table->save($data);
+        if (!$table->save($data)) {
+          $this->setError($table->getError());
+          return false;         
+        }
 
         // TO DO - Concatenate the first and last names and update the joomla user 'name' field.
         $user = new JUser($userId);
@@ -212,6 +218,34 @@ class plgUserProfile_fc extends JPlugin {
         return false;
       }
     }
+    return true;
+  }
+
+  /**
+   * Method is called before user data is stored in the database
+   *
+   * @param   array    $user   Holds the old user data.
+   * @param   boolean  $isnew  True if a new user is stored.
+   * @param   array    $data   Holds the new user data.
+   *
+   * @return    boolean
+   *
+   * @since   3.1
+   * @throws    InvalidArgumentException on invalid date.
+   */
+  public function onUserBeforeSave($user, $isnew, $data) {
+
+    // Check that the date is valid.
+    if (!empty($data['firstname']) && !empty($data['surname'])) {
+      try {
+        // Concatenate the ffirst and surname fields and save into the name field.
+        $data['name'] = $data['firstname'] . ' ' . $data['surname'];
+      } catch (Exception $e) {
+        // Throw an exception if date is not valid.
+        throw new InvalidArgumentException(JText::_('PLG_USER_PROFILE_ERROR_INVALID_NAME'));
+      }
+    }
+
     return true;
   }
 
@@ -250,6 +284,4 @@ class plgUserProfile_fc extends JPlugin {
     return true;
   }
 
-  
-  
 }
