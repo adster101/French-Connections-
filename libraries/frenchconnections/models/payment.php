@@ -808,7 +808,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->setSubject($emailSubject)
             ->setBody($emailBody)
             ->isHtml(true)
-            ->cc($cc);
+            ->addCC($cc);
 
     if (!$mail->Send()) {
       return false;
