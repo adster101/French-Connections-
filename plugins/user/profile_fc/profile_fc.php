@@ -186,15 +186,18 @@ class plgUserProfile_fc extends JPlugin {
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
         $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
 
-        $table->set('_tbl_keys', array('id'));
-
-        //$table->delete($userId);
         $data['user_id'] = $data['id'];
         unset($data['id']);
 
+
+        //$table->delete($userId);
+        if ($isNew) {
+          $table->set('_tbl_keys', array('id'));
+        }
+
         if (!$table->save($data)) {
           $this->setError($table->getError());
-          return false;         
+          return false;
         }
 
         // TO DO - Concatenate the first and last names and update the joomla user 'name' field.
