@@ -52,6 +52,9 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
             JText::_('JSTATUS'), 'filter_state', JHtml::_('select.options', $this->getFilterFields(), 'value', 'text', $this->state->get('filter.state'), true)
     );
 
+     if ($canDo->get('core.admin')) {
+      JToolBarHelper::preferences('com_specialoffers');
+    }
 
     HelloWorldHelper::addSubmenu('specialoffers');
 

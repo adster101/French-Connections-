@@ -674,7 +674,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $transaction_number = $payment_details['VendorTxCode'];
     $auth_code = $payment_details['TxAuthNo'];
     $address = $billing_details['BillingAddress1'] . ' ' . $biling_details['BillingAddress2'] . ' ' . $billing_details['BillingCity'] . ' ' . $billing_details['BillingPostCode'] . ' ' . $billing_details['BillingCountry'];
-    $billing_email = $billing_details['BillingEmailAddress'];
+    $billing_email = (JDEBUG) ? 'admin@frenchconnections.co.uk' : $billing_details['BillingEmailAddress'];
 
     $description = "\n";
 
@@ -797,18 +797,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email', $cc = 'adamrifat@frenchconnections.co.uk') {
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email') {
 
-    $recipient = (JDEBUG) ? $params->get($parameter, 'adamrifat@frenchconnections.co.uk') : $to;
-
-    // Assemble the email data...the sexy way!
+    // Assemble the email data...
     $mail = JFactory::getMailer()
             ->setSender($from)
-            ->addRecipient($recipient)
+            ->addRecipient($to)
             ->setSubject($emailSubject)
             ->setBody($emailBody)
-            ->isHtml(true)
-            ->addCC($cc);
+            ->isHtml(true);
 
     if (!$mail->Send()) {
       return false;

@@ -23,6 +23,14 @@ class AccommodationControllerListing extends JControllerForm {
     JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
     $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
 
+
+    // Create an instance of the site application 
+    $app = JFactory::getApplication('site');
+
+    print_r($app->getCfg('debug'));
+    die;
+
+
     // Get a list of properties for renewals
     $props = $this->_getProps();
 
@@ -86,9 +94,8 @@ class AccommodationControllerListing extends JControllerForm {
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_30_DAYS'), $v->id);
           break;
       }
-      
-      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', '[TESTING]' . $subject, $body, $params);
 
+      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', '[TESTING]' . $subject, $body, $params);
     }
   }
 

@@ -43,7 +43,9 @@ class CliTest extends JApplicationCli {
   public function doExecute() {
 
     // Create an instance of the site application 
-    JFactory::getApplication('site');
+    $app = JFactory::getApplication('site');
+
+    $debug = $app->getCfg('debug');
 
     // Include all the model and helper files we need to process 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
@@ -56,6 +58,7 @@ class CliTest extends JApplicationCli {
 
     // Get the parameters for use in processing the renewal reminders
     $params = JComponentHelper::getParams('com_helloworld'); // These are the email params. 
+
     $renewal_template = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
     // Put the below into a separate method?
     foreach ($props as $k => $v) {
@@ -77,6 +80,9 @@ class CliTest extends JApplicationCli {
       $user = $payment_model->getUser($listing[0]->created_by);
       $payment_summary = $payment_model->getPaymentSummary();
       $total = $payment_model->getOrderTotal($payment_summary);
+
+      $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+
 
       SWITCH ($v->days) {
         case 1:
@@ -114,7 +120,7 @@ class CliTest extends JApplicationCli {
           break;
       }
 
-      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'accounts@frenchconnections.co.uk', '[TESTING] - ' . $subject, $body, $params);
+      $payment_model->sendEmail('noreply@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $params);
     }
 
     $this->out('We done...');
