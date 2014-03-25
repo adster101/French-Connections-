@@ -339,8 +339,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $item_costs = array();
 
     // Loop over all the units found
-    // Only record image count for one unit as the tariff will be set max images per unit
-    // not as a listing as a whole.
     foreach ($units as $unit) {
 
       if ($unit->accommodation_type == 25) {
@@ -355,19 +353,19 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $image_count = $image_count + $unit->images;
     }
 
+    // Work out the unit count
     if ($bandb > 0 && $selfcatering > 0) {
-      $unit_count = $selfcatering;
-      $mixed_units = true;
+      $unit_count = $selfcatering; // Set total units to the number of self-catering
+      $mixed_units = true; // Flag the property as having mixed units...
     } elseif ($bandb == 0 && $selfcatering > 0) {
-      $unit_count = ( $selfcatering - 1 );
+      $unit_count = ( $selfcatering - 1 ); // Remove one as the first is included in the package price
     } elseif ($bandb > 0 && $selfcatering == 0) {
-      $unit_count = 0;
+      $unit_count = 0; // Don't charge for additional units as B&B have unlimited
     }
-
 
     // Below covers most cases
     // Need to also consider
-    // Site network, e.g. French Translations (*)
+    // Site network, e.g. French Translations (?)
     // Video (*)
     // Also possible the 'additional' marketing gubbins
     // Vouchers! (*)
@@ -377,33 +375,38 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       // Get the component params - for e.g. the number of images they're entitled to
       // Determine the item costs
       if ($image_count >= 20) {
-        $item_costs['1004-009']['quantity'] = 1; // Renewal
+        //$item_costs['1004-009']['quantity'] = 1; // Renewal
+        $item_costs['1002-008']['quantity'] = 1; // Renewal
 
         if ($unit_count > 0) {
 
-          $item_costs['1004-006']['quantity'] = $unit_count;
+          $item_costs['1002-010']['quantity'] = $unit_count;
         }
       } else { // Image count must be less than 8 but still a renewal
         if ($unit_count > 0) {
-          $item_costs['1004-006']['quantity'] = $unit_count;
+          $item_costs['1002-010']['quantity'] = $unit_count;
         }
 
-        $item_costs['1004-002']['quantity'] = 1;
+        $item_costs['1002-004']['quantity'] = 1;
       }
     } else { // New property being published for first time
       // Determine the item costs
       if ($image_count >= 20) {
-        $item_costs['1005-009']['quantity'] = 1;
+        //$item_costs['1005-009']['quantity'] = 1;
+        $item_costs['1003-008']['quantity'] = 1;
 
         if ($unit_count > 0) {
-          $item_costs['1005-006']['quantity'] = $unit_count;
+          //$item_costs['1005-006']['quantity'] = $unit_count;
+          $item_costs['1003-010']['quantity'] = $unit_count;
         }
-      } else { // Image count must be less than 8
+      } else { // Image count must be less than 20
         // Add the base item price
-        $item_costs['1005-002']['quantity'] = 1;
+        //$item_costs['1005-002']['quantity'] = 1;
+        $item_costs['1003-004']['quantity'] = 1;
         if ($unit_count > 0) {
 
-          $item_costs['1005-006']['quantity'] = $unit_count;
+          //$item_costs['1005-006']['quantity'] = $unit_count;
+          $item_costs['1003-008']['quantity'] = $unit_count;
         }
 
         if ($image_count > 4 && $image_count <= 7) {
@@ -419,6 +422,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $item_costs['1005-014']['quantity'] = 1;
       }
     }
+    
     return $item_costs;
   }
 
