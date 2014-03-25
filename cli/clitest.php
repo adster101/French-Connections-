@@ -83,38 +83,45 @@ class CliTest extends JApplicationCli {
 
       $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
 
+      SWITCH (true) {
+        case ($v->days < 0):
+          $body = JText::sprintf(
+                          $renewal_template->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
+          );
+          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
 
-      SWITCH ($v->days) {
-        case 1:
+          break;
+
+        case ($v->days = "1"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $expiry_date
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_1_DAYS'), $v->id);
 
           break;
-        case 7:
+        case ($v->days = "7"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
           break;
 
-        case 14:
+        case ($v->days = "14"):
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
           break;
-        case 21:
+        case ($v->days = "21"):
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_21_DAYS'), $v->id);
 
           break;
-        case 30:
+        case ($v->days = "30"):
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
+                          $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_30_DAYS'), $v->id);
           break;
@@ -135,15 +142,22 @@ class CliTest extends JApplicationCli {
     //$this->out('Getting props...');
 
     $db = JFactory::getDBO();
+    /**
+     * Get the date now
+     */
+    $date = JFactory::getDate();
+
+    /*
+     * Add the date period to it
+     */
+    $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
     $query->select('id, datediff(expiry_date, now()) as days, expiry_date');
     $query->from('#__property');
-    $query->where('expiry_date > ' . $db->quote(JFactory::getDate()->calendar('Y-m-d')));
-    $query->where('datediff(expiry_date, now()) in (1,7,14,21,30)');
+    $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
+    $query->where('datediff(expiry_date, now()) in (-1,1,7,14,21,30)');
     $query->where('VendorTxCode = \'\'');
-
-    $db->setQuery($query);
 
     try {
       $rows = $db->loadObjectList();

@@ -86,6 +86,19 @@
       label="1 day reminder (body)" 
       filter="safehtml"
     />
+    <field
+      name="RENEWAL_REMINDER_SUBJECT_EXPIRED"
+      type="text"
+      label="Expiry reminder (Subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REMINDER_EXPIRED" 
+      type="editor" default="default" 
+      label="-1 day expired (body)" 
+      filter="safehtml"
+    />
   </fieldset>
   <fieldset 
     name="auto"

@@ -118,7 +118,9 @@ class plgUserProfile_fc extends JPlugin {
   function onContentPrepareForm($form, $data) {
     // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
-
+    $input = JFactory::getApplication()->input;
+    $form_data = $input->get('jform', array(), 'array');
+    $vat_status = '';
     $lang = JFactory::getLanguage();
     $lang->load('com_helloworld');
 
@@ -153,13 +155,19 @@ class plgUserProfile_fc extends JPlugin {
     // Add the rule path to the form so we may validate the user profile details a bit.
     JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models/rules');
 
-    $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
+    if (!empty($data)) {
+      $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
+    } else if (!empty($form_data)) {
+      $vat_status = $form_data['vat_status'];
+    }
+
+
     if ($vat_status == 'ZA') {
-      $form->setFieldAttribute('company_number', 'required', true);
+      $form->setFieldAttribute('company_number', 'required', 'required');
     }
 
     if ($vat_status == 'ECS') {
-      $form->setFieldAttribute('vat_number', 'required', true);
+      $form->setFieldAttribute('vat_number', 'required', 'required');
     }
 
     return true;
