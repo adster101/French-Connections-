@@ -114,7 +114,7 @@ class CliTest extends JApplicationCli {
           break;
       }
 
-      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', $subject, $body, $params);
+      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'accounts@frenchconnections.co.uk', '[TESTING] - ' . $subject, $body, $params);
     }
 
     $this->out('We done...');
