@@ -44,7 +44,7 @@ class CliTest extends JApplicationCli {
 
     // Create an instance of the site application 
     JFactory::getApplication('site');
-    
+
     // Include all the model and helper files we need to process 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
     require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
@@ -90,15 +90,14 @@ class CliTest extends JApplicationCli {
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
           );
-          break;
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
+          break;
 
         case 14:
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $v->id, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
-
           break;
         case 21:
           $body = JText::sprintf(
@@ -117,7 +116,7 @@ class CliTest extends JApplicationCli {
 
       $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', $subject, $body, $params);
     }
-    
+
     $this->out('We done...');
   }
 

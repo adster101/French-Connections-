@@ -17,12 +17,8 @@ abstract class HelloWorldHelper {
 
     $expiry_date = (!empty($expiry_date)) ? new DateTime($expiry_date) : '';
 
-    $days_to_renewal = '';
-    //$day_to_renewal_pretty = '';
-
     if ($expiry_date) {
-      $now = date('Y-m-d');
-      $now = new DateTime($now);
+      $now = new DateTime(date('Y-m-d'));
       $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
       //$days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
     }

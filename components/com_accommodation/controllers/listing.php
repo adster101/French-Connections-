@@ -62,8 +62,8 @@ class AccommodationControllerListing extends JControllerForm {
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $this->payment_summary->render($payment_summary), $total
           );
-          break;
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
+          break;
 
         case 14:
           $body = JText::sprintf(

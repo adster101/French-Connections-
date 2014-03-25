@@ -998,42 +998,23 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
     /*
      * Get the days until the properyt expires
+     * Could just check this below
      */
     $days_to_expiry = HelloWorldHelper::getDaysToExpiry($expiry_date);
 
-    if (!$date) {
+    if (!is_int($date)) {
 
       /*
        * Check that we have a valid date
        */
       $this->isRenewal = false;
-    } else if (empty($expiry_date)) {
+    } else if (!empty($expiry_date)) {
 
       /*
        *  If there is no expiry date then not a renewal
        */
-      $this->isRenewal = false;
-    } else if (time() > $date) {
-
-      /*
-       * If time now is greater than date, must have expired
-       */
       $this->isRenewal = true;
-    } else if (($days_to_expiry < 7) && ($date > time())) {
-
-      /*
-       * Less than seven days to expiry, treat as renewal
-       */
-      $this->isRenewal = true;
-    } else if ($days_to_expiry > 7) {
-
-      /*
-       * Check that we are not in the seven day window.
-       */
-
-      $this->isRenewal = false;
-    }
-
+    } 
 
     return $this->isRenewal;
   }
