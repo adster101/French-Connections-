@@ -87,7 +87,7 @@ class AccommodationControllerListing extends JControllerForm {
           break;
       }
       
-      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', $subject, $body, $params);
+      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', '[TESTING]' . $subject, $body, $params);
 
     }
   }

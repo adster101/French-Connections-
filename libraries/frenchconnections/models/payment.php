@@ -797,7 +797,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email') {
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email', $cc = 'adamrifat@frenchconnections.co.uk') {
 
     $recipient = (JDEBUG) ? $params->get($parameter, 'adamrifat@frenchconnections.co.uk') : $to;
 
@@ -807,7 +807,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->addRecipient($recipient)
             ->setSubject($emailSubject)
             ->setBody($emailBody)
-            ->isHtml(true);
+            ->isHtml(true)
+            ->cc($cc);
 
     if (!$mail->Send()) {
       return false;
