@@ -422,9 +422,57 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $item_costs['1005-014']['quantity'] = 1;
       }
     }
-    
+
     return $item_costs;
   }
+
+  public function processRepeatPayment($VendorTxCode = '', $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'REPEAT', $payment_summary = '') {
+
+    // Check we've got what we need to proceed
+    if (!$VendorTxCode || !$VPSTxId || !$SecurityKey || !$TxAuthNo) {
+      return false;
+    }
+    // Get the invoice component parameters which hold the protx settings
+    $protx_settings = JComponentHelper::getParams('com_itemcosts');
+
+    $sngTotal = 0.0;
+    $strProtocol = $protx_settings->get('VPSProtocol');
+    $strTransactionType = 'REPEAT';
+    $strVendorName = $protx_settings->get('VendorName');
+    $strPurchaseURL = $protx_settings->get('RepeatURL');
+    $strCurrency = $protx_settings->get('Currency');
+    $VendorTxCode = $this->owner_id . '-123456-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
+
+
+    // Loop over the order lines and make the basket - wrap into separate function
+    foreach ($payment_summary as $item => $line) {
+      $sngTotal = $sngTotal + $line->line_value;
+    }
+
+    /* Now to build the Sage Pay Direct POST.  For more details see the Sage Pay Direct Protocol 2.23
+     * * NB: Fields potentially containing non ASCII characters are URLEncoded when included in the POST */
+    $strPost = "VPSProtocol=" . $strProtocol;
+    $strPost = $strPost . "&TxType=" . $strTransactionType; //PAYMENT by default.  You can change this in the includes file
+    $strPost = $strPost . "&Vendor=" . $strVendorName;
+    $strPost = $strPost . "&VendorTxCode=" . $VendorTxCode; //As generated above
+    $strPost = $strPost . "&Amount=" . number_format($sngTotal, 2); //Formatted to 2 decimal places with leading digit but no commas or currency symbols **
+    $strPost = $strPost . "&Currency=" . $strCurrency;
+    $strPost = $strPost . "&Description=Repeat-Deferred";
+    $strPost = $strPost . "&RelatedVPSTxID=" . $VPSTxId;
+    $strPost = $strPost . "&RelatedVendorTxCode=" . $VendorTxCode;
+    $strPost = $strPost . "&RelatedSecurityKey=" . $SecurityKey;
+    $strPost = $strPost . "&RelatedTxAuthNo=" . $TxAuthNo;
+
+    $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
+    /* Analyse the response from Sage Pay Direct to check that everything is okay
+     * * Registration results come back in the Status and StatusDetail fields */
+
+    $arrResponse['VendorTxCode'] = $VendorTxCode;
+  }
+
+  /*
+   * 
+   */
 
   public function processPayment($data) {
 
@@ -443,7 +491,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     // First off, generate a VendorTxCode and stash what we have in the db
     $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
 
-    // Loop over the order lines and make the basket
+    // Loop over the order lines and make the basket - wrap into separate function
     foreach ($order as $item => $line) {
       $iBasketItems = $iBasketItems + 1;
       $strBasket = $strBasket . ':' . 'PRN[' . $data['id'] . '] ' . 'OWNER[' . $this->owner_id . '] ' . '[' . $line->code . '] [' . $line->item_description . ']:' . $line->quantity;
@@ -470,7 +518,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       // Error is set in the function
       return false;
     }
-
 
     // So let's put the transaction into the database
     $table = JTable::getInstance('protxtransactionlines', 'HelloWorldTable');
@@ -1012,7 +1059,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
        *  If there is no expiry date then not a renewal
        */
       $this->isRenewal = true;
-    } 
+    }
 
     return $this->isRenewal;
   }

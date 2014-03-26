@@ -21,10 +21,12 @@
       name="PurchaseURL"
       type="text"
       default=""
+      class="input-xxlarge"
       label="URL to Purchase"
       description="" />
     <field
       name="RepeatURL"
+      class="input-xxlarge"
       type="text"
       default=""
       label="URL to do a repeat payment"

@@ -102,23 +102,39 @@
   </fieldset>
   <fieldset 
     name="auto"
-    description="Update the email settings for manual renewals"
+    description="Update the email settings for auto-renewals"
     label="Auto renewal emails">
+    <field
+      name="AUTO_RENEWAL_30_DAYS_SUBJECT"
+      type="text"
+      label="Auto renewal reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    
     <field 
-      name="COM_AUTO_RENEWALS_A01" 
+      name="AUTO_RENEWAL_30_DAYS" 
       type="editor" default="default" 
       label="30 day reminder (auto)" 
       filter="safehtml"
     />
+    
+    <field
+      name="AUTO_RENEWAL_7_DAYS_SUBJECT"
+      type="text"
+      label="Auto renewal shadow payment failure (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />    
     <field 
-      name="COM_AUTO_RENEWALS_A02" 
+      name="AUTO_RENEWAL_7_DAYS" 
       type="editor" default="default" 
-      label="7 day payment failure" 
+      label="7 day shoadow payment failure" 
       description="" 
       filter="safehtml"
     /> 
     <field 
-      name="COM_AUTO_RENEWALS_U02" 
+      name="AUTO_RENEWAL_SUCCESS" 
       type="editor" default="default" 
       label="Successful payment" 
       description="" 

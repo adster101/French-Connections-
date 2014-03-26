@@ -32,8 +32,8 @@ class AccommodationControllerListing extends JControllerForm {
 
     // Get the parameters for use in processing the renewal reminders
     $params = JComponentHelper::getParams('com_helloworld'); // These are the email params. 
-    $renewal_template = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    // Put the below into a separate method?
+    $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
+
     foreach ($props as $k => $v) {
 
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
@@ -54,51 +54,42 @@ class AccommodationControllerListing extends JControllerForm {
       $payment_summary = $payment_model->getPaymentSummary();
       $total = $payment_model->getOrderTotal($payment_summary);
 
+      $recipient = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+
       SWITCH (true) {
-        case ($v->days < 0):
-          $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
-          );
-          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
-
-          break;
-
-        case ($v->days == "1"):
-          $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $expiry_date
-          );
-          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_1_DAYS'), $v->id);
-
-          break;
-        case ($v->days == "7"):
-          $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
-          );
-          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
-          break;
-
-        case ($v->days == "14"):
-          $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
-          );
-          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
-          break;
-        case ($v->days == "21"):
-          $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
-          );
-          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_21_DAYS'), $v->id);
-
-          break;
         case ($v->days == "30"):
           $body = JText::sprintf(
-                          $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
+                          $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
-          $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_30_DAYS'), $v->id);
+          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id);
+          break;
+        case ($v->days == "7"):
+          // Take shadow payment etc
+
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary)) {
+
+            // Problemo
+          }
+
+          $body = JText::sprintf(
+                          $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+          );
+          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
+          break;
+        case ($v->days == "0"):
+          // Take actual payment
+
+          break;
+
+        case ($v->days < 0):
+          $body = JText::sprintf(
+                          $renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
+          );
+          $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
           break;
       }
 
-      $payment_model->sendEmail('noreply@frenchconnections.co.uk', 'adamrifat@frenchconnections.co.uk', '[TESTING]' . $subject, $body, $params);
+      $payment_model->sendEmail('noreply@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body);
     }
   }
 
@@ -106,8 +97,7 @@ class AccommodationControllerListing extends JControllerForm {
    * Get a list of properties due for renewal
    */
 
-  private function _getProps($auto = false) {
-
+  private function _getProps($auto = true) {
     //$this->out('Getting props...');
 
     $db = JFactory::getDBO();
@@ -122,20 +112,22 @@ class AccommodationControllerListing extends JControllerForm {
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
-    $query->select('id, datediff(expiry_date, now()) as days, expiry_date, VendorTxCode');
-    $query->from('#__property');
+    $query->select('a.id, datediff(a.expiry_date, now()) as days, a.expiry_date, a.VendorTxCode, b.VendorTxCode, VPSTxId, SecurityKey, TxAuthNo');
+    $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,1,7,14,21,30)');
     if (!$auto) {
       $query->where('VendorTxCode = \'\'');
     } else {
-      $query->where('VendorTxCode > 0');      
+      $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
+      $query->where('a.VendorTxCode > 0');
     }
-    
+
     $db->setQuery($query);
 
     try {
       $rows = $db->loadObjectList();
+
     } catch (Exception $e) {
       return false;
     }
