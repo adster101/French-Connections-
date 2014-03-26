@@ -797,7 +797,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $params = '', $parameter = 'admin_payment_email') {
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '') {
 
     // Assemble the email data...
     $mail = JFactory::getMailer()

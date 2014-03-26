@@ -106,7 +106,7 @@ class AccommodationControllerListing extends JControllerForm {
    * Get a list of properties due for renewal
    */
 
-  private function _getProps() {
+  private function _getProps($auto = false) {
 
     //$this->out('Getting props...');
 
@@ -122,16 +122,18 @@ class AccommodationControllerListing extends JControllerForm {
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
-    $query->select('id, datediff(expiry_date, now()) as days, expiry_date');
+    $query->select('id, datediff(expiry_date, now()) as days, expiry_date, VendorTxCode');
     $query->from('#__property');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,1,7,14,21,30)');
-    $query->where('VendorTxCode = \'\'');
-
+    if (!$auto) {
+      $query->where('VendorTxCode = \'\'');
+    }
     $db->setQuery($query);
 
     try {
       $rows = $db->loadObjectList();
+      var_dump($rows);die;
     } catch (Exception $e) {
       var_dump($e);
       return false;
