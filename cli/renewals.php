@@ -53,7 +53,7 @@ class Renewals extends JApplicationCli {
     $app = JFactory::getApplication('site');
 
     // Get the debug setting
-    $debug = $app->getCfg('debug');
+    $debug = (bool) $app->getCfg('debug');
 
     // This layout is used for the payment summary bit on pro forma invoices and renewal reminders/invoices etc
     $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
@@ -68,7 +68,7 @@ class Renewals extends JApplicationCli {
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
   }
 
-  private function _manualrenewals(bool $debug = false, JLayoutFile $payment_summary_layout = '', stdClass $renewal_templates = '') {
+  private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
 
     $props = $this->_getProps();
 
@@ -253,6 +253,8 @@ class Renewals extends JApplicationCli {
     } else {
       $query->where('VendorTxCode > 0');      
     }
+
+    $db->setQuery($query);
 
     try {
       $rows = $db->loadObjectList();

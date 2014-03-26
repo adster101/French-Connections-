@@ -63,34 +63,34 @@ class AccommodationControllerListing extends JControllerForm {
 
           break;
 
-        case ($v->days = "1"):
+        case ($v->days == "1"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $expiry_date
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_1_DAYS'), $v->id);
 
           break;
-        case ($v->days = "7"):
+        case ($v->days == "7"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
           break;
 
-        case ($v->days = "14"):
+        case ($v->days == "14"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
           break;
-        case ($v->days = "21"):
+        case ($v->days == "21"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_template->get('RENEWAL_REMINDER_SUBJECT_21_DAYS'), $v->id);
 
           break;
-        case ($v->days = "30"):
+        case ($v->days == "30"):
           $body = JText::sprintf(
                           $renewal_template->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
@@ -117,7 +117,7 @@ class AccommodationControllerListing extends JControllerForm {
     $date = JFactory::getDate();
 
     /*
-     * Add the date period to it
+     * Subtract one day from it so we also get the props that expired yesterday
      */
     $date->sub(new DateInterval('P1D'));
 
@@ -128,14 +128,15 @@ class AccommodationControllerListing extends JControllerForm {
     $query->where('datediff(expiry_date, now()) in (-1,1,7,14,21,30)');
     if (!$auto) {
       $query->where('VendorTxCode = \'\'');
+    } else {
+      $query->where('VendorTxCode > 0');      
     }
+    
     $db->setQuery($query);
 
     try {
       $rows = $db->loadObjectList();
-      var_dump($rows);die;
     } catch (Exception $e) {
-      var_dump($e);
       return false;
     }
 
