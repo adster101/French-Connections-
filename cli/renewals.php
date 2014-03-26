@@ -96,7 +96,7 @@ class Renewals extends JApplicationCli {
       $payment_summary = $payment_model->getPaymentSummary();
       $total = $payment_model->getOrderTotal($payment_summary);
 
-      $recipient = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+      $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
 
       SWITCH (true) {
         case ($v->days < 0):
