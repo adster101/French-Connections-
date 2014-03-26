@@ -60,10 +60,8 @@ class Renewals extends JApplicationCli {
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    
     // Process the auto renewals
     // $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
-
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
   }
@@ -98,7 +96,7 @@ class Renewals extends JApplicationCli {
       $payment_summary = $payment_model->getPaymentSummary();
       $total = $payment_model->getOrderTotal($payment_summary);
 
-      $recipient = (!$debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+      $recipient = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
 
       SWITCH (true) {
         case ($v->days < 0):
@@ -106,37 +104,32 @@ class Renewals extends JApplicationCli {
                           $renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
-
           break;
-
-        case ($v->days = "1"):
+        case ($v->days == "1"):
           $body = JText::sprintf(
                           $renewal_templates->get('RENEWAL_REMINDER_DAYS_1'), $user->firstname, $v->id, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $expiry_date
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_1_DAYS'), $v->id);
-
           break;
-        case ($v->days = "7"):
+        case ($v->days == "7"):
           $body = JText::sprintf(
                           $renewal_templates->get('RENEWAL_REMINDER_DAYS_7'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_7_DAYS'), $v->id);
           break;
-
-        case ($v->days = "14"):
+        case ($v->days == "14"):
           $body = JText::sprintf(
                           $renewal_templates->get('RENEWAL_REMINDER_DAYS_14'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_14_DAYS'), $v->id);
           break;
-        case ($v->days = "21"):
+        case ($v->days == "21"):
           $body = JText::sprintf(
                           $renewal_templates->get('RENEWAL_REMINDER_DAYS_21'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_21_DAYS'), $v->id);
-
           break;
-        case ($v->days = "30"):
+        case ($v->days == "30"):
           $body = JText::sprintf(
                           $renewal_templates->get('RENEWAL_REMINDER_DAYS_30'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
@@ -251,7 +244,7 @@ class Renewals extends JApplicationCli {
     if (!$auto) {
       $query->where('VendorTxCode = \'\'');
     } else {
-      $query->where('VendorTxCode > 0');      
+      $query->where('VendorTxCode > 0');
     }
 
     $db->setQuery($query);
