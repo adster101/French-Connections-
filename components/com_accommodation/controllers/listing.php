@@ -30,7 +30,7 @@ class AccommodationControllerListing extends JControllerForm {
     $debug = $app->getCfg('debug');
 
     // Get a list of properties for renewals
-    $props = $this->_getProps();
+    $props = $this->_getProps(true);
 
     // Get the parameters for use in processing the renewal reminders
     $params = JComponentHelper::getParams('com_helloworld'); // These are the email params. 
@@ -89,14 +89,14 @@ class AccommodationControllerListing extends JControllerForm {
         case ($v->days == "0"):
           // Take actual payment
           if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary)) {
-            
+              $email = false;
           } else {
-            // Problemo
+            // Success
+            // Update listing details here, mainly just update the expiry date for the PRN
             $body = JText::sprintf(
                             $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_SUCCESS_SUBJECT'), $v->id);
-     
           }
 
           break;
@@ -106,6 +106,9 @@ class AccommodationControllerListing extends JControllerForm {
                           $renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
+          break;
+        default:
+          $email = false;
           break;
       }
 
@@ -120,7 +123,7 @@ class AccommodationControllerListing extends JControllerForm {
    * Get a list of properties due for renewal
    */
 
- private function _getProps($auto = false) {
+  private function _getProps($auto = false) {
 
     //$this->out('Getting props...');
 
@@ -154,13 +157,13 @@ class AccommodationControllerListing extends JControllerForm {
     try {
       $rows = $db->loadObjectList();
     } catch (Exception $e) {
-     // $this->out('Problem getting props...');
-      print_r($e);die;
+      // $this->out('Problem getting props...');
+      print_r($e);
+      die;
       return false;
     }
 
     return $rows;
-  
   }
 
   public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true)) {
@@ -221,6 +224,7 @@ class AccommodationControllerListing extends JControllerForm {
         $this->setRedirect(JRoute::_($website, false));
       }
     } catch (Exception $e) {
+
       // Log error   
       throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR', $id, $e->getMessage()), 500);
     }
