@@ -265,10 +265,11 @@ class Renewals extends JApplicationCli {
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
+    $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
+
     if (!$auto) {
       $query->where('VendorTxCode = \'\'');
     } else {
-      $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
       $query->where('a.VendorTxCode > 0');
     }
 
