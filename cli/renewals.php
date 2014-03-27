@@ -100,6 +100,7 @@ class Renewals extends JApplicationCli {
       $total = $payment_model->getOrderTotal($payment_summary);
 
       $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+      $cc = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'accounts@frenchconnections.co.uk';
 
       SWITCH (true) {
         case ($v->days < 0):
@@ -140,7 +141,7 @@ class Renewals extends JApplicationCli {
           break;
       }
 
-      $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body);
+      $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
     }
 
     $this->out('Done processing manual reminders...');
@@ -179,7 +180,7 @@ class Renewals extends JApplicationCli {
       $email = true;
 
       $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
-      $cc = ($debug) ? '' : 'accounts@frenchconnections.co.uk';
+      $cc = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'accounts@frenchconnections.co.uk';
 
       SWITCH (true) {
         case ($v->days == "30"):
