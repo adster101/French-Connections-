@@ -161,78 +161,41 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
           <div class="alert alert-notice">
             <span class="icon icon-flag">&nbsp</span><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?>
           </div>
-          <div class="accordion" id="accordion1">
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#internal">
-                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES'); ?>;
-                </a>
-              </div>
-              <div id="internal" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                  <fieldset class="panelform">
-                    <?php foreach ($this->form->getFieldset('internal_facilities') as $field) : ?>
-                      <?php echo $field->label; ?>
-                      <?php echo $field->input; ?>
-                    <?php endforeach; ?>
-                  </fieldset>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#external">
-                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES'); ?>
-                </a>
-              </div>
-              <div id="external" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  <fieldset class="panelform">
-                    <?php foreach ($this->form->getFieldset('external_facilities') as $field) : ?>
-                      <p><?php echo $field->label; ?>
-                        <?php echo $field->input; ?></p>
-                    <?php endforeach; ?>
-                  </fieldset>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#kitchen">
-                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES'); ?>
-                </a>
-              </div>
-              <div id="kitchen" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  <fieldset class="panelform">
-                    <?php foreach ($this->form->getFieldset('kitchen_facilities') as $field) : ?>
-                      <p><?php echo $field->label; ?></p>
-                      <?php echo $field->input; ?>
-                    <?php endforeach; ?>
-                  </fieldset>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#suitability">
-                  <?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_FACILITIES'); ?>
-                </a>
-              </div>
-              <div id="suitability" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  <fieldset class="panelform">
-                    <?php foreach ($this->form->getFieldset('suitability') as $field) : ?>
-                      <p><?php echo $field->label; ?></p>
-                      <?php echo $field->input; ?>
-                    <?php endforeach; ?>
-                  </fieldset>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </fieldset>
+        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES'); ?></h4>
+        <fieldset class="panelform">
+          <?php foreach ($this->form->getFieldset('internal_facilities') as $field) : ?>
+            <div class="row-fluid">
+              <div class="span12">
+                <?php echo $field->label; ?>
+                <?php echo $field->input; ?>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </fieldset>
+        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES'); ?></h4>
+        <fieldset class="panelform">
+          <?php foreach ($this->form->getFieldset('external_facilities') as $field) : ?>
+            <p><?php echo $field->label; ?>
+              <?php echo $field->input; ?></p>
+          <?php endforeach; ?>
+        </fieldset>
+        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES'); ?></h4>
+        <fieldset class="panelform">
+          <?php foreach ($this->form->getFieldset('kitchen_facilities') as $field) : ?>
+            <p><?php echo $field->label; ?></p>
+            <?php echo $field->input; ?>
+          <?php endforeach; ?>
+        </fieldset>
+        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_FACILITIES'); ?></h4>
+        <fieldset class="panelform">
+          <?php foreach ($this->form->getFieldset('suitability') as $field) : ?>
+            <p><?php echo $field->label; ?></p>
+            <?php echo $field->input; ?>
+          <?php endforeach; ?>
+        </fieldset>
+
+
       </div>
 
     </div>
