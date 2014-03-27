@@ -180,9 +180,9 @@ class Renewals extends JApplicationCli {
         case ($v->days == "30"):
 
           $body = JText::sprintf(
-                          $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
+                          $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
           );
-          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id);
+          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id, $expiry_date);
           break;
 
         case ($v->days == "7"):
@@ -192,8 +192,9 @@ class Renewals extends JApplicationCli {
 
             // Problemo - shadow payment failed so generate email
             $body = JText::sprintf(
-                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $payment_summary_layout->render($payment_summary)
             );
+            
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
           } else {
             // Don't send an email here if the shadow payment was successful.
@@ -209,7 +210,7 @@ class Renewals extends JApplicationCli {
           } else {
             // Problemo
             $body = JText::sprintf(
-                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_SUCCESS_SUBJECT'), $v->id);
      

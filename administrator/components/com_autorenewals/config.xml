@@ -136,7 +136,7 @@
     <field
       name="AUTO_RENEWAL_SUCCESS_SUBJECT"
       type="text"
-      label="Auto renewal shadow payment failure (subject)"
+      label="Auto renewal success (subject)"
       filter="string"
       class="input-xxlarge"
     />    
