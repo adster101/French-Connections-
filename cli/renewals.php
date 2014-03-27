@@ -186,21 +186,20 @@ class Renewals extends JApplicationCli {
         case ($v->days == "30"):
 
           $body = JText::sprintf(
-                          $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+                          $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
-          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id, $expiry_date);
+          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id);
           break;
 
         case ($v->days == "7"):
 
           // Take shadow payment... 
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary, $v->id)) {
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary)) {
 
             // Problemo - shadow payment failed so generate email
             $body = JText::sprintf(
-                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $payment_summary_layout->render($payment_summary)
+                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
             );
-
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
           } else {
             // Don't send an email here if the shadow payment was successful.
@@ -211,12 +210,13 @@ class Renewals extends JApplicationCli {
 
         case ($v->days == "0"):
           // Take actual payment
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary, $v->id)) {
-            
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary)) {
+            $email = false;
           } else {
-            // Problemo
+            // Success
+            // Update listing details here, mainly just update the expiry date for the PRN
             $body = JText::sprintf(
-                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname
+                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_SUCCESS_SUBJECT'), $v->id);
           }
@@ -228,6 +228,9 @@ class Renewals extends JApplicationCli {
                           $renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
+          break;
+        default:
+          $email = false;
           break;
       }
 
