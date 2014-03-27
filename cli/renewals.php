@@ -260,6 +260,8 @@ class Renewals extends JApplicationCli {
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
+    $query->select('a.id, datediff(a.expiry_date, now()) as days, a.expiry_date, b.id as TxID, a.VendorTxCode, b.VendorTxCode, VPSTxId, SecurityKey, TxAuthNo');
+
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
