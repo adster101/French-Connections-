@@ -426,7 +426,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     return $item_costs;
   }
 
-  public function processRepeatPayment($VendorTxCode = '', $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'REPEAT', $payment_summary = '') {
+  public function processRepeatPayment($VendorTxCode = '', $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'REPEAT', $payment_summary = '', $id = '') {
 
     // Check we've got what we need to proceed
     if (!$VendorTxCode || !$VPSTxId || !$SecurityKey || !$TxAuthNo) {
@@ -441,7 +441,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $strVendorName = $protx_settings->get('VendorName');
     $strPurchaseURL = $protx_settings->get('RepeatURL');
     $strCurrency = $protx_settings->get('Currency');
-    $VendorTxCode = $this->owner_id . '-123456-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
+    $VendorTxCode = $this->owner_id . '-' . $id . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
 
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($payment_summary as $item => $line) {

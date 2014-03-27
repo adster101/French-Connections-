@@ -150,7 +150,7 @@ class AccommodationControllerListing extends JControllerForm {
 
     try {
       $rows = $db->loadObjectList();
-      var_dump($rows);die;
+      //var_dump($rows);die;
     } catch (Exception $e) {
       return false;
     }

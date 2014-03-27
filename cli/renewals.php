@@ -64,6 +64,8 @@ class Renewals extends JApplicationCli {
     // $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
+    // Process the auto renewals
+    $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
   }
 
   private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
@@ -73,6 +75,8 @@ class Renewals extends JApplicationCli {
     if (!$props) {
       die;
     }
+
+    $this->out('About to process manual renewal reminders');
 
     // Process the renewal reminders
     foreach ($props as $k => $v) {
@@ -139,7 +143,7 @@ class Renewals extends JApplicationCli {
       $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body);
     }
 
-    $this->out('We done...');
+    $this->out('Done processing manual reminders...');
   }
 
   private function _autorenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
@@ -148,11 +152,12 @@ class Renewals extends JApplicationCli {
     $props = $this->_getProps(true);
 
     if (!$props) {
-      $this->out('We done...');
       die;
     }
 
-   foreach ($props as $k => $v) {
+    $this->out('About to process auto-renewal reminders');
+
+    foreach ($props as $k => $v) {
 
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
@@ -188,13 +193,13 @@ class Renewals extends JApplicationCli {
         case ($v->days == "7"):
 
           // Take shadow payment... 
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary)) {
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary, $v->id)) {
 
             // Problemo - shadow payment failed so generate email
             $body = JText::sprintf(
                             $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $payment_summary_layout->render($payment_summary)
             );
-            
+
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
           } else {
             // Don't send an email here if the shadow payment was successful.
@@ -205,7 +210,7 @@ class Renewals extends JApplicationCli {
 
         case ($v->days == "0"):
           // Take actual payment
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary)) {
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary, $v->id)) {
             
           } else {
             // Problemo
@@ -213,7 +218,6 @@ class Renewals extends JApplicationCli {
                             $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_SUCCESS_SUBJECT'), $v->id);
-     
           }
 
           break;
@@ -232,7 +236,7 @@ class Renewals extends JApplicationCli {
       }
     }
 
-    $this->out('We done...');
+    $this->out('Done processing auto renewal reminders and payments');
   }
 
   /*
@@ -255,14 +259,13 @@ class Renewals extends JApplicationCli {
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
-    $query->select('a.id, datediff(a.expiry_date, now()) as days, a.expiry_date, a.VendorTxCode, b.VendorTxCode, VPSTxId, SecurityKey, TxAuthNo');
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
     if (!$auto) {
       $query->where('VendorTxCode = \'\'');
     } else {
-      $query->join('left','#__protx_transactions b on b.id = a.VendorTxCode');
+      $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
       $query->where('a.VendorTxCode > 0');
     }
 
@@ -271,6 +274,7 @@ class Renewals extends JApplicationCli {
     try {
       $rows = $db->loadObjectList();
     } catch (Exception $e) {
+      $this->out('Problem getting props...');
       return false;
     }
 
