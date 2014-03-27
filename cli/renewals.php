@@ -268,7 +268,7 @@ class Renewals extends JApplicationCli {
     $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
 
     if (!$auto) {
-      $query->where('VendorTxCode = \'\'');
+      $query->where('a.VendorTxCode = \'\'');
     } else {
       $query->where('a.VendorTxCode > 0');
     }
