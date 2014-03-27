@@ -101,6 +101,7 @@ class Renewals extends JApplicationCli {
 
       $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
       $cc = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'accounts@frenchconnections.co.uk';
+      $send_email = true;
 
       SWITCH (true) {
         case ($v->days < 0):
@@ -139,9 +140,13 @@ class Renewals extends JApplicationCli {
           );
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_30_DAYS'), $v->id);
           break;
+        default:
+          $send_email = false;
+          break;
       }
-
-      $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
+      if ($send_email) {
+        $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
+      }
     }
 
     $this->out('Done processing manual reminders...');
