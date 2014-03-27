@@ -437,12 +437,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
     $sngTotal = 0.0;
     $strProtocol = $protx_settings->get('VPSProtocol');
-    $strTransactionType = 'REPEAT';
+    $strTransactionType = $type;
     $strVendorName = $protx_settings->get('VendorName');
     $strPurchaseURL = $protx_settings->get('RepeatURL');
     $strCurrency = $protx_settings->get('Currency');
     $VendorTxCode = $this->owner_id . '-123456-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
-
 
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($payment_summary as $item => $line) {
@@ -468,6 +467,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * * Registration results come back in the Status and StatusDetail fields */
 
     $arrResponse['VendorTxCode'] = $VendorTxCode;
+    $strStatus = $arrResponse["Status"];
+
+    if ($strStatus == "OK") {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /*
@@ -617,16 +623,16 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     // Card details and address details have been checked. Can now process accordingly...
 
     /* If this isn't 3D-Auth, then this is an authorisation result (either successful or otherwise) **
-     * * Get the results form the POST if they are there */
-    $strVPSTxId = $arrResponse["VPSTxId"];
-    $strSecurityKey = $arrResponse["SecurityKey"];
-    $strTxAuthNo = $arrResponse["TxAuthNo"];
-    $strAVSCV2 = $arrResponse["AVSCV2"];
-    $strAddressResult = $arrResponse["AddressResult"];
-    $strPostCodeResult = $arrResponse["PostCodeResult"];
-    $strCV2Result = $arrResponse["CV2Result"];
-    $str3DSecureStatus = $arrResponse["3DSecureStatus"];
-    $strCAVV = $arrResponse["CAVV"];
+     * * Get the results form the POST if they are there 
+      $strVPSTxId = $arrResponse["VPSTxId"];
+      $strSecurityKey = $arrResponse["SecurityKey"];
+      $strTxAuthNo = $arrResponse["TxAuthNo"];
+      $strAVSCV2 = $arrResponse["AVSCV2"];
+      $strAddressResult = $arrResponse["AddressResult"];
+      $strPostCodeResult = $arrResponse["PostCodeResult"];
+      $strCV2Result = $arrResponse["CV2Result"];
+      $str3DSecureStatus = $arrResponse["3DSecureStatus"];
+      $strCAVV = $arrResponse["CAVV"]; */
 
     // Update the database and redirect the user appropriately
     if ($strStatus == "OK")
@@ -844,7 +850,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '') {
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $cc = '') {
 
     // Assemble the email data...
     $mail = JFactory::getMailer()
@@ -853,6 +859,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->setSubject($emailSubject)
             ->setBody($emailBody)
             ->isHtml(true);
+
+    // If debug is off then we should have a $cc, at least for the renewals.
+    if ($cc) {
+      $mail->addCC($cc);
+    }
 
     if (!$mail->Send()) {
       return false;

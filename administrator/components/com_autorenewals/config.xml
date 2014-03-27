@@ -133,6 +133,13 @@
       description="" 
       filter="safehtml"
     /> 
+    <field
+      name="AUTO_RENEWAL_SUCCESS_SUBJECT"
+      type="text"
+      label="Auto renewal shadow payment failure (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />    
     <field 
       name="AUTO_RENEWAL_SUCCESS" 
       type="editor" default="default" 

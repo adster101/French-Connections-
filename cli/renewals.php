@@ -71,7 +71,6 @@ class Renewals extends JApplicationCli {
     $props = $this->_getProps();
 
     if (!$props) {
-      $this->out('We done...');
       die;
     }
 
@@ -137,7 +136,7 @@ class Renewals extends JApplicationCli {
           break;
       }
 
-      $payment_model->sendEmail('adamrifat@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body);
+      $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body);
     }
 
     $this->out('We done...');
@@ -153,7 +152,7 @@ class Renewals extends JApplicationCli {
       die;
     }
 
-    foreach ($props as $k => $v) {
+   foreach ($props as $k => $v) {
 
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
@@ -172,32 +171,49 @@ class Renewals extends JApplicationCli {
       $user = $payment_model->getUser($listing[0]->created_by);
       $payment_summary = $payment_model->getPaymentSummary();
       $total = $payment_model->getOrderTotal($payment_summary);
+      $email = true;
 
-      $recipient = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+      $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
+      $cc = ($debug) ? '' : 'accounts@frenchconnections.co.uk';
 
       SWITCH (true) {
         case ($v->days == "30"):
+
           $body = JText::sprintf(
                           $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
           $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id);
           break;
+
         case ($v->days == "7"):
-          // Take shadow payment etc
-          
+
+          // Take shadow payment... 
           if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary)) {
-            
-            // Problemo
-            
+
+            // Problemo - shadow payment failed so generate email
+            $body = JText::sprintf(
+                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+            );
+            $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
+          } else {
+            // Don't send an email here if the shadow payment was successful.
+            $email = false;
           }
-          
-          $body = JText::sprintf(
-                          $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
-          );
-          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
+
           break;
+
         case ($v->days == "0"):
           // Take actual payment
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary)) {
+            
+          } else {
+            // Problemo
+            $body = JText::sprintf(
+                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+            );
+            $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_SUCCESS_SUBJECT'), $v->id);
+     
+          }
 
           break;
 
@@ -209,7 +225,10 @@ class Renewals extends JApplicationCli {
           break;
       }
 
-      $payment_model->sendEmail('noreply@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body);
+      // Send the email
+      if ($email) {
+        $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
+      }
     }
 
     $this->out('We done...');
@@ -238,7 +257,7 @@ class Renewals extends JApplicationCli {
     $query->select('a.id, datediff(a.expiry_date, now()) as days, a.expiry_date, a.VendorTxCode, b.VendorTxCode, VPSTxId, SecurityKey, TxAuthNo');
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
-    $query->where('datediff(expiry_date, now()) in (-1,1,7,14,21,30)');
+    $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
     if (!$auto) {
       $query->where('VendorTxCode = \'\'');
     } else {
