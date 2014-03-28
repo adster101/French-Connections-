@@ -41,21 +41,5 @@
       class="input-xlarge"
       filter="string">
     </field>
-    <field 
-      name="catid"
-      required="true"
-      default="0"
-      type="category"
-			label="COM_HELLOWORLD_ADMIN_NOTES_CATEGORY"
-			description ="" 
-      message="COM_HELLOWORLD_ADMIN_NOTES_CATEGORY_VALIDATION"
-      labelclass="control-label"
-      class="input-large"
-      filter="int"
-      validate="nonzero"
-      show_root="true"
-      extension="com_helloworld">
-    </field>    
-
   </fieldset>
 </form>

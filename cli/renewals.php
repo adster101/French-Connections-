@@ -61,7 +61,6 @@ class Renewals extends JApplicationCli {
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
     // Process the auto renewals
-    // $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
     // Process the auto renewals
@@ -145,7 +144,13 @@ class Renewals extends JApplicationCli {
           break;
       }
       if ($send_email) {
-        $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
+        // Send the email
+        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc)) {
+          // If the email is sent then write out to the notes table
+          
+        }
+        
+        
       }
     }
 
@@ -199,6 +204,7 @@ class Renewals extends JApplicationCli {
         case ($v->days == "7"):
 
           // Take shadow payment... 
+          // May need to pass more info here, e.g. billing name, address, user id, 
           if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary)) {
 
             // Problemo - shadow payment failed so generate email
@@ -268,7 +274,18 @@ class Renewals extends JApplicationCli {
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
-    $query->select('a.id, datediff(a.expiry_date, now()) as days, a.expiry_date, b.id as TxID, b.VendorTxCode, VPSTxId, SecurityKey, TxAuthNo');
+    $query->select('
+      a.id, 
+      datediff(a.expiry_date, now()) as days, 
+      a.expiry_date, 
+      b.id as TxID, 
+      b.VendorTxCode,
+      b.VPSTxId, 
+      b.SecurityKey,
+      b.TxAuthNo, 
+      b.user_id, 
+      b.property_id'            
+    );
 
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));

@@ -23,7 +23,7 @@ abstract class HelloWorldHelper {
       //$days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
     }
 
-    $days_to_renewal = ($days_to_renewal) ? $days_to_renewal : '';
+    $days_to_renewal = (!empty($days_to_renewal)) ? $days_to_renewal : '';
 
     return $days_to_renewal;
   }

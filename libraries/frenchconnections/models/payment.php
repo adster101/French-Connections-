@@ -495,7 +495,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
     // Okay, so we have validated the form and we have the order summary
     // First off, generate a VendorTxCode and stash what we have in the db
-    $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
+    $VendorTxCode = $data['id'] . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
 
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($order as $item => $line) {
@@ -604,13 +604,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $strPost = $strPost . "&DeliveryPostCode=" . urlencode($data["BillingPostCode"]);
     $strPost = $strPost . "&DeliveryCountry=" . urlencode($data["BillingCountry"]);
 
-
     /* Send the account type to be used for this transaction.  Web sites should us E for e-commerce **
      * * If you are developing back-office applications for Mail Order/Telephone order, use M **
      * * If your back office application is a subscription system with recurring transactions, use C **
      * * Your Sage Pay account MUST be set up for the account type you choose.  If in doubt, use E * */
     $strPost = $strPost . "&AccountType=E";
-
 
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
     /* Analyse the response from Sage Pay Direct to check that everything is okay

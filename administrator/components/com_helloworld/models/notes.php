@@ -67,23 +67,15 @@ class HelloWorldModelNotes extends JModelList {
     // Filter by a single user.
     $property_id = (int) $this->getState('filter.property_id');
 
-
-    // Add the body and where filter.
     // Select the required fields from the table.
     $query->select('
         a.id,
         a.subject,
-        a.body,
         a.created_time,
-        a.catid,
-        a.property_id,
-        c.title
-      ');
+        a.property_id
+        ');
 
     $query->where('a.property_id = ' . $property_id);
-
-    $query->leftJoin('#__categories c on c.id = a.catid');
-
 
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');

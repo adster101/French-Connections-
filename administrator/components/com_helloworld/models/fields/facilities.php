@@ -78,11 +78,13 @@ class JFormFieldFacilities extends JFormField
 			$disabled = !empty($option->disable) ? ' disabled="disabled"' : '';
 			// Initialize some JavaScript option attributes.
 			$onclick = !empty($option->onclick) ? ' onclick="' . $option->onclick . '"' : '';
-			$html[] = '<label class="'. $class .'" for="' . $this->id . $i . '"' . $class . '>' . JText::_($option->text);
+      
+			$html[] = '<div class="facilities-container"><label class="'. $class .'" for="' . $this->id . $i . '"' . $class . '>'; 
 
 			$html[] = '<input type="checkbox" id="' . $this->id . $i . '" name="' . $this->name . '"' . ' value="'
-				. htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $class . $onclick . $disabled . '/>';
-			$html[] = '</label>';
+				. htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $class . $onclick . $disabled . '/>' . JText::_($option->text);;
+      
+			$html[] = '</label></div>';
 
 		}
 

@@ -14,13 +14,20 @@ $userId = $user->get('id');
 
 $data = array('item' => $this->item, 'progress' => $this->progress);
 ?>
+<style>
+  .facilities-container {
+    display:inline-block;
+    float:left;
+    width:33%;
+  }
+</style>
 <form action="<?php echo JRoute::_('index.php?option=com_helloworld&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
       </div>
-      <div id="" class="span8">
+      <div id="" class="span10">
       <?php else : ?>
         <div class="span10">
         <?php endif; ?>
@@ -159,36 +166,40 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <fieldset>
           <legend><?php echo JText::sprintf('COM_HELLOWORLD_FACILITIES_LEGEND', $this->item->unit_title); ?></legend>
           <div class="alert alert-notice">
-            <span class="icon icon-flag">&nbsp</span><?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?>
+            <span class="icon icon-flag"></span>&nbsp<?php echo JText::_('COM_HELLOWORLD_FACILITIES_BLURB'); ?>
           </div>
         </fieldset>
-        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES'); ?></h4>
-        <fieldset class="panelform">
+        <fieldset class="panelform">  
+          <legend><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES'); ?></legend>
           <?php foreach ($this->form->getFieldset('internal_facilities') as $field) : ?>
-            <div class="row-fluid">
-              <div class="span12">
-                <?php echo $field->label; ?>
-                <?php echo $field->input; ?>
-              </div>
-            </div>
+
+            <?php echo $field->label; ?>
+            <?php echo $field->input; ?>
+
           <?php endforeach; ?>
         </fieldset>
-        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES'); ?></h4>
+        <hr />
         <fieldset class="panelform">
+          <legend><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES'); ?></legend>
+
           <?php foreach ($this->form->getFieldset('external_facilities') as $field) : ?>
             <p><?php echo $field->label; ?>
               <?php echo $field->input; ?></p>
           <?php endforeach; ?>
         </fieldset>
-        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES'); ?></h4>
+        <hr />
         <fieldset class="panelform">
+          <legend><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_KITCHEN_FACILITIES'); ?></legend>
+
           <?php foreach ($this->form->getFieldset('kitchen_facilities') as $field) : ?>
             <p><?php echo $field->label; ?></p>
             <?php echo $field->input; ?>
           <?php endforeach; ?>
         </fieldset>
-        <h4><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_FACILITIES'); ?></h4>
+        <hr />
         <fieldset class="panelform">
+          <legend><?php echo JText::_('COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_FACILITIES'); ?></legend>
+
           <?php foreach ($this->form->getFieldset('suitability') as $field) : ?>
             <p><?php echo $field->label; ?></p>
             <?php echo $field->input; ?>
