@@ -58,7 +58,6 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
   <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
 
   <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter)) : ?>
-
     <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
     <?php echo $attribute_filter, $property_filter, $accommodation_filter; ?>
     <hr />
@@ -67,10 +66,9 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
   <div class="row-fluid">
     <div class="span-12">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#list" data-toggle="tab">List</a></li>
-        <li><a href="#mapsearch" data-toggle="tab">Map</a></li>
-        <li><a href="#localinfo" data-toggle="tab">Info</a></li>
-
+        <li class="active"><a href="#list" data-toggle="tab"><i class="icon icon-list"></i>&nbsp;List</a></li>
+        <li><a href="#mapsearch" data-toggle="tab"><i class="icon icon-location"></i>&nbsp;Map</a></li>
+        <li><a href="#localinfo" data-toggle="tab"><i class="icon icon-attachment"></i>&nbsp;Info</a></li>
       </ul>
     </div>
   </div>

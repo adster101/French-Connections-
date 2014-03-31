@@ -55,12 +55,12 @@ class TicketsModelTickets extends JModelList {
     $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
     $this->setState('filter.state', $published);
 
-    $area= $app->getUserStateFromRequest($this->context . '.filter.area', 'filter_area', '', 'string');
+    $area = $app->getUserStateFromRequest($this->context . '.filter.area', 'filter_area', '', 'string');
     $this->setState('filter.area', $area);
-   
+
     $severity = $app->getUserStateFromRequest($this->context . '.filter.severity', 'filter_severity', '', 'string');
     $this->setState('filter.severity', $severity);
-    
+
     // Load the parameters.
     $params = JComponentHelper::getParams('com_invoices');
     $this->setState('params', $params);
@@ -124,25 +124,34 @@ class TicketsModelTickets extends JModelList {
 
     // Filter by published state
     $published = $this->getState('filter.state');
+
+
     if (is_numeric($published)) {
       $query->where('a.state = ' . (int) $published);
     } else {
       $query->where('a.state in (1,2,3)');
     }
-    
+
     // Filter by project area
     $area = $this->getState('filter.area');
+  
+    // Adjusted to pull out all categories under the one being filtered on.
     if (is_numeric($area)) {
-      $query->where('a.area = ' . (int) $area);
-    } 
-    
+      $cat_tbl = JTable::getInstance('Category', 'JTable');
+      $cat_tbl->load($area);
+      $rgt = $cat_tbl->rgt;
+      $lft = $cat_tbl->lft;
+      $query->where('d.lft >= ' . (int) $lft)
+              ->where('d.rgt <= ' . (int) $rgt);
+    }
+
     // Filter by severity 
     $severity = $this->getState('filter.severity');
     if (is_numeric($severity)) {
       $query->where('a.severity = ' . (int) $severity);
-    } 
-    
-    
+    }
+
+
     // Filter by search on property number
     $search = $this->getState('filter.search');
     if (!empty($search)) {

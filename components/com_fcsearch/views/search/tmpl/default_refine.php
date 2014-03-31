@@ -76,7 +76,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
 
       <?php endforeach; ?>
       <?php if ($this->localinfo->level < 5) : ?>
-            <p>Refine location</p>
+        <p>Refine location</p>
         <?php if (!empty($this->location_options)) : ?>
 
           <?php
@@ -108,7 +108,10 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             <?php endif; ?>
             <?php if ($counter == count($this->location_options) && !$hide) : ?>
               <hr class="condensed" />
-              <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+              <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
+                <strong>
+                <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+              </strong>
             <?php endif; ?>
           <?php endforeach ?>
         <?php else : ?>
@@ -186,7 +189,11 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         <?php endif; ?>
         <?php if ($counter == count($this->property_options) && !$hide) : ?>
           <hr class="condensed" />
-          <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+          <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
+            <strong>
+              <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>          
+            </strong>
+          </a>
         <?php endif; ?>
       <?php endforeach ?>
     <?php else: ?>
@@ -241,8 +248,11 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
           <?php endif; ?>
           <?php if ($counter == count($values) && !$hide) : ?>
             <hr class="condensed" />
-
-            <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
+            <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
+              <strong>
+                <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>
+              </strong>
+            </a>
           <?php endif; ?>      
 
         <?php endforeach; ?>
