@@ -32,7 +32,7 @@ class TicketsModelTickets extends JModelList {
           'date_updated', 'a.date_updated',
           'state', 'a.state',
           'severity', 'a.severity',
-          '', 'a.severity',
+          'area', 'a.area',
       );
     }
 
