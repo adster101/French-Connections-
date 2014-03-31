@@ -61,7 +61,6 @@ class JFormFieldFacilities extends JFormField
 		$options = $this->getOptions();
 
 		// Build the checkbox field output.
-		
 		foreach ($options as $i => $option)
 		{
 			// Initialize some option attributes.
@@ -144,18 +143,14 @@ class JFormFieldFacilities extends JFormField
 		if ($db->getErrorNum()) {
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
-    
-    
+      
 		foreach ($facilities as $option)
 		{
-
-
 			// Create a new option object based on the <option /> element.
 			$tmp = JHtml::_(
 				'select.option', $option->value, $option->text, 'value', 'text',
 				( $option->published == 'true')
 			);
-
 
 			// Add the option object to the result set.
 			$options[] = $tmp;

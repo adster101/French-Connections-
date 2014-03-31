@@ -57,7 +57,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     // Get the unit version detail.
     if ($item = parent::getItem($pk)) {
 
-      // Use the primary key (in this case unit id) to pull out any existing tariffs for this property
+      // Use the primary key (in this case unit id) to pull out any existing facilities for this property
       $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
 
       $attributes = $this->getFacilities($pk, $item->id);
@@ -450,7 +450,7 @@ class HelloWorldModelUnitVersions extends JModelAdmin {
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...access options need adding.
-    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'suitability', 'accommodation_type', 'property_type');
+    $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'suitability');
 
     // Loop over the data and prepare an array to save
     foreach ($data as $key => $value) {

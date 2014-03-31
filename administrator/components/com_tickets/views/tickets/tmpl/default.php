@@ -83,7 +83,7 @@ if (!empty($this->extra_sidebar)) {
               <?php echo JText::_('COM_TICKETS_DESCRIPTION'); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_AREA', 'a.area', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_AREA_SORT', 'a.area', $listDirn, $listOrder); ?>
             </th>
             <th>
               <?php echo JText::_('COM_TICKETS_ASSIGNED_TO'); ?>
