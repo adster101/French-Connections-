@@ -232,7 +232,7 @@
   <fieldset name="internal_facilities" description="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES">
     <field
       class="checkbox required"
-      name="internal_facilities"
+      name="COM_FCSEARCH_INTERNAL"
       type="facilities"
       required="true"
       label="COM_HELLOWORLD_ACCOMMODATION_INTERNAL_FACILITIES_LABEL"
@@ -247,7 +247,7 @@
     <field
       class="checkbox required pull-left"
       required="true"
-      name="external_facilities"
+      name="COM_FCSEARCH_EXTERNAL"
       type="facilities"
       label="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL"
       description="COM_HELLOWORLD_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
@@ -270,7 +270,7 @@
   <fieldset name="suitability" description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY">
     <field
       class="checkbox inline"
-      name="suitability"
+      name="COM_FCSEARCH_SUITABILITY"
       type="facilities"
       label="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_LABEL"
       description="COM_HELLOWORLD_ACCOMMODATION_SUITABILITY_DESC"
