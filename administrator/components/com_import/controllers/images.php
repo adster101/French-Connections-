@@ -40,9 +40,9 @@ class ImportControllerImages extends JControllerForm {
 
     JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
 
-    $model = JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+    $model = JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
 
-    $model = JModelLegacy::getInstance('Image', 'HelloWorldModel');
+    $model = JModelLegacy::getInstance('Image', 'RentalModel');
 
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 

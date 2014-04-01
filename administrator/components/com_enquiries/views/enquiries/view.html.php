@@ -53,7 +53,7 @@ class EnquiriesViewEnquiries extends JViewLegacy {
       );
     }
 
-    HelloWorldHelper::addSubmenu('enquiries');
+    RentalHelper::addSubmenu('enquiries');
 
     $this->sidebar = JHtmlSidebar::render();
   }

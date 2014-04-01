@@ -13,7 +13,7 @@ $this->lang = ($this->lang == '*') ? 'en-GB' : $this->lang;
   <div id="j-sidebar-container" class="span2">
     <p>
       <?php
-      //echo JText::_('COM_HELLOWORLD_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
+      //echo JText::_('COM_RENTAL_YOU_ARE_EDITING_IN') . '<strong>&nbsp;' . $this->lang . '</strong>';
       //JHtml::_('select.options', JHtml::_('contentlanguage.existing', true, true), 'value', 'text', $this->state->get('filter.language'))
       echo JHTML::_('select.genericlist', JHtml::_('contentlanguage.existing', true, true), 'Language', 'onchange="submitbutton(\'attribute.language\')"', 'value', 'text', $this->lang);
       ?>

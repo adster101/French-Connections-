@@ -9,7 +9,7 @@
     <field 
       description="COM_ENQUIRIES_ENQUIRY_FORENAME_DESC"
       label="COM_ENQUIRIES_ENQUIRY_FORENAME_LABEL"    
-      name="guest_firstname"
+      name="guest_forename"
       labelclass="control-label"
       readonly="true"
       filter="unset">

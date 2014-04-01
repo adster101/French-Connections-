@@ -138,7 +138,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
     /*
      * Add the helloworld tables to the JTable include path
      */
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables', 'HelloWorldTable');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
    
     $app = JFactory::getApplication();
     
@@ -154,7 +154,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
     $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
     
     // Get an instance of the unit table
-    $table = $this->getTable('Unit','HelloWorldTable');
+    $table = $this->getTable('Unit','RentalTable');
     
     // Get the parent property id for the owner of this property 
     if (!$table->load($unit_id)) {

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+	<fieldset name="details">
+		<field
+			name="id"
+			type="hidden"
+		/>
+		<field
+			name="lang"
+			type="hidden"
+			required="true"
+			default="en-GB"
+		/>	
+		<field
+			name="department"
+			type="department"
+			extension="com_rental"
+			class="list"
+			default="1"
+			label="COM_RENTAL_HELLOWORLD_FIELD_DEPARTMENT_LABEL"
+			description="COM_RENTAL_HELLOWORLD_FIELD_DEPARTMENT_DESC"
+			required="true"
+		>
+			<option value="0">JOPTION_SELECT_CATEGORY</option>
+		</field>		
+			
+		<field
+			name="latitude"
+			type="text"
+			extension="com_rental"
+			class="inputbox validate-latitude"
+			default=""
+			label="COM_RENTAL_HELLOWORLD_FIELD_LATITUDE_LABEL"
+			description="COM_RENTAL_HELLOWORLD_FIELD_LATITUDE_DESC"
+			required="true">
+		</field>
+		<field
+			name="longitude"
+			type="text"
+			extension="com_rental"
+			class="inputbox validate-longitude"
+			default=""
+			label="COM_RENTAL_HELLOWORLD_FIELD_LONGITUDE_LABEL"
+			description="COM_RENTAL_HELLOWORLD_FIELD_LONGITUDE_DESC"
+			required="true">
+		</field>
+		<field
+			name="nearest_town"
+			type="text"
+			extension="com_rental"
+			class="inputbox validate-nearest_town"
+			default=""
+			label="COM_RENTAL_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
+			description="COM_RENTAL_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
+			required="true">
+		</field>		
+		<field
+			name="distance_to_coast"
+			type="text"
+			extension="com_rental"
+			class="inputbox validate-distance-to-coast"
+			default=""
+			label="COM_RENTAL_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
+			description="COM_RENTAL_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
+			required="false">
+		</field>		
+		
+		<field name="id" type="hidden" />
+	</fieldset>
+	<fields name="params">
+		<fieldset	name="params"	label="COM_RENTAL_LOCATION_GENERAL_PARAMS">
+			<field name="location_type" type="radio" default="0" label="COM_RENTAL_HELLOWORLD_FIELD_LOCATIONTYPE_LABEL" description="COM_RENTAL_HELLOWORLD_FIELD_LOCATIONTYPE_DESC" required="true">
+				<option value="COM_RENTAL_PARAMS_LOCATION_MOUNTAIN">COM_RENTAL_PARAMS_LOCATION_MOUNTAIN</option>
+				<option value="COM_RENTAL_PARAMS_LOCATION_COASTAL">COM_RENTAL_PARAMS_LOCATION_COASTAL</option>
+				<option value="COM_RENTAL_PARAMS_LOCATION_RURAL">COM_RENTAL_PARAMS_LOCATION_RURAL</option>
+				<option value="COM_RENTAL_PARAMS_LOCATION_CITY">COM_RENTAL_PARAMS_LOCATION_CITY</option>
+				<option value="COM_RENTAL_PARAMS_LOCATION_VALLEY">COM_RENTAL_PARAMS_LOCATION_VALLEY</option>
+			</field>
+		</fieldset>
+		<fieldset name="access" label="COM_RENTAL_ACCESS_GENERAL_PARAMS">
+			<field name="access_options" type="checkboxes" default="0" label="COM_RENTAL_HELLOWORLD_FIELD_ACCESSOPTIONS_LABEL" description="COM_RENTAL_HELLOWORLD_FIELD_ACCESSOPTIONS_DESC" required="true" multiple="true">
+				<option value="COM_RENTAL_PARAMS_ACCESS_PUBLICTRANSPORTAVAILABLE">COM_RENTAL_PARAMS_ACCESS_PUBLICTRANSPORTAVAILABLE</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_PUBLICTRANSPORTNOTAVAILABLE">COM_RENTAL_PARAMS_ACCESS_PUBLICTRANSPORTNOTAVAILABLE</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_AIRPORTPICKUP">COM_RENTAL_PARAMS_ACCESS_AIRPORTPICKUP</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_CARESSENTIAL">COM_RENTAL_PARAMS_ACCESS_CARESSENTIAL</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_OWNERPICKUPAVAILABLE">COM_RENTAL_PARAMS_ACCESS_OWNERPICKUPAVAILABLE</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_TAXIFROMAIRPORT">COM_RENTAL_PARAMS_ACCESS_TAXIFROMAIRPORT</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_TAXIFROMTRAINSTATION">COM_RENTAL_PARAMS_ACCESS_TAXIFROMTRAINSTATION</option>
+				<option value="COM_RENTAL_PARAMS_ACCESS_TRAINSTATIONPICKUPAVAILABLE">COM_RENTAL_PARAMS_ACCESS_TRAINSTATIONPICKUPAVAILABLE</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

@@ -30,7 +30,7 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    */
 
   public function getItem($pk = null) {
-    
+
     if ($item = parent::getItem($pk)) {
 
       $item->date_created = JFactory::getDate($item->date_created)->calendar('d M Y');
@@ -76,34 +76,30 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     return $data;
   }
 
-  
   public function markAsRead($id = '') {
-  
+
     if (empty($id)) {
       return true;
     }
-    
+
     // Need to check the current status of this enquiry. If already read, just do nout.
-    if ($enquiry = $this->getItem($id)){
-      
+    if ($enquiry = $this->getItem($id)) {
+
       if ($enquiry->state == 0) {
         $enquiry->state = 1;
-        
+
         $enquiry = $enquiry->getProperties();
-        
-        if ($this->save($enquiry)){
+
+        if ($this->save($enquiry)) {
           return true;
         }
-        
-        
       }
-      
     }
-    
-    
+
+
     return true;
   }
-  
+
   /*
    * Method to preprocess the special offer edit form
    *
@@ -117,7 +113,7 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
 
     $subject = JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT');
-    $message = JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE', ucfirst($data->guest_firstname));
+    $message = JText::sprintf('COM_ENQUIRIES_ENQUIRY_REPLY_MESSAGE', ucfirst($data->guest_forename));
 
     $form->setValue('reply_subject', null, $subject);
 
@@ -126,6 +122,26 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
   public function sendReply($data = array()) {
 
+    $table = $this->getTable();
+
+    // Bind the data
+    if (!$table->bind($data)) {
+      $this->setError($table->getError());
+      return false;
+    }
+
+    // Check for empty values
+    if (empty($table->guest_email)) {
+      return false;
+    }
+    // Assign empty values
+    if (empty($table->guest_email)) {
+      return false;
+    }
+    // Assign empty values
+    if (empty($table->guest_email)) {
+      return false;
+    }
     /*
      * Check that we have the details we need to proceed
      */
@@ -137,9 +153,9 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     /*
      * Need to check whether the user has overriden the default contact details
      */
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
-    $property = $this->getTable('PropertyVersions', 'HelloWorldTable');
+    $property = $this->getTable('PropertyVersions', 'RentalTable');
 
     if (!$property->load($data['property_id'], false)) {
       return false;
@@ -170,7 +186,7 @@ class EnquiriesModelEnquiry extends JModelAdmin {
        * 
        * Or surpress the account edit screen from the owner... 
        * 
-       * $account_table = $this->getTable('UserProfileFc', 'HelloWorldTable');
+       * $account_table = $this->getTable('UserProfileFc', 'RentalTable');
        * if (!$account_table->load($user->id)) {
        *   return false;
        * }

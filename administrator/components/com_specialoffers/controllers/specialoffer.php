@@ -9,7 +9,7 @@ jimport('frenchconnections.controllers.property.base');
 /**
  * HelloWorld Controller
  */
-class SpecialOffersControllerSpecialOffer extends HelloWorldControllerBase {
+class SpecialOffersControllerSpecialOffer extends RentalControllerBase {
   /*
    * Function to expire a special offer by setting the end_date of the offer to a past date.
    * Offered to owners of an approved (active) offer rather than opening up edit or change state permissions

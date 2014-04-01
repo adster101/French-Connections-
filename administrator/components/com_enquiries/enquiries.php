@@ -11,7 +11,7 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_enquiries'))
 // Register the Helloworld helper file
 JLoader::register('EnquiriesHelper', dirname(__FILE__) . '/helpers/enquiries.php');
 
-JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
+JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

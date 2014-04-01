@@ -44,13 +44,13 @@ class plgQuickiconFc extends JPlugin {
    * @since       2.5
    */
   public function onGetIcons($context) {
-    if ($context != $this->params->get('context', 'mod_quickicon') || !JFactory::getUser()->authorise('core.manage', 'com_helloworld')) {
+    if ($context != $this->params->get('context', 'mod_quickicon') || !JFactory::getUser()->authorise('core.manage', 'com_rental')) {
       return;
     }
 
     return array(
         array(
-            'link' => JRoute::_('index.php?option=com_helloworld'),
+            'link' => JRoute::_('index.php?option=com_rental'),
             'image' => 'home',
             'text' => JText::_('MOD_QUICK_ICON_FC_PROPERTY_MANAGER'),
             'id' => 'woot'

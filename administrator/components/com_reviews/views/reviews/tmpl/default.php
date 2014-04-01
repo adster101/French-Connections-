@@ -22,17 +22,17 @@ $unit_id = $input->get('unit_id', '0', 'int');
 
 // If the review is being viewed through the reviews view of hellowolrd then we need to redirect back there
 // and not the to the com_reviews component.
-$route = ($option == 'com_helloworld') ? $option . '&view=reviews&unit_id=' . (int) $unit_id : $option;
+$route = ($option == 'com_rental') ? $option . '&view=reviews&unit_id=' . (int) $unit_id : $option;
 
 // Check relevant permissions for the user against the reviews component
 $canDo = ReviewsHelper::getActions('com_reviews');
 
-$canChangeState = ($option == 'com_helloworld') ? false : $canDo->get('core.edit.state');
+$canChangeState = ($option == 'com_rental') ? false : $canDo->get('core.edit.state');
 $canEditOwn = $canDo->get('core.edit.own');
 $canEdit = $canDo->get('core.edit');
 
 // Set the data array (for the progress layout) based on the component we are in
-$data = ($option == 'com_helloworld') ? array('item' => $this->unit, 'progress' => $this->progress) : array();
+$data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $this->progress) : array();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=' . $route); ?>" method="post" name="adminForm" id="adminForm">

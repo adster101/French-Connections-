@@ -40,7 +40,7 @@ class StatsViewStats extends JViewLegacy {
 
    
 
-    HelloWorldHelper::addSubmenu('stats');
+    RentalHelper::addSubmenu('stats');
 
     $this->sidebar = JHtmlSidebar::render();
   }

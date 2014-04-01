@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset name="submit">
+    <field
+      name="vat_status"
+      required="true"
+      type="list"
+      default=""
+      class="vat_status input-xxlarge"
+      label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
+      labelclass="control-label"
+      description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
+      <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
+      <option	value="S2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
+      <option	value="S2A">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
+      <option	value="Z">PLG_USER_PROFILE_FIELD_VAT_STATUS_Z</option>
+      <option	value="ZA">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>
+      <option	value="ECS">PLG_USER_PROFILE_FIELD_VAT_STATUS_ECS</option>
+    </field>
+      
+    <field
+      name="vat_number"
+      type="text"
+      description="PLG_USER_PROFILE_FIELD_VAT_NUMBER_DESC"
+      label="PLG_USER_PROFILE_FIELD_VAT_NUMBER_LABEL"
+      message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
+      size="30"
+      validate="vat"
+      labelclass="control-label"
+      class="validate validate-vat"
+      required="false"
+
+    />
+      
+    <field
+      name="company_number"
+      type="text"
+      description="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_DESC"
+      label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
+      message="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_MESSAGE"
+      size="30"
+      validate="company"
+      labelclass="control-label"
+      class="validate validate-company"
+      required="false"
+
+    />   
+
+
+    <field
+      name="property_id"
+      type="hidden"
+      default=""
+      filter="int">
+    </field>
+  </fieldset>
+</form>

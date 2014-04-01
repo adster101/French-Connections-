@@ -92,7 +92,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    * @since	1.6
    * 
    */
-  public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'Property', $prefix = 'RentalTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -225,7 +225,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   public function getUserFormDetails() {
 
     // Get a copy of the form we are using to collect the user invoice address and vat status
-    $form = $this->loadForm('com_helloworld.helloworld', 'ordersummary', array('control' => 'jform', 'load_data' => false));
+    $form = $this->loadForm('com_rental.helloworld', 'ordersummary', array('control' => 'jform', 'load_data' => false));
 
     if (empty($form)) {
       return false;
@@ -245,13 +245,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
   public function getPaymentForm() {
 
-    $form = $this->loadForm('com_helloworld.helloworld', 'payment', array('control' => 'jform', 'load_data' => false));
+    $form = $this->loadForm('com_rental.helloworld', 'payment', array('control' => 'jform', 'load_data' => false));
 
     if (empty($form)) {
       return false;
     }
 
-    $data = JFactory::getApplication()->getUserState('com_helloworld.renewal.data', array());
+    $data = JFactory::getApplication()->getUserState('com_rental.renewal.data', array());
     $data['id'] = $id = $this->getState($this->getName() . '.id', '');
 
     $form->bind($data);
@@ -271,10 +271,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       return $this->retrieve($user_id);
     }
 
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
     // Now get the user details
-    $table = $this->getTable('UserProfileFc', 'HelloWorldTable');
+    $table = $this->getTable('UserProfileFc', 'RentalTable');
 
     // Attempt to load the row.
     $return = $table->load($user_id);
@@ -526,7 +526,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     }
 
     // So let's put the transaction into the database
-    $table = JTable::getInstance('protxtransactionlines', 'HelloWorldTable');
+    $table = JTable::getInstance('protxtransactionlines', 'RentalTable');
 
     // Add each of the order lines to the transaction lines table
     foreach ($order as $line) {
@@ -717,7 +717,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $payment_details = $order_payment_details['payment'];
     $listing_id = ($this->getListingId()) ? $this->getListingId() : '';
     $expiry_date = ($this->getExpiryDate()) ? $this->getExpiryDate() : '';
-    $params = JComponentHelper::getParams('com_helloworld');
+    $params = JComponentHelper::getParams('com_rental');
     $date = JFactory::getDate();
     $from = array($params->get('payment_admin_email', 'accounts@frenchconnections.co.uk'), $params->get('payment_admin_name', 'French Connections Accounts'));
 
@@ -750,16 +750,16 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       }
 
       // Send payment receipt
-      $receipt_subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
-      $receipt_body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
+      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
+      $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
       $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $params);
 
       // Send the renewal confirmation email           
-      $confirmation_subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
-      $confirmation_body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
+      $confirmation_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
+      $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
       $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $params);
 
-      $message = 'COM_HELLOWORLD_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES';
+      $message = 'COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES';
 
       return $message;
     } else if ($this->getIsRenewal() && $this->getIsReview()) {
@@ -770,16 +770,16 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $this->updateProperty($listing_id, $total, $review = 2);
 
       // Send payment receipt
-      $receipt_subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
-      $receipt_body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
+      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
+      $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
       $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $params);
 
       // Send the renewal confirmation email           
-      $confirmation_subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
-      $confirmation_body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
+      $confirmation_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
+      $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
       $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $params);
 
-      $message = 'COM_HELLOWORLD_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES';
+      $message = 'COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES';
 
       return $message;
     } else if (empty($expiry_date) && !$this->getIsRenewal()) {
@@ -791,11 +791,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $this->updateProperty($review = 2);
 
       // Send payment receipt
-      $receipt_subject = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
-      $receipt_body = JText::sprintf('COM_HELLOWORLD_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
+      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
+      $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
       $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $params);
 
-      $message = 'COM_HELLOWORLD_HELLOWORLD_NEW_PROPERTY_CONFIRMATION';
+      $message = 'COM_RENTAL_HELLOWORLD_NEW_PROPERTY_CONFIRMATION';
 
       return $message;
       // Send confirmation of submission
@@ -838,7 +838,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       }
 
       // Return a message for display on the admin side
-      $message = 'COM_HELLOWORLD_HELLOWORLD_PAYMENT_NEW_PROPERTY';
+      $message = 'COM_RENTAL_HELLOWORLD_PAYMENT_NEW_PROPERTY';
     } else if ($isReview && $isRenewal) {
 
       // A renewal with changes that need reviewing...
@@ -902,7 +902,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $data['expiry_date'] = $expiry_date;
     }
 
-    $table = JTable::getInstance('Property', 'HelloWorldTable');
+    $table = JTable::getInstance('Property', 'RentalTable');
 
 
     // Store the data.
@@ -984,7 +984,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   public function saveProtxTransaction($data = array(), $key = '') {
     // So let's put the transaction into the database
 
-    $table = JTable::getInstance('protxtransactions', 'HelloWorldTable');
+    $table = JTable::getInstance('protxtransactions', 'RentalTable');
 
     if (!empty($key)) {
       $table->set('_tbl_keys', array('VendorTxCode'));
@@ -1054,7 +1054,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * Get the days until the properyt expires
      * Could just check this below
      */
-    $days_to_expiry = HelloWorldHelper::getDaysToExpiry($expiry_date);
+    $days_to_expiry = RentalHelper::getDaysToExpiry($expiry_date);
 
     if (!is_int($date)) {
 

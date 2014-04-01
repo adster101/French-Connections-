@@ -15,7 +15,7 @@ JLoader::register('SpecialOffersHelper', dirname(__FILE__) . '/helpers/specialof
 JLoader::register('JHtmlGeneral', JPATH_SITE . 'libraries/frenchconnections/html/helpers/general.php');
 
 // Register the helloworld helper for the side navigation.
-JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
+JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

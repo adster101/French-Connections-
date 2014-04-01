@@ -122,8 +122,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       }
 
       // Also would be a good idea to insert a row into the profile db table
-      JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
-      $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
+      JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+      $table = JTable::getInstance('UserProfileFc', 'RentalTable');
 
       // Set the table key to id so we ensure a new record is generated.
       // $table->set('_tbl_key', 'id');

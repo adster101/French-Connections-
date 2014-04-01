@@ -23,8 +23,8 @@ class ImportControllerProperty_amenities extends JControllerForm {
 
     JLog::addLogger(array('text_file' => 'property.amenities.import.php'), JLog::ALL, array('import_property_amenities'));
 
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
-    $table = JTable::getInstance('PropertyVersions', 'HelloWorldTable');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    $table = JTable::getInstance('PropertyVersions', 'RentalTable');
 
     $lang = JFactory::getLanguage();
 

@@ -117,12 +117,12 @@ class plgUserProfile_fc extends JPlugin {
    */
   function onContentPrepareForm($form, $data) {
     // Require the helloworld helper class
-    require_once(JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
+    require_once(JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
     $input = JFactory::getApplication()->input;
     $form_data = $input->get('jform', array(), 'array');
     $vat_status = '';
     $lang = JFactory::getLanguage();
-    $lang->load('com_helloworld');
+    $lang->load('com_rental');
 
     // Only do this is we're editing a property owner?
 
@@ -141,8 +141,8 @@ class plgUserProfile_fc extends JPlugin {
     $doc = JFactory::getDocument();
     //$doc->addScript('/media/fc/js/general.js', 'text/javascript', true);  
 
-    JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
-    JText::script('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
 
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.
     $form->setFieldAttribute('name', 'required', 'false');
@@ -153,7 +153,7 @@ class plgUserProfile_fc extends JPlugin {
     $form->loadFile('profile', false);
 
     // Add the rule path to the form so we may validate the user profile details a bit.
-    JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models/rules');
+    JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_rental/models/rules');
 
     if (!empty($data)) {
       $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
@@ -191,8 +191,8 @@ class plgUserProfile_fc extends JPlugin {
 
       try {
 
-        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
-        $table = JTable::getInstance('UserProfileFc', 'HelloWorldTable');
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+        $table = JTable::getInstance('UserProfileFc', 'RentalTable');
 
         $data['user_id'] = $data['id'];
         unset($data['id']);

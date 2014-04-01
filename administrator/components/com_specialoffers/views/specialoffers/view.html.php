@@ -56,7 +56,7 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
       JToolBarHelper::preferences('com_specialoffers');
     }
 
-    HelloWorldHelper::addSubmenu('specialoffers');
+    RentalHelper::addSubmenu('specialoffers');
 
     $this->sidebar = JHtmlSidebar::render();
   }

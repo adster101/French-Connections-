@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset name="properties">
+   <field
+			name="property_id"
+			type="UserProperties"
+			label="COM_CATEGORIES_FIELD_PARENT_LABEL"
+			description="COM_CATEGORIES_FIELD_PARENT_DESC"
+			class="required validate"
+			required="true"
+      user="">
+    </field>	
+  </fieldset>
+</form>
+

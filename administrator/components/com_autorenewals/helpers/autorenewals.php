@@ -30,7 +30,7 @@ abstract class AutoRenewalsHelper {
   public function addSubmenu($vName = '') {
     JHtmlSidebar::addEntry(JText::_('COM_AUTORENEWALS'), 'index.php?option=com_featuredproperties', ($vName == 'featuredproperties' || $vName == 'autorenewals'));
     //JHtmlSidebar::addEntry(JText::_('COM_FEATUREDPROPERTIES_MANAGE_FEATURED_PROPERTY_TYPE'), 'index.php?option=com_featuredproperties&view=featuredpropertytypes', ($vName == 'featuredpropertytype' || $vName == 'featuredpropertytypes'));
-    JHtmlSidebar::addEntry(JText::_('COM_AUTORENEWALS_MANAGE_PROPERTY_LIST'), 'index.php?option=com_helloworld');
+    JHtmlSidebar::addEntry(JText::_('COM_AUTORENEWALS_MANAGE_PROPERTY_LIST'), 'index.php?option=com_rental');
   }
 
   /**

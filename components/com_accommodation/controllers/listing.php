@@ -19,9 +19,9 @@ class AccommodationControllerListing extends JControllerForm {
 
     // Include all the model and helper files we need to process 
     require_once JPATH_BASE . '/libraries/frenchconnections/models/payment.php';
-    require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
-    JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
-    $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+    require_once JPATH_ADMINISTRATOR . '/components/com_rental/models/listing.php';
+    JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
+    $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 
 
     // Create an instance of the site application 
@@ -33,7 +33,7 @@ class AccommodationControllerListing extends JControllerForm {
     $props = $this->_getProps(false);
 
     // Get the parameters for use in processing the renewal reminders
-    $params = JComponentHelper::getParams('com_helloworld'); // These are the email params. 
+    $params = JComponentHelper::getParams('com_rental'); // These are the email params. 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
 
     foreach ($props as $k => $v) {
@@ -41,10 +41,10 @@ class AccommodationControllerListing extends JControllerForm {
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
       // Get an instance of the listing model
-      $listing_model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
+      $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
 
       // Set the listing ID we are sending the reminder to 
-      $listing_model->setState('com_helloworld.listing.id', $v->id);
+      $listing_model->setState('com_rental.listing.id', $v->id);
 
       // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();
@@ -225,8 +225,8 @@ class AccommodationControllerListing extends JControllerForm {
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
     $app = JFactory::getApplication();
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
     $model = $this->getModel();
     $params = JComponentHelper::getParams('com_enquiries');
     $id = $this->input->get('id', '', 'int');

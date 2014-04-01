@@ -30,10 +30,10 @@ abstract class AttributesHelper
 		$result	= new JObject;
  
 		if (empty($messageId)) {
-			$assetName = 'com_helloworld';
+			$assetName = 'com_rental';
 		}
 		else {
-			$assetName = 'com_helloworld.message.'.(int) $messageId;
+			$assetName = 'com_rental.message.'.(int) $messageId;
 		}
  
 		$actions = array(
@@ -100,7 +100,7 @@ abstract class AttributesHelper
 		$lang 	 =& JFactory::getLanguage();
 		$propertyId = JRequest::getInt('id');
 
-		return $session->get('com_helloworld.property.'.$propertyId.'.lang', $lang->getTag());
+		return $session->get('com_rental.property.'.$propertyId.'.lang', $lang->getTag());
 	}
 
 	

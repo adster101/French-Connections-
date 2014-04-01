@@ -60,7 +60,7 @@ class ClassificationViewClassification extends JViewLegacy
 		$canDo = ClassificationHelper::getActions($this->item->id);
     
     
-    JToolBarHelper::title($isNew ? JText::_('COM_HELLOWORLD_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_HELLOWORLD_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'classification');
+    JToolBarHelper::title($isNew ? JText::_('COM_RENTAL_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'classification');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{
@@ -99,9 +99,9 @@ class ClassificationViewClassification extends JViewLegacy
 	{
 		$isNew = $this->item->id == 0;
 		$document = JFactory::getDocument();
-		$document->setTitle($isNew ? JText::_('COM_HELLOWORLD_HELLOWORLD_CREATING') : JText::_('COM_HELLOWORLD_HELLOWORLD_EDITING'));
+		$document->setTitle($isNew ? JText::_('COM_RENTAL_HELLOWORLD_CREATING') : JText::_('COM_RENTAL_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . "/administrator/components/com_classification/views/classification/submitbutton.js");
 
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+		JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
 	}
 }

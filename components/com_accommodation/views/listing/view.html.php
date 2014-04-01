@@ -111,7 +111,7 @@ class AccommodationViewListing extends JViewLegacy {
     $document->addScript("media/fc/js/general.js", 'text/javascript', true, false);
     $document->addScript("media/fc/js/property.js", 'text/javascript', true, false);
     $document->addScript("media/fc/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true, false);
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_helloworld/css/availability.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/availability.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "media/fc/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
   }
 

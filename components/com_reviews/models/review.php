@@ -41,7 +41,7 @@ class ReviewsModelReview extends JModelForm {
 
     // Load the property get method to get the title and what not of the property being testimonialised
 
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
     $table = $this->getTable();
 
@@ -72,7 +72,7 @@ class ReviewsModelReview extends JModelForm {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'UnitVersions', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'UnitVersions', $prefix = 'RentalTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 

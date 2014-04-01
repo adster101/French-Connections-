@@ -49,7 +49,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
    */
   protected function addSubMenu() {
 
-    HelloWorldHelper::addSubmenu('specialoffers');
+    RentalHelper::addSubmenu('specialoffers');
 
     $this->sidebar = JHtmlSidebar::render();
   }
@@ -76,7 +76,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
 
     $document->addStyleSheet(JURI::root() . "/media/fc/css/jquery-ui-1.8.23.custom.css");
 
-    JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
   }
 
   /**

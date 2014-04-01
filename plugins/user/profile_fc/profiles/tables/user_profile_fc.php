@@ -11,7 +11,7 @@ jimport('joomla.database.table');
 /**
  * Hello Table class
  */
-class HelloWorldTableUser_profile_fc extends JTable
+class RentalTableUser_profile_fc extends JTable
 {
 	/**
 	 * Constructor

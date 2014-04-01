@@ -20,8 +20,8 @@ class AutorenewalsModelAutoRenewal extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Property', $prefix = 'HelloWorldTable', $config = array()) {
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables');
+  public function getTable($type = 'Property', $prefix = 'RentalTable', $config = array()) {
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
     return JTable::getInstance($type, $prefix, $config);
   }

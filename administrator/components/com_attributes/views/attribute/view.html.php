@@ -56,8 +56,8 @@ class AttributesViewAttribute extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('Manage property attributes'));
- 		$document->addScript(JURI::root() . "/administrator/components/com_helloworld/js/submitbutton.js");
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE');
+ 		$document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js");
+		JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
 
   }
 

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  
+  <fields
+    name="languages_spoken">
+      
+    <field
+      name="language_1"
+      label="COM_RENTAL_CONTACT_DETAILS_PRIMARY_LANGUAGE"
+      type="languages"
+      filter="string">
+      <option>JSELECT</option>
+    </field>
+    <field
+      name="language_2"
+      label="COM_RENTAL_CONTACT_DETAILS_SECONDARY_LANGUAGE"
+      type="languages">
+      <option>JSELECT</option>
+    </field>
+    <field
+      name="language_3"
+      label="COM_RENTAL_CONTACT_DETAILS_TERTIARY_LANGUAGE"
+      type="languages">
+      <option>JSELECT</option>
+    </field>
+    <field
+      name="language_4"
+      label="COM_RENTAL_CONTACT_DETAILS_QUANTERNARY_LANGUAGE"
+      type="languages">
+      <option>JSELECT</option>
+    </field>
+
+  </fields>
+  
+  <fieldset
+    name="website">
+    <field 
+      name="website_note" 
+      type="note"
+      class="alert alert-notice" 
+      label=""
+      labelclass="control-label"
+      description="COM_RENTAL_HELLOWORLD_WEBSITE_NOTE" />
+    <field
+      name="website"
+      type="url"
+      id="website"
+      filter="string"
+      label="COM_RENTAL_HELLOWORLD_WEBSITE"
+      message="COM_RENTAL_HELLOWORLD_WEBSITE_VALIDATION"
+      size="30"
+      class="validate-url input-xlarge"
+      validate="url"
+      labelclass="control-label"
+    />
+   
+  </fieldset> 
+
+  <fieldset
+    name="enquiry-contact-override">
+    <field 
+      name="contact_override_note" 
+      type="note"
+      class="alert alert-notice" 
+      label=""
+      labelclass="control-label"
+      description="COM_RENTAL_HELLOWORLD_ENQUIRY_OVERRIDE_OPTION" />
+    
+    <field 
+      name="use_invoice_details"
+      type="inlinecheckbox"
+      filter="int"
+      label="COM_RENTAL_HELLOWORLD_USE_INVOICE_DETAILS"
+      required="false"
+      labelclass="control-label">
+    </field>      
+    
+    <field 
+      name="first_name"
+      type="text"
+      class="input-large"
+      filter="string"
+      label="First name"
+      labelclass="control-label"
+      maxlength="25"
+    />
+    <field 
+      name="surname"
+      type="text"
+      class="input-large"
+      filter="string"
+      label="Surname"
+      labelclass="control-label"
+      maxlength="25"
+    />
+
+    <field 
+      name="phone_1"
+      type="tel"
+      filter="string"
+      label="Phone number"
+      maxlength="25"
+      labelclass="control-label"
+      class="validate validate-tel"
+    />
+
+  
+    <field 
+      name="email_1"
+      type="email"
+      filter="string"
+      label="Contact email"
+      maxlength="75"
+      labelclass="control-label"
+      class="validate validate-email"
+      validate="email"
+    />      
+      
+    
+  </fieldset>
+  
+  <fieldset
+    name="sms-preferences">
+    <field 
+      name="smsprefs" 
+      type="note"
+      class="alert alert-notice" 
+      labelclass="control-label"
+      description="COM_RENTAL_HELLOWORLD_ENQUIRY_SMS_CONTACT_PREFERENCES" />
+    <field 
+      name="sms_valid_message" 
+      type="note"
+      class="alert alert-success" 
+      labelclass="control-label"
+      description="COM_RENTAL_HELLOWORLD_ENQUIRY_SMS_CONTACT_ACTIVE" />
+    <field 
+      name="sms_alert_number" 
+      type="text"
+      label="SMS Telephone Number"
+      maxlength="25"
+      hint="e.g. 44 (0) 1234 123456" 
+      labelclass="control-label"
+      filter="string"
+      description="" 
+      validate="tel"
+    />
+    <field 
+      name="dummy_validation_code" 
+      type="text"
+      label="SMS Validation code"
+      maxlength="25"
+      labelclass="control-label"
+      filter="string"
+      default=""
+      value=""
+      description=""
+      class="input-small" 
+    />    
+    <field 
+      name="sms_nightwatchman"
+      type="inlinecheckbox"
+      label="COM_RENTAL_CONTACT_DETAILS_SMS_NIGHTWATCHMAN"
+      description=""
+      class="inline"
+      required="false"
+      filter="int"
+      default=""
+      labelclass="control-label"
+    />
+    
+  </fieldset>
+  
+  <fieldset
+    name="booking-form">
+
+    <field 
+      name="booking_form"
+      type="inlinecheckbox"
+      filter="int"
+      class="btn-group"
+      label="COM_RENTAL_HELLOWORLD_BOOKING_FORM_SHOW"
+      required="false"
+      labelclass="control-label">
+      <option value="1">JYES</option>
+      <option value="0">JNO</option>
+    </field>    
+    
+    <field 
+      name="address"
+      type="text"
+      class="input-xxlarge"
+      filter="string"
+      label="COM_RENTAL_HELLOWORLD_BOOKING_FORM_ADDRESS"
+      labelclass="control-label"
+      maxlength="175"
+    />    
+
+    
+    <field
+      name="deposit_currency"
+      labelclass="control-label"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_BASE_CURRENCY_LABEL"
+      description="COM_RENTAL_BOOKING_FORM_FIELD_BASE_CURRENCY_MESSAGE"
+      message="COM_RENTAL_TARIFFS_BOOKING_FORM_FIELD_BASE_CURRENCY_DESC"
+      type="attributetype"
+      filter="integer"
+      class="input-small"
+      id="19">
+      <option value="">JSELECT</option>
+    </field>
+    
+    <field
+      name="deposit"
+      type="text"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_DEPOSIT_LABEL"
+      maxlength="5"
+      filter="string"
+      class="input-mini"
+      labelclass="control-label"
+    />
+    <field
+      name="security_deposit"
+      type="text"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_SECURITY_DEPOSIT_LABEL"
+      maxlength="5"
+      filter="string"
+      class="input-mini"  
+      labelclass="control-label"
+    />    
+    <field
+      name="payment_deadline"
+      type="text"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_PAYMENT_DEADLINE_LABEL"
+      maxlength="25"
+      filter="string"
+      class="input-mini"
+      labelclass="control-label"
+    />    
+    <field 
+      name="evening_meal"
+      type="textarea"
+      maxlength="250"
+      filter="string"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_EVENING_MEAL"
+      class="input-xxlarge"
+      cols="10"
+      rows="5"
+      labelclass="control-label"
+    />
+    <field 
+      name="additional_booking_info"
+      type="textarea"
+      maxlength="250"
+      filter="string"
+      class="input-xxlarge"
+      cols="10"
+      rows="5"
+      labelclass="control-label"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_ADDITIONAL_BOOKING_INFO"
+
+    />    
+    <field 
+      name="terms_and_conditions"
+      label="COM_RENTAL_BOOKING_FORM_FIELD_TERMS_AND_CONDITIONS_LABEL"
+      type="editor"
+      cols="10"
+      rows="5"
+      filter="safehtml"
+      labelclass="control-label"     
+      buttons="false"
+    />    
+  </fieldset>
+
+  <fieldset name="hidden-details">
+    <field
+      name="sms_valid"
+      type="hidden"
+      filter="int"
+      default="0"
+    />
+    <field
+      name="sms_status"
+      type="hidden"
+      filter="string"
+      default=""
+    />     
+    <field
+      name="property_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="published"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="review"
+      type="hidden"
+      filter="int"
+      default="" />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+      default=""
+    />
+  </fieldset>
+  
+ 
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+

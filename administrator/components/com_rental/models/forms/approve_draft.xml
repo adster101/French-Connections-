@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset name="message">
+    <field
+      name="body"
+      type="editor"
+      label="Message to owner"
+      description =""
+      required="true"
+      class="validate"
+      filter="string">
+    </field>
+  
+    <field 
+      name="id"
+      filter="int"
+      required="true"
+      type="hidden"
+    />
+  </fieldset>
+</form>

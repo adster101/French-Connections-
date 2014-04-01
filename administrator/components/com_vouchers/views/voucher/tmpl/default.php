@@ -26,7 +26,7 @@ $userId = $user->get('id');
       <div id="j-main-container">
       <?php endif; ?>
       <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_HELLOWORLD_HELLOWORLD_ADDITIONAL_DETAILS'); ?></legend>
+        <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_ADDITIONAL_DETAILS'); ?></legend>
         <?php foreach ($this->form->getFieldset('voucher') as $field): ?>
           <div class="control-group">
             <?php echo $field->label; ?>

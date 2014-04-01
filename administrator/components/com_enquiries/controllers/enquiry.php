@@ -9,7 +9,7 @@ jimport('frenchconnections.controllers.property.base');
 /**
  * HelloWorld Controller
  */
-class EnquiriesControllerEnquiry extends HelloWorldControllerBase {       
+class EnquiriesControllerEnquiry extends RentalControllerBase {       
   
   /*
    * Function to reply to an owner enquiry.

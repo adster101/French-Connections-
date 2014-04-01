@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+
+	<fieldset name="availability">
+
+		<field
+			name="start_date"
+			type="text"
+			label="COM_RENTAL_AVAILABILITY_FIELD_START_DATE_LABEL"
+			description="COM_RENTAL_AVAILABILITY_FIELD_START_DATE_DESC"
+			size="40"
+			class="inputbox input-small"
+			validate=""
+			required="true"
+			default=""
+      readonly="true"
+      labelclass="control-label">
+    </field>
+		<field
+			name="end_date"
+			type="text"
+			label="COM_RENTAL_AVAILABILITY_FIELD_END_DATE_LABEL"
+			description="COM_RENTAL_AVAILABILITY_FIELD_END_DATE_DESC"
+			size="40"
+			class="inputbox input-small"
+			validate=""
+			required="true"
+			default=""
+      readonly="true"
+      labelclass="control-label">
+    </field>
+		<field
+			name="availability"
+			type="list"
+			label="COM_RENTAL_AVAILABILITY_FIELD_STATUS_LABEL"
+			description="COM_RENTAL_AVAILABILITY_FIELD_STATUS_DESC"
+			class="required input-medium"
+			validate=""
+			required="true"
+			default=""
+      labelclass="control-label"
+      filter="int">
+				<option value="">COM_RENTAL_PLEASE_CHOOSE</option>
+				<option value="1">COM_RENTAL_AVAILABILITY_FIELD_STATUS_AVAILABLE</option>
+				<option value="0">COM_RENTAL_AVAILABILITY_FIELD_STATUS_UNAVAILABLE</option>
+		</field>
+    <field
+      name="unit_id"
+      type="hidden"
+      filter="int">
+    </field>
+
+	</fieldset>
+</form>

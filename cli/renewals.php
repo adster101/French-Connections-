@@ -27,10 +27,10 @@ require_once JPATH_LIBRARIES . '/cms.php';
 
 // Require the additional model needed for processing. 
 require_once JPATH_LIBRARIES . '/frenchconnections/models/payment.php';
-require_once JPATH_ADMINISTRATOR . '/components/com_helloworld/models/listing.php';
+require_once JPATH_ADMINISTRATOR . '/components/com_rental/models/listing.php';
 
 // Register the Helloworld helper method
-JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
+JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
 /**
  * Cron job to trash expired cache data
@@ -56,7 +56,7 @@ class Renewals extends JApplicationCli {
     $debug = (bool) $app->getCfg('debug');
 
     // This layout is used for the payment summary bit on pro forma invoices and renewal reminders/invoices etc
-    $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_helloworld/layouts');
+    $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
@@ -83,10 +83,10 @@ class Renewals extends JApplicationCli {
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
       // Get an instance of the listing model
-      $listing_model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
+      $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
 
       // Set the listing ID we are sending the reminder to 
-      $listing_model->setState('com_helloworld.listing.id', $v->id);
+      $listing_model->setState('com_rental.listing.id', $v->id);
 
       // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();
@@ -173,10 +173,10 @@ class Renewals extends JApplicationCli {
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
       // Get an instance of the listing model
-      $listing_model = JModelLegacy::getInstance('Listing', 'HelloWorldModel', $config = array('ignore_request' => true));
+      $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
 
       // Set the listing ID we are sending the reminder to 
-      $listing_model->setState('com_helloworld.listing.id', $v->id);
+      $listing_model->setState('com_rental.listing.id', $v->id);
 
       // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();

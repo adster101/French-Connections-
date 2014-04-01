@@ -97,7 +97,7 @@ class ClassificationViewClassifications extends JViewLegacy
 			JToolBarHelper::preferences('com_classification');
 		}
     
-    JHtmlSidebar::setAction('index.php?option=com_helloworlds&view=articles');
+    JHtmlSidebar::setAction('index.php?option=com_rentals&view=articles');
 		
     JHtmlSidebar::addFilter(
 			JText::_('JOPTION_SELECT_PUBLISHED'),
@@ -115,7 +115,7 @@ class ClassificationViewClassifications extends JViewLegacy
 	{
 		$document = JFactory::getDocument();
 		$document->setTitle(JText::_('COM_CLASSIFICATION_MANAGER_CLASSIFICATIONS'));
-		JText::script('COM_HELLOWORLD_HELLOWORLD_ERROR_PARENT_PROPERTY_UNACCEPTABLE');
+		JText::script('COM_RENTAL_HELLOWORLD_ERROR_PARENT_PROPERTY_UNACCEPTABLE');
 	}  
   
 }

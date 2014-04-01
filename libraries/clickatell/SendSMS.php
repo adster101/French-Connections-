@@ -76,7 +76,7 @@ class SendSMS {
       $phone = urlencode($number);
     } else {
 
-      $phone = urlencode(JComponentHelper::getParams('com_helloworld')->get('debug_number','447799434206'));
+      $phone = urlencode(JComponentHelper::getParams('com_rental')->get('debug_number','447799434206'));
     }
 
     $ch = curl_init();

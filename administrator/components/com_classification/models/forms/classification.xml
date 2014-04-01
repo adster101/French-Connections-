@@ -44,7 +44,7 @@
     <field
       name="latitude"
       type="text"
-      extension="com_helloworld"
+      extension="com_rental"
       class="validate-latitude"
       default=""
       label="COM_CLASSIFICATION_FIELD_LATITUDE_LABEL"
@@ -57,7 +57,7 @@
     <field
       name="longitude"
       type="text"
-      extension="com_helloworld"
+      extension="com_rental"
       class="inputbox validate-longitude"
       default=""
       label="COM_CLASSIFICATION_FIELD_LONGITUDE_LABEL"

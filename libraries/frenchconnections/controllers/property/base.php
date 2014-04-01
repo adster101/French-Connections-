@@ -14,14 +14,14 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class HelloWorldControllerBase extends JControllerForm {
+class RentalControllerBase extends JControllerForm {
 
   protected function allowEdit($data = array(), $key = 'property_id') {
     $user = JFactory::getUser();
     $userId = $user->get('id');
     
-    $this->addModelPath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models', 'HelloWorldModel');
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/tables', 'HelloWorldTable');
+    $this->addModelPath(JPATH_ADMINISTRATOR . '/components/com_rental/models', 'RentalModel');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
 
     // Needs to be update as follows
     // For enquiries and special offers the $key will not point to the property table
@@ -61,7 +61,7 @@ class HelloWorldControllerBase extends JControllerForm {
       if (empty($ownerId) && $recordId) {
         // Need to do a lookup from the model.
         
-        $record = $this->getModel('Property','HelloWorldModel')->getItem($recordId);
+        $record = $this->getModel('Property','RentalModel')->getItem($recordId);
         if (empty($record)) {
           return false;
         }

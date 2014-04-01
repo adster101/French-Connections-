@@ -34,9 +34,9 @@ class AttributesController extends JControllerLegacy
 	{	
 		$id  	 = JRequest::getInt('id');
 		$session 	 =& JFactory::getSession();
-		$session->set('com_helloworld.property.'.$id.'.lang', JRequest::getVar('Language'));
+		$session->set('com_rental.property.'.$id.'.lang', JRequest::getVar('Language'));
 		$view = JRequest::getVar('view');
-		$this->setRedirect('index.php?option=com_helloworld&task='.$view.'.edit&id='.$id);
+		$this->setRedirect('index.php?option=com_rental&task='.$view.'.edit&id='.$id);
 	}	  
 
 }

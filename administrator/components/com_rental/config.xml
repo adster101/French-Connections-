@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	
+  <fieldset
+    name="permissions"
+    label="JCONFIG_PERMISSIONS_LABEL"
+    description="JCONFIG_PERMISSIONS_DESC"
+  >
+    <field
+      name="rules"
+      type="rules"
+      label="JCONFIG_PERMISSIONS_LABEL"
+      class="inputbox"
+      validate="rules"
+      filter="rules"
+      component="com_rental"
+      section="component"
+    />
+  </fieldset>
+  
+  <fieldset
+    name="clickatell"
+    label="Clickatell"
+    description="Username and password details for the clickatell account">
+    <field 
+      name="username"
+      type="text"
+      label="Username"
+      class="input-medium"
+    />
+    <field 
+      name="password"
+      type="password"
+      label="Password"
+      class="input-medium"
+    /> 
+    <field 
+      name="id"
+      type="text"
+      label="ID"
+      class="input-medium"
+    />  
+    <field 
+      name="debug_number"
+      type="text"
+      lavel="Debug number"
+      class="input-large"
+    />
+    
+  </fieldset>
+</config>

@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 // Register the Helloworld helper file
-//JLoader::register('HelloWorldHelper', JPATH_ADMINISTRATOR . '/components/com_helloworld/helpers/helloworld.php');
+//JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
     $lang = JFactory::getLanguage();
 
     $lang->load('com_users', JPATH_SITE, null, false, true);

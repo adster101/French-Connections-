@@ -563,18 +563,18 @@ class AccommodationModelListing extends JModelForm {
     JLog::add('Retrieving availability for - ' . $id . ')', JLog::ALL, 'availability');
 
     // First we need an instance of the availability table
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
 
-    $model = JModelLegacy::getInstance('Availability', 'HelloWorldModel', array());
+    $model = JModelLegacy::getInstance('Availability', 'RentalModel', array());
 
     // Attempt to load the availability for this property
     $availability = $model->getAvailability($unit_id);
 
     // Get availability as an array of days
-    $this->availability_array = HelloWorldHelper::getAvailabilityByDay($availability);
+    $this->availability_array = RentalHelper::getAvailabilityByDay($availability);
 
     // Build the calendar taking into account current availability...
-    $calendar = HelloWorldHelper::getAvailabilityCalendar($months = 18, $availability = $this->availability_array, $link = false);
+    $calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability = $this->availability_array, $link = false);
 
     return $calendar;
   }
@@ -588,8 +588,8 @@ class AccommodationModelListing extends JModelForm {
     // Get the state for this property ID
     $unit_id = $this->getState('unit.id');
 
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_helloworld/models');
-    $model = JModelLegacy::getInstance('Tariffs', 'HelloWorldModel');
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+    $model = JModelLegacy::getInstance('Tariffs', 'RentalModel');
 
     $tariffs = $model->getTariffs($unit_id);
 
@@ -799,7 +799,7 @@ class AccommodationModelListing extends JModelForm {
     $owner_email = '';
     $owner_name = '';
     jimport('clickatell.SendSMS');
-    $sms_params = JComponentHelper::getParams('com_helloworld');
+    $sms_params = JComponentHelper::getParams('com_rental');
 
     $banned_emails = explode(',', $params->get('banned_email'));
 

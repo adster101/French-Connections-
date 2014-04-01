@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset name="description">
+    <field
+      name="unit_title"
+      type="text"
+      label="COM_RENTAL_HELLOWORLD_FIELD_UNIT_TITLE_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_UNIT_TITLE_DESC"
+      size="25"
+      maxlength="25"
+      class="input-large"
+      required="true"
+      labelclass="control-label"
+      hint="COM_RENTAL_HELLOWORLD_FIELD_UNIT_TITLE_PLACEHOLDER"
+      translateHint="true"
+    />
+
+    <field
+      labelclass="control-label"
+      name="accommodation_type"
+      label="COM_RENTAL_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_DESC"
+      message="COM_RENTAL_HELLOWORLD_FIELD_ACCOMMODATION_TYPE_MESSAGE"
+      type="attributetype"
+      required="true"
+      validate="nonzero"
+      filter="int"
+      default=""
+      id="2">
+      <option value="">JSELECT</option>
+    </field>     
+
+    <field
+      labelclass="control-label"
+      name="property_type"
+      label="COM_RENTAL_HELLOWORLD_FIELD_PROPERTY_TYPE_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_PROPERTY_TYPE_DESC"
+      message="COM_RENTAL_HELLOWORLD_FIELD_PROPERTY_TYPE_MESSAGE"
+      type="attributetype"
+      required="true"
+      validate="nonzero"
+      filter="int"
+      id="1">
+      <option value="">JSELECT</option>
+    </field>
+    <field
+      name="description"
+      labelclass="control-label"
+      type="editor"
+      label="COM_RENTAL_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+      size="40"
+      class="inputbox"
+      filter="JComponentHelper::filterText"
+      required="true"
+      buttons="false"/>
+  </fieldset>
+
+  <fieldset name="occupancy">
+    <field
+      name="occupancy"
+      type="integer"
+      first="1"
+      last="20"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_OCCUPANCY_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_OCCUPANCY_DESC"
+      message="COM_RENTAL_HELLOWORLD_FIELD_OCCUPANCY_MESSAGE"
+      class="inputbox validate-occupancy input-small"
+      required="true"
+      labelclass="control-label"
+      validate="nonzero"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+
+    <field
+      name="single_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
+      class="input-small"
+      labelclass="control-label"
+      validate="nonzero"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+    
+    <field
+      name="double_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_DOUBLE_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      filter="int">
+      <option value="">JSELECT</option>
+
+    </field>
+    <field
+      name="triple_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_TRIPLE_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_TRIPLE_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="false"
+      default="0"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+    <field
+      name="quad_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_QUAD_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_QUAD_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+    <field
+      name="twin_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_TWIN_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_TWIN_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      labelclass="control-label"
+      validate="nonzero"
+      default=""
+      filter="int">
+      <option value="">JSELECT</option>
+      
+    </field>
+    <field
+      name="childrens_beds"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_CHILD_BEDS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_CHILD_BEDS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      filter="int">
+      <option value="">JSELECT</option>
+    
+    </field>
+    <field
+      name="cots"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_COTS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_COTS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="false"
+      filter="int">
+      <option value="">JSELECT</option>
+
+    </field>
+    <field
+      name="extra_beds"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_BEDS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_BEDS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="false"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+    <field
+      name="bathrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="true"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+    <field
+      name="toilets"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="false"
+      filter="int">
+      <option value="0">JSELECT</option>
+    </field>
+  </fieldset>
+
+
+  <fieldset name="internal_facilities" description="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES">
+    <field
+      class="checkbox required"
+      name="COM_FCSEARCH_INTERNAL"
+      type="facilities"
+      required="true"
+      label="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES_LABEL"
+      description="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES_DESC"
+      multiple="true"
+      id="9">
+    </field>
+   
+  </fieldset>
+  
+  <fieldset name="external_facilities" description="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES">
+    <field
+      class="checkbox required pull-left"
+      required="true"
+      name="COM_FCSEARCH_EXTERNAL"
+      type="facilities"
+      label="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL"
+      description="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
+      multiple="true"
+      id="10">
+    </field>
+  </fieldset>
+  <fieldset name="kitchen_facilities" description="COM_RENTAL_ACCOMMODATION_KITCHEN_FACILITIES">
+    <field
+      class="checkbox"
+      name="kitchen_facilities"
+      type="facilities"
+      label="COM_RENTAL_ACCOMMODATION_KITCHEN_FACILITIES_LABEL"
+      description="COM_RENTAL_ACCOMMODATION_KITCHEN_FACILITIES_DESC"
+      multiple="true"
+      id="11">
+    </field>
+  </fieldset>
+ 
+  <fieldset name="suitability" description="COM_RENTAL_ACCOMMODATION_SUITABILITY">
+    <field
+      class="checkbox inline"
+      name="COM_FCSEARCH_SUITABILITY"
+      type="facilities"
+      label="COM_RENTAL_ACCOMMODATION_SUITABILITY_LABEL"
+      description="COM_RENTAL_ACCOMMODATION_SUITABILITY_DESC"
+      multiple="true"
+      id="12">
+    </field>
+  </fieldset>
+  <fieldset name="hidden-details">
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="unit_id"
+      type="hidden"
+      filter="int">
+    </field>
+    <field
+      name="review"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="property_id"
+      type="hidden"
+      filter="int"
+    />
+  </fieldset>
+
+  <fieldset name="">
+    <field type="spacer" name="external_facilities_spacer" hr="true" />
+    <field
+      name="external_facilities_other"
+      type="editor"
+      label="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_LABEL"
+      description="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>
+    <field type="spacer" name="internal_facilities_spacer" hr="true" />
+    <field
+      name="internal_facilities_other"
+      type="editor"
+      label="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_LABEL"
+      description="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES_OTHER_DESC"
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      height="125px">
+    </field>
+    <field
+      name="created_on"
+      labelclass="control-label"
+      type="text"
+      label="JGLOBAL_CREATED_DATE"
+      class="readonly input-small"
+      filter="unset"
+      readonly="true"
+    />
+    <field
+      labelclass="control-label"
+      name="modified_by"
+      type="user"
+      label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+      class="readonly input-small"
+      readonly="true"
+      filter="unset"/>
+    <field
+      labelclass="control-label"
+      name="modified_on"
+      type="text"
+      label="JGLOBAL_FIELD_MODIFIED_LABEL"
+      class="readonly input-small"
+      filter="unset"
+      readonly="true" />
+  </fieldset>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+

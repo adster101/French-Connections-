@@ -19,13 +19,13 @@ $lang = JFactory::getLanguage();
 /**
  * Property Submenu
  */
-$addRental = $user->authorise('core.create', 'com_helloworld');
-$addRealestate = $user->authorise('core.create', 'com_helloworld');
+$addRental = $user->authorise('core.create', 'com_rental');
+$addRealestate = $user->authorise('core.create', 'com_rental');
 $addOffer = $user->authorise('core.create', 'com_specialoffers');
 $addReview = $user->authorise('core.create', 'com_reviews');
 
-$manage_rental = $user->authorise('core.manage', 'com_helloworld');
-$manage_realestate = $user->authorise('core.manage', 'com_helloworld');
+$manage_rental = $user->authorise('core.manage', 'com_rental');
+$manage_realestate = $user->authorise('core.manage', 'com_rental');
 $manage_offers = $user->authorise('core.manage', 'com_specialoffers');
 
 $manage_account = $user->authorise('core.manage', 'com_invoices');
@@ -45,13 +45,13 @@ if ($manage_rental || $manage_realestate) {
 
   if ($manage_rental) {
 
-    $menu->addChild(new JMenuNode(JText::_('COM_HELLOWORLD_MENU'), 'index.php?option=com_helloworld', 'class:property'), true);
-    $menu->addChild(new JMenuNode(JText::_('COM_HELLOWORLD_VIEW_ALL_MENU'), 'index.php?option=com_helloworld', 'class:property'));
+    $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_MENU'), 'index.php?option=com_rental', 'class:property'), true);
+    $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_VIEW_ALL_MENU'), 'index.php?option=com_rental', 'class:property'));
 
     if ($addRental) {
 
       $menu->addChild(
-              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_helloworld&task=propertyversions.add', 'class:newproperty')
+              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_rental&task=propertyversions.add', 'class:newproperty')
       );
     }
 
