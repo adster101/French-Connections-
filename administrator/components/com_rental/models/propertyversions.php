@@ -186,11 +186,11 @@ class RentalModelPropertyVersions extends JModelAdmin {
     }
 
     // Set the location details accordingly, needed for one of the form field types...
-    if (!empty($data->latitude) && !empty($data->longitude)) {
+    if (!empty($data->department)) {
 
-      $form->setFieldAttribute('city', 'latitude', $data->latitude);
-      $form->setFieldAttribute('city', 'longitude', $data->longitude);
-      $form->setFieldAttribute('city', 'default', $data->city);
+      $form->setFieldAttribute('city', 'department', $data->department);
+      $form->setFieldAttribute('city', 'readonly', 'false');
+      
     }
   }
 

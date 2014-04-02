@@ -30,7 +30,7 @@ class AccommodationControllerListing extends JControllerForm {
     $debug = $app->getCfg('debug');
 
     // Get a list of properties for renewals
-    $props = $this->_getProps(false);
+    $props = $this->_getProps(true);
 
     // Get the parameters for use in processing the renewal reminders
     $params = JComponentHelper::getParams('com_rental'); // These are the email params. 

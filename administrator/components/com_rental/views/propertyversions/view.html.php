@@ -137,6 +137,8 @@ class RentalViewPropertyversions extends JViewLegacy {
     $document->addScript(JURI::root() . "/administrator/components/com_rental/js/locate.js", 'text/javascript', true, false);
     //$document->addScript("http://help.frenchconnections.co.uk/JavaScript.ashx?fileMask=Optional/ChatScripting",'text/javascript',false, false);
 
+    JText::script('COM_RENTAL_PLEASE_CHOOSE');
+
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
 
 

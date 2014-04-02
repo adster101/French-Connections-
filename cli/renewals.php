@@ -198,7 +198,7 @@ class Renewals extends JApplicationCli {
           $body = JText::sprintf(
                           $renewal_templates->get('AUTO_RENEWAL_30_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total, $v->id
           );
-          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id);
+          $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_30_DAYS_SUBJECT'), $v->id, $expiry_date);
           break;
 
         case ($v->days == "7"):

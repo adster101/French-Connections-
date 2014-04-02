@@ -170,10 +170,6 @@ class RentalControllerPropertyVersions extends RentalControllerBase {
     
     if ($return && (int) $id && $id > 0) {
 
-      // Derive the first unit for this property and redirect
-      // getDefaultUnit - useful method for a property view also
-      // Get unit where ordering = 1 for this property id
-      // ensure that it is the latest version though, unless doing a preview
 
       
       $this->setRedirect(

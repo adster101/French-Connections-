@@ -20,6 +20,8 @@ $amenities = $this->form->getGroup('amenities');
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+  <?php echo JHtml::_('form.token'); ?>
+
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
@@ -34,16 +36,7 @@ $amenities = $this->form->getGroup('amenities');
         echo $progress_layout->render($data);
         echo $tabs_layout->render($data);
         ?>
-        <!--<fieldset class="adminform form-horizontal">
-          <legend><?php //echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_DETAILS');                      ?></legend>
-          <div class="control-group">
-        <?php //echo $this->form->getLabel('title');  ?>
-            <div class="controls">
-        <?php // echo $this->form->getInput('title');  ?>
-            </div>
-          </div>
-          <hr />
-        </fieldset>-->
+
         <div class="row-fluid">
           <div class="span9">
             <fieldset>
@@ -57,17 +50,17 @@ $amenities = $this->form->getGroup('amenities');
                   <?php echo $this->form->getInput('department'); ?>
                 </div>
               </div>
-
-              <?php echo $this->form->getInput('map'); ?>
-              <?php echo $this->form->getInput('latitude'); ?>
-              <?php echo $this->form->getInput('longitude'); ?>
-
               <div class="control-group">
                 <?php echo $this->form->getLabel('city'); ?>
                 <div class="controls">
                   <?php echo $this->form->getInput('city'); ?>
                 </div>
               </div>
+              <?php echo $this->form->getInput('map'); ?>
+              <?php echo $this->form->getInput('latitude'); ?>
+              <?php echo $this->form->getInput('longitude'); ?>
+
+
             </fieldset>
             <fieldset>
               <legend>Surrounding area</legend>
@@ -155,5 +148,4 @@ $amenities = $this->form->getGroup('amenities');
   <?php echo $field->input; ?>
 <?php endforeach; ?>
 <input type="hidden" name="task" value="" />
-<?php echo JHtml::_('form.token'); ?>
 </form>

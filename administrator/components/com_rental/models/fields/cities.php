@@ -25,6 +25,38 @@ class JFormFieldCities extends JFormFieldList {
    */
   protected $type = 'Cities';
 
+  protected function getInput() {
+
+    // Get the field options.
+    $cities = (array) $this->getOptions();
+    $data = array();
+    
+		$class = !empty($this->class) ? ' class="' . $this->class . '"' : '';
+
+    foreach ($cities as $city) {
+      $data[] = array(
+          'value' => $city->id,
+          'text' => $city->title,
+          'attr' => array('data-latitude' => $city->latitude, 'data-longitude'=>$city->longitude)
+      );
+    }
+
+    $options = array(
+        'id' => $this->id, // HTML id for select field
+        'list.attr' => array(// additional HTML attributes for select field
+            'class' => $class,
+        ),
+        'list.translate' => false, // true to translate
+        'option.key' => 'value', // key name for value in data array
+        'option.text' => 'text', // key name for text in data array
+        'option.attr' => 'attr', // key name for attr in data array
+        'list.select' => $this->value, // value of the SELECTED field
+    );
+
+    $result = JHtmlSelect::genericlist($data, $this->name, $options);
+    return $result;
+  }
+
   /**
    * Method to get the field options.
    *
@@ -35,56 +67,32 @@ class JFormFieldCities extends JFormFieldList {
     // Filter out any regions, areas etc
     $options = array();
     // Get latitude
-    $latitude = $this->element['latitude'] ? $this->element['latitude'] : '';
-    $longitude = $this->element['longitude'] ? $this->element['longitude'] : '';
-
-    if (!empty($latitude) && !empty($longitude)) {
-
+    $dept = $this->element['department'] ? $this->element['department'] : '';
+    
+    $items = array();
+    
+    if (!empty($dept)) {
 
       // Initialize variables. // Cache the db result here so it can be reused - or rely on sql cache?
       $options = array();
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
-      $query->select('id, title, level');
-      $query->select(
-              '(
-        3959 * acos( cos( radians(' . $longitude . ') )
-        * cos( radians( latitude ) )
-        * cos( radians( longitude ) -
-        radians(' . $latitude . ') ) +
-        sin( radians(' . $longitude . ') )
-        * sin( radians( latitude ) ) ) )
-        AS distance
-            ');
+      $query->select('id, title, latitude, longitude');
       $query->from('#__classifications');
-      $query->where('level = 5');
+      $query->where('parent_id = ' . (int) $dept);
 
-      $query->having('distance < 50');
-      $query->order('distance');
-      $db->setQuery($query, 0, 10);
+      $query->order('title', 'asc');
+      $db->setQuery($query);
       $items = $db->loadObjectList();
 
       // Check for a database error.
       if ($db->getErrorNum()) {
         JError::raiseWarning(500, $db->getErrorMsg());
       }
-
-      // Loop over each subtree item
-      foreach ($items as &$item) {
-        $repeat = ($item->level - 1 >= 0) ? $item->level - 1 : 0;
-        $item->title = $item->title . ' - ' . round($item->distance, 0) . ' Miles';
-        $options[] = JHtml::_('select.option', $item->id, $item->title);
-      }
     }
-
-
-
-
-
-    // Merge any additional options in the XML definition.
-    $options = array_merge(parent::getOptions(), $options);
-    return $options;
+    
+    return $items;
   }
 
 }

@@ -172,7 +172,7 @@
       label="COM_RENTAL_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_NEARESTTOWN_DESC"
       required="true"
-      readonly="false">
+      readonly="true">
       <option value="">COM_RENTAL_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
     </field>
 

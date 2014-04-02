@@ -65,7 +65,13 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
               <?php echo $this->pagination->getLimitBox(); ?>
             </div>
           </div>
+        <hr/>
         <?php endif; ?>
+        <div class="alert alert-info">
+          <span class="icon icon-info"></span>
+          <strong><?php echo JText::_('COM_REVIEWS_ADDING_REVIEWS'); ?></strong>
+          
+        </div>
       <?php if (count($this->items) > 0) : ?> 
 
         <table class="table table-striped" id="articleList">

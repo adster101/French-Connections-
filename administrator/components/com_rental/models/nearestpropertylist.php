@@ -55,7 +55,7 @@ class RentalModelNearestPropertyList extends JModelList
     $query->from('#__classifications');
     $query->where('level = 5');
 
-    $query->having('distance < 25');
+    //$query->having('');
     $query->order('distance');
 
 		return $query;
