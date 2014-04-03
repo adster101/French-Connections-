@@ -103,86 +103,86 @@ $data = array('progress' => $this->progress);
 
 
 
-<script id="template-upload" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-upload fade">
+      <script id="template-upload" type="text/x-tmpl">
+        {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-upload fade">
         <td>
-            <span class="preview"></span>
+        <span class="preview"></span>
         </td>
         <td>
-            <p class="name">{%=file.name%}</p>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
+        <p class="name">{%=file.name%}</p>
+        {% if (file.error) { %}
+        <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+        {% } %}
         </td>
         <td>
-            <p class="size">{%=o.formatFileSize(file.size)%}</p>
-            {% if (!o.files.error) { %}
-                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
-            {% } %}
+        <p class="size">{%=o.formatFileSize(file.size)%}</p>
+        {% if (!o.files.error) { %}
+        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        {% } %}
         </td>
         <td>
-            {% if (!o.files.error && !i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start">
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start</span>
-                </button>
-            {% } %}
-            {% if (!i) { %}
-                <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel</span>
-                </button>
-            {% } %}
+        {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+        <button class="btn btn-primary start">
+        <i class="glyphicon glyphicon-upload"></i>
+        <span>Start</span>
+        </button>
+        {% } %}
+        {% if (!i) { %}
+        <button class="btn btn-warning cancel">
+        <i class="glyphicon glyphicon-ban-circle"></i>
+        <span>Cancel</span>
+        </button>
+        {% } %}
         </td>
-    </tr>
-{% } %}
-</script>
-<!-- The template to display files available for download -->
-<script id="template-download" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-download fade">
+        </tr>
+        {% } %}
+      </script>
+      <!-- The template to display files available for download -->
+      <script id="template-download" type="text/x-tmpl">
+        {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-download fade">
         <td>
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
-                {% } %}
-            </span>
-        </td>
-        <td>
-            <p class="name">
-                {% if (file.thumbnail_url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnail_url?'data-gallery':''%}>{%=file.name%}
-                      <img src="{%=file.thumbnail_url%}" />
-                    </a>
-                {% } else { %}
-                    <span>{%=file.name%}</span>
-                {% } %}
-            </p>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-            {% } %}
+        <span class="preview">
+        {% if (file.thumbnailUrl) { %}
+        <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+        {% } %}
+        </span>
         </td>
         <td>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        <p class="name">
+        {% if (file.thumbnail_url) { %}
+        <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnail_url?'data-gallery':''%}>{%=file.name%}
+        <img src="{%=file.thumbnail_url%}" />
+        </a>
+        {% } else { %}
+        <span>{%=file.name%}</span>
+        {% } %}
+        </p>
+        {% if (file.error) { %}
+        <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+        {% } %}
         </td>
         <td>
-            {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" name="delete" value="1" class="toggle">
-            {% } else { %}
-                <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Clear</span>
-                </button>
-            {% } %}
+        <span class="size">{%=o.formatFileSize(file.size)%}</span>
         </td>
-    </tr>
-{% } %}
-</script>
+        <td>
+        {% if (file.deleteUrl) { %}
+        <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+        <i class="glyphicon glyphicon-trash"></i>
+        <span>Delete</span>
+        </button>
+        <input type="checkbox" name="delete" value="1" class="toggle">
+        {% } else { %}
+        <button class="btn btn-warning cancel">
+        <i class="glyphicon glyphicon-ban-circle"></i>
+        <span>Clear</span>
+        </button>
+        {% } %}
+        </td>
+        </tr>
+        {% } %}
+      </script>
 
       <form action="<?php echo JRoute::_('index.php?option=com_rental&view=images&unit_id=' . (int) $unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form">
         <fieldset>
@@ -224,6 +224,8 @@ $data = array('progress' => $this->progress);
           <input type="hidden" name="boxchecked" value="0" />
           <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
           <input type="hidden" name="id" value="<?php echo $this->unit->id ?>" />
+
+          <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=availability.manage&unit_id=' . (int) $this->unit->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
 
           <?php echo JHtml::_('form.token'); ?>
 

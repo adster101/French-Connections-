@@ -34,6 +34,8 @@ class RentalControllerImages extends JControllerAdmin {
     if (empty($this->extension)) {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
+
+    //$this->registerTask('saveandnext', 'save');
   }
 
   /**
@@ -348,11 +350,10 @@ class RentalControllerImages extends JControllerAdmin {
 
     $return['files'][] = $file;
     $blah = json_encode($return);
-    
+
     echo json_encode($return);
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
-    
   }
 
   /**
@@ -445,6 +446,25 @@ class RentalControllerImages extends JControllerAdmin {
     );
     return true;
   }
+
+  public function saveandnext() {
+
+    // Get the contents of the request data
+    $input = JFactory::getApplication()->input;
+    // If the task is save and next
+    if ($this->task == 'saveandnext') {
+      // Check if we have a next field in the request data
+      $next = $input->get('next', '', 'base64');
+      $url = base64_decode($next);
+      // And set the redirect if we have
+      if ($next) {
+        $this->setRedirect(base64_decode($next));
+      }
+    }
+    return true;
+  }
+
+
 
 }
 

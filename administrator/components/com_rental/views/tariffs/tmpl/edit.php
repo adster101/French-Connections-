@@ -36,7 +36,7 @@ $counter = 0;
             <!-- Listing status and tab layouts end -->
             <fieldset class="adminform form-vertical">
               <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_ADDITIONAL_TARIFFS_DETAIL', $this->item->unit_title); ?></legend>
-             
+
               <div class="control-group ">
                 <?php echo $this->form->getLabel('changeover_day'); ?> 
                 <div class="controls">
@@ -87,10 +87,10 @@ $counter = 0;
                     <?php if (($counter % 3 === 2)) : ?>
                     </div>
                     <hr />
-                    <?php endif; ?>
-                    <?php $counter++; ?>
-                  <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
-                </div>
+                  <?php endif; ?>
+                  <?php $counter++; ?>
+                <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
+              </div>
             </fieldset>
 
           </div>
@@ -101,5 +101,7 @@ $counter = 0;
     <?php echo $field->input; ?>
   <?php endforeach; ?>
   <input type="hidden" name="task" value="" />
+  <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $this->item->property_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
+
   <?php echo JHtml::_('form.token'); ?>
 </form>

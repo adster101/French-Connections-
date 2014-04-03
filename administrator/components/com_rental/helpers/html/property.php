@@ -350,7 +350,6 @@ class JHtmlProperty {
 
     $progress_icon = 'warning';
     $okay_icon = 'ok';
-    $optional = 'wrench';
 
     $html = '';
 
@@ -361,14 +360,13 @@ class JHtmlProperty {
       $progress_icon = $okay_icon;
       $id = $listing_id;
     } elseif ($controller == 'contactdetails') {
-      
+
       if ($item->use_invoice_details) {
         $progress_icon = $okay_icon;
-      } elseif (!$item->use_invoice_details && !empty($item->first_name) && !empty($item->surname) && !empty($item->email_1) && !empty($item->phone_1) ) {
+      } elseif (!$item->use_invoice_details && !empty($item->first_name) && !empty($item->surname) && !empty($item->email_1) && !empty($item->phone_1)) {
         $progress_icon = $okay_icon;
       }
       $id = $listing_id;
-
     } elseif (empty($item->title) && ($controller == 'propertyversions' )) {
 
       $progress_icon = $progress_icon;
@@ -404,9 +402,11 @@ class JHtmlProperty {
     $html .='<a class="' . $btnClass . '"'
             . ' href="' . JRoute::_('index.php?option=com_rental&task=' . $controller . '.' . $action . '&' . $urlParam . '=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '"'
             . ' rel="tooltip">';
-    $html .= '<i class="icon icon-' . $icon . '"></i>';
+    if ($icon) {
+      $html .= '<i class="icon icon-' . $icon . '"></i>';
+    }
     $html .= '&nbsp;' . Jtext::_($button_text);
-    if (!empty($progress_icon)) {
+    if (!empty($progress_icon) && $icon) {
       $html .= '&nbsp;<i class="icon icon-' . $progress_icon . '"></i>';
     }
     $html .= '</a>';
@@ -421,14 +421,13 @@ class JHtmlProperty {
   public static function progressMultiTabs($controller = '', $action = 'edit', $icon = '', $button_text = '', $data = '', $urlParam = '', $btnClass = '', $current_view) {
 
     $html = '';
-    $active = ($controller == $current_view) ? 'active' : '';
 
-    $html.='<li class="dropdown ' . $active . '">'
+    $html.='<li class="dropdown">'
             . '<a class="dropdown-toggle"'
             . 'data-toggle="dropdown"'
-            . 'href="#"> <i class="icon icon-' . $icon . '"></i>'
+            . 'href="#">'
             . '';
-    $html.= JText::_($button_text)
+    $html.= JText::_('Switch unit')
             . '<b class="caret"></b></a>'
             . '<ul class="dropdown-menu">';
 

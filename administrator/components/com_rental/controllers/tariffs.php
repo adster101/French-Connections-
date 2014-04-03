@@ -28,6 +28,7 @@ class RentalControllerTariffs extends RentalControllerBase {
     if (empty($this->extension)) {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
+    $this->registerTask('saveandnext', 'save');
   }
 
   /*
@@ -61,4 +62,18 @@ class RentalControllerTariffs extends RentalControllerBase {
     return $append;
   }
 
+  public function postSaveHook(\JModelLegacy $model, $validData = array()) {
+
+    // Get the contents of the request data
+    $input = JFactory::getApplication()->input;
+    // If the task is save and next
+    if ($this->task == 'saveandnext') {
+      // Check if we have a next field in the request data
+      $next = $input->get('next', '', 'base64');
+      // And set the redirect if we have
+      if ($next) {
+        $this->setRedirect(base64_decode($next));
+      }
+    }
+  }
 }

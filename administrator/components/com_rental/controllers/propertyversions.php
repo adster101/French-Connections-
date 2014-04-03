@@ -10,13 +10,18 @@ jimport('frenchconnections.controllers.property.base');
  * HelloWorld Controller
  */
 class RentalControllerPropertyVersions extends RentalControllerBase {
- 
+
+  public function __construct($config = array()) {
+
+    parent::__construct($config);
+    $this->registerTask('saveandnext', 'save');
+  }
 
   public function cancel($key = null) {
     parent::cancel($key);
-    
-    $id = JFactory::getApplication()->input->get('property_id','','int');
-    
+
+    $id = JFactory::getApplication()->input->get('property_id', '', 'int');
+
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false
@@ -34,7 +39,6 @@ class RentalControllerPropertyVersions extends RentalControllerBase {
 
     // Get the default append string
     //$append = parent::getRedirectToListAppend($recordId, $urlVar);
-
     // Get the task, if we are 'editing' then the parent id won't be set in the form scope
     $task = $this->getTask();
 
@@ -162,24 +166,20 @@ class RentalControllerPropertyVersions extends RentalControllerBase {
     return true;
   }
 
-  public function saveandnext($key = null, $urlVar = null) {
+  public function postSaveHook(\JModelLegacy $model, $validData = array()) {
 
-    $return = parent::save($key, $urlVar);
+    // Get the contents of the request data
+    $input = JFactory::getApplication()->input;
+    // If the task is save and next
+    if ($this->task == 'saveandnext') {
+      // Check if we have a next field in the request data
+      $next = $input->get('next', '', 'base64');
+      // And set the redirect if we have
+      if ($next) {
+        $this->setRedirect(base64_decode($next));
 
-    $id = JFactory::getApplication()->input->get('property_id','','int');
-    
-    if ($return && (int) $id && $id > 0) {
-
-
-      
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $unit_id, false
-              )
-      );
+      }
     }
-
-    return $return;
   }
 
 }

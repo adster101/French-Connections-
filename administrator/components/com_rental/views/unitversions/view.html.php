@@ -29,10 +29,10 @@ class RentalViewUnitversions extends JViewLegacy {
 
     // Get the unit item...
     $this->item = $this->get('Item');
-    
+
     $this->item->unit_title = (!empty($this->item->unit_title)) ? $this->item->unit_title : 'New unit';
 
-    
+
     // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
     $model = JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true));
 
@@ -95,7 +95,7 @@ class RentalViewUnitversions extends JViewLegacy {
     // Get component level permissions
     $canDo = RentalHelper::getActions();
 
-    JToolBarHelper::title( JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id) );
+    JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id));
 
     // Built the actions for new and existing records.
     if ($isNew) {
@@ -104,7 +104,7 @@ class RentalViewUnitversions extends JViewLegacy {
       if ($canDo->get('core.create')) {
         JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
         JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
-        //JToolBarHelper::custom('helloworld.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+        JToolBarHelper::custom('unitversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       }
     } else {
       JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
@@ -112,6 +112,7 @@ class RentalViewUnitversions extends JViewLegacy {
         // We can save the new record
         JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
         JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
+        JToolBarHelper::custom('unitversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       }
     }
 
@@ -139,7 +140,6 @@ class RentalViewUnitversions extends JViewLegacy {
     $document->addScript(JURI::root() . "administrator/components/com_rental/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
     $document->addScript(JURI::root() . "administrator/components/com_rental/js/tariffs.js", 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
-
   }
 
 }

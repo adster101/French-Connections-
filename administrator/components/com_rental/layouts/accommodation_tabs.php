@@ -30,7 +30,6 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 // The above function in turn calls progressButton with the same values as below.
 ?>
 
-<?php if (count($data['progress']) == 1) : ?> 
   <ul class="nav nav-tabs">
     <?php
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', '', $view);
@@ -40,16 +39,5 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', '', $view);
     echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'contactdetails', 'edit', 'envelope', 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', $item, 'property_id', '', $view);
     ?>
+      <?php echo JHtmlProperty::progressMultiTabs($view, 'edit', '', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $data['progress'], 'unit_id', '', $view); ?>
   </ul>
-<?php else: ?>
-  <ul class="nav nav-tabs">
-    <?php
-    echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', '', $view);
-    echo JHtmlProperty::progressMultiTabs('unitversions', 'edit', 'home', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $data['progress'], 'unit_id', '', $view);
-    echo JHtmlProperty::progressMultiTabs('images', 'manage', 'pictures', 'IMAGE_GALLERY', $data['progress'], 'unit_id', '', $view);
-    echo JHtmlProperty::progressMultiTabs('availability', 'manage', 'calendar', 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', $data['progress'], 'unit_id', '', $view);
-    echo JHtmlProperty::progressMultiTabs('tariffs', 'edit', 'briefcase', 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', $data['progress'], 'unit_id', '', $view);
-    echo JHtmlProperty::progressButton($item->id, $item->unit_id,'contactdetails', 'edit', 'envelope', 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', $item , 'property_id', '', $view);
-    ?>
-  </ul>
-<?php endif; ?>

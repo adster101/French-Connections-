@@ -28,8 +28,8 @@ $preview = ($review) ? '&preview=1' : '';
 $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]->unit_id . $preview;
 ?>
 
-<div class="row-fluid">
-  <div class="span9">
+<!--<div class="row-fluid">
+  <div class="span9">-->
     <?php if (!empty($notices)) : ?>
       <div class="alert alert-info">
         <?php if ($progress[0]->review) : ?>
@@ -119,9 +119,8 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
         </a>
       </div>
     <?php endif; ?>
-  </div>
   <?php // Need to put the following into language strings     ?>
-  <div class="span3">
+  <!--<div class="span3">
     <h4>Key</h4>
     <span>
       <i class="icon icon-warning"> </i>
@@ -135,3 +134,5 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
 
   </div>
 </div>
+
+</div>-->

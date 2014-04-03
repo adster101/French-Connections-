@@ -96,6 +96,8 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
 
           </div>
         </div>
+
+        <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $this->unit->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
       </form>
 
     </div>

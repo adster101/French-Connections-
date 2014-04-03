@@ -215,5 +215,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
     <?php echo $field->input; ?>
   <?php endforeach; ?>
   <input type="hidden" name="task" value="" />
+  <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=images.manage&unit_id=' . (int) $this->item->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
+
   <?php echo JHtml::_('form.token'); ?>
 </form>

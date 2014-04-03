@@ -70,7 +70,7 @@ class RentalViewImages extends JViewLegacy {
     // Get component level permissions
     $canDo = RentalHelper::getActions();
 
-    JToolBarHelper::title( JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
+    JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
 
     $bar = JToolBar::getInstance('toolbar');
 
@@ -85,6 +85,7 @@ class RentalViewImages extends JViewLegacy {
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
+    JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
 
     JToolBarHelper::help('', '');
 
@@ -101,10 +102,10 @@ class RentalViewImages extends JViewLegacy {
    */
   protected function setDocument() {
     $document = JFactory::getDocument();
-    
+
     JHtml::_('bootstrap.framework');
     //JHtml::_('behavior.framework');
-    
+
     $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_RENTAL_MANAGER_HELLOWORLD_EDIT'));
     $document->addScript(JURI::root() . "media/fc/js/images/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/tmpl.min.js", 'text/javascript', true, false);

@@ -107,7 +107,7 @@ class RentalViewPropertyversions extends JViewLegacy {
         // We can save the new record
         JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
         JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
-        //JToolBarHelper::custom('propertyversions.saveandnext', 'next', 'next', 'COM_RENTAL_HELLOWORLD_SAVE_AND_NEXT', false);
+        JToolBarHelper::custom('propertyversions.saveandnext','forward-2','', 'JTOOLBAR_SAVE_AND_NEXT', false);
 
       }
     }

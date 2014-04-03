@@ -81,6 +81,7 @@ class RentalViewAvailability extends JViewLegacy {
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
+    JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
 
     JToolBarHelper::help('', '');
 
@@ -105,7 +106,7 @@ class RentalViewAvailability extends JViewLegacy {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
-    $document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js");
+    //$document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js");
     $document->addScript(JURI::root() . "/administrator/components/com_rental/js/availability.js", false, true);
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_rental/css/availability.css", 'text/css', "screen");
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_START_DATE');

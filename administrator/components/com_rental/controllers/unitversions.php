@@ -37,6 +37,7 @@ class RentalControllerUnitVersions extends RentalControllerBase {
     // This redirects to the tariffs layout of the unitversions view
     $this->registerTask('tariffs', 'edit');
     $this->registerTask('images', 'edit');
+    $this->registerTask('saveandnext', 'save');
   }
 
   /*
@@ -222,7 +223,7 @@ class RentalControllerUnitVersions extends RentalControllerBase {
     $this->setMessage($this->getError(), 'message');
 
     $this->holdEditId('com_rental.view.listing', $id);
-    
+
     $unit_id = $model->getState($model->getName() . '.unit_id');
 
     // Redirect to the edit screen.
@@ -233,6 +234,21 @@ class RentalControllerUnitVersions extends RentalControllerBase {
     );
 
     return true;
+  }
+
+  public function postSaveHook(\JModelLegacy $model, $validData = array()) {
+
+    // Get the contents of the request data
+    $input = JFactory::getApplication()->input;
+    // If the task is save and next
+    if ($this->task == 'saveandnext') {
+      // Check if we have a next field in the request data
+      $next = $input->get('next', '', 'base64');
+      // And set the redirect if we have
+      if ($next) {
+        $this->setRedirect(base64_decode($next));
+      }
+    }
   }
 
 }

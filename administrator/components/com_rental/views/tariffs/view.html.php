@@ -28,7 +28,7 @@ class RentalViewTariffs extends JViewLegacy {
 
     // Get the unit item...
     $this->item = $this->get('Item');
-    
+
     $this->item->unit_title = (!empty($this->item->unit_title)) ? $this->item->unit_title : 'New unit';
 
     // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
@@ -98,6 +98,7 @@ class RentalViewTariffs extends JViewLegacy {
       // We can save the new record
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
+      JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }
 
     RentalHelper::addSubmenu('listings');
@@ -123,8 +124,6 @@ class RentalViewTariffs extends JViewLegacy {
     $document->addScript(JURI::root() . "administrator/components/com_rental/js/tariffs.js", 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
-
-
   }
 
 }
