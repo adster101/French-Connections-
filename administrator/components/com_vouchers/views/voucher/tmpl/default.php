@@ -16,7 +16,7 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_vouchers'); ?>" method="post" name="adminForm" id="adminForm" class="validate form-horizontal">
+<form action="<?php echo JRoute::_('index.php?option=com_vouchers&id=' . (int) $this->item->id) ?>" method="post" name="adminForm" id="adminForm" class="validate form-horizontal">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -26,7 +26,7 @@ $userId = $user->get('id');
       <div id="j-main-container">
       <?php endif; ?>
       <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_ADDITIONAL_DETAILS'); ?></legend>
+        <legend><?php echo JText::_('COM_VOUCHERS_VOUCHER_DETAIL'); ?></legend>
         <?php foreach ($this->form->getFieldset('voucher') as $field): ?>
           <div class="control-group">
             <?php echo $field->label; ?>

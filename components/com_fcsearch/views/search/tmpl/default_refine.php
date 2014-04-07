@@ -109,9 +109,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             <?php if ($counter == count($this->location_options) && !$hide) : ?>
               <hr class="condensed" />
               <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
-                <strong>
                 <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
-              </strong>
             <?php endif; ?>
           <?php endforeach ?>
         <?php else : ?>
@@ -190,9 +188,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         <?php if ($counter == count($this->property_options) && !$hide) : ?>
           <hr class="condensed" />
           <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
-            <strong>
-              <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>          
-            </strong>
+            <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>          
           </a>
         <?php endif; ?>
       <?php endforeach ?>
@@ -249,9 +245,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
           <?php if ($counter == count($values) && !$hide) : ?>
             <hr class="condensed" />
             <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
-              <strong>
-                <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>
-              </strong>
+              <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>
             </a>
           <?php endif; ?>      
 

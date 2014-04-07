@@ -34,7 +34,7 @@ class VouchersViewVoucher extends JViewLegacy {
     
     $this->state = $this->get('State');
 
-    $this->items = $this->get('Items');
+    $this->item = $this->get('Item');
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {

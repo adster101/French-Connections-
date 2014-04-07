@@ -46,12 +46,14 @@ jQuery(document).ready(function() {
   });
 
   jQuery('#slider').flexslider({
-    animation: "fade",
+    animation: "slide",
     animationLoop: false,
     slideshow: false,
     sync: '#carousel',
+    useCss: false,
     animationLoop: false,
-    controlNav: false
+    controlNav: false,
+    video:true
   });
 });
 

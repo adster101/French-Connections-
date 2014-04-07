@@ -41,14 +41,15 @@
       labelclass="control-label"
     />
     
-    <field 
+    <field
+      format="%d-%m-%Y" 
       labelclass="control-label"
       name="end_date" 
       type="calendar"
       label="Expires"
       description=""
       required="false"
-      class="input-mini"
+      class="input-small"
       filter="string" 
     />
     <field 
@@ -86,11 +87,6 @@
       name="id"
       type="hidden"
       filter="int"
-      default=""
-      label="COM_INVOICES_FORM_LBL_INVOICE_ID"
-      class="readonly input-mini"
-      labelclass="control-label"
-      description="JGLOBAL_FIELD_ID_DESC"
     />
     
   </fieldset>

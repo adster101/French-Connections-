@@ -144,6 +144,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     // Get the vat rate from the item costs config params setting
     $vat = JComponentHelper::getParams('com_itemcosts')->get('vat');
 
+    // Get any discount vouchers being applied to this order
+    $vouchers = $this->getVouchers($this->listing_id, true);
+
     // Loop over each order line and merge the item cost in
     foreach ($order_summary as $order => &$line) {
       if (array_key_exists($order, $item_costs)) {
@@ -159,6 +162,33 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $line['line_value'] = $line['quantity'] * $line['cost'];
     }
 
+    // Need to apply any discount vouchers
+    // 1. For each line calculate the discount
+    // 2. Total this up
+    // 3. Add a discount line to the order
+    if (!empty($vouchers)) {
+
+      $order_total = '';
+      $vat_total = '';
+      
+      foreach ($order_summary as $k => $v) {
+        // Calculate the discounts based on the order 
+        $order_total = $order_total + $v['line_value'];
+        $vat_total = $vat_total + $v['vat'];
+      }
+
+      $discount = array();
+      $discount['quantity'] = 1;
+      $discount['code'] = $vouchers[0]->item_cost_id;
+      $discount['item_description'] = $vouchers[0]->description;
+      $discount['cost'] = ($order_total * $vouchers[0]->cost);
+      $discount['vat'] = ($vat_total * $vouchers[0]->cost);
+      $discount['line_value'] = ($order_total * $vouchers[0]->cost);
+
+      $order_summary[$vouchers[0]->item_cost_id] = $discount;
+    }
+
+    // For a discount voucher this line should show  
     return $order_summary;
   }
 
@@ -175,6 +205,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     foreach ($order as $line => $line_detail) {
       $order_total = $order_total + $line_detail->line_value;
     }
+
 
     return $order_total;
   }
@@ -207,11 +238,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
     $query->where('code in (' . $item_codes . ')');
 
-
     $db->setQuery($query);
 
     $result = $db->loadAssocList($key = 'code');
-
 
     return $result;
   }
@@ -326,7 +355,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     // Need to know the user invoice address and VAT status for this user
     // If the property is a B&B, then don't charge for any additional units unless the additional units are self-catering
     // If the expiry date is set then this is a renewal. Regardless of whether it has actually expired or not   
-    // Item codes will be dependent on whether it is a renewal or not
+    // Item codes are dependent on whether it is a renewal or not
     // Units counters
     $bandb = 0;
     $selfcatering = 0;
@@ -423,6 +452,19 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       }
     }
 
+    // Get any vouchers that have been applied to this property
+    $vouchers = $this->getVouchers($this->listing_id);
+
+    foreach ($vouchers as $voucher) {
+      $item_costs[$voucher->item_cost_id]['quantity'] = 1;
+    }
+
+    // Get any additional marketing for this property
+    // - French translation
+    // - Video
+    // - LWL
+    // - Featured property (Phase II)
+    
     return $item_costs;
   }
 
@@ -1029,6 +1071,46 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $new_expiry_date = $date->toSql();
 
     return $new_expiry_date;
+  }
+
+  /**
+   *  * 
+   * Gets a list of vouchers applied to any particular property
+   * 
+   * @param type $property_id
+   * @return mixed
+   * 
+   */
+  public function getVouchers($property_id = '', $discount = false) {
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $date = JFactory::getDate();
+
+    $query->select('a.item_cost_id, a.date_redeemed, b.cost, b.description');
+    $query->from('#__vouchers a');
+    $query->where('property_id = ' . (int) $property_id);
+    $query->where('end_date > ' . $db->quote($date));
+    $query->join('left', '#__item_costs b on b.code = a.item_cost_id');
+    // Don't return the discount vouchers 
+    if (!$discount) {
+      $query->where('b.catid not in (50)');
+    } else {
+      $query->where('b.catid in (50)');
+    }
+    
+    $query->where('a.state = 1');
+
+    $db->setQuery($query);
+
+    try {
+      $rows = $db->loadObjectList();
+    } catch (Exception $e) {
+      // Problem loading vouchers for this property
+      return false;
+    }
+
+    return $rows;
   }
 
   /**

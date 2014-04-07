@@ -6,7 +6,7 @@ $language = JFactory::getLanguage();
 $lang = $language->getTag();
 $app = JFactory::getApplication();
 
-$Itemid = FCSearchHelperRoute::getItemid(array('component','com_accommodation'));
+$Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
 
 $this->item->itemid = $Itemid;
 
@@ -79,12 +79,17 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         <section class="slider">
           <div id="slider" class="flexslider">
             <ul class="slides">
+              <?php if (!empty($this->item->video_url)) : ?>
+                <li>
+                  <iframe id="player_1" src="<?php echo $this->escape($this->item->video_url) ?>" width="100%" height="281" frameborder="0"></iframe>
+                </li>
+              <?php endif; ?>
               <?php foreach ($this->images as $images => $image) : ?> 
                 <li>
                   <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
                   <p class="flex-caption">
                     <?php echo $image->caption; ?>
-                    <span class="muted small">(<?php echo $images+1 ?> / <?php echo count($this->images) ?>)</span>
+                    <span class="muted small">(<?php echo $images + 1 ?> / <?php echo count($this->images) ?>)</span>
                   </p>
                 </li>
               <?php endforeach; ?>
@@ -92,6 +97,16 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           </div>
           <div id="carousel" class="flexslider carousel">
             <ul class="slides">
+              <?php if (!empty($this->item->video_url)) : ?>
+                <li>
+                  <p class="center lead">
+                    <br />
+                    Video
+                    <span class="icon icon-video" style="width:100%;height:100%;"></span>
+                  </p>
+                  
+                </li>
+              <?php endif; ?>
               <?php foreach ($this->images as $images => $image) : ?> 
                 <li>
                   <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name ?>" /> 
@@ -103,6 +118,11 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php else : ?>
         <div class="panel panel-default">
           <ul class="slides">
+            <?php if (!empty($this->item->video_url)) : ?>
+              <li>
+                <img src="<?php JURI::root() . '/images/general/medium-sunflower.png' ?>" />
+              </li>
+            <?php endif; ?>
             <?php foreach ($this->images as $images => $image) : ?> 
               <li>
                 <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />

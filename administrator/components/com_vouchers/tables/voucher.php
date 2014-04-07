@@ -28,6 +28,10 @@ class VouchersTableVoucher extends JTable {
     
     $user = JFactory::getUser();
     $date = JFactory::getDate();
+
+    if (!empty($this->end_date)) {
+      $this->end_date = JFactory::getDate($this->end_date)->calendar('Y-m-d');
+    }
     
     if (empty($this->created_by)) {
       $this->created_by = $user->get('id');

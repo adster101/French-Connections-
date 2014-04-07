@@ -30,7 +30,8 @@ $total_vat = '';
       </tr>
     <?php endforeach; ?>
     <tr>
-      <td colspan="3">
+      <td>&nbsp;</td>
+      <td colspan="2">
         <strong>VAT</strong>
       </td>
       <td align="right"><?php echo number_format($total_vat, 2) ?></td>

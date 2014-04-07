@@ -107,7 +107,7 @@ class VouchersModelVouchers extends JModelList {
     );
     $query->from('`#__vouchers` AS a');
 
-    $query->leftJoin('#__item_costs b on a.item_cost_id = b.code');
+    $query->leftJoin('#__item_costs b on a.item_cost_id = b.id');
 
     // Filter by published state
     $published = $this->getState('filter.state');

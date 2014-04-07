@@ -147,7 +147,7 @@ if (!empty($this->extra_sidebar)) {
                 <?php echo $item->date_created; ?>
               </td>
               <td>
-                <?php echo $item->quantity; ?>
+                <?php //echo $item->quantity; ?>
               </td>
 
 

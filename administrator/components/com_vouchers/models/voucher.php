@@ -29,6 +29,16 @@ class VouchersModelVoucher extends JModelAdmin {
     return JTable::getInstance($type, $prefix, $config);
   }
 
+  public function getItem($pk=null) {
+    if ($item = parent::getItem($pk)) {
+      
+      $expiry = JFactory::getDate($item->end_date)->calendar('d-m-Y');
+      $item->end_date = $expiry;
+    }
+    
+    return $item;
+  }
+  
   /**
    * Method to get the record form.
    *
