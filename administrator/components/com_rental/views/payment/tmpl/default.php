@@ -31,8 +31,8 @@ $total_vat = '';
       <?php echo $this->payment_summary->render($this->summary); ?>      
 
       <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) ?>" class="btn btn-primary btn-large">
-        Pay now using our secure sever
-        <i class="icon icon-white icon-next"> </i>
+        Pay now using our secure server
+        <i class="icon icon-white icon-next">&nbsp;</i>
       </a>
       <hr />
       <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_HELP'); ?>

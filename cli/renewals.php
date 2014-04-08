@@ -48,7 +48,7 @@ class Renewals extends JApplicationCli {
    * @since   2.5
    */
   public function doExecute() {
-
+       
     // Create an instance of the site application - needed for the CLI app to run the JLayout
     $app = JFactory::getApplication('site');
 
@@ -68,7 +68,11 @@ class Renewals extends JApplicationCli {
   }
 
   private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
-
+    
+    // Array for holding a list of the contact notes
+    $notes = array();
+    
+    // Get props due for manual renewal
     $props = $this->_getProps();
 
     if (!$props) {
@@ -147,17 +151,23 @@ class Renewals extends JApplicationCli {
         // Send the email
         if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc)) {
           // If the email is sent then write out to the notes table
-          
+          $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
         }
-        
-        
       }
+    }
+
+    // Empty the notes array into the database
+    if (!empty($notes)) {
+      $this->saveNotes($notes);
     }
 
     $this->out('Done processing manual reminders...');
   }
 
   private function _autorenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
+
+    // Array for holding a list of the contact notes
+    $notes = array();
 
     // Get a list of properties for renewals
     $props = $this->_getProps(true);
@@ -247,11 +257,41 @@ class Renewals extends JApplicationCli {
 
       // Send the email
       if ($email) {
+
         $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
+
+        $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
       }
     }
 
+    if (!empty($notes)) {
+      $this->saveNotes($notes);
+    }
+
     $this->out('Done processing auto renewal reminders and payments');
+  }
+
+  public function saveNotes($notes = array()) {
+
+    // Add the tables to the include path
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+
+    // Get an instance of the note table
+    $table = JTable::getInstance('Note', 'RentalTable');
+
+    foreach ($notes as $note) {
+      if (!$table->bind($note)) {
+        return false;
+      }
+
+      if (!$table->store()) {
+        return false;
+      }
+
+      $table->reset();
+    }
+
+    return true;
   }
 
   /*
@@ -284,7 +324,7 @@ class Renewals extends JApplicationCli {
       b.SecurityKey,
       b.TxAuthNo, 
       b.user_id, 
-      b.property_id'            
+      b.property_id'
     );
 
     $query->from('#__property a');

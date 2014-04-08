@@ -78,10 +78,10 @@ $listing_id = '';
           <div class="btn-group pull-left hidden-phone">
             <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
             <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-                document.id('start_date').value = '';
-                document.id('end_date').value = '';
-                document.id('date_filter').value = '';
-                this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
+                  document.id('start_date').value = '';
+                  document.id('end_date').value = '';
+                  document.id('date_filter').value = '';
+                  this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
           </div>
 
           <div class="btn-group pull-right hidden-phone">
@@ -190,18 +190,21 @@ $listing_id = '';
                           </td>
                         <?php endif; ?>
                         <td>
+                          <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail) ?>
                           <?php if ($item->review != 2) : ?>
-                            <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail ) ?>
+
+
+          
                             <a href="<?php echo JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
                                 <?php echo JText::_('COM_RENTAL_HELLOWORLD_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php else: ?>
                                 <?php echo JText::_('COM_RENTAL_HELLOWORLD_MORE_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php endif; ?>
-                            </a>
-                          <?php else: ?>
-                            <?php //echo $this->escape($item->id);  ?>
+                            </a>                        
+
                           <?php endif; ?>
+
                         </td>
                         <td>
                           <?php echo $item->expiry_date; ?>
@@ -252,8 +255,6 @@ $listing_id = '';
                             <?php if ($canDo->get('helloworld.view.notes')) : ?>
                               <p>
                                 <?php echo JHtml::_('property.notes', $item->id); ?>
-                                &nbsp;
-                                <?php echo JHtml::_('property.addNote', $item->id); ?>
                                 &nbsp;
                                 <?php echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
 

@@ -122,13 +122,18 @@ class RentalControllerRenewal extends JControllerLegacy {
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
     $app = JFactory::getApplication();
+    
+    $id = $this->input->get('id', '', 'int');
+    
+    // Get an instance of the listing model
+    $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
 
-    // Get an instance of the Listing model and get the listing details
-    $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel');
+    // Set the listing ID we are processing payment for
+    $listing_model->setState('com_rental.listing.id', $id);
+
+    // Get the listing details (i.e. a list of units that make up the listing
     $listing = $listing_model->getItems();
 
-    $id = $this->input->getInt('id');
-    
     // Instantiate an instance of the property model using the listing detail as the config
     $model = $this->getModel('Payment', 'RentalModel', $config = array('listing' => $listing));
     $form = $model->getPaymentForm();
@@ -164,7 +169,7 @@ class RentalControllerRenewal extends JControllerLegacy {
     // import our payment library class
     jimport('frenchconnections.models.payment');
 
-    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $this->listing));
+    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
 
     // Attempt to save the configuration.
     $return = $model->processPayment($validData);
@@ -185,7 +190,7 @@ class RentalControllerRenewal extends JControllerLegacy {
 
     // Empty the data stored in the session...
     $app->setUserState('com_rental.renewal.data', $data);
-    
+
     // $return should contain a redirect url and a message, at least
     // Set the redirect based on the task.
     switch ($this->getTask()) {

@@ -52,7 +52,7 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
           <?php endforeach; ?>
         </ul>
       </div>
-    <?php elseif ((empty($notices) && $view == 'listing') && $review) : //No notices, listing view for a property that needs review  ?>
+    <?php elseif ((empty($notices) && $view == 'listing') && $review == 1) : //No notices, listing view for a property that needs review  ?>
       <div class="well well-small">
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
         <hr />
@@ -92,7 +92,7 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
         <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
         <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
       </div>
-   <?php elseif (empty($notices) && $days_to_renewal < 0  && !empty($expiry_date)) : ?>
+   <?php elseif (empty($notices) && $days_to_renewal < 0  && !empty($expiry_date) && $review < 2 ) : ?>
       <div class="alert alert-danger">
         <?php if ($progress[0]->review) : ?>
           <div class="pull-right">
@@ -104,7 +104,7 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
         <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_EXPIRED'); ?></p>
         <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
       </div>    
-    <?php elseif ($review) : ?>
+    <?php elseif ($review < 2) : ?>
       <div class="alert alert-info">
         <?php if ($progress[0]->review) : ?>
           <div class="pull-right">

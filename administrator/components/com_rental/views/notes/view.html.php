@@ -63,7 +63,6 @@ class RentalViewNotes extends JViewLegacy
 	{
 		// Initialise view variables.
 		$this->items      = $this->get('Items');
-		$this->pagination = $this->get('Pagination');
 		$this->state      = $this->get('State');
 		$this->user       = $this->get('User');
 

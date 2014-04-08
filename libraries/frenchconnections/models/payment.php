@@ -767,8 +767,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     $transaction_number = $payment_details['VendorTxCode'];
     $auth_code = $payment_details['TxAuthNo'];
     $address = $billing_details['BillingAddress1'] . ' ' . $biling_details['BillingAddress2'] . ' ' . $billing_details['BillingCity'] . ' ' . $billing_details['BillingPostCode'] . ' ' . $billing_details['BillingCountry'];
-    $billing_email = (JDEBUG) ? 'admin@frenchconnections.co.uk' : $billing_details['BillingEmailAddress'];
-
+    $billing_email = (JDEBUG) ? 'accounts@frenchconnections.co.uk' : $billing_details['BillingEmailAddress'];
+    $cc = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : '';
+    $html = false;
     $description = "\n";
 
     foreach ($order as $orderline) {
@@ -786,7 +787,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       // Update the expiry date
       $date = $this->getNewExpiryDate();
 
-      if (!$this->updateProperty($listing_id, $this->getIsReview(), $total, $expiry_date = $date)) {
+      if (!$this->updateProperty($listing_id, 0, $total, $expiry_date = $date, $published = 1 )) {
         // Log this
         return false;
       }
@@ -794,12 +795,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $params);
+      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html );
 
       // Send the renewal confirmation email           
       $confirmation_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
       $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
-      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $params);
+      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $cc, $html);
 
       $message = 'COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES';
 
@@ -814,12 +815,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $params);
+      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
 
       // Send the renewal confirmation email           
       $confirmation_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
       $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
-      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $params);
+      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $cc, $html);
 
       $message = 'COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES';
 
@@ -890,7 +891,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $cc = '') {
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $cc = '', $html = true) {
 
     // Assemble the email data...
     $mail = JFactory::getMailer()
@@ -898,7 +899,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             ->addRecipient($to)
             ->setSubject($emailSubject)
             ->setBody($emailBody)
-            ->isHtml(true);
+            ->isHtml($html);
 
     // If debug is off then we should have a $cc, at least for the renewals.
     if ($cc) {
@@ -920,7 +921,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
    * @param type $renewal_status - renewal status for the listing
    * @return boolean
    */
-  public function updateProperty($listing_id = '', $review = 1, $cost = '', $expiry_date = '') {
+  public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '') {
 
     // Initialise some variable
     $data = array();
@@ -935,7 +936,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * Update the cost of this latest update
      */
 
-    $data['cost'] = $cost;
+    $data['value'] = $cost;
 
     /*
      * Update the expiry date if one is passed in
@@ -944,6 +945,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $data['expiry_date'] = $expiry_date;
     }
 
+    if (!empty($published)) {
+      $data['published ='] = $published;
+    }
+    
     $table = JTable::getInstance('Property', 'RentalTable');
 
 

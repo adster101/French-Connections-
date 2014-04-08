@@ -103,9 +103,17 @@ class AccommodationControllerListing extends JControllerForm {
           $send_email = false;
           break;
       }
-      if ($send_email) {
+      // Send the email
+      if ($email) {
+
         $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
+
+        $notes[$v->id] = array('id'=>'','subject' => $subject, 'body' => $body, 'property_id' => $v->id);
       }
+    }
+
+    if (!empty($notes)) {
+      $this->saveNotes($notes);
     }
   }
 
@@ -154,6 +162,29 @@ class AccommodationControllerListing extends JControllerForm {
     }
 
     return $rows;
+  }
+
+  public function saveNotes($notes = array()) {
+
+    // Add the tables to the include path
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+
+    // Get an instance of the note table
+    $table = JTable::getInstance('Note', 'RentalTable');
+
+    foreach ($notes as $note) {
+      if (!$table->bind($note)) {
+        return false;
+      }
+
+      if (!$table->store()) {
+        return false;
+      }
+      
+      $table->reset();
+    }
+
+    return true;
   }
 
   public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true)) {

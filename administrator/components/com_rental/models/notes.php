@@ -144,6 +144,7 @@ class RentalModelNotes extends JModelList {
    * @since   1.6
    */
   protected function populateState($ordering = null, $direction = null) {
+    parent::populateState('a.created_time', 'DESC');
     $app = JFactory::getApplication();
     $input = $app->input;
 
@@ -152,6 +153,8 @@ class RentalModelNotes extends JModelList {
       $this->context .= '.' . $layout;
     }
 
+    $this->setState('list.limit', 50);
+    
     $value = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
     $this->setState('filter.search', $value);
 
@@ -164,7 +167,6 @@ class RentalModelNotes extends JModelList {
     $userId = $input->get('property_id', 0, 'int');
     $this->setState('filter.property_id', $userId);
 
-    parent::populateState('a.created_time', 'DESC');
   }
 
 }

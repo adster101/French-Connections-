@@ -35,7 +35,7 @@ class RentalModelNote extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Note', $prefix = 'HelloWorldTable', $config = array()) {
+  public function getTable($type = 'Note', $prefix = 'RentalTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -91,7 +91,7 @@ class RentalModelNote extends JModelAdmin {
   public function save($data) {
     if (parent::save($data)) {
 
-      if (!empty($data['snooze_until']) && !empty($data['property_id']) ) {
+      if (!empty($data['snooze_until']) && !empty($data['property_id'])) {
 
         // Unset any data that we don't want
         unset($data['subject']);
@@ -116,13 +116,9 @@ class RentalModelNote extends JModelAdmin {
       }
 
       return true;
-
-    } else {
-
-      // Parent save has borked, for some reason...
-      return false;
-
     }
+    // Parent save has borked, for some reason...
+    return false;
   }
 
 }

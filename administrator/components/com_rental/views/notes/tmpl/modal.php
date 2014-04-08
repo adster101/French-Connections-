@@ -14,14 +14,22 @@ JHtml::_('behavior.tooltip');
 ?>
 
 <h1><?php echo JText::sprintf('COM_RENTAL_NOTES_FOR_PROPERTY', $this->id); ?></h1>
-<form class="form-horizontal" action="<?php echo JRoute::_('index.php?option=com_rental&view=notes&layout=modal&tmpl=component&property_id=' . (int) $this->id); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_rental&tmpl=component'); ?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
+  <fieldset class="filter">
+    <div id="filter-bar" class="btn-toolbar ">
+
+      <button class="btn btn-primary">
+        <i class="icon icon-plus-2"></i>&nbsp;Add note</button>
+
+    </div>
+  </fieldset>
 
   <ul class="list-striped">
     <?php foreach ($this->items as $item) : ?>
       <li>
         <?php if ($item->subject) : ?>
 
-          <a href="<?php echo JRoute::_('index.php?option=com_rental&view=notes&layout=modal&tmpl=component&id=' . $item->id) ?>">
+          <a href="<?php echo JRoute::_('index.php?option=com_rental&view=note&layout=default&tmpl=component&id=' . $item->id) ?>">
             <strong><?php echo JText::_($this->escape($item->subject)); ?></strong>
           </a>
           <?php echo JHtml::date($item->created_time, 'D d M Y H:i'); ?>&ndash;
@@ -29,10 +37,9 @@ JHtml::_('behavior.tooltip');
       </li>
     <?php endforeach; ?>
   </ul>
-  <?php echo $this->pagination->getListFooter(); ?>
-
+  <input type="hidden" name="task" value="note.add" />
+  <input type="hidden" name="property_id" value="<?php echo $this->id ?>" />
+  <?php echo JHtml::_('form.token'); ?>
   <div>
-    <input type="hidden" name="task" value="" />
-    <?php echo JHtml::_('form.token'); ?>
   </div>
 </form>

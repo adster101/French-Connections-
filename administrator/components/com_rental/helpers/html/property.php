@@ -202,7 +202,7 @@ class JHtmlProperty {
       $value = 3;
     }
 
-    if ($review == 2 && $canReview === false) {
+    if ($review == 2) {
       $value = 4;
       $allowEdit = false;
     }
