@@ -22,7 +22,7 @@ $amenities = $this->form->getGroup('amenities');
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <?php echo JHtml::_('form.token'); ?>
 
-  <div class="row">
+  <div class="row-fluid">
    
         <div class="span12">
         <?php

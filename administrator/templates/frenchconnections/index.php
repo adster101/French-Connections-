@@ -118,14 +118,17 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
             </a>
           <?php endif; ?>
 
-          <a class="admin-logo" href="<?php echo $this->baseurl; ?>"><span class="icon-joomla"></span></a>
+          <a class="brand" href="<?php echo $this->baseurl; ?>">
+            <img src="<?php echo $logo; ?>" /><br />
+            <span>Home</span>
+          </a>
 
           <a class="brand hidden-desktop hidden-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
             <span class="icon-out-2 small"></span></a>
 
-          <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse"' : ''; ?>>
+          <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
             <jdoc:include type="modules" name="menu" style="none" />
-            <ul class="nav nav-user<?php echo ($this->direction == 'rtl') ? ' pull-left' : ' pull-right'; ?>">
+            <ul class="nav nav-user">
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span>
                   <b class="caret"></b></a>
@@ -137,18 +140,18 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                     </span>
                   </li>
                   <li class="divider"></li>
-                  <li class="">
-                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php echo $user->id; ?>"><?php echo JText::_('TPL_ISIS_EDIT_ACCOUNT'); ?></a>
+                  <!--<li class="">
+                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;  ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');  ?></a>
                   </li>
-                  <li class="divider"></li>
+                  <li class="divider"></li>-->
                   <li class="">
                     <a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1'); ?>"><?php echo JText::_('TPL_ISIS_LOGOUT'); ?></a>
                   </li>
                 </ul>
               </li>
             </ul>
-            <a class="brand visible-desktop visible-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
-              <span class="icon-out-2 small"></span></a>
+            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();  ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);  ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);  ?>
+              <span class="icon-out-2 small"></span></a>-->
           </div>
           <!--/.nav-collapse -->
         </div>
@@ -156,16 +159,13 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
     </nav>
     <!-- Header -->
     <?php if ($displayHeader) : ?>
-        <header class="header">      <div class="container">
-
-          <div class="container-logo ">
-            <img src="<?php echo $logo; ?>" class="logo" />
-          </div>
+      <header class="header">   
+        <div class="container">
           <div class="container-title">
             <jdoc:include type="modules" name="title" />
-          </div>      </div>
-
-        </header>
+          </div>     
+        </div>
+      </header>
     <?php endif; ?>
     <?php if ((!$statusFixed) && ($this->countModules('status'))) : ?>
       <!-- Begin Status Module -->
@@ -185,11 +185,10 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
         <div class="subhead">
           <div class="container">
             <div id="container-collapse" class="container-collapse"></div>
-            <div class="row-fluid">
+            <div class="row">
               <div class="span12">
                 <jdoc:include type="modules" name="toolbar" style="no" />
-              </div>
-            </div>
+              </div>            </div>
           </div>
         </div>
       </div>
@@ -201,7 +200,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
       <section id="content">
         <!-- Begin Content -->
         <jdoc:include type="modules" name="top" style="xhtml" />
-        <div class="row-fluid">
+        <div class="row">
           <?php if ($showSubmenu) : ?>
             <div class="span2">
               <jdoc:include type="modules" name="submenu" style="none" />
@@ -212,7 +211,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
               <?php endif; ?>
               <jdoc:include type="message" />
               <?php
-// Show the page title here if the header is hidden
+              // Show the page title here if the header is hidden
               if (!$displayHeader) :
                 ?>
                 <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
@@ -261,7 +260,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                   , navTop = $('.subhead').length && $('.subhead').offset().top - <?php if ($displayHeader || !$statusFixed) : ?>40<?php else: ?>20<?php endif; ?>
                   , isFixed = 0
 
-          processScroll()
+          processScroll();
 
           // hack sad times - holdover until rewrite for 2.1
           $nav.on('click', function()
@@ -269,7 +268,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
             if (!isFixed) {
               setTimeout(function()
               {
-                $win.scrollTop($win.scrollTop() - 47)
+                $win.scrollTop($win.scrollTop() - 97)
               }, 10)
             }
           })

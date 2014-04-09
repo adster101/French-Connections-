@@ -89,7 +89,7 @@ $debug  = (boolean) $config->get('debug');
 		<div id="content">
 			<!-- Begin Content -->
 			<div id="element-box" class="login well">
-				<img src="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template ?>/images/joomla.png" alt="Joomla!" />
+				<img src="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template ?>/images/banner.gif" alt="French Connections" />
 				<hr />
 				<jdoc:include type="message" />
 				<jdoc:include type="component" />
