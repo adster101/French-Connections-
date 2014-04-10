@@ -10,4 +10,3 @@
 defined('_JEXEC') or die;
 
 ?>
-Woot!

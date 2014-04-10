@@ -141,7 +141,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                   </li>
                   <li class="divider"></li>
                   <!--<li class="">
-                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;  ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');  ?></a>
+                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;       ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');       ?></a>
                   </li>
                   <li class="divider"></li>-->
                   <li class="">
@@ -150,7 +150,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                 </ul>
               </li>
             </ul>
-            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();  ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);  ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);  ?>
+            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();       ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);       ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);       ?>
               <span class="icon-out-2 small"></span></a>-->
           </div>
           <!--/.nav-collapse -->
@@ -225,29 +225,17 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
           <!-- End Content -->
       </section>
 
-      <?php if (!$this->countModules('status') || (!$statusFixed && $this->countModules('status'))) : ?>
-        <footer class="footer">
-          <p align="center">
-            <jdoc:include type="modules" name="footer" style="no" />
-            &copy; <?php echo $sitename; ?> <?php echo date('Y'); ?></p>
-        </footer>
-      <?php endif; ?>
-    </div>
-    <?php if (($statusFixed) && ($this->countModules('status'))) : ?>
-      <!-- Begin Status Module -->
-      <div id="status" class="navbar navbar-fixed-bottom hidden-phone">
-        <div class="btn-toolbar">
-          <div class="btn-group pull-right">
-            <p>
-              <jdoc:include type="modules" name="footer" style="no" />
-              &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
-            </p>
 
+    </div>
+    <?php if ($this->countModules('owner-footer')) : ?> 
+      <div id="status" class=""> 
+        <footer class="footer clearfix"> 
+          <div class="container">
+            <jdoc:include type="modules" name="owner-footer" style="no" />
+            
           </div>
-          <jdoc:include type="modules" name="status" style="no" />
-        </div>
+        </footer>  
       </div>
-      <!-- End Status Module -->
     <?php endif; ?>
     <jdoc:include type="modules" name="debug" style="none" />
     <?php if ($stickyToolbar) : ?>
