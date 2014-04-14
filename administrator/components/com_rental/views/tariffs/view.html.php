@@ -101,10 +101,7 @@ class RentalViewTariffs extends JViewLegacy {
       JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }
 
-    RentalHelper::addSubmenu('listings');
 
-    // Add the side bar
-    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**

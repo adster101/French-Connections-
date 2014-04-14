@@ -106,16 +106,7 @@ class RentalViewListing extends JViewLegacy {
     }
 
 
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
-
-      $view = strtolower(JRequest::getVar('view'));
-
-      $canDo = RentalHelper::addSubmenu('listings');
-
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-    }
+   
   }
 
   /**

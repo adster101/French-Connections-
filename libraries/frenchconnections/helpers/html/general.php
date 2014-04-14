@@ -27,7 +27,7 @@ class JHtmlGeneral {
    *
    * @since   2.5
    */
-  public static function image($src) {
+  public static function image($src, $class = 'thumbnail') {
     $src = preg_replace('#[^A-Z0-9\-_\./]#i', '', $src);
     $file = JPATH_SITE . '/' . $src;
 
@@ -38,7 +38,7 @@ class JHtmlGeneral {
       return '';
     }
 
-    return '<img src="' . JUri::root() . $src . '" alt="" class="thumbnail" />';
+    return '<img src="' . JUri::root() . $src . '" alt="" class="' . $class . '" />';
   }
 
   /*

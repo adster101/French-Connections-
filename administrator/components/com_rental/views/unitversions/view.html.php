@@ -118,10 +118,6 @@ class RentalViewUnitversions extends JViewLegacy {
 
 
 
-    $canDo = RentalHelper::addSubmenu('listings');
-
-    // Add the side bar
-    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**

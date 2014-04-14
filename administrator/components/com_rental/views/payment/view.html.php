@@ -84,20 +84,10 @@ class RentalViewPayment extends JViewLegacy {
     // Register the JHtmlProperty class
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
-    // Get component level permissions
-    $canDo = RentalHelper::getActions();
-
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
 
 
-
-    $view = strtolower(JRequest::getVar('listings'));
-
-    $canDo = RentalHelper::addSubmenu('listings');
-
-    // Add the side bar
-    $this->sidebar = JHtmlSidebar::render();
 
 
 

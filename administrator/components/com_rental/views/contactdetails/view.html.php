@@ -119,18 +119,6 @@ class RentalViewContactdetails extends JViewLegacy
 				JToolBarHelper::save('contactdetails.save', 'JTOOLBAR_SAVE');
 			}
 		}
-
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
-
-      $view = strtolower(JRequest::getVar('view'));
-
-      $canDo = RentalHelper::addSubmenu('listings');
-
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-
-    }
 	}
 
   /**

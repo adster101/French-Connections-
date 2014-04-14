@@ -89,10 +89,6 @@ class RentalViewImages extends JViewLegacy {
 
     JToolBarHelper::help('', '');
 
-    $canDo = RentalHelper::addSubmenu('listings');
-
-    // Add the side bar
-    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**
