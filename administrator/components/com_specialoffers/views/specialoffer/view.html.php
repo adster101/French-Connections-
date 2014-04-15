@@ -49,9 +49,9 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
    */
   protected function addSubMenu() {
 
-    RentalHelper::addSubmenu('specialoffers');
+    //RentalHelper::addSubmenu('specialoffers');
 
-    $this->sidebar = JHtmlSidebar::render();
+    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**

@@ -55,9 +55,9 @@ class ReviewsViewReviews extends JViewLegacy {
       );
     }
 
-    RentalHelper::addSubmenu('reviews');
+    //RentalHelper::addSubmenu('reviews');
 
-    $this->sidebar = JHtmlSidebar::render();
+    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**

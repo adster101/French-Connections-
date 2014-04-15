@@ -26,7 +26,6 @@ class StatsViewStats extends JViewLegacy {
 
     $view = strtolower(JRequest::getVar('view'));
 
-    $this->addSubMenu();
 
     $this->addToolBar();
 
@@ -62,7 +61,7 @@ class StatsViewStats extends JViewLegacy {
    */
   protected function addToolBar() {
     
-    JToolbarHelper::back( 'JTOOLBAR_BACK' );
+    JToolbarHelper::help('','');
 
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_STATS_VIEW_STATS'));

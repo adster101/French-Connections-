@@ -35,7 +35,7 @@ class JHtmlGeneral {
     JPath::check($file);
 
     if (!file_exists($file)) {
-      return '';
+      return '<img src="' . JUri::root() . 'images/general/no-image.png" alt="" class="' . $class . '" />';
     }
 
     return '<img src="' . JUri::root() . $src . '" alt="" class="' . $class . '" />';

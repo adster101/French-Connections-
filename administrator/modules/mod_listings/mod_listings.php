@@ -25,4 +25,3 @@ $items = ModListingHelper::getList($params);
 
 
 require JModuleHelper::getLayoutPath('mod_listings', $params->get('layout', 'default'));
-

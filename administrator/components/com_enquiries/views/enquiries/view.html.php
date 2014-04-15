@@ -53,9 +53,9 @@ class EnquiriesViewEnquiries extends JViewLegacy {
       );
     }
 
-    RentalHelper::addSubmenu('enquiries');
+    //RentalHelper::addSubmenu('enquiries');
 
-    $this->sidebar = JHtmlSidebar::render();
+    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**

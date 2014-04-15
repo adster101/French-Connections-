@@ -176,6 +176,120 @@ class JHtmlProperty {
   }
 
   /**
+   * Generates an button group for editing a property
+   * 
+   * @param type $days
+   * @param type $id
+   * @param type $unit_id
+   */
+  public static function editButton($days = '', $id = '', $unit_id = '', $review = '') {
+    // Array of image, task, title, action.
+    // Possible renewal states are
+    // Expired (renew now)
+    // About to expire (non auto-renew) (renew now) (opt in)
+    // About to expire (auto renew) (opt out)
+    // Publshed with > 28 days to renewal (non auto renew) (opt in)
+
+    $value = '';
+    $html = '';
+    $allowEdit = true;
+
+    if (empty($days) || $days > 28) { // A new sign up which has never been published...
+      $value = 2;
+    } elseif ($days <= 7 && $days >= 0) { // Property about to expire
+      $value = 1;
+    } elseif ($days < 0 && !empty($days)) { // Property has expired
+      $value = 1;
+    } elseif ($days >= 7 && $days <= 28) { // More than seven days but expiring within the month.
+      $value = 3;
+    }
+
+    if ($review == 2) {
+      $value = 4;
+      $allowEdit = false;
+    }
+
+    $states = array(
+        0 => array(
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE',
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE_TOOLTIP',
+            'btn-primary'),
+        1 => array(
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW',
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON_TOOLTIP',
+            'btn-primary'),
+        2 => array(
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
+            'btn-primary'),
+        3 => array(
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_DUE_FOR_RENEWAL_TOOLTIP',
+            'btn-primary')
+    );
+
+    $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
+    $html .= '<div class="btn-group">';
+    if ($allowEdit) {
+      $html .= '<a class="btn ' . $state[3] . '" href="' . JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= JText::sprintf($state[0], (int) $id);
+      $html .= '</a>';
+      $html .= '<button class="btn dropdown-toggle ' . $state[3] . '" data-toggle="dropdown">';
+      $html .= '<span class="caret"></span>';
+      $html .= '</button>';
+      $html .= '<ul class="dropdown-menu">';
+      $html .= '<li>';
+      $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=propertyversions.edit&property_id=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= '<i class="icon icon-location">&nbsp;</i>&nbsp;';
+      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '</a>';
+      $html .= '</li>';
+      $html .= '<li>';
+      $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $unit_id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= '<i class="icon icon-home">&nbsp;</i>&nbsp;';
+      $html .= JText::_('COM_RENTAL_SUBMENU_PROPERTY');
+      $html .= '</a>';
+      $html .= '</li>';
+      $html .= '<li>';
+      $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=images.manage&unit_id=' . (int) $unit_id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= '<i class="icon icon-pictures">&nbsp;</i>&nbsp;';
+      $html .= JText::_('IMAGE_GALLERY');
+      $html .= '</a>';
+      $html .= '</li>';
+      $html .= '<li>';
+      $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=availability.manage&unit_id=' . (int) $unit_id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= '<i class="icon icon-location">&nbsp;</i>';
+      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '</a>';
+      $html .= '</li>';
+      $html .= '<li>';
+      $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $unit_id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= '<i class="icon icon-location">&nbsp;</i>';
+      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '</a>';
+      $html .= '</li>';
+      $html .= '<li>';
+      $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '">';
+      $html .= '<i class="icon icon-location">&nbsp;</i>';
+      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '</a>';
+      $html .= '</li>';
+      $html .= '</ul>';
+    } else {
+      $html .= '<span rel="tooltip" class="btn ' . $state[3] . '" title="' . JText::_($state[3]) . '">';
+    }
+    $html .= JText::_($state[2]);
+
+    $html.= ($allowEdit) ? '</a>' : '</span>';
+    $html .= '</div>';
+    return $html;
+  }
+
+  /**
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
@@ -214,7 +328,7 @@ class JHtmlProperty {
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE_TOOLTIP',
-            'btn-danger'),
+            'btn-warning'),
         1 => array(
             'chevron-right',
             'renewal.summary',
@@ -231,11 +345,11 @@ class JHtmlProperty {
             'btn-primary'),
         3 => array(
             'chevron-right',
-            'listing.view',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'renewal.summary',
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW',
+            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
             'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_DUE_FOR_RENEWAL_TOOLTIP',
-            'btn-warning'),
+            'btn-info'),
         4 => array(
             'locked',
             'listing.view',
@@ -251,8 +365,9 @@ class JHtmlProperty {
     } else {
       $html .= '<span rel="tooltip" class="btn ' . $state[5] . '" title="' . JText::_($state[4]) . '">';
     }
-    $html .= '<i class=\'icon-' . $state[0] . '\'></i>&nbsp;';
     $html .= JText::_($state[3]);
+
+    $html .= '&nbsp;<i class=\'icon-' . $state[0] . '\'>&nbsp;</i>';
 
     $html.= ($allowEdit) ? '</a>' : '</span>';
 
