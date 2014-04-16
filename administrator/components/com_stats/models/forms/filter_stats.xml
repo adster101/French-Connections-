@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>  
+
+  <fields name="filter"> 
+    <fieldset addfieldpath="/libraries/frenchconnections/fields" >
+      <field
+        name="search"
+        type="text"
+        label="COM_CONTENT_FILTER_SEARCH_DESC"
+        hint="JSEARCH_FILTER"
+      />
+        
+      <field
+        name="id"
+        type="property"
+        label="COM_STATS_FILTER_PROPERTY"
+        description="COM_STATS_FILTER_PROPERTY_DESC"
+        onchange="this.form.submit();">
+        <option value="">JOPTION_SELECT_PUBLISHED</option>
+      </field>
+    
+      <field
+        name="date_range"
+        type="list"
+        label="COM_STATS_FILTER_DATE_RANGE"
+        description="COM_STATS_FILTER_DATE_RANGE_DESC"
+        onchange="this.form.submit();"> 
+        <option value="">All time</option>
+        <option value="-4 week">Last 4 weeks</option>
+        <option value="-3 month">Last 3 months</option>
+        <option value="-1 year">Last 12 months</option>
+      </field>  
+    </fieldset>
+
+  </fields> 
+
+</form>

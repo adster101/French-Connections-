@@ -751,7 +751,7 @@ class AccommodationModelListing extends JModelForm {
 
     if ($hitcount) {
       // Get the property id
-      $pk = $this->getState('unit.id', false);
+      $pk = $this->getState('property.id', false);
 
       $db = $this->getDbo();
 

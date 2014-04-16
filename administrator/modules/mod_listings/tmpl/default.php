@@ -61,7 +61,7 @@ $lang->load('com_rental');
       <hr /> 
       <div class="pull-right"
            <p>
-          <a rel="tooltip" title="<?php echo JText::_('COM_RENTAL_VIEW_LISTING_STATISTICS_TOOLTIP'); ?>" href="<?php echo JRoute::_('index.php?option=com_stats') ?>">
+          <a rel="tooltip" title="<?php echo JText::_('COM_RENTAL_VIEW_LISTING_STATISTICS_TOOLTIP'); ?>" href="<?php echo JRoute::_('index.php?option=com_stats&id=' . (int) $item->id) ?>">
             <i class="icon icon-bars"></i> 
             <?php echo JText::_('COM_RENTAL_VIEW_LISTING_STATISTICS'); ?>
           </a>
