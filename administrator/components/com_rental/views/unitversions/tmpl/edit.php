@@ -22,14 +22,14 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
   }
 </style>
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
-  <div class="row-fluid">
+  <div class="row">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
         <?php echo $this->sidebar; ?>
       </div>
       <div id="" class="span10">
       <?php else : ?>
-        <div class="span10">
+        <div class="span12">
         <?php endif; ?>
         <?php
         $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');

@@ -24,14 +24,14 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $item->availability_last_updated_on : '';
 ?>
 
-<div class="row-fluid">
+<div class="row">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span8">
     <?php else : ?>
-      <div id="j-main-container" class="span10">
+      <div id="j-main-container" class="span12">
       <?php endif; ?>
       <?php
       $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
@@ -43,7 +43,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
       <div class="clear alert alert-notice">
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_AVAILABILITY_INSTRUCTIONS'); ?>
       </div>
-      <div class="row-fluid">
+      <div class="row">
         <div class="span8">
           <p class="pull-left">
             <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_AVAILABILITY_LAST_UPDATED', $availability_last_updated); ?>
@@ -100,13 +100,5 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
         <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $this->unit->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
       </form>
 
-    </div>
-    <div class="span2">
-      <div class="well well-small">
-        <h3>Availability calendar</h3>
-        <ul>
-          <li>Update yo availability, fool!</li>
-        </ul>
-      </div>
     </div>
   </div>

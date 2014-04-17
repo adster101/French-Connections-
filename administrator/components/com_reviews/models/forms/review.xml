@@ -100,7 +100,7 @@
     </field>
 
     <field 
-      name="created" 
+      name="date_created" 
       type="calendar" 
       label="Date created"
       description="COM_CONTENT_FIELD_CREATED_DESC" 

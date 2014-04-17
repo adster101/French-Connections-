@@ -4,12 +4,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla modelform library
-jimport('joomla.application.component.modellegacy');
-
-// Import the graph gubbins
-jimport('pchart.class.pDraw');
-jimport('pchart.class.pImage');
-jimport('pchart.class.pData');
+// jimport('joomla.application.component.modellegacy');
 
 /**
  * HelloWorld Model
@@ -30,10 +25,10 @@ class StatsModelStats extends JModelList {
     } elseif ($this->getState('filter.id')) {
       $id = (int) $this->getState('filter.id');
     } else {
-      $id = $input->get('id','','int');
+      $id = $input->get('id', '', 'int');
     }
 
-    $date_range = $this->getState('filter.date_range', '-1 year');
+    $date_range = $this->getState('filter.date_range', '');
 
     // Set up an array to hold the series data
     $graph_data = array();
@@ -42,7 +37,7 @@ class StatsModelStats extends JModelList {
     $graph_data['views'] = $this->getData($id, '#__property_views', $date_range);
     $graph_data['enquiries'] = $this->getData($id, '#__enquiries', $date_range);
     $graph_data['clicks'] = $this->getData($id, '#__website_views', $date_range);
-    $graph_data['reviews'] = $this->getData($id, '#__reviews', $date_range );
+    $graph_data['reviews'] = $this->getData($id, '#__reviews', $date_range);
 
 
     return $graph_data;
@@ -71,9 +66,14 @@ class StatsModelStats extends JModelList {
 
     parent::populateState();
 
-    //$input = JFactory::getApplication()->input;
-    //$id = $input->get('id', '', 'int');
-    //$this->setState('stats.id', $id);
+    // Get the request data
+    $input = JFactory::getApplication()->input;
+
+    // If we have an id in the url then use that to set the form filter value. This is just for completeness.
+    if ($input->get('id', '', 'int')) {
+      $id = $input->get('id', '', 'int');
+      $this->setState('filter.id',$id);
+    }
   }
 
   public function getData($id = '', $table = '', $range = '') {
@@ -105,21 +105,20 @@ class StatsModelStats extends JModelList {
   }
 
   public function loadFormData() {
-    
+
+    // Get any data stored in the user state context (if any)
     $data = JFactory::getApplication()->getUserState($this->context, new stdClass);
-    
+
+    // Get the request data
     $input = JFactory::getApplication()->input;
-    
-    if ($input->get('id','','int')) {
-      $id = $input->get('id','','int');
-      $data->filter = array('id'=>$id);
+
+    // If we have an id in the url then use that to set the form filter value. This is just for completeness.
+    if ($input->get('id', '', 'int')) {
+      $id = $input->get('id', '', 'int');
+      $data->filter = array('id' => $id);
     }
 
-    
-    
-    
     return $data;
   }
-  
-  
+
 }

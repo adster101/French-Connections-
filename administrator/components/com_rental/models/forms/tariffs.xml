@@ -19,8 +19,7 @@
       filter="int"
       id="20"
       placeholder="true"
-      required="true"
-      >
+      required="true">
     </field>
     <field
       name="base_currency"
@@ -45,7 +44,6 @@
       filter="int"
       class="input-large"
       id="21"
-      default=""
       placeholder="true">
     </field>
 

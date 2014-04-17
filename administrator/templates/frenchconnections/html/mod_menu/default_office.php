@@ -35,10 +35,6 @@ $manage_users = $user->authorise('core.manage', 'com_users');
 $manage_vouchers = $user->authorise('core.manage', 'com_vouchers');
 
 
-
-$menu->addChild(new JMenuNode(JText::_('COM_ADMIN_HOME'), 'index.php'), true);
-$menu->getParent();
-
 if ($manage_rental || $manage_realestate) {
 
   $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_RENTAL_PROPERTY'), '#'), true);
@@ -134,11 +130,10 @@ if ($manage_account) {
 
   $menu->addChild(new JMenuNode(JText::_('COM_ACCOUNTS_MENU'), '#'), true);
 
-  if (!$manage_users) {
 
-    $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
-    $menu->addSeparator();
-  }
+  $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
+  $menu->addSeparator();
+
 
 
 

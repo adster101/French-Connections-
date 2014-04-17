@@ -14,9 +14,7 @@ class StatsViewStats extends JViewLegacy {
   
   function display($tpl = null) {    // Gets the info from the model and displays the template 
 
-    
-    $this->item->id = 13;
-    
+        
     $this->state = $this->get('State');
     $this->data = $this->get('GraphData');
 		$this->filterForm    = $this->get('FilterForm');

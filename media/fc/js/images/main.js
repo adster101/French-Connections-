@@ -51,7 +51,7 @@ jQuery(function() {
         jQuery('input[name=id]').val(id);
 
         jQuery.get(
-                "/administrator/index.php?option=com_helloworld&view=images&layout=default_image_list&format=raw",
+                "/administrator/index.php?option=com_rental&view=images&layout=default_image_list&format=raw",
                 {
                   id: id
                 })

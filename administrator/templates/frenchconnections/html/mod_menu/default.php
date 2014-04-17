@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 $user = JFactory::getUser();
 
-$groups = $user->getAuthorisedGroups();
+$groups = JAccess::getGroupsByUser($user->id, false);
 
 $document = JFactory::getDocument();
 $direction = $document->direction == 'rtl' ? 'pull-right' : '';
@@ -25,5 +25,3 @@ if (in_array(10, $groups)) {
 }
 
 $menu->renderMenu('menu', 'nav ' . $direction);
-
-

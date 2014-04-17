@@ -831,12 +831,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $total = $this->getOrderTotal($order);
 
       // Update the review status 
-      $this->updateProperty($review = 2);
+      $this->updateProperty($listing_id, $total, $review = 2);
 
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $params);
+      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
 
       $message = 'COM_RENTAL_HELLOWORLD_NEW_PROPERTY_CONFIRMATION';
 

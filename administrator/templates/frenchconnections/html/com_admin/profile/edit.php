@@ -49,10 +49,8 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
 
 <form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
   <div class="row-fluid">
-    <div id="j-sidebar-container" class="span2">
-      <?php echo JHtmlSidebar::render(); ?>
-    </div>
-    <div id="" class="span10">
+    
+    <div id="" class="span12">
       <fieldset>
         <legend>Your name</legend>
         <div class="control-group">

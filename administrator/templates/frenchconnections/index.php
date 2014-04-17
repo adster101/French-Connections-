@@ -199,7 +199,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
         <section id="content">
           <!-- Begin Content -->
           <jdoc:include type="modules" name="top" style="xhtml" />
-          <div class="row">
+          <div class="row-fluid">
             <?php if ($showSubmenu) : ?>
               <div class="span2">
                 <jdoc:include type="modules" name="submenu" style="none" />
