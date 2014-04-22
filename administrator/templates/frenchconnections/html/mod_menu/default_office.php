@@ -27,13 +27,8 @@ $addReview = $user->authorise('core.create', 'com_reviews');
 $manage_rental = $user->authorise('core.manage', 'com_rental');
 $manage_realestate = $user->authorise('core.manage', 'com_rental');
 $manage_offers = $user->authorise('core.manage', 'com_specialoffers');
-
 $manage_account = $user->authorise('core.manage', 'com_invoices');
-
 $manage_users = $user->authorise('core.manage', 'com_users');
-
-$manage_vouchers = $user->authorise('core.manage', 'com_vouchers');
-
 
 if ($manage_rental || $manage_realestate) {
 
@@ -42,15 +37,7 @@ if ($manage_rental || $manage_realestate) {
   if ($manage_rental) {
 
     $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_MENU'), 'index.php?option=com_rental', 'class:property'), true);
-    $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_VIEW_ALL_MENU'), 'index.php?option=com_rental', 'class:property'));
-
-    if ($addRental) {
-
-      $menu->addChild(
-              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_rental&task=propertyversions.add', 'class:newproperty')
-      );
-    }
-
+    //$menu->addChild(new JMenuNode(JText::_('COM_RENTAL_VIEW_ALL_MENU'), 'index.php?option=com_rental', 'class:property'));
     // Determine the parent node for whichever child element we are adding
     $menu->getParent();
   }
@@ -70,13 +57,6 @@ if ($manage_rental || $manage_realestate) {
     $menu->getParent();
   }
 
-  $menu->addSeparator();
-
-  $menu->addChild(
-          new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
-  );
-
-  $menu->getParent();
 
   $menu->addSeparator();
 
@@ -91,9 +71,14 @@ if ($manage_rental || $manage_realestate) {
   $menu->getParent();
 
 
+  if ($addRental) {
+    $menu->addSeparator();
 
-  // Determine the parent of the firstly added node
-  $menu->getParent();
+    $menu->addChild(
+            new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_rental&task=propertyversions.add', 'class:newproperty')
+    );
+    $menu->getParent();
+  }
 }
 
 if ($manage_realestate) {
@@ -123,6 +108,15 @@ if ($manage_realestate) {
   $menu->getParent();
 }
 
+// Break out the enquiries bit
+$menu->addSeparator();
+
+$menu->addChild(
+        new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
+);
+
+$menu->getParent();
+
 /**
  * Account menu
  */
@@ -140,10 +134,7 @@ if ($manage_account) {
   $menu->addChild(new JMenuNode(JText::_('Invoice History'), 'index.php?option=com_invoices&view=invoices', 'class:accounts'), true);
 
   $menu->getParent();
-  if ($manage_vouchers) {
-    $menu->addChild(new JMenuNode(JText::_('Voucher Management'), 'index.php?option=com_vouchers&view=vouchers', 'class:accounts'), true);
-    $menu->getParent();
-  }
+
 
   $menu->getParent();
 }

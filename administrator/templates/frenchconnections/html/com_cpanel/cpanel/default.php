@@ -12,7 +12,7 @@ $user = JFactory::getUser();
 $groups = JAccess::getGroupsByUser($user->id, false);
 ?>
 
-<div class="row">
+<div class="row-fluid">
 
   <?php if (in_array(10, $groups)) : ?>
     <?php $iconmodules = JModuleHelper::getModules('owner'); ?>

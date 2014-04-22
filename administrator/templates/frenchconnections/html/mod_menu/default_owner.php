@@ -45,16 +45,8 @@ if ($manage_rental || $manage_realestate) {
 
   if ($manage_rental) {
 
-    $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_MENU'), 'index.php?option=com_rental', 'class:property'), true);
-    $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_VIEW_ALL_MENU'), 'index.php?option=com_rental', 'class:property'));
-
-    if ($addRental) {
-
-      $menu->addChild(
-              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_rental&task=propertyversions.add', 'class:newproperty')
-      );
-    }
-
+    $menu->addChild(new JMenuNode(JText::_('COM_RENTAL_MENU'), 'index.php', 'class:property'), true);
+    //$menu->addChild(new JMenuNode(JText::_('COM_RENTAL_VIEW_ALL_MENU'), 'index.php?option=com_rental', 'class:property'));
     // Determine the parent node for whichever child element we are adding
     $menu->getParent();
   }
@@ -85,16 +77,29 @@ if ($manage_rental || $manage_realestate) {
   $menu->addChild(new JMenuNode(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', 'class:stats'), true);
 
   $menu->getParent();
+  
+  //$menu->addSeparator();
+  //$menu->addChild(
+          //new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
+  //);
+  //$menu->getParent();
+  
+  if ($addRental) {
+    $menu->addSeparator();
 
+    $menu->addChild(
+            new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_rental&task=propertyversions.add', 'class:newproperty')
+    );
+    $menu->getParent();
+  }
 
 
   // Determine the parent of the firstly added node
-  $menu->getParent();
+  //$menu->getParent();
 }
 
 if ($manage_realestate) {
   $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_REAL_ESTATE_PROPERTY'), '#'), true);
-
 
   if ($manage_realestate) {
 
@@ -114,14 +119,13 @@ if ($manage_realestate) {
 
   $menu->getParent();
 }
-$menu->addSeparator();
 
+$menu->addSeparator();
 
 $menu->addChild(
         new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
 );
 $menu->getParent();
-
 
 /**
  * Account menu
@@ -132,16 +136,12 @@ if ($manage_account) {
           new JMenuNode(JText::_('COM_ACCOUNTS_MENU'), '#'), true
   );
 
-
-    $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
-    $menu->addSeparator();
-  
-
+  $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
+  $menu->addSeparator();
 
   $menu->addChild(new JMenuNode(JText::_('Invoice History'), 'index.php?option=com_invoices&view=invoices', 'class:accounts'), true);
 
   $menu->getParent();
-
 
   $menu->getParent();
 }
