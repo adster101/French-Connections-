@@ -102,9 +102,9 @@ class RentalModelUnitVersions extends JModelAdmin {
 
     // Execute the db query, returns an iterator object.
     $result = $this->_db->getIterator();
-
     // Loop over the iterator and do stuff with it
     foreach ($result as $row) {
+
       $tmp = JArrayHelper::fromObject($row);
 
       // If the facility type already exists

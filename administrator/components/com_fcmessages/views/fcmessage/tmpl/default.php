@@ -15,7 +15,7 @@ JHtml::_('formbehavior.chosen', 'select');
 	<fieldset>
 		<div class="control-group">
 			<div class="control-label">
-				<?php echo JText::_('COM_MESSAGES_FIELD_USER_ID_FROM_LABEL'); ?>
+				<?php echo JText::_('COM_FCMESSAGES_FIELD_USER_ID_FROM_LABEL'); ?>
 			</div>
 			<div class="controls">
 				<?php echo $this->item->get('from_user_name');?>
@@ -23,7 +23,7 @@ JHtml::_('formbehavior.chosen', 'select');
 		</div>
 		<div class="control-group">
 			<div class="control-label">
-				<?php echo JText::_('COM_MESSAGES_FIELD_DATE_TIME_LABEL'); ?>
+				<?php echo JText::_('COM_FCMESSAGES_FIELD_DATE_TIME_LABEL'); ?>
 			</div>
 			<div class="controls">
 				<?php echo JHtml::_('date', $this->item->date_time);?>
@@ -31,7 +31,7 @@ JHtml::_('formbehavior.chosen', 'select');
 		</div>
 		<div class="control-group">
 			<div class="control-label">
-				<?php echo JText::_('COM_MESSAGES_FIELD_SUBJECT_LABEL'); ?>
+				<?php echo JText::_('COM_FCMESSAGES_FIELD_SUBJECT_LABEL'); ?>
 			</div>
 			<div class="controls">
 				<?php echo $this->item->subject;?>
@@ -39,7 +39,7 @@ JHtml::_('formbehavior.chosen', 'select');
 		</div>
 		<div class="control-group">
 			<div class="control-label">
-				<?php echo JText::_('COM_MESSAGES_FIELD_MESSAGE_LABEL'); ?>
+				<?php echo JText::_('COM_FCMESSAGES_FIELD_MESSAGE_LABEL'); ?>
 			</div>
 			<div class="controls">
 				<?php echo $this->item->message; ?>

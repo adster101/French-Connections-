@@ -130,4 +130,27 @@ class RentalControllerAvailability extends JControllerForm {
     return true;
   }
 
+  public function cancel($key = null) {
+
+    JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+    // Get the property ID from the form data and redirect 
+    $input = JFactory::getApplication()->input;
+
+    $data = $input->get('jform', array(), 'array');
+
+    $property_id = $data['property_id'];
+    
+    // Clean the session data and redirect.
+    $this->releaseEditId('com_rental.edit.unitversions', $property_id);
+
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $property_id, false
+            )
+    );
+
+    return true;
+  }
+
 }

@@ -98,26 +98,15 @@ class RentalViewUnitversions extends JViewLegacy {
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id));
 
     // Built the actions for new and existing records.
-    if ($isNew) {
-      JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
-      // For new records, check the create permission.
-      if ($canDo->get('core.create')) {
+    // For new records, check the create permission.
+      if ($canDo->get('core.create')) {  
         JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
         JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
         JToolBarHelper::custom('unitversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       }
-    } else {
-      JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
-      if ($canDo->get('core.edit.own')) {
-        // We can save the new record
-        JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
-        JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
-        JToolBarHelper::custom('unitversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-      }
-    }
-
-
-
+   
+    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::help('unitversions',true);
   }
 
   /**

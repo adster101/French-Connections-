@@ -111,7 +111,7 @@ class RentalModelListing extends JModelList {
         b.phone_1,
         b.email_1,
         e.review as unit_review,
-        b.title,
+        -- b.title,
         a.created_by,
         e.unit_id unit_id,
         e.property_id,

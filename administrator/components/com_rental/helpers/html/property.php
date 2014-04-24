@@ -229,7 +229,12 @@ class JHtmlProperty {
             'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
             'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
             'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_DUE_FOR_RENEWAL_TOOLTIP',
-            'btn-primary')
+            'btn-primary'),
+        4 => array(
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
+            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_LOCKED_BUTTON_TOOLTIP',
+            'btn-primary disabled')
     );
 
     $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
@@ -262,25 +267,27 @@ class JHtmlProperty {
       $html .= '</li>';
       $html .= '<li>';
       $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=availability.manage&unit_id=' . (int) $unit_id . '&' . JSession::getFormToken() . '=1') . '">';
-      $html .= '<i class="icon icon-location">&nbsp;</i>';
-      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '<i class="icon icon-calendar">&nbsp;</i>&nbsp;';
+      $html .= JText::_('COM_RENTAL_SUBMENU_PROPERTY');
       $html .= '</a>';
       $html .= '</li>';
       $html .= '<li>';
       $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $unit_id . '&' . JSession::getFormToken() . '=1') . '">';
-      $html .= '<i class="icon icon-location">&nbsp;</i>';
-      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '<i class="icon icon-briefcase">&nbsp;</i>&nbsp;';
+      $html .= JText::_('COM_RENTAL_SUBMENU_MANAGE_TARIFFS');
       $html .= '</a>';
       $html .= '</li>';
       $html .= '<li>';
       $html .= '<a href="' . JRoute::_('index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '">';
-      $html .= '<i class="icon icon-location">&nbsp;</i>';
-      $html .= JText::_('COM_RENTAL_SUBMENU_LOCATION');
+      $html .= '<i class="icon icon-envelope">&nbsp;</i>&nbsp;';
+      $html .= JText::_('COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS');
       $html .= '</a>';
       $html .= '</li>';
       $html .= '</ul>';
     } else {
-      $html .= '<span rel="tooltip" class="btn ' . $state[3] . '" title="' . JText::_($state[3]) . '">';
+
+      $html .= '<span rel="tooltip" class="btn ' . $state[3] . '" title="' . JText::_($state[2]) . '">';
+      $html .= '<i class="icon icon-locked">&nbsp;</i>';
     }
     $html .= JText::_($state[2]);
 

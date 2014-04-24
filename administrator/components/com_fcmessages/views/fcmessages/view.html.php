@@ -17,7 +17,7 @@ JHtml::_('behavior.modal');
  * @subpackage  com_messages
  * @since       1.6
  */
-class MessagesViewMessages extends JViewLegacy
+class FcMessagesViewfcMessages extends JViewLegacy
 {
 	protected $items;
 
@@ -42,8 +42,8 @@ class MessagesViewMessages extends JViewLegacy
 		}
 
 		$this->addToolbar();
-		$this->sidebar = JHtmlSidebar::render();
-		parent::display($tpl);
+
+    parent::display($tpl);
 	}
 
 	/**
@@ -54,48 +54,38 @@ class MessagesViewMessages extends JViewLegacy
 	protected function addToolbar()
 	{
 		$state	= $this->get('State');
-		$canDo	= JHelperContent::getActions('com_messages');
+		$canDo	= JHelperContent::getActions('com_fcmessages');
 
-		JToolbarHelper::title(JText::_('COM_MESSAGES_MANAGER_MESSAGES'), 'envelope inbox');
+		JToolbarHelper::title(JText::_('COM_FCMESSAGES_MANAGER_MESSAGES'), 'envelope');
 
 		if ($canDo->get('core.create'))
 		{
-			JToolbarHelper::addNew('message.add');
+			JToolbarHelper::addNew('fcmessage.add');
 		}
 
 		if ($canDo->get('core.edit.state'))
 		{
 			JToolbarHelper::divider();
-			JToolbarHelper::publish('messages.publish', 'COM_MESSAGES_TOOLBAR_MARK_AS_READ');
-			JToolbarHelper::unpublish('messages.unpublish', 'COM_MESSAGES_TOOLBAR_MARK_AS_UNREAD');
+			JToolbarHelper::publish('fcmessages.publish', 'COM_FCMESSAGES_TOOLBAR_MARK_AS_READ');
+			JToolbarHelper::unpublish('fcmessages.unpublish', 'COM_FCMESSAGES_TOOLBAR_MARK_AS_UNREAD');
 		}
 
 		if ($state->get('filter.state') == -2 && $canDo->get('core.delete'))
 		{
 			JToolbarHelper::divider();
-			JToolbarHelper::deleteList('', 'messages.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolbarHelper::deleteList('', 'fcmessages.delete', 'JTOOLBAR_EMPTY_TRASH');
 		} elseif ($canDo->get('core.edit.state'))
 		{
 			JToolbarHelper::divider();
-			JToolbarHelper::trash('messages.trash');
+			JToolbarHelper::trash('fcmessages.trash');
 		}
-
-		//JToolbarHelper::addNew('module.add');
-		JToolbarHelper::divider();
-		$bar = JToolBar::getInstance('toolbar');
-
-		// Instantiate a new JLayoutFile instance and render the layout
-		JHtml::_('behavior.modal', 'a.messagesSettings');
-		$layout = new JLayoutFile('toolbar.mysettings');
-
-		$bar->appendButton('Custom', $layout->render(array()), 'upload');
 
 		if ($canDo->get('core.admin'))
 		{
-			JToolbarHelper::preferences('com_messages');
+			JToolbarHelper::preferences('com_fcmessages');
 		}
 
 		JToolbarHelper::divider();
-		JToolbarHelper::help('JHELP_COMPONENTS_MESSAGING_INBOX');
+		JToolbarHelper::help('JHELP_COMPONENTS_MESSAGING_INBOX', true);
 	}
 }

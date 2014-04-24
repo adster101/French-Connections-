@@ -94,11 +94,10 @@ class RentalViewTariffs extends JViewLegacy {
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
 
     if ($canDo->get('core.edit.own'))
-      JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
-      // We can save the new record
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+      JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
     }
 
 

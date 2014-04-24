@@ -155,9 +155,7 @@ class RentalControllerUnitVersions extends RentalControllerBase {
       case 'cancel':
         // Derive the parent id from the form data
         $data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
         $id = $data['property_id'];
-
         break;
 
 

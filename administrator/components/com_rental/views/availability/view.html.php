@@ -25,7 +25,7 @@ class RentalViewAvailability extends JViewLegacy {
 
     // Get the unit item we are editing the availability for...
     $this->unit = $this->get('Item');
-    
+
     $this->unit->unit_title = (!empty($this->unit->unit_title)) ? $this->unit->unit_title : 'New unit';
 
     //Populate the availability model state
@@ -80,11 +80,9 @@ class RentalViewAvailability extends JViewLegacy {
     $bar = JToolBar::getInstance('toolbar');
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-
+    JToolBarHelper::cancel('availability.cancel', 'JTOOLBAR_CLOSE');
     JToolBarHelper::help('', '');
-
   }
 
   /**

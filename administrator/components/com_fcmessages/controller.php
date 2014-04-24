@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class MessagesController extends JControllerLegacy
+class FcMessagesController extends JControllerLegacy
 {
 	/**
 	 * Method to display a view.
@@ -29,7 +29,7 @@ class MessagesController extends JControllerLegacy
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		require_once JPATH_COMPONENT.'/helpers/messages.php';
+		require_once JPATH_COMPONENT.'/helpers/fcmessages.php';
 
 		$view   = $this->input->get('view', 'messages');
 		$layout = $this->input->get('layout', 'default');
@@ -47,7 +47,6 @@ class MessagesController extends JControllerLegacy
 		}
 
 		// Load the submenu.
-		MessagesHelper::addSubmenu($this->input->get('view', 'messages'));
 		parent::display();
 
 	}

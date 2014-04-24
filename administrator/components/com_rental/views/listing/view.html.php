@@ -81,7 +81,7 @@ class RentalViewListing extends JViewLegacy {
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_RENTAL_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
 
-    JToolBarHelper::custom('listings', 'arrow-left-2', '', 'COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', false);
+    //JToolBarHelper::back('listings', 'arrow-left-2', '', 'COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', false);
 
 
     if ($layout == 'default') {
@@ -92,8 +92,10 @@ class RentalViewListing extends JViewLegacy {
         }
 
         if ($canDo->get('core.create')) {
-          JToolBarHelper::addNew('unitversions.add', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
+          //JToolBarHelper::addNew('unitversions.add', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
         }
+        
+        JToolbarHelper::help('asdas',true);
 
         
       }

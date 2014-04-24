@@ -47,6 +47,8 @@ class RentalViewListingreview extends JViewLegacy {
       /*
        * Get the unit list for this property
        */
+      
+      // Get the listing model which returns the list of units that make up a listing
       $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true)));
       $model = $this->getModel('Listing');
       $model->setState('com_rental.listing.id', $this->id);

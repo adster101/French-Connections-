@@ -51,23 +51,16 @@ class RentalController extends JControllerLegacy {
     }
 
     // Set up an array of views to protect from direct access
-    $views_to_protect = array('tariffs' => 1, 'offers' => 1, 'unitversions' => 1, 'availability ' => 1);
-
-    // Get the document object.
-    $document = JFactory::getDocument();
+    $views_to_protect = array('listing', 'tariffs', 'offers', 'unitversions', 'availability');
 
     // set default view if not set
     JRequest::setVar('view', JRequest::getCmd('view', 'Listings'));
 
     // Set the default view name and format from the Request.
     $vName = JRequest::getCmd('view', 'Property');
-    $lName = JRequest::getCmd('layout', 'default');
-    $id = JRequest::getInt('unit_id');
 
-    // Check for edit form. This checks that the edit ID is set in the session.
-    // This only occurs when someone follows a link ?option=com_rental&task=helloworld.edit&id=78
     // A check in each sub-controller is also needed to ensure that the user does actually own the item id
-    if (array_key_exists($vName, $views_to_protect) && !$this->checkEditId('com_rental.edit.' . $vName, $id)) {
+    if (in_array($vName, $views_to_protect) && !$this->checkEditId('com_rental.edit.' . $vName, $id)) {
       // Somehow the person just went to the form - we don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');

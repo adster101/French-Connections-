@@ -87,7 +87,7 @@ jQuery(function() {
 
 // Add the relevant event handlers to the save caption and delete buttons
 function add_event_handlers() {
-  var sortableList = new jQuery.JSortableList('#articleList tbody', 'adminForm', '', 'index.php?option=com_helloworld&task=images.saveOrderAjax&tmpl=component', '', '');
+  var sortableList = new jQuery.JSortableList('#articleList tbody', 'adminForm', '', 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component', '', '');
 
   jQuery('.delete').on('click', function(event) {
     if (!confirm("Really delete?")) {

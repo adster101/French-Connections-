@@ -87,7 +87,7 @@ class RentalControllerListing extends JControllerForm {
 
   public function view() {
 
-    $context = "$this->option.view.$this->context";
+    $context = "$this->option.edit.$this->context";
     $app = JFactory::getApplication();
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
@@ -304,7 +304,7 @@ class RentalControllerListing extends JControllerForm {
 
 
     $days_to_renewal = RentalHelper::getDaysToExpiry($listing[0]->expiry_date);
-
+    var_dump($days_to_renewal);
     if (empty($listing[0]->vat_status)) { // No VAT status on record for this listing.
       $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
 
@@ -322,7 +322,6 @@ class RentalControllerListing extends JControllerForm {
     } else {
 
       // Need to determine whether they owe us any more wedge
-      // Update the listing review status
       $model = $this->getModel('Property', 'RentalModel', $config = array('ignore_request' => true));
 
       $model->updateProperty($listing_id = $listing[0]->id, 2);

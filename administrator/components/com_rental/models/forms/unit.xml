@@ -232,7 +232,7 @@
   <fieldset name="internal_facilities" description="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES">
     <field
       class="checkbox required"
-      name="COM_FCSEARCH_INTERNAL"
+      name="internal_facilities"
       type="facilities"
       required="true"
       label="COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES_LABEL"
@@ -247,7 +247,7 @@
     <field
       class="checkbox required pull-left"
       required="true"
-      name="COM_FCSEARCH_EXTERNAL"
+      name="external_facilities"
       type="facilities"
       label="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES_LABEL"
       description="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES_DESC"
@@ -270,7 +270,7 @@
   <fieldset name="suitability" description="COM_RENTAL_ACCOMMODATION_SUITABILITY">
     <field
       class="checkbox inline"
-      name="COM_FCSEARCH_SUITABILITY"
+      name="suitability"
       type="facilities"
       label="COM_RENTAL_ACCOMMODATION_SUITABILITY_LABEL"
       description="COM_RENTAL_ACCOMMODATION_SUITABILITY_DESC"

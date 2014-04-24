@@ -24,7 +24,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $item->availability_last_updated_on : '';
 ?>
 
-<div class="row">
+<div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -43,7 +43,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
       <div class="clear alert alert-notice">
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_AVAILABILITY_INSTRUCTIONS'); ?>
       </div>
-      <div class="row">
+      <div class="row-fluid">
         <div class="span8">
           <p class="pull-left">
             <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_AVAILABILITY_LAST_UPDATED', $availability_last_updated); ?>

@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class MessagesModelMessages extends JModelList
+class FcMessagesModelFcMessages extends JModelList
 {
 	/**
 	 * Constructor.

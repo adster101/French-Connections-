@@ -256,10 +256,8 @@ $listing_id = '';
                               <p>
                                 <?php echo JHtml::_('property.notes', $item->id); ?>
                                 &nbsp;
-                                <?php echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
-
+                                <?php //echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
                               </p>
-
                             <?php endif; ?>
                           </td>
                         <?php endif; ?>

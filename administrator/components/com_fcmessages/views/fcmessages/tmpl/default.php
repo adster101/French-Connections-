@@ -14,14 +14,13 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
-JHtml::_('formbehavior.chosen', 'select');
 
 $user		= JFactory::getUser();
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_messages&view=messages'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_fcmessages&view=fcmessages'); ?>" method="post" name="adminForm" id="adminForm">
 <?php if (!empty( $this->sidebar)) : ?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
@@ -32,7 +31,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 <?php endif;?>
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
-				<input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" class="hasTooltip" title="<?php echo JHtml::tooltipText('COM_MESSAGES_SEARCH_IN_SUBJECT'); ?>" />
+				<input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" class="hasTooltip" title="<?php echo JHtml::tooltipText('COM_FCMESSAGES_SEARCH_IN_SUBJECT'); ?>" />
 			</div>
 			<div class="btn-group pull-left">
 				<button type="submit" class="btn hasTooltip" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
@@ -41,7 +40,7 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 			<div class="btn-group pull-left">
 				<select name="filter_state" class="inputbox" onchange="this.form.submit()">
 					<option value=""><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
-					<?php echo JHtml::_('select.options', MessagesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.state'));?>
+					<?php echo JHtml::_('select.options', FcMessagesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.state'));?>
 				</select>
 			</div>
 		</div>
@@ -58,13 +57,13 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 							<?php echo JHtml::_('grid.checkall'); ?>
 						</th>
 						<th class="title">
-							<?php echo JHtml::_('grid.sort', 'COM_MESSAGES_HEADING_SUBJECT', 'a.subject', $listDirn, $listOrder); ?>
+							<?php echo JHtml::_('grid.sort', 'COM_FCMESSAGES_HEADING_SUBJECT', 'a.subject', $listDirn, $listOrder); ?>
 						</th>
 						<th width="5%">
-							<?php echo JHtml::_('grid.sort', 'COM_MESSAGES_HEADING_READ', 'a.state', $listDirn, $listOrder); ?>
+							<?php echo JHtml::_('grid.sort', 'COM_FCMESSAGES_HEADING_READ', 'a.state', $listDirn, $listOrder); ?>
 						</th>
 						<th width="15%">
-							<?php echo JHtml::_('grid.sort', 'COM_MESSAGES_HEADING_FROM', 'a.user_id_from', $listDirn, $listOrder); ?>
+							<?php echo JHtml::_('grid.sort', 'COM_FCMESSAGES_HEADING_FROM', 'a.user_id_from', $listDirn, $listOrder); ?>
 						</th>
 						<th width="20%" class="nowrap">
 							<?php echo JHtml::_('grid.sort', 'JDATE', 'a.date_time', $listDirn, $listOrder); ?>
@@ -87,11 +86,11 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 							<?php echo JHtml::_('grid.id', $i, $item->message_id); ?>
 						</td>
 						<td>
-							<a href="<?php echo JRoute::_('index.php?option=com_fcmessages&view=message&message_id='.(int) $item->message_id); ?>">
+							<a href="<?php echo JRoute::_('index.php?option=com_fcmessages&view=fcmessage&message_id='.(int) $item->message_id); ?>">
 								<?php echo $this->escape($item->subject); ?></a>
 						</td>
 						<td class="center">
-							<?php echo JHtml::_('messages.state', $item->state, $i, $canChange); ?>
+							<?php echo JHtml::_('fcmessages.state', $item->state, $i, $canChange); ?>
 						</td>
 						<td>
 							<?php echo $item->user_from; ?>

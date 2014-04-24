@@ -32,7 +32,7 @@ $data = array('progress' => $this->progress);
     </div>
     <div id="j-main-container" class="span8">
     <?php else : ?>
-      <div id="j-main-container" class="span10">
+      <div id="j-main-container" class="span12">
       <?php endif; ?>
       <?php
       $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
@@ -184,7 +184,7 @@ $data = array('progress' => $this->progress);
         {% } %}
       </script>
 
-      <form action="<?php echo JRoute::_('index.php?option=com_rental&view=images&unit_id=' . (int) $unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form">
+      <form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" id="adminForm" class="form">
         <fieldset>
           <legend>
             <?php echo JText::sprintf('COM_RENTAL_IMAGES_EXISTING_IMAGE_LIST', $this->unit->unit_title); ?>
@@ -224,17 +224,13 @@ $data = array('progress' => $this->progress);
           <input type="hidden" name="boxchecked" value="0" />
           <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
           <input type="hidden" name="id" value="<?php echo $this->unit->id ?>" />
-
+          <input type="hidden" name="property_id" value="<?php echo $this->unit->property_id ?>" />
           <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=availability.manage&unit_id=' . (int) $this->unit->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
 
           <?php echo JHtml::_('form.token'); ?>
 
         </fieldset>
       </form>
-    </div>
-
-    <div class="span2">
-
     </div>
   </div>
 

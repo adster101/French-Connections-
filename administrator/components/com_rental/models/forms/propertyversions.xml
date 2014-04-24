@@ -186,6 +186,8 @@
       required="false"
       filter="int"
       id="7">
+      <option value="">JSELECT</option>
+
     </field>
     
     <field
@@ -227,7 +229,7 @@
       labelclass="control-label"
       id="8">
     </field>
-     <field
+    <field
       class="checkbox inline"
       name="access"
       type="facilities"

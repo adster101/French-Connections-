@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class JHtmlMessages
+class JHtmlFcMessages
 {
 	/**
 	 * @param   int $value	The state value
@@ -24,9 +24,9 @@ class JHtmlMessages
 	{
 		// Array of image, task, title, action.
 		$states	= array(
-			-2	=> array('trash.png',		'messages.unpublish',	'JTRASHED',				'COM_MESSAGES_MARK_AS_UNREAD'),
-			1	=> array('tick.png',		'messages.unpublish',	'COM_MESSAGES_OPTION_READ',		'COM_MESSAGES_MARK_AS_UNREAD'),
-			0	=> array('publish_x.png',	'messages.publish',		'COM_MESSAGES_OPTION_UNREAD',	'COM_MESSAGES_MARK_AS_READ')
+			-2	=> array('trash.png',		'fcmessages.unpublish',	'JTRASHED',				'COM_FCMESSAGES_MARK_AS_UNREAD'),
+			1	=> array('tick.png',		'fcmessages.unpublish',	'COM_FCMESSAGES_OPTION_READ',		'COM_FCMESSAGES_MARK_AS_UNREAD'),
+			0	=> array('publish_x.png',	'fcmessages.publish',		'COM_FCMESSAGES_OPTION_UNREAD',	'COM_FCMESSAGES_MARK_AS_READ')
 		);
 		$state	= JArrayHelper::getValue($states, (int) $value, $states[0]);
 		$html	= JHtml::_('image', 'admin/'.$state[0], JText::_($state[2]), null, true);

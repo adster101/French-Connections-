@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class FcMessagesControllerMessages extends JControllerAdmin
+class FcMessagesControllerFcMessages extends JControllerAdmin
 {
 	/**
 	 * Method to get a model object, loading it if required.
@@ -29,7 +29,7 @@ class FcMessagesControllerMessages extends JControllerAdmin
 	 *
 	 * @since   1.6
 	 */
-	public function getModel($name = 'Message', $prefix = 'MessagesModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'FcMessage', $prefix = 'FcMessagesModel', $config = array('ignore_request' => true))
 	{
 		$model = parent::getModel($name, $prefix, $config);
 		return $model;

@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class MessagesModelMessage extends JModelAdmin
+class FcMessagesModelFcMessage extends JModelAdmin
 {
 	/**
 	 * message
@@ -177,7 +177,7 @@ class MessagesModelMessage extends JModelAdmin
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_messages.message', 'message', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_fcmessages.message', 'message', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form))
 		{
 			return false;
@@ -195,14 +195,14 @@ class MessagesModelMessage extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_messages.edit.message.data', array());
+		$data = JFactory::getApplication()->getUserState('com_fcmessages.edit.message.data', array());
 
 		if (empty($data))
 		{
 			$data = $this->getItem();
 		}
 
-		$this->preprocessData('com_messages.message', $data);
+		$this->preprocessData('com_fcmessages.message', $data);
 
 		return $data;
 	}
@@ -312,7 +312,7 @@ class MessagesModelMessage extends JModelAdmin
 			$lang = JLanguage::getInstance($toUser->getParam('admin_language', $default_language), $debug);
 			$lang->load('com_messages', JPATH_ADMINISTRATOR);
 
-			$siteURL  = JUri::root() . 'administrator/index.php?option=com_messages&view=message&message_id='.$table->message_id;
+			$siteURL  = JUri::root() . 'administrator/index.php?option=com_fcmessages&view=message&message_id='.$table->message_id;
 			$sitename = JFactory::getApplication()->getCfg('sitename');
 
 			$subject = sprintf($lang->_('COM_MESSAGES_NEW_MESSAGE_ARRIVED'), $sitename);

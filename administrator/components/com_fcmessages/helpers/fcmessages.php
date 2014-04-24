@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class MessagesHelper
+class FcMessagesHelper
 {
 	/**
 	 * Configure the Linkbar.
@@ -27,13 +27,13 @@ class MessagesHelper
 	public static function addSubmenu($vName)
 	{
 		JHtmlSidebar::addEntry(
-			JText::_('COM_MESSAGES_ADD'),
+			JText::_('COM_FCMESSAGES_ADD'),
 			'index.php?option=com_messages&view=message&layout=edit',
 			$vName == 'message'
 		);
 
 		JHtmlSidebar::addEntry(
-			JText::_('COM_MESSAGES_READ'),
+			JText::_('COM_FCMESSAGES_READ'),
 			'index.php?option=com_messages',
 			$vName == 'messages'
 		);
@@ -52,7 +52,7 @@ class MessagesHelper
 		JLog::add(__METHOD__ . '() is deprecated, use JHelperContent::getActions() with new arguments order instead.', JLog::WARNING, 'deprecated');
 
 		// Get list of actions
-		$result = JHelperContent::getActions('com_messages');
+		$result = JHelperContent::getActions('com_fcmessages');
 
 		return $result;
 	}
@@ -66,8 +66,8 @@ class MessagesHelper
 	{
 		// Build the filter options.
 		$options	= array();
-		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_MESSAGES_OPTION_READ'));
-		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_MESSAGES_OPTION_UNREAD'));
+		$options[]	= JHtml::_('select.option',	'1',	JText::_('COM_FCMESSAGES_OPTION_READ'));
+		$options[]	= JHtml::_('select.option',	'0',	JText::_('COM_FCMESSAGES_OPTION_UNREAD'));
 		$options[]	= JHtml::_('select.option',	'-2',	JText::_('JTRASHED'));
 		return $options;
 	}

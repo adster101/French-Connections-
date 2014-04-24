@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class FcMessagesControllerMessage extends JControllerForm
+class FcMessagesControllerFcMessage extends JControllerForm
 {
 	/**
 	 * Method (override) to check if you can save a new or existing record.
@@ -32,22 +32,5 @@ class FcMessagesControllerMessage extends JControllerForm
 	{
 		return parent::allowSave($data, $key);
 	}
-
-	/**
-	 * Reply to an existing message.
-	 *
-	 * This is a simple redirect to the compose form.
-	 */
-	public function reply()
-	{
-		if ($replyId = $this->input->getInt('reply_id'))
-		{
-			$this->setRedirect('index.php?option=com_messages&view=message&layout=edit&reply_id=' . $replyId);
-		}
-		else
-		{
-			$this->setMessage(JText::_('COM_MESSAGES_INVALID_REPLY_ID'));
-			$this->setRedirect('index.php?option=com_messages&view=messages');
-		}
-	}
+  
 }

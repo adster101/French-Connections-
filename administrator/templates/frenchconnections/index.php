@@ -141,7 +141,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                   </li>
                   <li class="divider"></li>
                   <!--<li class="">
-                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;         ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');         ?></a>
+                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;          ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');          ?></a>
                   </li>
                   <li class="divider"></li>-->
                   <li class="">
@@ -150,7 +150,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                 </ul>
               </li>
             </ul>
-            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();         ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);         ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);         ?>
+            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();          ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);          ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);          ?>
               <span class="icon-out-2 small"></span></a>-->
           </div>
           <!--/.nav-collapse -->
@@ -195,45 +195,44 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
       </div>
     <?php endif; ?>
     <!-- container-fluid -->
-      <div class="container container-main">
-        <section id="content">
-          <!-- Begin Content -->
-          <jdoc:include type="modules" name="top" style="xhtml" />
-          <div class="row-fluid">
-            <?php if ($showSubmenu) : ?>
-              <div class="span2">
-                <jdoc:include type="modules" name="submenu" style="none" />
-              </div>
-              <div class="span10">
-              <?php else : ?>
-                <div class="span12">
-                <?php endif; ?>
-                <jdoc:include type="message" />
-                <?php
-                // Show the page title here if the header is hidden
-                if (!$displayHeader) :
-                  ?>
-                  <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
-                <?php endif; ?>
-                <jdoc:include type="component" />
-              </div>
+    <div class="container container-main">
+      <section id="content">
+        <!-- Begin Content -->
+        <jdoc:include type="modules" name="top" style="xhtml" />
+        <div class="row-fluid">
+          <?php if ($showSubmenu) : ?>
+            <div class="span2">
+              <jdoc:include type="modules" name="submenu" style="none" />
             </div>
-            <?php if ($this->countModules('bottom')) : ?>
-              <jdoc:include type="modules" name="bottom" style="xhtml" />
-            <?php endif; ?>
-            <!-- End Content -->
-        </section>
+            <div class="span10">
+            <?php else : ?>
+              <div class="span12">
+              <?php endif; ?>
+              <jdoc:include type="message" />
+              <?php
+              // Show the page title here if the header is hidden
+              if (!$displayHeader) :
+                ?>
+                <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
+              <?php endif; ?>
+              <jdoc:include type="component" />
+            </div>
+          </div>
+          <?php if ($this->countModules('bottom')) : ?>
+            <jdoc:include type="modules" name="bottom" style="xhtml" />
+          <?php endif; ?>
+          <!-- End Content -->
+      </section>
 
-      </div>
+    </div>
     <?php if ($this->countModules('owner-footer')) : ?> 
-      <div id="status" class=""> 
-        <footer class="footer clearfix"> 
-          <div class="container">
-            <jdoc:include type="modules" name="owner-footer" style="no" />
-
+      <footer id="status" class="navbar navbar-fixed-bottom"> 
+          <div class="clearfix">
+            <div class="container">
+              <jdoc:include type="modules" name="owner-footer" style="no" />
+            </div>
           </div>
         </footer>  
-      </div>
     <?php endif; ?>
     <jdoc:include type="modules" name="debug" style="none" />
     <?php if ($stickyToolbar) : ?>

@@ -84,11 +84,9 @@ class RentalViewImages extends JViewLegacy {
     }
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CANCEL');
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-
-    JToolBarHelper::help('', '');
-
+    JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::help('', true);
   }
 
   /**

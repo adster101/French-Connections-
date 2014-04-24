@@ -125,7 +125,7 @@ class MessagesModelConfig extends JModelForm
 			$tuples = array();
 			foreach ($data as $k => $v)
 			{
-				$tuples[] = '(' . $userId.', ' . $db->quote($k) . ', ' . $db->quote($v) . ')';
+				$tuples[] = $userId.', ' . $db->quote($k) . ', ' . $db->quote($v);
 			}
 
 			if ($tuples)
@@ -133,7 +133,7 @@ class MessagesModelConfig extends JModelForm
 				$query = $db->getQuery(true)
 					->insert($db->quoteName('#__messages_cfg'))
 					->columns($db->quoteName(array('user_id', 'cfg_name', 'cfg_value')))
-					->values(implode(',', $tuples));
+					->values($tuples);
 				$db->setQuery($query);
 
 				try
@@ -142,6 +142,8 @@ class MessagesModelConfig extends JModelForm
 				}
 				catch (RuntimeException $e)
 				{
+                    var_dump($e);die;
+
 					$this->setError($e->getMessage());
 					return false;
 				}

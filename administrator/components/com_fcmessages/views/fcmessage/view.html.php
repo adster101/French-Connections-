@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_messages
  * @since       1.6
  */
-class MessagesViewMessage extends JViewLegacy {
+class FcMessagesViewFcMessage extends JViewLegacy {
 
   protected $form;
   protected $item;
@@ -45,10 +45,7 @@ class MessagesViewMessage extends JViewLegacy {
   protected function addToolbar() {
 
     JToolbarHelper::title(JText::_('COM_MESSAGES_VIEW_PRIVATE_MESSAGE'), 'envelope inbox');
-    $sender = JUser::getInstance($this->item->user_id_from);
-    if ($sender->authorise('core.create', 'com_fcmessages') && $sender->authorise('core.login.admin')) {
-      JToolbarHelper::custom('message.reply', 'redo', null, 'COM_MESSAGES_TOOLBAR_REPLY', false);
-    }
+    
 
     JToolbarHelper::cancel('fcmessage.cancel', 'Close');
     JToolbarHelper::help('config', true);

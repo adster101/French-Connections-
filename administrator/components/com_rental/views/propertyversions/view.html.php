@@ -32,10 +32,9 @@ class RentalViewPropertyversions extends JViewLegacy {
 
     // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
     $model = JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true));
-    
+
     // Switch to the revised listing class
     // $model = JModelLegacy::getInstance('Listing_proper', 'RentalModel', array('id' => $this->item->property_id));
-
     // Here we attempt to wedge some data into the model
     // So another method in the same model can use it.
     $listing_id = ($this->item->property_id) ? $this->item->property_id : '';
@@ -93,29 +92,21 @@ class RentalViewPropertyversions extends JViewLegacy {
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->property_id));
 
     // Built the actions for new and existing records.
-    if ($isNew) {
-      JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 
-      // For new records, check the create permission.
-      if ($canDo->get('core.create')) {
-        JToolBarHelper::save('propertyversions.saveandnext', 'JTOOLBAR_SAVE');
-        JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
-      }
-    } else {
-      if ($canDo->get('core.edit.own'))
-        JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL'); {
-        // We can save the new record
-        JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
-        JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
-        JToolBarHelper::custom('propertyversions.saveandnext','forward-2','', 'JTOOLBAR_SAVE_AND_NEXT', false);
-
-      }
+    if ($canDo->get('core.create')) {
+      // We can save the new record
+      JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
+      JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
+      JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }
-    
-    RentalHelper::addSubmenu('listings');
+
+    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
+
+
+    //RentalHelper::addSubmenu('listings');
 
     // Add the side bar
-    $this->sidebar = JHtmlSidebar::render();
+    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**
@@ -140,8 +131,7 @@ class RentalViewPropertyversions extends JViewLegacy {
     JText::script('COM_RENTAL_PLEASE_CHOOSE');
 
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
-
-
   }
 
 }
+

@@ -16,23 +16,29 @@ $output = array();
   <?php if (count($msgs) > 0) : ?>
     <?php foreach ($msgs as $k => $v) : ?>
       <li>
-        <a href="<?php echo JRoute::_('index.php?option=com_messages&view=message&message_id=' . (int) $v->message_id); ?>" class="message">
-          <strong><?php echo htmlspecialchars($v->subject, ENT_COMPAT, 'UTF-8'); ?></strong>        
+        <?php echo JFactory::getDate($v->date_time)->calendar('d M Y'); ?> &ndash; 
+        <a href="<?php echo JRoute::_('index.php?option=com_fcmessages&view=fcmessage&message_id=' . (int) $v->message_id); ?>" class="message">
+          <?php if ($v->state) : ?>
+            <?php echo htmlspecialchars($v->subject, ENT_COMPAT, 'UTF-8'); ?>
+          <?php else: ?>
+            <strong><?php echo htmlspecialchars($v->subject, ENT_COMPAT, 'UTF-8'); ?></strong>        
+
+          <?php endif; ?>
         </a>
       </li>
     <?php endforeach; ?>
 
   <?php else: ?>
-      <li>
-        <span>No unread messages</span>
-      </li>
+    <li>
+      <span>No unread messages</span>
+    </li>
   <?php endif; ?> 
 </ul>
 
-  <p class="align-right">
-    <a class="" href="<?php echo JRoute::_('index.php?option=com_fcmessages'); ?>">
-      <strong>
-        <?php echo JText::_('COM_OWNER_MESSAGES_VIEW_ALL'); ?>
-      </strong>
-    </a>
-  </p>
+<p class="align-right">
+  <a class="" href="<?php echo JRoute::_('index.php?option=com_fcmessages'); ?>">
+    <strong>
+      <?php echo JText::_('COM_OWNER_MESSAGES_VIEW_ALL'); ?>
+    </strong>
+  </a>
+</p>
