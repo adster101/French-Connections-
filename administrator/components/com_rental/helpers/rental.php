@@ -37,7 +37,7 @@ abstract class RentalHelper {
     $notices = array();
     // The sections we want to check for. Tariffs needs expanding for the more detailed tariff data (changeover day etc)
     $sections = array('images' => array(), 'availability' => array(), 'tariffs' => array(), 'contact_details' => array());
-
+        
     if (empty($progress)) {
       return false;
     }

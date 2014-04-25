@@ -87,7 +87,7 @@ class RentalControllerListing extends JControllerForm {
 
   public function view() {
 
-    $context = "$this->option.edit.$this->context";
+    $context = "$this->option.view.$this->context";
     $app = JFactory::getApplication();
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
@@ -304,7 +304,7 @@ class RentalControllerListing extends JControllerForm {
 
 
     $days_to_renewal = RentalHelper::getDaysToExpiry($listing[0]->expiry_date);
-    var_dump($days_to_renewal);
+
     if (empty($listing[0]->vat_status)) { // No VAT status on record for this listing.
       $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
 
@@ -490,7 +490,7 @@ class RentalControllerListing extends JControllerForm {
   public function checkEditId($context, $id) {
     if (!parent::checkEditId($context, $id)) {
       // Somehow the person just went to the form and tried to save it. We don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $recordId));
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
 
       $this->setRedirect(

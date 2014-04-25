@@ -45,6 +45,7 @@ class RentalController extends JControllerLegacy {
     $layout = $this->input->get('layout', 'default');
     $id = $this->input->getInt('id');
     $unit_id = $this->input->getInt('unit_id');
+    
     if (!$this->canView($view)) {
       JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
       return false;

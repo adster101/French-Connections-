@@ -72,7 +72,8 @@
       filter="int"
       label="COM_RENTAL_HELLOWORLD_USE_INVOICE_DETAILS"
       required="false"
-      labelclass="control-label">
+      labelclass="control-label"
+      default="">
     </field>      
     
     <field 
