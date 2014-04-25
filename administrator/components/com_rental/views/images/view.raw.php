@@ -16,13 +16,10 @@ class RentalViewImages extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-    
 
     $input = JFactory::getApplication()->input;
     $id = $input->get('id','','int');
- 
-
-     
+      
     // populateState for the images model
     $this->state = $this->get('State');
     $images = $this->getModel();
@@ -36,7 +33,7 @@ class RentalViewImages extends JViewLegacy
 
     
     $this->pagination = $this->get('Pagination');
-
+    
 		// Display the template
 		parent::display($tpl);
 

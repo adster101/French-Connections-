@@ -44,7 +44,7 @@ class RentalController extends JControllerLegacy {
     $view = $this->input->get('view', '');
     $layout = $this->input->get('layout', 'default');
     $id = $this->input->getInt('id');
-
+    $unit_id = $this->input->getInt('unit_id');
     if (!$this->canView($view)) {
       JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
       return false;
@@ -69,11 +69,9 @@ class RentalController extends JControllerLegacy {
       return false;
     }
 
-
-
-    if (($vName == 'images') && !$this->checkEditId('com_rental.edit.unitversions', $id)) {
+    if (($vName == 'images') && !$this->checkEditId('com_rental.edit.unitversions', $unit_id)) {
       // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $unit_id));
       $this->setMessage($this->getError(), 'error');
       $this->setRedirect(JRoute::_('index.php?option=com_rental&view=listings', false));
 
