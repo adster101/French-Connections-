@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>  
-
   <fields name="filter"> 
     <fieldset>
       <field
@@ -47,16 +46,15 @@
         <option value="2">COM_TICKETS_TESTING_FILTER</option>
         <option value="3">COM_TICKETS_PENDING_FILTER</option>
       </field>  
-    <field
-      name="assigned_to"
-      type="users"
-      label="Created by"
-      class="input-medium"
-      filter="int"
-      onchange="this.form.submit();">
+      <field
+        name="assigned_to"
+        type="users"
+        label="Created by"
+        class="input-medium"
+        filter="int"
+        onchange="this.form.submit();">
         <option value="">COM_TICKETS_ASSIGNED_FILTER</option>
-    
-    </field>  
+      </field>  
     </fieldset>
   </fields> 
   <fields name="list">

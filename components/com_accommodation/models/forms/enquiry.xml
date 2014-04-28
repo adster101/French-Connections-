@@ -2,7 +2,7 @@
 <form>
   <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
     <field 
-      name="guest_firstname"
+      name="guest_forename"
       type="text"
       id="first-name"
       class="validate-name input-small"

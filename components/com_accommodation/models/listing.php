@@ -800,7 +800,6 @@ class AccommodationModelListing extends JModelForm {
     $owner_name = '';
     jimport('clickatell.SendSMS');
     $sms_params = JComponentHelper::getParams('com_rental');
-
     $banned_emails = explode(',', $params->get('banned_email'));
 
     if (in_array($data['guest_email'], $banned_emails)) {
@@ -835,7 +834,7 @@ class AccommodationModelListing extends JModelForm {
     } else {
       // We just use the details from the contact page
       $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
-      $owner_name = htmlspecialchars($item->firstname) . '&nbsp;' . htmlspecialchars($item->surname);
+      $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
     }
 
     // Need to send an SMS if a valid SMS number has been setup.
@@ -846,7 +845,7 @@ class AccommodationModelListing extends JModelForm {
 
 
     // The details of the enquiry as submitted by the holiday maker
-    $firstname = $data['guest_firstname'];
+    $firstname = $data['guest_forename'];
     $surname = $data['guest_surname'];
     $email = $data['guest_email'];
     $phone = $data['guest_phone'];
