@@ -50,9 +50,7 @@
     <field
       name="assigned_to"
       type="users"
-      labelclass="control-label"
       label="Created by"
-      description=""
       class="input-medium"
       filter="int"
       onchange="this.form.submit();">

@@ -56,7 +56,7 @@ class JFormFieldUsers extends JFormFieldList {
     }
 
     // Merge any additional options in the XML definition.
-    array_merge(parent::getOptions(), $options);
+    $options = array_merge(parent::getOptions(), $options);
     return $options;
   }
 
