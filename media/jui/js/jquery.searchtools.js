@@ -54,7 +54,6 @@
 		this.filterButton    = $(this.options.formSelector + ' ' + this.options.filterBtnSelector);
 		this.filterContainer = $(this.options.formSelector + ' ' + this.options.filterContainerSelector);
 		this.filtersHidden   = this.options.filtersHidden;
-
 		// List fields
 		this.listButton    = $(this.options.formSelector + ' ' + this.options.listBtnSelector);
 		this.listContainer = $(this.options.formSelector + ' ' + this.options.listContainerSelector);
@@ -86,7 +85,7 @@
 		this.chosenSupport    = this.options.chosenSupport;
 		this.clearListOptions = this.options.clearListOptions;
 
-		// Selector values
+    // Selector values
 		this._name = pluginName;
 
 		this.init();
@@ -171,7 +170,7 @@
 		checkFilter: function (element) {
 			var self = this;
 
-			var option = $(element).find('option:selected');
+      var option = $(element).find('option:selected');
 			if (option.val() != '') {
 				self.activeFilter(element);
 			} else {

@@ -226,7 +226,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
 
     </div>
     <?php if ($this->countModules('owner-footer')) : ?> 
-      <footer id="status" class="navbar navbar-fixed-bottom"> 
+      <footer id="status" class=""> 
           <div class="clearfix">
             <div class="container">
               <jdoc:include type="modules" name="owner-footer" style="no" />

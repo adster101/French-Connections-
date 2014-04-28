@@ -42,12 +42,12 @@ class TicketsViewTicket extends JViewLegacy {
 
     $canDo = TicketsHelper::getActions();
 
-    TicketsHelper::addSubmenu('tickets');
+    //TicketsHelper::addSubmenu('tickets');
+    //$this->sidebar = JHtmlSidebar::render();
 
 
     $this->addToolbar($canDo);
 
-    $this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);
   }

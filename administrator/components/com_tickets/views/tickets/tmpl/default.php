@@ -14,7 +14,6 @@ JHtml::_('bootstrap.tooltip');
 
 // Import CSS
 $document = JFactory::getDocument();
-$document->addStyleSheet('components/com_vouchers/assets/css/invoices.css');
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
@@ -29,7 +28,9 @@ if (!empty($this->extra_sidebar)) {
 }
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tickets'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_tickets'); ?>" method="post" name="adminForm" id="adminForm" class="js-stools-form">
+
+  <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -39,21 +40,6 @@ if (!empty($this->extra_sidebar)) {
       <div id="j-main-container">
       <?php endif; ?>
 
-      <div id="filter-bar" class="btn-toolbar">
-        <div class="filter-search btn-group pull-left">
-          <label for="filter_search" class="element-invisible"><?php echo JText::_('JSEARCH_FILTER'); ?></label>
-          <input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('JSEARCH_FILTER'); ?>" />
-
-
-        </div>
-
-        <div class="btn-group pull-left">
-          <button class="btn hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn hasTooltip" type="button" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>" onclick="document.id('filter_search').value = '';
-              this.form.submit();"><i class="icon-remove"></i></button>
-        </div>
-
-      </div>
 
       <table class="table table-striped" id="invoiceList">
         <thead>
@@ -76,28 +62,22 @@ if (!empty($this->extra_sidebar)) {
                 <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
               </th>
             <?php endif; ?>
+
             <th class='left'>
               <?php echo JText::_('JGLOBAL_TITLE'); ?>
             </th>
             <th class='left'>
-              <?php echo JText::_('COM_TICKETS_DESCRIPTION'); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_SEVERITY', 'a.severity', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
               <?php echo JHtml::_('grid.sort', 'COM_TICKETS_AREA_SORT', 'a.area', $listDirn, $listOrder); ?>
             </th>
             <th>
-              <?php echo JText::_('COM_TICKETS_ASSIGNED_TO'); ?>
-            </th>
-            <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_ASSIGNED_TO', 'a.assigned_to', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
               <?php echo JHtml::_('grid.sort', 'COM_TICKETS_DATE_UPDATED', 'a.date_updated', $listDirn, $listOrder); ?>
             </th>
-            <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_SEVERITY', 'a.severity', $listDirn, $listOrder); ?>
-            </th>
-
           </tr>
         </thead>
         <tfoot>
@@ -140,13 +120,12 @@ if (!empty($this->extra_sidebar)) {
                 <?php if ($item->checked_out) : ?>
                   <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'tickets.', $canCheckin); ?>
                 <?php endif; ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_tickets&task=ticket.edit&id=' . (int) $item->id) ?>">
+                <a rel="tooltip" title="<?php echo JHtml::_('string.truncate', $item->description, 250); ?>" href="<?php echo JRoute::_('index.php?option=com_tickets&task=ticket.edit&id=' . (int) $item->id) ?>">
                   <?php echo $this->escape($item->title); ?>
                 </a>
               </td>
               <td>
-                <?php echo JHtml::_('string.truncate', $item->description, 250); ?>
-
+                <?php echo $item->severity; ?>
               </td>
               <td>
                 <?php echo $this->escape($item->area); ?>
@@ -155,23 +134,19 @@ if (!empty($this->extra_sidebar)) {
               <td>
                 <?php echo $item->name; ?>
               </td>
-              <td>
-                <?php echo $item->date_created; ?>
-              </td>
+
               <td>
                 <?php echo $item->date_updated; ?>
               </td>
 
 
-              <td>
-                <?php echo $item->severity; ?>
-              </td>
+
 
             </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
-      <?php //Load the batch processing form.  ?>
+      <?php //Load the batch processing form.    ?>
       <?php echo $this->loadTemplate('batch'); ?>
 
       <input type="hidden" name="task" value="" />

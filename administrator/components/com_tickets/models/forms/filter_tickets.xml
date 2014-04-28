@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>  
+
+  <fields name="filter"> 
+    <fieldset>
+      <field
+        name="search"
+        type="text"
+        label="COM_CONTENT_FILTER_SEARCH_DESC"
+        hint="JSEARCH_FILTER" />
+      <field
+        class="input-medium"
+        name="severity"
+        type="list"
+        labelclass="element-invisible"
+        label="COM_TICKETS_SEVERITY"
+        description=""
+        onchange="this.form.submit();"> 
+        <option value="">COM_TICKETS_SEVERITY</option>
+        <option value="1">COM_TICKETS_CRITICAL</option>
+        <option value="2">COM_TICKETS_HIGH</option>
+        <option value="3">COM_TICKETS_MEDIUM</option>
+        <option value="4">COM_TICKETS_LOW</option>
+        <option value="5">COM_TICKETS_MINOR</option>
+      </field> 
+      <field
+        name="area"
+        type="category"
+        extension="com_tickets"
+        label="COM_TICKETS_SEVERITY"
+        labelclass="element-invisible"
+        description=""
+        onchange="this.form.submit();"> 
+        <option value="">COM_TICKETS_AREA</option>
+      </field> 
+      <field
+        name="state"
+        type="list"
+        labelclass="element-invisible"
+        label="JOPTION_SELECT_PUBLISHED"
+        description=""
+        class="input-medium"
+        onchange="this.form.submit();"> 
+        <option value="">JOPTION_SELECT_PUBLISHED</option>
+        <option value="1">COM_TICKETS_OPEN</option>
+        <option value="2">COM_TICKETS_CLOSED</option>
+        <option value="3">COM_TICKETS_TESTING_FILTER</option>
+        <option value="4">COM_TICKETS_PENDING_FILTER</option>
+      </field>  
+    <field
+      name="assigned_to"
+      type="users"
+      labelclass="control-label"
+      label="Created by"
+      description=""
+      class="input-medium"
+      filter="int"
+      onchange="this.form.submit();" />  
+    </fieldset>
+  </fields> 
+  <fields name="list">
+    <field
+      name="limit"
+      type="limitbox"
+      class="inputbox input-small"
+      default="10"
+      labelclass="element-invisible"
+      label="COM_CONTENT_LIST_LIMIT"
+      description="COM_CONTENT_LIST_LIMIT_DESC"
+      onchange="this.form.submit();">
+    </field>
+  </fields>
+</form>

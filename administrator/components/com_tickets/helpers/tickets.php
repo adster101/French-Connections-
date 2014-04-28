@@ -55,7 +55,7 @@ class TicketsHelper {
   public static function getSeverities() {
     // Build the filter options.
     $options = array();
-    $options[] = JHtml::_('select.option', '1', JText::_('COM_TICKETS_CRITICAL'));
+    $options[] = JHtml::_('select.option', '1', JText::_(' '));
     $options[] = JHtml::_('select.option', '2', JText::_('COM_TICKETS_HIGH'));
     $options[] = JHtml::_('select.option', '3', JText::_('COM_TICKETS_MEDIUM'));
     $options[] = JHtml::_('select.option', '4', JText::_('COM_TICKETS_LOW'));

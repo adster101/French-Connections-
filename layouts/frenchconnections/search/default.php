@@ -37,14 +37,25 @@ $filters = $data['view']->filterForm->getGroup('filter');
       <?php echo JText::_('JSEARCH_FILTER'); ?>
     </label>
     <?php if (!empty($filters['filter_search'])) : ?>
-    <div class="btn-wrapper input-append">
-      <?php echo $filters['filter_search']->input; ?>
-      <button type="submit" class="btn hasTooltip" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_SUBMIT'); ?>">
-        <i class="icon-search"></i>
+      <div class="btn-wrapper input-append">
+        <?php echo $filters['filter_search']->input; ?>
+        <button type="submit" class="btn hasTooltip" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_SUBMIT'); ?>">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    <?php endif; ?>
+    <div class="js-stools-container-list hidden-phone hidden-tablet">
+
+      <?php echo JLayoutHelper::render('joomla.searchtools.default.list', $data); ?>
+    </div>
+	<div class="js-stools-container-filters hidden-phone clearfix">
+		<?php echo JLayoutHelper::render('joomla.searchtools.default.filters', $data); ?>
+	</div>
+    <div class="btn-wrapper">
+      <button type="button" class="btn hasTooltip js-stools-btn-clear" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_CLEAR'); ?>">
+        <?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>
       </button>
     </div>
-    <?php endif; ?>
-    <?php echo JLayoutHelper::render('frenchconnections.search.default.filters', $data); ?>
   </div>
 </div>
 <hr />
