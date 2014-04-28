@@ -55,7 +55,10 @@
       description=""
       class="input-medium"
       filter="int"
-      onchange="this.form.submit();" />  
+      onchange="this.form.submit();">
+        <option value="">COM_TICKETS_ASSIGNED_FILTER</option>
+    
+    </field>  
     </fieldset>
   </fields> 
   <fields name="list">
