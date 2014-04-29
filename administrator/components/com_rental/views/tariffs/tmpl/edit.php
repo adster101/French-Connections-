@@ -18,7 +18,7 @@ $counter = 0;
       </div>
       <div id="" class="span10">
       <?php else : ?>
-        <div class="span10">
+        <div class="span12">
         <?php endif; ?>
         <!-- Listing status and tab layouts start -->
         <?php
