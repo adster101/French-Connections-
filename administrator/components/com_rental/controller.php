@@ -52,14 +52,14 @@ class RentalController extends JControllerLegacy {
     }
 
     // Set up an array of views to protect from direct access
-    $views_to_protect = array('listing', 'tariffs', 'offers', 'unitversions', 'availability');
+    $views_to_protect = array('tariffs', 'offers', 'unitversions', 'availability');
 
     // set default view if not set
     JRequest::setVar('view', JRequest::getCmd('view', 'Listings'));
 
     // Set the default view name and format from the Request.
     $vName = JRequest::getCmd('view', 'Property');
-
+    
     // A check in each sub-controller is also needed to ensure that the user does actually own the item id
     if (in_array($vName, $views_to_protect) && !$this->checkEditId('com_rental.edit.' . $vName, $id)) {
       // Somehow the person just went to the form - we don't allow that.
