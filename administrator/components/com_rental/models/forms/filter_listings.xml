@@ -51,7 +51,7 @@
     <field
       name="fullordering"
       type="hidden"
-      default="a.title ASC"
+      default=""
       filter="string">
     </field>
     <field
