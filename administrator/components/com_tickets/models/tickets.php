@@ -26,14 +26,14 @@ class TicketsModelTickets extends JModelList {
   public function __construct($config = array()) {
     if (empty($config['filter_fields'])) {
       $config['filter_fields'] = array(
-          'id',
-          'created_by',
-          'date_created',
-          'date_updated',
-          'state',
-          'severity',
-          'area',
-          'assigned_to'
+          'id', 'a.id',
+          'created_by', 'a.created_by',
+          'date_created', 'a.date_created',
+          'date_updated', 'a.date_updated',
+          'state', 'a.state',
+          'severity', 'a.severity',
+          'area', 'a.area',
+          'assigned_to', 'a.assigned_to'
       );
     }
 

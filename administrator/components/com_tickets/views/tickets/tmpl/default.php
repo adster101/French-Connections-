@@ -17,8 +17,8 @@ $document = JFactory::getDocument();
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
-$listOrder = $this->state->get('list.ordering');
-$listDirn = $this->state->get('list.direction');
+$listOrder = $this->escape($this->state->get('list.ordering'));
+$listDirn = $this->escape($this->state->get('list.direction'));
 ?>
 
 <?php
@@ -46,7 +46,7 @@ if (!empty($this->extra_sidebar)) {
           <tr>
             <?php if (isset($this->items[0]->ordering)): ?>
               <th width="1%" class="nowrap center hidden-phone">
-                <?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+                <?php echo JHtml::_('searchtools.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
               </th>
             <?php endif; ?>
             <th width="1%" class="hidden-phone">
@@ -54,12 +54,12 @@ if (!empty($this->extra_sidebar)) {
             </th>
             <?php if (isset($this->items[0]->state)): ?>
               <th width="1%" class="nowrap center">
-                <?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+                <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
               </th>
             <?php endif; ?>
             <?php if (isset($this->items[0]->id)): ?>
               <th  class="nowrap  hidden-phone">
-                <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+                <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
               </th>
             <?php endif; ?>
 
@@ -67,16 +67,16 @@ if (!empty($this->extra_sidebar)) {
               <?php echo JText::_('JGLOBAL_TITLE'); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_SEVERITY', 'a.severity', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_SEVERITY', 'a.severity', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_AREA_SORT', 'a.area', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_AREA_SORT', 'a.area', $listDirn, $listOrder); ?>
             </th>
             <th>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_ASSIGNED_TO', 'a.assigned_to', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_ASSIGNED_TO', 'a.assigned_to', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_TICKETS_DATE_UPDATED', 'a.date_updated', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_DATE_UPDATED', 'a.date_updated', $listDirn, $listOrder); ?>
             </th>
           </tr>
         </thead>
@@ -151,8 +151,6 @@ if (!empty($this->extra_sidebar)) {
 
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />
-      <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-      <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
       <?php echo JHtml::_('form.token'); ?>
     </div>
 </form>
