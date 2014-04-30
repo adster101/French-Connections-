@@ -8,7 +8,8 @@ defined('_JEXEC') or die('Restricted access');
   <th><?php echo JText::_('COM_ACCOMMODATION_TARIFFS'); ?></th>
 </thead>
 <?php foreach ($this->tariffs as $tariff) : ?>
-  <?php $prices = JHtml::_('general.price', $tariff->tariff, 'GBP', $this->item->base_currency, $this->item->exchange_rate_usd); ?>
+
+  <?php $prices = JHtml::_('general.price', $tariff->tariff, $this->item->base_currency,$this->item->exchange_rate_eur, $this->item->exchange_rate_usd); ?>
   <tr>
     <td>
       <?php echo htmlspecialchars(JFactory::getDate($tariff->start_date)->calendar('d F Y')); ?>

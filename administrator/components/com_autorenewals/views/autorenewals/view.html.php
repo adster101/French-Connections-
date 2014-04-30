@@ -37,7 +37,7 @@ class AutorenewalsViewAutorenewals extends JViewLegacy {
     $this->addToolbar($canDo);
 
 
-    $this->sidebar = JHtmlSidebar::render();
+    //$this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);
   }

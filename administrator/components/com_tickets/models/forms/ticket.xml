@@ -21,6 +21,7 @@
       description=""
       fiter="string"
       required="true"
+      class="input-xxlarge"
       label="Ticket title"
     />
     <field 

@@ -787,7 +787,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       // Update the expiry date
       $date = $this->getNewExpiryDate();
 
-      if (!$this->updateProperty($listing_id, 0, $total, $expiry_date = $date, $published = 1 )) {
+      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date = $date, $published = 1 )) {
         // Log this
         return false;
       }
@@ -937,6 +937,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      */
 
     $data['value'] = $cost;
+    
 
     /*
      * Update the expiry date if one is passed in
@@ -945,8 +946,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $data['expiry_date'] = $expiry_date;
     }
 
+    /*
+     * Also update the published, if requested...
+     */
     if (!empty($published)) {
-      $data['published ='] = $published;
+      $data['published'] = $published;
     }
     
     $table = JTable::getInstance('Property', 'RentalTable');

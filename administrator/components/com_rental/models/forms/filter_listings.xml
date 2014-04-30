@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>  
+  <fields name="filter"> 
+    <fieldset>
+      <field
+        name="search"
+        type="text"
+        label="COM_CONTENT_FILTER_SEARCH_DESC"
+        hint="COM_RENTAL_PROPERTY_SEARCH_FILTER" 
+        class="input-xlarge" 
+      />
+      <field
+        name="published"
+        type="list"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_ACTIVE"
+        description=""
+        class="input-medium"
+        onchange="this.form.submit();"> 
+        <option value="">JOPTION_SELECT_PUBLISHED</option>
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+        <option value="-1">JTRASHED</option>
+      </field>  
+      <field
+        name="review"
+        type="list"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_REVIEW"
+        class="input-large"
+        onchange="this.form.submit();"> 
+        <option value="">COM_RENTAL_HELLOWORLD_FILTER_REVIEW</option>
+        <option value="1">COM_RENTAL_HELLOWORLD_UPDATED</option>
+        <option value="2">COM_RENTAL_HELLOWORLD_FOR_REVIEW</option>
+      </field>       
+      <field
+        name="snoozed"
+        type="list"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_SNOOZED"
+        class="input-large"
+        onchange="this.form.submit();"> 
+        <option value="">COM_RENTAL_HELLOWORLD_FILTER_SNOOZED</option>
+        <option value="1">COM_RENTAL_HELLOWORLD_HIDE_SNOOZED</option>
+        <option value="2">COM_RENTAL_HELLOWORLD_SHOW_SNOOZED</option>
+      </field>  
+   
+    </fieldset>
+  </fields> 
+  <fields name="list">
+    <field
+      name="fullordering"
+      type="hidden"
+      default="a.title ASC"
+      filter="string">
+    </field>
+    <field
+      name="limit"
+      type="limitbox"
+      class="inputbox input-small"
+      default="10"
+      labelclass="element-invisible"
+      label="COM_CONTENT_LIST_LIMIT"
+      description="COM_CONTENT_LIST_LIMIT_DESC"
+      onchange="this.form.submit();">
+    </field>
+  </fields>
+   <field
+        name="start_date"
+        type="calendar"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_SNOOZED"
+        class="input-small"
+        format="%d-%m-%Y"
+        hint="From"> 
+      </field>                    
+      <field
+        name="end_date"
+        type="calendar"
+        hint="To"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_SNOOZED"
+        class="input-small"
+        format="%d-%m-%Y"> 
+      </field>  
+      <field
+        name="report_filter"
+        type="list"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_REPORT"
+        class="input-large"
+        onchange="this.form.submit();"> 
+        <option value="">COM_RENTAL_FILTER_REPORT_TYPE</option>
+        <option value="1">COM_RENTAL_FILTER_EXPIRY_DATE</option>
+        <option value="2">COM_RENTAL_FILTER_CREATED_DATE</option>
+      </field>  
+</form>

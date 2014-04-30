@@ -7,7 +7,6 @@ JHtml::_('formbehavior.chosen', 'select');
 $canChange = $user->authorise('core.edit.state', 'com_autorenewals');
 
 $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) + 1 : $colspan = 7;
-
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_autorenewals'); ?>" method="post" name="adminForm" id="adminForm">
@@ -16,14 +15,14 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) + 
       <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10">
+
+    <?php else : ?>
+      <div id="j-main-container">
+      <?php endif; ?>
       <?php
       // Search tools bar
       echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
       ?>
-    <?php else : ?>
-      <div id="j-main-container">
-      <?php endif; ?>
-
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>

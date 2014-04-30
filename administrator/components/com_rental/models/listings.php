@@ -49,41 +49,6 @@ class RentalModelListings extends JModelList {
    * @since	1.6
    */
   protected function populateState($ordering = null, $direction = null) {
-    // Initialise variables
-    $app = JFactory::getApplication();
-
-    $context = $this->context;
-
-    $extension = $app->getUserStateFromRequest('com_rentals.property.filter.extension', 'extension', 'com_rentals', 'cmd');
-
-    $this->setState('filter.extension', $extension);
-    $parts = explode('.', $extension);
-
-    // Should be an int. No filter is null so perhaps no filter should be -1?
-    $published = $this->getUserStateFromRequest($this->context . '.filter.published', 'filter_published', '');
-    $this->setState('filter.published', $published);
-
-    $start_date = $this->getUserStateFromRequest($this->context . '.filter.start_date', 'start_date', '', 'date');
-    $this->setState('filter.start_date', $start_date);
-
-    $end_date = $this->getUserStateFromRequest($this->context . '.filter.end_date', 'end_date', '', 'date');
-    $this->setState('filter.end_date', $end_date);
-   
-    $date_filter = $this->getUserStateFromRequest($this->context . '.filter.date_filter', 'date_filter', '', 'string');
-    $this->setState('filter.date_filter', $date_filter);
-    
-    $review_state = $this->getUserStateFromRequest($this->context . '.filter.review', 'filter_review', '');
-    $this->setState('filter.review', $review_state);
-
-    $snooze_state = $this->getUserStateFromRequest($this->context . '.filter.snoozed', 'filter_snoozed', false);
-
-    $this->setState('filter.snoozed', $snooze_state);
-
-    // extract the component name
-    $this->setState('filter.component', $parts[0]);
-
-    $search = $this->getUserStateFromRequest($context . '.search', 'filter_search');
-    $this->setState('filter.search', $search);
 
     // List state information.
     parent::populateState('a.id', 'asc');

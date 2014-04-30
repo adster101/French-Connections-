@@ -24,14 +24,11 @@ class RentalViewListings extends JViewLegacy {
 
     // Get data from the model
     $items = $this->get('Items');
-
-    $pagination = $this->get('Pagination');
-
     $this->state = $this->get('State');
-
-    // Assign data to the view
     $this->items = $items;
-    $this->pagination = $pagination;
+    $this->pagination = $this->get('Pagination');
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilter = $this->get('ActiveFilters');
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
@@ -94,34 +91,12 @@ class RentalViewListings extends JViewLegacy {
       JToolBarHelper::preferences('com_rental');
     }
 
-    // Check that the user is authorised to view the filters.
-    if ($canDo->get('helloworld.filter')) {
+    $view = strtolower(JRequest::getVar('view'));
 
-      JHtmlSidebar::addFilter(
-              JText::_('COM_RENTAL_HELLOWORLD_FILTER_ACTIVE'), 'filter_published', JHtml::_('select.options', RentalHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
-      );
-      JHtmlSidebar::addFilter(
-              JText::_('COM_RENTAL_HELLOWORLD_FILTER_REVIEW'), 'filter_review', JHtml::_('select.options', RentalHelper::getReviewOptions(), 'value', 'text', $this->state->get('filter.review'), true)
-      );
-      JHtmlSidebar::addFilter(
-              JText::_('COM_RENTAL_HELLOWORLD_FILTER_SNOOZED'), 'filter_snoozed', JHtml::_('select.options', RentalHelper::getSnoozeOptions(), 'value', 'text', $this->state->get('filter.snoozed'), true)
-      );
+    $canDo = RentalHelper::addSubmenu($view);
 
-    }
-
-    
-
-      $view = strtolower(JRequest::getVar('view'));
-
-      $canDo = RentalHelper::addSubmenu($view);
-
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-
-    
-
-
-
+    // Add the side bar
+    // $this->sidebar = JHtmlSidebar::render();
   }
 
   /**

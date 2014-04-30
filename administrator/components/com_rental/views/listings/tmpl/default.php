@@ -5,6 +5,8 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('dropdown.init');
+JHtml::_('behavior.modal', 'a.modal');
+
 
 $arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
@@ -26,72 +28,18 @@ $listing_id = '';
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
+  <?php if ($canDo->get('helloworld.reports.renewal')) : // Don't show this for owners ?>
+    <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+  <?php endif; ?>
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
-
     </div>
     <div id="j-main-container" class="span10">
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <?php if ($canDo->get('helloworld.reports.renewal')) : // Don't show this for owners ?>
-        <div id="filter-bar" class="btn-toolbar">
-          <div class="filter-search btn-group pull-left">
-            <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-            <input type="text" name="filter_search"
-                   id="filter_search"
-                   value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                   title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
-                   placeholder="<?php echo JText::_('COM_RENTAL_PROPERTY_SEARCH_FILTER'); ?>" />
-          </div>
-
-          <div class="btn-group pull-left">
-            <input 
-              type="text" 
-              name="start_date" 
-              id="start_date" 
-              value="<?php echo $start_date ?>" 
-              class="input-small prepend-1 hasdatepicker" 
-              placeholder="From"
-              autocomplete="false"
-              />
-          </div>
-          <div class="btn-group pull-left">
-
-            <input 
-              type="text" 
-              name="end_date" 
-              id="end_date" 
-              value="<?php echo $end_date ?>" 
-              class="input-small hasdatepicker" 
-              placeholder="To" 
-              autocomplete="false"
-              />
-          </div>
-          <div class="btn-group pull-left">
-            <select class="input-large" name="date_filter" id="date_filter">
-              <?php echo JHtml::_('select.options', RentalHelper::getDateFilterOptions(), 'value', 'text', $date_filter, true) ?>
-            </select>
-          </div>
-
-          <div class="btn-group pull-left hidden-phone">
-            <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-            <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-                  document.id('start_date').value = '';
-                  document.id('end_date').value = '';
-                  document.id('date_filter').value = '';
-                  this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-          </div>
-
-          <div class="btn-group pull-right hidden-phone">
-            <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-            <?php echo $this->pagination->getLimitBox(); ?>
-          </div>
-        </div>
-        <hr />     
-      <?php endif; ?>
-
+     
       <?php if (empty($this->items)) : // This user doesn't have any listings against their account     ?>
         <hr />
         <div class="alert alert-block">
@@ -104,7 +52,7 @@ $listing_id = '';
                   <tr>
                     <th>
                       <?php if ($canDo->get('helloworld.sort.prn')) : ?>
-                        <?php echo JHtml::_('grid.sort', 'COM_RENTAL_HELLOWORLD_HEADING_ID', 'id', $listDirn, $listOrder); ?>
+                        <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_ID', 'id', $listDirn, $listOrder); ?>
                       <?php else : ?>
                         <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_ID') ?>
                       <?php endif; ?>
@@ -122,7 +70,7 @@ $listing_id = '';
                     </th>
                     <th width="10%">
                       <?php if ($canDo->get('helloworld.sort.expiry')) : ?>
-                        <?php echo JHtml::_('grid.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_EXPIRY', 'a.expiry_date', $listDirn, $listOrder); ?>
+                        <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_EXPIRY', 'a.expiry_date', $listDirn, $listOrder); ?>
                       <?php else: ?>
                         <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_DATE_EXPIRY'); ?>
                       <?php endif; ?>
@@ -134,7 +82,7 @@ $listing_id = '';
                       <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
                     </th>
                     <th>
-                      <?php echo JHtml::_('grid.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
+                      <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
                     </th>
                     <?php if ($canDo->get('helloworld.property.review')) : ?>  
                       <th>
@@ -194,7 +142,7 @@ $listing_id = '';
                           <?php if ($item->review != 2) : ?>
 
 
-          
+
                             <a href="<?php echo JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
                                 <?php echo JText::_('COM_RENTAL_HELLOWORLD_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
@@ -290,8 +238,6 @@ $listing_id = '';
             <div>
               <input type="hidden" name="task" value="" />
               <input type="hidden" name="boxchecked" value="" />
-              <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-              <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
               <?php echo JHtml::_('form.token'); ?>
             </div>
             </div>

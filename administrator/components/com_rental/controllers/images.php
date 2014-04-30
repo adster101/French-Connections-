@@ -371,7 +371,7 @@ class RentalControllerImages extends JControllerForm {
    */
   protected function reformatFilesArray($name, $type, $tmp_name, $size) {
     // Prepend a unique ID to the filename so that all files have a unique name.
-    $name = uniqid() . '-' . JFile::makeSafe($name);
+    $name = uniqid() . '-' . JFile::makeSafe(str_replace(' ', '-', $name));
     return array(
         'name' => $name,
         'type' => $type,

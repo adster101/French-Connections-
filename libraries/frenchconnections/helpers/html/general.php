@@ -75,17 +75,17 @@ class JHtmlGeneral {
     if ($baseCurrency == 'GBP') {
       $prices['GBP'] = $price; 
       // Check whether we have an owner currency override (!?). If so then calculate the euro rate based on that 
-      $prices['EUR'] = ($exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
+      $prices['EUR'] = ((float) $exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['EUR']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
       // Likewise for the USD rate
-      $prices['USD'] = ($exchange_rate_usd > 0) ? round(($exchange_rate_usd * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
+      $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['USD']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
     } elseif ($baseCurrency == 'EUR') { // Base rate is in euros
       $prices['EUR'] = $price;
-      $prices['GBP'] = (((float) $exchange_rate_eur > 0)) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
+      $prices['GBP'] = ((float) $exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['GBP']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
       // To convert into USD we need to convert from GBP
-      $prices['USD'] = (!empty($exchange_rate_usd)) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
+      $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
         round((($rates['USD']->exchange_rate) * $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP);
     }
 
