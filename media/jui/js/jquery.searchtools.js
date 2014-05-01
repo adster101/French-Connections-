@@ -1,4 +1,4 @@
-;(function ($, window, document, undefined) {
+(function ($, window, document, undefined) {
 
 	// Create the defaults once
 	var pluginName = "searchtools";
@@ -54,6 +54,7 @@
 		this.filterButton    = $(this.options.formSelector + ' ' + this.options.filterBtnSelector);
 		this.filterContainer = $(this.options.formSelector + ' ' + this.options.filterContainerSelector);
 		this.filtersHidden   = this.options.filtersHidden;
+
 		// List fields
 		this.listButton    = $(this.options.formSelector + ' ' + this.options.listBtnSelector);
 		this.listContainer = $(this.options.formSelector + ' ' + this.options.listContainerSelector);
@@ -85,7 +86,7 @@
 		this.chosenSupport    = this.options.chosenSupport;
 		this.clearListOptions = this.options.clearListOptions;
 
-    // Selector values
+		// Selector values
 		this._name = pluginName;
 
 		this.init();
@@ -95,10 +96,17 @@
 		init: function () {
 			var self = this;
 
+			// IE < 9 - Avoid to submit placeholder value
+			if(!document.addEventListener  ) {
+				if (this.searchField.val() === this.searchField.attr('placeholder')) {
+					this.searchField.val('');
+				}
+			}
+
 			// Get values
 			this.searchString = this.searchField.val();
 
-			if (this.filtersHidden) {
+      if (this.filtersHidden) {
 				this.hideFilters();
 			} else {
 				this.showFilters();
@@ -170,8 +178,8 @@
 		checkFilter: function (element) {
 			var self = this;
 
-      var option = $(element).find('option:selected');
-			if (option.val() != '') {
+			var option = $(element).find('option:selected');
+			if (option.val() !== '') {
 				self.activeFilter(element);
 			} else {
 				self.deactiveFilter(element);
@@ -305,7 +313,7 @@
 				this.orderField = $('<input>').attr({
 				    type: 'hidden',
 				    id: 'js-stools-field-order',
-				    class: 'js-stools-field-order',
+				    'class': 'js-stools-field-order',
 				    name: self.options.orderFieldName,
 				    value: self.activeOrder + ' ' + this.activeDirection
 				});

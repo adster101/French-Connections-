@@ -66,7 +66,7 @@ abstract class JHtmlSearchtools
 	{
 		$sig = md5(serialize(array($selector, $options)));
 
-    // Only load once
+		// Only load once
 		if (!isset(static::$loaded[__METHOD__][$sig]))
 		{
 			// Include Bootstrap framework

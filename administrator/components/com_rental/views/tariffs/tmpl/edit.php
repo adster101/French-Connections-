@@ -32,6 +32,32 @@ $counter = 0;
           <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>
         </div>
         <div class="row-fluid">
+          <div class="span8">
+            <fieldset class="adminform">
+              <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_TARIFFS', $this->item->unit_title); ?></legend>
+              <div class="tariff-range">
+                <ol class="list-striped">
+                <?php foreach ($this->form->getFieldset('unit-tariffs') as $field) : ?>                
+                  <?php if ($counter % 3 === 0) : // Output a new row every third  ?> 
+                  <li class="clearfix">
+                    <?php endif; ?>     
+                    <div class="facilities-container">
+                      <?php
+                      echo $field->label;
+                      echo $field->input;
+                      ?>            
+                    </div>
+                    <?php if (($counter % 3 === 2)) : ?>
+                      
+                  </li>
+                  <?php endif; ?>
+                  <?php $counter++; ?>
+                <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
+                </ul>
+              </div>
+            </fieldset>
+
+          </div>
           <div class="span4">
             <!-- Listing status and tab layouts end -->
             <fieldset class="adminform form-vertical">
@@ -69,32 +95,8 @@ $counter = 0;
               </div>
             </fieldset>
           </div>
-          <div class="span8">
-            <fieldset class="adminform">
-              <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_TARIFFS', $this->item->unit_title); ?></legend>
-              <div class="tariff-range">
-                <?php foreach ($this->form->getFieldset('unit-tariffs') as $field) : ?>                
-
-                  <?php if ($counter % 3 === 0) : // Output a new row every third  ?> 
-                    <div class="row-fluid">
-                    <?php endif; ?>
-                    <div class="span4">
-                      <?php
-                      echo $field->label;
-                      echo $field->input;
-                      ?>               
-                    </div>      
-                    <?php if (($counter % 3 === 2)) : ?>
-                    </div>
-                    <hr />
-                  <?php endif; ?>
-                  <?php $counter++; ?>
-                <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
-              </div>
-            </fieldset>
-
-          </div>
-        </div>        </div>
+        </div>     
+      </div>
     </div>
   </div>
   <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>

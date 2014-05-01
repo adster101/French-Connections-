@@ -31,7 +31,7 @@ class RentalModelListings extends JModelList {
           'checked_out_time', 'a.checked_out_time',
           'created_user_id', 'a.created_user_id',
           'a.created_on', 'a.created_on',
-          'snoozed', 'a.snooze_until'
+          'snoozed', 'published'
       );
     }
     parent::__construct($config);
@@ -50,6 +50,7 @@ class RentalModelListings extends JModelList {
    */
   protected function populateState($ordering = null, $direction = null) {
 
+    
     // List state information.
     parent::populateState('a.id', 'asc');
   }

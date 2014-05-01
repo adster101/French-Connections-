@@ -4,7 +4,8 @@ jQuery(document).ready(function() {
   jQuery(function() {
 
     // Select each UL with class of tariff-range and for each 
-    jQuery('.tariff-range .row-fluid').each(function(index) {
+    jQuery('.tariff-range ol > li').each(function(index) {
+      
 
       var current = jQuery(this).children().children('input[type=text].tariff_date');
       var start_date_id = '#' + jQuery(current[0]).attr('id');
@@ -17,7 +18,7 @@ jQuery(document).ready(function() {
       }
 
       jQuery(start_date_id).datepicker({
-        numberOfMonths: 2,
+        numberOfMonths: 1,
         showOn: "both",
         dateFormat: "dd-mm-yy",
         buttonImageOnly: true,
@@ -30,7 +31,7 @@ jQuery(document).ready(function() {
       });
 
       jQuery(end_date_id).datepicker({
-        numberOfMonths: 2,
+        numberOfMonths: 1,
         dateFormat: "dd-mm-yy",
         showOn: "both",
         buttonImageOnly: true,

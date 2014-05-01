@@ -4,7 +4,6 @@ defined('_JEXEC') or die('Restricted Access');
 // load tooltip behavior
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
-JHtml::_('dropdown.init');
 JHtml::_('behavior.modal', 'a.modal');
 
 
@@ -16,18 +15,18 @@ $start_date = $this->state->get('filter.start_date');
 $end_date = $this->state->get('filter.end_date');
 $date_filter = $this->state->get('filter.date_filter');
 
-$user = JFactory::getUser();
-$userId = $user->get('id');
-$groups = $user->getAuthorisedGroups();
-$ordering = ($listOrder == 'a.lft');
-$originalOrders = array();
+//$user = JFactory::getUser();
+//$userId = $user->get('id');
+//$groups = $user->getAuthorisedGroups();
+//$ordering = ($listOrder == 'a.lft');
+//$originalOrders = array();
+//$listing_id = '';
 
 $canDo = RentalHelper::getActions();
 
-$listing_id = '';
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" class="form-validate" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" class="form-validate js-stools-form" id="adminForm">
   <?php if ($canDo->get('helloworld.reports.renewal')) : // Don't show this for owners ?>
     <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
   <?php endif; ?>

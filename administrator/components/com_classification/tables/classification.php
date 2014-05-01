@@ -66,7 +66,8 @@ class ClassificationTableClassification extends JTableNested
 		return true;
 	}
   
-  public function store (  )
+  
+  public function store ( $updateNulls = false )
   {
  
     // Add more validation and what not here?

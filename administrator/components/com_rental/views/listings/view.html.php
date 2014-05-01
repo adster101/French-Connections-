@@ -11,8 +11,9 @@ jimport('joomla.application.component.view');
  */
 class RentalViewListings extends JViewLegacy {
 
+  protected $items;
+  protected $pagination;
   protected $state;
-
   /**
    * HelloWorlds view display method
    * @return void
@@ -22,13 +23,13 @@ class RentalViewListings extends JViewLegacy {
     $user = JFactory::getUser();
     $userID = $user->id;
 
-    // Get data from the model
-    $items = $this->get('Items');
-    $this->state = $this->get('State');
-    $this->items = $items;
+    // Get data from the model  
+    
     $this->pagination = $this->get('Pagination');
+    $this->items = $this->get('Items');
+    $this->state = $this->get('State');
     $this->filterForm = $this->get('FilterForm');
-    $this->activeFilter = $this->get('ActiveFilters');
+    $this->activeFilters = $this->get('ActiveFilters');
 
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
@@ -107,8 +108,6 @@ class RentalViewListings extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
-    $document->addScript(JURI::root() . "administrator/components/com_rental/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
     $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
 
     JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');

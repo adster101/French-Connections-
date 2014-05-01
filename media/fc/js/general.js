@@ -177,7 +177,7 @@ jQuery(document).ready(function() {
 
 });
 
-  var infowindow;
+var infowindow;
 
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
@@ -326,45 +326,45 @@ var show_contact = function(that) {
 }
 
 
-/* Fires on occasion when a button has it bound to it's onclick event
- Joomla.submitbutton = function(task)
- {
- 
- if (task == '')
- {
- return false;
- }
- else
- {
- var isValid = true;
- var action = task.split('.');
- if (action[1] != 'cancel' && action[1] != 'close')
- {
- var forms = $$('form.form-validate');
- for (var i = 0; i < forms.length; i++)
- {
- if (!document.formvalidator.isValid(forms[i]))
- {
- isValid = false;
- break;
- }
- }
- }
- 
- if (isValid)
- {
- // Unbind the onbeforeunload event
- window.onbeforeunload = null;
- Joomla.submitform(task);
- return true;
- }
- else
- {
- alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE', ''));
- return false;
- }
- }
- }*/
+/* Fires on occasion when a button has it bound to it's onclick event */
+Joomla.submitbutton = function(task)
+{
+
+  if (task == '')
+  {
+    return false;
+  }
+  else
+  {
+    var isValid = true;
+    var action = task.split('.');
+    if (action[1] != 'cancel' && action[1] != 'close')
+    {
+      var forms = $$('form.form-validate');
+      for (var i = 0; i < forms.length; i++)
+      {
+        if (!document.formvalidator.isValid(forms[i]))
+        {
+          isValid = false;
+          break;
+        }
+      }
+    }
+
+    if (isValid)
+    {
+      // Unbind the onbeforeunload event
+      window.onbeforeunload = null;
+      Joomla.submitform(task);
+      return true;
+    }
+    else
+    {
+      alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE', ''));
+      return false;
+    }
+  }
+}
 
 
   

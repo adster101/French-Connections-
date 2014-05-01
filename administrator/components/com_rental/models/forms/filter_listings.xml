@@ -44,28 +44,7 @@
         <option value="1">COM_RENTAL_HELLOWORLD_HIDE_SNOOZED</option>
         <option value="2">COM_RENTAL_HELLOWORLD_SHOW_SNOOZED</option>
       </field>  
-   
-    </fieldset>
-  </fields> 
-  <fields name="list">
-    <field
-      name="fullordering"
-      type="hidden"
-      default=""
-      filter="string">
-    </field>
-    <field
-      name="limit"
-      type="limitbox"
-      class="inputbox input-small"
-      default="10"
-      labelclass="element-invisible"
-      label="COM_CONTENT_LIST_LIMIT"
-      description="COM_CONTENT_LIST_LIMIT_DESC"
-      onchange="this.form.submit();">
-    </field>
-  </fields>
-   <field
+      <field
         name="start_date"
         type="calendar"
         labelclass="element-invisible"
@@ -94,4 +73,24 @@
         <option value="1">COM_RENTAL_FILTER_EXPIRY_DATE</option>
         <option value="2">COM_RENTAL_FILTER_CREATED_DATE</option>
       </field>  
+    </fieldset>
+  </fields> 
+  <fields name="list">
+    <field
+      name="fullordering"
+      type="hidden"
+      default=""
+      filter="string">
+    </field>
+    <field
+      name="limit"
+      type="limitbox"
+      class="inputbox input-small"
+      default="10"
+      labelclass="element-invisible"
+      label="COM_CONTENT_LIST_LIMIT"
+      description="COM_CONTENT_LIST_LIMIT_DESC"
+      onchange="this.form.submit();">
+    </field>
+  </fields>
 </form>

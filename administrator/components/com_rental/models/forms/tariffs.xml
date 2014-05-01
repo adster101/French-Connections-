@@ -19,6 +19,7 @@
       class="input-medium"
       filter="int"
       validate="nonzero"
+      labelclass="control-label"
       required="true">
       <option value="">Choose</option>
       <option value="446">Sunday</option>
@@ -38,6 +39,7 @@
       type="list"
       filter="string"
       required="true"
+      labelclass="control-label"
       class="input-medium">
       <option value="">JSELECT</option>
       <option value="GBP">GBP</option>
@@ -49,6 +51,7 @@
       label="COM_RENTAL_TARIFFS_FIELD_TARIFF_BASED_ON_LABEL"
       description="COM_RENTAL_TARIFFS_FIELD_TARIFF_BASED_ON_DESC"
       required="true"
+      labelclass="control-label"
       filter="int"
       validate="nonzero"
       class="input-large"
@@ -62,6 +65,7 @@
       label="COM_RENTAL_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
       rows="6"
+      labelclass="control-label"
       class="input-xlarge validate-description"
       default=""
       filter="string"
