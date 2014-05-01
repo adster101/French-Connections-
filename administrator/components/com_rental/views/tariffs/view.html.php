@@ -96,7 +96,7 @@ class RentalViewTariffs extends JViewLegacy {
     if ($canDo->get('core.edit.own'))
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
-      JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+      JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
     }
 

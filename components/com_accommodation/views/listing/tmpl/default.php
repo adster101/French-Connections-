@@ -444,19 +444,18 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <td><?php echo $this->item->linen_costs; ?></td>        
         </tr>
       <?php endif; ?>       
-
+      <?php if (array_key_exists('Kitchen features', $this->unit_facilities)) : ?>
+        <tr>
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
+          <td><?php echo implode(', ', $this->unit_facilities['Kitchen features']) ?></td>         
+        </tr>      
+      <?php endif; ?>   
       <?php if (array_key_exists('Property Facilities', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
           <td><?php echo implode(', ', $this->unit_facilities['Property Facilities']) ?></td>         
         </tr>      
-      <?php endif; ?>   
-      <?php if (array_key_exists('Activities nearby', $this->property_facilities)) : ?>
-        <tr>
-          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_ACTIVITIES_NEARBY') ?></td>
-          <td><?php echo implode(', ', $this->property_facilities['Activities nearby']) ?></td>         
-        </tr>      
-      <?php endif; ?>  
+      <?php endif; ?>    
 
       <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?>
         <tr>
@@ -464,13 +463,13 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <td><?php echo implode(', ', $this->unit_facilities['External Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
-
-      <?php if (array_key_exists('Kitchen features', $this->unit_facilities)) : ?>
+      <?php if (array_key_exists('Activities nearby', $this->property_facilities)) : ?>
         <tr>
-          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
-          <td><?php echo implode(', ', $this->unit_facilities['Kitchen features']) ?></td>         
+          <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_ACTIVITIES_NEARBY') ?></td>
+          <td><?php echo implode(', ', $this->property_facilities['Activities nearby']) ?></td>         
         </tr>      
-      <?php endif; ?>       
+      <?php endif; ?> 
+    
     </table>
   </div>
   <div class="span4">

@@ -12,14 +12,23 @@
     </field>
     <field
       name="changeover_day"
-      type="attributetype"
+      type="list"
       label="COM_RENTAL_HELLOWORLD_FIELD_CHANGEOVER_DAY_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_CHANGEOVER_DAY_DESC"
-      class="required input-medium"
+      message="COM_RENTAL_TARIFFS_FIELD_BASE_CURRENCY_DESC"
+      class="input-medium"
       filter="int"
-      id="20"
-      placeholder="true"
+      validate="nonzero"
       required="true">
+      <option value="">Choose</option>
+      <option value="446">Sunday</option>
+      <option value="440">Monday</option>
+      <option value="441">Tuesday</option>
+      <option value="442">Wedsnesday</option>
+      <option value="443">Thursday</option>
+      <option value="444">Friday</option>
+      <option value="445">Saturday</option>
+      <option value="1521">Non-applicable(B&amp;B)</option>
     </field>
     <field
       name="base_currency"
@@ -30,10 +39,9 @@
       filter="string"
       required="true"
       class="input-medium">
-          <option value="">JSELECT</option>
-          <option value="GBP">GBP</option>
-          <option value="EUR">EUR</option>
-
+      <option value="">JSELECT</option>
+      <option value="GBP">GBP</option>
+      <option value="EUR">EUR</option>
     </field>
     <field
       name="tariff_based_on"
@@ -42,6 +50,7 @@
       description="COM_RENTAL_TARIFFS_FIELD_TARIFF_BASED_ON_DESC"
       required="true"
       filter="int"
+      validate="nonzero"
       class="input-large"
       id="21"
       placeholder="true">

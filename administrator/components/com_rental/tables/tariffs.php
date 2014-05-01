@@ -43,7 +43,7 @@ class RentalTableTariffs extends JTable {
     if (!is_integer((int) $this->tariff)) {
       return false;
     }
-    
+        
     return true;
   }
 

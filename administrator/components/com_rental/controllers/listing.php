@@ -192,7 +192,7 @@ class RentalControllerListing extends JControllerForm {
 
     // Need to do a lookup from the model.
     $record = $this->getModel('Property')->getItem($recordId);
-    
+
     if (empty($record)) {
       return false;
     }
@@ -296,19 +296,19 @@ class RentalControllerListing extends JControllerForm {
     // Redirect to the renewal payment/summary form thingy...
 
     $listing = $this->getModel('Listing', 'RentalModel', $config = array('ignore_request' => true));
-
     $listing->setState('com_rental.listing.id', $recordId);
 
     // Get the listing unit details
-    $listing = $listing->getItems();
+    $items = $listing->getItems();
 
+    $days_to_renewal = RentalHelper::getDaysToExpiry($items[0]->expiry_date);
 
-    $days_to_renewal = RentalHelper::getDaysToExpiry($listing[0]->expiry_date);
-
-    if (empty($listing[0]->vat_status)) { // No VAT status on record for this listing.
+    if (empty($items[0]->vat_status)) { // No VAT status on record for this listing.
       $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId, false);
+
+      $this->setRedirect($redirect, $message, 'notice');
     } elseif ($days_to_renewal < 7 && $days_to_renewal > 0) {
       // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
       $message = ($days_to_renewal > 0) ? 'Your property is expiring within 7 days - please renew now' : 'Property expired, renew now.';
@@ -316,21 +316,23 @@ class RentalControllerListing extends JControllerForm {
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
     } else if (empty($days_to_renewal)) {
 
-      $message = 'Oh, looks like you\'re submitting a new property. Submitted for review, etc etc ';
+      $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
+      $this->setRedirect($redirect, $message, 'COM_RENTAL_PAYMENT_DUE');
     } else {
 
       // Need to determine whether they owe us any more wedge
       $model = $this->getModel('Property', 'RentalModel', $config = array('ignore_request' => true));
 
-      $model->updateProperty($listing_id = $listing[0]->id, 2);
+      $model->updateProperty($listing_id = $items[0]->id, 2);
 
       $redirect = JRoute::_('index.php?option=' . $this->extension, false);
+      $this->setRedirect($redirect, $message, 'notice');
     }
 
-
-    $this->setRedirect($redirect, $message, 'warning');
+    // Redirect will always be set above...
+    //$this->setRedirect($redirect, $message, 'notice');
   }
 
   /**

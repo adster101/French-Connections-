@@ -14,13 +14,7 @@ $userId = $user->get('id');
 
 $data = array('item' => $this->item, 'progress' => $this->progress);
 ?>
-<style>
-  .facilities-container {
-    display:inline-block;
-    float:left;
-    width:33%;
-  }
-</style>
+
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
@@ -120,7 +114,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
             </div>
           </div>
           <div class="row-fluid">
-
             <div class="span2">
               <div class="control-group">
                 <?php echo $this->form->getLabel('childrens_beds'); ?>
@@ -172,16 +165,13 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <fieldset class="panelform">  
           <legend><?php echo JText::_('COM_RENTAL_ACCOMMODATION_INTERNAL_FACILITIES'); ?></legend>
           <?php foreach ($this->form->getFieldset('internal_facilities') as $field) : ?>
-
             <?php echo $field->label; ?>
             <?php echo $field->input; ?>
-
           <?php endforeach; ?>
         </fieldset>
         <hr />
         <fieldset class="panelform">
           <legend><?php echo JText::_('COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES'); ?></legend>
-
           <?php foreach ($this->form->getFieldset('external_facilities') as $field) : ?>
             <p><?php echo $field->label; ?>
               <?php echo $field->input; ?></p>
@@ -190,7 +180,6 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <hr />
         <fieldset class="panelform">
           <legend><?php echo JText::_('COM_RENTAL_ACCOMMODATION_KITCHEN_FACILITIES'); ?></legend>
-
           <?php foreach ($this->form->getFieldset('kitchen_facilities') as $field) : ?>
             <p><?php echo $field->label; ?></p>
             <?php echo $field->input; ?>
@@ -199,16 +188,12 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <hr />
         <fieldset class="panelform">
           <legend><?php echo JText::_('COM_RENTAL_ACCOMMODATION_SUITABILITY_FACILITIES'); ?></legend>
-
           <?php foreach ($this->form->getFieldset('suitability') as $field) : ?>
             <p><?php echo $field->label; ?></p>
             <?php echo $field->input; ?>
           <?php endforeach; ?>
         </fieldset>
-
-
       </div>
-
     </div>
   </div>
   <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
@@ -216,6 +201,5 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
   <?php endforeach; ?>
   <input type="hidden" name="task" value="" />
   <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=images.manage&unit_id=' . (int) $this->item->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
-
   <?php echo JHtml::_('form.token'); ?>
 </form>
