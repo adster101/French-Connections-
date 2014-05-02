@@ -21,7 +21,7 @@
       validate="nonzero"
       labelclass="control-label"
       required="true">
-      <option value="">Choose</option>
+      <option value="">JSELECT</option>
       <option value="446">Sunday</option>
       <option value="440">Monday</option>
       <option value="441">Tuesday</option>
@@ -68,13 +68,12 @@
       labelclass="control-label"
       class="input-xlarge validate-description"
       default=""
+      hint="Enter any additional costs that aren't included in the advertised tariffs. For example, linen or heating costs."
       filter="string"
       buttons="false"
       validate="additionalpricenotes"
       message="COM_RENTAL_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE"
     />
-    
- 
   </fieldset>
  
   <fieldset name="hidden-details">

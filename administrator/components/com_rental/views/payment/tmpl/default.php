@@ -9,7 +9,7 @@ $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
 
 $total = '';
 $total_vat = '';
-
+$route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this->id);
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
@@ -35,7 +35,7 @@ $total_vat = '';
         <i class="icon icon-white icon-next">&nbsp;</i>
       </a>
       <hr />
-      <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_HELP'); ?>
+      <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_HELP', $route); ?>
 
       <p>
         <img src="/images/general/sage_pay_logo.gif" alt="Sage pay logo" />

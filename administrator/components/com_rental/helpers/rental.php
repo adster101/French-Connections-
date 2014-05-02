@@ -8,6 +8,16 @@ defined('_JEXEC') or die;
  */
 abstract class RentalHelper {
 
+  public static function filterTariffs($tariffs = array()) {
+
+
+    foreach ($tariffs as $i => $v) {
+      $tariffs[$i] = JFilterInput::getInstance()->clean($v, 'INT');
+    }
+
+    return $tariffs;
+  }
+
   /**
    * Method to return the number of days until the property is due to expire
    *
@@ -37,7 +47,7 @@ abstract class RentalHelper {
     $notices = array();
     // The sections we want to check for. Tariffs needs expanding for the more detailed tariff data (changeover day etc)
     $sections = array('images' => array(), 'availability' => array(), 'tariffs' => array(), 'contact_details' => array());
-        
+
     if (empty($progress)) {
       return false;
     }

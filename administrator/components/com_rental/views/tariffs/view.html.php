@@ -99,6 +99,7 @@ class RentalViewTariffs extends JViewLegacy {
       JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
     }
+    JToolBarHelper::help('',true);
 
 
   }

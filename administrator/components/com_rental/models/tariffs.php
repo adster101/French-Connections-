@@ -178,36 +178,34 @@ class RentalModelTariffs extends JModelAdmin {
           id="tariff_start_date_' . $counter . '"
           name="start_date"
           type="tariff"
+          multiple="true"
           default="' . $tariff->start_date . '"
           label="COM_RENTAL_AVAILABILITY_FIELD_START_DATE_LABEL"
           description=""
-          class="inputbox tariff_date input-small"         
-          labelclass=""
-          readonly="false">
+          class="inputbox tariff_date input-small">
         </field>
         
         <field
           id="tariff_end_date_' . $counter . '"
           name="end_date"
           type="tariff"
+          multiple="true"
           default="' . $tariff->end_date . '"
           label="COM_RENTAL_AVAILABILITY_FIELD_END_DATE_LABEL"
           description=""
-          class="inputbox tariff_date input-small"         
-          labelclass=""
-          readonly="false">
+          class="inputbox tariff_date input-small">
         </field>
         
         <field
           id="tariff_price_' . $counter . '"
           name="tariff"
           type="tariff"
+          multiple="true"
           default="' . $tariff->tariff . '"
           label="COM_RENTAL_TARIFFS_FIELD_TARIFF_LABEL"
           description=""
-          class="inputbox tariff_date input-small"         
-          labelclass=""
-          readonly="false">
+          filter="RentalHelper::filterTariffs"
+          class="inputbox tariff_date input-small">
         </field>';
       $counter++;
     }
@@ -221,36 +219,31 @@ class RentalModelTariffs extends JModelAdmin {
           id="tariff_start_date_' . $i . '"
           name="start_date"
           type="tariff"
-          default=""
+          multiple="true"
           label="COM_RENTAL_AVAILABILITY_FIELD_START_DATE_LABEL"
-          description=""
           class="inputbox tariff_date input-small"         
-          labelclass=""
-          readonly="false">
+          hint="dd-mm-yyyy">
         </field>
         
         <field
           id="tariff_end_date_' . $i . '"
           name="end_date"
           type="tariff"
-          default=""
+          multiple="true"
           label="COM_RENTAL_AVAILABILITY_FIELD_END_DATE_LABEL"
-          description=""
           class="inputbox tariff_date input-small"         
-          labelclass=""
-          readonly="false">
+          hint="dd-mm-yyyy">
         </field>
         
         <field
           id="tariff_price_' . $i . '"
           name="tariff"
           type="tariff"
-          default=""
+          multiple="true"
+          hint="e.g. 275"
           label="COM_RENTAL_TARIFFS_FIELD_TARIFF_LABEL"
-          description=""
-          class="inputbox tariff_date input-small"         
-          labelclass=""
-          readonly="false">
+          filter="RentalHelper::filterTariffs"
+          class="inputbox tariff_date input-small">
         </field>';
     }
 
@@ -265,7 +258,7 @@ class RentalModelTariffs extends JModelAdmin {
    */
   public function save($data = array()) {
 
-    // Get the relevant data up front
+// Get the relevant data up front
     $table = $this->getTable('Tariffs', 'RentalTable');
     $tariffs = $this->getTariffsFromPost($data);
     $model = $this->getInstance('UnitVersions', 'RentalModel');
@@ -274,11 +267,11 @@ class RentalModelTariffs extends JModelAdmin {
     $tariff_periods = RentalHelper::getAvailabilityByPeriod($tariffs_by_day, 'tariff');
     $unit_data = array(); // An array to hold data about the base unit to update
     $from_price = false; // Holds the minimum price for a unit based on the set of tariffs being saved.
-    // We've checked all tariffs, need to save 'em
-    // Generate a logger instance for tariffs
+// We've checked all tariffs, need to save 'em
+// Generate a logger instance for tariffs
     JLog::addLogger(array('text_file' => 'tariffs.update.php'), 'DEBUG', array('tariffs'));
 
-    // Get an db instance and start a transaction
+// Get an db instance and start a transaction
     $db = JFactory::getDBO();
     $db->transactionStart();
 
@@ -286,17 +279,17 @@ class RentalModelTariffs extends JModelAdmin {
 
       JLog::add('About to delete tariffs for unit ' . $pk, 'DEBUG', 'tariffs');
 
-      //Delete existing tariffs for this unit
+//Delete existing tariffs for this unit
       $table->delete($pk);
 
       JLog::add('Tariffs deleted for unit ' . $pk, 'DEBUG', 'tariffs');
 
-      // Set the Tariff table key to id. Sigh, we do this so that the save method inserts a new record
-      // against the id rather than trying to update the unit_id record, which we've just deleted.
-      //$table->set('_tbl_key', 'id');
+// Set the Tariff table key to id. Sigh, we do this so that the save method inserts a new record
+// against the id rather than trying to update the unit_id record, which we've just deleted.
+//$table->set('_tbl_key', 'id');
       $table->set('_tbl_keys', array('id'));
 
-      // Save each, which also binds, checks and stores the tariff
+// Save each, which also binds, checks and stores the tariff
       foreach ($tariff_periods as $tariff_period) {
 
         $tariff_period[unit_id] = $pk;
@@ -304,16 +297,16 @@ class RentalModelTariffs extends JModelAdmin {
 
         JLog::add('About to save tariff ( ' . $tariff_period['start_date'] . ' - ' . $tariff_period['end_date'] . ' - ' . $tariff_period['tariff'] . ' for unit ' . $pk, 'DEBUG', 'tariffs');
 
-        // Check that each tariff is valid
+// Check that each tariff is valid
         if (!$table->save($tariff_period)) {
 
-          // Log it baby
+// Log it baby
           JLog::add('Problem saving above tariff for unit' . $pk, 'DEBUG', 'tariffs');
 
-          // Rollback any db changes
+// Rollback any db changes
           $db->transactionRollback();
 
-          // Set an error message
+// Set an error message
           $this->setError(JText::_('COM_RENTAL_HELLOWORLD_TARIFFS_TARIFF_START_DATE'));
           return false;
         }
@@ -326,51 +319,51 @@ class RentalModelTariffs extends JModelAdmin {
 
 
 
-        // Flush the table ready for the next lot...
+// Flush the table ready for the next lot...
         $table->reset();
       }
 
-      // Commit the transaction
+// Commit the transaction
       $db->transactionCommit();
     } catch (Exception $e) {
 
-      // Roll back any queries executed so far
+// Roll back any queries executed so far
       $db->transactionRollback();
 
       $this->setError($e->getMessage());
 
-      // Log the exception
+// Log the exception
       JLog::add('There was a problem: ' . $e->getMessage(), 'DEBUG', 'tariffs');
       return false;
     }
 
-    // Tariffs are saved, now save the rest of the unit information by handing it off to the unitversions model
+// Tariffs are saved, now save the rest of the unit information by handing it off to the unitversions model
     unset($data['start_date']);
     unset($data['end_date']);
     unset($data['tariff']);
 
 
-    // Get an instance of the unit model
+// Get an instance of the unit model
     $unit = JModelLegacy::getInstance('Unit', 'RentalModel');
-    
-    // Set the data and save the from price against the unit
+
+// Set the data and save the from price against the unit
     $unit_data['from_price'] = $from_price;
     $unit_data['id'] = $pk;
 
     $unit->save($unit_data);
 
-    // Proceed and save the rest of the submitted data against the unit version (creating a new one if necessary)
+// Proceed and save the rest of the submitted data against the unit version (creating a new one if necessary)
     $blah = $model->save($data);
 
-    // Set the table key back to unit_id
-    //$table->set('_tbl_key', 'unit_id');
+// Set the table key back to unit_id
+//$table->set('_tbl_key', 'unit_id');
     $table->set('_tbl_keys', array('unit_id'));
 
     $pkName = $table->getKeyName();
 
     $table->unit_id = $data['unit_id'];
 
-    // Important - need to set the model state here so that the controller redirects accordingly.
+// Important - need to set the model state here so that the controller redirects accordingly.
     if (isset($table->$pkName)) {
       $this->setState($this->getName() . '.id', $table->$pkName);
     }
@@ -386,9 +379,9 @@ class RentalModelTariffs extends JModelAdmin {
 
   protected function saveTariffs($unit_id = '', $data = array()) {
 
-    // Similar could be considered to the facilities as well.
-    // We need to extract tariff information here, because the tariffs are filtered via the 
-    // controller validation method. Perhaps need to override the validation method for this model?
+// Similar could be considered to the facilities as well.
+// We need to extract tariff information here, because the tariffs are filtered via the 
+// controller validation method. Perhaps need to override the validation method for this model?
 
     if (!array_key_exists('start_date', $data)) {
       return true;
@@ -398,11 +391,11 @@ class RentalModelTariffs extends JModelAdmin {
 
 
 
-    // Get instance of the tariffs table
+// Get instance of the tariffs table
     $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'RentalTable', $config = array());
 
 
-    // Bind the translated fields to the JTable instance	
+// Bind the translated fields to the JTable instance	
     if (!$tariffsTable->save($unit_id, $tariff_periods)) {
 
       return false;
@@ -422,11 +415,11 @@ class RentalModelTariffs extends JModelAdmin {
    * 
    */
   protected function getTariffsByDay($tariffs = array()) {
-    // Array to hold availability per day for each day that availability has been set for.
-    // This is needed as availability is stored by period, but displayed by day.
+// Array to hold availability per day for each day that availability has been set for.
+// This is needed as availability is stored by period, but displayed by day.
     $raw_tariffs = array();
 
-    // Generate a DateInterval object which is re-used in the below loop
+// Generate a DateInterval object which is re-used in the below loop
     $DateInterval = new DateInterval('P1D');
 
 
@@ -436,8 +429,8 @@ class RentalModelTariffs extends JModelAdmin {
       $tariff_period_end_date = '';
       $tariff_period_length = '';
 
-      // Check that availability period is set for this loop. Possible that empty array elements exists as additional
-      // tariff fields are added to the form in case owner wants to add additional tariffs etc
+// Check that availability period is set for this loop. Possible that empty array elements exists as additional
+// tariff fields are added to the form in case owner wants to add additional tariffs etc
       try {
 
         if ($tariff->start_date != '' && $tariff->end_date != '' && $tariff->tariff != '') {
@@ -481,8 +474,8 @@ class RentalModelTariffs extends JModelAdmin {
 
     $num = count($data['start_date']);
 
-    // Here we must have data passed in from the form validator
-    // E.g. something hasn't validated correctly
+// Here we must have data passed in from the form validator
+// E.g. something hasn't validated correctly
     for ($i = 0; $i < $num; $i++) {
       $tmp = array();
       $tmp['start_date'] = $data['start_date'][$i];
