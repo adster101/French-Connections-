@@ -15,6 +15,23 @@ defined('_JEXEC') or die;
  */
 class RegisterownerControllerRegisterowner extends JControllerForm {
 
+  public function autologin() {
+
+    $model = $this->getModel();
+
+    $user = JFactory::getUser(9009);
+
+    $model->setLoginCookie($user);
+
+    // Auto login cookie has been set and record created in the db
+    $this->setRedirect(
+            JRoute::_('administrator/index.php', false)
+    );
+
+
+    return true;
+  }
+
   public function register() {
     // Check for request forgeries.
     JSession::checkToken('POST') or jexit(JText::_('JINVALID_TOKEN'));
@@ -60,18 +77,18 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
     }
 
     // Hand the data into the model, create the new user
-    $register = $model->save($validate);
+    $user = $model->save($validate);
 
-    if (!$register) {
-
+    if (!$user) {
 
       $app->setUserState('com_registerowner.register.data', $data);
 
-      $this->setRedirect(JRoute::_('index.php?option=com_registerowner', false), $this->getError(), 'error');
+      $this->setRedirect(
+              JRoute::_('index.php?option=com_registerowner', false), $this->getError(), 'error'
+      );
 
       return false;
     }
-
 
     // Flush the data from the session
     $app->setUserState('com_registerowner.register.data', null);
@@ -80,6 +97,16 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
     $this->setRedirect(JRoute::_(ContentHelperRoute::getArticleRoute($success_article), false));
+
+    // This sets a login cookie containing the username and password details
+    // These are then picked up by the autologin plugin 
+    // which in turn are authed and the user logged in...
+    //$model->setLoginCookie($user);
+
+    // Auto login cookie has been set and record created in the db
+    //$this->setRedirect(
+            //JRoute::_('administrator/index.php?option=com_autologin', false)
+    //);
 
     return true;
   }

@@ -152,7 +152,7 @@
       label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
       description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
       <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
-      <option	value="S2">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
+      <option	value="S20">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
       <option	value="S2A">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
       <option	value="Z">PLG_USER_PROFILE_FIELD_VAT_STATUS_Z</option>
       <option	value="ZA">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>

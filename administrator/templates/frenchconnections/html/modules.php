@@ -41,13 +41,15 @@ function modChrome_well($module, &$params, &$attribs) {
   if ($module->content) {
     $bootstrapSize = $params->get('bootstrap_size');
     $moduleClass = !empty($bootstrapSize) ? ' span' . (int) $bootstrapSize . '' : '';
-
+// Temporarily store header class in variable
+    $headerClass = $params->get('header_class');
+    $headerClass = !empty($headerClass) ? ' class="' . htmlspecialchars($headerClass) . '"' : '';
     if ($moduleClass) {
       echo '<div class="' . $moduleClass . '">';
     }
 
     echo '<div class="well well-small">';
-    echo '<h2 class="module-title nav-header">' . $module->title . '</h2>';
+    echo '<h2 class="' . $headerClass . '">' . $module->title . '</h2>';
     echo $module->content;
     echo '</div>';
 
@@ -94,6 +96,6 @@ function modChrome_panel($module, &$params, &$attribs) {
     </<?php echo $moduleTag; ?>>
     </<?php echo $moduleTag; ?>>
 
-  <?php
+    <?php
   endif;
 }

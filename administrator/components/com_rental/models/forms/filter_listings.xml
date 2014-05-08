@@ -63,15 +63,15 @@
         format="%d-%m-%Y"> 
       </field>  
       <field
-        name="report_filter"
+        name="date_filter"
         type="list"
         labelclass="element-invisible"
         label="COM_RENTAL_HELLOWORLD_FILTER_REPORT"
         class="input-large"
         onchange="this.form.submit();"> 
         <option value="">COM_RENTAL_FILTER_REPORT_TYPE</option>
-        <option value="1">COM_RENTAL_FILTER_EXPIRY_DATE</option>
-        <option value="2">COM_RENTAL_FILTER_CREATED_DATE</option>
+        <option value="expiry_date">COM_RENTAL_FILTER_EXPIRY_DATE</option>
+        <option value="created_on">COM_RENTAL_FILTER_CREATED_DATE</option>
       </field>  
     </fieldset>
   </fields> 

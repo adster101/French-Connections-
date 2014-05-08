@@ -59,9 +59,6 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
               <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAILS'); ?>
             </th>
             <th>
-              <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_PERIOD'); ?>
-            </th>
-            <th>
               <?php echo JHtml::_('grid.sort', 'COM_ENQUIRIES_ENQUIRY_DATE_CREATED', 'e.date_created', $listDirn, $listOrder); ?>
             </th>
             <th>
@@ -108,9 +105,6 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                     <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
                   </span>
                 <?php endif; ?>
-              </td>
-              <td>
-                <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_PERIOD_FROM_TO', JFactory::getDate($item->start_date)->calendar('d M Y'), JFactory::getDate($item->end_date)->calendar('d M Y')); ?>
               </td>
               <td>
                 <?php echo JFactory::getDate($item->date_created)->calendar('d M Y'); ?>

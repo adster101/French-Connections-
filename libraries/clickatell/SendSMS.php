@@ -67,8 +67,14 @@ class SendSMS {
     return true;
   }
 
-  public function send($number, $text) {
+  public function send($number, $text, $schedule) {
 
+    $deliv_time='';
+    
+    if ($schedule) {
+      $deliv_time = '&deliv_time=' . (int) $schedule;
+    }
+    
     $sendtext = urlencode($text);
 
     if (!JDEBUG) {
@@ -82,7 +88,7 @@ class SendSMS {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $this->send_url);
     curl_setopt($ch, CURLOPT_POST, 3);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, "session_id=" . $this->session_id . "&to=$phone&text=$sendtext");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, "session_id=" . $this->session_id . "&to=$phone&text=$sendtext$deliv_time");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $result = curl_exec($ch);
     curl_close($ch);

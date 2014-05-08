@@ -134,17 +134,32 @@ body {
     height: 100%;
 }
 /* Login */
-.view-login{
-	padding-top: 0;
-	#gradient > .radial(@loginBackgroundHighlight, @loginBackground);
 
-	.container{
-		width: 300px;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		margin-top: -206px;
-		margin-left: -150px;
+/* Header */
+
+.view-login{
+
+
+
+	padding-top: 0;
+  background: #f2f5f1;
+
+.header {
+	padding-bottom: 9px;
+  .border-radius(@borderRadiusLarge);
+  background: url( '/templates/frenchconnections/images/header-bg.jpg' ) center no-repeat;
+  padding:0 0 9px 0;
+}
+
+	.container{ 
+ @media(min-width: 1200px) {
+    width:940px;
+  }
+    background-color: #FFF;
+    border-radius: 4px;
+    padding: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
 	}
 	.navbar-fixed-bottom{
 		padding-left: 20px;
@@ -156,18 +171,7 @@ body {
 		color: #FCFCFC;
 		text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 	}
-	.well{
-		padding-bottom: 0;
-		.box-shadow(~"0px 0px 60px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.9) inset");
-	}
-	.login-joomla{
-		display: inline-block;
-		height: 24px;
-		width: 24px;
-		text-indent: -9999px;
-		background: url('../images/login-joomla.png') no-repeat;
-		margin-left: -20px;
-	}
+
 	.navbar-fixed-bottom{
 		position: absolute;
 	}
@@ -176,14 +180,7 @@ body {
 	}
 }
 .login {
-	.chzn-single {
-		width: 230px !important;
-	}
-	.chzn-container,
-	.chzn-drop {
-		width: 238px !important;
-		max-width: 238px !important;
-	}
+	
 	.btn-large {
 		margin-top: 10px;
 	}
@@ -442,7 +439,7 @@ h6 { font-size: 12px; line-height: 14px; }
   font-size: 14px;
   margin-bottom: 20px;
 }
-.quick-icons .nav-header, .well .module-title.nav-header {
+.quick-icons .nav-header {
   font-size: 13px;
 }
 .quick-icons h2.nav-header {
@@ -451,10 +448,7 @@ h6 { font-size: 12px; line-height: 14px; }
 .quick-icons h2.nav-header:first-child {
   margin: 0px 0 5px;
 }
-.well .module-title.nav-header {
-  padding: 0px 15px 7px;
-  margin: 0px;
-}
+
 .quick-icons [class^="icon-"]:before, .quick-icons [class*=" icon-"]:before {
   font-size: 16px;
   margin-bottom: 20px;

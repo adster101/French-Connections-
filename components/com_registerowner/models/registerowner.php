@@ -171,6 +171,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       if (!$return) {
         // Log out to file that email wasn't sent for what ever reason;
         // Trigger email to admin / office user. e.g. as per registration.php
+        Throw new Exception('Problem creating user profile');
       }
 
       // If we get here we're doing well.
@@ -182,27 +183,75 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       $message_data['subject'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_SUBJECT');
       $message_data['message'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_BODY');
       $message_data['date_time'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
- 
+
       if (!$message->save($message_data)) {
         $this->setError($table->getError());
+        Throw new Exception('Problem creating user profile');
       }
-      
-      $model = JModelLegacy::getInstance('Config','MessagesModel',$config=array('ignore_request'=>true));
-      $model->setState('user.id', $user->id);
-      if (!$model->save(array('auto_purge'=>0))) {
 
+      $model = JModelLegacy::getInstance('Config', 'MessagesModel', $config = array('ignore_request' => true));
+      $model->setState('user.id', $user->id);
+      if (!$model->save(array('auto_purge' => 0))) {
+        Throw new Exception('Problem creating user profile');
       }
-      
+
       // Commit the transaction
       $db->transactionCommit();
-      
-      return true;
+
+      // Return the user object we've just created
+      return $user;
     } catch (Exception $e) {
       // Roll back any queries executed so far
       $db->transactionRollback();
 
       $this->setError($e->getMessage());
+
+      return false;
     }
+  }
+
+  /*
+   * 
+   */
+
+  public function setLoginCookie($user) {
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    // Get the db instance
+    // Remember checkbox is set
+    $cookieName = md5('autologin');
+
+    // Set lifetime of cookie to 5 mins
+    $lifetime = 300;
+
+    // Generate a random password.
+    $series = JUserHelper::genRandomPassword(20);
+        
+    // Generate new cookie
+    $token = JUserHelper::genRandomPassword(16);
+    $cookieValue = $token . '.' . $series;
+
+    // Overwrite existing cookie with new value
+    $input->cookie->set(
+            $cookieName, $cookieValue, time() + $lifetime, $input->get('cookie_path', '/'), $input->get('cookie_domain'), $app->isSSLConnection()
+    );
+
+    $query = $this->_db->getQuery(true);
+    $query
+            ->insert($this->_db->quoteName('#__user_keys'))
+            ->set($this->_db->quoteName('user_id') . ' = ' . $this->_db->quote($user->id))
+            ->set($this->_db->quoteName('series') . ' = ' . $this->_db->quote($series))
+            ->set($this->_db->quoteName('uastring') . ' = ' . $this->_db->quote($cookieName))
+            ->set($this->_db->quoteName('time') . ' = ' . (time() + $lifetime));
+    $hashed_token = JUserHelper::hashPassword($token);
+    $query
+            ->set($this->_db->quoteName('token') . ' = ' . $this->_db->quote($hashed_token));
+    $this->_db->setQuery($query)->execute();
+
+    return true;
+    
   }
 
 }

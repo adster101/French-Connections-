@@ -339,7 +339,7 @@ class AccommodationModelListing extends JModelForm {
     $app = JFactory::getApplication('site');
     $menus = $app->getMenu();
     $items = $menus->getItems('component', 'com_placeofinterest');
-		$items = is_array($items) ? $items : array();
+    $items = is_array($items) ? $items : array();
     $itemid = $items[0]->id;
     $query = $db->getQuery(true);
 
@@ -801,8 +801,14 @@ class AccommodationModelListing extends JModelForm {
     jimport('clickatell.SendSMS');
     $sms_params = JComponentHelper::getParams('com_rental');
     $banned_emails = explode(',', $params->get('banned_email'));
+    // The details of where who is sending the email (e.g. FC in this case).
+    $mailfrom = $app->getCfg('mailfrom');
+    $fromname = $app->getCfg('fromname');
+    $sitename = $app->getCfg('sitename');
+    $minutes_until_safe_to_send = '';
 
     if (in_array($data['guest_email'], $banned_emails)) {
+
       return false;
     }
 
@@ -832,17 +838,10 @@ class AccommodationModelListing extends JModelForm {
       // This assumes that name is in synch with the user profile table first and last name fields...
       $owner_name = htmlspecialchars($item->name);
     } else {
-      // We just use the details from the contact page
+      // We just use the details from the contact page, possibly also send this to the owner...
       $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
       $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
     }
-
-    // Need to send an SMS if a valid SMS number has been setup.
-    // The details of where who is sending the email (e.g. FC in this case).
-    $mailfrom = $app->getCfg('mailfrom');
-    $fromname = $app->getCfg('fromname');
-    $sitename = $app->getCfg('sitename');
-
 
     // The details of the enquiry as submitted by the holiday maker
     $firstname = $data['guest_forename'];
@@ -857,10 +856,9 @@ class AccommodationModelListing extends JModelForm {
     $full_name = $firstname . ' ' . $surname;
 
     // Prepare email body
-    $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, stripslashes($message), $arrival, $end, $adults, $children);
+    $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $arrival, $end, $adults, $children);
 
     $mail = JFactory::getMailer();
-
     $mail->addRecipient($owner_email, $owner_name);
     $mail->addReplyTo(array($mailfrom, $fromname));
     $mail->setSender(array($mailfrom, $fromname));
@@ -868,24 +866,64 @@ class AccommodationModelListing extends JModelForm {
     $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title));
     $mail->setBody($body);
 
-    if (!$mail->Send()) {
-      return false;
-    }
+    //if (!$mail->Send()) {
+    //return false;
+    //}
+    // Prepare email body for the holidaymaker email
+    $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname);
+    $mail->ClearAllRecipients();
+    $mail->ClearAddresses();
+    $mail->setBody($body);
+    $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
+    $mail->addRecipient($email);
 
-    $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
+    //if (!$mail->Send()) {
+    //return false;
+    //}
+    // Only fire up the SMS bit if the owner is subscribed to SMS alerts...
+    if ($item->sms_valid) {
 
-    /*
-     *  if the login return 0, means that login failed, you cant send sms after this 
-     */
-    if (!$sms->login()) {
-      return false;
-    }
+      $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
+      /*
+       *  if the login return 0, means that login failed, you cant send sms after this 
+       */
+      if (!$sms->login()) {
+        return false;
+      }
 
-    /*
-     * Send sms using the simple send() call 
-     */
-    if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email))) {
-      return false;
+      // Get the time in 24h format with minutes
+      $time = JFactory::getDate()->calendar('Hi');
+
+      if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800)) {
+
+        // Must be 'night' time
+        // Determine the number of minutes until 0800h when it's safe to send the SMS
+        if ($time < '2359') {
+
+          // Set default timezone so we can work out the correct time now
+          date_default_timezone_set("Europe/London");
+
+          // Get the unix timestamp for tomorrow at 0800h
+          $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
+
+          // Calculate the minutes between now and when we it's safe to send the message.
+          $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
+        } else {
+
+          // Get the unix timestamp for later today at 0800h
+          $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
+
+          // Calculate the minutes between now and when we it's safe to send the message.
+          $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
+        }
+      }
+
+      /*
+       * Send sms using the simple send() call 
+       */
+      if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send)) {
+        return false;
+      }
     }
 
     // We are done.

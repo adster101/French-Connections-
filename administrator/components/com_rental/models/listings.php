@@ -31,7 +31,8 @@ class RentalModelListings extends JModelList {
           'checked_out_time', 'a.checked_out_time',
           'created_user_id', 'a.created_user_id',
           'a.created_on', 'a.created_on',
-          'snoozed', 'published'
+          'snoozed', 'published',
+          'date_filter'
       );
     }
     parent::__construct($config);
@@ -183,7 +184,10 @@ class RentalModelListings extends JModelList {
     $date_filter = $this->getState('filter.date_filter');
     
     if ($start_date && $end_date && $date_filter) {
-      $query->where('a.' . $db->escape($date_filter) .  ' >=' . $db->quote($start_date) . ' and a.' . $db->escape($date_filter) . ' <=' . $db->quote($end_date));
+      $query->where('(a.' . $db->escape($date_filter) .  ' >=' . 
+              $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
+              ' and a.' . $db->escape($date_filter) . ' <=' . 
+              $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
     }
 
     // Filter by search in title

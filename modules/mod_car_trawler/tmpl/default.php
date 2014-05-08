@@ -29,7 +29,7 @@ defined('_JEXEC') or die;
   ctOTAEngine.setTarget("Production"); // Target for the engine
   ctOTAEngine.setClientID("387737"); // Provided by CarTrawler
   ctOTAEngine.addCurrency(); // adds list of all available currencies
-  ctOTAEngine.setCurrency("EUR"); // default Currency
+  ctOTAEngine.setCurrency("GBR"); // default Currency
   ctOTAEngine.setDefaultLanguage("EN"); // Default Language
   ctOTAEngine.enableAutoSuggest({style: "lightgray", flag: true});
   ctOTAEngine.enableNewCalendar({style: "blue", daterange: true});

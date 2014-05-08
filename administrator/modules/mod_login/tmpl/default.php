@@ -96,3 +96,4 @@ JHtml::_('formbehavior.chosen');
 		<?php echo JHtml::_('form.token'); ?>
 	</fieldset>
 </form>
+
