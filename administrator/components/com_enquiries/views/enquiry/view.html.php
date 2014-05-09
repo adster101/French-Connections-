@@ -51,9 +51,9 @@ class EnquiriesViewEnquiry extends JViewLegacy {
    */
   protected function addSubMenu($canDo) {
 
-    RentalHelper::addSubmenu('enquiries');
+    //RentalHelper::addSubmenu('enquiries');
 
-    $this->sidebar = JHtmlSidebar::render();
+    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**

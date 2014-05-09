@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form 
   addfieldpath="/administrator/components/com_specialoffers/models/fields"
-  addrulepath="/administrator/components/com_enquiries/models/rules" 
->
-    
+  addrulepath="/administrator/components/com_enquiries/models/rules"> 
     
   <fieldset  name="requestor" label="">
     <field 

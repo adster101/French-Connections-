@@ -28,6 +28,8 @@ class EnquiriesViewEnquiries extends JViewLegacy {
     $this->state = $this->get('State');
 
     $this->pagination = $this->get('Pagination');
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
 
     $view = strtolower(JRequest::getVar('view'));
 
@@ -36,7 +38,7 @@ class EnquiriesViewEnquiries extends JViewLegacy {
     $this->addToolBar($canDo);
 
     $this->setDocument();
-    
+
 
     parent::display($tpl);
   }
@@ -54,7 +56,6 @@ class EnquiriesViewEnquiries extends JViewLegacy {
     }
 
     //RentalHelper::addSubmenu('enquiries');
-
     //$this->sidebar = JHtmlSidebar::render();
   }
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>  
+  <fields name="filter"> 
+    <fieldset>
+      <field
+        name="search"
+        type="text"
+        label="COM_CONTENT_FILTER_SEARCH_DESC"
+        hint="JSEARCH_FILTER" />
+      <field
+        class="input-medium"
+        name="state"
+        type="list"
+        labelclass="element-invisible"
+        label="JOPTION_SELECT_PUBLISHED"
+        description=""
+        onchange="this.form.submit();"> 
+        <option value="">COM_ENQUIRIES_OPTION_ALL</option>
+        <option value="0">COM_ENQUIRIES_OPTION_UNREAD</option>
+        <option value="-2">JTRASHED</option>
+      </field> 
+      <field
+        name="date_received"
+        type="calendar"
+        label="COM_RENTAL_HELLOWORLD_FILTER_SNOOZED"
+        class="input-medium"
+        format="%d-%m-%Y"
+        hint="From date received"
+        onchange="this.form.submit()"> 
+      </field>   
+    </fieldset>
+  </fields> 
+  <fields name="list">
+    <field
+      name="fullordering"
+      type="hidden"
+      default="e.date_created DESC"
+      filter="string">
+    </field>
+    <field
+      name="limit"
+      type="limitbox"
+      class="inputbox input-small"
+      default="10"
+      labelclass="element-invisible"
+      label="COM_CONTENT_LIST_LIMIT"
+      description="COM_CONTENT_LIST_LIMIT_DESC"
+      onchange="this.form.submit();">
+    </field>
+  </fields>
+</form>

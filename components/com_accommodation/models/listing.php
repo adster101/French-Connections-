@@ -798,20 +798,27 @@ class AccommodationModelListing extends JModelForm {
     $date = JFactory::getDate();
     $owner_email = '';
     $owner_name = '';
+    $valid = true;
     jimport('clickatell.SendSMS');
     $sms_params = JComponentHelper::getParams('com_rental');
     $banned_emails = explode(',', $params->get('banned_email'));
+    $banned_phrases = explode(',', $params->get('banned_phrases'));
     // The details of where who is sending the email (e.g. FC in this case).
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
     $sitename = $app->getCfg('sitename');
     $minutes_until_safe_to_send = '';
 
+    // Check the banned email list 
     if (in_array($data['guest_email'], $banned_emails)) {
-
-      return false;
+      $valid = false; // Naughty!
     }
 
+    // Check the banned phrases list - This is currently done as a form field validation rule
+    //if (!$this->contains($data['message'], $banned_phrases)) {
+    //echo "woot"; die;
+    //$valid = false; // Naughty!
+    //}
     // Add enquiries and property manager table paths
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 
@@ -822,113 +829,137 @@ class AccommodationModelListing extends JModelForm {
     $data['property_id'] = $id;
     $data['unit_id'] = $unit_id;
 
+    if (!$valid) {
+      $data['state'] = -1;
+    }
+
     // Check that we can save the data and save it out to the enquiry table
     if (!$table->save($data)) {
       return false;
     }
+    
+    // We only need to process the rest of this is the enquiry is validated
+    if ($valid) {
+      // Need to get the contact detail preferences for this property/user combo
+      $item = $this->getItem();
 
-    // Need to get the contact detail preferences for this property/user combo
-    $item = $this->getItem();
+      // If the property is set to use invoice details
+      // Override anything set in the property version 
+      if ($item->use_invoice_details) {
 
-    // If the property is set to use invoice details
-    // Override anything set in the property version 
-    if ($item->use_invoice_details) {
-
-      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email;
-      // This assumes that name is in synch with the user profile table first and last name fields...
-      $owner_name = htmlspecialchars($item->name);
-    } else {
-      // We just use the details from the contact page, possibly also send this to the owner...
-      $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
-      $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
-    }
-
-    // The details of the enquiry as submitted by the holiday maker
-    $firstname = $data['guest_forename'];
-    $surname = $data['guest_surname'];
-    $email = $data['guest_email'];
-    $phone = $data['guest_phone'];
-    $message = $data['message'];
-    $arrival = $data['start_date'];
-    $end = $data['end_date'];
-    $adults = $data['adults'];
-    $children = $data['children'];
-    $full_name = $firstname . ' ' . $surname;
-
-    // Prepare email body
-    $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $arrival, $end, $adults, $children);
-
-    $mail = JFactory::getMailer();
-    $mail->addRecipient($owner_email, $owner_name);
-    $mail->addReplyTo(array($mailfrom, $fromname));
-    $mail->setSender(array($mailfrom, $fromname));
-    $mail->addBCC($mailfrom, $fromname);
-    $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title));
-    $mail->setBody($body);
-
-    //if (!$mail->Send()) {
-    //return false;
-    //}
-    // Prepare email body for the holidaymaker email
-    $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname);
-    $mail->ClearAllRecipients();
-    $mail->ClearAddresses();
-    $mail->setBody($body);
-    $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
-    $mail->addRecipient($email);
-
-    //if (!$mail->Send()) {
-    //return false;
-    //}
-    // Only fire up the SMS bit if the owner is subscribed to SMS alerts...
-    if ($item->sms_valid) {
-
-      $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
-      /*
-       *  if the login return 0, means that login failed, you cant send sms after this 
-       */
-      if (!$sms->login()) {
-        return false;
+        $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email;
+        // This assumes that name is in synch with the user profile table first and last name fields...
+        $owner_name = htmlspecialchars($item->name);
+      } else {
+        // We just use the details from the contact page, possibly also send this to the owner...
+        $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
+        $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
       }
 
-      // Get the time in 24h format with minutes
-      $time = JFactory::getDate()->calendar('Hi');
+      // The details of the enquiry as submitted by the holiday maker
+      $firstname = $data['guest_forename'];
+      $surname = $data['guest_surname'];
+      $email = $data['guest_email'];
+      $phone = $data['guest_phone'];
+      $message = $data['message'];
+      $arrival = $data['start_date'];
+      $end = $data['end_date'];
+      $adults = $data['adults'];
+      $children = $data['children'];
+      $full_name = $firstname . ' ' . $surname;
 
-      if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800)) {
+      // Prepare email body
+      $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $arrival, $end, $adults, $children);
 
-        // Must be 'night' time
-        // Determine the number of minutes until 0800h when it's safe to send the SMS
-        if ($time < '2359') {
+      $mail = JFactory::getMailer();
+      $mail->addRecipient($owner_email, $owner_name);
+      $mail->addReplyTo(array($mailfrom, $fromname));
+      $mail->setSender(array($mailfrom, $fromname));
+      $mail->addBCC($mailfrom, $fromname);
+      $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title));
+      $mail->setBody($body);
 
-          // Set default timezone so we can work out the correct time now
-          date_default_timezone_set("Europe/London");
+      //if (!$mail->Send()) {
+      //return false;
+      //}
+      // Prepare email body for the holidaymaker email
+      $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname);
+      $mail->ClearAllRecipients();
+      $mail->ClearAddresses();
+      $mail->setBody($body);
+      $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
+      $mail->addRecipient($email);
 
-          // Get the unix timestamp for tomorrow at 0800h
-          $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
+      //if (!$mail->Send()) {
+      //return false;
+      //}
+      // Only fire up the SMS bit if the owner is subscribed to SMS alerts...
+      if ($item->sms_valid) {
 
-          // Calculate the minutes between now and when we it's safe to send the message.
-          $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
-        } else {
-
-          // Get the unix timestamp for later today at 0800h
-          $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
-
-          // Calculate the minutes between now and when we it's safe to send the message.
-          $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
+        $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
+        /*
+         *  if the login return 0, means that login failed, you cant send sms after this 
+         */
+        if (!$sms->login()) {
+          return false;
         }
-      }
 
-      /*
-       * Send sms using the simple send() call 
-       */
-      if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send)) {
-        return false;
+        // Get the time in 24h format with minutes
+        $time = JFactory::getDate()->calendar('Hi');
+
+        if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800)) {
+
+          // Must be 'night' time
+          // Determine the number of minutes until 0800h when it's safe to send the SMS
+          if ($time < '2359') {
+
+            // Set default timezone so we can work out the correct time now
+            date_default_timezone_set("Europe/London");
+
+            // Get the unix timestamp for tomorrow at 0800h
+            $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
+
+            // Calculate the minutes between now and when we it's safe to send the message.
+            $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
+          } else {
+
+            // Get the unix timestamp for later today at 0800h
+            $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
+
+            // Calculate the minutes between now and when we it's safe to send the message.
+            $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
+          }
+        }
+
+        /*
+         * Send sms using the simple send() call 
+         */
+        if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send)) {
+          return false;
+        }
       }
     }
 
     // We are done.
     // TO DO: Should add some logging of the different failure points above.
     return true;
+  }
+
+  /**
+   * Function uses a PCRE to search a string for a series of banned phrases. 
+   * http://stackoverflow.com/questions/6228581/how-to-search-array-of-string-in-another-string-in-php
+   * Fast? 
+   * 
+   * @param type $string
+   * @param array $search
+   * @param type $caseInsensitive
+   * @return type
+   */
+  function contains($string, Array $search, $caseInsensitive = false) {
+    $exp = '/'
+            . implode('|', array_map('preg_quote', $search))
+            . ($caseInsensitive ? '/i' : '/');
+    return preg_match($exp, $string) ? true : false;
   }
 
 }

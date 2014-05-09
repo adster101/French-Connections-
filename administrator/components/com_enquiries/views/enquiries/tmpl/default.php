@@ -17,6 +17,7 @@ $canEditOwn = $user->authorise('core.edit.own', 'com_enquiries');
 $canEdit = $user->authorise('core.edit', 'com_enquiries');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" method="post" name="adminForm" id="adminForm">
+  <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
 
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
@@ -26,26 +27,8 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <div id="filter-bar" class="btn-toolbar">
-        <div class="filter-search btn-group pull-left">
-          <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-          <input type="text" name="filter_search"
-                 maxlength="50"
-                 id="filter_search"
-                 value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                 title="<?php echo JText::_('COM_ITEMS_SEARCH_FILTER'); ?>"
-                 placeholder="<?php echo JText::_('COM_ITEMS_SEARCH_FILTER'); ?>" />
-        </div>
-        <div class="btn-group pull-left hidden-phone">
-          <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-              this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-        </div>
-        <div class="btn-group pull-right hidden-phone">
-          <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-          <?php echo $this->pagination->getLimitBox(); ?>
-        </div>
-      </div>
+
+
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>
@@ -54,6 +37,9 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
             </th>
             <th width="1%">
               <?php echo JText::_('JSTATUS'); ?>
+            </th>
+            <th>
+              <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_FROM'); ?>
             </th>
             <th>
               <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_DETAILS'); ?>
@@ -67,8 +53,6 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
             <th>
               <?php echo JHtml::_('grid.sort', 'COM_ENQUIRIES_PROPERTY_ID', 'e.property_id', $listDirn, $listOrder); ?>
             </th>
-            
-
           </tr>
         </thead>
         <tbody>
@@ -90,21 +74,21 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                       <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_TITLE_FIRST_LAST', $item->forename, $item->surname); ?>
                     </strong>
                   </a>
-                <br />
-                  <?php if (!empty($item->message)) : ?>
-                    <span class="small">
-                      <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
-                    </span>
-                  <?php endif; ?>
                 <?php else: ?>
                   <strong>
                     <?php echo JText::sprintf('COM_ENQUIRIES_ENQUIRY_TITLE', $item->forename, $item->surname); ?>
                   </strong>
-                  <br />
-                  <span class="small">
-                    <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
-                  </span>
                 <?php endif; ?>
+              </td>
+              <td>
+                <?php if (!empty($item->message)) : ?>
+                  <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
+                <?php endif; ?>                  
+                <p class="small">
+                  (<?php echo JText::sprintf('COM_ENQUIRIES_FROM', $item->start_date); ?>
+                  <?php echo JText::sprintf('COM_ENQUIRIES_TO', $item->end_date); ?>)
+                </p>
+
               </td>
               <td>
                 <?php echo JFactory::getDate($item->date_created)->calendar('d M Y'); ?>
@@ -115,15 +99,29 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <?php endif; ?>
               </td>
               <td>
-                <?php echo (int) $item->property_id; ?>
+                <?php echo $this->escape($item->unit_title); ?>
+                (<?php echo (int) $item->property_id; ?>)
               </td>
 
             </tr>
           <?php endforeach; ?>
+
         <input type="hidden" name="extension" value="<?php echo 'com_enquiries'; ?>" />
         </tbody>
       </table>
       <?php echo $this->pagination->getListFooter(); ?>
+      <?php if (!count($this->items) && $this->activeFilters) : ?>
+        <div class="alert alert-info">
+          <h4>No enquiries found for this search</h4>
+          <p>No enquiries were found matching the filters you have applied. Please try again.</p>
+        </div>
+      <?php endif; ?>
+      <?php if (!count($this->items) && !$this->activeFilters) : ?>
+        <div class="alert alert-info">
+          <h4>No enquiries</h4>
+          <p>There are no enquiries listed against your property listings.</p>
+        </div>
+      <?php endif; ?>        
 
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />

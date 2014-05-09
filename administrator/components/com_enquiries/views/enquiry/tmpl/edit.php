@@ -15,7 +15,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
     </div>
     <div class="span5">
     <?php else : ?>
-      <div id="j-main-container">
+      <div id="j-main-container" class="span6">
       <?php endif; ?>
 
       <fieldset>
@@ -52,7 +52,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
     </div>
 
 
-    <div class="span5">
+    <div class="span6">
       <fieldset>       
         <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_RESPOND_TO_ENQUIRY'); ?></legend>
         <?php foreach ($this->form->getFieldset('reply') as $field): ?>

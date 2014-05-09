@@ -17,10 +17,8 @@
 		/>
 	</fieldset>  
  	<fieldset name="Contact_Form"
-		label=""
-		description="COM_ENQUIRIES_FIELD_CONFIG_ENQUIRIES_FORM"
-	>
-
+		label="Advanced settings"
+		description="COM_ENQUIRIES_FIELD_CONFIG_ENQUIRIES_FORM">
     <field
       name="admin_enquiry_email"
       type="text"
@@ -29,7 +27,7 @@
       description="Email address to redirect email to if in debug mode"
       filter="string"
     />
-  
+    
     <field
       name="admin_enquiry_email_no_reply"
       type="text"
@@ -46,7 +44,7 @@
 			default=""
 			label="COM_ENQUIRIES_FIELD_CAPTCHA_LABEL"
 			description="COM_ENQUIRIES_FIELD_CAPTCHA_DESC"
-			filter="cmd" >
+			filter="cmd">
 			<option
 				value="">JOPTION_USE_DEFAULT</option>
 			<option
