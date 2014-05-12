@@ -97,6 +97,7 @@ class EnquiriesViewEnquiries extends JViewLegacy {
 
     if ($canDo->get('core.delete')) {
       JToolBarHelper::deleteList('Are you sure?', 'enquiries.delete', 'JTOOLBAR_DELETE');
+      JToolBarHelper::custom('enquiries.resend', 'refresh','', 'COM_ENQUIRIES_RESEND_FAILED', true);
     }
 
     if ($canDo->get('core.admin')) {

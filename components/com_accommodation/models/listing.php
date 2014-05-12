@@ -72,7 +72,8 @@ class AccommodationModelListing extends JModelForm {
     // Get the form.
     $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
 
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -89,7 +90,8 @@ class AccommodationModelListing extends JModelForm {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
@@ -139,7 +141,8 @@ class AccommodationModelListing extends JModelForm {
    */
   public function getItem() {
 
-    if (!isset($this->item)) {
+    if (!isset($this->item))
+    {
       // Get the language for this request
       $lang = & JFactory::getLanguage()->getTag();
 
@@ -229,20 +232,27 @@ class AccommodationModelListing extends JModelForm {
 
       $query->from('#__property as a');
       $query->leftJoin('#__unit b ON a.id = b.property_id');
-      if (!$this->preview) {
+      if (!$this->preview)
+      {
         $query->leftJoin('#__property_versions c ON (c.property_id = a.id and c.id = (select max(n.id) from #__property_versions as n where n.property_id = a.id and n.review = 0))');
-      } else {
+      }
+      else
+      {
         $query->leftJoin('#__property_versions c ON (c.property_id = a.id and c.id = (select max(n.id) from #__property_versions as n where n.property_id = a.id))');
       }
 
-      if (!$this->preview) {
+      if (!$this->preview)
+      {
         $query->leftJoin('#__unit_versions d ON (d.unit_id = b.id and d.id = (select max(o.id) from #__unit_versions o where unit_id = b.id and o.review = 0))');
-      } else {
+      }
+      else
+      {
         $query->leftJoin('#__unit_versions d ON (d.unit_id = b.id and d.id = (select max(o.id) from #__unit_versions o where unit_id = b.id))');
       }
 
       // Join the translations table to pick up any translations 
-      if ($lang === 'fr-FR') {
+      if ($lang === 'fr-FR')
+      {
 
         $query->select('p.unit_title, p.description, p.additional_price_notes, p.linen_costs');
         $query->join('left', '#__unit_versions_translations p on p.version_id = d.id');
@@ -262,7 +272,9 @@ class AccommodationModelListing extends JModelForm {
         $query->leftJoin('#__classifications_translations n ON n.id = c.region');
         $query->leftJoin('#__attributes_translation j ON j.id = d.tariff_based_on');
         $query->leftJoin('#__attributes_translation k ON k.id = d.changeover_day');
-      } else {
+      }
+      else
+      {
         $query->leftJoin('#__classifications e ON e.id = c.city');
 
         // Join the property type through the property attributes table
@@ -287,15 +299,19 @@ class AccommodationModelListing extends JModelForm {
       $query->where('a.id=' . (int) $id);
       $query->where('b.id=' . (int) $unit_id);
 
-      if (!$this->preview) {
+      if (!$this->preview)
+      {
         $query->where('c.review = 0');
         $query->where('d.review = 0');
-      } else {
+      }
+      else
+      {
         $query->where('c.review in (0,1)');
         $query->where('d.review in (0,1)');
       }
 
-      if (!$this->preview) {
+      if (!$this->preview)
+      {
         // TO DO: We should check the expiry date at some point.
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
       }
@@ -309,18 +325,21 @@ class AccommodationModelListing extends JModelForm {
         // TO DO - Log me baby
       }
 
-      if (empty($this->item)) {
+      if (empty($this->item))
+      {
         // This property has expired or is otherwise unavailable.                
         return false;
       }
     }
 
     // Update the unit id into the model state for use later on in the model
-    if (empty($unit_id)) {
+    if (empty($unit_id))
+    {
       $this->setState('unit.id', $this->item->unit_id);
     }
 
-    if (!empty($this->item->city)) {
+    if (!empty($this->item->city))
+    {
       $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
     }
 
@@ -415,16 +434,22 @@ class AccommodationModelListing extends JModelForm {
             f.title as attribute_type
           ');
       $query->from($table1 . ' a');
-      if (!$this->preview) {
+      if (!$this->preview)
+      {
         $query->leftJoin($table2 . ' b ON (b.' . $field . ' = a.id and b.id = (select max(c.id) from ' . $table2 . ' c where ' . $field . ' = a.id and c.review = 0))');
-      } else {
+      }
+      else
+      {
         $query->leftJoin($table2 . ' b ON (b.' . $field . ' = a.id and b.id = (select max(c.id) from ' . $table2 . ' c where ' . $field . ' = a.id))');
       }
 
       $query->join('left', $table3 . ' d on (d.property_id = a.id and d.version_id = b.id)');
-      if ($lang === 'fr-FR') {
+      if ($lang === 'fr-FR')
+      {
         $query->join('left', '#__attributes_translation e on e.id = d.attribute_id');
-      } else {
+      }
+      else
+      {
         $query->join('left', '#__attributes e on e.id = d.attribute_id');
       }
       $query->join('left', '#__attributes_type f on f.id = e.attribute_type_id');
@@ -434,7 +459,8 @@ class AccommodationModelListing extends JModelForm {
       $results = $this->_db->setQuery($query)->loadObjectList();
 
       foreach ($results as $attribute) {
-        if (!array_key_exists($attribute->attribute_type, $attributes)) {
+        if (!array_key_exists($attribute->attribute_type, $attributes))
+        {
           $attributes[$attribute->attribute_type] = array();
         }
 
@@ -458,7 +484,8 @@ class AccommodationModelListing extends JModelForm {
 
   public function getUnits() {
 
-    if (!isset($this->units)) {
+    if (!isset($this->units))
+    {
 
       try {
         // Get the state for this property ID
@@ -473,10 +500,13 @@ class AccommodationModelListing extends JModelForm {
         $select = 'unit_title,a.id,occupancy,a.property_id,(single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms';
         $query->select($select);
         $query->from('#__unit a');
-        if (!$this->preview) {
+        if (!$this->preview)
+        {
 
           $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
-        } else {
+        }
+        else
+        {
           $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
         }
 
@@ -484,9 +514,12 @@ class AccommodationModelListing extends JModelForm {
         $query->where('a.property_id = ' . (int) $id);
         //$query->where('a.published = 1');
         $query->order('ordering');
-        if (!$this->preview) {
+        if (!$this->preview)
+        {
           $query->where('a.published = 1');
-        } else {
+        }
+        else
+        {
           $query->where('a.published in (0,1)');
         }
         return $this->_db->setQuery($query)->loadObjectList();
@@ -500,6 +533,44 @@ class AccommodationModelListing extends JModelForm {
     }
   }
 
+  /**
+   * Gets a list of related properties based on the property someone has just enquired on.
+   * 
+   * @return boolean
+   */
+  public function getRelatedProps() {
+
+    if (empty($this->item))
+    {
+      return false;
+    }
+
+    JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_fcsearch/models');
+
+    $app = JFactory::getApplication();
+
+    $input = $app->input;
+    $filter = JFilterInput::getInstance();
+
+    $location = JApplication::stringURLSafe($filter->clean($this->item->department, 'string'));
+
+    if (!$location)
+    {
+      return false;
+    }
+
+    // Set s_kwds in the input data. E.g. spoof a location search...
+    $app->input->set('s_kwds', $location);
+    $app->input->set('limit', 4);
+
+    $model = JModelLegacy::getInstance('Search', 'FcSearchModel');
+
+    $model->getLocalInfo(); // Must call this first, probably should be a protected method called internally from the model
+    $results = $model->getResults(); // Get the property listings, related to this one, if any.s
+
+    return $results;
+  }
+
   /*
    * Function to return a list of reviews for a given property
    *
@@ -508,7 +579,8 @@ class AccommodationModelListing extends JModelForm {
 
   public function getReviews() {
 
-    if (!isset($this->reviews)) {
+    if (!isset($this->reviews))
+    {
       $unit_id = $this->getState('unit.id');
 
       try {
@@ -596,7 +668,8 @@ class AccommodationModelListing extends JModelForm {
 
 
     // Check the $availability loaded correctly
-    if (!$tariffs) {
+    if (!$tariffs)
+    {
 
       $tariffs = array();
     }
@@ -610,7 +683,8 @@ class AccommodationModelListing extends JModelForm {
 
   public function getOffers() {
 
-    if (!isset($this->offer)) {
+    if (!isset($this->offer))
+    {
 
       try {
         // Get the state for this property ID
@@ -672,9 +746,12 @@ class AccommodationModelListing extends JModelForm {
     ');
 
     $query->from('#__unit a');
-    if (!$this->preview) {
+    if (!$this->preview)
+    {
       $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
-    } else {
+    }
+    else
+    {
       $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
     }
 
@@ -690,7 +767,8 @@ class AccommodationModelListing extends JModelForm {
 
 
     // Check the $availability loaded correctly
-    if (!$images) {
+    if (!$images)
+    {
       // Ooops, there was a problem getting the availability
       // Check that the row actually exists
       JLog::add('Problem fetching images for - ' . $id, JLog::ERROR, 'images');
@@ -723,7 +801,8 @@ class AccommodationModelListing extends JModelForm {
     array_shift($path); // Remove the first element as it's the root of the NST
     // Put the path into a std class obj which is passed into the getPathway method.
     foreach ($path as $k => $v) {
-      if ($v->parent_id) {
+      if ($v->parent_id)
+      {
         $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
         $pathArr->$k->name = $v->title;
       }
@@ -749,7 +828,8 @@ class AccommodationModelListing extends JModelForm {
     $input = JFactory::getApplication()->input;
     $hitcount = $input->getInt('hitcount', 1);
 
-    if ($hitcount) {
+    if ($hitcount)
+    {
       // Get the property id
       $pk = $this->getState('property.id', false);
 
@@ -810,7 +890,8 @@ class AccommodationModelListing extends JModelForm {
     $minutes_until_safe_to_send = '';
 
     // Check the banned email list 
-    if (in_array($data['guest_email'], $banned_emails)) {
+    if (in_array($data['guest_email'], $banned_emails))
+    {
       $valid = false; // Naughty!
     }
 
@@ -829,28 +910,34 @@ class AccommodationModelListing extends JModelForm {
     $data['property_id'] = $id;
     $data['unit_id'] = $unit_id;
 
-    if (!$valid) {
+    if (!$valid)
+    {
       $data['state'] = -1;
     }
 
     // Check that we can save the data and save it out to the enquiry table
-    if (!$table->save($data)) {
+    if (!$table->save($data))
+    {
       return false;
     }
-    
+
     // We only need to process the rest of this is the enquiry is validated
-    if ($valid) {
+    if ($valid)
+    {
       // Need to get the contact detail preferences for this property/user combo
       $item = $this->getItem();
 
       // If the property is set to use invoice details
       // Override anything set in the property version 
-      if ($item->use_invoice_details) {
+      if ($item->use_invoice_details)
+      {
 
         $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email;
         // This assumes that name is in synch with the user profile table first and last name fields...
         $owner_name = htmlspecialchars($item->name);
-      } else {
+      }
+      else
+      {
         // We just use the details from the contact page, possibly also send this to the owner...
         $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
         $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
@@ -894,24 +981,28 @@ class AccommodationModelListing extends JModelForm {
       //return false;
       //}
       // Only fire up the SMS bit if the owner is subscribed to SMS alerts...
-      if ($item->sms_valid) {
+      if ($item->sms_valid)
+      {
 
         $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
         /*
          *  if the login return 0, means that login failed, you cant send sms after this 
          */
-        if (!$sms->login()) {
+        if (!$sms->login())
+        {
           return false;
         }
 
         // Get the time in 24h format with minutes
         $time = JFactory::getDate()->calendar('Hi');
 
-        if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800)) {
+        if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800))
+        {
 
           // Must be 'night' time
           // Determine the number of minutes until 0800h when it's safe to send the SMS
-          if ($time < '2359') {
+          if ($time < '2359')
+          {
 
             // Set default timezone so we can work out the correct time now
             date_default_timezone_set("Europe/London");
@@ -921,7 +1012,9 @@ class AccommodationModelListing extends JModelForm {
 
             // Calculate the minutes between now and when we it's safe to send the message.
             $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
-          } else {
+          }
+          else
+          {
 
             // Get the unix timestamp for later today at 0800h
             $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
@@ -934,7 +1027,8 @@ class AccommodationModelListing extends JModelForm {
         /*
          * Send sms using the simple send() call 
          */
-        if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send)) {
+        if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send))
+        {
           return false;
         }
       }

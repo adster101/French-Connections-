@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
+
 ?>
 
 

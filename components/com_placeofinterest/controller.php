@@ -27,5 +27,4 @@ class PlaceofinterestController extends JControllerLegacy {
 
     return $this;
   }
-
 }

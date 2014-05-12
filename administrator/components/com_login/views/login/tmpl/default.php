@@ -18,7 +18,6 @@ JHtml::_('behavior.noframes');
 $loginmodule = LoginModelLogin::getLoginModule('mod_login');
 echo JModuleHelper::renderModule($loginmodule, array('style' => 'rounded', 'id' => 'section-box'));
 
-
 //Get any other modules in the login position.
 //If you want to use a different position for the modules, change the name here in your override.
 $modules = JModuleHelper::getModules('login');

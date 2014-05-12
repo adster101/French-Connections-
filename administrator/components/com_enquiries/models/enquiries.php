@@ -23,7 +23,8 @@ class EnquiriesModelEnquiries extends JModelList {
       $config['filter_fields'] = array(
           'id', 'e.id',
           'state', 'e.state',
-          'created', 'e.date_created'
+          'created', 'e.date_created',
+          'property_id','e.property_id'
       );
     }
 
@@ -128,7 +129,8 @@ class EnquiriesModelEnquiries extends JModelList {
     if (is_numeric($state))
     {
       $query->where('e.state = ' . (int) $state);
-    } else
+    }
+    else
     {
       $query->where('e.state IN (0,1)');
     }
@@ -142,7 +144,11 @@ class EnquiriesModelEnquiries extends JModelList {
     // Filter by search in title
     $search = $this->getState('filter.search');
 
-    if (!empty($search))
+    if ((int) $search)
+    {
+      $query->where('e.property_id = ' . (int) $search);
+    }
+    else
     {
       $search = $db->Quote('%' . $db->escape($search, true) . '%');
       $query->where('(e.message LIKE ' . $search . ')');

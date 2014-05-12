@@ -113,7 +113,9 @@ class FcSearchModelSearch extends JModelList {
 
   /**
    * Get the information about the area which is being searched on.
-   *  
+   * TO DO - This should probably be a protected method called internally from say getResults
+   * if state not set accordingly.
+   * 
    * @return boolean
    */
   public function getLocalInfo() {
@@ -201,7 +203,6 @@ class FcSearchModelSearch extends JModelList {
     // Load the results from the database.
     $db->setQuery($sql, $offset, $count);
 
-
     $rows = $db->loadObjectList();
 
     // Process results into
@@ -259,6 +260,7 @@ class FcSearchModelSearch extends JModelList {
         c.city,
         d.occupancy,
         d.bathrooms,
+        d.base_currency,
         b.from_price as price,
         -- if (d.accommodation_type = \'24\', b.from_price * 7, b.from_price) as price,
         -- b.from_price as nightly_price,

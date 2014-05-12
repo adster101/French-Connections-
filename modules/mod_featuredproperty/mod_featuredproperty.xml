@@ -63,7 +63,15 @@
           <option value="1">Yes</option>
           <option value="0">No</option>
         </field>
-     
+        <field 
+          type="list"
+          name="related"
+          label="Related"
+          description="Show related props for post enquiry page"
+          default="0">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </field>     
       </fieldset>
       <fieldset name="advanced">
         <field
