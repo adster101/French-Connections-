@@ -954,14 +954,14 @@ class AccommodationModelListing extends JModelForm
       if ($item->use_invoice_details)
       {
 
-        $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email;
+        $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email;
         // This assumes that name is in synch with the user profile table first and last name fields...
         $owner_name = htmlspecialchars($item->name);
       }
       else
       {
         // We just use the details from the contact page, possibly also send this to the owner...
-        $owner_email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $item->email_1;
+        $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email_1;
         $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
       }
 
