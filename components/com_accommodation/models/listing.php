@@ -985,7 +985,7 @@ class AccommodationModelListing extends JModelForm
       $mail->addReplyTo(array($mailfrom, $fromname));
       $mail->setSender(array($mailfrom, $fromname));
       $mail->addBCC($mailfrom, $fromname);
-      $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title));
+      $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title, $id));
       $mail->setBody($body);
 
       if (!$mail->Send())
@@ -1082,5 +1082,4 @@ class AccommodationModelListing extends JModelForm
             . ($caseInsensitive ? '/i' : '/');
     return preg_match($exp, $string) ? true : false;
   }
-
 }
