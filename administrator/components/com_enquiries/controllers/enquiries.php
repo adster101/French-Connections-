@@ -22,8 +22,15 @@ class EnquiriesControllerEnquiries extends JControllerAdmin
     return $model;
   }
 
+  /**
+   * This controller action resends each email that is marked 
+   * 
+   */
   public function resend()
   {
+    
+    
+    
     echo "Woot!";die;
   }
 

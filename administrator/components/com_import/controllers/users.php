@@ -72,7 +72,6 @@ class ImportControllerUsers extends JControllerForm {
         }
       }
 
-
       // Get the salt and password details 
       $salt = JUserHelper::genRandomPassword(32);
       $password = JUserHelper::getCryptedPassword($line[4], $salt);

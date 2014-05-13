@@ -8,7 +8,8 @@ jimport('joomla.error.log');
 /**
  * HelloWorld Model
  */
-class AccommodationModelListing extends JModelForm {
+class AccommodationModelListing extends JModelForm
+{
 
   /**
    * @var object item
@@ -20,7 +21,8 @@ class AccommodationModelListing extends JModelForm {
    */
   protected $preview = false;
 
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
 
     parent::__construct($config = array());
 
@@ -29,7 +31,8 @@ class AccommodationModelListing extends JModelForm {
     $this->preview = ($input->get('preview', 0, 'boolean')) ? true : false;
   }
 
-  public function getShortlist() {
+  public function getShortlist()
+  {
 
     // Get an instance of the shortlist model
     JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_shortlist/models');
@@ -52,7 +55,8 @@ class AccommodationModelListing extends JModelForm {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array()) {
+  public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -67,7 +71,8 @@ class AccommodationModelListing extends JModelForm {
    * @return	JForm	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
@@ -86,7 +91,8 @@ class AccommodationModelListing extends JModelForm {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
 
@@ -110,7 +116,8 @@ class AccommodationModelListing extends JModelForm {
    * @return	void
    * @since	1.6
    */
-  protected function populateState() {
+  protected function populateState()
+  {
 
     // Get the input values etc
     $app = JFactory::getApplication();
@@ -139,7 +146,8 @@ class AccommodationModelListing extends JModelForm {
    *
    * @return object The message to be displayed to the user
    */
-  public function getItem() {
+  public function getItem()
+  {
 
     if (!isset($this->item))
     {
@@ -352,7 +360,8 @@ class AccommodationModelListing extends JModelForm {
    * At present, is only 'places of interest'
    * 
    */
-  public function getMapItems($lat = '', $lon = '') {
+  public function getMapItems($lat = '', $lon = '')
+  {
 
     $db = JFactory::getDbo();
     $app = JFactory::getApplication('site');
@@ -391,12 +400,14 @@ class AccommodationModelListing extends JModelForm {
    * @return type
    * 
    */
-  public function getUnitFacilities() {
+  public function getUnitFacilities()
+  {
 
     return $this->getFacilities('#__unit', '#__unit_versions', 'unit_id', '#__unit_attributes');
   }
 
-  public function getPropertyFacilities() {
+  public function getPropertyFacilities()
+  {
 
     return $this->getFacilities('#__property', '#__property_versions', 'property_id', '#__property_attributes');
   }
@@ -407,7 +418,8 @@ class AccommodationModelListing extends JModelForm {
    *
    */
 
-  public function getFacilities($table1 = '', $table2 = '', $field = '', $table3 = '') {
+  public function getFacilities($table1 = '', $table2 = '', $field = '', $table3 = '')
+  {
 
     $lang = JFactory::getLanguage()->getTag();
 
@@ -482,7 +494,8 @@ class AccommodationModelListing extends JModelForm {
    * Function to return a list of units for a given property
    */
 
-  public function getUnits() {
+  public function getUnits()
+  {
 
     if (!isset($this->units))
     {
@@ -538,7 +551,8 @@ class AccommodationModelListing extends JModelForm {
    * 
    * @return boolean
    */
-  public function getRelatedProps() {
+  public function getRelatedProps()
+  {
 
     if (empty($this->item))
     {
@@ -577,7 +591,8 @@ class AccommodationModelListing extends JModelForm {
    *
    */
 
-  public function getReviews() {
+  public function getReviews()
+  {
 
     if (!isset($this->reviews))
     {
@@ -624,7 +639,8 @@ class AccommodationModelListing extends JModelForm {
    *
    */
 
-  public function getAvailability() {
+  public function getAvailability()
+  {
     // Get the state for this property ID
     $id = $this->getState('property.id');
 
@@ -655,7 +671,8 @@ class AccommodationModelListing extends JModelForm {
    * Function to return a list of tariffs for a given property
    */
 
-  public function getTariffs() {
+  public function getTariffs()
+  {
 
     // Get the state for this property ID
     $unit_id = $this->getState('unit.id');
@@ -681,7 +698,8 @@ class AccommodationModelListing extends JModelForm {
    * Function to return a list of tariffs for a given property
    */
 
-  public function getOffers() {
+  public function getOffers()
+  {
 
     if (!isset($this->offer))
     {
@@ -719,7 +737,8 @@ class AccommodationModelListing extends JModelForm {
    *
    */
 
-  public function getImages() {
+  public function getImages()
+  {
 
     // Get the property ID
     $id = $this->getState('property.id');
@@ -784,7 +803,8 @@ class AccommodationModelListing extends JModelForm {
    *
    */
 
-  public function getCrumbs() {
+  public function getCrumbs()
+  {
 
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
     $table = JTable::getInstance('Classification', 'ClassificationTable');
@@ -823,7 +843,8 @@ class AccommodationModelListing extends JModelForm {
    *
    * @return	boolean	True if successful; false otherwise and internal error set.
    */
-  public function hit() {
+  public function hit()
+  {
 
     $input = JFactory::getApplication()->input;
     $hitcount = $input->getInt('hitcount', 1);
@@ -871,7 +892,8 @@ class AccommodationModelListing extends JModelForm {
    * @param type $params
    * @return boolean
    */
-  public function processEnquiry($data = array(), $params = '', $id = '', $unit_id = '') {
+  public function processEnquiry($data = array(), $params = '', $id = '', $unit_id = '')
+  {
 
     // Set up the variables we need to process this enquiry
     $app = JFactory::getApplication();
@@ -966,9 +988,11 @@ class AccommodationModelListing extends JModelForm {
       $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title));
       $mail->setBody($body);
 
-      //if (!$mail->Send()) {
-      //return false;
-      //}
+      if (!$mail->Send())
+      {
+        return false;
+      }
+
       // Prepare email body for the holidaymaker email
       $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname);
       $mail->ClearAllRecipients();
@@ -977,9 +1001,11 @@ class AccommodationModelListing extends JModelForm {
       $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
       $mail->addRecipient($email);
 
-      //if (!$mail->Send()) {
-      //return false;
-      //}
+      if (!$mail->Send())
+      {
+        return false;
+      }
+
       // Only fire up the SMS bit if the owner is subscribed to SMS alerts...
       if ($item->sms_valid)
       {
@@ -1049,7 +1075,8 @@ class AccommodationModelListing extends JModelForm {
    * @param type $caseInsensitive
    * @return type
    */
-  function contains($string, Array $search, $caseInsensitive = false) {
+  function contains($string, Array $search, $caseInsensitive = false)
+  {
     $exp = '/'
             . implode('|', array_map('preg_quote', $search))
             . ($caseInsensitive ? '/i' : '/');

@@ -363,7 +363,7 @@ class AccommodationControllerListing extends JControllerForm {
     if ($Itemid)
     {
       $this->setRedirect(
-              JRoute::_('index.php?option=com_accommodation&view=enquiry&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false), $msg
+              JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=enquiry', false), $msg
       );
     }
     else
