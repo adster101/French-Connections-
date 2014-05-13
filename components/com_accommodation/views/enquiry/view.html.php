@@ -6,10 +6,12 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HTML View class for the HelloWorld Component
  */
-class AccommodationViewEnquiry extends JViewLegacy {
+class AccommodationViewEnquiry extends JViewLegacy
+{
 
   // Overwriting JView display method
-  function display($tpl = null) {
+  function display($tpl = null)
+  {
 
     // Assign data to the view   
     $app = JFactory::getApplication();
@@ -34,7 +36,7 @@ class AccommodationViewEnquiry extends JViewLegacy {
 
     // Get nearby props that are also of interest
     $this->related = $this->get('RelatedProps');
-    
+
     // Check for errors.
     if (count($errors = $this->get('Errors')))
     {
@@ -61,31 +63,13 @@ class AccommodationViewEnquiry extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
-
-    $document = JFactory::getDocument();
-
-    if ($this->item->accommodation_type == 'Bed and Breakfast')
-    {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->city, $this->item->department);
-    }
-    else
-    {
-      $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->city, $this->item->department);
-    }
-
+  protected function setDocument()
+  {
+    $this->title = JText::sprintf('COM_ACCOMMODATION_ENQUIRY_SENT_TITLE', $this->item->unit_title);
     // Set document and page titles
     $this->document->setTitle($this->title);
     $this->document->setDescription($this->title);
     $this->document->setMetaData('keywords', $this->title);
     $this->document->setMetaData('robots', 'noindex');
-
-    $document->addScript("media/fc/js/jquery.flexslider.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/general.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/property.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true, false);
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/availability.css", 'text/css', "screen");
-    $document->addStyleSheet(JURI::root() . "media/fc/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
   }
-
 }
