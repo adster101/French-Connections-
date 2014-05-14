@@ -1036,8 +1036,7 @@ class AccommodationModelListing extends JModelForm
             $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
 
             // Calculate the minutes between now and when we it's safe to send the message.
-            // $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
-            $minutes_until_safe_to_send = 20;
+            $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
           }
           else
           {
@@ -1045,8 +1044,7 @@ class AccommodationModelListing extends JModelForm
             $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
 
             // Calculate the minutes between now and when we it's safe to send the message.
-            // $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
-            $minutes_until_safe_to_send = 20;
+            $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
           }
         }
 
