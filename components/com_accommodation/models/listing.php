@@ -918,10 +918,12 @@ class AccommodationModelListing extends JModelForm
     }
 
     // Check the banned phrases list - This is currently done as a form field validation rule
-    //if (!$this->contains($data['message'], $banned_phrases)) {
-    //echo "woot"; die;
-    //$valid = false; // Naughty!
-    //}
+    if (!$this->contains($data['message'], $banned_phrases))
+    {
+     
+      $valid = false; // Naughty!
+    }
+
     // Add enquiries and property manager table paths
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 
@@ -1018,7 +1020,7 @@ class AccommodationModelListing extends JModelForm
         {
           return false;
         }
-        
+
         // Set default timezone so we can work out the correct time now
         date_default_timezone_set("Europe/London");
 

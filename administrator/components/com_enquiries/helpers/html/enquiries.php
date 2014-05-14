@@ -24,7 +24,8 @@ class JHtmlEnquiries
 	{
 		// Array of image, task, title, action.
 		$states	= array(
-			-2	=> array('trash.png',		'enquiries.unpublish',	'JTRASHED',				'COM_MESSAGES_MARK_AS_UNREAD'),
+			-2	=> array('trash.png',		'enquiries.unpublish',	'JTRASHED',	'COM_MESSAGES_MARK_AS_UNREAD'),
+			-1	=> array('disabled.png',		'enquiries.publish',	'JTRASHED', 'COM_MESSAGES_MARK_AS_UNREAD'),
 			1	=> array('email-read-32.png',		'enquiries.unpublish',	'COM_MESSAGES_OPTION_READ',		'COM_MESSAGES_MARK_AS_UNREAD'),
 			0	=> array('email-unread-32.png',	'enquiries.publish',		'COM_MESSAGES_OPTION_UNREAD',	'COM_MESSAGES_MARK_AS_READ')
 		);

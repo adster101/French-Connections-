@@ -15,7 +15,8 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class JFormRuleMessage extends JFormRule {
+class JFormRuleMessage extends JFormRule
+{
 
   /**
    * Method to test for a valid color in hexadecimal.
@@ -30,16 +31,13 @@ class JFormRuleMessage extends JFormRule {
    *
    * @return  boolean  True if the value is valid, false otherwise.
    */
-  public function test(&$element, $value, $group = null, &$input = null, &$form = null) {
-    $params = JComponentHelper::getParams('com_enquiries');
-    $banned = $params->get('banned_text');
+  public function test(&$element, $value, $group = null, &$input = null, &$form = null)
+  {
 
-    foreach (explode(',', $banned) as $item) {
-      if (JString::stristr($item, $value) !== false)
-        return false;
-    }
 
-    if (strlen($value) > 1250) {
+
+    if (strlen($value) > 1250)
+    {
       return false;
     }
 
