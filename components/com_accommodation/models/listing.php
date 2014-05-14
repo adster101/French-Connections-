@@ -385,7 +385,8 @@ class AccommodationModelListing extends JModelForm
 
     $db->setQuery($query);
     $rows = $db->loadObjectList();
-    foreach ($rows as $k => $v) {
+    foreach ($rows as $k => $v)
+    {
       $rows[$k]->description = JHtml::_('string.truncate', $v->description, 75, true, false);
       $rows[$k]->link = JRoute::_('index.php?option=com_placeofinterest&Itemid=' . $itemid . '&place=' . $v->alias);
     }
@@ -470,7 +471,8 @@ class AccommodationModelListing extends JModelForm
 
       $results = $this->_db->setQuery($query)->loadObjectList();
 
-      foreach ($results as $attribute) {
+      foreach ($results as $attribute)
+      {
         if (!array_key_exists($attribute->attribute_type, $attributes))
         {
           $attributes[$attribute->attribute_type] = array();
@@ -820,7 +822,8 @@ class AccommodationModelListing extends JModelForm
 
     array_shift($path); // Remove the first element as it's the root of the NST
     // Put the path into a std class obj which is passed into the getPathway method.
-    foreach ($path as $k => $v) {
+    foreach ($path as $k => $v)
+    {
       if ($v->parent_id)
       {
         $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
@@ -904,7 +907,7 @@ class AccommodationModelListing extends JModelForm
     jimport('clickatell.SendSMS');
     $sms_params = JComponentHelper::getParams('com_rental');
     $banned_emails = explode(',', $params->get('banned_email'));
-    $banned_phrases = explode(',', $params->get('banned_phrases'));
+    $banned_phrases = explode(',', $params->get('banned_text'));
     // The details of where who is sending the email (e.g. FC in this case).
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
@@ -918,7 +921,7 @@ class AccommodationModelListing extends JModelForm
     }
 
     // Check the banned phrases list - This is currently done as a form field validation rule
-    if (!$this->contains($data['message'], $banned_phrases, true))
+    if ($this->contains($data['message'], $banned_phrases))
     {
       $valid = false; // Naughty!
     }
@@ -1065,21 +1068,25 @@ class AccommodationModelListing extends JModelForm
   }
 
   /**
-   * Function uses a PCRE to search a string for a series of banned phrases. 
+   * Check through the list of banned phrases and return true if one found 
    * http://stackoverflow.com/questions/6228581/how-to-search-array-of-string-in-another-string-in-php
-   * Fast? 
    * 
    * @param type $string
    * @param array $search
    * @param type $caseInsensitive
    * @return type
    */
-  function contains($string, Array $search, $caseInsensitive = false)
+  function contains($value, Array $banned)
   {
-    $exp = '/'
-            . implode('|', array_map('preg_quote', $search))
-            . ($caseInsensitive ? '/i' : '/');
-    return preg_match($exp, $string) ? true : false;
+    foreach ($banned as $item)
+    {
+      if (JString::stristr($item, $value) !== false)
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
 }

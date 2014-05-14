@@ -33,10 +33,8 @@ class JFormRuleMessage extends JFormRule
    */
   public function test(&$element, $value, $group = null, &$input = null, &$form = null)
   {
-
-
-
-    if (strlen($value) > 1250)
+    
+    if (strlen($value) > 750)
     {
       return false;
     }
