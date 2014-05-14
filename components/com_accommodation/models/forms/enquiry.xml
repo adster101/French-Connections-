@@ -53,7 +53,7 @@
       description="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_LABEL"
       message="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_VALIDATION_MESSAGE"
-      filter="int"
+      filter="string"
       validate="telephone"
       labelclass="control-label"
     />

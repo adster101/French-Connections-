@@ -1018,35 +1018,35 @@ class AccommodationModelListing extends JModelForm
         {
           return false;
         }
+        
+        // Set default timezone so we can work out the correct time now
+        date_default_timezone_set("Europe/London");
 
         // Get the time in 24h format with minutes
-        $time = JFactory::getDate()->calendar('Hi');
+        $time = date('Hi');
 
         if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800))
         {
 
           // Must be 'night' time
           // Determine the number of minutes until 0800h when it's safe to send the SMS
-          if ($time < '2359')
+          if ($time < 2359)
           {
-
-            // Set default timezone so we can work out the correct time now
-            date_default_timezone_set("Europe/London");
-
             // Get the unix timestamp for tomorrow at 0800h
             $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
 
             // Calculate the minutes between now and when we it's safe to send the message.
-            $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
+            // $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
+            $minutes_until_safe_to_send = 20;
           }
           else
           {
-
             // Get the unix timestamp for later today at 0800h
             $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
 
             // Calculate the minutes between now and when we it's safe to send the message.
-            $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
+            // $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
+            $minutes_until_safe_to_send = 20;
           }
         }
 
@@ -1082,4 +1082,5 @@ class AccommodationModelListing extends JModelForm
             . ($caseInsensitive ? '/i' : '/');
     return preg_match($exp, $string) ? true : false;
   }
+
 }
