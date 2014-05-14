@@ -918,9 +918,8 @@ class AccommodationModelListing extends JModelForm
     }
 
     // Check the banned phrases list - This is currently done as a form field validation rule
-    if (!$this->contains($data['message'], $banned_phrases))
+    if (!$this->contains($data['message'], $banned_phrases, true))
     {
-     
       $valid = false; // Naughty!
     }
 
