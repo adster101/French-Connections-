@@ -105,7 +105,7 @@ class EnquiriesModelEnquiries extends JModelList {
       e.guest_email as email,
       e.message,
       date_format(e.start_date, "%d-%m-%Y") as start_date,
-      date_format(e.end_date, "%d-%m-%Y") as start_date,
+      date_format(e.end_date, "%d-%m-%Y") as end_date,
       e.end_date,
       e.date_created,
       e.state,

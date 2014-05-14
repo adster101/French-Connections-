@@ -90,8 +90,8 @@ class EnquiriesViewEnquiries extends JViewLegacy {
     }
 
     if ($canDo->get('core.edit.state')) {
-      JToolBarHelper::publish('enquiries.publish', 'COM_ENQUIRIES_MARK_AS_READ', true);
-      JToolBarHelper::unpublish('enquiries.unpublish', 'COM_ENQUIRIES_MARK_AS_UNREAD', true);
+      JToolBarHelper::custom('enquiries.publish','envelope-opened','', 'COM_ENQUIRIES_MARK_AS_READ', true);
+      JToolBarHelper::custom('enquiries.unpublish','envelope','', 'COM_ENQUIRIES_MARK_AS_UNREAD', true);
       JToolBarHelper::trash('enquiries.trash');
     }
 

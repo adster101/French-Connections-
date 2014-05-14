@@ -17,6 +17,7 @@
         onchange="this.form.submit();"> 
         <option value="">COM_ENQUIRIES_OPTION_ALL</option>
         <option value="0">COM_ENQUIRIES_OPTION_UNREAD</option>
+        <option value="1">COM_ENQUIRIES_OPTION_READ</option>
         <option value="-2">JTRASHED</option>
       </field> 
       <field

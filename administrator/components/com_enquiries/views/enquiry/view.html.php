@@ -82,12 +82,12 @@ class EnquiriesViewEnquiry extends JViewLegacy {
    */
   protected function addToolBar($canDo) {
 
+    JToolBarHelper::custom('enquiry.cancel','backward-2','', 'COM_ENQUIRIES_ENQUIRY_BACK', false);
 
     if ($canDo->get('core.edit.own')) {
       JToolBarHelper::save('enquiry.reply', 'COM_ENQUIRIES_ENQUIRY_REPLY');
     }
 
-    JToolBarHelper::cancel('enquiry.cancel', 'JTOOLBAR_CLOSE');
 
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
 
