@@ -9,17 +9,19 @@
  */
 defined('_JEXEC') or die;
 
+JFormHelper::loadRuleClass('email');
+
 /**
- * JFormRule for com_contact to make sure the subject contains no banned word.
+ * JFormRule for com_contact to make sure the E-Mail adress is not blocked.
  *
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class JFormRuleTelephone extends JFormRule
+class JFormRuleStartdate extends JFormRuleEmail
 {
 
   /**
-   * Method to test for a valid.
+   * Method to test for a valid color in hexadecimal.
    *
    * @param   SimpleXMLElement  &$element  The SimpleXMLElement object representing the <field /> tag for the form field object.
    * @param   mixed             $value     The form field value to validate.
@@ -33,26 +35,22 @@ class JFormRuleTelephone extends JFormRule
    */
   public function test(& $element, $value, $group = null, &$input = null, &$form = null)
   {
-    // If the field is empty and not required, the field is valid.
-    $required = ((string) $element['required'] == 'true' || (string) $element['required'] == 'required');
+    
+    $valid = preg_match("/^(\d{2})-(\d{2})-(\d{4})$/", $value, $matches);
 
-    if (!$required && empty($value))
-    {
-      return true;
-    }
-
-    // $value is prefiltered by Jform and will only contain alpha numeric chars (+ and spaces are stripped).
-    // Test that the string matches the pattern
-    if (preg_match('/^[0-9]{11,25}$/', $value, $matches))
-    {
-      // Yay
-      return true;
-    }
-    else
-    {
-      // Boo
+    // If not a valid date format 
+    if (!$valid) {
       return false;
     }
+
+    // Valid date format, so check if valid date
+    if (checkdate($matches[2], $matches[1], $matches[3]))
+    {
+      return true;
+    }
+
+    // Belts and braces
+    return false;
   }
 
 }

@@ -13,7 +13,7 @@ $lang->load('com_rental');
 
 //echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8');
 ?>
-<!--<p><?php //echo JText::_('MOD_LISTINGS_BLURB');                    ?></p>-->
+<!--<p><?php //echo JText::_('MOD_LISTINGS_BLURB');                       ?></p>-->
 
 <div class="page-header clearfix">
   <a class="btn btn-large btn-success pull-right" href="index.php?option=com_rental&amp;task=propertyversions.add"> 
@@ -55,10 +55,15 @@ $lang->load('com_rental');
         <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail, 'thumbnail pull-left') ?>
         <?php echo JHtml::_('property.editButton', $days_to_renewal, $item->id, $item->unit_id, $item->review); ?>
         <hr /> 
-        <div class="pull-right"
-             <p>
+        <div class="pull-right">
+
+          <p>
+            <a class="latest-enquiries" rel="tooltip" title="<?php echo JText::_('COM_RENTAL_VIEW_LISTING_ENQUIRIES_TOOLTIP'); ?>" href="<?php echo JRoute::_('index.php?option=com_enquiries') ?>">
+              <?php echo JText::_('COM_RENTAL_VIEW_LISTING_ENQUIRIES_TOOLTIP'); ?>
+            </a>
+          </p>
+          <p>
             <a rel="tooltip" title="<?php echo JText::_('COM_RENTAL_VIEW_LISTING_STATISTICS_TOOLTIP'); ?>" href="<?php echo JRoute::_('index.php?option=com_stats&id=' . (int) $item->id) ?>">
-             
               <?php echo JText::_('COM_RENTAL_VIEW_LISTING_STATISTICS'); ?>
             </a>
           </p>
@@ -96,11 +101,11 @@ $lang->load('com_rental');
   </a>  
   <h3>For sale property</h3>
 </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      No for sale property found
-    </div>
-    <div class="panel-body">
-      <p>You don't currently have any for sale properties to manage. In case you didn't spot it click <strong>the big green button</strong> to add a for sale property...</p>
-    </div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    No for sale property found
   </div>
+  <div class="panel-body">
+    <p>You don't currently have any for sale properties to manage. In case you didn't spot it click <strong>the big green button</strong> to add a for sale property...</p>
+  </div>
+</div>

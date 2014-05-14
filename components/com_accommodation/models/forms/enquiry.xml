@@ -41,6 +41,7 @@
       required="true"
       labelclass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
+      validate="email"
 		/>
     
     <field 
@@ -52,9 +53,8 @@
       description="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_LABEL"
       message="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_VALIDATION_MESSAGE"
-      filter="tel"
+      filter="int"
       validate="telephone"
-      required="true"
       labelclass="control-label"
     />
       
@@ -69,10 +69,9 @@
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
       filter="string"
       validate="message"
-      required="required"
+      required="true"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
-      maxlength="250"
 		/>
     
     <field name="start_date"
@@ -82,9 +81,10 @@
       description="COM_ACCOMMODATION_ENQUIRY_START_DATE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL"
       filter="string"
-      validate="date"
+      validate="startdate"
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
+      required="true"
     />
     
     <field name="end_date"
@@ -94,9 +94,10 @@
       description="COM_ACCOMMODATION_ENQUIRY_END_DATE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL"
       filter="string"
-      validate="date"
+      validate="enddate"
       message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
+      required="true"
     />  
  
     <field 
