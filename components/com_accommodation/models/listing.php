@@ -1029,7 +1029,7 @@ class AccommodationModelListing extends JModelForm
         // Get the time in 24h format with minutes
         $time = date('Hi');
 
-        if ($item->sms_nightwatchman && ((int) $time > 2200 || $time < 0800))
+        if ($item->sms_nightwatchman && ((int) $time > 2000 || $time < 0800))
         {
 
           // Must be 'night' time

@@ -131,4 +131,6 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
       <?php echo JHtml::_('form.token'); ?>
 
     </div>
+    <?php //Load the batch processing form. ?>
+    <?php echo $this->loadTemplate('batch'); ?>
 </form>

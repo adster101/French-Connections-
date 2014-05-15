@@ -9,7 +9,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class EnquiriesModelEnquiry extends JModelAdmin {
+class EnquiriesModelEnquiry extends JModelAdmin
+{
 
   /**
    * Returns a reference to the a Table object, always creating it.
@@ -20,7 +21,8 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array()) {
+  public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array())
+  {
 
     return JTable::getInstance($type, $prefix, $config);
   }
@@ -29,9 +31,11 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    * Override getItem so we can set the date format
    */
 
-  public function getItem($pk = null) {
+  public function getItem($pk = null)
+  {
 
-    if ($item = parent::getItem($pk)) {
+    if ($item = parent::getItem($pk))
+    {
 
       $item->date_created = JFactory::getDate($item->date_created)->calendar('d M Y');
       $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('d M Y') : 'N/A';
@@ -49,11 +53,13 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_enquiries.enquiries', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
     return $form;
@@ -65,32 +71,39 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_enquiries.edit.enquiry.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
     return $data;
   }
 
-  public function markAsRead($id = '') {
+  public function markAsRead($id = '')
+  {
 
-    if (empty($id)) {
+    if (empty($id))
+    {
       return true;
     }
 
     // Need to check the current status of this enquiry. If already read, just do nout.
-    if ($enquiry = $this->getItem($id)) {
+    if ($enquiry = $this->getItem($id))
+    {
 
-      if ($enquiry->state == 0) {
+      if ($enquiry->state == 0)
+      {
         $enquiry->state = 1;
 
         $enquiry = $enquiry->getProperties();
 
-        if ($this->save($enquiry)) {
+        if ($this->save($enquiry))
+        {
           return true;
         }
       }
@@ -109,7 +122,8 @@ class EnquiriesModelEnquiry extends JModelAdmin {
    *
    */
 
-  protected function preprocessForm(JForm $form, $data) {
+  protected function preprocessForm(JForm $form, $data)
+  {
 
 
     $subject = JText::_('COM_ENQUIRIES_ENQUIRY_REPLY_SUBJECT');
@@ -120,32 +134,75 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     $form->setValue('reply_message', null, $message);
   }
 
-  public function sendReply($data = array()) {
+  public function processFailedEnquiries($enqs = array(), $state = '0')
+  {
+    $user = JFactory::getUser();
+
+    JModelLegacy::addIncludePath(JPATH_SITE, '/components/com_accommodation/models');
+    
+    if (!$user->authorise('core.admin', 'com_enquiries'))
+    {
+      return false;
+    }
+
+    foreach ($enqs as $enquiry)
+    {
+      $enquiry_detail = $this->getItem($enquiry);
+
+      if (!$enquiry_detail)
+      {
+        return false;
+      }
+      
+      $model = JModelLegacy::getInstance();
+            
+      
+    }
+
+    // Load the property details (e.g. enq settings, sms status etc)
+    // Process the email 
+    // Process the SMS (update listing model with override flag)
+    // Update status of enq in system
+    // Return
+    var_dump($enquiry_detail);
+    die;
+
+    echo "woot";
+    die;
+  }
+
+  public function sendReply($data = array())
+  {
 
     $table = $this->getTable();
 
     // Bind the data
-    if (!$table->bind($data)) {
+    if (!$table->bind($data))
+    {
       $this->setError($table->getError());
       return false;
     }
 
     // Check for empty values
-    if (empty($table->guest_email)) {
+    if (empty($table->guest_email))
+    {
       return false;
     }
     // Assign empty values
-    if (empty($table->guest_email)) {
+    if (empty($table->guest_email))
+    {
       return false;
     }
     // Assign empty values
-    if (empty($table->guest_email)) {
+    if (empty($table->guest_email))
+    {
       return false;
     }
     /*
      * Check that we have the details we need to proceed
      */
-    if (empty($data['guest_email']) || empty($data['reply_subject']) || empty($data['reply_message'])) {
+    if (empty($data['guest_email']) || empty($data['reply_subject']) || empty($data['reply_message']))
+    {
 
       return false;
     }
@@ -157,11 +214,13 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
     $property = $this->getTable('PropertyVersions', 'RentalTable');
 
-    if (!$property->load($data['property_id'], false)) {
+    if (!$property->load($data['property_id'], false))
+    {
       return false;
     }
 
-    if ($property->use_invoice_details) {
+    if ($property->use_invoice_details)
+    {
 
       $user = JFactory::getUser();
 
@@ -195,7 +254,9 @@ class EnquiriesModelEnquiry extends JModelAdmin {
 
       $data['from_email'] = $user->email;
       $data['from_name'] = $user->name;
-    } else {
+    }
+    else
+    {
 
       /*
        * Take the email details from the overriden contact details...
@@ -227,12 +288,14 @@ class EnquiriesModelEnquiry extends JModelAdmin {
     $mail->setFrom($from, $from_name);
 
 
-    if (!$mail->Send()) {
+    if (!$mail->Send())
+    {
       return false;
     }
 
     // Add the bcc if the owners want a copy of the email.
-    if (!empty($data['cc_message'])) {
+    if (!empty($data['cc_message']))
+    {
       // If the owner wants a copy then this is 'cced' to the owner in a separate email.
       $cc_email_from = $params->get('admin_enquiry_no_reply', 'adamrifat@frenchconnections.co.uk');
       $cc_recipient = (JDEBUG) ? $params->get('admin_enquiry_email', 'adamrifat@frenchconnections.co.uk') : $from;
@@ -244,7 +307,8 @@ class EnquiriesModelEnquiry extends JModelAdmin {
               ->setSubject($subject)
               ->setBody($body);
 
-      if (!$mail->Send()) {
+      if (!$mail->Send())
+      {
         //Log this out to a log file, not major, owner won't get email is all...
       }
     }

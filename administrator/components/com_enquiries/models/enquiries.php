@@ -71,6 +71,7 @@ class EnquiriesModelEnquiries extends JModelList {
 
       $options = array('' => 'COM_ENQUIRIES_OPTION_ALL',
           '0' => 'COM_ENQUIRIES_OPTION_UNREAD',
+          '1' => 'COM_ENQUIRIES_OPTION_READ',
           '-1' => 'COM_ENQUIRIES_OPTION_FAILED',
           '-2' => 'JTRASHED');
 
@@ -106,7 +107,6 @@ class EnquiriesModelEnquiries extends JModelList {
       e.message,
       date_format(e.start_date, "%d-%m-%Y") as start_date,
       date_format(e.end_date, "%d-%m-%Y") as end_date,
-      e.end_date,
       e.date_created,
       e.state,
       e.property_id,

@@ -9,13 +9,15 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class EnquiriesViewEnquiries extends JViewLegacy {
+class EnquiriesViewEnquiries extends JViewLegacy
+{
 
   protected $items;
   protected $state;
   protected $pagination;
 
-  function display($tpl = null) {    // Gets the info from the model and displays the template 
+  function display($tpl = null)
+  {    // Gets the info from the model and displays the template 
 
     /*
      * Get the permissions for this component
@@ -46,9 +48,11 @@ class EnquiriesViewEnquiries extends JViewLegacy {
   /**
    * Adds the submenu details for this view
    */
-  protected function addSubMenu($canDo) {
+  protected function addSubMenu($canDo)
+  {
 
-    if ($canDo->get('core.edit.state')) {
+    if ($canDo->get('core.edit.state'))
+    {
 
       JHtmlSidebar::addFilter(
               JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', EnquiriesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
@@ -64,7 +68,8 @@ class EnquiriesViewEnquiries extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
 
 
     $document = JFactory::getDocument();
@@ -82,25 +87,30 @@ class EnquiriesViewEnquiries extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar($canDo) {
+  protected function addToolBar($canDo)
+  {
 
 
-    if ($canDo->get('core.edit')) {
+    if ($canDo->get('core.edit'))
+    {
       JToolBarHelper::editList('enquiry.edit', 'JTOOLBAR_EDIT');
     }
 
-    if ($canDo->get('core.edit.state')) {
-      JToolBarHelper::custom('enquiries.publish','envelope-opened','', 'COM_ENQUIRIES_MARK_AS_READ', true);
-      JToolBarHelper::custom('enquiries.unpublish','envelope','', 'COM_ENQUIRIES_MARK_AS_UNREAD', true);
+    if ($canDo->get('core.edit.state'))
+    {
+      JToolBarHelper::custom('enquiries.publish', 'envelope-opened', '', 'COM_ENQUIRIES_MARK_AS_READ', true);
+      JToolBarHelper::custom('enquiries.unpublish', 'envelope', '', 'COM_ENQUIRIES_MARK_AS_UNREAD', true);
       JToolBarHelper::trash('enquiries.trash');
     }
 
-    if ($canDo->get('core.delete')) {
+    if ($canDo->get('core.delete'))
+    {
       JToolBarHelper::deleteList('Are you sure?', 'enquiries.delete', 'JTOOLBAR_DELETE');
-      JToolBarHelper::custom('enquiries.resend', 'refresh','', 'COM_ENQUIRIES_RESEND_FAILED', true);
     }
 
-    if ($canDo->get('core.admin')) {
+    if ($canDo->get('core.admin'))
+    {
+      JToolBarHelper::custom('enquiries.resend', 'refresh', '', 'COM_ENQUIRIES_RESEND_FAILED', true);
       JToolBarHelper::preferences('com_enquiries');
     }
 
@@ -114,7 +124,8 @@ class EnquiriesViewEnquiries extends JViewLegacy {
    *
    * @since   3.0
    */
-  protected function getSortFields() {
+  protected function getSortFields()
+  {
     return array(
         'a.ordering' => JText::_('JGRID_HEADING_ORDERING'),
         'a.title' => JText::_('JGLOBAL_TITLE'),
