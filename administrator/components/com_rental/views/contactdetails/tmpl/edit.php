@@ -93,6 +93,12 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
               <?php echo $this->form->getInput('email_1'); ?>
             </div>
           </div>        
+          <div class="control-group">
+            <?php echo $this->form->getLabel('email_2'); ?>
+            <div class="controls">
+              <?php echo $this->form->getInput('email_2'); ?>
+            </div>
+          </div>        
         </div>
       </fieldset>            
 

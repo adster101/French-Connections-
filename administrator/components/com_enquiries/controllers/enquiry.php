@@ -70,7 +70,8 @@ class EnquiriesControllerEnquiry extends RentalControllerBase
       $errors = $model->getErrors();
 
       // Push up to five validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
+      {
         if ($errors[$i] instanceof Exception)
         {
           $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
@@ -150,9 +151,17 @@ class EnquiriesControllerEnquiry extends RentalControllerBase
       // Update the status of the enquiry to indicate that it's been read.
       $model = $this->getModel();
       $id = $this->input->getInt('id');
+      $item = $model->getItem($id);
 
-      if ($model->publish($id))
+      if (!$item)
       {
+        return false;
+      }
+
+      // Only publish the item (mark as read) if the state is unread and not failed
+      if ($item->state == 0)
+      {
+        $model->publish($id);
         return true;
       }
     }

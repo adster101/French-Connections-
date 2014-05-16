@@ -120,9 +120,8 @@ class AccommodationModelListing extends JModelForm
   {
 
     // Get the input values etc
-    $app = JFactory::getApplication();
+    $app = JFactory::getApplication('site');
     $input = $app->input;
-
 
     // Get the property id
     $id = $input->get('id', '', 'int');
@@ -136,8 +135,8 @@ class AccommodationModelListing extends JModelForm
     $this->setState('unit.id', $unit_id);
 
     // Load the parameters.
-    $params = $app->getParams();
-    $this->setState('params', $params);
+    //$params = $app->getParams();
+    //$this->setState('params', $params);
     parent::populateState();
   }
 
@@ -224,6 +223,7 @@ class AccommodationModelListing extends JModelForm
         ufc.phone_3,
         ufc.firstname,
         ufc.surname,
+        ufc.email_alt,
         ufc.exchange_rate_eur,
         ufc.exchange_rate_usd,
         ufc.address1,
@@ -895,7 +895,7 @@ class AccommodationModelListing extends JModelForm
    * @param type $params
    * @return boolean
    */
-  public function processEnquiry($data = array(), $params = '', $id = '', $unit_id = '')
+  public function processEnquiry($data = array(), $params = '', $id = '', $unit_id = '', $override = false)
   {
 
     // Set up the variables we need to process this enquiry
@@ -936,9 +936,18 @@ class AccommodationModelListing extends JModelForm
     $data['property_id'] = $id;
     $data['unit_id'] = $unit_id;
 
+    // If the enquiry is not valid then we set the state to 'failed'
     if (!$valid)
     {
       $data['state'] = -1;
+    }
+
+    // Override flag to ensure that email will get sent even if not valid. 
+    // For example, from enquiry manager admin wants to sent a failed enquiry
+    if ($override)
+    {
+      $data['state'] = 0;
+      $valid = true;
     }
 
     // Check that we can save the data and save it out to the enquiry table
@@ -991,6 +1000,12 @@ class AccommodationModelListing extends JModelForm
       $mail->addBCC($mailfrom, $fromname);
       $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title, $id));
       $mail->setBody($body);
+
+      // If there is a secondary email then add that as a recipient
+      if (!empty($item->email_alt))
+      {
+        $mail->addRecipient($item->email_alt, $owner_name);
+      }
 
       if (!$mail->Send())
       {

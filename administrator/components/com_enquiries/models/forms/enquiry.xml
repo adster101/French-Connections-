@@ -95,7 +95,7 @@
     
     <field 
       name="unit_id" 
-      type="UserProperties" 
+      type="text" 
       filter="int"
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
@@ -106,17 +106,18 @@
   
   <fieldset name="themessage">
     
-    <field name="message"
-           type="textarea"
-           description="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_DESC"
-           label="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_LABEL"
-           filter="unset"
-           class="input-large"
-           rows="10"
-           maxlength="150"
-           labelclass="control-label"
-           readonly="true"  
-           disabled="true"
+    <field 
+      name="message"
+      type="textarea"
+      description="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_DESC"
+      label="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_LABEL"
+      filter="unset"
+      class="input-large"
+      rows="10"
+      maxlength="150"
+      labelclass="control-label"
+      readonly="true"  
+      disabled="true"
     />        
   </fieldset>
   

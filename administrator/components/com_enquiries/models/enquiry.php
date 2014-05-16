@@ -136,9 +136,12 @@ class EnquiriesModelEnquiry extends JModelAdmin
 
   public function processFailedEnquiries($enqs = array(), $state = '0')
   {
+    // Set up the bits and pieces 
     $user = JFactory::getUser();
-
-    JModelLegacy::addIncludePath(JPATH_SITE, '/components/com_accommodation/models');
+    $params = JComponentHelper::getParams('com_enquiries');
+    JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_accommodation/models');
+    $lang = JFactory::getLanguage();
+    $lang->load('com_accommodation', JPATH_SITE);
     
     if (!$user->authorise('core.admin', 'com_enquiries'))
     {
@@ -147,15 +150,23 @@ class EnquiriesModelEnquiry extends JModelAdmin
 
     foreach ($enqs as $enquiry)
     {
-      $enquiry_detail = $this->getItem($enquiry);
+      $detail = $this->getItem($enquiry);
 
-      if (!$enquiry_detail)
+      if (!$detail)
       {
         return false;
       }
       
-      $model = JModelLegacy::getInstance();
-            
+      $enquiry_detail = JArrayHelper::fromObject($detail);
+      
+      $model = JModelLegacy::getInstance('Listing','AccommodationModel');
+      
+      $model->getState();
+      $model->setState('property.id', $enquiry_detail['property_id']);
+      $model->setState('unit.id', $enquiry_detail['unit_id']);
+      $model->processEnquiry($enquiry_detail, $params, $enquiry_detail['property_id'], $enquiry_detail['unit_id'], true);
+      
+      
       
     }
 
@@ -163,12 +174,8 @@ class EnquiriesModelEnquiry extends JModelAdmin
     // Process the email 
     // Process the SMS (update listing model with override flag)
     // Update status of enq in system
-    // Return
-    var_dump($enquiry_detail);
-    die;
 
-    echo "woot";
-    die;
+    return true;
   }
 
   public function sendReply($data = array())

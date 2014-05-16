@@ -1,0 +1,121 @@
+//
+// Panels - nicked from bootstrap 3
+// ----------------------------------------------------------------
+
+// Base class
+.panel {
+  margin-bottom: 18px;;
+  background-color: @white;
+  border: 1px solid transparent;
+  border-radius: @baseBorderRadius;
+  .box-shadow(0 1px 1px rgba(0,0,0,.05));
+}
+
+// Panel contents
+.panel-body {
+  padding: 9px;
+  .clearfix();
+}
+
+// Panels
+// -------------------------
+.panel-variant(@border; @heading-text-color; @heading-bg-color; @heading-border) {
+  border-color: darken(@border, 10%);
+
+  & > .panel-heading {
+    color: @heading-text-color;
+    background-color: @heading-bg-color;
+    border-color: @heading-border;
+
+    + .panel-collapse .panel-body {
+      border-top-color: @border;
+    }
+  }
+  & > .panel-footer {
+    + .panel-collapse .panel-body {
+      border-bottom-color: @border;
+    }
+  }
+}
+
+// Optional heading
+.panel-heading {
+  padding: 9px 15px;
+  border-bottom: 1px solid transparent;
+  .border-top-radius(@baseBorderRadius);
+  font-weight:bold;
+  > .dropdown .dropdown-toggle {
+    color: inherit;
+  }
+}
+
+// Within heading, strip any `h*` tag of it's default margins for spacing.
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: ceil((@baseFontSize * 1.125));
+  color: inherit;
+
+  > a {
+    color: inherit;
+  }
+}
+
+// Optional footer (stays gray in every modifier class)
+.panel-footer {
+  padding: 10px 15px;
+  background-color: @bodyBackground;
+  border-top: 1px solid #defaultBorder;
+  .border-bottom-radius(@baseBorderRadius - 1);
+}
+
+//
+// Speech bubbles
+// -----------------------------
+
+.skewX(@deg: -15deg) {
+        -webkit-transform:skewX(@deg);
+       -moz-transform:skewX(@deg);
+        -ms-transform:skewX(@deg);
+         -o-transform:skewX(@deg);
+            transform:skewX(@deg);
+}
+
+.quote(@speechBubbleBackground: #fff, @padding: 25px, @bubblePointHeight: 20px, @bubblePointPadding: 0px, @bubblePointAngle: -35deg, @borderColour: @wellBackground)
+{
+  position:relative;
+  border: 1px solid darken(@borderColour, 25%);
+  padding: @padding;
+  .border-radius(@baseBorderRadius);
+  background: @speechBubbleBackground;
+  margin-bottom: @bubblePointHeight + @bubblePointPadding;
+
+  p {    
+      font-size: @baseFontSize;
+  }
+
+  &:before {
+    content:"";
+    position:absolute;
+    bottom:-20px;
+    left:25px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: darken(@borderColour, 25%) transparent transparent darken(@borderColour, 25%);  
+  }
+
+  &:after {
+    content:"";
+    position: absolute;
+    bottom: -18px;
+    left: 26px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: @white transparent transparent @white;
+  }
+}
+
+cite:before {
+  content: '\2014 \00A0';
+}
+

@@ -99,7 +99,16 @@
       message="PLG_USER_PROFILE_FIELD_POSTAL_CODE_MESSAGE"
       size="30"
     />
+      
+    <field
+      name="email_alt"
+      type="email"
+      label="PLG_USER_PROFILE_FIELD_EMAIL_2_LABEL"
+      description="PLG_USER_PROFILE_FIELD_EMAIL_2_DESC"
 
+      validate="email"
+      size="30">
+    </field>
     <field
       name="phone_1"
       type="tel"
@@ -132,8 +141,7 @@
       message="PLG_USER_PROFILE_FIELD_PHONE_3_MESSAGE"
       size="30"
     />
-      
- 
+
       
     <field
       name="vat_status_note"

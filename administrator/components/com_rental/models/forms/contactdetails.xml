@@ -2,8 +2,7 @@
 <form>
   
   <fields
-    name="languages_spoken">
-      
+    name="languages_spoken"> 
     <field
       name="language_1"
       label="COM_RENTAL_CONTACT_DETAILS_PRIMARY_LANGUAGE"
@@ -29,7 +28,6 @@
       type="languages">
       <option>JSELECT</option>
     </field>
-
   </fields>
   
   <fieldset
@@ -111,6 +109,16 @@
       type="email"
       filter="string"
       label="Contact email"
+      maxlength="75"
+      labelclass="control-label"
+      class="validate validate-email"
+      validate="email"
+    />      
+    <field 
+      name="email_2"
+      type="email"
+      filter="string"
+      label="Alternative contact email"
       maxlength="75"
       labelclass="control-label"
       class="validate validate-email"

@@ -29,6 +29,7 @@ class plgUserProfile_fc extends JPlugin {
       'region',
       'country',
       'postal_code',
+      'email_alt',
       'phone_1',
       'phone_2',
       'phone_3',
@@ -79,7 +80,7 @@ class plgUserProfile_fc extends JPlugin {
         // Load the profile data from the database.
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
-        $query->select('user_id,firstname,surname,address1,address2,city,region,country,postal_code,phone_1,phone_2,phone_3,aboutme,tos,vat_status,vat_number,company_number,receive_newsletter,where_heard,exchange_rate_eur,exchange_rate_usd');
+        $query->select('user_id,firstname,surname,address1,address2,city,region,country,postal_code,email_alt,phone_1,phone_2,phone_3,aboutme,tos,vat_status,vat_number,company_number,receive_newsletter,where_heard,exchange_rate_eur,exchange_rate_usd');
         $query->from('#__user_profile_fc');
         $query->where('user_id = ' . (int) $userId);
 

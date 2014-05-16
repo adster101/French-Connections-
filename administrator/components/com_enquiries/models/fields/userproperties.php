@@ -57,7 +57,7 @@ class JFormFieldUserProperties extends JFormFieldList
 	
 		if (in_array(10,$groups)) { // This user is in the property owner user group (10) or a super user.
 			$query->select('a.id, a.title,a.level'); 
-			$query->from('#__helloworld AS a');
+			$query->from('#__property AS a');
 			$query->where('created_by = '.$user->id);		// Select only the props created by the user that created this property
 			
 			// Get the options.
