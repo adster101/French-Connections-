@@ -82,7 +82,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
               </td>
               <td>
                 <?php if (!empty($item->message)) : ?>
-                  <?php echo JHtml::_('string.truncate', $item->message, 150); ?>
+                  <?php echo JHtml::_('string.truncate', $item->message, 175, true, false); ?>
                 <?php endif; ?>                  
                 <p class="small">
                   (<?php echo JText::sprintf('COM_ENQUIRIES_FROM', $item->start_date); ?>

@@ -5,7 +5,6 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
-
 /**
  * HelloWorld Model
  */
@@ -169,11 +168,6 @@ class EnquiriesModelEnquiry extends JModelAdmin
       
       
     }
-
-    // Load the property details (e.g. enq settings, sms status etc)
-    // Process the email 
-    // Process the SMS (update listing model with override flag)
-    // Update status of enq in system
 
     return true;
   }

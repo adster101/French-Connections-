@@ -68,7 +68,7 @@ class RentalControllerBase extends JControllerForm {
         $ownerId = $record->created_by;
       }
 
-      // If the owner matches 'me' then do the test.
+      // If the owner matches 'the owner' then do the test.
       if ($ownerId == $userId) {
 
         return true;

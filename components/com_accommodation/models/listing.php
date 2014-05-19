@@ -923,7 +923,13 @@ class AccommodationModelListing extends JModelForm
     // Check the banned phrases list - This is currently done as a form field validation rule
     if ($this->contains($data['message'], $banned_phrases))
     {
-      $valid = false; // Naughty!
+      $valid = false; // Naughty!!
+    }
+
+    // Check the number of enquiries from this email address    
+    if ($this->enquiryCount($data['guest_email']) >= $params->get('enqs_per_day', 10))
+    {
+      $valid = false; //Naughty!!!
     }
 
     // Add enquiries and property manager table paths
@@ -1004,7 +1010,8 @@ class AccommodationModelListing extends JModelForm
       // If there is a secondary email then add that as a recipient
       if (!empty($item->email_alt))
       {
-        $mail->addRecipient($item->email_alt, $owner_name);
+        $alt_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email_alt;
+        $mail->addRecipient($alt_email, $owner_name);
       }
 
       if (!$mail->Send())
@@ -1102,6 +1109,37 @@ class AccommodationModelListing extends JModelForm
     }
 
     return false;
+  }
+
+  public function enquiryCount($email = '')
+  {
+
+    // Get a new query object
+    $query = $this->_db->getQuery(true);
+
+    $query->select('count(' . $this->_db->quoteName('guest_email') . ') as count');
+    $query->from($this->_db->quoteName('#__enquiries'));
+    $query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d") - INTERVAL 1 DAY)');
+    $query->where(
+            $this->_db->quoteName('guest_email') . '=' .
+            $this->_db->quote(
+                    $this->_db->escape($email, true)
+            )
+    );
+    $query->group($this->_db->quoteName('guest_email'));
+
+    $this->_db->setQuery($query);
+
+    try {
+
+      $row = $this->_db->loadObject();
+      
+    } catch (Exception $e) {
+      
+    }
+    
+    return $row->count;
+    
   }
 
 }

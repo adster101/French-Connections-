@@ -98,11 +98,15 @@
 			description="COM_ENQUIRIES_CONFIG_FIELD_OWNER_ENQUIRY_EMAIL_DESC"
     />
   
-		<field name="redirect"
-			type="menuitem"
-			size="30"
-			label="Menu item to redirect to after a successful enquiry"
-			description="COM_ENQUIRIES_FIELD_CONFIG_REDIRECT_DESC" />
+		<field 
+      name="enqs_per_day"
+			type="integer"
+			label="Enquiries/day"
+			description="The number of enquiries per day a user can send" 
+      first="10"
+      last="50"
+      step="1"
+    />
       
   </fieldset> 
   

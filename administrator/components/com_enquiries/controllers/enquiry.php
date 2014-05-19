@@ -7,10 +7,11 @@ defined('_JEXEC') or die('Restricted access');
 jimport('frenchconnections.controllers.property.base');
 
 /**
- * HelloWorld Controller
+ * Enquiry Controller
  */
 class EnquiriesControllerEnquiry extends RentalControllerBase
 {
+  
   /*
    * Function to reply to an owner enquiry.
    * Updates a date field in the enquiries table to indicate the owner replied.

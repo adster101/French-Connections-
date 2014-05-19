@@ -27,6 +27,11 @@ $modal = new JLayoutFile('shortlist_modal', $basePath = JPATH_SITE . '/component
         <?php echo JText::_('COM_ACCOMMODATION_BROWSE_ACCOMMODATION'); ?>
       </a>
     <?php endif; ?>
+    
+
+   
+
+
     <div class="dropdown pull-right">
       <button class="dropdown-toggle btn btn-small" id="dLabel" role="button" data-toggle="dropdown" data-target="#">
         <i class="icon icon-facebook"></i> 
