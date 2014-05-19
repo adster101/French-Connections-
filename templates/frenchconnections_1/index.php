@@ -156,7 +156,7 @@ else
         <jdoc:include type="modules" name="banner" style="xhtml" />
       </div>
       <?php if ($this->countModules('position-11') && $this->countModules('position-12')) : ?>
-        <div class="homepage-search-box" style="background:url('/images/headers/paris-skyline.jpg') no-repeat center;height:430px;">
+        <div class="homepage-search-box" style="background:url('/images/general/headers/paris-skyline.jpg') no-repeat center;height:430px;">
           <div class="container">
             <jdoc:include type="modules" name="position-11" style="no" />
           </div>

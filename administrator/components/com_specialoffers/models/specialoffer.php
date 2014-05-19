@@ -90,7 +90,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
           size="1" 
           default="0" 
           required="true"
-          labelClass="control-label">
+          labelclass="control-label">
       <option value="">JSELECT</option>
 			<option value="1">JPUBLISHED</option>
 			<option value="0">JUNPUBLISHED</option>
