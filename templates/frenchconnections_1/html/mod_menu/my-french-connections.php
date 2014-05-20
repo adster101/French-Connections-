@@ -21,8 +21,7 @@ if (!$user->guest) {
 //JHtml::_('bootstrap.dropdown');
 // Note. It is important to remove spaces between elements.
 ?>
-<div class='pull-right'>
-  <?php if ($user->guest) : // User is guest. Just want to show a link to the login screen     ?> 
+  <?php if ($user->guest) : // User is guest. Just want to show a link to the login screen ?> 
     <ul role="menu" aria-labelledby="dLabel" class="nav <?php echo $class_sfx; ?>">
       <?php
       foreach ($list as $i => &$item) :
@@ -59,8 +58,8 @@ if (!$user->guest) {
       ?>
     </ul>
   <?php else : ?> 
-    <div class="dropdown my-french">
-
+    <ul class="nav <?php echo $class_sfx; ?>">
+      <li class="dropdown-toggle">
       <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
         <?php echo htmlspecialchars($user->name); ?>
         <b class="caret"></b>
@@ -162,8 +161,8 @@ if (!$user->guest) {
         ?>
 
       </ul>
-    </div>
+      </li>
+    </ul>
 
   <?php endif; ?>
 
-</div>

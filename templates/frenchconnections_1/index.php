@@ -128,33 +128,26 @@ else
       <header class="header" role="banner">
         <div class="container">
           <!-- Header -->
-          <div class="row-fluid">
-            <div class="span3">
-              <a class="brand pull-left" href="<?php echo $this->baseurl; ?>">
-                <?php echo $logo; ?> <?php
-                if ($this->params->get('sitedescription'))
-                {
-                  echo '<div class="site-description">' . htmlspecialchars($this->params->get('sitedescription')) . '</div>';
-                }
-                ?>
-              </a>
-            </div>
-            <div class="span9">
-              <nav class="navigation" role="navigation">
-                <jdoc:include type="modules" name="position-0" style="none" />
-              </nav>
-            </div>
-          </div>
-        </div>  
-      </header>
-      <div class="container">
-        <?php if ($this->countModules('position-1')) : ?>
+          <a class="brand pull-left" href="<?php echo $this->baseurl; ?>">
+            <?php echo $logo; ?> <?php
+            if ($this->params->get('sitedescription'))
+            {
+              echo '<div class="site-description">' . htmlspecialchars($this->params->get('sitedescription')) . '</div>';
+            }
+            ?>
+          </a>            
+
           <nav class="navigation" role="navigation">
-            <jdoc:include type="modules" name="position-1" style="nav" />
+            <jdoc:include type="modules" name="position-0" style="none" />
           </nav>
-        <?php endif; ?>
-        <jdoc:include type="modules" name="banner" style="xhtml" />
-      </div>
+        </div>
+      </header>
+      <?php if ($this->countModules('position-1')) : ?>
+        <div class="container">
+          <jdoc:include type="modules" name="position-1" style="html5" />
+        </div>
+      <?php endif; ?>
+      <jdoc:include type="modules" name="banner" style="xhtml" />
       <?php if ($this->countModules('position-11') && $this->countModules('position-12')) : ?>
         <div class="homepage-search-box" style="background:url('/images/general/headers/paris-skyline.jpg') no-repeat center;height:430px;">
           <div class="container">
