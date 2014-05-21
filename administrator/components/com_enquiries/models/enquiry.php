@@ -5,6 +5,7 @@ defined('_JEXEC') or die('Restricted access');
 
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
+
 /**
  * HelloWorld Model
  */
@@ -26,22 +27,63 @@ class EnquiriesModelEnquiry extends JModelAdmin
     return JTable::getInstance($type, $prefix, $config);
   }
 
-  /*
-   * Override getItem so we can set the date format
+  /**
+   * Method to get a menu item.
+   *
+   * @param   integer    The id of the menu item to get.
+   *
+   * @return  mixed  Menu item data object on success, false on failure.
    */
-
   public function getItem($pk = null)
   {
 
-    if ($item = parent::getItem($pk))
+    $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+
+    if ($pk > 0)
     {
+      // Attempt to load the row.
+      $query = $this->_db->getQuery(true);
 
-      $item->date_created = JFactory::getDate($item->date_created)->calendar('d M Y');
-      $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('d M Y') : 'N/A';
-      $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('d M Y') : 'N/A';
+      $query->select('
+        a.id,
+        date_format(a.date_created, "%d %M %Y") as date_created,
+        date_format(a.start_date, "%d %M %Y") as start_date,
+        date_format(a.end_date,"%d %M %Y") as end_date,
+        guest_forename,
+        guest_surname,
+        guest_email,
+        guest_phone,
+        adults,
+        children,
+        message,
+        a.property_id,
+        a.unit_id,
+        owner_id,
+        state,
+        ip_address,
+        replied,
+        date_replied,
+        b.unit_title'
+      );
+
+      $query->from($this->_db->quoteName('#__enquiries', 'a'));
+      $query->leftJoin($this->_db->quoteName('#__unit_versions', 'b') . ' on b.unit_id = a.unit_id');
+      $query->where('a.id = ' . (int) $pk);
+
+
+      $this->_db->setQuery($query);
+
+      $return = $this->_db->loadObject();
+
+      // Check for a table object error.
+      if ($return === false || empty($return))
+      {
+        $this->setError('There was a problem fetching the enquiry.');
+        return false;
+      }
     }
-
-    return $item;
+    
+    return $return;
   }
 
   /**
@@ -141,7 +183,7 @@ class EnquiriesModelEnquiry extends JModelAdmin
     JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_accommodation/models');
     $lang = JFactory::getLanguage();
     $lang->load('com_accommodation', JPATH_SITE);
-    
+
     if (!$user->authorise('core.admin', 'com_enquiries'))
     {
       return false;
@@ -155,18 +197,15 @@ class EnquiriesModelEnquiry extends JModelAdmin
       {
         return false;
       }
-      
+
       $enquiry_detail = JArrayHelper::fromObject($detail);
-      
-      $model = JModelLegacy::getInstance('Listing','AccommodationModel');
-      
+
+      $model = JModelLegacy::getInstance('Listing', 'AccommodationModel');
+
       $model->getState();
       $model->setState('property.id', $enquiry_detail['property_id']);
       $model->setState('unit.id', $enquiry_detail['unit_id']);
       $model->processEnquiry($enquiry_detail, $params, $enquiry_detail['property_id'], $enquiry_detail['unit_id'], true);
-      
-      
-      
     }
 
     return true;
@@ -313,8 +352,6 @@ class EnquiriesModelEnquiry extends JModelAdmin
         //Log this out to a log file, not major, owner won't get email is all...
       }
     }
-
-
 
     /*
      * It's all gravy 

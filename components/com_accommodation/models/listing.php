@@ -228,6 +228,7 @@ class AccommodationModelListing extends JModelForm
         ufc.exchange_rate_usd,
         ufc.address1,
         ufc.address2,
+        ufc.email_alt,
         ufc.city as owner_city,
         ufc.region as county,
         ufc.country,
@@ -1005,14 +1006,13 @@ class AccommodationModelListing extends JModelForm
       $mail->addReplyTo(array($mailfrom, $fromname));
       $mail->setSender(array($mailfrom, $fromname));
       $mail->addBCC($mailfrom, $fromname);
-      $mail->isHtml(true);
       $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title, $id));
       $mail->setBody($body);
 
       // If there is a secondary email then add that as a recipient
       if (!empty($item->email_alt))
       {
-        $alt_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email_alt;
+        $alt_email = (JDEBUG) ? 'izzy@frenchconnections.co.uk' : $item->email_alt;
         $mail->addRecipient($alt_email, $owner_name);
       }
 
@@ -1028,7 +1028,8 @@ class AccommodationModelListing extends JModelForm
 
       $mail->ClearAllRecipients();
       $mail->ClearAddresses();
-      $mail->setBody($body);
+      $mail->setBody($body); 
+      $mail->isHtml(true);
       $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
       $mail->addRecipient($email);
 

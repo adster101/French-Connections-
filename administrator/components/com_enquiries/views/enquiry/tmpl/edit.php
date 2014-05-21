@@ -39,16 +39,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
           </div>         
         <?php endforeach; ?>
       </fieldset>
-      <fieldset>
-        <?php foreach ($this->form->getFieldset('themessage') as $field): ?>
-          <div class="control-group">
-            <?php echo $field->label; ?>
-            <div class="controls">
-              <?php echo $field->input; ?>
-            </div>
-          </div>         
-        <?php endforeach; ?>
-      </fieldset>
+
     </div>
 
 
@@ -71,7 +62,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
           </i>
           <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_REPLY'); ?>
         </button>
-       
+
 
 
       </fieldset>    
