@@ -67,7 +67,7 @@ class EnquiriesViewEnquiry extends JViewLegacy {
     $document = JFactory::getDocument();
 
     // Set the site property
-    $this->title = JText::sprintf('COM_ENQUIRIES_ENQUIRY_EDIT', $this->item->guest_forename, $this->item->guest_surname);
+    $this->title = JText::sprintf('COM_ENQUIRIES_ENQUIRY_EDIT', $this->item->guest_forename, $this->item->guest_surname, $this->item->unit_title);
 
     // Set the document title
     $this->document->setTitle($this->title);
