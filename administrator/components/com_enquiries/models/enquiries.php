@@ -8,7 +8,8 @@ jimport('joomla.application.component.modellist');
 /**
  * HelloWorldList Model
  */
-class EnquiriesModelEnquiries extends JModelList {
+class EnquiriesModelEnquiries extends JModelList
+{
 
   /**
    * Constructor.
@@ -17,14 +18,15 @@ class EnquiriesModelEnquiries extends JModelList {
    * @see		JController
    * @since	1.6
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     if (empty($config['filter_fields']))
     {
       $config['filter_fields'] = array(
           'id', 'e.id',
           'state', 'e.state',
           'created', 'e.date_created',
-          'property_id','e.property_id'
+          'property_id', 'e.property_id'
       );
     }
 
@@ -39,7 +41,8 @@ class EnquiriesModelEnquiries extends JModelList {
    * @return	void
    * @since	1.6
    */
-  protected function populateState($ordering = null, $direction = null) {
+  protected function populateState($ordering = null, $direction = null)
+  {
     $app = JFactory::getApplication();
 
     // Adjust the context to support modal layouts.
@@ -52,7 +55,8 @@ class EnquiriesModelEnquiries extends JModelList {
     parent::populateState('e.id', 'desc');
   }
 
-  public function preprocessForm(\JForm $form, $data, $group = 'content') {
+  public function preprocessForm(\JForm $form, $data, $group = 'content')
+  {
     parent::preprocessForm($form, $data, $group);
 
     $user = JFactory::getUser();
@@ -65,17 +69,21 @@ class EnquiriesModelEnquiries extends JModelList {
       $type_field = new SimpleXMLElement('<field />');
       $type_field->addAttribute('type', 'list');
       $type_field->addAttribute('name', 'state');
-      $type_field->addAttribute('class', 'input-medium');
+      $type_field->addAttribute('class', 'input-xlarge');
       $type_field->addAttribute('labelclass', 'element-invisible');
       $type_field->addAttribute('onchange', 'this.form.submit()');
 
       $options = array('' => 'COM_ENQUIRIES_OPTION_ALL',
-          '0' => 'COM_ENQUIRIES_OPTION_UNREAD',
           '1' => 'COM_ENQUIRIES_OPTION_READ',
-          '-1' => 'COM_ENQUIRIES_OPTION_FAILED',
-          '-2' => 'JTRASHED');
+          '0' => 'COM_ENQUIRIES_OPTION_UNREAD',
+          '-1' => 'COM_ENQUIRIES_OPTION_FAILED_BANNED_EMAIL',
+          '-3' => 'COM_ENQUIRIES_OPTION_FAILED_BANNED_PHRASE',
+          '-4' => 'COM_ENQUIRIES_OPTION_FAILED_BANNED_MULTIPLE',
+          '-2' => 'JTRASHED'
+      );
 
-      foreach ($options as $key => $value) {
+      foreach ($options as $key => $value)
+      {
         $child = $type_field->addChild('option', $value);
         $child->addAttribute('value', $key);
       }
@@ -89,7 +97,8 @@ class EnquiriesModelEnquiries extends JModelList {
    * @return	string	An SQL query
    *
    */
-  protected function getListQuery() {
+  protected function getListQuery()
+  {
 
     // Get the user to authorise
     $user = JFactory::getUser();
@@ -121,7 +130,7 @@ class EnquiriesModelEnquiries extends JModelList {
     $query->from('#__enquiries e');
     // Join on p.id so we can get the enqs for property owned by current user
     $query->leftJoin('#__property p on p.id = e.property_id');
-    
+
     // Joing on unit versions to get the unit title    
     $query->leftJoin('#__unit_versions u on u.unit_id = e.unit_id');
     $query->where('u.review = 0');
@@ -151,7 +160,7 @@ class EnquiriesModelEnquiries extends JModelList {
     {
       $query->where('e.property_id = ' . (int) $search);
     }
-    else
+    elseif(!empty($search))
     {
       $search = $db->Quote('%' . $db->escape($search, true) . '%');
       $query->where('(e.message LIKE ' . $search . ')');

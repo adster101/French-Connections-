@@ -77,15 +77,6 @@
       labelclass="control-label"
       class="required validate-prn"
     />
-      
-    <field 
-      name="id"
-      type="hidden"
-      filter="int"
-    />
-    
-    
-  
   </fieldset>
 
 </form>

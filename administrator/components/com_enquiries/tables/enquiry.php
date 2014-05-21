@@ -22,15 +22,7 @@ class EnquiriesTableEnquiry extends JTable {
   function __construct(&$db) {
     parent::__construct('#__enquiries', 'id', $db);
   }
-
-  public function load($pk = null, $reset = true) {
-    if (parent::load($pk, $reset)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
+ 
   /**
    * Method to set the publishing state for a row or list of rows in the database
    * table.  The method respects checked out rows by other users and will attempt

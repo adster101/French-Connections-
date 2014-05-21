@@ -174,18 +174,18 @@ else
         <div class="span12">
           <jdoc:include type="modules" name="position-12" style="html5" />
         </div>
-      <?php endif; ?>
-      <div class="row-fluid">
-        <?php if ($this->countModules('position-8')) : ?>
-          <!-- Begin Sidebar -->
-          <div id="sidebar" class="span3">
-            <div class="sidebar-nav">
-              <jdoc:include type="modules" name="position-8" style="xhtml" />
+      <?php endif; ?>        <div class="container">
+
+        <div class="row-fluid">
+          <?php if ($this->countModules('position-8')) : ?>
+            <!-- Begin Sidebar -->
+            <div id="sidebar" class="span3">
+              <div class="sidebar-nav">
+                <jdoc:include type="modules" name="position-8" style="xhtml" />
+              </div>
             </div>
-          </div>
-          <!-- End Sidebar -->
-        <?php endif; ?>
-        <div class="container">
+            <!-- End Sidebar -->
+          <?php endif; ?>
           <main id="content" role="main" class="<?php echo $span; ?>">
             <!-- Begin Content -->
             <jdoc:include type="modules" name="position-3" style="xhtml" />

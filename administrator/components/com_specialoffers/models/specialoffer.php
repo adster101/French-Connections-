@@ -150,6 +150,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
     // Set the date created timestamp
     $data['date_created'] = JFactory::getDate()->toSql();
     // And format the dates into the correct mysql date format
+    
     $data['start_date'] = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
     $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
     

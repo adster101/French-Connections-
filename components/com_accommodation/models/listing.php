@@ -912,28 +912,35 @@ class AccommodationModelListing extends JModelForm
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
     $sitename = $app->getCfg('sitename');
+    $car_hire_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));
+    $currency_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('currency_affiliate'));
+    $ferry_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('ferry_affiliate'));
+    $shortlist_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('shortlist_page'));
     $minutes_until_safe_to_send = '';
 
-    // Check the banned email list 
+    // Add enquiries  paths
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
+
+    // Check the banned email list     
     if (in_array($data['guest_email'], $banned_emails))
     {
       $valid = false; // Naughty!
+      $data['state'] = -1;
     }
 
     // Check the banned phrases list - This is currently done as a form field validation rule
     if ($this->contains($data['message'], $banned_phrases))
     {
       $valid = false; // Naughty!!
+      $data['state'] = -3;
     }
 
     // Check the number of enquiries from this email address    
     if ($this->enquiryCount($data['guest_email']) >= $params->get('enqs_per_day', 10))
     {
       $valid = false; //Naughty!!!
+      $data['state'] = -4;
     }
-
-    // Add enquiries and property manager table paths
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 
     $table = $this->getTable();
 
@@ -942,13 +949,7 @@ class AccommodationModelListing extends JModelForm
     $data['property_id'] = $id;
     $data['unit_id'] = $unit_id;
 
-    // If the enquiry is not valid then we set the state to 'failed'
-    if (!$valid)
-    {
-      $data['state'] = -1;
-    }
-
-    // Override flag to ensure that email will get sent even if not valid. 
+     // Override flag to ensure that email will get sent even if not valid. 
     // For example, from enquiry manager admin wants to sent a failed enquiry
     if ($override)
     {
@@ -1004,6 +1005,7 @@ class AccommodationModelListing extends JModelForm
       $mail->addReplyTo(array($mailfrom, $fromname));
       $mail->setSender(array($mailfrom, $fromname));
       $mail->addBCC($mailfrom, $fromname);
+      $mail->isHtml(true);
       $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title, $id));
       $mail->setBody($body);
 
@@ -1020,7 +1022,10 @@ class AccommodationModelListing extends JModelForm
       }
 
       // Prepare email body for the holidaymaker email
-      $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname);
+      // TO DO - Make the property link not hard coded 
+      $property_link = JUri::base() . 'listing/' . (int) $id . '?unit_id=' . (int) $unit_id;
+      $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname, $property_link, $property_link, $car_hire_link, $currency_link, $ferry_link, $shortlist_link);
+
       $mail->ClearAllRecipients();
       $mail->ClearAddresses();
       $mail->setBody($body);
@@ -1119,7 +1124,9 @@ class AccommodationModelListing extends JModelForm
 
     $query->select('count(' . $this->_db->quoteName('guest_email') . ') as count');
     $query->from($this->_db->quoteName('#__enquiries'));
-    $query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d") - INTERVAL 1 DAY)');
+    //$query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d") - INTERVAL 1 DAY)');
+    // Just needs to be great than now...surely?
+    $query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d"))');
     $query->where(
             $this->_db->quoteName('guest_email') . '=' .
             $this->_db->quote(
@@ -1133,13 +1140,11 @@ class AccommodationModelListing extends JModelForm
     try {
 
       $row = $this->_db->loadObject();
-      
     } catch (Exception $e) {
       
     }
-    
+
     return $row->count;
-    
   }
 
 }

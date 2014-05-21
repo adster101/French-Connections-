@@ -94,9 +94,9 @@
     />      
     
     <field 
-      name="unit_id" 
+      name="unit_title" 
       type="text" 
-      filter="int"
+      filter="string"
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
       readonly="true"
