@@ -950,7 +950,7 @@ class AccommodationModelListing extends JModelForm
     $data['property_id'] = $id;
     $data['unit_id'] = $unit_id;
 
-     // Override flag to ensure that email will get sent even if not valid. 
+    // Override flag to ensure that email will get sent even if not valid. 
     // For example, from enquiry manager admin wants to sent a failed enquiry
     if ($override)
     {
@@ -1028,7 +1028,7 @@ class AccommodationModelListing extends JModelForm
 
       $mail->ClearAllRecipients();
       $mail->ClearAddresses();
-      $mail->setBody($body); 
+      $mail->setBody($body);
       $mail->isHtml(true);
       $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
       $mail->addRecipient($email);
@@ -1051,33 +1051,33 @@ class AccommodationModelListing extends JModelForm
           return false;
         }
 
+        // Get minutes between now and midnight
+        // If minutes less than 240 
+        // Schedule for tomorrow at eight
+        // Else schedule for today at eight
         // Set default timezone so we can work out the correct time now
         date_default_timezone_set("Europe/London");
 
-        // Get the time in 24h format with minutes
-        $time = date('Hi');
-
-        if ($item->sms_nightwatchman && ((int) $time > 2000 || $time < 0800))
+        // Get the time in 'HHmm' format
+        // E.g. 2034
+        $time = (int) date('Hi');
+        
+        if ($item->sms_nightwatchman && ($time > 2000 && $time < 2359))
         {
 
-          // Must be 'night' time
-          // Determine the number of minutes until 0800h when it's safe to send the SMS
-          if ($time < 2359)
-          {
-            // Get the unix timestamp for tomorrow at 0800h
-            $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
+          // Get the unix timestamp for tomorrow at 0800h
+          $tomorrow_at_eight = mktime(8, 0, 0, date('m'), date('d') + 1, date('y'));
 
-            // Calculate the minutes between now and when we it's safe to send the message.
-            $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
-          }
-          else
-          {
-            // Get the unix timestamp for later today at 0800h
-            $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
+          // Calculate the minutes between now and when we it's safe to send the message.
+          $minutes_until_safe_to_send = round(($tomorrow_at_eight - time()) / 60);
+        }
+        elseif ($item->sms_nightwatchman && ($time > 0 && $time < 800))
+        {
+          // Get the unix timestamp for later today at 0800h
+          $today_at_eight = mktime(8, 0, 0, date('m'), date('d'), date('y'));
 
-            // Calculate the minutes between now and when we it's safe to send the message.
-            $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
-          }
+          // Calculate the minutes between now and when we it's safe to send the message.
+          $minutes_until_safe_to_send = round(($today_at_eight - time()) / 60);
         }
 
         /*
@@ -1089,7 +1089,7 @@ class AccommodationModelListing extends JModelForm
         }
       }
     }
-
+    die;
     // We are done.
     // TO DO: Should add some logging of the different failure points above.
     return true;
