@@ -22,3 +22,6 @@ $filters = $data['view']->filterForm->getGroup('filter');
     <?php endif; ?>
   <?php endforeach; ?>
 <?php endif; ?>
+  <button class="btn" style="margin-bottom: 10px">
+    <?php echo JText::_('JSUBMIT'); ?>
+  </button>

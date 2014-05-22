@@ -26,9 +26,9 @@
         label="COM_RENTAL_HELLOWORLD_FILTER_SNOOZED"
         class="input-medium"
         format="%d-%m-%Y"
-        hint="From date received"
-        onchange="this.form.submit()"> 
-      </field>   
+        hint="From date received" 
+      /> 
+         
     </fieldset>
   </fields> 
   <fields name="list">
