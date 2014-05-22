@@ -919,7 +919,7 @@ class AccommodationModelListing extends JModelForm
     $shortlist_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('shortlist_page'));
     $minutes_until_safe_to_send = '';
 
-    // Add enquiries  paths
+    // Add enquiries paths
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 
     // Check the banned email list     

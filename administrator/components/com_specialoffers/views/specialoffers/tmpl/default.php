@@ -64,11 +64,9 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
               <th class="hidden-phone">
                 <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
               </th>
-              <?php if ($canChangeState) : // If user can change state just show them un/publish buttons (e.g. admin)  ?>
-                <th>
-                  <?php echo JText::_('JPUBLISHED'); ?>
-                </th>    
-              <?php endif; ?>
+              <th>
+                <?php echo JText::_('JPUBLISHED'); ?>
+              </th>    
               <th>
                 <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_TITLE', 'so.title', $listDirn, $listOrder); ?>
 
@@ -76,7 +74,7 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
               <th>
                 <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_PROPERTY_ID', 'c.unit_title', $listDirn, $listOrder); ?>
               </th>
-    
+
               <th>
                 <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_START_DATE', 'a.start_date', $listDirn, $listOrder); ?>
 
@@ -93,20 +91,18 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
                 <td class="hidden-phone">
                   <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                 </td>
-                <?php if ($canChangeState) : // If user can change state just show them un/publish buttons (e.g. admin)  ?>
-                  <td>
-                    <?php echo JHtml::_('jgrid.published', $item->published, $i, 'specialoffers.', $canChangeState, 'cb', $item->start_date, $item->end_date); ?>
-                    <?php if ($item->published && strtotime($item->start_date) < time() && strtotime($item->end_date) > time()) : // Offer is current?>
-                      <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_ACTIVE'); ?>
-                    <?php elseif ($item->published && strtotime($item->end_date) < time()) : // Offer is published but expired?>  
-                      <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_EXPIRED'); ?>
-                    <?php elseif ($item->published && strtotime($item->start_date) > time()) : // Offer is published but scheduled for future date ?>  
-                      <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_SCHEDULED'); ?>
-                    <?php elseif (!$item->published) : // Offer is awaiting moderation ?>
-                      <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_AWAITING_APPROVAL'); ?>
-                    <?php endif; ?>
-                  </td>
-                <?php endif; ?>
+                <td>
+                  <?php echo JHtml::_('jgrid.published', $item->published, $i, 'specialoffers.', $canChangeState, 'cb', $item->start_date, $item->end_date); ?>
+                  <?php if ($item->published && strtotime($item->start_date) < time() && strtotime($item->end_date) > time()) : // Offer is current?>
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_ACTIVE'); ?>
+                  <?php elseif ($item->published && strtotime($item->end_date) < time()) : // Offer is published but expired?>  
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_EXPIRED'); ?>
+                  <?php elseif ($item->published && strtotime($item->start_date) > time()) : // Offer is published but scheduled for future date ?>  
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_SCHEDULED'); ?>
+                  <?php elseif (!$item->published) : // Offer is awaiting moderation ?>
+                    <?php echo JText::_('COM_SPECIALOFFERS_OFFER_STATUS_AWAITING_APPROVAL'); ?>
+                  <?php endif; ?>
+                </td>
                 <td>
                   <?php if ($canEdit) : ?>
                     <a href="<?php echo JRoute::_('index.php?option=com_specialoffers&task=specialoffer.edit&id=' . (int) $item->id); ?>">
@@ -116,13 +112,14 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
                       <?php echo $this->escape($item->description); ?>
                     </span>
                   <?php else: ?>
-                    <strong>
-                      <?php echo JHtml::_('string.truncate', $this->escape(strip_tags($item->title)), 150); ?>
-                    </strong>
-                    <br />
-                    <span class="small">
+                    <p>
+                      <strong>
+                        <?php echo $this->escape($item->title); ?>
+                      </strong>
+                      <br />
                       <?php echo $this->escape($item->description); ?>
-                    </span> 
+                    </p>
+
                   <?php endif; ?>
                 </td>              
                 <td>

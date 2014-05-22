@@ -25,7 +25,7 @@ class RentalControllerBase extends JControllerForm {
 
     // Needs to be update as follows
     // For enquiries and special offers the $key will not point to the property table
-    if ($this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs') {
+    if ($this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs') {
 
       $model = $this->getModel();
       $table = $model->getTable();

@@ -18,7 +18,7 @@
       class="required validate-title"
       validate="title"
       labelclass="control-label"
-		/>
+    />
  
     <field 
       name="description"
@@ -32,7 +32,7 @@
       maxlength="150"
       class="required validate-description"
       labelclass="control-label"
-		/>
+    />
     
     <field 
       name="start_date"
@@ -76,6 +76,12 @@
       message="COM_SPECIALOFFERS_PROPERTY_ID_VALIDATION_MESSAGE"
       labelclass="control-label"
       class="required validate-prn"
+    />
+    
+    <field 
+      name="id"
+      type="hidden"
+      filter="int" 
     />
   </fieldset>
 

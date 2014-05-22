@@ -9,7 +9,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class SpecialOffersModelSpecialOffer extends JModelAdmin {
+class SpecialOffersModelSpecialOffer extends JModelAdmin
+{
 
   /**
    * Method override to check if you can edit an existing record.
@@ -20,18 +21,21 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    * @return	boolean
    * @since	1.6
    */
-  protected function allowEdit($data = array(), $key = 'id') {
+  protected function allowEdit($data = array(), $key = 'id')
+  {
     // Check specific edit permission then general edit permission.
     return JFactory::getUser()->authorise('core.edit');
   }
-  
+
   /*
    * Override getItem so we can set the date format
    */
 
-  public function getItem($pk = null) {
-    
-    if ($item = parent::getItem($pk)) {
+  public function getItem($pk = null)
+  {
+
+    if ($item = parent::getItem($pk))
+    {
 
       $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('d-m-Y') : '';
       $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('d-m-Y') : '';
@@ -39,7 +43,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
 
     return $item;
   }
-  
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -49,7 +53,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'SpecialOffer', $prefix = 'SpecialOffersTable', $config = array()) {
+  public function getTable($type = 'SpecialOffer', $prefix = 'SpecialOffersTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -61,11 +66,13 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_specialoffers.specialoffers', 'specialoffer', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
     return $form;
@@ -73,13 +80,15 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
 
   /* Method to preprocess the special offer edit form */
 
-  protected function preprocessForm(JForm $form, $data) {
+  protected function preprocessForm(JForm $form, $data)
+  {
 
     // Get the user
     $user = JFactory::getUser();
 
     // If the user is authorised to edit state then we assume they have general admin rights
-    if ($user->authorise('core.edit.state', 'com_specialoffers')) {
+    if ($user->authorise('core.edit.state', 'com_specialoffers'))
+    {
 
       $field = '<form><fieldset name="publishing"><field name="published" 
           type="list" 
@@ -100,8 +109,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
 
       $form->setFieldAttribute('unit_id', 'type', 'text');
 
-      if (!empty($data->property_id)) {
-        $form->setFieldAttribute('property_id', 'readonly', 'true');
+      if (!empty($data->property_id))
+      {
+        $form->setFieldAttribute('unit_id', 'readonly', 'true');
       }
 
       $form->load($field);
@@ -114,15 +124,41 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_specialoffers.edit.specialoffer.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
     return $data;
+  }
+
+  /**
+   * 
+   */
+  public function publish(&$pks, $value = 1)
+  {
+
+    $publish = parent::publish($pks, $value);
+
+    if ($publish)
+    {
+      // Item has been published, send a notification email to the owner
+      foreach ($pks as $k => $v)
+      {
+        // Get the special offer details
+        $item = $this->getItem($v);
+
+        if (!$item)
+        {
+          return false;
+        }
+      }
+    }
   }
 
   /**
@@ -133,58 +169,105 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin {
    * @return	boolean	True on success.
    * @since	1.6
    */
-  public function save($data) {
-    
-    /*
-     * Add the helloworld tables to the JTable include path
-     */
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
-   
+  public function save($data)
+  {
     $app = JFactory::getApplication();
-    
-    // Get the user
-    $user = JFactory::getUser();   
-    
-    $unit_id = $data['unit_id'];
-       
-    // Set the date created timestamp
-    $data['date_created'] = JFactory::getDate()->toSql();
-    // And format the dates into the correct mysql date format
-    
-    $data['start_date'] = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
-    $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
-    
-    // Get an instance of the unit table
-    $table = $this->getTable('Unit','RentalTable');
-    
-    // Get the parent property id for the owner of this property 
-    if (!$table->load($unit_id)) {
+    $user = JFactory::getUser();
+    // Get an instance of the unit table, so we can get the property ID...
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    $unit_table = $this->getTable('Unit', 'RentalTable');
+    $table = $this->getTable();
+    $send_notification_email = false;
+    $date = JFactory::getDate()->toSql();
+
+    // $this->getUnitDetail() // Method to get unit title, owner id and property id from a unit id
+    // Checks needed here include
+    // Only one active offer per unit
+    // $offers = $this->getActiveOffers();
+    // If owner on basic package then they get two special offers only...  
+    // $offer_count = $this->getAvailableOffers();
+    // 
+    // Get the parent property id for the unit the offer is being added to
+    if (!$unit_table->load($data['unit_id']))
+    {
       $this->setError(JText::_('COM_SPECIAL_OFFERS_PROBLEM_CREATING_OFFER'));
       return false;
     }
-    
-    // Set the user ID in the data array
-    $data['created_by'] = $table->created_by;
-    $data['property_id'] = $table->property_id;
-    
-    
-    // TO DO - Add a check that no active offers exist for this unit already
-    
-    
-    if (parent::save($data)) {
-     
-      // Trigger email to admin user
-      
-      // Set additional messaging to notify user that offer is awaiting moderation etc.
-      if (!$user->authorise('core.edit.state', 'com_specialoffers')) {
-        JFactory::getApplication()->enqueueMessage(JText::_('COM_SPECIALOFFERS_OFFER_ADDED_SUCCESS'));
+
+    $data['property_id'] = $unit_table->property_id;
+
+    // Set the date created timestamp
+    $data['date_created'] = $date;
+
+    // And format the dates into the correct mysql date format
+    $data['start_date'] = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
+    $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
+
+    // Allow an exception to be thrown.
+    try {
+      $key = $table->getKeyName();
+      $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+      $isNew = true;
+
+      // Load the row if saving an existing record. 
+      // Just do getItem here? what if new?
+      if ($pk > 0)
+      {
+        $item = $this->getItem($pk);
       }
-      
-      return true;
+
+      // Offer already created. If not approved and being set to published then update the approved by gubbins
+      if (empty($item->approved_by) && empty($item->approved_on) && !$item->published && $data['published'] == 1)
+      {
+        $data['approved_by'] = $user->id;
+        $data['approved_date'] = $date;
+        // Ensures that we only send notification email when offer is first approved.
+        $send_notification_email = true;
+      }
+
+      // Store the data.
+      if (!$table->save($data))
+      {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Clean the cache.
+      $this->cleanCache();
+    } catch (Exception $e) {
+      $this->setError($e->getMessage());
+
+      return false;
     }
 
-    return false;
-  }
 
+
+    // Trigger email to admin user
+    if ($send_notification_email)
+    {
+      // 
+      var_dump($unit_table);die;
+    }
+
+    // Set additional messaging to notify user that offer is awaiting moderation etc.
+    if (!$user->authorise('core.edit.state', 'com_specialoffers'))
+    {
+      $app->set;
+      $app->enqueueMessage(JText::_('COM_SPECIALOFFERS_OFFER_ADDED_SUCCESS'));
+    }
+    
+    // Gubbins needed for correct redirect of controller etc
+    $pkName = $table->getKeyName();
+
+    if (isset($table->$pkName))
+    {
+      $this->setState($this->getName() . '.id', $table->$pkName);
+    }
+
+    $this->setState($this->getName() . '.new', $isNew);
+    
+    
+    return true;
+  }
 
 }

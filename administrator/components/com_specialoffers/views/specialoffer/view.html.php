@@ -85,6 +85,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
   protected function addToolBar($canDo) {
 
     if ($canDo->get('core.create')) {
+      JToolBarHelper::apply('specialoffer.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('specialoffer.save', 'JTOOLBAR_SAVE');
     }
     
