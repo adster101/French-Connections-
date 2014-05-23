@@ -88,7 +88,7 @@ jQuery(document).ready(function() {
   jQuery(function() {
     if (jQuery('.start_date').length) {
 
-      jQuery(".hasdatepicker").datepicker({dateFormat: 'yy-mm-dd'});
+      jQuery(".hasdatepicker").datepicker({dateFormat: 'dd-mm-yy'});
 
       var start_date = jQuery('.start_date').attr('value');
 

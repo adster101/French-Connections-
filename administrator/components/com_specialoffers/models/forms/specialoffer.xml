@@ -5,7 +5,19 @@
     addrulepath="/administrator/components/com_specialoffers/models/rules" 
     addfieldpath="/administrator/components/com_specialoffers/models/fields" 
     label="">
-    
+           
+    <field 
+      name="unit_id" 
+      type="UserProperties" 
+      filter="int"
+      description="COM_SPECIALOFFERS_PROPERTY_ID_DESC"
+      label="COM_SPECIALOFFERS_PROPERTY_ID_LABEL"
+      default=""
+      required="true"
+      message="COM_SPECIALOFFERS_PROPERTY_ID_VALIDATION_MESSAGE"
+      labelclass="control-label"
+      class="required validate-prn"
+    />
     <field 
       name="title"
       type="text"
@@ -15,9 +27,10 @@
       filter="string"
       required="true"
       maxlength="50"
-      class="required validate-title"
+      class="required validate-title input-xxlarge"
       validate="title"
       labelclass="control-label"
+      hint="COM_SPECIALOFFERS_TITLE_PLACEHOLDER"
     />
  
     <field 
@@ -32,6 +45,7 @@
       maxlength="150"
       class="required validate-description"
       labelclass="control-label"
+      hint="COM_SPECIALOFFERS_DESCRIPTION_PLACEHOLDER"
     />
     
     <field 
@@ -64,19 +78,7 @@
       message="COM_SPECIALOFFERS_END_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"           
     />
-        
-    <field 
-      name="unit_id" 
-      type="UserProperties" 
-      filter="int"
-      description="COM_SPECIALOFFERS_PROPERTY_ID_DESC"
-      label="COM_SPECIALOFFERS_PROPERTY_ID_LABEL"
-      default=""
-      required="true"
-      message="COM_SPECIALOFFERS_PROPERTY_ID_VALIDATION_MESSAGE"
-      labelclass="control-label"
-      class="required validate-prn"
-    />
+ 
     
     <field 
       name="id"

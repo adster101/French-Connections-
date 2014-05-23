@@ -9,13 +9,15 @@ jimport('joomla.application.component.view');
 /**
  * Classification View
  */
-class SpecialOffersViewSpecialOffer extends JViewLegacy {
+class SpecialOffersViewSpecialOffer extends JViewLegacy
+{
 
   /**
    * display method of Attribute view
    * @return void
    */
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
 
     $canDo = SpecialOffersHelper::getActions();
 
@@ -24,7 +26,8 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
     $form = $this->get('Form');
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
@@ -47,10 +50,10 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
   /**
    * Adds the submenu details for this view
    */
-  protected function addSubMenu() {
+  protected function addSubMenu()
+  {
 
     //RentalHelper::addSubmenu('specialoffers');
-
     //$this->sidebar = JHtmlSidebar::render();
   }
 
@@ -59,7 +62,8 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $isNew = $this->item->id == 0;
 
     $document = JFactory::getDocument();
@@ -82,15 +86,22 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar($canDo) {
+  protected function addToolBar($canDo)
+  {
 
-    if ($canDo->get('core.create')) {
+    if ($canDo->get('core.create'))
+    {
       JToolBarHelper::apply('specialoffer.apply', 'JTOOLBAR_APPLY');
+    }
+
+    // Only show the 'apply' button if you can edit state.
+    if ($canDo->get('core.edit.state'))
+    {
       JToolBarHelper::save('specialoffer.save', 'JTOOLBAR_SAVE');
     }
-    
+
     JToolBarHelper::cancel('specialoffer.cancel', 'JTOOLBAR_CLOSE');
-    
+
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
 
     // Set the title which appears on the toolbar 

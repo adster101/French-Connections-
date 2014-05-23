@@ -2,20 +2,32 @@
 <config>
   
   
-	<fieldset
-		name="permissions"
-		label="JCONFIG_PERMISSIONS_LABEL"
-		description="JCONFIG_PERMISSIONS_DESC"
-	>
-		<field
-			name="rules"
-			type="rules"
-			label="JCONFIG_PERMISSIONS_LABEL"
-			class="inputbox"
-			validate="rules"
-			filter="rules"
-			component="com_specialoffers"
-			section="component"
-		/>
-	</fieldset>
+  <fieldset
+    name="permissions"
+    label="JCONFIG_PERMISSIONS_LABEL"
+    description="JCONFIG_PERMISSIONS_DESC"
+  >
+    <field
+      name="rules"
+      type="rules"
+      label="JCONFIG_PERMISSIONS_LABEL"
+      class="inputbox"
+      validate="rules"
+      filter="rules"
+      component="com_specialoffers"
+      section="component"
+    />
+  </fieldset>
+  <fieldset 
+    name="advanced"
+    label="Advanced"> 
+    <field
+      name="intasure"
+      type="text"
+      label="Intasure"
+      class="input-xxlarge"
+      
+      
+    />
+  </fieldset>
 </config>

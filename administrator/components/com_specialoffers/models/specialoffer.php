@@ -11,34 +11,67 @@ jimport('joomla.application.component.modeladmin');
  */
 class SpecialOffersModelSpecialOffer extends JModelAdmin
 {
-
-  /**
-   * Method override to check if you can edit an existing record.
-   *
-   * @param	array	$data	An array of input data.
-   * @param	string	$key	The name of the key for the primary key.
-   *
-   * @return	boolean
-   * @since	1.6
+  /*
+   * Function get offer
+   * Gets one special offer for a property 
+   * 
+   * params
+   * @id; property id
+   * 
    */
-  protected function allowEdit($data = array(), $key = 'id')
+
+  public function getActiveOffer($unit_id = null, $start_date = '', $end_date = '', $pk = 0)
   {
-    // Check specific edit permission then general edit permission.
-    return JFactory::getUser()->authorise('core.edit');
+    $query = $this->_db->getQuery(true);
+    $query->select('count(*) as count');
+    $query->from($this->_db->quoteName('#__special_offers'));
+    $query->where('unit_id = ' . (int) $unit_id);
+    $query->where('published = 1');
+    // If new start date falls between any eisting start and end dates then it can't be valid
+    // http://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
+    $query->where('(start_date <= ' . $this->_db->Quote($end_date) . ') AND (end_date >= ' . $this->_db->Quote($start_date) . ')');
+    $query->where('id <> ' . (int) $pk);
+    // Get the offer 
+    $this->_db->setQuery($query);
+
+    try {
+
+      $result = $this->_db->loadObject();
+
+      if ($result->count > 0)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+
+      return $result;
+    } catch (RuntimeException $e) {
+      $je = new JException($e->getMessage());
+      $this->setError($je);
+      return false;
+    }
   }
 
-  /*
-   * Override getItem so we can set the date format
+  /**
+   * Method to get a single record.
+   * Overloaded simply to format the dates accordingly
+   *
+   * @param   integer  $pk  The id of the primary key.
+   *
+   * @return  mixed    Object on success, false on failure.
+   *
+   * @since   12.2
    */
-
   public function getItem($pk = null)
   {
 
     if ($item = parent::getItem($pk))
     {
-
-      $item->start_date = ($item->start_date != '0000-00-00') ? JFactory::getDate($item->start_date)->calendar('d-m-Y') : '';
-      $item->end_date = ($item->end_date != '0000-00-00') ? JFactory::getDate($item->end_date)->calendar('d-m-Y') : '';
+      $item->start_date = (empty($item->start_date)) ? '' : JFactory::getDate($item->start_date)->calendar('d-m-Y');
+      $item->end_date = (empty($item->end_date)) ? '' : JFactory::getDate($item->end_date)->calendar('d-m-Y');
     }
 
     return $item;
@@ -56,6 +89,46 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   public function getTable($type = 'SpecialOffer', $prefix = 'SpecialOffersTable', $config = array())
   {
     return JTable::getInstance($type, $prefix, $config);
+  }
+
+  /**
+   * Method to get some basic unit details for use in the confirmation email
+   *  
+   * @param int $id
+   * @return Object on success, false on failure.
+   */
+  private function getUnitDetail($unit_id = '')
+  {
+
+    try {
+
+      $query = $this->_db->getQuery(true);
+
+      $query->select('
+        b.unit_title,
+        b.property_id,
+        b.unit_id,
+        e.firstname,
+        e.surname,
+        f.email
+      ');
+
+      $query->from($this->_db->quoteName('#__unit', 'a'));
+      $query->leftJoin($this->_db->quoteName('#__unit_versions', 'b') . ' ON (b.unit_id = a.id and b.id = (select max(c.id) from ' . $this->_db->quoteName('#__unit_versions', 'c') . ' where c.unit_id = a.id and c.review = 0))');
+      $query->leftJoin($this->_db->quoteName('#__property', 'd') . ' on d.id = b.property_id');
+      $query->leftJoin($this->_db->quoteName('#__user_profile_fc', 'e') . ' on e.user_id = d.created_by');
+      $query->leftJoin($this->_db->quoteName('#__users', 'f') . ' on f.id = e.user_id');
+      $query->where('a.id = ' . (int) $unit_id);
+
+      $this->_db->setQuery($query);
+
+      $row = $this->_db->loadObject();
+    } catch (Exception $e) {
+      $this->setError($e->getMessage());
+      return false;
+    }
+
+    return $row;
   }
 
   /**
@@ -102,9 +175,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
           labelclass="control-label">
       <option value="">JSELECT</option>
 			<option value="1">JPUBLISHED</option>
-			<option value="0">JUNPUBLISHED</option>
-			<option value="2">JARCHIVED</option>
-			<option value="-2">JTRASHED</option>
 		</field></fieldset></form>';
 
       $form->setFieldAttribute('unit_id', 'type', 'text');
@@ -173,51 +243,63 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   {
     $app = JFactory::getApplication();
     $user = JFactory::getUser();
-    // Get an instance of the unit table, so we can get the property ID...
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
-    $unit_table = $this->getTable('Unit', 'RentalTable');
     $table = $this->getTable();
     $send_notification_email = false;
     $date = JFactory::getDate()->toSql();
+    $unit_id = $data['unit_id'];
+    $start_date = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
+    $end_date = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
+    $key = $table->getKeyName();
+    $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+    $params = JComponentHelper::getParams('com_specialoffers');
 
-    // $this->getUnitDetail() // Method to get unit title, owner id and property id from a unit id
-    // Checks needed here include
-    // Only one active offer per unit
-    // $offers = $this->getActiveOffers();
-    // If owner on basic package then they get two special offers only...  
-    // $offer_count = $this->getAvailableOffers();
-    // 
-    // Get the parent property id for the unit the offer is being added to
-    if (!$unit_table->load($data['unit_id']))
-    {
-      $this->setError(JText::_('COM_SPECIAL_OFFERS_PROBLEM_CREATING_OFFER'));
-      return false;
-    }
-
-    $data['property_id'] = $unit_table->property_id;
-
-    // Set the date created timestamp
-    $data['date_created'] = $date;
-
-    // And format the dates into the correct mysql date format
-    $data['start_date'] = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
-    $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
-
-    // Allow an exception to be thrown.
     try {
-      $key = $table->getKeyName();
-      $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
-      $isNew = true;
+
+      $unit_detail = $this->getUnitDetail($unit_id);
+
+      if (!$unit_detail)
+      {
+        $this->setError(JText::_('COM_SPECIALOFFERS_OFFER_NO_UNIT'));
+        return false;
+      }
+
+      // Set the parent property id for the unit the offer is being added to 
+      $data['property_id'] = $unit_detail->property_id;
+
+      // Only allow one active offer per unit
+      $active_offer = $this->getActiveOffer($unit_id, $start_date, $end_date, $pk);
+      if ($active_offer)
+      {
+        $this->setError(JText::_('COM_SPECIALOFFERS_OFFER_ALREADY_ACTIVE'));
+        return false;
+      }
+      // If owner on basic package then they get two special offers only...  
+      // $offer_count = $this->getAvailableOffers();
+      // $this->getPackageType
+      // Set the date created timestamp
+      $data['date_created'] = $date;
+
+      // And format the dates into the correct mysql date format
+      $data['start_date'] = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
+      $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
 
       // Load the row if saving an existing record. 
       // Just do getItem here? what if new?
       if ($pk > 0)
       {
-        $item = $this->getItem($pk);
+        $offer = $this->getItem($pk);
+      }
+      else
+      {
+        $table = $this->getTable();
+
+        // Convert to the JObject before adding other data.
+        $properties = $table->getProperties(1);
+        $offer = JArrayHelper::toObject($properties, 'JObject');
       }
 
       // Offer already created. If not approved and being set to published then update the approved by gubbins
-      if (empty($item->approved_by) && empty($item->approved_on) && !$item->published && $data['published'] == 1)
+      if (empty($offer->approved_by) && empty($offer->approved_on) && !$offer->published && $data['published'] == 1)
       {
         $data['approved_by'] = $user->id;
         $data['approved_date'] = $date;
@@ -240,23 +322,33 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       return false;
     }
 
-
-
     // Trigger email to admin user
     if ($send_notification_email)
     {
-      // 
-      var_dump($unit_table);die;
+      // Load the user details (already valid from table check).
+      $fromUser = $app->getCfg('mailfrom');
+
+      // Get the owners email, setting up to go to site mailfrom is debug is on
+      $toUser = (JDEBUG) ? $app->getCfg('mailfrom') : $unit_detail->email;
+      
+      // The url to link to the owners property in the confirmation email
+      $siteURL = JUri::root() . 'listing/' . $table->property_id . '?unit_id=' . (int) $table->unit_id;
+      $intasure = $params->get('intasure');
+      
+      // Prepare the email.
+      $subject = htmlspecialchars(JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_SUBJECT', $unit_detail->property_id, $unit_detail->firstname), ENT_QUOTES, 'UTF-8');
+      $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $siteURL, $intasure);
+      JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
     }
 
     // Set additional messaging to notify user that offer is awaiting moderation etc.
     if (!$user->authorise('core.edit.state', 'com_specialoffers'))
     {
-      $app->set;
       $app->enqueueMessage(JText::_('COM_SPECIALOFFERS_OFFER_ADDED_SUCCESS'));
     }
-    
-    // Gubbins needed for correct redirect of controller etc
+
+    // Gubbins needed for correct redirect of controller
+    // Needed here as we've overloaded the save method
     $pkName = $table->getKeyName();
 
     if (isset($table->$pkName))
@@ -265,8 +357,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     }
 
     $this->setState($this->getName() . '.new', $isNew);
-    
-    
+
     return true;
   }
 

@@ -49,7 +49,7 @@ abstract class FeaturedPropertiesHelper {
 
   public static function getFeaturedPropertyTypeOptions() {
 
-		$options = JHtml::_('category.options', 'com_featuredproperties');
+		$options = JHtml::_('category.options', 'com_featuredproperties', array('filter.published' => array(1)));
     
     return $options;
     

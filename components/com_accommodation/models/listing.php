@@ -298,7 +298,6 @@ class AccommodationModelListing extends JModelForm
         $query->leftJoin('#__attributes k ON k.id = d.changeover_day');
       }
 
-
       $query->leftJoin('#__users u on a.created_by = u.id');
       $query->leftJoin('#__user_profile_fc ufc on u.id = ufc.user_id');
 
@@ -699,9 +698,10 @@ class AccommodationModelListing extends JModelForm
 
   /*
    * Function to return a list of tariffs for a given property
+   * TO DO - Move the below call to the model 
    */
 
-  public function getOffers()
+  public function getOffers($id = null)
   {
 
     if (!isset($this->offer))
@@ -709,7 +709,7 @@ class AccommodationModelListing extends JModelForm
 
       try {
         // Get the state for this property ID
-        $id = $this->getState('unit.id', '');
+        $id = (!empty($id)) ? $id : (int) $this->getState('unit.id', '');
 
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('offers'));
@@ -1061,7 +1061,7 @@ class AccommodationModelListing extends JModelForm
         // Get the time in 'HHmm' format
         // E.g. 2034
         $time = (int) date('Hi');
-        
+
         if ($item->sms_nightwatchman && ($time > 2000 && $time < 2359))
         {
 
@@ -1089,7 +1089,7 @@ class AccommodationModelListing extends JModelForm
         }
       }
     }
-    die;
+
     // We are done.
     // TO DO: Should add some logging of the different failure points above.
     return true;
