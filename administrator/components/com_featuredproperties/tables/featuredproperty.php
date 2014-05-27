@@ -23,5 +23,7 @@ class FeaturedPropertiesTableFeaturedProperty extends JTable
 	{
 		parent::__construct('#__featured_properties', 'id', $db);
 	}
+  
+  
 
 }

@@ -39,9 +39,7 @@ class SpecialOffersControllerSpecialOffer extends RentalControllerBase
     // The record ID of the offer that is being cancelled.
     $recordId = (int) (count($ids) ? $ids[0] : '');
 
-    // Need to refine this so that:
-    // i. Additional permission for 'cancel offer' is granted to owners
-    // ii.Check that the offer being edited is owned by owner
+    // Check that the offer can be edited by the owner attempting 
     if (!$this->allowEdit(array($key => $recordId), $key))
     {
       $this->setMessage(JText::_('COM_SPECIALOFFERS_YOU_CANNOT_EXPIRE_THIS_OFFER'), 'error');
@@ -54,8 +52,13 @@ class SpecialOffersControllerSpecialOffer extends RentalControllerBase
 
       return false;
     }
-    echo "Woot";
-    die;
+
+    if (!$model->canceloffer($recordId))
+    {
+      
+      return false;
+    }
+
 
     // Update the end_date for the offer
     $table->end_date = JFactory::getDate()->toSql();

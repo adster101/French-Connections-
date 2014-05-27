@@ -19,21 +19,27 @@ class RentalControllerBase extends JControllerForm
 
   protected function allowEdit($data = array(), $key = 'property_id')
   {
+
     $user = JFactory::getUser();
     $userId = $user->get('id');
 
     $this->addModelPath(JPATH_ADMINISTRATOR . '/components/com_rental/models', 'RentalModel');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
 
-    // Needs to be update as follows
-    // For enquiries and special offers the $key will not point to the property table
+    // Check general edit permission first.
+    if ($user->authorise('core.edit', $this->option))
+    {
+      return true;
+    }
+
+    // For enquiries and special offers, look up the property id using the table
     if ($this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs')
     {
 
       $model = $this->getModel();
       $table = $model->getTable();
 
-      if (!property_exists($table, $key))
+      if (!property_exists($table, 'property_id'))
       {
         return false;
       }
@@ -43,7 +49,6 @@ class RentalControllerBase extends JControllerForm
     }
     else
     {
-
       // Initialise variables.
       $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
     }
@@ -52,12 +57,6 @@ class RentalControllerBase extends JControllerForm
     if ($recordId === 0)
     {
       return false;
-    }
-
-    // Check general edit permission first.
-    if ($user->authorise('core.edit', $this->option))
-    {
-      return true;
     }
 
     // Fallback on edit.own.
@@ -69,7 +68,6 @@ class RentalControllerBase extends JControllerForm
       if (empty($ownerId) && $recordId)
       {
         // Need to do a lookup from the model.
-
         $record = $this->getModel('Property', 'RentalModel')->getItem($recordId);
         if (empty($record))
         {

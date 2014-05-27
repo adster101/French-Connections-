@@ -11,24 +11,30 @@ jimport('joomla.application.component.modeladmin');
  */
 class SpecialOffersModelSpecialOffer extends JModelAdmin
 {
-  
 
-	/**
-	 * Method to test whether a record can be deleted.
-	 *
-	 * @param   object  $record  A record object.
-	 *
-	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
-	 *
-	 * @since   12.2
-	 */
-	protected function canEditState($record)
-	{
-		$user = JFactory::getUser();
+  public function canceloffer($id = null)
+  {
 
-		return $user->authorise('core.edit.state', $this->option);
-	}
-  
+    $table = $this->getTable();
+    $item = $this->getItem($id);
+
+    if (!$item)
+    {
+      return false;
+    }
+
+    // Update the end_date for the offer
+    $item->end_date = JFactory::getDate()->toSql();
+
+    try {
+      $table->save($item);
+    } catch (Exception $e) {
+      return false;
+    }
+
+    return true;
+  }
+
   /*
    * Function get offer
    * Gets one special offer for a property 
@@ -88,8 +94,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
     if ($item = parent::getItem($pk))
     {
-      $item->start_date = (empty($item->start_date)) ? '' : JFactory::getDate($item->start_date)->calendar('d-m-Y');
-      $item->end_date = (empty($item->end_date)) ? '' : JFactory::getDate($item->end_date)->calendar('d-m-Y');
+      //$item->start_date = (empty($item->start_date)) ? '' : JFactory::getDate($item->start_date)->calendar('d-m-Y');
+      //$item->end_date = (empty($item->end_date)) ? '' : JFactory::getDate($item->end_date)->calendar('d-m-Y');
     }
 
     return $item;
@@ -169,6 +175,15 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     return $form;
   }
 
+  protected function preprocessData($context, &$data)
+  {
+    parent::preprocessData($context, $data);
+    
+    // This just formats the dates correctly for display in the edit form...
+    $data->start_date = (empty($data->start_date)) ? '' : JFactory::getDate($data->start_date)->calendar('d-m-Y');
+    $data->end_date = (empty($data->end_date)) ? '' : JFactory::getDate($data->end_date)->calendar('d-m-Y');
+  }
+
   /* Method to preprocess the special offer edit form */
 
   protected function preprocessForm(JForm $form, $data)
@@ -202,6 +217,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         $form->setFieldAttribute('unit_id', 'readonly', 'true');
       }
 
+
       $form->load($field);
     }
   }
@@ -221,6 +237,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     {
       $data = $this->getItem();
     }
+
+    $this->preprocessData('com_specialoffer.edit', $data);
 
     return $data;
   }
@@ -348,11 +366,11 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
       // Get the owners email, setting up to go to site mailfrom is debug is on
       $toUser = (JDEBUG) ? $app->getCfg('mailfrom') : $unit_detail->email;
-      
+
       // The url to link to the owners property in the confirmation email
       $siteURL = JUri::root() . 'listing/' . $table->property_id . '?unit_id=' . (int) $table->unit_id;
       $intasure = $params->get('intasure');
-      
+
       // Prepare the email.
       $subject = htmlspecialchars(JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_SUBJECT', $unit_detail->property_id, $unit_detail->firstname), ENT_QUOTES, 'UTF-8');
       $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $siteURL, $intasure);
