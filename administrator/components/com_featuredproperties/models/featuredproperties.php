@@ -97,7 +97,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 			$query->where('a.published IN (0,1)');
     }
 
-    $query->where('a.end_date >= ' . $db->quote(JFactory::getDate()));
+    //$query->where('a.end_date >= ' . $db->quote(JFactory::getDate()));
     
 		// Filter by search in title
 		$search = $this->getState('filter.search');

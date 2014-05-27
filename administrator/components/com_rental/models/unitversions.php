@@ -447,6 +447,12 @@ class RentalModelUnitVersions extends JModelAdmin
     // Get the images assigned to this old unit version id
     $images = $image->getItems();
 
+    // If there are no images for the current version then return
+    if (empty($images))
+    {
+      return true;
+    }
+
     // Get a db instance
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -465,10 +471,7 @@ class RentalModelUnitVersions extends JModelAdmin
     // Execute the query
     $this->_db->setQuery($query);
 
-    if (empty($images))
-    {
-      return true;
-    }
+
 
     if (!$db->execute($query))
     {
