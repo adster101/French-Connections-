@@ -9,7 +9,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class RentalModelUnitVersions extends JModelAdmin {
+class RentalModelUnitVersions extends JModelAdmin
+{
 
   public $layout = '';
   public $new_version_required = false;
@@ -23,7 +24,8 @@ class RentalModelUnitVersions extends JModelAdmin {
    * @return	boolean
    * @since	1.6
    */
-  public function allowEdit($data = array(), $key = 'id') {
+  public function allowEdit($data = array(), $key = 'id')
+  {
     // Check specific edit permission then general edit permission.
     return JFactory::getUser()->authorise('core.edit', 'com_rental.message.' . ((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
   }
@@ -37,7 +39,8 @@ class RentalModelUnitVersions extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'UnitVersions', $prefix = 'RentalTable', $config = array()) {
+  public function getTable($type = 'UnitVersions', $prefix = 'RentalTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -52,17 +55,20 @@ class RentalModelUnitVersions extends JModelAdmin {
    *
    */
 
-  public function getItem($pk = null) {
+  public function getItem($pk = null)
+  {
 
     // Get the unit version detail.
-    if ($item = parent::getItem($pk)) {
+    if ($item = parent::getItem($pk))
+    {
 
       // Use the primary key (in this case unit id) to pull out any existing facilities for this property
       $pk = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
 
       $attributes = $this->getFacilities($pk, $item->id);
 
-      foreach ($attributes as $key => $values) {
+      foreach ($attributes as $key => $values)
+      {
         $item->$key = $values;
       }
       // Add any tariffs to the unit data for display on the view
@@ -77,7 +83,8 @@ class RentalModelUnitVersions extends JModelAdmin {
    * Get the tariffs for this unit
    * 
    */
-  public function getFacilities($id, $version) {
+  public function getFacilities($id, $version)
+  {
 
     // Array to hold the result list
     $property_attributes = array();
@@ -103,12 +110,14 @@ class RentalModelUnitVersions extends JModelAdmin {
     // Execute the db query, returns an iterator object.
     $result = $this->_db->getIterator();
     // Loop over the iterator and do stuff with it
-    foreach ($result as $row) {
+    foreach ($result as $row)
+    {
 
       $tmp = JArrayHelper::fromObject($row);
 
       // If the facility type already exists
-      if (!array_key_exists($tmp['field_name'], $property_attributes)) {
+      if (!array_key_exists($tmp['field_name'], $property_attributes))
+      {
         $property_attributes[$tmp['field_name']] = array();
       }
 
@@ -117,8 +126,10 @@ class RentalModelUnitVersions extends JModelAdmin {
 
     // Load returns an array for each facility type
     // We need to append each one to item so that they may be bound to the form
-    if (!empty($property_attributes)) {
-      foreach ($property_attributes as $facility_type => $value) {
+    if (!empty($property_attributes))
+    {
+      foreach ($property_attributes as $facility_type => $value)
+      {
         $properties[$facility_type] = implode($value, ',');
       }
     }
@@ -134,19 +145,24 @@ class RentalModelUnitVersions extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     $input = JFactory::getApplication()->input;
     $layout = $input->get('layout', 'edit', 'string');
 
-    if ($this->layout == 'tariffs' || $layout == 'tariffs') {
+    if ($this->layout == 'tariffs' || $layout == 'tariffs')
+    {
       $form = $this->loadForm('com_rental.unit', 'tariffs', array('control' => 'jform', 'load_data' => $loadData));
-    } else {
+    }
+    else
+    {
       $form = $this->loadForm('com_rental.unit', 'unit', array('control' => 'jform', 'load_data' => $loadData));
     }
 
     // Get the form.
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -161,7 +177,8 @@ class RentalModelUnitVersions extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
 
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.edit.unitversions.data', array());
@@ -169,7 +186,8 @@ class RentalModelUnitVersions extends JModelAdmin {
 
     // Need to get the tariff data into the form here...
     // If nout in session then we grab the item from the database
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
@@ -185,18 +203,24 @@ class RentalModelUnitVersions extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function canEditState() {
+  protected function canEditState()
+  {
     $comtask = JRequest::getVar('task', '', 'POST', 'string');
 
     $task = explode('.', $comtask);
 
     $user = JFactory::getUser();
 
-    if ($task[1] == 'orderdown' || $task[1] == 'orderup') {
+    if ($task[1] == 'orderdown' || $task[1] == 'orderup')
+    {
       return $user->authorise('helloworld.edit.reorder', $this->option);
-    } else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash') {
+    }
+    else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash')
+    {
       return $user->authorise('core.edit.state', $this->option);
-    } else {
+    }
+    else
+    {
       return false;
     }
   }
@@ -210,7 +234,8 @@ class RentalModelUnitVersions extends JModelAdmin {
    *
    * @since   12.2
    */
-  public function save($data) {
+  public function save($data)
+  {
     $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
     $model = JModelLegacy::getInstance('Property', 'RentalModel', $config = array('ignore_request' => 'true'));
@@ -231,7 +256,8 @@ class RentalModelUnitVersions extends JModelAdmin {
       // Here we don't explicitly know if there is a new version
       // Load the exisiting row, if there is one.
 
-      if ($pk > 0) {
+      if ($pk > 0)
+      {
         $table->load($pk);
         $isNew = false;
       }
@@ -241,7 +267,8 @@ class RentalModelUnitVersions extends JModelAdmin {
       // If this is a new unit then we need to generate a 'stub' entry into the unit table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       // TO DO - Move this code to run when user chooses add new property
-      if ($isNew) {
+      if ($isNew)
+      {
 
         // in unit table property ID refers to the parent listing id
         // $data['property_id'] = $data['property_id'];
@@ -250,7 +277,8 @@ class RentalModelUnitVersions extends JModelAdmin {
         $new_unit_id = $this->createNewUnit($data);
 
 
-        if (!$new_unit_id) {
+        if (!$new_unit_id)
+        {
           // Problem creating the new property stub...
           Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT'));
         }
@@ -264,13 +292,15 @@ class RentalModelUnitVersions extends JModelAdmin {
       }
 
       // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
-      if (!($data['review'])) {
+      if (!($data['review']))
+      {
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
         // New method - getPropertyDetails(); returns the expiry date of the property.
         $expiry_date = $model->getPropertyDetails($data['property_id']);
 
-        if (is_integer($expiry_date)) {
+        if (is_integer($expiry_date))
+        {
           // As a new version is required amend the data array before we save
           $data['id'] = '';
           $data['review'] = 1;
@@ -288,10 +318,11 @@ class RentalModelUnitVersions extends JModelAdmin {
       // but we want it saving against the version id
       //$table->set('_tbl_key', 'id');
       $table->set('_tbl_keys', array('id'));
- 
+
 
       // Bind the data.
-      if (!$table->bind($data)) {
+      if (!$table->bind($data))
+      {
         $this->setError($table->getError());
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
@@ -300,13 +331,15 @@ class RentalModelUnitVersions extends JModelAdmin {
       $this->prepareTable($table);
 
       // Check the data. Use this to increment the counter for unit?
-      if (!$table->check()) {
+      if (!$table->check())
+      {
         $this->setError($table->getError());
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // Store the data.
-      if (!$table->store()) {
+      if (!$table->store())
+      {
         $this->setError($table->getError());
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
@@ -322,12 +355,14 @@ class RentalModelUnitVersions extends JModelAdmin {
 
       JLog::add('About to save facilities for unit version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
-      if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id)) {
+      if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id))
+      {
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
 
       // When a new version is created or a new unit is created
-      if ($this->new_version_required === true || $isNew) {
+      if ($this->new_version_required === true || $isNew)
+      {
 
         // Here we have created a new version or a new unit
         // TO DO: Wrap the below into a function - reuse the updateProperty method from the Property model
@@ -339,17 +374,20 @@ class RentalModelUnitVersions extends JModelAdmin {
         $property->modified = JFactory::getDate();
         JLog::add('About to update Property review status for ' . $property->id, 'DEBUG', 'unitversions');
 
-        if (!$property->store()) {
+        if (!$property->store())
+        {
           $this->setError($property->getError());
           Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
         }
 
         // If this is not a new unit, then we want to copy the unit images to the new version...
-        if (!$isNew) {
+        if (!$isNew)
+        {
 
           // Copy the images against the new version id, but only if the versions are different
           // If we are updating a new unpublished version, no need to copy images
-          if ($old_version_id != $new_version_id) {
+          if ($old_version_id != $new_version_id)
+          {
             JLog::add('About to copy images for unit ' . $pk, 'unitversions');
 
             $this->copyUnitImages($old_version_id, $new_version_id);
@@ -382,22 +420,24 @@ class RentalModelUnitVersions extends JModelAdmin {
     //$table->set('_tbl_key', 'unit_id');
     $table->set('_tbl_keys', array('unit_id'));
 
-    
+
     $pkName = $table->getKeyName();
 
-    if (isset($table->$pkName)) {
+    if (isset($table->$pkName))
+    {
       $this->setState($this->getName() . '.id', $table->$pkName);
     }
     $this->setState($this->getName() . '.new', $isNew);
     $this->setState($this->getName() . '.review', $table->review);
     $this->setState($this->getName() . '.version_id', $table->id);
     $this->setState($this->getName() . '.unit_id', $table->unit_id);
-    
+
 
     return true;
   }
 
-  public function copyUnitImages($old_version_id = '', $new_version_id = '') {
+  public function copyUnitImages($old_version_id = '', $new_version_id = '')
+  {
 
     // Get a list of all images stored against the old version
     $image = JModelLegacy::getInstance('Images', 'RentalModel', $config = array('ignore_request' => true));
@@ -413,9 +453,10 @@ class RentalModelUnitVersions extends JModelAdmin {
 
     $query->insert('#__property_images_library');
 
-    $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', ordering));
+    $query->columns(array('version_id', 'unit_id', 'image_file_name', 'caption', 'ordering'));
 
-    foreach ($images as $image) {
+    foreach ($images as $image)
+    {
       // Only insert if there are some images
       $insert_string = "$new_version_id, '" . $image->unit_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
       $query->values($insert_string);
@@ -424,7 +465,13 @@ class RentalModelUnitVersions extends JModelAdmin {
     // Execute the query
     $this->_db->setQuery($query);
 
-    if (!$db->execute($query)) {
+    if (empty($images))
+    {
+      return true;
+    }
+
+    if (!$db->execute($query))
+    {
       Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
     }
     return true;
@@ -437,13 +484,16 @@ class RentalModelUnitVersions extends JModelAdmin {
    *
    */
 
-  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '') {
+  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '')
+  {
 
-    if (!is_array($data) || empty($data)) {
+    if (!is_array($data) || empty($data))
+    {
       return true;
     }
 
-    if (empty($old_version_id) || empty($new_version_id)) {
+    if (empty($old_version_id) || empty($new_version_id))
+    {
       return true;
     }
 
@@ -453,38 +503,48 @@ class RentalModelUnitVersions extends JModelAdmin {
     $whitelist = array('external_facilities', 'internal_facilities', 'kitchen_facilities', 'suitability');
 
     // Loop over the data and prepare an array to save
-    foreach ($data as $key => $value) {
+    foreach ($data as $key => $value)
+    {
 
-      if (!in_array($key, $whitelist)) {
+      if (!in_array($key, $whitelist))
+      {
         continue;
       }
 
       // We're not interested in the 'other' fields E.g. external_facilities_other
-      if (strpos($key, 'other') == 0 && !empty($value)) {
+      if (strpos($key, 'other') == 0 && !empty($value))
+      {
 
         // Location, property and accommodation types are all single integers and not arrays
-        if (is_array($value)) {
+        if (is_array($value))
+        {
           // We want to save this in one go so we make an array
-          foreach ($value as $facility) {
+          foreach ($value as $facility)
+          {
             // Facilities should be integers
-            if ((int) $facility) {
+            if ((int) $facility)
+            {
               $attributes[] = $facility;
             }
           }
-        } else {
+        }
+        else
+        {
           $attributes[] = $value;
         }
       }
     }
 
     // If we have any attributes
-    if (count($attributes) > 0) {
+    if (count($attributes) > 0)
+    {
 
       // Get instance of the tariffs table
       $attributesTable = JTable::getInstance('PropertyAttributes', 'RentalTable', $config = array());
 
       // Bind the translated fields to the JTable instance
-      if (!$attributesTable->save($id, $attributes, $old_version_id, $new_version_id)) {
+      if (!$attributesTable->save($id, $attributes, $old_version_id, $new_version_id))
+      {
         JApplication::enqueueMessage(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_ADDING_ATTRIBUTES'), 'warning');
 
         JError::raiseWarning(500, $attributesTable->getError());
@@ -519,9 +579,11 @@ class RentalModelUnitVersions extends JModelAdmin {
    * @param type $data
    * @return mixed
    */
-  public function createNewUnit($data = array()) {
+  public function createNewUnit($data = array())
+  {
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       return false;
     }
 
@@ -531,7 +593,8 @@ class RentalModelUnitVersions extends JModelAdmin {
 
     // Optional further sanity check after data has been validated, filtered, and about to be checked...
     //$this->prepareTable($property_table);
-    if (!$unit_table->save($data)) {
+    if (!$unit_table->save($data))
+    {
       return false;
     }
 
@@ -543,7 +606,8 @@ class RentalModelUnitVersions extends JModelAdmin {
    * @param type $version_id
    * @return type
    */
-  public function getImages($version_id = '') {
+  public function getImages($version_id = '')
+  {
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
@@ -567,7 +631,8 @@ class RentalModelUnitVersions extends JModelAdmin {
 
     $images = $db->loadAssocList();
 
-    if (empty($images)) {
+    if (empty($images))
+    {
       return false;
     }
 
