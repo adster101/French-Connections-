@@ -11,7 +11,40 @@ jimport('frenchconnections.controllers.property.base');
  */
 class EnquiriesControllerEnquiry extends RentalControllerBase
 {
-  
+
+  /**
+   * This method extends the edit method and updates the state to 'read'
+   * 
+   * @param type $key
+   * @param type $urlVar
+   * @return boolean
+   */
+  public function edit($key = null, $urlVar = null)
+  {
+
+    if (parent::edit($key, $urlVar))
+    {
+
+      // Update the status of the enquiry to indicate that it's been read.
+      $model = $this->getModel();
+      $id = $this->input->getInt('id');
+      $item = $model->getItem($id);
+
+      if (!$item)
+      {
+        return false;
+      }
+
+      // Only publish the item (mark as read) if the state is unread and not failed
+      if ($item->state == 0)
+      {
+        $model->publish($id);
+        return true;
+      }
+    }
+    return true;
+  }
+
   /*
    * Function to reply to an owner enquiry.
    * Updates a date field in the enquiries table to indicate the owner replied.
@@ -133,39 +166,6 @@ class EnquiriesControllerEnquiry extends RentalControllerBase
             )
     );
 
-    return true;
-  }
-
-  /**
-   * This method extends the edit method and updates the state to 'read'
-   * 
-   * @param type $key
-   * @param type $urlVar
-   * @return boolean
-   */
-  public function edit($key = null, $urlVar = null)
-  {
-
-    if (parent::edit($key, $urlVar))
-    {
-
-      // Update the status of the enquiry to indicate that it's been read.
-      $model = $this->getModel();
-      $id = $this->input->getInt('id');
-      $item = $model->getItem($id);
-
-      if (!$item)
-      {
-        return false;
-      }
-
-      // Only publish the item (mark as read) if the state is unread and not failed
-      if ($item->state == 0)
-      {
-        $model->publish($id);
-        return true;
-      }
-    }
     return true;
   }
 

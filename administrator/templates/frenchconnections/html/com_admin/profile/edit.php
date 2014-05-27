@@ -49,7 +49,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
 
 <form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
   <div class="row-fluid">
-    
+
     <div id="" class="span12">
       <fieldset>
         <legend>Your name</legend>
@@ -105,6 +105,14 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
           </div>
           <div class="controls">
             <?php echo $this->form->getInput('email'); ?>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="control-label">
+            <?php echo $this->form->getLabel('email_alt'); ?>
+          </div>
+          <div class="controls">
+            <?php echo $this->form->getInput('email_alt'); ?>
           </div>
         </div>
         <div class="control-group">

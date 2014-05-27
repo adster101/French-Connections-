@@ -25,12 +25,16 @@ $leadingcount = 0;
     </ol>
     <div class="carousel-inner">
       <?php foreach ($items as $item) : ?>
-        <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
+          <?php
+    $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
+    $description = JHTml::_('string.truncate', $item->description, 75, true, false);
+    $title = JText::sprintf('MOD_FEATURED_PROPERTY_THUMB_TITLE', $item->id, $description);
+    ?>
         <?php $property = JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>
         <?php $region = JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $item->alias . '&lang=' . $lang . '&Itemid=' . (int) $Itemid_search); ?>
         <div class = "item <?php echo ($leadingcount == 0) ? 'active' : '' ?>">
           <?php if (isset($item->thumbnail) && !empty($item->thumbnail)) : ?>
-            <a class="" href="<?php echo $property ?>">
+            <a title="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
               <img src='/images/property/<?php echo $item->unit_id . '/gallery/' . $item->thumbnail ?>' class="img-rounded" />
             </a>
           <?php endif; ?>

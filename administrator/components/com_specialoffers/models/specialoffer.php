@@ -11,6 +11,24 @@ jimport('joomla.application.component.modeladmin');
  */
 class SpecialOffersModelSpecialOffer extends JModelAdmin
 {
+  
+
+	/**
+	 * Method to test whether a record can be deleted.
+	 *
+	 * @param   object  $record  A record object.
+	 *
+	 * @return  boolean  True if allowed to change the state of the record. Defaults to the permission for the component.
+	 *
+	 * @since   12.2
+	 */
+	protected function canEditState($record)
+	{
+		$user = JFactory::getUser();
+
+		return $user->authorise('core.edit.state', $this->option);
+	}
+  
   /*
    * Function get offer
    * Gets one special offer for a property 

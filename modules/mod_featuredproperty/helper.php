@@ -21,23 +21,23 @@ class modFeaturedPropertyHelper
 
     $type = $params->get('type');
     $offers_only = $params->get('offers');
-    
+
     // In case we are on the 'special offers' search results page then override the offers flag...
     $input = JFactory::getApplication()->input;
-    
-    $offers = $input->get('offers', 0, $offers_only);
-    
-    
+
+    $offers = $input->get('offers', false, 'boolean');
 
     $lang = JFactory::getLanguage()->getTag();
-    $date = JFactory::getDate()->calendar('Y-m-d');
 
+    $date = date('Y-m-d H:i:s', mktime(14, 30, 0, date('m'), date('d'), date('y')));
+   
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
     $query->select('
       a.id,
       b.id as unit_id,
       c.unit_title,
+      left(c.description,150) as description,
       c.occupancy,
       i.image_file_name as thumbnail,
       g.title,
@@ -45,7 +45,6 @@ class modFeaturedPropertyHelper
       c.base_currency,
       (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');
-
 
     $query->select('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) as offer');
 
@@ -91,7 +90,7 @@ class modFeaturedPropertyHelper
       $query->where('h.end_date >= ' . $db->quote($date));
     }
 
-    if ($offers)
+    if ($offers_only || $offers)
     {
       $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) is not null');
     }

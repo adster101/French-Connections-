@@ -14,12 +14,15 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
 ?>
 
 <?php foreach ($items as $key => $item) : ?>
-  <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
-
+  <?php
+  $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
+  $description = JHTml::_('string.truncate', $item->description, 75, true, false);
+  $title = JText::sprintf('MOD_FEATURED_PROPERTY_THUMB_TITLE', $item->id, $description);
+  ?>
   <?php if ($item->title) : ?>     
     <div class="clearfix">
       <?php if (!empty($item->unit_title)) : ?>
-      <h4><?php echo htmlspecialchars($item->unit_title) ?></h4>
+        <h4><?php echo htmlspecialchars($item->unit_title) ?></h4>
       <?php endif ?>
       <?php if (!empty($item->offer)) : ?>
         <p class="offer">
@@ -28,7 +31,7 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
         </p>
       <?php endif; ?>
       <p>
-        <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
+        <a title="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
           <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded pull-left" />
         </a>
       </p>

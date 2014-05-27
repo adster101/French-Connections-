@@ -15,19 +15,20 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 
 
       <?php foreach ($items as $key => $item) : ?>
+        
         <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
         <?php if ($item->title) : ?>     
           <div class="row-fluid">
             <div class="span8"> 
               <p>
-                <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
+                <a title="<?php echo htmlspecialchars($item->id . ' ' . $item->title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
                   <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="img-rounded" />
                 </a>
               </p>
             </div>
             <div class="span4">
               <p>
-                <strong><?php echo $item->title; ?></strong> | 
+                <strong><?php echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8'); ?></strong> | 
                 <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
                 <?php echo $item->occupancy; ?>
                 <?php if (!empty($item->price)) : ?> |

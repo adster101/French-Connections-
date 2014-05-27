@@ -15,11 +15,17 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
 
 <div class="row-fluid">
   <?php foreach ($items as $key => $item) : ?>
-    <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
+    <?php
+    $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
+    $description = JHTml::_('string.truncate', $item->description, 75, true, false);
+    $title = JText::sprintf('MOD_FEATURED_PROPERTY_THUMB_TITLE', $item->id, $description);
+    ?>
+
     <?php if ($item->title) : ?>     
       <div class="span3"> 
         <p>
-          <a class="fp-thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
+
+          <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
             <?php if (!empty($item->offer)) : ?>
               <span class="offer">
                 <?php echo htmlspecialchars($item->offer); ?>
