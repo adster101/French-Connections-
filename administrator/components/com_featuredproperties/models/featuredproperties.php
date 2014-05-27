@@ -50,18 +50,6 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 			$this->context .= '.'.$layout;
 		}
 
-		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
-		$this->setState('filter.search', $search);
-
-		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
-		$this->setState('filter.published', $published);
-
-		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
-		$this->setState('filter.title', $title);
-    
-    $type = $this->getUserStateFromRequest($this->context . '.filter.type', 'filter_type','');
-    $this->setState('filter.type', $type);
-
     // List state information.
 		parent::populateState('a.start_date','desc');
 	}
@@ -101,7 +89,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
     $query->join('left', '#__categories b on b.id = a.featured_property_type');
 
     // Filter by published state
-		$published = $this->getState('filter.published');
+		$published = $this->getState('filter.state');
 
     if (is_numeric($published)) {
 			$query->where('a.published = ' . (int) $published);
@@ -124,7 +112,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
       }
     }
     
-    $type = $this->getState('filter.type');
+    $type = $this->getState('filter.featured_property_type');
     
     if (!empty($type)){
       $query->where('a.featured_property_type = ' . (int) $type);
