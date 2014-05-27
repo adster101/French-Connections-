@@ -22,7 +22,9 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
     $this->state = $this->get('State');
     $this->items = $this->get('Items');
     $this->pagination = $this->get('Pagination');
-
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
+    
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       throw new Exception(implode("\n", $errors));
@@ -37,13 +39,7 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
 
     $this->addToolbar($canDo);
 
-    JHtmlSidebar::addFilter(
-            JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', FeaturedPropertiesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
-    );
-
-    JHtmlSidebar::addFilter(
-            JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_type', JHtml::_('select.options', FeaturedPropertiesHelper::getFeaturedPropertyTypeOptions(), 'value', 'text', $this->state->get('filter.type'), true)
-    );
+   
     $this->sidebar = JHtmlSidebar::render();
 
     parent::display($tpl);

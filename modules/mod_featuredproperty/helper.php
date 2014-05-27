@@ -9,17 +9,26 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-class modFeaturedPropertyHelper {
+class modFeaturedPropertyHelper
+{
 
   var $items;
 
-  public function getFeaturedProperties(&$params) {
+  public function getFeaturedProperties(&$params)
+  {
 
     $count = $params->get('count', 4);
 
     $type = $params->get('type');
-    $offers = $params->get('offers');
+    $offers_only = $params->get('offers');
     
+    // In case we are on the 'special offers' search results page then override the offers flag...
+    $input = JFactory::getApplication()->input;
+    
+    $offers = $input->get('offers', 0, $offers_only);
+    
+    
+
     $lang = JFactory::getLanguage()->getTag();
     $date = JFactory::getDate()->calendar('Y-m-d');
 
@@ -37,9 +46,9 @@ class modFeaturedPropertyHelper {
       (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');
 
-    if ($offers) {
-      $query->select('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) as offer');
-    }
+
+    $query->select('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) as offer');
+
 
     $query->from('#__property as a');
     $query->join('left', '#__unit b ON a.id = b.property_id');
@@ -51,11 +60,14 @@ class modFeaturedPropertyHelper {
     $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))');
 
     // Join the translations table to pick up any translations 
-    if ($lang == 'fr-FR') {
+    if ($lang == 'fr-FR')
+    {
       $query->select('j.unit_title');
       $query->join('left', '#__unit_versions_translations j on j.version_id = c.id');
       $query->join('left', '#__classifications_translations g ON g.id = e.department');
-    } else {
+    }
+    else
+    {
       $query->join('left', '#__classifications g ON g.id = e.department');
     }
 
@@ -68,27 +80,24 @@ class modFeaturedPropertyHelper {
     $query->where('i.ordering = 1');
     $query->where('a.expiry_date >= ' . $db->quote($date));
 
-    // Only join on the featured property table if we're not looking for offers. 
-    if (!$offers) {
+    // On the last minute page we don't want featured properties, just those with offers.
+    // This is set by a module parameter and should only default to true on the last minute page.
+    if (!$offers_only)
+    {
       $query->join('left', '#__featured_properties h on h.property_id = a.id');
-
       $query->where('h.published = 1');
       $query->where('h.featured_property_type = ' . $type);
       $query->where('h.start_date <= ' . $db->quote($date));
       $query->where('h.end_date >= ' . $db->quote($date));
     }
 
-    if ($offers) {
+    if ($offers)
+    {
       $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) is not null');
     }
 
     $query->order('rand()');
     $db->setQuery($query, 0, $count);
-
-    // Load the JSON string
-    //$params = new JRegistry;
-    //$params->loadJSON($this->item->params);
-    //$this->item->params = $params;
 
     $items = ($items = $db->loadObjectList()) ? $items : array();
 
@@ -100,7 +109,8 @@ class modFeaturedPropertyHelper {
     return $items;
   }
 
-  function renderLayout(&$params) {
+  function renderLayout(&$params)
+  {
 
     // Do other stuff here to prepare content etc
     /**

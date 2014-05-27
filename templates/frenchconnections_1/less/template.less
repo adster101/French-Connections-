@@ -142,8 +142,13 @@ input#abe_driverAge {
   border-bottom: 1px dotted;
 }
 
-// Offer 'ribbon'  
-p.offer
+// Offer 'ribbon' and associated CSS
+
+.fp-thumbnail {
+  position:relative;
+}
+
+p.offer, span.offer
   {
     position: relative;
     padding: 3px 0px 5px 9px;
@@ -154,7 +159,8 @@ p.offer
     #gradient > .vertical(lighten(#cd3e3f, 5% ),#cd3e3f);
 
   } 
-  p.offer:after
+
+  p.offer:after, span.offer:after
   {
     content: ' ';
     position: absolute;
@@ -165,6 +171,18 @@ p.offer
     border-style: solid;
     border-color: #7b6c50 #7b6c50 transparent transparent;
   }
+
+.fp-thumbnail > span.offer 
+{
+  position:absolute;
+  width:215px;
+  top:90px;
+  z-index:10;
+  left:-9px;
+  margin:0;
+  background-color:hsla(360,59%,52%,0.75);
+  background-image:none;
+}
 
 .offscreen {
   position:absolute;

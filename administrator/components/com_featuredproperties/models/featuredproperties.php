@@ -25,7 +25,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 				'state', 'a.state',
 				'start_date', 'a.start_date',
         'end_date', 'a.end_date',
-        'featured_property_type'
+        'featured_property_type','a.featured_property_type'
 			);
     }
 
@@ -63,7 +63,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
     $this->setState('filter.type', $type);
 
     // List state information.
-		parent::populateState('a.start_date','asc');
+		parent::populateState('a.start_date','desc');
 	}
 
   /**
@@ -130,7 +130,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
       $query->where('a.featured_property_type = ' . (int) $type);
     }
 
-    $listOrdering = $this->getState('list.ordering','date_created');
+    $listOrdering = $this->getState('list.ordering','start_date');
 		$listDirn = $db->escape($this->getState('list.direction', 'desc'));
     $query->order($db->escape($listOrdering).' '.$listDirn);
 

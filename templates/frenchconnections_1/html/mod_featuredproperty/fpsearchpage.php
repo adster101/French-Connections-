@@ -13,30 +13,33 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
 ?>
 
-  <div class="row-fluid">
-
-    <?php foreach ($items as $key => $item) : ?>
-      <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
-      <?php if ($item->title) : ?>     
-        <div class="span3"> 
-          <p>
-            <a class="" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
-              <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded" />
-            </a>
-          </p>
-
-          <p>
-            <strong><?php echo $item->title; ?></strong> | 
-            <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
-            <?php echo $item->occupancy; ?>
-            <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
+<div class="row-fluid">
+  <?php foreach ($items as $key => $item) : ?>
+    <?php $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', ''); ?>
+    <?php if ($item->title) : ?>     
+      <div class="span3"> 
+        <p>
+          <a class="fp-thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
+            <?php if (!empty($item->offer)) : ?>
+              <span class="offer">
+                <?php echo htmlspecialchars($item->offer); ?>
+              </span>
             <?php endif; ?>
-          </p>
-        </div>
+            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded" />
+          </a>
+        </p>
+        <p>
+          <strong><?php echo $item->title; ?></strong> | 
+          <?php echo JText::_('MOD_FEATURED_PROPERTY_SLEEPS'); ?>
+          <?php echo $item->occupancy; ?>
+          <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
+          <?php endif; ?>
+        </p>
+      </div>
 
-      <?php endif; ?>
-    <?php endforeach; ?>
+    <?php endif; ?>
+  <?php endforeach; ?>
 
-  </div>
+</div>
 
 

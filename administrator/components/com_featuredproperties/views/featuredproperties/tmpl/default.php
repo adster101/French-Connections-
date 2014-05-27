@@ -5,30 +5,21 @@ $user = JFactory::getUser();
 $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
 $canChange = $user->authorise('core.edit.state', 'com_featuredproperties');
-
-$colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0]))+1 : $colspan = 7;
+$colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) + 1 : $colspan = 7;
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_featuredproperties'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_featuredproperties'); ?>" method="post" name="adminForm" id="adminForm" class=""> 
+
   <?php if (!empty($this->sidebar)) : ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="j-main-container" class="span10">
+    <div id="j-main-container" class="span10"> 
+      <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
     <?php else : ?>
       <div id="j-main-container">
+        <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
       <?php endif; ?>
-      <div id="filter-bar" class="btn-toolbar">
-        <div class="filter-search btn-group pull-left">
-          <label for="filter_search" class="element-invisible"><?php echo JText::_('COM_BANNERS_SEARCH_IN_TITLE'); ?></label>
-          <input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_('JSEARCH_FILTER'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" class="hasTooltip" title="<?php echo JHtml::tooltipText('COM_MODULES_MODULES_FILTER_SEARCH_DESC'); ?>" />
-        </div>
-        <div class="btn-group pull-left hidden-phone">
-          <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-              this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-        </div>
-      </div>
       <table class="table table-striped" id="articleList">
         <thead>
           <tr>
@@ -45,12 +36,10 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0]))+1 
               <?php echo JText::_('COM_FEATUREDPROPERTY_PAID_STATUS'); ?>
             </th>
             <th class="title">
-              <?php //echo JText::_('Start date'); ?>
               <?php echo JHtml::_('grid.sort', 'Start date', 'a.start_date', $listDirn, $listOrder); ?>
             </th>
             <th class="title">
               <?php echo JText::_('End date'); ?>
-              <?php // echo JHtml::_('grid.sort', 'End date', 'a.end_date', $listDirn, $listOrder); ?>
             </th>
             <th class="title">
               <?php echo JText::_('Featured on'); ?>
@@ -100,9 +89,6 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0]))+1 
               <td>
             </tr>
           <?php endif; ?>        
-
-
-
         </tbody>
         <tfoot>
           <tr>
