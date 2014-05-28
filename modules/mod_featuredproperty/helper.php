@@ -16,22 +16,17 @@ class modFeaturedPropertyHelper
 
   public function getFeaturedProperties(&$params)
   {
-
     $count = $params->get('count', 4);
-
     $type = $params->get('type');
     $offers_only = $params->get('offers');
-
     // In case we are on the 'special offers' search results page then override the offers flag...
     $input = JFactory::getApplication()->input;
-
     $offers = $input->get('offers', false, 'boolean');
-
     $lang = JFactory::getLanguage()->getTag();
-
-    $date = date('Y-m-d H:i:s', mktime(14, 30, 0, date('m'), date('d'), date('y')));
-   
+    // Using JHtml::date instead of JDate...
+    $date = JHtml::date($input = 'now', 'Y-m-d H:i:s', false);
     $db = JFactory::getDBO();
+    
     $query = $db->getQuery(true);
     $query->select('
       a.id,
