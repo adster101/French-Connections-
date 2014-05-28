@@ -68,8 +68,9 @@ class FeaturedPropertiesModelFeaturedProperty extends JModelAdmin {
 
   public function save($data) {
 
-    $data['start_date'] = JFactory::getDate($data['start_date'])->toSql();
-    $data['end_date'] = JFactory::getDate($data['end_date'])->toSql();
+    // Convert the dates to the correct format at set them to 1430 rather than midnight
+    $data['start_date'] = JFactory::getDate($data['start_date'] . '14:30:00')->toSql();
+    $data['end_date'] = JFactory::getDate($data['end_date'] . '14:30:00')->toSql();
 
     return parent::save($data);
   }
