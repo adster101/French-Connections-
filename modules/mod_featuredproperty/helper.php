@@ -24,7 +24,7 @@ class modFeaturedPropertyHelper
     $offers = $input->get('offers', false, 'boolean');
     $lang = JFactory::getLanguage()->getTag();
     // Using JHtml::date instead of JDate...
-    $date = JHtml::date($input = 'now', 'Y-m-d H:i:s', false);
+    $date = JHtml::date($input = 'now', 'Y-m-d', false);
     $db = JFactory::getDBO();
     
     $query = $db->getQuery(true);
@@ -43,8 +43,8 @@ class modFeaturedPropertyHelper
 
     $query->select('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($date) . ' AND k.end_date >= ' . $db->quote($date) . ' and k.unit_id = c.unit_id) as offer');
 
-
     $query->from('#__property as a');
+
     $query->join('left', '#__unit b ON a.id = b.property_id');
     // Here we only join the unit version where review is 0. Should ensure that we only take published units
 
@@ -64,7 +64,6 @@ class modFeaturedPropertyHelper
     {
       $query->join('left', '#__classifications g ON g.id = e.department');
     }
-
 
     $query->join('left', '#__property_images_library i on c.id = i.version_id');
 
