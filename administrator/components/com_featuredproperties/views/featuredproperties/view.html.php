@@ -79,7 +79,6 @@ class FeaturedPropertiesViewFeaturedProperties extends JViewLegacy {
     if ($canDo->get('core.edit.state')) {
       JToolBarHelper::publish('featuredproperties.publish', 'COM_FEATUREDPROPERTY_MARK_AS_PAID', true);
       JToolBarHelper::unpublish('featuredproperties.unpublish', 'COM_FEATUREDPROPERTY_MARK_AS_UNPAID', true);
-      JToolBarHelper::trash('featuredproperties.trash');
     }
 
     if ($canDo->get('core.delete')) {

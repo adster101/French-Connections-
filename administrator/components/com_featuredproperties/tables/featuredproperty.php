@@ -31,26 +31,28 @@ class FeaturedPropertiesTableFeaturedProperty extends JTable
    */
   public function check()
   {
-    // Check for existing name
-    $query = $this->_db->getQuery(true)
-            ->select('count(*) as count')
-            ->from($this->_db->quoteName('#__featured_properties'))
-            ->where($this->_db->quoteName('start_date') . ' = ' . $this->_db->quote($this->start_date))
-            ->where($this->_db->quoteName('featured_property_type') . ' = ' . $this->_db->quote($this->featured_property_type));
-    $this->_db->setQuery($query);
-    
-    $result = $this->_db->loadObject();
-
-    $count = (int) $result->count;
-    
-    if ($count >= 4)
+    // Only do this for new FP slots
+    if (empty($this->id))
     {
-      $this->setError(JText::_('COM_FEATUREDPROPERTIES_MORE_THAN_FOUR'));
-      return false;
-    }
-      
-    return true;
+      // Check for existing name
+      $query = $this->_db->getQuery(true)
+              ->select('count(*) as count')
+              ->from($this->_db->quoteName('#__featured_properties'))
+              ->where($this->_db->quoteName('start_date') . ' = ' . $this->_db->quote($this->start_date))
+              ->where($this->_db->quoteName('featured_property_type') . ' = ' . $this->_db->quote($this->featured_property_type));
+      $this->_db->setQuery($query);
 
+      $result = $this->_db->loadObject();
+
+      $count = (int) $result->count;
+
+      if ($count >= 4)
+      {
+        $this->setError(JText::_('COM_FEATUREDPROPERTIES_MORE_THAN_FOUR'));
+        return false;
+      }
+    }
+    return true;
   }
 
 }
