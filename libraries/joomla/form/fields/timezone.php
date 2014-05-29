@@ -173,7 +173,7 @@ class JFormFieldTimezone extends JFormFieldGroupedList
 			sort($location);
 		}
 
-		// Merge any additional groups in the XML definition.
+    // Merge any additional groups in the XML definition.
 		$groups = array_merge(parent::getGroups(), $groups);
 
 		return $groups;

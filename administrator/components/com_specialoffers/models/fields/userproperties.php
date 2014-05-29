@@ -7,7 +7,7 @@
  */
 defined('JPATH_BASE') or die;
 
-JFormHelper::loadFieldClass('list');
+JFormHelper::loadFieldClass('groupedlist');
 
 /**
  * Form Field class for the Joomla Framework.
@@ -16,7 +16,7 @@ JFormHelper::loadFieldClass('list');
  * @subpackage	com_categories
  * @since		1.6
  */
-class JFormFieldUserProperties extends JFormFieldList
+class JFormFieldUserProperties extends JFormFieldGroupedList
 {
 
   /**
@@ -34,8 +34,9 @@ class JFormFieldUserProperties extends JFormFieldList
    * @return	array	The field option objects.
    * @since	1.6
    */
-  protected function getOptions()
+  protected function getGroups()
   {
+    $groups = array();
     $created_by = '';
 
     // Initialise variables.
@@ -47,29 +48,35 @@ class JFormFieldUserProperties extends JFormFieldList
 
     $user = JFactory::getUser(); // Get current logged in user
 
-    $query->select('a.id, b.unit_title');
+    $query->select('a.id, b.unit_title, d.id as property_id');
     $query->from('#__unit AS a');
     $query->join('left', '#__unit_versions b on (a.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
     $query->join('left', '#__property d on d.id = b.property_id');
     $query->where('d.created_by = ' . $user->id);  // Select only the props created by the user that created this property
-    
     // Get the options.
     $db->setQuery($query);
 
     $properties = $db->loadObjectList();
     // Loop over each subtree item
-    $options[] = JHtml::_('select.option', '', JText::_('COM_SPECIALOFFERS_CHOOSE_PROPERTY'));
 
-    foreach ($properties as $property)
+    foreach ($properties as $property => $unit)
     {
-      $options[] = JHtml::_('select.option', $property->id, $property->unit_title);
+      if (!array_key_exists($unit->property_id, $groups))
+      {
+        $groups[$unit->property_id] = array();
+      }
+
+
+      $groups[$unit->property_id][$unit->id] = JHtml::_('select.option', $unit->id, $unit->unit_title, 'value', 'text', false);
+
+
+
+
     }
+    //var_dump($groups);die;
+      $groups = array_merge(parent::getGroups(), $groups);
 
-
-    $options = array_merge(parent::getOptions(), $options);
-
-    return $options;
+    return $groups;
   }
 
 }
-

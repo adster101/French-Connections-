@@ -178,10 +178,13 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   protected function preprocessData($context, &$data)
   {
     parent::preprocessData($context, $data);
-    
+
     // This just formats the dates correctly for display in the edit form...
-    $data->start_date = (empty($data->start_date)) ? '' : JFactory::getDate($data->start_date)->calendar('d-m-Y');
-    $data->end_date = (empty($data->end_date)) ? '' : JFactory::getDate($data->end_date)->calendar('d-m-Y');
+    if (!is_array($data))
+    {
+      $data->start_date = (empty($data->start_date)) ? '' : JFactory::getDate($data->start_date)->calendar('d-m-Y');
+      $data->end_date = (empty($data->end_date)) ? '' : JFactory::getDate($data->end_date)->calendar('d-m-Y');
+    }
   }
 
   /* Method to preprocess the special offer edit form */
@@ -196,29 +199,20 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     if ($user->authorise('core.edit.state', 'com_specialoffers'))
     {
 
-      $field = '<form><fieldset name="publishing"><field name="published" 
-          type="list" 
-          label="JSTATUS"
-          description="JFIELD_PUBLISHED_DESC" 
-          class="input-medium"
-          filter="intval" 
-          size="1" 
-          default="0" 
-          required="true"
-          labelclass="control-label">
-      <option value="">JSELECT</option>
-			<option value="1">JPUBLISHED</option>
-		</field></fieldset></form>';
-
       $form->setFieldAttribute('unit_id', 'type', 'text');
 
       if (!empty($data->property_id))
       {
         $form->setFieldAttribute('unit_id', 'readonly', 'true');
       }
-
-
-      $form->load($field);
+    }
+    else
+    {
+      // Remove these fields for non authed user groups.
+      $form->removeField('published');
+      $form->removeField('approved_by');
+      $form->removeField('approved_date');
+      $form->removeField('id');
     }
   }
 
@@ -244,13 +238,17 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   }
 
   /**
+   * Updates the status and then checks the status of the offer and if being published for the first 
+   * time triggers and email to the owner.
    * 
+   * @param type $pks
+   * @param type $value
+   * @return boolean
    */
   public function publish(&$pks, $value = 1)
   {
 
     $publish = parent::publish($pks, $value);
-
     if ($publish)
     {
       // Item has been published, send a notification email to the owner
@@ -263,13 +261,42 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         {
           return false;
         }
+
+        $user = JFactory::getUser();
+
+        // Offer already created. If not approved and being set to published then update the approved by gubbins
+        if (empty($item->approved_by) && empty($item->approved_on) && $value == 1)
+        {
+          $item->approved_by = $user->id;
+          $item->approved_date = $date;
+
+          $table = $this->getTable();
+
+          // Update the offer with the approved by and approved date.
+          if (!$table->save($item))
+          {
+            $this->setError($table->getError());
+            return false;
+          }
+
+          // Get the unit detail
+          $unit_detail = $this->getUnitDetail($item->unit_id);
+
+          // Send notification email when offer is first approved.
+          $this->sendNotificationEmail($unit_detail, $unit_detail->property_id, $unit_detail->unit_id, $item->start_date);
+        }
       }
+
+      return true;
     }
   }
 
   /**
    * Method to save the form data.
-   *
+   * TO DO - Move getActiveOffer() and getAvailableOffers() to the table class 
+   * and implement them in check() method. Although the above method will then call those checks 
+   * again?
+   * 
    * @param	array	The form data.
    *
    * @return	boolean	True on success.
@@ -287,7 +314,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $end_date = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
-    $params = JComponentHelper::getParams('com_specialoffers');
+    $isNew = true;
 
     try {
 
@@ -324,6 +351,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       if ($pk > 0)
       {
         $offer = $this->getItem($pk);
+        $isNew = false;
       }
       else
       {
@@ -361,20 +389,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     // Trigger email to admin user
     if ($send_notification_email)
     {
-      // Load the user details (already valid from table check).
-      $fromUser = $app->getCfg('mailfrom');
-
-      // Get the owners email, setting up to go to site mailfrom is debug is on
-      $toUser = (JDEBUG) ? $app->getCfg('mailfrom') : $unit_detail->email;
-
-      // The url to link to the owners property in the confirmation email
-      $siteURL = JUri::root() . 'listing/' . $table->property_id . '?unit_id=' . (int) $table->unit_id;
-      $intasure = $params->get('intasure');
-
-      // Prepare the email.
-      $subject = htmlspecialchars(JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_SUBJECT', $unit_detail->property_id, $unit_detail->firstname), ENT_QUOTES, 'UTF-8');
-      $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $siteURL, $intasure);
-      JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
+      $this->sendNotificationEmail($unit_detail, $table->property_id, $table->unit_id, $table->start_date);
     }
 
     // Set additional messaging to notify user that offer is awaiting moderation etc.
@@ -395,6 +410,29 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $this->setState($this->getName() . '.new', $isNew);
 
     return true;
+  }
+
+  public function sendNotificationEmail($unit_detail, $property_id, $unit_id, $start_date)
+  {
+    $app = JFactory::getApplication();
+    $params = JComponentHelper::getParams('com_specialoffers');
+
+    // Load the user details (already valid from table check).
+    $fromUser = $app->getCfg('mailfrom');
+
+    // Get the owners email, setting up to go to site mailfrom is debug is on
+    $toUser = (JDEBUG) ? $app->getCfg('mailfrom') : $unit_detail->email;
+
+    // The url to link to the owners property in the confirmation email
+    $siteURL = JUri::root() . 'listing/' . $property_id . '?unit_id=' . (int) $unit_id;
+    $intasure = $params->get('intasure');
+
+    $start_date = JHtml::date($start_date, 'd m Y');
+
+    // Prepare the email.
+    $subject = htmlspecialchars(JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_SUBJECT', $unit_detail->property_id, $unit_detail->firstname), ENT_QUOTES, 'UTF-8');
+    $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $start_date, $siteURL, $intasure);
+    JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
   }
 
 }

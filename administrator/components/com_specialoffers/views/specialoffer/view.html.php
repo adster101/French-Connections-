@@ -88,14 +88,13 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
    */
   protected function addToolBar($canDo)
   {
-
-    if ($canDo->get('core.create'))
-    {
-      JToolBarHelper::apply('specialoffer.apply', 'JTOOLBAR_APPLY');
-    }
-
     // Only show the 'apply' button if you can edit state.
     if ($canDo->get('core.edit.state'))
+    {
+      JToolBarHelper::apply('specialoffer.apply');
+    }
+
+    if ($canDo->get('core.create'))
     {
       JToolBarHelper::save('specialoffer.save', 'JTOOLBAR_SAVE');
     }
@@ -104,7 +103,6 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
 
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
 
-    // Set the title which appears on the toolbar 
   }
 
 }
