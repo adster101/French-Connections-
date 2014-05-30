@@ -9,28 +9,27 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class SpecialOffersViewSpecialOffers extends JViewLegacy {
+class SpecialOffersViewSpecialOffers extends JViewLegacy
+{
 
   protected $items;
   protected $state;
   protected $pagination;
 
-  function display($tpl = null) {    // Gets the info from the model and displays the template 
+  function display($tpl = null)
+  {
+
+    // Gets the info from the model and displays the template 
     $canDo = SpecialOffersHelper::getActions();
 
     // Get data from the model
     $this->items = $this->get('Items');
-
-
-
     $this->state = $this->get('State');
     $this->pagination = $this->get('Pagination');
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
 
     $this->setDocument();
-
-    $view = strtolower(JRequest::getVar('view'));
-
-    $this->addSubMenu($canDo);
 
     $this->addToolBar($canDo);
 
@@ -40,9 +39,11 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
   /**
    * Adds the submenu details for this view
    */
-  protected function addSubMenu($canDo) {
+  protected function addSubMenu($canDo)
+  {
 
-    if ($canDo->get('core.edit.state')) {
+    if ($canDo->get('core.edit.state'))
+    {
       JHtmlSidebar::addFilter(
               JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
       );
@@ -52,13 +53,10 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
             JText::_('JSTATUS'), 'filter_state', JHtml::_('select.options', $this->getFilterFields(), 'value', 'text', $this->state->get('filter.state'), true)
     );
 
-     if ($canDo->get('core.admin')) {
+    if ($canDo->get('core.admin'))
+    {
       JToolBarHelper::preferences('com_specialoffers');
     }
-
-    //RentalHelper::addSubmenu('specialoffers');
-
-    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**
@@ -66,7 +64,8 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_(''));
   }
@@ -74,18 +73,22 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar($canDo) {
+  protected function addToolBar($canDo)
+  {
     $document = JFactory::getDocument();
 
-    if ($canDo->get('core.create')) {
+    if ($canDo->get('core.create'))
+    {
       JToolBarHelper::addNew('specialoffer.add', 'COM_SPECIAL_OFFERS_NEW_OFFER');
     }
 
-    if ($canDo->get('core.edit')) {
+    if ($canDo->get('core.edit'))
+    {
       JToolBarHelper::editList('specialoffer.edit', 'JTOOLBAR_EDIT');
     }
 
-    if ($canDo->get('core.edit.state')) {
+    if ($canDo->get('core.edit.state'))
+    {
 
 
       JToolBarHelper::publish('specialoffers.publish', 'JTOOLBAR_PUBLISH', true);
@@ -93,9 +96,12 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
       JToolBarHelper::trash('specialoffers.trash');
     }
 
-    if ($canDo->get('core.delete')) {
+    if ($canDo->get('core.delete'))
+    {
       JToolBarHelper::deleteList('Are you sure?', 'specialoffers.delete', 'JTOOLBAR_DELETE');
-    } else {
+    }
+    else
+    {
       JToolBarHelper::custom('specialoffer.canceloffer', 'delete', '', JText::_('COM_SPECIALOFFERS_OFFER_EXPIRE_OFFER'));
     }
 
@@ -112,7 +118,8 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
    *
    * @since   3.0
    */
-  protected function getFilterFields() {
+  protected function getFilterFields()
+  {
     $options = array();
     $options[] = JHtml::_('select.option', '1', 'COM_SPECIALOFFERS_OFFER_STATUS_EXPIRED');
     $options[] = JHtml::_('select.option', '2', 'COM_SPECIALOFFERS_OFFER_STATUS_ACTIVE');
@@ -128,7 +135,8 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy {
    *
    * @since   3.0
    */
-  protected function getSortFields() {
+  protected function getSortFields()
+  {
     return array(
         'a.ordering' => JText::_('JGRID_HEADING_ORDERING'),
         'a.title' => JText::_('JGLOBAL_TITLE'),

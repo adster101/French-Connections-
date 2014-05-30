@@ -58,23 +58,18 @@ class JFormFieldUserProperties extends JFormFieldGroupedList
 
     $properties = $db->loadObjectList();
     // Loop over each subtree item
-
     foreach ($properties as $property => $unit)
     {
-      if (!array_key_exists($unit->property_id, $groups))
+      $name = JText::sprintf('COM_SPECIALOFFERS_PROPERTY_REFERENCE', $unit->property_id);
+
+      if (!isset($groups[$name]))
       {
-        $groups[$unit->property_id] = array();
+        $groups[$name] = array();
       }
 
-
-      $groups[$unit->property_id][$unit->id] = JHtml::_('select.option', $unit->id, $unit->unit_title, 'value', 'text', false);
-
-
-
-
+      $groups[$name][] = JHtml::_('select.option', $unit->id, $unit->unit_title);
     }
-    //var_dump($groups);die;
-      $groups = array_merge(parent::getGroups(), $groups);
+    $groups = array_merge(parent::getGroups(), $groups);
 
     return $groups;
   }

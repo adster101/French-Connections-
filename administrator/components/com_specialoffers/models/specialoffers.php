@@ -22,7 +22,7 @@ class SpecialOffersModelSpecialOffers extends JModelList
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = array(
 				'id', 'a.id',
-				'state', 'a.state',
+				'published', 'a.published',
 				'created', 'a.date_created',
         'title','c.unit_title',
 				'start_date', 'a.start_date',
@@ -50,24 +50,9 @@ class SpecialOffersModelSpecialOffers extends JModelList
 		{
 			$this->context .= '.'.$layout;
 		}
-
-		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
-		$this->setState('filter.search', $search);
-
-		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
-		$this->setState('filter.published', $published);
-
-		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
-		$this->setState('filter.title', $title);  
-
-    $state = $this->getUserStateFromRequest($this->context.'.filter.state', 'filter_state', '');
-		$this->setState('filter.state', $state);  
-		
-	
-
-    
+		    
     // List state information.
-		parent::populateState('a.date_created','desc');
+		parent::populateState('a.start_date','desc');
 	}
  
   /**

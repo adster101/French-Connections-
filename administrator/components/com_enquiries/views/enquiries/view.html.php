@@ -26,9 +26,7 @@ class EnquiriesViewEnquiries extends JViewLegacy
 
     // Get data from the model
     $this->items = $this->get('Items');
-
     $this->state = $this->get('State');
-
     $this->pagination = $this->get('Pagination');
     $this->filterForm = $this->get('FilterForm');
     $this->activeFilters = $this->get('ActiveFilters');
