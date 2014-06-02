@@ -30,7 +30,8 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy
     $this->activeFilters = $this->get('ActiveFilters');
 
     $this->setDocument();
-
+    $this->addSubMenu();
+    
     $this->addToolBar($canDo);
 
     parent::display($tpl);
@@ -39,24 +40,11 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy
   /**
    * Adds the submenu details for this view
    */
-  protected function addSubMenu($canDo)
+  protected function addSubMenu()
   {
+    RentalHelper::addSubmenu('specialoffers');
+    $this->sidebar = JHtmlSidebar::render();
 
-    if ($canDo->get('core.edit.state'))
-    {
-      JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
-      );
-    }
-
-    JHtmlSidebar::addFilter(
-            JText::_('JSTATUS'), 'filter_state', JHtml::_('select.options', $this->getFilterFields(), 'value', 'text', $this->state->get('filter.state'), true)
-    );
-
-    if ($canDo->get('core.admin'))
-    {
-      JToolBarHelper::preferences('com_specialoffers');
-    }
   }
 
   /**
@@ -106,7 +94,10 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy
     }
 
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
-
+    if ($canDo->get('core.admin'))
+    {
+      JToolBarHelper::preferences('com_specialoffers');
+    }
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_SPECIALOFFERS_MANAGE_OFFERS'));
   }

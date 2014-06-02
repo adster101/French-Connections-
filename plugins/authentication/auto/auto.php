@@ -18,7 +18,8 @@ defined('_JEXEC') or die;
  * @note        Code based on http://jaspan.com/improved_persistent_login_cookie_best_practice
  *              and http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
  */
-class PlgAuthenticationAuto extends JPlugin {
+class PlgAuthenticationAuto extends JPlugin
+{
 
   /**
    * Application object
@@ -47,10 +48,12 @@ class PlgAuthenticationAuto extends JPlugin {
    *
    * @since   3.2
    */
-  public function onUserAuthenticate($credentials, $options, &$response) {
+  public function onUserAuthenticate($credentials, $options, &$response)
+  {
 
     // No remember me for admin
-    if (!$this->app->isAdmin()) {
+    if (!$this->app->isAdmin())
+    {
       return false;
     }
 
@@ -60,14 +63,15 @@ class PlgAuthenticationAuto extends JPlugin {
     $cookieName = md5('autologin');
     $cookieValue = $this->app->input->cookie->get($cookieName);
 
-    if (!$cookieValue) {
+    if (!$cookieValue)
+    {
       return;
     }
 
     $cookieArray = explode('.', $cookieValue);
-
     // Check for valid cookie value
-    if (count($cookieArray) != 2) {
+    if (count($cookieArray) != 2)
+    {
       // Destroy the cookie in the browser.
       $this->app->input->cookie->set($cookieName, false, time() - 42000, $this->app->get('cookie_path', '/'), $this->app->get('cookie_domain'));
       JLog::add('Invalid cookie detected.', JLog::WARNING, 'error');
@@ -94,7 +98,8 @@ class PlgAuthenticationAuto extends JPlugin {
             ->order($this->db->quoteName('time') . ' DESC');
     $results = $this->db->setQuery($query)->loadObjectList();
 
-    if (count($results) !== 1) {
+    if (count($results) !== 1)
+    {
       // Destroy the cookie in the browser.
       $this->app->input->cookie->set($cookieName, false, time() - 42000, $this->app->get('cookie_path', '/'), $this->app->get('cookie_domain'));
       $response->status = JAuthentication::STATUS_FAILURE;
@@ -103,10 +108,11 @@ class PlgAuthenticationAuto extends JPlugin {
     }
 
     // We have a user with one cookie with a valid series and a corresponding record in the database.
-    else {
-      $token = JUserHelper::hashPassword($cookieArray[0]);
+    else
+    {
 
-      if (!JUserHelper::verifyPassword($cookieArray[0], $results[0]->token)) {
+      if (!JUserHelper::verifyPassword($cookieValue, $results[0]->token))
+      {
         // This is a real attack! Either the series was guessed correctly or a cookie was stolen and used twice (once by attacker and once by victim).
         // Delete all tokens for this user!
         $query = $this->db->getQuery(true)
@@ -129,11 +135,12 @@ class PlgAuthenticationAuto extends JPlugin {
     $query = $this->db->getQuery(true)
             ->select($this->db->quoteName(array('id', 'username', 'password')))
             ->from($this->db->quoteName('#__users'))
-            ->where($this->db->quoteName('username') . ' = ' . $this->db->quote($results[0]->user_id))
+            ->where($this->db->quoteName('id') . ' = ' . $this->db->quote($results[0]->user_id))
             ->where($this->db->quoteName('requireReset') . ' = 0');
     $result = $this->db->setQuery($query)->loadObject();
 
-    if ($result) {
+    if ($result)
+    {
       // Bring this in line with the rest of the system
       $user = JUser::getInstance($result->id);
 
@@ -147,7 +154,9 @@ class PlgAuthenticationAuto extends JPlugin {
       // Set response status.
       $response->status = JAuthentication::STATUS_SUCCESS;
       $response->error_message = '';
-    } else {
+    }
+    else
+    {
       $response->status = JAuthentication::STATUS_FAILURE;
       $response->error_message = JText::_('JGLOBAL_AUTH_NO_USER');
     }
@@ -162,9 +171,11 @@ class PlgAuthenticationAuto extends JPlugin {
    *
    * @since   3.2
    */
-  public function onUserAfterLogout($options) {
+  public function onUserAfterLogout($options)
+  {
     // No remember me for admin
-    if ($this->app->isAdmin()) {
+    if ($this->app->isAdmin())
+    {
       return false;
     }
 
@@ -172,7 +183,8 @@ class PlgAuthenticationAuto extends JPlugin {
     $cookieValue = $this->app->input->cookie->get($cookieName);
 
     // There are no cookies to delete.
-    if (!$cookieValue) {
+    if (!$cookieValue)
+    {
       return true;
     }
 

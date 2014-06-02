@@ -25,7 +25,9 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
       <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10">
-      <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+      <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?> 
+                 <?php echo $toolbar = JToolbar::getInstance('toolbar')->render('toolbar'); ?>
+
     <?php else : ?>
       <div id="j-main-container">
         <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>

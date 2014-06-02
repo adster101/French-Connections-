@@ -8,7 +8,8 @@ jimport('joomla.error.log');
 /**
  * HelloWorld Model
  */
-class RegisterOwnerModelRegisterOwner extends JModelAdmin {
+class RegisterOwnerModelRegisterOwner extends JModelAdmin
+{
 
   /**
    * @var object item
@@ -24,7 +25,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = '', $prefix = '', $config = array()) {
+  public function getTable($type = '', $prefix = '', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -39,10 +41,12 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @return	JForm	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = false) {
+  public function getForm($data = array(), $loadData = false)
+  {
     // Get the form.
     $form = $this->loadForm('com_registerowner.register', 'register', array('control' => 'jform', 'load_data' => true));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -56,11 +60,13 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_registerowner.register.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = array();
     }
 
@@ -79,7 +85,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @return	void
    * @since	1.6
    */
-  protected function populateState() {
+  protected function populateState()
+  {
 
     return true;
   }
@@ -89,7 +96,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * @param type $data
    * @return boolean
    */
-  public function save($data) {
+  public function save($data)
+  {
     $db = JFactory::getDBO();
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_messages/tables');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
@@ -106,6 +114,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       $data['id'] = '';
       $data['groups'] = array('10');
       $data['email'] = $data['email1'];
+      $data['username'] = $data['email'];
       $data['registerDate'] = JFactory::getDate()->toSql();
       $data['name'] = $data['firstname'] . ' ' . $data['surname'];
 
@@ -113,13 +122,15 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       $data['block'] = 0;
 
       // Bind the data.
-      if (!$user->bind($data)) {
+      if (!$user->bind($data))
+      {
         $this->setError($user->getError());
         return false;
       }
 
       // Store the data.
-      if (!$user->save()) {
+      if (!$user->save())
+      {
         $this->setError($user->getError());
         return false;
       }
@@ -137,7 +148,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       $user_profile['surname'] = $data['surname'];
       $user_profile['phone_1'] = $data['dialling_code'] . ' ' . $data['phone_1'];
 
-      if (!$table->save($user_profile)) {
+      if (!$table->save($user_profile))
+      {
         $this->setError($table->getError());
         Throw new Exception('Problem creating user profile');
       }
@@ -168,7 +180,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       // Send the registration email. the true argument means it will go as HTML
       $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody, true, $data['mailfrom']);
 
-      if (!$return) {
+      if (!$return)
+      {
         // Log out to file that email wasn't sent for what ever reason;
         // Trigger email to admin / office user. e.g. as per registration.php
         Throw new Exception('Problem creating user profile');
@@ -178,20 +191,24 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
       // While we're at it let's add an entry into the messages table so they will be greeted with
       // a lovingly hand crafted message of thanks for signing up.
       $message = $this->getTable('Message', 'MessagesTable');
-      $message_data['user_id_from'] = 1;
+      $message_data['user_id_from'] = 8891; // Parameterise this...
       $message_data['user_id_to'] = $user->id;
       $message_data['subject'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_SUBJECT');
       $message_data['message'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_BODY');
       $message_data['date_time'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
 
-      if (!$message->save($message_data)) {
+      if (!$message->save($message_data))
+      {
         $this->setError($table->getError());
         Throw new Exception('Problem creating user profile');
       }
 
       $model = JModelLegacy::getInstance('Config', 'MessagesModel', $config = array('ignore_request' => true));
       $model->setState('user.id', $user->id);
-      if (!$model->save(array('auto_purge' => 0))) {
+
+      // Save the 'welcome' message to the messages table...
+      if (!$model->save(array('auto_purge' => 0)))
+      {
         Throw new Exception('Problem creating user profile');
       }
 
@@ -214,7 +231,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
    * 
    */
 
-  public function setLoginCookie($user) {
+  public function setLoginCookie($user)
+  {
 
     $app = JFactory::getApplication();
     $input = $app->input;
@@ -223,14 +241,28 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
     // Remember checkbox is set
     $cookieName = md5('autologin');
 
-    // Set lifetime of cookie to 5 mins
-    $lifetime = 300;
+    // Set lifetime of cookie to 1 min
+    $lifetime = 60;
 
-    // Generate a random password.
-    $series = JUserHelper::genRandomPassword(20);
-        
-    // Generate new cookie
+    // Generates a unique 'series' identifier which acts as a 'salt'
+    do {
+      $series = JUserHelper::genRandomPassword(20);
+      $query = $this->_db->getQuery(true)
+              ->select($this->_db->quoteName('series'))
+              ->from($this->_db->quoteName('#__user_keys'))
+              ->where($this->_db->quoteName('series') . ' = ' . $this->_db->quote($series));
+      $results = $this->_db->setQuery($query)->loadResult();
+
+      if (is_null($results))
+      {
+        $unique = true;
+      }
+    } while ($unique === false);
+
+    // Generate a random token
     $token = JUserHelper::genRandomPassword(16);
+    
+    // Sets the cookieValue to the unhashed series and token values, dot separated...
     $cookieValue = $token . '.' . $series;
 
     // Overwrite existing cookie with new value
@@ -238,6 +270,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
             $cookieName, $cookieValue, time() + $lifetime, $input->get('cookie_path', '/'), $input->get('cookie_domain'), $app->isSSLConnection()
     );
 
+    // Update the user keys table 
     $query = $this->_db->getQuery(true);
     $query
             ->insert($this->_db->quoteName('#__user_keys'))
@@ -245,13 +278,11 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin {
             ->set($this->_db->quoteName('series') . ' = ' . $this->_db->quote($series))
             ->set($this->_db->quoteName('uastring') . ' = ' . $this->_db->quote($cookieName))
             ->set($this->_db->quoteName('time') . ' = ' . (time() + $lifetime));
-    $hashed_token = JUserHelper::hashPassword($token);
-    $query
-            ->set($this->_db->quoteName('token') . ' = ' . $this->_db->quote($hashed_token));
+    $hashed_token = JUserHelper::hashPassword($cookieValue);
+    $query->set($this->_db->quoteName('token') . ' = ' . $this->_db->quote($hashed_token));
     $this->_db->setQuery($query)->execute();
 
     return true;
-    
   }
 
 }

@@ -24,7 +24,8 @@ JHtml::_('bootstrap.loadCss', false, $this->direction);
 
 // Load specific language related CSS
 $file = 'language/' . $lang->getTag() . '/' . $lang->getTag() . '.css';
-if (is_file($file)) {
+if (is_file($file))
+{
   $doc->addStyleSheet($file);
 }
 
@@ -104,7 +105,6 @@ $debug = (boolean) $config->get('debug');
               <img src="/images/general/logo-3.png" alt="French Connections" />
             </a>
           </div>
-
           <div class="span7 header-search">
             <jdoc:include type="modules" name="position-0" style="none" />
           </div>
@@ -116,7 +116,12 @@ $debug = (boolean) $config->get('debug');
           <jdoc:include type="modules" name="position-1" style="nav" />
         </nav>
       <?php endif; ?>
-      <div id="content">
+      <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
+        One moment while we create your account...<br /><br />
+        <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
+      </p>
+      
+      <div id="content" <?php echo ($cookie) ? "class='hide'" : '' ?>>
         <!-- Begin Content -->
         <div id="element-box" class="">
           <jdoc:include type="message" />

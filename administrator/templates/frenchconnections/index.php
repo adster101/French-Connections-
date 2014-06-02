@@ -125,7 +125,6 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
 
           <a class="brand hidden-desktop hidden-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
             <span class="icon-out-2 small"></span></a>
-
           <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
             <jdoc:include type="modules" name="menu" style="none" />
             <ul class="nav nav-user">
@@ -141,7 +140,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                   </li>
                   <li class="divider"></li>
                   <!--<li class="">
-                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;          ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');          ?></a>
+                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id; ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');          ?></a>
                   </li>
                   <li class="divider"></li>-->
                   <li class="">
@@ -195,16 +194,16 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
       </div>
     <?php endif; ?>
     <!-- container-fluid -->
-    <div class="container container-main">
+    <div class="container container-main" style="position:relative;left:0;">
       <section id="content">
         <!-- Begin Content -->
         <jdoc:include type="modules" name="top" style="xhtml" />
         <div class="row-fluid">
           <?php if ($showSubmenu) : ?>
-            <div class="span2">
+            <div class="span3">
               <jdoc:include type="modules" name="submenu" style="none" />
             </div>
-            <div class="span10">
+            <div class="span9">
             <?php else : ?>
               <div class="span12">
               <?php endif; ?>

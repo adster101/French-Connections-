@@ -38,12 +38,7 @@ JHtml::_('behavior.tooltip');
         <?php echo $this->form->getInput('surname'); ?>
       </div>
     </div>    
-    <div class="control-group">
-      <?php echo $this->form->getLabel('username'); ?>
-      <div class="controls">
-        <?php echo $this->form->getInput('username'); ?>
-      </div>
-    </div>
+
     <div class="control-group">
       <?php echo $this->form->getLabel('email1'); ?>
       <div class="controls">

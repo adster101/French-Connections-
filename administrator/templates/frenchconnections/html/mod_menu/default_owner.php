@@ -30,12 +30,6 @@ $manage_offers = $user->authorise('core.manage', 'com_specialoffers');
 
 $manage_account = $user->authorise('core.manage', 'com_invoices');
 
-$manage_users = $user->authorise('core.manage', 'com_users');
-
-$manage_vouchers = $user->authorise('core.manage', 'com_vouchers');
-
-
-
 //$menu->addChild(new JMenuNode(JText::_('COM_ADMIN_HOME'), 'index.php'), true);
 //$menu->getParent();
 

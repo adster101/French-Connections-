@@ -33,7 +33,7 @@ class EnquiriesViewEnquiries extends JViewLegacy
 
     $view = strtolower(JRequest::getVar('view'));
 
-    $this->addSubMenu($canDo);
+    //$this->addSubMenu($canDo);
 
     $this->addToolBar($canDo);
 
@@ -49,16 +49,8 @@ class EnquiriesViewEnquiries extends JViewLegacy
   protected function addSubMenu($canDo)
   {
 
-    if ($canDo->get('core.edit.state'))
-    {
-
-      JHtmlSidebar::addFilter(
-              JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', EnquiriesHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.published'), true)
-      );
-    }
-
-    //RentalHelper::addSubmenu('enquiries');
-    //$this->sidebar = JHtmlSidebar::render();
+    RentalHelper::addSubmenu('enquiries');
+    $this->sidebar = JHtmlSidebar::render();
   }
 
   /**

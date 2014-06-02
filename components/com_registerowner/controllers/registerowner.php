@@ -96,17 +96,17 @@ class RegisterownerControllerRegisterowner extends JControllerForm {
     $msg = JText::_('COM_REGISTER_SUCCESS');
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    $this->setRedirect(JRoute::_(ContentHelperRoute::getArticleRoute($success_article), false));
+    // $this->setRedirect(JRoute::_(ContentHelperRoute::getArticleRoute($success_article), false));
 
     // This sets a login cookie containing the username and password details
     // These are then picked up by the autologin plugin 
     // which in turn are authed and the user logged in...
-    //$model->setLoginCookie($user);
+    $model->setLoginCookie($user);
 
     // Auto login cookie has been set and record created in the db
-    //$this->setRedirect(
-            //JRoute::_('administrator/index.php?option=com_autologin', false)
-    //);
+    $this->setRedirect(
+            JRoute::_('administrator', false)
+    );
 
     return true;
   }
