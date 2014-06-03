@@ -1,5 +1,6 @@
 jQuery(document).ready(function() {
 
+  jQuery('input, textarea').placeholder();
 
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
