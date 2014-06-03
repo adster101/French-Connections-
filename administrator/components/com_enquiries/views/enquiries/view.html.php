@@ -60,8 +60,6 @@ class EnquiriesViewEnquiries extends JViewLegacy
    */
   protected function setDocument()
   {
-
-
     $document = JFactory::getDocument();
 
     // Set the title property

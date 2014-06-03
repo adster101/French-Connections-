@@ -1,6 +1,11 @@
 jQuery(document).ready(function() {
 
-  jQuery('input, textarea').placeholder();
+ 
+    jQuery('.js-stools-form').submit(function(event){
+      console.log(jQuery("input").attr(""));
+    });
+ 
+
 
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc

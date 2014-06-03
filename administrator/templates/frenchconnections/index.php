@@ -110,7 +110,6 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
       <!--[if lt IE 9]>
       <script src="../media/jui/js/html5.js"></script>
       <![endif]-->
-
   </head>
 
   <body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?>" <?php if ($stickyToolbar) : ?>data-spy="scroll" data-target=".subhead" data-offset="87"<?php endif; ?>>
