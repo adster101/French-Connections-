@@ -13,7 +13,8 @@
         type="list"
         labelclass="element-invisible"
         label="COM_TICKETS_SEVERITY"
-        description=""> 
+        description=""
+        onchange="this.form.submit();"> 
         <option value="">COM_TICKETS_SEVERITY</option>
         <option value="1">COM_TICKETS_CRITICAL</option>
         <option value="2">COM_TICKETS_HIGH</option>
@@ -27,7 +28,8 @@
         extension="com_tickets"
         label="COM_TICKETS_SEVERITY"
         labelclass="element-invisible"
-        description=""> 
+        description=""
+        onchange="this.form.submit();"> 
         <option value="">COM_TICKETS_AREA</option>
       </field> 
       <field
@@ -36,7 +38,8 @@
         labelclass="element-invisible"
         label="JOPTION_SELECT_PUBLISHED"
         description=""
-        class="input-medium"> 
+        class="input-medium"
+        onchange="this.form.submit();"> 
         <option value="">JOPTION_SELECT_PUBLISHED</option>
         <option value="1">COM_TICKETS_OPEN</option>
         <option value="0">COM_TICKETS_CLOSED</option>
@@ -48,7 +51,8 @@
         type="users"
         label="Created by"
         class="input-medium"
-        filter="int">
+        filter="int"
+        onchange="this.form.submit();">
         <option value="">COM_TICKETS_ASSIGNED_FILTER</option>
       </field>  
     </fieldset>
@@ -67,7 +71,8 @@
       default="10"
       labelclass="element-invisible"
       label="COM_CONTENT_LIST_LIMIT"
-      description="COM_CONTENT_LIST_LIMIT_DESC">
+      description="COM_CONTENT_LIST_LIMIT_DESC"
+      onchange="this.form.submit();">
     </field>
   </fields>
 </form>
