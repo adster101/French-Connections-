@@ -26,7 +26,8 @@ $doc->addStyleSheetVersion('templates/' . $this->template . '/css/template' . ($
 // Load specific language related CSS
 $file = 'language/' . $lang->getTag() . '/' . $lang->getTag() . '.css';
 
-if (is_file($file)) {
+if (is_file($file))
+{
   $doc->addStyleSheetVersion($file);
 }
 
@@ -42,18 +43,23 @@ $cpanel = ($option === 'com_cpanel');
 
 $showSubmenu = false;
 $this->submenumodules = JModuleHelper::getModules('submenu');
-foreach ($this->submenumodules as $submenumodule) {
+foreach ($this->submenumodules as $submenumodule)
+{
   $output = JModuleHelper::renderModule($submenumodule);
-  if (strlen($output)) {
+  if (strlen($output))
+  {
     $showSubmenu = true;
     break;
   }
 }
 
 // Logo file
-if ($this->params->get('logoFile')) {
+if ($this->params->get('logoFile'))
+{
   $logo = JUri::root() . $this->params->get('logoFile');
-} else {
+}
+else
+{
   $logo = $this->baseurl . '/templates/' . $this->template . '/images/logo.png';
 }
 
@@ -67,6 +73,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <jdoc:include type="head" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9">
 
       <!-- Template color -->
       <?php if ($this->params->get('templateColor')) : ?>
@@ -102,6 +109,10 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
 
       <!--[if lt IE 9]>
       <script src="../media/jui/js/html5.js"></script>
+      <![endif]-->
+      <!--[if lt IE 10]> 
+      <script src="../media/fc/js/jquery.placeholder.js"></script>
+
       <![endif]-->
   </head>
 
@@ -140,7 +151,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                   </li>
                   <li class="divider"></li>
                   <!--<li class="">
-                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id; ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');          ?></a>
+                    <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;   ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');            ?></a>
                   </li>
                   <li class="divider"></li>-->
                   <li class="">
@@ -149,7 +160,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                 </ul>
               </li>
             </ul>
-            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();          ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);          ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);          ?>
+            <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();            ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);            ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);            ?>
               <span class="icon-out-2 small"></span></a>-->
           </div>
           <!--/.nav-collapse -->
@@ -209,7 +220,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
               <?php endif; ?>
               <jdoc:include type="message" />
               <?php
-              // Show the page title here if the header is hidden
+// Show the page title here if the header is hidden
               if (!$displayHeader) :
                 ?>
                 <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
@@ -226,12 +237,12 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
     </div>
     <?php if ($this->countModules('owner-footer')) : ?> 
       <footer id="status" class=""> 
-          <div class="clearfix">
-            <div class="container">
-              <jdoc:include type="modules" name="owner-footer" style="no" />
-            </div>
+        <div class="clearfix">
+          <div class="container">
+            <jdoc:include type="modules" name="owner-footer" style="no" />
           </div>
-        </footer>  
+        </div>
+      </footer>  
     <?php endif; ?>
     <jdoc:include type="modules" name="debug" style="none" />
     <?php if ($stickyToolbar) : ?>

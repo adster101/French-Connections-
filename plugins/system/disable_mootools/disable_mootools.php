@@ -17,8 +17,7 @@ class plgSystemDisable_mootools extends JPlugin {
 
     $app = JFactory::getApplication();
 
-    //	for admin we must to load MooTools anyway...
-    if (!$app->isAdmin()) {
+    if ($app->isAdmin()) {
       //	params support
       //	@since in v.1.0.1
       $on = $this->params->get('enabled', 0);
@@ -39,12 +38,16 @@ class plgSystemDisable_mootools extends JPlugin {
           $relativePath = trim(str_replace($uri->getPath(), '', JUri::root()), '/');
           $relativeScript = trim(str_replace($uri->getPath(), '', $url), '/');
           $relativeUrl = str_replace($relativePath, '', $url);
-
+          
+          if (strpos($url, 'html5fallback') === false) 
+					{
+						$headers['scripts'][$url] = $type;
+					}
           // Try to disable relative and full URLs
-          unset($doc->_scripts[$url]);
-          unset($doc->_scripts[$relativeUrl]);
-          unset($doc->_scripts[JUri::root(true) . $url]);
-          unset($doc->_scripts[$relativeScript]);
+          //unset($doc->_scripts[$url]);
+          //unset($doc->_scripts[$relativeUrl]);
+          //unset($doc->_scripts[JUri::root(true) . $url]);
+          //unset($doc->_scripts[$relativeScript]);
         }
 
 

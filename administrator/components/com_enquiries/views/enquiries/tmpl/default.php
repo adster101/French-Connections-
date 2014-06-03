@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('bootstrap.tooltip');
+//JHtml::_('bootstrap.tooltip');
 
 
 $listDirn = $this->escape($this->state->get('list.direction'));
