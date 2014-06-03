@@ -1,11 +1,11 @@
 jQuery(document).ready(function() {
 
- 
-    jQuery('.js-stools-form').submit(function(event){
-      console.log(jQuery("input").attr(""));
+  jQuery(function() {
+    jQuery('.js-stools-field-filter > select').change(function() {
+      jQuery("input").attr("placeholder", "");
+      this.form.submit();
     });
- 
-
+  });
 
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
@@ -37,17 +37,13 @@ jQuery(document).ready(function() {
     jQuery(this).popover({// Initialise a popover
       trigger: 'manual' // Take control of when the popover is opened
     }).click(function(event) {
-
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
       popover = jQuery(this).data('popover'); // Get the popover data attributes
       popover.options.content = getContent(this); // Update the content by calling getContent
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
-
   })
-
-
 
   jQuery('body').on('click', '.popover span', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
