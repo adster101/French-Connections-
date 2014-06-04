@@ -18,10 +18,10 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
-    <div id="j-sidebar-container" class="span2">
+    <div id="j-sidebar-container" class="span3">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="j-main-container" class="span10">
+    <div id="j-main-container" class="span9">
       <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
       <?php //echo $toolbar = JToolbar::getInstance('toolbar')->render('toolbar'); ?>
     <?php else : ?>

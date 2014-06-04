@@ -30,7 +30,7 @@ class SpecialOffersViewSpecialOffers extends JViewLegacy
     $this->activeFilters = $this->get('ActiveFilters');
 
     $this->setDocument();
-    $this->addSubMenu();
+    //$this->addSubMenu();
     
     $this->addToolBar($canDo);
 

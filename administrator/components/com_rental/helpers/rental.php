@@ -169,10 +169,10 @@ abstract class RentalHelper {
     JHtmlSidebar::addEntry(JText::_('COM_RENTAL_PROPERTY_SUBMENU_MENU'), '#');
     JHtmlSidebar::addEntry(JText::_('COM_RENTAL_MENU'), 'index.php?option=com_rental', ($view == 'listings'));
     JHtmlSidebar::addEntry(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', ($view == 'specialoffers'));
-    JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
     JHtmlSidebar::addEntry(JText::_('COM_REVIEWS_MENU'), 'index.php?option=com_reviews', ($view == 'reviews'));
     JHtmlSidebar::addEntry(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', ($view == 'stats'));
-  }
+     JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
+ }
 
   /**
    * Get the actions

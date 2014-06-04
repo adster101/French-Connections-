@@ -33,7 +33,7 @@ class EnquiriesViewEnquiries extends JViewLegacy
 
     $view = strtolower(JRequest::getVar('view'));
 
-    //$this->addSubMenu($canDo);
+    // $this->addSubMenu($canDo);
 
     $this->addToolBar($canDo);
 
@@ -49,7 +49,7 @@ class EnquiriesViewEnquiries extends JViewLegacy
   protected function addSubMenu($canDo)
   {
 
-    RentalHelper::addSubmenu('enquiries');
+    EnquiriesHelper::addSubmenu('enquiries');
     $this->sidebar = JHtmlSidebar::render();
   }
 

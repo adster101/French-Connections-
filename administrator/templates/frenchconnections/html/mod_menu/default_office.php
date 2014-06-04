@@ -88,28 +88,22 @@ if ($manage_realestate) {
   if ($manage_realestate) {
 
     $menu->addChild(new JMenuNode(JText::_('Real Estate Property'), '#', 'class:realestateproperty'), true);
+    $menu->getParent();
 
     if ($addRealestate) {
+          $menu->addSeparator();
+
       $menu->addChild(
               new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REAL_ESTATE_PROPERTY'), '#', 'class:newrealestateproperty')
       );
-    }
-    $menu->getParent();
+      
+    }    $menu->getParent();
+
   }
-  $menu->addSeparator();
+  
 
-  $menu->addChild(
-          new JMenuNode(JText::_('Enquiries'), 'index.php?option=com_enquiries', 'class:enquiries'));
-
-  $menu->addSeparator();
-
-  $menu->addChild(new JMenuNode(JText::_('Statistics'), 'index.php?option=com_stats', 'class:stats'));
-
-  $menu->getParent();
 }
 
-// Break out the enquiries bit
-$menu->addSeparator();
 
 $menu->addChild(
         new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
@@ -117,27 +111,6 @@ $menu->addChild(
 
 $menu->getParent();
 
-/**
- * Account menu
- */
-if ($manage_account) {
-
-  $menu->addChild(new JMenuNode(JText::_('COM_ACCOUNTS_MENU'), '#'), true);
-
-
-  $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
-  $menu->addSeparator();
-
-
-
-
-  $menu->addChild(new JMenuNode(JText::_('Invoice History'), 'index.php?option=com_invoices&view=invoices', 'class:accounts'), true);
-
-  $menu->getParent();
-
-
-  $menu->getParent();
-}
 
 /**
  * Site SubMenu
@@ -157,27 +130,6 @@ if (in_array(8, $user->getAuthorisedGroups())) {
     $menu->addSeparator();
   }
 
-  $chm = $user->authorise('core.manage', 'com_checkin');
-  $cam = $user->authorise('core.manage', 'com_cache');
-
-  if ($chm || $cam) {
-    // Keep this for when bootstrap supports submenus?
-    /* $menu->addChild(
-      new JMenuNode(JText::_('MOD_MENU_MAINTENANCE'), 'index.php?option=com_checkin', 'class:maintenance'), true
-      ); */
-
-    if ($chm) {
-      $menu->addChild(new JMenuNode(JText::_('MOD_MENU_GLOBAL_CHECKIN'), 'index.php?option=com_checkin', 'class:checkin'));
-      $menu->addSeparator();
-    }
-
-    if ($cam) {
-      $menu->addChild(new JMenuNode(JText::_('MOD_MENU_CLEAR_CACHE'), 'index.php?option=com_cache', 'class:clear'));
-      $menu->addChild(new JMenuNode(JText::_('MOD_MENU_PURGE_EXPIRED_CACHE'), 'index.php?option=com_cache&view=purge', 'class:purge'));
-    }
-
-    // $menu->getParent();
-  }
 
   $menu->addSeparator();
 
