@@ -1,5 +1,11 @@
 jQuery(document).ready(function() {
 
+  // Check whether placeholder is supported or not.
+  if (document.createElement("input").placeholder == undefined) {
+    // Placeholder is not supported, so remove the attribute
+    jQuery('input').removeAttr('placeholder');
+  } 
+
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
   if (jQuery('#map').length) {
