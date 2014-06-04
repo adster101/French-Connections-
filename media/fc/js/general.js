@@ -1,12 +1,5 @@
 jQuery(document).ready(function() {
 
-  jQuery(function() {
-    jQuery('.js-stools-field-filter > select').change(function() {
-      jQuery("input").attr("placeholder", "");
-      this.form.submit();
-    });
-  });
-
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
   if (jQuery('#map').length) {
