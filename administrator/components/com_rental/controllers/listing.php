@@ -12,7 +12,8 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class RentalControllerListing extends JControllerForm {
+class RentalControllerListing extends JControllerForm
+{
 
   protected $extension;
 
@@ -24,11 +25,13 @@ class RentalControllerListing extends JControllerForm {
    * @since  1.6
    * @see    JController
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension)) {
+    if (empty($this->extension))
+    {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
 
@@ -46,7 +49,8 @@ class RentalControllerListing extends JControllerForm {
    *
    * @since   1.6
    */
-  protected function allowView($id = 0) {
+  protected function allowView($id = 0)
+  {
 
     // Initialise variables.
     $user = JFactory::getUser();
@@ -55,24 +59,29 @@ class RentalControllerListing extends JControllerForm {
 
     // Check that this property is not checked out already
     // Check general edit permission first.
-    if ($user->authorise('core.edit', $this->extension)) {
+    if ($user->authorise('core.edit', $this->extension))
+    {
       return true;
     }
 
     // Fallback on edit.own.
     // First test if the permission is available.
-    if ($user->authorise('core.edit.own', $this->extension)) {
+    if ($user->authorise('core.edit.own', $this->extension))
+    {
       // Now test the owner is the user.
-      if (empty($ownerId) && $id) {
+      if (empty($ownerId) && $id)
+      {
         // Need to do a lookup from the model.
         $record = $this->getModel('Property')->getItem($id);
-        if (empty($record)) {
+        if (empty($record))
+        {
           return false;
         }
         $ownerId = $record->created_by;
       }
       // If the owner matches 'me' then do the test.
-      if ($ownerId == $userId) {
+      if ($ownerId == $userId)
+      {
         return true;
       }
     }
@@ -85,7 +94,8 @@ class RentalControllerListing extends JControllerForm {
    *
    */
 
-  public function view() {
+  public function view()
+  {
 
     $context = "$this->option.view.$this->context";
     $app = JFactory::getApplication();
@@ -98,7 +108,8 @@ class RentalControllerListing extends JControllerForm {
      */
     $id = $this->input->get('id', '', 'int');
 
-    if (!$this->allowView($id)) {
+    if (!$this->allowView($id))
+    {
       $this->setRedirect(
               JRoute::_(
                       'index.php?option=' . $this->option, false)
@@ -137,7 +148,8 @@ class RentalControllerListing extends JControllerForm {
     return true;
   }
 
-  public function stats() {
+  public function stats()
+  {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('GET') or die('Invalid Token');
@@ -145,7 +157,8 @@ class RentalControllerListing extends JControllerForm {
     // Get the id of the property being statted
     $id = JFactory::getApplication()->input->getInt('id');
 
-    if (!$this->allowView($id)) {
+    if (!$this->allowView($id))
+    {
 
       echo JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id);
       jexit();
@@ -162,13 +175,12 @@ class RentalControllerListing extends JControllerForm {
     return true;
   }
 
-  public function accountupdate() {
+  public function accountupdate()
+  {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
 
-    $app = JFactory::getApplication();
-    $lang = JFactory::getLanguage();
     $model = $this->getModel('Payment');
     $data = $this->input->post->get('jform', array(), 'array');
     $context = "$this->option.view.$this->context";
@@ -177,11 +189,13 @@ class RentalControllerListing extends JControllerForm {
     $recordId = $this->input->getInt('id', '', 'int');
 
     // Check that the edit ID is in the session scope
-    if (!$this->checkEditId($context, $recordId)) {
+    if (!$this->checkEditId($context, $recordId))
+    {
       return false;
     }
 
-    if (!$this->validate($model, $data, $context, $recordId)) {
+    if (!$this->validate($model, $data, $context, $recordId))
+    {
 
       // Redirect back to the edit screen.
       $this->setRedirect(
@@ -193,7 +207,8 @@ class RentalControllerListing extends JControllerForm {
     // Need to do a lookup from the model.
     $record = $this->getModel('Property')->getItem($recordId);
 
-    if (empty($record)) {
+    if (empty($record))
+    {
       return false;
     }
 
@@ -203,12 +218,15 @@ class RentalControllerListing extends JControllerForm {
 
     $profile = $this->getModel('UserProfile');
 
-    if (!$profile->save($data)) {
+    if (!$profile->save($data))
+    {
       return false;
     }
 
+    $message = JText::_('COM_RENTAL_ACCOUNT_DETAILS_UPDATED');
+    
     $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
-    $this->setRedirect($redirect, $message, 'warning');
+    $this->setRedirect($redirect, $message, 'success');
 
 
     return true;
@@ -220,7 +238,8 @@ class RentalControllerListing extends JControllerForm {
    * @return boolean
    * 
    */
-  public function submit() {
+  public function submit()
+  {
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
 
@@ -235,7 +254,8 @@ class RentalControllerListing extends JControllerForm {
     $recordId = $this->input->post->get('property_id', '', 'int');
 
     // Check that the edit ID is in the session scope
-    if (!$this->checkEditId($context, $recordId)) {
+    if (!$this->checkEditId($context, $recordId))
+    {
       return false;
     }
 
@@ -243,7 +263,8 @@ class RentalControllerListing extends JControllerForm {
     // Sometimes the form needs some posted data, such as for plugins and modules.
     $form = $model->getForm($data, false);
 
-    if (!$form) {
+    if (!$form)
+    {
       $app->enqueueMessage($model->getError(), 'error');
 
       return false;
@@ -253,16 +274,21 @@ class RentalControllerListing extends JControllerForm {
     $validData = $model->validate($form, $data);
 
     // Check for validation errors.
-    if ($validData === false) {
+    if ($validData === false)
+    {
 
       // Get the validation messages.
       $errors = $model->getErrors();
 
       // Push up to three validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-        if ($errors[$i] instanceof Exception) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
           $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-        } else {
+        }
+        else
+        {
           $app->enqueueMessage($errors[$i], 'warning');
         }
       }
@@ -303,24 +329,31 @@ class RentalControllerListing extends JControllerForm {
 
     $days_to_renewal = RentalHelper::getDaysToExpiry($items[0]->expiry_date);
 
-    if (empty($items[0]->vat_status)) { // No VAT status on record for this listing.
+    if (empty($items[0]->vat_status))
+    { // No VAT status on record for this listing.
       $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId, false);
 
       $this->setRedirect($redirect, $message, 'notice');
-    } elseif ($days_to_renewal < 7 && $days_to_renewal > 0) {
+    }
+    elseif ($days_to_renewal < 7 && $days_to_renewal > 0)
+    {
       // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
       $message = ($days_to_renewal > 0) ? 'Your property is expiring within 7 days - please renew now' : 'Property expired, renew now.';
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
-    } else if (empty($days_to_renewal)) {
+    }
+    else if (empty($days_to_renewal))
+    {
 
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
       $this->setRedirect($redirect, $message, 'COM_RENTAL_PAYMENT_DUE');
-    } else {
+    }
+    else
+    {
 
       // Need to determine whether they owe us any more wedge
       $model = $this->getModel('Property', 'RentalModel', $config = array('ignore_request' => true));
@@ -340,7 +373,8 @@ class RentalControllerListing extends JControllerForm {
    * 
    * 
    */
-  public function review() {
+  public function review()
+  {
 
     // Get the user
     $user = JFactory::getUser();
@@ -354,7 +388,8 @@ class RentalControllerListing extends JControllerForm {
     $checkin = property_exists($table, 'checked_out');
 
     // Check user is authed to review
-    if (!$user->authorise('helloworld.property.review', $this->option)) {
+    if (!$user->authorise('helloworld.property.review', $this->option))
+    {
 
       // Set the internal error and also the redirect error.
       $this->setError(JText::_('COM_RENTAL_PROPERTY_REVIEW_NOT_AUTHORISED'));
@@ -371,7 +406,8 @@ class RentalControllerListing extends JControllerForm {
     }
 
     // Check property out to user reviewing
-    if ($checkin && !$model->checkout($recordId)) {
+    if ($checkin && !$model->checkout($recordId))
+    {
       // Check-out failed, display a notice but allow the user to see the record.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_CHECKOUT_FAILED', $model->getError()));
       $this->setMessage($this->getError(), 'error');
@@ -383,7 +419,9 @@ class RentalControllerListing extends JControllerForm {
       );
 
       return false;
-    } else {
+    }
+    else
+    {
       // Check-out succeeded, push the new record id into the session.
       $this->holdEditId($context, $recordId);
       $app->setUserState($context . '.data', null);
@@ -404,7 +442,8 @@ class RentalControllerListing extends JControllerForm {
    * 
    * @return boolean
    */
-  public function release() {
+  public function release()
+  {
 
     // Get the user
     $user = JFactory::getUser();
@@ -418,7 +457,8 @@ class RentalControllerListing extends JControllerForm {
 
     // TO DO - CHECK Edit id is in the session for this user
     // Check-in the original row.
-    if ($checkin && $model->checkin($recordId) === false) {
+    if ($checkin && $model->checkin($recordId) === false)
+    {
       // Check-in failed. Go back to the item and display a notice.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $model->getError()));
       $this->setMessage($this->getError(), 'error');
@@ -442,7 +482,8 @@ class RentalControllerListing extends JControllerForm {
   /**
    * 
    */
-  public function approve() {
+  public function approve()
+  {
 
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
@@ -464,7 +505,8 @@ class RentalControllerListing extends JControllerForm {
   /**
    * 
    */
-  public function publish() {
+  public function publish()
+  {
 
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
@@ -489,8 +531,10 @@ class RentalControllerListing extends JControllerForm {
    * @param type $id
    * @return boolean
    */
-  public function checkEditId($context, $id) {
-    if (!parent::checkEditId($context, $id)) {
+  public function checkEditId($context, $id)
+  {
+    if (!parent::checkEditId($context, $id))
+    {
       // Somehow the person just went to the form and tried to save it. We don't allow that.
       $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
       $this->setMessage($this->getError(), 'error');
@@ -507,7 +551,8 @@ class RentalControllerListing extends JControllerForm {
     return true;
   }
 
-  public function validate($model, $data, $context, $recordId) {
+  public function validate($model, $data, $context, $recordId)
+  {
 
     $app = JFactory::getApplication();
 
@@ -515,7 +560,8 @@ class RentalControllerListing extends JControllerForm {
     // Sometimes the form needs some posted data, such as for plugins and modules.
     $form = $model->getForm($data, false);
 
-    if (!$form) {
+    if (!$form)
+    {
       $app->enqueueMessage($model->getError(), 'error');
 
       return false;
@@ -525,16 +571,21 @@ class RentalControllerListing extends JControllerForm {
     $validData = $model->validate($form, $data);
 
     // Check for validation errors.
-    if ($validData === false) {
+    if ($validData === false)
+    {
 
       // Get the validation messages.
       $errors = $model->getErrors();
 
       // Push up to three validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-        if ($errors[$i] instanceof Exception) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
           $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-        } else {
+        }
+        else
+        {
           $app->enqueueMessage($errors[$i], 'warning');
         }
       }

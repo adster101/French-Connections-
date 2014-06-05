@@ -6,7 +6,7 @@
     <field 
       name="item_cost_id"
       type="sql"
-      query="select code as id, description from #__item_costs where catid in (66,50) order by catid, id asc"
+      query="select code as id, description from #__item_costs where (catid in (66,50) OR description like '%featured%') order by catid, id asc"
       labelclass="control-label"
       label="Item code"
       required="true"
@@ -21,8 +21,7 @@
       name="property_id"
       type="text"
       labelclass="control-label"
-      label="COM_INVOICES_FORM_LBL_INVOICE_PROPERTY_ID"
-      description="COM_INVOICES_FORM_DESC_INVOICE_PROPERTY_ID"
+      label="COM_VOUCHERS_PROPERTY_ID"
       required="true"
       class="input-small"
       filter="int"
@@ -40,6 +39,15 @@
       class="input-mini"
       labelclass="control-label"
     />
+    <field
+      type="text"
+      default=""
+      name="note"
+      label="COM_VOUCHERS_VOUCHER_NOTE"
+      filter="string"
+      labelclass="control-label"
+      class="input-xxlarge"
+    />
     
     <field
       format="%d-%m-%Y" 
@@ -51,10 +59,12 @@
       required="false"
       class="input-small"
       filter="string" 
+      default=""
     />
     <field 
       name="date_created" 
-      type="text" 
+      type="calendar"
+      format="%d-%m-%y"
       labelclass="control-label"
       class="input-large"
       label="Date created"
@@ -64,7 +74,8 @@
     />
     <field 
       name="date_redeemed" 
-      type="text" 
+      type="calendar"
+      format="%d-%m-%y"
       labelclass="control-label"
       class="input-large"
       label="Date redeemed"

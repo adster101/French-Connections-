@@ -13,7 +13,7 @@ $lang->load('com_rental');
 
 //echo htmlspecialchars($item->title, ENT_QUOTES, 'UTF-8');
 ?>
-<!--<p><?php //echo JText::_('MOD_LISTINGS_BLURB');                       ?></p>-->
+<!--<p><?php //echo JText::_('MOD_LISTINGS_BLURB');                        ?></p>-->
 
 <div class="page-header clearfix">
   <a class="btn btn-large btn-success pull-right" href="index.php?option=com_rental&amp;task=propertyversions.add"> 
@@ -50,6 +50,10 @@ $lang->load('com_rental');
           <div class="alert alert-danger">
             <?php echo JText::sprintf('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_EXPIRED', $item->expiry_date); ?>
             <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, 0, $item->expiry_date); ?>
+          </div>
+        <?php elseif (empty($days_to_renewal)) : ?>
+          <div class="alert alert-danger">
+            <?php echo JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED'); ?>
           </div>
         <?php endif; ?>  
         <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail, 'thumbnail pull-left') ?>

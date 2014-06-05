@@ -5,7 +5,7 @@
     label="">
     
     <field 
-      label="Property id"    
+      label="PRN"    
       name="property_id"
       labelclass="control-label"
       filter="int"

@@ -30,7 +30,7 @@ $colspan = (isset($this->items[0])) ? count(get_object_vars($this->items[0])) + 
               <?php echo JText::_('JGRID_HEADING_ID'); ?>
             </th>
             <th width="1%" class="nowrap center">
-              <?php echo JText::_('Property Id'); ?>
+              <?php echo JText::_('PRN'); ?>
             </th>
             <th>
               <?php echo JText::_('COM_FEATUREDPROPERTY_PAID_STATUS'); ?>

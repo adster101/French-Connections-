@@ -43,15 +43,85 @@
       labelclass="control-label"
       class="validate validate-company"
       required="false"
-
-    />   
-
-
+    /> 
+   
     <field
       name="property_id"
       type="hidden"
-      default=""
       filter="int">
     </field>
+  </fieldset>
+  <fieldset name="address"
+  >
+    <field
+      name="address1"
+      type="text"
+      default=""
+      class="input-xlarge"
+      description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_ADDRESS1_LABEL"
+      message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
+      size="30"
+      required="true"
+      labelclass="control-label"
+    />
+    <field
+      name="address2"
+      type="text"
+      class="input-xlarge"
+      description="PLG_USER_PROFILE_FIELD_ADDRESS2_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_ADDRESS2_LABEL"
+      message="PLG_USER_PROFILE_FIELD_ADDRESS2_MESSAGE"
+      size="30"
+      labelclass="control-label"
+    />
+
+    <field
+      name="city"
+      type="text"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_CITY_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_CITY_LABEL"
+      message="PLG_USER_PROFILE_FIELD_CITY_MESSAGE"
+      size="30"
+      labelclass="control-label"
+      required="true"
+    />
+    
+    <field
+      name="region"
+      type="text"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_REGION_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_REGION_LABEL"
+      message="PLG_USER_PROFILE_FIELD_REGION_MESSAGE"
+      size="30"
+      labelclass="control-label"
+      required="true"
+    />
+    
+    <field
+      name="postal_code"
+      type="text"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_POSTAL_CODE_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_POSTAL_CODE_LABEL"
+      message="PLG_USER_PROFILE_FIELD_POSTAL_CODE_MESSAGE"
+      size="30"
+      labelclass="control-label"
+      required="true"
+      class="input-small"
+    />
+    
+    
+    
+
+
+   
   </fieldset>
 </form>

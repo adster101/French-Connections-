@@ -65,13 +65,32 @@ $show_company_number = '';
               </div>
             </div>    
           </div>
+
         </fieldset>
+        <fieldset>
+          <legend><?php echo JText::_('Address details'); ?></legend>
+
+          <?php foreach ($this->form->getFieldset('address') as $field) : ?>                
+            <div class="control-group">
+              <div class="control-label"> 
+                <?php echo $field->label; ?>
+
+              </div>
+              <div class="controls">   
+                <?php echo $field->input; ?>
+
+              </div>
+            </div>    
+          </fieldset>
+
+
+        <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
         <?php echo JHtmlProperty::button('btn btn-primary btn-large pull-right', 'listing.accountupdate', 'icon-next', 'Proceed'); ?>
 
         <input type="hidden" name="task" value="" />
         <?php echo JHtml::_('form.token'); ?>
         <?php echo $this->form->getInput('property_id'); ?>
-      
+
         <hr />
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_HELP'); ?>
 
