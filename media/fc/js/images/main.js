@@ -17,9 +17,7 @@
 jQuery(function() {
 
   'use strict';
-
-
-
+  
   // Initialize the jQuery File Upload widget:
   jQuery('#fileupload').fileupload({
     // Uncomment the following to send cross-domain cookies:
@@ -27,9 +25,14 @@ jQuery(function() {
     //url: 'index.php?option=com_helloworld&task=images.upload'
     //downloadTemplateId:null,
     //uploadTemplateId:null,
+    // Enable image resizing, except for Android and Opera,
+    // which actually support image resizing, but fail to
+    // send Blob objects via XHR requests:
+    disableImageResize: /Android(?!.*Chrome)|Opera/
+            .test(window.navigator.userAgent),
     previewMaxWidth: 210,
-    previewAsCanvas: false,
     previewMaxHeight: 120,
+    previewCrop: true,
     maxFileSize: 4000000,
     singleFileUploads: true,
     sequentialUploads: true,

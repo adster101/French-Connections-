@@ -14,7 +14,7 @@
  table.table tr.template-upload td,
 table.table tr.template-download td {
    display:inline-block;
-   min-width:160px;
+   min-width:210px;
    padding:0;
  }
  
@@ -29,7 +29,7 @@ table.table tr.template-download td {
 table.table tr.template-upload,
 table.table tr.template-download {
   display: inline-block;
-  width: 170px;
+  width: 210px;
   margin-right: 10px;
   position:relative;
 } 
