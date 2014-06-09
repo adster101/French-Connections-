@@ -100,8 +100,6 @@ class RentalViewTariffs extends JViewLegacy {
       JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
     }
     JToolBarHelper::help('',true);
-
-
   }
 
   /**

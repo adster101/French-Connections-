@@ -46,19 +46,6 @@ class VouchersModelVouchers extends JModelList {
    * Note. Calling getState in this method will result in recursion.
    */
   protected function populateState($ordering = null, $direction = null) {
-    // Initialise variables.
-    $app = JFactory::getApplication('administrator');
-
-    // Load the filter state.
-    $search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
-    $this->setState('filter.search', $search);
-
-    $published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
-    $this->setState('filter.state', $published);
-
-    // Load the parameters.
-    $params = JComponentHelper::getParams('com_invoices');
-    $this->setState('params', $params);
 
     // List state information.
     parent::populateState('a.id', 'asc');
@@ -102,12 +89,13 @@ class VouchersModelVouchers extends JModelList {
     // Select the required fields from the table.
     $query->select(
             $this->getState(
-                    'list.select', 'a.*,b.description'
+                      'list.select', 
+                      'a.id,a.date_created, date_format(a.end_date, "%d %M %Y") as end_date,a.quantity, a.item_cost_id, a.state, a.property_id, b.description'
             )
     );
     $query->from('`#__vouchers` AS a');
 
-    $query->leftJoin('#__item_costs b on a.item_cost_id = b.id');
+    $query->leftJoin('#__item_costs b on a.item_cost_id = b.code');
 
     // Filter by published state
     $published = $this->getState('filter.state');

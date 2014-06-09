@@ -31,7 +31,7 @@ class VouchersViewVoucher extends JViewLegacy {
     $this->id = $app->input->get('id', '', 'int');
 
     $this->form = $this->get('Form');
-    
+
     $this->state = $this->get('State');
 
     $this->item = $this->get('Item');
@@ -60,7 +60,11 @@ class VouchersViewVoucher extends JViewLegacy {
    */
   protected function addToolbar($canDo) {
 
-    JToolBarHelper::title(JText::sprintf('COM_VOUCHERS_VOUCHER_TITLE', $this->id));
+    if ($this->id) {
+      JToolBarHelper::title(JText::sprintf('COM_VOUCHERS_VOUCHER_TITLE', $this->item->property_id));
+    } else {
+      JToolBarHelper::title(JText::sprintf('COM_VOUCHERS_VOUCHER_NEW', $this->id));
+    }
 
     if ($canDo->get('core.create')) {
       JToolBarHelper::apply('voucher.apply', 'JTOOLBAR_APPLY');

@@ -29,7 +29,9 @@ class VouchersViewVouchers extends JViewLegacy {
     $this->state = $this->get('State');
     $this->items = $this->get('Items');
     $this->pagination = $this->get('Pagination');
-
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
+    
     // Check for errors.
     if (count($errors = $this->get('Errors'))) {
       throw new Exception(implode("\n", $errors));
@@ -37,11 +39,9 @@ class VouchersViewVouchers extends JViewLegacy {
     
     $canDo = VouchersHelper::getActions();
 
-    InvoicesHelper::addSubmenu('vouchers');
 
     $this->addToolbar($canDo);
 
-    $this->sidebar = JHtmlSidebar::render();
     parent::display($tpl);
   }
 
@@ -57,6 +57,7 @@ class VouchersViewVouchers extends JViewLegacy {
 
     //Check if the form exists before showing the add/edit buttons
     $formPath = JPATH_COMPONENT_ADMINISTRATOR . '/models/forms/voucher.xml';
+    
     if (file_exists($formPath)) {
 
       if ($canDo->get('core.create')) {
@@ -101,16 +102,7 @@ class VouchersViewVouchers extends JViewLegacy {
 
     if ($canDo->get('core.admin')) {
       JToolBarHelper::preferences('com_vouchers');
-    }
-
-    //Set sidebar action - New in 3.0
-    JHtmlSidebar::setAction('index.php?option=com_voucher&view=vouchers');
-
-    JHtmlSidebar::addFilter(
-            JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), "value", "text", $this->state->get('filter.state'), true)
-    );
-
-  
+    }  
   }
 
 }
