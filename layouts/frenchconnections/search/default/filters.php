@@ -6,7 +6,6 @@
  * @copyright   Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 defined('JPATH_BASE') or die;
 
 $data = $displayData;
@@ -15,10 +14,10 @@ $data = $displayData;
 $filters = $data['view']->filterForm->getGroup('filter');
 ?>
 <?php if ($filters) : ?>
-	<?php foreach ($filters as $fieldName => $field) : ?>
-		<?php if ($fieldName != 'filter_search') : ?>
-				<?php echo $field->label; ?>
-				<?php echo $field->input; ?>
-		<?php endif; ?>
-	<?php endforeach; ?>
+  <?php foreach ($filters as $fieldName => $field) : ?>
+    <div class="filter-container">
+      <?php echo $field->label; ?>
+      <?php echo $field->input; ?>
+    </div>
+  <?php endforeach; ?>
 <?php endif; ?>

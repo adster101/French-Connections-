@@ -15,7 +15,8 @@ jimport('joomla.utilities.date');
  * @subpackage	User.profile
  * @version		1.6
  */
-class plgUserProfile_fc extends JPlugin {
+class plgUserProfile_fc extends JPlugin
+{
   /*
    * ARRAY OF FIELDS AND WHAT NOT
    */
@@ -52,7 +53,8 @@ class plgUserProfile_fc extends JPlugin {
    * @param       array   $config  An array that holds the plugin configuration
    * @since       1.5
    */
-  public function __construct(& $subject, $config) {
+  public function __construct(& $subject, $config)
+  {
     parent::__construct($subject, $config);
     $this->loadLanguage();
     JFormHelper::addFieldPath(dirname(__FILE__) . '/fields');
@@ -66,17 +68,22 @@ class plgUserProfile_fc extends JPlugin {
    * @return	boolean
    * @since	1.6
    */
-  function onContentPrepareData($context, $data) {
+  function onContentPrepareData($context, $data)
+  {
     // Check we are manipulating a valid form.
-    if (!in_array($context, array('com_admin.profile', 'com_users.user'))) {
+
+    if (!in_array($context, array('com_admin.profile', 'com_users.user')))
+    {
 
       return true;
     }
 
-    if (is_object($data)) {
+    if (is_object($data))
+    {
       $userId = isset($data->id) ? $data->id : 0;
 
-      if (!isset($data->profile) and $userId > 0) {
+      if (!isset($data->profile) and $userId > 0)
+      {
         // Load the profile data from the database.
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -89,7 +96,8 @@ class plgUserProfile_fc extends JPlugin {
         $result = $db->loadAssoc();
 
         // Check for a database error.
-        if ($db->getErrorNum()) {
+        if ($db->getErrorNum())
+        {
           $this->_subject->setError($db->getErrorMsg());
           return false;
         }
@@ -97,9 +105,11 @@ class plgUserProfile_fc extends JPlugin {
         // Merge the profile data.
         $data->profile = array();
 
-        foreach ($result as $key => $value) {
+        foreach ($result as $key => $value)
+        {
           $data->$key = json_decode($value, true);
-          if ($data->$key == '') {
+          if ($data->$key == '')
+          {
             $data->$key = $value;
           }
         }
@@ -116,7 +126,8 @@ class plgUserProfile_fc extends JPlugin {
    * @return	boolean
    * @since	1.6
    */
-  function onContentPrepareForm($form, $data) {
+  function onContentPrepareForm($form, $data)
+  {
     // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
     $input = JFactory::getApplication()->input;
@@ -127,7 +138,8 @@ class plgUserProfile_fc extends JPlugin {
 
     // Only do this is we're editing a property owner?
 
-    if (!($form instanceof JForm)) {
+    if (!($form instanceof JForm))
+    {
       $this->_subject->setError('JERROR_NOT_A_FORM');
       return false;
     }
@@ -135,7 +147,8 @@ class plgUserProfile_fc extends JPlugin {
     // Check we are manipulating a valid form.
     $name = $form->getName();
 
-    if (!in_array($name, array('com_admin.profile', 'com_users.user'))) {
+    if (!in_array($name, array('com_admin.profile', 'com_users.user')))
+    {
       return true;
     }
 
@@ -156,25 +169,31 @@ class plgUserProfile_fc extends JPlugin {
     // Add the rule path to the form so we may validate the user profile details a bit.
     JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_rental/models/rules');
 
-    if (!empty($data)) {
+    if (!empty($data))
+    {
       $vat_status = (isset($data->vat_status)) ? $data->vat_status : '';
-    } else if (!empty($form_data)) {
+    }
+    else if (!empty($form_data))
+    {
       $vat_status = $form_data['vat_status'];
     }
 
 
-    if ($vat_status == 'ZA') {
+    if ($vat_status == 'ZA')
+    {
       $form->setFieldAttribute('company_number', 'required', 'required');
     }
 
-    if ($vat_status == 'ECS') {
+    if ($vat_status == 'ECS')
+    {
       $form->setFieldAttribute('vat_number', 'required', 'required');
     }
 
     return true;
   }
 
-  function onUserAfterSave($data, $isNew, $result, $error) {
+  function onUserAfterSave($data, $isNew, $result, $error)
+  {
 
     // Get the inputs so we can see whether we need to process anything or not
     $input = JFactory::getApplication()->input;
@@ -186,7 +205,8 @@ class plgUserProfile_fc extends JPlugin {
     /*
      * If the option is admin or user and the view matches then process the additional user profile info.
      */
-    if (($view == 'profile' && $option == 'com_admin') || ($layout == 'edit' && $option == 'com_users')) {
+    if (($view == 'profile' && $option == 'com_admin') || ($layout == 'edit' && $option == 'com_users'))
+    {
 
       $userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
@@ -200,11 +220,13 @@ class plgUserProfile_fc extends JPlugin {
 
 
         //$table->delete($userId);
-        if ($isNew) {
+        if ($isNew)
+        {
           $table->set('_tbl_keys', array('id'));
         }
 
-        if (!$table->save($data)) {
+        if (!$table->save($data))
+        {
           $this->setError($table->getError());
           return false;
         }
@@ -215,13 +237,15 @@ class plgUserProfile_fc extends JPlugin {
         $userdata['name'] = $data['firstname'] . ' ' . $data['surname'];
         // Bind the data.
 
-        if (!$user->bind($userdata)) {
+        if (!$user->bind($userdata))
+        {
           $this->setError($user->getError());
           return false;
         }
 
         // Store the data.
-        if (!$user->save()) {
+        if (!$user->save())
+        {
           $this->setError($user->getError());
           return false;
         }
@@ -245,10 +269,12 @@ class plgUserProfile_fc extends JPlugin {
    * @since   3.1
    * @throws    InvalidArgumentException on invalid date.
    */
-  public function onUserBeforeSave($user, $isnew, $data) {
+  public function onUserBeforeSave($user, $isnew, $data)
+  {
 
     // Check that the date is valid.
-    if (!empty($data['firstname']) && !empty($data['surname'])) {
+    if (!empty($data['firstname']) && !empty($data['surname']))
+    {
       try {
         // Concatenate the ffirst and surname fields and save into the name field.
         $data['name'] = $data['firstname'] . ' ' . $data['surname'];
@@ -270,21 +296,25 @@ class plgUserProfile_fc extends JPlugin {
    * @param	boolean		$success	True if user was succesfully stored in the database
    * @param	string		$msg		Message
    */
-  function onUserAfterDelete($user, $success, $msg) {
-    if (!$success) {
+  function onUserAfterDelete($user, $success, $msg)
+  {
+    if (!$success)
+    {
       return false;
     }
 
     $userId = JArrayHelper::getValue($user, 'id', 0, 'int');
 
-    if ($userId) {
+    if ($userId)
+    {
       try {
         $db = JFactory::getDbo();
         $db->setQuery(
                 'DELETE FROM #__user_profile_fc WHERE user_id = ' . $userId
         );
 
-        if (!$db->query()) {
+        if (!$db->query())
+        {
           throw new Exception($db->getErrorMsg());
         }
       } catch (JException $e) {

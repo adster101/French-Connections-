@@ -48,4 +48,19 @@
     />
     
   </fieldset>
+  
+  <fieldset
+    name="basic"
+    label="Basic">
+    
+    <field
+      type="menuitem"
+      name="termsandconditions"
+      label="Link to TandC"
+      description="Choose a link to the Terms and conditions (here shown on submit listing for review form)"
+      filter="int"      
+    />
+    
+  </fieldset>
+  
 </config>

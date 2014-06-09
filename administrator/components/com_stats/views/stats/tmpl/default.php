@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('bootstrap.popover');
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_stats'); ?>" method="post" name="adminForm" id="adminForm" class="form-inline">
+<form action="<?php echo JRoute::_('index.php?option=com_stats'); ?>" method="post" name="adminForm" id="adminForm" class="form-vertical">
   <?php echo JLayoutHelper::render('frenchconnections.search.default', array('view' => $this)); ?>
   <div id="j-main-container" class="row-fluid">
     <div class="span3">

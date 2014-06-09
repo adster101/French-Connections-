@@ -1229,7 +1229,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
 
-    if (!$discount)
+    if (!$discount && count($rows) > 0)
     {
       foreach ($rows as $row)
       {
@@ -1239,7 +1239,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       
       return $vouchers;
     }
-
+    
     return $rows;
   }
 

@@ -17,7 +17,7 @@
 jQuery(function() {
 
   'use strict';
-  
+
   // Initialize the jQuery File Upload widget:
   jQuery('#fileupload').fileupload({
     // Uncomment the following to send cross-domain cookies:
@@ -37,7 +37,8 @@ jQuery(function() {
     singleFileUploads: true,
     sequentialUploads: true,
     dropZone: dropZone,
-    multipart: true
+    multipart: true,
+    autoUpload: false
   }).bind('fileuploaddone', function(e, data) {
     // File has been uploaded, need to refresh the existing images list
     try {

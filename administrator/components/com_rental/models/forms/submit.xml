@@ -17,17 +17,15 @@
 
     <field
       name="tos"
-      type="inlinecheckbox"
+      type="termsandconditions"
       default=""
       required="true"
       labelclass="checkbox required"
       filter="int"
       message="Please confirm that you accept the terms and conditions"
-      label="By checking this box I confirm that I have read and agree to be bound by all of the French Connections Terms and Conditions.">
+      label="COM_RENTAL_LISTING_SUBMIT_TERMS_AND_CONDITIONS">
     </field>
    
-
-
     <field
       name="property_id"
       type="hidden"

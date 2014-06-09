@@ -11,7 +11,7 @@
       />
         
       <field
-        name="id"
+        name="search"
         type="property"
         label="COM_STATS_FILTER_PROPERTY"
         description="COM_STATS_FILTER_PROPERTY_DESC"
@@ -21,16 +21,25 @@
       </field>
     
       <field
-        name="date_range"
-        type="list"
-        label="COM_STATS_FILTER_DATE_RANGE"
+        name="start_date"
+        type="text"
+        label="Date from: "
         description="COM_STATS_FILTER_DATE_RANGE_DESC"
+        hint="dd-mm-yyyy"
+        class="start_date input-small"
         onchange="this.form.submit();"> 
-        <option value="">JSELECT</option>
-        <option value="-4 week">Last 4 weeks</option>
-        <option value="-3 month">Last 3 months</option>
-        <option value="-1 year">Last 12 months</option>
-      </field>  
+   
+      </field> 
+      <field
+        name="end_date"
+        type="text"
+        label="Date to: "
+        description="COM_STATS_FILTER_DATE_RANGE_DESC"
+        hint="dd-mm-yyyy"
+        class="end_date input-small"
+        onchange="this.form.submit();"> 
+   
+      </field>   
     </fieldset>
 
   </fields> 

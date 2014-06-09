@@ -88,9 +88,7 @@ jQuery(document).ready(function() {
 
   jQuery(function() {
     if (jQuery('.start_date').length) {
-
-      jQuery(".hasdatepicker").datepicker({dateFormat: 'dd-mm-yy'});
-
+      
       var start_date = jQuery('.start_date').attr('value');
 
       if (start_date == '') {
@@ -222,7 +220,7 @@ function initialise() {
     disableDefaultUI: false,
     zoomControl: true
   };
-  console.log(myOptions);
+
   var map = new google.maps.Map(document.getElementById("map"), myOptions);
   var marker = new google.maps.Marker({
     position: myLatLng,

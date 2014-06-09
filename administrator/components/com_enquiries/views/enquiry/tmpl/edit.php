@@ -44,7 +44,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
 
 
     <div class="span6">
-      <fieldset>       
+      <fieldset >       
         <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_RESPOND_TO_ENQUIRY'); ?></legend>
         <?php foreach ($this->form->getFieldset('reply') as $field): ?>
           <div class="control-group">
@@ -54,17 +54,16 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
             </div>
           </div>   
         <?php endforeach; ?>
-        <?php echo $this->form->getInput('cc_message'); ?>
-
+      </fieldset>
+      <fieldset class="form-inline">       
+        <?php echo $this->form->getInput('cc_message'); ?>  
+        <?php echo $this->form->getLabel('cc_message'); ?>
         <hr />
         <button class="btn" onclick="Joomla.submitbutton('enquiry.reply')" href="#">
           <i class="icon-save ">
           </i>
           <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_REPLY'); ?>
         </button>
-
-
-
       </fieldset>    
     </div>
   </div>
