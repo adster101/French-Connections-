@@ -107,10 +107,29 @@ a[href*="index.php?option=com_rental&task=propertyversions.add"]:before {
 
 fieldset .checkboxes > ul li {
   float:left;
+  width:33%;
+} 
+
+@media screen and (max-width: 1024px) {
+fieldset .checkboxes > ul li {
+  float:left;
+  width:33%;
+}     
+}
+
+@media screen and (max-width: 720px) {
+fieldset .checkboxes > ul li {
+  float:left;
   width:50%;
 }     
+}
 
-
+@media screen and (max-width: 480px) {
+fieldset .checkboxes > ul li {
+  float:none;
+  width:100%;
+}     
+}
 
 
 
