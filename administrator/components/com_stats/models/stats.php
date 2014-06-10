@@ -17,6 +17,25 @@ class StatsModelStats extends JModelList
 
   protected $id = '';
 
+  /**
+   * Constructor.
+   *
+   * @param	array	An optional associative array of configuration settings.
+   * @see		JController
+   * @since	1.6
+   */
+  public function __construct($config = array())
+  {
+    if (empty($config['filter_fields']))
+    {
+      $config['filter_fields'] = array(
+          'start_date', 'end_date', 'id', 'search'
+      );
+    }
+
+    parent::__construct($config);
+  }
+
   public function getGraphData()
   {
 
@@ -35,16 +54,17 @@ class StatsModelStats extends JModelList
       $id = $input->get('id', '', 'int');
     }
 
-    $date_range = $this->getState('filter.date_range', '');
+    $start_date = JFactory::getDate($this->getState('filter.start_date', ''))->calendar('Y-m-d');
+    $end_date = JFactory::getDate($this->getState('filter.end_date', ''))->calendar('Y-m-d');
 
     // Set up an array to hold the series data
     $graph_data = array();
 
     // Get the various data to populate the report
-    $graph_data['views'] = $this->getData($id, '#__property_views', $date_range);
-    $graph_data['enquiries'] = $this->getData($id, '#__enquiries', $date_range);
-    $graph_data['clicks'] = $this->getData($id, '#__website_views', $date_range);
-    $graph_data['reviews'] = $this->getData($id, '#__reviews', $date_range);
+    $graph_data['views'] = $this->getData($id, '#__property_views', $start_date, $end_date);
+    $graph_data['enquiries'] = $this->getData($id, '#__enquiries', $start_date, $end_date);
+    $graph_data['clicks'] = $this->getData($id, '#__website_views', $start_date, $end_date);
+    $graph_data['reviews'] = $this->getData($id, '#__reviews', $start_date, $end_date);
 
 
     return $graph_data;
@@ -89,8 +109,13 @@ class StatsModelStats extends JModelList
     }
   }
 
-  public function getData($id = '', $table = '', $range = '')
+  public function getData($id = '', $table = '', $start_date = '', $end_date)
   {
+
+    if (empty($id))
+    {
+      return false;
+    }
 
     // Add in the number of page view this property has had in the last twelve months...
 
@@ -102,12 +127,17 @@ class StatsModelStats extends JModelList
      ');
     $query->from($table);
     $query->where('property_id = ' . (int) $id);
-    if ($range)
+    
+    if ($start_date)
     {
-      $now = date('Y-m-d');
-      $last_year = strtotime((string) $range, strtotime($now));
-      $query->where('date_created > ' . $db->quote(date('Y-m-d', $last_year)));
+      $query->where('date_created > ' . $db->quote($start_date));
     }
+    
+    if ($end_date)
+    {
+      $query->where('date_created < ' . $db->quote($end_date));
+    }
+    
     $db->setQuery($query);
 
     try {

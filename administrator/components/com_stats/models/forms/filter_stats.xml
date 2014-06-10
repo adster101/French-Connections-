@@ -27,7 +27,7 @@
         description="COM_STATS_FILTER_DATE_RANGE_DESC"
         hint="dd-mm-yyyy"
         class="start_date input-small"
-        onchange="this.form.submit();"> 
+      filter="int"> 
    
       </field> 
       <field
@@ -36,8 +36,7 @@
         label="Date to: "
         description="COM_STATS_FILTER_DATE_RANGE_DESC"
         hint="dd-mm-yyyy"
-        class="end_date input-small"
-        onchange="this.form.submit();"> 
+        class="end_date input-small"> 
    
       </field>   
     </fieldset>
