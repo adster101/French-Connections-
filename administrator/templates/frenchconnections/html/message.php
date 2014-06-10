@@ -13,7 +13,7 @@ function renderMessage($msgList)
 {
 	$buffer  = null;
 	$buffer .= "\n<div id=\"system-message-container\">";
-	$alert = array('com_rental_payment_due'=>'alert-info', 'error' => 'alert-error', 'warning' => '', 'notice' => 'alert-info', 'message' => 'alert-success');
+	$alert = array('com_rental_payment_due'=>'alert-info', 'error' => 'alert-error', 'warning' => '', 'notice' => 'alert-info', 'success' => 'alert-success');
 
 	// Only render the message list and the close button if $msgList has items
 	if (is_array($msgList) && (count($msgList) >= 1))

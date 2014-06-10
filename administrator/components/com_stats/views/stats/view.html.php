@@ -46,7 +46,7 @@ class StatsViewStats extends JViewLegacy
    */
   protected function addToolBar()
   {
-    JToolbarHelper::help('', '');
+    // JToolbarHelper::help('', '');
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_STATS_VIEW_STATS'));
   }

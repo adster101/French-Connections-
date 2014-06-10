@@ -26,6 +26,17 @@ $searchButton = $data['options']->get('searchButton', true);
 $filters = $data['view']->filterForm->getGroup('filter');
 ?>
 
+<?php if (!empty($filters['filter_search'])) : ?>
+	<?php if ($searchButton) : ?>
+		<label for="filter_search" class="element-invisible">
+			<?php echo JText::_('JSEARCH_FILTER'); ?>
+		</label>
+		<div class="btn-wrapper input-append">
+			<?php echo $filters['filter_search']->input; ?>
+			<button type="submit" class="btn hasTooltip" title="<?php echo JHtml::tooltipText('JSEARCH_FILTER_SUBMIT'); ?>">
+				<i class="icon-search"></i>
+			</button>
+		</div>
 		<?php if ($filterButton) : ?>
 			<div class="btn-wrapper hidden-phone">
 				<button type="button" class="btn hasTooltip js-stools-btn-filter" title="<?php echo JHtml::tooltipText('JSEARCH_TOOLS_DESC'); ?>">
@@ -38,3 +49,5 @@ $filters = $data['view']->filterForm->getGroup('filter');
 				<?php echo JText::_('JSEARCH_FILTER_CLEAR');?>
 			</button>
 		</div>
+	<?php endif; ?>
+<?php endif;

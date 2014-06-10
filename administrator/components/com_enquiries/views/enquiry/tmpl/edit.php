@@ -8,7 +8,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
 ?>   
 <form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" id="adminForm" method="post" name="adminForm">
-
   <?php if (!empty($this->sidebar)): ?>
     <div class="span2">
       <?php echo $this->sidebar; ?>

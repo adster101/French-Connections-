@@ -23,7 +23,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
     </div>
     <div id="j-main-container" class="span9">
       <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
-      <?php //echo $toolbar = JToolbar::getInstance('toolbar')->render('toolbar'); ?>
+      <?php echo $toolbar = JToolbar::getInstance('toolbar')->render('toolbar'); ?>
     <?php else : ?>
       <div id="j-main-container">
         <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>

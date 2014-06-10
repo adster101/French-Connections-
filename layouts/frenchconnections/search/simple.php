@@ -15,7 +15,7 @@ $data['options'] = !empty($data['options']) ? $data['options'] : array();
 
 // Set some basic options
 $customOptions = array(
-    'filtersHidden' => false,
+    'filtersHidden' => isset($data['options']['filtersHidden']) ? $data['options']['filtersHidden'] : empty($data['view']->activeFilters),
     'defaultLimit' => isset($data['options']['defaultLimit']) ? $data['options']['defaultLimit'] : JFactory::getApplication()->getCfg('list_limit', 20),
     'searchFieldSelector' => '#filter_search',
     'orderFieldSelector' => '#list_fullordering'
@@ -26,16 +26,20 @@ $data['options'] = array_unique(array_merge($customOptions, $data['options']));
 $formSelector = !empty($data['options']['formSelector']) ? $data['options']['formSelector'] : '#adminForm';
 
 // Load search tools
-JHtml::_('searchtools.form', $formSelector, $data['options']);
+//JHtml::_('searchtools.form', $formSelector, $data['options']);
 ?>
 <div class="js-stools clearfix well well-small">
- 
-    <div class="js-stools-container-list hidden-phone hidden-tablet">
-      <?php echo JLayoutHelper::render('joomla.searchtools.default.list', $data); ?>
+  <div class="clearfix">
+    <div class="js-stools-container-bar">
+      <?php //echo JLayoutHelper::render('frenchconnections.search.simple.bar', $data);  ?>
     </div>
-  <!-- Filters div -->
-  <div class="js-stools-container-filters hidden-phone clearfix">
-    <?php echo JLayoutHelper::render('frenchconnections.search.default.filters', $data); ?>
+    <div class="js-stools-container-list">
+      <?php echo JLayoutHelper::render('frenchconnections.search.simple.list', $data); ?>
+    </div>
   </div>
-
+  <!-- Filters div -->
+  <div class="js-stools-container-filters">
+    <?php echo JLayoutHelper::render('frenchconnections.search.simple.filters', $data); ?>
+	
+  </div>
 </div>

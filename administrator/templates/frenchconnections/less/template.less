@@ -105,9 +105,23 @@ a[href*="index.php?option=com_rental&task=propertyversions.add"]:before {
     margin-right: 10px;
 }
 
-fieldset .checkboxes > ul li, .js-stools-container-filters > .filter-container {
+legend {
+  font-size: inherit;
+  font-weight:bold; 
+}
+
+fieldset .checkboxes > ul li {
   float:left;
-  width:25%;
+  width:33%;
+} 
+
+.js-stools-container-filters > fieldset > .filter-container {
+  display:inline-block;
+  margin-right: 25px;
+} 
+
+.js-stools-container-filters input {
+  margin-bottom:0;
 } 
 
 @media screen and (max-width: 1024px) {

@@ -9,22 +9,29 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HelloWorld Model
  */
-class StatsModelStats extends JModelList {
+class StatsModelStats extends JModelList
+{
   /*
    * The property id for the stats we are retrieving
    */
 
   protected $id = '';
 
-  public function getGraphData() {
+  public function getGraphData()
+  {
 
     $input = JFactory::getApplication()->input;
     // Get the id from the model state
-    if ($this->getState('filter.search')) {
+    if ($this->getState('filter.search'))
+    {
       $id = (int) $this->getState('filter.search');
-    } elseif ($this->getState('filter.id')) {
+    }
+    elseif ($this->getState('filter.id'))
+    {
       $id = (int) $this->getState('filter.id');
-    } else {
+    }
+    else
+    {
       $id = $input->get('id', '', 'int');
     }
 
@@ -43,15 +50,19 @@ class StatsModelStats extends JModelList {
     return $graph_data;
   }
 
-  public function preprocessForm(\JForm $form, $data, $group = 'content') {
+  public function preprocessForm(\JForm $form, $data, $group = 'content')
+  {
 
     $user = JFactory::getUser();
 
     $groups = JAccess::getGroupsByUser($user->id, false);
 
-    if (in_array(10, $groups)) {
+    if (in_array(10, $groups))
+    {
       $form->removeField('search', 'filter');
-    } else {
+    }
+    else
+    {
       $form->removeField('id', 'filter');
     }
 
@@ -62,7 +73,8 @@ class StatsModelStats extends JModelList {
     parent::preprocessForm($form, $data, $group);
   }
 
-  public function populateState() {
+  public function populateState()
+  {
 
     parent::populateState();
 
@@ -70,13 +82,15 @@ class StatsModelStats extends JModelList {
     $input = JFactory::getApplication()->input;
 
     // If we have an id in the url then use that to set the form filter value. This is just for completeness.
-    if ($input->get('id', '', 'int')) {
+    if ($input->get('id', '', 'int'))
+    {
       $id = $input->get('id', '', 'int');
-      $this->setState('filter.id',$id);
+      $this->setState('filter.id', $id);
     }
   }
 
-  public function getData($id = '', $table = '', $range = '') {
+  public function getData($id = '', $table = '', $range = '')
+  {
 
     // Add in the number of page view this property has had in the last twelve months...
 
@@ -88,7 +102,8 @@ class StatsModelStats extends JModelList {
      ');
     $query->from($table);
     $query->where('property_id = ' . (int) $id);
-    if ($range) {
+    if ($range)
+    {
       $now = date('Y-m-d');
       $last_year = strtotime((string) $range, strtotime($now));
       $query->where('date_created > ' . $db->quote(date('Y-m-d', $last_year)));
@@ -104,7 +119,8 @@ class StatsModelStats extends JModelList {
     return $rows;
   }
 
-  public function loadFormData() {
+  public function loadFormData()
+  {
 
     // Get any data stored in the user state context (if any)
     $data = JFactory::getApplication()->getUserState($this->context, new stdClass);
@@ -113,7 +129,8 @@ class StatsModelStats extends JModelList {
     $input = JFactory::getApplication()->input;
 
     // If we have an id in the url then use that to set the form filter value. This is just for completeness.
-    if ($input->get('id', '', 'int')) {
+    if ($input->get('id', '', 'int'))
+    {
       $id = $input->get('id', '', 'int');
       $data->filter = array('id' => $id);
     }
