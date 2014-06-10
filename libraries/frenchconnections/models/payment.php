@@ -120,7 +120,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Get the order summary, consists of item codes and quantities
     // Compare the expiry date with today, if not due for renewal then don't get 
     // the payment summary, just get any vouchers that may be applied.
-    if ($days_to_expiry < 28)
+    if ($days_to_expiry <= 30)
     {
       $order_summary = $this->summary($this->listing);
     }
