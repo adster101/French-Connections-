@@ -16,6 +16,7 @@ JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.multiselect');
 
 $input     = JFactory::getApplication()->input;
+
 $field     = $input->getCmd('field');
 $function  = 'jSelectUser_' . $field;
 $listOrder = $this->escape($this->state->get('list.ordering'));

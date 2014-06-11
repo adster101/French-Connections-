@@ -14,7 +14,8 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Invoices records.
  */
-class InvoicesModelinvoices extends JModelList {
+class InvoicesModelinvoices extends JModelList
+{
 
   /**
    * Constructor.
@@ -23,8 +24,10 @@ class InvoicesModelinvoices extends JModelList {
    * @see        JController
    * @since    1.6
    */
-  public function __construct($config = array()) {
-    if (empty($config['filter_fields'])) {
+  public function __construct($config = array())
+  {
+    if (empty($config['filter_fields']))
+    {
       $config['filter_fields'] = array(
           'id', 'a.id',
           'created_by', 'a.created_by',
@@ -57,7 +60,8 @@ class InvoicesModelinvoices extends JModelList {
    *
    * Note. Calling getState in this method will result in recursion.
    */
-  protected function populateState($ordering = null, $direction = null) {
+  protected function populateState($ordering = null, $direction = null)
+  {
     // Initialise variables.
     $app = JFactory::getApplication('administrator');
 
@@ -93,7 +97,8 @@ class InvoicesModelinvoices extends JModelList {
    * @return	string		A store id.
    * @since	1.6
    */
-  protected function getStoreId($id = '') {
+  protected function getStoreId($id = '')
+  {
     // Compile the store id.
     $id.= ':' . $this->getState('filter.search');
     $id.= ':' . $this->getState('filter.state');
@@ -107,7 +112,8 @@ class InvoicesModelinvoices extends JModelList {
    * @return	JDatabaseQuery
    * @since	1.6
    */
-  protected function getListQuery() {
+  protected function getListQuery()
+  {
     // Create a new query object.
     $db = $this->getDbo();
     $query = $db->getQuery(true);
@@ -127,25 +133,32 @@ class InvoicesModelinvoices extends JModelList {
 
 
     // Filter on user
-    if (!$canDo->get('core.edit') && $canDo->get('core.edit.own')) {
+    if (!$canDo->get('core.edit') && $canDo->get('core.edit.own'))
+    {
       $query->where('a.user_id = ' . (int) $user->id);
     }
 
     // Filter by published state
     $published = $this->getState('filter.state');
-    if (is_numeric($published)) {
+    if (is_numeric($published))
+    {
       $query->where('a.state = ' . (int) $published);
-    } else if ($published === '') {
+    }
+    else if ($published === '')
+    {
       $query->where('(a.state IN (0, 1))');
     }
 
-
     // Filter by search in title
     $search = $this->getState('filter.search');
-    if (!empty($search)) {
-      if ((int) $search) {
+    if (!empty($search))
+    {
+      if ((int) $search)
+      {
         $query->where('a.property_id = ' . (int) $search);
-      } else {
+      }
+      else
+      {
         $search = $db->Quote('%' . $db->escape($search, true) . '%');
         $query->where('( a.property_id LIKE ' . $search . '  OR  a.first_name LIKE ' . $search . '  OR  a.surname LIKE ' . $search . '  OR  a.town LIKE ' . $search . '  OR  a.postcode LIKE ' . $search . ' )');
       }
@@ -153,11 +166,13 @@ class InvoicesModelinvoices extends JModelList {
 
     //Filtering due_date
     $filter_due_date_from = $this->state->get("filter.due_date.from");
-    if ($filter_due_date_from) {
+    if ($filter_due_date_from)
+    {
       $query->where("a.due_date >= '" . $db->escape($filter_due_date_from) . "'");
     }
     $filter_due_date_to = $this->state->get("filter.due_date.to");
-    if ($filter_due_date_to) {
+    if ($filter_due_date_to)
+    {
       $query->where("a.due_date <= '" . $db->escape($filter_due_date_to) . "'");
     }
 
@@ -165,7 +180,8 @@ class InvoicesModelinvoices extends JModelList {
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');
     $orderDirn = $this->state->get('list.direction');
-    if ($orderCol && $orderDirn) {
+    if ($orderCol && $orderDirn)
+    {
       $query->order($db->escape($orderCol . ' ' . $orderDirn));
     }
 

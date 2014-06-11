@@ -199,7 +199,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     if ($user->authorise('core.edit.state', 'com_specialoffers'))
     {
 
-      $form->setFieldAttribute('unit_id', 'type', 'text');
+      $form->setFieldAttribute('unit_id', 'type', 'unit');
 
       if (!empty($data->property_id))
       {
