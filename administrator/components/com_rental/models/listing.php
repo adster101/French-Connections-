@@ -8,7 +8,8 @@ jimport('joomla.application.component.modellist');
 /**
  * HelloWorldList Model
  */
-class RentalModelListing extends JModelList {
+class RentalModelListing extends JModelList
+{
 
   /**
    * Method to auto-populate the model state.
@@ -21,7 +22,8 @@ class RentalModelListing extends JModelList {
    * @return	void
    * @since	1.6
    */
-  public function populateState($ordering = null, $direction = null) {
+  public function populateState($ordering = null, $direction = null)
+  {
 
     // Initialise variables
     $app = JFactory::getApplication();
@@ -51,6 +53,8 @@ class RentalModelListing extends JModelList {
     $search = $this->getUserStateFromRequest($context . '.search', 'filter_search');
     $this->setState('filter.search', $search);
 
+    $this->setState('filter.latest', true);
+
     // List state information.
     parent::populateState('a.id', 'asc');
   }
@@ -67,11 +71,13 @@ class RentalModelListing extends JModelList {
    * @return	string		A store id.
    * @since	1.6
    */
-  protected function getStoreId($id = '') {
+  protected function getStoreId($id = '')
+  {
     // Compile the store id.
     $id .= ':' . $this->getState('filter.search');
     $id .= ':' . $this->getState('filter.extension');
     $id .= ':' . $this->getState('filter.published');
+    $id .= ':' . $this->getState('com_rental.listing.latest');
 
     return parent::getStoreId($id);
   }
@@ -81,7 +87,8 @@ class RentalModelListing extends JModelList {
    *
    * @return	string	An SQL query
    */
-  protected function getListQuery() {
+  protected function getListQuery()
+  {
 
     // Get the user ID
     $user = JFactory::getUser();
@@ -90,6 +97,7 @@ class RentalModelListing extends JModelList {
     // Get the access control permissions in a handy array
     $canDo = RentalHelper::getActions();
     $id = $this->getState($this->context . '.id', '');
+    $latest = $this->getState('com_rental.listing.latest', true);
 
     // Create a new query object.
     $db = JFactory::getDBO();
@@ -130,9 +138,29 @@ class RentalModelListing extends JModelList {
         (select count(*) from qitz3_tariffs where unit_id = d.id and end_date > NOW()) as tariffs
       ');
     $query->from('#__property as a');
-    $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id))');
+
+    // Switch out on whether we want the latest or 'published' version
+    if ($latest)
+    {
+      $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id))');
+    }
+    else
+    {
+      $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id and c.review = 0))');
+    }
+
     $query->join('left', '#__unit d on d.property_id = a.id');
-    $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
+
+    // Switch out on whether we want the latest or 'published' version
+    if ($latest)
+    {
+      $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where f.unit_id = d.id))');
+    }
+    else
+    {
+      $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where f.unit_id = d.id and f.review = 0))');
+    }
+
     $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
 
     $query->where('a.id = ' . (int) $id);
@@ -143,9 +171,21 @@ class RentalModelListing extends JModelList {
     // Should this be with an ACL check, e.g. core.edit.own and core.edit
     // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
     //  // If true then has permission to edit all as well as own, otherwise just own
-    if ($canDo->get('core.edit.own') && !$canDo->get('core.edit')) {
+    if ($canDo->get('core.edit.own') && !$canDo->get('core.edit'))
+    {
       $query->where('a.created_by=' . $userId);
       $query->where('d.published = 1');
+    }
+
+    if ($latest)
+    {
+      $query->where('b.review in (0,1)');
+      $query->where('e.review in (0,1)');
+    }
+    else
+    {
+      $query->where('b.review = 0');
+      $query->where('e.review = 0');
     }
 
     $query->where('a.created_by !=0');
@@ -153,7 +193,8 @@ class RentalModelListing extends JModelList {
     return $query;
   }
 
-  function getLanguages() {
+  function getLanguages()
+  {
     $lang = & JFactory::getLanguage();
     $languages = $lang->getKnownLanguages(JPATH_SITE);
 

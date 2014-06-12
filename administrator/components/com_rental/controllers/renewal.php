@@ -55,7 +55,7 @@ class RentalControllerRenewal extends JControllerLegacy {
     // Redirect to the renewal payment/summary form thingy...
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false
+                    'index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false
             )
     );
 
@@ -169,7 +169,7 @@ class RentalControllerRenewal extends JControllerLegacy {
     // import our payment library class
     jimport('frenchconnections.models.payment');
 
-    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
+    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal' => true));
 
     // Attempt to save the configuration.
     $return = $model->processPayment($validData);

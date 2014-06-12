@@ -32,7 +32,7 @@ class ModMenuHelper
 		$app = JFactory::getApplication();
 		$menu = $app->getMenu();
 
-    // Get active menu item
+		// Get active menu item
 		$base = self::getBase($params);
 		$user = JFactory::getUser();
 		$levels = $user->getAuthorisedViewLevels();
@@ -48,7 +48,7 @@ class ModMenuHelper
 			$showAll = $params->get('showAllChildren');
 			$items   = $menu->getItems('menutype', $params->get('menutype'));
 
-      $lastitem = 0;
+			$lastitem = 0;
 
 			if ($items)
 			{
@@ -108,7 +108,7 @@ class ModMenuHelper
 							{
 								$item->flink = 'index.php?Itemid=' . $item->id;
 
-								if (isset($item->query['format']) && $app->getCfg('sef_suffix'))
+								if (isset($item->query['format']) && $app->get('sef_suffix'))
 								{
 									$item->flink .= '&format=' . $item->query['format'];
 								}

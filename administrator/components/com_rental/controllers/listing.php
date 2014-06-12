@@ -224,7 +224,7 @@ class RentalControllerListing extends JControllerForm
     }
 
     $message = JText::_('COM_RENTAL_ACCOUNT_DETAILS_UPDATED');
-    
+
     $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
     $this->setRedirect($redirect, $message, 'success');
 
@@ -249,6 +249,8 @@ class RentalControllerListing extends JControllerForm
     $data = $this->input->post->get('jform', array(), 'array');
     $context = "$this->option.view.$this->context";
     $task = $this->getTask();
+    jimport('frenchconnections.models.payment');
+
 
     // Get the record ID from the data array
     $recordId = $this->input->post->get('property_id', '', 'int');
@@ -323,6 +325,7 @@ class RentalControllerListing extends JControllerForm
 
     $listing = $this->getModel('Listing', 'RentalModel', $config = array('ignore_request' => true));
     $listing->setState('com_rental.listing.id', $recordId);
+    $listing->setState('com_rental.listing.latest', true);
 
     // Get the listing unit details
     $items = $listing->getItems();
@@ -335,14 +338,14 @@ class RentalControllerListing extends JControllerForm
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId, false);
 
-      $this->setRedirect($redirect, $message, 'notice');
+      $this->setRedirect($redirect, $message);
     }
     elseif ($days_to_renewal < 7 && $days_to_renewal > 0)
     {
       // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
       $message = ($days_to_renewal > 0) ? 'Your property is expiring within 7 days - please renew now' : 'Property expired, renew now.';
 
-      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
     }
     else if (empty($days_to_renewal))
     {
@@ -350,22 +353,39 @@ class RentalControllerListing extends JControllerForm
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
 
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
-      $this->setRedirect($redirect, $message, 'COM_RENTAL_PAYMENT_DUE');
+    }
+    else if ((!empty($days_to_renewal) && $days_to_renewal < 0))
+    {
+      $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_RENEWAL_WITH_CHANGES');
+
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
     }
     else
     {
 
       // Need to determine whether they owe us any more wedge
-      $model = $this->getModel('Property', 'RentalModel', $config = array('ignore_request' => true));
-
-      $model->updateProperty($listing_id = $items[0]->id, 2);
+      // This sets a state flag in the model to ensure we get a list of what is currently published.
+      $listing->setState('com_rental.listing.latest', false);
+      $previous = $listing->getItems();
+   
+      $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $previous, 'renewal' => false));
+      
+      $old_version = $payment->summary($previous);
+      $new_version = $payment->summary($items);
+      
+      var_dump($old_version);
+      var_dump($new_version);
+      
+      die;
+      // Compare two versions to see what, if any, additional payment is required.
+      
+      $payment->updateProperty($listing_id = $items[0]->id, 2);
 
       $redirect = JRoute::_('index.php?option=' . $this->extension, false);
-      $this->setRedirect($redirect, $message, 'notice');
+      $this->setRedirect($redirect, $message);
     }
 
-    // Redirect will always be set above...
-    //$this->setRedirect($redirect, $message, 'notice');
+    $this->setRedirect($redirect, $message);
   }
 
   /**

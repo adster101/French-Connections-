@@ -29,7 +29,6 @@ Joomla.submitform = function(task, form) {
     if (typeof form.fireEvent == "function") {
         form.fireEvent('submit');
     }
-    jQuery(form).trigger('submit');
     form.submit();
 };
 
@@ -181,6 +180,21 @@ Joomla.isChecked = function(isitchecked, form) {
         form.boxchecked.value++;
     } else {
         form.boxchecked.value--;
+    }
+
+    // Toggle main toggle checkbox depending on checkbox selection
+    var c = true, i, e;
+    for (i = 0, n = form.elements.length; i < n; i++) {
+        e = form.elements[i];
+        if (e.type == 'checkbox') {
+            if (e.name != 'checkall-toggle' && e.checked == false) {
+                c = false;
+                break;
+            }
+        }
+    }
+    if (form.elements['checkall-toggle']) {
+        form.elements['checkall-toggle'].checked = c;
     }
 }
 

@@ -26,7 +26,8 @@ class RentalViewPayment extends JViewLegacy {
     $input = JFactory::getApplication()->input;
     $this->id = $input->get('id', '', 'int');
     $layout = $input->get('layout', '', 'string');
-
+    $renewal = $input->getCmd('renewal', false);
+    
     //$this->extension = $input->get('option', '', 'string');
     // Get an instance of the Listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel'));
@@ -35,7 +36,7 @@ class RentalViewPayment extends JViewLegacy {
     $this->listing = $model->getItems();
 
     // Add the Property model so we can get the renewal details...
-    $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $this->listing));
+    $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $this->listing, 'renewal' => $renewal));
 
     // Get the units and image details they against this property
     $this->summary = $listing->getPaymentSummary();

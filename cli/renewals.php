@@ -96,7 +96,7 @@ class Renewals extends JApplicationCli {
       $listing = $listing_model->getItems();
 
       // Get an instance of the payment model
-      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
+      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal' => true));
 
       $user = $payment_model->getUser($listing[0]->created_by);
       $payment_summary = $payment_model->getPaymentSummary();
@@ -192,7 +192,7 @@ class Renewals extends JApplicationCli {
       $listing = $listing_model->getItems();
 
       // Get an instance of the payment model
-      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
+      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal' => true));
 
       $user = $payment_model->getUser($listing[0]->created_by);
       $payment_summary = $payment_model->getPaymentSummary();

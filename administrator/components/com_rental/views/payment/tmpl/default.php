@@ -30,7 +30,7 @@ $route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this-
 
       <?php echo $this->payment_summary->render($this->summary); ?>      
 
-      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) ?>" class="btn btn-primary btn-large">
+      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) . '&renewal=1' ?>" class="btn btn-primary btn-large">
         Pay now using our secure server
         <i class="icon icon-white icon-next">&nbsp;</i>
       </a>

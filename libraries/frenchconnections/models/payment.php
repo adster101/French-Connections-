@@ -76,8 +76,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       /*
        * Determine whether this is a renewal. 
        */
-      $expiry = $config['listing'][0]->expiry_date;
-      $this->setIsRenewal($expiry);
+      $renewal = $config['renewal'];
+      $this->setIsRenewal($renewal);
 
       $this->listing_id = $config['listing'][0]->id;
       $this->expiry_date = $config['listing'][0]->expiry_date;
@@ -120,10 +120,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Get the order summary, consists of item codes and quantities
     // Compare the expiry date with today, if not due for renewal then don't get 
     // the payment summary, just get any vouchers that may be applied.
-    if ($days_to_expiry <= 30)
-    {
-      $order_summary = $this->summary($this->listing);
-    }
+
+    $order_summary = $this->summary($this->listing);
+
 
     $vouchers = $this->getVouchers($this->listing_id);
 
@@ -221,7 +220,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
       $order_summary[$vouchers[0]->item_cost_id] = $discount;
     }
- 
+
     return $order_summary;
   }
 
@@ -413,6 +412,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Item costs line holder
     $item_costs = array();
 
+
+
     // Loop over all the units found
     foreach ($units as $unit)
     {
@@ -447,81 +448,70 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $unit_count = 0; // Don't charge for additional units as B&B have unlimited
     }
 
-    // Below covers most cases
-    // Need to also consider
-    // Site network, e.g. French Translations (?)
-    // Video (*)
-    // Also possible the 'additional' marketing gubbins
-    // Vouchers! (*)
-
+    // If this is a straightforward renewal then calculate everything...based on renewal prices
     if ($this->getIsRenewal())
     {
-
-      // Get the component params - for e.g. the number of images they're entitled to
       // Determine the item costs
-      if ($image_count >= 20)
+      if ($image_count >= 8)
       {
         //$item_costs['1004-009']['quantity'] = 1; // Renewal
         $item_costs['1002-008']['quantity'] = 1; // Renewal
-
-        if ($unit_count > 0)
-        {
-
-          $item_costs['1002-010']['quantity'] = $unit_count;
-        }
       }
       else
-      { // Image count must be less than 8 but still a renewal
-        if ($unit_count > 0)
-        {
-          $item_costs['1002-010']['quantity'] = $unit_count;
-        }
-
+      {
+        // Image count must be less than 8 
         $item_costs['1002-004']['quantity'] = 1;
       }
+
+      // Add any additional units not included in base price 
+      if ($unit_count > 0)
+      {
+        $item_costs['1002-010']['quantity'] = $unit_count;
+      }
     }
-    else
-    { // New property being published for first time
+    // New property being published for first time...
+    elseif (!$this->getIsRenewal() && empty($this->expiry_date))
+    {
       // Determine the item costs
-      if ($image_count >= 20)
+      if ($image_count >= 8)
       {
         //$item_costs['1005-009']['quantity'] = 1;
         $item_costs['1003-008']['quantity'] = 1;
-
-        if ($unit_count > 0)
-        {
-          //$item_costs['1005-006']['quantity'] = $unit_count;
-          $item_costs['1003-010']['quantity'] = $unit_count;
-        }
       }
       else
-      { // Image count must be less than 20
-        // Add the base item price
-        //$item_costs['1005-002']['quantity'] = 1;
-        $item_costs['1003-004']['quantity'] = 1;
-        if ($unit_count > 0)
-        {
-
-          //$item_costs['1005-006']['quantity'] = $unit_count;
-          $item_costs['1003-008']['quantity'] = $unit_count;
-        }
-
-        if ($image_count > 4 && $image_count <= 7)
-        {
-
-          // Additional images
-          $additional_images = $image_count - 4;
-
-          $item_costs['1005-005']['quantity'] = $additional_images;
-        }
-      }
-
-      if ($mixed_units)
       {
-        $item_costs['1005-014']['quantity'] = 1;
+        // Image count must be less than 8
+        $item_costs['1003-004']['quantity'] = 1;
+
+        // Comment this out for now...still to have bunfight about when we have two packages etc
+        //if ($image_count > 4 && $image_count <= 7)
+        //{
+        // Additional images
+        //$additional_images = $image_count - 4;
+        //$item_costs['1005-005']['quantity'] = $additional_images;
+        //}
+      }
+      // Add any additional units not included in base price 
+      if ($unit_count > 0)
+      {
+        $item_costs['1003-010']['quantity'] = $unit_count;
+      }
+    }
+    // Not a renewal and not a new property...just calculate any additional units etc
+    elseif (!$this->getIsRenewal() && !empty($this->expiry_date))
+    {
+      // Add any additional units not included in base price 
+      if ($unit_count > 0)
+      {
+        $item_costs['1003-010']['quantity'] = $unit_count;
       }
     }
 
+    // If this property version has B&B and S/C then add it as an item cost
+    if ($mixed_units)
+    {
+      $item_costs['1005-014']['quantity'] = 1;
+    }
 
     // Get any additional marketing for this property
     // - French translation
@@ -772,8 +762,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
 
     // Okay now we have processed the transaction and update it in the db.
-    switch ($strStatus)
-    {
+    switch ($strStatus) {
       case 'OK':
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
         $return = array('order' => $order, 'payment' => $arrResponse);
@@ -1223,8 +1212,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     try {
       $rows = $db->loadObjectList();
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // Problem loading vouchers for this property
       return false;
     }
@@ -1236,10 +1224,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         $vouchers[$row->item_cost_id]['quantity'] = 1;
         $vouchers[$row->item_cost_id]['note'] = $row->note;
       }
-      
+
       return $vouchers;
     }
-    
+
     return $rows;
   }
 
@@ -1258,30 +1246,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    * 
    * @return void
    */
-  protected function setIsRenewal($expiry_date = '')
+  protected function setIsRenewal($renewal = false)
   {
-
-
-    $date = strtotime($expiry_date);
-
-    /*
-     * Get the days until the properyt expires
-     * Could just check this below
-     */
-    $days_to_expiry = RentalHelper::getDaysToExpiry($expiry_date);
-
-    if (!is_int($date))
-    {
-
-
-      $this->isRenewal = false;
-    }
-    else if (!empty($expiry_date))
-    {
-      $this->isRenewal = true;
-    }
-
-    return $this->isRenewal;
+    $this->isRenewal = $renewal;
   }
 
   /**
