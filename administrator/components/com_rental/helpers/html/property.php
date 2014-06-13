@@ -331,14 +331,14 @@ class JHtmlProperty {
     $states = array(
         0 => array(
             'chevron-right',
-            'renewal.summary',
+            'payment.summary',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE_TOOLTIP',
             'btn-warning'),
         1 => array(
             'chevron-right',
-            'renewal.summary',
+            'payment.summary',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON_TOOLTIP',
@@ -352,7 +352,7 @@ class JHtmlProperty {
             'btn-primary'),
         3 => array(
             'chevron-right',
-            'renewal.summary',
+            'payment.summary',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW',
             'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
             'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_DUE_FOR_RENEWAL_TOOLTIP',
@@ -425,8 +425,8 @@ class JHtmlProperty {
 
     $html = '';
     $html.='<button class="' . $btnClass . '" onclick="Joomla.submitbutton(\'' . $task . '\')">'
+            . '<i class="' . $iconClass . '"></i>&nbsp;&nbsp;'
             . JText::_($text)
-            . '<i class="' . $iconClass . '"></i>'
             . '</button>';
 
     return $html;

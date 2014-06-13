@@ -9,6 +9,7 @@ $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
 $fieldsets = $this->form->getFieldSets();
 $total = '';
 $total_vat = '';
+var_dump($this->renewal);
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
@@ -25,7 +26,7 @@ $total_vat = '';
       <p>
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_BLURB'); ?>
       </p>
-        <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
+      <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
 
       <?php echo $this->payment_summary->render($this->summary); ?>      
       <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&view=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
@@ -43,9 +44,11 @@ $total_vat = '';
             <?php endforeach; ?>
           </fieldset>
         <?php endforeach; ?>
-        <?php echo JHtmlProperty::button('btn btn-primary btn-large pull-right', 'renewal.process', 'icon-next', 'Proceed'); ?>
-
+        <?php echo JHtmlProperty::button('btn btn-primary btn-large', 'payment.process', 'icon-next', 'Submit payment'); ?>
+        <hr />
         <input type="hidden" name="task" value="" />
+        <input type="hidden" name="renewal" value="<?php echo $this->renewal; ?>" />
+
         <?php echo JHtml::_('form.token'); ?>
         <?php echo $this->form->getInput('id'); ?>
 

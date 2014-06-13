@@ -100,6 +100,40 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     return JTable::getInstance($type, $prefix, $config);
   }
 
+  /**
+   * Loops through the 'current' version and checks whether any of the lines were present in the previous version
+   * If so, determine the quantity they had on previous version and subtract that from the current version.
+   *  
+   * 
+   * @param type $current_order_summary
+   * @param type $previous_order_summary
+   * @return type
+   */
+  public function getPaymentDue($current_order_summary, $previous_order_summary)
+  {
+
+    $order_lines_due = array();
+    $quantity_to_charge = '';
+    
+    foreach ($current_order_summary as $item => $quantity)
+    {
+      // The previous version had some of this already (e.g. units) possibly images.
+      if (array_key_exists($item, $previous_order_summary))
+      {
+        // The previous version had some of this already (e.g. units) possibly images.        
+        $quantity_to_charge = $quantity['quantity'] - $previous_order_summary[$item]['quantity'];
+        $order_lines_due[$item]['quantity'] = $quantity_to_charge;
+
+      } else {
+        // The previous version didn't have any of these, so bill 'em all
+        $order_lines_due[$item]['quantity'] = $quantity['quantity'];
+      }
+    }
+
+    return $order_lines_due; 
+
+  }
+
   /*
    * Returns a list of order lines for a listing based on what combination of units/images and so on the listing has
    *
@@ -108,7 +142,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    *
    */
 
-  public function getPaymentSummary()
+  public function getPaymentSummary($current = array(), $previous = array())
   {
 
     $order_summary = array();
@@ -121,21 +155,30 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Compare the expiry date with today, if not due for renewal then don't get 
     // the payment summary, just get any vouchers that may be applied.
 
-    $order_summary = $this->summary($this->listing);
+    $order_summary = $this->summary($current);
 
-
+    // If we have a previous version and this is not a renewal 
+    if (!empty($previous) && !$this->getIsRenewal())
+    {
+      $previous_order_summary = $this->summary($previous);
+      
+      // Determine whether any additional payment is due.
+      $order_summary = $this->getPaymentDue($order_summary, $previous_order_summary);
+    }
+    
+    // Get any vouchers applied to this property
     $vouchers = $this->getVouchers($this->listing_id);
 
-    $order_summary = array_merge($order_summary, $vouchers);
+    $order = array_merge($order_summary, $vouchers);
 
     // Get the item cost details based on the summary
-    $item_costs = $this->getItemCosts($order_summary);
+    $item_costs = $this->getItemCosts($order);
 
     // Add the VAT status to the order summary
     $vat_status = ($user->vat_status) ? $user->vat_status : 'S2';
 
     // Calculate the value of each line of the order...
-    $summary_tmp = $this->getOrderLineTotals($order_summary, $item_costs, $vat_status);
+    $summary_tmp = $this->getOrderLineTotals($order, $item_costs, $vat_status);
 
     // Get vouchers, need to pick up any vouchers that are added against a property here
     // Detect the inclusion into the French site network
@@ -580,11 +623,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    * 
    */
 
-  public function processPayment($data)
+  public function processPayment($data, $current_version = array(), $previous_version = array())
   {
 
     // Get the order summary details
-    $order = $this->getPaymentSummary();
+    $order = $this->getPaymentSummary($current_version, $previous_version);
 
     // Get the invoice component parameters which hold the protx settings
     $protx_settings = JComponentHelper::getParams('com_itemcosts');

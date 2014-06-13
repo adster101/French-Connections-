@@ -6,7 +6,8 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HelloWorld Controller
  */
-class RentalControllerRenewal extends JControllerLegacy {
+class RentalControllerPayment extends JControllerLegacy
+{
 
   protected $extension;
 
@@ -18,16 +19,19 @@ class RentalControllerRenewal extends JControllerLegacy {
    * @since  1.6
    * @see    JController
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension)) {
+    if (empty($this->extension))
+    {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
   }
 
-  public function summary() {
+  public function summary()
+  {
 
     // Get the record ID being renewed
     $recordId = $this->input->get('id', '', 'int');
@@ -36,7 +40,8 @@ class RentalControllerRenewal extends JControllerLegacy {
     $context = "com_rental.renewal.summary";
 
     // Check that the owner/user can edit/renew this record
-    if (!$this->allowEdit(array('id' => $recordId))) {
+    if (!$this->allowEdit(array('id' => $recordId)))
+    {
       $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
       $this->setMessage($this->getError(), 'error');
 
@@ -72,7 +77,8 @@ class RentalControllerRenewal extends JControllerLegacy {
    *
    * @since   1.6
    */
-  protected function allowEdit($data = array(), $key = 'id') {
+  protected function allowEdit($data = array(), $key = 'id')
+  {
 
     // Initialise variables.
     $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
@@ -80,31 +86,37 @@ class RentalControllerRenewal extends JControllerLegacy {
     $userId = $user->get('id');
 
     // This covers the case where the user is creating a new property (i.e. id is 0 or not set
-    if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
+    if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension))
+    {
       return true;
     }
 
     // Check general edit permission first.
-    if ($user->authorise('core.edit', $this->extension)) {
+    if ($user->authorise('core.edit', $this->extension))
+    {
       return true;
     }
 
     // Fallback on edit.own.
     // First test if the permission is available.
-    if ($user->authorise('core.edit.own', $this->extension)) {
+    if ($user->authorise('core.edit.own', $this->extension))
+    {
       // Now test the owner is the user.
       $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
-      if (empty($ownerId) && $recordId) {
+      if (empty($ownerId) && $recordId)
+      {
         // Need to do a lookup from the model.
         $record = $this->getModel('Property')->getItem($recordId);
-        if (empty($record)) {
+        if (empty($record))
+        {
           return false;
         }
         $ownerId = $record->created_by;
       }
 
       // If the owner matches 'me' then do the test.
-      if ($ownerId == $userId) {
+      if ($ownerId == $userId)
+      {
         return true;
       }
     }
@@ -116,26 +128,33 @@ class RentalControllerRenewal extends JControllerLegacy {
    *
    */
 
-  public function process() {
+  public function process()
+  {
 
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
+    // import our payment library class
+    jimport('frenchconnections.models.payment');
+    $previous_version = array();
     $app = JFactory::getApplication();
-    
     $id = $this->input->get('id', '', 'int');
-    
+    $renewal = $this->input->get('renewal', false, 'boolean');
     // Get an instance of the listing model
-    $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
+    $listing = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
+    $listing->setState('com_rental.listing.latest', true);
 
     // Set the listing ID we are processing payment for
-    $listing_model->setState('com_rental.listing.id', $id);
+    $listing->setState('com_rental.listing.id', $id);
 
     // Get the listing details (i.e. a list of units that make up the listing
-    $listing = $listing_model->getItems();
+    $current_version = $listing->getItems();
+
+    // Instantiate the payment model
+    $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $renewal));
 
     // Instantiate an instance of the property model using the listing detail as the config
-    $model = $this->getModel('Payment', 'RentalModel', $config = array('listing' => $listing));
+    $model = $this->getModel('Payment', 'RentalModel');
     $form = $model->getPaymentForm();
 
     // Data here is the clients billing address details
@@ -146,15 +165,20 @@ class RentalControllerRenewal extends JControllerLegacy {
     $validData = $model->validate($form, $data);
 
     // Check for validation errors.
-    if ($validData === false) {
+    if ($validData === false)
+    {
       // Get the validation messages.
       $errors = $model->getErrors();
 
       // Push up to three validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-        if ($errors[$i] instanceof Exception) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
           $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
-        } else {
+        }
+        else
+        {
           $app->enqueueMessage($errors[$i], 'warning');
         }
       }
@@ -166,27 +190,30 @@ class RentalControllerRenewal extends JControllerLegacy {
       $this->setRedirect(JRoute::_('index.php?option=com_rental&view=renewal&layout=payment&id=' . (int) $data['id'], false));
       return false;
     }
-    // import our payment library class
-    jimport('frenchconnections.models.payment');
 
-    $model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal' => true));
+    if (!$renewal)
+    {
+      $listing->setState('com_rental.listing.latest', false);
+      $previous_version = $listing->getItems();
+    }
 
-    // Attempt to save the configuration.
-    $return = $model->processPayment($validData);
+    // Attempt process the payment
+    $return = $payment_model->processPayment($validData, $current_version, $previous_version);
 
     // Check the return value.
-    if ($return === false) {
+    if ($return === false)
+    {
       // Save the data in the session.
       $app->setUserState('com_rental.renewal.data', $data);
 
       // Save failed, go back to the screen and display a notice.
-      $message = JText::sprintf('JERROR_SAVE_FAILED', $model->getError());
+      $message = JText::sprintf('JERROR_SAVE_FAILED', $payment_model->getError());
       $this->setRedirect('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $data['id'], $message, 'error');
       return false;
     }
 
-    // Payment has been authorised...
-    $message = $model->processListing($return, $validData);
+    // Payment has been authorised...TO DO process listing better off somewhere else?
+    $message = $payment_model->processListing($return, $validData);
 
     // Empty the data stored in the session...
     $app->setUserState('com_rental.renewal.data', $data);
@@ -204,3 +231,4 @@ class RentalControllerRenewal extends JControllerLegacy {
   }
 
 }
+

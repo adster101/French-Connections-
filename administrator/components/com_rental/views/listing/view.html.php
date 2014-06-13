@@ -9,7 +9,8 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class RentalViewListing extends JViewLegacy {
+class RentalViewListing extends JViewLegacy
+{
 
   protected $state;
 
@@ -17,7 +18,8 @@ class RentalViewListing extends JViewLegacy {
    * Listing view display method
    * @return void
    */
-  function display($tpl = null) {
+  function display($tpl = null)
+  {
 
 // Load the user profile landuage strings.
     $lang = JFactory::getLanguage();
@@ -51,7 +53,8 @@ class RentalViewListing extends JViewLegacy {
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
@@ -69,7 +72,8 @@ class RentalViewListing extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
 
     $document = JFactory::getDocument();
 
@@ -80,35 +84,33 @@ class RentalViewListing extends JViewLegacy {
     $canDo = RentalHelper::getActions();
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_RENTAL_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
+    
+    JToolBarHelper::back('COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', '/administrator/index.php?option=com_rental');
 
-    //JToolBarHelper::back('listings', 'arrow-left-2', '', 'COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', false);
-
-
-    if ($layout == 'default') {
+    if ($layout == 'default')
+    {
       // Only show the add units button if there is at least one listing
-      if (count($this->items) > 0) {
-        if ($canDo->get('core.delete')) {
-          JToolBarHelper::deleteList('', 'units.delete', 'JTOOLBAR_DELETE');
-        }
+      if (count($this->items) > 0)
+      {
 
-        if ($canDo->get('core.create')) {
+
+
+        if ($canDo->get('core.create'))
+        {
           //JToolBarHelper::addNew('unitversions.add', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
         }
-        
-        JToolbarHelper::help('asdas',true);
 
-        
+        JToolbarHelper::help('asdas', true);
       }
     }
 
-    if ($layout == 'review') {
-      if ($canDo->get('helloworld.property.review')) {
+    if ($layout == 'review')
+    {
+      if ($canDo->get('helloworld.property.review'))
+      {
         JToolBarHelper::deleteList('', 'listing.approve', 'BLAH');
       }
     }
-
-
-   
   }
 
   /**
@@ -116,7 +118,8 @@ class RentalViewListing extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $document = JFactory::getDocument();
 
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));

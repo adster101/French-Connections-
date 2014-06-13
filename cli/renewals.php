@@ -91,6 +91,7 @@ class Renewals extends JApplicationCli {
 
       // Set the listing ID we are sending the reminder to 
       $listing_model->setState('com_rental.listing.id', $v->id);
+      $listing_model->setState('com_rental.listing.latest', true);
 
       // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();
@@ -99,7 +100,7 @@ class Renewals extends JApplicationCli {
       $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal' => true));
 
       $user = $payment_model->getUser($listing[0]->created_by);
-      $payment_summary = $payment_model->getPaymentSummary();
+      $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
 
       $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
@@ -187,6 +188,7 @@ class Renewals extends JApplicationCli {
 
       // Set the listing ID we are sending the reminder to 
       $listing_model->setState('com_rental.listing.id', $v->id);
+      $listing_model->setState('com_rental.listing.latest', true);
 
       // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();
@@ -195,7 +197,7 @@ class Renewals extends JApplicationCli {
       $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal' => true));
 
       $user = $payment_model->getUser($listing[0]->created_by);
-      $payment_summary = $payment_model->getPaymentSummary();
+      $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
       $email = true;
 
@@ -219,7 +221,7 @@ class Renewals extends JApplicationCli {
 
             // Problemo - shadow payment failed so generate email
             $body = JText::sprintf(
-                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+                            $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $payment_summary_layout->render($payment_summary)
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
           } else {

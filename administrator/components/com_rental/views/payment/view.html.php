@@ -12,7 +12,8 @@ jimport('frenchconnections.models.payment');
 /**
  * HelloWorlds View
  */
-class RentalViewPayment extends JViewLegacy {
+class RentalViewPayment extends JViewLegacy
+{
 
   /**
    * HelloWorld raw view display method
@@ -21,35 +22,42 @@ class RentalViewPayment extends JViewLegacy {
    *
    * @return void
    */
-  function display($tpl = null) {
+  function display($tpl = null)
+  {
 
     $input = JFactory::getApplication()->input;
     $this->id = $input->get('id', '', 'int');
     $layout = $input->get('layout', '', 'string');
-    $renewal = $input->getCmd('renewal', false);
-    
-    //$this->extension = $input->get('option', '', 'string');
+    $this->renewal = $input->getCmd('renewal', false);
+
     // Get an instance of the Listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel'));
-    $model = $this->getModel('Listing');
+    $model = $this->getModel('Listing');   
+    $model->setState('com_rental.listing.latest', true);
 
-    $this->listing = $model->getItems();
 
+    $current_version = $model->getItems();
+    
+    $model->setState('com_rental.listing.latest', false);
+    $previous_version = $model->getItems();
+    
     // Add the Property model so we can get the renewal details...
-    $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $this->listing, 'renewal' => $renewal));
+    $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $previous_version, 'renewal' => $this->renewal));
 
     // Get the units and image details they against this property
-    $this->summary = $listing->getPaymentSummary();
+    $this->summary = $listing->getPaymentSummary($current_version, $previous_version);
 
-    if ($layout == 'account') {
-      
+    if ($layout == 'account')
+    {
+
       // Get the account form
       $this->form = $this->get('Form');
-    } elseif ($layout == 'payment') {
+    }
+    elseif ($layout == 'payment')
+    {
       // Get the payment form
       $this->form = $this->get('PaymentForm');
     }
-
 
     // Set the document
     $this->setDocument();
@@ -66,7 +74,8 @@ class RentalViewPayment extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $document = JFactory::getDocument();
 
     // Set the page title
@@ -81,7 +90,8 @@ class RentalViewPayment extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
     // Register the JHtmlProperty class
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 

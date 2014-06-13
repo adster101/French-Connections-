@@ -47,15 +47,16 @@ class AccommodationControllerListing extends JControllerForm {
 
       // Set the listing ID we are sending the reminder to 
       $listing_model->setState('com_rental.listing.id', $v->id);
+    $listing_model->setState('com_rental.listing.latest', true);
 
       // Get a breakdown of the listing - returns an array of units.
       $listing = $listing_model->getItems();
 
       // Get an instance of the payment model
-      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing));
+      $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $listing, 'renewal'=>true));
 
       $user = $payment_model->getUser($listing[0]->created_by);
-      $payment_summary = $payment_model->getPaymentSummary();
+      $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
       $email = true;
 

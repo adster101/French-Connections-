@@ -4,9 +4,10 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
+$input = JFactory::getApplication()->input;
 $language = JFactory::getLanguage();
 $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
-
+$renewal = ($input->getCmd('renewal','')) ? '&renewal=1' : '';
 $total = '';
 $total_vat = '';
 $route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this->id);
@@ -30,7 +31,7 @@ $route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this-
 
       <?php echo $this->payment_summary->render($this->summary); ?>      
 
-      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) . '&renewal=1' ?>" class="btn btn-primary btn-large">
+      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) . $renewal ?>" class="btn btn-primary btn-large">
         Pay now using our secure server
         <i class="icon icon-white icon-next">&nbsp;</i>
       </a>
