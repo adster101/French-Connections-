@@ -123,11 +123,11 @@ class RentalControllerPayment extends JControllerLegacy
     return false;
   }
 
-  /*
-   *  Method to process the card details for a renewal payment...actual payment processing is done in the model...
-   *
+  /**
+   * Method to process the card details for a renewal payment...actual payment processing is done in the model...
+   * 
+   * @return boolean
    */
-
   public function process()
   {
 

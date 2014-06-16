@@ -73,13 +73,16 @@ class RentalControllerListing extends JControllerForm
       {
         // Need to do a lookup from the model.
         $record = $this->getModel('Property')->getItem($id);
-        if (empty($record))
+        if (empty($record) || $record->review == 2)
         {
           return false;
         }
         $ownerId = $record->created_by;
       }
       // If the owner matches 'me' then do the test.
+      
+      
+      
       if ($ownerId == $userId)
       {
         return true;
@@ -102,6 +105,7 @@ class RentalControllerListing extends JControllerForm
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
 
+    
 
     /**
      *  $id is the listing the user is trying to edit
@@ -352,46 +356,40 @@ class RentalControllerListing extends JControllerForm
     {
 
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
-
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
     }
-    else if ((!empty($days_to_renewal) && $days_to_renewal < 0))
+    else if ((!empty($days_to_renewal) && $days_to_renewal < 0)) // Need to check review status here...
     {
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_RENEWAL_WITH_CHANGES');
-
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
     }
     else
     {
-
       // Need to determine whether they owe us any more wedge
       // This sets a state flag in the model to ensure we get a list of what is currently published.
       $listing->setState('com_rental.listing.latest', false);
       $previous_version = $listing->getItems();
-
-      $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $previous_version, 'renewal' => false));
-
+      $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => false));
       $order_summary = $payment->getPaymentSummary($current_version, $previous_version);
 
-      if (!empty($order_summary))
+      if ($order_summary)
       {
         // Redirect to payment screen
         $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_PAYMENT_WITH_CHANGES');
         $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
-
       }
       else
       {
         // If we get here it means there is no payment due for this so we just lock it for editing.
-        $payment->updateProperty($listing_id = $current_version[0]->id, 2);
-        $redirect = JRoute::_('index.php?option=' . $this->extension, false);
+        $payment->updateProperty($listing_id = $current_version[0]->id,0, 2);
+        $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
+        $redirect = JRoute::_('index.php', false);
       }
-
-
-      $this->setRedirect($redirect, $message);
-
-      return true;
     }
+    
+    $this->setRedirect($redirect, $message);
+
+    return true;
   }
 
   /**

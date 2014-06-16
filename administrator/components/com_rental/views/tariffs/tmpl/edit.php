@@ -9,14 +9,7 @@ $tariff_field_sets = $this->form->getFieldSet('tariffs');
 $data = array('item' => $this->item, 'progress' => $this->progress);
 $counter = 0;
 ?>
-<style>
-select:invalid {
-  outline: 2px solid red;
-}
-select:focus:invalid {
-  color: red;
-}
-</style>
+
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=tariffs&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>"
       method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <div class="row-fluid">
@@ -49,7 +42,7 @@ select:focus:invalid {
                   <?php if ($counter % 3 === 0) : // Output a new row every third  ?> 
                   <li class="clearfix">
                     <?php endif; ?>     
-                    <div class="facilities-container">
+                    <div class="tariffs-container">
                       <?php
                       echo $field->label;
                       echo $field->input;

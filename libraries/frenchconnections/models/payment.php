@@ -114,7 +114,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $order_lines_due = array();
     $quantity_to_charge = '';
-    
+
     foreach ($current_order_summary as $item => $quantity)
     {
       // The previous version had some of this already (e.g. units) possibly images.
@@ -122,16 +122,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       {
         // The previous version had some of this already (e.g. units) possibly images.        
         $quantity_to_charge = $quantity['quantity'] - $previous_order_summary[$item]['quantity'];
-        $order_lines_due[$item]['quantity'] = $quantity_to_charge;
 
-      } else {
+        if ($quantity_to_charge > 0)
+        {
+          $order_lines_due[$item]['quantity'] = $quantity_to_charge;
+        }
+      }
+      else
+      {
         // The previous version didn't have any of these, so bill 'em all
         $order_lines_due[$item]['quantity'] = $quantity['quantity'];
       }
     }
 
-    return $order_lines_due; 
-
+    return $order_lines_due;
   }
 
   /*
@@ -161,15 +165,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     if (!empty($previous) && !$this->getIsRenewal())
     {
       $previous_order_summary = $this->summary($previous);
-      
+
       // Determine whether any additional payment is due.
       $order_summary = $this->getPaymentDue($order_summary, $previous_order_summary);
     }
-    
+
     // Get any vouchers applied to this property
     $vouchers = $this->getVouchers($this->listing_id);
 
     $order = array_merge($order_summary, $vouchers);
+
+    if (empty($order))
+    {
+      return false;
+    }
 
     // Get the item cost details based on the summary
     $item_costs = $this->getItemCosts($order);
@@ -965,12 +974,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // only be called when they need to pay extra
       // Update review status
       // If payment made - send payment receipt
-
-      $this->updateProperty($review = 2);
+      $total = $this->getOrderTotal($order);
+      
+      $this->updateProperty($listing_id, $total, $review = 2);
     }
-
-
-
 
     $order_total = $this->getOrderTotal($order);
 

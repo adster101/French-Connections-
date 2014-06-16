@@ -365,20 +365,41 @@ class RentalModelUnitVersions extends JModelAdmin
       {
 
         // Here we have created a new version or a new unit
-        // TO DO: Wrap the below into a function - reuse the updateProperty method from the Property model
-        // Update the existing property listing to indicate that it has been modified in a way that requires a review
+        // Update the existing property listing to indicate that it has been modified and that it 
+        // requires a review
         $property = $this->getTable('Property', 'RentalTable');
-
+        // Set the table properties
         $property->id = $table->property_id;
         $property->review = 1;
         $property->modified = JFactory::getDate();
+        // Logger
         JLog::add('About to update Property review status for ' . $property->id, 'DEBUG', 'unitversions');
-
+        // Attempt to save the new property details against the property id
         if (!$property->store())
         {
           $this->setError($property->getError());
           Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
         }
+
+        // Actually, here we need to create a completely new version of this property
+        // Otherwise, we might not have a previous version to compare to when generating payment etc.        
+        //$property_version = $this->getTable('PropertyVersions', 'RentalTable');
+
+        //if (!$property_version->load($table->property_id))
+        //{
+          //JLog::add('There was a problem loading the Property details for ' . $property_version->id . 'when trying to create new unit for ' . $table->unit_id, 'DEBUG', 'unitversions');
+          //Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+        //}
+        // Unset the version id, to ensure a new version is created.
+        //unset($property_version->id);
+        // Logger 
+        //JLog::add('About to create new property version for ' . $property->id, 'DEBUG', 'unitversions');
+        // Attempt to save the new property details against the property id
+        //if (!$property_version->store())
+        //{
+          //$this->setError($property_version->getError());
+          //Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+        //}
 
         // If this is not a new unit, then we want to copy the unit images to the new version...
         if (!$isNew)

@@ -9,7 +9,6 @@ $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
 $fieldsets = $this->form->getFieldSets();
 $total = '';
 $total_vat = '';
-var_dump($this->renewal);
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>

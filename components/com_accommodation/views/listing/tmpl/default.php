@@ -10,6 +10,14 @@ $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation')
 
 $this->item->itemid = $Itemid;
 
+$input = JFactory::getApplication()->input;
+$preview = $input->get('preview','','int');
+$append = '';
+if ((int) $preview && $preview == 1) {
+  $append = '&preview=1';
+}
+
+
 $price_range = array();
 if (!empty($this->tariffs))
 {
@@ -241,10 +249,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->loadTemplate('reviews'); ?>
 
       <p class="center">
-        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) ?>#availability">
+        <a class="btn btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
         </a>
-        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id); ?>#email">
+        <a class="btn btn-primary btn-large" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
           <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
         </a>
       </p>

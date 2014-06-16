@@ -11,7 +11,8 @@ jimport('simplediff.simplediff');
 /**
  * HelloWorld Model
  */
-class RentalModelListingReview extends JModelAdmin {
+class RentalModelListingReview extends JModelAdmin
+{
 
   /**
    * Method to get the record form.
@@ -21,12 +22,14 @@ class RentalModelListingReview extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_rental.approve_draft', 'approve_draft', array('control' => 'jform', 'load_data' => $loadData));
 
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -36,7 +39,8 @@ class RentalModelListingReview extends JModelAdmin {
   /**
    * Get the message text to bind with the form
    */
-  public function loadFormData() {
+  public function loadFormData()
+  {
 
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
 
@@ -45,7 +49,8 @@ class RentalModelListingReview extends JModelAdmin {
 
     $property = $table->load($recordId);
 
-    if (!$property) {
+    if (!$property)
+    {
 
       Throw new Exception('Problem loading property details', 500);
     }
@@ -69,7 +74,8 @@ class RentalModelListingReview extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'PropertyVersions', $prefix = 'RentalTable', $config = array()) {
+  public function getTable($type = 'PropertyVersions', $prefix = 'RentalTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -78,7 +84,8 @@ class RentalModelListingReview extends JModelAdmin {
    * 
    * 
    */
-  public function getListingDiff($recordId = null) {
+  public function getListingDiff($recordId = null)
+  {
 
     // Get the primary key set in the model state
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
@@ -89,7 +96,8 @@ class RentalModelListingReview extends JModelAdmin {
     $versions = array();
     $unit_versions = array();
 
-    if (!empty($unitId)) {
+    if (!empty($unitId))
+    {
 
       // Must be reviewing a unit
       $unit_versions = $this->getVersionDetail($unitId, '#__unit', '#__unit_versions', 'unit_id');
@@ -106,7 +114,8 @@ class RentalModelListingReview extends JModelAdmin {
        */
       $model = JModelLegacy::getInstance('UnitVersions', 'RentalModel', $config = array('ignore_request' => true));
 
-      foreach ($versions['unit'] as $key => $value) {
+      foreach ($versions['unit'] as $key => $value)
+      {
 
         /*
          * Get the images based on the version id we are looking at
@@ -114,7 +123,8 @@ class RentalModelListingReview extends JModelAdmin {
 
         $images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
 
-        if (!$images) {
+        if (!$images)
+        {
           continue;
         }
 
@@ -137,7 +147,8 @@ class RentalModelListingReview extends JModelAdmin {
     /*
      *  $versions contains one or two records
      */
-    if (!$property_versions) {
+    if (!$property_versions)
+    {
       // OOoops
       return false;
     }
@@ -157,7 +168,8 @@ class RentalModelListingReview extends JModelAdmin {
    * @return mixed 
    * 
    */
-  public function getPropertyVersionDetail($recordId) {
+  public function getPropertyVersionDetail($recordId)
+  {
 
     $db = JFactory::getDbo();
 
@@ -216,19 +228,22 @@ class RentalModelListingReview extends JModelAdmin {
     $row = $db->loadAssocList();
 
     // Check that we have a result.
-    if (empty($row)) {
+    if (empty($row))
+    {
       return false;
     }
 
     return $row;
   }
 
-  public function getItemDiff($versions = array(), $keys_to_check = array()) {
+    public function getItemDiff($versions = array(), $keys_to_check = array())
+  {
 
     $simplediff = new simplediff();
 
     // If we only have one version then don't bother with the difference
-    if (count($versions) < 2) {
+    if (count($versions) < 2)
+    {
       $versions[] = array();
 
       return $versions;
@@ -238,8 +253,10 @@ class RentalModelListingReview extends JModelAdmin {
     $new_version = $versions[1];
 
     // Need to load the new version details here to replace those loaded here.
-    foreach ($old_version as $key => $value) {
-      if (in_array($key, $keys_to_check)) {
+    foreach ($old_version as $key => $value)
+    {
+      if (in_array($key, $keys_to_check))
+      {
         $diff = $simplediff->htmldiff(strip_tags($old_version[$key]), strip_tags($new_version[$key]));
         $new_version[$key] = $diff;
       }

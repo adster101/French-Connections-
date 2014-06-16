@@ -35,7 +35,7 @@ $show_company_number = '';
         <span class='icon icon-flag'> </span>
         Our records indicate that we don't have VAT or invoice details registered on our system. Please complete the following before proceeding.
       </div>
-      <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&task=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+      <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&task=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
         <fieldset>
           <div class="control-group">
             <div class="control-label">
@@ -83,9 +83,10 @@ $show_company_number = '';
             </div>    
           </fieldset>
 
+        <?php endforeach; // End of foreach getFieldSet fieldset name   ?>  
+        <hr />
 
-        <?php endforeach; // End of foreach getFieldSet fieldset name   ?> 
-        <?php echo JHtmlProperty::button('btn btn-primary btn-large pull-right', 'listing.accountupdate', 'icon-next', 'Proceed'); ?>
+        <?php echo JHtmlProperty::button('btn btn-primary btn-large', 'listing.accountupdate', 'icon-next', 'COM_RENTAL_UPDATE_ACCOUNT_DETAILS_AND_PROCEED'); ?>
 
         <input type="hidden" name="task" value="" />
         <?php echo JHtml::_('form.token'); ?>

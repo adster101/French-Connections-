@@ -781,10 +781,11 @@ class AccommodationModelListing extends JModelForm
 
     $query->where('a.id = ' . (int) $unit_id);
 
-
+    $query->order('d.ordering','asc');
     $db->setQuery($query);
 
     $images = $db->loadObjectList();
+    
 
 
 

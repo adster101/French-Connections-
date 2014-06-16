@@ -21,7 +21,7 @@ class RentalViewListing extends JViewLegacy
   function display($tpl = null)
   {
 
-// Load the user profile landuage strings.
+    // Load the user profile landuage strings.
     $lang = JFactory::getLanguage();
     $lang->load('plg_user_profile_fc');
 
