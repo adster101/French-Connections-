@@ -75,7 +75,7 @@ class RentalViewImages extends JViewLegacy {
     $bar = JToolBar::getInstance('toolbar');
 
     // Add a upload button
-    if ($canDo->get('helloworld.images.create')) {
+    if ($canDo->get('core.create')) {
 
       $title = JText::_('JTOOLBAR_UPLOAD');
       $dhtml = "<button data-toggle=\"collapse\" data-target=\"#collapseUpload\" class=\"btn btn-small btn-success\">

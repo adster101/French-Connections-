@@ -9,7 +9,8 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class RentalViewAutorenewals extends JViewLegacy {
+class RentalViewAutorenewals extends JViewLegacy
+{
 
   /**
    * HelloWorld raw view display method
@@ -18,7 +19,8 @@ class RentalViewAutorenewals extends JViewLegacy {
    *
    * @return void
    */
-  function display($tpl = null) {
+  function display($tpl = null)
+  {
 
     $app = JFactory::getApplication();
     $input = $app->input;
@@ -48,7 +50,8 @@ class RentalViewAutorenewals extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
     $document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js", true, false);
@@ -60,33 +63,18 @@ class RentalViewAutorenewals extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
 
     JToolBarHelper::title(($this->id) ? JText::sprintf('COM_RENTAL_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->id) : JText::_('COM_RENTAL_MANAGER_HELLOWORLD_NEW'));
 
     // Get component level permissions
-		$canDo = RentalHelper::getActions();
+    $canDo = RentalHelper::getActions();
 
-    // Display a helpful navigation for the owners
-    if ($canDo->get('helloworld.ownermenu.view')) {
-
-      $view = strtolower(JRequest::getVar('view'));
-
-      RentalHelper::addSubmenu($view);
-
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-    }
-
-    if ($canDo->get('helloworld.property.autorenew')) {
-      // We can save the new record
-      JToolBarHelper::save('autorenewals.save', 'JTOOLBAR_SAVE');
-    }
-
-
+    // We can save the new record
+    JToolBarHelper::save('autorenewals.save', 'JTOOLBAR_SAVE');
     JToolBarHelper::cancel('autorenewals.cancel', 'JTOOLBAR_CANCEL');
-
-    JToolBarHelper::help('COM_RENTAL_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
+    //JToolBarHelper::help('COM_RENTAL_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
   }
 
 }

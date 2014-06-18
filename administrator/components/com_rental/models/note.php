@@ -82,43 +82,4 @@ class RentalModelNote extends JModelAdmin {
     $property_id = JFactory::getApplication()->input->get('property_id', 0, 'int');
     $this->setState('note.property_id', $property_id);
   }
-
-  /*
-   * Method to save the snooze until date against the propery, if set
-   *
-   */
-
-  public function save($data) {
-    if (parent::save($data)) {
-
-      if (!empty($data['snooze_until']) && !empty($data['property_id'])) {
-
-        // Unset any data that we don't want
-        unset($data['subject']);
-        unset($data['catid']);
-        unset($data['body']);
-
-        // in the propery table primary key is id
-        $data['id'] = $data['property_id'];
-
-        // Get an instance of the propery table
-        $table = $this->getTable('Property', 'HelloWorldTable');
-
-        if (!$table->bind($data)) {
-          $this->setError($table->getError());
-          return false;
-        }
-
-        if (!$table->store()) {
-          $this->setError($table->getError());
-          return false;
-        }
-      }
-
-      return true;
-    }
-    // Parent save has borked, for some reason...
-    return false;
-  }
-
 }

@@ -20,9 +20,6 @@ $originalOrders = array();
 
 $canDo = RentalHelper::getActions();
 $canEditOwn = $canDo->get('core.edit.own');
-$canPublish = $canDo->get('helloworld.edit.publish');
-$canSubmitForReview = $canDo->get('helloworld.property.submit');
-$canReview = $canDo->get('helloworld.property.review');
 
 $data = array();
 $data['progress'] = $this->items;

@@ -12,17 +12,6 @@
 			description =""      
       labelclass="control-label">
     </field>
-    <field
-			name="snooze_until"
-			type="calendar"
-			default=""
-			label="COM_RENTAL_SNOOZE_SNOOZE_DATE"
-			description =""
-      size="80"
-      maxlength="75"
-      class="validate"
-      labelclass="control-label">
-    </field>
     <field 
       name="subject"
       type="input"

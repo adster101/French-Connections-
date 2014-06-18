@@ -45,7 +45,7 @@ class JFormFieldUserProperties extends JFormFieldGroupedList
     $db = JFactory::getDbo();  // Get the database instance
 
     $query = $db->getQuery(true);
-
+    $date = JFactory::getdate()->calendar('Y-m-d');
     $user = JFactory::getUser(); // Get current logged in user
 
     $query->select('a.id, b.unit_title, d.id as property_id');
@@ -53,6 +53,7 @@ class JFormFieldUserProperties extends JFormFieldGroupedList
     $query->join('left', '#__unit_versions b on (a.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
     $query->join('left', '#__property d on d.id = b.property_id');
     $query->where('d.created_by = ' . $user->id);  // Select only the props created by the user that created this property
+    $query->where('d.expiry_date > ' . $date);
     // Get the options.
     $db->setQuery($query);
 

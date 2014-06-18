@@ -89,7 +89,7 @@ $canDo = RentalHelper::getActions();
               foreach ($this->items as $i => $item):
                 $orderkey = array_search($item->id, $this->ordering[$item->parent_id]);
                 $canEditOwn = $user->authorise('core.edit.own', 'com_rental') && $item->created_by == $userId || in_array(8, $groups) || in_array(11, $groups);
-                $canPublish = $user->authorise('helloworld.edit.publish', 'com_rental');
+                $canPublish = $user->authorise('core.edit.state', 'com_rental');
                 $canReorder = $user->authorise('helloworld.edit.reorder', 'com_rental');
                 $expiry_date = new DateTime($item->expiry_date);
                 $now = date('Y-m-d');

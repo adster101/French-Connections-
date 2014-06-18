@@ -9,7 +9,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class RentalModelSummary extends JModelAdmin {
+class RentalModelSummary extends JModelAdmin
+{
 
   /**
    * Method override to check if you can edit an existing record.
@@ -20,7 +21,8 @@ class RentalModelSummary extends JModelAdmin {
    * @return	boolean
    * @since	1.6
    */
-  public function allowEdit($data = array(), $key = 'id') {
+  public function allowEdit($data = array(), $key = 'id')
+  {
     // Check specific edit permission then general edit permission.
     return JFactory::getUser()->authorise('core.edit', 'com_rental.message.' . ((int) isset($data[$key]) ? $data[$key] : 0)) or parent::allowEdit($data, $key);
   }
@@ -34,7 +36,8 @@ class RentalModelSummary extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'HelloWorld', $prefix = 'RentalTable', $config = array()) {
+  public function getTable($type = 'HelloWorld', $prefix = 'RentalTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -46,11 +49,13 @@ class RentalModelSummary extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_rental.helloworld', 'helloworld', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -62,38 +67,43 @@ class RentalModelSummary extends JModelAdmin {
    * 
    */
 
-  public function getNewPropertyForm($data = array(), $loadData = false) {
+  public function getNewPropertyForm($data = array(), $loadData = false)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_rental.userproperties', 'userproperties', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
     return $form;
   }
-  
+
   /*
    * Method to get a form for the admin user to choose which account they would like to add a property to
    * 
    */
 
-  public function getNewAdminPropertyForm($data = array(), $loadData = false) {
+  public function getNewAdminPropertyForm($data = array(), $loadData = false)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_rental.addpropertybyuser', 'addpropertybyuser', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
-        
+
     return $form;
   }
-  
+
   /**
    * Method to get the script that have to be included on the form
    *
    * @return string	Script files
    */
-  public function getScript() {
+  public function getScript()
+  {
     return 'administrator/components/com_rental/models/forms/helloworld.js';
   }
 
@@ -103,15 +113,17 @@ class RentalModelSummary extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.edit.helloworld.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
-    
-    
+
+
     return $data;
   }
 
@@ -135,20 +147,23 @@ class RentalModelSummary extends JModelAdmin {
    * 
    */
 
-  protected function preprocessForm(JForm $form, $data) {
+  protected function preprocessForm(JForm $form, $data)
+  {
 
     // More robustly checked on the component level permissions?
     // E.g. at the moment any user who is not owner can edit this? 
     // e.g. add a new permission core.edit.property.changeparent
-    
-    $canDo = $this->getState('actions.permissions',array());
+
+    $canDo = $this->getState('actions.permissions', array());
     // If we don't come from a view then this maybe empty so we reset it.
-    if (empty($canDo)) {
+    if (empty($canDo))
+    {
       $canDo = RentalHelper::getActions();
     }
-    
+
     // If $data->property_id is set and it's not null or 1 (e.g. a unit)
-    if (isset($data->property_id) && $data->property_id != 1 && !empty($data->property_id)) {
+    if (isset($data->property_id) && $data->property_id != 1 && !empty($data->property_id))
+    {
 
       // Use getItem to get the data for the parent property if supplied
       $parent_prop = $this->getItem($data->property_id);
@@ -160,61 +175,64 @@ class RentalModelSummary extends JModelAdmin {
       $data->department = $parent_prop->department;
       $data->distance_to_coast = $parent_prop->distance_to_coast;
 
-      foreach ($form->getFieldSet('Location') as $field) {
+      foreach ($form->getFieldSet('Location') as $field)
+      {
         // So we loop over the fields disabling them and making them non-required in the form
         // This ensure that they will not be editable by the user in this instance. 
         $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'readonly', 'true');
       }
-      
+
       // Lastly add the city field via an XML string
-     
-      $form->setFieldAttribute('city', 'latitude', $data->latitude );
+
+      $form->setFieldAttribute('city', 'latitude', $data->latitude);
       $form->setFieldAttribute('city', 'longitude', $data->longitude);
 
       $form->removeField('map');
-
-      
-      
-    } else if (!empty($data) && $data->property_id == 1) {
+    }
+    else if (!empty($data) && $data->property_id == 1)
+    {
 
       // We are editing an existing property here which isn't a child
       $latitude = (!empty($data->latitude) ? $data->latitude : 0);
       $longitude = (!empty($data->longitude) ? $data->longitude : 0);
-      
-      $form->setFieldAttribute('city', 'latitude', $latitude );
+
+      $form->setFieldAttribute('city', 'latitude', $latitude);
       $form->setFieldAttribute('city', 'longitude', $longitude);
 
       // Check the parent editing ability of this user
-      if ($canDo->get('helloworld.edit.property.parent')) {
+      if ($canDo->get('helloworld.edit.property.parent'))
+      {
         $XmlStr = $this->getUserPropertiesXml($form, $data);
         $form->load('<form>' . $XmlStr . '</form>');
       }
-      
+
       // Check the change parent ability of this user
-      if (!$canDo->get('helloworld.edit.property.owner')) {
-  			$form->removeField('created_by');
+      if (!$canDo->get('helloworld.edit.property.owner'))
+      {
+        $form->removeField('created_by');
       }
-      
-    } else if (!isset($data->property_id) && !isset($data->created_by)) { 
+    }
+    else if (!isset($data->property_id) && !isset($data->created_by))
+    {
 
       // Only applies when a user is creating a new property as property_id is set in the session scope in the sub controller
       // Otherwise if parent id not set in $data but has been taken from session scope e.g. new unit being added      
       // Use getItem to get the data for the parent property if supplied
-     
       // Scope property_id from the user session scope
-      $property_id = JApplication::getUserState('property_id','');
+      $property_id = JApplication::getUserState('property_id', '');
 
       $data->property_id = $property_id;
 
       // If parent id = 1 this is a new parent property
-      if ($property_id !=1 && $property_id !='') { 
-        
+      if ($property_id != 1 && $property_id != '')
+      {
+
         // Get the parent details for the property id supplied
         $parent_prop = $this->getItem($property_id);
-      
-        $form->setFieldAttribute('city', 'latitude', $parent_prop->latitude );
+
+        $form->setFieldAttribute('city', 'latitude', $parent_prop->latitude);
         $form->setFieldAttribute('city', 'longitude', $parent_prop->longitude);
-        
+
         // Set the location details accordingly
         $data->latitude = $parent_prop->latitude;
         $data->longitude = $parent_prop->longitude;
@@ -222,52 +240,54 @@ class RentalModelSummary extends JModelAdmin {
         $data->location_type = $parent_prop->location_type;
         $data->department = $parent_prop->department;
         $data->distance_to_coast = $parent_prop->distance_to_coast;
-        
-        foreach ($form->getFieldSet('Location') as $field) {
+
+        foreach ($form->getFieldSet('Location') as $field)
+        {
           // So we loop over the fields disabling them and making them non-required in the form
           // This ensure that they will not be editable by the user in this instance. 
           $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'readonly', 'true');
           $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'class', 'readonly');
-          $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'required', 'false'); 
+          $form->setFieldAttribute(str_replace(array('jform', '[', ']'), '', $field->name), 'required', 'false');
         }
-        
-        $form->removeField('map');
 
-        
-      } 
-      
+        $form->removeField('map');
+      }
+
       // Check the parent editing ability of this user
-      if ($canDo->get('helloworld.edit.property.parent')) {
-        
+      if ($canDo->get('helloworld.edit.property.parent'))
+      {
+
         // Scope created by from the user session scope
         $user = JApplication::getUserState('created_by', '');
-        
+
         $XmlStr = $this->getUserPropertiesXml($form, $data, $user);
-        
+
         $form->load('<form>' . $XmlStr . '</form>');
         $data->created_by = $user;
-
       }
 
       // Check the change parent ability of this user
-      if (!$canDo->get('helloworld.edit.property.owner')) {
+      if (!$canDo->get('helloworld.edit.property.owner'))
+      {
         $form->setFieldAttribute('created_by', 'type', 'hidden');
       }
-
-    } else {
+    }
+    else
+    {
       // Check the parent editing ability of this user
-      if ($canDo->get('helloworld.edit.property.parent')) {
+      if ($canDo->get('helloworld.edit.property.parent'))
+      {
         $XmlStr = $this->getUserPropertiesXml($form, $data);
         $form->load('<form>' . $XmlStr . '</form>');
-      }      
+      }
     }
-    
-    
+
+
     // Reset the user state as otherwise property_id in session scope will interfere
     // with normal editing etc
     JApplication::setUserState('property_id', '');
   }
-  
+
   /**
    * Method to return the neatest city xml foeld definition string
    *
@@ -279,9 +299,10 @@ class RentalModelSummary extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function getUserPropertiesXml($form, $data, $user = '' ) {
+  protected function getUserPropertiesXml($form, $data, $user = '')
+  {
     $XmlStr = '';
-    
+
     $XmlStr .= '<field
 			name="property_id"
 			type="UserProperties"
@@ -291,11 +312,11 @@ class RentalModelSummary extends JModelAdmin {
       labelclass="control-label"
 			required="true"
       readonly="true"
-      user="' . $user .'"></field>';  
+      user="' . $user . '"></field>';
 
     return $XmlStr;
   }
-  
+
   /**
    * Method to return the neatest city xml foeld definition string
    *
@@ -307,11 +328,12 @@ class RentalModelSummary extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function getNearestCityXml($form, $data, $readonly = 'true') {
+  protected function getNearestCityXml($form, $data, $readonly = 'true')
+  {
     $latitude = (!empty($data->latitude) ? $data->latitude : 0);
-    $longitude = (!empty($data->longitude) ? $data->longitude : 0);   
+    $longitude = (!empty($data->longitude) ? $data->longitude : 0);
     $readonly = ($readonly) ? 'true' : 'false';
-    
+
     $XmlStr = '<field
       name="city"
       type="cities"
@@ -329,7 +351,7 @@ class RentalModelSummary extends JModelAdmin {
       <option value="">COM_RENTAL_HELLOWORLD_FIELD_SELECT_NEAREST_TOWN</option>
 
     </field>';
-    
+
     return $XmlStr;
   }
 
@@ -342,41 +364,47 @@ class RentalModelSummary extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function canEditState() {
+  protected function canEditState()
+  {
     $comtask = JRequest::getVar('task', '', 'POST', 'string');
 
     $task = explode('.', $comtask);
 
     $user = JFactory::getUser();
 
-    if ($task[1] == 'orderdown' || $task[1] == 'orderup') {
+    if ($task[1] == 'orderdown' || $task[1] == 'orderup')
+    {
       return $user->authorise('helloworld.edit.reorder', $this->option);
-    } else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash') {
+    }
+    else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash')
+    {
       return $user->authorise('core.edit.state', $this->option);
-    } else {
+    }
+    else
+    {
       return false;
     }
   }
-  
-	/**
-	 * Method to auto-populate the model state.
-	 *
-	 * Note. Calling getState in this method will result in recursion.
-	 *
-	 * @param	string	An optional ordering field.
-	 * @param	string	An optional direction (asc|desc).
-	 *
-	 * @return	void
-	 * @since	1.6
-	 */
-	protected function populateState($ordering = null, $direction = null)
-	{
 
-		$canDo = RentalHelper::getActions();
-		$this->setState('actions.permissions', $canDo);
-		
-		// List state information.
-		parent::populateState();
-	}
-  
+  /**
+   * Method to auto-populate the model state.
+   *
+   * Note. Calling getState in this method will result in recursion.
+   *
+   * @param	string	An optional ordering field.
+   * @param	string	An optional direction (asc|desc).
+   *
+   * @return	void
+   * @since	1.6
+   */
+  protected function populateState($ordering = null, $direction = null)
+  {
+
+    $canDo = RentalHelper::getActions();
+    $this->setState('actions.permissions', $canDo);
+
+    // List state information.
+    parent::populateState();
+  }
+
 }

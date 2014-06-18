@@ -9,22 +9,24 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class RentalViewListings extends JViewLegacy {
+class RentalViewListings extends JViewLegacy
+{
 
   protected $items;
   protected $pagination;
   protected $state;
+
   /**
    * HelloWorlds view display method
    * @return void
    */
-  function display($tpl = null) {
+  function display($tpl = null)
+  {
     // Find the user details
     $user = JFactory::getUser();
     $userID = $user->id;
 
     // Get data from the model  
-    
     $this->pagination = $this->get('Pagination');
     $this->items = $this->get('Items');
     $this->state = $this->get('State');
@@ -32,13 +34,15 @@ class RentalViewListings extends JViewLegacy {
     $this->activeFilters = $this->get('ActiveFilters');
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
 
     // Preprocess the list of items to find ordering divisions.
-    foreach ($this->items as &$item) {
+    foreach ($this->items as &$item)
+    {
       // $this->ordering[$item->property_id][] = $item->id;
     }
 
@@ -58,43 +62,46 @@ class RentalViewListings extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
-    $document = JFactory::getDocument();
-
-    $user = JFactory::getUser();
-
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JToolbarButtonAjaxpopup', JPATH_ROOT . '/administrator/components/com_rental/buttons/Ajaxpopup.php');
-
-    // Here we register a new JButton which simply uses the ajax squeezebox rather than the iframe handler
-    JLoader::register('JToolbarButtonAjaxpopupchooseowner', JPATH_ROOT . '/administrator/components/com_rental/buttons/Ajaxpopupchooseowner.php');
+  protected function addToolBar()
+  {
 
     $canDo = RentalHelper::getActions();
 
     JToolBarHelper::title(JText::_('COM_RENTAL_MANAGER_HELLOWORLDS'), 'helloworld');
-    if ($canDo->get('core.create')) {
+
+    if ($canDo->get('core.create'))
+    {
       JToolBarHelper::addNew('propertyversions.add', 'COM_RENTAL_HELLOWORLD_ADD_NEW_PROPERTY', false);
     }
-    if ($canDo->get('core.edit') || ($canDo->get('core.edit.own'))) {
+
+    if ($canDo->get('core.edit') || ($canDo->get('core.edit.own')))
+    {
       JToolBarHelper::editList('propertyversions.edit', 'JTOOLBAR_EDIT');
     }
-    if ($canDo->get('core.delete')) {
-      JToolBarHelper::deleteList('', 'listings.delete', 'JTOOLBAR_DELETE');
-    }
 
-    if ($canDo->get('core.edit.state')) {
+    if ($canDo->get('core.edit.state'))
+    {
       JToolBarHelper::publish('listings.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('listings.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('listings.trash');
     }
 
-    if ($canDo->get('core.admin')) {
+    $bar = JToolBar::getInstance('toolbar');
+    JLoader::register('JToolbarButtonSnooze', JPATH_ROOT . '/administrator/components/com_rental/buttons/snooze.php');
+
+    // Add the custom snooze button
+    if ($canDo->get('rental.listing.admin'))
+    {
+      JToolbarHelper::custom('listings.admin', 'pause', '', 'COM_RENTAL_SNOOZE', true);
+    }
+
+    if ($canDo->get('core.admin'))
+    {
       JToolBarHelper::preferences('com_rental');
     }
 
     $view = strtolower(JRequest::getVar('view'));
 
-    $canDo = RentalHelper::addSubmenu($view);
 
     // Add the side bar
     // $this->sidebar = JHtmlSidebar::render();
@@ -105,7 +112,8 @@ class RentalViewListings extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
     $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);

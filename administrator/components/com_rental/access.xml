@@ -8,26 +8,16 @@
 		<action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />
 		<action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_EDITOWN_COMPONENT_DESC" />
 		<action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
-    <action name="helloworld.edit.reorder" title="JACTION_REORDER" description="JACTION_EDITREORDER_COMPONENT_DESC" />
-		<action name="helloworld.edit.publish" title="JACTION_PUBLISH" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
-		<action name="helloworld.edit.property.owner" title="JACTION_EDIT_OWNER" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
-		<action name="helloworld.edit.property.parent" title="JACTION_EDIT_PARENT" description="JACTION_EDITPUBLISH_COMPONENT_DESC" />
-		<action name="helloworld.filter" title="COM_RENTAL_PROPERTY_FILTER" description="" />
-		<action name="helloworld.display.owner" title="COM_RENTAL_DISPLAY_OWNER" description="" />
-		<action name="helloworld.view.notes" title="COM_RENTAL_DISPLAY_CONTACT_LOG" description="" />
-		<action name="helloworld.notes.add" title="COM_RENTAL_HELLOWORLD_SNOOZE" description="" />
-    <action name="helloworld.sort.expiry" title="COM_RENTAL_SORT_BY_EXPIRY_DATE" description="" />
-		<action name="helloworld.sort.prn" title="COM_RENTAL_SORT_BY_PRN" description="" />
-		<action name="helloworld.ownermenu.view" title="COM_RENTAL_OWNER_MENU_VIEW" description="" />
-		<action name="helloworld.reports.renewal" title="Access to the renewal report filters" description="" />
-		<action name="helloworld.images.delete" title="COM_RENTAL_HELLOWORLD_DELETE_IMAGE" description="Whether the user has specific permission to delete an image" />
-		<action name="helloworld.images.edit" title="COM_RENTAL_HELLOWORLD_EDIT_IMAGE" description="" />
-		<action name="helloworld.images.reorder" title="Reorder images" description="Whether the user group is allowed to reorder images or not." />
-		<action name="helloworld.images.create" title="COM_RENTAL_HELLOWORLD_CREATE_IMAGE" description="" />
-		<action name="helloworld.property.submit" title="Submit for review" description="" />
-		<action name="helloworld.property.review" title="Review and approve changes" description="" />
-		<action name="helloworld.property.autorenew" title="Update auto renreal status" description="" />
-		<action name="helloworld.property.preview" title="Generate a property preview" description="" />
+    <action name="rental.unit.reorder" title="JACTION_REORDER" description="JACTION_EDITREORDER_COMPONENT_DESC" />
+		<action name="rental.listing.submit" title="Submit for review" description="" />
+		<action name="rental.listing.review" title="Review and approve changes" description="" />
+		<action name="rental.listing.admin" title="Snooze, udpate expirydate or change owner" description="" />
+		<action name="rental.listings.showowner" title="View owner details" description="" />
+		<action name="rental.listings.filter" title="Show listings view filters" description="" />
+    <action name="rental.notes.view" title="COM_RENTAL_DISPLAY_CONTACT_LOG" description="" />
+		<action name="rental.notes.add" title="Create note permission" description="" />
+		<action name="rental.images.delete" title="Delete images permission" description="Whether the user has specific permission to delete an image" />
+		<action name="rental.images.reorder" title="Reorder images permission" description="Whether the user group is allowed to reorder images or not." />
 	</section>
   <section name="category">
 		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset 
+    name="snooze"
+    label="COM_RENTAL_SNOOZE_SNOOZE_DATE">
+    <field
+      name="snooze_until"
+      type="calendar"
+      format="%d-%m-%Y"
+      label="COM_RENTAL_SNOOZE_SNOOZE_DATE"
+      filter="string">
+    </field>
+  </fieldset>
+  <fieldset 
+    name="change-owner"
+    label="COM_RENTAL_CHANGE_OWNER">
+ 
+    <field
+      name="created_by"
+      label="COM_RENTAL_FIELD_PROPERTY_CREATED_BY_LABEL"
+      type="user"
+      filter="int">
+    </field>
+      
+  </fieldset>
+  <fieldset 
+    name="update-expiry-date"
+    label="COM_RENTAL_UPDATE_DATE_LAPSED" >
+    <field
+      name="snooze_until"
+      type="calendar"
+      format="%d-%m-%Y"
+      label="COM_RENTAL_HELLOWORLD_HEADING_DATE_EXPIRY"
+      filter="string"
+    >
+    </field>
+  </fieldset>
+  <fieldset
+    name="note"
+    label="COM_RENTAL_HELLOWORLD_ADD_NOTE">
+            
+    <field 
+      name="subject"
+      type="input"
+      label="Note subject"
+      class="input"
+      filter="string">
+    </field>
+  
+    <field 
+      name="body"
+      type="textarea"
+      label="COM_RENTAL_SNOOZE_CONTACT_NOTES"
+      description ="COM_RENTAL_IMAGES_EDIT_CAPTION_IMAGE_DESC"      
+      class="input-xlarge"
+      filter="string">
+    </field>
+  </fieldset>
+</form>

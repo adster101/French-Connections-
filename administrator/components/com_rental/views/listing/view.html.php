@@ -106,7 +106,7 @@ class RentalViewListing extends JViewLegacy
 
     if ($layout == 'review')
     {
-      if ($canDo->get('helloworld.property.review'))
+      if ($canDo->get('rental.listing.review'))
       {
         JToolBarHelper::deleteList('', 'listing.approve', 'BLAH');
       }

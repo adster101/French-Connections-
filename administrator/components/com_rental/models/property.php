@@ -22,6 +22,17 @@ class RentalModelProperty extends JModelAdmin {
     return $form;
   }
 
+    public function getAdminForm($data = array(), $loadData = true) {
+
+    $form = $this->loadForm('com_rental.listing', 'admin', array('control' => 'jform', 'load_data' => $loadData));
+
+    if (empty($form)) {
+      return false;
+    }
+
+    return $form;
+  }
+  
   public function loadFormData() {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.view.listing.data', array());

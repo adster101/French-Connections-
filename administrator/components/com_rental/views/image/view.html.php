@@ -60,16 +60,7 @@ class RentalViewImage extends JViewLegacy {
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CANCEL');
 
-    // Display a helpful navigation for the owners 
-    if ($canDo->get('helloworld.ownermenu.view')) {
-
-      $view = strtolower(JRequest::getVar('view'));
-
-      $canDo = RentalHelper::addSubmenu($view);
-
-      // Add the side bar
-      $this->sidebar = JHtmlSidebar::render();
-    }
+   
   }
 
   /**

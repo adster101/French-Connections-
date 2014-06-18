@@ -4,12 +4,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+$title = $displayData['title'];
+$id = $displayData['id'];
 ?>
 <!-- Modal -->
-<div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="<?php echo $id ?>" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">Modal header</h3>
+    <h3 id="myModalLabel"><?php echo $title ?></h3>
   </div>
   <div class="modal-body">
     <!-- Content goes here -->

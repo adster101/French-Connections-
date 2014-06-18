@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       2.5
  */
-class JHtmlProperty {
+class JHtmlProperty
+{
 
   /**
    * Display an image.
@@ -27,14 +28,16 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function image($src) {
+  public static function image($src)
+  {
     $src = preg_replace('#[^A-Z0-9\-_\./]#i', '', $src);
     $file = JPATH_SITE . '/' . $src;
 
     jimport('joomla.filesystem.path');
     JPath::check($file);
 
-    if (!file_exists($file)) {
+    if (!file_exists($file))
+    {
       return '';
     }
 
@@ -50,7 +53,8 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function addNote($property_id) {
+  public static function addNote($property_id)
+  {
     $title = JText::_('COM_RENTAL_ADD_NOTE');
 
     return '<a href="' . JRoute::_('index.php?option=com_rental&task=note.add&property_id=' . (int) $property_id) . '">'
@@ -67,8 +71,10 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function filterNotes($count, $userId) {
-    if (empty($count)) {
+  public static function filterNotes($count, $userId)
+  {
+    if (empty($count))
+    {
       return '';
     }
 
@@ -87,8 +93,10 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function notes($id) {
-    if (empty($id)) {
+  public static function notes($id)
+  {
+    if (empty($id))
+    {
       return '';
     }
 
@@ -109,9 +117,11 @@ class JHtmlProperty {
    *
    * @since   2.5
    */
-  public static function stats($id, $u_id) {
+  public static function stats($id, $u_id)
+  {
 
-    if (empty($id)) {
+    if (empty($id))
+    {
       return '';
     }
 
@@ -130,7 +140,8 @@ class JHtmlProperty {
    *
    * @since  3.0
    */
-  public static function reviewStates($checked_out = 0) {
+  public static function reviewStates($checked_out = 0)
+  {
 
 
 
@@ -182,7 +193,8 @@ class JHtmlProperty {
    * @param type $id
    * @param type $unit_id
    */
-  public static function editButton($days = '', $id = '', $unit_id = '', $review = '') {
+  public static function editButton($days = '', $id = '', $unit_id = '', $review = '')
+  {
     // Array of image, task, title, action.
     // Possible renewal states are
     // Expired (renew now)
@@ -194,17 +206,25 @@ class JHtmlProperty {
     $html = '';
     $allowEdit = true;
 
-    if (empty($days) || $days > 28) { // A new sign up which has never been published...
+    if (empty($days) || $days > 28)
+    { // A new sign up which has never been published...
       $value = 2;
-    } elseif ($days <= 7 && $days >= 0) { // Property about to expire
+    }
+    elseif ($days <= 7 && $days >= 0)
+    { // Property about to expire
       $value = 1;
-    } elseif ($days < 0 && !empty($days)) { // Property has expired
+    }
+    elseif ($days < 0 && !empty($days))
+    { // Property has expired
       $value = 1;
-    } elseif ($days >= 7 && $days <= 28) { // More than seven days but expiring within the month.
+    }
+    elseif ($days >= 7 && $days <= 28)
+    { // More than seven days but expiring within the month.
       $value = 3;
     }
 
-    if ($review == 2) {
+    if ($review == 2)
+    {
       $value = 4;
       $allowEdit = false;
     }
@@ -239,7 +259,8 @@ class JHtmlProperty {
 
     $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
     $html .= '<div class="btn-group">';
-    if ($allowEdit) {
+    if ($allowEdit)
+    {
       $html .= '<a class="btn ' . $state[3] . '" href="' . JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '">';
       $html .= JText::sprintf($state[0], (int) $id);
       $html .= '</a>';
@@ -284,7 +305,9 @@ class JHtmlProperty {
       $html .= '</a>';
       $html .= '</li>';
       $html .= '</ul>';
-    } else {
+    }
+    else
+    {
 
       $html .= '<span rel="tooltip" class="btn ' . $state[3] . '" title="' . JText::_($state[2]) . '">';
       $html .= '<i class="icon icon-locked">&nbsp;</i>';
@@ -300,7 +323,8 @@ class JHtmlProperty {
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
-  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false) {
+  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false)
+  {
 
     // Array of image, task, title, action.
     // Possible renewal states are
@@ -313,17 +337,25 @@ class JHtmlProperty {
     $html = '';
     $allowEdit = true;
 
-    if (empty($days) || $days > 28) { // A new sign up which has never been published...
+    if (empty($days) || $days > 28)
+    { // A new sign up which has never been published...
       $value = 2;
-    } elseif ($days <= 7 && $days >= 0) { // Property about to expire
+    }
+    elseif ($days <= 7 && $days >= 0)
+    { // Property about to expire
       $value = 0;
-    } elseif ($days < 0 && !empty($days)) { // Property has expired
+    }
+    elseif ($days < 0 && !empty($days))
+    { // Property has expired
       $value = 1;
-    } elseif ($days >= 7 && $days <= 28) { // More than seven days but expiring within the month.
+    }
+    elseif ($days >= 7 && $days <= 28)
+    { // More than seven days but expiring within the month.
       $value = 3;
     }
 
-    if ($review == 2) {
+    if ($review == 2)
+    {
       $value = 4;
       $allowEdit = false;
     }
@@ -367,14 +399,20 @@ class JHtmlProperty {
     );
 
     $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
-    if ($allowEdit) {
+
+
+    if ($allowEdit)
+    {
       $html .= '<a rel="tooltip" class="btn ' . $state[5] . '" href="' . JRoute::_('index.php?option=com_rental&task=' . $state[1] . '&id=' . (int) $id) . '" title="' . JText::_($state[4]) . '">';
-    } else {
+      $html .= '<i class=\'icon-' . $state[0] . '\'>&nbsp;</i>&nbsp;';
+    }
+    else
+    {
       $html .= '<span rel="tooltip" class="btn ' . $state[5] . '" title="' . JText::_($state[4]) . '">';
+      $html .= '<i class=\'icon-' . $state[0] . '\'>&nbsp;</i>&nbsp;';
     }
     $html .= JText::_($state[3]);
 
-    $html .= '&nbsp;<i class=\'icon-' . $state[0] . '\'>&nbsp;</i>';
 
     $html.= ($allowEdit) ? '</a>' : '</span>';
 
@@ -385,7 +423,8 @@ class JHtmlProperty {
    * @param	int $value	The state value
    * @param	int $i
    */
-  public static function autorenewalstate($value = '', $id = '') {
+  public static function autorenewalstate($value = '', $id = '')
+  {
 
     $html = '';
 
@@ -421,7 +460,8 @@ class JHtmlProperty {
    *
    */
 
-  public static function button($btnClass = '', $task = '', $iconClass = '', $text) {
+  public static function button($btnClass = '', $task = '', $iconClass = '', $text)
+  {
 
     $html = '';
     $html.='<button class="' . $btnClass . '" onclick="Joomla.submitbutton(\'' . $task . '\')">'
@@ -441,23 +481,28 @@ class JHtmlProperty {
    * @return  JObject
    * @since   1.6
    */
-  public static function getActions($extension, $categoryId = 0) {
+  public static function getActions($extension, $categoryId = 0)
+  {
     $user = JFactory::getUser();
     $result = new JObject;
     $parts = explode('.', $extension);
     $component = $parts[0];
 
-    if (empty($categoryId)) {
+    if (empty($categoryId))
+    {
       $assetName = $component;
       $level = 'component';
-    } else {
+    }
+    else
+    {
       $assetName = $component . '.category.' . (int) $categoryId;
       $level = 'category';
     }
 
     $actions = JAccess::getActions($component, $level);
 
-    foreach ($actions as $action) {
+    foreach ($actions as $action)
+    {
       $result->set($action->name, $user->authorise($action->name, $assetName));
     }
 
@@ -468,7 +513,8 @@ class JHtmlProperty {
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'property_id', $btnClass = '', $current_view = '') {
+  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'property_id', $btnClass = '', $current_view = '')
+  {
 
     $progress_icon = 'warning';
     $okay_icon = 'ok';
@@ -477,70 +523,97 @@ class JHtmlProperty {
 
     $id = ($controller == 'propertyversions') ? $listing_id : $unit_id;
 
-    if (!empty($item->latitude) && ($controller == 'propertyversions')) {
+    if (!empty($item->latitude) && ($controller == 'propertyversions'))
+    {
 
       $progress_icon = $okay_icon;
       $id = $listing_id;
-    } elseif ($controller == 'contactdetails') {
+    }
+    elseif ($controller == 'contactdetails')
+    {
 
-      if ($item->use_invoice_details) {
+      if ($item->use_invoice_details)
+      {
         $progress_icon = $okay_icon;
-      } elseif (!$item->use_invoice_details && !empty($item->first_name) && !empty($item->surname) && !empty($item->email_1) && !empty($item->phone_1)) {
+      }
+      elseif (!$item->use_invoice_details && !empty($item->first_name) && !empty($item->surname) && !empty($item->email_1) && !empty($item->phone_1))
+      {
         $progress_icon = $okay_icon;
       }
       $id = $listing_id;
-    } elseif (empty($item->title) && ($controller == 'propertyversions' )) {
+    }
+    elseif (empty($item->title) && ($controller == 'propertyversions' ))
+    {
 
       $progress_icon = $progress_icon;
       $id = $listing_id;
-    } elseif (empty($item->unit_title) && $controller == 'unitversions' && !empty($listing_id) && $action == 'edit') { // This property has no unit, or unit details not completed...
+    }
+    elseif (empty($item->unit_title) && $controller == 'unitversions' && !empty($listing_id) && $action == 'edit')
+    { // This property has no unit, or unit details not completed...
       $progress_icon = $progress_icon;
-    } elseif (!empty($unit_id) && $controller == 'images') {
+    }
+    elseif (!empty($unit_id) && $controller == 'images')
+    {
 
       $progress_icon = ($item->images > 0) ? $okay_icon : $progress_icon;
-    } elseif (!empty($unit_id) && $controller == 'availability') {
+    }
+    elseif (!empty($unit_id) && $controller == 'availability')
+    {
 
       $progress_icon = ($item->availability > 0) ? $okay_icon : $progress_icon;
-    } elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id)) {
+    }
+    elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id))
+    {
 
       $progress_icon = $okay_icon;
-    } elseif (!empty($unit_id) && $controller == 'tariffs') {
+    }
+    elseif (!empty($unit_id) && $controller == 'tariffs')
+    {
 
       $progress_icon = ($item->tariffs > 0) ? $okay_icon : $progress_icon;
-    } else if ($controller == 'reviews') {
+    }
+    else if ($controller == 'reviews')
+    {
 
       $id = $unit_id;
       $progress_icon = '';
-    } elseif (!empty($unit_id) && $controller == 'unitversions') {
+    }
+    elseif (!empty($unit_id) && $controller == 'unitversions')
+    {
 
       $progress_icon = '';
     }
 
     $active = ($controller == $current_view) ? 'active' : '';
 
-    if (!$btnClass) {
+    if (!$btnClass)
+    {
       $html .= '<li class="' . $active . '">';
     }
     $html .='<a class="' . $btnClass . '"'
             . ' href="' . JRoute::_('index.php?option=com_rental&task=' . $controller . '.' . $action . '&' . $urlParam . '=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '"'
             . ' rel="tooltip">';
-    if ($icon) {
+    if ($icon)
+    {
       $html .= '<i class="icon icon-' . $icon . '"></i>';
     }
     $html .= '&nbsp;' . Jtext::_($button_text);
-    if (!empty($progress_icon) && $icon) {
+    if (!empty($progress_icon) && $icon)
+    {
       $html .= '&nbsp;<i class="icon icon-' . $progress_icon . '"></i>';
     }
     $html .= '</a>';
 
-    if (!$btnClass) {
+    if (!$btnClass)
+    {
       '</li>';
     }
 
     return $html;
   }
 
-  public static function progressMultiTabs($controller = '', $action = 'edit', $icon = '', $button_text = '', $data = '', $urlParam = '', $btnClass = '', $current_view) {
+  public static function progressMultiTabs($controller = '', $action = 'edit', $icon = '', $button_text = '', $data = '', $urlParam = '', $btnClass = '', $current_view)
+  {
 
     $html = '';
 
@@ -553,7 +626,8 @@ class JHtmlProperty {
             . '<b class="caret"></b></a>'
             . '<ul class="dropdown-menu">';
 
-    foreach ($data as $item) {
+    foreach ($data as $item)
+    {
 
       $html.='<li>';
       $html.=JHtmlProperty::progressButton($item->id, $item->unit_id, $controller, $action, $icon, $item->unit_title, $item, $urlParam, $btnClass, '');

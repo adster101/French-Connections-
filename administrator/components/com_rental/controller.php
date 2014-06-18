@@ -27,7 +27,7 @@ class RentalController extends JControllerLegacy
     switch ($view) {
       // Special permissions.
       case 'notes':
-        return $canDo->get('helloworld.view.' . $view);
+        return $canDo->get('rental.notes.view');
         break;
 
       // Default permissions.

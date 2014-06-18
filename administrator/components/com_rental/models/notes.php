@@ -72,7 +72,8 @@ class RentalModelNotes extends JModelList {
         a.id,
         a.subject,
         a.created_time,
-        a.property_id
+        a.property_id,
+        a.body
         ');
 
     $query->where('a.property_id = ' . $property_id);

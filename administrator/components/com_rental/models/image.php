@@ -37,7 +37,7 @@ class RentalModelImage extends JModelAdmin {
   protected function canDelete($record) {
     // This need expanding to check the user is not only authorise but actually owns the resource.
     $user = JFactory::getUser();
-    return $user->authorise('helloworld.images.delete', $this->option);
+    return $user->authorise('rental.images.delete', $this->option);
   }
 
   public function delete($pks) {
@@ -130,7 +130,7 @@ class RentalModelImage extends JModelAdmin {
   protected function canEditState($record) {
     
     $user = JFactory::getUser();
-    return $user->authorise('helloworld.images.reorder', $this->option); 
+    return $user->authorise('rental.images.reorder', $this->option); 
   }
 
   /**

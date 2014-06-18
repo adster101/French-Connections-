@@ -24,7 +24,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     }
 
     // Update the end_date for the offer
-    $item->end_date = JFactory::getDate()->toSql();
+    $item->end_date = JFactory::getDate('-1 day')->toSql();
 
     try {
       $table->save($item);

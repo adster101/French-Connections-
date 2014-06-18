@@ -43,7 +43,7 @@ class RentalControllerNote extends JControllerForm {
    * @since   1.6
    */
   protected function allowAdd($data = array(), $key = 'id') {
-    return JFactory::getUser()->authorise('helloworld.notes.add', $this->extension);
+    return JFactory::getUser()->authorise('rental.notes.add', $this->extension);
   }
 
   /**

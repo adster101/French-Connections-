@@ -263,7 +263,7 @@ class RentalControllerImages extends JControllerForm {
     JSession::checkToken('GET') or die('Invalid Token');
 
     // Check that this user is authorised to upload images here
-    if (!$user->authorise('helloworld.images.create', $this->extension)) {
+    if (!$user->authorise('core.create', $this->extension)) {
       $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_NOT_AUTHORISED'), 'message');
       $this->setRedirect(JRoute::_('index.php?option=com_rental&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
     }
