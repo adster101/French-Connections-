@@ -14,20 +14,18 @@
   <fieldset 
     name="change-owner"
     label="COM_RENTAL_CHANGE_OWNER">
- 
     <field
       name="created_by"
       label="COM_RENTAL_FIELD_PROPERTY_CREATED_BY_LABEL"
       type="user"
       filter="int">
     </field>
-      
   </fieldset>
   <fieldset 
     name="update-expiry-date"
     label="COM_RENTAL_UPDATE_DATE_LAPSED" >
     <field
-      name="snooze_until"
+      name="expiry_date"
       type="calendar"
       format="%d-%m-%Y"
       label="COM_RENTAL_HELLOWORLD_HEADING_DATE_EXPIRY"
@@ -38,15 +36,14 @@
   <fieldset
     name="note"
     label="COM_RENTAL_HELLOWORLD_ADD_NOTE">
-            
     <field 
       name="subject"
       type="input"
       label="Note subject"
       class="input"
-      filter="string">
+      filter="string"
+      required="true">
     </field>
-  
     <field 
       name="body"
       type="textarea"
@@ -56,4 +53,9 @@
       filter="string">
     </field>
   </fieldset>
+  <field 
+    name="id"
+    type="hidden"
+    filter="int"
+  />
 </form>

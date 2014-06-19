@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       2.5
  */
-class RentalViewAdmin extends JViewLegacy
+class RentalViewProperty extends JViewLegacy
 {
 
   /**
@@ -39,7 +39,7 @@ class RentalViewAdmin extends JViewLegacy
 
     if ($canDo->get('core.edit'))
     {
-      JToolBarHelper::save('save', '', false);
+      JToolBarHelper::save('property.save');
     }
 
   }
@@ -55,11 +55,18 @@ class RentalViewAdmin extends JViewLegacy
     public function display($tpl = null)
     {
 
+      // Set the id we are editing
+      $this->id = JFactory::getApplication()->input->getInt('id', '');
+      
+      // Set the model
       $this->setModel(JModelLegacy::getInstance('Property', 'RentalModel'), true);
 
       // Initialise view variables.
-      $this->form = $this->get('AdminForm');
-
+      $this->form = $this->get('Form');
+      
+      // Get the id we are updating
+      
+      
       // Check for errors.
       if (count($errors = $this->get('Errors')))
       {

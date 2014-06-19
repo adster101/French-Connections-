@@ -24,10 +24,22 @@ class TicketsController extends JControllerLegacy
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		$view		= JFactory::getApplication()->input->getCmd('view', 'tickets');
+    $user = JFactory::getUser();
+    $input = JFactory::getApplication()->input;
+    $option = $input->getCmd('option', 'com_tickets');
+    $view = $input->getCmd('view', 'tickets');
+    
     JFactory::getApplication()->input->set('view', $view);
-
-		parent::display($cachable, $urlparams);
+    
+    if ($user->authorise($option . '.view.' . $view, $option))
+    {
+      parent::display($cachable, $urlparams);
+    }
+    else
+    {
+      $this->setRedirect('/');
+      $this->redirect();
+    }
 
 		return $this;
 	}

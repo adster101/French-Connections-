@@ -15,6 +15,18 @@
       
     />
     <field 
+      name="myfolder" 
+      type="folderlist" 
+      default="" 
+      label="Select a folder" 
+      directory="administrator/components/com_tickets/views" 
+      filter="" 
+      exclude="" 
+      stripext="" 
+      hide_default="true"
+    />
+    
+    <field 
       name="title"
       type="text"
       labelclass="control-label"
