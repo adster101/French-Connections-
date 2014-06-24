@@ -60,7 +60,7 @@ class RentalModelListingReview extends JModelAdmin
   public function getForm($data = array(), $loadData = true)
   {
 
-// Get the form.
+    // Get the form.
     $form = $this->loadForm('com_rental.approve_draft', 'approve_draft', array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))
@@ -79,7 +79,7 @@ class RentalModelListingReview extends JModelAdmin
 
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
 
-// Get the owner details etc
+    // Get the owner details etc
     $table = $this->getTable('Property', 'RentalTable');
 
     $property = $table->load($recordId);
@@ -123,7 +123,7 @@ class RentalModelListingReview extends JModelAdmin
   {
     $input = JFactory::getApplication()->input;
 
-// Get the primary key set in the model state
+    // Get the primary key set in the model state
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
     $layout = $input->get('layout', '', 'string');
     $unitId = $input->get('unit_id', '', 'int');
@@ -134,8 +134,25 @@ class RentalModelListingReview extends JModelAdmin
     if ($layout == 'unit')
     {
 
-// Must be reviewing a unit
+      // An array of keys to check using the htmldiff method
+      $keys_to_check = array(
+          'description'
+      );    // Must be reviewing a unit
       $unit_versions = $this->getUnitVersionDetail($unitId, '#__unit', '#__unit_versions', 'unit_id');
+      $unit_versions['unit'] = $this->getHtmlDiff($unit_versions, $keys_to_check);
+
+
+      // TO DO - The below needs to be a method
+      foreach ($unit_versions[0] as $k => $v)
+      {
+        $new_versions[$k] = array();
+        $new_versions[$k][] = $unit_versions[0][$k];
+        $new_versions[$k][] = (!empty($unit_versions[1][$k])) ? $unit_versions[1][$k] : '';
+        $other_array[] = $new_versions;
+        $new_versions = array();
+      }
+
+      $versions['unit'] = $other_array;
 
       foreach ($versions['unit'] as $key => $value)
       {
@@ -144,37 +161,56 @@ class RentalModelListingReview extends JModelAdmin
          * Get the images based on the version id we are looking at
          */
 
-//$images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
-//if (!$images)
-//{
-//continue;
-//}
-//$versions['images'][$value['id']] = $images;
+        $images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
+        if (!$images)
+        {
+        continue;
+        }
+        $versions['images'][$value['id']] = $images;
       }
     }
     else
     {
-// Fetch the latest two version of this property.
+      // Fetch the latest two version of this property.
       if (!$property_versions = $this->getPropertyVersionDetail($propertyId, '#__property', '#__property_versions', 'property_id'))
       {
         Throw new Exception('Problem fetching version detail', 500);
       }
 
-// An array of keys to check using the htmldiff method
-      $keys_to_check = array(
-          'location_details',
-          'video_url',
-          'security_deposit',
-          'evening_meal',
-          'additional_booking_info',
-          'terms_and_conditions'
-      );
-
       $property_versions = $this->decodeLocalAmenities($property_versions);
 
-// Get an array holding the two version of the property part of the listing      
-      $versions['property'] = $this->getItemDiff($property_versions, $keys_to_check);
+      // Get any html diffs if we have a new version
+      if (!empty($property_versions[1]))
+      {
+
+        // An array of keys to check using the htmldiff method
+        $keys_to_check = array(
+            'location_details',
+            'video_url',
+            'security_deposit',
+            'evening_meal',
+            'additional_booking_info',
+            'terms_and_conditions'
+        );
+
+        // Get an array holding the two version of the property part of the listing      
+        $property_versions = $this->getHtmlDiff($property_versions, $keys_to_check);
+      }
+
+      // TO DO - The below needs to be a method
+      foreach ($property_versions[0] as $k => $v)
+      {
+        $new_versions[$k] = array();
+        $new_versions[$k][] = $property_versions[0][$k];
+        $new_versions[$k][] = (!empty($property_versions[1][$k])) ? $property_versions[1][$k] : '';
+        $other_array[] = $new_versions;
+        $new_versions = array();
+      }
+
+      $versions['property'] = $other_array;
     }
+
+
 
     return $versions;
   }
@@ -191,7 +227,7 @@ class RentalModelListingReview extends JModelAdmin
    */
   public function getUnitVersionDetail($recordId)
   {
-// The following keys are passed to getHtmlDiff to highlight changes in the html
+    // The following keys are passed to getHtmlDiff to highlight changes in the html
     $keys_to_check = array(
         'unit_title',
         'description',
@@ -203,22 +239,29 @@ class RentalModelListingReview extends JModelAdmin
 
     $query = $db->getQuery(true);
 
-// Initialise the query.
+    // Initialise the query.
     $query->select('
-b.unit_id as `Unit ID`,
-b.property_id as `PRN`,
-b.unit_title as `Unit title`,
-b.description as `Description`
-');
+      b.unit_id,
+      b.property_id,
+      b.unit_title,
+      b.description,
+      b.accommodation_type, 
+      b.property_type,
+      b.occupancy,
+      b.single_bedrooms,
+      b.additional_price_notes,
+      b.linen_costs,
+      b.tariff_based_on
+      ');
 
     $query->from($db->quoteName('#__unit') . ' as a');
     $query->join('left', $db->quoteName('#__unit_versions') . ' as b on a.id = b.unit_id');
-//$query->join('left', $db->quoteName('#__classifications') . ' c on c.id = b.country');
-//$query->join('left', $db->quoteName('#__classifications') . ' d on d.id = b.area');
-//$query->join('left', $db->quoteName('#__classifications') . ' e on e.id = b.region');
-//$query->join('left', $db->quoteName('#__classifications') . ' f on f.id = b.department');
-//$query->join('left', $db->quoteName('#__classifications') . ' g on g.id = b.city');
-//$query->join('left', $db->quoteName('#__users') . ' u on u.id = b.modified_by');
+    //$query->join('left', $db->quoteName('#__classifications') . ' c on c.id = b.country');
+    //$query->join('left', $db->quoteName('#__classifications') . ' d on d.id = b.area');
+    //$query->join('left', $db->quoteName('#__classifications') . ' e on e.id = b.region');
+    //$query->join('left', $db->quoteName('#__classifications') . ' f on f.id = b.department');
+    //$query->join('left', $db->quoteName('#__classifications') . ' g on g.id = b.city');
+    //$query->join('left', $db->quoteName('#__users') . ' u on u.id = b.modified_by');
     $query->where('a.id = ' . (int) $recordId);
     $query->where('b.review in (0,1)');
 
@@ -226,15 +269,11 @@ b.description as `Description`
 
     $row = $db->loadAssocList();
 
-// Check that we have a result.
+    // Check that we have a result.
     if (empty($row))
     {
       return false;
     }
-
-
-
-    $versions['unit'] = $this->getItemDiff($unit_versions, $keys_to_check);
 
     return $row;
   }
@@ -256,41 +295,41 @@ b.description as `Description`
 
     $query = $db->getQuery(true);
 
-// Initialise the query.
+    // Initialise the query.
     $query->select('
-b.property_id,
-c.title,
-d.title,
-e.title,
-f.title,
-g.title,
-b.location_details,
-b.local_amenities,
-b.latitude,
-b.longitude,
-b.distance_to_coast,
-b.video_url,
-b.booking_form,
-b.deposit,
-b.security_deposit,
-b.payment_deadline,
-b.evening_meal,
-b.additional_booking_info,
-b.terms_and_conditions,
-b.use_invoice_details,
-b.first_name,
-b.surname,
-b.address,
-b.phone_1,
-b.phone_2,
-b.phone_3,
-b.fax,
-b.email_1,
-b.email_2,
-b.website,
-b.modified_on,
-u.name
-');
+      b.property_id,
+      c.title,
+      d.title,
+      e.title,
+      f.title,
+      g.title,
+      b.location_details,
+      b.local_amenities,
+      b.latitude,
+      b.longitude,
+      b.distance_to_coast,
+      b.video_url,
+      b.booking_form,
+      b.deposit,
+      b.security_deposit,
+      b.payment_deadline,
+      b.evening_meal,
+      b.additional_booking_info,
+      b.terms_and_conditions,
+      b.use_invoice_details,
+      b.first_name,
+      b.surname,
+      b.address,
+      b.phone_1,
+      b.phone_2,
+      b.phone_3,
+      b.fax,
+      b.email_1,
+      b.email_2,
+      b.website,
+      b.modified_on,
+      u.name
+    ');
 
     $query->from($db->quoteName('#__property') . ' as a');
     $query->join('left', $db->quoteName('#__property_versions') . ' as b on a.id = b.property_id');
@@ -316,24 +355,19 @@ u.name
     return $rows;
   }
 
-  public function getItemDiff($versions = array(), $keys_to_check = array())
+  public function getHtmlDiff($versions = array(), $keys_to_check = array())
   {
 
     $simplediff = new simplediff();
     $new_versions = array();
     $other_array = array();
-// If we only have one version then don't bother with the difference
-    if (count($versions) < 2)
-    {
-      $versions[] = array();
 
-      return $versions;
-    }
+
 
     $old_version = $versions[0];
-    $new_version = $versions[1];
+    $new_version = (!empty($versions[1])) ? $versions[1] : array();
 
-// Need to load the new version details here to replace those loaded here.
+    // Need to load the new version details here to replace those loaded here.
     foreach ($old_version as $key => $value)
     {
       if (in_array($key, $keys_to_check))
@@ -345,19 +379,7 @@ u.name
 
     $versions[1] = $new_version;
 
-
-    foreach ($versions[0] as $k => $v)
-    {
-      $new_versions[$k] = array();
-      $new_versions[$k][] = $versions[0][$k];
-      $new_versions[$k][] = $versions[1][$k];
-      $other_array[] = $new_versions;
-      $new_versions = array();
-    }
-
-
-
-    return $other_array;
+    return $versions;
   }
 
 }

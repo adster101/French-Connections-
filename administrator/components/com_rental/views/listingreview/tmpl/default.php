@@ -56,17 +56,19 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
             <?php foreach ($this->versions[$layout] as $key => $versions) : ?>
               <?php foreach ($versions as $field => $values) : ?>
                 <tr>
-                  <td>
+                  <td width='20%'>
                     <?php echo $this->escape($field); ?>
-                      <?php if (strcmp(trim($values[1]), trim($values[0])) != 0) : ?>
+                      <?php if (strcmp(trim($values[1]), trim($values[0])) != 0 && !empty($values[1])) : ?>
                         <span class="label label-important">*</span>
                       <?php endif; ?>
                   </td>
-                  <td>
+                  <td width='40%'>
                     <?php echo strip_tags($values[0]) ?>
                   </td>
-                  <td> 
-                     <?php echo $values[1] ?>
+                  <td width='40%'> 
+                    <?php if (!empty($values[1])) : ?>
+                     <?php echo strip_tags($values[1]) ?>
+                    <?php endif; ?>
 
                     <?php //if (array_key_exists($key, $this->versions[$layout][1])) : ?>
                     <?php //endif; ?>
