@@ -328,10 +328,17 @@ Joomla.submitbutton = function(task)
   {
     return false;
   }
+  else if (task == 'unitversions.add') 
+  { 
+    console.log(task);
+    jQuery('jform_tos').attr('required', '');
+    return true;
+  }
   else
   {
     var isValid = true;
     var action = task.split('.');
+    
     if (action[1] != 'cancel' && action[1] != 'close')
     {
       var forms = $$('form.form-validate');

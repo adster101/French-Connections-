@@ -64,13 +64,13 @@ $data['form'] = $this->form;
                   </td>
                 <tr>
                   <td colspan="7">
-                    <?php echo JHtml::_('general.button', 'btn btn-success pull-right', 'unitversions.add','icon icon-plus', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT'); ?>
-
+                    <a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_rental&task=unitversions.add&property_id=' . (int) $this->items[0]->id); ?>">
+                      <i class="icon icon-plus"></i>&nbsp;
+                      <?php echo JText::_('COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT'); ?>
+                    </a>
                   </td>
                 </tr>
                 </tr>
-
-              <?php else : ?>
               <?php endif; ?>
             <?php endforeach; ?>
           <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
@@ -87,10 +87,6 @@ $data['form'] = $this->form;
 
         <?php echo JHtml::_('form.token'); ?> .
       </form>
-
-    </div>
-    <div class="span2">
-
     </div>
   </div>
 

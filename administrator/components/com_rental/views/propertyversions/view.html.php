@@ -99,6 +99,7 @@ class RentalViewPropertyversions extends JViewLegacy {
       JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }
+    JToolbarHelper::help('', false, '/support/rental-property/1139-location-details');
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 

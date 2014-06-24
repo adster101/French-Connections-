@@ -85,24 +85,9 @@ class RentalViewListing extends JViewLegacy
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_RENTAL_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
     
+    // TO DO - For owners back should be to OA homepage
     JToolBarHelper::back('COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', '/administrator/index.php?option=com_rental');
-
-    if ($layout == 'default')
-    {
-      // Only show the add units button if there is at least one listing
-      if (count($this->items) > 0)
-      {
-
-
-
-        if ($canDo->get('core.create'))
-        {
-          //JToolBarHelper::addNew('unitversions.add', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
-        }
-
-        JToolbarHelper::help('asdas', true);
-      }
-    }
+    JToolbarHelper::help('', false, '/support');
 
     if ($layout == 'review')
     {

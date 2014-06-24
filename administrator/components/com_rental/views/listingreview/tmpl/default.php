@@ -12,6 +12,7 @@ $layout = $input->get('layout', '', 'string');
 $listing_id = $input->get('property_id', '', 'int');
 $unit_id = $input->get('unit_id', '', 'int');
 
+
 $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warning';
 ?>
 <form name='adminForm' id='adminForm' action='index.php?option=com_rental' class='form-validate' method='post'>
@@ -52,24 +53,23 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
           <th>Draft</th>
           </thead>
           <tbody>
-            <?php foreach ($this->versions[$layout] as $version) : ?>
-              <?php foreach ($version as $key => $value) : ?>
+            <?php foreach ($this->versions[$layout] as $key => $versions) : ?>
+              <?php foreach ($versions as $field => $values) : ?>
                 <tr>
-                  <td width="20%">
-                    <?php echo $key; ?>
-                    <?php if (count($this->versions[$layout][1])) : ?>
-                      <?php if (strcmp(trim($this->versions[$layout][1][$key]), trim($this->versions[$layout][0][$key])) != 0) : ?>
+                  <td>
+                    <?php echo $this->escape($field); ?>
+                      <?php if (strcmp(trim($values[1]), trim($values[0])) != 0) : ?>
                         <span class="label label-important">*</span>
                       <?php endif; ?>
-                    <?php endif; ?>
                   </td>
-                  <td width="40%">
-                    <?php echo strip_tags($this->versions[$layout][0][$key]) ?>
+                  <td>
+                    <?php echo strip_tags($values[0]) ?>
                   </td>
-                  <td width="40%">
-                    <?php if (array_key_exists($key, $this->versions[$layout][1])) : ?>
-                      <?php echo $this->versions[$layout][1][$key] ?>
-                    <?php endif; ?>
+                  <td> 
+                     <?php echo $values[1] ?>
+
+                    <?php //if (array_key_exists($key, $this->versions[$layout][1])) : ?>
+                    <?php //endif; ?>
                   </td>
                 </tr>
               <?php endforeach; ?>

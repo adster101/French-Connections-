@@ -111,7 +111,6 @@ class RentalViewTariffs extends JViewLegacy {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
-    $document->addScript(JURI::root() . "/media/fc/js/general.js");
     JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
     JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
     $document->addScript(JURI::root() . "/media/fc/js/general.js");

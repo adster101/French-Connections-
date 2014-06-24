@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class RentalViewListingreview extends JViewLegacy {
+class RentalViewListingreview extends JViewLegacy
+{
 
   /**
    * Method to display the view.
@@ -27,52 +28,41 @@ class RentalViewListingreview extends JViewLegacy {
    *
    * @since   2.5
    */
-  public function display($tpl = null) {
-
-    $this->id = JFactory::getApplication()->input->get('property_id', '', 'int');
+  public function display($tpl = null)
+  {
 
     // Get the input
     $input = JFactory::getApplication()->input;
-
-    // Determine the layout
-    $unitId = $input->get('unit_id', '', 'int');
-
+    $this->id = $input->get('property_id', '', 'int');
     $layout = $this->getLayout();
 
-    if ($layout == 'approve') {
-
+    if ($layout == 'approve')
+    {
       $this->form = $this->get('Form');
-    } else {
-
-      /*
-       * Get the unit list for this property
-       */
-      
+    }
+    else
+    {
       // Get the listing model which returns the list of units that make up a listing
       $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true)));
       $model = $this->getModel('Listing');
       $model->setState('com_rental.listing.id', $this->id);
       $this->units = $model->getItems();
 
-      /*
-       *  Get the appropriate diffs based on whether we have a unit ID or not 
-       */
+      // Get the appropriate diffs based on whether we have a unit ID or not 
       $this->versions = $this->get('ListingDiff');
 
-      /*
-       * If the new property version is empty then there is no change for this property
-       */
+      // If the new property version is empty then there is no change for this property
       $this->property_review = (empty($this->versions['property'][1])) ? 0 : 1;
     }
+
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode("\n", $errors));
       return false;
     }
 
-
     $this->addToolbar();
-
     $this->setDocument();
 
     parent::display($tpl);
@@ -81,19 +71,22 @@ class RentalViewListingreview extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
 
     /*
      * Get the layout we are dealing with
      */
     $layout = $this->getLayout();
 
-    if ($layout == 'approve') {
+    if ($layout == 'approve')
+    {
 
       JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES', $this->id));
       JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_APPROVE', false);
-      
-    } else {
+    }
+    else
+    {
 
       JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY', $this->id));
       JToolBarHelper::back('Back to property list', 'index.php?option=com_rental');
@@ -109,7 +102,8 @@ class RentalViewListingreview extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     
   }
 

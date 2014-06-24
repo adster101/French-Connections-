@@ -29,7 +29,7 @@ $data['form'] = $this->form;
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="j-main-container" class="span8">
+    <div id="j-main-container" class="span10">
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
@@ -66,7 +66,6 @@ $data['form'] = $this->form;
               <th colspan="2">
                 Accommodation units
               </th>
-
               <?php if ($canDo->get('core.edit.state')) : ?>
                 <th>
                   <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_ACTIVE'); ?>
@@ -105,17 +104,16 @@ $data['form'] = $this->form;
                   <td>
                     <?php echo JHtml::_('grid.id', $i, $item->unit_id); ?>
                   </td>
-
-
-
                 </tr>
               <?php else : ?>
               <?php endif; ?>
             <?php endforeach; ?>
             <tr>
               <td colspan="7">
-                <?php echo JHtml::_('general.button', 'btn btn-success pull-right', 'unitversions.add','icon icon-plus', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT'  ); ?>
-               
+                <a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_rental&task=unitversions.add&property_id=' . (int) $this->items[0]->id ); ?>">
+                  <i class="icon icon-plus"></i>&nbsp;
+                  <?php echo JText::_('COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT'); ?>
+                </a>
               </td>
             </tr>
           </tbody>
@@ -133,10 +131,5 @@ $data['form'] = $this->form;
         <input type="hidden" name="property_id" value="<?php echo $this->id ?>" />
         <?php echo JHtml::_('form.token'); ?>
       </form>
-
-    </div>
-
-    <div class="span2">
-      <p>Help (me)...</p>
-    </div>
+    </div>    
   </div>
