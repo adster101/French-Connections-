@@ -92,7 +92,7 @@ class RentalViewListings extends JViewLegacy
     // Add the custom snooze button
     if ($canDo->get('rental.listing.admin'))
     {
-      JToolbarHelper::custom('property.edit', 'pause', '', 'COM_RENTAL_SNOOZE', true);
+      JToolbarHelper::custom('property.edit', 'refresh', '', 'COM_RENTAL_UPDATE_PROPERTY', true);
     }
 
     if ($canDo->get('core.admin'))

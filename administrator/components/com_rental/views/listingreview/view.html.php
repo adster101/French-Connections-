@@ -47,7 +47,7 @@ class RentalViewListingreview extends JViewLegacy
       $model = $this->getModel('Listing');
       $model->setState('com_rental.listing.id', $this->id);
       $this->units = $model->getItems();
-
+      
       // Get the appropriate diffs based on whether we have a unit ID or not 
       $this->versions = $this->get('ListingDiff');
 
@@ -83,6 +83,8 @@ class RentalViewListingreview extends JViewLegacy
     {
 
       JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES', $this->id));
+      JToolBarHelper::back();
+
       JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_APPROVE', false);
     }
     else

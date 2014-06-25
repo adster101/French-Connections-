@@ -59,6 +59,85 @@ class RentalModelListing extends JModelList
     parent::populateState('a.id', 'asc');
   }
 
+  public function publishListing($items = array())
+  {
+
+    $db = JFactory::getDbo();
+
+    try {
+
+      // Start a db transaction so we can roll back if necessary
+      $db->transactionStart();
+
+      // Update the property versions 
+      if ($items[0]->property_review)
+      {
+
+        $query = $db->getQuery(true);
+        // Set an update statement - should only be here is there are two versions...
+        // Also updates the 'published on' date
+        $query->update('#__property_versions');
+        $query->set('
+          review = CASE review
+              WHEN 0 THEN -1
+              WHEN 1 THEN 0
+            END,
+            published_on = CASE review
+              WHEN 0 THEN now()
+            END
+        ');
+
+        // Do this for the property ID
+        $query->where('property_id=' . (int) $items[0]->id);
+
+        $db->setQuery($query);
+        $db->execute();
+      }
+
+      // Update the unit versions
+      foreach ($items as $unit)
+      {
+        if ($unit->unit_review)
+        {
+          $query = $db->getQuery(true);
+
+          $query->update('#__unit_versions');
+          $query->set('
+              review = CASE review
+                WHEN 0 THEN -1
+                WHEN 1 THEN 0
+              END,
+              published_on = CASE review
+                WHEN 0 THEN now()
+              END
+          ');
+          $query->where('unit_id=' . (int) $unit->unit_id);
+          $db->setQuery($query);
+          $db->execute();
+        }
+      }
+
+      // Lastly update the property review status 
+      $query = $db->getQuery(true);
+
+      $query->update('#__property');
+      $query->set('review =0');
+      $query->where('id=' . (int) $items[0]->id);
+
+      $db->setQuery($query);
+      $db->execute();
+
+      $db->transactionCommit();
+    } catch (Exception $e) {
+
+      $db->transactionRollback();
+
+      return false;
+    }
+
+    return true;
+  }
+
   /**
    * Method to get a store id based on model configuration state.
    *

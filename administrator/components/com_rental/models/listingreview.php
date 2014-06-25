@@ -40,8 +40,11 @@ class RentalModelListingReview extends JModelAdmin
       // For any amenities found html them up so they can be more easily checked.
       foreach ($amenities as $amenity => $text)
       {
-        $html .= '<p><strong>' . JText::_('COM_ACCOMMODATION_' . strtoupper($amenity)) . '</strong>';
-        $html .= JString::ucwords($text) . '</p>';
+        if ($text)
+        {
+          $html .= '<p><strong>' . JText::_('COM_ACCOMMODATION_' . strtoupper($amenity)) . '</strong>';
+          $html .= JString::ucwords($text) . '</p>';
+        }
       }
 
       $property_versions[$k]['local_amenities'] = $html;
@@ -130,51 +133,107 @@ class RentalModelListingReview extends JModelAdmin
     $propertyId = $input->get('property_id', '', 'int');
     $versions = array();
     $unit_versions = array();
+    $model = JModelLegacy::getInstance('UnitVersions', 'RentalModel', $config = array('ignore_request' => true));
 
     if ($layout == 'unit')
     {
 
-      // An array of keys to check using the htmldiff method
-      $keys_to_check = array(
-          'description'
-      );    // Must be reviewing a unit
-      $unit_versions = $this->getUnitVersionDetail($unitId, '#__unit', '#__unit_versions', 'unit_id');
-      $unit_versions['unit'] = $this->getHtmlDiff($unit_versions, $keys_to_check);
+      // Get the unit versions associated with the unit being reviewed
+      if (!$unit_versions = $this->getUnitVersionDetail($unitId))
+      {
+        Throw new Exception('Problem fetching unit version detail', 500);
+      }
 
+      foreach ($unit_versions as $key => $value)
+      {
+        // Get the images based on the version id we are looking at
+        $images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
+        $versions['images'][] = $images;
+      }
+
+      if (count($versions['images']) == 2)
+      {
+
+
+        $simplediff = new simplediff();
+
+        // Contains all images in the new version
+        $new_version_images = array();
+        $old_version_images = array();
+
+        foreach ($versions['images'][1] as $key => $image)
+        {
+          $new_version_images[$image['image_file_name']] = array();
+          $new_version_images[$image['image_file_name']]['position'] = $key;
+          $new_version_images[$image['image_file_name']]['caption'] = $image['caption'];
+        }
+
+        foreach ($versions['images'][0] as $key => $image)
+        {
+          $old_version_images[$image['image_file_name']] = array();
+          $old_version_images[$image['image_file_name']]['position'] = $key;
+          $old_version_images[$image['image_file_name']]['caption'] = $image['caption'];
+        }
+
+        // $v contains an array of images 
+        foreach ($versions['images'][0] as $key => $image)
+        {
+          // Deals with diffing the captions
+          if (array_key_exists($image['image_file_name'], $new_version_images))
+          {
+            $image['deleted'] = false;
+            // Image is present in both versions
+            $old_caption = $image['caption'];
+            $new_caption = $new_version_images[$image['image_file_name']]['caption'];
+
+            // Get a diff on the two captions
+            $diff = $simplediff->htmldiff($old_caption, $new_caption);
+
+            // Store the diff against the new image array
+            $versions['images'][1][$new_version_images[$image['image_file_name']]['position']]['diff'] = $diff;
+          }
+
+          if (!array_key_exists($image['image_file_name'], $new_version_images))
+          {
+            $image['deleted'] = true;
+            // Image has been deleted, need to add it to new version images for completeness
+            $versions['images'][0][$key] = $image;
+          }
+        }
+
+        foreach ($versions['images'][1] as $key => $image)
+        {
+          if (!array_key_exists($image['image_file_name'], $old_version_images))
+          {
+            $image['added'] = true;
+            $versions['images'][1][$key] = $image;
+          }
+        }
+      }
+
+
+
+      // Get an html based diff of all the fields.
+      $unit_versions_diff = $this->getHtmlDiff($unit_versions);
 
       // TO DO - The below needs to be a method
       foreach ($unit_versions[0] as $k => $v)
       {
         $new_versions[$k] = array();
-        $new_versions[$k][] = $unit_versions[0][$k];
-        $new_versions[$k][] = (!empty($unit_versions[1][$k])) ? $unit_versions[1][$k] : '';
+        $new_versions[$k][] = $unit_versions_diff[0][$k];
+        $new_versions[$k][] = (!empty($unit_versions_diff[1][$k])) ? $unit_versions_diff[1][$k] : '';
         $other_array[] = $new_versions;
         $new_versions = array();
       }
 
       $versions['unit'] = $other_array;
-
-      foreach ($versions['unit'] as $key => $value)
-      {
-
-        /*
-         * Get the images based on the version id we are looking at
-         */
-
-        $images = (array_key_exists('id', $value)) ? $model->getImages($value['id']) : array();
-        if (!$images)
-        {
-        continue;
-        }
-        $versions['images'][$value['id']] = $images;
-      }
     }
     else
     {
       // Fetch the latest two version of this property.
-      if (!$property_versions = $this->getPropertyVersionDetail($propertyId, '#__property', '#__property_versions', 'property_id'))
+      if (!$property_versions = $this->getPropertyVersionDetail($propertyId))
       {
-        Throw new Exception('Problem fetching version detail', 500);
+        Throw new Exception('Problem fetching property version detail', 500);
       }
 
       $property_versions = $this->decodeLocalAmenities($property_versions);
@@ -182,19 +241,8 @@ class RentalModelListingReview extends JModelAdmin
       // Get any html diffs if we have a new version
       if (!empty($property_versions[1]))
       {
-
-        // An array of keys to check using the htmldiff method
-        $keys_to_check = array(
-            'location_details',
-            'video_url',
-            'security_deposit',
-            'evening_meal',
-            'additional_booking_info',
-            'terms_and_conditions'
-        );
-
         // Get an array holding the two version of the property part of the listing      
-        $property_versions = $this->getHtmlDiff($property_versions, $keys_to_check);
+        $property_versions = $this->getHtmlDiff($property_versions);
       }
 
       // TO DO - The below needs to be a method
@@ -209,8 +257,6 @@ class RentalModelListingReview extends JModelAdmin
 
       $versions['property'] = $other_array;
     }
-
-
 
     return $versions;
   }
@@ -227,40 +273,46 @@ class RentalModelListingReview extends JModelAdmin
    */
   public function getUnitVersionDetail($recordId)
   {
-    // The following keys are passed to getHtmlDiff to highlight changes in the html
-    $keys_to_check = array(
-        'unit_title',
-        'description',
-        'additional_price_notes'
-    );
 
     $db = JFactory::getDbo();
-
-
     $query = $db->getQuery(true);
 
     // Initialise the query.
     $query->select('
+      b.id,
       b.unit_id,
       b.property_id,
       b.unit_title,
       b.description,
-      b.accommodation_type, 
-      b.property_type,
+      d.title as accommodation_type, 
+      e.title as property_type,
       b.occupancy,
       b.single_bedrooms,
+      b.double_bedrooms,
+      b.triple_bedrooms,
+      b.quad_bedrooms,
+      b.twin_bedrooms,
+      b.childrens_beds,
+      b.cots,
+      b.extra_beds,
+      b.bathrooms,
+      b.toilets,
       b.additional_price_notes,
+      b.base_currency,
       b.linen_costs,
-      b.tariff_based_on
-      ');
+      f.title as tariff_based_on,
+      g.title as changeover_day
+    ');
 
     $query->from($db->quoteName('#__unit') . ' as a');
     $query->join('left', $db->quoteName('#__unit_versions') . ' as b on a.id = b.unit_id');
-    //$query->join('left', $db->quoteName('#__classifications') . ' c on c.id = b.country');
-    //$query->join('left', $db->quoteName('#__classifications') . ' d on d.id = b.area');
-    //$query->join('left', $db->quoteName('#__classifications') . ' e on e.id = b.region');
-    //$query->join('left', $db->quoteName('#__classifications') . ' f on f.id = b.department');
-    //$query->join('left', $db->quoteName('#__classifications') . ' g on g.id = b.city');
+    $query->join('left', $db->quoteName('#__attributes', 'd') . ' on d.id = b.accommodation_type');
+    $query->join('left', $db->quoteName('#__attributes', 'e') . ' on e.id = b.property_type');
+    $query->join('left', $db->quoteName('#__attributes', 'f') . ' on f.id = b.tariff_based_on');
+    $query->join('left', $db->quoteName('#__attributes', 'g') . ' on g.id = b.changeover_day');
+
+
+
     //$query->join('left', $db->quoteName('#__users') . ' u on u.id = b.modified_by');
     $query->where('a.id = ' . (int) $recordId);
     $query->where('b.review in (0,1)');
@@ -355,30 +407,45 @@ class RentalModelListingReview extends JModelAdmin
     return $rows;
   }
 
-  public function getHtmlDiff($versions = array(), $keys_to_check = array())
+  /**
+   * Method takes an array containing one or two elements corresponding to different versions of
+   * either a property or unit and generates an 'html' diff of the two with insertions wrapped in 
+   * <ins> and deletions wrapped in <del>. If no new version then it's created but all elements
+   * are set to null.
+   * 
+   * @param array $versions
+   * @param type $keys_to_check
+   * @return type
+   */
+  public function getHtmlDiff($versions = array())
   {
 
+    // Get an instance of our simple diff class
     $simplediff = new simplediff();
-    $new_versions = array();
-    $other_array = array();
 
-
-
+    // 
     $old_version = $versions[0];
     $new_version = (!empty($versions[1])) ? $versions[1] : array();
 
-    // Need to load the new version details here to replace those loaded here.
+    // Loop over the old version array
     foreach ($old_version as $key => $value)
     {
-      if (in_array($key, $keys_to_check))
+      if (empty($new_version[$key]))
+      {
+        // If we're not looking at a new version, just set it to empty
+        $new_version[$key] = '';
+      }
+      else
       {
         $diff = $simplediff->htmldiff(strip_tags($old_version[$key]), strip_tags($new_version[$key]));
-        $new_version[$key] = $diff;
+        $new_version[$key] = trim($diff);
+        $old_version[$key] = strip_tags($old_version[$key]);
       }
     }
 
+    // Update the 'diffed' versions in the version array
     $versions[1] = $new_version;
-
+    $versions[0] = $old_version;
     return $versions;
   }
 

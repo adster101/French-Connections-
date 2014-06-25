@@ -12,7 +12,6 @@ $layout = $input->get('layout', '', 'string');
 $listing_id = $input->get('property_id', '', 'int');
 $unit_id = $input->get('unit_id', '', 'int');
 
-
 $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warning';
 ?>
 <form name='adminForm' id='adminForm' action='index.php?option=com_rental' class='form-validate' method='post'>
@@ -58,16 +57,16 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
                 <tr>
                   <td width='20%'>
                     <?php echo $this->escape($field); ?>
-                      <?php if (strcmp(trim($values[1]), trim($values[0])) != 0 && !empty($values[1])) : ?>
-                        <span class="label label-important">*</span>
-                      <?php endif; ?>
+                    <?php if (strcmp(trim($values[1]), trim($values[0])) != 0 && !empty($values[1])) : ?>
+                      <span class="label label-important">*</span>
+                    <?php endif; ?>
                   </td>
                   <td width='40%'>
                     <?php echo strip_tags($values[0]) ?>
                   </td>
                   <td width='40%'> 
                     <?php if (!empty($values[1])) : ?>
-                     <?php echo strip_tags($values[1]) ?>
+                      <?php echo strip_tags($values[1], "<ins>,<del>") ?>
                     <?php endif; ?>
 
                     <?php //if (array_key_exists($key, $this->versions[$layout][1])) : ?>
@@ -81,19 +80,33 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
         <?php if (array_key_exists('images', $this->versions)) : ?>
           <table class="table table-bordered table-striped">
             <tr>
-              <td width="20%">Images</td>
-              <?php foreach ($this->versions[$layout] as $version) : ?>
-                <?php if (array_key_exists($version['id'], $this->versions['images'])) : ?>
-                  <td width="40%">
-                    <?php foreach ($this->versions['images'][$version['id']] as $images) : ?>
-                      <p>
-                        <img src=<?php echo '/images/property/' . $unit_id . '/thumbs/' . $images['image_file_name']; ?> /> 
-                        <span><?php echo $images['caption'] ?></span>
-                      </p>
-                    <?php endforeach; ?>
-                  </td>
-                <?php endif; ?> 
-              <?php endforeach; ?>
+              <td width="20%">Images</td> 
+              <td width="40%">
+                <?php foreach ($this->versions['images'][0] as $version) : ?>
+                  <p>
+                    <img src=<?php echo '/images/property/' . $unit_id . '/thumbs/' . $version['image_file_name']; ?> />
+                    <?php if (!empty($version['deleted'])) : ?>
+                      <span class="label label-warning">Deleted</span>
+                    <?php endif; ?>
+                    <span><?php echo $this->escape($version['caption']) ?></span>
+                  </p>
+                <?php endforeach; ?>
+              </td>
+              <td width="40%">
+                <?php if (!empty($this->versions['images'][1])) : ?>
+                  <?php foreach ($this->versions['images'][1] as $version) : ?>
+                    <p>
+                      <img src=<?php echo '/images/property/' . $unit_id . '/thumbs/' . $version['image_file_name']; ?> /> 
+                      <?php if (!empty($version['added'])) : ?>
+                        <span class="label label-success">Added</span>
+                      <?php endif; ?>            
+                      <span>
+                        <?php echo (!empty($version['diff'])) ? $version['diff'] : $version['caption'] ?>
+                      </span>
+                    </p>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </td>
             </tr>
           </table>         
         <?php endif; ?>

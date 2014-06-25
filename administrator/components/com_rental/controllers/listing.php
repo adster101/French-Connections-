@@ -36,7 +36,6 @@ class RentalControllerListing extends JControllerForm
     }
 
     $this->registerTask('checkin', 'review');
-    
   }
 
   public function accountupdate()
@@ -150,7 +149,10 @@ class RentalControllerListing extends JControllerForm
    */
   public function approve()
   {
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');
 
+    // TO DO - Add permissions check here
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
 
@@ -199,15 +201,26 @@ class RentalControllerListing extends JControllerForm
    */
   public function publish()
   {
-
-    $model = $this->getModel('Property', 'RentalModel');
-    $table = $model->getTable();
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');
 
     $input = JFactory::getApplication()->input;
     $recordId = $input->get('id', '', 'int');
+    $model = $this->getModel();
+    $table = $model->getTable('Property', 'RentalTable');
     $checkin = property_exists($table, 'checked_out');
 
-    $recordId = $input->get('id', '', 'int');
+    $model->setState('com_rental.listing.id', $recordId);
+
+    $items = $model->getItems();
+
+    // Updates the review status for all units and property
+    $publish = $model->publishListing($items);
+
+    if ($publish)
+    {
+      // Send confirmation email
+    }
 
     $this->setRedirect(
             JRoute::_(
@@ -224,6 +237,8 @@ class RentalControllerListing extends JControllerForm
    */
   public function review()
   {
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');
 
     // Get the user
     $user = JFactory::getUser();
@@ -293,6 +308,8 @@ class RentalControllerListing extends JControllerForm
    */
   public function release()
   {
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');
 
     // Get the user
     $user = JFactory::getUser();

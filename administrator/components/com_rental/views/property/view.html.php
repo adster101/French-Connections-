@@ -37,48 +37,47 @@ class RentalViewProperty extends JViewLegacy
 
     JToolBarHelper::title(JText::_('COM_RENTAL_MANAGER_HELLOWORLDS'), 'helloworld');
 
+    JToolBarHelper::back();
+
     if ($canDo->get('core.edit'))
     {
       JToolBarHelper::save('property.save');
     }
-
   }
-    /**
-     * Override the display method for the view.
-     *
-     * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
-     *
-     * @return  mixed  A string if successful, otherwise a JError object.
-     *
-     * @since   2.5
-     */
-    public function display($tpl = null)
+
+  /**
+   * Override the display method for the view.
+   *
+   * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+   *
+   * @return  mixed  A string if successful, otherwise a JError object.
+   *
+   * @since   2.5
+   */
+  public function display($tpl = null)
+  {
+
+    // Set the id we are editing
+    $this->id = JFactory::getApplication()->input->getInt('id', '');
+
+    // Set the model
+    $this->setModel(JModelLegacy::getInstance('Property', 'RentalModel'), true);
+
+    // Initialise view variables.
+    $this->form = $this->get('Form');
+
+    // Get the id we are updating
+    // Check for errors.
+    if (count($errors = $this->get('Errors')))
     {
-
-      // Set the id we are editing
-      $this->id = JFactory::getApplication()->input->getInt('id', '');
-      
-      // Set the model
-      $this->setModel(JModelLegacy::getInstance('Property', 'RentalModel'), true);
-
-      // Initialise view variables.
-      $this->form = $this->get('Form');
-      
-      // Get the id we are updating
-      
-      
-      // Check for errors.
-      if (count($errors = $this->get('Errors')))
-      {
-        throw new Exception(implode("\n", $errors), 500);
-      }
-
-      // Set the toolbar
-      $this->addToolBar();
-
-      parent::display($tpl);
+      throw new Exception(implode("\n", $errors), 500);
     }
 
+    // Set the toolbar
+    $this->addToolBar();
+
+    parent::display($tpl);
   }
 
-  
+}
+
