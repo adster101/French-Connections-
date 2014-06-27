@@ -5,6 +5,8 @@ defined('_JEXEC') or die('Restricted access');
 // import the Joomla modellist library
 jimport('joomla.application.component.modellist');
 
+// TO DO - Merge this model with 'listingreview' model which uses JModelAdmin as base.
+
 /**
  * HelloWorldList Model
  */
@@ -59,6 +61,12 @@ class RentalModelListing extends JModelList
     parent::populateState('a.id', 'asc');
   }
 
+  /**
+   * Controller action to publish a listing. Activated from the PFR 'approve' view
+   * 
+   * @param type $items
+   * @return boolean
+   */
   public function publishListing($items = array())
   {
 
@@ -121,7 +129,7 @@ class RentalModelListing extends JModelList
       $query = $db->getQuery(true);
 
       $query->update('#__property');
-      $query->set('review =0');
+      $query->set('review = 0');
       $query->where('id=' . (int) $items[0]->id);
 
       $db->setQuery($query);
@@ -135,6 +143,33 @@ class RentalModelListing extends JModelList
       return false;
     }
 
+    return true;
+  }
+
+  public function sendApprovalEmail($listing = array(), $data = array())
+  {
+
+    $app = JFactory::getApplication();
+    $owner_email = (JDEBUG) ? $app->getCfg('mailfrom','adamrifat@frenchconnections.co.uk') : $listing->email;
+    $owner_name = $data['firstname'] . ' ' . $data['surname'];
+    $mailfrom = $app->getCfg('mailfrom');
+    $fromname = $app->getCfg('fromname');
+    $body = $data['body'];
+    $subject = JText::sprintf('COM_RENTAL_APPROVE_CHANGES_CONFIRMATION_SUBJECT', $data['firstname'], $listing[0]->id);
+    $mail = JFactory::getMailer();
+    
+    $mail->addRecipient($owner_email, $owner_name);
+    $mail->addReplyTo(array($mailfrom, $fromname));
+    $mail->setSender(array($mailfrom, $fromname));
+    $mail->setSubject($subject);
+    $mail->setBody($body);
+    $mail->isHtml(true);
+
+    if (!$mail->Send())
+    {
+      return false;
+    }
+    
     return true;
   }
 
@@ -195,8 +230,6 @@ class RentalModelListing extends JModelList
         b.use_invoice_details,
         b.first_name,
         b.surname,
-        b.phone_1,
-        b.email_1,
         e.review as unit_review,
         -- b.title,
         a.created_by,
@@ -209,7 +242,10 @@ class RentalModelListing extends JModelList
         d.availability_last_updated_on,
         e.accommodation_type,
         e.created_on,
-        g.vat_status,
+        g.vat_status,  
+        g.phone_1,
+        g.email_alt,
+        h.email,
         base_currency,
         tariff_based_on,
         (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
@@ -241,6 +277,7 @@ class RentalModelListing extends JModelList
     }
 
     $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
+    $query->join('left', '#__users h on a.created_by = h.id');
 
     $query->where('a.id = ' . (int) $id);
     $query->order('ordering');

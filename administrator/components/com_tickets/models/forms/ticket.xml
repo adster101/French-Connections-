@@ -12,18 +12,6 @@
       labelclass="control-label"
       description="JGLOBAL_FIELD_ID_DESC"
       readonly="true"
-      
-    />
-    <field 
-      name="myfolder" 
-      type="folderlist" 
-      default="" 
-      label="Select a folder" 
-      directory="administrator/components/com_tickets/views" 
-      filter="" 
-      exclude="" 
-      stripext="" 
-      hide_default="true"
     />
     
     <field 

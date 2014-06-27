@@ -72,8 +72,37 @@
       validate="nonzero"
       filter="int">
       <option value="">JSELECT</option>
+    </field> 
+    <field
+      name="bathrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="true"
+      filter="int">
+      <option value="">JSELECT</option>
     </field>
-
+    <field
+      name="toilets"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      required="false"
+      filter="int">
+      <option value="0">JSELECT</option>
+    </field>
     <field
       name="single_bedrooms"
       type="integer"
@@ -196,36 +225,7 @@
       filter="int">
       <option value="">JSELECT</option>
     </field>
-    <field
-      name="bathrooms"
-      type="integer"
-      first="1"
-      last="10"
-      step="1"
-      label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
-      description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
-      class="bedrooms-select input-small"
-      validate="nonzero"
-      labelclass="control-label"
-      required="true"
-      filter="int">
-      <option value="">JSELECT</option>
-    </field>
-    <field
-      name="toilets"
-      type="integer"
-      first="1"
-      last="10"
-      step="1"
-      label="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_LABEL"
-      description="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
-      class="bedrooms-select input-small"
-      validate="nonzero"
-      labelclass="control-label"
-      required="false"
-      filter="int">
-      <option value="0">JSELECT</option>
-    </field>
+ 
   </fieldset>
 
 

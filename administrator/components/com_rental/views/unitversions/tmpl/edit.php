@@ -15,7 +15,7 @@ $userId = $user->get('id');
 $data = array('item' => $this->item, 'progress' => $this->progress);
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+<form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
@@ -61,100 +61,18 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
             </div>
         </fieldset>
 
-        <fieldset class="adminform form-vertical">
+        <fieldset class="adminform ">
           <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_OCCUPANCY_DETAILS', $this->item->unit_title); ?></legend>
-          <div class="row-fluid">
-            <div class="span2">
+          <?php foreach ($this->form->getFieldset('occupancy') as $field) : ?>
+            <div class="bedrooms-container">
               <div class="control-group">
-                <?php echo $this->form->getLabel('occupancy'); ?>
+                <?php echo $field->label; ?>
                 <div class="controls">
-                  <?php echo $this->form->getInput('occupancy'); ?>
+                  <?php echo $field->input; ?>
                 </div>
               </div>
             </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('single_bedrooms'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('single_bedrooms'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('double_bedrooms'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('double_bedrooms'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('triple_bedrooms'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('triple_bedrooms'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('quad_bedrooms'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('quad_bedrooms'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('twin_bedrooms'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('twin_bedrooms'); ?>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row-fluid">
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('childrens_beds'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('childrens_beds'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('cots'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('cots'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('extra_beds'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('extra_beds'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('bathrooms'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('bathrooms'); ?>
-                </div>
-              </div>
-            </div>
-            <div class="span2">
-              <div class="control-group">
-                <?php echo $this->form->getLabel('toilets'); ?>
-                <div class="controls">
-                  <?php echo $this->form->getInput('toilets'); ?>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php endforeach; ?>
         </fieldset>
         <fieldset>
           <legend><?php echo JText::sprintf('COM_RENTAL_FACILITIES_LEGEND', $this->item->unit_title); ?></legend>

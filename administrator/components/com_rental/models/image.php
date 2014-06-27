@@ -46,7 +46,6 @@ class RentalModelImage extends JModelAdmin {
     $db->transactionStart();
     $image_profiles = array('', 'gallery', 'thumb', 'thumbs');
     $image_file_path = '';
-    $image = '';
 
     try {
 
@@ -64,15 +63,15 @@ class RentalModelImage extends JModelAdmin {
         $path = JPATH_SITE . '/images/property/' . $table->unit_id . '/';
         // Delete the actual image file from the file system
 
-
-        foreach ($image_profiles as $profile) {
-          $image_file_path = $path . $profile . '/' . $table->image_file_name;
-          if (JFile::exists($image_file_path)) {
-            if (!JFile::delete($image_file_path)) {
-              Throw new Exception('Problem deleting image from file system');
-            }
-          }
-        }
+        // This is actually a bad idea as previous versions might need images at some point
+        //foreach ($image_profiles as $profile) {
+          //$image_file_path = $path . $profile . '/' . $table->image_file_name;
+          //if (JFile::exists($image_file_path)) {
+            //if (!JFile::delete($image_file_path)) {
+              //Throw new Exception('Problem deleting image from file system');
+            //}
+          //}
+        //}
       }
     } catch (Exception $e) {
 

@@ -112,7 +112,6 @@ class RentalControllerListing extends JControllerForm
     $userId = $user->get('id');
     $ownerId = '';
 
-    // Check that this property is not checked out already
     // Check general edit permission first.
     if ($user->authorise('core.edit', $this->extension))
     {
@@ -204,28 +203,92 @@ class RentalControllerListing extends JControllerForm
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
 
-    $input = JFactory::getApplication()->input;
-    $recordId = $input->get('id', '', 'int');
-    $model = $this->getModel();
-    $table = $model->getTable('Property', 'RentalTable');
-    $checkin = property_exists($table, 'checked_out');
-
-    $model->setState('com_rental.listing.id', $recordId);
-
-    $items = $model->getItems();
-
-    // Updates the review status for all units and property
-    $publish = $model->publishListing($items);
-
-    if ($publish)
+    // Authorisation check. Check that this user is allowed to publish
+    if (!$this->allowView())
     {
-      // Send confirmation email
+      $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . $this->getRedirectToListAppend(), false
+              )
+      );
+
+      return false;
+    }
+    
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $recordId = $input->get('id', '', 'int');
+    $data = $input->get('jform', '', array());
+    
+    // Get the various models we will be using
+    $model = $this->getModel();
+    $model->setState('com_rental.listing.id', $recordId);
+    $property_model = $this->getModel('Property', 'RentalModel');
+    $listingreview_model = $this->getModel('ListingReview', 'RentalModel');
+
+    // Validate the posted data
+    $form = $listingreview_model->getForm();
+
+    // Test whether the data is valid.
+    $validData = $listingreview_model->validate($form, $data);
+
+    // Check for validation errors.
+    if ($validData === false)
+    {
+      // Get the validation messages.
+      $errors = $model->getErrors();
+
+      // Push up to three validation messages out to the user.
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if (($errors[$i]) instanceof Exception)
+        {
+          $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+        }
+        else
+        {
+          $app->enqueueMessage($errors[$i], 'warning');
+        }
+      }
+
+      // Redirect back to the edit screen.
+      $this->setRedirect(
+              JRoute::_('index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . (int) $recordId , false)
+      );
+
+      return false;
     }
 
+    // Get Items returns an array of units which represents the listing
+    $listing = $model->getItems();
+
+    // Updates the review status for all units and property
+    $publish = $model->publishListing($listing);
+
+    if (!$publish)
+    {
+      // TO DO - Log and determine action
+      return false;
+    }
+
+    // Get a new instance of the properyt model and checkin the record
+    $property_model->checkin(array($recordId));
+
+    // Send the confirmation email
+    $mail = $model->sendApprovalEmail($listing, $validData);
+    
+    // Send confirmation email
+    $msg = JText::sprintf('COM_RENTAL_PROPERTY_PUBLISHED', $listing[0]->id);
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . $recordId, false
-            )
+                    'index.php?option=' . $this->option, false
+            ), 
+            $msg, 
+            'success'
     );
     return true;
   }

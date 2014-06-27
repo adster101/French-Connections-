@@ -70,11 +70,11 @@ abstract class RentalHelper {
 
       $unit->contact_details = true;
     }
-
+    var_dump($progress);
     if (!$progress[0]->use_invoice_details &&
             empty($progress[0]->first_name) &&
             empty($progress[0]->surname) &&
-            empty($progress[0]->email_1) &&
+            empty($progress[0]->email_alt) &&
             empty($progress[0]->phone_1)
     ) {
       $progress[0]->contact_details = false;
