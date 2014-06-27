@@ -86,7 +86,7 @@
 // Icon Font
 @import "icomoon.less";
 
-.navbar .nav > li > a[href*="index.php?option=com_enquiries"]:before, a.latest-enquiries:before {
+.navbar .nav > li > a[href*="index.php?option=com_enquiries"]:before, a[href*="index.php?option=com_enquiries"]:before {
   font-family:icomoon;
   content:"\4d  ";
 }
@@ -96,6 +96,11 @@ a[href*="index.php?option=com_stats"]:before {
   content:"\76  ";
 }
 
+a[href*="index.php?option=com_rental&view=marketing"]:before {
+  font-family:icomoon;
+  content:"k";
+
+}
 a[href*="index.php?option=com_rental&task=propertyversions.add"]:before {
   font-family:icomoon;
   content:"\5d  ";
@@ -119,6 +124,7 @@ ins {
   background:green;
 }
 
+// Applies to any screen width above 1024px, I think
 fieldset .checkboxes > ul li, .tariffs-container, .bedrooms-container {
   float:left;
   width:33%;
@@ -133,32 +139,68 @@ fieldset .checkboxes > ul li, .tariffs-container, .bedrooms-container {
   margin-bottom:0;
 } 
 
-@media screen and (max-width: 1024px) {
-fieldset .checkboxes > ul li, .js-stools-container-filters > .filter-container {
+.listing-container-wide,
+.listing-image-container
+{
+  
   float:left;
-  width:33%;
-}     
+  margin:0 10px 10px 0;
+}
 
+.listing-container-narrow-links
+{
+  float:right;
+}
 
+// Applies to screen widths up to 1024px
+@media screen and (max-width: 1024px) 
+{
+  fieldset .checkboxes > ul li, .js-stools-container-filters > .filter-container 
+  {
+    float:left;
+    width:33%;
+  }     
 
 }
 
-@media screen and (max-width: 720px) {
-fieldset .checkboxes > ul li, .bedrooms-container  {
-  float:left;
-  width:50%;
-}     
+@media screen and (max-width: 720px) 
+{
+  fieldset .checkboxes > ul li, .bedrooms-container  
+  {
+    float:left;
+    width:50%;
+  }     
+
+  .listing-container-narrow-links
+  {
+    float:left;
+    width:100%;
+    border-top:1px solid @grayLighter;
+    padding-top:10px;
+
+    p > {
+      display:inline-block;
+      width:30%;
+    }
+  }
 }
 
-@media screen and (max-width: 480px) {
-fieldset .checkboxes > ul li, .bedrooms-container  {
-  float:none;
-  width:100%;
-}     
+@media screen and (max-width: 480px) 
+{
+  fieldset .checkboxes > ul li, .bedrooms-container  
+  {
+    float:none;
+    width:100%;
+  }     
+
+  .listing-container-narrow-links,
+  .listing-image-container,
+  .listing-container-wide
+  {
+    float:none;
+    width:100%;
+  }
 }
-
-
-
 
 
 /* Panel styles */

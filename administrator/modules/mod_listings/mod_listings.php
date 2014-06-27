@@ -8,6 +8,9 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
+
+$lang = JFactory::getLanguage();
+$lang->load('com_rental');
 // Register the Helloworld helper file
 JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
@@ -21,7 +24,9 @@ JLoader::register('JHtmlProperty', JPATH_ADMINISTRATOR . '/components/com_rental
 require_once __DIR__ . '/helper.php';
 
 // Get the listings for this owner
-$items = ModListingHelper::getList($params);
+$items = ModListingHelper::getList();
 
+// Process the property list into a more useful object
+$listings = ModListingHelper::getPropertyList($items);
 
 require JModuleHelper::getLayoutPath('mod_listings', $params->get('layout', 'default'));

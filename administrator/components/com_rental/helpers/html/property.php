@@ -140,7 +140,7 @@ class JHtmlProperty
    *
    * @since  3.0
    */
-  public static function reviewStates($checked_out = 0)
+  public static function reviewStates()
   {
 
 
@@ -323,7 +323,7 @@ class JHtmlProperty
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
-  public static function renewalButton($days = '', $id = '', $review = 0, $canReview = false)
+  public static function renewalButton($days = '', $id = '', $review = 0)
   {
 
     // Array of image, task, title, action.
@@ -469,6 +469,72 @@ class JHtmlProperty
             . JText::_($text)
             . '</button>';
 
+    return $html;
+  }
+
+  /*
+   * A generic make button function button
+   *
+   *
+   */
+
+  public static function quicklink($title = '', $url = '', $text = '')
+  {
+
+    $html = '';
+    $html .= '<p>'
+            . '<a title="' . JText::_($title) . '" href="' . $url . '">'
+            . JText::_($text)
+            . '</a>'
+            . '</p>';
+    return $html;
+  }
+
+  /*
+   * A generic make button function button
+   *
+   *
+   */
+
+  public static function note($msgClass = 'alert alert-danger', $msg = '')
+  {
+    $html = '';
+    $html .= '<div class="' . $msgClass . '">' . JText::_($msg) . '</div>';
+    return $html;
+  }
+
+  /*
+   * A generic make button function button
+   *
+   *
+   */
+
+  public static function locked($msg)
+  {
+    $html = '';
+    $html .= '<span class="btn-primary disabled">'
+          . '<i class="icon icon-locked"> </i>'
+          . JText::_($msg) 
+          . '</span>';
+    return $html;
+  }
+
+  /*
+   * A generic make button function button
+   *
+   *
+   */
+
+  public static function listingmessage($msgClass = 'alert alert-danger', $msg = '', $btnClass = 'btn btn-danger', $task = '', $id, $iconClass = '', $btnText = '')
+  {
+    $html = '';
+    $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg)
+            . '<a class="' . $btnClass . ' pull-right" href="'
+            . JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id) . '">'
+            . '<i class="' . $iconClass . '">&nbsp;</i>&nbsp;'
+            . JText::_($btnText)
+            . '</a>'
+            . '</div>';
     return $html;
   }
 
