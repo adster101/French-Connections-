@@ -6,12 +6,15 @@ defined('_JEXEC') or die;
 /**
  * HelloWorld component helper.
  */
-abstract class RentalHelper {
+abstract class RentalHelper
+{
 
-  public static function filterTariffs($tariffs = array()) {
+  public static function filterTariffs($tariffs = array())
+  {
 
 
-    foreach ($tariffs as $i => $v) {
+    foreach ($tariffs as $i => $v)
+    {
       $tariffs[$i] = JFilterInput::getInstance()->clean($v, 'INT');
     }
 
@@ -23,14 +26,15 @@ abstract class RentalHelper {
    *
    * @param type $expiry_date
    */
-  public static function getDaysToExpiry($expiry_date = '') {
+  public static function getDaysToExpiry($expiry_date = '')
+  {
 
     $expiry_date = (!empty($expiry_date)) ? new DateTime($expiry_date) : '';
 
-    if ($expiry_date) {
+    if ($expiry_date)
+    {
       $now = new DateTime(date('Y-m-d'));
       $days_to_renewal = $now->diff($expiry_date)->format('%R%a');
-      //$days_to_renewal_pretty = $now->diff($expiry_date)->format('%a');
     }
 
     $days_to_renewal = (!empty($days_to_renewal)) ? $days_to_renewal : '';
@@ -42,50 +46,45 @@ abstract class RentalHelper {
    * Determines a list of notices to display for a property notifying the user of which units and which sections need attention
    */
 
-  public static function getProgressNotices($progress = array()) {
+  public static function getProgressNotices($progress = array())
+  {
 
     $notices = array();
     // The sections we want to check for. Tariffs needs expanding for the more detailed tariff data (changeover day etc)
-    $sections = array('images' => array(), 'availability' => array(), 'tariffs' => array(), 'contact_details' => array());
+    $sections = array('images' => array(), 'availability' => array(), 'tariffs' => array());
 
-    if (empty($progress)) {
+    if (empty($progress))
+    {
       return false;
     }
 
-    if (empty($progress[0]->title)) {
-      
-    }
-
-
-
-
-    if (empty($progress[0]->unit_title)) {
-      
-    }
-
-    foreach ($progress as $unit) {
-      if (empty($unit->unit_title)) {
+    foreach ($progress as $unit)
+    {
+      if (empty($unit->unit_title))
+      {
         $notices['Accommodation']['units'][] = (!empty($unit->unit_title)) ? $unit->unit_title : 'New Unit';
       }
-
-      $unit->contact_details = true;
     }
-    var_dump($progress);
+
     if (!$progress[0]->use_invoice_details &&
             empty($progress[0]->first_name) &&
             empty($progress[0]->surname) &&
-            empty($progress[0]->email_alt) &&
+            empty($progress[0]->email_1) &&
             empty($progress[0]->phone_1)
-    ) {
-      $progress[0]->contact_details = false;
+    )
+    {
+      $notices['contact_details']['units'] = false;
     }
 
+    foreach ($sections as $section => $value)
+    {
 
-    foreach ($sections as $section => $value) {
-
-      foreach ($progress as $key => $unit) {
-        if ($unit->$section == 0) { // If the unit doesn't have this section completed
-          if (!array_key_exists($section, $notices)) {
+      foreach ($progress as $key => $unit)
+      {
+        if ($unit->$section == 0)
+        { // If the unit doesn't have this section completed
+          if (!array_key_exists($section, $notices))
+          {
             $notices[$section]['units'] = '';
           }
 
@@ -95,6 +94,8 @@ abstract class RentalHelper {
       }
     }
 
+
+
     return $notices;
   }
 
@@ -103,7 +104,8 @@ abstract class RentalHelper {
    *
    * @return	array	An array of JHtmlOption elements.
    */
-  public static function getStateOptions() {
+  public static function getStateOptions()
+  {
 
     // Build the filter options.
     $options = array();
@@ -119,7 +121,8 @@ abstract class RentalHelper {
    * @return  array An array of JHtmlOption elements
    */
 
-  public static function getReviewOptions() {
+  public static function getReviewOptions()
+  {
     // Build the filter options.
     $options = array();
     $options[] = JHtml::_('select.option', '1', JText::_('COM_RENTAL_HELLOWORLD_UPDATED'));
@@ -133,7 +136,8 @@ abstract class RentalHelper {
    * @return  array An array of JHtmlOption elements
    */
 
-  public static function getSnoozeOptions() {
+  public static function getSnoozeOptions()
+  {
     // Build the filter options.
     $options = array();
     $options[] = JHtml::_('select.option', '1', JText::_('COM_RENTAL_HELLOWORLD_HIDE_SNOOZED'));
@@ -147,7 +151,8 @@ abstract class RentalHelper {
    * @return  array An array of JHtmlOption elements
    */
 
-  public static function getDateFilterOptions() {
+  public static function getDateFilterOptions()
+  {
     // Build the filter options.
     $options = array();
     $options[] = JHtml::_('select.option', '', JText::_('JSELECT'));
@@ -159,7 +164,8 @@ abstract class RentalHelper {
   /**
    * This submenu is used between the rental property manager, special offers, review, enquiries and stats components.
    */
-  public static function addSubmenu($view = '') {
+  public static function addSubmenu($view = '')
+  {
 
     //Get the current user id
     $user = JFactory::getUser();
@@ -171,13 +177,14 @@ abstract class RentalHelper {
     JHtmlSidebar::addEntry(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', ($view == 'specialoffers'));
     JHtmlSidebar::addEntry(JText::_('COM_REVIEWS_MENU'), 'index.php?option=com_reviews', ($view == 'reviews'));
     JHtmlSidebar::addEntry(JText::_('COM_STATS_MENU'), 'index.php?option=com_stats', ($view == 'stats'));
-     JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
- }
+    JHtmlSidebar::addEntry(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', ($view == 'enquiries'));
+  }
 
   /**
    * Get the actions
    */
-  public static function getActions($assetName = 'com_rental') {
+  public static function getActions($assetName = 'com_rental')
+  {
     $user = JFactory::getUser();
     $result = new JObject;
 
@@ -185,7 +192,7 @@ abstract class RentalHelper {
         'core.admin',
         'core.manage',
         'core.create',
-        'core.delete',  
+        'core.delete',
         'core.edit',
         'core.edit.state',
         'core.edit.own',
@@ -202,7 +209,8 @@ abstract class RentalHelper {
     );
 
 
-    foreach ($actions as $action) {
+    foreach ($actions as $action)
+    {
       $result->set($action, $user->authorise($action, $assetName));
     }
     return $result;
@@ -213,7 +221,8 @@ abstract class RentalHelper {
    *
    */
 
-  public static function isOwner($editUserID = null) {
+  public static function isOwner($editUserID = null)
+  {
 
     // Get the user object and assign the userID to a var
     $user = JFactory::getUser($editUserID);
@@ -222,11 +231,12 @@ abstract class RentalHelper {
     // Get a list of the groups that the user is assigned to
     $groups = $user->getAuthorisedGroups();
 
-    $group = array_pop($groups);
-
-    if ($group === 10) {
+    if (in_array(10, $groups))
+    {
       return true;
-    } else {
+    }
+    else
+    {
 
       return false;
     }
@@ -236,7 +246,8 @@ abstract class RentalHelper {
    * Get the default language
    */
 
-  public static function getDefaultLanguage() {
+  public static function getDefaultLanguage()
+  {
     $lang = & JFactory::getLanguage()->getTag();
     return $lang;
   }
@@ -247,7 +258,8 @@ abstract class RentalHelper {
    *
    */
 
-  public static function getLanguages() {
+  public static function getLanguages()
+  {
     $lang = & JFactory::getLanguage();
     $languages = $lang->getKnownLanguages(JPATH_SITE);
 
@@ -257,7 +269,8 @@ abstract class RentalHelper {
     return $return;
   }
 
-  public static function getLang() {
+  public static function getLang()
+  {
     $session = & JFactory::getSession();
     $lang = & JFactory::getLanguage();
     $propertyId = JRequest::getInt('id');
@@ -277,7 +290,8 @@ abstract class RentalHelper {
    * @param type $first_day
    * @return string False on failure or error, true otherwise.
    */
-  public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true) {
+  public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
+  {
 
     // Get the view
     $app = JFactory::getApplication();
@@ -296,7 +310,8 @@ abstract class RentalHelper {
     $year = date("y", $now);
 
     // The loop loops over some code which outputs a calendar. It does this $months times
-    for ($z = 0; $z <= $months; $z++) {
+    for ($z = 0; $z <= $months; $z++)
+    {
 
       $calendar.='<div class="span3"><div class="calendar-container">';
 
@@ -315,7 +330,8 @@ abstract class RentalHelper {
 
       $calendar.= '<table class="table table-condensed avCalendar">' . "\n";
       $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr class="days">' . "\n";
-      if ($day_name_length) { #if the day names should be shown ($day_name_length > 0)
+      if ($day_name_length)
+      { #if the day names should be shown ($day_name_length > 0)
         #if day_name_length is >3, the full name of the day will be printed
         foreach ($day_names as $d)
           $calendar .= '<th abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
@@ -325,8 +341,10 @@ abstract class RentalHelper {
 
       if ($weekday > 0)
         $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>';#initial 'empty' days
-      for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++) {
-        if ($weekday == 7) {
+      for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++)
+      {
+        if ($weekday == 7)
+        {
           $weekday = 0; #start a new week
           $calendar .= "</tr>\n<tr>";
         }
@@ -338,33 +356,45 @@ abstract class RentalHelper {
         $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
         $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
 
-        if ($status) { // Availability is true, i.e. available
-          if ($status_yesterday != $status) {
+        if ($status)
+        { // Availability is true, i.e. available
+          if ($status_yesterday != $status)
+          {
             $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
-          } else {
+          }
+          else
+          {
             $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
           }
-        } else { // Availability is false i.e. unavailable
-          if ($status_yesterday != $status) {
+        }
+        else
+        { // Availability is false i.e. unavailable
+          if ($status_yesterday != $status)
+          {
 
             $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
-          } else {
+          }
+          else
+          {
 
             $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
           }
         }
       }
 
-      if ($weekday != 7) {
+      if ($weekday != 7)
+      {
         $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>'; #remaining "empty" days
       }
       $calendar.="</table></div></div>";
 
-      if (($z % 4 === 3)) {
+      if (($z % 4 === 3))
+      {
         $calendar.='</div><div class="row-fluid">';
       }
 
-      if ($z == $months) {
+      if ($z == $months)
+      {
         $calendar.='</div>';
       }
 
@@ -376,17 +406,22 @@ abstract class RentalHelper {
     return $calendar;
   }
 
-  public function generateDateCell($today = '', $day = '', $classes = array(), $showlinks = false) {
+  public function generateDateCell($today = '', $day = '', $classes = array(), $showlinks = false)
+  {
 
     $return = '';
 
     $class = implode(' ', $classes);
-    if (!empty($today)) {
+    if (!empty($today))
+    {
       $return .= '<td data-date=' . $today . ' class="' . $class . '">';
 
-      if ($showlinks) {
+      if ($showlinks)
+      {
         $return .= '<a href="#">' . $day . '</a></td>';
-      } else {
+      }
+      else
+      {
         $return .= '<span>' . $day . '</span>';
       }
 
@@ -408,7 +443,8 @@ abstract class RentalHelper {
    * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
    *
    */
-  public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability_status = false) {
+  public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability_status = false)
+  {
     // Array to hold availability per day for each day that availability has been set for.
     // This is needed as availability is stored by period, but displayed by day.
     $raw_availability = array();
@@ -417,7 +453,8 @@ abstract class RentalHelper {
     $DateInterval = new DateInterval('P1D');
 
     // For each availability period passed in
-    foreach ($availability_by_day as $availability_period) {
+    foreach ($availability_by_day as $availability_period)
+    {
 
       // Convert the availability period start date to a PHP date object
       $availability_period_start_date = new DateTime($availability_period->start_date);
@@ -432,7 +469,8 @@ abstract class RentalHelper {
       $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_period->availability;
 
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
-      for ($i = 1; $i <= $availability_period_length->days; $i++) {
+      for ($i = 1; $i <= $availability_period_length->days; $i++)
+      {
 
         // Add one day to the start date for each day of availability
         $date = $availability_period_start_date->add($DateInterval);
@@ -443,7 +481,8 @@ abstract class RentalHelper {
     }
 
     // If additional availability has been added then we need to add that to the array as well.
-    if ($start_date && $end_date) {
+    if ($start_date && $end_date)
+    {
       // Convert the availability period start date to a PHP date object
       $availability_period_start_date = new DateTime($start_date);
 
@@ -454,7 +493,8 @@ abstract class RentalHelper {
       $availability_period_length = date_diff($availability_period_start_date, $availability_period_end_date);
 
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
-      for ($i = 0; $i <= $availability_period_length->days; $i++) {
+      for ($i = 0; $i <= $availability_period_length->days; $i++)
+      {
 
         $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_status;
 
@@ -473,20 +513,25 @@ abstract class RentalHelper {
    * @return array An array of availability periods
    *
    */
-  public static function getAvailabilityByPeriod($availability_by_day = array(), $key = 'status') {
+  public static function getAvailabilityByPeriod($availability_by_day = array(), $key = 'status')
+  {
     $current_status = '';
     $availability_by_period = array();
     $counter = 0;
 
     $last_date = key(array_slice($availability_by_day, -1, 1, TRUE));
 
-    foreach ($availability_by_day as $day => $status) {
-      if (($status !== $current_status) || ( date_diff(new DateTime($last_date), new DateTime($day))->days > 1 )) {
+    foreach ($availability_by_day as $day => $status)
+    {
+      if (($status !== $current_status) || ( date_diff(new DateTime($last_date), new DateTime($day))->days > 1 ))
+      {
         $counter++;
         $availability_by_period[$counter]['start_date'] = $day;
         $availability_by_period[$counter]['end_date'] = $day;
         $availability_by_period[$counter][$key] = $status;
-      } else {
+      }
+      else
+      {
         $availability_by_period[$counter]['end_date'] = $day;
       }
 
@@ -509,20 +554,24 @@ abstract class RentalHelper {
    *
    * @since   11.1
    */
-  public static function linkedcalendar($value, $name, $id, $format = '%Y-%m-%d', $attribs = null) {
+  public static function linkedcalendar($value, $name, $id, $format = '%Y-%m-%d', $attribs = null)
+  {
     static $done;
 
-    if ($done === null) {
+    if ($done === null)
+    {
       $done = array();
     }
 
     $readonly = isset($attribs['readonly']) && $attribs['readonly'] == 'readonly';
     $disabled = isset($attribs['disabled']) && $attribs['disabled'] == 'disabled';
-    if (is_array($attribs)) {
+    if (is_array($attribs))
+    {
       $attribs = JArrayHelper::toString($attribs);
     }
 
-    if (!$readonly && !$disabled) {
+    if (!$readonly && !$disabled)
+    {
       // Load the calendar behavior
       JHtml::_('behavior.tooltip');
 
@@ -530,7 +579,9 @@ abstract class RentalHelper {
       return '<input type="text" title="' . (0 !== (int) $value ? JHtml::_('date', $value) : '') . '" name="' . $name . '" id="' . $id
               . '" value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '" ' . $attribs . ' />'
               . JHtml::_('image', 'system/calendar.png', JText::_('JLIB_HTML_CALENDAR'), array('class' => 'calendar', 'id' => $id . '_img'), true);
-    } else {
+    }
+    else
+    {
       return '<input type="text" title="' . (0 !== (int) $value ? JHtml::_('date', $value) : '')
               . '" value="' . (0 !== (int) $value ? JHtml::_('date', $value, JFactory::getDbo()->getDateFormat()) : '') . '" ' . $attribs
               . ' /><input type="hidden" name="' . $name . '" id="' . $id . '" value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '" />';
@@ -546,9 +597,11 @@ abstract class RentalHelper {
    *
    */
 
-  public static function getUnitsbyId($data = array()) {
+  public static function getUnitsbyId($data = array())
+  {
 
-    if (empty($data)) {
+    if (empty($data))
+    {
 
       // This is a new property as no progress data has been returned (e.g. no listing or unit data)
       $units = array();
@@ -572,13 +625,16 @@ abstract class RentalHelper {
     }
     $units = array();
 
-    foreach ($data as $key => $value) {
+    foreach ($data as $key => $value)
+    {
 
-      if (empty($value->unit_id)) {
+      if (empty($value->unit_id))
+      {
         $value->unit_id = 0;
       }
 
-      if (!array_key_exists($value->unit_id, $units)) {
+      if (!array_key_exists($value->unit_id, $units))
+      {
         $units[$value->unit_id] = $value;
       }
     }
@@ -586,7 +642,8 @@ abstract class RentalHelper {
     return $units;
   }
 
-  public static function getEmptyUnit($listing_id = '') {
+  public static function getEmptyUnit($listing_id = '')
+  {
 
     // This is a new property as no progress data has been returned (e.g. no listing or unit data)
 

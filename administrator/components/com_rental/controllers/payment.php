@@ -143,6 +143,7 @@ class RentalControllerPayment extends JControllerLegacy
     // Get an instance of the listing model
     $listing = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
     $listing->setState('com_rental.listing.latest', true);
+    $user = JFactory::getUser();
 
     // Set the listing ID we are processing payment for
     $listing->setState('com_rental.listing.id', $id);
@@ -218,13 +219,13 @@ class RentalControllerPayment extends JControllerLegacy
     // Empty the data stored in the session...
     $app->setUserState('com_rental.renewal.data', $data);
 
-    // $return should contain a redirect url and a message, at least
-    // Set the redirect based on the task.
-    switch ($this->getTask()) {
-
-      default:
-        $this->setRedirect('index.php?option=com_rental', $message);
-        break;
+    if (RentalHelper::isOwner($user->id))
+    {
+      $this->setRedirect('index.php', $message);
+    }
+    else
+    {
+      $this->setRedirect('index.php?option=com_rental', $message);
     }
 
     return true;

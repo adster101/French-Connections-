@@ -14,10 +14,23 @@
 		<action name="rental.listing.admin" title="Snooze, udpate expirydate or change owner" description="" />
 		<action name="rental.listings.showowner" title="View owner details" description="" />
 		<action name="rental.listings.filter" title="Show listings view filters" description="" />
-    <action name="rental.notes.view" title="COM_RENTAL_DISPLAY_CONTACT_LOG" description="" />
 		<action name="rental.notes.add" title="Create note permission" description="" />
-		<action name="rental.images.delete" title="Delete images permission" description="Whether the user has specific permission to delete an image" />
-		<action name="rental.images.reorder" title="Reorder images permission" description="Whether the user group is allowed to reorder images or not." />
+		<action name="rental.images.delete" title="Delete images permission" description="" />
+		<action name="rental.images.reorder" title="Reorder images permission" description="" />
+		<action name="rental.autorenewals.view" title="Access autorenewal view" description="" />
+		<action name="rental.availability.view" title="Access availability view" description="" />
+		<action name="rental.contactdetails.view" title="Access contact details view" description="" />
+		<action name="rental.images.view" title="Access images view" description="" />
+		<action name="rental.listing.view" title="Access listing view" description="" />
+		<action name="rental.listingreview.view" title="Access listing review view" description="" />
+		<action name="rental.listings.view" title="Access listings view" description="" />
+    <action name="rental.notes.view" title="Access notes view" description="" />
+		<action name="rental.note.view" title="Access note view" description="" />
+		<action name="rental.payment.view" title="Access payment view" description="" />
+		<action name="rental.property.view" title="Access property view" description="" />
+		<action name="rental.propertyversions.view" title="Access property version view" description="" />
+		<action name="rental.tariffs.view" title="Access tariffs view" description="" />
+		<action name="rental.unitversions.view" title="Access unit versions" description="" />
 	</section>
   <section name="category">
 		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />

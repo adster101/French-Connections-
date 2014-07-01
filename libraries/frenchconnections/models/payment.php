@@ -913,7 +913,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       }
 
       // Send payment receipt
-      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
+      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
       $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
 
@@ -922,20 +922,23 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
       $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $cc, $html);
 
-      $message = 'COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES';
+      $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES');
 
       return $message;
     }
     else if ($this->getIsRenewal() && $this->getIsReview())
     {
-
+      // Get the amound paid
       $total = $this->getOrderTotal($order);
 
+      // Generate a new expiry date based on today
+      $date = $this->getNewExpiryDate();
+
       // Renewal with amendments, update the total and review state.
-      $this->updateProperty($listing_id, $total, $review = 2);
+      $this->updateProperty($listing_id, $total, $review = 2, $date);
 
       // Send payment receipt
-      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
+      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
       $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
 
@@ -944,7 +947,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
       $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $cc, $html);
 
-      $message = 'COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES';
+      $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES');
 
       return $message;
     }
@@ -958,11 +961,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $this->updateProperty($listing_id, $total, $review = 2);
 
       // Send payment receipt
-      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $total, $listing_id);
+      $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
       $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
 
-      $message = 'COM_RENTAL_HELLOWORLD_NEW_PROPERTY_CONFIRMATION';
+      $message = JText::_('COM_RENTAL_HELLOWORLD_NEW_PROPERTY_CONFIRMATION');
 
       return $message;
       // Send confirmation of submission
@@ -975,44 +978,16 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Update review status
       // If payment made - send payment receipt
       $total = $this->getOrderTotal($order);
-      
-      $this->updateProperty($listing_id, $total, $review = 2);
-    }
 
-    $order_total = $this->getOrderTotal($order);
-
-    $return = false;
-
-    // Need to process the rest of the gubbins
-    // Essentially we need to do the following
-    // Update the expiry date to one year hence
-    // If a renewal, then no need to hold the property in the PFR, so update the expiry date and send a confirmation email and write into the admin log
-    // If a sign up, then update review status to 2, update the expiry date and send an email to confirm payment? Log payment amount against the property as well
-    // We have just processed a payment. This could be
-    // 1. A renewal (need to check if it needs reviewing)
-    // 2. An existing listing with additional billable items
-    // 3. A brand new listing 
-    // If expiry date is empty and not a renewal
-
-    if (empty($expiry_date))
-    {
-
-      // Send an email detailing the payment made
-      // Must be a new property - 
-      if (!$this->updateProperty($listing_id, $review = 2, $listing_charge = $order_total))
+      if (round($total, 2) > 0)
       {
-
-        // TODO - Add consistent logging across the component, do it!
-        return $return;
+        // Send payment receipt
+        $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
+        $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
+        $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
       }
 
-      // Return a message for display on the admin side
-      $message = 'COM_RENTAL_HELLOWORLD_PAYMENT_NEW_PROPERTY';
-    }
-    else if ($isReview && $isRenewal)
-    {
-
-      // A renewal with changes that need reviewing...
+      $this->updateProperty($listing_id, $total, $review = 2);
     }
   }
 

@@ -84,6 +84,11 @@ $canDo = RentalHelper::getActions();
                         <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_CREATED_BY'); ?>
                       </th>
                     <?php endif; ?>
+                    <?php if (property_exists($this->items[0], 'value')) : ?>
+                      <th>    
+                        <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_LISTING_HEADING_VALUE', 'a.value', $listDirn, $listOrder); ?>
+                      </th>
+                    <?php endif; ?>
                   </tr>
                 </thead>
                 <?php
@@ -96,7 +101,6 @@ $canDo = RentalHelper::getActions();
                   <?php foreach ($this->items as $i => $item): ?>
                     <?php
                     $days_to_renewal = RentalHelper::getDaysToExpiry($item->expiry_date);
-
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
                     if ($item->review == 0)
@@ -118,7 +122,7 @@ $canDo = RentalHelper::getActions();
                     }
                     ?>
                     <?php if ($canEditOwn) : ?>
-                      <tr class="row<?php echo $i % 2; ?>">
+                      <tr>
                         <td>
                           <?php echo $item->id; ?>
                         </td>
@@ -133,9 +137,6 @@ $canDo = RentalHelper::getActions();
                         <td>
                           <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail) ?>
                           <?php if ($item->review != 2) : ?>
-
-
-
                             <a href="<?php echo JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
                                 <?php echo JText::_('COM_RENTAL_HELLOWORLD_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
@@ -143,9 +144,7 @@ $canDo = RentalHelper::getActions();
                                 <?php echo JText::_('COM_RENTAL_HELLOWORLD_MORE_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php endif; ?>
                             </a>                        
-
                           <?php endif; ?>
-
                         </td>
                         <td>
                           <?php echo $item->expiry_date; ?>
@@ -200,6 +199,11 @@ $canDo = RentalHelper::getActions();
                                 <?php //echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
                               </p>
                             <?php endif; ?>
+                          </td>
+                        <?php endif; ?>
+                        <?php if (property_exists($item, 'value')) : ?>
+                          <td>
+                            <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?> 
                           </td>
                         <?php endif; ?>
                       </tr>

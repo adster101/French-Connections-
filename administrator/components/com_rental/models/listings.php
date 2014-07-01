@@ -35,7 +35,8 @@ class RentalModelListings extends JModelList
           'created_user_id', 'a.created_user_id',
           'a.created_on', 'a.created_on',
           'snoozed', 'published',
-          'date_filter'
+          'date_filter',
+          'value', 'a.value'
       );
     }
     parent::__construct($config);
@@ -168,7 +169,9 @@ class RentalModelListings extends JModelList
     $review_state = $this->getState('filter.review');
     if (is_numeric($review_state))
     {
+      $query->select('a.value');
       $query->where('a.review = ' . (int) $review_state);
+      
     }
 
     // Filter by snooze state

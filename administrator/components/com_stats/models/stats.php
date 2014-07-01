@@ -112,6 +112,8 @@ class StatsModelStats extends JModelList
   public function getData($id = '', $table = '', $start_date = '', $end_date)
   {
 
+    $user = JFActory::getUser();
+
     if (empty($id))
     {
       return false;
@@ -123,21 +125,29 @@ class StatsModelStats extends JModelList
     $query = $db->getQuery(true);
 
     $query->select('
-       count(id) as count
+       count(a.id) as count
      ');
-    $query->from($table);
-    $query->where('property_id = ' . (int) $id);
+    $query->from($db->quoteName($table, 'a'));
     
+    $query->where('property_id = ' . (int) $id);
+
     if ($start_date)
     {
       $query->where('date_created > ' . $db->quote($start_date));
     }
-    
+
     if ($end_date)
     {
       $query->where('date_created < ' . $db->quote($end_date));
     }
-    
+
+    // If user not authorised to view all stats just limit them to properties they own
+    if (!$user->authorise('com_stats', 'com_stats.view.all'))
+    {
+      $query->leftJoin($db->quoteName('#__property', 'b') . ' ON b.id = a.property_id' );
+      $query->where('b.created_by = ' . $user->id);
+    }
+
     $db->setQuery($query);
 
     try {
@@ -151,7 +161,6 @@ class StatsModelStats extends JModelList
 
   public function loadFormData()
   {
-
     // Get any data stored in the user state context (if any)
     $data = JFactory::getApplication()->getUserState($this->context, new stdClass);
 

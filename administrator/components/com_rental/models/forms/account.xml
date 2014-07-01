@@ -29,7 +29,6 @@
       labelclass="control-label"
       class="validate validate-vat"
       required="false"
-
     />
       
     <field
@@ -51,8 +50,7 @@
       filter="int">
     </field>
   </fieldset>
-  <fieldset name="address"
-  >
+  <fieldset name="address">
     <field
       name="address1"
       type="text"
@@ -77,7 +75,6 @@
       size="30"
       labelclass="control-label"
     />
-
     <field
       name="city"
       type="text"
@@ -90,7 +87,7 @@
       labelclass="control-label"
       required="true"
     />
-    
+
     <field
       name="region"
       type="text"

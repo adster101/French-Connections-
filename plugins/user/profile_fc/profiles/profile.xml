@@ -35,7 +35,8 @@
     />      
       
     <field
-      name="address1"
+      name="address1"    
+      required="true"
       type="text"
       id="address1"
       description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
@@ -58,6 +59,7 @@
       
     <field
       name="city"
+      required="true"
       type="text"
       id="city"
       description="PLG_USER_PROFILE_FIELD_CITY_DESC"
@@ -70,6 +72,7 @@
     <field
       name="region"
       type="text"
+      required="true"
       id="region"
       description="PLG_USER_PROFILE_FIELD_REGION_DESC"
       filter="string"
@@ -81,6 +84,7 @@
     <field
       name="country"
       type="text"
+      required="true"
       id="country"
       description="PLG_USER_PROFILE_FIELD_COUNTRY_DESC"
       filter="string"
@@ -91,6 +95,7 @@
 
     <field
       name="postal_code"
+      required="true"
       type="text"
       id="postal_code"
       description="PLG_USER_PROFILE_FIELD_POSTAL_CODE_DESC"

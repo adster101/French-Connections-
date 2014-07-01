@@ -438,7 +438,7 @@ class RentalControllerImages extends JControllerForm {
       return false;
     }
 
-    $this->holdEditId('com_rental.edit.unitversions', $id);
+    $this->holdEditId($this->option . '.edit.' .$this->context, $id);
 
     $this->setRedirect(
             JRoute::_(

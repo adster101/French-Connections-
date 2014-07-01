@@ -125,11 +125,22 @@ class RentalModelListing extends JModelList
         }
       }
 
-      // Lastly update the property review status 
+      // Update the property review and expirty date
       $query = $db->getQuery(true);
 
       $query->update('#__property');
       $query->set('review = 0');
+      $query->set('published = 1');
+      $query->set('value = ' . $db->quote('0.00'));
+
+      // If the expiry date is empty, and the property is being approved then implicity assume it's 
+      // a new property and set the renewal date accordingly. 
+      if (empty($items[0]->expiry_date))
+      {
+        $expiry_date = JFactory::getDate('+1 year');
+        $query->set('expiry_date=' . $db->quote($expiry_date));
+      }
+
       $query->where('id=' . (int) $items[0]->id);
 
       $db->setQuery($query);
@@ -150,14 +161,14 @@ class RentalModelListing extends JModelList
   {
 
     $app = JFactory::getApplication();
-    $owner_email = (JDEBUG) ? $app->getCfg('mailfrom','adamrifat@frenchconnections.co.uk') : $listing->email;
+    $owner_email = (JDEBUG) ? $app->getCfg('mailfrom', 'adamrifat@frenchconnections.co.uk') : $listing->email;
     $owner_name = $data['firstname'] . ' ' . $data['surname'];
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
     $body = $data['body'];
     $subject = JText::sprintf('COM_RENTAL_APPROVE_CHANGES_CONFIRMATION_SUBJECT', $data['firstname'], $listing[0]->id);
     $mail = JFactory::getMailer();
-    
+
     $mail->addRecipient($owner_email, $owner_name);
     $mail->addReplyTo(array($mailfrom, $fromname));
     $mail->setSender(array($mailfrom, $fromname));
@@ -169,7 +180,7 @@ class RentalModelListing extends JModelList
     {
       return false;
     }
-    
+
     return true;
   }
 
@@ -243,9 +254,9 @@ class RentalModelListing extends JModelList
         e.accommodation_type,
         e.created_on,
         g.vat_status,  
-        g.phone_1,
-        g.email_alt,
-        h.email,
+        b.phone_1,
+        b.email_1,
+        b.email_2,
         base_currency,
         tariff_based_on,
         (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,

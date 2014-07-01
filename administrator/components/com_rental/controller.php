@@ -20,19 +20,19 @@ class RentalController extends JControllerLegacy
    * @return  boolean
    * @since   1.6
    */
-  protected function canView($view)
+  protected function canView($view, $option)
   {
-    $canDo = RentalHelper::getActions();
 
-    switch ($view) {
-      // Special permissions.
-      case 'notes':
-        return $canDo->get('rental.notes.view');
-        break;
+    $user = JFactory::getUser();
+    $asset = $this->name . '.' . $view . '.view';
 
-      // Default permissions.
-      default:
-        return true;
+    if ($user->authorise($asset, $option))
+    {
+      return true;
+    }
+    else
+    {
+      return false;
     }
   }
 
@@ -44,76 +44,31 @@ class RentalController extends JControllerLegacy
   function display($cachable = false)
   {
 
-    $view = $this->input->get('view', '');
-    $layout = $this->input->get('layout', 'default');
-    $id = $this->input->getInt('id');
+    // Set the default view for this component
+    JRequest::setVar('view', JRequest::getCmd('view', 'listings'));
+
+    // Get the GET params for this view
+    $view = $this->input->get('view', 'listings');
+    $option = $this->input->getCmd('option', 'com_rental');
+    $property_id = $this->input->getInt('id');
     $unit_id = $this->input->getInt('unit_id');
+    $context = $option . '.edit.' . $view;
 
-    if (!$this->canView($view))
+    // Basic check to ensure user is allowed to access this view.
+    if (!$this->canView($view, $option))
     {
-      JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+      $this->setRedirect('index.php');
       return false;
     }
 
-    // Set up an array of views to protect from direct access
-    $views_to_protect = array('tariffs', 'offers', 'unitversions', 'availability');
-
-    // set default view if not set
-    JRequest::setVar('view', JRequest::getCmd('view', 'Listings'));
-
-    // Set the default view name and format from the Request.
-    $vName = JRequest::getCmd('view', 'Property');
-
+    // Check whether the user has accessed this item correctly already...
     // Test all the relevant views and that the 'edit ids' are held in the session
-    // TO DO - Make this into a function or sommat!
-    if ($vName == 'listing' && !$this->checkEditId('com_rental.view.' . $vName, $id))
+    if (!$this->checkEditId($context, $property_id) || !$this->checkEditId($context, $unit_id))
     {
       // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
-      $this->setMessage($this->getError(), 'error');
+      //$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', ''));
+      //$this->setMessage($this->getError(), 'error');
       $this->setRedirect(JRoute::_('index.php', false));
-
-      return false;
-    }
-
-    // A check in each sub-controller is also needed to ensure that the user does actually own the item id
-    if (in_array($vName, $views_to_protect) && !$this->checkEditId('com_rental.edit.' . $vName, $id))
-    {
-      // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
-      $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=listings', false));
-
-      return false;
-    }
-
-    if (($vName == 'images') && !$this->checkEditId('com_rental.edit.unitversions', $unit_id))
-    {
-      // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $unit_id));
-      $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=listings', false));
-
-      return false;
-    }
-
-    if ($vName == 'reviews' && !$this->checkEditId('com_rental.view.unitversions', $id))
-    {
-      // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
-      $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=listings', false));
-
-      return false;
-    }
-
-    if ($vName == 'stats' && !$this->checkEditId('com_rental.stats.view', $id))
-    {
-      // Somehow the person just went to the form - we don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
-      $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=listings', false));
-
       return false;
     }
 

@@ -218,12 +218,12 @@ class RentalControllerListing extends JControllerForm
 
       return false;
     }
-    
+
     $app = JFactory::getApplication();
     $input = $app->input;
     $recordId = $input->get('id', '', 'int');
     $data = $input->get('jform', '', array());
-    
+
     // Get the various models we will be using
     $model = $this->getModel();
     $model->setState('com_rental.listing.id', $recordId);
@@ -257,7 +257,7 @@ class RentalControllerListing extends JControllerForm
 
       // Redirect back to the edit screen.
       $this->setRedirect(
-              JRoute::_('index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . (int) $recordId , false)
+              JRoute::_('index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . (int) $recordId, false)
       );
 
       return false;
@@ -280,15 +280,13 @@ class RentalControllerListing extends JControllerForm
 
     // Send the confirmation email
     $mail = $model->sendApprovalEmail($listing, $validData);
-    
+
     // Send confirmation email
     $msg = JText::sprintf('COM_RENTAL_PROPERTY_PUBLISHED', $listing[0]->id);
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option, false
-            ), 
-            $msg, 
-            'success'
+            ), $msg, 'success'
     );
     return true;
   }
@@ -453,7 +451,7 @@ class RentalControllerListing extends JControllerForm
     $context = "$this->option.view.$this->context";
     $task = $this->getTask();
     jimport('frenchconnections.models.payment');
-
+    $user = JFactory::getUser();
 
     // Get the record ID from the data array
     $recordId = $this->input->post->get('property_id', '', 'int');
@@ -512,7 +510,7 @@ class RentalControllerListing extends JControllerForm
       return false;
     }
 
-    // Save the submittions note into the notes table, if there is a note.
+    // TO DO - Save the submittions note into the notes table, if there is a note.
     // It's all good.
     // Here we need to determine how to handle this submission for review.
     // If the expiry date is within 7 days then we need to redirect the user to the renewal screen.
@@ -535,30 +533,29 @@ class RentalControllerListing extends JControllerForm
 
     $days_to_renewal = RentalHelper::getDaysToExpiry($current_version[0]->expiry_date);
 
-    // TO DO - Could the following be moved into a separate method?
+    // TO DO - Could the following be moved into a separate method in the model?
     if (empty($current_version[0]->vat_status))
-    { // No VAT status on record for this listing.
+    {
+      // No VAT status on record for this listing.
       $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
-
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId, false);
-
       $this->setRedirect($redirect, $message);
     }
     elseif ($days_to_renewal < 7 && $days_to_renewal > 0)
     {
-      // If there are less than seven days to renewal or is a new property listing (e.g. doesn't have an expiry date)
+      // If there are between 7 and 0 days to renewal  
       $message = ($days_to_renewal > 0) ? 'Your property is expiring within 7 days - please renew now' : 'Property expired, renew now.';
-
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
     }
     else if (empty($days_to_renewal))
     {
-
+      // New property 
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
     }
-    else if ((!empty($days_to_renewal) && $days_to_renewal < 0)) // Need to check review status here...
+    else if ((!empty($days_to_renewal) && $days_to_renewal < 0 && $current_version[0]->review)) // Need to check review status here...
     {
+
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_RENEWAL_WITH_CHANGES');
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
     }
@@ -582,7 +579,15 @@ class RentalControllerListing extends JControllerForm
         // If we get here it means there is no payment due for this so we just lock it for editing.
         $payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
         $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
-        $redirect = JRoute::_('index.php', false);
+
+        if (RentalHelper::isOwner($user->id))
+        {
+          $redirect = JRoute::_('index.php');
+        }
+        else
+        {
+          $redirect = JRoute::_('index.php?option=' . $this->extension);
+        }
       }
     }
 
@@ -600,7 +605,7 @@ class RentalControllerListing extends JControllerForm
   public function view()
   {
 
-    $context = "$this->option.view.$this->context";
+    $context = "$this->option.edit.$this->context";
     $app = JFactory::getApplication();
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
