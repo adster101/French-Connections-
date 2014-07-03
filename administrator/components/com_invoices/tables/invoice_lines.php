@@ -11,9 +11,9 @@
 defined('_JEXEC') or die;
 
 /**
- * Account Table class
+ * invoice Table class
  */
-class InvoicesTableAccount extends JTable {
+class InvoicesTableInvoice_lines extends JTable {
 
     /**
      * Constructor
@@ -21,6 +21,6 @@ class InvoicesTableAccount extends JTable {
      * @param JDatabase A database connector object
      */
     public function __construct(&$db) {
-        parent::__construct('#__user_profile_fc', 'user_id', $db);
+        parent::__construct('#__invoice_lines', 'invoice_id', $db);
     }
 }

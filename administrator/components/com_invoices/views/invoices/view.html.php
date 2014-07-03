@@ -37,11 +37,8 @@ class InvoicesViewInvoices extends JViewLegacy
       throw new Exception(implode("\n", $errors));
     }
 
-    InvoicesHelper::addSubmenu('invoices');
-
     $this->addToolbar();
 
-    $this->sidebar = JHtmlSidebar::render();
     parent::display($tpl);
   }
 
@@ -52,22 +49,29 @@ class InvoicesViewInvoices extends JViewLegacy
    */
   protected function addToolbar()
   {
-    require_once JPATH_COMPONENT . '/helpers/invoices.php';
-
+    $user = JFactory::getUser();
     $state = $this->get('State');
-    $canDo = InvoicesHelper::getActions($state->get('filter.category_id'));
 
     JToolBarHelper::title(JText::_('COM_INVOICES_TITLE_INVOICES'), 'invoices.png');
-   
-    if ($canDo->get('core.admin'))
+
+    // Add a batch button
+    if ($user->authorise('core.create', 'com_invoices') && $user->authorise('core.edit', 'com_invoices') && $user->authorise('core.edit.state', 'com_invoices'))
+    {
+      $title = JText::_('JTOOLBAR_UPLOAD');
+
+      // Instantiate a new JLayoutFile instance and render the batch button
+
+      $dhtml = $layout->render(array('title' => $title));
+      $bar->appendButton('Custom', $dhtml, 'batch');
+    }
+
+    if ($user->authorise('core.admin', 'com_invoices'))
     {
       JToolBarHelper::preferences('com_invoices');
     }
-
   }
 
-  protected
-          function getSortFields()
+  protected function getSortFields()
   {
     return array(
         'a.id' => JText::_('JGRID_HEADING_ID'),

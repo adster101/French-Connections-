@@ -5,7 +5,7 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.modeladmin');
 
-class InvoicesModelAccount extends JModelForm {
+class InvoicesModelImport extends JModelForm {
  
 	/**
 	 * Method to get the menu item form.
@@ -15,10 +15,10 @@ class InvoicesModelAccount extends JModelForm {
 	 * @return  JForm    A JForm object on success, false on failure
 	 * @since   1.6
 	 */
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = array(), $loadData = false)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_invoices.account', 'account', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_invoices.import', 'import', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form))
 		{
 			return false;
@@ -27,10 +27,5 @@ class InvoicesModelAccount extends JModelForm {
 		return $form;
 	}
 
-  
-  public function getTable($name = 'Account', $prefix = 'InvoicesTable', $options = array()) {
-    return JTable::getInstance($name, $prefix, $options);
-  }
-  
   
 }

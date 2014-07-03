@@ -38,8 +38,6 @@ class InvoicesViewInvoice extends JViewLegacy {
       throw new Exception(implode("\n", $errors));
     }
 
-    InvoicesHelper::addSubmenu('invoices');
-
     $this->addToolbar();
 
     $this->sidebar = JHtmlSidebar::render();

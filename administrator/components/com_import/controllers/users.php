@@ -87,13 +87,13 @@ class ImportControllerUsers extends JControllerForm {
 
       $user->groups = $groups;
       $user->name = $line[1];
-      $user->username = $line[2];
+      $user->username = trim($line[2]);
 
       // Test that the email is at least in a valid format...
-      if (!JMailHelper::isEmailAddress($line[3])) {
+      if (!JMailHelper::isEmailAddress(trim($line[3]))) {
         $user->email = 'no_email_' . $user->id . '@email.com';
       } else {
-        $user->email = $line[3];
+        $user->email = trim($line[3]);
       }
       $user->password = $array['password'] = $password . ':' . $salt;
       $user->block = $line[5];
@@ -107,6 +107,7 @@ class ImportControllerUsers extends JControllerForm {
       if (!$user->save()) {
         // If this happens most likely user is a duplicate, log.
         JLog::add(JText::_($user->username . '(' . $user->id . ',' . $user->email . ').' . $user->getError()), JLog::WARNING, 'import_user');
+        $user->delete($user->id);
       }
     }
 

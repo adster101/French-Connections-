@@ -37,7 +37,7 @@ class RentalControllerPayment extends JControllerLegacy
     $recordId = $this->input->get('id', '', 'int');
 
     // Set the context so we can hold the edit ID
-    $context = "com_rental.renewal.summary";
+    $context = "com_rental.edit.payment";
 
     // Check that the owner/user can edit/renew this record
     if (!$this->allowEdit(array('id' => $recordId)))

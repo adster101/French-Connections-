@@ -123,7 +123,7 @@ $sortFields = $this->getSortFields();
                 <?php echo $item->property_id; ?>
               </td>
               <td>
-                <?php echo $item->DateCreated; ?>
+                <?php echo JFactory::getDate($item->DateCreated)->calendar('d-m-Y'); ?>
               </td>
               <td>
                 <?php echo $item->Amount; ?>

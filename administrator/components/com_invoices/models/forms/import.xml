@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset
+    name="import"
+    label="Import MYOB invoice file">
+    <field 
+      type="file"
+      name="invoices"
+      label="MYOB invoice file">
+    </field>
+  </fieldset>
+</form>

@@ -64,7 +64,7 @@ $vat_total = '';
           ?>
             <tr>
               <td><?php echo $this->escape($item->quantity) ?></td>
-              <td><?php echo $this->escape($item->description) ?></td>
+              <td><?php echo '[' . $this->escape($item->code) . '] ' . $this->escape($item->description) ?></td>
               <td text-align="right"><?php echo $this->escape($item->cost) ?></td>
               <td text-align="right"><?php echo $line_total; ?></td>
             </tr>

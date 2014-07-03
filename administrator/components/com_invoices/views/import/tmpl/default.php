@@ -8,11 +8,7 @@
  */
 // no direct access
 defined('_JEXEC') or die;
-
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('bootstrap.tooltip');
-JHtml::_('behavior.multiselect');
-JHtml::_('formbehavior.chosen', 'select');
+JSession::checkToken('get') or die(JText::_('JINVALID_TOKEN'));
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
@@ -27,7 +23,10 @@ $userId = $user->get('id');
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-
+      <?php foreach ($this->form->getFieldSet('import') as $field) : ?>
+        <?php echo $field->input; ?>
+        <?php echo $field->label; ?>
+      <?php endforeach; ?>
 
     </div>
 
