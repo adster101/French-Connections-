@@ -15,7 +15,8 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Invoices.
  */
-class InvoicesViewImport extends JViewLegacy {
+class InvoicesViewImport extends JViewLegacy
+{
 
   protected $items;
   protected $pagination;
@@ -24,18 +25,19 @@ class InvoicesViewImport extends JViewLegacy {
   /**
    * Display the view
    */
-  public function display($tpl = null) {
-
+  public function display($tpl = null)
+  {
     $canDo = InvoicesHelper::getActions();
-
     $app = JFactory::getApplication();
-    
     $this->form = $this->get('Form');
-    
+
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       throw new Exception(implode("\n", $errors));
     }
+    
+    JToolBarHelper::preferences('com_invoices');
 
     parent::display($tpl);
   }

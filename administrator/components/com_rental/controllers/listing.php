@@ -448,7 +448,7 @@ class RentalControllerListing extends JControllerForm
     $lang = JFactory::getLanguage();
     $model = $this->getModel('Submit');
     $data = $this->input->post->get('jform', array(), 'array');
-    $context = "$this->option.view.$this->context";
+    $context = "$this->option.edit.$this->context";
     $task = $this->getTask();
     jimport('frenchconnections.models.payment');
     $user = JFactory::getUser();

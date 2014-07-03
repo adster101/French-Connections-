@@ -12,9 +12,9 @@ JSession::checkToken('get') or die(JText::_('JINVALID_TOKEN'));
 
 $user = JFactory::getUser();
 $userId = $user->get('id');
+$fieldsets = $this->form->getFieldSets();
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_invoices'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -23,17 +23,20 @@ $userId = $user->get('id');
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <?php foreach ($this->form->getFieldSet('import') as $field) : ?>
-        <?php echo $field->input; ?>
-        <?php echo $field->label; ?>
+      <?php foreach ($fieldsets as $fieldset) : ?>
+        <fieldset>
+          <legend>
+            <?php echo $fieldset->label; ?>
+          </legend>
+          <?php foreach ($this->form->getFieldSet($fieldset->name) as $field) : ?>
+            <?php echo $field->input; ?>
+            <?php echo $field->label; ?>
+          <?php endforeach; ?>
+        </fieldset>
       <?php endforeach; ?>
-
+      <?php echo JToolbar::getInstance('toolbar')->render('toolbar'); ?>
     </div>
-
     <?php echo JHtml::_('form.token'); ?>
     <input type="hidden" name="task" value="" />
-
-</form>
-
 
 

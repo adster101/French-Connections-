@@ -27,25 +27,26 @@ $saveOrder = $listOrder == 'a.ordering';
 $sortFields = $this->getSortFields();
 ?>
 <script type="text/javascript">
-	Joomla.orderTable = function()
-	{
-		table = document.getElementById("sortTable");
-		direction = document.getElementById("directionTable");
-		order = table.options[table.selectedIndex].value;
-		if (order != '<?php echo $listOrder; ?>')
-		{
-			dirn = 'asc';
-		}
-		else
-		{
-			dirn = direction.options[direction.selectedIndex].value;
-		}
-		Joomla.tableOrdering(order, dirn, '');
-	}
+  Joomla.orderTable = function()
+  {
+    table = document.getElementById("sortTable");
+    direction = document.getElementById("directionTable");
+    order = table.options[table.selectedIndex].value;
+    if (order != '<?php echo $listOrder; ?>')
+    {
+      dirn = 'asc';
+    }
+    else
+    {
+      dirn = direction.options[direction.selectedIndex].value;
+    }
+    Joomla.tableOrdering(order, dirn, '');
+  }
 </script>
 <?php
 //Joomla Component Creator code to allow adding non select list filters
-if (!empty($this->extra_sidebar)) {
+if (!empty($this->extra_sidebar))
+{
   $this->sidebar .= $this->extra_sidebar;
 }
 ?>
@@ -67,7 +68,8 @@ if (!empty($this->extra_sidebar)) {
         </div>
         <div class="btn-group pull-left">
           <button class="btn hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-          <button class="btn hasTooltip" type="button" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>" onclick="document.id('filter_search').value='';this.form.submit();"><i class="icon-remove"></i></button>
+          <button class="btn hasTooltip" type="button" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>" onclick="document.id('filter_search').value = '';
+    this.form.submit();"><i class="icon-remove"></i></button>
         </div>
         <div class="btn-group pull-right hidden-phone">
           <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
@@ -138,9 +140,12 @@ if (!empty($this->extra_sidebar)) {
         </thead>
         <tfoot>
           <?php
-          if (isset($this->items[0])) {
+          if (isset($this->items[0]))
+          {
             $colspan = count(get_object_vars($this->items[0]));
-          } else {
+          }
+          else
+          {
             $colspan = 10;
           }
           ?>
@@ -172,15 +177,15 @@ if (!empty($this->extra_sidebar)) {
               <?php if (isset($this->items[0]->id)): ?>
                 <td class="">
                   <?php echo (int) $item->id; ?>
-                <br />
-                <?php if (!empty($item->due_date)): ?>
-            			For Advertising on Internet site French Connections for 1 year commencing <?php echo $item->due_date; ?>
-                <?php else: ?>
-                  Sundries
-                <?php endif; ?>
-                <a href="<?php echo JRoute::_('index.php?option=com_invoices&view=invoice&invoice_id=' . (int) $item->id) ?>">
-                  <?php echo JText::_('COM_INVOICES_INVOICES_VIEW_DETAIL'); ?>
-                </a>
+                  <br />
+                  <?php if (!empty($item->due_date)): ?>
+                    For Advertising on Internet site French Connections for 1 year commencing <?php echo $item->due_date; ?>
+                  <?php else: ?>
+                    Sundries
+                  <?php endif; ?>
+                  <a href="<?php echo JRoute::_('index.php?option=com_invoices&view=invoice&invoice_id=' . (int) $item->id) ?>">
+                    <?php echo JText::_('COM_INVOICES_INVOICES_VIEW_DETAIL'); ?>
+                  </a>
                 </td>
               <?php endif; ?>
               <td>
@@ -214,7 +219,12 @@ if (!empty($this->extra_sidebar)) {
       <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
       <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
       <?php echo JHtml::_('form.token'); ?>
-    </div>
+    </div> 
+    <?php
+    // Instantiate a new JLayoutFile instance and render the batch button
+    $layout = new JLayoutFile('frenchconnections.general.modal');
+    echo $layout->render(array('title' => 'COM_INVOICES_IMPORT_FROM_MYOB', 'id' => ''));
+    ?>
 </form>
 
 

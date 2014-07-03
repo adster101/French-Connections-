@@ -229,7 +229,7 @@ abstract class RentalHelper
 
 
     // Get a list of the groups that the user is assigned to
-    $groups = $user->getAuthorisedGroups();
+    $groups = JAccess::getGroupsByUser($user->id, true);
 
     if (in_array(10, $groups))
     {

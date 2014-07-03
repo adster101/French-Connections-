@@ -2,7 +2,7 @@
 <form>
   <fieldset
     name="import"
-    label="Import MYOB invoice file">
+    label="COM_INVOICE_SELECT_MYOB_FILE">
     <field 
       type="file"
       name="invoices"

@@ -54,14 +54,17 @@ class InvoicesViewInvoices extends JViewLegacy
 
     JToolBarHelper::title(JText::_('COM_INVOICES_TITLE_INVOICES'), 'invoices.png');
 
+    $bar = JToolbar::getInstance('toolbar');
+    
     // Add a batch button
     if ($user->authorise('core.create', 'com_invoices') && $user->authorise('core.edit', 'com_invoices') && $user->authorise('core.edit.state', 'com_invoices'))
     {
       $title = JText::_('JTOOLBAR_UPLOAD');
 
       // Instantiate a new JLayoutFile instance and render the batch button
+			$layout = new JLayoutFile('frenchconnections.toolbar.upload');
 
-      $dhtml = $layout->render(array('title' => $title));
+      $dhtml = $layout->render(array('title' => $title, 'url' => 'index.php?option=com_invoices&amp;view=import&amp;tmpl=component&amp;format=raw&amp;layout=modal&amp;' . JSession::getFormToken() . '=1'));
       $bar->appendButton('Custom', $dhtml, 'batch');
     }
 
