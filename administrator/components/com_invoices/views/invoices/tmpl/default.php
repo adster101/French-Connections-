@@ -10,8 +10,7 @@
 defined('_JEXEC') or die;
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('bootstrap.tooltip');
-JHtml::_('formbehavior.chosen', 'select');
+JHtml::_('behavior.formvalidation');
 
 // Import CSS
 $document = JFactory::getDocument();
@@ -220,11 +219,11 @@ if (!empty($this->extra_sidebar))
       <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
       <?php echo JHtml::_('form.token'); ?>
     </div> 
-    <?php
-    // Instantiate a new JLayoutFile instance and render the batch button
-    $layout = new JLayoutFile('frenchconnections.general.modal');
-    echo $layout->render(array('title' => 'COM_INVOICES_IMPORT_FROM_MYOB', 'id' => ''));
-    ?>
-</form>
 
+</form>
+<?php
+// Instantiate a new JLayoutFile instance and render the batch button
+$layout = new JLayoutFile('frenchconnections.general.modal');
+echo $layout->render(array('title' => 'COM_INVOICES_IMPORT_FROM_MYOB', 'id' => '', 'task' => 'invoices.import'));
+?>
 

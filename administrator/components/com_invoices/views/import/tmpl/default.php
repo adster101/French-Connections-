@@ -14,29 +14,22 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 $fieldsets = $this->form->getFieldSets();
 ?>
-
-  <?php if (!empty($this->sidebar)): ?>
-    <div id="j-sidebar-container" class="span2">
-      <?php echo $this->sidebar; ?>
-    </div>
-    <div id="j-main-container" class="span10">
-    <?php else : ?>
-      <div id="j-main-container">
-      <?php endif; ?>
-      <?php foreach ($fieldsets as $fieldset) : ?>
-        <fieldset>
-          <legend>
-            <?php echo $fieldset->label; ?>
-          </legend>
-          <?php foreach ($this->form->getFieldSet($fieldset->name) as $field) : ?>
-            <?php echo $field->input; ?>
-            <?php echo $field->label; ?>
-          <?php endforeach; ?>
-        </fieldset>
-      <?php endforeach; ?>
-      <?php echo JToolbar::getInstance('toolbar')->render('toolbar'); ?>
-    </div>
-    <?php echo JHtml::_('form.token'); ?>
-    <input type="hidden" name="task" value="" />
+<form action="<?php echo JRoute::_('index.php?option=com_invoices'); ?>" method="post" name="adminForm" id="adminForm">
+  <div id="j-main-container">
+    <?php foreach ($fieldsets as $fieldset) : ?>
+      <fieldset class="form-inline">
+        <legend>
+          <?php echo JText::_($fieldset->label); ?>
+        </legend>
+        <?php foreach ($this->form->getFieldSet($fieldset->name) as $field) : ?>
+          <?php echo $field->label; ?> 
+          <?php echo $field->input; ?>
+        <?php endforeach; ?>
+      </fieldset>
+    <?php endforeach; ?>
+  </div>
+  <?php echo JHtml::_('form.token'); ?>
+  <input type="hidden" name="task" value="" />
+</form>
 
 

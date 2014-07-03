@@ -37,8 +37,6 @@ class InvoicesViewImport extends JViewLegacy
       throw new Exception(implode("\n", $errors));
     }
     
-    JToolBarHelper::preferences('com_invoices');
-
     parent::display($tpl);
   }
 

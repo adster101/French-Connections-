@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @version     1.0.0
  * @package     com_invoices
@@ -6,7 +7,6 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  * @author      Adam Rifat <adam@littledonkey.net> - http://
  */
-
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -17,50 +17,54 @@ jimport('joomla.application.component.controlleradmin');
  */
 class InvoicesControllerInvoices extends JControllerAdmin
 {
-	/**
-	 * Proxy for getModel.
-	 * @since	1.6
-	 */
-	public function getModel($name = 'invoice', $prefix = 'InvoicesModel')
-	{
-		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
-		return $model;
-	}
-    
-    
-	/**
-	 * Method to save the submitted ordering values for records via AJAX.
-	 *
-	 * @return  void
-	 *
-	 * @since   3.0
-	 */
-	public function saveOrderAjax()
-	{
-		// Get the input
-		$input = JFactory::getApplication()->input;
-		$pks = $input->post->get('cid', array(), 'array');
-		$order = $input->post->get('order', array(), 'array');
 
-		// Sanitize the input
-		JArrayHelper::toInteger($pks);
-		JArrayHelper::toInteger($order);
+  /**
+   * Proxy for getModel.
+   * @since	1.6
+   */
+  public function getModel($name = 'invoice', $prefix = 'InvoicesModel')
+  {
+    $model = parent::getModel($name, $prefix, array('ignore_request' => true));
+    return $model;
+  }
 
-		// Get the model
-		$model = $this->getModel();
+  /**
+   * Method to save the submitted ordering values for records via AJAX.
+   *
+   * @return  void
+   *
+   * @since   3.0
+   */
+  public function saveOrderAjax()
+  {
+    // Get the input
+    $input = JFactory::getApplication()->input;
+    $pks = $input->post->get('cid', array(), 'array');
+    $order = $input->post->get('order', array(), 'array');
 
-		// Save the ordering
-		$return = $model->saveorder($pks, $order);
+    // Sanitize the input
+    JArrayHelper::toInteger($pks);
+    JArrayHelper::toInteger($order);
 
-		if ($return)
-		{
-			echo "1";
-		}
+    // Get the model
+    $model = $this->getModel();
 
-		// Close the application
-		JFactory::getApplication()->close();
-	}
+    // Save the ordering
+    $return = $model->saveorder($pks, $order);
+
+    if ($return)
+    {
+      echo "1";
+    }
+
+    // Close the application
+    JFactory::getApplication()->close();
+  }
+
+  public function import()
+  {
     
-    
-    
+    echo "woot";die;
+  }
+
 }
