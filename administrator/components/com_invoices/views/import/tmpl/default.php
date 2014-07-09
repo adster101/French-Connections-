@@ -14,7 +14,16 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 $fieldsets = $this->form->getFieldSets();
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_invoices'); ?>" method="post" name="adminForm" id="adminForm">
+<script type="text/javascript">
+	Joomla.submitbutton = function(task)
+	{
+		if (task == 'invoices.import')
+		{
+			Joomla.submitform(task, document.getElementById('invoiceForm'));
+		}
+	}
+</script>
+<form action="<?php echo JRoute::_('index.php?option=com_invoices'); ?>" method="post" name="invoiceForm" id="invoiceForm" enctype="multipart/form-data">
   <div id="j-main-container">
     <?php foreach ($fieldsets as $fieldset) : ?>
       <fieldset class="form-inline">

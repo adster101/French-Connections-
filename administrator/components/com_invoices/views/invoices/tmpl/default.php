@@ -125,10 +125,6 @@ if (!empty($this->extra_sidebar))
             <th class='left'>
               <?php echo JHtml::_('grid.sort', 'COM_INVOICES_INVOICES_VAT', 'a.vat', $listDirn, $listOrder); ?>
             </th>
-
-            <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_INVOICES_INVOICES_DUE_DATE', 'a.due_date', $listDirn, $listOrder); ?>
-            </th>
             <th class='left'>
               <?php echo JHtml::_('grid.sort', 'COM_INVOICES_INVOICES_FIRST_NAME', 'a.first_name', $listDirn, $listOrder); ?>
             </th>
@@ -199,8 +195,6 @@ if (!empty($this->extra_sidebar))
               <td>
                 <?php echo $item->vat; ?>
               </td>
-              <td>
-                <?php echo $item->due_date; ?>
               </td>
               <td>
                 <?php echo $item->first_name; ?>
@@ -222,8 +216,11 @@ if (!empty($this->extra_sidebar))
 
 </form>
 <?php
+if ($user->authorise('com_invoices.import.view', 'com_invoices'))
+{
 // Instantiate a new JLayoutFile instance and render the batch button
-$layout = new JLayoutFile('frenchconnections.general.modal');
-echo $layout->render(array('title' => 'COM_INVOICES_IMPORT_FROM_MYOB', 'id' => '', 'task' => 'invoices.import'));
+  $layout = new JLayoutFile('frenchconnections.general.modal');
+  echo $layout->render(array('title' => 'COM_INVOICES_IMPORT_FROM_MYOB', 'id' => '', 'task' => 'invoices.import'));
+}
 ?>
 

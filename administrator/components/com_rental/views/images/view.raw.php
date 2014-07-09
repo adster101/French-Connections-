@@ -18,7 +18,7 @@ class RentalViewImages extends JViewLegacy
 	{
 
     $input = JFactory::getApplication()->input;
-    $id = $input->get('id','','int');
+    $id = $input->get('version_id','','int');
       
     // populateState for the images model
     $this->state = $this->get('State');

@@ -6,8 +6,8 @@
 $title = JText::_($displayData['title']);
 $id = ($displayData['id']) ? $displayData['id'] : 'collapseModal';
 $task = ($displayData['task']) ? $displayData['task'] : '';
-
-$cmd = "Joomla.submitbutton('$task')";
+// TO DO - Make the invoiceForm a variable
+$cmd = "Joomla.submitbutton('$task','invoiceForm')";
 ?>
 <!-- Modal -->
 <div id="<?php echo $id ?>" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -41,6 +41,7 @@ jQuery(function() {
     autoUpload: false
   }).bind('fileuploaddone', function(e, data) {
     // File has been uploaded, need to refresh the existing images list
+
     try {
 
       if (!data.result.files[0].error.length) {
@@ -57,18 +58,19 @@ jQuery(function() {
         jQuery.get(
                 "/administrator/index.php?option=com_rental&view=images&layout=default_image_list&format=raw",
                 {
-                  id: id
+                  version_id: id
                 })
                 .done(function(results) {
+          
           jQuery('.ui-sortable').empty();
           jQuery('.ui-sortable').html(results);
-
           // Bind the caption save event to the 
           add_event_handlers();
 
         });
+        
       } else {
-
+        
       }
     } catch (err) {
       console.log(err.message);

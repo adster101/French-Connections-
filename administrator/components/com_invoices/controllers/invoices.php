@@ -10,6 +10,7 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+// Extend this from JControllerLegacy?
 jimport('joomla.application.component.controlleradmin');
 
 /**
@@ -19,52 +20,80 @@ class InvoicesControllerInvoices extends JControllerAdmin
 {
 
   /**
-   * Proxy for getModel.
-   * @since	1.6
+   * Method to import a list of invoices from a tab separated file
+   * Includes an auth check and calls the relevant model to perform the actual import.
+   *  
+   * @return boolean
    */
-  public function getModel($name = 'invoice', $prefix = 'InvoicesModel')
+  public function import()
   {
-    $model = parent::getModel($name, $prefix, array('ignore_request' => true));
-    return $model;
+    JSession::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
+    $params = JComponentHelper::getParams('com_invoices');
+    $data = $this->input->files->get('jform', '', 'array');
+    $file = $data['invoices'];
+    $model = $this->getModel();
+    $user = JFactory::getUser();
+
+    // Check the auth permissions for creating invoices
+    if (!$user->authorise('core.create', 'com_invocies'))
+    {
+      return false;
+    }
+
+    // Total length of post back data in bytes.
+    $contentLength = (int) $_SERVER['CONTENT_LENGTH'];
+
+    // Maximum allowed size of post back data in MB.
+    $postMaxSize = (int) ini_get('post_max_size');
+
+    // Maximum allowed size of script execution in MB.
+    $memoryLimit = (int) ini_get('memory_limit');
+
+    // Check for the total size of post back data.
+    if (($postMaxSize > 0 && $contentLength > $postMaxSize * 1024 * 1024) || ($memoryLimit != -1 && $contentLength > $memoryLimit * 1024 * 1024))
+    {
+      JError::raiseWarning(100, JText::_('COM_MEDIA_ERROR_WARNUPLOADTOOLARGE'));
+      return false;
+    }
+
+    $uploadMaxSize = $params->get('upload_maxsize', 0) * 1024 * 1024;
+
+    if (($file['error'] == 1) || ($uploadMaxSize > 0 && $file['size'] > $uploadMaxSize))
+    {
+      // File size exceed either 'upload_max_filesize' or 'upload_maxsize'.
+      JError::raiseWarning(100, JText::_('COM_INVOICES_ERROR_WARNFILETOOLARGE'));
+      return false;
+    }
+
+    // Call media helper so we can use canUpload to check whether the upload is palatable or not.
+    $mediaHelper = new JHelperMedia;
+
+    if (!$mediaHelper->canUpload($file, 'com_invoices'))
+    {
+      return false;
+    }
+
+    // Try and import the invoices using the invoices model
+    if (!$model->import($file))
+    {
+      $this->setRedirect('index.php?option=' . $this->option, $message, 'error');
+      return false;
+    }
+
+    $this->setRedirect('index.php?option=' . $this->option, $message, 'error');
+    return true;
   }
 
   /**
-   * Method to save the submitted ordering values for records via AJAX.
+   * Get the mime type.
    *
-   * @return  void
+   * @return  string    The mime type.
    *
-   * @since   3.0
+   * @since   1.6
    */
-  public function saveOrderAjax()
+  public function getMimeType()
   {
-    // Get the input
-    $input = JFactory::getApplication()->input;
-    $pks = $input->post->get('cid', array(), 'array');
-    $order = $input->post->get('order', array(), 'array');
-
-    // Sanitize the input
-    JArrayHelper::toInteger($pks);
-    JArrayHelper::toInteger($order);
-
-    // Get the model
-    $model = $this->getModel();
-
-    // Save the ordering
-    $return = $model->saveorder($pks, $order);
-
-    if ($return)
-    {
-      echo "1";
-    }
-
-    // Close the application
-    JFactory::getApplication()->close();
-  }
-
-  public function import()
-  {
-    
-    echo "woot";die;
+    return $this->getState('compressed') ? 'application/zip' : 'text/csv';
   }
 
 }

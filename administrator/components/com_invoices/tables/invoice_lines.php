@@ -13,14 +13,39 @@ defined('_JEXEC') or die;
 /**
  * invoice Table class
  */
-class InvoicesTableInvoice_lines extends JTable {
+class InvoicesTableInvoice_lines extends JTable
+{
 
-    /**
-     * Constructor
-     *
-     * @param JDatabase A database connector object
-     */
-    public function __construct(&$db) {
-        parent::__construct('#__invoice_lines', 'invoice_id', $db);
+  /**
+   * Constructor
+   *
+   * @param JDatabase A database connector object
+   */
+  public function __construct(&$db)
+  {
+    parent::__construct('#__invoice_lines', 'id', $db);
+  }
+
+  /**
+   * Method to reset class properties to the defaults set in the class
+   * definition. It will ignore the primary key as well as any private class
+   * properties (except $_errors).
+   *
+   * @return  void
+   *
+   * @link    http://docs.joomla.org/JTable/reset
+   * @since   11.1
+   */
+  public function reset()
+  {
+    // Get the default values for the class from the table.
+    foreach ($this->getFields() as $k => $v)
+    {
+      $this->$k = $v->Default;
     }
+
+    // Reset table errors
+    $this->_errors = array();
+  }
+
 }

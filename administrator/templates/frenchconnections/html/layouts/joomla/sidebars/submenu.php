@@ -11,7 +11,7 @@ defined('JPATH_BASE') or die;
 
 ?>
 <div id="sidebar">
-	<div class="sidebar-nav well well-small">
+	<div class="sidebar-nav">
 		<?php if ($displayData->displayMenu) : ?>
 		<ul id="submenu" class="nav nav-list">
 			<?php foreach ($displayData->list as $item) :
