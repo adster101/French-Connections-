@@ -9,11 +9,6 @@
 
 defined('_JEXEC') or die;
 
-// Register the Helloworld helper file
-//JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
-    $lang = JFactory::getLanguage();
-
-    $lang->load('com_users', JPATH_SITE, null, false, true);
 $controller = JControllerLegacy::getInstance('registerowner');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
