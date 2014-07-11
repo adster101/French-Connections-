@@ -46,7 +46,7 @@ class RentalControllerListing extends JControllerForm
 
     $model = $this->getModel('Payment');
     $data = $this->input->post->get('jform', array(), 'array');
-    $context = "$this->option.view.$this->context";
+    $context = "$this->option.edit.$this->context";
 
     // Get the record ID from the data array
     $recordId = $this->input->getInt('id', '', 'int');

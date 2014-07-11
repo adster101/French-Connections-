@@ -36,13 +36,20 @@ class RentalControllerPayment extends JControllerLegacy
     // Get the record ID being renewed
     $recordId = $this->input->get('id', '', 'int');
 
+    $listing = $this->getModel('Listing', 'RentalModel', $config = array('ignore_request' => true));
+    $listing->setState('com_rental.listing.id', $recordId);
+    $listing->setState('com_rental.listing.latest', true);
+
+    // Get the listing unit details
+    $current_listing = $listing->getItems();
+
     // Set the context so we can hold the edit ID
     $context = "com_rental.edit.payment";
 
     // Get the renewal state
     $renewal = $this->input->get('renewal', 0, 'int');
     $isRenewal = ($renewal) ? '&renewal=1' : '';
-    
+
     // Check that the owner/user can edit/renew this record
     if (!$this->allowEdit(array('id' => $recordId)))
     {
@@ -60,13 +67,17 @@ class RentalControllerPayment extends JControllerLegacy
 
     // User is allowed to edit this resource, push the new record id into the session.
     $this->holdEditId($context, $recordId);
+    if (empty($current_listing[0]->vat_status))
+    {
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false);
+    }
+    else
+    {
+      // Redirect to the renewal payment/summary form thingy...
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false);
+    }
 
-    // Redirect to the renewal payment/summary form thingy...
-    $this->setRedirect(
-            JRoute::_(
-                    'index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false
-            )
-    );
+    $this->setRedirect($route);
 
     return false;
   }
