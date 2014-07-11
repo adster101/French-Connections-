@@ -538,26 +538,26 @@ class RentalControllerListing extends JControllerForm
     {
       // No VAT status on record for this listing.
       $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
-      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId, false);
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&layout=account&id=' . (int) $recordId, false);
       $this->setRedirect($redirect, $message);
     }
     elseif ($days_to_renewal < 7 && $days_to_renewal > 0)
     {
       // If there are between 7 and 0 days to renewal  
       $message = ($days_to_renewal > 0) ? 'Your property is expiring within 7 days - please renew now' : 'Property expired, renew now.';
-      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&id=' . (int) $recordId . '&renewal=1', false);
     }
     else if (empty($days_to_renewal))
     {
       // New property 
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
-      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&id=' . (int) $recordId, false);
     }
     else if ((!empty($days_to_renewal) && $days_to_renewal < 0 && $current_version[0]->review)) // Need to check review status here...
     {
 
       $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_RENEWAL_WITH_CHANGES');
-      $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . '&renewal=1', false);
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&id=' . (int) $recordId . '&renewal=1', false);
     }
     else
     {
