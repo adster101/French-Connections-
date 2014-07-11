@@ -572,7 +572,7 @@ class RentalControllerListing extends JControllerForm
       {
         // Redirect to payment screen
         $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_PAYMENT_WITH_CHANGES');
-        $redirect = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId, false);
+        $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&id=' . (int) $recordId, false);
       }
       else
       {

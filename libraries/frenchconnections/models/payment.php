@@ -111,7 +111,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    */
   public function getPaymentDue($current_order_summary, $previous_order_summary)
   {
-
+    // TO DO - Take into account the number of images on previous version and if >=8 don't charge for additional images. If previous version had less than 
     $order_lines_due = array();
     $quantity_to_charge = '';
 
@@ -564,7 +564,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     {
       $item_costs['1005-014']['quantity'] = 1;
     }
-
+    
+    // TO DO - Also for images, innit!
     // Get any additional marketing for this property
     // - French translation
     // - Video

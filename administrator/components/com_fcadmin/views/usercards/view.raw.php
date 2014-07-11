@@ -15,7 +15,7 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Invoices.
  */
-class InvoicesViewInvoices extends JViewLegacy
+class FcadminViewUsercards extends JViewLegacy
 {
 
   /**
@@ -35,7 +35,7 @@ class InvoicesViewInvoices extends JViewLegacy
 
     $document = JFactory::getDocument();
     $document->setMimeEncoding('text/csv');
-    JFactory::getApplication()->setHeader('Content-disposition', 'attachment; filename="woot.txt"; creation-date="' . JFactory::getDate()->toRFC822() . '"', true);
+    JFactory::getApplication()->setHeader('Content-disposition', 'attachment; filename="fccustomers.txt"; creation-date="' . JFactory::getDate()->toRFC822() . '"', true);
     echo $content;
   }
 

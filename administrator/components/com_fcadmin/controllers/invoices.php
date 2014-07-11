@@ -16,8 +16,30 @@ jimport('joomla.application.component.controlleradmin');
 /**
  * Invoices list controller class.
  */
-class InvoicesControllerInvoices extends JControllerAdmin
+class FcadminControllerInvoices extends JControllerLegacy
 {
+
+  protected $default_view = 'invoices';
+
+  /**
+   * Constructor.
+   *
+   * @param   array  $config  An optional associative array of configuration settings.
+   *
+   * @see     JControllerLegacy
+   * @since   12.2
+   * @throws  Exception
+   */
+  public function __construct($config = array())
+  {
+    parent::__construct($config);
+
+    // Guess the option as com_NameOfController
+    if (empty($this->option))
+    {
+      $this->option = 'com_' . strtolower($this->getName());
+    }
+  }
 
   /**
    * Method to import a list of invoices from a tab separated file
@@ -28,10 +50,11 @@ class InvoicesControllerInvoices extends JControllerAdmin
   public function import()
   {
     JSession::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
-    $params = JComponentHelper::getParams('com_invoices');
+
+    $params = JComponentHelper::getParams('com_fcadmin');
     $data = $this->input->files->get('jform', '', 'array');
     $file = $data['invoices'];
-    $model = $this->getModel();
+    $model = $this->getModel('invoices');
     $user = JFactory::getUser();
 
     // Check the auth permissions for creating invoices
@@ -68,7 +91,7 @@ class InvoicesControllerInvoices extends JControllerAdmin
     // Call media helper so we can use canUpload to check whether the upload is palatable or not.
     $mediaHelper = new JHelperMedia;
 
-    if (!$mediaHelper->canUpload($file, 'com_invoices'))
+    if (!$mediaHelper->canUpload($file, 'com_fcadmin'))
     {
       return false;
     }
@@ -76,24 +99,13 @@ class InvoicesControllerInvoices extends JControllerAdmin
     // Try and import the invoices using the invoices model
     if (!$model->import($file))
     {
-      $this->setRedirect('index.php?option=' . $this->option, $message, 'error');
+      $this->setRedirect('index.php?option=' . $this->option . '&tmpl=component');
       return false;
     }
 
-    $this->setRedirect('index.php?option=' . $this->option, $message, 'error');
+    
+    $this->setRedirect('index.php?option=' . $this->option . '&view=' . $this->default_view . '&tmpl=component');
     return true;
-  }
-
-  /**
-   * Get the mime type.
-   *
-   * @return  string    The mime type.
-   *
-   * @since   1.6
-   */
-  public function getMimeType()
-  {
-    return $this->getState('compressed') ? 'application/zip' : 'text/csv';
   }
 
 }

@@ -178,7 +178,7 @@ if (!empty($this->extra_sidebar))
                   <?php else: ?>
                     Sundries
                   <?php endif; ?>
-                  <a href="<?php echo JRoute::_('index.php?option=com_invoices&view=invoice&invoice_id=' . (int) $item->id) ?>">
+                  <a href="<?php echo JRoute::_('index.php?option=com_invoices&task=invoice.edit&id=' . (int) $item->id) ?>">
                     <?php echo JText::_('COM_INVOICES_INVOICES_VIEW_DETAIL'); ?>
                   </a>
                 </td>

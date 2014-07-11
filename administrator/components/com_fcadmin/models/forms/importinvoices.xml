@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset
+    name="import"
+    label="COM_FCADMIN_IMPORT_INVOICES_FILE_LEGEND"
+    description="COM_FCADMIN_IMPORT_INVOICE_FILE_DESCRIPTION">
+    <field 
+      type="file"
+      name="invoices"
+      labelclass="control-label"
+      label="COM_FCADMIN_IMPORT_INVOICE_FILE_LABEL">
+    </field>
+  </fieldset>
+</form>

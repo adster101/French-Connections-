@@ -29,17 +29,20 @@ class InvoicesController extends JControllerLegacy
     // Get the GET params for this view
     $view = JFactory::getApplication()->input->getCmd('view', 'invoices');
     JFactory::getApplication()->input->set('view', $view);
-    $user = JFactory::getUser();
 
-    $option = $this->input->getCmd('option', 'com_invoices');
+    $layout = $this->input->get('layout', 'default');
+    $id = $this->input->getInt('id');
 
-    // Basic check to ensure user is allowed to access this view.
-    if ($view == 'import' && !$user->authorise('com_invoices.import.view', $option))
+    // Check for edit form.
+    if ($view == 'invoice' && $layout == 'edit' && !$this->checkEditId('com_invoices.edit.invoice', $id))
     {
-      $this->setRedirect('index.php');
+      // Somehow the person just went to the form - we don't allow that.
+      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+      $this->setMessage($this->getError(), 'error');
+      $this->setRedirect(JRoute::_('index.php?option=com_invoices', false));
+
       return false;
     }
-
 
 
 

@@ -67,9 +67,12 @@ abstract class ModListingHelper
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $items = $db->loadObjectList();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       return false;
     }
 
@@ -109,28 +112,31 @@ abstract class ModListingHelper
       $msg = JText::_('COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON');
       $html = JHtml::_('property.locked', $msg);
     }
+    elseif ($review == 1 && !empty($expiry_date) && $days_to_renewal > 28)
+    {
+      $msg = JText::_('COM_RENTAL_RENTAL_EDIT_NON_SUBMITTED');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg);
+    }
     elseif ($days_to_renewal <= 28 && $days_to_renewal >= 7 && !empty($days_to_renewal))
     {
       $msg = JText::sprintf('COM_RENTAL_CONTROL_PANEL_DAYS_TO_RENEWAL', $days_to_renewal, $expiry_date);
-      $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'btn btn-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', '');
+      $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'btn btn-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', true);
     }
     elseif ($days_to_renewal <= 7 && $days_to_renewal >= 0 && !empty($days_to_renewal))
     {
       $msg = JText::sprintf('COM_RENTAL_CONTROL_PANEL_DAYS_TO_RENEWAL', $days_to_renewal, $expiry_date);
-      $html = JHtml::_('property.listingmessage', 'alert alert-warning', $msg, 'btn btn-warning', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', '');
+      $html = JHtml::_('property.listingmessage', 'alert alert-warning', $msg, 'btn btn-warning', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', true);
     }
     elseif ($days_to_renewal < 0 && !empty($days_to_renewal))
     {
       $msg = JText::sprintf('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_EXPIRED', $expiry_date);
-      $html = JHtml::_('property.listingmessage', 'alert alert-danger', $msg, 'btn btn-danger', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', '');
+      $html = JHtml::_('property.listingmessage', 'alert alert-danger', $msg, 'btn btn-danger', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', true);
     }
     elseif (empty($days_to_renewal))
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
       $html = JHtml::_('property.note', 'alert alert-danger', $msg);
     }
-
-
 
     return $html;
   }

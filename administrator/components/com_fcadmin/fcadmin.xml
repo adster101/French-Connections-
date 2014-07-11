@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.1.0" method="upgrade">
+  <name>FC Admin</name>
+  <!-- The following elements are optional and free of formatting constraints -->
+  <creationDate>September 2012</creationDate>
+  <author>Adam Rifat</author>
+  <authorEmail>adamrifat@frenchconnections.co.uk</authorEmail>
+  <authorUrl>http://www.frenchconnections.co.uk</authorUrl>
+  <copyright>Copyright Info</copyright>
+  <license>License Info</license>
+        <!--  The version string is recorded in the components table -->
+  <version>0.0.1</version>
+        <!-- The description is optional and defaults to the name -->
+  <description>
+    A helper component to import data into the joomla db from the existing FC database. Imports a csv file and allows you to specify which user
+    group the user is assiged to.
+  </description>
+        
+ 
+  <administration>
+    <!-- Administration Menu Section -->
+		<menu>COM_FCADMIN</menu>  
+    <languages folder="admin">
+			<language tag="en-GB">language/en-GB/en-GB.com_fcadmin.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_fcadmin.sys.ini</language>
+		</languages>
+  </administration>
+
+</extension>

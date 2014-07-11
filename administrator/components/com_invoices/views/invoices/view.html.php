@@ -56,29 +56,6 @@ class InvoicesViewInvoices extends JViewLegacy
 
     $bar = JToolbar::getInstance('toolbar');
 
-    // Add a batch button
-    if ($user->authorise('core.create', 'com_invoices') && $user->authorise('core.edit', 'com_invoices') && $user->authorise('core.edit.state', 'com_invoices'))
-    {
-      $title = JText::_('JTOOLBAR_UPLOAD');
-
-      // Instantiate a new JLayoutFile instance and render the batch button
-      $layout = new JLayoutFile('frenchconnections.toolbar.upload');
-
-      $dhtml = $layout->render(array('title' => $title, 'url' => 'index.php?option=com_invoices&amp;view=import&amp;tmpl=component&amp;format=raw&amp;layout=modal&amp;' . JSession::getFormToken() . '=1'));
-      $bar->appendButton('Custom', $dhtml, 'batch');
-    }
-
-    if ($user->authorise('com_invoices.users.download'))
-    {
-      $bar->appendButton('Link', 'download', 'COM_INVOICES_DOWNLOAD_USER_CARDS', 'index.php?option=com_invoices&task=invoices.downloadusercards&format=raw');
-    }
-    
-    if ($user->authorise('com_invoices.jobs.download'))
-    {
-      $bar->appendButton('Link', 'download', 'COM_INVOICES_DOWNLOAD_JOB_FILE', 'index.php?option=com_invoices&task=invoices.downloadjobfiles&format=raw');
-    }
-
-
     if ($user->authorise('core.admin', 'com_invoices'))
     {
       JToolBarHelper::preferences('com_invoices');

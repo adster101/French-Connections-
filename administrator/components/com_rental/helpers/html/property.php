@@ -320,6 +320,9 @@ class JHtmlProperty
   }
 
   /**
+   * This helper method simply displays a button on the property listings view based on the review 
+   * state and the number of days until renewal.
+   * 
    * @param	int $days	The number of days until the property expires, or null if a new sign up
    * @param	int $i
    */
@@ -333,88 +336,33 @@ class JHtmlProperty
     // About to expire (auto renew) (opt out)
     // Publshed with > 28 days to renewal (non auto renew) (opt in)
 
-    $value = '';
     $html = '';
-    $allowEdit = true;
 
     if (empty($days) || $days > 28)
-    { // A new sign up which has never been published...
-      $value = 2;
+    {
+      // A new sign up which has never been published...
+      $html = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP', 'listing.view', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'btn btn-primary', false);
     }
     elseif ($days <= 7 && $days >= 0)
-    { // Property about to expire
-      $value = 0;
+    {
+      // Property about to expire
+      $html = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE_TOOLTIP', 'payment.summary', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', 'btn btn-warning', true);
     }
     elseif ($days < 0 && !empty($days))
-    { // Property has expired
-      $value = 1;
+    {
+      // Property has expired
+      $html = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON_TOOLTIP', 'payment.summary', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', 'btn btn-danger', true);
     }
     elseif ($days >= 7 && $days <= 28)
-    { // More than seven days but expiring within the month.
-      $value = 3;
-    }
-
-    if ($review == 2)
     {
-      $value = 4;
-      $allowEdit = false;
+      // More than seven days but expiring within the month.
+      $html = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON_TOOLTIP', 'payment.summary', 'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON', 'btn btn-danger', true);
     }
-
-    $states = array(
-        0 => array(
-            'chevron-right',
-            'payment.summary',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW_ABOUT_TO_EXPIRE_TOOLTIP',
-            'btn-warning'),
-        1 => array(
-            'chevron-right',
-            'payment.summary',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON_TOOLTIP',
-            'btn-danger'),
-        2 => array(
-            'chevron-right',
-            'listing.view',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP',
-            'btn-primary'),
-        3 => array(
-            'chevron-right',
-            'payment.summary',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW',
-            'COM_RENTAL_HELLOWORLD_RENEW_NOW_BUTTON',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_DUE_FOR_RENEWAL_TOOLTIP',
-            'btn-info'),
-        4 => array(
-            'locked',
-            'listing.view',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON',
-            'COM_RENTAL_HELLOWORLD_EDIT_LISTING_LOCKED_BUTTON_TOOLTIP',
-            'btn-primary disabled')
-    );
-
-    $state = JArrayHelper::getValue($states, (int) $value, $states[2]);
-
-
-    if ($allowEdit)
+    elseif ($review == 2)
     {
-      $html .= '<a rel="tooltip" class="btn ' . $state[5] . '" href="' . JRoute::_('index.php?option=com_rental&task=' . $state[1] . '&id=' . (int) $id) . '" title="' . JText::_($state[4]) . '">';
-      $html .= '<i class=\'icon-' . $state[0] . '\'>&nbsp;</i>&nbsp;';
+      $msg = JText::_('COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON');
+      $html = JHtml::_('property.locked', $msg);
     }
-    else
-    {
-      $html .= '<span rel="tooltip" class="btn ' . $state[5] . '" title="' . JText::_($state[4]) . '">';
-      $html .= '<i class=\'icon-' . $state[0] . '\'>&nbsp;</i>&nbsp;';
-    }
-    $html .= JText::_($state[3]);
-
-
-    $html.= ($allowEdit) ? '</a>' : '</span>';
 
     return $html;
   }
@@ -512,10 +460,32 @@ class JHtmlProperty
   public static function locked($msg)
   {
     $html = '';
-    $html .= '<span class="btn-primary disabled">'
-          . '<i class="icon icon-locked"> </i>'
-          . JText::_($msg) 
-          . '</span>';
+    $html .= '<a class="btn-primary disabled">'
+            . '<i class="icon icon-locked"> </i>'
+            . JText::_($msg)
+            . '</a>';
+    return $html;
+  }
+
+  /**
+   * Adds a link type affair to the page
+   * 
+   * @param type $id
+   * @param type $title
+   * @param type $task
+   * @param type $text
+   * @param type $renewal
+   * @return string
+   */
+  public static function link($id = '', $title = '', $task = '', $text = '', $class = '', $renewal = false)
+  {
+    $isRenewal = ($renewal) ? '&renewal=1' : '';
+    $route = JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id . $isRenewal);
+    $html = '';
+    $html .= '<a rel="tooltip" title="' . JText::_($title) . '" href="' . $route . '" class="' . $class . '">'
+            . '<i class="icon icon-chevron-right"></i>&nbsp;'
+            . JText::_($text)
+            . '</a>';
     return $html;
   }
 
@@ -525,12 +495,13 @@ class JHtmlProperty
    *
    */
 
-  public static function listingmessage($msgClass = 'alert alert-danger', $msg = '', $btnClass = 'btn btn-danger', $task = '', $id, $iconClass = '', $btnText = '')
+  public static function listingmessage($msgClass = 'alert alert-danger', $msg = '', $btnClass = 'btn btn-danger', $task = '', $id, $iconClass = '', $btnText = '', $renewal = false)
   {
+    $isRenewal = ($renewal) ? '&renewal=1' : '';
+    $route = JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id . $isRenewal);
     $html = '';
     $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg)
-            . '<a class="' . $btnClass . ' pull-right" href="'
-            . JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id) . '">'
+            . '<a class="' . $btnClass . ' pull-right" href="' . $route . '">'
             . '<i class="' . $iconClass . '">&nbsp;</i>&nbsp;'
             . JText::_($btnText)
             . '</a>'
@@ -606,7 +577,7 @@ class JHtmlProperty
       {
         $progress_icon = $okay_icon;
       }
-      
+
       $id = $listing_id;
     }
     elseif (empty($item->title) && ($controller == 'propertyversions' ))

@@ -16,27 +16,35 @@ jimport('joomla.application.component.controlleradmin');
 /**
  * Invoices list controller class.
  */
-class InvoicesControllerInvoices extends JControllerAdmin
+class FcadminControllerDownloads extends JControllerAdmin
 {
 
-  public function downloadusercards()
+  public function usercards()
   {
     // Set the view to the raw view
-    $view = $this->getView('invoices', 'raw');
-    
+    $view = $this->getView('usercards', 'raw');
+
     // Get the model for the view.
-    $model = $this->getModel('DownloadUserCards');
+    $model = $this->getModel('usercards');
 
     // Push the model into the view (as default).
     $view->setModel($model, true);
- 
+
     $view->display();
-    
   }
 
-  public function downloadjobfiles()
+  public function jobfiles()
   {
-    
+    // Set the view to the raw view
+    $view = $this->getView('jobfile', 'raw');
+
+    // Get the model for the view.
+    $model = $this->getModel('jobfile');
+
+    // Push the model into the view (as default).
+    $view->setModel($model, true);
+
+    $view->display();
   }
 
 }

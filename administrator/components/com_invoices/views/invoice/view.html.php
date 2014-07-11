@@ -27,7 +27,7 @@ class InvoicesViewInvoice extends JViewLegacy {
   public function display($tpl = null) {
 
     $app = JFactory::getApplication();
-    $this->id = $app->input->get('invoice_id','','int');
+    $this->id = $app->input->get('id','','int');
 
     $this->state = $this->get('State');
 

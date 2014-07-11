@@ -26,9 +26,12 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     // Update the end_date for the offer
     $item->end_date = JFactory::getDate('-1 day')->toSql();
 
-    try {
+    try
+    {
       $table->save($item);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       return false;
     }
 
@@ -58,7 +61,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     // Get the offer 
     $this->_db->setQuery($query);
 
-    try {
+    try
+    {
 
       $result = $this->_db->loadObject();
 
@@ -72,7 +76,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       }
 
       return $result;
-    } catch (RuntimeException $e) {
+    }
+    catch (RuntimeException $e)
+    {
       $je = new JException($e->getMessage());
       $this->setError($je);
       return false;
@@ -124,7 +130,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   private function getUnitDetail($unit_id = '')
   {
 
-    try {
+    try
+    {
 
       $query = $this->_db->getQuery(true);
 
@@ -147,7 +154,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       $this->_db->setQuery($query);
 
       $row = $this->_db->loadObject();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       $this->setError($e->getMessage());
       return false;
     }
@@ -316,7 +325,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
 
-    try {
+    try
+    {
 
       $unit_detail = $this->getUnitDetail($unit_id);
 
@@ -362,6 +372,11 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         $offer = JArrayHelper::toObject($properties, 'JObject');
       }
 
+      if (empty($offer->created_by))
+      {
+        $data['created_by'] = $user->id;
+      }
+
       // Offer already created. If not approved and being set to published then update the approved by gubbins
       if (empty($offer->approved_by) && empty($offer->approved_on) && !$offer->published && $data['published'] == 1)
       {
@@ -380,7 +395,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
       // Clean the cache.
       $this->cleanCache();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       $this->setError($e->getMessage());
 
       return false;

@@ -33,7 +33,7 @@ class RentalControllerBase extends JControllerForm
     }
 
     // For enquiries and special offers, look up the property id using the table
-    if ($this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs')
+    if ($this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs' || $this->context == 'invoice')
     {
 
       $model = $this->getModel();
