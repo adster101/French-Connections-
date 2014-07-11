@@ -11,7 +11,7 @@ jimport('simplediff.simplediff');
 /**
  * HelloWorld Model
  */
-class RentalModelListingReview extends JModelAdmin
+class RentalModelReview extends JModelAdmin
 {
 
   /**

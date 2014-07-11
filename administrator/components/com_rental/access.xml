@@ -22,7 +22,7 @@
 		<action name="rental.contactdetails.view" title="Access contact details view" description="" />
 		<action name="rental.images.view" title="Access images view" description="" />
 		<action name="rental.listing.view" title="Access listing view" description="" />
-		<action name="rental.listingreview.view" title="Access listing review view" description="" />
+		<action name="rental.review.view" title="Access listing review view" description="" />
 		<action name="rental.listings.view" title="Access listings view" description="" />
     <action name="rental.notes.view" title="Access notes view" description="" />
 		<action name="rental.note.view" title="Access note view" description="" />

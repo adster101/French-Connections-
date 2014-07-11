@@ -17,7 +17,7 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
 <form name='adminForm' id='adminForm' action='index.php?option=com_rental' class='form-validate' method='post'>
   <ul class="nav nav-tabs">
     <li <?php echo ($layout == 'property') ? 'class="active"' : '' ?>>
-      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=listingreview&layout=property&property_id=' . (int) $listing_id) ?>">
+      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=review&layout=property&property_id=' . (int) $listing_id) ?>">
         <i class="icon <?php echo 'icon-' . $property_status_icon ?>"></i>
         Property Detail
       </a>
@@ -26,7 +26,7 @@ $property_status_icon = (!$this->units[0]->property_review) ? 'publish' : 'warni
       <li <?php echo ($layout == 'unit' && $unit->unit_id == $unit_id) ? 'class="active"' : '' ?>>
         <?php $review = ($unit->unit_review == 1) ? 'warning' : 'publish'; ?>
 
-        <a href="<?php echo JRoute::_('index.php?option=com_rental&view=listingreview&layout=unit&property_id=' . (int) $unit->property_id . '&unit_id=' . (int) $unit->unit_id) ?>">
+        <a href="<?php echo JRoute::_('index.php?option=com_rental&view=review&layout=unit&property_id=' . (int) $unit->property_id . '&unit_id=' . (int) $unit->unit_id) ?>">
           <?php if ($review) : ?>
             <i class="icon <?php echo 'icon-' . $review ?>"></i>
           <?php endif; ?>

@@ -299,7 +299,10 @@ class RentalControllerListing extends JControllerForm
   public function review()
   {
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken() or die('Invalid Token');
+    if (!JSession::checkToken() && !JSession::checkToken('GET'))
+    {
+      die('Invalid Token');
+    }
 
     // Get the user
     $user = JFactory::getUser();
@@ -307,7 +310,7 @@ class RentalControllerListing extends JControllerForm
     $table = $model->getTable('Property', 'RentalTable');
     $cid = $this->input->post->get('cid', array(), 'array');
     $app = JFactory::getApplication();
-    $context = "$this->option.review.$this->context";
+    $context = "$this->option.edit.review";
 
     $recordId = (int) (count($cid) ? $cid[0] : 0);
     $checkin = property_exists($table, 'checked_out');
@@ -355,7 +358,7 @@ class RentalControllerListing extends JControllerForm
 
       $this->setRedirect(
               JRoute::_(
-                      'index.php?option=' . $this->option . '&view=listingreview&layout=property&property_id=' . $recordId, false
+                      'index.php?option=' . $this->option . '&view=review&layout=property&property_id=' . $recordId, false
               )
       );
 
