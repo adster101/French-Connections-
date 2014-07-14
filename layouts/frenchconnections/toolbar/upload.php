@@ -10,10 +10,9 @@
 defined('_JEXEC') or die;
 
 $title = $displayData['title'];
-$url = $displayData['url'];
 
 ?>
-<button data-toggle="modal" data-target="#collapseModal" class="btn btn-small" data-remote="<?php echo $url; ?>">
+<button data-toggle="modal" data-target="#collapseModal" class="btn btn-small">
 	<i class="icon-upload" title="<?php echo $title; ?>"></i>
 	<?php echo $title; ?>
 </button>

@@ -376,6 +376,8 @@ class JHtmlProperty
 
     $html = '';
 
+    
+    
     $states = array(
         0 => array(
             'chevron-right',
@@ -501,7 +503,7 @@ class JHtmlProperty
     $route = JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id . $isRenewal);
     $html = '';
     $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg)
-            . '<a class="' . $btnClass . ' pull-right" href="' . $route . '">'
+            . '<a class="' . $btnClass . '" href="' . $route . '">'
             . '<i class="' . $iconClass . '">&nbsp;</i>&nbsp;'
             . JText::_($btnText)
             . '</a>'

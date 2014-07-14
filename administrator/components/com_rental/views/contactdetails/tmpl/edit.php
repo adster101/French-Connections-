@@ -17,19 +17,18 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
 ?>
 
 
-<form action="<?php echo JRoute::_('index.php?option=com_rental&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal ">
+<form action="<?php echo JRoute::_('index.php?option=com_rental&view=property&task=edit&property_id=' . (int) $this->item->property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
-      <?php //echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_DETAILS_HELP'); ?>
     </div>
     <div id="" class="span10">
     <?php else : ?>
-      <div class="span10 form-inline">
+      <div class="span12">
       <?php endif; ?>
       <?php
       echo $progress_layout->render($data);
-      echo $tabs_layout->render($data);
+      //echo $tabs_layout->render($data);
       ?>
 
       <fieldset class="adminform form-horizontal">
@@ -63,6 +62,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
         <?php echo $this->form->getLabel('contact_override_note'); ?>
         <div class="control-group">
           <div class="control-label">
+            <?php echo $this->form->getLabel('use_invoice_details'); ?>
           </div>
           <div class="controls">
             <?php echo $this->form->getInput('use_invoice_details'); ?>
@@ -112,7 +112,6 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
             <?php echo $this->form->getInput('website'); ?>
           </div>
         </div>
-
       </fieldset>
       <fieldset class="adminform">
         <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LANGUAGES_SPOKEN'); ?></legend>
@@ -137,15 +136,13 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
             </div>
           </div>
         <?php endforeach; ?>
-
       </fieldset>          
     </div>
-  </div>
 
-  <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
+    <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
 
-    <?php echo $field->input; ?>
-  <?php endforeach; ?>
-  <input type="hidden" name="task" value="" />
-  <?php echo JHtml::_('form.token'); ?>
+      <?php echo $field->input; ?>
+    <?php endforeach; ?>
+    <input type="hidden" name="task" value="" />
+    <?php echo JHtml::_('form.token'); ?>
 </form>

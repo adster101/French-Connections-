@@ -6,9 +6,11 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HelloWorld View
  */
-class RentalViewPropertyversions extends JViewLegacy {
+class RentalViewPropertyversions extends JViewLegacy
+{
 
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     $this->_name = 'propertyversions';
@@ -18,7 +20,8 @@ class RentalViewPropertyversions extends JViewLegacy {
    * display method of Hello view
    * @return void
    */
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
 
     // Get the model state
     $this->state = $this->get('State');
@@ -49,7 +52,8 @@ class RentalViewPropertyversions extends JViewLegacy {
     $lang = RentalHelper::getLang();
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
@@ -75,7 +79,8 @@ class RentalViewPropertyversions extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
     // Determine the view we are using.
     $view = strtolower(JRequest::getVar('view'));
 
@@ -93,19 +98,20 @@ class RentalViewPropertyversions extends JViewLegacy {
 
     // Built the actions for new and existing records.
 
-    if ($canDo->get('core.create')) {
+    if ($canDo->get('core.create'))
+    {
       // We can save the new record
       JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }
+
     JToolbarHelper::help('', false, '/support/rental-property/1139-location-details');
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 
 
     //RentalHelper::addSubmenu('listings');
-
     // Add the side bar
     //$this->sidebar = JHtmlSidebar::render();
   }
@@ -115,22 +121,19 @@ class RentalViewPropertyversions extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
 
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->id));
-    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
-    JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
     $document->addScript(JURI::root() . "/media/fc/js/general.js");
 
     $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript(JURI::root() . "/administrator/components/com_rental/js/locate.js", 'text/javascript', true, false);
-    //$document->addScript("http://help.frenchconnections.co.uk/JavaScript.ashx?fileMask=Optional/ChatScripting",'text/javascript',false, false);
-
-    JText::script('COM_RENTAL_PLEASE_CHOOSE');
-
     $document->addStyleSheet(JURI::root() . "/administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
   }
 

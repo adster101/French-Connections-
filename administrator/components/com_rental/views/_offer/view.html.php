@@ -94,6 +94,6 @@ class RentalViewOffer extends JViewLegacy
 		$document->setTitle($isNew ? JText::_('COM_RENTAL_HELLOWORLD_CREATING') : JText::_('COM_RENTAL_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . $this->script);
 		$document->addScript(JURI::root() . "/administrator/components/com_rental/views/helloworld/submitbutton.js");
-		JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+		JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
 	}
 }

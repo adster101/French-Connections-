@@ -34,7 +34,7 @@ $amenities = $this->form->getGroup('amenities');
         <?php endif; ?>
         <?php
         echo $progress_layout->render($data);
-        echo $tabs_layout->render($data);
+        //echo $tabs_layout->render($data);
         ?>
 
         <fieldset>

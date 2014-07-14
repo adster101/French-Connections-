@@ -20,9 +20,8 @@ $cmd = "Joomla.submitbutton('$task','invoiceForm')";
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-
     <button class="btn btn-primary" onclick="<?php echo $cmd; ?>">
-<?php echo JText::_('JSUBMIT'); ?>
+      <?php echo JText::_('JSUBMIT'); ?>
     </button>
   </div>
 </div>

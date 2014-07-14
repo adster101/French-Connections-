@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
   if (document.createElement("input").placeholder == undefined) {
     // Placeholder is not supported, so remove the attribute
     jQuery('input').removeAttr('placeholder');
-  } 
+  }
 
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
@@ -84,7 +84,7 @@ jQuery(document).ready(function() {
 
   jQuery(function() {
     if (jQuery('.start_date').length) {
-      
+
       var start_date = jQuery('.start_date').attr('value');
 
       if (start_date == '') {
@@ -119,11 +119,11 @@ jQuery(document).ready(function() {
 
   if (jQuery("#contactDetails").length) {
 
-    var checked = jQuery('input[name="jform[use_invoice_details]"');
+    var checked = jQuery('#jform_use_invoice_details');
 
     show_contact(checked);
 
-    jQuery("input[name='jform[use_invoice_details]']").on('click', function(e) {
+    jQuery("#jform_use_invoice_details").on('change', function(e) {
 
       show_contact(this);
 
@@ -146,7 +146,9 @@ jQuery(document).ready(function() {
   // Bind a change function to all forms that need validation.
   // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
-    window.onbeforeunload = youSure;
+    window.onbeforeunload = function() {
+      return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    };
   });
 
   try {
@@ -159,7 +161,9 @@ jQuery(document).ready(function() {
           // Check whether the actie editor 'is dirty'
           if (tinyMCE.activeEditor.isDirty()) {
             // If so, do the business on before unload
-            window.onbeforeunload = youSure;
+            window.onbeforeunload = function() {
+              return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+            };
           }
         });
       });
@@ -228,11 +232,6 @@ function initialise() {
       map.panTo(marker.getPosition());
     }, 1500);
   });
-}
-
-var youSure = function() {
-  return Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_UNSAVED_CHANGES');
-
 }
 
 var getContent = function(that) {
@@ -328,17 +327,11 @@ Joomla.submitbutton = function(task)
   {
     return false;
   }
-  else if (task == 'unitversions.add') 
-  { 
-    console.log(task);
-    jQuery('jform_tos').attr('required', '');
-    return true;
-  }
   else
   {
     var isValid = true;
     var action = task.split('.');
-    
+
     if (action[1] != 'cancel' && action[1] != 'close')
     {
       var forms = $$('form.form-validate');
@@ -361,7 +354,7 @@ Joomla.submitbutton = function(task)
     }
     else
     {
-      alert(Joomla.JText._('COM_HELLOWORLD_HELLOWORLD_ERROR_UNACCEPTABLE', ''));
+      alert(Joomla.JText._('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE', ''));
       return false;
     }
   }

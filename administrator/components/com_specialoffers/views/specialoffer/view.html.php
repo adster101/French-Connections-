@@ -80,7 +80,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
 
     $document->addStyleSheet(JURI::root() . "/media/fc/css/jquery-ui-1.8.23.custom.css");
 
-    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
   }
 
   /**

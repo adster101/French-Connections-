@@ -163,7 +163,7 @@ class RentalControllerListing extends JControllerForm
 
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=listingreview&layout=approve&property_id=' . $recordId, false
+                    'index.php?option=' . $this->option . '&view=review&layout=approve&property_id=' . $recordId, false
             )
     );
     return true;
@@ -228,7 +228,7 @@ class RentalControllerListing extends JControllerForm
     $model = $this->getModel();
     $model->setState('com_rental.listing.id', $recordId);
     $property_model = $this->getModel('Property', 'RentalModel');
-    $listingreview_model = $this->getModel('ListingReview', 'RentalModel');
+    $listingreview_model = $this->getModel('Review', 'RentalModel');
 
     // Validate the posted data
     $form = $listingreview_model->getForm();

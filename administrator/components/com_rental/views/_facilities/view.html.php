@@ -98,6 +98,6 @@ class RentalViewFacilities extends JViewLegacy
 
 		$document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css",'text/css',"screen");
 
-		JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+		JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
 	}
 }

@@ -52,12 +52,11 @@ class RentalViewAutorenewals extends JViewLegacy
    */
   protected function setDocument()
   {
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
     $document = JFactory::getDocument();
+    $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true);
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
-    $document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js", true, false);
-    $document->addScript(JURI::root() . "/administrator/components/com_rental/js/vat.js", 'text/javascript', true, false);
-
-    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
   }
 
   /**

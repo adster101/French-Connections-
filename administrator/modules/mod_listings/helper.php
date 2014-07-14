@@ -30,7 +30,7 @@ abstract class ModListingHelper
   {
     $user = JFactory::getuser();
     $db = JFactory::getDbo();
-
+    $date = JFactory::getDate()->calendar('Y-m-d');
     $query = $db->getQuery(true);
 
     // Select some fields
@@ -45,6 +45,7 @@ abstract class ModListingHelper
       date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
       a.review,
+      (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-032") . ' ) as payment, 
       f.image_file_name as thumbnail
     ');
 
@@ -88,7 +89,7 @@ abstract class ModListingHelper
       $property->auto_renewal = (!empty($property->VendorTxCode)) ? true : false;
       // Done properly, can just pass the object here 
       $property->message =
-              ModListingHelper::getListingStatusMessage($property->expiry_date, $property->days_to_renewal, $property->id, $property->review);
+              ModListingHelper::getListingStatusMessage($property->expiry_date, $property->days_to_renewal, $property->id, $property->review, $property->payment);
     }
     return $properties;
   }
@@ -102,7 +103,7 @@ abstract class ModListingHelper
    * @param type $review
    * @return type
    */
-  public static function getListingStatusMessage($expiry_date, $days_to_renewal, $id, $review)
+  public static function getListingStatusMessage($expiry_date, $days_to_renewal, $id, $review, $payment)
   {
 
     $html = '';
@@ -136,6 +137,12 @@ abstract class ModListingHelper
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
       $html = JHtml::_('property.note', 'alert alert-danger', $msg);
+    }
+    elseif (!empty($payment)) 
+    {
+      $msg = JText::_('COM_RENTAL_PAYMENT_DUE');
+      $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'label label-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_PAYMENT_DUE_PROCEED', false);
+
     }
 
     return $html;

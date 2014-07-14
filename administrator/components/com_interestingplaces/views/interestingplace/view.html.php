@@ -102,6 +102,6 @@ class InterestingPlacesViewInterestingPlace extends JViewLegacy
 		$document->setTitle($isNew ? JText::_('COM_RENTAL_HELLOWORLD_CREATING') : JText::_('COM_RENTAL_HELLOWORLD_EDITING'));
 		$document->addScript(JURI::root() . "/administrator/components/com_interestingplace/views/classification/submitbutton.js");
 
-		JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+		JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
 	}
 }

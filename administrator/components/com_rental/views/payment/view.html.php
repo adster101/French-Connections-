@@ -83,7 +83,7 @@ class RentalViewPayment extends JViewLegacy
 
     $document->addScript(JURI::root() . "/media/fc/js/general.js", false, true);
 
-    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
   }
 

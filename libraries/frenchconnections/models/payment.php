@@ -85,6 +85,33 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     }
   }
 
+  public function clearVouchers($listing_id)
+  {
+    // Get the db object
+    $db = JFactory::getDBO();
+    // Get a date so we can expire all vouchers listed against a property
+    $date = JFactory::getDate('-1 day')->calendar('Y-m-d');
+    $yesterday = JFactory::getDate('')->calendar('Y-m-d');
+
+
+    $query = $db->getQuery(true);
+
+    $query->update('#__vouchers');
+    $query->set($db->quoteName('end_date') . ' = ' . $db->quote($yesterday));
+    $query->set($db->quoteName('date_redeemed') . ' = ' . $db->quote($date));
+    $query->where($db->quoteName('property_id') . ' = ' . (int) $listing_id);
+
+    try
+    {
+      $db->setQuery($query);
+      $db->execute();
+    }
+    catch (Exception $e)
+    {
+      return false;
+    }
+  }
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -564,7 +591,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     {
       $item_costs['1005-014']['quantity'] = 1;
     }
-    
+
     // TO DO - Also for images, innit!
     // Get any additional marketing for this property
     // - French translation
@@ -971,7 +998,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return $message;
       // Send confirmation of submission
     }
-    else if (!empty($expiry_date) && !$this->getIsRenewal())
+    else if (!empty($expiry_date) && !$this->getIsRenewal() && $this->getIsReview())
     {
 
       // Existing property that has been updated. - May not be appropriate here...or this may 
@@ -989,6 +1016,29 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       }
 
       $this->updateProperty($listing_id, $total, $review = 2);
+
+      $message = JText::_('COM_RENTAL_PROPERTY_EXISTING_PROPERTY_UPDATE_WITH_PAYMENT');
+
+      return $message;
+    }
+    else if (!empty($expiry_date) && !$this->getIsRenewal() && !$this->getIsReview())
+    {
+      // Must be processing a voucher or some other gubbins
+      $total = $this->getOrderTotal($order);
+
+      if (round($total, 2) > 0)
+      {
+        // Send payment receipt
+        $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
+        $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
+        $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
+      }
+
+      $this->clearVouchers($listing_id);
+
+      $message = JText::_('COM_RENTAL_PROPERTY_ADDITIONAL_PAYMENT_RECEIVED');
+
+      return $message;
     }
   }
 
@@ -1236,9 +1286,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $rows = $db->loadObjectList();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       // Problem loading vouchers for this property
       return false;
     }

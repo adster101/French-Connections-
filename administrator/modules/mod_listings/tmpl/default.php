@@ -7,6 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
+
 ?>
 <div class="page-header clearfix">
   <a class="btn <?php echo (count($listings)) ? '' : 'btn-large' ?> btn-success pull-right" href="index.php?option=com_rental&amp;task=propertyversions.add"> 
@@ -34,10 +35,26 @@ defined('_JEXEC') or die;
           </div>
           <div class="listing-container-wide">
             <?php echo JHtml::_('property.editButton', $item->days_to_renewal, $item->id, $item->unit_id, $item->review); ?>
+           
             <hr />
-            <p>
-              <?php echo JHtml::_('property.autorenewalstate', $item->auto_renewal, $item->id); ?>
-            </p>
+            <?php if ($item->auto_renewal) : ?>
+              <p><?php echo JText::sprintf('MOD_LISTINGS_AUTO_RENEWAL_ENABLED', $item->expiry_date); ?></p>
+              <p>
+                <?php echo JText::_('MOD_LISTING_AUTO_RENEWAL_STATUS_ENABLED'); ?>
+                <?php echo JHtml::_('property.link', $item->id, 'COM_RENTAL_HELLOWORLD_CANCEL_AUTO_RENEWALS_CLICK_HERE', 'autorenewals.showtransactionlist', 'COM_RENTAL_HELLOWORLD_CANCEL_AUTO_RENEWALS_CLICK_HERE', '', false); ?>
+              </p>
+            <?php elseif (!$item->auto_renewal && !empty($item->expiry_date)) : ?>
+              <p><?php echo JText::sprintf('MOD_LISTINGS_ENABLE_AUTO_RENEWAL', $item->expiry_date); ?></p>
+              <p>
+                <?php echo JText::_('MOD_LISTING_AUTO_RENEWAL_STATUS_NOT_ENABLED'); ?>
+                <?php echo JHtml::_('property.link', $item->id, 'COM_RENTAL_HELLOWORLD_ENABLE_AUTO_RENEWALS', 'autorenewals.showtransactionlist', 'COM_RENTAL_HELLOWORLD_ENABLE_AUTO_RENEWALS', '', false); ?>
+              </p>
+            <?php else : ?>      
+              <?php echo JText::_('MOD_LISTING_AUTO_RENEWAL_STATUS_NOT_ENABLED'); ?>
+
+              <?php echo JHtml::_('property.link', $item->id, 'COM_RENTAL_HELLOWORLD_ENABLE_AUTO_RENEWALS', 'autorenewals.showtransactionlist', 'COM_RENTAL_HELLOWORLD_ENABLE_AUTO_RENEWALS', '', false); ?>
+            <?php endif; ?>
+            <?php //echo JHtml::_('property.autorenewalstate', $item->auto_renewal, $item->id); ?>
           </div>
         </div>
         <div class="listing-container-narrow-links">

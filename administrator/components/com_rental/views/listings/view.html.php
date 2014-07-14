@@ -118,7 +118,7 @@ class RentalViewListings extends JViewLegacy
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
     $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
 
-    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
   }
 
 }

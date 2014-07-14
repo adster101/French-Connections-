@@ -155,7 +155,7 @@ class plgUserProfile_fc extends JPlugin
     $doc = JFactory::getDocument();
     //$doc->addScript('/media/fc/js/general.js', 'text/javascript', true);  
 
-    JText::script('COM_RENTAL_HELLOWORLD_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
 
     // Remove the name field. This is maintained in the onAfterUserSave method by concatenating the first and surnames.

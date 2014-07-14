@@ -30,7 +30,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         echo $progress->render($data);
 
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        echo $layout->render($data);
+        //echo $layout->render($data);
         ?>
 
         <fieldset class="adminform form-inline">
@@ -64,6 +64,19 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <fieldset class="adminform ">
           <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_OCCUPANCY_DETAILS', $this->item->unit_title); ?></legend>
           <?php foreach ($this->form->getFieldset('occupancy') as $field) : ?>
+            <div class="bedrooms-container">
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </fieldset>
+        <fieldset class="adminform ">
+          <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_BATHROOM_DETAILS', $this->item->unit_title); ?></legend>
+          <?php foreach ($this->form->getFieldset('douches') as $field) : ?>
             <div class="bedrooms-container">
               <div class="control-group">
                 <?php echo $field->label; ?>

@@ -40,14 +40,9 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       Joomla.submitform(task, document.getElementById('profile-form'));
     }
   }
-
-
-
-
-
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
+<form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="profile-form" class="form-validate form-horizontal" enctype="multipart/form-data">
   <div class="row-fluid">
 
     <div id="" class="span12">
