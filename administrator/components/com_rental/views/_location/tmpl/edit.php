@@ -30,7 +30,7 @@ $data = array('units'=>$this->units,'item'=>$this->item,'progress'=>$this->progr
         <?php endif; ?> 
         <?php
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        //echo $layout->render($data);
+        echo $layout->render($data);
         ?>
         <fieldset class="adminform form-horizontal">
           <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_DETAILS'); ?></legend>

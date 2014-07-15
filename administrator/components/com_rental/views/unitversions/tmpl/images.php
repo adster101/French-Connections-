@@ -40,12 +40,14 @@ $data = array('item' => $this->unit, 'progress' => $this->progress);
     <?php else : ?>
       <div id="j-main-container" class="span10">
       <?php endif; ?>
-      <?php
+      <?php  
+      $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+      echo $layout->render($data);
+      
       $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       echo $progress->render($data);
 
-      $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-      //echo $layout->render($data);
+
       ?>
       <div id="collapseUpload" class="in collapse">
         <!-- The file upload form used as target for the file upload widget -->

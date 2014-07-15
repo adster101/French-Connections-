@@ -61,10 +61,10 @@ abstract class ModListingHelper
     $query->join('left', '#__unit d on d.property_id = a.id');
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
     $query->where('(d.ordering = 1 or d.ordering is null)');
-
+    $query->where('d.published = 1');
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
-    $query->where('(f.ordering = 1 or f.ordering is null)');
+    $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');
 
     $db->setQuery($query);
 

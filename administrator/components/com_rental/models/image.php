@@ -132,58 +132,6 @@ class RentalModelImage extends JModelAdmin {
     return $user->authorise('rental.images.reorder', $this->option); 
   }
 
-  /**
-   * Method to adjust the ordering of a row. Amended to check edit state access check
-   *
-   * Returns NULL if the user did not have edit
-   * privileges for any of the selected primary keys.
-   *
-   * @param   integer  $pks    The ID of the primary key to move.
-   * @param   integer  $delta  Increment, usually +1 or -1
-   *
-   * @return  mixed  False on failure or error, true on success, null if the $pk is empty (no items selected).
-   *
-   * @since   12.2
-   */
-  public function reorder($pks, $delta = 0) {
-    $table = $this->getTable();
-    $pks = (array) $pks;
-    $result = true;
-
-    $allowed = true;
-
-    foreach ($pks as $i => $pk) {
-      $table->reset();
-
-      if ($table->load($pk) && $this->checkout($pk)) {
-
-        $where = $this->getReorderConditions($table);
-
-        if (!$table->move($delta, $where)) {
-          $this->setError($table->getError());
-          unset($pks[$i]);
-          $result = false;
-        }
-
-        $this->checkin($pk);
-      } else {
-        $this->setError($table->getError());
-        unset($pks[$i]);
-        $result = false;
-      }
-    }
-
-    if ($allowed === false && empty($pks)) {
-      $result = null;
-    }
-
-    // Clear the component's cache
-    if ($result == true) {
-      $this->cleanCache();
-    }
-
-    return $result;
-  }
 
   /**
    * Method to get the data that should be injected in the form.
@@ -199,7 +147,7 @@ class RentalModelImage extends JModelAdmin {
     }
     return $data;
   }
-
+ 
   /**
    * A protected method to get a set of ordering conditions.
    *

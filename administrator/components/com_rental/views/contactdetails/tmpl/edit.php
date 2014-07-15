@@ -28,7 +28,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       <?php endif; ?>
       <?php
       echo $progress_layout->render($data);
-      //echo $tabs_layout->render($data);
+      echo $tabs_layout->render($data);
       ?>
 
       <fieldset class="adminform form-horizontal">

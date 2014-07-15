@@ -27,7 +27,7 @@ $counter = 0;
         echo $progress->render($data);
 
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        //echo $layout->render($data);
+        echo $layout->render($data);
         ?>
         <div class="alert alert-notice">
           <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_TARIFFS_INSTRUCTIONS'); ?></p>

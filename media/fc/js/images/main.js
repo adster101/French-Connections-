@@ -12,70 +12,33 @@
 /*jslint nomen: true, unparam: true, regexp: true */
 /*global $, window, document */
 
-
-
 jQuery(function() {
 
   'use strict';
+    // Initialize the jQuery File Upload widget:
+    jQuery('#fileupload').fileupload({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        //url: 'server/php/'
+    });
 
-  // Initialize the jQuery File Upload widget:
-  jQuery('#fileupload').fileupload({
-    // Uncomment the following to send cross-domain cookies:
-    //xhrFields: {withCredentials: true},
-    //url: 'index.php?option=com_helloworld&task=images.upload'
-    //downloadTemplateId:null,
-    //uploadTemplateId:null,
-    // Enable image resizing, except for Android and Opera,
-    // which actually support image resizing, but fail to
-    // send Blob objects via XHR requests:
-    disableImageResize: /Android(?!.*Chrome)|Opera/
-            .test(window.navigator.userAgent),
-    previewMaxWidth: 210,
-    previewMaxHeight: 120,
-    previewCrop: true,
-    maxFileSize: 4000000,
-    singleFileUploads: true,
-    sequentialUploads: true,
-    dropZone: dropZone,
-    multipart: true,
-    autoUpload: false
-  }).bind('fileuploaddone', function(e, data) {
-    // File has been uploaded, need to refresh the existing images list
-
-    try {
-
-      if (!data.result.files[0].error.length) {
-
-        jQuery("#fc-message")
-                .addClass("alert alert-success show")
-                .html(data.result.files[0].message);
-
-        var id = jQuery('input[name=id]').val();
-        var id = data.result.files[0].version_id;
-
-        jQuery('input[name=id]').val(id);
-
-        jQuery.get(
-                "/administrator/index.php?option=com_rental&view=images&layout=default_image_list&format=raw",
-                {
-                  version_id: id
-                })
-                .done(function(results) {
-          
-          jQuery('.ui-sortable').empty();
-          jQuery('.ui-sortable').html(results);
-          // Bind the caption save event to the 
-          add_event_handlers();
-
+   
+      // Load existing files:
+        jQuery('#fileupload').addClass('fileupload-processing').fileupload('add', function(){
+          alert("eoot");
         });
-        
-      } else {
-        
-      }
-    } catch (err) {
-      console.log(err.message);
-    }
-  });
+        jQuery.ajax({
+            // Uncomment the following to send cross-domain cookies:
+            //xhrFields: {withCredentials: true},
+            url: jQuery('#fileupload').fileupload('option', 'url'),
+            dataType: 'json',
+            context: jQuery('#fileupload')[0]
+        }).always(function () {
+            jQuery(this).removeClass('fileupload-processing');
+        }).done(function (result) {
+            jQuery(this).fileupload('option', 'done')
+                .call(this, $.Event('done'), {result: result});
+        });
 });
 
 // When the Document is ready...
@@ -93,7 +56,7 @@ jQuery(function() {
 
 // Add the relevant event handlers to the save caption and delete buttons
 function add_event_handlers() {
-  var sortableList = new jQuery.JSortableList('#articleList tbody', 'adminForm', '', 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component', '', '');
+  var sortableList = new jQuery.JSortableList('#imageList', 'adminForm', '', 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component', '', '');
 
   jQuery('.delete').on('click', function(event) {
     if (!confirm("Really delete?")) {

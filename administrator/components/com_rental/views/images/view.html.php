@@ -18,7 +18,6 @@ class RentalViewImages extends JViewLegacy
    */
   public function display($tpl = null)
   {
-
     // Add the Listing model to this view, so we can get the progress stuff
     $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true)));
 
@@ -42,12 +41,10 @@ class RentalViewImages extends JViewLegacy
     // Set the list limit model state so that we return all available images.
     $images->setState('list.limit');
 
-
     // Get the images associated with this unit version
     $this->items = $this->get('Items');
 
     $this->pagination = $this->get('Pagination');
-
 
     // Set the toolbar
     $this->addToolBar();
@@ -88,13 +85,13 @@ class RentalViewImages extends JViewLegacy
       // Get the toolbar object instance
       $bar = JToolBar::getInstance('uploadimages');
       
-      JHtml::_('bootstrap.modal', 'collapseModal');
+      JHtml::_('bootstrap.modal', 'imageUploadModal');
       $title = JText::_('JTOOLBAR_UPLOAD');
 
       // Instantiate a new JLayoutFile instance and render the batch button
       $layout = new JLayoutFile('frenchconnections.toolbar.upload');
 
-      $dhtml = $layout->render(array('title' => $title));
+      $dhtml = $layout->render(array('title' => $title, 'target' => '#imageUploadModal' ));
       $bar->appendButton('Custom', $dhtml, 'upload');
 
     }
@@ -126,6 +123,7 @@ class RentalViewImages extends JViewLegacy
     $document->addScript(JURI::root() . "media/fc/js/images/main.js", 'text/javascript', true, false);
     //$document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery.fileupload.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery.fileupload-ui.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
 

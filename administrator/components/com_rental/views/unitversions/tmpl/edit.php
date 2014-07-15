@@ -30,7 +30,7 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         echo $progress->render($data);
 
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        //echo $layout->render($data);
+        echo $layout->render($data);
         ?>
 
         <fieldset class="adminform form-inline">

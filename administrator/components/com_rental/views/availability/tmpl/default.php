@@ -37,7 +37,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
       $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       echo $progress->render($data);
-      //echo $layout->render($data);
+      echo $layout->render($data);
       ?>
       <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_AVAILABILITY', $this->unit->unit_title); ?></legend>
       <div class="clear alert alert-notice">

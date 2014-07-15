@@ -248,7 +248,7 @@ class RentalModelListings extends JModelList
 
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
-    $query->where('(f.ordering = 1 or f.ordering is null)');
+    $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');
 
     $listOrdering = $this->getState('list.ordering', 'a.id');
     $listDirn = $db->escape($this->getState('list.direction', ''));

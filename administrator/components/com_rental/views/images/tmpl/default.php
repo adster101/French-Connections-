@@ -2,8 +2,8 @@
 // No direct access
 
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+//JHtml::_('behavior.tooltip');
+//JHtml::_('behavior.formvalidation');
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
@@ -14,7 +14,7 @@ $saveOrder = true;
 
 if ($saveOrder) {
   $saveOrderingUrl = 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component';
-  JHtml::_('fcsortablelist.fcsortable', 'articleList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false);
+  JHtml::_('fcsortablelist.fcsortable', 'imageList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false);
 }
 
 $app = JFactory::getApplication();
@@ -34,130 +34,29 @@ $data = array('progress' => $this->progress);
     <?php else : ?>
       <div id="j-main-container" class="span12">
       <?php endif; ?>
-      <?php
+      <?php  
+      $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+      echo $layout->render($data);
+      
       $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       echo $progress->render($data);
 
-      $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-      //echo $layout->render($data);
+   
       echo JToolbar::getInstance('uploadimages')->render();
       ?>
-    
-
-
-      <script id="template-upload" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
-    <tr class="template-upload fade">
-        <td>
-            <span class="preview"></span>
-        </td>
-        <td>
-            <p class="name">{%=file.name%}</p>
-            <strong class="error text-danger"></strong>
-        </td>
-        <td>
-            <p class="size">Processing...</p>
-            <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
-        </td>
-        <td>
-            {% if (!i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start" disabled>
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start</span>
-                </button>
-            {% } %}
-            {% if (!i) { %}
-                <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel</span>
-                </button>
-            {% } %}
-        </td>
-    </tr>
-{% } %}
-      </script>
-      <!-- The template to display files available for download -->
-      <script id="template-download" type="text/x-tmpl">
-        {% for (var i=0, file; file=o.files[i]; i++) { %}
-        <tr class="template-download fade">
-        <td>
-        <span class="preview">
-        {% if (file.thumbnailUrl) { %}
-        <img src="{%=file.thumbnailUrl%}">
-        {% } %}
-        </span>
-        </td>
-        <td>
-        <p class="name">
-        {% if (file.thumbnail_url) { %}
-       
-        <img src="{%=file.thumbnail_url%}" />
         
-        {% } else { %}
-        <span>{%=file.name%}</span>
-        {% } %}
-        </p>
-        {% if (file.error) { %}
-        <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-        {% } %}
-        </td>
-        <td>
-        <span class="size">{%=o.formatFileSize(file.size)%}</span>
-        </td>
-        <td>
-        {% if (file.deleteUrl) { %}
-        <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-        <i class="glyphicon glyphicon-trash"></i>
-        <span>Delete</span>
-        </button>
-        <input type="checkbox" name="delete" value="1" class="toggle">
-        {% } else { %}
-        <button class="btn btn-warning cancel">
-        <i class="glyphicon glyphicon-ban-circle"></i>
-        <span>Clear</span>
-        </button>
-        {% } %}
-        </td>
-        </tr>
-        {% } %}
-      </script>
-
       <form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" id="adminForm" class="form">
         <fieldset>
           <legend>
             <?php echo JText::sprintf('COM_RENTAL_IMAGES_EXISTING_IMAGE_LIST', $this->unit->unit_title); ?>
           </legend>
-          <table id="articleList" class="table table-striped">
-            <thead>
-              <tr>
-                <th class="hide">
-
-                </th>
-                <th>
-            <div>
-              <?php echo JText::_('COM_RENTAL_HELLOWORLD_IMAGE_ORDERING'); ?>
-            </div>
-            </th>
-            <th class="center">
-              <?php echo JText::_('COM_RENTAL_IMAGES_CHOOSE_THUMBNAIL'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_RENTAL_HELLOWORLD_IMAGES_THUMBNAIL'); ?>
-            </th>
-            <th>
-              <?php echo JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION'); ?>
-            </th>
-
-            <th>
-              <?php echo JText::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
-            </th>
-            </tr>
-            </thead>
-            <tbody class="ui-sortable">    
+          <ul id="imageList" class="">
+ 
               <?php echo $this->loadTemplate('image_list'); ?>
-            </tbody>
-            <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
-          </table>
+            
+          </ul>   
+          <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
+
           <input type="hidden" name="task" value="" />
           <input type="hidden" name="boxchecked" value="0" />
           <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
