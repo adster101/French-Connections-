@@ -504,13 +504,14 @@ class JHtmlProperty
   {
     $isRenewal = ($renewal) ? '&renewal=1' : '';
     $route = JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id . $isRenewal);
+    $link = 'index.php?option=com_rental&task=listing.view&id=' . (int) $id;
     $html = '';
     $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg) 
             . '&nbsp;&nbsp;<a class="' . $btnClass . '" href="' . $route . '">'
             . '<i class="' . $iconClass . '">&nbsp;</i>&nbsp;'
             . JText::_($btnText)
             . '</a>&nbsp;|&nbsp;'
-            . '<a href="index.php?option=con_rental&task=listing.view&id="' . (int) $id . '">'
+            . '<a href="' . $link . '">'
             . 'Edit this property'
             . '</a>'
             . '</div>';
