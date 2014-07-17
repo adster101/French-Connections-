@@ -7,7 +7,6 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
-
 ?>
 <div class="page-header clearfix">
   <a class="btn <?php echo (count($listings)) ? '' : 'btn-large' ?> btn-success pull-right" href="index.php?option=com_rental&amp;task=propertyversions.add"> 
@@ -26,16 +25,15 @@ defined('_JEXEC') or die;
         </h4>  
       </div>
       <div class="panel-body">  
-        <?php if (!empty($item->message) && $item->review != 2) : ?>
-          <?php echo $item->message; ?>
-        <?php endif; ?> 
+
         <div class="listing-container">
           <div class="listing-image-container">
             <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail, 'thumbnail') ?>
           </div>
           <div class="listing-container-wide">
-            <?php echo JHtml::_('property.editButton', $item->days_to_renewal, $item->id, $item->unit_id, $item->review); ?>
-           
+            <?php if (!empty($item->message) && $item->review != 2) : ?>
+              <?php echo $item->message; ?>
+            <?php endif; ?> 
             <hr />
             <?php if ($item->auto_renewal) : ?>
               <p><?php echo JText::sprintf('MOD_LISTINGS_AUTO_RENEWAL_ENABLED', $item->expiry_date); ?></p>

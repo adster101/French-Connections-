@@ -446,10 +446,13 @@ class JHtmlProperty
    *
    */
 
-  public static function note($msgClass = 'alert alert-danger', $msg = '')
+  public static function note($msgClass = 'alert alert-danger', $msg = '', $id)
   {
+    $link = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP', 'listing.view', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'btn btn-primary', false);
     $html = '';
-    $html .= '<div class="' . $msgClass . '">' . JText::_($msg) . '</div>';
+    $html .= '<div class="' . $msgClass . '">' . JText::_($msg);
+    $html .= '&nbsp;' . $link
+          .= '</div>';
     return $html;
   }
 
@@ -502,10 +505,13 @@ class JHtmlProperty
     $isRenewal = ($renewal) ? '&renewal=1' : '';
     $route = JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id . $isRenewal);
     $html = '';
-    $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg)
-            . '<a class="' . $btnClass . '" href="' . $route . '">'
+    $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg) 
+            . '&nbsp;&nbsp;<a class="' . $btnClass . '" href="' . $route . '">'
             . '<i class="' . $iconClass . '">&nbsp;</i>&nbsp;'
             . JText::_($btnText)
+            . '</a>&nbsp;|&nbsp;'
+            . '<a href="index.php?option=con_rental&task=listing.view&id="' . (int) $id . '">'
+            . 'Edit this property'
             . '</a>'
             . '</div>';
     return $html;

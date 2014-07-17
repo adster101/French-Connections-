@@ -65,7 +65,8 @@ abstract class ModListingHelper
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
     $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');
-
+    //$query->order('a.expiry_date', 'asc');
+    
     $db->setQuery($query);
 
     try
@@ -112,11 +113,12 @@ abstract class ModListingHelper
     {
       $msg = JText::_('COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON');
       $html = JHtml::_('property.locked', $msg);
+      
     }
     elseif ($review == 1 && !empty($expiry_date) && $days_to_renewal > 28)
     {
       $msg = JText::_('COM_RENTAL_RENTAL_EDIT_NON_SUBMITTED');
-      $html = JHtml::_('property.note', 'alert alert-info', $msg);
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id);
     }
     elseif ($days_to_renewal <= 28 && $days_to_renewal >= 7 && !empty($days_to_renewal))
     {
@@ -136,7 +138,7 @@ abstract class ModListingHelper
     elseif (empty($days_to_renewal))
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
-      $html = JHtml::_('property.note', 'alert alert-danger', $msg);
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id);
     }
     elseif (!empty($payment)) 
     {
