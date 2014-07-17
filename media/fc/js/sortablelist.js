@@ -8,9 +8,16 @@
     $(tableWrapper).sortable({
       placeholder: "ui-state-highlight",
       stop: function(e, ui) {
-        alert($(this).sortable('serialize'));
+        //serialize form then post to callback url
+        var formData = $('#' + formId).serialize();
+        formData = formData.replace('task', '');
+        formData = formData + '&' + $(this).sortable('serialize');
+        $.post(saveOrderingUrl, formData);
+        
+        $('#imageList .thumbnail-default').empty();
+        $('#imageList li:nth-child(1) .thumbnail-default').html('<span class="lead icon-default"> </span>');
+        
       }
-     
     });
   }
 })(jQuery);

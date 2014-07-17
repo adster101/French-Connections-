@@ -109,7 +109,7 @@ class RentalViewImages extends JViewLegacy
     JHtml::_('bootstrap.framework');
     //JHtml::_('behavior.framework');
 
-    $document->setTitle($this->unit->unit_title ? JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->unit->unit_title) : JText::_('COM_RENTAL_MANAGER_HELLOWORLD_EDIT'));
+    $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
     $document->addScript(JURI::root() . "media/fc/js/images/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/tmpl.min.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/images/load-image.min.js", 'text/javascript', true, false);
@@ -128,7 +128,7 @@ class RentalViewImages extends JViewLegacy
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
 
     // Register the JHtmlProperty class
     JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/helpers/fcsortablelist.php');

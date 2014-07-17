@@ -236,8 +236,11 @@ class RentalControllerImages extends JControllerForm {
     // Get the app and user instances
     $app = JFactory::getApplication($initialise = false);
     $user = JFactory::getUser();
+    $filter = new JFilterInput();
+    
     // Load the relevant model(s) so we can save the data back to the db
     $model = $this->getModel('Image');
+    
     // Initialise an array to return the info about the uploaded image
     $return = array();
 
@@ -272,7 +275,8 @@ class RentalControllerImages extends JControllerForm {
     $params = JComponentHelper::getParams('com_media');
 
     // Get some data from the request
-    $files = JRequest::getVar('jform', '', 'files', 'array');
+    $files = JRequest::getVar('jform', array(), 'files', 'array');
+          
 
     // Input is in the form of an associative array containing numerically indexed arrays - passed in from PHP/Apache in this format?
     // We want a numerically indexed array containing associative arrays
@@ -281,7 +285,7 @@ class RentalControllerImages extends JControllerForm {
             array($this, 'reformatFilesArray'), (array) $files['name'], (array) $files['type'], (array) $files['tmp_name'], (array) $files['size']
     );
 
-    foreach ($uploaded_file as &$file) {
+    foreach ($uploaded_file as $key => &$file) {
 
       // Initialise an error component of the $upload_file array
       $file['error'] = '';
@@ -349,7 +353,6 @@ class RentalControllerImages extends JControllerForm {
     }
 
     $return['files'][] = $file;
-    $blah = json_encode($return);
 
     echo json_encode($return);
 
@@ -369,7 +372,7 @@ class RentalControllerImages extends JControllerForm {
    * @return	array
    * @access	protected
    */
-  protected function reformatFilesArray($name, $type, $tmp_name, $size) {
+  protected function reformatFilesArray($name, $type, $tmp_name, $size, $caption = '') {
     // Prepend a unique ID to the filename so that all files have a unique name.
     $name = uniqid() . '-' . JFile::makeSafe(str_replace(' ', '-', $name));
     return array(
@@ -378,6 +381,7 @@ class RentalControllerImages extends JControllerForm {
         'tmp_name' => $tmp_name,
         'size' => $size,
         'filepath' => JPath::clean(implode('/', array($this->folder, $name))),
+        'caption' => $caption
     );
   }
 
@@ -389,19 +393,32 @@ class RentalControllerImages extends JControllerForm {
    * @since   3.0
    */
   public function saveOrderAjax() {
-    $pks = $this->input->post->get('cid', array(), 'array');
-    $order = $this->input->post->get('order', array(), 'array');
-
+    
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken() or die('Invalid Token');  
+    
+    $input = JFactory::getApplication()->input;
+    
+    $sort = $input->get('sort', array(), 'array');
+    
+    $order = array();
+    
+    foreach ($sort as $k => $v) {
+      $order[] = $k + 1;
+    }
+    
+    //$pks = $this->input->post->get('cid', array(), 'array');
+    //$order = $this->input->post->get('order', array(), 'array');
 
     // Sanitize the input
-    JArrayHelper::toInteger($pks);
+    JArrayHelper::toInteger($sort);
     JArrayHelper::toInteger($order);
 
     // Get the model
     $model = $this->getModel('Image');
 
     // Save the ordering
-    $return = $model->saveorder($pks, $order);
+    $return = $model->saveorder($sort, $order);
 
     if ($return) {
       echo "1";

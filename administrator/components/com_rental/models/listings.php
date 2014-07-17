@@ -162,7 +162,7 @@ class RentalModelListings extends JModelList
     }
     elseif ($published === '')
     {
-      $query->where('a.published in (0,1)');
+      $query->where('a.published in (0,1,2)');
     }
 
     // Filter by review state
