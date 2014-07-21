@@ -49,7 +49,6 @@ defined('_JEXEC') or die;
               </p>
             <?php else : ?>      
               <?php echo JText::_('MOD_LISTING_AUTO_RENEWAL_STATUS_NOT_ENABLED'); ?>
-
               <?php echo JHtml::_('property.link', $item->id, 'COM_RENTAL_HELLOWORLD_ENABLE_AUTO_RENEWALS', 'autorenewals.showtransactionlist', 'COM_RENTAL_HELLOWORLD_ENABLE_AUTO_RENEWALS', '', false); ?>
             <?php endif; ?>
             <?php //echo JHtml::_('property.autorenewalstate', $item->auto_renewal, $item->id); ?>
@@ -58,7 +57,7 @@ defined('_JEXEC') or die;
         <div class="listing-container-narrow-links">
           <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_ENQUIRIES_TOOLTIP', 'index.php?option=com_enquiries', 'COM_RENTAL_VIEW_LISTING_ENQUIRIES'); ?>
           <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_STATISTICS_TOOLTIP', 'index.php?option=com_stats&id=' . (int) $item->id, 'COM_RENTAL_VIEW_LISTING_STATISTICS'); ?>
-          <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_ADDITIONAL_MARKETING_TOOLTIP', 'index.php?option=com_rental&view=marketing', 'COM_RENTAL_VIEW_LISTING_ADDITIONAL_MARKETING'); ?>    
+          <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_ADDITIONAL_MARKETING_TOOLTIP', 'index.php?option=com_rental&task=marketing.edit&property_id=' . (int) $item->id, 'COM_RENTAL_VIEW_LISTING_ADDITIONAL_MARKETING'); ?>    
         </div>
       </div>
     </div>
@@ -69,25 +68,25 @@ defined('_JEXEC') or die;
 <?php else: ?>
   <div class="panel panel-default">
     <div class="panel-heading">
-      No rental property found
+      <?php echo JText::_('MOD_LISTINGS_NO_SELF_CATERING_PROPERTY_FOUND_PANEL_HEADING'); ?>
     </div>
     <div class="panel-body">
-      <p>You don't currently have any for rental properties to manage. In case you didn't spot it click <strong>the big green button</strong> to add a rental property...</p>
+      <p><?php echo JText::_('MOD_LISTINGS_NO_SELF_CATERING_PROPERTY_FOUND') ?></p>
     </div>
   </div>
 <?php endif; ?>
 <hr />
 <div class="page-header clearfix">
   <a href="#" class="btn btn-large btn-success pull-right">
-    <span class="icon icon-plus-2"></span>&nbsp;&nbsp;<?php echo JText::_('New for sale property'); ?>
+    <span class="icon icon-plus-2"></span>&nbsp;&nbsp;<?php echo JText::_('MOD_LISTINGS_ADD_NEW_RENTAL_PROPERTY'); ?>
   </a>  
-  <h3>For sale property</h3>
+  <h3><?php echo JText::_('MOD_LISTINGS_REAL_ESTATE_PROPERTY_FOUND_HEADING'); ?></h3>
 </div>
 <div class="panel panel-default">
   <div class="panel-heading">
-    No for sale property found
+    <?php echo JText::_('MOD_LISTINGS_NO_REAL_ESTATE_PROPERTY_FOUND_PANEL_HEADING'); ?>
   </div>
   <div class="panel-body">
-    <p>You don't currently have any for sale properties to manage. In case you didn't spot it click <strong>the big green button</strong> to add a for sale property...</p>
+    <p><?php echo JText::_('MOD_LISTINGS_NO_REAL_ESTATE_PROPERTY_FOUND') ?></p>
   </div>
 </div>

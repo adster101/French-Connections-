@@ -7,7 +7,7 @@ JHtml::_('behavior.formvalidation');
 $input = JFactory::getApplication()->input;
 $language = JFactory::getLanguage();
 $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
-$renewal = ($input->getCmd('renewal','')) ? '&renewal=1' : '';
+$renewal = ($input->getCmd('renewal', '')) ? '&renewal=1' : '';
 $total = '';
 $total_vat = '';
 $route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this->id);
@@ -27,14 +27,21 @@ $route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this-
       <p>
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_BLURB'); ?>
       </p>
-      <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
+      <?php if (!empty($this->summary)) : ?>
 
-      <?php echo $this->payment_summary->render($this->summary); ?>      
+        <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
 
-      <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) . $renewal ?>" class="btn btn-primary btn-large">
-        Pay now using our secure server
-        <i class="icon icon-white icon-next">&nbsp;</i>
-      </a>
+        <?php echo $this->payment_summary->render($this->summary); ?>    
+        <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) . $renewal ?>" class="btn btn-primary btn-large">
+           <i class="icon icon-white icon-chevron-right">&nbsp;</i>&nbsp;Pay now using our secure server
+         
+        </a>
+      <?php else: ?>
+        <div class="alert alert-info">
+          <?php echo JText::_('COM_RENTAL_PAYMENT_NO_PAYMENT_DUE'); ?>
+        </div>
+      <?php endif; ?>
+
       <hr />
       <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_HELP', $route); ?>
 

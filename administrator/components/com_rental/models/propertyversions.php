@@ -23,7 +23,7 @@ class RentalModelPropertyVersions extends JModelAdmin {
       return false;
     }
 
-    // Explicityly set the review status to 1
+    // Set the review status to 1
     $data['review'] = 1;
 
     $property_table = $this->getTable('Property', 'RentalTable');
@@ -380,6 +380,7 @@ class RentalModelPropertyVersions extends JModelAdmin {
 
       // If not a new property mark the property listing as for review
       // TO DO: look at this - ensure that new props can't be published without review
+      // Move the following into prepareTable();
 
       if (!$isNew) { // && $data['review'] == 0
         // Update the existing property listing to indicate that the listing has been updated
@@ -394,7 +395,7 @@ class RentalModelPropertyVersions extends JModelAdmin {
         $property->sms_status = ($data['sms_status']) ? $data['sms_status'] : '';
         $property->sms_valid = ($data['sms_valid']) ? $data['sms_valid'] : '';
         $property->sms_nightwatchman = ($data['sms_nightwatchman']) ? $data['sms_nightwatchman'] : '';
-
+        
         if (!$property->store()) {
           $this->setError($property->getError());
           return false;

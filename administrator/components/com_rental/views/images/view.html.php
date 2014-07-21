@@ -107,21 +107,20 @@ class RentalViewImages extends JViewLegacy
     $document = JFactory::getDocument();
 
     JHtml::_('bootstrap.framework');
-    //JHtml::_('behavior.framework');
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
-    $document->addScript(JURI::root() . "media/fc/js/images/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/tmpl.min.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/load-image.min.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/canvas-to-blob.min.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/jquery.iframe-transport.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-process.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-image.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-validate.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/jquery.fileupload-ui.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/images/main.js", 'text/javascript', true, false);
-    //$document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/tmpl.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/load-image.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/canvas-to-blob.min.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.iframe-transport.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.fileupload.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.fileupload-process.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.fileupload-image.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.fileupload-validate.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.fileupload-ui.js", 'text/javascript', true, false);
+    $document->addScript(JURI::root() . "media/fc/js/main.js", 'text/javascript', true, false);
+    // TO DO - Move this to media folder and add to grunt to concat 
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery.fileupload.css", 'text/css', "screen");
     $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery.fileupload-ui.css", 'text/css', "screen");
@@ -131,6 +130,7 @@ class RentalViewImages extends JViewLegacy
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
 
     // Register the JHtmlProperty class
+    // TO DO - Move this to main or add to concat etc
     JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/helpers/fcsortablelist.php');
   }
 

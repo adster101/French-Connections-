@@ -4,8 +4,7 @@
   <fieldset
     name="permissions"
     label="JCONFIG_PERMISSIONS_LABEL"
-    description="JCONFIG_PERMISSIONS_DESC"
-  >
+    description="JCONFIG_PERMISSIONS_DESC">
     <field
       name="rules"
       type="rules"
@@ -46,7 +45,6 @@
       lavel="Debug number"
       class="input-large"
     />
-    
   </fieldset>
   
   <fieldset
@@ -60,7 +58,124 @@
       description="Choose a link to the Terms and conditions (here shown on submit listing for review form)"
       filter="int"      
     />
-    
   </fieldset>
   
+  <fieldset
+    name="sign-up-costs"
+    label="Sign-up cost codes"
+    >
+    <field 
+      name="basic-package"
+      type="itemcosts"
+      label="Basic package"
+      class="input-xxlarge"
+      filter="string"
+      cat="51">
+      <option value="">JSELECT</option>
+    </field> 
+    <field 
+      name="professional-package"
+      type="itemcosts"
+      label="Unlimited package"
+      class="input-xxlarge"
+      filter="string"
+      cat="51">
+      <option value="">JSELECT</option>
+    </field>    
+    <field 
+      name="additional-unit"
+      type="itemcosts"
+      label="Additional unit"
+      class="input-xxlarge"
+      filter="string"
+      cat="51">
+      <option value="">JSELECT</option>
+    </field>
+    <field 
+      name="video"
+      type="itemcosts"
+      label="Video"
+      class="input-xxlarge"
+      filter="string"
+      cat="51">
+      <option value="">JSELECT</option>
+    </field>
+    <field 
+      name="lwl"
+      type="itemcosts"
+      label="Long winter let"
+      class="input-xxlarge"
+      filter="string"
+      cat="51">
+      <option value="">JSELECT</option>
+    </field>
+    <field 
+      name="frtranslation"
+      type="itemcosts"
+      label="Translation"
+      class="input-xxlarge"
+      filter="string"
+      cat="51">
+      <option value="">JSELECT</option>
+    </field> 
+  </fieldset>
+    <fieldset
+    name="renewal-costs"
+    label="Renewal cost codes"
+    addfieldpath="/administrator/components/com_rental/models/fields">
+    <field 
+      name="basic-package-renewal"
+      type="itemcosts"
+      label="Basic package"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field> 
+    <field 
+      name="professional-package-renewal"
+      type="itemcosts"
+      label="Unlimited package"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field>    
+    <field 
+      name="additional-unit-renewal"
+      type="itemcosts"
+      label="Additional unit"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field>
+    <field 
+      name="video-renewal"
+      type="itemcosts"
+      label="Video renewal"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field>
+    <field 
+      name="lwl-renewal"
+      type="itemcosts"
+      label="Long winter let"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field>
+    <field 
+      name="frtranslation-renewal"
+      type="itemcosts"
+      label="Translation"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field> 
+  </fieldset>
 </config>

@@ -39,7 +39,5 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
   echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', '', $view);
   echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'contactdetails', 'edit', 'envelope', 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', $item, 'property_id', '', $view);
   ?>
-  <?php if (count($data['progress']) > 1) : ?> 
-    <?php echo JHtmlProperty::progressMultiTabs($view, 'edit', '', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $data['progress'], 'unit_id', '', $view); ?>
-  <?php endif; ?>
+  
 </ul>

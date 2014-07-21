@@ -31,6 +31,7 @@
 		<action name="rental.propertyversions.view" title="Access property version view" description="" />
 		<action name="rental.tariffs.view" title="Access tariffs view" description="" />
 		<action name="rental.unitversions.view" title="Access unit versions" description="" />
+		<action name="rental.marketing.view" title="Access marketing screen" description="" />
 	</section>
   <section name="category">
 		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />

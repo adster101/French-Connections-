@@ -147,7 +147,7 @@
       type="text"
       label="SMS Telephone Number"
       maxlength="25"
-      hint="e.g. 44 (0) 1234 123456" 
+      hint="e.g. 44 7956 123 456" 
       labelclass="control-label"
       filter="string"
       description="" 

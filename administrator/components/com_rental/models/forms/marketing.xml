@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset 
+    name="video"
+    label="COM_RENTAL_MARKETING_VIDEO_URL_FIELDSET"
+    description="COM_RENTAL_MARKETING_VIDEO_URL_DESCRIPTION">
+    <field 
+      name="video_url"
+      type="text"
+      filter="url"
+      class="input-xxlarge"
+      label="COM_RENTAL_MARKETING_VIDEO_URL"
+      hint="COM_RENTAL_MARKETING_VIDEO_URL_PLACEHOLDER">
+    </field>
+  </fieldset>
+  <fieldset 
+    name="winterlet"
+    label="COM_RENTAL_MARKETNG_LONG_WINTER_LET_FIELDSET_LEGEND"
+    description="COM_RENTAL_MARKETING_LONG_WINTER_LET_FIELDSET_DESCRIPTION">
+    <field 
+      name="lwl"
+      type="checkbox"
+      label="COM_RENTAL_MARKETING_LONG_WINTER_LET"
+      class="input"
+      filter="int">
+    </field>
+  </fieldset>
+  <fieldset 
+    name="frtranslation"
+    label="COM_RENTAL_MARKETNG_FRENCH_TRANSLATION_FIELDSET_LEGEND"
+    description="COM_RENTAL_MARKETING_FRENCH_TRANSLATION_FIELDSET_DESCRIPTION">
+    <field 
+      name="frtranslation"
+      type="radio"
+      class=""
+      label="COM_RENTAL_MARKETING_FRENCH_TRANSLATION"      
+      filter="int"
+      default="0">
+      <option value="0">COM_RENTAL_MARKETING_FRENCH_TRANSLATION_OFF</option>
+      <option value="1">COM_RENTAL_MARKETING_FRENCH_TRANSLATION_ON</option>
+
+    </field>
+  </fieldset>
+  <fieldset name="hidden">
+  
+    <field
+      name="property_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="published"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="review"
+      type="hidden"
+      filter="int"
+      default="" />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+      default=""
+    />
+  </fieldset>
+</form>

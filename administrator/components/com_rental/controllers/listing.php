@@ -580,7 +580,7 @@ class RentalControllerListing extends JControllerForm
       else
       {
         // If we get here it means there is no payment due for this so we just lock it for editing.
-        $payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
+        //$payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
         $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
 
         if (RentalHelper::isOwner($user->id))
@@ -593,7 +593,7 @@ class RentalControllerListing extends JControllerForm
         }
       }
     }
-
+    
     $this->setRedirect($redirect, $message);
 
     return true;

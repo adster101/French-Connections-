@@ -136,7 +136,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    * @param type $previous_order_summary
    * @return type
    */
-  public function getPaymentDue($current_order_summary, $previous_order_summary)
+  public function getPaymentDue($current_order_summary = array(), $previous_order_summary = array())
   {
     // TO DO - Take into account the number of images on previous version and if >=8 don't charge for additional images. If previous version had less than 
     $order_lines_due = array();
@@ -473,6 +473,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
   public function summary($units = array())
   {
+    // Get the vat rate from the item costs config params setting
+    $codes = JComponentHelper::getParams('com_rental');
 
     // $units contains the listing including all the units and so on.
     // From this we can generate our pro forma order
@@ -534,18 +536,21 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       if ($image_count >= 8)
       {
         //$item_costs['1004-009']['quantity'] = 1; // Renewal
-        $item_costs['1002-008']['quantity'] = 1; // Renewal
+        //$item_costs['1002-008']['quantity'] = 1; // Renewal
+        $item_costs[$codes->get('professional-package-renewal')]['quantity'] = 1; // Renewal
       }
       else
       {
         // Image count must be less than 8 
-        $item_costs['1002-004']['quantity'] = 1;
+        //$item_costs['1002-004']['quantity'] = 1;
+        $item_costs[$codes->get('basic-package-renewal')]['quantity'] = 1;
       }
 
       // Add any additional units not included in base price 
       if ($unit_count > 0)
       {
-        $item_costs['1002-010']['quantity'] = $unit_count;
+        //$item_costs['1002-010']['quantity'] = $unit_count;
+        $item_costs[$codes->get('additional-unit-renewal')]['quantity'] = $unit_count;
       }
     }
     // New property being published for first time...
@@ -555,25 +560,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       if ($image_count >= 8)
       {
         //$item_costs['1005-009']['quantity'] = 1;
-        $item_costs['1003-008']['quantity'] = 1;
+        //$item_costs['1003-008']['quantity'] = 1;
+        $item_costs[$codes->get('basic-package')]['quantity'] = 1;
       }
       else
       {
         // Image count must be less than 8
-        $item_costs['1003-004']['quantity'] = 1;
-
-        // Comment this out for now...still to have bunfight about when we have two packages etc
-        //if ($image_count > 4 && $image_count <= 7)
-        //{
-        // Additional images
-        //$additional_images = $image_count - 4;
-        //$item_costs['1005-005']['quantity'] = $additional_images;
-        //}
+        //$item_costs['1003-004']['quantity'] = 1;
+        $item_costs[$codes->get('professional-package-renewal')]['quantity'] = 1;
       }
       // Add any additional units not included in base price 
       if ($unit_count > 0)
       {
-        $item_costs['1003-010']['quantity'] = $unit_count;
+        //$item_costs['1003-010']['quantity'] = $unit_count;
+        $item_costs[$codes->get('additional-unit')]['quantity'] = $unit_count;
       }
     }
     // Not a renewal and not a new property...just calculate any additional units etc
@@ -582,7 +582,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Add any additional units not included in base price 
       if ($unit_count > 0)
       {
-        $item_costs['1003-010']['quantity'] = $unit_count;
+        $item_costs[$codes->get('additional-unit')]['quantity'] = $unit_count;
       }
     }
 
@@ -592,11 +592,45 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $item_costs['1005-014']['quantity'] = 1;
     }
 
-    // TO DO - Also for images, innit!
-    // Get any additional marketing for this property
-    // - French translation
-    // - Video
-    // - LWL
+    // If renewal
+    if ($this->getIsRenewal())
+    {
+      // Do we have a LWL listing?
+      if (!empty($unit->lwl))
+      {
+        $item_costs[$codes->get('lwl-renewal')]['quantity'] = 1;
+      }
+      // Do we have a video listing
+      if (!empty($unit->video_url))
+      {
+        $item_costs[$codes->get('video-renewal')]['quantity'] = 1;
+      }
+      // Do we have a translation listing
+      if (!empty($unit->frtranslation))
+      {
+        $item_costs[$codes->get('frtranslation-renewal')]['quantity'] = 1;
+      }
+    }
+    //If not renewal
+    elseif (!$this->getIsRenewal())
+    {
+      // Do we have a LWL listing?
+      if (!empty($unit->lwl))
+      {
+        $item_costs[$codes->get('lwl')]['quantity'] = 1;
+      }
+      // Do we have a video listing
+      if (!empty($unit->video_url))
+      {
+        $item_costs[$codes->get('video')]['quantity'] = 1;
+      }
+      // Do we have a translation listing
+      if (!empty($unit->frtranslation))
+      {
+        $item_costs[$codes->get('frtranslation')]['quantity'] = 1;
+      }
+    }
+    // TO DO - Lastly, need to account for an existing package switching between basic and unlimited.
     return $item_costs;
   }
 

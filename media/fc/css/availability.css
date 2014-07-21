@@ -1,0 +1,111 @@
+/*
+  Availability calendar table styles
+*/
+
+table.avCalendar {
+  margin-bottom:0;
+}
+
+table.avCalendar td {
+  border:1px solid #fff;
+}
+
+table.avCalendar td a,
+table.aCalendar td a:hover,
+table.avCalendar td span{
+  color:#333;
+  text-decoration:none;
+  margin:0 0px 0px 0px;
+  display:block;
+  height:35px;
+}
+
+table.avCalendar td.available:hover,
+table.avCalendar td.unavailable:hover {
+  /*cursor:pointer;*/
+
+}
+
+table.avCalendar td,
+table.avCalendar th {
+  vertical-align:top;
+  padding:0;
+}
+
+.calendar-container {
+  padding: 4px;
+  margin-top: 18px;
+  z-index: 3000;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  height:250px;
+}
+
+table.avCalendarMonth {
+  border-collapse:collapse;
+  border: 1px solid #d7e1f2;
+}
+
+table.avCalendar tr.days {
+  border-bottom: 1px solid #d7e1f2;
+  background-color: #f2f5f1;
+}
+
+tr.days th {
+  width:22px;
+}
+
+.month-year {
+  background:#eaf3fe;
+  margin-bottom:1px;
+  font-weight:bold;
+  padding:3px 0 6px 3px;
+}
+
+td.available {
+  color: #333;
+}
+
+td.unavailable {
+  color: #fff;
+  background-color: #aaa !important;
+  text-decoration:line-through;
+}
+
+td.unavailable a,
+table.avCalendar td.unavailable span, table.avCalendar td.unavailable-available span {
+  color:#eee;
+}
+
+td a.start {
+  background:url('/media/fc/css/images/availability-start-date.png') center center no-repeat;
+}
+
+td a.end {
+  background:url('/media/fc/css/images/availability-end-date.png') center center no-repeat;
+}
+
+td.available-unavailable {
+  background:url('/media/fc/css/images/available-unavailable.png') center center no-repeat;
+
+}
+td.unavailable-available {
+  background:url('/media/fc/css/images/unavailable-available.png') center center no-repeat;
+
+}
+
+.key tr {
+  margin-bottom:2px;
+}
+
+.key td.available, .key td.unavailable {
+  padding:2px;
+  vertical-align:top;
+  border:1px solid #D7E1F2;
+  width:18px;
+}
+
+
+

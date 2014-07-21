@@ -34,5 +34,4 @@ class JFormRuleVat extends JFormRule {
       
       return $return;
   }
-
 }

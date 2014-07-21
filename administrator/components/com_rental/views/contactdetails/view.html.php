@@ -30,7 +30,7 @@ class RentalViewContactdetails extends JViewLegacy {
 
     $this->script = $this->get('Script');
 
-    // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
+    // Get an instance of our model, setting ignore_request to true so we bypass populateState
     $model = JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true));
 
     // Here we attempt to wedge some data into the model

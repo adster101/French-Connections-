@@ -50,7 +50,7 @@ class RentalController extends JControllerLegacy
     // Get the GET params for this view
     $view = $this->input->get('view', 'listings');
     $option = $this->input->getCmd('option', 'com_rental');
-    $property_id = $this->input->getInt('id');
+    $property_id = ($this->input->getInt('id')) ? $this->input->getInt('id') : $this->input->getInt('property_id');
     $unit_id = $this->input->getInt('unit_id');
     $context = $option . '.edit.' . $view;
 
