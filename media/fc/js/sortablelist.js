@@ -7,6 +7,8 @@
   $.JSortableList = function(tableWrapper, formId, sortDir, saveOrderingUrl, options, nestedList) {
     $(tableWrapper).sortable({
       placeholder: "ui-state-highlight",
+      forcePlaceholderSize : true,
+      helper:"clone",
       stop: function(e, ui) {
         //serialize form then post to callback url
         var formData = $('#' + formId).serialize();
@@ -15,7 +17,7 @@
         $.post(saveOrderingUrl, formData);
         
         $('#imageList .thumbnail-default').empty();
-        $('#imageList li:nth-child(1) .thumbnail-default').html('<span class="lead icon-default"> </span>');
+        $('#imageList li:nth-child(1) .thumbnail-default').html('<span class="icon-default">&nbsp;</span>');
         
       }
     });

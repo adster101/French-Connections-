@@ -14,37 +14,47 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 <p class="align-right"><?php echo JText::_('COM_RENTAL_RENTAL_KEY'); ?></p>
 
 <?php if (!empty($this->items)) : ?>
-  <ul id="imageList" class="list list-striped">
+  <ul id="imageList" class="">
     <?php foreach ($this->items as $i => $item): ?>
-      <li class="clearfix" id="sort_<?php echo $item->id ?>">    
-
-        <div class="media">
-          <a class="pull-left" data-imageid="<?php echo $item->id ?>">
-            <img class="media-object" src="<?php echo '/images/property/' . (int) $item->unit_id . '/thumb/' . $item->image_file_name; ?>" />
-          </a>
-          <div class="media-body">
-            <a class="btn btn-danger pull-right" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
-              <i class="icon icon-trash"></i>
-              <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
-            </a> 
+      <li class="clearfix" id="sort_<?php echo (int) $item->id ?>">  
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="lead">
+              <div class="thumbnail-default pull-left">
+                <?php if ($i == 0) : ?>
+                  <span class="icon-default">&nbsp;</span>
+                <?php else: ?>
+                  <span class="icon">&nbsp;</span>
+                <?php endif; ?>
+              </div>
+              <span class="icon icon-move muted pull-right">&nbsp;</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <p>
+              <img class="media-object" src="<?php echo '/images/property/' . (int) $item->unit_id . '/thumb/' . $this->escape($item->image_file_name); ?>" />
+            </p>
             <p class="caption">
-              <label>Caption</label>
-              <input  class="input input-xlarge " type="text" name="jform[caption]" value="<?php echo $this->escape($item->caption); ?>" maxlength="75" />
-              <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_REMAINING_CHARS_CAPTION'); ?>
+              <label for="<?php echo $this->escape($item->image_file_name) ?>">Caption</label>  
+              <input placeholder="<?php echo JText::_('COM_RENTAL_CAPTION_PLACEHOLDER') ?>" id="<?php echo $this->escape($item->image_file_name) ?>" class="input span12" type="text" name="jform[caption]" value="<?php echo $this->escape($item->caption); ?>" maxlength="75" />
               <br />
+              <span class="muted"><?php echo Jtext::_('COM_RENTAL_HELLOWORLD_REMAINING_CHARS_CAPTION'); ?></span>
+              <br /> 
+              <span class="message-container"></span>
+
+            </p>
+            <p>
+
               <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_rental&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>" >
                 <i class="icon-pencil-2 icon-white"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
               </a>  
-              <span class="message-container"></span>
+              <a class="btn btn-danger" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
+                <i class="icon icon-trash"></i>
+                <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
+              </a>
             </p>
-            <soan class="thumnail-container">
-              <span class="thumbnail-default">        
-                <?php if ($i == 0) : ?>
-                  <span class="icon-default lead pull-left bottom">&nbsp;</span>
-                <?php endif; ?>
-              </span>
-              </span>
+
           </div>
         </div>
       </li>

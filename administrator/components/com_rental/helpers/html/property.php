@@ -376,8 +376,8 @@ class JHtmlProperty
 
     $html = '';
 
-    
-    
+
+
     $states = array(
         0 => array(
             'chevron-right',
@@ -452,7 +452,7 @@ class JHtmlProperty
     $html = '';
     $html .= '<div class="' . $msgClass . '">' . JText::_($msg);
     $html .= '&nbsp;' . $link
-          .= '</div>';
+            .= '</div>';
     return $html;
   }
 
@@ -506,7 +506,7 @@ class JHtmlProperty
     $route = JRoute::_('index.php?option=com_rental&task=' . $task . '&id=' . (int) $id . $isRenewal);
     $link = 'index.php?option=com_rental&task=listing.view&id=' . (int) $id;
     $html = '';
-    $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg) 
+    $html .= '<div class="' . $msgClass . ' clearfix">' . JText::_($msg)
             . '&nbsp;&nbsp;<a class="' . $btnClass . '" href="' . $route . '">'
             . '<i class="' . $iconClass . '">&nbsp;</i>&nbsp;'
             . JText::_($btnText)
@@ -571,13 +571,11 @@ class JHtmlProperty
 
     if (!empty($item->latitude) && ($controller == 'propertyversions'))
     {
-
       $progress_icon = $okay_icon;
       $id = $listing_id;
     }
     elseif ($controller == 'contactdetails')
     {
-
       if ($item->use_invoice_details)
       {
         $progress_icon = $okay_icon;
@@ -586,68 +584,59 @@ class JHtmlProperty
       {
         $progress_icon = $okay_icon;
       }
-
       $id = $listing_id;
     }
     elseif (empty($item->title) && ($controller == 'propertyversions' ))
     {
-
       $progress_icon = $progress_icon;
       $id = $listing_id;
     }
     elseif (empty($item->unit_title) && $controller == 'unitversions' && !empty($listing_id) && $action == 'edit')
-    { // This property has no unit, or unit details not completed...
+    {
+      // This property has no unit, or unit details not completed...
       $progress_icon = $progress_icon;
     }
     elseif (!empty($unit_id) && $controller == 'images')
     {
-
       $progress_icon = ($item->images > 0) ? $okay_icon : $progress_icon;
     }
     elseif (!empty($unit_id) && $controller == 'availability')
     {
-
       $progress_icon = ($item->availability > 0) ? $okay_icon : $progress_icon;
     }
     elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id))
     {
-
       $progress_icon = $okay_icon;
     }
     elseif (!empty($unit_id) && $controller == 'tariffs')
     {
-
       $progress_icon = ($item->tariffs > 0) ? $okay_icon : $progress_icon;
     }
     else if ($controller == 'reviews')
     {
-
       $id = $unit_id;
       $progress_icon = '';
     }
     elseif (!empty($unit_id) && $controller == 'unitversions')
     {
-
       $progress_icon = '';
     }
-
     $active = ($controller == $current_view) ? 'active' : '';
-
     if (!$btnClass)
     {
-      $html .= '<li class="' . $active . '">';
+      $html .= '<li id="' . $controller . '" class="' . $active . '">';
     }
     $html .='<a class="' . $btnClass . '"'
             . ' href="' . JRoute::_('index.php?option=com_rental&task=' . $controller . '.' . $action . '&' . $urlParam . '=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '"'
             . ' rel="tooltip">';
     if ($icon)
     {
-      $html .= '<i class="icon icon-' . $icon . '"></i>';
+      $html .= '<span class="icon icon-' . $icon . '"></span>';
     }
     $html .= '&nbsp;' . Jtext::_($button_text);
     if (!empty($progress_icon) && $icon)
     {
-      $html .= '&nbsp;<i class="icon icon-' . $progress_icon . '"></i>';
+      $html .= '&nbsp;<span class="icon icon-' . $progress_icon . '"></span>';
     }
     $html .= '</a>';
 

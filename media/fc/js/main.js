@@ -82,8 +82,7 @@ jQuery(function() {
     //url: 'server/php/'
   }).bind('fileuploaddone', function(e, data) {
     // File has been uploaded, need to refresh the existing images list
-
-  try {
+    try {
 
       if (!data.result.files[0].error.length) {
 
@@ -102,11 +101,26 @@ jQuery(function() {
                   version_id: id
                 })
                 .done(function(results) {
+          var gallery = jQuery('.image-gallery');
+          gallery.empty();
+          gallery.html(results);
 
-          jQuery('.image-gallery').empty();
-          jQuery('.image-gallery').html(results);
           // Bind the caption save event to the 
           add_event_handlers();
+
+          var imageCount = jQuery('#imageList').length;
+
+          var span = jQuery('#images > a span:nth-child(2)');
+
+          if (imageCount > 0) {
+            span.removeClass('icon-warning');
+            span.addClass('icon-ok');
+          } else {
+            span.removeClass('icon-ok');
+            span.addClass('icon-warning');
+          }
+
+
 
         });
 
@@ -117,7 +131,7 @@ jQuery(function() {
       console.log(err.message);
     }
 
-    
+
 
   });
 
@@ -131,6 +145,9 @@ jQuery(function() {
   add_event_handlers();
 
 });
+
+
+
 
 
 
@@ -180,6 +197,7 @@ function add_event_handlers() {
     jQuery(this).on('click', function(event) {
 
       event.preventDefault();
+
       // Unbind the not save message...
       window.onbeforeunload = null;
 
@@ -187,15 +205,14 @@ function add_event_handlers() {
 
       // Update the caption via the GET ajax thingamy bob
       var url = jQuery(this).attr('href');
-      var caption = jQuery(this).siblings('input[type=text]').val();
+      var caption = jQuery(this).parent().siblings('p').find('input[type=text]').val();
 
       jQuery.get(
               url, {
         caption: caption
-      })
-              .done(function(data) {
+      }).done(function(data) {
         // Update the caption bit with a message
-        jQuery(that).siblings('span.message-container').append(data);
+        jQuery(that).parent().siblings('p').find('span.message-container').append(data);
         jQuery('span.message').delay(5000).fadeOut(1000);
 
       });

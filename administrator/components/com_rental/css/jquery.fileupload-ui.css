@@ -67,10 +67,7 @@
 .files video {
   max-width: 300px;
 }
-#imageUploadModal {
-  width:700px;
-  margin-left: -350px;
-}
+
 @media (max-width: 767px) {
 
   .files .name {
@@ -91,27 +88,28 @@
   }
 }
 
+	#imageList { 
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width:auto;
+  }
 
+
+    
   #imageList li {
     position:relative;
-    padding-left: 100px;
+    float: left;
+    width:24%;
+    margin: 0 1% 18px 0;
   }
 
   #imageList li:hover {
     cursor:move;
   }
 
-  #imageList li:before {
-    font-family: icomoon;
-    content: "\7a";
-    font-size:21px;
-    position:absolute;
-    top:50px;
-    left:0;
-    padding:9px;
-  }
+ 
 
   .ui-state-highlight {
-    height:120px;
-    border:dotted 1px #333;
+    background: #f2f5f1;
   }

@@ -30,7 +30,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 // The above function in turn calls progressButton with the same values as below.
 ?>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" id="propertyState">
   <?php
   echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', '', $view);
   echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', '', $view);

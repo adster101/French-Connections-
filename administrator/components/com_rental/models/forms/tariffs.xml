@@ -29,7 +29,7 @@
       <option value="443">Thursday</option>
       <option value="444">Friday</option>
       <option value="445">Saturday</option>
-      <option value="1521">Non-applicable(B&amp;B)</option>
+      <option value="1521">Non-applicable</option>
     </field>
     <field
       name="base_currency"
