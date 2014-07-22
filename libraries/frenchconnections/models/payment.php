@@ -561,13 +561,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       {
         //$item_costs['1005-009']['quantity'] = 1;
         //$item_costs['1003-008']['quantity'] = 1;
-        $item_costs[$codes->get('basic-package')]['quantity'] = 1;
+        $item_costs[$codes->get('professional-package')]['quantity'] = 1;
       }
       else
       {
         // Image count must be less than 8
         //$item_costs['1003-004']['quantity'] = 1;
-        $item_costs[$codes->get('professional-package')]['quantity'] = 1;
+        $item_costs[$codes->get('basic-package')]['quantity'] = 1;
       }
       // Add any additional units not included in base price 
       if ($unit_count > 0)
