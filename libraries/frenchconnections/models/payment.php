@@ -1303,7 +1303,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $query->select('a.item_cost_id, a.date_redeemed, b.cost, b.description, a.note');
     $query->from('#__vouchers a');
     $query->where('property_id = ' . (int) $property_id);
-    $query->where('end_date > ' . $db->quote($date));
+    $query->where('end_date >= ' . $db->quote($date));
     $query->join('left', '#__item_costs b on b.code = a.item_cost_id');
 
     // Don't return the discount vouchers 
