@@ -17,7 +17,7 @@
         $.post(saveOrderingUrl, formData);
         
         $('#imageList .thumbnail-default').empty();
-        $('#imageList li:nth-child(1) .thumbnail-default').html('<span class="icon-default">&nbsp;</span>');
+        $('#imageList li:nth-child(1) .thumbnail-default').html('<span class="icon-default pull-left">&nbsp;</span>');
         
       }
     });

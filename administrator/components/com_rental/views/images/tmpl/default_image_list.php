@@ -22,9 +22,9 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
             <div class="lead">
               <div class="thumbnail-default pull-left">
                 <?php if ($i == 0) : ?>
-                  <span class="icon-default">&nbsp;</span>
+                  <span class="icon-default pull-left">&nbsp;</span>
                 <?php else: ?>
-                  <span class="icon">&nbsp;</span>
+                  <span class="icon pull-left">&nbsp;</span>
                 <?php endif; ?>
               </div>
               <span class="icon icon-move muted pull-right">&nbsp;</span>

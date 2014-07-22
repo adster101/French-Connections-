@@ -567,7 +567,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       {
         // Image count must be less than 8
         //$item_costs['1003-004']['quantity'] = 1;
-        $item_costs[$codes->get('professional-package-renewal')]['quantity'] = 1;
+        $item_costs[$codes->get('professional-package')]['quantity'] = 1;
       }
       // Add any additional units not included in base price 
       if ($unit_count > 0)
