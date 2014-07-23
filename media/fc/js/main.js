@@ -238,19 +238,22 @@ jQuery.fn.extend({
 
     // On window un-load check that all captions have been saved
     window.onbeforeunload = function() {
+      var changed = false;
 
       jQuery('#imageList').find('input[type=text]').each(function() {
-
         var a = jQuery(this).prop('defaultValue');
-        var b = jQuery(this).val();
-        console.log(a);
-        console.log(b);
-        if (a !== b) {
-          return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+        var b = jQuery(this).attr('value');
+        var equal = a.toUpperCase() === b.toUpperCase();
+
+        if (!equal) {
+          changed = true;
         }
       });
-    };
 
+      if (changed) {
+        return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+      }
+    };
   },
   confirmDelete: function() {
 

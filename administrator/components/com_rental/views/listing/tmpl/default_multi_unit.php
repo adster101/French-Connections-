@@ -89,8 +89,8 @@ $data['form'] = $this->form;
                   <td>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', 'btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', 'btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', 'btn') ?>
                     <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', 'btn') ?>
+                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', 'btn') ?>
                   </td>
                   <?php if ($canDo->get('core.edit.state')) : ?>
                     <td>
@@ -110,7 +110,7 @@ $data['form'] = $this->form;
             <?php endforeach; ?>
             <tr>
               <td colspan="7">
-                <a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_rental&task=unitversions.add&property_id=' . (int) $this->items[0]->id ); ?>">
+                <a class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_rental&task=unitversions.add&property_id=' . (int) $this->items[0]->id); ?>">
                   <i class="icon icon-plus"></i>&nbsp;
                   <?php echo JText::_('COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT'); ?>
                 </a>
