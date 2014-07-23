@@ -9,6 +9,7 @@
       placeholder: "ui-state-highlight",
       forcePlaceholderSize : true,
       helper:"clone",
+      opacity:0.8,
       stop: function(e, ui) {
         //serialize form then post to callback url
         var formData = $('#' + formId).serialize();

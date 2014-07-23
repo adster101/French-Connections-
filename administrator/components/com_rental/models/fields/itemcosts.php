@@ -43,7 +43,7 @@ class JFormFieldItemcosts extends JFormFieldList
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('code as value, description as text');
+    $query->select('code as value, concat("[", code, "] ", description) as text');
     $query->from('#__item_costs');
     $query->where('catid = ' . (int) $cat);
 

@@ -102,10 +102,12 @@ jQuery(function() {
                 })
                 .done(function(results) {
           var gallery = jQuery('.image-gallery');
+
           gallery.empty();
           gallery.html(results);
 
-          // Bind the caption save event to the 
+
+
           add_event_handlers();
 
           var imageCount = jQuery('#imageList').length;
@@ -119,8 +121,6 @@ jQuery(function() {
             span.removeClass('icon-ok');
             span.addClass('icon-warning');
           }
-
-
 
         });
 
@@ -147,77 +147,122 @@ jQuery(function() {
 });
 
 
-
-
-
-
 // Add the relevant event handlers to the save caption and delete buttons
-function add_event_handlers() {
+var add_event_handlers = function() {
 
+  // Add the sortable list to the photo gallery
   var sortableList = new jQuery.JSortableList('#imageList', 'adminForm', '', 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component', '', '');
 
-  jQuery('.delete').on('click', function(event) {
-    if (!confirm("Really delete?")) {
-      event.preventDefault();
-    }
-    ;
-  });
-
-  // Update the caption count and what not...
-  jQuery('.caption').each(function() {
-
-    var that = this;
-    var length = jQuery(that).find('input').val().length;
-    var input = jQuery(that).find('input[type=text]');
-
-    // Update the span element with the initial value of the caption
-    jQuery(that).find('span.caption-count').text(75 - length);
-
-    jQuery(input).on('keyup', function(event) {
-
-      // On the keyup event, update the value of the span count element
-      var length = jQuery(that).find('input').val().length;
-
-      jQuery(that).find('span.caption-count').text(75 - length);
-
-    });
-  })
-
-  jQuery('.caption').change(function() {
-    window.onbeforeunload = function() {
-      return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    };
-  });
-  // Remove the uploaded images from the queue
+  // Fade out the the uploaded images from the upload queue after five seconds
   jQuery('li.template-download').css('position', 'static').delay(5000).fadeOut(1500);
 
-  // Bind a click event to the update-caption buttons
-  jQuery('.update-caption').each(function() {
+  // Attach caption counters to the captions
+  jQuery('.caption').captionCounter();
 
-    jQuery(this).on('click', function(event) {
+  jQuery('.update-caption').updateCaption();
 
-      event.preventDefault();
+  // Add a confirmation popup to the delete button
+  jQuery('.delete').confirmDelete();
 
-      // Unbind the not save message...
-      window.onbeforeunload = null;
+
+
+};
+
+// Extend the jQuery instance with a few helpful methods...TO DO make into a plugin?
+jQuery.fn.extend({
+  captionCounter: function() {
+    // Update the caption count and what not...
+    jQuery(this).each(function() {
 
       var that = this;
+      var length = jQuery(that).find('input').val().length;
+      var input = jQuery(that).find('input[type=text]');
 
-      // Update the caption via the GET ajax thingamy bob
-      var url = jQuery(this).attr('href');
-      var caption = jQuery(this).parent().siblings('p').find('input[type=text]').val();
+      // Update the span element with the initial value of the caption
+      jQuery(that).find('span.caption-count').text(75 - length);
 
-      jQuery.get(
-              url, {
-        caption: caption
-      }).done(function(data) {
-        // Update the caption bit with a message
-        jQuery(that).parent().siblings('p').find('span.message-container').append(data);
-        jQuery('span.message').delay(5000).fadeOut(1000);
+      jQuery(input).on('keyup', function(event) {
+
+        // On the keyup event, update the value of the span count element
+        var length = jQuery(that).find('input').val().length;
+
+        jQuery(that).find('span.caption-count').text(75 - length);
 
       });
+    });
+  },
+  updateCaption: function() {
 
+    // Bind a click event to the save caption buttons
+    jQuery(this).each(function()
+    {
+
+      jQuery(this).on('click', function(event) {
+
+        // Prevent the default click event
+        event.preventDefault();
+
+        // Unbind the not save message...
+        // window.onbeforeunload = null;
+
+        var that = this;
+
+        // Update the caption via the GET ajax thingamy bob
+        var url = jQuery(this).attr('href');
+        var defaultValue = jQuery(this).parent().siblings('p').find('input[type=text]').prop('defaultValue');
+        var caption = jQuery(this).parent().siblings('p').find('input[type=text]').val();
+
+        jQuery.getJSON(
+                url, {
+          caption: caption
+        }).done(function(data) {
+
+          if (data.error === 1) {
+            // There was an error 
+
+          } else {
+            // Save and update was okay
+            // Update the defaultValue 
+
+            jQuery(that).parent().siblings('p').find('input[type=text]').prop('defaultValue', caption);
+          }
+
+          // Update the caption bit with a message
+          jQuery(that).parent().siblings('p').find('span.message-container').append(data.message);
+          jQuery('span.message').delay(5000).fadeOut(1000);
+
+        });
+
+      });
+    });
+
+    // On window un-load check that all captions have been saved
+    window.onbeforeunload = function() {
+
+      jQuery('#imageList').find('input[type=text]').each(function() {
+
+        var a = jQuery(this).prop('defaultValue');
+        var b = jQuery(this).val();
+        console.log(a);
+        console.log(b);
+        if (a !== b) {
+          return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+        }
+      });
+    };
+
+  },
+  confirmDelete: function() {
+
+    jQuery(this).each(function() {
+      jQuery(this).on('click', function(event) {
+        if (!confirm(Joomla.JText._('COM_RENTAL_IMAGES_CONFIRM_DELETE_IMAGE'))) {
+          event.preventDefault();
+        }
+        ;
+      });
     })
-  })
 
-}
+  }
+
+});

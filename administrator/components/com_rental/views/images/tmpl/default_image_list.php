@@ -11,7 +11,17 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 ?>
 
 
-<p class="align-right"><?php echo JText::_('COM_RENTAL_RENTAL_KEY'); ?></p>
+<p>
+  <?php echo JText::_('COM_RENTAL_RENTAL_KEY'); ?>
+  &nbsp;&nbsp;
+  <a class="hasPopover" 
+     data-placement="bottom" 
+     title="<?php echo JText::_('COM_RENTAL_MANAGE_IMAGES_HELP_TITLE') ?>" 
+     data-content="<?php echo JText::_('COM_RENTAL_MANAGE_IMAGES_HELP') ?>">
+    <i class="icon icon-info"> </i> 
+    <?php echo JText::_('JHELP'); ?>
+  </a> 
+</p>
 
 <?php if (!empty($this->items)) : ?>
   <ul id="imageList" class="">
@@ -49,7 +59,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
                 <i class="icon-pencil-2 icon-white"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
               </a>  
-              <a class="btn btn-danger" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
+              <a class="btn btn-danger delete" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
                 <i class="icon icon-trash"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
               </a>

@@ -156,9 +156,9 @@ class RentalControllerImages extends JControllerForm {
 
     // Check that this user is authorised to edit (i.e. owns) this this property
     if (!$this->allowEdit($data, 'unit_id')) {
-      $response = JText::_('NOT_AUTHORISED');
-      echo $response;
-      jexit(); // Exit this request now as results passed back to client via xhr transport.
+      $response['message'] = JText::_('NOT_AUTHORISED');
+      //echo $response;
+      //jexit(); // Exit this request now as results passed back to client via xhr transport.
     }
 
     // Consider running this through $model->validate to more carefully check the caption details
@@ -168,9 +168,10 @@ class RentalControllerImages extends JControllerForm {
 
     if (!$validData) {
       // Problem saving, oops
-      $response = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_IS_INVALID');
-      echo $response;
-      jexit(); // Exit this request now as results passed back to client via xhr transport.     
+      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_IS_INVALID');
+      $response['error'] = 1;
+      //echo $response;
+      //jexit(); // Exit this request now as results passed back to client via xhr transport.     
     }
 
     // Need to ensure the caption is filtered at some point
@@ -178,14 +179,16 @@ class RentalControllerImages extends JControllerForm {
     // Also, need to amend the save method so that it triggers a new version
     if (!$model->save($data)) {
       // Problem saving, oops
-      $response = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
-      echo $response;
-      jexit(); // Exit this request now as results passed back to client via xhr transport.
+      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
+      $response['error'] = 1;
+      //echo $response;
+      //jexit(); // Exit this request now as results passed back to client via xhr transport.
     }
 
-    $response = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_UPDATED');
-
-    echo $response;
+    $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_UPDATED');
+    $response['error'] = 0;
+    
+    echo json_encode($response);
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
     // Log out to a file

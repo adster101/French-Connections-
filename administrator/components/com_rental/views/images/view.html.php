@@ -128,6 +128,7 @@ class RentalViewImages extends JViewLegacy
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_IMAGES_CONFIRM_DELETE_IMAGE');
 
     // Register the JHtmlProperty class
     // TO DO - Move this to main or add to concat etc
