@@ -29,6 +29,14 @@ jQuery(document).ready(function() {
     event.preventDefault();
 
   });
+  
+  if(jQuery('#newUnit').length) {
+    jQuery('#newUnit').on('click', function(event){
+        if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {
+          event.preventDefault();
+        }
+    })
+  }
 
   jQuery('.shortlist').each(function() { // For each result
 

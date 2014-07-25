@@ -111,6 +111,7 @@ class RentalViewListing extends JViewLegacy
     $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true);
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT');
   }
 
 }

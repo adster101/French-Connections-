@@ -171,7 +171,6 @@ class RentalModelListings extends JModelList
     {
       $query->select('a.value');
       $query->where('a.review = ' . (int) $review_state);
-      
     }
 
     // Filter by snooze state
@@ -190,8 +189,7 @@ class RentalModelListings extends JModelList
       }
       elseif ($snooze_state == 2)
       {
-
-        // Don't filter, user wants to see all snoozed props as well as not snoozed etc
+        // Don't filter, show snoozed properties. Point?
       }
     }
 
@@ -200,13 +198,28 @@ class RentalModelListings extends JModelList
     $end_date = $this->getState('filter.end_date');
     $date_filter = $this->getState('filter.date_filter');
 
-    if ($start_date && $end_date && $date_filter)
+    if ($start_date && $end_date && $date_filter == 'expiry_date')
+    {
+      // This filter includes any properties with snooze dates between the dates being filtered on .
+      $query->where('((a.' . $db->escape($date_filter) . ' >=' .
+              $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
+              ' and a.' . $db->escape($date_filter) . ' <=' .
+              $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')' .
+              ' OR (' . $db->escape('a.snooze_until') . ' >=' .
+              $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
+              ' and ' . $db->escape('a.snooze_until') . ' <=' .
+              $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . '))');
+      $query->where('a.expiry_date IS NOT NULL');
+    }
+    elseif ($start_date && $end_date && $date_filter == 'created_on')
     {
       $query->where('(a.' . $db->escape($date_filter) . ' >=' .
               $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
               ' and a.' . $db->escape($date_filter) . ' <=' .
               $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
     }
+
+
 
     // Filter by search in title
     // TODO - Try and tidy up this logic a bit.
