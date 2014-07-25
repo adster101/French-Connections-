@@ -444,8 +444,6 @@ class RentalControllerListing extends JControllerForm
    */
   public function submit()
   {
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken() or die('Invalid Token');
 
     $app = JFactory::getApplication();
     $lang = JFactory::getLanguage();

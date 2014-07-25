@@ -207,7 +207,7 @@
       label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
       class="bedrooms-select input-small"
-      validate="nonzero"
+      validate="bathrooms"
       labelclass="control-label"
       required="true"
       filter="int">
@@ -222,7 +222,7 @@
       label="COM_RENTAL_RENTAL_FIELD_ENSUITE_LABEL"
       description="COM_RENTAL_RENTAL_FIELD_ENSUITE_DESC"
       class="bedrooms-select input-small"
-      validate="nonzero"
+      validate="bathrooms"
       labelclass="control-label"
       required="true"
       filter="int">
@@ -237,7 +237,7 @@
       label="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_EXTRA_TOILETS_DESC"
       class="bedrooms-select input-small"
-      validate="nonzero"
+      validate="bathrooms"
       labelclass="control-label"
       filter="int">
       <option value="">JSELECT</option>

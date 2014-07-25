@@ -450,7 +450,7 @@ class JHtmlProperty
   {
     $link = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP', 'listing.view', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'btn btn-primary', false);
     $html = '';
-    $html .= '<div class="' . $msgClass . '">' . JText::_($msg);
+    $html .= '<div class="' . $msgClass . '"><span class="icon icon-info">&nbsp;</span>&nbsp;' . JText::_($msg);
     $html .= '&nbsp;' . $link
             .= '</div>';
     return $html;

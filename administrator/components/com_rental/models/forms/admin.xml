@@ -29,9 +29,35 @@
       type="calendar"
       format="%d-%m-%Y"
       label="COM_RENTAL_HELLOWORLD_HEADING_DATE_EXPIRY"
-      filter="string"
-    >
+      filter="string">
     </field>
+  </fieldset>
+  <fieldset 
+    name="non-renewal-reason"
+    label="COM_RENTAL_UPDATE_NON_RENEWAL_REASON">
+    <field
+      name="renewalreason"
+      type="list"
+      label="COM_RENTAL_UPDATE_NON_RENEWAL_REASONS"
+      filter="string">
+      <option value="">JSELECT</option>
+      <option value="NO_FEEDBACK">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_NO_FEEDBACK</option>
+      <option value="SOLD">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_SOLD</option>
+      <option value="COMPETITOR">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_COMPETITOR</option>
+      <option value="LOW_ENQUIRIES">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_LOW_ENQUIRIES</option>
+      <option value="LOW_ENQUIRIES">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_LOW_PERCEIVED</option>
+      <option value="STOPPED_LETTING">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_STOPPED_LETTING</option>
+      <option value="NO_REASON">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_NO_REASON</option>
+      <option value="TOO_EXPENSIVE">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_TOO_EXPENSIVE</option>
+      <option value="RENNOVATING">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_RENNOVATING</option>
+      <option value="FULLY_BOOKED">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_FULLY_BOOKED</option>
+      <option value="CANNOT_CONTACT">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_CANNOT_CONTACT</option>
+      <option value="WEBSITE_ISSUES">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_WESITE_ISSUES</option>
+      <option value="OTHER">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_OTHER</option>
+    </field>
+      
+    
+    
   </fieldset>
   <fieldset
     name="note"

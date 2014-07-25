@@ -45,7 +45,7 @@ abstract class ModListingHelper
       date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
       a.review,
-      (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-032") . ' ) as payment, 
+      (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-032") . ' ) as payment, 
       f.image_file_name as thumbnail
     ');
 
@@ -113,7 +113,11 @@ abstract class ModListingHelper
     {
       $msg = JText::_('COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON');
       $html = JHtml::_('property.locked', $msg);
-      
+    }
+    elseif (!empty($payment)) 
+    {
+      $msg = JText::_('COM_RENTAL_PAYMENT_DUE');
+      $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'btn btn-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_PAYMENT_DUE_PROCEED', false);
     }
     elseif ($review == 1 && !empty($expiry_date) && $days_to_renewal > 28)
     {
@@ -140,12 +144,7 @@ abstract class ModListingHelper
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
       $html = JHtml::_('property.note', 'alert alert-info', $msg, $id);
     }
-    elseif (!empty($payment)) 
-    {
-      $msg = JText::_('COM_RENTAL_PAYMENT_DUE');
-      $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'label label-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_PAYMENT_DUE_PROCEED', false);
 
-    }
 
     return $html;
   }

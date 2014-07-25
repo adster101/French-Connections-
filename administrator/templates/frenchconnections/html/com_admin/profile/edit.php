@@ -22,9 +22,6 @@ $lang->load('com_invoices', JPATH_ADMINISTRATOR, null, false, true);
 JLoader::register('InvoicesHelper', JPATH_ADMINISTRATOR . '/components/com_invoices/helpers/invoices.php');
 InvoicesHelper::addSubmenu('account');
 
-// Get the form fieldsets.
-$fieldsets = $this->form->getFieldsets();
-
 $company_number = $this->form->getValue('company_number');
 $vat_status = $this->form->getValue('vat_status');
 
