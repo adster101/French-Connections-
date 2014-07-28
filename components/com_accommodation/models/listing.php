@@ -160,9 +160,9 @@ class AccommodationModelListing extends JModelForm
 
       $select = '
         a.id as property_id,
-        a.sms_alert_number,
-        a.sms_valid,
-        a.sms_nightwatchman,
+        ufc.sms_alert_number,
+        ufc.sms_valid,
+        ufc.sms_nightwatchman,
         b.id as unit_id,
         c.location_details,
         c.local_amenities,

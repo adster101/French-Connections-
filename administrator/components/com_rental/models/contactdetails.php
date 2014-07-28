@@ -38,20 +38,6 @@ class RentalModelContactDetails extends JModelAdmin {
 
       $id = ($data->property_id) ? $data->property_id : '';
 
-      $sms_details = $this->getSMSDetails($id);
-
-
-      /*
-       * See if there are any SMS prefs saved against this property
-       */
-      if (!empty($sms_details)) {
-
-        $data->sms_alert_number = $sms_details->sms_alert_number;
-        $data->sms_valid = $sms_details->sms_valid;
-        $data->sms_status = $sms_details->sms_status;
-        $data->sms_nightwatchman = $sms_details->sms_nightwatchman;
-      }
-
       if (!empty($data->languages_spoken)) {
         // Convert the urls field to an array.
         $registry = new JRegistry;
@@ -121,83 +107,14 @@ class RentalModelContactDetails extends JModelAdmin {
    *  
    */
   public function save($data) {
-
-    $params = JComponentHelper::getParams('com_rental');
-
+    
     /*
      * Get the property versions model
      */
     $model = JModelLegacy::getInstance('PropertyVersions', 'RentalModel');
 
     /*
-     * Get the existing SMS details for this property 
-     */
-    $sms_details = $this->getSMSDetails($data['property_id']);
-
-    /*
-     * Get the SMS related values from the validated form data
-     */
-    $valid = $data['sms_valid'];
-    $sms_number = $data['sms_alert_number'];
-    $sms_verification_code = $data['dummy_validation_code'];
-    $sms_status = $data['sms_status'];
-
-    /*
-     * Login flag to indicate whether we logged into clickatell okay
-     */
-    $login = false;
-
-    /*
-     * If we have an sms number but it's not been validated and there we haven't send a verification code
-     * OR
-     * The sms number that has been passed is different to the one on record.
-     */
-    if (($sms_number && !$valid && !$sms_status) || (!empty($sms_number) && strcmp($sms_number, $sms_details->sms_alert_number) != 0)) {
-
-      $code = rand(10000, 100000);
-      $data['sms_validation_code'] = $code;
-      $data['sms_status'] = 'VALIDATION';
-      $data['sms_valid'] = 0;
-      $data['sms_alert_number'] = $sms_number;
-
-      // Clickatel baby
-      $sendsms = new SendSMS($params->get('username'), $params->get('password'), $params->get('id'));
-
-      /*
-       *  if the login return 0, means that login failed, you cant send sms after this 
-       */
-      if (($sendsms->login())) {
-        $login = true;
-      }
-
-      /*
-       * Send sms using the simple send() call 
-       */
-      if ($login) {
-        $sendsms->send($sms_number, JText::sprintf('COM_RENTAL_HELLOWORLD_SMS_VERIFICATION_CODE', $code));
-      }
-    } else if (($sms_number) && !$valid && $sms_status == 'VALIDATION') { // The number hasn't been validated but we might have a validation code to verify
-
-      /*
-       * Get the validation code from the data base and compare it to that passed in via the form
-       */
-
-      $data['sms_validation_code'] = $sms_details->sms_validation_code;
-      $data['sms_valid'] = 0;
-
-      if ($sms_verification_code == $sms_details->sms_validation_code) {
-        $data['sms_status'] = 'ACTIVE';
-        $data['sms_valid'] = 1;
-      }
-    } else if (empty($sms_number)) { // Opt out of alerts
-      $data['sms_validation_code'] = '';
-      $data['sms_status'] = '';
-      $data['sms_valid'] = 0;
-      $data['sms_alert_number'] = '';
-    }
-
-    /*
-     * Lastly, we need to check if the use_invoice_details flag is set. If not present then need to update the field
+     * We need to check if the use_invoice_details flag is set. If not present then need to update the field.
      */
     if (empty($data['use_invoice_details'])) {
       $data['use_invoice_details'] = false;
@@ -230,43 +147,5 @@ class RentalModelContactDetails extends JModelAdmin {
 
     return true;
   }
-
-  /**
-   * Method to get SMS alert status relating to a property reference number
-   * TO DO - Cache the result in model scope for multiple uses.
-   * 
-   * @param type $id
-   * @return boolean
-   */
-  public function getSMSDetails($id = '') {
-
-    if (empty($id)) {
-      return false;
-    }
-
-    $db = JFactory::getDbo();
-
-    $query = $db->getQuery(true);
-
-    // Initialise the query.
-    $query->select('sms_alert_number, sms_valid, sms_status, sms_validation_code,sms_nightwatchman');
-    $query->from('#__property' . ' as a');
-    $query->where('a.id = ' . (int) $id);
-
-    $db->setQuery($query);
-
-    $row = $db->loadObject();
-
-    // Check that we have a result.
-    if (empty($row)) {
-      return false;
-    }
-
-
-
-
-    return $row;
-  }
-
 }
 

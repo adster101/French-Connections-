@@ -42,7 +42,13 @@ class plgUserProfile_fc extends JPlugin
       'receive_newsletter',
       'where_heard',
       'exchange_rate_eur',
-      'exchange_rate_usd'
+      'exchange_rate_usd',
+      'sms_alert_number',
+      'dummy_validation_code',
+      'sms_status',
+      'sms_valid',
+      'sms_inactive',
+      'sms_nightwatchman'
   );
 
   /**
@@ -70,7 +76,7 @@ class plgUserProfile_fc extends JPlugin
    */
   function onContentPrepareData($context, $data)
   {
-    // Check we are manipulating a valid form.
+// Check we are manipulating a valid form.
 
     if (!in_array($context, array('com_admin.profile', 'com_users.user')))
     {
@@ -84,10 +90,38 @@ class plgUserProfile_fc extends JPlugin
 
       if (!isset($data->profile) and $userId > 0)
       {
-        // Load the profile data from the database.
+// Load the profile data from the database.
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
-        $query->select('user_id,firstname,surname,address1,address2,city,region,country,postal_code,email_alt,phone_1,phone_2,phone_3,aboutme,tos,vat_status,vat_number,company_number,receive_newsletter,where_heard,exchange_rate_eur,exchange_rate_usd');
+        $query->select('
+          user_id,
+          firstname,
+          surname,
+          address1,
+          address2,
+          city,
+          region,
+          country,
+          postal_code,
+          email_alt,
+          phone_1,
+          phone_2,
+          phone_3,
+          aboutme,
+          tos,
+          vat_status,
+          vat_number,
+          company_number,
+          receive_newsletter,
+          where_heard,
+          exchange_rate_eur,
+          exchange_rate_usd,
+          sms_alert_number,
+          sms_status,
+          sms_valid,
+          sms_inactive,
+          sms_nightwatchman      
+        ');
         $query->from('#__user_profile_fc');
         $query->where('user_id = ' . (int) $userId);
 
@@ -95,14 +129,14 @@ class plgUserProfile_fc extends JPlugin
 
         $result = $db->loadAssoc();
 
-        // Check for a database error.
+// Check for a database error.
         if ($db->getErrorNum())
         {
           $this->_subject->setError($db->getErrorMsg());
           return false;
         }
 
-        // Merge the profile data.
+// Merge the profile data.
         $data->profile = array();
 
         foreach ($result as $key => $value)
@@ -128,7 +162,7 @@ class plgUserProfile_fc extends JPlugin
    */
   function onContentPrepareForm($form, $data)
   {
-    // Require the helloworld helper class
+// Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
     $input = JFactory::getApplication()->input;
     $form_data = $input->get('jform', array(), 'array');
@@ -178,7 +212,6 @@ class plgUserProfile_fc extends JPlugin
       $vat_status = $form_data['vat_status'];
     }
 
-
     if ($vat_status == 'ZA')
     {
       $form->setFieldAttribute('company_number', 'required', 'required');
@@ -201,55 +234,124 @@ class plgUserProfile_fc extends JPlugin
     $view = $input->get('view', '', 'string');
     $option = $input->get('option', '', 'string');
     $layout = $input->get('layout', '', 'string');
+    $params = JComponentHelper::getParams('com_rental');
+    $userdata = array();
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    $table = JTable::getInstance('UserProfileFc', 'RentalTable');
+
+    jimport('clickatell.SendSMS');
 
     /*
-     * If the option is admin or user and the view matches then process the additional user profile info.
+     * If the option is admin or user and the view matches then process the additional user profile
+     * info.
      */
     if (($view == 'profile' && $option == 'com_admin') || ($layout == 'edit' && $option == 'com_users'))
     {
 
       $userId = JArrayHelper::getValue($data, 'id', 0, 'int');
 
-      try {
+      try
+      {
+        // Load the existing user profile data for this user.
+        $table->load($data['id']);
 
-        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
-        $table = JTable::getInstance('UserProfileFc', 'RentalTable');
+        /*
+         * Get the SMS related values from the validated form data
+         */
+        $isValid = $data['sms_valid'];
+        $sms_number = $data['sms_alert_number'];
+        $sms_verification_code = $data['dummy_validation_code'];
+        $sms_status = $data['sms_status'];
 
-        $data['user_id'] = $data['id'];
-        unset($data['id']);
-
-
-        //$table->delete($userId);
-        if ($isNew)
+        // Set the nightwatchman flag if unset in the form
+        if (empty($data['sms_nightwatchman']))
         {
-          $table->set('_tbl_keys', array('id'));
+          $data['sms_nightwatchman'] = 0;
+        }
+        /*
+         * If we have an sms number but it's not been validated and there we haven't send a verification code
+         * OR
+         * The sms number that has been passed is different to the one on record.
+         */
+        if (($sms_number && !$isValid && !$sms_status) || (!empty($sms_number) && strcmp($sms_number, $table->sms_alert_number) != 0))
+        {
+          $code = rand(10000, 100000);
+          $data['sms_validation_code'] = $code;
+          $data['sms_status'] = 'VALIDATION';
+          $data['sms_valid'] = 0;
+          $data['sms_alert_number'] = $sms_number;
+
+          // Clickatel baby
+          $sendsms = new SendSMS($params->get('username'), $params->get('password'), $params->get('id'));
+
+          /*
+           *  if the login return 0, means that login failed, you cant send sms after this 
+           */
+          if (($sendsms->login()))
+          {
+            $login = true;
+          }
+
+          /*
+           * Send sms using the simple send() call 
+           */
+          if ($login)
+          {
+            $sendsms->send($sms_number, JText::sprintf('COM_RENTAL_HELLOWORLD_SMS_VERIFICATION_CODE', $code));
+          }
+        }
+        else if (($sms_number) && !$isValid && $sms_status == 'VALIDATION')
+        {
+
+          // The number hasn't been validated but we might have a validation code to verify
+          // Get the validation code from the data base and compare it to that passed in via the form
+          $data['sms_validation_code'] = $table->sms_validation_code;
+          $data['sms_valid'] = 0;
+
+          if ($sms_verification_code == $table->sms_validation_code)
+          {
+            $data['sms_status'] = 'ACTIVE';
+            $data['sms_valid'] = 1;
+          }
+        }
+        else if (empty($sms_number))
+        {
+          // Opt out of alerts
+          $data['sms_validation_code'] = '';
+          $data['sms_status'] = '';
+          $data['sms_valid'] = 0;
+          $data['sms_alert_number'] = '';
         }
 
+        // Unset id which is the user id and set user_id in $data
+        $data['user_id'] = $data['id'];
+
+        unset($data['id']);
+
+        // Save the data back to the user profile table
         if (!$table->save($data))
         {
           $this->setError($table->getError());
           return false;
         }
 
-        // TO DO - Concatenate the first and last names and update the joomla user 'name' field.
-        $user = new JUser($userId);
+        // Concatenate the first and last names and update the joomla user 'name' field.
+        $user = JTable::getInstance('User', 'JTable');
+
+        // Load the existing user details
+        $user->load($userId);
 
         $userdata['name'] = $data['firstname'] . ' ' . $data['surname'];
-        // Bind the data.
 
-        if (!$user->bind($userdata))
+        /* Store the data. This is triggering a double call of this plugin! */
+        if (!$user->save($userdata))
         {
           $this->setError($user->getError());
           return false;
         }
-
-        // Store the data.
-        if (!$user->save())
-        {
-          $this->setError($user->getError());
-          return false;
-        }
-      } catch (JException $e) {
+      }
+      catch (JException $e)
+      {
         $this->_subject->setError($e->getMessage());
         return false;
       }
@@ -275,10 +377,13 @@ class plgUserProfile_fc extends JPlugin
     // Check that the date is valid.
     if (!empty($data['firstname']) && !empty($data['surname']))
     {
-      try {
+      try
+      {
         // Concatenate the ffirst and surname fields and save into the name field.
         $data['name'] = $data['firstname'] . ' ' . $data['surname'];
-      } catch (Exception $e) {
+      }
+      catch (Exception $e)
+      {
         // Throw an exception if date is not valid.
         throw new InvalidArgumentException(JText::_('PLG_USER_PROFILE_ERROR_INVALID_NAME'));
       }
@@ -307,7 +412,8 @@ class plgUserProfile_fc extends JPlugin
 
     if ($userId)
     {
-      try {
+      try
+      {
         $db = JFactory::getDbo();
         $db->setQuery(
                 'DELETE FROM #__user_profile_fc WHERE user_id = ' . $userId
@@ -317,7 +423,9 @@ class plgUserProfile_fc extends JPlugin
         {
           throw new Exception($db->getErrorMsg());
         }
-      } catch (JException $e) {
+      }
+      catch (JException $e)
+      {
         $this->_subject->setError($e->getMessage());
         return false;
       }

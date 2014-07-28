@@ -31,32 +31,6 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       echo $tabs_layout->render($data);
       ?>
 
-      <fieldset class="adminform form-horizontal">
-        <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend> 
-        <?php echo $this->form->getLabel('smsprefs'); ?>
-        <div class="control-group">
-          <?php echo $this->form->getLabel('sms_alert_number'); ?>
-          <div class="controls">
-            <?php echo $this->form->getInput('sms_alert_number'); ?>
-          </div>
-        </div>
-        <?php if (!$this->item->sms_valid) : ?>
-          <div class="control-group">
-            <?php echo $this->form->getLabel('dummy_validation_code'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('dummy_validation_code'); ?>
-            </div>
-          </div>
-        <?php elseif ($this->item->sms_valid) : ?>
-          <?php echo $this->form->getLabel('sms_valid_message'); ?>
-        <?php endif; ?>
-        <div class="control-group">
-          <div class="controls">
-            <?php echo $this->form->getInput('sms_nightwatchman'); ?>
-          </div>
-        </div>
-      </fieldset>   
-
       <fieldset class="adminform">      
         <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
         <?php echo $this->form->getLabel('contact_override_note'); ?>
