@@ -91,13 +91,15 @@ class FcAdminCssMenu extends JAdminCssMenu
       $class = '';
 		}
 
-		if ($this->_current->class == 'disabled')
-		{
-			$class = ' class="disabled"';
-		}
+		if ($this->_current->hasChildren()) {
+   		// Print the item
+		echo "<li class='group'>";   
+    } else {
+      echo "<li class='item'>";
+    }
 
-		// Print the item
-		echo "<li" . $class . ">";
+
+
 
 		// Print a link if it exists
 		$linkClass = array();
@@ -164,7 +166,7 @@ class FcAdminCssMenu extends JAdminCssMenu
 			}
 			else
 			{
-				echo '<ul class="">' . "\n";
+				echo '<ul class="group">' . "\n";
 			}
 
 			foreach ($this->_current->getChildren() as $child)

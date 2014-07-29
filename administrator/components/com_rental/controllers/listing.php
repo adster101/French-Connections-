@@ -538,7 +538,7 @@ class RentalControllerListing extends JControllerForm
     if (empty($current_version[0]->vat_status))
     {
       // No VAT status on record for this listing.
-      $message = 'Oooh, naughty, you haven\'t told us about your VAT status';
+      $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_BLURB');
       $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&layout=account&id=' . (int) $recordId, false);
       $this->setRedirect($redirect, $message);
     }

@@ -40,6 +40,12 @@
       <option value="1">COM_RENTAL_MARKETING_FRENCH_TRANSLATION_ON</option>
 
     </field>
+    <field
+      name="translationservice"
+      type="note"
+      description="COM_RENTAL_MARKETING_FRENCH_TRANSLATION_SERVICE"
+      class="notice notice-info"
+    />
   </fieldset>
   <fieldset name="hidden">
   

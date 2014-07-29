@@ -25,12 +25,10 @@ $show_company_number = '';
       <h2>
         <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_TITLE'); ?>
       </h2>
-      <p>
-        <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY_BLURB'); ?>
-      </p>
-      <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
+    
+      <?php //$this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
 
-      <?php echo $this->payment_summary->render($this->summary); ?>   
+      <?php //echo $this->payment_summary->render($this->summary); ?>   
       <div class="alert alert-notice">
         <span class='icon icon-flag'> </span>
         Our records indicate that we don't have VAT or invoice details registered on our system. Please complete the following before proceeding.

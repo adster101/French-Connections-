@@ -24,4 +24,4 @@ if (in_array(10, $groups)) {
   require JModuleHelper::getLayoutPath('mod_fcmenu', 'default_enabled');
 }
 
-$menu->renderMenu('menu', 'nav ' . $direction);
+$menu->renderMenu('fcadminmenu', 'nav ' . $direction);

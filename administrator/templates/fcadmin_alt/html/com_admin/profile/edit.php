@@ -42,7 +42,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
 <form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="profile-form" class="form-validate form-horizontal" enctype="multipart/form-data">
 
   <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
-  <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('JCATEGORY', true)); ?>
+  <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_ADMIN_VIEW_PROFILE_TITLE', true)); ?>
 
   <fieldset>
     <legend>Your name</legend>
@@ -238,7 +238,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
     </div> 
   </fieldset>
   <?php echo JHtml::_('bootstrap.endTab'); ?>
-  <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'sms', JText::_('JCATEGORY', true)); ?>
+  <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'sms', JText::_('COM_ADMIN_VIEW_PROFILE_SMS_SETTINGS', true)); ?>
 
   <fieldset class="adminform form-horizontal">
     <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend> 

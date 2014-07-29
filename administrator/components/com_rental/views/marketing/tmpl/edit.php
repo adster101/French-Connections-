@@ -12,7 +12,6 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.framework');
 JHtml::_('behavior.keepalive');
 $fieldsets = $this->form->getFieldSets();
-
 ?>
 <form 
   action="<?php echo JRoute::_('index.php?option=com_rental&task=marketing.save&property_id=' . (int) $this->id) ?>" 
@@ -20,29 +19,33 @@ $fieldsets = $this->form->getFieldSets();
   name="adminForm" 
   id="adminForm" 
   class="form-validate form-vertical">
-    <?php foreach ($fieldsets as $fieldset): ?>
-      <?php if ($fieldset->name != 'hidden') : ?>  
-      <fieldset class="panelform">
-        <legend>
-          <?php echo JText::_($fieldset->label); ?>
-        </legend>
-        <?php echo JText::_($fieldset->description); ?>
+  <div class="row-fluid">
+    <div class="span12">
+      <?php foreach ($fieldsets as $fieldset): ?>
+        <?php if ($fieldset->name != 'hidden') : ?>  
+          <fieldset class="panelform">
+            <legend>
+              <?php echo JText::_($fieldset->label); ?>
+            </legend>
+            <?php echo JText::_($fieldset->description); ?>
+            <?php foreach ($this->form->getFieldset($fieldset->name) as $field) : ?>
+              <div class="control-group">
+                <?php echo $field->label; ?>
+                <div class="controls">
+                  <?php echo $field->input; ?>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </fieldset> 
+        <?php endif; ?>
+      <?php endforeach; ?>
+      <?php foreach ($this->form->getFieldset('hidden') as $field) : ?>
+        <?php echo $field->input; ?>
+      <?php endforeach; ?>
 
-        <?php foreach ($this->form->getFieldset($fieldset->name) as $field) : ?>
-          <div class="control-group">
-            <?php echo $field->label; ?>
-            <div class="controls">
-              <?php echo $field->input; ?>
-            </div>
-          </div>
-        <?php endforeach; ?>
-      </fieldset> 
-    <?php endif; ?>
-  <?php endforeach; ?>
-  <?php foreach ($this->form->getFieldset($fieldset->name) as $field) : ?>
-    <?php echo $field->input; ?>
-  <?php endforeach; ?>
-
-  <input type="hidden" name="task" value="" />
-  <?php echo JHtml::_('form.token'); ?>
+      <input type="hidden" name="task" value="" />
+      <?php echo JHtml::_('form.token'); ?>
+    </div>
+  </div>
 </form>
+
