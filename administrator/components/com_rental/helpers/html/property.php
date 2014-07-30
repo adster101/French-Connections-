@@ -462,13 +462,14 @@ class JHtmlProperty
    *
    */
 
-  public static function locked($msg)
+  public static function locked($msg, $btnText, $title)
   {
-    $html = '';
-    $html .= '<a class="btn-primary disabled">'
-            . '<i class="icon icon-locked"> </i>'
-            . JText::_($msg)
-            . '</a>';
+    $html = '<div class="alert alert-info">'
+            . JText::_($msg) 
+            . '&nbsp;<button rel="tooltip" class="btn btn-primary disabled" title="' . JText::_($title) . '">'
+            . '<i class="icon icon-locked"> </i>&nbsp;'
+            . JText::_($btnText)
+            . '</button></div>';
     return $html;
   }
 

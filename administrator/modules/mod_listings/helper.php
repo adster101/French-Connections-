@@ -45,7 +45,7 @@ abstract class ModListingHelper
       date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
       a.review,
-      (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-032") . ' ) as payment, 
+      (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-002") . ' ) as payment, 
       f.image_file_name as thumbnail
     ');
 
@@ -66,7 +66,7 @@ abstract class ModListingHelper
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
     $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');
     //$query->order('a.expiry_date', 'asc');
-    
+
     $db->setQuery($query);
 
     try
@@ -111,10 +111,9 @@ abstract class ModListingHelper
 
     if ($review == 2)
     {
-      $msg = JText::_('COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON');
-      $html = JHtml::_('property.locked', $msg);
+      $html = JHtml::_('property.locked', 'COM_RENTAL_PROPERTY_LOCKED_FOR_EDITING', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_LOCKED_BUTTON_TOOLTIP');
     }
-    elseif (!empty($payment)) 
+    elseif (!empty($payment))
     {
       $msg = JText::_('COM_RENTAL_PAYMENT_DUE');
       $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'btn btn-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_PAYMENT_DUE_PROCEED', false);
@@ -142,6 +141,11 @@ abstract class ModListingHelper
     elseif (empty($days_to_renewal))
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id);
+    }
+    else
+    {
+      $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_EDIT_PROPERTY');
       $html = JHtml::_('property.note', 'alert alert-info', $msg, $id);
     }
 

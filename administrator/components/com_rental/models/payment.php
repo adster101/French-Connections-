@@ -68,8 +68,5 @@ class RentalModelPayment extends JModelAdmin {
     return JTable::getInstance($type, $prefix, $options);
   }
   
-
-  
-  
   
 }

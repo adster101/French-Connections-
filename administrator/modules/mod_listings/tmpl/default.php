@@ -31,7 +31,7 @@ defined('_JEXEC') or die;
             <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail, 'thumbnail') ?>
           </div>
           <div class="listing-container-wide">
-            <?php if (!empty($item->message) && $item->review != 2) : ?>
+            <?php if (!empty($item->message)) : ?>
               <?php echo $item->message; ?>
             <?php endif; ?> 
             <hr />

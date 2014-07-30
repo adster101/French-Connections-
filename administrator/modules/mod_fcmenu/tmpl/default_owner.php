@@ -32,7 +32,9 @@ $manage_account = $user->authorise('core.manage', 'com_invoices');
 if ($manage_rental || $manage_realestate)
 {
 
-  $menu->addChild(new JMenuNode(JText::_('COM_ADMIN_RENTAL_PROPERTY'), '#'), true);
+  $menu->addChild(
+          new JMenuNode(JText::_('COM_ADMIN_RENTAL_PROPERTY'), '#', 'blah', true)
+          , true);
 
   if ($manage_rental)
   {
@@ -46,7 +48,7 @@ if ($manage_rental || $manage_realestate)
   $menu->getParent();
 
   if ($manage_offers)
-  {  
+  {
     $menu->addChild(new JMenuNode(JText::_('COM_SPECIALOFFERS_MENU'), 'index.php?option=com_specialoffers', 'class:specialoffers'), true);
     // Get the parent of the above added child
     $menu->getParent();

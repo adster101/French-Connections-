@@ -487,6 +487,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $selfcatering = 0;
     $mixed_units = false;
 
+    $unit_count = '';
+
     // Total images holder
     $image_count = 0;
 
@@ -697,6 +699,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   public function processPayment($data, $current_version = array(), $previous_version = array())
   {
 
+    // Determine whether this payment should be saved as an auto-renewal or not
+    $shouldAutoRenew = (!empty($data['autorenewal'])) ? $data['autorenewal'] : '';
+
     // Get the order summary details
     $order = $this->getPaymentSummary($current_version, $previous_version);
 
@@ -710,7 +715,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     // Okay, so we have validated the form and we have the order summary
     // First off, generate a VendorTxCode and stash what we have in the db
-    $VendorTxCode = $data['id'] . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
+    $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . '-' . rand(0, 32000) * rand(0, 32000);
 
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($order as $item => $line)
@@ -742,7 +747,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
 
-    // So let's put the transaction into the database
+    // So let's put the transaction lines into the database
     $table = JTable::getInstance('protxtransactionlines', 'RentalTable');
 
     // Add each of the order lines to the transaction lines table
@@ -872,14 +877,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     else
       $strDBStatus = "UNKNOWN - An unknown status was returned from Sage Pay.  The Status was: " . mysql_real_escape_string($strStatus) . ", with StatusDetail:" . mysql_real_escape_string($strStatusDetail);
 
-    // Save the transaction out to the protx table
+    // Save the transaction out to the protx table, this effectively updates the row with the 
+    // response from Protx
     $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
 
     // Okay now we have processed the transaction and update it in the db.
     switch ($strStatus) {
       case 'OK':
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
-        $return = array('order' => $order, 'payment' => $arrResponse);
+        $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $shouldAutoRenew);
         return $return;
         break;
       case 'MALFORMED':
@@ -1168,43 +1174,43 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
   public function requestPost($url, $data)
   {
-// Set a one-minute timeout for this script
+    // Set a one-minute timeout for this script
     set_time_limit(60);
 
-// Initialise output variable
+    // Initialise output variable
     $output = array();
 
-// Open the cURL session
+    // Open the cURL session
     $curlSession = curl_init();
 
-// Set the URL
+    // Set the URL
     curl_setopt($curlSession, CURLOPT_URL, $url);
-// No headers, please
+    // No headers, please
     curl_setopt($curlSession, CURLOPT_HEADER, 0);
-// It's a POST request
+    // It's a POST request
     curl_setopt($curlSession, CURLOPT_POST, 1);
-// Set the fields for the POST
+    // Set the fields for the POST
     curl_setopt($curlSession, CURLOPT_POSTFIELDS, $data);
-// Return it direct, don't print it out
+    // Return it direct, don't print it out
     curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);
-// This connection will timeout in 30 seconds
+    // This connection will timeout in 30 seconds
     curl_setopt($curlSession, CURLOPT_TIMEOUT, 30);
-//The next two lines must be present for the kit to work with newer version of cURL
-//You should remove them if you have any problems in earlier versions of cURL
+    //The next two lines must be present for the kit to work with newer version of cURL
+    //You should remove them if you have any problems in earlier versions of cURL
     curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($curlSession, CURLOPT_SSL_VERIFYHOST, 1);
 
-//Send the request and store the result in an array
+    //Send the request and store the result in an array
 
     $rawresponse = curl_exec($curlSession);
-//Store the raw response for later as it's useful to see for integration and understanding
+    //Store the raw response for later as it's useful to see for integration and understanding
     $_SESSION["rawresponse"] = $rawresponse;
-//Split response into name=value pairs
+    //Split response into name=value pairs
     $response = split(chr(10), $rawresponse);
-// Check that a connection was made
+    // Check that a connection was made
     if (curl_error($curlSession))
     {
-// If it wasn't...
+      // If it wasn't...
       $output['Status'] = "FAIL";
       $output['StatusDetail'] = curl_error($curlSession);
     }
@@ -1226,14 +1232,26 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
 // END function requestPost()
 
-  /*
+  /**
    * Function to save a transaction out to the protx transaction table
+   * 
+   * @param type $data
+   * @param type $key - Determines whether to update an existing row based on key passed or insert a new row
+   * @return boolean
    */
-
   public function saveProtxTransaction($data = array(), $key = '')
   {
-    // So let's put the transaction into the database
 
+    if (array_key_exists('CardExpiryDate', $data))
+    {
+      // Process the expiry date into last day of given month year
+      $year = '20' . substr($data['CardExpiryDate'], -2);
+      $month = substr($data['CardExpiryDate'], 0, 2);
+      $expiry_date = new DateTime($year . '-' . $month . '-01');
+      $data['CardExpiryDate'] = $expiry_date->format('Y-m-t');
+    }
+
+    // So let's put the transaction into the database
     $table = JTable::getInstance('protxtransactions', 'RentalTable');
 
     if (!empty($key))

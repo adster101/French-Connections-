@@ -141,14 +141,14 @@ class RentalModelAutoRenewals extends JModelAdmin {
       id,
       VendorTxCode,
       CardType,
-      CardExpiryDate,
+      date_format(CardExpiryDate, "%d %M %Y") as CardExpiryDate,
       CardLastFourDigits
     ');
 
     $query->from('#__protx_transactions');
 
     $query->where('property_id = ' . (int) $pk);
-    //$query->where('CardExpiryDate > now()');
+    $query->where($db->quoteName('Status') . ' = ' . $db->quote('OK'));
     $db->setQuery($query);
 
     $rows = $db->loadObjectList();

@@ -113,15 +113,23 @@
 
 #fcadminmenu > li.item > a {
     text-decoration: none;
-    padding-left: 45px;
+    padding-left: 35px;
     white-space: nowrap;
     overflow: hidden;
 }
 #fcadminmenu .group a {
-    padding-left: 55px;
+    padding-left: 45px;
     font-weight: normal;
 }
-
+.top-level {
+    transition: background-color 0.218s ease 0s, opacity 0.218s ease 0s;
+    -moz-user-select: none;
+    cursor: default;
+    opacity: 0.8;
+    outline: 0px none;
+    padding: 7px 0px 7px 17px;
+    position: relative;
+}
 .navbar .nav > li > a[href*="index.php?option=com_enquiries"]:before, a[href*="index.php?option=com_enquiries"]:before {
   font-family:icomoon;
   content:"\4d  ";

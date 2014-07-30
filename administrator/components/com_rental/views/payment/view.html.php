@@ -49,7 +49,6 @@ class RentalViewPayment extends JViewLegacy
 
     if ($layout == 'account')
     {
-
       // Get the account form
       $this->form = $this->get('Form');
     }
@@ -97,10 +96,6 @@ class RentalViewPayment extends JViewLegacy
 
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
-
-
-
-
 
     //JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
 

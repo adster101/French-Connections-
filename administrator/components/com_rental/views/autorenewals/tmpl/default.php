@@ -13,9 +13,9 @@ $fieldsets = $this->form->getFieldSets();
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="" class="span8">
+    <div id="" class="span10">
     <?php else : ?>
-      <div lass="span10">
+      <div class="span12">
       <?php endif; ?>
       <form action="<?php echo JRoute::_('index.php?option=com_rental&view=autorenewals&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <?php foreach ($fieldsets as $fieldset) : ?>
@@ -34,23 +34,8 @@ $fieldsets = $this->form->getFieldSets();
           </fieldset>
         <?php endforeach; ?>
 
-
-
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="jform[id]" value="11" />
-
         <?php echo JHtml::_('form.token'); ?>
-
-
       </form>
-
-    </div>
-
-    <div class="span2">
-
-      <h4>Secure details</h4>
-      <p>Choosing to pay now using our secure payment form will ensure your property is published as soon as possible. All major CREDIT or DEBIT cards are accepted (UK and international) on our completely secure server.</p>
-      <p><img src="/images/general/sage_pay_logo.gif" alt="Sage pay logo" />
-      <p><img src="/images/general/mcsc_logo.gif" alt="Sage pay logo" />
-      <p><img src="/images/general/vbv_logo_small.gif" alt="Sage pay logo" />
     </div>

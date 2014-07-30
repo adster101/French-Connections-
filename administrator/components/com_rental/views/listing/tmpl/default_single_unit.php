@@ -31,9 +31,9 @@ $data['form'] = $this->form;
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="" class="span8">
+    <div id="" class="span12">
     <?php else : ?>
-      <div class="span10 form-inline">
+      <div class="span12 form-inline">
       <?php endif; ?>
 
       <form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" class="form-validate form-horizontal" id="adminForm">
