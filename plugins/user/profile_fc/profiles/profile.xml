@@ -252,19 +252,15 @@
     />
   </fieldset>
   <fieldset
-    name="sms-preferences">
+    name="sms-preferences"
+    label="COM_ADMIN_VIEW_PROFILE_SMS_SETTINGS">
     <field 
       name="smsprefs" 
       type="note"
       class="alert alert-notice" 
       labelclass="control-label"
       description="COM_RENTAL_HELLOWORLD_ENQUIRY_SMS_CONTACT_PREFERENCES" />
-    <field 
-      name="sms_valid_message" 
-      type="note"
-      class="alert alert-success" 
-      labelclass="control-label"
-      description="COM_RENTAL_HELLOWORLD_ENQUIRY_SMS_CONTACT_ACTIVE" />
+ 
     <field 
       name="sms_alert_number" 
       type="text"
@@ -288,6 +284,12 @@
       description=""
       class="input-small" 
     />    
+    <field 
+      name="sms_valid_message" 
+      type="note"
+      class="alert alert-success" 
+      labelclass="control-label"
+      description="COM_RENTAL_HELLOWORLD_ENQUIRY_SMS_CONTACT_ACTIVE" />
     <field 
       name="sms_nightwatchman"
       type="checkbox"

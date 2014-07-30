@@ -266,7 +266,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       </div>
     </div>
   </fieldset> 
-  <?php echo JHtml::_('bootstrap.endTabSet'); ?>
+  <?php echo JHtml::_('bootstrap.endTab'); ?>
 
   <?php echo $this->form->getInput('sms_valid'); ?>
   <?php echo $this->form->getInput('sms_status'); ?>
