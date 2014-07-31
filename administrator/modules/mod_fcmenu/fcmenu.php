@@ -133,10 +133,10 @@ class FcAdminCssMenu extends JAdminCssMenu
     }
 
     // Implode out $linkClass for rendering
-    $linkClass = ' class="' . implode(' ', $linkClass) . '"';
+    $linkClass = ' class="item-label ' . implode(' ', $linkClass) . '"';
     if ($this->_current->hasChildren())
     {
-      echo "<div class='top-level'>";   
+      echo "<div class='nav-label top-level'>";   
       // TO DO - Need to do something here to determine if this is the 'parent' of the current 
       // 'active' node. Something like $this->hasActiveChild() or similar.
 

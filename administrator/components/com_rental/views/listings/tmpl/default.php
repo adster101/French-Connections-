@@ -75,7 +75,7 @@ $canDo = RentalHelper::getActions();
                       <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
                     </th>
                     <?php if ($canDo->get('rental.listing.review')) : ?>  
-                      <th>
+                      <th width="10%">
                         <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
                       </th>
                     <?php endif; ?>
@@ -199,6 +199,9 @@ $canDo = RentalHelper::getActions();
                                 <?php //echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
                               </p>
                             <?php endif; ?>
+                            <?php if (property_exists($item, 'enquiries')) :?>
+                              <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
+                              <?php endif; ?>
                           </td>
                         <?php endif; ?>
                         <?php if (property_exists($item, 'value')) : ?>

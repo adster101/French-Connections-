@@ -107,7 +107,7 @@ class RentalModelListings extends JModelList
 
     // Add in the number of page view this property has had in the last twelve months...
     $now = date('Y-m-d');
-    $last_year = strtotime("-1 year", strtotime($now));
+    $one_year_ago = JFactory::getDate("-1 year")->calendar('Y-m-d');
 
     // Select some fields
     $query->select('
@@ -142,6 +142,8 @@ class RentalModelListings extends JModelList
       $query->select('uc.name AS editor');
       $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
     }
+
+
 
     // Fundamental check to ensure owners only see their own listings.
     // This is an ACL check, e.g. core.edit.own and core.edit
@@ -194,32 +196,35 @@ class RentalModelListings extends JModelList
     }
 
     // Filter on expiry date
-    $start_date = $this->getState('filter.start_date');
-    $end_date = $this->getState('filter.end_date');
     $date_filter = $this->getState('filter.date_filter');
+    $start_date = JFactory::getDate($this->getState('filter.start_date'))->calendar('Y-m-d');
+    $end_date = JFactory::getDate($this->getState('filter.end_date'))->calendar('Y-m-d');
 
-    if ($start_date && $end_date && $date_filter == 'expiry_date')
+    if ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'expiry_date')
     {
-      // This filter includes any properties with snooze dates between the dates being filtered on .
-      $query->where('((a.' . $db->escape($date_filter) . ' >=' .
-              $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
-              ' and a.' . $db->escape($date_filter) . ' <=' .
-              $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')' .
-              ' OR (' . $db->escape('a.snooze_until') . ' >=' .
-              $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
-              ' and ' . $db->escape('a.snooze_until') . ' <=' .
-              $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . '))');
+      // This filter includes any properties with snooze dates between the dates being filtered on.
+      // This allows us to show properties that expired outside the dated being filtered on but
+      // were snoozed to appear between the dated being filtered. We also, exlude properties that 
+      // are no longer expired. That is, they have been renewed since they were snoozed...
+      $query->where('((a.' . $db->escape($date_filter) . ' >=' . $db->quote($start_date) . ' and a.'
+              . $db->escape($date_filter) . ' <=' . $db->quote($end_date) . ')' .
+              ' OR (' . $db->escape('a.snooze_until') . ' >=' . $db->quote($start_date) . ' and '
+              . $db->escape('a.snooze_until') . ' <=' . $db->quote($end_date) . ' and a.expiry_date <= ' . $db->quote($now) . '))');
+
+      // Exclude unpublished properties.......
       $query->where('a.expiry_date IS NOT NULL');
+
+      // We need to pull in additional information for this report, yippee!!
+      $query->select('(select count(*) from ' . $db->quoteName('#__enquiries', 'enq') . ' where property_id = a.id and enq.date_created >= SUBDATE(a.expiry_date, INTERVAL 1 YEAR)) as enquiries');
+      $query->select('(select count(*) from ' . $db->quoteName('#__website_views', 'webviews') . ' where property_id = a.id and webviews.date_created >= SUBDATE(a.expiry_date, INTERVAL 1 YEAR)) as clicks');
     }
-    elseif ($start_date && $end_date && $date_filter == 'created_on')
+    elseif ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'created_on')
     {
       $query->where('(a.' . $db->escape($date_filter) . ' >=' .
               $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
               ' and a.' . $db->escape($date_filter) . ' <=' .
               $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
     }
-
-
 
     // Filter by search in title
     // TODO - Try and tidy up this logic a bit.

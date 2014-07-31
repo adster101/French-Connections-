@@ -53,7 +53,7 @@ class RentalController extends JControllerLegacy
     $property_id = ($this->input->getInt('id')) ? $this->input->getInt('id') : $this->input->getInt('property_id');
     $unit_id = $this->input->getInt('unit_id');
     $context = $option . '.edit.' . $view;
-    $views = array('reviews', 'notes', 'note');
+    $views = array('review', 'notes', 'note');
 
     // Basic check to ensure user is allowed to access this view.
     if (!$this->canView($view, $option))

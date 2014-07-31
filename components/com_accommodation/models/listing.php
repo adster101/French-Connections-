@@ -1056,6 +1056,7 @@ class AccommodationModelListing extends JModelForm
         // If minutes less than 240 
         // Schedule for tomorrow at eight
         // Else schedule for today at eight
+        
         // Set default timezone so we can work out the correct time now
         date_default_timezone_set("Europe/London");
 

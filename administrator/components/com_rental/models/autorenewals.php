@@ -9,7 +9,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class RentalModelAutoRenewals extends JModelAdmin {
+class RentalModelAutoRenewals extends JModelAdmin
+{
 
   public $extension = 'com_rental';
 
@@ -22,7 +23,8 @@ class RentalModelAutoRenewals extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Property', $prefix = 'RentalTable', $config = array()) {
+  public function getTable($type = 'Property', $prefix = 'RentalTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -34,11 +36,13 @@ class RentalModelAutoRenewals extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_rental.helloworld', 'autorenewals', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -51,12 +55,14 @@ class RentalModelAutoRenewals extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
 
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.property.renewal.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
@@ -72,10 +78,12 @@ class RentalModelAutoRenewals extends JModelAdmin {
    * @throws	Exception if there is an error in the form event.
    * @since	1.6
    */
-  protected function preprocessForm(JForm $form, $data) {
+  protected function preprocessForm(JForm $form, $data)
+  {
 
 
-    if (!empty($data->VendorTxCodes)) {
+    if (!empty($data->VendorTxCodes))
+    {
 
       $default = ($data->VendorTxCode) ? $data->VendorTxCode : '';
 
@@ -87,19 +95,20 @@ class RentalModelAutoRenewals extends JModelAdmin {
               label="COM_RENTAL_HELLOWORLD_AUTO_RENEWAL_CAPTION"
               description =""
               required="true"
-              default="'. $default .'"
+              default="' . $default . '"
               class="validate required">';
 
       // Loop over the existing availability first
-      foreach ($data->VendorTxCodes as $transaction) {
+      foreach ($data->VendorTxCodes as $transaction)
+      {
 
         $XmlStr.= '<option value="' . $transaction->id . '"> ' .
-                JText::sprintf('COM_RENTAL_HELLOWORLD_AUTORENEWAL_CARD_DETAILS',$transaction->CardType, $transaction->CardLastFourDigits,$transaction->CardExpiryDate) .
+                JText::sprintf('COM_RENTAL_HELLOWORLD_AUTORENEWAL_CARD_DETAILS', $transaction->CardType, $transaction->CardLastFourDigits, $transaction->CardExpiryDate) .
                 ' </option>';
       }
       $XmlStr .= '<option value=\'0\'>None/opt out</option>';
       $XmlStr .= '</field></fieldset></form>';
-      $form->load($XmlStr,false);
+      $form->load($XmlStr, false);
     }
   }
 
@@ -109,10 +118,12 @@ class RentalModelAutoRenewals extends JModelAdmin {
    *
    */
 
-  public function getItem($pk = null) {
+  public function getItem($pk = null)
+  {
 
 
-    if ($item = parent::getItem($pk)) {
+    if ($item = parent::getItem($pk))
+    {
 
       // Need to grab any existing transactions for this property listing
       $transactions = $this->getProtxTransactions($item->id);
@@ -128,9 +139,11 @@ class RentalModelAutoRenewals extends JModelAdmin {
    *
    */
 
-  protected function getProtxTransactions($pk = null) {
+  protected function getProtxTransactions($pk = null)
+  {
 
-    if (!$pk) {
+    if (!$pk)
+    {
       return false;
     }
 
@@ -138,22 +151,25 @@ class RentalModelAutoRenewals extends JModelAdmin {
     $query = $db->getQuery(true);
 
     $query->select('
+      CardLastFourDigits,
       id,
       VendorTxCode,
       CardType,
-      date_format(CardExpiryDate, "%d %M %Y") as CardExpiryDate,
-      CardLastFourDigits
+      date_format(CardExpiryDate, "%d %M %Y") as CardExpiryDate
+
     ');
 
     $query->from('#__protx_transactions');
 
     $query->where('property_id = ' . (int) $pk);
     $query->where($db->quoteName('Status') . ' = ' . $db->quote('OK'));
+    $query->order('id', 'asc');
     $db->setQuery($query);
 
     $rows = $db->loadObjectList();
 
-    if (!$rows) {
+    if (!$rows)
+    {
       return false;
     }
 
@@ -161,92 +177,88 @@ class RentalModelAutoRenewals extends JModelAdmin {
   }
 
   /**
-	 * Method to save the form data.
-	 *
-	 * @param   array  $data  The form data.
-	 *
-	 * @return  boolean  True on success, False on error.
-	 *
-	 * @since   12.2
-	 */
-	public function save($data)
-	{
-		$dispatcher = JEventDispatcher::getInstance();
-		$table = $this->getTable('Property','RentalTable');
-		$key = $table->getKeyName();
-		$pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
-		$isNew = true;
+   * Method to save the form data.
+   *
+   * @param   array  $data  The form data.
+   *
+   * @return  boolean  True on success, False on error.
+   *
+   * @since   12.2
+   */
+  public function save($data)
+  {
+    $dispatcher = JEventDispatcher::getInstance();
+    $table = $this->getTable('Property', 'RentalTable');
+    $key = $table->getKeyName();
+    $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+    $isNew = true;
 
     // Include the content plugins for the on save events.
-		JPluginHelper::importPlugin('content');
+    JPluginHelper::importPlugin('content');
 
-		// Allow an exception to be thrown.
-		try
-		{
-			// Load the row if saving an existing record.
-			if ($pk > 0)
-			{
-				$table->load($pk);
-				$isNew = false;
-			}
+    // Allow an exception to be thrown.
+    try
+    {
+      // Load the row if saving an existing record.
+      if ($pk > 0)
+      {
+        $table->load($pk);
+        $isNew = false;
+      }
 
-			// Bind the data.
-			if (!$table->bind($data))
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+      // Bind the data.
+      if (!$table->bind($data))
+      {
+        $this->setError($table->getError());
+        return false;
+      }
 
-			// Prepare the row for saving
-			$this->prepareTable($table);
+      // Prepare the row for saving
+      $this->prepareTable($table);
 
-			// Check the data.
-			if (!$table->check())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+      // Check the data.
+      if (!$table->check())
+      {
+        $this->setError($table->getError());
+        return false;
+      }
 
-			// Trigger the onContentBeforeSave event.
-			$result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
-			if (in_array(false, $result, true))
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+      // Trigger the onContentBeforeSave event.
+      $result = $dispatcher->trigger($this->event_before_save, array($this->option . '.' . $this->name, $table, $isNew));
+      if (in_array(false, $result, true))
+      {
+        $this->setError($table->getError());
+        return false;
+      }
 
-			// Store the data.
-			if (!$table->store())
-			{
-				$this->setError($table->getError());
-				return false;
-			}
+      // Store the data.
+      if (!$table->store())
+      {
+        $this->setError($table->getError());
+        return false;
+      }
 
-			// Clean the cache.
-			$this->cleanCache();
+      // Clean the cache.
+      $this->cleanCache();
 
-			// Trigger the onContentAfterSave event.
-			$dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
-		}
-		catch (Exception $e)
-		{
-			$this->setError($e->getMessage());
+      // Trigger the onContentAfterSave event.
+      $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
+    }
+    catch (Exception $e)
+    {
+      $this->setError($e->getMessage());
       return false;
-		}
+    }
 
-		$pkName = $table->getKeyName();
+    $pkName = $table->getKeyName();
 
-		if (isset($table->$pkName))
-		{
-			$this->setState($this->getName() . '.id', $table->$pkName);
-		}
-		$this->setState($this->getName() . '.new', $isNew);
+    if (isset($table->$pkName))
+    {
+      $this->setState($this->getName() . '.id', $table->$pkName);
+    }
+    $this->setState($this->getName() . '.new', $isNew);
 
-		return true;
-	}
-
-
-
-
+    return true;
+  }
 
 }

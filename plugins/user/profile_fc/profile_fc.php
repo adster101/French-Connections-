@@ -90,7 +90,7 @@ class plgUserProfile_fc extends JPlugin
 
       if (!isset($data->profile) and $userId > 0)
       {
-// Load the profile data from the database.
+        // Load the profile data from the database.
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
         $query->select('
@@ -129,14 +129,14 @@ class plgUserProfile_fc extends JPlugin
 
         $result = $db->loadAssoc();
 
-// Check for a database error.
+        // Check for a database error.
         if ($db->getErrorNum())
         {
           $this->_subject->setError($db->getErrorMsg());
           return false;
         }
 
-// Merge the profile data.
+        // Merge the profile data.
         $data->profile = array();
 
         foreach ($result as $key => $value)
@@ -162,7 +162,7 @@ class plgUserProfile_fc extends JPlugin
    */
   function onContentPrepareForm($form, $data)
   {
-// Require the helloworld helper class
+    // Require the helloworld helper class
     require_once(JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
     $input = JFactory::getApplication()->input;
     $form_data = $input->get('jform', array(), 'array');
@@ -220,6 +220,16 @@ class plgUserProfile_fc extends JPlugin
     if ($vat_status == 'ECS')
     {
       $form->setFieldAttribute('vat_number', 'required', 'required');
+    }
+
+    if (!$data->sms_valid)
+    {
+      $form->removeField('sms_valid_message');
+    }
+    
+    if ($data->sms_valid) 
+    {
+      $form->removeField('dummy_validation_code');
     }
 
     return true;

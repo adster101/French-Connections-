@@ -87,49 +87,165 @@
 @import "icomoon.less";
 
 // FC ADMIN MENU
-#fcadminmenu {
-  padding:10px 10px 10px 0px;
+#navigation{
+	margin-bottom:26px;
+	padding:10px 10px 10px 0;
+	font-size:14px
 }
 
-#fcadminmenu li {
-    list-style: none outside none;
+#navigation-border-box{
+	border-bottom:1px solid #eee;
+	width:170px;
+	margin-left:30px
 }
 
-#fcadminmenu > li.item {
-  line-height:30px;
+#navigation .goog-zippy-expanded{
+	font-weight:bold
 }
 
-#fcadminmenu > .item {
-  height:30px;
+#navigation ul{
+	padding:0;
+	margin:0;
+	display:block
 }
 
-#fcadminmenu .item {
-  padding-bottom:4px;
+#navigation li{
+	padding:0;
+	margin:0;
+	list-style:none;
+	display:block
 }
 
-#fcadminmenu > li.group {
-  line-height:16px;
+#navigation>li.group{
+	line-height:16px
 }
 
-#fcadminmenu > li.item > a {
-    text-decoration: none;
-    padding-left: 35px;
-    white-space: nowrap;
-    overflow: hidden;
+#navigation .item{
+	padding-bottom:4px
 }
-#fcadminmenu .group a {
-    padding-left: 45px;
-    font-weight: normal;
+
+#navigation>.item{
+	height:30px
 }
+
+#navigation a.item-label{
+	display:block;
+	color:#777
+}
+
+#navigation li.item.selected a{
+	color:#dd4b39;
+	font-weight:bold
+}
+
+#navigation li.item.selected a:hover{
+	color:#dd4b39
+}
+
+#navigation>li.item{
+	line-height:30px
+}
+
+#navigation>li.item.selected>a{
+	border-left:4px solid #dd4b39
+}
+
+#navigation>li.item a:hover{
+	background-color:#eee
+}
+
+#navigation>li.item>a{
+	text-decoration:none;
+	padding-left:45px;
+	white-space:nowrap;
+	overflow:hidden
+}
+
+#navigation>li.item.selected>a{
+	padding-left:41px
+}
+
+#navigation>li.item>a:hover{
+	color:#212121
+}
+
+#navigation .group .nav-label{
+	padding-left:45px;
+	color:#777
+}
+
+#navigation .group .nav-label:hover{
+	color:#212121
+}
+
+#navigation .group a{
+	padding-left:55px;
+	font-weight:normal
+}
+
+#navigation .group a:hover{
+	color:#212121;
+	background-color:#eee;
+	text-decoration:none
+}
+
+#navigation .group .selected a{
+	padding-left:51px;
+	border-left:4px solid #dd4b39
+}
+
+#navigation .nav-help-icon{
+	background-image:url('/webmasters/tools/images/fe/i_icon_default.png');
+	background-repeat:no-repeat;
+	background-position:bottom left;
+	float:left;
+	margin-left:8px;
+	margin-right:7px;
+	min-width:14px;
+	min-height:14px
+}
+
+#navigation .nav-help-icon:hover{
+	background-image:url('/webmasters/tools/images/fe/i_icon_hover.png');
+	cursor:pointer
+}
+
+#navigation .nav-title-with-icon{
+	float:left;
+	max-width:145px
+}
+
+#navigation .top-level{
+	opacity:1
+}
+
+#navigation .top-level:focus{
+	background-color:transparent
+}
+
+#navigation .top-level:hover{
+	background-color:#eee
+}
+
+#navigation .goog-zippy-expanded:before{
+	left:33px
+}
+
+#navigation .goog-zippy-collapsed:before{
+	left:35px
+}
+
 .top-level {
-    transition: background-color 0.218s ease 0s, opacity 0.218s ease 0s;
     -moz-user-select: none;
     cursor: default;
     opacity: 0.8;
     outline: 0px none;
     padding: 7px 0px 7px 17px;
     position: relative;
+    transition: background-color 0.218s ease 0s, opacity 0.218s ease 0s;
 }
+
+/*
 .navbar .nav > li > a[href*="index.php?option=com_enquiries"]:before, a[href*="index.php?option=com_enquiries"]:before {
   font-family:icomoon;
   content:"\4d  ";
@@ -149,6 +265,7 @@ a[href*="index.php?option=com_rental&task=propertyversions.add"]:before {
   font-family:icomoon;
   content:"\5d  ";
 }
+*/
 
 .media > .pull-left {
     margin-right: 10px;
@@ -619,6 +736,7 @@ html[dir=rtl] .quick-icons .nav-list [class^="icon-"],html[dir=rtl] .quick-icons
 .container-main,
 #system-debug {
 	padding-bottom: 50px;
+  margin-top:36px;
 }
 
 /* Status Module */

@@ -99,22 +99,6 @@ abstract class RentalHelper
     return $notices;
   }
 
-  /**
-   * Get a list of filter options for the state of a module.
-   *
-   * @return	array	An array of JHtmlOption elements.
-   */
-  public static function getStateOptions()
-  {
-
-    // Build the filter options.
-    $options = array();
-    $options[] = JHtml::_('select.option', '1', JText::_('COM_RENTAL_HELLOWORLD_ACTIVE'));
-    $options[] = JHtml::_('select.option', '0', JText::_('COM_RENTAL_HELLOWORLD_INACTIVE'));
-    $options[] = JHtml::_('select.option', '-1', JText::_('JTRASHED'));
-    return $options;
-  }
-
   /*
    * Get a list of filter options for the review state of a property
    *

@@ -632,7 +632,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         $item_costs[$codes->get('frtranslation')]['quantity'] = 1;
       }
     }
-    // TO DO - Lastly, need to account for an existing package switching between basic and unlimited.
+    // TO DO - Lastly, need to account for an existing package switching between basic and unlimited images
     return $item_costs;
   }
 
@@ -700,7 +700,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   {
 
     // Determine whether this payment should be saved as an auto-renewal or not
-    $shouldAutoRenew = (!empty($data['autorenewal'])) ? $data['autorenewal'] : '';
+    $shouldAutoRenew = (!empty($data['autorenewal'])) ? $data['autorenewal'] : '0';
+
+    // Transaction id for repeat payment, if above is true
+    $transaction_id = '';
 
     // Get the order summary details
     $order = $this->getPaymentSummary($current_version, $previous_version);
@@ -844,19 +847,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $strStatus = $arrResponse["Status"];
     $strStatusDetail = $arrResponse["StatusDetail"];
     // Card details and address details have been checked. Can now process accordingly...
-
-    /* If this isn't 3D-Auth, then this is an authorisation result (either successful or otherwise) **
-     * * Get the results form the POST if they are there 
-      $strVPSTxId = $arrResponse["VPSTxId"];
-      $strSecurityKey = $arrResponse["SecurityKey"];
-      $strTxAuthNo = $arrResponse["TxAuthNo"];
-      $strAVSCV2 = $arrResponse["AVSCV2"];
-      $strAddressResult = $arrResponse["AddressResult"];
-      $strPostCodeResult = $arrResponse["PostCodeResult"];
-      $strCV2Result = $arrResponse["CV2Result"];
-      $str3DSecureStatus = $arrResponse["3DSecureStatus"];
-      $strCAVV = $arrResponse["CAVV"]; */
-
     // Update the database and redirect the user appropriately
     if ($strStatus == "OK")
       $strDBStatus = "AUTHORISED - The transaction was successfully authorised with the bank.";
@@ -879,13 +869,18 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     // Save the transaction out to the protx table, this effectively updates the row with the 
     // response from Protx
-    $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
+    $transaction = $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
+
+    if ($shouldAutoRenew)
+    {
+      $transaction_id = $transaction->id;
+    }
 
     // Okay now we have processed the transaction and update it in the db.
     switch ($strStatus) {
       case 'OK':
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
-        $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $shouldAutoRenew);
+        $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $transaction_id);
         return $return;
         break;
       case 'MALFORMED':
@@ -942,6 +937,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
      */
     $order = $order_payment_details['order'];
     $payment_details = $order_payment_details['payment'];
+    $transaction_id = $order_payment_details['autorenew'];
     $listing_id = ($this->getListingId()) ? $this->getListingId() : '';
     $expiry_date = ($this->getExpiryDate()) ? $this->getExpiryDate() : '';
     $params = JComponentHelper::getParams('com_rental');
@@ -974,7 +970,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Update the expiry date
       $date = $this->getNewExpiryDate();
 
-      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date = $date, $published = 1))
+      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date = $date, $published = 1, $autorenewal = $transaction_id))
       {
         // Log this
         return false;
@@ -1003,7 +999,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $date = $this->getNewExpiryDate();
 
       // Renewal with amendments, update the total and review state.
-      $this->updateProperty($listing_id, $total, $review = 2, $date);
+      $this->updateProperty($listing_id, $total, $review = 2, $date, '', '', $autorenewal = $transaction_id);
 
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
@@ -1026,7 +1022,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $total = $this->getOrderTotal($order);
 
       // Update the review status 
-      $this->updateProperty($listing_id, $total, $review = 2);
+      $this->updateProperty($listing_id, $total, $review = 2, '', '', $autorenewal = $transaction_id);
 
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
@@ -1055,7 +1051,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
       }
 
-      $this->updateProperty($listing_id, $total, $review = 2);
+      $this->updateProperty($listing_id, $total, $review = 2, '', '', $autorenewal = $transaction_id);
 
       $message = JText::_('COM_RENTAL_PROPERTY_EXISTING_PROPERTY_UPDATE_WITH_PAYMENT');
 
@@ -1113,12 +1109,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   /**
    * Method to update a property record given a listing ID
    * 
-   * @param type $listing_id - the parent property id to update
-   * @param type $review - review status that we want to set for the listing
-   * @param type $renewal_status - renewal status for the listing
+   * @param type $listing_id - The property listing ID to update
+   * @param type $cost - The cost to the owner of this update
+   * @param type $review - The resulting review status
+   * @param type $expiry_date - The new expiry date
+   * @param type $published - The new published state
+   * @param type $autorenewal - The autorenewal transaction ID
    * @return boolean
    */
-  public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '')
+  public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '')
   {
 
     // Initialise some variable
@@ -1136,6 +1135,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $data['value'] = $cost;
 
+    /*
+     * Update the autorenwal transaction id
+     */
+    $data['VendorTxCode'] = $autorenewal;
 
     /*
      * Update the expiry date if one is passed in
@@ -1257,6 +1260,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     if (!empty($key))
     {
       $table->set('_tbl_keys', array('VendorTxCode'));
+      $table->load($data['VendorTxCode']);
     }
 
     // Bind the data.
@@ -1273,7 +1277,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
 
-    return true;
+    return $table;
   }
 
   /**

@@ -116,56 +116,35 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
           <!-- Top Navigation -->
           <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="navbar-inner">
-              <div class="container-fluid">
-                <?php if ($this->params->get('admin_menus') != '0') : ?>
-                  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </a>
-                <?php endif; ?>
+              <a class="brand" href="<?php echo $this->baseurl; ?>">
+                <img src="<?php echo $logo; ?>" /><br />
+                <span>Home</span>
+              </a>
 
-                <a class="brand" href="<?php echo $this->baseurl; ?>">
-                  <img src="<?php echo $logo; ?>" /><br />
-                  <span>Home</span>
-                </a>
-
-                <a class="brand hidden-desktop hidden-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
-                  <span class="icon-out-2 small"></span></a>
-                <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
-                  <ul class="nav nav-user">
-                    <li class="dropdown">
-                      <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span>
-                        <b class="caret"></b></a>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <span>
-                            <span class="icon-user"></span>
-                            <strong><?php echo $user->name; ?></strong>
-                          </span>
-                        </li>
-                        <li class="divider"></li>
-                        <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;             ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                      ?></a>
-                        </li>
-                        <li class="divider"></li>-->
-                        <li class="">
-                          <a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1'); ?>"><?php echo JText::_('TPL_ISIS_LOGOUT'); ?></a>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                      ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                      ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                      ?>
-                    <span class="icon-out-2 small"></span></a>-->
-                </div>
-                <!--/.nav-collapse -->
+              <a class="brand hidden-desktop hidden-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
+                <span class="icon-out-2 small"></span></a>
+              <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
+                <ul class="nav">
+                  <li>
+                    <a>
+                      <span class="icon-user"></span>
+                      <?php echo $user->name; ?>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="visible-desktop visible-tablet" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank">
+                      <?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
+                      <span class="icon-out-2 small"></span>
+                    </a>
+                  </li>
+                  <li class="">
+                    <a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1'); ?>"><?php echo JText::_('Log out'); ?></a>
+                  </li>
+                </ul>
               </div>
             </div>
           </nav>
-          <!-- Header -->
-          <?php if ($displayHeader) : ?>
 
-          <?php endif; ?>
           <?php if ((!$statusFixed) && ($this->countModules('status'))) : ?>
             <!-- Begin Status Module -->
             <div id="status" class="navbar status-top hidden-phone">
@@ -176,22 +155,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
             </div>
             <!-- End Status Module -->
           <?php endif; ?>
-          <?php if (!$cpanel) : ?>
-            <!-- Subheader -->
-            <a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse"><?php echo JText::_('TPL_ISIS_TOOLBAR'); ?>
-              <i class="icon-wrench"></i></a>
-            <div class="subhead-collapse collapse">
-              <div class="subhead">
-                <div class="container">
-                  <div id="container-collapse" class="container-collapse"></div>
-                  <div class="row">
-                    <div class="span12">
-                    </div>   
-                  </div>
-                </div>
-              </div>
-            </div>
-          <?php endif; ?>
+          
           <!-- container-fluid -->
           <div class="container-fluid container-main" style="position:relative;left:0;">
             <section id="content">
@@ -207,16 +171,12 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                   <?php else : ?>
                     <div class="span12">
                     <?php endif; ?>
-                    <jdoc:include type="message" />
-
+                      <div style="border-left:solid 1px #e5e5e5;padding-left:36px;">
                     <jdoc:include type="modules" name="title" />
-                    <div class="row-fluid">
-                      <div class="span12">
-                        <jdoc:include type="modules" name="toolbar" style="no" />
-                      </div>   
-
-                      <jdoc:include type="component" />
-                    </div>
+                    <jdoc:include type="message" />
+                    <jdoc:include type="modules" name="toolbar" style="no" />
+                    <jdoc:include type="component" />
+                      </div>
                   </div>
                   <?php if ($this->countModules('bottom')) : ?>
                     <jdoc:include type="modules" name="bottom" style="xhtml" />
