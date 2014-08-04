@@ -72,7 +72,8 @@ class RentalModelListing extends JModelList
 
     $db = JFactory::getDbo();
 
-    try {
+    try
+    {
 
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
@@ -147,7 +148,9 @@ class RentalModelListing extends JModelList
       $db->execute();
 
       $db->transactionCommit();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
 
       $db->transactionRollback();
 
@@ -229,7 +232,6 @@ class RentalModelListing extends JModelList
     $query = $db->getQuery(true);
 
     // Initialise the query.
-    $query = $this->_db->getQuery(true);
     $query->select('
         a.id,
         a.expiry_date,
@@ -333,6 +335,24 @@ class RentalModelListing extends JModelList
       $return[] = JHTML::_('select.option', $tag, $properties['name']);
 
     return $return;
+  }
+
+  function getTotalImages()
+  {
+    
+    $images = 0;
+    
+    if (!$listing = $this->getItems())
+    {
+      return false;
+    }
+
+    foreach ($listing as $row => $unit)
+    {
+      $images += $unit->images;
+    }
+    
+    return (int) $images;
   }
 
 }

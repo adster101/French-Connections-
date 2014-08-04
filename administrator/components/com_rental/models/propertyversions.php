@@ -9,7 +9,8 @@ jimport('joomla.application.component.modeladmin');
 /**
  * HelloWorld Model
  */
-class RentalModelPropertyVersions extends JModelAdmin {
+class RentalModelPropertyVersions extends JModelAdmin
+{
   /*
    *
    * Method to create a 'parent' entry into the #__property table.
@@ -17,9 +18,11 @@ class RentalModelPropertyVersions extends JModelAdmin {
    *
    */
 
-  public function createNewProperty($data = array()) {
+  public function createNewProperty($data = array())
+  {
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       return false;
     }
 
@@ -28,19 +31,22 @@ class RentalModelPropertyVersions extends JModelAdmin {
 
     $property_table = $this->getTable('Property', 'RentalTable');
 
-    if (!$property_table->bind($data)) {
+    if (!$property_table->bind($data))
+    {
       $this->setErrro($property_table->getError());
       return false;
     }
 
     // Optional further sanity check after data has been validated, filtered, and about to be checked...
     //$this->prepareTable($property_table);
-    if (!$property_table->store()) {
+    if (!$property_table->store())
+    {
       return false;
     }
 
     return $property_table->id;
   }
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -50,7 +56,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'PropertyVersions', $prefix = 'RentalTable', $config = array()) {
+  public function getTable($type = 'PropertyVersions', $prefix = 'RentalTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -62,11 +69,13 @@ class RentalModelPropertyVersions extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_rental.propertyversions', 'propertyversions', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
 
@@ -79,20 +88,24 @@ class RentalModelPropertyVersions extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.edit.propertyversions.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
     return $data;
   }
 
-  public function getItem($pk = null) {
+  public function getItem($pk = null)
+  {
 
-    if ($item = parent::getItem($pk)) {
+    if ($item = parent::getItem($pk))
+    {
 
       $registry = new JRegistry;
       $registry->loadString($item->local_amenities);
@@ -103,7 +116,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
 
       $attributes = $this->getFacilities($pk, $item->id);
 
-      foreach ($attributes as $key => $values) {
+      foreach ($attributes as $key => $values)
+      {
         $item->$key = $values;
       }
     }
@@ -120,7 +134,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
    * Get the facilities for this property
    * 
    */
-  public function getFacilities($id, $version, $table = '#__property_attributes b') {
+  public function getFacilities($id, $version, $table = '#__property_attributes b')
+  {
 
     // Array to hold the result list
     $property_attributes = array();
@@ -147,11 +162,13 @@ class RentalModelPropertyVersions extends JModelAdmin {
     $result = $this->_db->getIterator();
 
     // Loop over the iterator and do stuff with it
-    foreach ($result as $row) {
+    foreach ($result as $row)
+    {
       $tmp = JArrayHelper::fromObject($row);
 
       // If the facility type already exists
-      if (!array_key_exists($tmp['field_name'], $property_attributes)) {
+      if (!array_key_exists($tmp['field_name'], $property_attributes))
+      {
         $property_attributes[$tmp['field_name']] = array();
       }
 
@@ -160,8 +177,10 @@ class RentalModelPropertyVersions extends JModelAdmin {
 
     // Load returns an array for each facility type
     // We need to append each one to item so that they may be bound to the form
-    if (!empty($property_attributes)) {
-      foreach ($property_attributes as $facility_type => $value) {
+    if (!empty($property_attributes))
+    {
+      foreach ($property_attributes as $facility_type => $value)
+      {
         $properties[$facility_type] = implode($value, ',');
       }
     }
@@ -169,7 +188,6 @@ class RentalModelPropertyVersions extends JModelAdmin {
     return $properties;
   }
 
- 
   /*
    * param JForm $form The JForm instance for the view being edited
    * param array $data The form data as derived from the view (may be empty)
@@ -178,19 +196,21 @@ class RentalModelPropertyVersions extends JModelAdmin {
    *
    */
 
-  protected function preprocessForm(JForm $form, $data) {
+  protected function preprocessForm(JForm $form, $data)
+  {
 
     // Convert data to object if it's an array
-    if (is_array($data)) {
+    if (is_array($data))
+    {
       $data = JArrayHelper::toObject($data, 'JObject');
     }
 
     // Set the location details accordingly, needed for one of the form field types...
-    if (!empty($data->department)) {
+    if (!empty($data->department))
+    {
 
       $form->setFieldAttribute('city', 'department', $data->department);
       $form->setFieldAttribute('city', 'readonly', 'false');
-      
     }
   }
 
@@ -203,7 +223,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function getLocationDetails($city) {
+  protected function getLocationDetails($city)
+  {
 
     $location_details_array = array();
 
@@ -212,15 +233,18 @@ class RentalModelPropertyVersions extends JModelAdmin {
 
     $table = $this->getTable('Classification', 'ClassificationTable');
 
-    if (!$location_details = $table->getPath($city)) {
+    if (!$location_details = $table->getPath($city))
+    {
       $this->setError($table->getError());
       return false;
     };
 
     // Loop over the location details and pass them back as an array
-    foreach ($location_details as $key => $value) {
+    foreach ($location_details as $key => $value)
+    {
 
-      if ($value->level > 0) {
+      if ($value->level > 0)
+      {
         $location_details_array[] = $value->id;
       }
     }
@@ -238,18 +262,24 @@ class RentalModelPropertyVersions extends JModelAdmin {
    *
    * @since   11.1
    */
-  protected function canEditState() {
+  protected function canEditState()
+  {
     $comtask = JRequest::getVar('task', '', 'POST', 'string');
 
     $task = explode('.', $comtask);
 
     $user = JFactory::getUser();
 
-    if ($task[1] == 'orderdown' || $task[1] == 'orderup') {
+    if ($task[1] == 'orderdown' || $task[1] == 'orderup')
+    {
       return $user->authorise('helloworld.edit.reorder', $this->option);
-    } else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash') {
+    }
+    else if ($task[1] == 'publish' || $task[1] == 'unpublish' || $task[1] == 'trash')
+    {
       return $user->authorise('core.edit.state', $this->option);
-    } else {
+    }
+    else
+    {
       return false;
     }
   }
@@ -265,7 +295,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
    * @return	void
    * @since	1.6
    */
-  protected function populateState($ordering = null, $direction = null) {
+  protected function populateState($ordering = null, $direction = null)
+  {
 
     $canDo = RentalHelper::getActions();
     $this->setState('actions.permissions', $canDo);
@@ -283,7 +314,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
    *
    * @since   12.2
    */
-  public function save($data) {
+  public function save($data)
+  {
 
     $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
@@ -302,7 +334,8 @@ class RentalModelPropertyVersions extends JModelAdmin {
     $location_details = $this->getLocationDetails($city);
 
     // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
-    if (!empty($location_details)) {
+    if (!empty($location_details))
+    {
       $data['country'] = $location_details[0];
       $data['area'] = $location_details[1];
       $data['region'] = $location_details[2];
@@ -311,16 +344,19 @@ class RentalModelPropertyVersions extends JModelAdmin {
     }
 
     // Wrap up the amenities if they are present and save 'em
-    if (isset($data['amenities']) && is_array($data['amenities'])) {
+    if (isset($data['amenities']) && is_array($data['amenities']))
+    {
       $registry = new JRegistry;
       $registry->loadArray($data['amenities']);
       $data['local_amenities'] = (string) $registry;
     }
 
     // Allow an exception to be thrown.
-    try {
+    try
+    {
       // Load the exisiting row, if there is one.
-      if ($pk > 0) {
+      if ($pk > 0)
+      {
         $table->load($pk);
         $isNew = false;
       }
@@ -332,29 +368,35 @@ class RentalModelPropertyVersions extends JModelAdmin {
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
       // TODO - Move this code so that it runs when adding a new property rather than when saving for the first time
 
-      if ($isNew) {
+      if ($isNew)
+      {
 
         $new_property_id = $this->createNewProperty($data);
 
-        if (!$new_property_id) {
+        if (!$new_property_id)
+        {
 
           // Problem creating the new property stub...
           $this->setError('There was a problem creating your property. Please try again.');
           return false;
-        } else {
+        }
+        else
+        {
           $data['property_id'] = $new_property_id;
           $data['review'] = 1;
         }
       }
 
       // If $data['review'] is not set we need to check whether a new version is required
-      if (!$data['review']) {
+      if ($data['review'] == 0)
+      {
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
         // New method - getExpiryDate(); returns the expiry date of the property.
         $expiry_date = $model->getPropertyDetails($data['property_id']);
 
-        if (is_integer($expiry_date)) {
+        if (is_integer($expiry_date))
+        {
 
           // As a new version is required amend the data array before we save
           // id here refers to the version id. Unsetting this effectively forces the table class to 
@@ -368,12 +410,13 @@ class RentalModelPropertyVersions extends JModelAdmin {
       // Set the table model to the appropriate key
       // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
-      
+
 
       $table->set('_tbl_keys', array('id'));
 
       // Store the data.
-      if (!$table->save($data)) {
+      if (!$table->save($data))
+      {
         $this->setError($table->getError());
         return false;
       }
@@ -381,41 +424,48 @@ class RentalModelPropertyVersions extends JModelAdmin {
       // If not a new property mark the property listing as for review
       // TO DO: look at this - ensure that new props can't be published without review
       // Move the following into prepareTable();
-
-      if (!$isNew) { // && $data['review'] == 0
-        // Update the existing property listing to indicate that the listing has been updated
+      // $data['review'] - refers to the property version review state
+      if (!$isNew && $data['review'] == 0) // Is this dodgy somehow for existing props? 
+      // Yes, need to explicity check in case it's updated during the review  
+      {
+        
+        // Update the existing property table review state to indicate that the listing has been updated
         $property = $this->getTable('Property', 'RentalTable');
 
         $property->id = $table->property_id;
         $property->review = 1;
-        
-        if (!$property->store()) {
+
+        if (!$property->store())
+        {
           $this->setError($property->getError());
           return false;
         }
       }
-      
+
       // The version id is the id of the version created/updated in the _unit_versions table
       $new_version_id = ($table->id) ? $table->id : '';
 
       $this->setState('new.version.id', $new_version_id);
-      
+
       // We will always want to update the facilities relating to the version id
       // E.g. if a new unit, insert facilitites, if new version then we will
       // save the facilities against the new version id.
 
       JLog::add('About to save facilities for property (' . $table->property_id . 'version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
-      if (!$this->savePropertyFacilities($data, $table->property_id, $old_version_id, $new_version_id,'#__property_attributes', array('activities','access'))) {
+      if (!$this->savePropertyFacilities($data, $table->property_id, $old_version_id, $new_version_id, '#__property_attributes', array('activities', 'access')))
+      {
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
-      
+
       // Commit the transaction
       $db->transactionCommit();
 
       // Clean the cache.
       $this->cleanCache();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
 
       // Roll back any queries executed so far
       $db->transactionRollback();
@@ -431,10 +481,11 @@ class RentalModelPropertyVersions extends JModelAdmin {
     // on not the version key id
     //$table->set('_tbl_key', 'property_id');
     $table->set('_tbl_keys', array('property_id'));
-    
+
     $pkName = $table->getKeyName();
 
-    if (isset($table->$pkName)) {
+    if (isset($table->$pkName))
+    {
       $this->setState($this->getName() . '.id', $table->$pkName);
     }
     $this->setState($this->getName() . '.new', $isNew);
@@ -442,66 +493,79 @@ class RentalModelPropertyVersions extends JModelAdmin {
     return true;
   }
 
-
- /*
+  /*
    * Method to save the property attributes into the #__attribute_property table.
    *
    *
    *
    */
 
-  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $table = '', $attribute_liat = array()) {
+  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $table = '', $attribute_liat = array())
+  {
 
-    if (!is_array($data) || empty($data)) {
+    if (!is_array($data) || empty($data))
+    {
       return true;
     }
 
-    if (empty($old_version_id) || empty($new_version_id)) {
+    if (empty($old_version_id) || empty($new_version_id))
+    {
       return true;
     }
-    
-    
+
+
 
     $attributes = array();
 
 
     // Loop over the data and prepare an array to save
-    foreach ($data as $key => $value) {
+    foreach ($data as $key => $value)
+    {
 
-      if (!in_array($key, $attribute_liat)) {
+      if (!in_array($key, $attribute_liat))
+      {
         continue;
       }
 
       // We're not interested in the 'other' fields E.g. external_facilities_other
-      if (strpos($key, 'other') == 0 && !empty($value)) {
+      if (strpos($key, 'other') == 0 && !empty($value))
+      {
 
         // Location, property and accommodation types are all single integers and not arrays
-        if (is_array($value)) {
+        if (is_array($value))
+        {
           // We want to save this in one go so we make an array
-          foreach ($value as $facility) {
+          foreach ($value as $facility)
+          {
             // Facilities should be integers
-            if ((int) $facility) {
+            if ((int) $facility)
+            {
               $attributes[] = $facility;
             }
           }
-        } else {
+        }
+        else
+        {
           $attributes[] = $value;
         }
       }
     }
 
     // If we have any attributes
-    if (count($attributes) > 0) {
+    if (count($attributes) > 0)
+    {
 
       // Firstly need to delete these...in a transaction would be better
       $query = $this->_db->getQuery(true);
 
-      if ($old_version_id == $new_version_id) {
+      if ($old_version_id == $new_version_id)
+      {
 
         $query->delete($table)->where('version_id = ' . $old_version_id);
         $this->_db->setQuery($query);
 
-        if (!$this->_db->execute()) {
+        if (!$this->_db->execute())
+        {
 
           $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
 
@@ -518,20 +582,22 @@ class RentalModelPropertyVersions extends JModelAdmin {
 
       $query->columns(array('version_id', 'property_id', 'attribute_id'));
 
-      foreach ($attributes as $attribute) {
+      foreach ($attributes as $attribute)
+      {
         $insert_string = "$new_version_id, $id," . $attribute . "";
         $query->values($insert_string);
       }
 
       $this->_db->setQuery($query);
 
-      if (!$this->_db->execute()) {
+      if (!$this->_db->execute())
+      {
         $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
         $this->setError($e);
         return false;
       }
 
-  
+
       return true;
     }
 

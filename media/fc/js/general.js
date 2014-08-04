@@ -255,10 +255,6 @@ var getContent = function(that) {
 
 }
 
-var checkEditor = function(elements, index, array) {
-  console.log(index);
-}
-
 /* define some useful functions, innit! */
 var show_vat = function(vatID) {
   vat_number = jQuery('#vat_number');

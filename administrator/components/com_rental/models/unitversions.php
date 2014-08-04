@@ -292,7 +292,9 @@ class RentalModelUnitVersions extends JModelAdmin
       }
 
       // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
-      if (!($data['review']))
+      //if (!($data['review'])) // changed to below to prevent property version being reset if being reviewed
+      // Will need to check here property review status if unit version review == 0
+      if ($data['review'] == 0)
       {
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.

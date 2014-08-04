@@ -55,10 +55,13 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
               <?php echo $this->form->getInput('surname'); ?>
             </div>
           </div>
-          <div class="control-group">
+
+          <div class="control-group">            
+
             <?php echo $this->form->getLabel('phone_1'); ?>
-            <div class="controls">
-              <?php echo $this->form->getInput('phone_1'); ?>
+            <div class="controls"> 
+              <?php echo $this->form->getInput('phone_1'); ?> 
+              <?php echo $this->form->getLabel('phone_1_note'); ?>
             </div>
           </div>
           <div class="control-group">

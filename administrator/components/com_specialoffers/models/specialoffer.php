@@ -107,6 +107,36 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     return $item;
   }
 
+  public function getTotalOffers($property_id = '', $expiry_date = '')
+  {
+    $query = $this->_db->getQuery(true);
+    $query->select('count(*) as count');
+    $query->from($this->_db->quoteName('#__special_offers'));
+    $query->where('property_id = ' . (int) $property_id);
+    $query->where('published = 1');
+    $query->where('start_date >= SUBDATE(' . $this->_db->Quote($expiry_date) . ', INTERVAL 1 YEAR)' );
+    $query->where('start_date <= ' . $this->_db->Quote($expiry_date));
+    
+    // Get the offers 
+    $this->_db->setQuery($query);
+
+    try
+    {
+
+      $result = $this->_db->loadObject();
+
+      $total = $result->count;
+      
+      return $total;
+    }
+    catch (RuntimeException $e)
+    {
+      $je = new JException($e->getMessage());
+      $this->setError($je);
+      return false;
+    }
+  }
+
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -139,6 +169,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         b.unit_title,
         b.property_id,
         b.unit_id,
+        d.expiry_date,
         e.firstname,
         e.surname,
         f.email
@@ -346,10 +377,29 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         $this->setError(JText::_('COM_SPECIALOFFERS_OFFER_ALREADY_ACTIVE'));
         return false;
       }
+
       // If owner on basic package then they get two special offers only...  
-      // $offer_count = $this->getAvailableOffers();
-      // $this->getPackageType
-      // Set the date created timestamp
+      $offer_count = $this->getTotalOffers($unit_detail->property_id, $unit_detail->expiry_date);
+
+      JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+      $model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
+      $model->setState('com_rental.listing.id', $unit_detail->property_id);
+      $images = $model->getTotalImages();
+
+      if (!$images)
+      {
+        $message = JText::_('COM_SPECIALOFFERS_PROBLEM_GETTING_PROPERTY_LISTING_DETAIL');
+        Throw new Exception($message);
+      }
+      
+      if ($images < 8 && $offer_count > 2)
+      {    
+        $message = JText::_('COM_SPECIALOFFERS_UPGRADE_REQUIRED_BEFORE_ADDING_MORE_OFFERS');
+        $app->enqueueMessage($message, 'notice');
+        $app->redirect('index.php?option=com_specialoffers');
+      }
+  
+
       $data['date_created'] = $date;
 
       // And format the dates into the correct mysql date format
@@ -357,7 +407,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
 
       // Load the row if saving an existing record. 
-      // Just do getItem here? what if new?
       if ($pk > 0)
       {
         $offer = $this->getItem($pk);
@@ -399,7 +448,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     catch (Exception $e)
     {
       $this->setError($e->getMessage());
-
       return false;
     }
 
@@ -451,5 +499,4 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $start_date, $siteURL, $intasure);
     JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
   }
-
 }

@@ -19,6 +19,7 @@
 		<action name="rental.images.reorder" title="Reorder images permission" description="" />
 		<action name="rental.autorenewals.view" title="Access autorenewal view" description="" />
 		<action name="rental.availability.view" title="Access availability view" description="" />
+		<action name="rental.availability.delete" title="Delete availability" description="" />
 		<action name="rental.contactdetails.view" title="Access contact details view" description="" />
 		<action name="rental.images.view" title="Access images view" description="" />
 		<action name="rental.listing.view" title="Access listing view" description="" />

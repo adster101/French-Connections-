@@ -52,6 +52,14 @@ class plgUserProfile_fc extends JPlugin
   );
 
   /**
+   * Affects constructor behavior. If true, language files will be loaded automatically.
+   *
+   * @var    boolean
+   * @since  3.1
+   */
+  protected $autoloadLanguage = true;
+
+  /**
    * Constructor
    *
    * @access      protected
@@ -62,8 +70,10 @@ class plgUserProfile_fc extends JPlugin
   public function __construct(& $subject, $config)
   {
     parent::__construct($subject, $config);
-    $this->loadLanguage();
     JFormHelper::addFieldPath(dirname(__FILE__) . '/fields');
+    $doc = JFactory::getDocument();
+    $doc->addScript('/media/fc/js/general.js', 'text/javascript', true);
+    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
   }
 
   /**
@@ -76,11 +86,9 @@ class plgUserProfile_fc extends JPlugin
    */
   function onContentPrepareData($context, $data)
   {
-// Check we are manipulating a valid form.
-
+    // Check we are manipulating a valid form.
     if (!in_array($context, array('com_admin.profile', 'com_users.user')))
     {
-
       return true;
     }
 
@@ -162,7 +170,20 @@ class plgUserProfile_fc extends JPlugin
    */
   function onContentPrepareForm($form, $data)
   {
-    // Require the helloworld helper class
+    if (!($form instanceof JForm))
+    {
+      $this->_subject->setError('JERROR_NOT_A_FORM');
+      return false;
+    }
+
+    $name = $form->getName();
+
+    // Check we are manipulating a valid form.
+    if (!in_array($name, array('com_admin.profile', 'com_users.user')))
+    {
+      return true;
+    }
+
     require_once(JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
     $input = JFactory::getApplication()->input;
     $form_data = $input->get('jform', array(), 'array');
@@ -170,24 +191,7 @@ class plgUserProfile_fc extends JPlugin
     $lang = JFactory::getLanguage();
     $lang->load('com_rental');
 
-    // Only do this is we're editing a property owner?
 
-    if (!($form instanceof JForm))
-    {
-      $this->_subject->setError('JERROR_NOT_A_FORM');
-      return false;
-    }
-
-    // Check we are manipulating a valid form.
-    $name = $form->getName();
-
-    if (!in_array($name, array('com_admin.profile', 'com_users.user')))
-    {
-      return true;
-    }
-
-    $doc = JFactory::getDocument();
-    //$doc->addScript('/media/fc/js/general.js', 'text/javascript', true);  
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
@@ -226,8 +230,8 @@ class plgUserProfile_fc extends JPlugin
     {
       $form->removeField('sms_valid_message');
     }
-    
-    if ($data->sms_valid) 
+
+    if ($data->sms_valid)
     {
       $form->removeField('dummy_validation_code');
     }

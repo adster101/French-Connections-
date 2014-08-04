@@ -29,17 +29,7 @@ $show_vat_number = ($this->item->vat_status == 'ECS') ? true : false;
 $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true : false;
 ?>
 
-<script type="text/javascript">
-  Joomla.submitbutton = function(task)
-  {
-    if (task == 'profile.cancel' || document.formvalidator.isValid(document.id('profile-form')))
-    {
-      Joomla.submitform(task, document.getElementById('profile-form'));
-    }
-  }
-</script>
-
-<form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="profile-form" class="form-validate form-horizontal" enctype="multipart/form-data">
+<form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
 
   <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
   <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_ADMIN_VIEW_PROFILE_TITLE', true)); ?>

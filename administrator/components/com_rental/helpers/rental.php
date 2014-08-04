@@ -333,8 +333,8 @@ abstract class RentalHelper
           $calendar .= "</tr>\n<tr>";
         }
 
-        $today = date('Y-m-d', gmmktime(0, 0, 0, $month, $day, $year));
-        $yesterday = date('Y-m-d', gmmktime(0, 0, 0, $month, $day - 1, $year));
+        $today = date('d-m-Y', gmmktime(0, 0, 0, $month, $day, $year));
+        $yesterday = date('d-m-Y', gmmktime(0, 0, 0, $month, $day - 1, $year));
 
         // Check whether availability status is set for the preceeding day
         $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
@@ -450,7 +450,7 @@ abstract class RentalHelper
       $availability_period_length = date_diff($availability_period_start_date, $availability_period_end_date);
 
       // Set the first day of the availability period to available/unavailable
-      $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_period->availability;
+      $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = $availability_period->availability;
 
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
       for ($i = 1; $i <= $availability_period_length->days; $i++)
@@ -460,7 +460,7 @@ abstract class RentalHelper
         $date = $availability_period_start_date->add($DateInterval);
 
         // Add the day as an array key storing the availability status as the value
-        $raw_availability[date_format($date, 'Y-m-d')] = $availability_period->availability;
+        $raw_availability[date_format($date, 'd-m-Y')] = $availability_period->availability;
       }
     }
 
@@ -480,7 +480,7 @@ abstract class RentalHelper
       for ($i = 0; $i <= $availability_period_length->days; $i++)
       {
 
-        $raw_availability[date_format($availability_period_start_date, 'Y-m-d')] = $availability_status;
+        $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = $availability_status;
 
         // Add one day to the start date for each day of availability
         $date = $availability_period_start_date->add($DateInterval);

@@ -1,4 +1,5 @@
 <?php
+
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -10,15 +11,16 @@ jimport('joomla.database.table');
  */
 class RentalTableAvailability extends JTable
 {
-	/**
-	 * Constructor
-	 *
-	 * @param object Database connector object
-	 */
-	function __construct(&$db)
-	{
-		parent::__construct('#__availability', 'unit_id', $db);
-	}
+
+  /**
+   * Constructor
+   *
+   * @param object Database connector object
+   */
+  function __construct(&$db)
+  {
+    parent::__construct('#__availability', 'unit_id', $db);
+  }
 
   /**
    * Overloaded save function
@@ -26,40 +28,40 @@ class RentalTableAvailability extends JTable
    *
    *
    */
-  public function save ($id = null, $availability_periods = array() )
+  public function save($id = null, $availability_periods = array())
   {
-    if (!$this->check()) {
+    if (!$this->check())
+    {
       JLog::add('JDatabaseMySQL::queryBatch() is deprecated.', JLog::WARNING, 'deprecated');
       return false;
-
-    } else {
+    }
+    else
+    {
 
       $query = $this->_db->getQuery(true);
 
       $query->insert('#__availability');
 
-			$query->columns(array('unit_id','start_date','end_date','availability'));
+      $query->columns(array('unit_id', 'start_date', 'end_date', 'availability'));
 
-      foreach ($availability_periods as $period) {
-        $insert_string = "$id,'" .$period['start_date']."','" . $period['end_date'] . "',". $period['status'] ."";
+      foreach ($availability_periods as $period)
+      {
+        $start_date = JFactory::getDate($period['start_date'])->calendar('Y-m-d');
+        $end_date = JFactory::getDate($period['end_date'])->calendar('Y-m-d');
+        $insert_string = "$id," . $this->_db->quote($start_date) . "," . $this->_db->quote($end_date) . "," . (int) $period['status'] . "";
         $query->values($insert_string);
       }
-			$this->_db->setQuery($query);
+      $this->_db->setQuery($query);
 
-			if (!$this->_db->execute())
-			{
-				$e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
-				$this->setError($e);
-				return false;
-			}
-
-      // Tick the availability progress flag to true
-      JApplication::setUserState('com_rental.availability.progress', true);
-
-
+      if (!$this->_db->execute())
+      {
+        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
+        $this->setError($e);
+        return false;
+      }
+      
       return true;
     }
-
   }
 
   /**
@@ -68,7 +70,9 @@ class RentalTableAvailability extends JTable
    *
    * @return boolean
    */
-  public function check() {
+  public function check()
+  {
     return true;
   }
+
 }

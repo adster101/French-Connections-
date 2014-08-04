@@ -11,6 +11,59 @@ jimport('frenchconnections.controllers.property.base');
  */
 class SpecialOffersControllerSpecialOffer extends RentalControllerBase
 {
+
+  /**
+   * Method to add a new record.
+   *
+   * @return  mixed  True if the record can be added, a error object if not.
+   *
+   * @since   12.2
+   */
+  public function add()
+  {
+    $app = JFactory::getApplication();
+    $context = "$this->option.edit.$this->context";
+
+    // Access check.
+    if (!$this->allowAdd())
+    {
+      // Set the internal error and also the redirect error.
+      $this->setError(JText::_('JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . $this->getRedirectToListAppend(), false
+              )
+      );
+
+      return false;
+    }
+    
+    // Get the model and check if the user is entitled to add anymore...
+    $model = $this->getModel();
+    
+    
+    
+    
+    
+    
+
+    // Clear the record edit information from the session.
+    $app->setUserState($context . '.data', null);
+
+    // Redirect to the edit screen.
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=' . $this->view_item
+                    . $this->getRedirectToItemAppend(), false
+            )
+    );
+
+    return true;
+  }
+
   /*
    * Function to expire a special offer by setting the end_date of the offer to a past date.
    * Offered to owners of an approved (active) offer rather than opening up edit or change state permissions
@@ -55,7 +108,7 @@ class SpecialOffersControllerSpecialOffer extends RentalControllerBase
 
     if (!$model->canceloffer($recordId))
     {
-      
+
       return false;
     }
 
@@ -78,5 +131,5 @@ class SpecialOffersControllerSpecialOffer extends RentalControllerBase
 
     return true;
   }
-
+  
 }

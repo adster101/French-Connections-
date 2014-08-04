@@ -82,20 +82,7 @@ jQuery(document).ready(function(){
       
       // Rebind the hover event to update the tooltip that is displayed
       bind_hover();
-      
-      
-
-    }) 
-    
-
-
-    
-
-
-    
-      
-      
-   
+    })     
   });
   
   
@@ -111,10 +98,8 @@ function reset() {
   var status = jQuery('#jform_availability').val('');
   jQuery('form#adminForm').removeClass('updated');
   jQuery('.avCalendar td a').removeClass('edited start end');
-
 }
  
-
 /* 
  * Function to bind a tooltip to the hover event on the calendar date picker
  * 

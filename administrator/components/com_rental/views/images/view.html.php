@@ -121,10 +121,9 @@ class RentalViewImages extends JViewLegacy
     $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/jquery.fileupload-ui.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/main.js", 'text/javascript', true, false);
     // TO DO - Move this to media folder and add to grunt to concat 
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery.fileupload.css", 'text/css', "screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery.fileupload-ui.css", 'text/css', "screen");
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "media/fc/css/jquery.fileupload.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "media/fc/css/jquery.fileupload-ui.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "media/fc/css/helloworld.css", 'text/css', "screen");
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

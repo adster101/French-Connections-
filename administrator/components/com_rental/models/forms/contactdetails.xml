@@ -61,7 +61,6 @@
       type="note"
       class="alert alert-notice" 
       label=""
-      labelclass="control-label"
       description="COM_RENTAL_HELLOWORLD_ENQUIRY_OVERRIDE_OPTION" />
     
     <field 
@@ -99,10 +98,15 @@
       filter="string"
       label="Phone number"
       maxlength="25"
-      labelclass="control-label"
+      labelclass="control-label"  
+      hint="COM_RENTAL_ENQUIRY_SETTINGS_PHONE_EXAMPLE"
       class="validate validate-tel"
     />
-
+    <field 
+      name="phone_1_note" 
+      type="note"
+      class="badge badge-info" 
+      description="COM_RENTAL_ENQUIRY_SETTINGS_PHONT_NOTE" />
   
     <field 
       name="email_1"
