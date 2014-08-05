@@ -21,7 +21,7 @@ $units = RentalHelper::getUnitsById($data['progress']);
 // Set the item which is used below to output the tabs
 $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($listing_id);
 
-$availability_last_updated = (!empty($item->availability_last_updated_on)) ? $item->availability_last_updated_on : '';
+$availability_last_updated = (!empty($item->availability_last_updated_on)) ? JFactory::getDate($item->availability_last_updated_on)->calendar('D d M Y') : '';
 ?>
 
 <div class="row-fluid">
@@ -34,9 +34,10 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? $it
       <div id="j-main-container" class="span12">
       <?php endif; ?>
       <?php
-      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+      //$progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+      //echo $progress->render($data);
+      
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-      echo $progress->render($data);
       echo $layout->render($data);
       ?>
       <legend><?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_AVAILABILITY', $this->unit->unit_title); ?></legend>

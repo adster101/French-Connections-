@@ -648,32 +648,4 @@ class JHtmlProperty
 
     return $html;
   }
-
-  public static function progressMultiTabs($controller = '', $action = 'edit', $icon = '', $button_text = '', $data = '', $urlParam = '', $btnClass = '', $current_view)
-  {
-
-    $html = '';
-
-    $html.='<li class="dropdown">'
-            . '<a class="dropdown-toggle"'
-            . 'data-toggle="dropdown"'
-            . 'href="#">'
-            . '';
-    $html.= JText::_('Switch unit')
-            . '<b class="caret"></b></a>'
-            . '<ul class="dropdown-menu">';
-
-    foreach ($data as $item)
-    {
-
-      $html.='<li>';
-      $html.=JHtmlProperty::progressButton($item->id, $item->unit_id, $controller, $action, $icon, $item->unit_title, $item, $urlParam, $btnClass, '');
-
-      $html.='</li>';
-    }
-    $html.='</ul></li>';
-
-    return $html;
-  }
-
 }

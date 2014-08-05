@@ -14,13 +14,10 @@ $listing_id = $input->get('property_id', '', 'int');
 $data = $displayData;
 
 // Process the units into a keyed array (useful so we can get at individual units)
-// Easier to just foreach ?
 $units = RentalHelper::getUnitsById($data['progress']);
 
-
-
 // Determine the unit id, if a new unit unit_id = 0 - the listing id is then used as parent in the create unit view
-($view == 'propertyversions' || $view == 'contactdetails' ) ? $unit_id = key($units) : $unit_id = $input->get('unit_id', '0', 'int');
+$unit_id = ($view == 'propertyversions' || $view == 'contactdetails' ) ? key($units) : $input->get('unit_id', '0', 'int');
 
 // Set the item which is used below to output the tabs
 $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($listing_id);
@@ -30,7 +27,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 // The above function in turn calls progressButton with the same values as below.
 ?>
 
-<ul class="nav nav-tabs" id="propertyState">
+<ul class="nav nav-wizard clearfix" id="propertyState">
   <?php
   echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'propertyversions', 'edit', 'compass', 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', $item, 'property_id', '', $view);
   echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', '', $view);

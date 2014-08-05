@@ -29,12 +29,12 @@ jQuery(document).ready(function() {
     event.preventDefault();
 
   });
-  
-  if(jQuery('#newUnit').length) {
-    jQuery('#newUnit').on('click', function(event){
-        if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {
-          event.preventDefault();
-        }
+
+  if (jQuery('#newUnit').length) {
+    jQuery('#newUnit').on('click', function(event) {
+      if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {
+        event.preventDefault();
+      }
     })
   }
 
@@ -180,6 +180,30 @@ jQuery(document).ready(function() {
     // what to do!?
   }
 
+  // Add special offer counter... 
+  jQuery('#jform_offer_description').each(function() {
+
+
+    // Assign this to that so we can use this later...
+    var that = this;
+
+    // Update the span element with the initial value of the caption
+    var length = jQuery('#jform_offer_description').val().length;
+    jQuery('span.offer-counter').text(150 - length);
+
+    // Add the maxlength attribute
+    jQuery(this).attr('maxlength', 150);
+
+    jQuery(this).on('keyup', function(event) {
+
+      // On the keyup event, update the value of the span count element
+      var length = jQuery('#jform_offer_description').val().length;
+
+      jQuery('.offer-counter').text(150 - length);
+
+    });
+  })
+
 
 });
 
@@ -321,6 +345,7 @@ var show_contact = function(that) {
     })
   }
 }
+
 
 
 /* Fires on occasion when a button has it bound to it's onclick event */

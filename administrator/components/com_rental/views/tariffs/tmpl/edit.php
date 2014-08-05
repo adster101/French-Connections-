@@ -23,8 +23,8 @@ $counter = 0;
         <?php endif; ?>
         <!-- Listing status and tab layouts start -->
         <?php
-        $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        echo $progress->render($data);
+        //$progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+        //echo $progress->render($data);
 
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
         echo $layout->render($data);

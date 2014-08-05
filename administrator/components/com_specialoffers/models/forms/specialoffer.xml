@@ -4,7 +4,7 @@
     name="specialoffer" 
     addrulepath="/administrator/components/com_specialoffers/models/rules" 
     addfieldpath="/administrator/components/com_specialoffers/models/fields" 
-    label="">
+    label="COM_SPECIALOFFER_DETAILS">
     <field 
       name="unit_id" 
       type="UserProperties" 
@@ -41,10 +41,18 @@
       filter="safehtml"
       validate="description"
       required="true"
+      rows="5"
       maxlength="150"
       class="required validate-description"
       labelclass="control-label"
       hint="COM_SPECIALOFFERS_DESCRIPTION_PLACEHOLDER"
+    />
+    <field 
+      type="note"
+      name="counter"
+      description="COM_SPECIALOFFERS_DESCRIPTION_COUNTER"
+      id="counter"
+      class="" 
     />
     <field 
       name="published" 
@@ -61,6 +69,37 @@
       <option value="1">JPUBLISHED</option>
       <option value="0">JUNPUBLISHED</option>
     </field>
+ 
+    <field 
+      name="id"
+      type="text"
+      filter="int"
+      readonly="true"
+      label="COM_SPECIALOFFERS_ID_LABEL"
+      labelclass="control-label" 
+    />
+    <field 
+      name="approved_by"
+      type="user"
+      filter="unset"
+      readonly="true"
+      label="COM_SPECIALOFFERS_APPROVED_BY_LABEL"
+      labelclass="control-label" 
+    />   
+    <field 
+      name="approved_date"
+      type="calendar"
+      format="%d-%m-%Y"
+      filter="unset"
+      readonly="true"
+      label="COM_SPECIALOFFERS_APPROVED_DATE_LABEL"
+      labelclass="control-label" 
+      class="input-small"
+    />   
+  </fieldset>
+  <fieldset
+    name="availability"
+    label="COM_SPECIALOFFERS_OFFER_AVAILABILITY">
     <field 
       name="start_date"
       type="text"
@@ -90,31 +129,5 @@
       message="COM_SPECIALOFFERS_END_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"           
     />
-    <field 
-      name="id"
-      type="text"
-      filter="int"
-      readonly="true"
-      label="COM_SPECIALOFFERS_ID_LABEL"
-      labelclass="control-label" 
-    />
-    <field 
-      name="approved_by"
-      type="user"
-      filter="unset"
-      readonly="true"
-      label="COM_SPECIALOFFERS_APPROVED_BY_LABEL"
-      labelclass="control-label" 
-    />   
-    <field 
-      name="approved_date"
-      type="calendar"
-      format="%d-%m-%Y"
-      filter="unset"
-      readonly="true"
-      label="COM_SPECIALOFFERS_APPROVED_DATE_LABEL"
-      labelclass="control-label" 
-      class="input-small"
-    />   
   </fieldset>
 </form>

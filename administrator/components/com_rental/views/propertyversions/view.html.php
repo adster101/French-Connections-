@@ -134,7 +134,7 @@ class RentalViewPropertyversions extends JViewLegacy
 
     $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript(JURI::root() . "/administrator/components/com_rental/js/locate.js", 'text/javascript', true, false);
-    $document->addStyleSheet(JURI::root() . "/administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
+    $document->addStyleSheet(JURI::root() . "/media/fc/css/helloworld.css", 'text/css', "screen");
   }
 
 }

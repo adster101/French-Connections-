@@ -4,8 +4,9 @@ defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
 JHtml::_('behavior.formvalidation');
+$fieldsets = $this->form->getFieldSets();
 ?>
-<form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_specialoffers&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">
+<form class="form-validate form-vertical" action="<?php echo JRoute::_('index.php?option=com_specialoffers&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">
 
 
   <?php if (!empty($this->sidebar)): ?>
@@ -16,25 +17,22 @@ JHtml::_('behavior.formvalidation');
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_SPECIALOFFER_DETAILS'); ?></legend>
-        <?php foreach ($this->form->getFieldset('specialoffer') as $field): ?>
-          <div class="control-group">
-            <?php echo $field->label; ?>
-            <div class="controls">
-              <?php echo $field->input; ?>
-            </div>
-          </div>         
+      <?php foreach ($fieldsets as $fieldset): ?> 
+        <fieldset class="adminform">        
+            <legend><?php echo JText::_($fieldset->label); ?></legend>
+
+          <?php foreach ($this->form->getFieldset($fieldset->name) as $field): ?> 
+
+            <div class="control-group">
+              <?php echo $field->label; ?>
+              <div class="controls">
+                <?php echo $field->input; ?>
+              </div>
+            </div>       
+          </fieldset>
+
         <?php endforeach; ?>
-        <?php foreach ($this->form->getFieldset('publishing') as $field): ?>
-          <div class="control-group">
-            <?php echo $field->label; ?>
-            <div class="controls">
-              <?php echo $field->input; ?>
-            </div>
-          </div>         
-        <?php endforeach; ?>
-      </fieldset>
+      <?php endforeach; ?>
     </div>
   </div>
 </div>

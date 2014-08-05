@@ -119,6 +119,7 @@ if ($manage_account)
   );
 
   $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id, 'class:accounts'));
+  $menu->addChild(new JMenuNode(JText::_('TPL_ISIS_EDIT_ACCOUNT_SMS'), 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id . '#sms', 'class:accounts'));
 
   $menu->addChild(new JMenuNode(JText::_('Invoice History'), 'index.php?option=com_invoices&view=invoices', 'class:accounts'), true);
 

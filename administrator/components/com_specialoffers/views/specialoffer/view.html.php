@@ -76,6 +76,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     $document->addScript(JURI::root() . "/media/fc/js/general.js", false, true);
     $document->addStyleSheet(JURI::root() . "/media/fc/css/jquery-ui-1.8.23.custom.css");
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
   }
 
   /**
@@ -98,7 +99,6 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     JToolBarHelper::cancel('specialoffer.cancel', 'JTOOLBAR_CLOSE');
 
     JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
-
   }
 
 }

@@ -1,0 +1,139 @@
+
+@arrow-size: 20px;
+@arrow-sep: 6px;
+
+.arrow(@color) {
+  width: 0px;
+  height: 0px;
+  border-top: @arrow-size inset transparent;
+  border-bottom: @arrow-size inset transparent;
+  border-left: @arrow-size solid @color;
+  position: absolute;
+  content: "";
+  top: 0;
+}
+
+// Nav Wizard
+// -------------------------
+.nav-wizard {
+  > li {
+    float: left;
+
+    > a {
+      position: relative;
+      background-color: @grayLighter;
+
+      .badge {
+        margin-left: 3px;
+        color: @gray;
+        background-color: @blueDark;
+      }
+    }
+    &:not(:first-child) > a {
+      padding-left: 2*@arrow-size - @arrow-sep;
+
+      &:before {
+        .arrow(#fff);
+        left: 0;
+      }
+    }
+    &:not(:last-child) > a {
+      margin-right: @arrow-sep;
+
+      &:after {
+        .arrow(@grayLighter);
+        right: -@arrow-size;
+        z-index: 2;
+      }
+    }
+    &:first-child > a {
+      border-top-left-radius: @baseBorderRadius;
+      border-bottom-left-radius: @baseBorderRadius;
+    }
+    &:last-child > a {
+      border-top-right-radius: @baseBorderRadius;
+      border-bottom-right-radius: @baseBorderRadius;
+    }
+
+    &:hover > a {
+      background-color: darken(@grayLighter, 10%);
+      &:before {
+        border-right-color: darken(@grayLighter, 10%);
+      }
+      &:after {
+        border-left-color: darken(@grayLighter, 10%);
+      }
+    }
+
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @white;
+        background-color: @blue;
+      }
+
+      &:after {
+        border-left-color: @blue;
+      }
+
+      .badge {
+        color: @blueDark;
+        background-color: @yellow;
+      }
+    }
+
+    &.disabled > a {
+      color: @grayLight;
+
+      &:hover,
+      &:focus {
+        color: @grayLight;
+        text-decoration: none;
+        background-color: transparent;
+        cursor: not-allowed;
+      }
+    }
+
+    // &.active ~ li > a {
+    //   color: @grayLight;
+    //   &:hover,
+    //   &:focus {
+    //     color: @grayLight;
+    //     text-decoration: none;
+    //     background-color: transparent;
+    //     cursor: not-allowed;
+    //   }
+    //     // background-color: darken(@gray, 20%);
+    //     // &:before {
+    //     //     border-right-color: darken(@gray, 20%);
+    //     // }
+    //     // &:after {
+    //     //     border-left-color: darken(@gray, 20%);
+    //     // }
+    // }
+  }
+}
+
+.nav-wizard.nav-justified {
+    > li {
+        float: none;
+
+        > a {
+            padding: 18px;
+        }
+    }
+
+    // Small screens size, remove the "arrows" and just show it like stacked pills.
+    @media (max-width: @gridRowWidth768) {
+        > li > a {
+            border-radius: @baseBorderRadius;
+            margin-right: 0;
+
+            &:before,
+            &:after {
+              border: none !important;
+            }
+        }
+    }
+}
