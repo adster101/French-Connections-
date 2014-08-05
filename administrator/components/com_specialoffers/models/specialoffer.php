@@ -394,7 +394,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       
       if ($images < 8 && $offer_count > 2)
       {    
-        $message = JText::_('COM_SPECIALOFFERS_UPGRADE_REQUIRED_BEFORE_ADDING_MORE_OFFERS');
+        $message = JText::sprintf('COM_SPECIALOFFERS_UPGRADE_REQUIRED_BEFORE_ADDING_MORE_OFFERS', $unit_detail->property_id);
         $app->enqueueMessage($message, 'notice');
         $app->redirect('index.php?option=com_specialoffers');
       }
