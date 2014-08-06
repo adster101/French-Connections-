@@ -90,39 +90,39 @@ jQuery(document).ready(function() {
     })
   });
 
-  jQuery(function() {
-    if (jQuery('.start_date').length) {
 
-      var start_date = jQuery('.start_date').attr('value');
+  if (jQuery('.start_date').length) {
 
-      if (start_date == '') {
-        start_date = new Date();
-      }
+    var start_date = jQuery('.start_date').attr('value');
 
-      jQuery('.start_date').datepicker({
-        numberOfMonths: 1,
-        showOn: "both",
-        dateFormat: "dd-mm-yy",
-        buttonImageOnly: true,
-        buttonImage: "/media/system/images/calendar.png",
-        showButtonPanel: true,
-        onSelect: function(selectedDate) {
-          jQuery('.end_date').datepicker("option", "minDate", selectedDate);
-        }
-      });
-
-      jQuery('.end_date').datepicker({
-        numberOfMonths: 1,
-        dateFormat: "dd-mm-yy",
-        showOn: "both",
-        buttonImageOnly: true,
-        buttonImage: "/media/system/images/calendar.png",
-        minDate: start_date,
-        showButtonPanel: true
-      });
+    if (start_date == '') {
+      start_date = new Date();
     }
-    ;
-  });
+
+    jQuery('.start_date').datepicker({
+      numberOfMonths: 1,
+      showOn: "both",
+      dateFormat: "dd-mm-yy",
+      buttonImageOnly: true,
+      buttonImage: "/media/system/images/calendar.png",
+      showButtonPanel: true,
+      onSelect: function(selectedDate) {
+        jQuery('.end_date').datepicker("option", "minDate", selectedDate);
+      }
+    });
+
+    jQuery('.end_date').datepicker({
+      numberOfMonths: 1,
+      dateFormat: "dd-mm-yy",
+      showOn: "both",
+      buttonImageOnly: true,
+      buttonImage: "/media/system/images/calendar.png",
+      minDate: start_date,
+      showButtonPanel: true
+    });
+  }
+  ;
+
 
 
   if (jQuery("#contactDetails").length) {
@@ -202,7 +202,25 @@ jQuery(document).ready(function() {
       jQuery('.offer-counter').text(150 - length);
 
     });
+  });
+
+  // Figure out what to do with local storage
+  // Update tab-href dependent on window.location.hash
+  // localStorage.removeItem('tab-href');
+
+  // Javascript to enable link to tab
+  var hash = document.location.hash;
+  var prefix = 'tab-';
+  if (hash) {
+    jQuery('.nav-tabs a[href=' + hash.replace(prefix, '') + ']').tab('show');
+    localStorage.setItem('tab-href', window.location.hash);
+  }
+
+  // Change hash for page-reload
+  jQuery('.nav-tabs a').on('shown', function(e) {
+    window.location.hash = e.target.hash.replace("#", "#" + prefix);
   })
+
 
 
 });
@@ -347,7 +365,6 @@ var show_contact = function(that) {
 }
 
 
-
 /* Fires on occasion when a button has it bound to it's onclick event */
 Joomla.submitbutton = function(task)
 {
@@ -389,5 +406,9 @@ Joomla.submitbutton = function(task)
   }
 }
 
+jQuery(function() {
+  var activeTab = jQuery('a[href="' + location.hash + '"]');
+  activeTab && activeTab.tab('show');
+});
 
   
