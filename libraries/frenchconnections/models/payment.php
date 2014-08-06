@@ -1320,7 +1320,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $date = JFactory::getDate();
+    $date = JFactory::getDate()->calendar('Y-m-d');
     $vouchers = array();
     $query->select('a.item_cost_id, a.date_redeemed, b.cost, b.description, a.note');
     $query->from('#__vouchers a');
