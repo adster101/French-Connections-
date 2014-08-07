@@ -34,6 +34,8 @@ class RentalViewImages extends JViewLegacy
     $progress->setState('com_rental.listing.id', $this->unit->property_id);
     $this->progress = $progress->getItems();
 
+    $this->property_id = $this->progress[0]->id;
+
     // populateState for the images model
     $this->state = $this->get('State');
     $images = $this->getModel();
@@ -76,25 +78,13 @@ class RentalViewImages extends JViewLegacy
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CLOSE');
-    JToolBarHelper::help('', true);
-
-    // Add a second tool bar for the upload image row of gubbins
-    // Add a upload button
-    if ($canDo->get('core.create'))
-    {
-      // Get the toolbar object instance
-      $bar = JToolBar::getInstance('uploadimages');
-      
-      JHtml::_('bootstrap.modal', 'imageUploadModal');
-      $title = JText::_('JTOOLBAR_UPLOAD');
-
-      // Instantiate a new JLayoutFile instance and render the batch button
-      $layout = new JLayoutFile('frenchconnections.toolbar.upload');
-
-      $dhtml = $layout->render(array('title' => $title, 'target' => '#imageUploadModal' ));
-      $bar->appendButton('Custom', $dhtml, 'upload');
-
-    }
+    //JToolBarHelper::help('', true);
+    
+    // Get a toolbar instance so we can append the preview button
+    $bar = JToolBar::getInstance('toolbar');
+    $property_id = $this->progress[0]->id;
+    $unit_id = $this->progress[0]->unit_id;
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->unit->id);
   }
 
   /**

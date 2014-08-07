@@ -88,8 +88,13 @@
 // Icon Font
 @import "icomoon.less";
 
+#toolbar #toolbar-preview {
+    float: right;
+}
+
 // Sign up 'nav wizrd'
 @import "../../../../media/fc/less/nav-wizard.less";
+
 
 .nav-wizard > li > a {
   padding:10px 15px;
@@ -140,11 +145,11 @@
 
 #navigation a.item-label{
 	display:block;
-	color:#777
+	color:@grayDark
 }
 
 #navigation li.item.selected a{
-	color:#dd4b39;
+	color:@red;
 	font-weight:bold
 }
 
@@ -237,11 +242,16 @@
 	background-color:#eee
 }
 
-#navigation .goog-zippy-expanded:before{
+#navigation .collapsed:before {
 	left:33px
 }
-
-#navigation .goog-zippy-collapsed:before{
+.expanded:before {
+    content: url('/administrator/templates/fcadmin_alt/images/arrow_down.png');
+    left: 5px;
+    top: 5px;
+    position: absolute;
+}
+#navigation .expanded:before {
 	left:35px
 }
 

@@ -7,7 +7,10 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_rental'))
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
- 
+
+// Register the Preview button
+JLoader::register('JToolbarButtonPreview', JPATH_ROOT . '/administrator/components/com_rental/buttons/preview.php'); 
+
 // Register the Helloworld helper file
 JLoader::register('RentalHelper', dirname(__FILE__) . '/helpers/rental.php');
 

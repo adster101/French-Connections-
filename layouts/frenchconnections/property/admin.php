@@ -8,13 +8,14 @@
  */
 defined('_JEXEC') or die;
 
-$doTask = $displayData['doTask'];
-$title = $displayData['title'];
-$remote = $displayData['remote'];
-$id = $displayData['id'];
-$icon = $displayData['icon'];
+$text = $displayData['text'];
+$property_id = $displayData['property_id'];
+$unit_id = $displayData['unit_id'];
+
+$url = '/listing/' . (int) $property_id . '?unit_id=' . (int) $unit_id . '&preview=1';
+
 ?>
-<button data-toggle="modal" data-target="#<?php echo $id ?>" href="<?php echo $remote; ?>" class="btn btn-small">
-  <i class="icon-<?php echo $icon ?>" title="<?php echo $title; ?>"></i>
-  <?php echo $title; ?>
-</button>
+<a href="<?php echo $url ?>" class="btn btn-small pull-right" target="_blank">
+  <span class="icon-out-2"></span>
+  <?php echo $text; ?>
+</a>

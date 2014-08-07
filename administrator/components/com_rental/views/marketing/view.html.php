@@ -96,6 +96,10 @@ class RentalViewMarketing extends JViewLegacy
       JToolBarHelper::apply('marketing.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('marketing.save', 'JTOOLBAR_SAVE');
     }
+    
+    // Get a toolbar instance so we can append the preview button
+    $bar = JToolBar::getInstance('toolbar');
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', 'index.php');
   }
 
 }

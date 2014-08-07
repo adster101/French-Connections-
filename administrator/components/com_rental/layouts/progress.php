@@ -33,11 +33,6 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
   <div class="span9">-->
 <?php if (!empty($notices)) : ?>
   <div class="alert alert-info">
-    <?php if ($progress[0]->review) : ?>
-      <div class="pull-right">
-        <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_RENTAL_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
-      </div>
-    <?php endif; ?>
     <h4>Listing Progress</h4>
     <ul>
       <?php if (empty($progress[0]->latitude) && empty($progress[0]->longitude)) : ?>
@@ -76,31 +71,17 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
   <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_BLURB'); ?>
 <?php elseif (empty($notices) && !$review && $days_to_renewal >= 7) : ?>
   <div class="alert alert-info">
-    <div class="pull-right">
-      <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_RENTAL_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
-    </div>
     <h4>Listing Status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_OKAY'); ?></p>
   </div>
 <?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review && empty($expiry_date)) : ?>
-  <div class="alert alert-danger">
-    <?php if ($progress[0]->review) : ?>
-      <div class="pull-right">
-        <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_RENTAL_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
-      </div>
-    <?php endif; ?>        
+<div class="alert alert-danger">       
     <h4>Listing Status</h4>
-
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
     <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
   </div>
 <?php elseif (empty($notices) && $days_to_renewal < 0 && !empty($expiry_date) && $review < 2) : ?>
-  <div class="alert alert-danger">
-    <?php if ($progress[0]->review) : ?>
-      <div class="pull-right">
-        <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_RENTAL_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
-      </div>
-    <?php endif; ?>        
+  <div class="alert alert-danger">       
     <h4>Listing Status</h4>
 
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_EXPIRED'); ?></p>
@@ -108,11 +89,6 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
   </div>    
 <?php elseif ($review < 2) : ?>
   <div class="alert alert-info">
-    <?php if ($progress[0]->review) : ?>
-      <div class="pull-right">
-        <a target="_blank" href="<? echo JRoute::_($link); ?>" title="COM_RENTAL_HELLOWORLD_PREVIEW_PROPERTY" class="btn btn-primary">Preview <i class="icon icon-out-2"> </i></a>
-      </div>
-    <?php endif; ?>
     <h4>Listing Status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_UNSUBMITTED_CHANGES'); ?></p>
     <a href="<?php echo JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $id) ?>" class="btn btn-primary">

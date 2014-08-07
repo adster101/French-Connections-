@@ -44,6 +44,7 @@ class RentalController extends JControllerLegacy
   function display($cachable = false)
   {
 
+
     // Set the default view for this component
     JRequest::setVar('view', JRequest::getCmd('view', 'listings'));
 

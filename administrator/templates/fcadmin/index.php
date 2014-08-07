@@ -147,7 +147,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                         </li>
                         <li class="divider"></li>
                         <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;     ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');              ?></a>
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;       ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                ?></a>
                         </li>
                         <li class="divider"></li>-->
                         <li class="">
@@ -156,7 +156,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                       </ul>
                     </li>
                   </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();              ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);              ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);              ?>
+                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                ?>
                     <span class="icon-out-2 small"></span></a>-->
                 </div>
                 <!--/.nav-collapse -->
@@ -186,7 +186,8 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
           <?php if (!$cpanel) : ?>
             <!-- Subheader -->
             <a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse"><?php echo JText::_('TPL_ISIS_TOOLBAR'); ?>
-              <i class="icon-wrench"></i></a>
+              <i class="icon-wrench"></i>
+            </a>
             <div class="subhead-collapse collapse">
               <div class="subhead">
                 <div class="container">

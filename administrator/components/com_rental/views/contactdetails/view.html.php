@@ -6,9 +6,11 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HelloWorld View
  */
-class RentalViewContactdetails extends JViewLegacy {
+class RentalViewContactdetails extends JViewLegacy
+{
 
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     $this->_name = 'contactdetails';
@@ -18,7 +20,8 @@ class RentalViewContactdetails extends JViewLegacy {
    * display method of Hello view
    * @return void
    */
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
 
     // Get the model state
     $this->state = $this->get('State');
@@ -43,11 +46,14 @@ class RentalViewContactdetails extends JViewLegacy {
 
     $this->progress = $model->getItems();
 
+
+
     $languages = RentalHelper::getLanguages();
     $lang = RentalHelper::getLang();
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
@@ -73,7 +79,8 @@ class RentalViewContactdetails extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
     // Determine the view we are using.
     $view = strtolower(JRequest::getVar('view'));
 
@@ -90,12 +97,20 @@ class RentalViewContactdetails extends JViewLegacy {
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_CONTACT_EDIT', $this->item->property_id));
 
 
-    if ($canDo->get('core.edit.own')) {
+    if ($canDo->get('core.edit.own'))
+    {
       JToolBarHelper::apply('contactdetails.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('contactdetails.save', 'JTOOLBAR_SAVE');
       // We can save the new record
       JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
     }
+
+    // Get a toolbar instance so we can append the preview button
+    $bar = JToolBar::getInstance('toolbar');    // Get the property ID as the first item in the progress array
+    $property_id = $this->progress[0]->id;
+    $unit_id = $this->progress[0]->unit_id;
+
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
   }
 
   /**
@@ -103,7 +118,8 @@ class RentalViewContactdetails extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
 
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();

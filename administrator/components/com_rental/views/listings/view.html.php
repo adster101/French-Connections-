@@ -86,9 +86,6 @@ class RentalViewListings extends JViewLegacy
       JToolBarHelper::trash('listings.trash');
     }
 
-    $bar = JToolBar::getInstance('toolbar');
-    JLoader::register('JToolbarButtonSnooze', JPATH_ROOT . '/administrator/components/com_rental/buttons/snooze.php');
-
     // Add the custom snooze button
     if ($canDo->get('rental.listing.admin'))
     {

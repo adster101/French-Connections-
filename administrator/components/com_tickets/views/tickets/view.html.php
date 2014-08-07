@@ -44,7 +44,7 @@ class TicketsViewTickets extends JViewLegacy
     //TicketsHelper::addSubmenu('tickets');
     //$this->sidebar = JHtmlSidebar::render();
     $this->setDocument();
-    
+
     $this->addToolbar($canDo);
 
     parent::display($tpl);

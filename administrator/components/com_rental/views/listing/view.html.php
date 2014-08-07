@@ -84,10 +84,10 @@ class RentalViewListing extends JViewLegacy
     $canDo = RentalHelper::getActions();
 
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_RENTAL_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
-    
-    // TO DO - For owners back should be to OA homepage
+
+    // TO DO - For owners back should be to OA homepage, probably taken care of by permissions settings
     JToolBarHelper::back('COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', '/administrator/index.php?option=com_rental');
-    JToolbarHelper::help('', false, '/support');
+    //JToolbarHelper::help('', false, '/support');
 
     if ($layout == 'review')
     {
@@ -96,6 +96,12 @@ class RentalViewListing extends JViewLegacy
         JToolBarHelper::deleteList('', 'listing.approve', 'BLAH');
       }
     }
+
+    // Get a toolbar instance so we can append the preview button
+    $bar = JToolBar::getInstance('toolbar');
+    $property_id = $this->items[0]->id;
+    $unit_id = $this->items[0]->unit_id;
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
   }
 
   /**

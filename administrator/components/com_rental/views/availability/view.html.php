@@ -9,13 +9,15 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class RentalViewAvailability extends JViewLegacy {
+class RentalViewAvailability extends JViewLegacy
+{
 
   /**
    * display method of Availability View
    * @return void
    */
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
 
     // Get the property ID we are editing.
     $this->item->id = JRequest::getVar('unit_id');
@@ -38,12 +40,16 @@ class RentalViewAvailability extends JViewLegacy {
     $progress = $this->getModel('Listing');
     $progress->setState('com_rental.listing.id', $this->unit->property_id);
     $this->progress = $progress->getItems();
+    
+    // Get the property ID as the first item in the progress array
+    $this->property_id = $this->progress[0]->id;
 
     // Get the availability for this unit
     $this->availability = $this->get('Availability');
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
@@ -67,7 +73,8 @@ class RentalViewAvailability extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
     // Determine the layout we are using.
     // Should this be done with views?
     $view = strtolower(JRequest::getVar('view'));
@@ -82,7 +89,11 @@ class RentalViewAvailability extends JViewLegacy {
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     JToolBarHelper::cancel('availability.cancel', 'JTOOLBAR_CLOSE');
-    JToolBarHelper::help('', '');
+    
+    // Get a toolbar instance so we can append the preview button
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->item->id);
+
+    //JToolBarHelper::help('', '');
   }
 
   /**
@@ -90,7 +101,8 @@ class RentalViewAvailability extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));

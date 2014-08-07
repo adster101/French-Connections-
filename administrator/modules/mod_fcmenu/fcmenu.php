@@ -72,42 +72,46 @@ class FcAdminCssMenu extends JAdminCssMenu
   public function renderLevel($depth)
   {
     // Build the CSS class suffix
-    $class = '';
+    $itemClass = array();
 
-    if ($this->_current->hasChildren())
+    // Is this the current active linkage?
+    if ($this->_current->active)
     {
+      $itemClass[] = 'selected';
+    }
+
+    /* if ($this->_current->hasChildren())
+      {
       $class = ' class="dropdown"';
       $class = '';
-    }
+      }
 
-    if ($this->_current->class == 'separator')
-    {
+      if ($this->_current->class == 'separator')
+      {
       $class = ' class="divider"';
-    }
+      }
 
-    if ($this->_current->hasChildren() && $this->_current->class)
-    {
+      if ($this->_current->hasChildren() && $this->_current->class)
+      {
       $class = ' class="dropdown-submenu"';
       $class = '';
-    }
+      }
+     */
 
-    if ($this->_current->hasChildren())
-    {
-      // Print the item
-      echo "<li class='group'>";
-    }
-    else
-    {
-      echo "<li class='item'>";
-    }
+    // Get the class attributes to add to the li item
+    $itemClass[] = ($this->_current->hasChildren()) ? 'group' : 'item';
+    $itemClass = ' class="' . implode(' ', $itemClass) . '"';
 
-
-
+    // Print the item
+    echo "<li" . $itemClass . ">";
 
     // Print a link if it exists
     $linkClass = array();
     $dataToggle = '';
     $dropdownCaret = '';
+    $icon = '';
+
+
 
     if ($this->_current->hasChildren())
     {
@@ -115,11 +119,6 @@ class FcAdminCssMenu extends JAdminCssMenu
       $linkClass[] = '';
       //$dataToggle = ' data-toggle="dropdown"';
       $dataToggle = '';
-
-      if (!$this->_current->getParent()->hasParent()) // I.e. parent is ROOT
-      {
-        $dropdownCaret = ' <span class="caret"></span>';
-      }
     }
 
     if ($this->_current->link != null && $this->_current->getParent()->title != 'ROOT')
@@ -132,41 +131,53 @@ class FcAdminCssMenu extends JAdminCssMenu
       }
     }
 
+    if ($this->_current->class)
+    {
+      $icon = '<span class="icon icon-' . $this->_current->class . '">&nbsp;</span>&nbsp;';
+    }
+
+
     // Implode out $linkClass for rendering
     $linkClass = ' class="item-label ' . implode(' ', $linkClass) . '"';
+
+    // Check to see if this node has children, allows for nesting
     if ($this->_current->hasChildren())
     {
-      echo "<div class='nav-label top-level'>";   
+      if (!$this->_current->getParent()->hasParent()) // Check if this is a parent NODE (i.e. parent node is ROOT)
+      {
+        echo "<div class='nav-label top-level expanded'>";
+      }
       // TO DO - Need to do something here to determine if this is the 'parent' of the current 
       // 'active' node. Something like $this->hasActiveChild() or similar.
-
     }
-    
 
+    // Spit out a placeholder node
     if ($this->_current->link == '#' && $this->_current->target == null)
     {
-      echo "<div>" . $dropdownCaret . $this->_current->title . "</div>";
+      echo $icon . $this->_current->title;
     }
     elseif ($this->_current->link != null && $this->_current->target != null)
     {
       echo "<a" . $linkClass . " " . $dataToggle . " href=\"" . $this->_current->link . "\" target=\"" . $this->_current->target . "\" >"
-      . $dropdownCaret . $this->_current->title . "</a>";
+      . $icon . $this->_current->title . "</a>";
     }
     elseif ($this->_current->link != null && $this->_current->target == null)
     {
-      echo "<a" . $linkClass . " " . $dataToggle . " href=\"" . $this->_current->link . "\">" . $dropdownCaret . $this->_current->title . "</a>";
+      echo "<a" . $linkClass . " " . $dataToggle . " href=\"" . $this->_current->link . "\">" . $icon . $this->_current->title . "</a>";
     }
     elseif ($this->_current->title != null)
     {
-      echo "<a" . $linkClass . " " . $dataToggle . ">" . $dropdownCaret . $this->_current->title . "</a>";
+      echo "<a" . $linkClass . " " . $dataToggle . ">" . $icon . $this->_current->title . "</a>";
     }
-    else
-    {
-      echo "<span></span>";
-    }
+
+
+    // Sames checks as above, but for closing tags
     if ($this->_current->hasChildren())
     {
-      echo "</div>";
+      if (!$this->_current->getParent()->hasParent()) // Check if this is a parent NODE (i.e. parent node is ROOT)
+      {
+        echo "</div>";
+      }
     }
 
     // Recurse through children if they exist
@@ -198,6 +209,26 @@ class FcAdminCssMenu extends JAdminCssMenu
     }
 
     echo "</li>\n";
+  }
+
+  /**
+   * Method to determine whether the current menu item is current
+   * Determined by scanning the URL
+   * 
+   */
+  public function isActive($url = '')
+  {
+    $uri = JUri::getInstance();
+    $current_url = $uri->toString();
+
+    if (empty($url))
+    {
+      return false;
+    }
+
+    $active = strpos($current_url, $url);
+
+    return $active;
   }
 
 }

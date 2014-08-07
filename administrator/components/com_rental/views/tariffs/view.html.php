@@ -9,13 +9,15 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class RentalViewTariffs extends JViewLegacy {
+class RentalViewTariffs extends JViewLegacy
+{
 
   /**
    * display method of Availability View
    * @return void
    */
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
     $app = JFactory::getApplication();
 
     $layout = $app->input->get('layout', '', 'string');
@@ -40,7 +42,8 @@ class RentalViewTariffs extends JViewLegacy {
 
     $listing_id = ($this->item->property_id) ? $this->item->property_id : '';
 
-    if (empty($listing_id)) {
+    if (empty($listing_id))
+    {
 
       // Probably creating a new unit, listing id is in GET scope
       $input = $app->input;
@@ -62,7 +65,8 @@ class RentalViewTariffs extends JViewLegacy {
     $this->lang = RentalHelper::getLang();
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode('<br />', $errors));
       return false;
     }
@@ -80,7 +84,8 @@ class RentalViewTariffs extends JViewLegacy {
   /**
    * Setting the toolbar
    */
-  protected function addToolBar() {
+  protected function addToolBar()
+  {
     // Determine the layout we are using.
     // Should this be done with views?
     $view = strtolower(JRequest::getVar('view'));
@@ -94,12 +99,19 @@ class RentalViewTariffs extends JViewLegacy {
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
 
     if ($canDo->get('core.edit.own'))
+    {
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-      JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE'); {
+      JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE');
     }
-    JToolBarHelper::help('',true);
+    // Get a toolbar instance so we can append the preview button
+    $bar = JToolBar::getInstance('toolbar');
+    $property_id = $this->progress[0]->id;
+    $unit_id = $this->progress[0]->unit_id;
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
+
+    //JToolBarHelper::help('', true);
   }
 
   /**
@@ -107,7 +119,8 @@ class RentalViewTariffs extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
