@@ -54,7 +54,7 @@ $amenities = $this->form->getGroup('amenities');
               <?php echo $this->form->getInput('city'); ?>
             </div>
           </div>
-   
+
           <?php echo $this->form->getInput('map'); ?>
           <?php echo $this->form->getInput('latitude'); ?>
           <?php echo $this->form->getInput('longitude'); ?>
@@ -116,8 +116,6 @@ $amenities = $this->form->getGroup('amenities');
           </div>
         </fieldset>
 
-
-
         <fieldset>
           <legend>Local Amenities</legend>
           <div class="alert alert-notice">
@@ -133,19 +131,12 @@ $amenities = $this->form->getGroup('amenities');
           <?php endforeach; ?>
         </fieldset>
       </div>
-
     </div>
-  </div>
-</div>
+    <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
+      <?php echo $field->input; ?>
+    <?php endforeach; ?>
 
-
-
-<?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
-
-  <?php echo $field->input; ?>
-<?php endforeach; ?>
-
-<input type="hidden" name="task" value="" />
-<input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $this->progress[0]->unit_id, false)); ?>" />
+    <input type="hidden" name="task" value="" />
+    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $this->progress[0]->unit_id, false)); ?>" />
 </form>
 

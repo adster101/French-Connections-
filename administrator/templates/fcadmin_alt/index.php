@@ -106,12 +106,10 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
             }
           </style>
         <?php endif; ?>
-
         <!--[if lt IE 9]>
         <script src="../media/jui/js/html5.js"></script>
         <![endif]-->
         </head>
-
         <body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?>" <?php if ($stickyToolbar) : ?>data-spy="scroll" data-target=".subhead" data-offset="87"<?php endif; ?>>
           <!-- Top Navigation -->
           <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -145,7 +143,6 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
               </div>  
             </div>
           </nav>
-
           <?php if ((!$statusFixed) && ($this->countModules('status'))) : ?>
             <!-- Begin Status Module -->
             <div id="status" class="navbar status-top hidden-phone">
@@ -156,23 +153,17 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
             </div>
             <!-- End Status Module -->
           <?php endif; ?>
-
           <!-- container-fluid -->
           <div class="container-fluid">
             <section id="content">
               <!-- Begin Content -->
               <jdoc:include type="modules" name="top" style="xhtml" />
-
-
-              <div class="row-fluid">
-                
-                <?php $help = JToolbar::getInstance('help'); ?>
+                <?php $help = JToolbar::getInstance('fchelp'); ?>
                 <?php echo $help->render(); ?>
-
+              <div class="row-fluid">
                 <?php if ($showSubmenu) : ?>
                   <div class="span3">
                     <jdoc:include type="modules" name="fcmenu" style="none" />
-                    <jdoc:include type="modules" name="submenu" style="none" />
                   </div>
                   <div class="span9">
                   <?php else : ?>
@@ -181,66 +172,67 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                     <div style="border-left:solid 1px #e5e5e5;padding-left:36px;">
                       <jdoc:include type="modules" name="title" />
                       <jdoc:include type="message" />
-                      <jdoc:include type="modules" name="toolbar" style="no" />
+                      <?php if (!$cpanel) : ?>
+                        <jdoc:include type="modules" name="toolbar" style="no" />
+                      <?php endif; ?>   
                       <jdoc:include type="component" />                   
-
                     </div>
                   </div>
-                  <?php if ($this->countModules('bottom')) : ?>
-                    <jdoc:include type="modules" name="bottom" style="xhtml" />
-                  <?php endif; ?>
-                  <!-- End Content -->
-                  </section>
-
                 </div>
-                <?php if ($this->countModules('owner-footer')) : ?> 
-                  <footer id="status" class=""> 
-                    <div class="clearfix">
-                      <div class="container">
-                        <jdoc:include type="modules" name="owner-footer" style="no" />
-                      </div>
-                    </div>
-                  </footer>  
+                <?php if ($this->countModules('bottom')) : ?>
+                  <jdoc:include type="modules" name="bottom" style="xhtml" />
                 <?php endif; ?>
-                <jdoc:include type="modules" name="debug" style="none" />
-                <?php if ($stickyToolbar) : ?>
-                  <script>
-                    (function($)
+                <!-- End Content -->
+            </section>
+            <?php if ($this->countModules('owner-footer')) : ?> 
+              <footer id="status" class=""> 
+                <div class="clearfix">
+                  <div class="container">
+                    <jdoc:include type="modules" name="owner-footer" style="no" />
+                  </div>
+                </div>
+              </footer>  
+            <?php endif; ?>
+          </div>
+          <jdoc:include type="modules" name="debug" style="none" />
+          <?php if ($stickyToolbar) : ?>
+            <script>
+              (function($)
+              {
+                // fix sub nav on scroll
+                var $win = $(window)
+                        , $nav = $('.subhead')
+                        , navTop = $('.subhead').length && $('.subhead').offset().top - <?php if ($displayHeader || !$statusFixed) : ?>40<?php else: ?>20<?php endif; ?>
+                        , isFixed = 0
+
+                processScroll();
+
+                // hack sad times - holdover until rewrite for 2.1
+                $nav.on('click', function()
+                {
+                  if (!isFixed) {
+                    setTimeout(function()
                     {
-                      // fix sub nav on scroll
-                      var $win = $(window)
-                              , $nav = $('.subhead')
-                              , navTop = $('.subhead').length && $('.subhead').offset().top - <?php if ($displayHeader || !$statusFixed) : ?>40<?php else: ?>20<?php endif; ?>
-                              , isFixed = 0
+                      $win.scrollTop($win.scrollTop() - 97)
+                    }, 10)
+                  }
+                })
 
-                      processScroll();
+                $win.on('scroll', processScroll)
 
-                      // hack sad times - holdover until rewrite for 2.1
-                      $nav.on('click', function()
-                      {
-                        if (!isFixed) {
-                          setTimeout(function()
-                          {
-                            $win.scrollTop($win.scrollTop() - 97)
-                          }, 10)
-                        }
-                      })
-
-                      $win.on('scroll', processScroll)
-
-                      function processScroll()
-                      {
-                        var i, scrollTop = $win.scrollTop()
-                        if (scrollTop >= navTop && !isFixed) {
-                          isFixed = 1
-                          $nav.addClass('subhead-fixed')
-                        } else if (scrollTop <= navTop && isFixed) {
-                          isFixed = 0
-                          $nav.removeClass('subhead-fixed')
-                        }
-                      }
-                    })(jQuery);
-                  </script>
-                <?php endif; ?>
-                </body>
-                </html>
+                function processScroll()
+                {
+                  var i, scrollTop = $win.scrollTop()
+                  if (scrollTop >= navTop && !isFixed) {
+                    isFixed = 1
+                    $nav.addClass('subhead-fixed')
+                  } else if (scrollTop <= navTop && isFixed) {
+                    isFixed = 0
+                    $nav.removeClass('subhead-fixed')
+                  }
+                }
+              })(jQuery);
+            </script>
+          <?php endif; ?>
+        </body>
+        </html>

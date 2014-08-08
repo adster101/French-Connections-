@@ -167,7 +167,7 @@
     <field
       name="city"
       type="cities"
-      class="inputbox validate"
+      class="inputbox"
       labelclass="control-label"
       label="COM_RENTAL_HELLOWORLD_FIELD_NEARESTTOWN_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_NEARESTTOWN_DESC"

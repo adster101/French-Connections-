@@ -104,7 +104,7 @@ $counter = 0;
     <?php echo $field->input; ?>
   <?php endforeach; ?>
   <input type="hidden" name="task" value="" />
-  <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $this->item->property_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
+  <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=availability.edit&unit_id=' . (int) $this->item->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
 
   <?php echo JHtml::_('form.token'); ?>
 </form>

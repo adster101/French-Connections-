@@ -101,8 +101,9 @@ class EnquiriesViewEnquiries extends JViewLegacy
       JToolBarHelper::custom('enquiries.resend', 'refresh', '', 'COM_ENQUIRIES_RESEND_FAILED', true);
       JToolBarHelper::preferences('com_enquiries');
     }
-
-    JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
+    
+    $help = JToolbar::getInstance('fchelp');
+    $help->appendButton('Help', 'COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
   }
 
   /**

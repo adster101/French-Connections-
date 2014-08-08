@@ -299,7 +299,7 @@ class RentalModelUnitVersions extends JModelAdmin
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
         // New method - getPropertyDetails(); returns the expiry date of the property.
-        $expiry_date = $model->getPropertyDetails($data['property_id']);
+        $expiry_date = $model->getPropertyDetail($data['property_id']);
 
         if (is_integer($expiry_date))
         {

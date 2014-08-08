@@ -6,7 +6,7 @@ JHtml::_('behavior.formvalidation');
 
 $input = JFactory::getApplication()->input;
 $language = JFactory::getLanguage();
-$language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
+$language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR . '/language', 'en-GB', true);
 $renewal = ($input->getCmd('renewal', '')) ? '&renewal=1' : '';
 $total = '';
 $total_vat = '';

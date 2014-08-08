@@ -88,10 +88,11 @@ class EnquiriesViewEnquiry extends JViewLegacy {
       JToolBarHelper::save('enquiry.reply', 'COM_ENQUIRIES_ENQUIRY_REPLY');
     }
 
-
-    JToolBarHelper::help('COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
+    $help = JToolbar::getInstance('fchelp');
+    $help->appendButton('help','COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
 
     // Set the component toolbar title
+
     JToolbarHelper::title($this->title);
   }
 

@@ -36,7 +36,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? JFa
       <?php
       //$progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       //echo $progress->render($data);
-      
+
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       echo $layout->render($data);
       ?>
@@ -84,7 +84,6 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? JFa
             </fieldset>
             <input type="hidden" name="task" value="availability.apply" /> 
             <input type="hidden" name="jform[property_id]" value=<?php echo $this->unit->property_id ?> /> 
-
             <?php echo JHtml::_('form.token'); ?>
           </div>
           <div class="modal-footer">
@@ -94,11 +93,9 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? JFa
             <button class="btn" data-dismiss="modal" aria-hidden="true">
               <?php echo JText::_('JCANCEL') ?>
             </button>
-
           </div>
         </div>
-
-        <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $this->unit->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
+        <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $this->property_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
       </form>
 
     </div>

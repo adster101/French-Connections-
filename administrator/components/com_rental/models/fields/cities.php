@@ -31,7 +31,7 @@ class JFormFieldCities extends JFormFieldList {
     $cities = (array) $this->getOptions();
     $data = array();
     
-		$class = !empty($this->class) ? ' class="' . $this->class . '"' : '';
+		$class = !empty($this->class) ? $this->class : '';
 
     foreach ($cities as $city) {
       $data[] = array(

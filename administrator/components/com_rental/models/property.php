@@ -48,7 +48,7 @@ class RentalModelProperty extends JModelAdmin
    * @param type $property_id
    * @return type
    */
-  public function getPropertyDetails($property_id = '')
+  public function getPropertyDetail($property_id = '')
   {
 
     if (!$property_id)

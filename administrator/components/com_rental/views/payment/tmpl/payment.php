@@ -5,7 +5,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
 $language = JFactory::getLanguage();
-$language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
+$language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR . '/language', 'en-GB', true);
 $fieldsets = $this->form->getFieldSets();
 $total = '';
 $total_vat = '';

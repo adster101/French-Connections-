@@ -366,7 +366,6 @@ class RentalModelPropertyVersions extends JModelAdmin
 
       // If this is a new propery then we need to generate a 'stub' entry into the propery table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
-      // TODO - Move this code so that it runs when adding a new property rather than when saving for the first time
 
       if ($isNew)
       {
@@ -380,11 +379,9 @@ class RentalModelPropertyVersions extends JModelAdmin
           $this->setError('There was a problem creating your property. Please try again.');
           return false;
         }
-        else
-        {
-          $data['property_id'] = $new_property_id;
-          $data['review'] = 1;
-        }
+
+        $data['property_id'] = $new_property_id;
+        $data['review'] = 1;
       }
 
       // If $data['review'] is not set we need to check whether a new version is required
@@ -393,11 +390,10 @@ class RentalModelPropertyVersions extends JModelAdmin
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
         // New method - getExpiryDate(); returns the expiry date of the property.
-        $expiry_date = $model->getPropertyDetails($data['property_id']);
+        $expiry_date = $model->getPropertyDetail($data['property_id']);
 
         if (is_integer($expiry_date))
         {
-
           // As a new version is required amend the data array before we save
           // id here refers to the version id. Unsetting this effectively forces the table class to 
           // create a new entry rather than updating an existing row.
@@ -410,35 +406,42 @@ class RentalModelPropertyVersions extends JModelAdmin
       // Set the table model to the appropriate key
       // If we don't do this, the model will save against the property_id
       // but we want it saving against the version id
-
-
       $table->set('_tbl_keys', array('id'));
 
-      // Store the data.
+      // Store the data, regardless of the review state
       if (!$table->save($data))
       {
         $this->setError($table->getError());
         return false;
       }
 
-      // If not a new property mark the property listing as for review
-      // TO DO: look at this - ensure that new props can't be published without review
-      // Move the following into prepareTable();
+      // If not a new and review state == 0 (e.g. an existing property version)  
       // $data['review'] - refers to the property version review state
-      if (!$isNew && $data['review'] == 0) // Is this dodgy somehow for existing props? 
-      // Yes, need to explicity check in case it's updated during the review  
+      if (!$isNew && $data['review'] == 0)
       {
-        
-        // Update the existing property table review state to indicate that the listing has been updated
+
+        // We need to check the review state of the property in case it's a PFR (review state 2) 
         $property = $this->getTable('Property', 'RentalTable');
 
-        $property->id = $table->property_id;
-        $property->review = 1;
-
-        if (!$property->store())
+        // Load the parent property details. TO DO should probably reuse getPropertyDetail method and cache
+        if (!$property->load($table->property_id))
         {
-          $this->setError($property->getError());
-          return false;
+          Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_PROPERTY', $this->getError()));
+        }
+
+        // Update the review status, if it's not already been submitted.
+        if ($property->review < 2)
+        {
+          // Update the existing property table review state to indicate that the listing has been updated
+          $property->id = $table->property_id;
+
+          $property->review = 1;
+
+          if (!$property->store())
+          {
+            $this->setError($property->getError());
+            return false;
+          }
         }
       }
 
