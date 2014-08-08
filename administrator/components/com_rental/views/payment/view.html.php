@@ -24,7 +24,9 @@ class RentalViewPayment extends JViewLegacy
    */
   function display($tpl = null)
   {
-
+    $language = JFactory::getLanguage();
+    $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);
+    
     $input = JFactory::getApplication()->input;
     $this->id = $input->get('id', '', 'int');
     $layout = $input->get('layout', '', 'string');
@@ -32,15 +34,15 @@ class RentalViewPayment extends JViewLegacy
 
     // Get an instance of the Listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel'));
-    $model = $this->getModel('Listing');   
+    $model = $this->getModel('Listing');
     $model->setState('com_rental.listing.latest', true);
 
 
     $current_version = $model->getItems();
-    
+
     $model->setState('com_rental.listing.latest', false);
     $previous_version = $model->getItems();
-    
+
     // Add the Property model so we can get the renewal details...
     $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $this->renewal));
 
