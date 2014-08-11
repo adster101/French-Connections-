@@ -51,3 +51,6 @@ robots.txt
 /jQuery-File-Upload-master
 /node_modules/
 /administrator/templates/fcadmin_alt/
+/bower_components/
+/apc.php
+/phpinfo.php
