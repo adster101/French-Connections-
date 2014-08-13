@@ -7,18 +7,34 @@
 //
 //## Gray and brand colors for use across Bootstrap.
 
-@gray-darker:            lighten(#000, 13.5%); // #222
-@gray-dark:              lighten(#000, 20%);   // #333
-@gray:                   lighten(#000, 33.5%); // #555
-@gray-light:             lighten(#000, 46.7%); // #777
-@gray-lighter:           lighten(#000, 93.5%); // #eee
+@gray-darker:           #525f79; 
+@gray-dark:             lighten(@gray-darker, 20%);   // #333
+@gray:                  lighten(@gray-darker, 32.5%); // #555
+@gray-light:            lighten(@gray-darker, 46.7%); // #777
+@gray-lighter:          #f2f5f1;
 
-@brand-primary:         #428bca;
+@red:                   #cd3e3f;
+@brown:                 #7b6c50;
+@light-brown:           #968563;
+@lighter-brown:         #c89b24;
+@orange:                #e9af11;
+@yellow:                #fee88d;
+@yellow-lighter:        #fffbd7;
+
+@blue-dark:             #031b5a;
+@blue-light:            #324c87;
+@blue-lighter:          #647cb6;
+@blue-pale:             #c0d0eb;
+@blue-paler:            #d7e1f2;
+@blue-baby:             #eaf3fe;
+@taupe:                 #e7eae3;
+@taupe-lighter:         #f2f5f1;
+
+@brand-primary:         #647cb6;
 @brand-success:         #5cb85c;
-@brand-info:            #5bc0de;
-@brand-warning:         #f0ad4e;
-@brand-danger:          #d9534f;
-
+@brand-info:            #647cb6;
+@brand-warning:         #e9af11;
+@brand-danger:          #cd3e3f;
 
 //== Scaffolding
 //
@@ -27,10 +43,10 @@
 //** Background color for `<body>`.
 @body-bg:               #fff;
 //** Global text color on `<body>`.
-@text-color:            @gray-dark;
+@text-color:            @gray-darker;
 
 //** Global textual link color.
-@link-color:            @brand-primary;
+@link-color:            @blue-dark;
 //** Link hover color set via `darken()` function.
 @link-hover-color:      darken(@link-color, 15%);
 
@@ -39,6 +55,9 @@
 //
 //## Font, line-height, and color for body text, headings, and more.
 
+@fc-font-name: 'DistTh';
+@fc-font-social: 'Social';
+
 @font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
@@ -46,6 +65,8 @@
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          14px;
+@font-size-xxlarge:        ceil((@font-size-base * 1.75)); // ~18px
+@font-size-xlarge:        ceil((@font-size-base * 1.50)); // ~18px
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 
@@ -325,7 +346,7 @@
 @container-md:                 @container-desktop;
 
 // Large screen / wide desktop
-@container-large-desktop:      ((1140px + @grid-gutter-width));
+@container-large-desktop:      ((1370px + @grid-gutter-width));
 //** For `@screen-lg-min` and up.
 @container-lg:                 @container-large-desktop;
 
@@ -342,16 +363,16 @@
 @navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
 @navbar-collapse-max-height:       340px;
 
-@navbar-default-color:             #777;
-@navbar-default-bg:                #f8f8f8;
+@navbar-default-color:             @gray-darker;
+@navbar-default-bg:                @taupe-lighter;
 @navbar-default-border:            darken(@navbar-default-bg, 6.5%);
 
 // Navbar links
-@navbar-default-link-color:                #777;
-@navbar-default-link-hover-color:          #333;
+@navbar-default-link-color:                @gray-darker;
+@navbar-default-link-hover-color:          darken(@navbar-default-link-color, 6.5%);
 @navbar-default-link-hover-bg:             transparent;
 @navbar-default-link-active-color:         #555;
-@navbar-default-link-active-bg:            darken(@navbar-default-bg, 6.5%);
+@navbar-default-link-active-bg:            @blue-baby;
 @navbar-default-link-disabled-color:       #ccc;
 @navbar-default-link-disabled-bg:          transparent;
 
@@ -737,7 +758,7 @@
 //
 //##
 
-@well-bg:                     #f5f5f5;
+@well-bg:                     @gray-lighter;
 @well-border:                 darken(@well-bg, 7%);
 
 
@@ -837,7 +858,7 @@
 //** Blockquote border color
 @blockquote-border-color:     @gray-lighter;
 //** Page header border color
-@page-header-border-color:    @gray-lighter;
+@page-header-border-color:    @gray-light;
 //** Width of horizontal description list titles
 @dl-horizontal-offset:        @component-offset-horizontal;
 //** Horizontal line color.

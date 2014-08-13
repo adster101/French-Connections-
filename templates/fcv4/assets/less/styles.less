@@ -10,6 +10,187 @@
 @import "../../../../bower_components/bootstrap/less/type.less";
 @import "../../../../bower_components/bootstrap/less/code.less";
 @import "../../../../bower_components/bootstrap/less/grid.less";
+@import "../../../../bower_components/bootstrap/less/forms.less";
 @import "../../../../bower_components/bootstrap/less/panels.less";
+@import "../../../../bower_components/bootstrap/less/wells.less";
 
-// All my specific BS FC styles etc
+
+// Components: Nav
+@import "../../../../bower_components/bootstrap/less/navs.less";
+@import "../../../../bower_components/bootstrap/less/navbar.less";
+@import "../../../../bower_components/bootstrap/less/breadcrumbs.less";
+@import "../../../../bower_components/bootstrap/less/pagination.less";
+@import "../../../../bower_components/bootstrap/less/pager.less";
+@import "../../../../bower_components/bootstrap/less/carousel.less";
+
+
+
+// Utilities
+@import "../../../../bower_components/bootstrap/less/utilities.less";
+@import "../../../../bower_components/bootstrap/less/responsive-utilities.less";
+
+// Fonts
+@import "../../../../bower_components/bootstrap/less/glyphicons.less";
+
+// Buttons
+@import "../../../../bower_components/bootstrap/less/buttons.less";
+
+// FC styles
+
+// Import the custom font for the headings...
+@font-face {
+  font-family: 'District Thin';
+  src: url('@{icon-font-path}@{fc-font-name}.eot');
+  src: url('@{icon-font-path}@{fc-font-name}.eot?#iefix') format('embedded-opentype'),
+       url('@{icon-font-path}@{fc-font-name}.woff') format('woff'),
+       url('@{icon-font-path}@{fc-font-name}.ttf') format('truetype'),
+       url('@{icon-font-path}@{fc-font-name}.svg#@{icon-font-svg-id}') format('svg');
+}
+
+// Import the custom font for the social icons...
+@font-face {
+  font-family: 'Social';
+  src: url('@{icon-font-path}@{fc-font-social}.eot');
+  src: url('@{icon-font-path}@{fc-font-social}.eot?#iefix') format('embedded-opentype'),
+       url('@{icon-font-path}@{fc-font-social}.woff') format('woff'),
+       url('@{icon-font-path}@{fc-font-social}.ttf') format('truetype'),
+       url('@{icon-font-path}@{fc-font-social}.svg#@{icon-font-svg-id}') format('svg');
+}
+/* Use the following CSS code if you want to have a class per icon */
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+	font-family: 'IcoMoon' , 'Social';
+	font-style: normal;
+	speak: none;
+  font-size: @font-size-xxlarge;
+  padding-right:30px;
+}
+
+.icon-google-plus:before {
+	content: "\e600";
+  color:#dd4b39 ;
+}
+
+.icon-facebook:before {
+	content: "\e601";
+  color:#647cb7
+}
+.icon-twitter:before {
+	content: "\e602";
+  color:#55acee
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "District Thin";
+  text-transform:uppercase;
+}
+
+// UPPER CASE NAVBAR TEXT
+.navbar {
+  text-transform:uppercase;
+}
+
+
+// Remove the default float left from navbar-header
+.navbar-header {
+  @media (min-width: @grid-float-breakpoint) {
+    float: none;
+  }
+}
+
+// Container for the top right banner position and navigation
+.banner-container {
+  @media (min-width: @screen-sm-min) { 
+    float:right;
+  }
+}
+
+// Top login nav - justified tabs up to sm screen width
+.nav-login {
+    float: right;
+    margin-bottom:9px;
+  >li {
+    > a {
+      text-align: center;
+      background-color:#eaf3fe;  
+    }
+    > a:before {
+      padding-right: 3px;
+    }
+    > a.holidaymaker-login:before {
+      content: "\e008";
+      font-family: "Glyphicons Halflings"; 
+    }
+    > a.owner-login:before {
+      content: "\e033";
+      font-family: "Glyphicons Halflings"; 
+    }
+  }
+  @media (max-width: @screen-sm-min) { 
+    float:none;
+    width: 100%;
+
+    li:nth-of-type(1) {
+      padding-right:2px;
+    }
+
+    > li {
+      float:none;
+      display: table-cell;
+      width: 1%;
+      > a {
+        margin-bottom: 0;
+ 
+      }
+    }
+  }
+}
+
+// Home page search panel
+.search-field {
+
+}
+
+.search-box {
+  width:100%;
+}
+
+.panel-home-page-search {
+    @media (min-width: @screen-sm-min) { 
+    width:400px;
+    position:absolute;
+    z-index:20;
+  }
+
+  @media (min-width: @screen-md-min) {
+    left:120px;
+    top:40px;
+  }
+
+  background-color:transparent;
+  border-radius:0;
+  .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border);
+   
+  border: 10px solid fade(#f2f5f1, 80%);
+  
+  > .panel-body {
+    background-color:fade(#f2f5f1, 95%);
+    > h4 {
+      margin-top:0;
+    }
+  }   
+}
+
+// Add margin to bottom of carousel 
+#myCarousel {
+  margin-bottom:20px;
+}
+
+// Additional well styles 
+.well {
+  border-radius:0;
+
+  > h1, h2, h3, h4, h5, h6 {
+    margin-top:0;
+  }
+}

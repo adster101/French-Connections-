@@ -22,7 +22,7 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
     ?>
 
     <?php if ($item->title) : ?>     
-      <div class="col-lg-3 col-md-3"> 
+      <div class="span3"> 
         <p>
 
           <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
@@ -41,6 +41,7 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
           <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
           <?php endif; ?>
         </p>
+        
       </div>
 
     <?php endif; ?>

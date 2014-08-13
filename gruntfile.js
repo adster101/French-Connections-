@@ -3,6 +3,21 @@ module.exports = function(grunt) {
   // 1. All configuration goes here 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    copy: {
+      main: {
+        files: [
+        // includes files within path
+        {
+          expand: true, 
+          src: ['bower_components/bootstrap/fonts/*', 'templates/fcv4/assets/fonts/*'], 
+          dest: 'media/fc/assets/fonts/',
+          flatten: true
+        }
+
+        ]
+      }
+    },
+
     less: {
       development: {
         options: {
@@ -17,8 +32,8 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          'media/fc/js/libs/blueimp/*.js', // All JS in the libs folder
-          'media/fc/main.js'  // This specific file
+        'media/fc/js/libs/blueimp/*.js', // All JS in the libs folder
+        'media/fc/main.js'  // This specific file
         ],
         dest: 'media/fc/js/build/production.js'
       }
@@ -30,11 +45,17 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      less: {
+      woot: {
         files: ['templates/fcv4/assets/less/*.less'], //watched files
         tasks: ['less'], //tasks to run
         options: {
           livereload: true                        //reloads the browser
+        }
+      }, 
+      site: {
+        files: ['templates/fcv4/*.php'],
+        options: {
+          livereload: true
         }
       }
     }
@@ -45,9 +66,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
-  grunt.registerTask('init', ['less', 'concat', 'uglify']);
+  grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy']);
   grunt.registerTask('default', ['watch']);
 };

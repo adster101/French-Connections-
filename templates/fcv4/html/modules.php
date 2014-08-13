@@ -82,6 +82,7 @@ function modChrome_nav($module, &$params, &$attribs) {
 
 /*
  * Module chrome for rendering the module in a submenu
+ * 
  */
 
 function modChrome_no($module, &$params, &$attribs) {
@@ -95,11 +96,12 @@ function modChrome_well($module, &$params, &$attribs) {
 	$headerTag      = htmlspecialchars($params->get('header_tag', 'h3'));
 	$bootstrapSize  = (int) $params->get('bootstrap_size', 0);
 	$moduleClass    = $bootstrapSize != 0 ? ' span' . $bootstrapSize : '';
-  
+  $headerClass	= $params->get('header_class');
+
   if ($module->content) {
     echo "<div class=\"well " . htmlspecialchars($params->get('moduleclass_sfx')) . ' ' . $moduleClass . "\">";
     if ($module->showtitle) {
-      echo '<' . $headerTag . ' class=\'page-header\'>' . $module->title . '</' . $headerTag . '>';
+      echo '<' . $headerTag . ' class=' . htmlspecialchars($headerClass) . '>' . $module->title . '</' . $headerTag . '>';
     }
     echo $module->content;
     echo "</div>";

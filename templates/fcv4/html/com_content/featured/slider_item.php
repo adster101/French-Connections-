@@ -19,7 +19,7 @@ $info = $this->item->params->get('info_block_position', 0);
 
 <div class="item <?php echo ($this->item_number == 0) ? 'active' : '' ?>">
   <?php if (isset($images->image_slider) && !empty($images->image_slider)) : ?>
-    <img class="img-rounded" src="<?php echo htmlspecialchars($images->image_slider); ?>" alt="<?php echo htmlspecialchars($images->image_slider_alt); ?>"/>
+    <img src="<?php echo htmlspecialchars($images->image_slider); ?>" alt="<?php echo htmlspecialchars($images->image_slider_alt); ?>"/>
   <?php endif; ?>
   <div class="carousel-caption">
     <?php if ($params->get('show_title')) : ?>
