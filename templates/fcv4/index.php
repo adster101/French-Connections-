@@ -46,15 +46,15 @@ $this->_script = array();
       <?php endif; ?>
       <div class="navbar-header">
         <!-- Brand and toggle get grouped for better mobile display -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fc-navbar-collapse-1">
-          <?php echo JText::_('TPL_FCV4_TOGGLE_MENU') ?>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button> 
-        <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
+         <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
           <img src="/images/general/logo-4.png" alt="' . $sitename . '" />
-        </a> 
+        </a>      
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fc-navbar-collapse-1">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>   
+        </button> 
+
       </div>
       <?php if ($this->countModules('position-1')) : ?>  
         <nav class="collapse navbar navbar-default fc-navbar-collapse" role="navigation">
@@ -86,6 +86,7 @@ $this->_script = array();
     <div class="row">
       <div class="col-lg-9">
         <jdoc:include type="modules" name="position-12" style="none" />
+        <hr />
         <div class="row">
           <div class="col-lg-6">
             <jdoc:include type="modules" name="position-14" style="none" />

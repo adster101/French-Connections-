@@ -22,12 +22,12 @@ $info = $this->item->params->get('info_block_position', 0);
     <img src="<?php echo htmlspecialchars($images->image_slider); ?>" alt="<?php echo htmlspecialchars($images->image_slider_alt); ?>"/>
   <?php endif; ?>
   <div class="carousel-caption">
-    <?php if ($params->get('show_title')) : ?>
+    <?php if ($params->get('show_title') && (1 == 2)) : ?>
       <h4 class="item-title">
         <?php if ($params->get('link_titles') && $params->get('access-view')) : ?>
           <a href="<?php echo JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid)); ?>"> <?php echo $this->escape($this->item->title); ?></a>
         <?php else : ?>
-          <?php echo $this->escape($this->item->title); ?>
+          <?php  echo $this->escape($this->item->title); ?>
         <?php endif; ?>
       </h4>
 
@@ -53,7 +53,7 @@ $info = $this->item->params->get('info_block_position', 0);
       endif;
       ?>
 
-      <p>          
+      <h4>          
         <?php 
         echo JHtml::_('string.truncate', (strip_tags($this->item->text)), $params->get('readmore_limit')); ?>
         <a class="" href="<?php echo $link; ?>"> 
@@ -62,7 +62,7 @@ $info = $this->item->params->get('info_block_position', 0);
           <span class="icon-chevron-right"></span>
 
         </a>
-      </p>
+      </h4>
 
         
 

@@ -285,7 +285,7 @@ a {
 }
 a:hover,
 a:focus {
-  color: #010510;
+  color: #cd3e3f;
   text-decoration: underline;
 }
 a:focus {
@@ -2715,8 +2715,8 @@ select[multiple].input-lg {
 }
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
-  color: #454f65;
-  background-color: transparent;
+  color: #cd3e3f;
+  background-color: #eaf3fe;
 }
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
@@ -2756,8 +2756,8 @@ select[multiple].input-lg {
   }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #454f65;
-    background-color: transparent;
+    color: #cd3e3f;
+    background-color: #eaf3fe;
   }
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
   .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
@@ -2776,14 +2776,14 @@ select[multiple].input-lg {
   color: #525f79;
 }
 .navbar-default .navbar-link:hover {
-  color: #454f65;
+  color: #cd3e3f;
 }
 .navbar-default .btn-link {
   color: #525f79;
 }
 .navbar-default .btn-link:hover,
 .navbar-default .btn-link:focus {
-  color: #454f65;
+  color: #cd3e3f;
 }
 .navbar-default .btn-link[disabled]:hover,
 fieldset[disabled] .navbar-default .btn-link:hover,
@@ -2947,7 +2947,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-  color: #010510;
+  color: #cd3e3f;
   background-color: #f2f5f1;
   border-color: #dddddd;
 }
@@ -3102,7 +3102,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   font-size: 20px;
   color: #ffffff;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  text-shadow: 0;
 }
 .carousel-control.left {
   background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
@@ -3199,7 +3199,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   padding-bottom: 20px;
   color: #ffffff;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  text-shadow: 0;
 }
 .carousel-caption .btn {
   text-shadow: none;
@@ -4450,7 +4450,7 @@ fieldset[disabled] .btn-link {
 }
 .btn-link:hover,
 .btn-link:focus {
-  color: #010510;
+  color: #cd3e3f;
   text-decoration: underline;
   background-color: transparent;
 }
@@ -4534,6 +4534,15 @@ h6 {
 .navbar {
   text-transform: uppercase;
 }
+.navbar-toggle {
+  border: 1px solid #525f79;
+}
+.navbar-toggle .icon-bar {
+  background-color: #525f79;
+}
+.navbar-brand {
+  height: auto;
+}
 @media (min-width: 768px) {
   .navbar-header {
     float: none;
@@ -4551,6 +4560,7 @@ h6 {
 .nav-login > li > a {
   text-align: center;
   background-color: #eaf3fe;
+  color: #525f79;
 }
 .nav-login > li > a:before {
   padding-right: 3px;
@@ -4580,18 +4590,18 @@ h6 {
     margin-bottom: 0;
   }
 }
-.search-box {
-  width: 100%;
-}
 .panel-home-page-search {
   background-color: transparent;
   border-radius: 0;
   border-color: #dddddd;
-  border: 10px solid rgba(242, 245, 241, 0.8);
+  border: 10px solid rgba(242, 245, 241, 0.75);
+}
+.panel-home-page-search .form-inline .form-control,
+.panel-home-page-search .form-inline .form-group {
+  display: inline-block;
 }
 @media (min-width: 768px) {
   .panel-home-page-search {
-    width: 400px;
     position: absolute;
     z-index: 20;
   }
@@ -4599,8 +4609,16 @@ h6 {
 @media (min-width: 992px) {
   .panel-home-page-search {
     left: 120px;
-    top: 40px;
+    top: 60px;
   }
+}
+.panel-home-page-search .form-inline .search-box {
+  display: block;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.panel-home-page-search .form-inline .search-control {
+  width: 100px;
 }
 .panel-home-page-search > .panel-heading {
   color: #8592ac;
@@ -4623,8 +4641,43 @@ h6 {
 .panel-home-page-search > .panel-body > h4 {
   margin-top: 0;
 }
-#myCarousel {
+#homepageCarousel {
   margin-bottom: 20px;
+}
+#homepageCarousel .carousel-control {
+  position: absolute;
+  top: 0;
+  left: 3%;
+  bottom: 0;
+  width: auto;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  font-size: 20px;
+  color: #ffffff;
+}
+#homepageCarousel .carousel-control.left {
+  background-image: none;
+}
+#homepageCarousel .carousel-control.right {
+  left: auto;
+  right: 3%;
+  background-image: none;
+}
+#homepageCarousel .carousel-caption {
+  background-color: rgba(242, 245, 241, 0.95);
+  color: #525f79;
+  text-align: left;
+  text-indent: 120px;
+}
+@media screen and (min-width: 768px) {
+  #homepageCarousel .carousel-caption {
+    left: 0;
+    right: 0;
+    padding: 0;
+  }
+  #homepageCarousel .carousel-indicators {
+    bottom: 20px;
+  }
 }
 .well {
   border-radius: 0;

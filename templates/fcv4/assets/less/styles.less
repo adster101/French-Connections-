@@ -90,6 +90,19 @@ h1, h2, h3, h4, h5, h6 {
   text-transform:uppercase;
 }
 
+.navbar-toggle {
+  border: 1px solid @gray-darker;
+  
+}
+
+
+.navbar-toggle .icon-bar {
+    background-color: @gray-darker;
+}
+
+.navbar-brand {
+  height:auto;
+}
 
 // Remove the default float left from navbar-header
 .navbar-header {
@@ -112,7 +125,8 @@ h1, h2, h3, h4, h5, h6 {
   >li {
     > a {
       text-align: center;
-      background-color:#eaf3fe;  
+      background-color:@blue-baby;  
+      color:@gray-darker;
     }
     > a:before {
       padding-right: 3px;
@@ -146,50 +160,114 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-// Home page search panel
-.search-field {
-
-}
-
-.search-box {
-  width:100%;
-}
-
 .panel-home-page-search {
-    @media (min-width: @screen-sm-min) { 
-    width:400px;
+
+  .form-inline .form-control, .form-inline .form-group {
+    display:inline-block;
+  } 
+  
+  @media (min-width: @screen-sm-min) { 
+    //width:460px;
     position:absolute;
     z-index:20;
   }
 
   @media (min-width: @screen-md-min) {
     left:120px;
-    top:40px;
+    top:60px;
+  }
+
+  .form-inline .search-box {
+    display:block;
+    margin-bottom:15px;
+    width:100%;
+  } 
+
+  .form-inline .search-control  {
+    width:100px;
   }
 
   background-color:transparent;
   border-radius:0;
   .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border);
    
-  border: 10px solid fade(#f2f5f1, 80%);
+  border: 10px solid fade(@taupe-lighter, 75%);
   
   > .panel-body {
-    background-color:fade(#f2f5f1, 95%);
+    background-color:fade(@taupe-lighter, 95%);
     > h4 {
       margin-top:0;
     }
   }   
 }
 
+// Homepage carousel
+
 // Add margin to bottom of carousel 
-#myCarousel {
+
+
+// Optional captions
+// -----------------------------
+// Hidden by default for smaller viewports
+#homepageCarousel {
+  
+  // Add a margin to the homepage carousel, needed.
   margin-bottom:20px;
+
+  // Left/right controls for nav
+  // ---------------------------
+  .carousel-control {
+    position: absolute;
+    top: 0;
+    left: 3%;
+    bottom: 0;
+    width: auto;
+    .opacity(@carousel-control-opacity);
+    font-size: @carousel-control-font-size;
+    color: @carousel-control-color;
+ 
+    // Remove default gradient backgrounds
+    &.left {
+      background-image:none;
+    }
+    &.right {
+      left: auto;
+      right: 3%;
+      background-image:none;
+    }
+  }
+
+  // Set the background colour for the homepage carousel
+  .carousel-caption {
+    background-color:fade(@taupe-lighter, 95%);  
+    color:@gray-darker;
+    text-align:left;
+    text-indent: 120px;
+  }
+
+  // Scale up controls for tablets and up
+  @media screen and (min-width: @screen-sm-min) {
+    // Show and left align the captions
+    .carousel-caption {
+      left: 0;
+      right: 0;
+      padding:0;
+    }
+    // Move up the indicators
+    .carousel-indicators {
+      bottom: 20px;
+    }
+  }
 }
+
 
 // Additional well styles 
 .well {
+  
+  // Remove the border radius 
   border-radius:0;
 
+  // Do these need top margins?
   > h1, h2, h3, h4, h5, h6 {
     margin-top:0;
   }

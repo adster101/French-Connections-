@@ -13,7 +13,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
 ?>
 
-<div class="row-fluid">
+<div class="row">
   <?php foreach ($items as $key => $item) : ?>
     <?php
     $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
@@ -31,7 +31,7 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
                 <?php echo htmlspecialchars($item->offer); ?>
               </span>
             <?php endif; ?>
-            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded" />
+            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail" />
           </a>
         </p>
         <p>

@@ -14,7 +14,7 @@ JHtml::_('behavior.caption');
 // If the page class is defined, add to class as suffix.
 // It will be a separate class if the user starts it with a space
 ?>
-<div class="blog-featured<?php echo $this->pageclass_sfx; ?>">
+<div class="blog-featured<?php echo $this->pageclass_sfx; ?> hidden-xs">
   <?php if ($this->params->get('show_page_heading') != 0) : ?>
     <div class="page-header">
       <h1>
@@ -24,12 +24,8 @@ JHtml::_('behavior.caption');
   <?php endif; ?>
   <?php $leadingcount = 0; ?>
   <?php if (!empty($this->lead_items)) : ?>
-    <div id="myCarousel" class="carousel slide"><!-- Carousel items -->
-      <ol class="carousel-indicators">
-        <?php for ($x = 0; $x < count($this->lead_items); $x++) : ?>
-          <li data-target="#myCarousel" data-slide-to="<?php echo $x ?>" class="<?php echo ($x == 0) ? 'active' : '' ?>"></li>
-        <?php endfor; ?>
-      </ol>
+    <div id="homepageCarousel" class="carousel slide" data-ride="carousel"><!-- Carousel items -->
+      
       <div class="carousel-inner">
         <?php foreach ($this->lead_items as &$item) : ?>
           <?php
@@ -40,8 +36,12 @@ JHtml::_('behavior.caption');
           ?>
         <?php endforeach; ?>
       </div>
-      <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-      <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+      <a class="left carousel-control" href="#homepageCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control" href="#homepageCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
     </div>
   <?php endif; ?>
 </div>
