@@ -32,32 +32,43 @@ $departure = '';
           <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
         </label>
         <input id="s_kwds" class="typeahead search-box form-control" type="text" name="s_kwds" autocomplete="Off" value="<?php echo $searchterm ?>" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>" />
+
         <div class="form-group">
           <label class="sr-only" for="arrival">
             <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
           </label>
-          <input type="date" name="arrival" id="arrival" size="30" value="<?php echo $arrival ?>" 
-                 class="start_date form-control search-control" autocomplete="Off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_ARRIVAL_DATE') ?>" />
+          <div class="input-group">
+            <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival ?>" 
+                   class="start_date form-control search-control-date" autocomplete="Off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_ARRIVAL_DATE') ?>" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          </div>
         </div>
         <div class="form-group">
           <label class="sr-only" for="departure">
             <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
-          </label>
-          <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure ?>" 
-                 class="end_date form-control search-control" autocomplete="off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DEPARTURE_DATE') ?>" />
+          </label>    
+          <span class="input-group">
+
+            <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure ?>" 
+                   class="end_date form-control search-control-date" autocomplete="off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DEPARTURE_DATE') ?>" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+          </span>
         </div>
         <div class="form-group">
           <label class="sr-only" for="occupancy">
             <?php echo JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') ?>
           </label>
-          <select id="occupancy" name="occupancy" class="form-control search-control">
+
+          <select id="occupancy" name="occupancy" class="form-control search-control-occupancy">
             <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_PEOPLE'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $occupancy); ?>
           </select>
         </div>
-        <button class="property-search-button btn btn-primary pull-right">
-          <i class="icon-search icon-white"> </i>
-          <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
-        </button>
+        
+            <button class="property-search-button btn btn-primary">
+              <i class="icon-search icon-white"> </i>
+              <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
+            </button>
+     
         <input type="hidden" name="option" value="com_fcsearch" />
       </form>
     </div>

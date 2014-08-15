@@ -32,11 +32,11 @@ $this->_script = array();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
-
   <?php $doc->addStyleSheet('media/fc/assets/css/styles.css'); ?>
+  <?php $doc->addScript('media/fc/assets/js/scripts.js', 'text/javascript', false, true); ?>
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>">
-  <header role="banner"> 
+  <header class="" role="banner"> 
 
     <div class="container"> 
       <?php if ($this->countModules('position-0')) : ?>
@@ -46,27 +46,18 @@ $this->_script = array();
       <?php endif; ?>
       <div class="navbar-header">
         <!-- Brand and toggle get grouped for better mobile display -->
-         <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
-          <img src="/images/general/logo-4.png" alt="' . $sitename . '" />
-        </a>      
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#fc-navbar-collapse-1">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".fc-navbar-collapse">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>   
         </button> 
-
+        <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
+          <img src="/images/general/logo-4.png" alt="' . $sitename . '" />
+        </a>  
       </div>
       <?php if ($this->countModules('position-1')) : ?>  
-        <nav class="collapse navbar navbar-default fc-navbar-collapse" role="navigation">
+        <nav class="collapse navbar navbar-collapse navbar-default fc-navbar-collapse" role="navigation">
           <jdoc:include type="modules" name="position-1" style="none" />
-          <?php if ($menu->getActive() != $menu->getDefault('en-GB')) : ?>
-            <form class="navbar-form navbar-right" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-              </div>
-              <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-          <?php endif; ?>
         </nav>
       <?php endif; ?>  
     </div>   
@@ -84,26 +75,25 @@ $this->_script = array();
   </main>  
   <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>
     <div class="row">
-      <div class="col-lg-9">
+      <div class="col-lg-9 col-md-8">
         <jdoc:include type="modules" name="position-12" style="none" />
         <hr />
         <div class="row">
-          <div class="col-lg-6">
+          <div class="col-lg-6 col-md-6">
             <jdoc:include type="modules" name="position-14" style="none" />
           </div>
-          <div class="col-lg-6">
+          <div class="col-lg-6 col-md-6">
             <jdoc:include type="modules" name="position-15" style="none" />
           </div>
         </div>
       </div>
-      <div class="col-lg-3">
+      <div class="col-lg-3 col-md-4">
         <jdoc:include type="modules" name="position-13" style="none" />
       </div>       
     </div>
   <?php endif; ?>
   <!-- End Content -->
 </div>
-
 <jdoc:include type="modules" name="debug" style="html5" />
 </body>
 </html>

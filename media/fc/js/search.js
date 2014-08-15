@@ -1,7 +1,6 @@
 var infowindow;
 
 jQuery(document).ready(function() {
-
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('shown', function(e) {
 

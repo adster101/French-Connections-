@@ -72,8 +72,8 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
       </ul>
     </div>
   </div>
-  <div class="row-fluid">
-    <div class="tab-content span9">
+  <div class="row">
+    <div class="tab-content col-lg-9 col-md-9">
       <div class="tab-pane active" id="list">
         <?php if (count($this->results) > 0) : ?>
           <div class="clearfix">
@@ -124,13 +124,11 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
         <div id="map_canvas"></div>
       </div>
       <div class="tab-pane" id="localinfo">
-        <div class="row-fluid">
           <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
           <?php echo $this->localinfo->description; ?>
-        </div>
       </div>
     </div>
-    <div class="span3">
+    <div class="col-lg-3 col-md-3">
       <?php
       JDEBUG ? $_PROFILER->mark('Start process refine') : null;
       echo $this->loadTemplate('refine');

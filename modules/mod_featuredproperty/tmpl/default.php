@@ -31,7 +31,7 @@ $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accomm
                 <?php echo htmlspecialchars($item->offer); ?>
               </span>
             <?php endif; ?>
-            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail" />
+            <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-responsive" />
           </a>
         </p>
         <p>

@@ -95,17 +95,18 @@ function modChrome_well($module, &$params, &$attribs) {
 
 	$headerTag      = htmlspecialchars($params->get('header_tag', 'h3'));
 	$bootstrapSize  = (int) $params->get('bootstrap_size', 0);
-	$moduleClass    = $bootstrapSize != 0 ? ' span' . $bootstrapSize : '';
+	$moduleClass    = $bootstrapSize != 0 ? 'span' . $bootstrapSize : '';
   $headerClass	= $params->get('header_class');
-  $moduleClass .= ($params->get('moduleclass_sfx')) ? '&nbsp;' . htmlspecialchars($params->get('moduleclass_sfx')) : ''; 
+  $moduleClass .= ($params->get('moduleclass_sfx')) ? ' ' . htmlspecialchars($params->get('moduleclass_sfx')) : ''; 
   
   if ($module->content) {
-    echo "<div class=\"well" . $moduleClass . "\">";
+    echo "<div class=\"well well-sm\">";
+    echo "<div class=\"" . $moduleClass . "\">";
     if ($module->showtitle) {
       echo '<' . $headerTag . ' class=' . htmlspecialchars($headerClass) . '>' . $module->title . '</' . $headerTag . '>';
     }
     echo $module->content;
-    echo "</div>";
+    echo "</div></div>";
   }
 }
 
