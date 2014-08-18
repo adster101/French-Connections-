@@ -15,7 +15,7 @@
 @import "../../../../bower_components/bootstrap/less/wells.less";
 
 
-// Components: Nav
+// Components
 @import "../../../../bower_components/bootstrap/less/navs.less";
 @import "../../../../bower_components/bootstrap/less/navbar.less";
 @import "../../../../bower_components/bootstrap/less/breadcrumbs.less";
@@ -23,6 +23,8 @@
 @import "../../../../bower_components/bootstrap/less/pager.less";
 @import "../../../../bower_components/bootstrap/less/carousel.less";
 @import "../../../../bower_components/bootstrap/less/component-animations.less";
+@import "../../../../bower_components/bootstrap/less/media.less";
+
 
 
 
@@ -205,8 +207,6 @@ h1, h2, h3, h4, h5, h6 {
     width:100%;
   } 
 
-
-
   background-color:transparent;
   border-radius:0;
   .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border);
@@ -222,6 +222,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 // Homepage featured property 
+
 .homepage-fp {
   h1.page-header {
     margin-top:0;
@@ -315,10 +316,23 @@ h1, h2, h3, h4, h5, h6 {
       left: 0;
       right: 0;
       padding:0;
+      text-indent:80px;
     }
     // Move up the indicators
     .carousel-indicators {
       bottom: 20px;
+    }
+  }
+
+  @media screen and (min-width: @screen-md-min) {
+    .carousel-caption {
+      text-indent:80px;
+    }
+  }
+
+  @media screen and (min-width: @screen-lg-min) {
+    .carousel-caption {
+      text-indent:120px;
     }
   }
 }
