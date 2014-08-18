@@ -61,8 +61,8 @@ $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), 
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 ?>
 
-<div class="page-header"> 
   <?php echo $this->loadTemplate('social'); ?>
+<div class="page-header"> 
 
   <h1 class="small-h1">
     <?php echo $this->document->title; ?>

@@ -10232,6 +10232,120 @@ return jQuery;
 }(jQuery);
 
 /* ========================================================================
+ * Bootstrap: popover.js v3.2.0
+ * http://getbootstrap.com/javascript/#popovers
+ * ========================================================================
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // POPOVER PUBLIC CLASS DEFINITION
+  // ===============================
+
+  var Popover = function (element, options) {
+    this.init('popover', element, options)
+  }
+
+  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
+
+  Popover.VERSION  = '3.2.0'
+
+  Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
+    placement: 'right',
+    trigger: 'click',
+    content: '',
+    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+  })
+
+
+  // NOTE: POPOVER EXTENDS tooltip.js
+  // ================================
+
+  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
+
+  Popover.prototype.constructor = Popover
+
+  Popover.prototype.getDefaults = function () {
+    return Popover.DEFAULTS
+  }
+
+  Popover.prototype.setContent = function () {
+    var $tip    = this.tip()
+    var title   = this.getTitle()
+    var content = this.getContent()
+
+    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
+    $tip.find('.popover-content').empty()[ // we use append for html objects to maintain js events
+      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
+    ](content)
+
+    $tip.removeClass('fade top bottom left right in')
+
+    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
+    // this manually by checking the contents.
+    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
+  }
+
+  Popover.prototype.hasContent = function () {
+    return this.getTitle() || this.getContent()
+  }
+
+  Popover.prototype.getContent = function () {
+    var $e = this.$element
+    var o  = this.options
+
+    return $e.attr('data-content')
+      || (typeof o.content == 'function' ?
+            o.content.call($e[0]) :
+            o.content)
+  }
+
+  Popover.prototype.arrow = function () {
+    return (this.$arrow = this.$arrow || this.tip().find('.arrow'))
+  }
+
+  Popover.prototype.tip = function () {
+    if (!this.$tip) this.$tip = $(this.options.template)
+    return this.$tip
+  }
+
+
+  // POPOVER PLUGIN DEFINITION
+  // =========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.popover')
+      var options = typeof option == 'object' && option
+
+      if (!data && option == 'destroy') return
+      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.popover
+
+  $.fn.popover             = Plugin
+  $.fn.popover.Constructor = Popover
+
+
+  // POPOVER NO CONFLICT
+  // ===================
+
+  $.fn.popover.noConflict = function () {
+    $.fn.popover = old
+    return this
+  }
+
+}(jQuery);
+
+/* ========================================================================
  * Bootstrap: modal.js v3.2.0
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
@@ -10509,120 +10623,6 @@ return jQuery;
     })
     Plugin.call($target, option, this)
   })
-
-}(jQuery);
-
-/* ========================================================================
- * Bootstrap: popover.js v3.2.0
- * http://getbootstrap.com/javascript/#popovers
- * ========================================================================
- * Copyright 2011-2014 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * ======================================================================== */
-
-
-+function ($) {
-  'use strict';
-
-  // POPOVER PUBLIC CLASS DEFINITION
-  // ===============================
-
-  var Popover = function (element, options) {
-    this.init('popover', element, options)
-  }
-
-  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
-
-  Popover.VERSION  = '3.2.0'
-
-  Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
-    placement: 'right',
-    trigger: 'click',
-    content: '',
-    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
-  })
-
-
-  // NOTE: POPOVER EXTENDS tooltip.js
-  // ================================
-
-  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
-
-  Popover.prototype.constructor = Popover
-
-  Popover.prototype.getDefaults = function () {
-    return Popover.DEFAULTS
-  }
-
-  Popover.prototype.setContent = function () {
-    var $tip    = this.tip()
-    var title   = this.getTitle()
-    var content = this.getContent()
-
-    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
-    $tip.find('.popover-content').empty()[ // we use append for html objects to maintain js events
-      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
-    ](content)
-
-    $tip.removeClass('fade top bottom left right in')
-
-    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
-    // this manually by checking the contents.
-    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
-  }
-
-  Popover.prototype.hasContent = function () {
-    return this.getTitle() || this.getContent()
-  }
-
-  Popover.prototype.getContent = function () {
-    var $e = this.$element
-    var o  = this.options
-
-    return $e.attr('data-content')
-      || (typeof o.content == 'function' ?
-            o.content.call($e[0]) :
-            o.content)
-  }
-
-  Popover.prototype.arrow = function () {
-    return (this.$arrow = this.$arrow || this.tip().find('.arrow'))
-  }
-
-  Popover.prototype.tip = function () {
-    if (!this.$tip) this.$tip = $(this.options.template)
-    return this.$tip
-  }
-
-
-  // POPOVER PLUGIN DEFINITION
-  // =========================
-
-  function Plugin(option) {
-    return this.each(function () {
-      var $this   = $(this)
-      var data    = $this.data('bs.popover')
-      var options = typeof option == 'object' && option
-
-      if (!data && option == 'destroy') return
-      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
-      if (typeof option == 'string') data[option]()
-    })
-  }
-
-  var old = $.fn.popover
-
-  $.fn.popover             = Plugin
-  $.fn.popover.Constructor = Popover
-
-
-  // POPOVER NO CONFLICT
-  // ===================
-
-  $.fn.popover.noConflict = function () {
-    $.fn.popover = old
-    return this
-  }
 
 }(jQuery);
 
@@ -14324,7 +14324,9 @@ jQuery(document).ready(function() {
     }).click(function(event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      popover = jQuery(this).data('popover'); // Get the popover data attributes
+      console.log(jQuery(this).data());
+      popover = jQuery(this).data('bs.popover'); // Get the popover data attributes
+      popover.options.html = true; // Update the content by calling getContent
       popover.options.content = getContent(this); // Update the content by calling getContent
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
@@ -14352,18 +14354,18 @@ jQuery(document).ready(function() {
         favourite.data(dataObj);
 
         if (dataObj.action == 'remove') {
-          el.addClass('icon-checkbox');
-          el.removeClass('icon-checkbox-unchecked');
+          el.addClass('glyphicon-ok');
+          el.removeClass('glyphicon-remove');
         } else {
-          el.addClass('icon-checkbox-unchecked');
-          el.removeClass('icon-checkbox');
+          el.addClass('glyphicon-remove');
+          el.removeClass('glyphicon-ok');
         } // If action is remove then add icon-checkbox else remove it
         (dataObj.action == 'remove') ? favourite.toggleClass('muted', false) : favourite.toggleClass('muted', true); // If action is remove then add icon-checkbox else remove it
         favourite.attr('data-action', dataObj.action);
 
       } else {
         jQuery('.shortlist').addClass('muted');
-        el.removeClass('icon-checkbox icon-checkbox-unchecked').html('<p>Session expired.<br /> Please login.</p>');
+        el.removeClass('glyphicon-ok glyphicon-remove').html('<p>Session expired.<br /> Please login.</p>');
       }
     })
   });
@@ -14498,9 +14500,6 @@ jQuery(document).ready(function() {
   jQuery('.nav-tabs a').on('shown', function(e) {
     window.location.hash = e.target.hash.replace("#", "#" + prefix);
   })
-
-
-
 });
 
 var infowindow;
@@ -14567,10 +14566,10 @@ var getContent = function(that) {
   action = jQuery(that).data('action');
 
   if (action == 'remove') {
-    return "<span class=\'click icon icon-checkbox\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+    return "<span class='click glyphicon glyphicon-remove'> Shortlist</span><hr /><a href='/shortlist'>View shortlist</a>";
 
   }
-  return "<span class=\'click icon icon-checkbox-unchecked\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+  return "<span class='click glyphicon glyphicon-ok'> Shortlist</span><hr /><a href='/shortlist'>View shortlist</a>";
 
 
 }
@@ -14648,6 +14647,7 @@ Joomla.submitbutton = function(task)
 {
   if (task == '')
   {
+    alert("woot");
     return false;
   }
   else

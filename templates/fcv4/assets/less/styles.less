@@ -26,11 +26,11 @@
 @import "../../../../bower_components/bootstrap/less/component-animations.less";
 @import "../../../../bower_components/bootstrap/less/component-animations.less";
 @import "../../../../bower_components/bootstrap/less/modals.less";
+@import "../../../../bower_components/bootstrap/less/popovers.less";
+
 
 // FC Specific, 3rd party plugins etc
 @import "flexslider.less";
-
-
 
 
 // Utilities
@@ -68,13 +68,6 @@
        url('@{icon-font-path}@{fc-font-social}.svg#@{icon-font-svg-id}') format('svg');
 }
 /* Use the following CSS code if you want to have a class per icon */
-
-[class^="icon-"]:before, [class*=" icon-"]:before {
-	font-family: 'IcoMoon' , 'Social';
-	font-style: normal;
-	speak: none;
-}
-
 .icon-xxlarge {
   font-size: @font-size-xxlarge;
   padding-right:30px;
@@ -86,15 +79,21 @@
 
 
 .icon-google-plus:before {
+	font-family: 'Social';
+
 	content: "\e600";
   color:#dd4b39 ;
 }
 
 .icon-facebook:before {
+	font-family: 'Social';
+
 	content: "\e601";
   color:#647cb7
 }
 .icon-twitter:before {
+	font-family: 'Social';
+
 	content: "\e602";
   color:#55acee
 }

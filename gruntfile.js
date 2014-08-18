@@ -21,7 +21,7 @@ module.exports = function(grunt) {
     less: {
       development: {
         options: {
-          compress: true //minifying the result
+          compress: false //minifying the result
         },
         files: {
           //compiling frontend.less into frontend.css
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
         src: 'media/fc/assets/js/scripts.js',
         dest: 'media/fc/assets/js/scripts.min.js',
         options: {
-          mangle:true
+          mangle:false
         }
       }
     },

@@ -46,7 +46,9 @@ jQuery(document).ready(function() {
     }).click(function(event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      popover = jQuery(this).data('popover'); // Get the popover data attributes
+      console.log(jQuery(this).data());
+      popover = jQuery(this).data('bs.popover'); // Get the popover data attributes
+      popover.options.html = true; // Update the content by calling getContent
       popover.options.content = getContent(this); // Update the content by calling getContent
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
@@ -74,18 +76,18 @@ jQuery(document).ready(function() {
         favourite.data(dataObj);
 
         if (dataObj.action == 'remove') {
-          el.addClass('icon-checkbox');
-          el.removeClass('icon-checkbox-unchecked');
+          el.addClass('glyphicon-ok');
+          el.removeClass('glyphicon-remove');
         } else {
-          el.addClass('icon-checkbox-unchecked');
-          el.removeClass('icon-checkbox');
+          el.addClass('glyphicon-remove');
+          el.removeClass('glyphicon-ok');
         } // If action is remove then add icon-checkbox else remove it
         (dataObj.action == 'remove') ? favourite.toggleClass('muted', false) : favourite.toggleClass('muted', true); // If action is remove then add icon-checkbox else remove it
         favourite.attr('data-action', dataObj.action);
 
       } else {
         jQuery('.shortlist').addClass('muted');
-        el.removeClass('icon-checkbox icon-checkbox-unchecked').html('<p>Session expired.<br /> Please login.</p>');
+        el.removeClass('glyphicon-ok glyphicon-remove').html('<p>Session expired.<br /> Please login.</p>');
       }
     })
   });
@@ -220,9 +222,6 @@ jQuery(document).ready(function() {
   jQuery('.nav-tabs a').on('shown', function(e) {
     window.location.hash = e.target.hash.replace("#", "#" + prefix);
   })
-
-
-
 });
 
 var infowindow;
@@ -289,10 +288,10 @@ var getContent = function(that) {
   action = jQuery(that).data('action');
 
   if (action == 'remove') {
-    return "<span class=\'click icon icon-checkbox\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+    return "<span class='click glyphicon glyphicon-remove'> Shortlist</span><hr /><a href='/shortlist'>View shortlist</a>";
 
   }
-  return "<span class=\'click icon icon-checkbox-unchecked\'>&nbsp;Shortlist</span><hr /><a href=\'/shortlist\'>View shortlist</a>";
+  return "<span class='click glyphicon glyphicon-ok'> Shortlist</span><hr /><a href='/shortlist'>View shortlist</a>";
 
 
 }
@@ -370,6 +369,7 @@ Joomla.submitbutton = function(task)
 {
   if (task == '')
   {
+    alert("woot");
     return false;
   }
   else
