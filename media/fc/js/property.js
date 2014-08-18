@@ -3,37 +3,11 @@ jQuery(window).load(function() {
   // Load the google maps crap
   loadGoogleMaps('initPropertyMap');
   
-  // Load the twitter crap
-  !function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (!d.getElementById(id)) {
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "https://platform.twitter.com/widgets.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }
-  }
-
-  // Load the Facebook crap
-  (document, "script", "twitter-wjs");
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id))
-      return;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-// Done loading crap
-  
 })
 
 jQuery(document).ready(function() {
 
-  jQuery('#recaptcha_widget a').tooltip();
-
+  //jQuery('#recaptcha_widget a').tooltip()
   // The slider being synced must be initialized first
   jQuery('#carousel').flexslider({
     animation: "slide",

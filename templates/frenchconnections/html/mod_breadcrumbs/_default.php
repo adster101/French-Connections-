@@ -50,11 +50,6 @@ defined('_JEXEC') or die;
 			echo '<span>' . $item->name . '</span>';
 		}
 
-		if (($key != $penult_item_key) || $show_last)
-		{
-			echo '<span class="divider">' . $separator . '</span>';
-		}
-
 		echo '</li>';
 	}
 	elseif ($show_last)

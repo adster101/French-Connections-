@@ -65,7 +65,7 @@
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          14px;
-@font-size-xxlarge:        ceil((@font-size-base * 1.75)); // ~18px
+@font-size-xxlarge:       ceil((@font-size-base * 1.75)); // ~18px
 @font-size-xlarge:        ceil((@font-size-base * 1.50)); // ~18px
 @font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
@@ -788,13 +788,13 @@
 @breadcrumb-padding-vertical:   8px;
 @breadcrumb-padding-horizontal: 15px;
 //** Breadcrumb background color
-@breadcrumb-bg:                 #f5f5f5;
+@breadcrumb-bg:                 transparent;
 //** Breadcrumb text color
 @breadcrumb-color:              #ccc;
 //** Text color of current page in the breadcrumb
 @breadcrumb-active-color:       @gray-light;
 //** Textual separator for between breadcrumb elements
-@breadcrumb-separator:          "/";
+@breadcrumb-separator:          "\00a0/";
 
 
 //== Carousel

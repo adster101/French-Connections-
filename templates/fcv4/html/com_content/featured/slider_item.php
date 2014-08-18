@@ -11,10 +11,8 @@ defined('_JEXEC') or die;
 // Create a shortcut for params.
 $params = &$this->item->params;
 $images = json_decode($this->item->images);
-
 $canEdit = $this->item->params->get('access-edit');
 $info = $this->item->params->get('info_block_position', 0);
-
 ?>
 
 <div class="item <?php echo ($this->item_number == 0) ? 'active' : '' ?>">

@@ -11,9 +11,10 @@ $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation')
 $this->item->itemid = $Itemid;
 
 $input = JFactory::getApplication()->input;
-$preview = $input->get('preview','','int');
+$preview = $input->get('preview', '', 'int');
 $append = '';
-if ((int) $preview && $preview == 1) {
+if ((int) $preview && $preview == 1)
+{
   $append = '&preview=1';
 }
 
@@ -83,8 +84,8 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 <?php if (count($this->units) > 1) : ?>
   <?php echo $this->loadTemplate('units'); ?>
 <?php endif; ?>
-<div class="row-fluid">
-  <div class="span7">
+<div class="row">
+  <div class="col-lg-7 col-md-7 col-sm-12">
     <!-- Image gallery -->
     <!-- Needs go into a separate template -->
     <div id="main" role="main">
@@ -149,7 +150,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php endif; ?>
     </div>
   </div>
-  <div class="span5 key-facts">
+  <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
     <div class="well">
       <?php if ($this->tariffs) : ?> 
         <?php if (min($price_range) == max($price_range)) : ?>
@@ -262,12 +263,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
 
 
-<div class="row-fluid" id="about">
+<div class="row" id="about">
   <?php $this->item->navigator = 'about'; ?>
   <?php echo $navigator->render($this->item); ?>
 </div>
-<div class="row-fluid">
-  <div class="span8" >
+<div class="row">
+  <div class="col-lg-7 col-md-7 col-sm-7" >
     <?php if ($this->item->unit_title) : ?>
       <h2><?php echo $this->escape($this->item->unit_title) ?>
         <?php //echo JText::sprintf('HOLIDAY_ACCOMMODATION_AT', $this->item->accommodation_type, $this->item->unit_title)  ?></h2>  
@@ -276,7 +277,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->item->description; ?>
     <?php endif; ?>
   </div>
-  <div class="span4">
+  <div class="col-lg-5 col-md-5 col-sm-5">
     <?php
     jimport('joomla.application.module.helper');
     $modules = JModuleHelper::getModule('mod_OpenX_spc', 'MPU-LISTING');
@@ -286,12 +287,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </div>
 </div>
 <?php if (!empty($this->item->location_details)) : ?>
-  <div class="row-fluid" id="location">
+  <div class="row" id="location">
     <?php $this->item->navigator = 'location'; ?>
     <?php echo $navigator->render($this->item); ?>
   </div>
-  <div class="row-fluid">
-    <div class="span8">
+  <div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-7">
       <?php if ($this->item->unit_title) : ?>
         <h3><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h3>  
       <?php endif; ?>
@@ -306,7 +307,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-    <div class="span4">   
+    <div class="col-lg-5 col-md-5 col-sm-5">   
       <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
       <p class="key text-right">
         <span>
@@ -321,12 +322,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
 <?php if (!empty($this->item->getting_there)) : ?>
 
-  <div class="row-fluid" id="gettingthere">
+  <div class="row" id="gettingthere">
     <?php $this->item->navigator = 'gettingthere'; ?>
     <?php echo $navigator->render($this->item); ?>
   </div>
-  <div class="row-fluid">
-    <div class="span8">
+  <div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-7">
       <?php if ($this->item->unit_title) : ?>
         <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h3>  
       <?php endif; ?>
@@ -344,7 +345,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
       </p>
     </div>
-    <div class="span4"> 
+    <div class="col-lg-5 col-md-5 col-sm-5"> 
 
     </div>
   </div>
@@ -353,12 +354,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
 <?php if ($this->reviews) : ?>
 
-  <div class="row-fluid" id="reviews">
+  <div class="row" id="reviews">
     <?php $this->item->navigator = 'reviews'; ?>
     <?php echo $navigator->render($this->item); ?>
   </div>
-  <div class="row-fluid">
-    <div class="span8">
+  <div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-7">
       <?php if ($this->item->unit_title) : ?>
         <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->unit_title)) ?></h3> 
       <?php endif; ?>
@@ -379,16 +380,16 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       </div>
 
     </div>
-    <div class="span4"></div>
+    <div class="col-lg-5 col-md-5 col-sm-5"></div>
   </div>
 <?php endif; ?>
 
-<div class="row-fluid" id="facilities">
+<div class="row" id="facilities">
   <?php $this->item->navigator = 'facilities'; ?>
   <?php echo $navigator->render($this->item); ?>
 </div>
-<div class="row-fluid">
-  <div class="span8">
+<div class="row">
+  <div class="col-lg-7 col-md-7 col-sm-7">
     <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h3> 
     <?php endif; ?>
@@ -437,60 +438,60 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
             ?>
           </td>        
         </tr>
-<?php } ?>
+      <?php } ?>
 
       <!-- Occupancy -->
-<?php if ($this->item->occupancy) : ?>
+      <?php if ($this->item->occupancy) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY') ?></td>
           <td><?php echo $this->item->occupancy; ?></td>        
         </tr>
-<?php endif; ?>
+      <?php endif; ?>
 
       <!-- Suitability -->
-<?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
+      <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY') ?></td>
           <td><?php echo implode(', ', $this->unit_facilities['Suitability']) ?></td>         
         </tr>
-<?php endif; ?>
+      <?php endif; ?>
 
       <!-- Linen costs -->
-<?php if ($this->item->linen_costs) : ?>
+      <?php if ($this->item->linen_costs) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
           <td><?php echo $this->item->linen_costs; ?></td>        
         </tr>
       <?php endif; ?>       
-<?php if (array_key_exists('Kitchen features', $this->unit_facilities)) : ?>
+      <?php if (array_key_exists('Kitchen features', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
           <td><?php echo implode(', ', $this->unit_facilities['Kitchen features']) ?></td>         
         </tr>      
       <?php endif; ?>   
-<?php if (array_key_exists('Property Facilities', $this->unit_facilities)) : ?>
+      <?php if (array_key_exists('Property Facilities', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
           <td><?php echo implode(', ', $this->unit_facilities['Property Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>    
 
-<?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?>
+      <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
           <td><?php echo implode(', ', $this->unit_facilities['External Facilities']) ?></td>         
         </tr>      
       <?php endif; ?>   
-<?php if (array_key_exists('Activities nearby', $this->property_facilities)) : ?>
+      <?php if (array_key_exists('Activities nearby', $this->property_facilities)) : ?>
         <tr>
           <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_ACTIVITIES_NEARBY') ?></td>
           <td><?php echo implode(', ', $this->property_facilities['Activities nearby']) ?></td>         
         </tr>      
-<?php endif; ?> 
+      <?php endif; ?> 
 
     </table>
   </div>
-  <div class="span4">
+  <div class="col-lg-5 col-md-5 col-sm-5">
   </div>
 </div>
 
@@ -498,28 +499,28 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
 
 
-<div class="row-fluid" id="availability">  
+<div class="row" id="availability">  
   <?php $this->item->navigator = 'availability'; ?>
-<?php echo $navigator->render($this->item); ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
-<div clas="row-fluid">
-  <div class="span8">
+<div clas="row">
+  <div class="col-lg-7 col-md-7 col-sm-7">
     <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h3> 
     <?php endif; ?>
-<?php if ($this->item->changeover_day) : ?>
+    <?php if ($this->item->changeover_day) : ?>
       <p>
         <strong>
-        <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY') ?>
+          <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY') ?>
         </strong>
-      <?php echo htmlspecialchars($this->item->changeover_day) ?>
+        <?php echo htmlspecialchars($this->item->changeover_day) ?>
       </p>
-      <?php endif; ?>   
+    <?php endif; ?>   
     <p>
-<?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
+      <?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
     </p>
   </div>
-  <div class="span4">
+  <div class="col-lg-5 col-md-5 col-sm-5">
     <table class="key">
       <tr>
         <td class="available"></td>
@@ -531,22 +532,22 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
     </table>    
   </div>
 </div>
-<div class="row-fluid">
+<div class="row">
   <div class="span12">
     <?php if ($this->availability) : ?>
       <?php echo $this->availability; ?>
-<?php endif; ?>
+    <?php endif; ?>
   </div>
 </div>
 
 
 
-<div class="row-fluid" id="tariffs">
+<div class="row" id="tariffs">
   <?php $this->item->navigator = 'tariffs'; ?>
-<?php echo $navigator->render($this->item); ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
-<div class="row-fluid">
-  <div class="span8">
+<div class="row">
+  <div class="col-lg-7 col-md-7 col-sm-7">
     <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h3> 
     <?php endif; ?>    
@@ -554,54 +555,54 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php echo $this->loadTemplate('tariffs'); ?>
     <?php else: ?>
       <p>No tariffs were found for this property. Please enquire with the owner for rental rates for this property</p>
-<?php endif; ?>
+    <?php endif; ?>
   </div>
-  <div class="span4">  
+  <div class="col-lg-5 col-md-5 col-sm-5">  
     <?php if ($this->item->additional_price_notes) : ?>
       <h3><?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?></h3>
       <?php echo $this->item->additional_price_notes ?>
-<?php endif; ?>
+    <?php endif; ?>
   </div>  
 
 </div>
 
-<div class="row-fluid" id="email">
+<div class="row" id="email">
   <?php $this->item->navigator = 'email'; ?>
-<?php echo $navigator->render($this->item); ?>
+  <?php echo $navigator->render($this->item); ?>
 </div>
-<div class="row-fluid">
+<div class="row">
   <div class="span12">
     <?php if ($this->item->unit_title) : ?>
       <h3><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->unit_title)) ?></h3> 
-<?php endif; ?>
+    <?php endif; ?>
   </div>
 </div>
-<div class="row-fluid">
-  <div class="span8">
-<?php echo $this->loadTemplate('form'); ?>
+<div class="row">
+  <div class="col-lg-7 col-md-7 col-sm-7">
+    <?php echo $this->loadTemplate('form'); ?>
   </div>
-  <div class="span4">
+  <div class="col-lg-5 col-md-5 col-sm-5">
     <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4> 
     <p>
-<?php echo $this->escape($this->item->firstname); ?>&nbsp;<?php echo $this->escape($this->item->surname); ?><br />
+      <?php echo $this->escape($this->item->firstname); ?>&nbsp;<?php echo $this->escape($this->item->surname); ?><br />
       <span class="small">(<?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ADVERTISING_SINCE', $this->item->advertising_since)); ?>)</span>
     </p>
 
     <p>
       <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL'); ?>
-<?php echo $this->item->phone_1; ?>
+      <?php echo $this->item->phone_1; ?>
     </p>
 
-      <?php if ($this->item->phone_2) : ?>
+    <?php if ($this->item->phone_2) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
-      <?php echo $this->item->phone_2; ?>
+        <?php echo $this->item->phone_2; ?>
       </p>
     <?php endif; ?>
-      <?php if ($this->item->phone_3) : ?>
+    <?php if ($this->item->phone_3) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
-      <?php echo $this->item->phone_3; ?>
+        <?php echo $this->item->phone_3; ?>
       </p>
     <?php endif; ?>  
     <?php if (count($langs_array) > 0) : ?>
@@ -612,17 +613,17 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <p><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_VIEW', $link); ?></p>
     <?php endif; ?>
 
-      <?php if ($this->item->website) : ?>
+    <?php if ($this->item->website) : ?>
       <p>
-          <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
+        <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
         <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
-  <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
+          <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
         </a>
       </p>
-<?php endif; ?>
+    <?php endif; ?>
     <hr />
     <p>
-<?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
+      <?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
     </p>
   </div>
 

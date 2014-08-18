@@ -37,10 +37,14 @@ module.exports = function(grunt) {
         'bower_components/bootstrap/js/tab.js', 
         'bower_components/bootstrap/js/transition.js', 
         'bower_components/bootstrap/js/collapse.js', 
-        'bower_components/bootstrap/js/tooltip.js', 
+        'bower_components/bootstrap/js/tooltip.js',   
+        'bower_components/bootstrap/js/popover.js', 
+
         'bower_components/bootstrap/js/modal.js', 
         'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', 
+        'media/system/js/core-uncompressed.js', 
         'media/fc/js/libs/bootstrap3-typeahead.js', 
+        'media/fc/js/libs/jquery.flexslider.js', 
         'media/fc/js/general.js', 
         'media/fc/js/search.js', 
         'media/fc/js/property.js' 
@@ -91,5 +95,5 @@ module.exports = function(grunt) {
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
   grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy']);
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['init']);
 };

@@ -64,13 +64,16 @@ $this->_script = array();
   </header>  
   <div class="container">
     <!-- Begin Content -->
-    <jdoc:include type="message" /> 
     <?php if ($this->countModules('position-11')) : ?>
       <jdoc:include type="modules" name="position-11" style="no" />
     <?php endif; ?>
     <div class="row">
       <main id="content" role="main">
-    </div>
+    </div> 
+    <jdoc:include type="modules" name="position-3" style="xhtml" />
+
+    <jdoc:include type="message" /> 
+
     <jdoc:include type="component" />
   </main>  
   <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>

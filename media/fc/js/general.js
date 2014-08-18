@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
 
     // TO DO - add the property clicked on to the shortlist in the background...
     jQuery('#myModal').modal({
-      remote: '/my-account?tmpl=component&layout=modal&return=' + url
+      remote: '/my-account?tmpl=nohead&layout=modal&return=' + url
     }).on('hidden', function() {
 
     });
