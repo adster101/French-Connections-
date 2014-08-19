@@ -6,18 +6,17 @@ module.exports = function(grunt) {
     copy: {
       main: {
         files: [
-        // includes files within path
-        {
-          expand: true, 
-          src: ['bower_components/bootstrap/fonts/*', 'templates/fcv4/assets/fonts/*'], 
-          dest: 'media/fc/assets/fonts/',
-          flatten: true
-        }
+          // includes files within path
+          {
+            expand: true,
+            src: ['bower_components/bootstrap/fonts/*', 'templates/fcv4/assets/fonts/*'],
+            dest: 'media/fc/assets/fonts/',
+            flatten: true
+          }
 
         ]
       }
     },
-
     less: {
       development: {
         options: {
@@ -32,22 +31,23 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-        'bower_components/jquery/dist/jquery.js', 
-        'bower_components/bootstrap/js/carousel.js', 
-        'bower_components/bootstrap/js/tab.js', 
-        'bower_components/bootstrap/js/transition.js', 
-        'bower_components/bootstrap/js/collapse.js', 
-        'bower_components/bootstrap/js/tooltip.js',   
-        'bower_components/bootstrap/js/popover.js', 
-
-        'bower_components/bootstrap/js/modal.js', 
-        'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js', 
-        'media/system/js/core-uncompressed.js', 
-        'media/fc/js/libs/bootstrap3-typeahead.js', 
-        'media/fc/js/libs/jquery.flexslider.js', 
-        'media/fc/js/general.js', 
-        'media/fc/js/search.js', 
-        'media/fc/js/property.js' 
+          'bower_components/jquery/dist/jquery.js',
+          'bower_components/bootstrap/js/carousel.js',
+          'bower_components/bootstrap/js/tab.js',
+          'bower_components/bootstrap/js/transition.js',
+          'bower_components/bootstrap/js/collapse.js',
+          'bower_components/bootstrap/js/tooltip.js',
+          'media/fc/js/libs/bootstrap3-typeahead.js',
+          'bower_components/bootstrap/js/popover.js',
+          'bower_components/bootstrap/js/affix.js',
+          'bower_components/bootstrap/js/scrollspy.js',
+          'bower_components/bootstrap/js/modal.js',
+          'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
+          'media/system/js/core-uncompressed.js',
+          'media/fc/js/libs/jquery.flexslider.js',
+          'media/fc/js/general.js',
+          'media/fc/js/search.js',
+          'media/fc/js/property.js'
         ],
         dest: 'media/fc/assets/js/scripts.js'
       }
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
         src: 'media/fc/assets/js/scripts.js',
         dest: 'media/fc/assets/js/scripts.min.js',
         options: {
-          mangle:false
+          mangle: false
         }
       }
     },
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
         options: {
           livereload: true                        //reloads the browser
         }
-      }, 
+      },
       site: {
         files: ['templates/fcv4/*.php'],
         options: {

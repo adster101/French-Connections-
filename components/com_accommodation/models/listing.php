@@ -324,10 +324,13 @@ class AccommodationModelListing extends JModelForm
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
       }
 
-      try {
+      try
+      {
 
         $this->item = $this->_db->setQuery($query)->loadObject();
-      } catch (Exception $e) {
+      }
+      catch (Exception $e)
+      {
         // Runtime exception
         // Different to a null result.
         // TO DO - Log me baby
@@ -427,7 +430,8 @@ class AccommodationModelListing extends JModelForm
 
 
 
-    try {
+    try
+    {
 
       // Get the state for this property ID
       $unit_id = $this->getState('unit.id');
@@ -485,7 +489,9 @@ class AccommodationModelListing extends JModelForm
 
 
       return $this->facilities;
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       // Log the exception and return false
       JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
@@ -502,7 +508,8 @@ class AccommodationModelListing extends JModelForm
     if (!isset($this->units))
     {
 
-      try {
+      try
+      {
         // Get the state for this property ID
         $id = $this->getState('property.id');
 
@@ -529,18 +536,15 @@ class AccommodationModelListing extends JModelForm
         $query->where('a.property_id = ' . (int) $id);
         //$query->where('a.published = 1');
         $query->order('ordering');
-        if (!$this->preview)
-        {
-          $query->where('a.published = 1');
-        }
-        else
-        {
-          $query->where('a.published in (0,1)');
-        }
+
+        $query->where('a.published = 1');
+
         return $this->_db->setQuery($query)->loadObjectList();
 
         return $this->units;
-      } catch (Exception $e) {
+      }
+      catch (Exception $e)
+      {
         // Log the exception and return false
         JLog::add('Problem fetching units for - ' . $id . $e->getMessage(), JLOG::ERROR, 'units');
         return false;
@@ -600,7 +604,8 @@ class AccommodationModelListing extends JModelForm
     {
       $unit_id = $this->getState('unit.id');
 
-      try {
+      try
+      {
         // Get the state for this property ID
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
@@ -627,7 +632,9 @@ class AccommodationModelListing extends JModelForm
 
         // Return the reviews, if any
         return $this->reviews;
-      } catch (Exception $e) {
+      }
+      catch (Exception $e)
+      {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $unit_id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
@@ -707,7 +714,8 @@ class AccommodationModelListing extends JModelForm
     if (!isset($this->offer))
     {
 
-      try {
+      try
+      {
         // Get the state for this property ID
         $id = (!empty($id)) ? $id : (int) $this->getState('unit.id', '');
 
@@ -727,7 +735,9 @@ class AccommodationModelListing extends JModelForm
         // Return the offer, if any
 
         return $this->offer;
-      } catch (Exception $e) {
+      }
+      catch (Exception $e)
+      {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
@@ -781,11 +791,11 @@ class AccommodationModelListing extends JModelForm
 
     $query->where('a.id = ' . (int) $unit_id);
 
-    $query->order('d.ordering','asc');
+    $query->order('d.ordering', 'asc');
     $db->setQuery($query);
 
     $images = $db->loadObjectList();
-    
+
 
 
 
@@ -814,9 +824,12 @@ class AccommodationModelListing extends JModelForm
     $table = JTable::getInstance('Classification', 'ClassificationTable');
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
 
-    try {
+    try
+    {
       $path = $table->getPath($pk = $this->item->city_id);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
 
       // Log the exception here...
       return false;
@@ -873,9 +886,12 @@ class AccommodationModelListing extends JModelForm
 
       $db->setQuery($query);
 
-      try {
+      try
+      {
         $db->execute();
-      } catch (RuntimeException $e) {
+      }
+      catch (RuntimeException $e)
+      {
         $this->setError($e->getMessage());
         return false;
       }
@@ -1056,7 +1072,6 @@ class AccommodationModelListing extends JModelForm
         // If minutes less than 240 
         // Schedule for tomorrow at eight
         // Else schedule for today at eight
-        
         // Set default timezone so we can work out the correct time now
         date_default_timezone_set("Europe/London");
 
@@ -1140,10 +1155,13 @@ class AccommodationModelListing extends JModelForm
 
     $this->_db->setQuery($query);
 
-    try {
+    try
+    {
 
       $row = $this->_db->loadObject();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       
     }
 

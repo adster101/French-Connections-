@@ -1,0 +1,51 @@
+//
+// Speech bubbles
+// -----------------------------
+
+.skewX(@deg: -15deg) {
+        -webkit-transform:skewX(@deg);
+       -moz-transform:skewX(@deg);
+        -ms-transform:skewX(@deg);
+         -o-transform:skewX(@deg);
+            transform:skewX(@deg);
+}
+
+.quote(@speechBubbleBackground: #fff, @padding: 25px, @bubblePointHeight: 20px, @bubblePointPadding: 0px, @bubblePointAngle: -35deg, @borderColour: @blue-baby)
+{
+  font-size:@font-size-base;
+  position:relative;
+  border: 1px solid darken(@borderColour, 25%);
+  padding: @padding;
+  border-radius: @border-radius-base;
+  background: @speechBubbleBackground;
+  margin-bottom: @bubblePointHeight + @bubblePointPadding;
+
+  p {    
+      font-size: @font-size-base;
+  }
+
+  &:before {
+    content:"";
+    position:absolute;
+    bottom:-20px;
+    left:25px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: darken(@borderColour, 25%) transparent transparent darken(@borderColour, 25%);  
+  }
+
+  &:after {
+    content:"";
+    position: absolute;
+    bottom: -18px;
+    left: 26px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: @white transparent transparent @white;
+  }
+}
+
+cite:before {
+  content: '\2014 \00A0';
+}
+

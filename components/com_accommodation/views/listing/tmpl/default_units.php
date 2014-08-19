@@ -12,7 +12,7 @@ if ((int) $preview && $preview == 1) {
 
 ?>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" style="margin-bottom:20px">
   <?php foreach ($this->units as $unit) { ?>
     <li <?php
   if ($this->item->unit_id == $unit->id) {

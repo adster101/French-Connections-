@@ -35,10 +35,10 @@ $this->_script = array();
   <?php $doc->addStyleSheet('media/fc/assets/css/styles.css'); ?>
   <?php $doc->addScript('media/fc/assets/js/scripts.js', 'text/javascript', false, true); ?>
 </head>
-<body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>">
-  <header class="" role="banner"> 
+<body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
+  <div class="container"> 
+    <header class="" role="banner"> 
 
-    <div class="container"> 
       <?php if ($this->countModules('position-0')) : ?>
         <div class="banner-container">
           <jdoc:include type="modules" name="position-0" style="none" />
@@ -60,22 +60,23 @@ $this->_script = array();
           <jdoc:include type="modules" name="position-1" style="none" />
         </nav>
       <?php endif; ?>  
-    </div>   
-  </header>  
-  <div class="container">
+    </header>  
     <!-- Begin Content -->
     <?php if ($this->countModules('position-11')) : ?>
       <jdoc:include type="modules" name="position-11" style="no" />
     <?php endif; ?>
-    <div class="row">
-      <main id="content" role="main">
-    </div> 
+
+
     <jdoc:include type="modules" name="position-3" style="xhtml" />
+  </div>   
 
-    <jdoc:include type="message" /> 
+<jdoc:include type="message" /> 
 
-    <jdoc:include type="component" />
-  </main>  
+<jdoc:include type="component" />
+
+
+<div class="container">
+
   <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>
     <div class="row">
       <div class="col-lg-9 col-md-8">

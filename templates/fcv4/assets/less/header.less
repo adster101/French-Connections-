@@ -1,0 +1,89 @@
+/**
+
+Contains styles that mainly apply to the header section of the template
+19/08/2014 Adam Rifat FCV4
+
+**/
+
+
+// Container for the top right banner position and navigation
+.banner-container {
+  @media (min-width: @screen-sm-min) { 
+    float:right;
+  }
+}
+
+// UPPER CASE NAVBAR TEXT
+.navbar {
+  text-transform:uppercase;
+}
+
+.navbar-toggle {
+  border: 1px solid @gray-darker;
+  
+}
+
+
+.navbar-toggle .icon-bar {
+    background-color: @gray-darker;
+}
+
+.navbar-brand {
+  height:auto;
+}
+
+// Remove the default float left from navbar-header
+.navbar-header {
+  @media (min-width: @grid-float-breakpoint) {
+    float: none;
+  }
+}
+
+// Top login nav - justified tabs up to sm screen width
+.nav-login {
+
+    float: right;
+    margin-bottom:9px;
+
+  >li {
+
+    > a {
+      text-align: center;
+      background-color:@blue-baby;  
+      color:@gray-darker;
+    }
+
+    > a:before {
+      padding-right: 3px;
+    }
+
+    > a.holidaymaker-login:before {
+      content: "\e008";
+      font-family: "Glyphicons Halflings"; 
+    }
+
+    > a.owner-login:before {
+      content: "\e033";
+      font-family: "Glyphicons Halflings"; 
+    }
+  }
+
+  @media (max-width: @screen-sm-min) { 
+    float:none;
+    width: 100%;
+
+    li:nth-of-type(1) {
+      padding-right:2px;
+    }
+
+    > li {
+      float:none;
+      display: table-cell;
+      width: 1%;
+      > a {
+        margin-bottom: 0;
+ 
+      }
+    }
+  }
+}

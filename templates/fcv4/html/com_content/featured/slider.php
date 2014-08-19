@@ -14,34 +14,36 @@ JHtml::_('behavior.caption');
 // If the page class is defined, add to class as suffix.
 // It will be a separate class if the user starts it with a space
 ?>
-<div class="blog-featured<?php echo $this->pageclass_sfx; ?> hidden-xs">
-  <?php if ($this->params->get('show_page_heading') != 0) : ?>
-    <div class="page-header">
-      <h1>
-        <?php echo $this->escape($this->params->get('page_heading')); ?>
-      </h1>
-    </div>
-  <?php endif; ?>
-  <?php $leadingcount = 0; ?>
-  <?php if (!empty($this->lead_items)) : ?>
-    <div id="homepageCarousel" class="carousel slide" data-ride="carousel" data-interval="2500"><!-- Carousel items -->
-      
-      <div class="carousel-inner">
-        <?php foreach ($this->lead_items as &$item) : ?>
-          <?php
-          $this->item = &$item;
-          $this->item_number = $leadingcount;
-          echo $this->loadTemplate('item');
-          $leadingcount++;
-          ?>
-        <?php endforeach; ?>
+<div class="container">
+  <div class="blog-featured<?php echo $this->pageclass_sfx; ?> hidden-xs">
+    <?php if ($this->params->get('show_page_heading') != 0) : ?>
+      <div class="page-header">
+        <h1>
+          <?php echo $this->escape($this->params->get('page_heading')); ?>
+        </h1>
       </div>
-      <a class="left carousel-control" href="#homepageCarousel" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-      </a>
-      <a class="right carousel-control" href="#homepageCarousel" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-      </a>
-    </div>
-  <?php endif; ?>
+    <?php endif; ?>
+    <?php $leadingcount = 0; ?>
+    <?php if (!empty($this->lead_items)) : ?>
+      <div id="homepageCarousel" class="carousel slide" data-ride="carousel" data-interval="2500"><!-- Carousel items -->
+
+        <div class="carousel-inner">
+          <?php foreach ($this->lead_items as &$item) : ?>
+            <?php
+            $this->item = &$item;
+            $this->item_number = $leadingcount;
+            echo $this->loadTemplate('item');
+            $leadingcount++;
+            ?>
+          <?php endforeach; ?>
+        </div>
+        <a class="left" href="#homepageCarousel" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right" href="#homepageCarousel" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+      </div>
+    <?php endif; ?>
+  </div>
 </div>

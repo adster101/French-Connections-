@@ -220,18 +220,18 @@ function getPath(event) {
 
   path = path + '/' + stripVowelAccent(s_kwds);
 
-  if (arrival !== '') {
+  if (arrival !== '' && typeof(arrival) !== 'undefined') {
     path = path + '/arrival_' + arrival;
   }
 
-  if (departure !== '') {
+  if (departure !== '' && typeof(departure) !== 'undefined') {
     path = path + '/departure_' + departure;
   }
-  if (occupancy !== '') {
+  if (occupancy !== '' && typeof(occupancy) !== 'undefined') {
     path = path + '/occupancy_' + occupancy;
   }
 
-  if (bedrooms !== '') {
+  if (bedrooms !== '' && typeof(bedrooms) !== 'undefined') {
     path = path + '/bedrooms_' + bedrooms;
   }
 

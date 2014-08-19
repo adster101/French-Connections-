@@ -1,0 +1,77 @@
+/**
+
+Contains styles that apply at the global level, or can be applied to any section of the template
+19/08/2014 Adam Rifat FCV4
+
+**/
+
+// Dotted underline 
+.dotted {
+  border-bottom: 1px dotted;
+}
+
+// Offer 'ribbon'  
+p.offer
+  {
+    position: relative;
+    padding: 3px 0px 5px 9px;
+    margin: 18px 0 18px -22px;
+    color: #fff;
+    background-color: #cd3e3f;
+    width:100%;
+    #gradient > .vertical(lighten(#cd3e3f, 5% ),#cd3e3f);
+
+  } 
+  p.offer:after
+  {
+    content: ' ';
+    position: absolute;
+    height: 0;
+    left: 0px;
+    top: 100%;
+    border-width: 7px 7px;
+    border-style: solid;
+    border-color: #7b6c50 #7b6c50 transparent transparent;
+  }
+
+.offscreen {
+  position:absolute;
+  left:-10000px; 
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
+.search-field {
+  display: inline-block;
+}
+
+.affix {
+    display: block;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 999;
+}
+
+.navbar-property-navigator {
+  border-radius:0;
+  border:none;
+  box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Speech bubble for blockqotes */
+.quote, .well .quote {
+  .quote(@padding:15px;);
+}
+
+.view-listing {
+  .page-header {
+    > h1 {
+      font-size:@font-size-h3; 
+      margin-top:0;
+
+    }  
+  }
+}

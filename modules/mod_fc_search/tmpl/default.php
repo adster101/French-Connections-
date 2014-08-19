@@ -8,11 +8,9 @@
  */
 defined('_JEXEC') or die;
 
-$document = JFactory::getDocument();
 $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 
-$menus = $app->getMenu('site');
 
 $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
 

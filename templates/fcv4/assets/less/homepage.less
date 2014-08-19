@@ -1,0 +1,162 @@
+
+.panel-home-page-search {
+  
+  @media (min-width: @screen-sm-min) { 
+
+    .form-inline .search-control-date  {
+      width:85px;
+    }
+
+    .form-inline .search-control-occupancy  {
+      width:85px;
+    }
+  }
+
+  @media (min-width: @screen-md-min) {
+    left:80px;   
+    width:480px;
+    position:absolute;
+    z-index:20;
+    top:20px;
+  }
+
+  @media (min-width: @screen-lg-min) {
+    left:120px;
+    top:60px;
+  }
+
+  .form-inline .search-box {
+    display:block;
+    margin-bottom:15px;
+    width:100%;
+  } 
+
+  background-color:transparent;
+  border-radius:0;
+  .panel-variant(@panel-default-border; @panel-default-text; @panel-default-heading-bg; @panel-default-border);
+   
+  border: 10px solid fade(@taupe-lighter, 75%);
+  
+  > .panel-body {
+    background-color:fade(@taupe-lighter, 95%);
+    > h4 {
+      margin-top:0;
+    }
+  }   
+}
+
+// Homepage featured property 
+
+.homepage-fp {
+  h1.page-header {
+    margin-top:0;
+  }
+}
+
+// Homepage offer tabs
+
+.homepage-offers {
+  background-color: #fff;
+  .tab-content {
+    padding:9px;
+  }
+  
+  .nav-tabs {
+    > li {
+
+      // Actual tabs (as links)
+      > a {
+        border-radius: 0;
+        margin-right: 0;
+        border:0;
+        text-transform:uppercase;
+        padding:10px 6px;
+        &:hover {
+          border:0;
+        }
+      }
+
+      // Active state, and its :hover to override normal :hover
+      &.active > a {
+        &,
+        &:hover,
+        &:focus {
+          border-right: 1px solid @nav-tabs-active-link-hover-border-color;
+          border-bottom-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+// Homepage carousel
+
+// Add margin to bottom of carousel 
+
+
+// Optional captions
+// -----------------------------
+// Hidden by default for smaller viewports
+#homepageCarousel {
+  
+  // Add a margin to the homepage carousel, needed.
+  margin-bottom:20px;
+
+  // Left/right controls for nav
+  // ---------------------------
+  .left, .right {
+    position:absolute;
+    top:45%;  
+    background-image:none;
+    padding:8px 10px 5px 10px;
+    font-size:20px;
+    background-color: fade(#000, 60%);
+    color:@white;
+    border-radius:4px;
+  }
+    
+    // Remove default gradient backgrounds
+    .left {
+      left:1%;
+    }
+
+    .right {
+      right:1%;
+    }
+  
+
+  // Set the background colour for the homepage carousel
+  .carousel-caption {
+    background-color:fade(@taupe-lighter, 95%);  
+    color:@gray-darker;
+    text-align:left;
+    text-indent: 120px;
+  }
+
+  // Scale up controls for tablets and up
+  @media screen and (min-width: @screen-sm-min) {
+    // Show and left align the captions
+    .carousel-caption {
+      left: 0;
+      right: 0;
+      padding:0;
+      text-indent:80px;
+    }
+    // Move up the indicators
+    .carousel-indicators {
+      bottom: 20px;
+    }
+  }
+
+  @media screen and (min-width: @screen-md-min) {
+    .carousel-caption {
+      text-indent:80px;
+    }
+  }
+
+  @media screen and (min-width: @screen-lg-min) {
+    .carousel-caption {
+      text-indent:120px;
+    }
+  }
+}
