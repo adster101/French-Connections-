@@ -33,6 +33,28 @@ Contains styles that apply at the global level, or can be applied to any section
        url('@{icon-font-path}@{fc-font-social}.svg#@{icon-font-svg-id}') format('svg');
 }
 
+// Control the heading sizes across the different view ports
+.view-listing, .view-search {
+  h1.page-header {
+    @media (max-width: @screen-lg-desktop) {
+      font-size:@font-size-h2; 
+    }  
+    @media (max-width: @screen-desktop) {
+      font-size:@font-size-h3; 
+    }
+    @media (max-width: @screen-tablet) {
+      font-size:@font-size-h4; 
+    }
+    @media (max-width: @screen-phone) {
+      font-size:@font-size-h5; 
+    }
+  }  
+}
+
+.breadcrumb {
+  font-size:12px;
+}
+
 /* Use the following CSS code if you want to have a class per icon */
 .icon-xxlarge {
   font-size: @font-size-xxlarge;

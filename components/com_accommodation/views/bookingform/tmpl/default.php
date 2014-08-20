@@ -86,10 +86,10 @@ $Itemid = FCSearchHelperRoute::getItemid(array('component','com_accommodation'))
       <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_OVER_18_STATEMENT'); ?></p>
       <p><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_PAYMENT_TERMS', $this->item->deposit, $this->item->security_deposit, $this->item->payment_deadline, $this->item->payment_deadline); ?></p>
     <?php else: ?>
-      <?php echo $this->item->additional_booking_info ?>
+      <?php echo strip_tags($this->item->additional_booking_info, "<td>,<tr>,<table>,<tbody>") ?>
     <?php endif; ?>
     <?php if (!empty($this->item->terms_and_conditions)) : ?>
-      <?php echo $this->item->terms_and_conditions ?>
+      <?php echo $this->escape(strip_tags($this->item->terms_and_conditions)) ?>
     <?php endif; ?>
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_ARRANGE_INSURANCE'); ?></p>
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_SIGNATURE'); ?></p>

@@ -281,7 +281,7 @@ abstract class RentalHelper
     $app = JFactory::getApplication();
     $view = $app->input->get('view', '', 'string');
 
-    $calendar = '<div class="row-fluid">';
+    $calendar = '<div class="row">';
 
     $showlinks = ($view == 'availability') ? true : false;
 
@@ -297,7 +297,7 @@ abstract class RentalHelper
     for ($z = 0; $z <= $months; $z++)
     {
 
-      $calendar.='<div class="span3"><div class="calendar-container">';
+      $calendar.='<div class="col-md-3 col-lg-3 col-sm-3"><div class="calendar-container">';
 
       $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
       #remember that mktime will automatically correct if invalid dates are entered
@@ -374,7 +374,7 @@ abstract class RentalHelper
 
       if (($z % 4 === 3))
       {
-        $calendar.='</div><div class="row-fluid">';
+        $calendar.='</div><div class="row">';
       }
 
       if ($z == $months)

@@ -48,24 +48,22 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
 
 <?php endif; ?>
 
-<div class="well well-small">
-  <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&id=' . (int) $id . '&unit_id=' . (int) $unit_id) . '#email'; ?>" method="post" class="form-validate form-horizontal">
+<div class="well well-sm well-light-blue">
+  <form class="form-validate form-horizontal" id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&id=' . (int) $id . '&unit_id=' . (int) $unit_id) . '#email'; ?>" method="post">
     <?php echo JHtml::_('form.token'); ?>
 
     <fieldset class="adminform">
       <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
-        <div class="control-group">
+        <div class="form-group">
+          <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
           <?php echo $field->label; ?>
-          <div class="controls">
             <?php echo $field->input; ?>
           </div>
         </div>         
       <?php endforeach; ?> 
     </fieldset>
-    <fieldset class="form-inline">
-
-    </fieldset>
-    <div class="form-actions"><button class="btn btn-primary btn-large validate pull-right" type="submit"><?php echo JText::_('COM_ACCOMMODATION_SEND_ENQUIRY'); ?></button>
+    
+    <div class="form-actions"><button class="btn btn-primary btn-large validate" type="submit"><?php echo JText::_('COM_ACCOMMODATION_SEND_ENQUIRY'); ?></button>
       <input type="hidden" name="option" value="com_accommodation" />
       <input type="hidden" name="task" value="listing.enquiry" />
     </div>

@@ -13,7 +13,10 @@ Contains styles that mainly apply to the header section of the template
   }
 }
 
-// UPPER CASE NAVBAR TEXT
+
+// MAIN NAVBAR 
+
+
 .navbar {
   text-transform:uppercase;
 }
@@ -32,12 +35,16 @@ Contains styles that mainly apply to the header section of the template
   height:auto;
 }
 
-// Remove the default float left from navbar-header
-.navbar-header {
-  @media (min-width: @grid-float-breakpoint) {
-    float: none;
-  }
+.navbar-nav {
+  font-size:85%;
 }
+
+// Remove the default float left from navbar-header
+  @media (min-width: @screen-desktop) {
+    .navbar-nav {
+      font-size:100%;
+    }
+  }
 
 // Top login nav - justified tabs up to sm screen width
 .nav-login {
