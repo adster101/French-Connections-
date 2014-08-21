@@ -33,20 +33,27 @@ Contains styles that apply at the global level, or can be applied to any section
        url('@{icon-font-path}@{fc-font-social}.svg#@{icon-font-svg-id}') format('svg');
 }
 
+
+
+
+
 // Control the heading sizes across the different view ports
 .view-listing, .view-search {
+
   h1.page-header {
-    @media (max-width: @screen-lg-desktop) {
-      font-size:@font-size-h2; 
-    }  
-    @media (max-width: @screen-desktop) {
+
+    font-size:@font-size-h4; 
+    
+    @media (min-width: @screen-tablet) {
       font-size:@font-size-h3; 
     }
-    @media (max-width: @screen-tablet) {
-      font-size:@font-size-h4; 
+
+    @media (min-width: @screen-desktop) {
+      font-size:@font-size-h2; 
     }
-    @media (max-width: @screen-phone) {
-      font-size:@font-size-h5; 
+
+    @media (min-width: @screen-lg-desktop) {
+      font-size:@font-size-h1; 
     }
   }  
 }
@@ -55,38 +62,29 @@ Contains styles that apply at the global level, or can be applied to any section
   font-size:12px;
 }
 
-/* Use the following CSS code if you want to have a class per icon */
-.icon-xxlarge {
-  font-size: @font-size-xxlarge;
-}
-
-.icon-xlarge {
-  font-size: @font-size-xlarge;
-}
 
 .social-icon {
-  display:inline-block;
   vertical-align:middle;
+  font-size:21px;
+  margin-left:10px;
 }
 
-.icon-google-plus:before {
+.google-plus:before {
 	font-family: 'Social';
-
 	content: "\e600";
   color:#dd4b39 ;
 }
 
-.icon-facebook:before {
+.facebook:before {
 	font-family: 'Social';
-
 	content: "\e601";
   color:#647cb7
 }
-.icon-twitter:before {
+.twitter:before {
 	font-family: 'Social';
-
 	content: "\e602";
-  color:#55acee
+  background-color:#55acee;
+  color:#fff;
 }
 
 h1, h2, h3, h4, h5, h6 {

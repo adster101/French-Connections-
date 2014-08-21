@@ -18,50 +18,55 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
 ?>
 
 <li>
-  <div class="results-header clearfix">
-    <p class="pull-right" style="text-align:right">
-      <?php if ($this->result->price) : ?>
-        <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
-        <span class="lead">
-          <?php echo '&pound;' . round($this->result->price); ?>
-        </span>
-        <br />
-        <span class="small">
-          <?php echo $this->result->tariff_based_on; ?>
-        </span>
-      <?php else : ?>
-        <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
-      <?php endif; ?>
-    </p> 
-    <h3>
-      <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->unit_title)); ?></a>
-      <small>
-        <?php echo $this->result->property_type . ', ' . $this->result->location_title ?>
-      </small>
-    </h3>
-    <?php if (!empty($this->result->offer)) : ?>
-      <p class="offer">
-        <strong><?php echo JText::_('COM_FCSEARCH_SPECIALOFFER'); ?></strong>
-        <?php echo $this->escape($this->result->offer); ?>
-      </p>
-    <?php endif; ?>
-  </div>
-  <div class="row-fluid">
-    <div class="span10 clearfix">
-      <a href="<?php echo $route ?>" class="thumbnail pull-left">
-        <img src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
-      </a>
-      <p>
-        <?php
-        echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
-        echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
-        echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
-        ?>
-      <hr />
-      <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
-      </p>
+  <div class="row">
+    <div class="col-xs-12 col-sm-9">
+      <h3>
+        <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->unit_title)); ?></a>
+        <small>
+          <?php echo $this->result->property_type . ', ' . $this->result->location_title ?>
+        </small>
+      </h3>
     </div>
-    <div class="span2 align-right result-links">
+    <div class="col-xs-12 col-sm-3">
+      <p class="">
+        <?php if ($this->result->price) : ?>
+          <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
+          <span class="lead">
+            <?php echo '&pound;' . round($this->result->price); ?>
+          </span><br />
+          <span class="small">
+            <?php echo $this->result->tariff_based_on; ?>
+          </span>
+        <?php else : ?>
+          <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
+        <?php endif; ?>
+      </p> 
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-10">
+      <div class="media">
+        <a href="<?php echo $route ?>" class="pull-left">
+          <img class="image-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
+        </a>
+        <div class="media-body">
+          <p>
+            <?php
+            echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
+            echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
+            echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
+            ?>
+          <hr />
+          <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
+          </p>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="col-xs-12 col-sm-2">
       <p>
         <a href="<?php echo $route ?>" class="btn btn-primary">
           <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
@@ -74,7 +79,7 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
           </a>
         <?php else : ?>
           <a class="login lead" href="#" data-return="<?php echo base64_encode('/shortlist'); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
-            <i class="icon icon-heart muted"></i>
+            <i class="glyphicon glyphicon-heart text-muted"></i>
           </a>    
         <?php endif; ?>
       </p> 

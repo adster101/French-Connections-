@@ -76,31 +76,32 @@ $this->_script = array();
 
 
     <jdoc:include type="message" /> 
+  </div>
 
-    <jdoc:include type="component" />
+<jdoc:include type="component" />
 
-
-    <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>
-      <div class="row">
-        <div class="col-lg-9 col-md-7">
-          <jdoc:include type="modules" name="position-12" style="none" />
-          <hr />
-          <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-              <jdoc:include type="modules" name="position-14" style="none" />
-            </div>
-            <div class="col-lg-6 col-md-6 col-md-6">
-              <jdoc:include type="modules" name="position-15" style="none" />
-            </div>
+<div class="container">
+  <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>
+    <div class="row">
+      <div class="col-lg-9 col-md-7">
+        <jdoc:include type="modules" name="position-12" style="none" />
+        <hr />
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <jdoc:include type="modules" name="position-14" style="none" />
+          </div>
+          <div class="col-lg-6 col-md-6 col-md-6">
+            <jdoc:include type="modules" name="position-15" style="none" />
           </div>
         </div>
-        <div class="col-lg-3 col-md-5">
-          <jdoc:include type="modules" name="position-13" style="none" />
-        </div>       
       </div>
-    <?php endif; ?>
-    <!-- End Content -->
-  </div>
+      <div class="col-lg-3 col-md-5">
+        <jdoc:include type="modules" name="position-13" style="none" />
+      </div>       
+    </div>
+  <?php endif; ?>
+  <!-- End Content -->
+</div>
 <jdoc:include type="modules" name="debug" style="html5" />
 </body>
 </html>

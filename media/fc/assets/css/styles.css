@@ -4157,6 +4157,34 @@ table th[class*="col-"] {
     border-bottom: 0;
   }
 }
+.media,
+.media-body {
+  overflow: hidden;
+  zoom: 1;
+}
+.media,
+.media .media {
+  margin-top: 15px;
+}
+.media:first-child {
+  margin-top: 0;
+}
+.media-object {
+  display: block;
+}
+.media-heading {
+  margin: 0 0 5px;
+}
+.media > .pull-left {
+  margin-right: 10px;
+}
+.media > .pull-right {
+  margin-left: 10px;
+}
+.media-list {
+  padding-left: 0;
+  list-style: none;
+}
 cite:before {
   content: '\2014 \00A0';
 }
@@ -4180,58 +4208,51 @@ Contains styles that apply at the global level, or can be applied to any section
   src: url('../fonts/Social.eot');
   src: url('../fonts/Social.eot?#iefix') format('embedded-opentype'), url('../fonts/Social.woff') format('woff'), url('../fonts/Social.ttf') format('truetype'), url('../fonts/Social.svg#glyphicons_halflingsregular') format('svg');
 }
-@media (max-width: 1200px) {
-  .view-listing h1.page-header,
-  .view-search h1.page-header {
-    font-size: 30px;
-  }
+.view-listing h1.page-header,
+.view-search h1.page-header {
+  font-size: 18px;
 }
-@media (max-width: 992px) {
+@media (min-width: 768px) {
   .view-listing h1.page-header,
   .view-search h1.page-header {
     font-size: 24px;
   }
 }
-@media (max-width: 768px) {
+@media (min-width: 992px) {
   .view-listing h1.page-header,
   .view-search h1.page-header {
-    font-size: 18px;
+    font-size: 30px;
   }
 }
-@media (max-width: 480px) {
+@media (min-width: 1200px) {
   .view-listing h1.page-header,
   .view-search h1.page-header {
-    font-size: 14px;
+    font-size: 36px;
   }
 }
 .breadcrumb {
   font-size: 12px;
 }
-/* Use the following CSS code if you want to have a class per icon */
-.icon-xxlarge {
-  font-size: 25px;
-}
-.icon-xlarge {
-  font-size: 21px;
-}
 .social-icon {
-  display: inline-block;
   vertical-align: middle;
+  font-size: 21px;
+  margin-left: 10px;
 }
-.icon-google-plus:before {
+.google-plus:before {
   font-family: 'Social';
   content: "\e600";
   color: #dd4b39 ;
 }
-.icon-facebook:before {
+.facebook:before {
   font-family: 'Social';
   content: "\e601";
   color: #647cb7;
 }
-.icon-twitter:before {
+.twitter:before {
   font-family: 'Social';
   content: "\e602";
-  color: #55acee;
+  background-color: #55acee;
+  color: #fff;
 }
 h1,
 h2,
@@ -4540,19 +4561,22 @@ p.offer:after {
 }
 .navbar-property-navigator {
   margin-bottom: 20px;
+  padding: 10px 0;
 }
 .navbar-property-navigator .nav > li > a {
+  font-size: 85%;
   padding: 10px;
 }
 .navbar-property-navigator .nav > li > a > .glyphicon {
   display: none;
 }
-.navbar-property-navigator {
-  font-size: 85%;
-}
-@media (min-width: 992px) {
-  .navbar-property-navigator .nav-pills {
+@media (min-width: 1200px) {
+  .navbar-property-navigator .nav > li > a {
+    padding: 10px 15px;
     font-size: 100%;
+  }
+  .navbar-property-navigator .nav > li > a > .glyphicon {
+    display: inline-block;
   }
 }
 /*

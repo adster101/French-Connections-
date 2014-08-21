@@ -68,28 +68,40 @@ p.offer
 
 
 
-.navbar-property-navigator {
-    margin-bottom: 20px;
 
-   .nav > li > a {
-      
-        padding:10px;
-        > .glyphicon {
-          display:none;
-        }
-      }
+   
+
+
+.navbar-property-navigator {
+
+  margin-bottom: 20px;
+  padding:10px 0;
+
+  .nav > li > a {
+
+    font-size:85%;
+    padding:10px;
+
+    > .glyphicon {
+        display:none;
     }
-
-
-.navbar-property-navigator {
-
-  font-size:85%;
+  }
 
   // Restore font size for desktop sized screens
-  @media (min-width: @screen-desktop) {
-    .nav-pills {
+  @media (min-width: @screen-lg-desktop) {
+   
+
+    .nav > li > a {     
+      padding:10px 15px;
       font-size:100%;
+      > .glyphicon {
+          display:inline-block;
+      }
     }
   }
 }
+
+
+
+
 

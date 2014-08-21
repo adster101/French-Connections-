@@ -14601,7 +14601,7 @@ jQuery(document).ready(function() {
   var nowTemp = new Date();
   var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-  var checkin = $('.start_date').datepicker({
+  var checkin = $('.start_date.date').datepicker({
     beforeShowDay: function(date) {
       return date.valueOf() >= now.valueOf();
     },
@@ -14615,11 +14615,11 @@ jQuery(document).ready(function() {
       checkout.datepicker("update", newDate);
 
     }
-    $('.end_date')[0].focus();
+    $('.end_date input')[0].focus();
   });
 
 
-  var checkout = $('.end_date').datepicker({
+  var checkout = $('.end_date.date').datepicker({
     beforeShowDay: function(date) {
       if (!checkin.datepicker("getDate").valueOf()) {
         return date.valueOf() >= new Date().valueOf();
@@ -15385,7 +15385,7 @@ jQuery(window).load(function() {
 
   // Load the google maps crap
   loadGoogleMaps('initPropertyMap');
-  
+
 })
 
 jQuery(document).ready(function() {
@@ -15400,18 +15400,30 @@ jQuery(document).ready(function() {
     asNavFor: '#slider',
     controlNav: false,
     slideshow: false
+
   });
 
   jQuery('#slider').flexslider({
-    animation: "slide",
+    animation: "fade",
     animationLoop: false,
     slideshow: false,
     sync: '#carousel',
     useCss: false,
     animationLoop: false,
     controlNav: false,
-    video:true
+    video: true,
+    after: function(slider) {
+      var slides = slider.slides;
+      var index = slider.animatingTo;
+      var slide = $(slides[index]);
+      var img = slide.find('img[data-src]');
+      if (img) {
+        img.attr("src", img.attr('data-src')).removeAttr("data-src");
+      }
+    }
   });
+
+
 });
 
 
@@ -15484,11 +15496,11 @@ function initPropertyMap() {
     }
 
 
-    
-  }).fail(function(e) {
-    }).always(function() {
 
-    });
+  }).fail(function(e) {
+  }).always(function() {
+
+  });
 
 
 }  

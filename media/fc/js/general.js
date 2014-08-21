@@ -9,7 +9,7 @@ jQuery(document).ready(function() {
   var nowTemp = new Date();
   var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-  var checkin = $('.start_date').datepicker({
+  var checkin = $('.start_date.date').datepicker({
     beforeShowDay: function(date) {
       return date.valueOf() >= now.valueOf();
     },
@@ -23,11 +23,11 @@ jQuery(document).ready(function() {
       checkout.datepicker("update", newDate);
 
     }
-    $('.end_date')[0].focus();
+    $('.end_date input')[0].focus();
   });
 
 
-  var checkout = $('.end_date').datepicker({
+  var checkout = $('.end_date.date').datepicker({
     beforeShowDay: function(date) {
       if (!checkin.datepicker("getDate").valueOf()) {
         return date.valueOf() >= new Date().valueOf();
