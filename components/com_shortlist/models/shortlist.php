@@ -43,6 +43,7 @@ class ShortlistModelShortlist extends JModelList {
       (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
       b.occupancy as occupancy,
       h.from_price as price,
+      b.bathrooms,
       b.description,
       i.title as tariff_based_on,
       j.title as location_title,

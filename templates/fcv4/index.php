@@ -15,14 +15,28 @@ $option = $app->input->getCmd('option', '');
 $view = $app->input->getCmd('view', '');
 $itemid = $app->input->getCmd('Itemid', '');
 $sitename = $app->getCfg('sitename');
+$listing = false;
 
 $menu = $app->getMenu();
-
-$siteHome = ($menu->getActive() == $menu->getDefault('en-GB')) ? 'home' : 'sub';
-
+$active = $menu->getActive();
+$siteHome = ($active == $menu->getDefault('en-GB')) ? 'home' : 'sub';
+if ($active)
+{
+  $listing = ($active->component == 'com_accommodation') ? true : false;
+}
 // Remove all JS from the initial page load...
 $this->_scripts = array();
 $this->_script = array();
+
+// Adjusting content width
+if ($this->countModules('position-7'))
+{
+  $span = "col-lg-8 col-md-9 col-sm-8 col-xs-12";
+}
+else
+{
+  $span = "col-lg-12 col-md-12 col-sm-12 col-xs-12";
+}
 ?>
 
 <!DOCTYPE html>
@@ -68,40 +82,54 @@ $this->_script = array();
 
 
   <div class="container">
+    <jdoc:include type="message" /> 
+
     <!-- Begin Content -->
     <?php if ($this->countModules('position-11')) : ?>
       <jdoc:include type="modules" name="position-11" style="no" />
     <?php endif; ?>
     <jdoc:include type="modules" name="position-3" style="xhtml" />
 
-
-    <jdoc:include type="message" /> 
   </div>
-
-<jdoc:include type="component" />
-
-<div class="container">
-  <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>
+  <?php if (!$listing): ?>
+    <div class="container">
+    <?php endif; ?>
     <div class="row">
-      <div class="col-lg-9 col-md-7">
-        <jdoc:include type="modules" name="position-12" style="none" />
-        <hr />
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <jdoc:include type="modules" name="position-14" style="none" />
-          </div>
-          <div class="col-lg-6 col-md-6 col-md-6">
-            <jdoc:include type="modules" name="position-15" style="none" />
-          </div>
-        </div>
+      <div class="<?php echo $span; ?>">
+        <jdoc:include type="component" />
       </div>
-      <div class="col-lg-3 col-md-5">
-        <jdoc:include type="modules" name="position-13" style="none" />
-      </div>       
+      <?php if ($this->countModules('position-7')): ?>
+        <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
+          <jdoc:include type="modules" name="position-7" style="xhtml" />
+        </div>
+      <?php endif; ?>
+    </div>
+    <?php if (!$listing): ?>
     </div>
   <?php endif; ?>
+  <?php if ($this->countModules('position-12') && $this->countModules('position-13')) : ?>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-9 col-md-7">
+          <jdoc:include type="modules" name="position-12" style="none" />
+          <hr />
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <jdoc:include type="modules" name="position-14" style="none" />
+            </div>
+            <div class="col-lg-6 col-md-6 col-md-6">
+              <jdoc:include type="modules" name="position-15" style="none" />
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-5">
+          <jdoc:include type="modules" name="position-13" style="none" />
+        </div>       
+      </div>
+    </div>
+
+  <?php endif; ?>
   <!-- End Content -->
-</div>
 <jdoc:include type="modules" name="debug" style="html5" />
 </body>
 </html>

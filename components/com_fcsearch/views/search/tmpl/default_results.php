@@ -85,12 +85,12 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
                 <label for="sort_by" class="">
                   <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
                 </label>
-                <select id="sort_by" class="input-medium" name="order">
+                <select id="sort_by" class="form-control" name="order">
                   <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
                 </select>
               </div>
             </div>
-            <ul class="search-results list-unstyled clear">
+            <div class="search-results list-unstyled clear">
               <?php
               JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
 
@@ -104,7 +104,7 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
               }
               JDEBUG ? $_PROFILER->mark('End process individual results (*10)') : null;
               ?>
-            </ul>
+            </div>
           <?php else: ?>
             <p class='lead'>
               <strong><?php echo JText::_('COM_FCSEARCH_SEARCH_NO_RESULTS_HEADING'); ?></strong>
@@ -131,7 +131,7 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
           <?php echo $this->localinfo->description; ?>
         </div>
       </div>
-      <div class="col-lg-3 col-md-3">
+      <div class="col-lg-3 col-md-3 refine-search">
         <?php
         JDEBUG ? $_PROFILER->mark('Start process refine') : null;
         echo $this->loadTemplate('refine');

@@ -71,7 +71,7 @@ $lastminute = (!empty($displayData->lastminute)) ? $displayData->lastminute : fa
     <?php endfor; ?>
   </ul>
 <?php endif; ?>
-<button class="property-search-button btn btn-primary pull-right" href="#">
+<button class="property-search-button btn btn-primary" href="#">
   <i class="icon-search icon-white"> </i>
   <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
 </button>

@@ -2,7 +2,7 @@ var infowindow;
 
 jQuery(document).ready(function() {
   // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('a[data-toggle="tab"]').on('shown', function(e) {
+  jQuery('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 
     jQuery('#map_canvas').hide();
 
@@ -63,7 +63,7 @@ jQuery(document).ready(function() {
         }
       }).done(function() {
 
-      });
+        });
     }
 
     jQuery('#map_canvas').show();
@@ -132,10 +132,10 @@ jQuery(document).ready(function() {
   jQuery(".typeahead").typeahead({
     source: function(query, process) {
       jQuery.get('/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
-              {
-                q: query,
-                items: 10
-              },
+      {
+        q: query,
+        items: 10
+      },
       function(data) {
         process(data);
       }
@@ -198,6 +198,8 @@ function getPath(event) {
   //return false;
   //}
 
+  
+
   if (chosen === '') {
     jQuery(".typeahead").attr('value', 'france');
   }
@@ -220,6 +222,37 @@ function getPath(event) {
 
   path = path + '/' + stripVowelAccent(s_kwds);
 
+  // get the current pathway as an array
+  var pathArray = window.location.pathname.split( '/' );
+  
+  // Loop over the path aray 
+  for (i = 0; i < pathArray.length; i++) {
+    
+    if (pathArray[i].indexOf('property_') >= 0) {
+      console.log(pathArray[i]);
+      path = path + '/' + [pathArray[i]];
+    }
+    if (pathArray[i].indexOf('accommodation_') >= 0) {
+      console.log(pathArray[i]);
+      path = path + '/' + [pathArray[i]];
+    }
+    if (pathArray[i].indexOf('external') >= 0) {
+      console.log(pathArray[i]);
+      path = path + '/' + [pathArray[i]];
+    }
+    if (pathArray[i].indexOf('internal_') >= 0) {
+      console.log(pathArray[i]);
+      path = path + '/' + [pathArray[i]];
+    }
+    if (pathArray[i].indexOf('suitability_') >= 0) {
+      console.log(pathArray[i]);
+      path = path + '/' + [pathArray[i]];
+    }
+    
+  }
+
+
+
   if (arrival !== '' && typeof(arrival) !== 'undefined') {
     path = path + '/arrival_' + arrival;
   }
@@ -235,7 +268,6 @@ function getPath(event) {
     path = path + '/bedrooms_' + bedrooms;
   }
 
-  // These fields are not present on the homepage search so they can be undefined as well as empty
   if (sort_by !== '' && typeof(sort_by) !== 'undefined') {
     path = path + '/' + sort_by;
   }
@@ -290,7 +322,7 @@ function loadScript() {
   var script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-          'callback=initmap';
+  'callback=initmap';
   document.body.appendChild(script);
 }
 
@@ -300,16 +332,16 @@ function stripVowelAccent(str) {
 
   var s = str;
   var rExps = [
-    /[\xC0-\xC2]/g,
-    /[\xE0-\xE2]/g,
-    /[\xC8-\xCA]/g,
-    /[\xE8-\xEB]/g,
-    /[\xCC-\xCE]/g,
-    /[\xEC-\xEE]/g,
-    /[\xD2-\xD4]/g,
-    /[\xF2-\xF4]/g,
-    /[\xD9-\xDB]/g,
-    /[\xF9-\xFB]/g
+  /[\xC0-\xC2]/g,
+  /[\xE0-\xE2]/g,
+  /[\xC8-\xCA]/g,
+  /[\xE8-\xEB]/g,
+  /[\xCC-\xCE]/g,
+  /[\xEC-\xEE]/g,
+  /[\xD2-\xD4]/g,
+  /[\xF2-\xF4]/g,
+  /[\xD9-\xDB]/g,
+  /[\xF9-\xFB]/g
   ];
 
   var repChar = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'];

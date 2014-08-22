@@ -8,42 +8,23 @@ $lang = JFactory::getLanguage();
 $lang->load('com_accommodation', JPATH_SITE);
 ?>
 
-<div class="page-header">
-  <div class="row-fluid">
-    <div class="span9">
-      <h1>
-        <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
-      </h1>
-    </div>
-    <?php if (!empty($search_url)) : ?>
-      <div class="span3">
-        <a class="btn btn-large" href="<?php echo $search_url ?>" title="">    
-          <i class="icon icon-backward-2"></i>
-          <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
-        </a>
-      </div>
-    <?php endif; ?>
-  </div>
-</div>
-<?php if (count($this->items) > 0) : ?>
+<h1 class="page-header">
+  <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
+</h1>
 
-  <div class="row-fluid">
-    <div class="span9">
-      <div class="search-pagination hidden-phone">
-        <div class="pagination small ">
-          <?php echo $this->pagination->getPagesLinks(); ?>
-        </div>
-      </div>
-    </div>
-    <div class="span3">
-      <p class="" style="line-height:34px;"><?php echo $this->pagination->getResultsCounter(); ?></p>
-    </div>
-  </div>
-  <ul class="search-results list-striped">
+
+
+<?php if (count($this->items) > 0) : ?> 
+  <p><?php echo $this->pagination->getResultsCounter(); ?></p>
+
+
+  <ul class="search-results list-unstyled">
     <?php
-    for ($i = 0, $n = count($this->items); $i < $n; $i++) {
+    for ($i = 0, $n = count($this->items); $i < $n; $i++)
+    {
       $this->result = &$this->items[$i];
-      if (!empty($this->result->id)) {
+      if (!empty($this->result->id))
+      {
         echo $this->loadTemplate('shortlist');
       }
     }

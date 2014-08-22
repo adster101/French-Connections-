@@ -1,0 +1,46 @@
+.view-search {
+
+  .refine-search {
+    .close {
+      float:none;
+    }
+  }
+
+  .nav-tabs {
+    margin-bottom:20px;
+  }
+
+  .search-results {
+    margin-top:20px;
+  }
+
+.search-results .search-result:nth-child(2n+1) {
+  background:@blue-baby;
+}
+
+  .search-result {
+    margin-bottom:29px;
+    border-bottom:1px solid darken(@blue-baby,5%);
+    padding:10px;
+
+    > h1,h2,h3,h4,h5,h6 {
+      margin-top:0;
+      > small {
+        color:@gray-darker;
+      }
+    }
+
+  }
+  
+  .rates, .view-property-button, .shortlist-button, .listing-reviews {
+  
+    text-align:right;
+
+    @media (max-width: @screen-tablet) {
+      text-align:left;
+    }
+  }
+
+  
+
+}

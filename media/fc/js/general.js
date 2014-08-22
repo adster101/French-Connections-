@@ -10,6 +10,7 @@ jQuery(document).ready(function() {
   var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
   var checkin = $('.start_date.date').datepicker({
+    format: "dd-mm-yyyy",
     beforeShowDay: function(date) {
       return date.valueOf() >= now.valueOf();
     },
@@ -28,6 +29,7 @@ jQuery(document).ready(function() {
 
 
   var checkout = $('.end_date.date').datepicker({
+    format: "dd-mm-yyyy",
     beforeShowDay: function(date) {
       if (!checkin.datepicker("getDate").valueOf()) {
         return date.valueOf() >= new Date().valueOf();
@@ -48,21 +50,7 @@ jQuery(document).ready(function() {
 
   jQuery('.result-links a.login').tooltip({animation: false});
 
-  jQuery('.login').on('click', function(event) {
 
-    var data = jQuery(this).data();
-    var url = data.return;
-
-    // TO DO - add the property clicked on to the shortlist in the background...
-    jQuery('#myModal').modal({
-      remote: '/my-account?tmpl=nohead&layout=modal&return=' + url
-    }).on('hidden', function() {
-
-    });
-
-    event.preventDefault();
-
-  });
 
   if (jQuery('#newUnit').length) {
     jQuery('#newUnit').on('click', function(event) {

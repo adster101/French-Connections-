@@ -17,9 +17,9 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_proper
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 ?>
 
-<li>
-  <div class="row">
-    <div class="col-xs-12 col-sm-9">
+<div class="search-result">
+  <div class="row ">
+    <div class="col-xs-12 col-sm-9 col-md-8">
       <h3>
         <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->unit_title)); ?></a>
         <small>
@@ -27,8 +27,8 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
         </small>
       </h3>
     </div>
-    <div class="col-xs-12 col-sm-3">
-      <p class="">
+    <div class="col-xs-12 col-sm-3 col-md-4">
+      <p class="rates">
         <?php if ($this->result->price) : ?>
           <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
           <span class="lead">
@@ -45,7 +45,7 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
   </div>
 
 
-  <div class="row">
+  <div class=" row">
     <div class="col-xs-12 col-sm-10">
       <div class="media">
         <a href="<?php echo $route ?>" class="pull-left">
@@ -67,25 +67,25 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
 
     </div>
     <div class="col-xs-12 col-sm-2">
-      <p>
+      <p class="view-property-button">
         <a href="<?php echo $route ?>" class="btn btn-primary">
           <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
         </a>
       </p>
-      <p>
+      <p class="shortlist-button">
         <?php if ($logged_in) : ?>
           <a class="shortlist lead <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-action='<?php echo $action ?>' href="#">
-            <i class="icon icon-heart"></i>
+            <i class="glyphicon glyphicon-heart"></i>
           </a>
         <?php else : ?>
-          <a class="login lead" href="#" data-return="<?php echo base64_encode('/shortlist'); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
-            <i class="glyphicon glyphicon-heart text-muted"></i>
+          <a class="login lead" href="<?php echo '/my-account?return=' . base64_encode('/shortlist'); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
+            <i class="glyphicon glyphicon-heart"></i>
           </a>    
         <?php endif; ?>
       </p> 
 
       <?php if ($this->result->reviews) : ?>
-        <p class="small">
+        <p class="listing-reviews">
           <a href="<?php echo $route . '#reviews' ?>">
             <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
           </a>
@@ -93,4 +93,5 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
       <?php endif; ?> 
     </div>
   </div>
-</li>
+
+</div>

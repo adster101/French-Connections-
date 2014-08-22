@@ -15,9 +15,10 @@ $menu = $app->getMenu();
 $active = $menu->getActive();
 $items = $menu->getItems('component', 'com_fcsearch');
 $Itemid = is_array($items) ? $items[0]->id : array();
-$isSearch = ($active->component == 'com_fcsearch') ? true : false;
+$isListing = ($active->component == 'com_accommodation') ? true : false;
+$isShortlist = ($active->component == 'com_shortlist') ? true : false;
 ?>
-<?php if (!empty($search_url) && !$isSearch) : ?>
+<?php if (!empty($search_url) && ($isListing || $isShortlist)) : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
     <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    
       <span class="glyphicon glyphicon-circle-arrow-left"></span>
@@ -77,7 +78,7 @@ $isSearch = ($active->component == 'com_fcsearch') ? true : false;
   ?>
 </ol>
 
-<?php if (!$isSearch) : ?>
+<?php if ($isListing) : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block pull-right">
     <form class="form-inline" id="property-search" method="POST" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>">
       <label class="sr-only" for="q">

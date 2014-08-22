@@ -58,7 +58,7 @@ abstract class JHtmlRefine {
         foreach ($filters_to_remove as $filter_to_remove) {
 
           $html .='<a class="muted" href="' . JRoute::_('http://' . $filter_to_remove['url']) . '">';
-          $html .='<span class="label"><i class="icon-delete"> </i>&nbsp; ' . $filter_to_remove['filter'];
+          $html .='<span class="label label-warning"><i class=" glyphicon glyphicon-remove"> </i>&nbsp; ' . $filter_to_remove['filter'];
           $html .='</span></a>&nbsp;';
         }
         $html .='</span>';
@@ -103,7 +103,7 @@ abstract class JHtmlRefine {
         foreach ($filters_to_remove as $filter_to_remove) {
 
           $html .='<a class="muted" href="' . JRoute::_('http://' . $filter_to_remove['url']) . '">';
-          $html .='<span class="label"><i class="icon-delete"> </i>&nbsp; ' . $filter_to_remove['filter'];
+          $html .='<span class="label label-warning"><i class=" glyphicon glyphicon-remove"> </i>&nbsp; ' . $filter_to_remove['filter'];
           $html .='</span></a>&nbsp;';
         }
         $html .='</span>';

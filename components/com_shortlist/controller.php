@@ -9,6 +9,7 @@ defined('_JEXEC') or die('Restricted access');
 class ShortlistController extends JControllerLegacy {
 
   public function display($cachable = false, $urlparams = array()) {
+
     $input = JFactory::getApplication()->input;
 
 

@@ -14,7 +14,6 @@ JHtml::_('behavior.caption');
 // If the page class is defined, add to class as suffix.
 // It will be a separate class if the user starts it with a space
 ?>
-<div class="container">
   <div class="blog-featured<?php echo $this->pageclass_sfx; ?> hidden-xs">
     <?php if ($this->params->get('show_page_heading') != 0) : ?>
       <div class="page-header">
@@ -37,13 +36,12 @@ JHtml::_('behavior.caption');
             ?>
           <?php endforeach; ?>
         </div>
-        <a class="left" href="#homepageCarousel" data-slide="prev">
+        <a class="carousel-left" href="#homepageCarousel" data-slide="prev">
           <span class="glyphicon glyphicon-chevron-left"></span>
         </a>
-        <a class="right" href="#homepageCarousel" data-slide="next">
+        <a class="carousel-right" href="#homepageCarousel" data-slide="next">
           <span class="glyphicon glyphicon-chevron-right"></span>
         </a>
       </div>
     <?php endif; ?>
   </div>
-</div>

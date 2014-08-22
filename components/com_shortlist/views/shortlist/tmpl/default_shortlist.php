@@ -19,8 +19,8 @@ $logged_in = ($user->guest) ? false : true;
 
 <li>
   <p class="pull-right">
-    <a class="btn btn-primary btn-small" data-id='<?php echo $this->result->id ?>' href="<?php echo JRoute::_('index.php?option=com_shortlist&task=shortlist.remove&id=' . (int) $this->result->unit_id . '&action=remove') ?>">
-      <i class="icon-delete small"></i>
+    <a class="btn btn-danger btn-small" data-id='<?php echo $this->result->id ?>' href="<?php echo JRoute::_('index.php?option=com_shortlist&task=shortlist.remove&id=' . (int) $this->result->unit_id . '&action=remove') ?>">
+      <i class="glyphicon glyphicon-remove small"></i>
     </a>
 
   </p>
@@ -38,7 +38,7 @@ $logged_in = ($user->guest) ? false : true;
     </div>
     <div class="span6">
       <span class="">
-        <?php echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->bedrooms, $this->result->accommodation_type, $this->result->property_type, $this->result->occupancy); ?>
+        <?php echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy); ?>
       </span>
       <hr class="condensed" />
       <p class="">

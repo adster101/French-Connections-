@@ -64,9 +64,9 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
       <?php foreach ($items as $key => $value) : ?> 
         <?php if ($key > 0) : ?>
           <p>
-            <a class="btn btn-small" style="display:block;text-align:left; text-wrap: no-wrap; overflow:hidden" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
+            <a class="btn btn-sm btn-default" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
+              <button class="close"> &times;</button>
               <?php echo $value->name = stripslashes(htmlspecialchars($value->name, ENT_COMPAT, 'UTF-8')); ?>
-              &nbsp;<button class="close"> &times;</button><span class="small pull-right muted">Remove</span>
             </a>
           </p> 
           <?php if (($key + 1) == count($items)) : ?>
@@ -177,7 +177,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
           <?php endif; ?>
           <p>
             <a href="<?php echo JRoute::_($route) ?>">
-              <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>
+              <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
               <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
             </a>
           </p>          
@@ -232,7 +232,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             <?php endif; ?>
             <p>
               <a href="<?php echo JRoute::_('http://' . $new_uri) ?>">
-                <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
+                <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
               </a>
             </p>
 

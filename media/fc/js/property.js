@@ -1,7 +1,7 @@
 jQuery(window).load(function() {
 
   // Load the google maps crap
-  loadGoogleMaps('initPropertyMap');
+  //loadGoogleMaps('initPropertyMap');
 
 })
 
