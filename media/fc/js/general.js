@@ -68,23 +68,21 @@ jQuery(document).ready(function() {
     }).click(function(event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      console.log(jQuery(this).data());
       popover = jQuery(this).data('bs.popover'); // Get the popover data attributes
       popover.options.html = true; // Update the content by calling getContent
-      popover.options.content = getContent(this); // Update the content by calling getContent
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
   })
 
-  jQuery('body').on('click', '.popover span', function(ev) { // When a pop over span is clicked
+  jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
+    console.log(this);
     var favourite = el.parent().parent().siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
     var userToken = document.getElementsByTagName("input")[0].name;
     url_params.id = dataObj.id;
     url_params.action = dataObj.action;
-
 
     var url = '/index.php?option=com_shortlist&task=shortlist.update&tmpl=component&' + userToken + '=1';
     jQuery.ajax({
@@ -113,41 +111,6 @@ jQuery(document).ready(function() {
       }
     })
   });
-
-
-  if (jQuery('.start_date').length) {
-
-    var start_date = jQuery('.start_date').attr('value');
-
-    if (start_date == '') {
-      start_date = new Date();
-    }
-
-    jQuery('.start_date').datepicker({
-      numberOfMonths: 1,
-      showOn: "both",
-      dateFormat: "dd-mm-yy",
-      buttonImageOnly: true,
-      buttonImage: "/media/system/images/calendar.png",
-      showButtonPanel: true,
-      onSelect: function(selectedDate) {
-        jQuery('.end_date').datepicker("option", "minDate", selectedDate);
-      }
-    });
-
-    jQuery('.end_date').datepicker({
-      numberOfMonths: 1,
-      dateFormat: "dd-mm-yy",
-      showOn: "both",
-      buttonImageOnly: true,
-      buttonImage: "/media/system/images/calendar.png",
-      minDate: start_date,
-      showButtonPanel: true
-    });
-  }
-  ;
-
-
 
   if (jQuery("#contactDetails").length) {
 
@@ -303,19 +266,6 @@ function initialise() {
       map.panTo(marker.getPosition());
     }, 1500);
   });
-}
-
-var getContent = function(that) {
-
-  action = jQuery(that).data('action');
-
-  if (action == 'remove') {
-    return "<span class='click glyphicon glyphicon-remove'> Shortlist</span><hr /><a href='/shortlist'>View shortlist</a>";
-
-  }
-  return "<span class='click glyphicon glyphicon-ok'> Shortlist</span><hr /><a href='/shortlist'>View shortlist</a>";
-
-
 }
 
 /* define some useful functions, innit! */

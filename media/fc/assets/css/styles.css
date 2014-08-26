@@ -6682,13 +6682,12 @@ p.offer:after {
 .view-search .search-results {
   margin-top: 20px;
 }
-.view-search .search-results .search-result:nth-child(2n+1) {
-  background: #eaf3fe;
-}
 .view-search .search-result {
-  margin-bottom: 29px;
-  border-bottom: 1px solid #d2e5fd;
-  padding: 10px;
+  padding: 20px 0;
+  border-top: 1px solid #d2e5fd;
+}
+.view-search .search-result .rates > .lead {
+  font-weight: bold;
 }
 .view-search .search-result > h1,
 .view-search .search-result h2,
@@ -6706,19 +6705,27 @@ p.offer:after {
 .view-search .search-result h6 > small {
   color: #525f79;
 }
-.view-search .rates,
-.view-search .view-property-button,
-.view-search .shortlist-button,
-.view-search .listing-reviews {
-  text-align: right;
-}
-@media (max-width: 768px) {
-  .view-search .rates,
-  .view-search .view-property-button,
-  .view-search .shortlist-button,
-  .view-search .listing-reviews {
-    text-align: left;
+@media (min-width: 768px) {
+  .view-search .search-result .rates,
+  .view-search .search-result .view-property-button,
+  .view-search .search-result .shortlist-button,
+  .view-search .search-result .listing-reviews {
+    text-align: right;
   }
+}
+.view-search .search-result .shortlist-button {
+  float: right;
+}
+.view-search .search-result .shortlist-button a.shortlist {
+  font-size: 21px;
+}
+@media (min-width: 768px) {
+  .view-search .search-result .shortlist-button {
+    float: none;
+  }
+}
+.view-search .search-result .rate-per {
+  white-space: nowrap;
 }
 /*
  * jQuery FlexSlider v2.2.0
@@ -6995,4 +7002,10 @@ html[xmlns] .slides {
 #carousel .flex-active-slide img {
   opacity: 1;
   cursor: default;
+}
+footer {
+  background-color: #e7eae3;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #c2c9b7;
 }

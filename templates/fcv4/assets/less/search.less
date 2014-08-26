@@ -15,13 +15,17 @@
   }
 
 .search-results .search-result:nth-child(2n+1) {
-  background:@blue-baby;
+  //background:@blue-baby;
 }
 
   .search-result {
-    margin-bottom:29px;
-    border-bottom:1px solid darken(@blue-baby,5%);
-    padding:10px;
+    
+    .rates > .lead {
+      font-weight:bold;
+    }
+  
+    padding:20px 0;
+    border-top:1px solid darken(@blue-baby,5%);
 
     > h1,h2,h3,h4,h5,h6 {
       margin-top:0;
@@ -30,17 +34,34 @@
       }
     }
 
-  }
   
-  .rates, .view-property-button, .shortlist-button, .listing-reviews {
-  
-    text-align:right;
+    .rates, .view-property-button, .shortlist-button, .listing-reviews {
+        
+      @media (min-width: @screen-tablet) {  
+        text-align:right;
+      }
+    }
 
-    @media (max-width: @screen-tablet) {
-      text-align:left;
+
+
+    .shortlist-button {
+
+      float:right;    
+    
+      a.shortlist { 
+        font-size:21px;
+      }
+
+      @media (min-width: @screen-tablet) {
+        
+      
+         float:none;
+      }
+    }
+    
+    .rate-per {
+       white-space:nowrap;
     }
   }
-
-  
 
 }

@@ -43,7 +43,6 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
 // $limit = (int) ($limit > $total ? $total : $limit);
 // $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
 ?>
-<div class="container">
 
   <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST">
 
@@ -141,12 +140,5 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
 
     </div>
   </form>
-
-
-
-
-
-</div>
-
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
 

@@ -13,28 +13,30 @@ $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+$HolidayMakerLogin = FCSearchHelperRoute::getItemid(array('component', 'com_users'));
+$login_route = JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin . '&return=' . base64_encode('/shortlist'));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 ?>
 
 <div class="search-result">
-  <div class="row ">
-    <div class="col-xs-12 col-sm-9 col-md-8">
-      <h3>
+  <div class="row">
+    <div class="col-xs-12 col-sm-9">
+      <h3 class="listing-title">
         <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->unit_title)); ?></a>
         <small>
           <?php echo $this->result->property_type . ', ' . $this->result->location_title ?>
         </small>
       </h3>
     </div>
-    <div class="col-xs-12 col-sm-3 col-md-4">
+    <div class="col-xs-12 col-sm-3">
       <p class="rates">
         <?php if ($this->result->price) : ?>
           <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
           <span class="lead">
             <?php echo '&pound;' . round($this->result->price); ?>
-          </span><br />
-          <span class="small">
+          </span>
+          <span class="rate-per">
             <?php echo $this->result->tariff_based_on; ?>
           </span>
         <?php else : ?>
@@ -43,55 +45,59 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
       </p> 
     </div>
   </div>
-
-
-  <div class=" row">
-    <div class="col-xs-12 col-sm-10">
-      <div class="media">
-        <a href="<?php echo $route ?>" class="pull-left">
-          <img class="image-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
-        </a>
-        <div class="media-body">
+  <div class="row">
+    <div class="col-xs-12 col-sm-3">
+      <p>
+        <a href="<?php echo $route ?>">
+          <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
+        </a>  
+      </p>
+    </div>
+    <div class="col-xs-12 col-sm-9">
+      <div class="row">
+        <div class="col-md-9 col-sm-9">
           <p>
             <?php
             echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
             echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
             echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
             ?>
-          <hr />
-          <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
           </p>
+          <p>
+            <?php echo JHtml::_('string.truncate', $this->result->description, 100, true, false); ?>
+          </p>
+
+
+        </div>
+        <div class="col-md-3 col-sm-3">  
+          <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
+            <a href="<?php echo $route ?>" class="btn btn-primary">
+              <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
+            </a>
+          </p>
+          <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
+            <?php if ($logged_in) : ?>
+              <a class="shortlist" <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-content="<ul class='nav'><li><label class='checkbox'><input type='checkbox' value'>My Shortlist</input></label></li><li class='divider'></li><li><a href='/shortlist'>View shortlist</a></li></ul>" data-action='<?php echo $action ?>' href="#">
+                <span class="glyphicon glyphicon-heart"></span>
+              </a>
+            <?php else : ?>
+              <a class="shortlist" href="<?php echo JRoute::_($login_route); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
+                <i class="glyphicon glyphicon-heart"></i>
+              </a>    
+            <?php endif; ?>
+          </p> 
+
+          <?php if ($this->result->reviews) : ?>
+            <p class="listing-reviews visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
+              <a href="<?php echo $route . '#reviews' ?>">
+                <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
+              </a>
+            </p>
+          <?php endif; ?> 
         </div>
       </div>
 
 
     </div>
-    <div class="col-xs-12 col-sm-2">
-      <p class="view-property-button">
-        <a href="<?php echo $route ?>" class="btn btn-primary">
-          <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
-        </a>
-      </p>
-      <p class="shortlist-button">
-        <?php if ($logged_in) : ?>
-          <a class="shortlist lead <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-action='<?php echo $action ?>' href="#">
-            <i class="glyphicon glyphicon-heart"></i>
-          </a>
-        <?php else : ?>
-          <a class="login lead" href="<?php echo '/my-account?return=' . base64_encode('/shortlist'); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
-            <i class="glyphicon glyphicon-heart"></i>
-          </a>    
-        <?php endif; ?>
-      </p> 
-
-      <?php if ($this->result->reviews) : ?>
-        <p class="listing-reviews">
-          <a href="<?php echo $route . '#reviews' ?>">
-            <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
-          </a>
-        </p>
-      <?php endif; ?> 
-    </div>
   </div>
-
 </div>

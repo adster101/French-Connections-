@@ -841,8 +841,10 @@ class AccommodationModelListing extends JModelForm
     {
       if ($v->parent_id)
       {
+        $city = trim(preg_replace('/\(.*?\)/', '', $v->title));
+
         $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
-        $pathArr->$k->name = $v->title;
+        $pathArr->$k->name = $city;
       }
     }
 

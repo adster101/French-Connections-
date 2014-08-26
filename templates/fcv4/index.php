@@ -97,6 +97,9 @@ else
     <div class="row">
       <div class="<?php echo $span; ?>">
         <jdoc:include type="component" />
+        <?php if ($this->countModules('position-2')): ?>
+          <jdoc:include type="modules" name="position-2" style="xhtml" />
+        <?php endif; ?>
       </div>
       <?php if ($this->countModules('position-7')): ?>
         <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
@@ -121,6 +124,8 @@ else
               <jdoc:include type="modules" name="position-15" style="none" />
             </div>
           </div>
+          <hr />
+
         </div>
         <div class="col-lg-3 col-md-5">
           <jdoc:include type="modules" name="position-13" style="none" />
@@ -129,6 +134,11 @@ else
     </div>
 
   <?php endif; ?>
+  <footer>
+    <div class="container">
+      <jdoc:include type="modules" name="footer" style="" />
+    </div>
+  </footer>
   <!-- End Content -->
 <jdoc:include type="modules" name="debug" style="html5" />
 </body>

@@ -36,6 +36,7 @@ module.exports = function(grunt) {
           'bower_components/bootstrap/js/tab.js',
           'bower_components/bootstrap/js/transition.js',
           'bower_components/bootstrap/js/collapse.js',
+          'bower_components/bootstrap/js/dropdown.js',
           'bower_components/bootstrap/js/tooltip.js',
           'media/fc/js/libs/bootstrap3-typeahead.js',
           'bower_components/bootstrap/js/popover.js',

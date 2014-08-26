@@ -29,10 +29,15 @@ $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 
 <ol class="breadcrumb<?php echo $moduleclass_sfx; ?> visible-lg-inline-block visible-md-inline-block visible-sm-inline-block hidden-xs hidden-sm">
   <?php
-  if ($params->get('showHere', 1))
-  {
-    echo '<span>' . JText::_('MOD_BREADCRUMBS_HERE') . '</span>&nbsp;';
-  }
+
+	if ($params->get('showHere', 1))
+	{
+		echo '<li class="active">' . JText::_('MOD_BREADCRUMBS_HERE') . '&#160;</li>';
+	}
+	else
+	{
+		echo '<li class="active"><span class="glyphicon glyphicon-map-marker"></span></li>';
+	}
 
 // Get rid of duplicated entries on trail including home page when using multilanguage
   for ($i = 0; $i < $count; $i++)

@@ -7,6 +7,7 @@ $lang = $language->getTag();
 $app = JFactory::getApplication();
 
 $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+$HolidayMakerLogin = FCSearchHelperRoute::getItemid(array('component', 'com_users'));
 
 $this->item->itemid = $Itemid;
 
@@ -79,13 +80,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </h1>
 </div>
 
-
-
-
-<div class="navbar-property-navigator hidden-xs" data-spy="affix" data-offset-top="640" >
+<div class="navbar-property-navigator" data-spy="affix" data-offset-top="640" >
   <div class="container">
     <div class="row">
-      <div class="col-lg-10 col-md-9 col-sm-8">
+      <div class="col-lg-10 col-md-9 col-sm-8 hidden-xs">
         <ul class="nav nav-pills">
           <li>
             <a href="<?php echo $route ?>#top">
@@ -145,12 +143,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
           <?php if ($logged_in) : ?>
-            <a class="btn btn-default shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="<?php echo $uri ?>">
-              <span class="glyphglyphicon glyphglyphicon-heart"></span>
+            <a class="btn btn-default shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="bottom" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="<?php echo $uri ?>">
+              <span class="glyphicon glyphicon-heart"></span>
               <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
             </a>
           <?php else : ?>
-            <a class="btn btn-default" href="<?php echo $uri ?>">
+            <a class="btn btn-default" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
               <span class="glyphicon glyphicon-heart muted"></span>
               <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
             </a>    
