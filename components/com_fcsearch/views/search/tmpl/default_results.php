@@ -115,11 +115,7 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
             echo JModuleHelper::renderModule($module);
             ?>
           <?php endif; ?> 
-          <div class="search-pagination">
-            <div class="pagination">
               <?php echo $this->pagination->getPagesLinks(); ?>
-            </div>
-          </div>
 
         </div>
         <div class="tab-pane" id="mapsearch">
