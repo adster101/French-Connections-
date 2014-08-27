@@ -75,10 +75,8 @@ if ($params->get('tag_id') != null)
         {
           $class = ' class="' . trim($class) . '"';
         }
-
         
         echo '<li' . $class . '>';
-
         
         // Render the menu item.
         switch ($item->type) :
@@ -88,14 +86,13 @@ if ($params->get('tag_id') != null)
           case 'heading':
             require JModuleHelper::getLayoutPath('mod_menu', 'default_' . $item->type);
             break;
-
           default:
             require JModuleHelper::getLayoutPath('mod_menu', 'default_url');
             break;
         endswitch;
 
         // The next item is deeper.
-        if ($item->deeper && $item->deeper)
+        if ($item->deeper && !$user->guest)
         {
           $anchor_class = $item->anchor_css ? 'class="' . $item->anchor_css . '" ' : '';
 
