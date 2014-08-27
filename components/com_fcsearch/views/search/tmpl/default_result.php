@@ -77,7 +77,7 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
           </p>
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
-              <a class="shortlist" <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-content="<ul class='nav'><li><label class='checkbox'><input type='checkbox' value'>My Shortlist</input></label></li><li class='divider'></li><li><a href='/shortlist'>View shortlist</a></li></ul>" data-action='<?php echo $action ?>' href="#">
+              <a class="shortlist" <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-content="<ul class='nav'><li><label class='checkbox'><input type='checkbox' value=''>My Shortlist</input></label></li><li class='divider'></li><li><a href='/my-account/shortlist'>View shortlist</a></li></ul>" data-action='<?php echo $action ?>' href="#">
                 <span class="glyphicon glyphicon-heart"></span>
               </a>
             <?php else : ?>

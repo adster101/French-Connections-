@@ -325,6 +325,7 @@ class FcSearchModelSearch extends JModelList {
           + sin(radians(' . $this->getState('search.longitude', '') . '))
           * sin(radians(c.latitude))) < 10)
         ');
+        
         $query->order('
         ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
           cos(radians(c.latitude)) *
@@ -390,6 +391,7 @@ class FcSearchModelSearch extends JModelList {
       // Sort out the ordering required      
       // No filter function needed here as ordering can simplt be cleared and reinstated, if needed.
       if ($sort_column) {
+        $query->clear('order');
         $query->order($sort_column . ' ' . $sort_order);
       }
 

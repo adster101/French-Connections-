@@ -14812,16 +14812,16 @@ jQuery(document).ready(function() {
     }).click(function(event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      popover = jQuery(this).data('bs.popover'); // Get the popover data attributes
-      popover.options.html = true; // Update the content by calling getContent
+      popover = jQuery(this).data('bs.popover'); // Get the popover instance
+      popover.options.html = true; 
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
   })
 
   jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
-    console.log(this);
-    var favourite = el.parent().parent().siblings('a.shortlist');
+    console.log(el);
+    var favourite = $('.popover').siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
     var userToken = document.getElementsByTagName("input")[0].name;
