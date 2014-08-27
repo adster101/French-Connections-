@@ -35,9 +35,9 @@ $departure = '';
           <label class="sr-only" for="arrival">
             <?php echo JText::_('COM_FCSEARCH_SEARCH_ARRIVAL') ?>
           </label>
-          <div class="input-group">
+          <div class="input-group start_date date">
             <input type="text" name="arrival" id="arrival" size="30" value="<?php echo $arrival ?>" 
-                   class="start_date form-control search-control-date" autocomplete="Off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_ARRIVAL_DATE') ?>" />
+                   class="form-control search-control-date" autocomplete="Off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_ARRIVAL_DATE') ?>" />
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
           </div>
         </div>
@@ -45,10 +45,10 @@ $departure = '';
           <label class="sr-only" for="departure">
             <?php echo JText::_('COM_FCSEARCH_SEARCH_DEPARTURE') ?>
           </label>    
-          <span class="input-group">
+          <span class="input-group end_date date">
 
             <input type="text" name="departure" id="departure" size="30" value="<?php echo $departure ?>" 
-                   class="end_date form-control search-control-date" autocomplete="off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DEPARTURE_DATE') ?>" />
+                   class="form-control search-control-date" autocomplete="off" placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DEPARTURE_DATE') ?>" />
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
           </span>
         </div>

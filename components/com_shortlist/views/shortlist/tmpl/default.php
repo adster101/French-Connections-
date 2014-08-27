@@ -39,7 +39,6 @@ $lang->load('com_accommodation', JPATH_SITE);
 
   <p class="lead"><?php echo JText::_('COM_SHORTLIST_SHORTLIST_EMPTY'); ?></p>
 
-  <p>Popular searches</p>
 
 <?php endif; ?>
 
