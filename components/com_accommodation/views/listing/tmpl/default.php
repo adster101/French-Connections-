@@ -18,6 +18,8 @@ $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 $uri = JUri::getInstance()->toString();
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
+$inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
+
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
 
 if ((int) $preview && $preview == 1)
@@ -57,6 +59,13 @@ if (!empty($this->item->languages_spoken))
 
 $amenities = ($this->item->local_amenities) ? json_decode($this->item->local_amenities) : array();
 
+// Shortlist button thingy
+$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
+$displayData = new StdClass;
+$displayData->action = $action;
+$displayData->inShortlist = $inShortlist;
+$displayData->unit_id = $this->item->unit_id;
+$displayData->class = ' btn btn-default';
 
 
 // Add the reviews to item for the above layout.
@@ -68,8 +77,7 @@ require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
 // Register the general helper class
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
-// The layout for the anchor based navigation on the property listing
-$navigator = new JLayoutFile('navigator', $basePath = JPATH_SITE . '/components/com_accommodation/layouts');
+
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 ?>
@@ -143,10 +151,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
           <?php if ($logged_in) : ?>
-            <a class="btn btn-default shortlist <?php echo ($action == 'add') ? 'muted' : '' ?>" data-animation="false" data-placement="bottom" data-toggle="popover" data-id='<?php echo $this->item->unit_id ?>' data-action='<?php echo $action ?>' href="<?php echo $uri ?>">
-              <span class="glyphicon glyphicon-heart"></span>
-              <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
-            </a>
+            <?php echo $shortlist->render($displayData); ?>
           <?php else : ?>
             <a class="btn btn-default" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
               <span class="glyphicon glyphicon-heart muted"></span>

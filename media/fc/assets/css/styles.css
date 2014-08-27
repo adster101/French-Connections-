@@ -6302,6 +6302,10 @@ Contains styles that apply at the global level, or can be applied to any section
   src: url('../fonts/Social.eot');
   src: url('../fonts/Social.eot?#iefix') format('embedded-opentype'), url('../fonts/Social.woff') format('woff'), url('../fonts/Social.ttf') format('truetype'), url('../fonts/Social.svg#glyphicons_halflingsregular') format('svg');
 }
+.view-listing .shortlist.in-shortlist > span,
+.view-search .shortlist.in-shortlist > span {
+  color: #cd3e3f;
+}
 .view-listing h1.page-header,
 .view-search h1.page-header {
   font-size: 18px;

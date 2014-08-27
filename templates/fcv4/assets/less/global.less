@@ -39,7 +39,11 @@ Contains styles that apply at the global level, or can be applied to any section
 
 // Control the heading sizes across the different view ports
 .view-listing, .view-search {
-
+      .shortlist.in-shortlist {
+        > span {
+          color:@red;
+        }
+      }
   h1.page-header {
 
     font-size:@font-size-h4; 

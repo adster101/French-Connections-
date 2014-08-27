@@ -29,15 +29,14 @@ $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 
 <ol class="breadcrumb<?php echo $moduleclass_sfx; ?> visible-lg-inline-block visible-md-inline-block visible-sm-inline-block hidden-xs hidden-sm">
   <?php
-
-	if ($params->get('showHere', 1))
-	{
-		echo '<li class="active">' . JText::_('MOD_BREADCRUMBS_HERE') . '&#160;</li>';
-	}
-	else
-	{
-		echo '<li class="active"><span class="glyphicon glyphicon-map-marker"></span></li>';
-	}
+  if ($params->get('showHere', 1))
+  {
+    echo '<li class="active">' . JText::_('MOD_BREADCRUMBS_HERE') . '&#160;</li>';
+  }
+  else
+  {
+    echo '<li class="active"><span class="glyphicon glyphicon-map-marker"></span></li>';
+  }
 
 // Get rid of duplicated entries on trail including home page when using multilanguage
   for ($i = 0; $i < $count; $i++)
@@ -86,6 +85,7 @@ $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 <?php if ($isListing) : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block pull-right">
     <form class="form-inline" id="property-search" method="POST" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>">
+      <?php echo JHtml::_('form.token'); ?>
       <label class="sr-only" for="q">
         <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
       </label>

@@ -11,13 +11,20 @@ defined('_JEXEC') or die;
 $user = JFactory::getUser();
 
 $logged_in = ($user->guest) ? false : true;
-$action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'in' : 'out';
+$action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
 $HolidayMakerLogin = FCSearchHelperRoute::getItemid(array('component', 'com_users'));
 $login_route = JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin . '&return=' . base64_encode('/shortlist'));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $inShortlist = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 1 : 0;
+$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
+$displayData = new StdClass;
+$displayData->action = $action;
+$displayData->inShortlist = $inShortlist;
+$displayData->unit_id= $this->result->unit_id;
+$displayData->class = '';
+
 ?>
 
 <div class="search-result">
@@ -76,9 +83,8 @@ $inShortlist = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 1 
           </p>
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
-              <a class="shortlist<?php echo ($inShortlist) ? ' in-shortlist' : ' muted' ?>" data-animation="false" data-placement="left" data-toggle="popover" data-id='<?php echo $this->result->unit_id ?>' data-content="<ul class='nav'><li><label class='checkbox'><input type='checkbox' <?php echo ($inShortlist) ? 'checked' : '';?> value='<?php echo $inShortlist?>'>My Shortlist</input></label></li><li class='divider'></li><li><a href='/my-account/shortlist'>View shortlist</a></li></ul>" data-action='<?php echo $action ?>' href="#">
-                <span class="glyphicon glyphicon-heart"></span>
-              </a>
+              <?php echo $shortlist->render($displayData); ?>
+              
             <?php else : ?>
               <a class="shortlist" href="<?php echo JRoute::_($login_route); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                 <i class="glyphicon glyphicon-heart"></i>

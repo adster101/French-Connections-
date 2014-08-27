@@ -14820,7 +14820,6 @@ jQuery(document).ready(function() {
 
   jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
-    console.log(el);
     var favourite = $('.popover').siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
@@ -14840,18 +14839,15 @@ jQuery(document).ready(function() {
         favourite.data(dataObj);
 
         if (dataObj.action == 'remove') {
-          el.addClass('glyphicon-ok');
-          el.removeClass('glyphicon-remove');
+          favourite.addClass('in-shortlist');
         } else {
-          el.addClass('glyphicon-remove');
-          el.removeClass('glyphicon-ok');
+          favourite.removeClass('in-shortlist');
         } // If action is remove then add icon-checkbox else remove it
-        (dataObj.action == 'remove') ? favourite.toggleClass('muted', false) : favourite.toggleClass('muted', true); // If action is remove then add icon-checkbox else remove it
         favourite.attr('data-action', dataObj.action);
 
       } else {
-        jQuery('.shortlist').addClass('muted');
-        el.removeClass('glyphicon-ok glyphicon-remove').html('<p>Session expired.<br /> Please login.</p>');
+        popover = $('.popover').data('bs.popover');
+        popover.options.content = '<p>Session expired.<br /> Please login.</p>';
       }
     })
   });
