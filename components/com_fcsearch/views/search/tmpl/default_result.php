@@ -17,6 +17,8 @@ $HolidayMakerLogin = FCSearchHelperRoute::getItemid(array('component', 'com_user
 $login_route = JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin . '&return=' . base64_encode('/shortlist'));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
+
+var_dump($this);
 ?>
 
 <div class="search-result">
@@ -66,8 +68,6 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
           <p>
             <?php echo JHtml::_('string.truncate', $this->result->description, 100, true, false); ?>
           </p>
-
-
         </div>
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
