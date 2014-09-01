@@ -91,13 +91,13 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
               </div>
               <div class="offset1 col-lg-2">
                 <a class="btn btn-small" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
-                  <i class="icon icon-loop">&nbsp;</i>
+                  <i class="glyphicon glyphicon-loop">&nbsp;</i>
                 </a>
                 <a title="Get an audio CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_image btn btn-small" href="javascript:Recaptcha.switch_type(\'audio\')">
-                  <i class="icon icon-music">&nbsp;</i>      
+                  <i class="glyphicon glyphicon-music">&nbsp;</i>      
                 </a>
                 <a title="Get an image CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_audio btn btn-small" href="javascript:Recaptcha.switch_type(\'image\')">
-                  <i class="icon icon-picture">&nbsp;</i>      
+                  <i class="glyphicon glyphicon-picture">&nbsp;</i>      
                 </a>
 
                 <a href="javascript:Recaptcha.showhelp()">

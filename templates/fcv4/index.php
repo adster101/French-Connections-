@@ -26,7 +26,7 @@ if ($active)
 }
 // Remove all JS from the initial page load...
 $this->_scripts = array();
-$this->_script = array();
+//$this->_script = array();
 
 // Adjusting content width
 if ($this->countModules('position-7'))

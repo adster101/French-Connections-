@@ -45,9 +45,13 @@ Contains styles that apply at the global level, or can be applied to any section
         }
       }
   h1.page-header {
-
+    
     font-size:@font-size-h4; 
     
+    @media (max-width: @screen-phone) {
+      margin-top:0;
+    }
+
     @media (min-width: @screen-tablet) {
       font-size:@font-size-h3; 
     }

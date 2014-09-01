@@ -387,7 +387,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </div>
   <?php if (!empty($this->item->location_details)) : ?>
     <div class="row" id="location">
-      <div class="col-lg- col-md-7 col-sm-7">
+      <div class="col-lg- col-md-7 col-sm-12">
         <?php if ($this->item->unit_title) : ?>
           <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h2>  
         <?php endif; ?>
@@ -402,7 +402,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <?php endforeach; ?>
         <?php endif; ?>
       </div>
-      <div class="col-lg-5 col-md-5 col-sm-5">   
+      <div class="col-lg-5 col-md-5 col-sm-12">   
         <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?></h2>  
 
         <div id="map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
@@ -419,7 +419,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
   <?php if (!empty($this->item->getting_there)) : ?>
     <div class="row" id="gettingthere">
-      <div class="col-lg-7 col-md-7 col-sm-7">
+      <div class="col-lg-7 col-md-7 col-sm-12">
         <?php if ($this->item->unit_title) : ?>
           <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h2>  
         <?php endif; ?>
@@ -437,7 +437,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
         </p>
       </div>
-      <div class="col-lg-5 col-md-5 col-sm-5"> 
+      <div class="col-lg-5 col-md-5 col-sm-12"> 
 
       </div>
     </div>
@@ -581,7 +581,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   <?php if ($this->item->unit_title) : ?>
     <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
   <?php endif; ?> 
-  <div clas="row" id="availability">
+  <div class="row" id="availability">
     <div class="col-lg-7 col-md-7 col-sm-7">
 
       <?php if ($this->item->changeover_day) : ?>
@@ -597,19 +597,22 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       </p>
     </div>
     <div class="col-lg-5 col-md-5 col-sm-5">
-      <table class="key">
-        <tr>
-          <td class="available"></td>
-          <td>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></td>
+      <table class="table table-condensed availability-key">
+        <thead> 
+          <tr>
+            <th class="available">&nbsp;</th>
+            <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></th>
 
-          <td class="unavailable">&nbsp;</td>
-          <td>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></td>
-        </tr>
+            <th class="unavailable">&nbsp;</th>
+            <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></th>
+          </tr>
+        </thead>
       </table>    
     </div>
   </div>
   <div class="row">
     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+      <hr />
       <?php if ($this->availability) : ?>
         <?php echo $this->availability; ?>
       <?php endif; ?>

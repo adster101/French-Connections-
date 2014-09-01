@@ -297,7 +297,7 @@ abstract class RentalHelper
     for ($z = 0; $z <= $months; $z++)
     {
 
-      $calendar.='<div class="col-md-3 col-lg-3 col-sm-3"><div class="calendar-container">';
+      $calendar.='<div class="col-md-4">';
 
       $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
       #remember that mktime will automatically correct if invalid dates are entered
@@ -312,13 +312,14 @@ abstract class RentalHelper
       $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day
       $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names
 
-      $calendar.= '<table class="table table-condensed avCalendar">' . "\n";
-      $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr class="days">' . "\n";
+      $calendar.='<table class="availability table table-bordered">' . "\n";
+      $calendar.= '<caption><strong>' . $title . '</strong></caption>' . "\n";
+      $calendar.= '<thead><tr class="days">' . "\n";
       if ($day_name_length)
       { #if the day names should be shown ($day_name_length > 0)
         #if day_name_length is >3, the full name of the day will be printed
         foreach ($day_names as $d)
-          $calendar .= '<th abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
+          $calendar .= '<th class="month-year" abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
       }
 
       $calendar.="</tr></thead>";
@@ -355,12 +356,10 @@ abstract class RentalHelper
         { // Availability is false i.e. unavailable
           if ($status_yesterday != $status)
           {
-
             $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
           }
           else
           {
-
             $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
           }
         }
@@ -370,9 +369,9 @@ abstract class RentalHelper
       {
         $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>'; #remaining "empty" days
       }
-      $calendar.="</table></div></div>";
+      $calendar.="</table></div>";
 
-      if (($z % 4 === 3))
+      if (($z % 3 === 2))
       {
         $calendar.='</div><div class="row">';
       }

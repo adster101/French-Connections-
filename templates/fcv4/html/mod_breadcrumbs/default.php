@@ -20,10 +20,12 @@ $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 ?>
 <?php if (!empty($search_url) && ($isListing || $isShortlist)) : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
-    <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    
-      <span class="glyphicon glyphicon-circle-arrow-left"></span>
-      <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
-    </a>
+    <p>
+      <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    
+        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+        <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
+      </a>
+    </p>
   </div>
 <?php endif; ?>
 
