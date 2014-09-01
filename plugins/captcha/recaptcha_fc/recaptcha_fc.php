@@ -17,7 +17,8 @@ defined('_JEXEC') or die;
  * @subpackage  Captcha
  * @since       2.5
  */
-class PlgCaptchaRecaptcha_fc extends JPlugin {
+class PlgCaptchaRecaptcha_fc extends JPlugin
+{
 
   const RECAPTCHA_API_SERVER = "http://www.google.com/recaptcha/api";
   const RECAPTCHA_API_SECURE_SERVER = "https://www.google.com/recaptcha/api";
@@ -40,7 +41,8 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    *
    * @since  2.5
    */
-  public function onInit($id) {
+  public function onInit($id)
+  {
     $document = JFactory::getDocument();
     $app = JFactory::getApplication();
 
@@ -48,13 +50,15 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
     $pubkey = $this->params->get('public_key', '');
     $theme = $this->params->get('theme', 'clean');
 
-    if ($pubkey == null || $pubkey == '') {
+    if ($pubkey == null || $pubkey == '')
+    {
       throw new Exception(JText::_('PLG_RECAPTCHA_FC_ERROR_NO_PUBLIC_KEY'));
     }
 
     $server = self::RECAPTCHA_API_SERVER;
 
-    if ($app->isSSLConnection()) {
+    if ($app->isSSLConnection())
+    {
       $server = self::RECAPTCHA_API_SECURE_SERVER;
     }
 
@@ -78,7 +82,8 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    *
    * @since  2.5
    */
-  public function onDisplay($name, $id, $class) {
+  public function onDisplay($name, $id, $class)
+  {
     $pubkey = $this->params->get('public_key', '');
 
     return '
@@ -86,23 +91,25 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="row">
-              <div class="col-lg-9">
+              <div class="col-lg-6 col-md-7 col-sm-12">
                 <div id="recaptcha_image"></div>
-              </div>
-              <div class="offset1 col-lg-2">
-                <a class="btn btn-small" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
-                  <i class="glyphicon glyphicon-loop">&nbsp;</i>
+              </div>         
+
+              <div class="col-lg-6 col-md-5 col-sm-12">
+                <a class="btn btn-default" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
+                  <i class="glyphicon glyphicon-refresh"></i>
                 </a>
-                <a title="Get an audio CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_image btn btn-small" href="javascript:Recaptcha.switch_type(\'audio\')">
-                  <i class="glyphicon glyphicon-music">&nbsp;</i>      
+                <a title="Get an audio CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_image btn btn-default" href="javascript:Recaptcha.switch_type(\'audio\')">
+                  <i class="glyphicon glyphicon-volume-up"></i>      
                 </a>
-                <a title="Get an image CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_audio btn btn-small" href="javascript:Recaptcha.switch_type(\'image\')">
-                  <i class="glyphicon glyphicon-picture">&nbsp;</i>      
+                <a title="Get an image CAPTCHA" data-toggle="tooltip" class="recaptcha_only_if_audio btn btn-default" href="javascript:Recaptcha.switch_type(\'image\')">
+                  <i class="glyphicon glyphicon-picture"></i>      
                 </a>
 
                 <a href="javascript:Recaptcha.showhelp()">
                   Help
-                </a>
+                </a>   
+                <img id="recaptcha_logo" alt="" width="71" height="36" src="http://www.google.com/recaptcha/api/img/clean/logo.png" class="pull-right" />
               </div>
             </div>
           <hr />
@@ -112,19 +119,19 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
           <!--<label class="recaptcha_only_if_image">Enter the words above:</label>
           <label class="recaptcha_only_if_audio">Enter the numbers you hear:</label><br />-->
         
-          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" />
-          <img id="recaptcha_logo" alt="" width="71" height="36" src="http://www.google.com/recaptcha/api/img/clean/logo.png" class="pull-right" />
+          <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" class="form-control col-lg-12" />
+
       
           <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=' . $pubkey . '"></script>
           <noscript>
             <iframe 
-              src="http://www.google.com/recaptcha/api/noscript?k=' .$pubkey . '" 
+              src="http://www.google.com/recaptcha/api/noscript?k=' . $pubkey . '" 
               height="300" 
               width="500" 
               frameborder="0">
             </iframe><br>
             <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
-            <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+            <input type="hidden" name="recaptcha_response_field" value="manual_challenge" class="control-field col-sm-6">
           </noscript>
         </div>
       </div>
@@ -138,7 +145,8 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    *
    * @since  2.5
    */
-  public function onCheckAnswer($code) {
+  public function onCheckAnswer($code)
+  {
     $input = JFactory::getApplication()->input;
     $privatekey = $this->params->get('private_key');
     $remoteip = $input->server->get('REMOTE_ADDR', '', 'string');
@@ -146,21 +154,24 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
     $response = $input->get('recaptcha_response_field', '', 'string');
 
     // Check for Private Key
-    if (empty($privatekey)) {
+    if (empty($privatekey))
+    {
       $this->_subject->setError(JText::_('PLG_RECAPTCHA_FC_ERROR_NO_PRIVATE_KEY'));
 
       return false;
     }
 
     // Check for IP
-    if (empty($remoteip)) {
+    if (empty($remoteip))
+    {
       $this->_subject->setError(JText::_('PLG_RECAPTCHA_FC_ERROR_NO_IP'));
 
       return false;
     }
 
     // Discard spam submissions
-    if ($challenge == null || strlen($challenge) == 0 || $response == null || strlen($response) == 0) {
+    if ($challenge == null || strlen($challenge) == 0 || $response == null || strlen($response) == 0)
+    {
       $this->_subject->setError(JText::_('PLG_RECAPTCHA_FC_ERROR_EMPTY_SOLUTION'));
 
       return false;
@@ -177,9 +188,12 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
 
     $answers = explode("\n", $response[1]);
 
-    if (trim($answers[0]) == 'true') {
+    if (trim($answers[0]) == 'true')
+    {
       return true;
-    } else {
+    }
+    else
+    {
       // @todo use exceptions here
       $this->_subject->setError(JText::_('PLG_RECAPTCHA_FC_ERROR_' . strtoupper(str_replace('-', '_', $answers[1]))));
 
@@ -196,10 +210,12 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    *
    * @since  2.5
    */
-  private function _recaptcha_qsencode($data) {
+  private function _recaptcha_qsencode($data)
+  {
     $req = "";
 
-    foreach ($data as $key => $value) {
+    foreach ($data as $key => $value)
+    {
       $req .= $key . '=' . urlencode(stripslashes($value)) . '&';
     }
 
@@ -221,7 +237,8 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    *
    * @since  2.5
    */
-  private function _recaptcha_http_post($host, $path, $data, $port = 80) {
+  private function _recaptcha_http_post($host, $path, $data, $port = 80)
+  {
     $req = $this->_recaptcha_qsencode($data);
 
     $http_request = "POST $path HTTP/1.0\r\n";
@@ -234,13 +251,15 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
 
     $response = '';
 
-    if (($fs = @fsockopen($host, $port, $errno, $errstr, 10)) == false) {
+    if (($fs = @fsockopen($host, $port, $errno, $errstr, 10)) == false)
+    {
       die('Could not open socket');
     }
 
     fwrite($fs, $http_request);
 
-    while (!feof($fs)) {
+    while (!feof($fs))
+    {
       // One TCP-IP packet
       $response .= fgets($fs, 1160);
     }
@@ -258,19 +277,22 @@ class PlgCaptchaRecaptcha_fc extends JPlugin {
    *
    * @since  2.5
    */
-  private function _getLanguage() {
+  private function _getLanguage()
+  {
     $language = JFactory::getLanguage();
 
     $tag = explode('-', $language->getTag());
     $tag = $tag[0];
     $available = array('en', 'pt', 'fr', 'de', 'nl', 'ru', 'es', 'tr');
 
-    if (in_array($tag, $available)) {
+    if (in_array($tag, $available))
+    {
       return "lang : '" . $tag . "',";
     }
 
     // If the default language is not available, let's search for a custom translation
-    if ($language->hasKey('PLG_RECAPTCHA_FC_CUSTOM_LANG')) {
+    if ($language->hasKey('PLG_RECAPTCHA_FC_CUSTOM_LANG'))
+    {
       $custom[] = 'custom_translations : {';
       $custom[] = "\t" . 'instructions_visual : "' . JText::_('PLG_RECAPTCHA_FC_INSTRUCTIONS_VISUAL') . '",';
       $custom[] = "\t" . 'instructions_audio : "' . JText::_('PLG_RECAPTCHA_FC_INSTRUCTIONS_AUDIO') . '",';

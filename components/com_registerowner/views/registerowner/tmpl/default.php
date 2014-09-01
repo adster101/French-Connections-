@@ -26,47 +26,49 @@ JHtml::_('behavior.tooltip');
 <form id="contact-form" action="<?php echo JRoute::_('index.php?option=com_registerowner'); ?>" method="post" class="form-validate form-horizontal">
   <legend><?php echo JText::_('COM_REGISTER_OWNER_LEGEND'); ?></legend>
   <fieldset class="adminform">
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('firstname'); ?>
-      <div class="controls">
+      <div class="col-md-4 col-lg-4 col-xs-12">
         <?php echo $this->form->getInput('firstname'); ?>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('surname'); ?>
-      <div class="controls">
+      <div class="col-md-4 col-lg-4 col-xs-12">
         <?php echo $this->form->getInput('surname'); ?>
       </div>
     </div>    
 
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('email1'); ?>
-      <div class="controls">
+      <div class="col-md-5 col-lg-6 col-xs-12">
         <?php echo $this->form->getInput('email1'); ?>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('email2'); ?>
-      <div class="controls">
+      <div class="col-md-5 col-lg-6 col-xs-10 col-xs-12">
         <?php echo $this->form->getInput('email2'); ?>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('phone_1'); ?>
-      <div class="controls">
+      <div class="col-md-4 col-lg-3 col-xs-12">
         <?php echo $this->form->getInput('dialling_code'); ?>
+      </div>
+      <div class="col-md-4 col-lg-5 col-xs-12">
         <?php echo $this->form->getInput('phone_1'); ?>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('where_heard'); ?>
-      <div class="controls">
+      <div class="col-md-6 col-lg-4 col-xs-12">
         <?php echo $this->form->getInput('where_heard'); ?>
       </div>
     </div>
-    <div class="control-group">
+    <div class="form-group">
       <?php echo $this->form->getLabel('captcha'); ?>
-      <div class="controls">
+      <div class="col-md-8 col-lg-5">
         <?php echo $this->form->getInput('captcha'); ?>
       </div>
     </div>

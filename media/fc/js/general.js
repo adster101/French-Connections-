@@ -1,5 +1,7 @@
 jQuery(document).ready(function() {
 
+
+
   // Check whether placeholder is supported or not.
   if (document.createElement("input").placeholder == undefined) {
     // Placeholder is not supported, so remove the attribute
@@ -69,7 +71,7 @@ jQuery(document).ready(function() {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
       popover = jQuery(this).data('bs.popover'); // Get the popover instance
-      popover.options.html = true; 
+      popover.options.html = true;
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
   })
@@ -206,6 +208,11 @@ jQuery(document).ready(function() {
 });
 
 var infowindow;
+
+var RecaptchaOptions = {
+  theme: "custom",
+  custom_theme_widget: "recaptcha_widget"
+}
 
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data

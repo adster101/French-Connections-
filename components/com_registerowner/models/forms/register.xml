@@ -3,27 +3,27 @@
   <fieldset 
     name="register" 
     label="">
-  <field 
+    <field 
       name="firstname" 
       type="text"
       description="COM_USERS_REGISTER_FIRST_NAME_DESC"
       filter="string"
       label="COM_USERS_REGISTER_FIRST_NAME_DESC"
       required="true"
-      class="input-small"
-      size="30"
-      labelclass="control-label"
+      class="form-control"
+      size="10"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
     />
     <field 
       name="surname" 
       type="text"
-      class="input-small"
+      class="form-control"
       description="COM_USERS_REGISTER_SURNAME_DESC"
       filter="string"
       label="COM_USERS_REGISTER_SURNAME_DESC"
       required="true"
       size="30"
-      labelclass="control-label"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
     />
 
     <field 
@@ -37,9 +37,9 @@
       required="true"
       size="30"
       unique="true"
-      class="input-large"
+      class="form-control"
       validate="email"
-      labelclass="control-label"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
     />
     <field 
       name="email2" 
@@ -50,16 +50,17 @@
       label="COM_USERS_REGISTER_EMAIL2_LABEL"
       message="COM_USERS_REGISTER_EMAIL2_MESSAGE"
       required="true"
-      class="input-large"
+      class="form-control"
       size="30"
       validate="equals"
-      labelclass="control-label"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
     />
     <field 
       name="dialling_code"
       type="diallingcodes"
       required="true"
       filter="string"
+      class="form-control"
     />
     <field
       name="phone_1"
@@ -70,9 +71,9 @@
       label="COM_USERS_REGISTER_PHONE_LABEL"
       message="COM_USERS_REGISTER_PHONE_MESSAGE"
       size="30"
-      class="input-small"
+      class="form-control"
       required="true"
-      labelclass="control-label"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
       validate="tel"
     />
     <field
@@ -83,7 +84,8 @@
       filter="string"
       required="true"
       label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
-      labelclass="control-label"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      class="form-control"
       message="PLG_USER_PROFILE_FIELD_WHERE_HEARD_MESSAGE">
       <option	value="">JGLOBAL_SELECT_AN_OPTION</option>
       <option	value="WHERE_HEARD_GOOGLE">WHERE_HEARD_SEARCH_ENGINE</option>
@@ -98,9 +100,9 @@
       label="COM_USERS_CAPTCHA_LABEL"
       description="COM_USERS_CAPTCHA_DESC"
       validate="captcha"
-      labelclass="control-label"
+      labelclass="control-label col-md-4"
     />
-    </fieldset>
+  </fieldset>
   
   
 </form>

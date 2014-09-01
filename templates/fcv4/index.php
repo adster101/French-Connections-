@@ -26,12 +26,12 @@ if ($active)
 }
 // Remove all JS from the initial page load...
 $this->_scripts = array();
-//$this->_script = array();
+$this->_script = array();
 
 // Adjusting content width
 if ($this->countModules('position-7'))
 {
-  $span = "col-lg-8 col-md-9 col-sm-8 col-xs-12";
+  $span = "col-lg-8 col-md-8 col-sm-8 col-xs-12";
 }
 else
 {
@@ -102,7 +102,7 @@ else
         <?php endif; ?>
       </div>
       <?php if ($this->countModules('position-7')): ?>
-        <div class="col-lg-4 col-md-3 col-sm-4 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
           <jdoc:include type="modules" name="position-7" style="xhtml" />
         </div>
       <?php endif; ?>

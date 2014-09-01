@@ -35,16 +35,14 @@ JHtml::_('behavior.keepalive');
     </div>
   <?php endif; ?>
 
-  <form action="<?php echo JRoute::_('index.php?option=com_users&task=user.login'); ?>" method="post" class="form-horizontal">
+  <form action="<?php echo JRoute::_('index.php?option=com_users&task=user.login'); ?>" method="post" class="form-vertical">
 
     <fieldset class="well">
       <?php foreach ($this->form->getFieldset('credentials') as $field) : ?>
         <?php if (!$field->hidden) : ?>
           <div class="form-group">
             <?php echo $field->label; ?>
-            <div class="col-md-10 control-label">
             <?php echo $field->input; ?>
-            </div>
           </div>
         <?php endif; ?>
       <?php endforeach; ?>
