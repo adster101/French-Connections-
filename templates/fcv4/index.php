@@ -120,7 +120,7 @@ else
             <div class="col-lg-6 col-md-6 col-sm-6">
               <jdoc:include type="modules" name="position-14" style="none" />
             </div>
-            <div class="col-lg-6 col-md-6 col-md-6">
+            <div class="col-lg-6 col-md-6 col-sm-6">
               <jdoc:include type="modules" name="position-15" style="none" />
             </div>
           </div>

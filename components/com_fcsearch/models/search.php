@@ -35,7 +35,7 @@ class FcSearchModelSearch extends JModelList {
   public $location;
 
   /*
-   * The 'level' of the search. 1-3 is a wider area search, 4 is a town/city search.
+   * The 'level' of the search. 1-4 is a wider area search, 5 is a town/city search.
    *
    */
   public $level = '';

@@ -296,10 +296,12 @@ class FcSearchViewSearch extends JViewLegacy {
     if ($property_type && $accommodation_type) {
       $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_TITLE', ucwords($accommodation_type), ucwords($property_type), ucwords($location));
     } elseif ($accommodation_type) {
-
       $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($accommodation_type), ucwords($location), ucwords($location), ucfirst($accommodation_type));
     } elseif ($property_type) {
-      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($property_type), ucwords($location), ucwords($location), ucfirst($property_type));
+      $inflector = JStringInflector::getInstance();
+      $inflector->addWord('Chateau', 'Chateaux ');
+      $plural_property_type = $inflector->toPlural($property_type);
+      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location), ucwords($location), ucfirst($plural_property_type));
     }
 
     // Amend the title based on bedroom and occupancy filter

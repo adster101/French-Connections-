@@ -1,32 +1,54 @@
 .view-search {
 
-  .refine-search {
-    .close {
-      float:none;
+  // Offer 'ribbon'  
+  p.offer
+    {
+      position: relative;
+      padding: 3px 0px 5px 9px;
+      margin-left: -14px;
+      color: #fff;
+      background-color: #cd3e3f;
+      #gradient > .vertical(lighten(#cd3e3f, 5% ),#cd3e3f);
+      font-weight:600;
+    } 
+
+    p.offer:after
+    {
+      content: ' ';
+      position: absolute;
+      height: 0;
+      left: 0px;
+      top: 100%;
+      border-width: 7px 7px;
+      border-style: solid;
+      border-color: #7b6c50 #7b6c50 transparent transparent;
     }
-  }
 
-  .nav-tabs {
-    margin-bottom:20px;
-  }
+    .refine-search {
+      .close {
+        float:none;
+      }
+    }
 
-  .search-results {
-    margin-top:20px;
-  }
+    .nav-tabs {
+      margin-bottom:20px;
+    }
 
-.search-results .search-result:nth-child(2n+1) {
-  background:@blue-baby;
-}
+    .search-results {
+      margin-top:20px;
+    }
 
-  .search-result {
-    
+    .search-results .search-result:nth-child(2n+1) {
+      background:@blue-baby;
+    }
+
+  .search-result { 
     .rates > .lead {
       font-weight:bold;
     }
   
     padding:20px 0;
     border-top:1px solid darken(@blue-baby,5%);
-
     > h1,h2,h3,h4,h5,h6 {
       margin-top:0;
       > small {
@@ -34,36 +56,26 @@
       }
     }
 
-  
     .rates, .view-property-button, .shortlist-button, .listing-reviews {
-        
       @media (min-width: @screen-tablet) {  
         text-align:right;
       }
     }
 
- 
-
     .shortlist-button {
 
       float:right;    
-    
       a.shortlist { 
         font-size:21px;
       }
-      
 
-
-      @media (min-width: @screen-tablet) {
-        
-      
+      @media (min-width: @screen-tablet) {  
          float:none;
       }
     }
-    
+   
     .rate-per {
        white-space:nowrap;
     }
   }
-
 }

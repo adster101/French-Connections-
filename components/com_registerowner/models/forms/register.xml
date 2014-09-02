@@ -12,7 +12,7 @@
       required="true"
       class="form-control"
       size="10"
-      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
     <field 
       name="surname" 
@@ -23,7 +23,7 @@
       label="COM_USERS_REGISTER_SURNAME_DESC"
       required="true"
       size="30"
-      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
 
     <field 
@@ -39,7 +39,7 @@
       unique="true"
       class="form-control"
       validate="email"
-      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
     <field 
       name="email2" 
@@ -53,7 +53,7 @@
       class="form-control"
       size="30"
       validate="equals"
-      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
     <field 
       name="dialling_code"
@@ -73,7 +73,7 @@
       size="30"
       class="form-control"
       required="true"
-      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
       validate="tel"
     />
     <field
@@ -84,7 +84,7 @@
       filter="string"
       required="true"
       label="PLG_USER_PROFILE_FIELD_WHERE_HEARD_LABEL"
-      labelclass="control-label col-md-4 col-lg-3 col-xs-12"
+      labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
       class="form-control"
       message="PLG_USER_PROFILE_FIELD_WHERE_HEARD_MESSAGE">
       <option	value="">JGLOBAL_SELECT_AN_OPTION</option>
@@ -100,7 +100,7 @@
       label="COM_USERS_CAPTCHA_LABEL"
       description="COM_USERS_CAPTCHA_DESC"
       validate="captcha"
-      labelclass="control-label col-md-4"
+      labelclass="control-label col-md-4 col-lg-3 col-sm-4"
     />
   </fieldset>
   

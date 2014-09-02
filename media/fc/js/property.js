@@ -1,8 +1,7 @@
 jQuery(window).load(function() {
-
-  // Load the google maps crap
-  loadGoogleMaps('initPropertyMap');
-
+  if (jQuery('#property_map_canvas').length) {
+    loadGoogleMaps('initPropertyMap');
+  }
 })
 
 jQuery(document).ready(function() {
@@ -17,7 +16,6 @@ jQuery(document).ready(function() {
     asNavFor: '#slider',
     controlNav: false,
     slideshow: false
-
   });
 
   jQuery('#slider').flexslider({
@@ -39,14 +37,11 @@ jQuery(document).ready(function() {
       }
     }
   });
-
-
 });
 
-
-
 function initPropertyMap() {
-  var data = jQuery('#map_canvas').data();
+  
+  var data = jQuery('#property_map_canvas').data();
   var lat = data.lat;
   var lon = data.lon;
   var hash = data.hash;
@@ -59,7 +54,7 @@ function initPropertyMap() {
     zoomControl: true
   };
 
-  var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+  var map = new google.maps.Map(document.getElementById("property_map_canvas"), myOptions);
 
 
   var prnmarker = new google.maps.Marker({

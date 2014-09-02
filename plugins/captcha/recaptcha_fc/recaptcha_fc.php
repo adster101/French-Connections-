@@ -91,11 +91,11 @@ class PlgCaptchaRecaptcha_fc extends JPlugin
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="row">
-              <div class="col-lg-6 col-md-7 col-sm-12">
+              <div class="col-lg-6 col-md-12 col-sm-12">
                 <div id="recaptcha_image"></div>
               </div>         
 
-              <div class="col-lg-6 col-md-5 col-sm-12">
+              <div class="col-lg-6 col-md-12 col-sm-12">
                 <a class="btn btn-default" href="javascript:Recaptcha.reload()" data-toggle="tooltip" title="Get another CAPTCHA">
                   <i class="glyphicon glyphicon-refresh"></i>
                 </a>

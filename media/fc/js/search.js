@@ -1,14 +1,16 @@
 var infowindow;
 
 jQuery(document).ready(function() {
+  
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 
-    jQuery('#map_canvas').hide();
+    //jQuery('#map_canvas').hide();
 
     if (!window.google) {
-      loadScript(); // Asych load the google maps stuff
+      loadGoogleMaps('initmap'); // Asych load the google maps stuff
     }
+    
     // Store the selected tab #ref in local storage, IE8+
     localStorage['selectedTab'] = jQuery(e.target).attr('href');
 
@@ -280,13 +282,20 @@ function getPath(event) {
     path = path + '/' + 'max_ ' + max_price;
   }
 
+  // Pull out the offers query string, if it exists
+  var offers = loadPageVar("offers");
+  
+  if (offers === 'true') {
+    path = path + '?offers=true';
+  }
+
+
   return path;
 
 
 }
 
 function initmap() {
-
 
   jQuery('#map_canvas').css('width', '100%');
   jQuery('#map_canvas').css('height', '600px');
@@ -316,14 +325,6 @@ function attachContent(marker, num) {
     });
     infowindow.open(marker.get('map'), marker);
   });
-}
-
-function loadScript() {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-  'callback=initmap';
-  document.body.appendChild(script);
 }
 
 // Function removes and replaces all French accented characters with non accented characters
@@ -373,4 +374,9 @@ function stripVowelAccent(str) {
   s = s.toLowerCase();
 
   return s;
+}
+
+// Pulls out the value of the query paramter sVar 
+function loadPageVar (sVar) {
+  return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 }

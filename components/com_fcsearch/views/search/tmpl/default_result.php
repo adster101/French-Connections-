@@ -22,9 +22,8 @@ $shortlist = new JLayoutFile('frenchconnections.general.shortlist');
 $displayData = new StdClass;
 $displayData->action = $action;
 $displayData->inShortlist = $inShortlist;
-$displayData->unit_id= $this->result->unit_id;
+$displayData->unit_id = $this->result->unit_id;
 $displayData->class = '';
-
 ?>
 
 <div class="search-result">
@@ -53,6 +52,16 @@ $displayData->class = '';
       </p> 
     </div>
   </div>
+  <?php if (!empty($this->result->offer)) : ?>
+    <div class="row">
+      <div class="col-xs-12">
+        <p class="offer">
+          <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
+          <?php echo $this->escape($this->result->offer); ?>
+        </p>       
+      </div>
+    </div>
+  <?php endif; ?>
   <div class="row">
     <div class="col-xs-12 col-sm-3">
       <p>
@@ -74,6 +83,7 @@ $displayData->class = '';
           <p>
             <?php echo JHtml::_('string.truncate', $this->result->description, 100, true, false); ?>
           </p>
+
         </div>
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
@@ -84,7 +94,7 @@ $displayData->class = '';
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
               <?php echo $shortlist->render($displayData); ?>
-              
+
             <?php else : ?>
               <a class="shortlist" href="<?php echo JRoute::_($login_route); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                 <i class="glyphicon glyphicon-heart"></i>
@@ -99,10 +109,10 @@ $displayData->class = '';
               </a>
             </p>
           <?php endif; ?> 
+
         </div>
       </div>
-
-
     </div>
   </div>
+
 </div>
