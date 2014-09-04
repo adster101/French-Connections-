@@ -46,8 +46,11 @@ class RentalViewPropertyversions extends JViewLegacy
     $model->setState('com_rental.' . $model->getName() . '.id', $listing_id);
     $model->setState('list.limit', 100);
 
+    // Get the units
     $this->progress = $model->getItems();
-
+    
+    $this->status = $model->getProgress($this->progress);
+    
     $languages = RentalHelper::getLanguages();
     $lang = RentalHelper::getLang();
 
@@ -104,17 +107,18 @@ class RentalViewPropertyversions extends JViewLegacy
       JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+      JToolBarHelper::custom('unitversions.add', 'plus', '', '', false);
     }
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
-    $property_id = $this->progress[0]->id;
-    $unit_id = $this->progress[0]->unit_id;
+    $property_id = $this->status->id;
+    $unit_id = $this->status->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
 
     //JToolbarHelper::help('', false, '/support/rental-property/1139-location-details');
 
-    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
+    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
 
 
     //RentalHelper::addSubmenu('listings');

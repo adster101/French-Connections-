@@ -33,6 +33,8 @@ class RentalViewImages extends JViewLegacy
     $progress = $this->getModel('Listing');
     $progress->setState('com_rental.listing.id', $this->unit->property_id);
     $this->progress = $progress->getItems();
+    
+    $this->status = $progress->getProgress($this->progress);
 
     $this->property_id = $this->progress[0]->id;
 

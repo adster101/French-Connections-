@@ -4,7 +4,7 @@
 // Core variables and mixins
 @import "variables.less"; // Custom for this template
 @import "../../../../media/jui/less/mixins.less";
-@import "../../../../templates/frenchconnections/less/mixins.less";
+@import "../../../../templates/frenchconnections_1/less/mixins.less";
 
 // Grid system and page structure
 @import "../../../../media/jui/less/scaffolding.less";
@@ -102,6 +102,90 @@
 }
 
 // FC ADMIN MENU
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+
+@media screen and (min-width: 769px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+         -o-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: static;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
+
 #navigation{
 	margin-bottom:26px;
 	padding:10px 10px 10px 0;

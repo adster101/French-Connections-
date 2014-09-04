@@ -160,9 +160,9 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
               <jdoc:include type="modules" name="top" style="xhtml" />
                 <?php $help = JToolbar::getInstance('fchelp'); ?>
                 <?php echo $help->render(); ?>
-              <div class="row-fluid">
+              <div class="row-fluid row-offcanvas row-offcanvas-left">
                 <?php if ($showSubmenu) : ?>
-                  <div class="span3">
+                  <div class="span3 sidebar-offcanvas">
                     <jdoc:include type="modules" name="fcmenu" style="none" />
                   </div>
                   <div class="span9">

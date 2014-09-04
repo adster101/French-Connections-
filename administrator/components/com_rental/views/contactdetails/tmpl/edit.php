@@ -10,10 +10,11 @@ JHtml::_('behavior.keepalive');
 $data = array();
 $data['property'] = $this->item;
 $data['progress'] = $this->progress;
+$data['status'] = $this->status;
 
 // So we can pass them into our layout files
 $tabs_layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-// $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+$progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 ?>
 
 
@@ -27,7 +28,7 @@ $tabs_layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTR
       <div class="span12">
       <?php endif; ?>
       <?php
-      // echo $progress_layout->render($data);
+      echo $progress_layout->render($data);
       echo $tabs_layout->render($data);
       ?>
 

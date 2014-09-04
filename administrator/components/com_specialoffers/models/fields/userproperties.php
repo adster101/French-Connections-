@@ -53,6 +53,7 @@ class JFormFieldUserProperties extends JFormFieldGroupedList
     $query->join('left', '#__unit_versions b on (a.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
     $query->join('left', '#__property d on d.id = b.property_id');
     $query->where('d.created_by = ' . $user->id);  // Select only the props created by the user that created this property
+    $query->where('a.published = 1');
     $query->where('d.expiry_date > ' . $date);
     // Get the options.
     $db->setQuery($query);

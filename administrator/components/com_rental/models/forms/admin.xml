@@ -56,6 +56,22 @@
       <option value="OTHER">COM_RENTAL_UPDATE_NON_RENEWAL_REASON_OTHER</option>
     </field>
       
+   
+    
+  </fieldset>
+   <fieldset 
+    name="review-status"
+    label="COM_RENTAL_UPDATE_PAYMENT_STATUS">
+    <field
+      name="review"
+      type="list"
+      label="COM_RENTAL_UPDATE_PAYMENT_STATUS_LABEL"
+      filter="string">
+      <option value="">JSELECT</option>
+      <option value="2">COM_RENTAL_UPDATE_REVIEW_STATUS_PAYMENT_RECEIVED</option>
+
+    </field>
+      
     
     
   </fieldset>

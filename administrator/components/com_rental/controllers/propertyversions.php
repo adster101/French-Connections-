@@ -154,7 +154,7 @@ class RentalControllerPropertyVersions extends RentalControllerBase {
     $this->setError(JText::_('COM_RENTAL_HELLOWORLD_CREATE_NEW_PROPERTY_SUCCESS'));
     $this->setMessage($this->getError(), 'message');
 
-    $this->holdEditId('com_rental.view.listing', $id);
+    $this->holdEditId('com_rental.edit.listing', $id);
 
     // Redirect to the edit screen.
     $this->setRedirect(
@@ -163,6 +163,9 @@ class RentalControllerPropertyVersions extends RentalControllerBase {
             )
     );
 
+    
+    
+    
     return true;
   }
 

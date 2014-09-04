@@ -42,6 +42,10 @@ class RentalViewListing extends JViewLegacy
 
     // Get data from the model
     $this->items = $this->get('Items');
+    
+    $model = $this->getModel();
+    
+    $this->status = $model->getProgress($this->items);
 
     $this->pagination = $this->get('Pagination');
 

@@ -44,6 +44,7 @@ class RentalControllerListing extends JControllerForm
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
 
+    $app = JFactory::getApplication();
     $model = $this->getModel('Payment');
     $data = $this->input->post->get('jform', array(), 'array');
     $context = "$this->option.edit.$this->context";
@@ -59,6 +60,9 @@ class RentalControllerListing extends JControllerForm
 
     if (!$this->validate($model, $data, $context, $recordId))
     {
+
+      // Save the data in the session.
+      $app->setUserState($context . '.data', $data);
 
       // Redirect back to the edit screen.
       $this->setRedirect(
@@ -312,7 +316,7 @@ class RentalControllerListing extends JControllerForm
     $app = JFactory::getApplication();
     $context = "$this->option.edit.review";
 
-    $recordId = (int) (count($cid) ? $cid[0] : 0);
+    $recordId = (int) (count($cid) ? $cid[0] : $app->input->get('property_id',''));
     $checkin = property_exists($table, 'checked_out');
 
     // Check user is authed to review
@@ -591,7 +595,7 @@ class RentalControllerListing extends JControllerForm
         }
       }
     }
-    
+
     $this->setRedirect($redirect, $message);
 
     return true;

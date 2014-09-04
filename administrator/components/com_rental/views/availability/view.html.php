@@ -37,10 +37,12 @@ class RentalViewAvailability extends JViewLegacy
     $this->form = $this->get('Form');
 
     // Get the listing model so we can get the tab progress detail
-    $progress = $this->getModel('Listing');
-    $progress->setState('com_rental.listing.id', $this->unit->property_id);
-    $this->progress = $progress->getItems();
+    $model = $this->getModel('Listing');
+    $model->setState('com_rental.listing.id', $this->unit->property_id);
+    $this->progress = $model->getItems();
     
+    $this->status = $model->getProgress($this->progress);
+
     // Get the property ID as the first item in the progress array
     $this->property_id = $this->progress[0]->id;
 

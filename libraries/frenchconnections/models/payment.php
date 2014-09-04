@@ -841,7 +841,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
     /* Analyse the response from Sage Pay Direct to check that everything is okay
      * * Registration results come back in the Status and StatusDetail fields */
-
     $arrResponse['VendorTxCode'] = $VendorTxCode;
 
     $strStatus = $arrResponse["Status"];

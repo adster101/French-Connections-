@@ -15,7 +15,7 @@
       required="true"
       filter="string"
       class="required"
-      default="VISA"
+      default=""
       labelclass="control-label"
       label="COM_RENTAL_HELLOWORLD_PAYMENT_CARD_TYPE">
       <option value="">COM_RENTAL_PLEASE_CHOOSE</option>
@@ -37,7 +37,7 @@
       label="COM_RENTAL_HELLOWORLD_CARD_NUMBER"
       maxlength="24"
       size="25"
-      default="4751410069610107"
+      default=""
     />
 
     <field
@@ -52,7 +52,7 @@
       size="30"
       labelclass="control-label"
       required="true"
-      default="MR A RIFAT"
+      default=""
     />
 
     <field
@@ -63,7 +63,7 @@
       maxlength="4"
       labelclass="control-label"
       required="false"
-      default="0413"
+      default=""
       filter="string"
       label="COM_RENTAL_HELLOWORLD_CARD_START_DATE"
     />
@@ -76,7 +76,7 @@
       maxlength="4"
       labelclass="control-label"
       required="true"
-      default="0418"
+      default=""
       label="COM_RENTAL_HELLOWORLD_CARD_EXPIRY_DATE"
       filter="string"
     />
@@ -101,7 +101,7 @@
       size="3"
       class="input-mini"
       labelclass="control-label"
-      default="004"
+      default=""
     />
   </fieldset>
 
@@ -118,7 +118,7 @@
       size="30"
       required="true"
       labelclass="control-label"
-      default="Adam"
+      default=""
     />
     <field
       name="BillingSurname"
@@ -130,14 +130,14 @@
       label="COM_RENTAL_HELLOWORLD_CARD_BILLING_SURNAME"
       message=""
       size="30"
-      default="Rifat"
+      default=""
       required="true"
       labelclass="control-label"
     />
     <field
       name="BillingAddress1"
       type="text"
-      default="56 St Thomas's Road"
+      default=""
       class="input-xlarge"
       id="BillingAddress1"
       description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
@@ -165,7 +165,7 @@
       name="BillingCity"
       type="text"
       id="BillingCity"
-      default="Hastings"
+      default=""
       description="PLG_USER_PROFILE_FIELD_CITY_DESC"
       filter="string"
       label="PLG_USER_PROFILE_FIELD_CITY_LABEL"
@@ -179,7 +179,7 @@
       name="BillingPostCode"
       type="text"
       id="BillingPostCode"
-      default="TN34 3LQ"
+      default=""
       description="PLG_USER_PROFILE_FIELD_POSTAL_CODE_DESC"
       filter="string"
       label="PLG_USER_PROFILE_FIELD_POSTAL_CODE_LABEL"
@@ -195,7 +195,7 @@
       filter="string"
       maxlength="75"
       required="true"
-      default="adam@littledonkey.net"
+      default=""
       class="input-medium"
       labelclass="control-label"
       label="PLG_USER_PROFILE_FIELD_EMAIL_LABEL"
@@ -471,7 +471,7 @@
       name="autorenewal" 
       type="checkbox"
       label="COM_RENTAL_PAYMENT_AUTO_RENEWAL"
-      default="1"
+      default=""
       required="false"
       labelclass="control-label"
       filter="int"

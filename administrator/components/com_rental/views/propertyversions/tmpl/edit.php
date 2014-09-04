@@ -13,7 +13,7 @@ $data['progress'] = $this->progress;
 
 // So we can pass them into our layout files
 $tabs_layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-//$progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+$progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 
 $fieldsets = $this->form->getFieldSets('citiestowns');
 $amenities = $this->form->getGroup('amenities');
@@ -33,7 +33,7 @@ $amenities = $this->form->getGroup('amenities');
         <div class="span12">
         <?php endif; ?>
         <?php
-        //echo $progress_layout->render($data);
+        echo $progress_layout->render(array('status'=>$this->status));
         echo $tabs_layout->render($data);
         ?>
 
@@ -137,6 +137,6 @@ $amenities = $this->form->getGroup('amenities');
     <?php endforeach; ?>
 
     <input type="hidden" name="task" value="" />
-    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $this->progress[0]->unit_id, false)); ?>" />
+    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $this->status->unit_id, false)); ?>" />
 </form>
 

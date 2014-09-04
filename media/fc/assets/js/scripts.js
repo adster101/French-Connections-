@@ -14752,41 +14752,47 @@ jQuery(document).ready(function() {
     jQuery('input').removeAttr('placeholder');
   }
 
-  var nowTemp = new Date();
-  var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+  try {
 
-  var checkin = $('.start_date.date').datepicker({
-    format: "dd-mm-yyyy",
-    beforeShowDay: function(date) {
-      return date.valueOf() >= now.valueOf();
-    },
-    autoclose: true
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-  }).on('changeDate', function(ev) {
-    if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
+    var checkin = jQuery('.start_date.date').datepicker({
+      format: "dd-mm-yyyy",
+      beforeShowDay: function(date) {
+        return date.valueOf() >= now.valueOf();
+      },
+      autoclose: true
 
-      var newDate = new Date(ev.date);
-      newDate.setDate(newDate.getDate() + 1);
-      checkout.datepicker("update", newDate);
+    }).on('changeDate', function(ev) {
+      if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
 
-    }
-    $('.end_date input')[0].focus();
-  });
+        var newDate = new Date(ev.date);
+        newDate.setDate(newDate.getDate() + 1);
+        checkout.datepicker("update", newDate);
 
-
-  var checkout = $('.end_date.date').datepicker({
-    format: "dd-mm-yyyy",
-    beforeShowDay: function(date) {
-      if (!checkin.datepicker("getDate").valueOf()) {
-        return date.valueOf() >= new Date().valueOf();
-      } else {
-        return date.valueOf() > checkin.datepicker("getDate").valueOf();
       }
-    },
-    autoclose: true
+      jQuery('.end_date input')[0].focus();
+    });
 
-  }).on('changeDate', function(ev) {
-  });
+
+    var checkout = jQuery('.end_date.date').datepicker({
+      format: "dd-mm-yyyy",
+      beforeShowDay: function(date) {
+        if (!checkin.datepicker("getDate").valueOf()) {
+          return date.valueOf() >= new Date().valueOf();
+        } else {
+          return date.valueOf() > checkin.datepicker("getDate").valueOf();
+        }
+      },
+      autoclose: true
+
+    }).on('changeDate', function(ev) {
+    });
+
+  } catch (e) {
+    // what to do!?
+  }
 
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
@@ -14822,7 +14828,7 @@ jQuery(document).ready(function() {
 
   jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
-    var favourite = $('.popover').siblings('a.shortlist');
+    var favourite = jQuery('.popover').siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
     var userToken = document.getElementsByTagName("input")[0].name;
@@ -14848,7 +14854,7 @@ jQuery(document).ready(function() {
         favourite.attr('data-action', dataObj.action);
 
       } else {
-        popover = $('.popover').data('bs.popover');
+        popover = jQuery('.popover').data('bs.popover');
         popover.options.content = '<p>Session expired.<br /> Please login.</p>';
       }
     })

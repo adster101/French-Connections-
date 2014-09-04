@@ -6,7 +6,7 @@ JHtml::_('behavior.formvalidation');
 
 // Get all the fieldsets in the tariffs form group
 $tariff_field_sets = $this->form->getFieldSet('tariffs');
-$data = array('item' => $this->item, 'progress' => $this->progress);
+$data = array('item' => $this->item, 'progress' => $this->progress, 'status' => $this->status);
 $counter = 0;
 ?>
 
@@ -23,8 +23,8 @@ $counter = 0;
         <?php endif; ?>
         <!-- Listing status and tab layouts start -->
         <?php
-        //$progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        //echo $progress->render($data);
+        $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+        echo $progress->render($data);
 
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
         echo $layout->render($data);

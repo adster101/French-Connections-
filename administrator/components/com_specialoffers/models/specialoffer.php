@@ -384,7 +384,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
       $model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
       $model->setState('com_rental.listing.id', $unit_detail->property_id);
-      $images = $model->getTotalImages();
+      $model->setState('com_rental.listing.latest', false);
+      $units = $model->getItems();
+      $images = $model->getTotalImages($units);
 
       if (!$images)
       {

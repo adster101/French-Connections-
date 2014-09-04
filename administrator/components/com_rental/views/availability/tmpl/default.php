@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
-$data = array('item' => $this->unit, 'progress' => $this->progress);
+$data = array('item' => $this->unit, 'progress' => $this->progress, 'status' => $this->status);
 
 // Get the input data
 $app = JFactory::getApplication();
@@ -34,8 +34,8 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? JFa
       <div id="j-main-container" class="span12">
       <?php endif; ?>
       <?php
-      //$progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-      //echo $progress->render($data);
+      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+      echo $progress->render($data);
 
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       echo $layout->render($data);

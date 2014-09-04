@@ -22,7 +22,7 @@ $app = JFactory::getApplication();
 $input = $app->input;
 
 $unit_id = $input->get('unit_id', '', 'int');
-$data = array('progress' => $this->progress);
+$data = array('progress' => $this->progress, 'status' => $this->status);
 ?>
 
 <div class="row-fluid">
@@ -35,8 +35,8 @@ $data = array('progress' => $this->progress);
       <div id="j-main-container" class="span12">
       <?php endif; ?>
       <?php
-      //$progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-      //echo $progress->render($data);
+      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+      echo $progress->render($data);
 
       $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
       echo $layout->render($data);

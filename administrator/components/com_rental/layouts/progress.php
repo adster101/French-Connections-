@@ -8,47 +8,13 @@ $input = $app->input;
 $view = $input->get('view', '', 'string');
 
 // $displayData is passed into the layout from our template
-$progress = $displayData['progress'];
+$progress = $displayData['status'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
-
-$notices = RentalHelper::getProgressNotices($progress); // Get an array of what units still need relevant data added...
-
-if (!empty($progress))
-{
-  $id = ($progress[0]->id) ? $progress[0]->id : ''; // Id is the main property reference number
-
-  $review = ($progress[0]->review) ? $progress[0]->review : ''; // $review inicates whether the main property listing has been flagged as needing a review
-  // $expiry_date - the expiry date of this property
-  $expiry_date = ($progress[0]->expiry_date) ? $progress[0]->expiry_date : '';
-  $days_to_renewal = RentalHelper::getDaysToExpiry($expiry_date);
-}
-
-$preview = ($review) ? '&preview=1' : '';
-
-
-$link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]->unit_id . $preview;
 ?>
 
 <!--<div class="row-fluid">
   <div class="span9">-->
-<?php if (!empty($notices)) : ?>
-  <div class="alert alert-info">
-    <h4>Listing Progress</h4>
-    <ul>
-      <?php if (empty($progress[0]->latitude) && empty($progress[0]->longitude)) : ?>
-        <li>
-          <?php echo JText::_('COM_RENTAL_LISTING_COMPLETE_PLEASE_COMPLETE_LOCATION_DETAILS'); ?>
-        </li>
-      <?php endif; ?>
-
-      <?php foreach ($notices as $key => $value) : ?>
-        <li>
-          <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_LISTING_PROGRESS_NOTICES', $key); ?>
-        </li>
-      <?php endforeach; ?>
-    </ul>
-  </div>
-<?php elseif ((empty($notices) && $view == 'listing') && $review == 1) : //No notices, listing view for a property that needs review   ?>
+<?php if ($view == 'listing' && $progress->review == 1 && $progress->complete) : //No notices, listing view for a property that needs review      ?>
   <div class="well well-small">
     <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
     <hr />
@@ -67,50 +33,44 @@ $link = '/listing/' . (int) $progress[0]->id . '?unit_id=' . (int) $progress[0]-
       <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
     </button>
   </div>
-<?php elseif (empty($notices) && $view == 'listing' && !$review && $days_to_renewal >= 7) : ?>
+<?php elseif ($view == 'listing' && !$progress->review && $progress->days_to_renewal >= 7 && $progress->complete) : ?>
   <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_BLURB'); ?>
-<?php elseif (empty($notices) && !$review && $days_to_renewal >= 7) : ?>
-  <div class="alert alert-info">
-    <h4>Listing Status</h4>
-    <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_OKAY'); ?></p>
-  </div>
-<?php elseif (empty($notices) && $days_to_renewal <= 7 && !$review && empty($expiry_date)) : ?>
-<div class="alert alert-danger">       
+<?php elseif ($progress->days_to_renewal <= 7 && !$progress->review && !empty($progress->expiry_date)) : ?>
+  <div class="alert alert-warning">       
     <h4>Listing Status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
-    <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
+    <?php echo JHtml::_('property.renewalButton', $progress->days_to_renewal, $progress->id); ?>
   </div>
-<?php elseif (empty($notices) && $days_to_renewal < 0 && !empty($expiry_date) && $review < 2) : ?>
+<?php elseif ($progress->days_to_renewal < 0 && !empty($progress->expiry_date) && $progress->review < 2) : ?>
   <div class="alert alert-danger">       
     <h4>Listing Status</h4>
-
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_EXPIRED'); ?></p>
-    <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $id); ?>
+    <?php echo JHtml::_('property.renewalButton', $progress->days_to_renewal, $progress->id); ?>
   </div>    
-<?php elseif ($review < 2) : ?>
+<?php elseif ($progress->review == 1 && $progress->complete) : ?>
   <div class="alert alert-info">
     <h4>Listing Status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_UNSUBMITTED_CHANGES'); ?></p>
-    <a href="<?php echo JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $id) ?>" class="btn btn-primary">
+    <a href="<?php echo JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $progress->id) ?>" class="btn btn-primary">
       <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
       <i class="icon icon-arrow-right-2 icon-white"> </i>
     </a>
   </div>
+<?php elseif ($progress->review == 2) : ?>
+  <div class="alert alert-info">
+    <h4>Listing status</h4>
+    <p><?php echo JText::_('COM_RENTAL_LISTING_SUBMITTED_FOR_REVIEW'); ?></p>
+    <?php
+    // Instantiate a new JLayoutFile instance and render the layout
+    $layout = new JLayoutFile('joomla.toolbar.standard');
+
+    $options = array(
+        'text' => JText::_('COM_RENTAL_LISTING_APPROVE_CHANGES'),
+        'doTask' => "Joomla.submitbutton('listing.review')",
+        'btnClass' => 'btn btn-primary',
+        'class' => 'icon icon-chevron-right');
+    echo $layout->render($options);
+    ?>
+
+  </div>
 <?php endif; ?>
-<?php // Need to put the following into language strings      ?>
-<!--<div class="span3">
-  <h4>Key</h4>
-  <span>
-    <i class="icon icon-warning"> </i>
-    Please complete
-  </span>
-  <span>
-
-    <i class="icon icon-publish"></i>
-    Required fields complete
-  </span>
-
-</div>
-</div>
-
-</div>-->

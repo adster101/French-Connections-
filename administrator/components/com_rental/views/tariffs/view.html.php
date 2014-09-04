@@ -56,6 +56,8 @@ class RentalViewTariffs extends JViewLegacy
 
     // Get the unit progress...
     $this->progress = $model->getItems();
+    
+    $this->status = $model->getProgress($this->progress);
 
 
     // Get the unit edit form

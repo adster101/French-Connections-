@@ -337,22 +337,61 @@ class RentalModelListing extends JModelList
     return $return;
   }
 
-  function getTotalImages()
+  function getTotalImages($listing = array())
   {
-    
+
     $images = 0;
-    
-    if (!$listing = $this->getItems())
-    {
-      return false;
-    }
 
     foreach ($listing as $row => $unit)
     {
       $images += $unit->images;
     }
-    
+
     return (int) $images;
+  }
+
+  /**
+   * 
+   * Method takes an array of units and determines the overall status / progress of the listing.
+   * Listing needs location, unit, images, availability, tariffs and 
+   * 
+   * @param array   An array of units associated making up a listing
+   *  
+   */
+  public function getProgress($units = array())
+  {
+    // Create a listing object to hold the status
+    $listing = new stdClass;
+
+    $listing->complete = true; // Assume listing is complete
+
+    $listing->id = $units[0]->id; // The main listing ID
+    $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
+    $listing->expiry_date = $units[0]->expiry_date; // The expiry date
+    $listing->days_to_renewal = RentalHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
+
+    foreach ($units as $key => $unit)
+    {
+      if (!$unit->availability || !$unit->tariffs || !$unit->images)
+      {
+        $listing->complete = false; // Listing isn't complete...
+      }
+    }
+
+    if (!$units[0]->use_invoice_details && empty($units[0]->first_name) && empty($units[0]->surname) && empty($units[0]->email_1) && empty($units[0]->phone_1))
+    {
+      $listing->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
+    }
+
+    if (!$units[0]->latitude || !$units[0]->longitude)
+    {
+      $listing->complete = false;
+    }
+    
+    $listing->unit_id = $units[0]->unit_id;
+    
+  return $listing;
+    
   }
 
 }

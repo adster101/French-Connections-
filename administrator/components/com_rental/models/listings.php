@@ -179,13 +179,11 @@ class RentalModelListings extends JModelList
     // Should only apply to users who can view and change snooze state
     if ($canDo->get('rental.notes.add'))
     {
-
       $snooze_state = $this->getState('filter.snoozed');
 
       // If snooze state is not set or set to hide snoozed...
       if ($snooze_state == false || $snooze_state == 1)
       {
-
         // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
         $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
       }

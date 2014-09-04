@@ -108,25 +108,16 @@ class RentalModelProperty extends JModelAdmin
       unset($data['expiry_date']);
     }
 
+    // Unset the review status if it's not been updated.
+    if (empty($data['review']))
+    {
+      unset($data['review']);
+    }
+
     if (!parent::save($data))
     {
       // Oops...
       return false;
-
-      // in the propery table primary key is id
-      //$data['id'] = $data['property_id'];
-      // Get an instance of the propery table
-      //$table = $this->getTable('Property', 'HelloWorldTable');
-      //if (!$table->bind($data))
-      //{
-      //$this->setError($table->getError());
-      //return false;
-      //}
-      //if (!$table->store())
-      //{
-      //$this->setError($table->getError());
-      //return false;
-      //}
     }
 
     // Update the notes 

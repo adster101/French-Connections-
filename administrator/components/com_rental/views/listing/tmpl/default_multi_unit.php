@@ -22,6 +22,7 @@ $canPublish = $canDo->get('core.edit.state');
 $data = array();
 $data['progress'] = $this->items;
 $data['form'] = $this->form;
+$data['status'] = $this->status;
 ?>
 <div class="row-fluid">
 

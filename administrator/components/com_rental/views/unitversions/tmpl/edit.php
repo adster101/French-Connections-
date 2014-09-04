@@ -12,7 +12,7 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 // And determine the user groups the user is in
 
-$data = array('item' => $this->item, 'progress' => $this->progress);
+$data = array('item' => $this->item, 'progress' => $this->progress, 'status' => $this->status);
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
@@ -26,8 +26,8 @@ $data = array('item' => $this->item, 'progress' => $this->progress);
         <div class="span12">
         <?php endif; ?>
         <?php
-        // $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        // echo $progress->render($data);
+         $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+         echo $progress->render($data);
 
         $layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
         echo $layout->render($data);

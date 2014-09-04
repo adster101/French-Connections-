@@ -312,7 +312,7 @@ abstract class RentalHelper
       $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day
       $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names
 
-      $calendar.='<table class="availability table table-bordered">' . "\n";
+      $calendar.='<table class="availability table table-bordered avCalendar">' . "\n";
       $calendar.= '<caption><strong>' . $title . '</strong></caption>' . "\n";
       $calendar.= '<thead><tr class="days">' . "\n";
       if ($day_name_length)

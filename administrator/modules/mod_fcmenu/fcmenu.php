@@ -44,6 +44,7 @@ class FcAdminCssMenu extends JAdminCssMenu
     // Recurse through children if they exist
     while ($this->_current->hasChildren())
     {
+      echo "<nav id='myNavmenu' class='navmenu navmenu-default navmenu-fixed-left offcanvas' role='navigation'>";
       echo "<ul " . $id . " " . $class . ">\n";
 
       foreach ($this->_current->getChildren() as $child)
@@ -53,6 +54,7 @@ class FcAdminCssMenu extends JAdminCssMenu
       }
 
       echo "</ul>\n";
+      echo "</nav>";
     }
 
     if ($this->_css)

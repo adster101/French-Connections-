@@ -46,6 +46,7 @@ class RentalViewContactdetails extends JViewLegacy
 
     $this->progress = $model->getItems();
 
+    $this->status = $model->getProgress($this->progress);
 
 
     $languages = RentalHelper::getLanguages();
