@@ -3,7 +3,8 @@
   This document describes the tariff form on the property manager screen.
   The actual tariff fields are injected via a plugin hook.
 -->
-<form	addrulepath="/administrator/components/com_rental/models/rules">
+<form	addrulepath="/administrator/components/com_rental/models/rules" 
+      addfieldpath="/administrator/components/com_specialoffers/models/fields">
   <fieldset name="additional-fields">
     <field
       name="unit_id"
@@ -74,6 +75,19 @@
       validate="additionalpricenotes"
       message="COM_RENTAL_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE"
     />
+
+    <field
+      name="copy_tariffs"
+      type="tariffscopy"
+      label="COM_RENTAL_TARIFFS_FIELD_COPY_EXISTING_TARIFFS"
+      labelclass="control-label"
+      description="COM_RENTAL_TARIFFS_FIELD_COPY_EXISTING_TARIFFS_DESC"
+      filter="integer"
+      property_id=""
+      onchange="Joomla.submitbutton('tariffs.apply');"
+      unit_id="">
+      <option>JSELECT</option>
+    </field>
   </fieldset>
  
   <fieldset name="hidden-details">

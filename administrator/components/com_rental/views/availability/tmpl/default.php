@@ -64,7 +64,7 @@ $availability_last_updated = (!empty($item->availability_last_updated_on)) ? JFa
       </div>
 
       <?php echo $this->calendar; ?>
-      <form action="<?php echo JRoute::_('index.php?option=com_rental&view=availability&unit_id=' . (int) $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+      <form action="<?php echo JRoute::_('index.php?option=com_rental&view=availability&unit_id=' . (int) $this->item->id) . '&property_id=' . (int) $this->unit->property_id ; ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
         <div id="availabilityModal" class="hide fade modal">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

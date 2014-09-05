@@ -15,6 +15,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
     <div class="span5">
     <?php else : ?>
       <div id="j-main-container" class="span6">
+        
       <?php endif; ?>
 
       <fieldset>

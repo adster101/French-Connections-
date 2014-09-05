@@ -117,9 +117,10 @@ class RentalViewUnitversions extends JViewLegacy
     $property_id = $this->progress[0]->id;
     $unit_id = $this->progress[0]->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
-    
+
     JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
-    
+    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
+
     $help = JToolbar::getInstance('help');
     $help->appendButton('Help', 'unitversions', true);
   }

@@ -11,7 +11,7 @@ $counter = 0;
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=tariffs&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>"
-      method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+      method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">
@@ -57,7 +57,14 @@ $counter = 0;
                 </ul>
               </div>
             </fieldset>
-
+            <fieldset>
+               <div class="control-group">
+                <?php echo $this->form->getLabel('copy_tariffs'); ?> 
+                <div class="controls">
+                  <?php echo $this->form->getInput('copy_tariffs'); ?>
+                </div>
+              </div>
+            </fieldset>
           </div>
           <div class="span4">
             <!-- Listing status and tab layouts end -->

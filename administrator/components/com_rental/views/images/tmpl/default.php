@@ -63,7 +63,7 @@ $data = array('progress' => $this->progress, 'status' => $this->status);
           <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
           <input type="hidden" name="id" value="<?php echo $this->unit->id ?>" />
           <input type="hidden" name="property_id" value="<?php echo $this->unit->property_id ?>" />
-          <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $this->unit->unit_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
+          <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $this->unit->unit_id . '&property_id=' . (int) $this->unit->property_id . '&' . JSession::getFormToken() . '=1', false)); ?>" />
           <?php echo JHtml::_('form.token'); ?>
         </fieldset>
       </form>

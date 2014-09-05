@@ -9,7 +9,8 @@ jimport('frenchconnections.controllers.property.base');
 /**
  * HelloWorld Controller
  */
-class RentalControllerTariffs extends RentalControllerBase {
+class RentalControllerTariffs extends RentalControllerBase
+{
 
   protected $extension;
 
@@ -21,14 +22,17 @@ class RentalControllerTariffs extends RentalControllerBase {
    * @since  1.6
    * @see    JController
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension)) {
+    if (empty($this->extension))
+    {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
     $this->registerTask('saveandnext', 'save');
+    $this->registerTask('copy', 'save');
   }
 
   /*
@@ -37,7 +41,8 @@ class RentalControllerTariffs extends RentalControllerBase {
    *
    */
 
-  public function getRedirectToListAppend($recordId = null, $urlVar = 'id') {
+  public function getRedirectToListAppend($recordId = null, $urlVar = 'id')
+  {
 
     // Get the default append string
     $append = '';
@@ -55,29 +60,34 @@ class RentalControllerTariffs extends RentalControllerBase {
     endswitch;
 
     // If parent ID is set in form data also append to the url
-    if ($id > 0) {
+    if ($id > 0)
+    {
       $append .= '&view=listing&id=' . $id;
     }
 
     return $append;
   }
 
-  public function postSaveHook(\JModelLegacy $model, $validData = array()) {
+  public function postSaveHook(\JModelLegacy $model, $validData = array())
+  {
 
     // Get the contents of the request data
     $input = JFactory::getApplication()->input;
     // If the task is save and next
-    if ($this->task == 'saveandnext') {
+    if ($this->task == 'saveandnext')
+    {
       // Check if we have a next field in the request data
       $next = $input->get('next', '', 'base64');
       // And set the redirect if we have
-      if ($next) {
+      if ($next)
+      {
         $this->setRedirect(base64_decode($next));
       }
     }
   }
 
-  public function cancel($key = null) {
+  public function cancel($key = null)
+  {
 
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -85,7 +95,7 @@ class RentalControllerTariffs extends RentalControllerBase {
     $input = JFactory::getApplication()->input;
 
     $property_id = $input->get('property_id', '', 'int');
-		$context = "$this->option.edit.$this->context";
+    $context = "$this->option.edit.$this->context";
 
     // Clean the session data and redirect.
     $this->releaseEditId($context, $property_id);
@@ -97,5 +107,4 @@ class RentalControllerTariffs extends RentalControllerBase {
 
     return true;
   }
-
 }

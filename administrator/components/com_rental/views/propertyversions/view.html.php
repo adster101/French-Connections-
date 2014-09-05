@@ -48,9 +48,9 @@ class RentalViewPropertyversions extends JViewLegacy
 
     // Get the units
     $this->progress = $model->getItems();
-    
+
     $this->status = $model->getProgress($this->progress);
-    
+
     $languages = RentalHelper::getLanguages();
     $lang = RentalHelper::getLang();
 
@@ -107,7 +107,6 @@ class RentalViewPropertyversions extends JViewLegacy
       JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-      JToolBarHelper::custom('unitversions.add', 'plus', '', '', false);
     }
 
     // Get a toolbar instance so we can append the preview button
@@ -119,7 +118,7 @@ class RentalViewPropertyversions extends JViewLegacy
     //JToolbarHelper::help('', false, '/support/rental-property/1139-location-details');
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
-
+    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     //RentalHelper::addSubmenu('listings');
     // Add the side bar

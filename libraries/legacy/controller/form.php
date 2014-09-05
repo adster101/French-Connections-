@@ -622,7 +622,7 @@ class JControllerForm extends JControllerLegacy
 		// Determine the name of the primary key for the data.
 		if (empty($key))
 		{
-			$key = $table->getKeyName();
+      $key = $table->getKeyName();
 		}
 
 		// To avoid data collisions the urlVar may be different from the primary key.

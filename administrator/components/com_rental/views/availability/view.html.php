@@ -40,7 +40,7 @@ class RentalViewAvailability extends JViewLegacy
     $model = $this->getModel('Listing');
     $model->setState('com_rental.listing.id', $this->unit->property_id);
     $this->progress = $model->getItems();
-    
+
     $this->status = $model->getProgress($this->progress);
 
     // Get the property ID as the first item in the progress array
@@ -91,7 +91,8 @@ class RentalViewAvailability extends JViewLegacy
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     JToolBarHelper::cancel('availability.cancel', 'JTOOLBAR_CLOSE');
-    
+    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
+
     // Get a toolbar instance so we can append the preview button
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->item->id);
 

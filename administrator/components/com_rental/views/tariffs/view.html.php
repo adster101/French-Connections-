@@ -25,7 +25,6 @@ class RentalViewTariffs extends JViewLegacy
     // Set the layout property of the unitversions model
     $this->getModel()->layout = $layout;
 
-
     $this->state = $this->get('State');
 
     // Get the unit item...
@@ -56,7 +55,7 @@ class RentalViewTariffs extends JViewLegacy
 
     // Get the unit progress...
     $this->progress = $model->getItems();
-    
+
     $this->status = $model->getProgress($this->progress);
 
 
@@ -106,6 +105,7 @@ class RentalViewTariffs extends JViewLegacy
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE');
+      JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
     }
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');

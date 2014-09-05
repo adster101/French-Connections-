@@ -158,8 +158,8 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
             <section id="content">
               <!-- Begin Content -->
               <jdoc:include type="modules" name="top" style="xhtml" />
-                <?php $help = JToolbar::getInstance('fchelp'); ?>
-                <?php echo $help->render(); ?>
+              <?php $help = JToolbar::getInstance('fchelp'); ?>
+              <?php echo $help->render(); ?>
               <div class="row-fluid row-offcanvas row-offcanvas-left">
                 <?php if ($showSubmenu) : ?>
                   <div class="span3 sidebar-offcanvas">
@@ -170,8 +170,8 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                     <div class="span12">
                     <?php endif; ?>
                     <div style="border-left:solid 1px #e5e5e5;padding-left:36px;">
-                      <jdoc:include type="modules" name="title" />
                       <jdoc:include type="message" />
+                      <jdoc:include type="modules" name="title" />
                       <?php if (!$cpanel) : ?>
                         <jdoc:include type="modules" name="toolbar" style="no" />
                       <?php endif; ?>   

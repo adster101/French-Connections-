@@ -220,7 +220,7 @@ class RentalControllerUnitVersions extends RentalControllerBase {
     $this->setError(JText::_('COM_RENTAL_HELLOWORLD_CREATE_NEW_UNIT_SUCCESS'));
     $this->setMessage($this->getError(), 'message');
 
-    $this->holdEditId('com_rental.view.listing', $id);
+    $this->holdEditId('com_rental.edit.listing', $id);
 
     $unit_id = $model->getState($model->getName() . '.unit_id');
 

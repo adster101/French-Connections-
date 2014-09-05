@@ -15,7 +15,7 @@ $userId = $user->get('id');
 $data = array('item' => $this->item, 'progress' => $this->progress, 'status' => $this->status);
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
+<form action="<?php echo JRoute::_('index.php?option=com_rental&view=helloworld&layout=edit&unit_id=' . (int) $this->item->unit_id) . '&property_id=' . (int) $this->item->property_id; ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
   <div class="row-fluid">
     <?php if (!empty($this->sidebar)): ?>
       <div id="j-sidebar-container" class="span2">

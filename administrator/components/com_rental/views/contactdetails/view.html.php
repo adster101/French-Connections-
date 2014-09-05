@@ -103,7 +103,8 @@ class RentalViewContactdetails extends JViewLegacy
       JToolBarHelper::apply('contactdetails.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('contactdetails.save', 'JTOOLBAR_SAVE');
       // We can save the new record
-      JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CANCEL');
+      JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
+      JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
     }
 
     // Get a toolbar instance so we can append the preview button
