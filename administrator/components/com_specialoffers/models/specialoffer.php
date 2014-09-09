@@ -114,8 +114,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $query->from($this->_db->quoteName('#__special_offers'));
     $query->where('property_id = ' . (int) $property_id);
     $query->where('published = 1');
-    $query->where('start_date >= SUBDATE(' . $this->_db->Quote($expiry_date) . ', INTERVAL 1 YEAR)' );
-    $query->where('start_date <= ' . $this->_db->Quote($expiry_date));
+    $query->where('start_date BETWEEN SUBDATE(' . $this->_db->Quote($expiry_date) . ', INTERVAL 1 YEAR) AND ' . $this->_db->Quote($expiry_date));
     
     // Get the offers 
     $this->_db->setQuery($query);
@@ -394,7 +393,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         Throw new Exception($message);
       }
       
-      if ($images < 8 && $offer_count > 2)
+      if ($images < 8 && $offer_count >= 2)
       {    
         $message = JText::sprintf('COM_SPECIALOFFERS_UPGRADE_REQUIRED_BEFORE_ADDING_MORE_OFFERS', $unit_detail->property_id);
         $app->enqueueMessage($message, 'notice');

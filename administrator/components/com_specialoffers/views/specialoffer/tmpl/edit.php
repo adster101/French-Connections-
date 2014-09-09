@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('behavior.formvalidation');
 $fieldsets = $this->form->getFieldSets();
 ?>
-<form class="form-validate form-vertical" action="<?php echo JRoute::_('index.php?option=com_specialoffers&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">
+<form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_specialoffers&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">
 
 
 
