@@ -19,6 +19,7 @@
                   label="Category"
                   extension="com_content"
                   show_root="true"
+                  multiple="true"
                   description="This category is used in the backend to link to the content"
                />
             </fieldset>
