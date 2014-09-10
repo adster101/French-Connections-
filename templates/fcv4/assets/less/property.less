@@ -10,8 +10,6 @@ Contains styles that apply at the global level, or can be applied to any section
   border-bottom: 1px dotted;
 }
 
-
-
 .offscreen {
   position:absolute;
   left:-10000px; 
@@ -23,7 +21,24 @@ Contains styles that apply at the global level, or can be applied to any section
 
 .search-field {
   display: inline-block;
+}
 
+.view-listing {
+
+  .special-offer { 
+   
+    background-color: @yellow-lighter;
+    border-color: @yellow;
+    color: @brown;
+    > h4 {
+      &:before { 
+        font-family: 'Glyphicons Halflings';
+        vertical-align:top;
+        content:"\e006";
+        color: @orange;
+      }
+    } 
+  }
 }
 
 .affix {
@@ -41,16 +56,13 @@ Contains styles that apply at the global level, or can be applied to any section
 
 /* Speech bubble for blockqotes */
 .quote, .well .quote {
-  .quote(@padding:15px;);
+  .quote(@padding:15px);
 }
 
 .navbar-property-navigator {
-
   margin-bottom: 20px;
   padding:10px 0;
-
   .nav > li > a {
-
     font-size:85%;
     padding:10px;
 

@@ -6593,6 +6593,16 @@ Contains styles that apply at the global level, or can be applied to any section
 .search-field {
   display: inline-block;
 }
+.view-listing .special-offer {
+  background-color: #fffbd7;
+  border-color: #fee88d;
+  color: #7b6c50;
+}
+.view-listing .special-offer > h4:before {
+  font-family: 'Glyphicons Halflings';
+  content: "\e006";
+  color: #e9af11;
+}
 .affix {
   display: block;
   position: fixed;

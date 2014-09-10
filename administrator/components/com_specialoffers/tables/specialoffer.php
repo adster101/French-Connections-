@@ -49,7 +49,7 @@ class SpecialOffersTableSpecialOffer extends JTable
   public function getOffer($id = null) 
 	{		
 		$query = $this->_db->getQuery(true);
-		$query->select('title,description');
+		$query->select('title,description,DATEDIFF(end_date, now()) as days');
 		$query->from($this->_tbl);
     $query->where('unit_id = ' . $this->_db->quote($id));
     $query->where('published = 1');
@@ -62,7 +62,7 @@ class SpecialOffersTableSpecialOffer extends JTable
     try
     {
       $result = $this->_db->loadObject();
-
+      
       return $result;
     }
     catch (RuntimeException $e)
