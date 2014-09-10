@@ -6600,6 +6600,7 @@ Contains styles that apply at the global level, or can be applied to any section
 }
 .view-listing .special-offer > h4:before {
   font-family: 'Glyphicons Halflings';
+  vertical-align: top;
   content: "\e006";
   color: #e9af11;
 }
