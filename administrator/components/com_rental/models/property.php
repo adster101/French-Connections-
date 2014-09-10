@@ -89,7 +89,7 @@ class RentalModelProperty extends JModelAdmin
 
   public function save($data)
   {
-    // Check whether any data has been entered (e.g. snooze date, owner id or epiry date) 
+    // Check whether any data has been entered (e.g. snooze date, owner id or expiry date) 
     // Reformat the dates to the correct format
     // Call the parent save method.
     // Possible to a 'post save' hook...
@@ -112,6 +112,11 @@ class RentalModelProperty extends JModelAdmin
     if (empty($data['review']))
     {
       unset($data['review']);
+    }
+    else
+    {
+      // Need to get the value of the renewal/update
+      
     }
 
     if (!parent::save($data))

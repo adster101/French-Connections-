@@ -38,11 +38,22 @@ $deduped = array_flip($deduped);
 $collection = array();
 
 
-$a = array_slice($deduped, 0, 10);
+$a = array_slice($deduped, 0, 5);
+
 
 depth_picker($a, "", $collection);
 
-echo "Woot";die;
+var_dump($collection);
+
+
+$collection = array();
+
+$b = array_slice($deduped, 6,5);
+
+depth_picker($b, "", $collection);
+
+var_dump($collection);die;
+
 function depth_picker($arr, $temp_string, &$collect) {
     if ($temp_string != "") 
         $collect []= $temp_string;
