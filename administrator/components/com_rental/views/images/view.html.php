@@ -87,7 +87,7 @@ class RentalViewImages extends JViewLegacy
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->progress[0]->id;
     $unit_id = $this->progress[0]->unit_id;
-    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->unit->id);
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->unit->unit_id);
   }
 
   /**

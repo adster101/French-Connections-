@@ -192,7 +192,7 @@ class AccommodationModelListing extends JModelForm
         c.languages_spoken,
         k.title as changeover_day,
         d.toilets,
-        d.bathrooms,
+        (bathrooms + ensuite) as bathrooms,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) AS bedrooms, 
         d.single_bedrooms,
         d.double_bedrooms,
