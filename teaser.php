@@ -29,6 +29,32 @@ foreach ($words as $key => $word)
   {
     $deduped[$word] = $key;
   }
+  
 }
 
-var_dump($deduped);
+$deduped = array_flip($deduped);
+
+
+$collection = array();
+
+
+$a = array_slice($deduped, 0, 10);
+
+depth_picker($a, "", $collection);
+
+echo "Woot";die;
+function depth_picker($arr, $temp_string, &$collect) {
+    if ($temp_string != "") 
+        $collect []= $temp_string;
+
+    for ($i=0; $i<sizeof($arr);$i++) {
+      
+        $arrcopy = $arr;
+        $elem = array_splice($arrcopy, $i, 1); // removes and returns the i'th element
+        if (sizeof($arrcopy) > 0) {
+            depth_picker($arrcopy, $temp_string ." " . $elem[0], $collect);
+        } else {
+            $collect []= $temp_string. " " . $elem[0];
+        }   
+    }   
+}

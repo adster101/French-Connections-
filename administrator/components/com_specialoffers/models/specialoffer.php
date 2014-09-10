@@ -322,7 +322,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
           $unit_detail = $this->getUnitDetail($item->unit_id);
 
           // Send notification email when offer is first approved.
-          $this->sendNotificationEmail($unit_detail, $unit_detail->property_id, $unit_detail->unit_id, $item->start_date);
+          $this->sendNotificationEmail($unit_detail, $unit_detail->property_id, $unit_detail->unit_id, $item->start_date, $item->end_date);
         }
       }
 
@@ -455,7 +455,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     // Trigger email to admin user
     if ($send_notification_email)
     {
-      $this->sendNotificationEmail($unit_detail, $table->property_id, $table->unit_id, $table->start_date);
+      $this->sendNotificationEmail($unit_detail, $table->property_id, $table->unit_id, $table->start_date, $table->end_date);
     }
 
     // Set additional messaging to notify user that offer is awaiting moderation etc.
@@ -478,7 +478,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     return true;
   }
 
-  public function sendNotificationEmail($unit_detail, $property_id, $unit_id, $start_date)
+  public function sendNotificationEmail($unit_detail, $property_id, $unit_id, $start_date, $end_date)
   {
     $app = JFactory::getApplication();
     $params = JComponentHelper::getParams('com_specialoffers');
@@ -493,11 +493,12 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $siteURL = JUri::root() . 'listing/' . $property_id . '?unit_id=' . (int) $unit_id;
     $intasure = $params->get('intasure');
 
-    $start_date = JHtml::date($start_date, 'd m Y');
+    $start_date = JHtml::date($start_date, 'D d M Y');
+    $end_date = JHtml::date($end_date, 'D d M Y');
 
     // Prepare the email.
     $subject = htmlspecialchars(JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_SUBJECT', $unit_detail->property_id, $unit_detail->firstname), ENT_QUOTES, 'UTF-8');
-    $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $start_date, $siteURL, $intasure);
+    $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $start_date, $end_date, $siteURL, $intasure);
     JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
   }
 }
