@@ -524,12 +524,11 @@ class AccommodationModelListing extends JModelForm
         $query->from('#__unit a');
         if (!$this->preview)
         {
-
-          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
+          $query->innerJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and c.review = 0))');
         }
         else
         {
-          $query->leftJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
+          $query->innerJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
         }
 
         //$query->join('left', '#__unit_versions b on a.id = b.unit_id');
@@ -539,9 +538,9 @@ class AccommodationModelListing extends JModelForm
 
         $query->where('a.published = 1');
 
-        return $this->_db->setQuery($query)->loadObjectList();
-
-        return $this->units;
+        $result = $this->_db->setQuery($query)->loadObjectList();
+        
+        return $result;
       }
       catch (Exception $e)
       {

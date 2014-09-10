@@ -50,7 +50,7 @@ class JFormFieldUserProperties extends JFormFieldGroupedList
 
     $query->select('a.id, b.unit_title, d.id as property_id');
     $query->from('#__unit AS a');
-    $query->join('left', '#__unit_versions b on (a.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
+    $query->join('inner', '#__unit_versions b on (a.id = b.unit_id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id and review = 0))');
     $query->join('left', '#__property d on d.id = b.property_id');
     $query->where('d.created_by = ' . $user->id);  // Select only the props created by the user that created this property
     $query->where('a.published = 1');
