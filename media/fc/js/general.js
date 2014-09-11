@@ -58,8 +58,6 @@ jQuery(document).ready(function() {
 
   jQuery('.result-links a.login').tooltip({animation: false});
 
-
-
   if (jQuery('#newUnit').length) {
     jQuery('#newUnit').on('click', function(event) {
       if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {

@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HelloWorld View
  */
-class RentalViewPropertyversions extends JViewLegacy
+class RealEstateViewPropertyversions extends JViewLegacy
 {
 
   public function __construct($config = array())
@@ -33,26 +33,19 @@ class RentalViewPropertyversions extends JViewLegacy
 
     $this->script = $this->get('Script');
 
-    // Get an instance of our model, setting ignore_request to true so we bypass units->populateState
-    $model = JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true));
+    // Get an instance of our listing model, setting ignore_request to true so we bypass units->populateState
+    //$model = JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true));
 
-    // Switch to the revised listing class
-    // $model = JModelLegacy::getInstance('Listing_proper', 'RentalModel', array('id' => $this->item->property_id));
-    // Here we attempt to wedge some data into the model
-    // So another method in the same model can use it.
-    $listing_id = ($this->item->property_id) ? $this->item->property_id : '';
+    //$listing_id = ($this->item->realestate_property_id) ? $this->item->realestate_property_id : '';
 
     // Set some model options
-    $model->setState('com_rental.' . $model->getName() . '.id', $listing_id);
-    $model->setState('list.limit', 100);
+    //$model->setState('COM_REALESTATE.' . $model->getName() . '.id', $listing_id);
+    //$model->setState('list.limit', 100);
 
     // Get the units
-    $this->progress = $model->getItems();
+    //$this->progress = $model->getItems();
 
-    $this->status = $model->getProgress($this->progress);
-
-    $languages = RentalHelper::getLanguages();
-    $lang = RentalHelper::getLang();
+    //$this->status = $model->getProgress($this->progress);
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
@@ -63,11 +56,6 @@ class RentalViewPropertyversions extends JViewLegacy
 
     // Register the JHtmlProperty class
     JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
-
-    // Assign the language data
-    $this->languages = $languages;
-    $this->lang = $lang;
-
 
     // Set the toolbar
     $this->addToolBar();
@@ -95,9 +83,9 @@ class RentalViewPropertyversions extends JViewLegacy
     $isNew = $this->item->id == 0;
 
     // Get component level permissions
-    $canDo = RentalHelper::getActions();
+    $canDo = RealEstateHelper::getActions();
 
-    JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->property_id));
+    JToolBarHelper::title(JText::sprintf('COM_REALESTATE_MANAGER_HELLOWORLD_EDIT', $this->item->realestate_property_id));
 
     // Built the actions for new and existing records.
 
@@ -111,16 +99,13 @@ class RentalViewPropertyversions extends JViewLegacy
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
-    $property_id = $this->status->id;
-    $unit_id = $this->status->unit_id;
-    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
+    $property_id = $this->item->realestate_property_id;
+    $bar->appendButton('Preview', 'preview', 'COM_REALESTATE_PROPERTY_PREVIEW', $property_id);
 
-    //JToolbarHelper::help('', false, '/support/rental-property/1139-location-details');
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
-    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
-    //RentalHelper::addSubmenu('listings');
+    //RealEstateHelper::addSubmenu('listings');
     // Add the side bar
     //$this->sidebar = JHtmlSidebar::render();
   }
@@ -136,14 +121,15 @@ class RentalViewPropertyversions extends JViewLegacy
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
 
-    $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->id));
-    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
-    $document->addScript(JURI::root() . "/media/fc/js/general.js");
+    $document->setTitle(JText::sprintf('COM_REALESTATE_MANAGER_HELLOWORLD_EDIT', $this->item->id));
+    JText::script('COM_REALESTATE_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_REALESTATE_RENTAL_ERROR_UNACCEPTABLE');
+    $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true, false);
 
     $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript(JURI::root() . "/media/fc/js/locate.js", 'text/javascript', true, false);
     $document->addStyleSheet(JURI::root() . "/media/fc/css/helloworld.css", 'text/css', "screen");
   }
+
 }
 

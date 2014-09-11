@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	
+  addrulepath="/libraries/frenchconnections/rules/property" 
+  addfieldpath="/libraries/frenchconnections/fields/property">
+  
+
+
+  <fieldset name="Location">    
+    <field
+      name="department"
+      type="departments"
+      extension="com_rental"
+      default="1"
+      label="COM_REALESTATE_FIELD_DEPARTMENT_LABEL"
+      description="COM_REALESTATE_FIELD_DEPARTMENT_DESC"
+      required="true"
+      labelclass="control-label">
+      <option value="">JOPTION_SELECT_CATEGORY</option>
+    </field>
+    <field
+      name="city"
+      type="cities"
+      class="inputbox"
+      labelclass="control-label"
+      label="COM_REALESTATE_FIELD_NEARESTTOWN_LABEL"
+      description="COM_REALESTATE_FIELD_NEARESTTOWN_DESC"
+      required="true"
+      readonly="true">
+      <option value="">COM_REALESTATE_FIELD_SELECT_NEAREST_TOWN</option>
+    </field>
+    <field
+      name="map"
+      id="map"
+      type="map"
+    />
+    <field
+      name="latitude"
+      extension="com_rental"
+      class="validate-latitude "
+      default="0"
+      label="COM_REALESTATE_FIELD_LATITUDE_LABEL"
+      description="COM_REALESTATE_FIELD_LATITUDE_DESC"
+      required="true"
+      maxlength="15"
+      filter="string"
+      validate="latlong"
+      labelclass="control-label"
+      readonly="true">
+    </field>
+    <field
+      name="longitude"
+      extension="com_rental"
+      class="inputbox validate-longitude"
+      default="0"
+      label="COM_REALESTATE_FIELD_LONGITUDE_LABEL"
+      description="COM_REALESTATE_FIELD_LONGITUDE_DESC"
+      required="true"
+      filter="string"
+      labelclass="control-label"
+      maxlength="15"
+      validate="latlong"
+      readonly="true">
+    </field>
+
+    <field
+      name="airport"
+      type="airport"
+      class="input"
+      required="false"
+      filter="int"
+      validate="nonzero"
+      label="Nearest Airport"
+      description=""
+      default=""
+      labelclass="control-label">
+      <option value="">JOPTION_SELECT_CATEGORY</option>
+
+    </field>
+  </fieldset>
+
+  <fieldset name="details">
+    <field
+      name="title"
+      labelclass="control-label"
+      type="text"
+      label="COM_REALESTATE_FIELD_TITLE_LABEL"
+      description="COM_REALESTATE_FIELD_TITLE_DESC"
+      size="75"
+      maxlength="75"
+      class="input-xxlarge"
+      validate="greeting"
+      required="false"
+      filter="string"
+      />
+    <field
+      name="description"
+      labelclass="control-label"
+      type="editor"
+      label="COM_RENTAL_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+      size="40"
+      class="inputbox"
+      filter="JComponentHelper::filterText"
+      required="true"
+      buttons="false"
+      />
+    <field
+      name="single_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
+      class="input-small"
+      labelclass="control-label"
+      validate="nonzero"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+   
+    <field
+      name="double_bedrooms"
+      type="integer"
+      first="1"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_DOUBLE_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="nonzero"
+      labelclass="control-label"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field>
+    <field
+      name="bathrooms"
+      type="integer"
+      first="0"
+      last="10"
+      step="1"
+      label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
+      description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
+      class="bedrooms-select input-small"
+      validate="bathrooms"
+      labelclass="control-label"
+      required="true"
+      filter="int">
+      <option value="">JSELECT</option>
+    </field> 
+    
+  
+  </fieldset>
+
+  <fieldset name="hidden-details">
+    <field
+      name="realestate_property_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="published"
+      type="hidden"
+      filter="unset"/>
+    <field
+      name="review"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="published_on"
+      type="hidden"
+      filter="string"
+    />
+  </fieldset>
+  
+ 
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
