@@ -15,7 +15,7 @@ $lang->load('com_rental');
 JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
 // Register the com_rental general helper file
-JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
+JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/html/general.php');
 
 // Register the JHtmlProperty class
 JLoader::register('JHtmlProperty', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/html/property.php');
