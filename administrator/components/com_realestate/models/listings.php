@@ -99,7 +99,7 @@ class RealestateModelListings extends JModelList
     $userId = $user->get('id');
 
     // Get the access control permissions in a handy array
-    $canDo = RealestateHelper::getActions();
+    $canDo = PropertyHelper::getActions();
 
     // Create a new query object.
     $db = JFactory::getDBO();

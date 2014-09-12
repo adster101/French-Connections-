@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	
-  addrulepath="/libraries/frenchconnections/rules/property" 
-  addfieldpath="/libraries/frenchconnections/fields/property">
-  
-
-
-  <fieldset name="Location">    
+  addrulepath="/libraries/frenchconnections/form/rules" 
+  addfieldpath="/libraries/frenchconnections/form/fields">
+  <fieldset 
+    name="Location"
+    label="COM_REALESTATE_LOCATION_DETAILS">    
     <field
       name="department"
       type="departments"
@@ -78,7 +77,9 @@
     </field>
   </fieldset>
 
-  <fieldset name="details">
+  <fieldset 
+    name="description"
+    label="COM_REALESTATE_DESCRIPTION_LEGEND">
     <field
       name="title"
       labelclass="control-label"
@@ -88,10 +89,10 @@
       size="75"
       maxlength="75"
       class="input-xxlarge"
-      validate="greeting"
+      validate="Fc.length"
       required="false"
       filter="string"
-      />
+    />
     <field
       name="description"
       labelclass="control-label"
@@ -103,7 +104,7 @@
       filter="JComponentHelper::filterText"
       required="true"
       buttons="false"
-      />
+    />
     <field
       name="single_bedrooms"
       type="integer"
@@ -148,10 +149,70 @@
       filter="int">
       <option value="">JSELECT</option>
     </field> 
-    
-  
+    <field
+      name="website"
+      type="text"
+      label="COM_REALESTATE_FIELD_WEBSITE_LABEL"
+      description="COM_REALESTATE_FIELD_WEBSITE_DESC"
+      message="COM_REALESTATE_FIELD_WEBSITE_MESSAGE"
+      class="input-medium"
+      validate="url"
+      filter="string"
+      labelclass="control-label"
+    />
   </fieldset>
-
+  
+ <fieldset 
+    name="salesdetails"
+    label="COM_REALESTATE_PROPERTY_SALE_DETAILS">
+ 
+    <field 
+      type="text"
+      name="price"
+      filter="int"
+      class="input-small"
+      labelclass="control-label"
+      label="COM_REALESTATE_FIELD_PRICE_LABEL"
+      description="COM_REALESTATE_FIELD_PRICE_DESC"
+      message="COM_REALESTATE_FIELD_PRICE_MESSAGE"
+      required="true"
+    />
+   
+    <field
+      type="list"
+      name="base_currency"
+      filter="string"
+      labelclass="control-label"
+      label="COM_REALESTATE_FIELD_CURRENCY_LABEL"
+      description="COM_REALESTATE_FIELD_CURRENCY_DESC"
+      message="COM_REALESTATE_FIELD_CURRENCY_MESSAGE"
+      required="true"
+      default="">
+      <option value="">JSELECT</option>
+      <option value="EUR">Euro</option>
+      <option value="GBP">Sterling</option>
+    </field>
+      
+    <field 
+      type="list"
+      name="additional_price_notes"
+      filter="string"
+      labelclass="control-label"
+      label="COM_REALESTATE_FIELD_PRICE_NOTES_LABEL"  
+      description="COM_REALESTATE_FIELD_PRICE_NOTES_DESC"  
+      message="COM_REALESTATE_FIELD_PRICE_NOTES_DESC"  
+      required="true"
+      default="">
+      <option value="">JSELECT</option>
+      <option value="COM_REALESTATE_FIELD_PRICE_NOTES_AGENCY_FEE_INCLUDED">COM_REALESTATE_FIELD_PRICE_NOTES_AGENCY_FEE_INCLUDED</option>
+      <option value="COM_REALESTATE_FIELD_PRICE_NOTES_NEGOTIABLE">COM_REALESTATE_FIELD_PRICE_NOTES_NEGOTIABLE</option>
+      <option value="COM_REALESTATE_FIELD_PRICE_NOTES_OFFERS_IN_THE_REGION_OF">COM_REALESTATE_FIELD_PRICE_NOTES_OFFERS_IN_THE_REGION_OF</option>
+      <option value="COM_REALESTATE_FIELD_PRICE_NOTES_OR_NEAREST_OFFER">COM_REALESTATE_FIELD_PRICE_NOTES_OR_NEAREST_OFFER</option>
+      <option value="COM_REALESTATE_FIELD_PRICE_NOTES_SALE_BY_PRIVATE_VENDOR">COM_REALESTATE_FIELD_PRICE_NOTES_SALE_BY_PRIVATE_VENDOR</option>
+      <option value="COM_REALESTATE_FIELD_PRICE_NOTES_UNCONDITIONAL">COM_REALESTATE_FIELD_PRICE_NOTES_UNCONDITIONAL</option>
+    </field>
+  </fieldset>
+ 
   <fieldset name="hidden-details">
     <field
       name="realestate_property_id"

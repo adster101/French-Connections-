@@ -8,11 +8,10 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_realestate'))
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
+JLoader::import('frenchconnections.library');
+
 // Register the Preview button
 JLoader::register('JToolbarButtonPreview', JPATH_ROOT . '/administrator/components/com_realestate/buttons/preview.php'); 
-
-// Register the Helloworld helper file
-JLoader::register('RealestateHelper', dirname(__FILE__) . '/helpers/realestate.php');
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

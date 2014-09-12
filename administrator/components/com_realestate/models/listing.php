@@ -224,7 +224,7 @@ class RealEstateModelListing extends PropertyModelListing
     $userId = $user->get('id');
 
     // Get the access control permissions in a handy array
-    $canDo = RentalHelper::getActions();
+    $canDo = PropertyHelper::getActions();
     $id = $this->getState($this->context . '.id', '');
     $latest = $this->getState('com_rental.listing.latest', true);
 
@@ -369,7 +369,7 @@ class RealEstateModelListing extends PropertyModelListing
     $listing->id = $units[0]->id; // The main listing ID
     $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
-    $listing->days_to_renewal = RentalHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
+    $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
 
     foreach ($units as $key => $unit)
     {

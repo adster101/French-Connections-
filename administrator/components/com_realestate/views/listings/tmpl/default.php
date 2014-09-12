@@ -22,7 +22,7 @@ $date_filter = $this->state->get('filter.date_filter');
 //$originalOrders = array();
 //$listing_id = '';
 
-$canDo = RealestateHelper::getActions();
+$canDo = PropertyHelper::getActions();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_realestate'); ?>" method="post" name="adminForm" class="form-validate js-stools-form" id="adminForm">
@@ -100,7 +100,7 @@ $canDo = RealestateHelper::getActions();
                 <tbody>
                   <?php foreach ($this->items as $i => $item): ?>
                     <?php
-                    $days_to_renewal = RealestateHelper::getDaysToExpiry($item->expiry_date);
+                    $days_to_renewal = PropertyHelper::getDaysToExpiry($item->expiry_date);
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
                     if ($item->review == 0)

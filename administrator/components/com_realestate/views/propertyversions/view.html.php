@@ -83,7 +83,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
     $isNew = $this->item->id == 0;
 
     // Get component level permissions
-    $canDo = RealEstateHelper::getActions();
+    $canDo = PropertyHelper::getActions();
 
     JToolBarHelper::title(JText::sprintf('COM_REALESTATE_MANAGER_HELLOWORLD_EDIT', $this->item->realestate_property_id));
 
@@ -105,7 +105,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
 
-    //RealEstateHelper::addSubmenu('listings');
+    //PropertyHelper::addSubmenu('listings');
     // Add the side bar
     //$this->sidebar = JHtmlSidebar::render();
   }

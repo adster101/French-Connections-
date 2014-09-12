@@ -316,7 +316,7 @@ class RentalControllerListing extends JControllerForm
     $app = JFactory::getApplication();
     $context = "$this->option.edit.review";
 
-    $recordId = (int) (count($cid) ? $cid[0] : $app->input->get('property_id',''));
+    $recordId = (int) (count($cid) ? $cid[0] : $app->input->get('property_id', ''));
     $checkin = property_exists($table, 'checked_out');
 
     // Check user is authed to review
@@ -582,7 +582,7 @@ class RentalControllerListing extends JControllerForm
       else
       {
         // If we get here it means there is no payment due for this so we just lock it for editing.
-        //$payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
+        $payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
         $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
 
         if (RentalHelper::isOwner($user->id))
@@ -614,6 +614,7 @@ class RentalControllerListing extends JControllerForm
     $app = JFactory::getApplication();
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
+    $checkin = property_exists($table, 'checked_out');
 
 
 
@@ -637,29 +638,30 @@ class RentalControllerListing extends JControllerForm
     $app->setUserState($context . '.data', null);
 
     // Check property out to user reviewing
-    //if ($checkin && !$model->checkout($id)) {
-    // Check-out failed, display a notice but allow the user to see the record.
-    //$this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
-    //$this->setMessage($this->getError(), 'error');
-    //$this->setRedirect(
-    //JRoute::_(
-    //'index.php?option=' . $this->option, false
-    //)
-    //);
-    //return false;
-    //}
-    // Hold the edit ID once the id and user have been authorised.
-    $this->holdEditId($context, $id);
+    if ($checkin && !$model->checkout($id))
+    {
+      // Check-out failed, display a notice but allow the user to see the record.
+      $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
+      $this->setMessage($this->getError(), 'error');
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false
+              )
+      );
+      return false;
+    }
+    else
+    {
+      // Hold the edit ID once the id and user have been authorised.
+      $this->holdEditId($context, $id);
 
-    $this->setRedirect(
-            JRoute::_(
-                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
-    );
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
+      );
 
-
-
-
-    return true;
+      return true;
+    }
   }
 
   public function validate($model, $data, $context, $recordId)

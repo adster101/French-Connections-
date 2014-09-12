@@ -40,8 +40,9 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
    */
   protected function populateState($ordering = null, $direction = null)
   {
+   
 
-    $canDo = RealEstateHelper::getActions();
+    $canDo = PropertyHelper::getActions();
     $this->setState('actions.permissions', $canDo);
 
     // List state information.
@@ -58,7 +59,6 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
    */
   public function save($data = array())
   {
-
     $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
     $model = JModelLegacy::getInstance('Property', 'RealEstateModel', $config = array('ignore_request' => 'true'));
@@ -222,116 +222,6 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
     return true;
   }
 
-  /*
-   * Method to save the property attributes into the #__attribute_property table.
-   *
-   *
-   *
-   */
-
-  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $table = '', $attribute_liat = array())
-  {
-
-    if (!is_array($data) || empty($data))
-    {
-      return true;
-    }
-
-    if (empty($old_version_id) || empty($new_version_id))
-    {
-      return true;
-    }
-
-
-
-    $attributes = array();
-
-    // Loop over the data and prepare an array to save
-    foreach ($data as $key => $value)
-    {
-
-      if (!in_array($key, $attribute_liat))
-      {
-        continue;
-      }
-
-      // We're not interested in the 'other' fields E.g. external_facilities_other
-      if (strpos($key, 'other') == 0 && !empty($value))
-      {
-
-        // Location, property and accommodation types are all single integers and not arrays
-        if (is_array($value))
-        {
-          // We want to save this in one go so we make an array
-          foreach ($value as $facility)
-          {
-            // Facilities should be integers
-            if ((int) $facility)
-            {
-              $attributes[] = $facility;
-            }
-          }
-        }
-        else
-        {
-          $attributes[] = $value;
-        }
-      }
-    }
-
-    // If we have any attributes
-    if (count($attributes) > 0)
-    {
-
-      // Firstly need to delete these...in a transaction would be better
-      $query = $this->_db->getQuery(true);
-
-      if ($old_version_id == $new_version_id)
-      {
-
-        $query->delete($table)->where('version_id = ' . $old_version_id);
-        $this->_db->setQuery($query);
-
-        if (!$this->_db->execute())
-        {
-
-          $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
-
-          $this->setError($e);
-          return false;
-        }
-      }
-
-
-
-      $query = $this->_db->getQuery(true);
-
-      $query->insert($table);
-
-      $query->columns(array('version_id', 'property_id', 'attribute_id'));
-
-      foreach ($attributes as $attribute)
-      {
-        $insert_string = "$new_version_id, $id," . $attribute . "";
-        $query->values($insert_string);
-      }
-
-      $this->_db->setQuery($query);
-
-      if (!$this->_db->execute())
-      {
-        $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $this->_db->getErrorMsg()));
-        $this->setError($e);
-        return false;
-      }
-
-
-      return true;
-    }
-
-
-    return true;
-  }
 
 }
 

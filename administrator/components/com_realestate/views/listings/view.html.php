@@ -60,7 +60,7 @@ class RealestateViewListings extends JViewLegacy
   protected function addToolBar()
   {
 
-    $canDo = RealestateHelper::getActions();
+    $canDo = PropertyHelper::getActions();
 
     JToolBarHelper::title(JText::_('COM_REALESTATE_MANAGER_HELLOWORLDS'), 'helloworld');
 
