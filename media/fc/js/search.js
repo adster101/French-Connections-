@@ -143,7 +143,7 @@ jQuery(document).ready(function() {
       }
       )
     },
-    items: 10
+    items: 15
   })
 
 
