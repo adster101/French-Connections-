@@ -96,11 +96,15 @@ class RealEstateModelListing extends PropertyModelListing
         a.id,
         a.expiry_date,
         a.review,
+        b.title,
+        b.city,
+        b.department,
+        b.price,
         b.base_currency,
         b.use_invoice_address,
         b.latitude,
-        b.longitude
-        
+        b.longitude,
+        0 as images
       ');
     $query->from('#__realestate_property as a');
 
@@ -177,38 +181,47 @@ class RealEstateModelListing extends PropertyModelListing
    * @param array   An array of units associated making up a listing
    *  
    */
-  public function getProgress($units = array())
+  public function getProgress($listing = array())
   {
-
     // Create a listing object to hold the status
-    $listing = new stdClass;
+    $state = new stdClass;
 
-    $listing->complete = true; // Assume listing is complete
+    $state->complete = true; // Assume listing is complete
+    $state->property_detail = true; // Assume we have all property details
+    $state->images = true; // Assume we have some images
 
-    $listing->id = $units[0]->id; // The main listing ID
-    $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
-    $listing->expiry_date = $units[0]->expiry_date; // The expiry date
-    $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
+    $state->id = $listing[0]->id; // The main listing ID
+    $state->review = $listing[0]->review; // The overall review status (e.g. 0,1,2)
+    $state->expiry_date = $listing[0]->expiry_date; // The expiry date
+    $state->days_to_renewal = PropertyHelper::getDaysToExpiry($listing[0]->expiry_date); // The calculated days to expiry
 
-    if (!$units[0]->use_invoice_address && empty($units[0]->first_name) && empty($units[0]->surname) && empty($units[0]->email_1) && empty($units[0]->phone_1))
+    if (!$listing[0]->use_invoice_address && empty($listing[0]->first_name) && empty($listing[0]->surname) && empty($listing[0]->email_1) && empty($listing[0]->phone_1))
     {
-      $listing->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
+      $state->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
     }
 
-    if (
-            !$units[0]->latitude ||
-            !$units[0]->longitude ||
-            !$units[0]->title ||
-            !$units[0]->city ||
-            !$units[0]->department ||
-            !$units[0]->price
+    // Check the property details are present and correct
+    if
+    (
+            !$listing[0]->latitude ||
+            !$listing[0]->longitude ||
+            !$listing[0]->title ||
+            !$listing[0]->city ||
+            !$listing[0]->department ||
+            !$listing[0]->price
     )
     {
-      $listing->property_detail = false;
-      $listing->complete = false;
+      $state->property_detail = false;
+      $state->complete = false;
     }
 
-    return $listing;
+    // Check if we have some images
+    if (empty($listing[0]->images))
+    {
+      $state->gallery = false;
+    }
+
+    return $state;
   }
 
 }

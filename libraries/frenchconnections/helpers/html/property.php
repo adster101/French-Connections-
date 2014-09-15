@@ -557,27 +557,27 @@ class JHtmlProperty
   }
 
   /**
-   * @param	int $value
-   * @param	int $i
+   * Simply outputs a button with a 
+   * 
+   * @param type $action
+   * @param type $state
+   * @return type
    */
-  public static function progressButton($action = '', $state = false)
+  public static function progressButton($action = '', $state = false, $text = '')
   {
 
     $layout = new JLayoutHelper();
+    $class = ($state) ? 'icon-publish' : 'icon-warning';
 
     $options = array(
         'doTask' => "Joomla.submitbutton('$action')",
-        'class' => 'publish',
-        'text' => 'Blah',
+        'class' => $class,
+        'text' => $text,
         'btnClass' => 'btn btn-default'
     );
 
     $html = $layout->render('joomla.toolbar.standard', $options);
-
-
-
-
-
+    
     return $html;
   }
 

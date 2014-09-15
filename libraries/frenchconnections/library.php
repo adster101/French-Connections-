@@ -12,7 +12,7 @@ JLoader::registerPrefix('Fc', dirname(__FILE__));
 JLoader::register('PropertyHelper', dirname(__FILE__) . '/helpers/property.php');
 
 // Common HTML helpers
-JHtml::addIncludePath(dirname(__FILE__) . '/html');
+JHtml::addIncludePath(dirname(__FILE__) . '/helpers/html');
 
 // Register the Preview button
 JLoader::register('JToolbarButtonPreview', dirname(__FILE__) . '/buttons/preview.php'); 

@@ -44,7 +44,6 @@ class RealEstateController extends JControllerLegacy
   function display($cachable = false)
   {
 
-
     // Set the default view for this component
     JRequest::setVar('view', JRequest::getCmd('view', 'listings'));
 
@@ -82,14 +81,4 @@ class RealEstateController extends JControllerLegacy
     // call parent behavior
     parent::display($cachable);
   }
-
-  function changeLanguage()
-  {
-    $id = JRequest::getInt('id');
-    $session = & JFactory::getSession();
-    $session->set('com_realestate.property.' . $id . '.lang', JRequest::getVar('Language'));
-    $view = JRequest::getVar('view');
-    $this->setRedirect('index.php?option=com_realestate&task=' . $view . '.edit&id=' . $id);
-  }
-
 }

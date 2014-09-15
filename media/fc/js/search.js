@@ -136,7 +136,7 @@ jQuery(document).ready(function() {
       jQuery.get('/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
       {
         q: query,
-        items: 10
+        items: 15
       },
       function(data) {
         process(data);
