@@ -14802,8 +14802,6 @@ jQuery(document).ready(function() {
 
   jQuery('.result-links a.login').tooltip({animation: false});
 
-
-
   if (jQuery('#newUnit').length) {
     jQuery('#newUnit').on('click', function(event) {
       if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {
@@ -15274,7 +15272,7 @@ jQuery(document).ready(function() {
       jQuery.get('/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
       {
         q: query,
-        items: 10
+        items: 15
       },
       function(data) {
         process(data);
