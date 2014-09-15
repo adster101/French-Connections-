@@ -9,7 +9,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class RentalControllerListing extends JControllerForm
+class PropertyControllerListing extends JControllerForm
 {
 
   protected $extension;
@@ -25,12 +25,6 @@ class RentalControllerListing extends JControllerForm
   public function __construct($config = array())
   {
     parent::__construct($config);
-
-    // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension))
-    {
-      $this->extension = JRequest::getCmd('extension', 'com_rental');
-    }
 
     $this->registerTask('checkin', 'review');
   }
@@ -167,32 +161,6 @@ class RentalControllerListing extends JControllerForm
                     'index.php?option=' . $this->option . '&view=review&layout=approve&property_id=' . $recordId, false
             )
     );
-    return true;
-  }
-
-  /**
-   * Overriden checkEditId so it's usable by multiple actions
-   * @param type $context
-   * @param type $id
-   * @return boolean
-   */
-  public function checkEditId($context, $id)
-  {
-    if (!parent::checkEditId($context, $id))
-    {
-      // Somehow the person just went to the form and tried to save it. We don't allow that.
-      $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
-      $this->setMessage($this->getError(), 'error');
-
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option . '&view=' . $this->view_list
-                      . $this->getRedirectToListAppend(), false
-              )
-      );
-
-      return false;
-    }
     return true;
   }
 
@@ -598,67 +566,13 @@ class RentalControllerListing extends JControllerForm
     return true;
   }
 
-  /*
-   * View action - checks ownership of record sets the edit id in session and redirects to the view
-   *
-   *
-   */
-
-  public function view()
+  public function getModel($name = 'Property', $prefix = '', $config = array())
   {
-
-    $context = "$this->option.edit.$this->context";
-    $app = JFactory::getApplication();
-    $model = $this->getModel('Property', 'RentalModel');
-    $table = $model->getTable();
-    $checkin = property_exists($table, 'checked_out');
-
-
-
-    /**
-     *  $id is the listing the user is trying to edit
-     */
-    $id = $this->input->get('id', '', 'int');
-
-    if (!$this->allowView($id))
-    {
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option, false)
-      );
-
-      $this->setMessage('You are not authorised to view this property listing at this time.', 'error');
-
-      return false;
-    }
-
-    $app->setUserState($context . '.data', null);
-
-    // Check property out to user reviewing
-    if ($checkin && !$model->checkout($id))
-    {
-      // Check-out failed, display a notice but allow the user to see the record.
-      $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
-      $this->setMessage($this->getError(), 'error');
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option, false
-              )
-      );
-      return false;
-    }
-    else
-    {
-      // Hold the edit ID once the id and user have been authorised.
-      $this->holdEditId($context, $id);
-
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
-      );
-
-      return true;
-    }
+    // Add the component model path
+    $this->addModelPath(JPATH_ADMINISTRATOR . '/components/' . $this->option . '/models/', ucfirst($this->model_prefix));
+    
+    // Get an instance of the model 
+    return parent::getModel($name, ucfirst($this->model_prefix), $config);
   }
 
   public function validate($model, $data, $context, $recordId)

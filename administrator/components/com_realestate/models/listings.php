@@ -120,8 +120,8 @@ class RealestateModelListings extends JModelList
       date_format(a.expiry_date, "%D %M %Y") as expiry_date,
       date_format(a.created_on, "%D %M %Y") as created_on,
       date_format(a.modified, "%D %M %Y") as modified,
-      a.review
-      -- f.image_file_name as thumbnail
+      a.review,
+      "" as thumbnail
     ');
 
     // Join the user details if the user has the ACL rights.

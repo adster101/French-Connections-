@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+JLoader::import('frenchconnections.library');
+
 // Register the Helloworld helper file
 JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 

@@ -210,121 +210,6 @@ class PropertyModelListing extends JModelList
     return parent::getStoreId($id);
   }
 
-  /**
-   * Method to build an SQL query to load the list data.
-   *
-   * @return	string	An SQL query
-   */
-  protected function getListQuery()
-  {
-
-    // Get the user ID
-    $user = JFactory::getUser();
-    $userId = $user->get('id');
-
-    // Get the access control permissions in a handy array
-    $canDo = RentalHelper::getActions();
-    $id = $this->getState($this->context . '.id', '');
-    $latest = $this->getState('com_rental.listing.latest', true);
-
-    // Create a new query object.
-    $db = JFactory::getDBO();
-    $query = $db->getQuery(true);
-
-    // Initialise the query.
-    $query->select('
-        a.id,
-        a.expiry_date,
-        a.review,
-        b.review as property_review,
-        b.latitude, 
-        b.longitude,
-        b.department,
-        b.use_invoice_details,
-        b.first_name,
-        b.surname,
-        e.review as unit_review,
-        -- b.title,
-        a.created_by,
-        e.unit_id unit_id,
-        e.property_id,
-        d.ordering,
-        e.unit_title,
-        e.changeover_day,
-        d.published,
-        d.availability_last_updated_on,
-        e.accommodation_type,
-        e.created_on,
-        g.vat_status,  
-        b.phone_1,
-        b.email_1,
-        b.video_url, 
-        b.lwl, 
-        b.frtranslation,
-        b.email_2,
-        base_currency,
-        tariff_based_on,
-        (select count(*) from qitz3_property_images_library where version_id =  e.id) as images,
-        (select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) as availability,
-        (select count(*) from qitz3_tariffs where unit_id = d.id and end_date > NOW()) as tariffs
-      ');
-    $query->from('#__property as a');
-
-    // Switch out on whether we want the latest or 'published' version
-    if ($latest)
-    {
-      $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id))');
-    }
-    else
-    {
-      $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id and c.review = 0))');
-    }
-
-    $query->join('left', '#__unit d on d.property_id = a.id');
-
-    // Switch out on whether we want the latest or 'published' version
-    if ($latest)
-    {
-      $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where f.unit_id = d.id))');
-    }
-    else
-    {
-      $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where f.unit_id = d.id and f.review = 0))');
-    }
-
-    $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
-    $query->join('left', '#__users h on a.created_by = h.id');
-
-    $query->where('a.id = ' . (int) $id);
-    $query->order('ordering');
-
-    // Check the user group this user belongs to.
-    // Fundamental check to ensure owners only see their own listings.
-    // Should this be with an ACL check, e.g. core.edit.own and core.edit
-    // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
-    //  // If true then has permission to edit all as well as own, otherwise just own
-    if ($canDo->get('core.edit.own') && !$canDo->get('core.edit'))
-    {
-      $query->where('a.created_by=' . $userId);
-      $query->where('d.published = 1');
-    }
-
-    if ($latest)
-    {
-      $query->where('b.review in (0,1)');
-      $query->where('e.review in (0,1)');
-    }
-    else
-    {
-      $query->where('b.review = 0');
-      $query->where('e.review = 0');
-    }
-
-    $query->where('a.created_by !=0');
-
-    return $query;
-  }
-
   function getLanguages()
   {
     $lang = & JFactory::getLanguage();
@@ -387,11 +272,10 @@ class PropertyModelListing extends JModelList
     {
       $listing->complete = false;
     }
-    
+
     $listing->unit_id = $units[0]->unit_id;
-    
-  return $listing;
-    
+
+    return $listing;
   }
 
 }

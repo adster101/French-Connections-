@@ -10,12 +10,11 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
+JLoader::import('frenchconnections.library');
+
 require_once (dirname(__FILE__).'/helper.php');
 
 require_once(JPATH_SITE.'/components/com_content/helpers/route.php');
-
-// Register the heneral help helper file
-JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 
 // Register the FCSearchHelperRoute class
 JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');

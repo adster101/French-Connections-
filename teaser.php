@@ -29,22 +29,17 @@ foreach ($words as $key => $word)
   {
     $deduped[$word] = $key;
   }
-  
 }
 
 $deduped = array_flip($deduped);
 
-
 $collection = array();
 
-
 $a = array_slice($deduped, 0, 5);
-
 
 depth_picker($a, "", $collection);
 
 var_dump($collection);
-
 
 $collection = array();
 

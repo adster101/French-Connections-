@@ -135,9 +135,9 @@ $canDo = PropertyHelper::getActions();
                           </td>
                         <?php endif; ?>
                         <td>
-                          <?php echo JHtml::_('image', '', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail) ?>
+                          <?php echo JHtml::_('image', '', '/images/property/' . $item->id . '/thumb/' . $item->thumbnail) ?>
                           <?php if ($item->review != 2) : ?>
-                            <a href="<?php echo JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
+                            <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=listing.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
                                 <?php echo JText::_('COM_REALESTATE_LISTING_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
                               <?php else: ?>
@@ -210,7 +210,7 @@ $canDo = PropertyHelper::getActions();
                     <?php else : ?>
                     <?php endif; ?>
                   <?php endforeach; ?>
-                <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
+                <input type="hidden" name="extension" value="<?php echo 'com_realestate'; ?>" />
 
                 </tbody>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	
   addrulepath="/administrator/components/com_rental/models/rules"
-  addfieldpath="/libraries/frenchconnections/fields/property">
+  addfieldpath="/libraries/frenchconnections/form/fields/property">
   
   <fieldset name="description">
     <field

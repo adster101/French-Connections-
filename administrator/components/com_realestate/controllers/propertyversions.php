@@ -11,6 +11,9 @@ jimport('frenchconnections.controllers.property.base');
  */
 class RealEstateControllerPropertyVersions extends RentalControllerBase
 {
+  
+  var $view_list = 'listing';
+
 
   public function __construct($config = array())
   {

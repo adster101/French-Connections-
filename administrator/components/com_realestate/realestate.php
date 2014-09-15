@@ -10,8 +10,6 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_realestate'))
 
 JLoader::import('frenchconnections.library');
 
-// Register the Preview button
-JLoader::register('JToolbarButtonPreview', JPATH_ROOT . '/administrator/components/com_realestate/buttons/preview.php'); 
 
 // import joomla controller library
 jimport('joomla.application.component.controller');
