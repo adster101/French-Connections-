@@ -557,7 +557,7 @@ class JHtmlProperty
   }
 
   /**
-   * Simply outputs a button with a 
+   * Simply outputs a button with an indication of whether the section has been completed or not
    * 
    * @param type $action
    * @param type $state
@@ -572,13 +572,41 @@ class JHtmlProperty
     $options = array(
         'doTask' => "Joomla.submitbutton('$action')",
         'class' => $class,
-        'text' => $text,
+        'text' => JText::_($text),
         'btnClass' => 'btn btn-default'
     );
 
     $html = $layout->render('joomla.toolbar.standard', $options);
-    
+
     return $html;
+  }
+
+  /**
+   * Simply outputs a li item with an indication of whether the section has been complete or not
+   * 
+   * @param type $action
+   * @param type $state
+   * @return type
+   */
+  public static function progressTab($action = '', $state = false, $text = '')
+  {
+    
+    //$title = empty($displayData['title']) ? '' : (' title="' . $this->escape($displayData['title']) . '"');
+    //$text = empty($displayData['text']) ? '' : ('<span class="j-links-link">' . $displayData['text'] . '</span>');
+
+
+    $class = ($state) ? 'icon-publish' : 'icon-warning';
+    
+    $options = array(
+        'class' => $class,
+        'text' => JText::_($text),
+        'btnClass' => 'btn btn-default',
+        'image' => $class
+    );
+
+    $layout = new JLayoutFile('joomla.links.link');
+
+    return $layout->render($link);
   }
 
 }

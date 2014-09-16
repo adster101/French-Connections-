@@ -84,10 +84,10 @@ class RealEstateViewListing extends JViewLegacy
 
     $canDo = PropertyHelper::getActions();
 
-    JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_RENTAL_HELLOWORLD_LISTING_TITLE', $this->id) : 'No listings');
+    JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_REALESTATE_LISTING_TITLE', $this->id) : 'No listings');
 
     // TO DO - For owners back should be to OA homepage, probably taken care of by permissions settings
-    JToolBarHelper::back('COM_RENTAL_HELLOWORLD_BACK_TO_PROPERTY_LIST', '/administrator/index.php?option=com_realestate');
+    JToolBarHelper::back('COM_REALESTATE_BACK_TO_PROPERTY_LIST', '/administrator/index.php?option=com_realestate');
     //JToolbarHelper::help('', false, '/support');
 
     if ($layout == 'review')
@@ -101,7 +101,7 @@ class RealEstateViewListing extends JViewLegacy
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->items[0]->id;
-    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id);
+    $bar->appendButton('Preview', 'preview', 'COM_REALESTATE_PROPERTY_PREVIEW', $property_id);
   }
 
   /**
@@ -113,11 +113,10 @@ class RealEstateViewListing extends JViewLegacy
   {
     $document = JFactory::getDocument();
 
-    $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
+    $document->setTitle(JText::_('COM_REALESTATE_ADMINISTRATION'));
     $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true);
 
-    JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT');
+    JText::script('COM_REALESTATE_RENTAL_UNSAVED_CHANGES');
   }
 
 }

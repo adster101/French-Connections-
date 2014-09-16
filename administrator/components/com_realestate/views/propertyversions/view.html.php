@@ -85,7 +85,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
     // Get component level permissions
     $canDo = PropertyHelper::getActions();
 
-    JToolBarHelper::title(JText::sprintf('COM_REALESTATE_MANAGER_HELLOWORLD_EDIT', $this->item->realestate_property_id));
+    JToolBarHelper::title(JText::sprintf('COM_REALESTATE_MANAGER_PROPERTY_EDIT', $this->item->realestate_property_id));
 
     // Built the actions for new and existing records.
 
@@ -123,7 +123,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
 
     $document->setTitle(JText::sprintf('COM_REALESTATE_MANAGER_HELLOWORLD_EDIT', $this->item->id));
     JText::script('COM_REALESTATE_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_REALESTATE_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
     $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true, false);
 
     $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");

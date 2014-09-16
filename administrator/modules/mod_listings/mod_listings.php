@@ -11,14 +11,10 @@ defined('_JEXEC') or die;
 
 $lang = JFactory::getLanguage();
 $lang->load('com_rental');
-// Register the Helloworld helper file
-JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
-// Register the com_rental general helper file
-JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/html/general.php');
+// Bootstrap the fc lib
+JLoader::import('frenchconnections.library');
 
-// Register the JHtmlProperty class
-JLoader::register('JHtmlProperty', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/html/property.php');
 
 // Include the syndicate functions only once
 require_once __DIR__ . '/helper.php';

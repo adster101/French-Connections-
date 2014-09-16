@@ -3,15 +3,16 @@
   addrulepath="/libraries/frenchconnections/form/rules" 
   addfieldpath="/libraries/frenchconnections/form/fields">
   <fieldset 
-    name="Location"
+    name="location"
     label="COM_REALESTATE_LOCATION_DETAILS">    
     <field
       name="department"
       type="departments"
-      extension="com_rental"
+      extension="COM_REALESTATE"
       default="1"
       label="COM_REALESTATE_FIELD_DEPARTMENT_LABEL"
       description="COM_REALESTATE_FIELD_DEPARTMENT_DESC"
+      message="COM_REALESTATE_FIELD_DEPARTMENT_MESSAGE"
       required="true"
       labelclass="control-label">
       <option value="">JOPTION_SELECT_CATEGORY</option>
@@ -23,6 +24,7 @@
       labelclass="control-label"
       label="COM_REALESTATE_FIELD_NEARESTTOWN_LABEL"
       description="COM_REALESTATE_FIELD_NEARESTTOWN_DESC"
+      message="COM_REALESTATE_FIELD_NEARESTTOWN_MESSAGE"
       required="true"
       readonly="true">
       <option value="">COM_REALESTATE_FIELD_SELECT_NEAREST_TOWN</option>
@@ -33,6 +35,7 @@
       type="map"
     />
     <field
+      type="hidden"
       name="latitude"
       extension="com_rental"
       class="validate-latitude "
@@ -47,6 +50,7 @@
       readonly="true">
     </field>
     <field
+      type="hidden"
       name="longitude"
       extension="com_rental"
       class="inputbox validate-longitude"
@@ -68,8 +72,8 @@
       required="false"
       filter="int"
       validate="nonzero"
-      label="Nearest Airport"
-      description=""
+      label="COM_REALESTATE_FIELD_AIRPORT_DESC"
+      description="COM_REALESTATE_FIELD_AIRPORT_DESC"
       default=""
       labelclass="control-label">
       <option value="">JOPTION_SELECT_CATEGORY</option>
@@ -86,19 +90,20 @@
       type="text"
       label="COM_REALESTATE_FIELD_TITLE_LABEL"
       description="COM_REALESTATE_FIELD_TITLE_DESC"
+      message="COM_REALESTATE_FIELD_TITLE_MESSAGE"
       size="75"
       maxlength="75"
       class="input-xxlarge"
       validate="Fc.length"
-      required="false"
+      required="true"
       filter="string"
     />
     <field
       name="description"
       labelclass="control-label"
       type="editor"
-      label="COM_RENTAL_HELLOWORLD_FIELD_DESCRIPTION_LABEL"
-      description="COM_RENTAL_HELLOWORLD_FIELD_DESCRIPTION_DESC"
+      label="COM_REALESTATE_FIELD_DESCRIPTION_LABEL"
+      description="COM_REALESTATE_FIELD_DESCRIPTION_DESC"
       size="40"
       class="inputbox"
       filter="JComponentHelper::filterText"
@@ -111,23 +116,24 @@
       first="1"
       last="10"
       step="1"
-      label="COM_RENTAL_HELLOWORLD_FIELD_SINGLE_ROOMS_LABEL"
-      description="COM_RENTAL_HELLOWORLD_FIELD_SINGLE_ROOMS_DESC"
+      label="COM_REALESTATE_FIELD_SINGLE_ROOMS_LABEL"
+      description="COM_REALESTATE_FIELD_SINGLE_ROOMS_DESC"
       class="input-small"
       labelclass="control-label"
       validate="nonzero"
-      filter="int">
+      filter="int"
+      default="">
       <option value="">JSELECT</option>
     </field>
-   
+    
     <field
       name="double_bedrooms"
       type="integer"
       first="1"
       last="10"
       step="1"
-      label="COM_RENTAL_HELLOWORLD_FIELD_DOUBLE_ROOMS_LABEL"
-      description="COM_RENTAL_HELLOWORLD_FIELD_DOUBLE_ROOMS_DESC"
+      label="COM_REALESTATE_FIELD_DOUBLE_ROOMS_LABEL"
+      description="COM_REALESTATE_FIELD_DOUBLE_ROOMS_DESC"
       class="bedrooms-select input-small"
       validate="nonzero"
       labelclass="control-label"
@@ -140,8 +146,9 @@
       first="0"
       last="10"
       step="1"
-      label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
-      description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"
+      label="COM_REALESTATE_FIELD_BATHROOMS_LABEL"
+      description="COM_REALESTATE_FIELD_BATHROOMS_DESC"
+      message="COM_REALESTATE_BATHROOMS_MESSAGE"
       class="bedrooms-select input-small"
       validate="bathrooms"
       labelclass="control-label"
@@ -155,29 +162,16 @@
       label="COM_REALESTATE_FIELD_WEBSITE_LABEL"
       description="COM_REALESTATE_FIELD_WEBSITE_DESC"
       message="COM_REALESTATE_FIELD_WEBSITE_MESSAGE"
-      class="input-medium"
+      class="input-xlarge"
       validate="url"
       filter="string"
       labelclass="control-label"
     />
   </fieldset>
   
- <fieldset 
+  <fieldset 
     name="salesdetails"
     label="COM_REALESTATE_PROPERTY_SALE_DETAILS">
- 
-    <field 
-      type="text"
-      name="price"
-      filter="int"
-      class="input-small"
-      labelclass="control-label"
-      label="COM_REALESTATE_FIELD_PRICE_LABEL"
-      description="COM_REALESTATE_FIELD_PRICE_DESC"
-      message="COM_REALESTATE_FIELD_PRICE_MESSAGE"
-      required="true"
-    />
-   
     <field
       type="list"
       name="base_currency"
@@ -192,7 +186,20 @@
       <option value="EUR">Euro</option>
       <option value="GBP">Sterling</option>
     </field>
-      
+    
+    <field 
+      type="text"
+      name="price"
+      filter="int"
+      class="input-small"
+      labelclass="control-label"
+      label="COM_REALESTATE_FIELD_PRICE_LABEL"
+      description="COM_REALESTATE_FIELD_PRICE_DESC"
+      message="COM_REALESTATE_FIELD_PRICE_MESSAGE"
+      required="true"
+      default=""
+    />
+   
     <field 
       type="list"
       name="additional_price_notes"
@@ -200,8 +207,6 @@
       labelclass="control-label"
       label="COM_REALESTATE_FIELD_PRICE_NOTES_LABEL"  
       description="COM_REALESTATE_FIELD_PRICE_NOTES_DESC"  
-      message="COM_REALESTATE_FIELD_PRICE_NOTES_DESC"  
-      required="true"
       default="">
       <option value="">JSELECT</option>
       <option value="COM_REALESTATE_FIELD_PRICE_NOTES_AGENCY_FEE_INCLUDED">COM_REALESTATE_FIELD_PRICE_NOTES_AGENCY_FEE_INCLUDED</option>
@@ -211,7 +216,83 @@
       <option value="COM_REALESTATE_FIELD_PRICE_NOTES_SALE_BY_PRIVATE_VENDOR">COM_REALESTATE_FIELD_PRICE_NOTES_SALE_BY_PRIVATE_VENDOR</option>
       <option value="COM_REALESTATE_FIELD_PRICE_NOTES_UNCONDITIONAL">COM_REALESTATE_FIELD_PRICE_NOTES_UNCONDITIONAL</option>
     </field>
+    <field 
+      type="text"
+      name="agency_reference"
+      filter="int"
+      class="input-small"
+      labelclass="control-label"
+      label="COM_REALESTATE_FIELD_AGENCY_REFERENCE_LABEL"
+      description="COM_REALESTATE_FIELD_AGENCY_REFERENCE_DESC"
+      default=""
+    />
   </fieldset>
+  <fieldset
+    name="contact"
+    label="COM_REALESTATE_PROPERTY_CONTACT_DETAILS">
+    <field 
+      name="contact_override_note" 
+      type="note"
+      class="alert alert-notice" 
+      label=""
+      description="COM_REALESTATE_HELLOWORLD_ENQUIRY_OVERRIDE_OPTION" 
+    />  
+    <field 
+      name="use_invoice_details"
+      type="checkbox"
+      filter="int"
+      label="COM_REALESTATE_USE_INVOICE_DETAILS"
+      description="COM_REALESTATE_ENQUIRY_OVERRIDE_OPTION" 
+      required="false"
+      labelclass="control-label"
+      default="">
+    </field>      
+    <field 
+      name="first_name"
+      type="text"
+      class="input-large"
+      filter="string"
+      label="First name"
+      labelclass="control-label"
+      maxlength="25"
+    />
+    <field 
+      name="surname"
+      type="text"
+      class="input-large"
+      filter="string"
+      label="Surname"
+      labelclass="control-label"
+      maxlength="25"
+    />
+    <field 
+      name="phone_1"
+      type="tel"
+      filter="string"
+      label="Phone number"
+      maxlength="25"
+      labelclass="control-label"  
+      hint="COM_REALESTATE_ENQUIRY_SETTINGS_PHONE_EXAMPLE"
+      class="validate validate-tel"
+    />
+    <field 
+      name="phone_1_note" 
+      type="note"
+      class="badge badge-info" 
+      description="COM_REALESTATE_ENQUIRY_SETTINGS_PHONE_NOTE" />
+  
+    <field 
+      name="email_1"
+      type="email"
+      filter="string"
+      label="Contact email"
+      maxlength="75"
+      labelclass="control-label"
+      class="validate validate-email"
+      validate="email"
+    />
+  </fieldset>
+    
  
   <fieldset name="hidden-details">
     <field

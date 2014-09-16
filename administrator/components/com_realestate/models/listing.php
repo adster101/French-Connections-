@@ -101,7 +101,7 @@ class RealEstateModelListing extends PropertyModelListing
         b.department,
         b.price,
         b.base_currency,
-        b.use_invoice_address,
+        b.use_invoice_details,
         b.latitude,
         b.longitude,
         0 as images
@@ -195,7 +195,7 @@ class RealEstateModelListing extends PropertyModelListing
     $state->expiry_date = $listing[0]->expiry_date; // The expiry date
     $state->days_to_renewal = PropertyHelper::getDaysToExpiry($listing[0]->expiry_date); // The calculated days to expiry
 
-    if (!$listing[0]->use_invoice_address && empty($listing[0]->first_name) && empty($listing[0]->surname) && empty($listing[0]->email_1) && empty($listing[0]->phone_1))
+    if (!$listing[0]->use_invoice_details && empty($listing[0]->first_name) && empty($listing[0]->surname) && empty($listing[0]->email_1) && empty($listing[0]->phone_1))
     {
       $state->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
     }

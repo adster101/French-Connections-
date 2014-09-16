@@ -86,7 +86,7 @@ abstract class ModListingHelper
 
     foreach ($properties as $property)
     {
-      $property->days_to_renewal = RentalHelper::getDaysToExpiry($property->expiry_date);
+      $property->days_to_renewal = PropertyHelper::getDaysToExpiry($property->expiry_date);
       $property->auto_renewal = (!empty($property->VendorTxCode)) ? true : false;
       // Done properly, can just pass the object here 
       $property->message =

@@ -41,7 +41,7 @@ $data['status'] = $this->status;
 
         <?php
         $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-        echo $layout->render($data);
+        //echo $layout->render($data);
         ?>
 
         <table class = "table table-striped" id = "articleList">

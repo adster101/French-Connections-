@@ -62,7 +62,7 @@ class RealestateViewListings extends JViewLegacy
 
     $canDo = PropertyHelper::getActions();
 
-    JToolBarHelper::title(JText::_('COM_REALESTATE_MANAGER_HELLOWORLDS'), 'helloworld');
+    JToolBarHelper::title(JText::_('COM_REALESTATE_MANAGER'), 'list');
 
     if ($canDo->get('core.create'))
     {
@@ -110,7 +110,7 @@ class RealestateViewListings extends JViewLegacy
     $document->setTitle(JText::_('COM_REALESTATE_ADMINISTRATION'));
     $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
 
-    JText::script('COM_REALESTATE_RENTAL_UNSAVED_CHANGES');
+    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
   }
 
 }

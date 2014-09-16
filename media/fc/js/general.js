@@ -326,7 +326,6 @@ var toggle = function(elem, show) {
 
 var show_contact = function(that) {
 
-
   if (jQuery(that).is(':checked')) {
     jQuery("#contactDetails").hide();
 

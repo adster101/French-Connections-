@@ -157,7 +157,6 @@
       labelclass="control-label"
       maxlength="175"
     />    
-
     
     <field
       name="deposit_currency"
