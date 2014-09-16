@@ -30,22 +30,21 @@ class RealEstateViewPropertyversions extends JViewLegacy
     $this->form = $this->get('Form');
 
     $this->item = $this->get('Item');
-
+    
     $this->script = $this->get('Script');
 
     // Get an instance of our listing model, setting ignore_request to true so we bypass units->populateState
-    //$model = JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true));
-
-    //$listing_id = ($this->item->realestate_property_id) ? $this->item->realestate_property_id : '';
+    $model = JModelLegacy::getInstance('Listing', 'RealEstateModel', array('ignore_request' => true));
 
     // Set some model options
-    //$model->setState('COM_REALESTATE.' . $model->getName() . '.id', $listing_id);
-    //$model->setState('list.limit', 100);
+    $model->setState('com_realestate.' . $model->getName() . '.id', $this->item->id);
+    $model->setState('list.limit', 100);
 
     // Get the units
-    //$this->progress = $model->getItems();
+    $this->progress = $model->getItems();
 
-    //$this->status = $model->getProgress($this->progress);
+    
+    $this->status = $model->getProgress($this->progress);
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))

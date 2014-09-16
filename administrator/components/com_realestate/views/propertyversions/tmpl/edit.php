@@ -30,7 +30,7 @@ $fieldsets = $this->form->getFieldSets();
         <?php endif; ?>
         <?php
         //echo $progress_layout->render(array('status'=>$this->status));
-        echo $tabs->render($data);
+        echo $tabs->render(array('status'=>$this->status));
         ?>
         <fieldset class="adminform">       
           <legend>

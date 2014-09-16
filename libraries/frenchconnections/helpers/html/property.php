@@ -588,25 +588,26 @@ class JHtmlProperty
    * @param type $state
    * @return type
    */
-  public static function progressTab($action = '', $state = false, $text = '')
+  public static function progressTab($state = false, $text = '', $link = '')
   {
     
     //$title = empty($displayData['title']) ? '' : (' title="' . $this->escape($displayData['title']) . '"');
     //$text = empty($displayData['text']) ? '' : ('<span class="j-links-link">' . $displayData['text'] . '</span>');
 
 
-    $class = ($state) ? 'icon-publish' : 'icon-warning';
+    $class = ($state) ? 'publish' : 'warning';
     
     $options = array(
         'class' => $class,
         'text' => JText::_($text),
         'btnClass' => 'btn btn-default',
-        'image' => $class
+        'image' => $class,
+        'link' => $link
     );
 
     $layout = new JLayoutFile('joomla.links.link');
 
-    return $layout->render($link);
+    return $layout->render($options);
   }
 
 }
