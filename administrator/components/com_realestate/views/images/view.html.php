@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class RentalViewImages extends JViewLegacy
+class RealEstateViewImages extends JViewLegacy
 {
 
   /**
@@ -18,44 +18,44 @@ class RentalViewImages extends JViewLegacy
    */
   public function display($tpl = null)
   {
-    // Add the Listing model to this view, so we can get the progress stuff
-    $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel', array('ignore_request' => true)));
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $this->id = $input->get('realestate_property_id');
+    $this->state = $this->get('State');
 
-    // Add the Listing unitversions model to this view, so we can get the unit detail
-    $this->setModel(JModelLegacy::getInstance('UnitVersions', 'RentalModel'));
+    /*
+     *  Following deals with getting the status of the listing
+     */
 
-    // Get the unitversions instance so we can get the unit detail
-    $unit = $this->getModel('UnitVersions');
-    $this->unit = $unit->getItem();
-    $this->unit->unit_title = (!empty($this->unit->unit_title)) ? $this->unit->unit_title : 'New unit';
+    $this->setModel(JModelLegacy::getInstance('Listing', 'RealEstateModel', array('ignore_request' => true)));
 
     // Get the listing model so we can get the tab progress detail
     $progress = $this->getModel('Listing');
-    $progress->setState('com_rental.listing.id', $this->unit->property_id);
-    $this->progress = $progress->getItems();
 
+    $progress->setState('com_realestate.listing.id', $this->id);
+    $this->progress = $progress->getItems();
     $this->status = $progress->getProgress($this->progress);
 
-    $this->property_id = $this->progress[0]->id;
+    /*
+     * Following deals with getting the listing detail (version, title etc)
+     */
+    $property = $this->setModel(JModelLegacy::getInstance('PropertyVersions', 'RealEstateModel'));
+    $this->property = $property->getItem();
 
-    // populateState for the images model
-    $this->state = $this->get('State');
-    $images = $this->getModel();
-    $images->setState('version_id', $this->unit->id);
-    
-    // Set the list limit model state so that we return all available images.
-    $images->setState('list.limit');
+    /*
+     * Lastly we see if there are any images saved against this property version...
+     */
 
-    // Get the images associated with this unit version
-    $this->items = $this->get('Items');
+    $model = $this->getModel();
+    $model->setState('version_id', $this->property->id);
 
-    $this->pagination = $this->get('Pagination');
+    $this->items = $model->getItems();
 
     // Set the toolbar
     $this->addToolBar();
     // Set the document
     $this->setDocument();
-
+    
     // Display the template
     parent::display($tpl);
   }
@@ -73,9 +73,9 @@ class RentalViewImages extends JViewLegacy
     $userId = $user->id;
 
     // Get component level permissions
-    $canDo = RentalHelper::getActions();
+    $canDo = PropertyHelper::getActions();
 
-    JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
+    JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->property->title, $this->property->realestate_property_id));
 
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
@@ -87,8 +87,7 @@ class RentalViewImages extends JViewLegacy
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->progress[0]->id;
-    $unit_id = $this->progress[0]->unit_id;
-    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->unit->unit_id);
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property->realestate_property_id);
   }
 
   /**
@@ -102,7 +101,7 @@ class RentalViewImages extends JViewLegacy
 
     JHtml::_('bootstrap.framework');
 
-    $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
+    $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->property->title, $this->property->realestate_property_id));
     $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/tmpl.min.js", 'text/javascript', true, false);
     $document->addScript(JURI::root() . "media/fc/js/libs/blueimp/load-image.min.js", 'text/javascript', true, false);

@@ -55,7 +55,7 @@ $data['status'] = $this->status;
                 <tr>
                   <td>
                     <?php echo JHtml::_('property.progressButton', 'propertyversions.edit', $this->status->property_detail, 'COM_REALESTATE_PROPERTY_DETAIL') ?>
-                    <?php echo JHtml::_('property.progressButton', 'images.manage', $this->status->gallery, 'IMAGE_GALLERY') ?>
+                    <?php echo JHtml::_('property.progressButton', 'images.edit', $this->status->gallery, 'IMAGE_GALLERY') ?>
                   </td>
                 </tr>
               <?php endif; ?>

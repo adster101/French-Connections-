@@ -16,7 +16,7 @@
       message="COM_REVIEW_TITLE_VALIDATION_MESSAGE"
       labelclass="control-label"
       hint="e.g. Fab accommodation with lovely pool"
-      class="span8"
+      class="form-control"
     />
     <field 
       name="review_text"
@@ -32,14 +32,15 @@
       message="COM_REVIEW_TEXT_VALIDATION_MESSAGE"
       labelclass="control-label"
       maxlength="1250"
-      class="span12"
+      class="form-control"
       hint="Your comments about this property based on your experiences"
     />
     <field 
       name="date"
-      type="calendar"
+      type="text"
       id="review-date"
-      class="input-small"
+      hint="yyyy-mm-dd"
+      class="form-control"
       description="COM_REVIEW_DATE_DESC"
       label="COM_REVIEW_DATE_LABEL"
       filter="string"
@@ -48,9 +49,29 @@
       message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
+    <field
+      name="single_bedrooms"
+      type="integer"
+      first="1"
+      last="5"
+      step="1"
+      label="COM_REVIEW_RATING_LABEL"
+      description="COM_REVIEW_RATING_DESC"
+      class="form-control"
+      labelclass="control-label"
+      filter="int"
+      required="true"
+      default="">
+      <option value="">JSELECT</option>
+    </field>
         
     <field 
       name="unit_id" 
+      type="hidden" 
+      filter="int" 
+    /> 
+    <field 
+      name="property_id" 
       type="hidden" 
       filter="int" 
     /> 

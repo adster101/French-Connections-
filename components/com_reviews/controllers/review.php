@@ -69,8 +69,7 @@ class ReviewsControllerReview extends JControllerForm {
     $user = JFactory::getUser();
     $model = $this->getModel('review');
     $params = JComponentHelper::getParams('com_reviews');
-    $stub = $this->input->get('id', '', 'int');
-    $id = (int) $stub;
+
     $CurrentUser = & JFactory::getUser();
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
@@ -80,8 +79,7 @@ class ReviewsControllerReview extends JControllerForm {
     $data['created'] = date('Y-m-d H:i:s');
     $data['created_by'] = $CurrentUser->id;
 
-    // Get the property details we are adding a review for.
-    $property = $model->getItem($id);
+
 
 
 
@@ -124,7 +122,7 @@ class ReviewsControllerReview extends JControllerForm {
       $app->setUserState('com_reviews.review.data', $data);
 
       // Redirect back to the contact form.
-      $this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $stub, false));
+      $this->setRedirect(JRoute::_('my-account/review?task=review.add&unit_id=' . (int) $data['unit_id'], false));
       return false;
     }
 
@@ -145,7 +143,6 @@ class ReviewsControllerReview extends JControllerForm {
     }
 
     // Set propertyID to same as ID
-    $data['property_id'] = $data['id'];
     $data['guest_name'] = $user->name;
     $data['created_by'] = $user->id;
 

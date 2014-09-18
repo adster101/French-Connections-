@@ -14,8 +14,8 @@ class PropertyModelListing extends JModelList
 {
 
   /**
+   * 
    * Method to auto-populate the model state.
-   *
    * Note. Calling getState in this method will result in recursion.
    *
    * @param	string	An optional ordering field.
@@ -23,6 +23,7 @@ class PropertyModelListing extends JModelList
    *
    * @return	void
    * @since	1.6
+   * 
    */
   public function populateState($ordering = null, $direction = null)
   {

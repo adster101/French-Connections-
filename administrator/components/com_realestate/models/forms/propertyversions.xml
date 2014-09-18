@@ -87,10 +87,11 @@
     <field
       name="title"
       labelclass="control-label"
-      type="text"
+      type="fc.text"
       label="COM_REALESTATE_FIELD_TITLE_LABEL"
       description="COM_REALESTATE_FIELD_TITLE_DESC"
       message="COM_REALESTATE_FIELD_TITLE_MESSAGE"
+      hint="COM_REALESTATE_FIELD_TITLE_PLACEHOLDER"
       size="75"
       maxlength="75"
       class="input-xxlarge"
@@ -158,7 +159,7 @@
     </field> 
     <field
       name="website"
-      type="text"
+      type="fc.text"
       label="COM_REALESTATE_FIELD_WEBSITE_LABEL"
       description="COM_REALESTATE_FIELD_WEBSITE_DESC"
       message="COM_REALESTATE_FIELD_WEBSITE_MESSAGE"
@@ -188,7 +189,7 @@
     </field>
     
     <field 
-      type="text"
+      type="fc.text"
       name="price"
       filter="int"
       class="input-small"
@@ -217,7 +218,7 @@
       <option value="COM_REALESTATE_FIELD_PRICE_NOTES_UNCONDITIONAL">COM_REALESTATE_FIELD_PRICE_NOTES_UNCONDITIONAL</option>
     </field>
     <field 
-      type="text"
+      type="fc.text"
       name="agency_reference"
       filter="int"
       class="input-small"
@@ -249,7 +250,7 @@
     </field>      
     <field 
       name="first_name"
-      type="text"
+      type="fc.text"
       class="input-large"
       filter="string"
       label="First name"
@@ -258,7 +259,7 @@
     />
     <field 
       name="surname"
-      type="text"
+      type="fc.text"
       class="input-large"
       filter="string"
       label="Surname"

@@ -84,7 +84,7 @@ class RealEstateModelListing extends PropertyModelListing
 
     // Get the access control permissions in a handy array
     $canDo = PropertyHelper::getActions();
-    $id = $this->getState($this->context . '.id', '');
+     $id = $this->getState($this->context . '.id', '');
     $latest = $this->getState('com_rental.listing.latest', true);
 
     // Create a new query object.
@@ -148,18 +148,6 @@ class RealEstateModelListing extends PropertyModelListing
     return $query;
   }
 
-  function getLanguages()
-  {
-    $lang = & JFactory::getLanguage();
-    $languages = $lang->getKnownLanguages(JPATH_SITE);
-
-    $return = array();
-    foreach ($languages as $tag => $properties)
-      $return[] = JHTML::_('select.option', $tag, $properties['name']);
-
-    return $return;
-  }
-
   function getTotalImages($listing = array())
   {
 
@@ -185,7 +173,7 @@ class RealEstateModelListing extends PropertyModelListing
   {
     // Create a listing object to hold the status
     $state = new stdClass;
-
+    
     $state->complete = true; // Assume listing is complete
     $state->property_detail = true; // Assume we have all property details
     $state->images = true; // Assume we have some images
@@ -223,6 +211,5 @@ class RealEstateModelListing extends PropertyModelListing
 
     return $state;
   }
-
 }
 
