@@ -43,18 +43,7 @@ class ReviewsModelReviews extends JModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-		$app = JFactory::getApplication();
 
-		$search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
-		$this->setState('filter.search', $search);
-
-		$published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
-		$this->setState('filter.published', $published);
-
-		$title = $this->getUserStateFromRequest($this->context.'.filter.title', 'filter_title', '');
-		$this->setState('filter.title', $title);
-
-    $ordering = $this->getUserStateFromRequest($this->context.'.filter.ordering', 'filter_title', '');
 
     // List state information.
 		parent::populateState('id', 'desc');
@@ -104,10 +93,16 @@ class ReviewsModelReviews extends JModelList
     // Filter by published state
 		$published = $this->getState('filter.published');
 
-    if (is_numeric($published)) {
-			$query->where('a.published = ' . (int) $published);
-		} else {
-			$query->where('a.published IN (0,1)');
+    // Filter by published state
+    $state = $this->getState('filter.state');
+
+    if (is_numeric($state))
+    {
+      $query->where('a.published = ' . (int) $state);
+    }
+    else
+    {
+      $query->where('a.published IN (0,1)');
     }
     
     // Need to ensure that owners only see reviews assigned to their properties

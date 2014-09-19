@@ -24,6 +24,8 @@ $displayData->action = $action;
 $displayData->inShortlist = $inShortlist;
 $displayData->unit_id = $this->result->unit_id;
 $displayData->class = '';
+$description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
+$title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->unit_id, $description);
 ?>
 
 <div class="search-result">
@@ -65,7 +67,7 @@ $displayData->class = '';
   <div class="row">
     <div class="col-xs-12 col-sm-3">
       <p>
-        <a href="<?php echo $route ?>">
+        <a href="<?php echo $route ?>" title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>">
           <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
         </a>  
       </p>

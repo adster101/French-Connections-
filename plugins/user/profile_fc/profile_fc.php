@@ -342,6 +342,11 @@ class plgUserProfile_fc extends JPlugin
 
         unset($data['id']);
 
+        // Set the table primary key to ID. As this is unset a new record will be created, if $isNew
+        if ($isNew)
+        {
+          $table->set('_tbl_keys', array('id'));
+        }
         // Save the data back to the user profile table
         if (!$table->save($data))
         {

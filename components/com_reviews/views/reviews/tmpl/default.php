@@ -10,7 +10,7 @@ $lang->load('com_accommodation', JPATH_SITE);
 
 <div class="page-header">
   <h1>
-    <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
+    <?php //echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
   </h1>
 </div>
 <?php if (count($this->items) > 0) : ?>

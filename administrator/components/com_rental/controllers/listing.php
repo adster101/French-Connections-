@@ -613,8 +613,6 @@ class RentalControllerListing extends JControllerForm
     $table = $model->getTable();
     $checkin = property_exists($table, 'checked_out');
 
-
-
     /**
      *  $id is the listing the user is trying to edit
      */

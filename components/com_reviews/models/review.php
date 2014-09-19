@@ -37,8 +37,6 @@ class ReviewsModelReview extends JModelForm {
     $input = $app->input;
     $unit_id = $input->get('unit_id', '', 'int');
 
-
-
     // Load the property get method to get the title and what not of the property being testimonialised
 
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
@@ -144,5 +142,7 @@ class ReviewsModelReview extends JModelForm {
 
     parent::populateState();
   }
+  
+  
 
 }

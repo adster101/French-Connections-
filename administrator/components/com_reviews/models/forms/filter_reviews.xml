@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>  
+  <fields name="filter"> 
+    <fieldset>
+      <field
+        name="search"
+        type="text"
+        label="COM_CONTENT_FILTER_SEARCH_DESC"
+        hint="COM_REVIEWS_REVIEW_SEARCH" />
+      <field
+        class="input-large"
+        name="state"
+        type="list"
+        labelclass="element-invisible"
+        label="JOPTION_SELECT_PUBLISHED"
+        description=""
+        onchange="this.form.submit();"> 
+        <option value="">COM_REVIEWS_OPTION_ALL</option>
+        <option value="0">COM_REVIEWS_OPTION_UNPUBLISHED</option>
+        <option value="1">COM_REVIEWS_OPTION_PUBLISHED</option>
+        <option value="-2">JTRASHED</option>
+      </field> 
+    </fieldset>
+  </fields> 
+  <fields name="list">
+    <field
+      name="limit"
+      type="limitbox"
+      class="inputbox input-small"
+      default="10"
+      labelclass="element-invisible"
+      label="COM_CONTENT_LIST_LIMIT"
+      description="COM_CONTENT_LIST_LIMIT_DESC"
+      onchange="this.form.submit();">
+    </field>
+  </fields>
+</form>

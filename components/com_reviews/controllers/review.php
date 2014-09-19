@@ -62,6 +62,7 @@ class ReviewsControllerReview extends JControllerForm {
   }
 
   public function submit() {
+    
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -78,10 +79,6 @@ class ReviewsControllerReview extends JControllerForm {
     $data['published'] = 0; // Default to unpublish, user either publishes, or trashes and then delete the review
     $data['created'] = date('Y-m-d H:i:s');
     $data['created_by'] = $CurrentUser->id;
-
-
-
-
 
     // Check for a valid session cookie
     if ($params->get('validate_session', 0)) {
@@ -145,6 +142,7 @@ class ReviewsControllerReview extends JControllerForm {
     // Set propertyID to same as ID
     $data['guest_name'] = $user->name;
     $data['created_by'] = $user->id;
+    $data['guest_email'] = $user->email;
 
     // And unset id incase it gets bound somehow...
     unset($data['id']);
@@ -192,7 +190,7 @@ class ReviewsControllerReview extends JControllerForm {
     } else {
       $this->setRedirect(JRoute::_('index.php?option=com_reviews', false), $msg, 'success');
     }
-
+    
     return true;
   }
 
@@ -231,5 +229,4 @@ class ReviewsControllerReview extends JControllerForm {
 
     return $sent;
   }
-
 }

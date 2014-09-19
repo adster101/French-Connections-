@@ -9,13 +9,15 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class ReviewsViewReviews extends JViewLegacy {
+class ReviewsViewReviews extends JViewLegacy
+{
 
   protected $items;
   protected $state;
   protected $pagination;
 
-  function display($tpl = null) {    // Gets the info from the model and displays the template
+  function display($tpl = null)
+  {    // Gets the info from the model and displays the template
     $canDo = ReviewsHelper::getActions();
 
     // Get data from the model
@@ -23,6 +25,8 @@ class ReviewsViewReviews extends JViewLegacy {
 
     $this->state = $this->get('State');
     $this->pagination = $this->get('Pagination');
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
 
     $this->setDocument();
 
@@ -39,7 +43,8 @@ class ReviewsViewReviews extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_(''));
   }
@@ -47,45 +52,54 @@ class ReviewsViewReviews extends JViewLegacy {
   /**
    * Adds the submenu details for this view
    */
-  protected function addSubMenu($canDo) {
+  protected function addSubMenu($canDo)
+  {
 
-    if ($canDo->get('core.edit.state')) {
+    if ($canDo->get('core.edit.state'))
+    {
       JHtmlSidebar::addFilter(
               JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true)
       );
     }
 
     //RentalHelper::addSubmenu('reviews');
-
     //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**
    * Setting the toolbar
    */
-  protected function addToolBar($canDo) {
+  protected function addToolBar($canDo)
+  {
 
-    if ($canDo->get('core.create')) {
+    if ($canDo->get('core.create'))
+    {
       JToolBarHelper::addNew('review.add', 'JTOOLBAR_NEW');
     }
 
-    if ($canDo->get('core.edit')) {
+    if ($canDo->get('core.edit'))
+    {
       JToolBarHelper::editList('review.edit', 'JTOOLBAR_EDIT');
     }
 
-    if ($canDo->get('core.edit.state')) {
+    if ($canDo->get('core.edit.state'))
+    {
       JToolBarHelper::publish('reviews.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('reviews.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolBarHelper::trash('reviews.trash');
     }
 
-    if ($canDo->get('core.edit.delete')) {
+    if ($canDo->get('core.edit.delete'))
+    {
       JToolBarHelper::deleteList('Are you sure?', 'reviews.delete', 'JTOOLBAR_DELETE');
     }
 
     JToolBarHelper::help('COM_REVIEWS_COMPONENT_HELP_VIEW', true);
 
-
+    if ($canDo->get('core.admin'))
+    {
+      JToolBarHelper::preferences('com_reviews');
+    }
     // Set the title which appears on the toolbar
     JToolBarHelper::title(JText::_('COM_REVIEW_VIEW_REVIEWS'));
   }
@@ -97,7 +111,8 @@ class ReviewsViewReviews extends JViewLegacy {
    *
    * @since   3.0
    */
-  protected function getSortFields($canDo) {
+  protected function getSortFields($canDo)
+  {
     return array(
         'a.ordering' => JText::_('JGRID_HEADING_ORDERING'),
         'a.title' => JText::_('JGLOBAL_TITLE'),

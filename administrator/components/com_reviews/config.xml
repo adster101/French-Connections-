@@ -56,11 +56,12 @@
 		</field>
 
 	
-		<field name="redirect"
-			type="text"
+		<field 
+      name="item_id_review"
+			type="menuitem"
 			size="30"
-			label="COM_CONTACT_FIELD_CONFIG_REDIRECT_LABEL"
-			description="COM_CONTACT_FIELD_CONFIG_REDIRECT_DESC" />
+			label="Review menu item ID"
+    />
       
   </fieldset> 
   

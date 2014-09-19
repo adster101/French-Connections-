@@ -50,7 +50,7 @@
       labelclass="control-label"
     />
     <field
-      name="single_bedrooms"
+      name="rating"
       type="integer"
       first="1"
       last="5"

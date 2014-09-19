@@ -44,34 +44,13 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-        <?php if ($option == 'com_reviews') : ?>
-          <div id="filter-bar" class="btn-toolbar">
-            <div class="filter-search btn-group pull-left">
-              <label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-              <input type="text" name="filter_search"
-                     id="filter_search"
-                     value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-                     title="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>"
-                     placeholder="<?php echo JText::_('COM_CATEGORIES_ITEMS_SEARCH_FILTER'); ?>" />
-            </div>
-            <div class="btn-group pull-left hidden-phone">
-              <button class="btn tip hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
-              <button class="btn tip hasTooltip" type="button" onclick="document.id('filter_search').value = '';
-                      this.form.submit();" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
-            </div>
-            <div class="btn-group pull-right hidden-phone">
-              <label for="limit" class="element-invisible">
-                <?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-              <?php echo $this->pagination->getLimitBox(); ?>
-            </div>
-          </div>
-        <hr/>
-        <?php endif; ?>
-        <div class="alert alert-info">
-          <span class="icon icon-info"></span>
-          <strong><?php echo JText::_('COM_REVIEWS_ADDING_REVIEWS'); ?></strong>
-          
-        </div>
+      <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+
+      <div class="alert alert-info">
+        <span class="icon icon-info"></span>
+        <strong><?php echo JText::_('COM_REVIEWS_ADDING_REVIEWS'); ?></strong>
+
+      </div>
       <?php if (count($this->items) > 0) : ?> 
 
         <table class="table table-striped" id="articleList">
@@ -114,7 +93,7 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
                   (<?php echo $item->unit_id; ?>)
                 </td>
                 <td>
-                  <?php echo JHtml::_('string.truncate', $item->review_text,0,true,false); // Don't allow html here. ?>
+                  <?php echo JHtml::_('string.truncate', $item->review_text, 0, true, false); // Don't allow html here. ?>
                   <?php if ($canEdit) : ?>
                     <a href="<?php echo JRoute::_('index.php?option=com_reviews&task=review.edit&id=' . (int) $item->id); ?>">
                       <?php echo JText::_('JTOOLBAR_EDIT'); ?>
