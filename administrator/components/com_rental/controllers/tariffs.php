@@ -94,14 +94,15 @@ class RentalControllerTariffs extends RentalControllerBase
     // Get the property ID from the form data and redirect 
     $input = JFactory::getApplication()->input;
 
-    $property_id = $input->get('property_id', '', 'int');
-    $context = "$this->option.edit.$this->context";
+    $data = $input->get('jform', array(), 'array');
+
+    $property_id = $data['property_id'];    $context = "$this->option.edit.$this->context";
 
     // Clean the session data and redirect.
     $this->releaseEditId($context, $property_id);
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $property_id, false
+                    'index.php?option=' . $this->option . '&task=listing.view&id=' . (int) $property_id, false
             )
     );
 

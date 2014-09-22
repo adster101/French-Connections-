@@ -10,7 +10,6 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_realestate'))
 
 JLoader::import('frenchconnections.library');
 
-
 // import joomla controller library
 jimport('joomla.application.component.controller');
 

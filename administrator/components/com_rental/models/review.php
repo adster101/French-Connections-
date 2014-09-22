@@ -89,7 +89,6 @@ class RentalModelReview extends JModelAdmin
 
     if (!$property)
     {
-
       Throw new Exception('Problem loading property details', 500);
     }
 
@@ -97,9 +96,14 @@ class RentalModelReview extends JModelAdmin
 
     $user = JFactory::getUser($userId);
 
-
-    $data['body'] = JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name, $recordId, 'asdasd');
-
+    if (empty($table->expiry_date))
+    {
+      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $recordId, $recordId);
+    }
+    else
+    {
+      $data['body'] = JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name, $recordId, '');
+    }
     return $data;
   }
 

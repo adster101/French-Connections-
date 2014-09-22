@@ -160,7 +160,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         // The previous version didn't have any of these, so bill 'em all
         $order_lines_due[$item]['quantity'] = $quantity['quantity'];
       }
+
+      // Determine whether this is an 'upgrade' from basic to unlimitied....
     }
+
+
+
 
     return $order_lines_due;
   }
@@ -495,8 +500,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Item costs line holder
     $item_costs = array();
 
-
-
     // Loop over all the units found
     foreach ($units as $unit)
     {
@@ -586,6 +589,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       {
         $item_costs[$codes->get('additional-unit')]['quantity'] = $unit_count;
       }
+
+      // If there are more than eight images in total they should be 'upgraded' to the unlimited package
+      if ($image_count >= 8 )
+      {
+        $item_costs[$codes->get('unlimited-upgrade')]['quantity'] = 1;
+      }
     }
 
     // If this property version has B&B and S/C then add it as an item cost
@@ -632,6 +641,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         $item_costs[$codes->get('frtranslation')]['quantity'] = 1;
       }
     }
+
+
     // TO DO - Lastly, need to account for an existing package switching between basic and unlimited images
     return $item_costs;
   }
@@ -701,7 +712,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     // Determine whether this payment should be saved as an auto-renewal or not
     $shouldAutoRenew = (!empty($data['autorenewal'])) ? $data['autorenewal'] : '0';
-
+    
     // Transaction id for repeat payment, if above is true
     $transaction_id = '';
 

@@ -49,10 +49,8 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
       <div class="alert alert-info">
         <span class="icon icon-info"></span>
         <strong><?php echo JText::_('COM_REVIEWS_ADDING_REVIEWS'); ?></strong>
-
       </div>
       <?php if (count($this->items) > 0) : ?> 
-
         <table class="table table-striped" id="articleList">
           <thead>
             <tr>
@@ -75,8 +73,6 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
               <th>
                 <?php echo JText::_('JSTATUS'); ?>
               </th>
-
-
               <th>
                 <?php echo JText::_('JGRID_HEADING_ID'); ?>
               </th>
@@ -90,7 +86,7 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
                 </td>
                 <td>
                   <?php echo $item->unit_title; ?>
-                  (<?php echo $item->unit_id; ?>)
+                  (<?php echo $item->property_id; ?>)
                 </td>
                 <td>
                   <?php echo JHtml::_('string.truncate', $item->review_text, 0, true, false); // Don't allow html here. ?>

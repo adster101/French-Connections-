@@ -36,6 +36,8 @@ class RentalViewReview extends JViewLegacy
     $this->id = $input->get('property_id', '', 'int');
     $layout = $this->getLayout();
 
+    
+    
     if ($layout == 'approve')
     {
       $this->form = $this->get('Form');
@@ -85,7 +87,7 @@ class RentalViewReview extends JViewLegacy
       JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES', $this->id));
       JToolBarHelper::back();
 
-      JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_APPROVE', false);
+      JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_SEND_APPROVAL_EMAIL', false);
     }
     else
     {

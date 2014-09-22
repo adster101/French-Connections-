@@ -164,7 +164,8 @@ class RentalModelListing extends JModelList
   {
 
     $app = JFactory::getApplication();
-    $owner_email = (JDEBUG) ? $app->getCfg('mailfrom', 'adamrifat@frenchconnections.co.uk') : $listing->email;
+    // TO DO - Check the below as it looks like it should be
+    $owner_email = (JDEBUG) ? $app->getCfg('mailfrom', 'adamrifat@frenchconnections.co.uk') : $listing[0]->email;
     $owner_name = $data['firstname'] . ' ' . $data['surname'];
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
@@ -172,12 +173,19 @@ class RentalModelListing extends JModelList
     $subject = JText::sprintf('COM_RENTAL_APPROVE_CHANGES_CONFIRMATION_SUBJECT', $data['firstname'], $listing[0]->id);
     $mail = JFactory::getMailer();
 
+
     $mail->addRecipient($owner_email, $owner_name);
     $mail->addReplyTo(array($mailfrom, $fromname));
     $mail->setSender(array($mailfrom, $fromname));
     $mail->setSubject($subject);
     $mail->setBody($body);
     $mail->isHtml(true);
+    
+    // If this is a new property then CC a copy to an admin email (e.g. sales@) 
+    if (empty($listing[0]->expiry_date))
+    {
+      $mail->addCC($mailfrom);
+    }
 
     if (!$mail->Send())
     {
@@ -256,6 +264,7 @@ class RentalModelListing extends JModelList
         e.accommodation_type,
         e.created_on,
         g.vat_status,  
+        h.email,
         b.phone_1,
         b.email_1,
         b.video_url, 
@@ -387,11 +396,10 @@ class RentalModelListing extends JModelList
     {
       $listing->complete = false;
     }
-    
+
     $listing->unit_id = $units[0]->unit_id;
-    
-  return $listing;
-    
+
+    return $listing;
   }
 
 }

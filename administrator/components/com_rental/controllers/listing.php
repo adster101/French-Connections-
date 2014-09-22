@@ -611,11 +611,11 @@ class RentalControllerListing extends JControllerForm
     $app = JFactory::getApplication();
     $model = $this->getModel('Property', 'RentalModel');
     $table = $model->getTable();
+    $user = JFactory::getUser();
+    $isOwner = RentalHelper::isOwner();
     $checkin = property_exists($table, 'checked_out');
 
-    /**
-     *  $id is the listing the user is trying to edit
-     */
+    //  $id is the listing the user is trying to edit
     $id = $this->input->get('id', '', 'int');
 
     if (!$this->allowView($id))
@@ -633,7 +633,7 @@ class RentalControllerListing extends JControllerForm
     $app->setUserState($context . '.data', null);
 
     // Check property out to user reviewing
-    if ($checkin && !$model->checkout($id))
+    if ($checkin && !$model->checkout($id) && !$isOwner)
     {
       // Check-out failed, display a notice but allow the user to see the record.
       $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
@@ -647,6 +647,9 @@ class RentalControllerListing extends JControllerForm
     }
     else
     {
+
+
+
       // Hold the edit ID once the id and user have been authorised.
       $this->holdEditId($context, $id);
 
@@ -654,9 +657,9 @@ class RentalControllerListing extends JControllerForm
               JRoute::_(
                       'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
       );
-
-      return true;
     }
+
+    return true;
   }
 
   public function validate($model, $data, $context, $recordId)

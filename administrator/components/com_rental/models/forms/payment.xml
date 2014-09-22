@@ -106,6 +106,12 @@
   </fieldset>
 
   <fieldset name="billing-details" label="COM_RENTAL_HELLOWORLD_PAYMENT_BILLING_DETAILS_LEGEND" description="">
+    <field 
+      name="user_invoice_address"
+      type="checkbox"
+      label="COM_RENTAL_INVOICE_ADDRESS_SAME_AS_BILLING"
+      default=""
+    />
     <field
       name="BillingFirstnames"
       type="text"

@@ -142,11 +142,11 @@ class RentalControllerAvailability extends JControllerForm {
     $property_id = $data['property_id'];
     
     // Clean the session data and redirect.
-    $this->releaseEditId('com_rental.edit.unitversions', $property_id);
+    $this->releaseEditId('com_rental.edit.unitversions', (int) $property_id);
 
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $property_id, false
+                    'index.php?option=' . $this->option . '&task=listing.view&id=' . (int) $property_id, false
             )
     );
 

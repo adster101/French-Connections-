@@ -177,5 +177,14 @@
       cat="49">
       <option value="">JSELECT</option>
     </field> 
+    <field 
+      name="unlimited-upgrade"
+      type="itemcosts"
+      label="Unlimited upgrade"
+      class="input-xxlarge"
+      filter="string"
+      cat="49">
+      <option value="">JSELECT</option>
+    </field> 
   </fieldset>
 </config>
