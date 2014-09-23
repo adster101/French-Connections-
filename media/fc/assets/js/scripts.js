@@ -14752,6 +14752,11 @@ jQuery(document).ready(function() {
     jQuery('input').removeAttr('placeholder');
   }
 
+  jQuery('.calendar').datepicker({
+    format: "dd-mm-yyyy",
+    autoclose: true
+  });
+  
   try {
 
     var nowTemp = new Date();
@@ -15069,7 +15074,6 @@ var toggle = function(elem, show) {
 }
 
 var show_contact = function(that) {
-
 
   if (jQuery(that).is(':checked')) {
     jQuery("#contactDetails").hide();

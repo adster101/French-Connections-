@@ -9,7 +9,7 @@ jimport('joomla.form.formrule');
 /**
  * Form Rule class for the Joomla Framework.
  */
-class FcFormRuleLength extends JFormRule
+class JFormRuleLength extends JFormRule
 {
 
   /**
