@@ -443,7 +443,7 @@ class RentalControllerImages extends JControllerForm {
     JSession::checkToken('GET') or die('Invalid Token');
 
     // $id is the listing the user is trying to edit
-    $id = $this->input->get('realestate_property_id', '', 'int');
+    $id = $this->input->get('unit_id', '', 'int');
 
     $data['id'] = $id;
 
@@ -453,7 +453,7 @@ class RentalControllerImages extends JControllerForm {
                       'index.php?option=' . $this->option, false)
       );
 
-      $this->setMessage('', 'error');
+      $this->setMessage('blah', 'error');
 
       return false;
     }
@@ -462,7 +462,7 @@ class RentalControllerImages extends JControllerForm {
 
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=images&realestate_property_id=' . (int) $id, false)
+                    'index.php?option=' . $this->option . '&view=images&unit_id=' . (int) $id, false)
     );
     return true;
   }

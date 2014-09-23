@@ -137,8 +137,7 @@ class PropertyControllerImages extends JControllerAdmin
     // Check that this user is authorised to upload images here
     if (!$user->authorise('core.create', $this->extension))
     {
-      $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_NOT_AUTHORISED'), 'message');
-      $this->setRedirect(JRoute::_('index.php?option=' . $this->extension . '&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
+      jexit();
     }
 
     // Get the media component parameters
@@ -208,7 +207,7 @@ class PropertyControllerImages extends JControllerAdmin
         // Add the url to the uploaded files array
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
-        $file['unit_id'] = $this->unit_id;
+        $file['unit_id'] = ($this->unit_id) ? $this->unit_id : '';
         $file['id'] = $this->id;
 
         // For RE we want to pass the real estate property ID
@@ -218,7 +217,7 @@ class PropertyControllerImages extends JControllerAdmin
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
-        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
+        //$file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
 
         // If we are happy to save and have something to save
         if (!$model->save($file))

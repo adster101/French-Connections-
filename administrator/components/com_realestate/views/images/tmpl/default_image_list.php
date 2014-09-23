@@ -42,7 +42,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
           </div>
           <div class="panel-body">
             <p>
-              <img class="media-object" src="<?php echo '/images/property/' . (int) $item->unit_id . '/thumb/' . $this->escape($item->image_file_name); ?>" />
+              <img class="media-object" src="<?php echo '/images/property/' . (int) $item->realestate_property_id . '/thumb/' . $this->escape($item->image_file_name); ?>" />
             </p>
             <p class="caption">
               <label for="<?php echo $this->escape($item->image_file_name) ?>">Caption</label>  
@@ -54,11 +54,11 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
             </p>
             <p>
-              <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_rental&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>" >
+              <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_rental&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&realestate_property_id=' . (int) $this->items[0]->unit_id ?>" >
                 <i class="icon-pencil-2 icon-white"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
               </a>  
-              <a class="btn btn-danger delete" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
+              <a class="btn btn-danger delete" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&realestate_property_id=' . (int) $this->items[0]->unit_id ?>">
                 <i class="icon icon-trash"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
               </a>

@@ -18,6 +18,7 @@ class RealEstateControllerImages extends PropertyControllerImages
   var $property_id;
   var $id;
   var $review;
+  var $unit_id;
 
   /**
    * Constructor.
@@ -59,9 +60,6 @@ class RealEstateControllerImages extends PropertyControllerImages
 
   public function manage()
   {
-
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken() or die('Invalid Token');
 
     // $id is the listing the user is trying to edit
     $id = $this->input->get('realestate_property_id', '', 'int');
