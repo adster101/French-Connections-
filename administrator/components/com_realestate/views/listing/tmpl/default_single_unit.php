@@ -40,7 +40,7 @@ $data['status'] = $this->status;
       <form action="<?php echo JRoute::_('index.php?option=com_realestate'); ?>" method="post" name="adminForm" class="form-validate form-horizontal" id="adminForm">
 
         <?php
-        $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+        $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
         //echo $layout->render($data);
         ?>
 
