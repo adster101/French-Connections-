@@ -12,7 +12,7 @@ require_once('administrator/components/com_media/helpers/media.php');
 /**
  * HelloWorld Controller
  */
-class PropertyControllerImages extends JControllerForm
+class PropertyControllerImages extends JControllerAdmin
 {
 
   protected $extension;
@@ -34,6 +34,8 @@ class PropertyControllerImages extends JControllerForm
     {
       $this->extension = JRequest::getCmd('extension', '');
     }
+
+
 
     //$this->registerTask('saveandnext', 'save');
   }
@@ -115,11 +117,13 @@ class PropertyControllerImages extends JControllerForm
 
   function upload()
   {
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken('GET') or die('Invalid Token');
 
     // Get the app and user instances
     $app = JFactory::getApplication($initialise = false);
+    $input = $app->input;
     $user = JFactory::getUser();
-    $filter = new JFilterInput();
 
     // Load the relevant model(s) so we can save the data back to the db
     $model = $this->getModel('Image');
@@ -127,26 +131,8 @@ class PropertyControllerImages extends JControllerForm
     // Initialise an array to return the info about the uploaded image
     $return = array();
 
-    // Get the id, which is the unit ID we are uploading the image against
-    $unit_id = $app->input->get('unit_id', '', 'int');
-
-    // Get the id, which is the unit ID we are uploading the image against
-    $property_id = $app->input->get('property_id', '', 'GET', 'int');
-
-    // Get the unit version id
-    $id = $app->input->get('id', '', 'int');
-
-    // Get the unit version id
-    $review = $app->input->get('review', '', 'boolean');
-
-    // Set the filepath for the images to be moved into
-    $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
-
     // An array to hold the that are good to save against the property
     $images = array();
-
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken('GET') or die('Invalid Token');
 
     // Check that this user is authorised to upload images here
     if (!$user->authorise('core.create', $this->extension))
@@ -160,7 +146,6 @@ class PropertyControllerImages extends JControllerForm
 
     // Get some data from the request
     $files = JRequest::getVar('jform', array(), 'files', 'array');
-
 
     // Input is in the form of an associative array containing numerically indexed arrays - passed in from PHP/Apache in this format?
     // We want a numerically indexed array containing associative arrays
@@ -223,10 +208,13 @@ class PropertyControllerImages extends JControllerForm
         // Add the url to the uploaded files array
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
-        $file['unit_id'] = $unit_id;
-        $file['id'] = $id;
-        $file['property_id'] = $property_id;
-        $file['review'] = $review;
+        $file['unit_id'] = $this->unit_id;
+        $file['id'] = $this->id;
+
+        // For RE we want to pass the real estate property ID
+        $file['realestate_property_id'] = ($this->option == 'com_realestate') ? $this->property_id : '';
+
+        $file['review'] = $this->review;
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';

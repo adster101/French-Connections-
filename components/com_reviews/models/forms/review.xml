@@ -10,7 +10,7 @@
       description="COM_REVIEW_TITLE_TEXT_DESC"
       label="COM_REVIEW_TITLE_TEXT_LABEL"
       filter="string"
-      validate="length"
+      validate="fc.length"
       required="true"
       message="COM_REVIEW_TITLE_VALIDATION_MESSAGE"
       labelclass="control-label"

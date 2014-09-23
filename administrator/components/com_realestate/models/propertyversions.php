@@ -121,7 +121,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
         // New method - getExpiryDate(); returns the expiry date of the property.
-        $expiry_date = $model->getPropertyDetail($data['property_id']);
+        $expiry_date = $model->getPropertyDetail($data['realestate_property_id']);
 
         if (is_integer($expiry_date))
         {
@@ -221,7 +221,5 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
     return true;
   }
-
-
 }
 

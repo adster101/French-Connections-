@@ -17,7 +17,7 @@ class RealestateTableImage extends JTable implements JObservableInterface {
    * @param object Database connector object
    */
   function __construct(&$db) {
-    parent::__construct('#__realestate_property_images_library', 'realestate_property_id', $db);
+    parent::__construct('#__realestate_property_images_library', 'id', $db);
 
     $this->_observers = new JObserverUpdater($this);
     JObserverMapper::attachAllObservers($this);
