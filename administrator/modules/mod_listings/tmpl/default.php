@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 ?>
 <div class="page-header clearfix">
   <a class="btn <?php echo (count($listings)) ? '' : 'btn-large' ?> btn-success pull-right" href="index.php?option=com_rental&amp;task=propertyversions.add"> 
-    <?php echo JText::_('COM_RENTAL_HELLOWORLD_ADD_NEW_PROPERTY'); ?>
+    <span class="icon icon-plus-2"></span>&nbsp;&nbsp;<?php echo JText::_('COM_RENTAL_HELLOWORLD_ADD_NEW_PROPERTY'); ?>
   </a>
   <h3><?php echo JText::_('COM_RENTAL_SUBMENU_RENTAL_ACCOMMODATION'); ?></h3>
 </div>
@@ -25,7 +25,6 @@ defined('_JEXEC') or die;
         </h4>  
       </div>
       <div class="panel-body">  
-
         <div class="listing-container">
           <div class="listing-image-container">
             <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail, 'thumbnail') ?>
@@ -77,7 +76,7 @@ defined('_JEXEC') or die;
 <?php endif; ?>
 <hr />
 <div class="page-header clearfix">
-  <a href="#" class="btn btn-large btn-success pull-right">
+  <a href="index.php?option=com_realestate&amp;task=propertyversions.add" class="btn btn-large btn-success pull-right">
     <span class="icon icon-plus-2"></span>&nbsp;&nbsp;<?php echo JText::_('MOD_LISTINGS_ADD_NEW_RENTAL_PROPERTY'); ?>
   </a>  
   <h3><?php echo JText::_('MOD_LISTINGS_REAL_ESTATE_PROPERTY_FOUND_HEADING'); ?></h3>

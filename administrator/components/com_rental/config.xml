@@ -183,7 +183,7 @@
       label="Unlimited upgrade"
       class="input-xxlarge"
       filter="string"
-      cat="49">
+      cat="65">
       <option value="">JSELECT</option>
     </field> 
   </fieldset>

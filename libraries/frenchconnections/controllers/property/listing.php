@@ -622,5 +622,70 @@ class PropertyControllerListing extends JControllerForm
     }
     return true;
   }
+  
+  /*
+   * View action - checks ownership of record sets the edit id in session and redirects to the view
+   *
+   *
+   */
+
+  public function view()
+  {
+
+    $context = "$this->option.edit.$this->context";
+    $app = JFactory::getApplication();
+    $model = $this->getModel('Property', $this->model_prefix);
+    $table = $model->getTable();
+    $user = JFactory::getUser();
+    $isOwner = PropertyHelper::isOwner();
+    $checkin = property_exists($table, 'checked_out');
+
+    //  $id is the listing the user is trying to edit
+    $id = $this->input->get('id', '', 'int');
+
+    if (!$this->allowView($id))
+    {
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false)
+      );
+
+      $this->setMessage('You are not authorised to view this property listing at this time.', 'error');
+
+      return false;
+    }
+
+    $app->setUserState($context . '.data', null);
+
+    // Check property out to user reviewing
+    if ($checkin && !$model->checkout($id) && !$isOwner)
+    {
+      // Check-out failed, display a notice but allow the user to see the record.
+      $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
+      $this->setMessage($this->getError(), 'error');
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option, false
+              )
+      );
+      return false;
+    }
+    else
+    {
+
+
+
+      // Hold the edit ID once the id and user have been authorised.
+      $this->holdEditId($context, $id);
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
+      );
+    }
+
+    return true;
+  }
+
 
 }

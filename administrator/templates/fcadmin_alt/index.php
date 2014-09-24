@@ -74,38 +74,14 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <jdoc:include type="head" />
       <meta http-equiv="X-UA-Compatible" content="IE=9">
-
         <!-- Template color -->
         <?php if ($this->params->get('templateColor')) : ?>
-          <style type="text/css">
-            .navbar-inner, .navbar-inverse .navbar-inner, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle, #status.status-top {
-              background: <?php echo $this->params->get('templateColor'); ?>;
-            }
-            .navbar-inner, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
-              -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-              -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-              box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-            }
-          </style>
+
         <?php endif; ?>
 
-        <!-- Template header color -->
-        <?php if ($this->params->get('headerColor')) : ?>
-          <style type="text/css">
-            .header {
-              background: <?php echo $this->params->get('headerColor'); ?>;
-            }
-          </style>
-        <?php endif; ?>
+      
 
-        <!-- Sidebar background color -->
-        <?php if ($this->params->get('sidebarColor')) : ?>
-          <style type="text/css">
-            .nav-list > .active > a, .nav-list > .active > a:hover {
-              background: <?php echo $this->params->get('sidebarColor'); ?>;
-            }
-          </style>
-        <?php endif; ?>
+
         <!--[if lt IE 9]>
         <script src="../media/jui/js/html5.js"></script>
         <![endif]-->
@@ -160,16 +136,16 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
               <jdoc:include type="modules" name="top" style="xhtml" />
               <?php $help = JToolbar::getInstance('fchelp'); ?>
               <?php echo $help->render(); ?>
-              <div class="row-fluid row-offcanvas row-offcanvas-left">
+              <div class="row-fluid">
                 <?php if ($showSubmenu) : ?>
-                  <div class="span3 sidebar-offcanvas">
+                  <div class="span3">
                     <jdoc:include type="modules" name="fcmenu" style="none" />
                   </div>
                   <div class="span9">
                   <?php else : ?>
                     <div class="span12">
                     <?php endif; ?>
-                    <div style="border-left:solid 1px #e5e5e5;padding-left:36px;">
+                    <div>
                       <jdoc:include type="message" />
                       <jdoc:include type="modules" name="title" />
                       <?php if (!$cpanel) : ?>

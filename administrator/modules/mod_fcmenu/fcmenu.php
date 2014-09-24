@@ -44,8 +44,8 @@ class FcAdminCssMenu extends JAdminCssMenu
     // Recurse through children if they exist
     while ($this->_current->hasChildren())
     {
-      echo "<div class='well'>";
-      echo "<nav id='myNavmenu' class='navmenu navmenu-default navmenu-fixed-left offcanvas' role='navigation'>";
+      echo "<div class='well well-small'>";
+      echo "<nav id='myNavmenu' class='' role='navigation'>";
       echo "<ul " . $id . " " . $class . ">\n";
 
       foreach ($this->_current->getChildren() as $child)
@@ -81,7 +81,7 @@ class FcAdminCssMenu extends JAdminCssMenu
     // Is this the current active linkage?
     if ($this->_current->active)
     {
-      $itemClass[] = 'selected';
+      $itemClass[] = 'active';
     }
 
     /* if ($this->_current->hasChildren())
@@ -104,6 +104,11 @@ class FcAdminCssMenu extends JAdminCssMenu
 
     // Get the class attributes to add to the li item
     $itemClass[] = ($this->_current->hasChildren()) ? 'group' : 'item';
+    if ($this->_current->link == '#' && $this->_current->target == null)
+    {
+      $itemClass[] = 'nav-header';
+    }
+
     $itemClass = ' class="' . implode(' ', $itemClass) . '"';
 
     // Print the item
@@ -149,10 +154,8 @@ class FcAdminCssMenu extends JAdminCssMenu
     {
       if (!$this->_current->getParent()->hasParent()) // Check if this is a parent NODE (i.e. parent node is ROOT)
       {
-        echo "<div class='nav-label top-level expanded'>";
+        echo "<div class=''>";
       }
-      // TO DO - Need to do something here to determine if this is the 'parent' of the current 
-      // 'active' node. Something like $this->hasActiveChild() or similar.
     }
 
     // Spit out a placeholder node
@@ -200,7 +203,7 @@ class FcAdminCssMenu extends JAdminCssMenu
       }
       else
       {
-        echo '<ul class="nav nav-list">' . "\n";
+        echo '<ul class="unstyled">' . "\n";
       }
 
       foreach ($this->_current->getChildren() as $child)

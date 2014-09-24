@@ -185,7 +185,6 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
       // E.g. if a new unit, insert facilitites, if new version then we will
       // save the facilities against the new version id.
 
-      JLog::add('About to save facilities for property (' . $table->realestate_property_id . 'version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
  
       // Commit the transaction

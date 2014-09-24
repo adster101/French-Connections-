@@ -10,7 +10,7 @@ $deduped = array();
 
 foreach ($words as $key => $word)
 {
-  
+
   $valid_word = false;
 
   if (strpos($word, '\''))
@@ -39,18 +39,23 @@ $a = array_slice($deduped, 0, 15);
 
 depth_picker($a, "", $collection);
 
-function depth_picker($arr, $temp_string, $collect) {
-    if ($temp_string != "") 
-        $collect []= $temp_string;
+function depth_picker($arr, $temp_string, $collect)
+{
+  if ($temp_string != "")
+    $collect [] = $temp_string;
 
-    for ($i=0; $i<sizeof($arr);$i++) {
-      
-        $arrcopy = $arr;
-        $elem = array_splice($arrcopy, $i, 1); // removes and returns the i'th element
-        if (sizeof($arrcopy) > 0) {
-            depth_picker($arrcopy, $temp_string ." " . $elem[0], $collect);
-        } else {
-            $collect []= $temp_string. " " . $elem[0];
-        }   
-    }   
+  for ($i = 0; $i < sizeof($arr); $i++)
+  {
+
+    $arrcopy = $arr;
+    $elem = array_splice($arrcopy, $i, 1); // removes and returns the i'th element
+    if (sizeof($arrcopy) > 0)
+    {
+      depth_picker($arrcopy, $temp_string . " " . $elem[0], $collect);
+    }
+    else
+    {
+      $collect [] = $temp_string . " " . $elem[0];
+    }
+  }
 }

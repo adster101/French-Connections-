@@ -9,12 +9,13 @@
 
 defined('_JEXEC') or die;
 
+// Bootstrap the fc lib
+JLoader::import('frenchconnections.library');
 
 // Include the module helper classes.
 if (!class_exists('ModMenuHelper'))
 {
-	require realpath(__DIR__ . '/..') . '/mod_menu/helper.php';
-  
+	require realpath(__DIR__ . '/..') . '/mod_menu/helper.php';  
 }
 
 if (!class_exists('JAdminCssMenu'))
