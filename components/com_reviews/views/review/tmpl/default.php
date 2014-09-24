@@ -34,9 +34,6 @@ jimport('joomla.html.html.bootstrap');
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
-JHtml::_('behavior.keepalive');
-JHtml::_('behavior.formvalidation');
-JHtml::_('behavior.tooltip');
 
 $id = $this->item->id ? $this->item->id : '';
 ?>

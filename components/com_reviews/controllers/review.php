@@ -101,9 +101,9 @@ class ReviewsControllerReview extends JControllerForm {
       return false;
     }
 
-    $validate = $model->validate($form, $data);
+    $validData = $model->validate($form, $data);
 
-    if ($validate === false) {
+    if ($validData === false) {
       // Get the validation messages.
       $errors = $model->getErrors();
       // Push up to three validation messages out to the user.
@@ -140,15 +140,14 @@ class ReviewsControllerReview extends JControllerForm {
     }
 
     // Set propertyID to same as ID
-    $data['guest_name'] = $user->name;
-    $data['created_by'] = $user->id;
-    $data['guest_email'] = $user->email;
-
-    // And unset id incase it gets bound somehow...
-    unset($data['id']);
-
+    $validData['guest_name'] = $user->name;
+    $validData['created_by'] = $user->id;
+    $validData['guest_email'] = $user->email;
+    $validData['date_created'] = JFactory::getDate()->calendar('Y-m-d');
+    $validData['date'] = JFactory::getDate($validData['date'])->calendar('Y-m-d');
+    
     // Check that we can save the data.
-    if (!$table->save($data)) {
+    if (!$table->save($validData)) {
 
       $errors = $table->getErrors();
 

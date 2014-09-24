@@ -35,12 +35,6 @@ class ReviewsViewReview extends JViewLegacy
 	 */
 	protected function setDocument() 
 	{
-		
-   
     $this->document->setTitle(JText::sprintf('COM_REVIEW_SUBMIT_REVIEW'));
-
-
-  
-    
 	}	
 }

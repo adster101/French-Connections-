@@ -57,7 +57,7 @@ class RealestateModelProperty extends JModelAdmin
     }
 
     // Get the table instance
-    $property = $this->getTable('Property', 'RentalTable');
+    $property = $this->getTable('Property', 'RealestateTable');
 
     // And then set the property ID 
     $property->id = $property_id;

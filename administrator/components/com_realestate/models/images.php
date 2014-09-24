@@ -44,4 +44,7 @@ class RealEstateModelImages extends JModelList
 
     return $query;
   }
+  
+  
+  
 }

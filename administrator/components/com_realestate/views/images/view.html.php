@@ -81,7 +81,6 @@ class RealEstateViewImages extends JViewLegacy
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CLOSE');
-    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     //JToolBarHelper::help('', true);
     // Get a toolbar instance so we can append the preview button

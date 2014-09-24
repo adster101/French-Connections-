@@ -189,9 +189,9 @@ class RealEstateModelImage extends JModelAdmin
 
     // Image has been uploaded, let's create some image profiles...
     // TO DO - Put the image dimensions in as params against the component
-    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'gallery', 578, 435);
-    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumbs', 100, 100);
-    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumb', 210, 120);
+    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'gallery', 578, 435);
+    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumbs', 100, 100);
+    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumb', 210, 120);
 
 
     // Hit up the unit versions save method to determine if a new version is needed.
@@ -200,7 +200,7 @@ class RealEstateModelImage extends JModelAdmin
       return false;
     }
 
-    $version_id = $unit->getState($unit->getName() . '.version_id');
+    $version_id = $unit->getState('new.version.id');
 
     $ordering = $this->getOrderPosition($version_id);
 
@@ -214,8 +214,6 @@ class RealEstateModelImage extends JModelAdmin
     $data['id'] = '';
     $data['ordering'] = $ordering + 1;
     $data['version_id'] = $version_id;
-
-
 
     // Call the parent save method to save the actual image data to the images table
     if (!parent::save($data))
@@ -246,7 +244,7 @@ class RealEstateModelImage extends JModelAdmin
 
     $query->select('max(ordering) as ordering');
     $query->where($db->quoteName('version_id') . ' = ' . (int) $version_id);
-    $query->from($db->quoteName('#__property_images_library'));
+    $query->from($db->quoteName('#__realestate_property_images_library'));
 
     $db->setQuery($query);
 

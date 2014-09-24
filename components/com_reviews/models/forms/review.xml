@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form>
+<form
+  addrulepath="/libraries/frenchconnections/form/rules">
   <fieldset name="review" addrulepath="/administrator/components/com_reviews/models/rules" label="COM_CONTACT_FORM_LABEL">
-   
-
     <field 
       name="title"
       type="text"
@@ -11,7 +10,7 @@
       description="COM_REVIEW_TITLE_TEXT_DESC"
       label="COM_REVIEW_TITLE_TEXT_LABEL"
       filter="string"
-      validate="reviewtitle"
+      validate="fc.length"
       required="true"
       message="COM_REVIEW_TITLE_VALIDATION_MESSAGE"
       labelclass="control-label"
@@ -39,12 +38,12 @@
       name="date"
       type="text"
       id="review-date"
-      hint="yyyy-mm-dd"
-      class="form-control"
+      hint="dd-mm-yyyy"
+      class="form-control calendar"
       description="COM_REVIEW_DATE_DESC"
       label="COM_REVIEW_DATE_LABEL"
       filter="string"
-      validate="reviewdate"
+      validate="date"
       required="true"
       message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"

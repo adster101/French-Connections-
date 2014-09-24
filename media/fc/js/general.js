@@ -8,6 +8,13 @@ jQuery(document).ready(function() {
     jQuery('input').removeAttr('placeholder');
   }
 
+  if (jQuery('.calendar').length) {
+    jQuery('.calendar').datepicker({
+      format: "dd-mm-yyyy",
+      autoclose: true
+    });
+  }
+  
   try {
 
     var nowTemp = new Date();
@@ -44,10 +51,10 @@ jQuery(document).ready(function() {
       autoclose: true
 
     }).on('changeDate', function(ev) {
-    });
+      });
 
   } catch (e) {
-    // what to do!?
+  // what to do!?
   }
 
   // Load the google maps crap, only if there is a #map on the page.
@@ -56,7 +63,9 @@ jQuery(document).ready(function() {
     loadGoogleMaps('initialise');
   }
 
-  jQuery('.result-links a.login').tooltip({animation: false});
+  jQuery('.result-links a.login').tooltip({
+    animation: false
+  });
 
   if (jQuery('#newUnit').length) {
     jQuery('#newUnit').on('click', function(event) {
@@ -166,7 +175,7 @@ jQuery(document).ready(function() {
       });
     }
   } catch (e) {
-    // what to do!?
+  // what to do!?
   }
 
   // Add special offer counter... 
@@ -243,7 +252,7 @@ var loadGoogleMaps = function(func) {
     script.type = 'text/javascript';
 
     script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-            'callback=' + func;
+    'callback=' + func;
     document.body.appendChild(script);
   }
 }

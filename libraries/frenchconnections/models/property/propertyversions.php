@@ -108,7 +108,6 @@ class PropertyModelVersions extends JModelAdmin
     // Set the location details accordingly, needed for one of the form field types...
     if (!empty($data->department))
     {
-
       $form->setFieldAttribute('city', 'department', $data->department);
       $form->setFieldAttribute('city', 'readonly', 'false');
     }
