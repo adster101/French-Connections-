@@ -13,6 +13,9 @@ $user = JFactory::getUser();
 
 $groups = JAccess::getGroupsByUser($user->id, false);
 
+$lang = JFactory::getLanguage();
+$lang->load('frenchconnections', JPATH_SITE . '/libraries/frenchconnections');
+
 $document = JFactory::getDocument();
 $direction = $document->direction == 'rtl' ? 'pull-right' : '';
 

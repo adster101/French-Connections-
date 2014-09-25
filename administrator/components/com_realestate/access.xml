@@ -9,6 +9,7 @@
     <action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_EDITOWN_COMPONENT_DESC" />
     <action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
     <action name="realestate.listing.view" title="Access listing view" description="" />
+		<action name="realestate.propertyversions.view" title="Access property version view" description="" />
 
   </section>
 </access>

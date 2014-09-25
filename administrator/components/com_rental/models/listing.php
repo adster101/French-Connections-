@@ -110,19 +110,26 @@ class RentalModelListing extends JModelList
         {
           $query = $db->getQuery(true);
 
+          // Update the currently published unit to 'archived'
           $query->update('#__unit_versions');
-          $query->set('
-              review = CASE review
-                WHEN 0 THEN -1
-                WHEN 1 THEN 0
-              END,
-              published_on = CASE review
-                WHEN 0 THEN now()
-              END
-          ');
+          $query->set('review = -1');
           $query->where('unit_id=' . (int) $unit->unit_id);
+          $query->where('review = 0');
           $db->setQuery($query);
           $db->execute();
+          
+          // Clear the query
+          $query->clear();
+
+          // Update the new version to published and update the published date
+          $query->update('#__unit_versions');
+          $query->set('review = 0, published_on = now()');
+          $query->where('unit_id=' . (int) $unit->unit_id);
+          $query->where('review = 1');
+          $db->setQuery($query);
+          $db->execute();          
+          
+          
         }
       }
 
@@ -132,6 +139,8 @@ class RentalModelListing extends JModelList
       $query->update('#__property');
       $query->set('review = 0');
       $query->set('published = 1');
+      $query->set('checked_out = \'\'');
+      $query->set('checked_out_time = \'\'');
       $query->set('value = ' . $db->quote('0.00'));
 
       // If the expiry date is empty, and the property is being approved then implicity assume it's 

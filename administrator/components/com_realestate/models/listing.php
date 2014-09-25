@@ -131,7 +131,6 @@ class RealEstateModelListing extends PropertyModelListing
     if ($canDo->get('core.edit.own') && !$canDo->get('core.edit'))
     {
       $query->where('a.created_by=' . $userId);
-      $query->where('d.published = 1');
     }
 
     if ($latest)

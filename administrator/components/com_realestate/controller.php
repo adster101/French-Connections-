@@ -50,7 +50,7 @@ class RealEstateController extends JControllerLegacy
     // Get the GET params for this view
     $view = $this->input->get('view', 'listings');
     $option = $this->input->getCmd('option', 'com_realestate');
-    $property_id = ($this->input->getInt('id')) ? $this->input->getInt('id') : $this->input->getInt('property_id');
+    $property_id = ($this->input->getInt('id')) ? $this->input->getInt('id') : $this->input->getInt('realestate_property_id');
     $unit_id = $this->input->getInt('unit_id');
     $context = $option . '.edit.' . $view;
     $views = array('review', 'notes', 'note');

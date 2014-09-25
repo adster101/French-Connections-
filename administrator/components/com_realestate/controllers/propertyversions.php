@@ -3,17 +3,29 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-// import Joomla controllerform library
-jimport('frenchconnections.controllers.property.base');
-
 /**
  * HelloWorld Controller
  */
-class RealEstateControllerPropertyVersions extends RentalControllerBase
+class RealEstateControllerPropertyVersions extends JControllerForm
 {
-  
+
   var $view_list = 'listing';
 
+  /**
+   * Checks whether the owner is allowed to edit this property version via the PropertyHelper class 
+   * 
+   * @param type $data
+   * @param type $key
+   * @return type boolean
+   */
+  public function allowEdit($data = array())
+  {
+    // Get the property id we're trying to edit
+    $id = $data['realestate_property_id'];
+    
+    // Test whether this user is allowed to edit it.
+    return PropertyHelper::allowEditRealestate($id);
+  }
 
   public function __construct($config = array())
   {

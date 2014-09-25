@@ -51,6 +51,22 @@ class RealEstateControllerImages extends PropertyControllerImages
     //$this->registerTask('saveandnext', 'save');
   }
 
+  /**
+   * Checks whether the owner is allowed to edit this property version via the PropertyHelper class 
+   * 
+   * @param type $data
+   * @param type $key
+   * @return type boolean
+   */
+  public function allowEdit($data = array())
+  {
+    // Get the property id we're trying to edit
+    $id = $data['realestate_property_id'];
+
+    // Test whether this user is allowed to edit it.
+    return PropertyHelper::allowEditRealestate($id);
+  }
+
   /*
    * View action - checks ownership of record sets the edit id in session and redirects to the view
    *

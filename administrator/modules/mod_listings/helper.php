@@ -65,6 +65,7 @@ abstract class ModListingHelper
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
     $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');
+    
     //$query->order('a.expiry_date', 'asc');
 
     $db->setQuery($query);
@@ -149,8 +150,6 @@ abstract class ModListingHelper
       $html = JHtml::_('property.note', 'alert alert-info', $msg, $id);
     }
 
-
     return $html;
   }
-
 }

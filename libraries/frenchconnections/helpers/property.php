@@ -14,9 +14,51 @@ defined('_JEXEC') or die;
 abstract class PropertyHelper
 {
 
-  public static function filterTariffs($tariffs = array())
+  public function allowEditRealestate($recordId = '')
   {
 
+    // If we don't have a property ID then we can't authorise
+    if ((int) $recordId === 0)
+    {
+      return false;
+    }
+
+    $user = JFactory::getUser();
+    $userId = $user->get('id');
+
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models','RealestateModel');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables','RealestateTable');
+    
+    // Check general edit permission first.
+    if ($user->authorise('core.edit', 'com_realestate'))
+    {
+      return true;
+    }
+
+    // If user has edit own permission we need to check whether they own this record or not.
+    if ($user->authorise('core.edit.own', 'com_realestate'))
+    {
+
+      // Need to do a lookup from the model.
+      $record = JModelLegacy::getInstance('Property', 'RealestateModel')->getItem($recordId);
+      if (empty($record))
+      {
+        return false;
+      }
+      // Set the owner ID
+      $ownerId = $record->created_by;
+
+      // If the owner matches 'the owner' then do the test.
+      if ($ownerId == $userId)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static function filterTariffs($tariffs = array())
+  {
 
     foreach ($tariffs as $i => $v)
     {
