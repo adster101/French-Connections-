@@ -51,10 +51,8 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
               <span class="muted"><?php echo Jtext::_('COM_RENTAL_HELLOWORLD_REMAINING_CHARS_CAPTION'); ?></span>
               <br /> 
               <span class="message-container"></span>
-
             </p>
             <p>
-
               <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_rental&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>" >
                 <i class="icon-pencil-2 icon-white"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
@@ -64,7 +62,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
               </a>
             </p>
-
           </div>
         </div>
       </li>

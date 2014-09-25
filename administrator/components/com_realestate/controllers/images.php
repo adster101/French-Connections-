@@ -80,9 +80,9 @@ class RealEstateControllerImages extends PropertyControllerImages
     // $id is the listing the user is trying to edit
     $id = $this->input->get('realestate_property_id', '', 'int');
 
-    $data['id'] = $id;
+    $data['realestate_property_id'] = $id;
 
-    if (!$this->allowEdit($data, 'id'))
+    if (!$this->allowEdit($data))
     {
       $this->setRedirect(
               JRoute::_(

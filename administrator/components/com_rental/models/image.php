@@ -185,7 +185,7 @@ class RentalModelImage extends JModelAdmin
   public function save($data)
   {
 
-    $unit = JModelLegacy::getInstance('UnitVersions', 'RentalModel');
+    $model = JModelLegacy::getInstance('UnitVersions', 'RentalModel');
 
     // Image has been uploaded, let's create some image profiles...
     // TO DO - Put the image dimensions in as params against the component
@@ -193,14 +193,23 @@ class RentalModelImage extends JModelAdmin
     $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumbs', 100, 100);
     $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumb', 210, 120);
 
+    // Get an db instance and start a transaction
+    $db = JFactory::getDBO();
+
+    // Need to look up the unit review status here to ensure that we upload new images against the correct version
+    $unit = $model->getItem($data['unit_id']);
+
+    // Set the review state to that of the latest unit version which will have previously been updated (if this is a 2nd, 3rd or 4th image upload etc
+    $data['review'] = $unit->review;
+    $data['id'] = $unit->id;
 
     // Hit up the unit versions save method to determine if a new version is needed.
-    if (!$unit->save($data))
+    if (!$model->save($data))
     {
       return false;
     }
 
-    $version_id = $unit->getState($unit->getName() . '.version_id');
+    $version_id = $model->getState($model->getName() . '.version_id');
 
     $ordering = $this->getOrderPosition($version_id);
 
@@ -223,9 +232,8 @@ class RentalModelImage extends JModelAdmin
       return false;
     }
 
-    $this->setState($this->getName() . '.version_id', $unit->getState($unit->getName() . '.version_id'));
-    $this->setState($this->getName() . '.review', $unit->getState($unit->getName() . '.review'));
-
+    $this->setState($this->getName() . '.version_id', $model->getState($model->getName() . '.version_id'));
+    $this->setState($this->getName() . '.review', $model->getState($model->getName() . '.review'));
 
     // Return to the controller
 

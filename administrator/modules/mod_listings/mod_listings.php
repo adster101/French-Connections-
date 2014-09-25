@@ -15,14 +15,17 @@ $lang->load('com_rental');
 // Bootstrap the fc lib
 JLoader::import('frenchconnections.library');
 
-
 // Include the syndicate functions only once
 require_once __DIR__ . '/helper.php';
 
 // Get the listings for this owner
 $items = ModListingHelper::getList();
 
+$re_items = ModListingHelper::getRealEstate();
+
 // Process the property list into a more useful object
 $listings = ModListingHelper::getPropertyList($items);
+
+$re_listings = ModListingHelper::getRealestatePropertyList($re_items);
 
 require JModuleHelper::getLayoutPath('mod_listings', $params->get('layout', 'default'));

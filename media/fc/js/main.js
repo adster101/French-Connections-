@@ -23,6 +23,7 @@ jQuery(function() {
     previewMaxHeight: 120,
     previewCrop: true,
     maxFileSize: 4000000,
+    sequentialUploads: true,
     autoUpload: false,
     filesContainer: jQuery('ul.files'),
     uploadTemplateId: null,
@@ -102,12 +103,14 @@ jQuery(function() {
                 })
                 .done(function(results) {
           var gallery = jQuery('.image-gallery');
-
+          
+          // Update the gallery with the latest list of images
           gallery.empty();
           gallery.html(results);
-
-
-
+          
+          // Update the review state so that subsequent images don't trigger new versions...
+          jQuery('input[name=review]').attr('value', "1");
+          
           add_event_handlers();
 
           var imageCount = jQuery('#imageList').length;

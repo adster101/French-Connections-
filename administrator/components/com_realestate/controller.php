@@ -69,7 +69,7 @@ class RealEstateController extends JControllerLegacy
 
     // Check whether the user has accessed this item correctly already...
     // Test all the relevant views and that the 'edit ids' are held in the session
-    if (!$this->checkEditId($context, $property_id) || !$this->checkEditId($context, $unit_id) && !in_array($view, $views))
+    if (!$this->checkEditId($context, $property_id) && !in_array($view, $views))
     {
       // Somehow the person just went to the form - we don't allow that.
       //$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', ''));

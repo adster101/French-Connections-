@@ -12,7 +12,7 @@ require_once('administrator/components/com_media/helpers/media.php');
 /**
  * HelloWorld Controller
  */
-class PropertyControllerImages extends JControllerAdmin
+class PropertyControllerImages extends JControllerForm
 {
 
   protected $extension;

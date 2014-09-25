@@ -76,16 +76,46 @@ defined('_JEXEC') or die;
 <?php endif; ?>
 <hr />
 <div class="page-header clearfix">
-  <a href="index.php?option=com_realestate&amp;task=propertyversions.add" class="btn btn-large btn-success pull-right">
+  <a href="index.php?option=com_realestate&amp;task=propertyversions.add" class="btn btn-success pull-right">
     <span class="icon icon-plus-2"></span>&nbsp;&nbsp;<?php echo JText::_('MOD_LISTINGS_ADD_NEW_RENTAL_PROPERTY'); ?>
   </a>  
   <h3><?php echo JText::_('MOD_LISTINGS_REAL_ESTATE_PROPERTY_FOUND_HEADING'); ?></h3>
 </div>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <?php echo JText::_('MOD_LISTINGS_NO_REAL_ESTATE_PROPERTY_FOUND_PANEL_HEADING'); ?>
+<?php if (count($re_listings) > 0) : ?>
+  <?php foreach ($re_listings as $k => $item) : ?> 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 style="margin:0">Property reference: <?php echo (int) $item->id ?>
+          <small>
+            <?php echo ($item->modified) ? JText::sprintf('COM_FC_LAST_UPDATED_ON', $item->modified) : JText::_('COM_FC_LAST_UPDATED_NEVER'); ?>
+          </small>
+        </h4>  
+      </div>
+      <div class="panel-body">  
+        <div class="listing-container">
+          <div class="listing-image-container">
+            <?php echo JHtml::_('general.image', '/images/property/' . $item->id . '/thumb/' . $item->thumbnail, 'thumbnail') ?>
+          </div>
+          <div class="listing-container-wide">
+            <?php if (!empty($item->message)) : ?>
+              <?php echo $item->message; ?>
+            <?php endif; ?> 
+            <hr />
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php if (!(count($items) - 1) == $k) : ?>
+      <hr />
+    <?php endif; ?>
+  <?php endforeach; ?>
+<?php else: ?>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <?php echo JText::_('MOD_LISTINGS_NO_REAL_ESTATE_PROPERTY_FOUND_PANEL_HEADING'); ?>
+    </div>
+    <div class="panel-body">
+      <p><?php echo JText::_('MOD_LISTINGS_NO_REAL_ESTATE_PROPERTY_FOUND') ?></p>
+    </div>
   </div>
-  <div class="panel-body">
-    <p><?php echo JText::_('MOD_LISTINGS_NO_REAL_ESTATE_PROPERTY_FOUND') ?></p>
-  </div>
-</div>
+<?php endif; ?>

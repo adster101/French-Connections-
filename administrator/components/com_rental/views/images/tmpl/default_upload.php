@@ -60,8 +60,7 @@ JHtml::_('bootstrap.popover');
       <div class="fileupload-loading"></div>
       <ul role="presentation" class="files clearfix"></ul>
     </div>
-    <input type="hidden" name="review" value="<?php echo $this->unit->review ?>" />
-    <input type="hidden" name="id" value="<?php echo $this->unit->id ?>" />
+   
     <input type="hidden" name="property_id" value="<?php echo $this->unit->property_id ?>" />
     <input type="hidden" name="unit_id" value="<?php echo $this->unit->unit_id ?>" />
   </fieldset>

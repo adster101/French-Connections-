@@ -134,6 +134,6 @@ $fieldsets = $this->form->getFieldSets();
       <?php echo $field->input; ?>
     <?php endforeach; ?>
     <input type="hidden" name="task" value="" />
-    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $this->status->unit_id, false)); ?>" />
+    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=images.manage&realestate_property_id=' . (int) $this->item->realestate_property_id, false)); ?>" />
 </form>
 

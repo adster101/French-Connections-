@@ -254,10 +254,10 @@ class RentalControllerImages extends JControllerForm {
     $property_id = $app->input->get('property_id', '', 'GET', 'int');
 
     // Get the unit version id
-    $id = $app->input->get('id', '', 'int');
+    //$id = $app->input->get('id', '', 'int');
 
     // Get the unit version id
-    $review = $app->input->get('review', '', 'boolean');
+    //$review = $app->input->get('review', '', 'boolean');
 
     // Set the filepath for the images to be moved into
     $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
@@ -336,9 +336,9 @@ class RentalControllerImages extends JControllerForm {
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
         $file['unit_id'] = $unit_id;
-        $file['id'] = $id;
+        //$file['id'] = $id;
         $file['property_id'] = $property_id;
-        $file['review'] = $review;
+        //$file['review'] = $review;
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
