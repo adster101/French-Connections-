@@ -417,7 +417,7 @@ class RentalModelPropertyVersions extends JModelAdmin
 
       // If not a new and review state == 0 (e.g. an existing property version)  
       // $data['review'] - refers to the property version review state
-      if (!$isNew && $data['review'] == 0)
+      if (!$isNew)
       {
 
         // We need to check the review state of the property in case it's a PFR (review state 2) 

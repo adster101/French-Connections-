@@ -76,11 +76,13 @@ class RentalModelReview extends JModelAdmin
 
   /**
    * Get the message text to bind with the form
+   * TO DO - Move most of below to getItem or preprocessForm?
    */
   public function loadFormData()
   {
 
     $recordId = (!empty($recordId)) ? $recordId : (int) $this->getState($this->getName() . '.id');
+    $layout = JFactory::getApplication()->input->getCmd('layout');
 
     // Get the owner details etc
     $table = $this->getTable('Property', 'RentalTable');
@@ -96,14 +98,26 @@ class RentalModelReview extends JModelAdmin
 
     $user = JFactory::getUser($userId);
 
+    $uri = JUri::getInstance();
+    $domain = $uri->toString(array('scheme', 'host'));
+
+
     if (empty($table->expiry_date))
     {
-      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $recordId, $recordId);
+      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['subject'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_GOING_LIVE_EMAIL_SUBJECT', $user->name, $recordId);
     }
-    else
+    else if ($layout == 'reject')
     {
-      $data['body'] = JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name, $recordId, '');
+      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_BODY', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['subject'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_SUBJECT', $user->name, $recordId);
     }
+    else if ($layout == 'approve')
+    {
+      $data['body'] = JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['subject'] = JText::sprintf('COM_RENTAL_APPROVE_CHANGES_CONFIRMATION_SUBJECT', $user->name, $recordId);
+    }
+
     return $data;
   }
 

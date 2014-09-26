@@ -33,6 +33,8 @@ class RentalControllerListing extends JControllerForm
     }
 
     $this->registerTask('checkin', 'review');
+    $this->registerTask('reject', 'approve');
+    $this->registerTask('decline', 'publish');
   }
 
   public function accountupdate()
@@ -154,17 +156,15 @@ class RentalControllerListing extends JControllerForm
 
     // TO DO - Add permissions check here
     $model = $this->getModel('Property', 'RentalModel');
-    $table = $model->getTable();
 
     $input = JFactory::getApplication()->input;
     $recordId = $input->get('id', '', 'int');
-    $checkin = property_exists($table, 'checked_out');
 
-    $recordId = $input->get('id', '', 'int');
+    $task = $this->getTask();
 
     $this->setRedirect(
             JRoute::_(
-                    'index.php?option=' . $this->option . '&view=review&layout=approve&property_id=' . $recordId, false
+                    'index.php?option=' . $this->option . '&view=review&layout=' . $task . '&property_id=' . $recordId, false
             )
     );
     return true;
@@ -223,7 +223,8 @@ class RentalControllerListing extends JControllerForm
     $app = JFactory::getApplication();
     $input = $app->input;
     $recordId = $input->get('id', '', 'int');
-    $data = $input->get('jform', '', array());
+    $data = $this->input->post->get('jform', array(), 'array');
+    $task = $this->getTask();
 
     // Get the various models we will be using
     $model = $this->getModel();
@@ -267,20 +268,27 @@ class RentalControllerListing extends JControllerForm
     // Get Items returns an array of units which represents the listing
     $listing = $model->getItems();
 
-    // Updates the review status for all units and property
-    $publish = $model->publishListing($listing);
-
+    if ($task == 'decline')
+    {
+      $publish = $model->reject($listing);
+    }
+    else
+    {
+      // Updates the review status for all units and property
+      $publish = $model->publishListing($listing);
+    }
+    
     if (!$publish)
     {
       // TO DO - Log and determine action
       return false;
     }
 
-    // Get a new instance of the properyt model and checkin the record
+    // Get a new instance of the property model and checkin the record
     $property_model->checkin(array($recordId));
 
     // Send the confirmation email
-    $mail = $model->sendApprovalEmail($listing, $validData);
+    $mail = $model->sendApprovalEmail($listing, $validData['body'], $validData['subject']);
 
     // Send confirmation email
     $msg = JText::sprintf('COM_RENTAL_PROPERTY_PUBLISHED', $listing[0]->id);

@@ -2,13 +2,21 @@
 <form	addrulepath="/administrator/components/com_rental/models/rules">
   <fieldset name="message">
     <field
+      name="subject"
+      type="text"
+      class="input-xxlarge"
+      filter="string"
+      required="true"
+      label="Subject"
+    />
+    <field
       name="body"
       type="editor"
       label="Message to owner"
       description =""
       required="true"
       class="validate"
-      filter="string">
+      filter="safehtml">
     </field>
   
     <field 

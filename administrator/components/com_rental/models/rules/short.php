@@ -30,7 +30,7 @@ class JFormRuleShort extends JFormRule
 	public function test(SimpleXMLElement $element, $value, $group = null, JRegistry $input = null, JForm $form = null)
 	{
     // If value is greater than 750 characters they will need to try again
-		if (strlen($value) > 50) {
+		if (strlen($value) > 150) {
       return false;
   	}
 

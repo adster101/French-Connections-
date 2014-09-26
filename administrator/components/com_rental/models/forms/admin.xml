@@ -59,7 +59,7 @@
    
     
   </fieldset>
-   <fieldset 
+  <fieldset 
     name="review-status"
     label="COM_RENTAL_UPDATE_PAYMENT_STATUS">
     <field
@@ -69,11 +69,14 @@
       filter="string">
       <option value="">JSELECT</option>
       <option value="2">COM_RENTAL_UPDATE_REVIEW_STATUS_PAYMENT_RECEIVED</option>
-
     </field>
-      
-    
-    
+    <field 
+      name="value"
+      type="text"
+      label="COM_RENTAL_UPDATE_PAYMENT_STATUS_VALUE_LABEL"
+      filter="int"
+      default=""
+    />     
   </fieldset>
   <fieldset
     name="note"

@@ -42,9 +42,9 @@ class RentalViewListing extends JViewLegacy
 
     // Get data from the model
     $this->items = $this->get('Items');
-    
+
     $model = $this->getModel();
-    
+
     $this->status = $model->getProgress($this->items);
 
     $this->pagination = $this->get('Pagination');
@@ -99,6 +99,11 @@ class RentalViewListing extends JViewLegacy
       {
         JToolBarHelper::deleteList('', 'listing.approve', 'BLAH');
       }
+    }
+
+    if ($canDo->get('core.edit.state'))
+    {
+      JToolBarHelper::trash('units.trash');
     }
 
     // Get a toolbar instance so we can append the preview button

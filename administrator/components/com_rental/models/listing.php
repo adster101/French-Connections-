@@ -141,7 +141,7 @@ class RentalModelListing extends JModelList
       $query->set('published = 1');
       $query->set('checked_out = \'\'');
       $query->set('checked_out_time = \'\'');
-      $query->set('value = ' . $db->quote('0.00'));
+      $query->set('value = null');
 
       // If the expiry date is empty, and the property is being approved then implicity assume it's 
       // a new property and set the renewal date accordingly. 
@@ -169,19 +169,70 @@ class RentalModelListing extends JModelList
     return true;
   }
 
-  public function sendApprovalEmail($listing = array(), $data = array())
+  /**
+   * Controller action to publish a listing. Activated from the PFR 'approve' view
+   * 
+   * @param type $items
+   * @return boolean
+   */
+  public function reject($items = array())
+  {
+
+    $db = JFactory::getDbo();
+
+    try
+    {
+
+      // Start a db transaction so we can roll back if necessary
+      $db->transactionStart();
+
+      // Update the property review and expiry date
+      $query = $db->getQuery(true);
+
+      $query->update('#__property');
+      $query->set('review = 1');
+      $query->set('published = 1');
+      $query->set('checked_out = \'\'');
+      $query->set('checked_out_time = \'\'');
+
+      $query->where('id=' . (int) $items[0]->id);
+
+      $db->setQuery($query);
+      $db->execute();
+
+      $db->transactionCommit();
+    }
+    catch (Exception $e)
+    {
+
+      $db->transactionRollback();
+
+      return false;
+    }
+
+    return true;
+  }
+  
+  
+  /**
+   * Below can be moved into a generic helper class method
+   * 
+   * @param type $listing
+   * @param type $body
+   * @param type $subject
+   * @return boolean
+   */
+  public function sendApprovalEmail($listing = array(), $body = '', $subject = '')
   {
 
     $app = JFactory::getApplication();
-    // TO DO - Check the below as it looks like it should be
+    
     $owner_email = (JDEBUG) ? $app->getCfg('mailfrom', 'adamrifat@frenchconnections.co.uk') : $listing[0]->email;
-    $owner_name = $data['firstname'] . ' ' . $data['surname'];
+    $owner_name = $listing[0]->account_name;
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
-    $body = $data['body'];
-    $subject = JText::sprintf('COM_RENTAL_APPROVE_CHANGES_CONFIRMATION_SUBJECT', $data['firstname'], $listing[0]->id);
-    $mail = JFactory::getMailer();
 
+    $mail = JFactory::getMailer();
 
     $mail->addRecipient($owner_email, $owner_name);
     $mail->addReplyTo(array($mailfrom, $fromname));
@@ -273,6 +324,7 @@ class RentalModelListing extends JModelList
         e.accommodation_type,
         e.created_on,
         g.vat_status,  
+        CONCAT(g.firstname, \' \', g.surname) as account_name,
         h.email,
         b.phone_1,
         b.email_1,
@@ -337,6 +389,8 @@ class RentalModelListing extends JModelList
       $query->where('b.review = 0');
       $query->where('e.review = 0');
     }
+    
+    $query->where('d.published != -2');
 
     $query->where('a.created_by !=0');
 

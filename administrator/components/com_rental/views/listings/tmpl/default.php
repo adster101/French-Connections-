@@ -104,6 +104,8 @@ $canDo = RentalHelper::getActions();
               $days_to_renewal = RentalHelper::getDaysToExpiry($item->expiry_date);
               $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
+              $value = (!empty($item->value)) ? round($item->value, 2) : '';
+              
               if ($item->review == 0)
               {
                 $enabled = false;
@@ -111,7 +113,6 @@ $canDo = RentalHelper::getActions();
               elseif ($item->review == 1)
               {
                 $enabled = $canDo->get('rental.listing.submit');
-                $enabled = false;
               }
               elseif ($item->review == 2)
               {
@@ -123,7 +124,7 @@ $canDo = RentalHelper::getActions();
               }
               ?>
               <?php if ($canEditOwn) : ?>
-                <tr>
+                <tr <?php echo ($value) ? 'class = \'alert alert-success\'' : '' ?>>
                   <td>
                     <?php echo $item->id; ?>
                   </td>
@@ -149,11 +150,11 @@ $canDo = RentalHelper::getActions();
                   </td>
                   <td>
                     <?php echo $item->expiry_date; ?>
-                    <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0 && !empty($days_to_renewal)) : // Property is expiring in the next 28 days ?>
+                    <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0 && !empty($days_to_renewal)) : // Property is expiring in the next 28 days  ?>
                       <p>
                         <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_DAYS_TO_RENEWAL', $days_to_renewal); ?>
                       </p>
-                    <?php elseif ($days_to_renewal < 0) : // Property must have expired  ?>
+                    <?php elseif ($days_to_renewal < 0) : // Property must have expired   ?>
                       <p>
                         <?php echo JText::sprintf('COM_RENTAL_HELLOWORLD_PROPERTY_EXPIRED'); ?>
                       </p>
@@ -197,7 +198,7 @@ $canDo = RentalHelper::getActions();
                         <p>
                           <?php echo JHtml::_('property.notes', $item->id); ?>
                           &nbsp;
-                          <?php //echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
+                          <?php //echo JHtml::_('property.stats', $item->id, $item->created_by);  ?>
                         </p>
                       <?php endif; ?>
                       <?php if (property_exists($item, 'enquiries')) : ?>

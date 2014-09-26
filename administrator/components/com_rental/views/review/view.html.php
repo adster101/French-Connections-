@@ -36,9 +36,9 @@ class RentalViewReview extends JViewLegacy
     $this->id = $input->get('property_id', '', 'int');
     $layout = $this->getLayout();
 
-    
-    
-    if ($layout == 'approve')
+
+
+    if ($layout == 'approve' || $layout == 'reject')
     {
       $this->form = $this->get('Form');
     }
@@ -87,7 +87,15 @@ class RentalViewReview extends JViewLegacy
       JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES', $this->id));
       JToolBarHelper::back();
 
-      JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_SEND_APPROVAL_EMAIL', false);
+      JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_REVIEW_PROPERTY_SEND_APPROVAL_EMAIL', false);
+    }
+    elseif ($layout == 'reject')
+    {
+
+      JToolBarHelper::title(JText::sprintf('COM_RENTAL_REJECT_CHANGES', $this->id));
+      JToolBarHelper::back();
+
+      JToolBarHelper::custom('listing.decline', 'publish', 'publish', 'COM_RENTAL_REVIEW_PROPERTY_SEND_REJECTION_EMAIL', false);
     }
     else
     {
@@ -99,7 +107,7 @@ class RentalViewReview extends JViewLegacy
       JToolBarHelper::custom('listing.release', 'locked', 'locked', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_CHECKIN', false);
       JToolBarHelper::custom('listing.view', 'edit', 'edit', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', false);
       // Get a toolbar instance so we can append the preview button
-      
+
       $bar = JToolBar::getInstance('toolbar');
       $property_id = $this->units[0]->id;
       $unit_id = $this->units[0]->unit_id;

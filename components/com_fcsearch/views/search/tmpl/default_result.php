@@ -25,7 +25,7 @@ $displayData->inShortlist = $inShortlist;
 $displayData->unit_id = $this->result->unit_id;
 $displayData->class = '';
 $description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
-$title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->unit_id, $description);
+$title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
 ?>
 
 <div class="search-result">
@@ -85,7 +85,7 @@ $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->unit_id, 
           <p>
             <?php echo JHtml::_('string.truncate', $this->result->description, 100, true, false); ?>
           </p>
-
+          <p class=""><?php echo JText::sprintf('COM_FCSEARCH_REF', $this->result->id); ?></p>
         </div>
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
