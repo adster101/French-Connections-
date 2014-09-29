@@ -48,6 +48,11 @@ class Renewals extends JApplicationCli {
    * @since   2.5
    */
   public function doExecute() {
+    
+    // Switch off cache
+    $cache = JFactory::getCache();
+    
+    $cache->setCaching( 0 );
        
     // Create an instance of the site application - needed for the CLI app to run the JLayout
     $app = JFactory::getApplication('site');
