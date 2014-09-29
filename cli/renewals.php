@@ -48,11 +48,6 @@ class Renewals extends JApplicationCli {
    * @since   2.5
    */
   public function doExecute() {
-    
-    // Switch off cache
-    $cache = JFactory::getCache();
-    
-    $cache->setCaching( 0 );
        
     // Create an instance of the site application - needed for the CLI app to run the JLayout
     $app = JFactory::getApplication('site');
@@ -65,11 +60,13 @@ class Renewals extends JApplicationCli {
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    // Process the auto renewals
+
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
+    
     // Process the auto renewals
     $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
+    
   }
 
   private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {

@@ -328,6 +328,19 @@ class RealEstateModelImage extends JModelAdmin
 
           // Put it out to a file
           $profile->tofile($file_path);
+
+          // Load the existing image
+          $existing_image = imagecreatefromjpeg($file_path);
+          
+          // Make it progressive
+          $bit = imageinterlace($existing_image, 1);
+
+          // Save it out
+          imagejpeg($existing_image, $file_path, 100);
+
+          // Free up memory
+          imagedestroy($existing_image);
+          
         }
         else if ($width < $height)
         {
@@ -351,12 +364,17 @@ class RealEstateModelImage extends JModelAdmin
             // Copy the existing image into the new one
             imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
 
+            // Make it progressive
+            imageinterlace($blank_image, 1);
+
             // Save it out
             imagejpeg($blank_image, $file_path, 100);
+
+            // Free up memory
+            imagedestroy($blank_image);
           }
           else
           {
-
             // Width is okay, just write it out
             $profile->tofile($file_path);
           }
@@ -377,8 +395,14 @@ class RealEstateModelImage extends JModelAdmin
           // Copy the existing image into the new one
           imagecopy($blank_image, $existing_image, ($max_width - $imgObj->getWidth()) / 2, ($max_height - $imgObj->getHeight()) / 2, 0, 0, $imgObj->getWidth(), $imgObj->getHeight());
 
+          // Make it progressive
+          imageinterlace($blank_image, 1);
+
           // Save it out
           imagejpeg($blank_image, $file_path, 100);
+
+          // Free up memory
+          imagedestroy($blank_image);
         }
       }
       catch (Exception $e)

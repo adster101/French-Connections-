@@ -21,6 +21,7 @@ abstract class ImportHelper {
     JHtmlSidebar::addEntry(JText::_('Availability'), 'index.php?option=com_import&view=availability', $submenu == 'availability');
     JHtmlSidebar::addEntry(JText::_('Enquiries'), 'index.php?option=com_import&view=enquiries', $submenu == 'enquiries');
     JHtmlSidebar::addEntry(JText::_('Images'), 'index.php?option=com_import&view=images', $submenu == 'images');
+    JHtmlSidebar::addEntry(JText::_('Real estate images'), 'index.php?option=com_import&view=realestateimages', $submenu == 'realestateimages');
     JHtmlSidebar::addEntry(JText::_('Locations'), 'index.php?option=com_import&view=locations', $submenu == 'locations');
     JHtmlSidebar::addEntry(JText::_('Locations Translations'), 'index.php?option=com_import&view=locationstranslations', $submenu == 'locationstranslations');
     JHtmlSidebar::addEntry(JText::_('Notes'), 'index.php?option=com_import&view=notes', $submenu == 'notes');

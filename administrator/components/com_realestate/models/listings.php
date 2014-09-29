@@ -121,7 +121,7 @@ class RealestateModelListings extends JModelList
       date_format(a.created_on, "%D %M %Y") as created_on,
       date_format(a.modified, "%D %M %Y") as modified,
       a.review,
-      "" as thumbnail
+      d.image_file_name as thumbnail
     ');
 
     // Join the user details if the user has the ACL rights.
@@ -255,7 +255,12 @@ class RealestateModelListings extends JModelList
       and b.id = (select max(c.id) from #__realestate_property_versions c where c.realestate_property_id = a.id)
     )');
 
-   
+    // Join the images, innit!
+    $query->join('left', '#__realestate_property_images_library d on b.id = d.version_id');
+    $query->where('(d.ordering = (select min(ordering) from #__property_images_library e where e.version_id = b.id) or d.ordering is null)');
+
+
+
 
     // Join the images, innit!
     //$query->join('left', '#__property_images_library f on e.id = f.version_id');

@@ -135,7 +135,7 @@ $canDo = PropertyHelper::getActions();
                           </td>
                         <?php endif; ?>
                         <td>
-                          <?php echo JHtml::_('image', '', '/images/property/' . $item->id . '/thumb/' . $item->thumbnail) ?>
+                          <?php echo JHtml::_('image', 'images/property/' . $item->id . '/thumb/' . $item->thumbnail, '') ?>
                           <?php if ($item->review != 2) : ?>
                             <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=listing.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                               <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>

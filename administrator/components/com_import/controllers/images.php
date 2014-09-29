@@ -11,7 +11,7 @@ jimport('joomla.user.helper');
 /**
  * HelloWorld Controller
  */
-class ImportControllerImages extends JControllerForm {
+class ImportControllerRealestate_images extends JControllerForm {
 
   public function import() {
 
@@ -138,6 +138,8 @@ class ImportControllerImages extends JControllerForm {
 
 
       /*
+       * TO DO move this to a cli script to process the images into the correct spot
+       * 
         $baseDir[] = COM_IMAGE_BASE . $line[0] . '/gallery/';
         $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumbs/';
         $baseDir[] = COM_IMAGE_BASE . $line[0] . '/thumb/';

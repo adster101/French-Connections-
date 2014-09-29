@@ -360,7 +360,10 @@ class RentalModelImage extends JModelAdmin
 
             // Copy the existing image into the new one
             imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
-
+            
+            // Make it progressive
+            imageinterlace($blank_image, 1);
+            
             // Save it out
             imagejpeg($blank_image, $file_path, 100);
           }
