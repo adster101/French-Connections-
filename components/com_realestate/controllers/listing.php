@@ -13,36 +13,7 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class AccommodationControllerListing extends JControllerForm {
-
-  public function saveNotes($notes = array()) {
-
-    // Add the tables to the include path
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
-
-    // Get an instance of the note table
-    $table = JTable::getInstance('Note', 'RentalTable');
-
-    foreach ($notes as $note) {
-      if (!$table->bind($note))
-      {
-        return false;
-      }
-
-      if (!$table->store())
-      {
-        return false;
-      }
-
-      $table->reset();
-    }
-
-    return true;
-  }
-
-  public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true)) {
-    return parent::getModel($name, $prefix, array('ignore_request' => false));
-  }
+class RealestateControllerListing extends JControllerForm {
 
   public function viewsite() {
     // Check for request forgeries.

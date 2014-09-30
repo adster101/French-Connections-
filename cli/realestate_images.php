@@ -47,12 +47,18 @@ class RealestateImages extends JApplicationCli
   {
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
+    // The source folder for the pics 
+    $src = '/home/adam/Pictures/_images';
+
+    //$move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
     // Add and get an instance of the realestate model image thingy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
     $model = JModelLegacy::getInstance('Image', 'RealestateModel');
 
     // Script to process real estate images for all properties in the #__realestate_property table
     $images = $this->_getProps();
+    
+    $this->out('Got image list...' . $e->getMessage());
 
     foreach ($images as $image)
     {
@@ -63,18 +69,18 @@ class RealestateImages extends JApplicationCli
       // The base path for the images created below
       $filepath = COM_IMAGE_BASE . $image->realestate_property_id;
 
-      // 
-      $image_path = $filepath . '/' . $image->image_file_name;
+      // The source path for the image being processed
+      $image_path = $src . '/' . $image->image_file_name;
 
       // Image has been uploaded, let's create some image profiles...
-      try
-      {
+      try {
         $model->generateImageProfile($image_path, (int) $image->realestate_property_id, $image->image_file_name, 'gallery', 578, 435);
         $model->generateImageProfile($image_path, (int) $image->realestate_property_id, $image->image_file_name, 'thumbs', 100, 100);
         $model->generateImageProfile($image_path, (int) $image->realestate_property_id, $image->image_file_name, 'thumb', 210, 120);
       }
-      catch (Exception $e)
-      {
+      catch (Exception $e) {
+        
+        $this->out('Problem creating image profiles...' . $e->getMessage());
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->realestate_property_id . ')', JLog::ERROR, 'import_images');
       }
     }
@@ -101,18 +107,16 @@ class RealestateImages extends JApplicationCli
 
     $query->from('#__realestate_property a');
 
-    $query->join('left', '#__realestate_property_images_library b on a.id = b.realeste_property_id');
+    $query->join('left', '#__realestate_property_images_library b on a.id = b.realestate_property_id');
     $query->where('b.id is not null');
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e)
-    {
-      $this->out('Problem getting props...');
+    catch (Exception $e) {
+      $this->out('Problem getting props...' . $e->getMessage());
       return false;
     }
 

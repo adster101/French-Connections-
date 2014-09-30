@@ -21,9 +21,9 @@ class ImportControllerRealestateimages extends JControllerForm
     JSession::checkToken('POST') or die('Invalid Token');
 
     // Open a handle to the import file
-    //$handle = fopen('/home/sysadmin/Documents/qitz3_property_images_library.csv', "r");
+    $handle = fopen('/home/adam/Documents/qitz3_property_images_library.csv', "r");
 
-    $handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_realestate_property_images_library.csv', "r");
+    //$handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_realestate_property_images_library.csv', "r");
 
     // Get a db instance
     $db = JFactory::getDBO();
@@ -151,7 +151,7 @@ class ImportControllerRealestateimages extends JControllerForm
       }
 
 
-      // Move each image and create the profile images
+      /* Move each image and create the profile images
       foreach ($images_to_insert as $key => $blah)
       {
 
@@ -192,7 +192,7 @@ class ImportControllerRealestateimages extends JControllerForm
         unset($move);
         unset($image_path);
         unset($images_to_insert);
-      }
+      }*/
     }
 
 
