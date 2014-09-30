@@ -161,28 +161,28 @@ $min_prices = JHtml::_('general.price',$this->item->price, $this->item->base_cur
       <!-- Number of bedrooms, if any -->
       <?php if ($this->item->single_bedrooms) : ?>
         <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS'); ?>
+          <?php echo JText::_('COM_REALESTATE_LISTING_SINGLE_BEDROOMS'); ?>
           <span class="pull-right"><?php echo $this->item->single_bedrooms; ?></span>
         </p>
       <?php endif; ?>
       <!-- Number of bedrooms, if any -->
       <?php if ($this->item->double_bedrooms) : ?>
         <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS'); ?>
+          <?php echo JText::_('COM_REALESTATE_LISTING_DOUBLE_BEDROOMS'); ?>
           <span class="pull-right"><?php echo $this->item->double_bedrooms; ?></span>
         </p>
       <?php endif; ?>
       <!-- Number of bathrooms, if any -->
       <?php if ($this->item->bathrooms) : ?>
         <p class="dotted">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_BATHROOMS'); ?>
+          <?php echo JText::_('COM_REALESTATE_LISTING_BATHROOMS'); ?>
           <span class="pull-right"><?php echo $this->item->bathrooms; ?></span>
         </p>
       <?php endif; ?>
      
       <p class="center">
         <a class="btn btn-primary btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id); ?>#email">
-          <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
+          <?php echo JText::_('COM_REALESTATE_LISTING_CONTACT_OWNER'); ?>  
         </a>
       </p>
     </div>  
