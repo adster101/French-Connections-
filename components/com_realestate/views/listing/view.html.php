@@ -66,10 +66,7 @@ class RealestateViewListing extends JViewLegacy
   protected function setDocument()
   {
 
-    $document = JFactory::getDocument();
-
-    $this->title = JText::sprintf('COM_REALESTATE_PROPERTY_TITLE', $this->item->title, $this->item->city_title, $this->item->department);
-
+    $this->title = JText::sprintf('COM_REALESTATE_PROPERTY_TITLE', $this->item->title);
 
     // Set document and page titles
     $this->document->setTitle($this->title);

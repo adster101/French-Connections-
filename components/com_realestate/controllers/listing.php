@@ -86,10 +86,11 @@ class RealestateControllerListing extends JControllerForm {
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
     $model = $this->getModel();
     $params = JComponentHelper::getParams('com_enquiries');
+    
     $id = $this->input->get('id', '', 'int');
-    $unit_id = $this->input->get('unit_id', '', 'int');
+
     // Get the itemID of the accommodation component. 
-    $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+    $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_realestate'));
 		$context = "$this->option.enquiry.data";
 
     // Get the data from POST
@@ -107,7 +108,7 @@ class RealestateControllerListing extends JControllerForm {
         $app->setUserState($context, $data);
 
         // Redirect back to the contact form.
-        $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+        $this->setRedirect(JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '#email', false));
         return false;
       }
     }
@@ -145,26 +146,26 @@ class RealestateControllerListing extends JControllerForm {
       $errors = $app->getMessageQueue();
 
       // Save the data in the session.
-      $app->setUserState('com_accommodation.enquiry.data', $data);
-      $app->setUserState('com_accommodation.enquiry.messages', $errors);
+      $app->setUserState('com_realestate.enquiry.data', $data);
+      $app->setUserState('com_realestate.enquiry.messages', $errors);
 
       // Redirect back to the contact form.
-      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+      $this->setRedirect(JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '#email', false));
       return false;
     }
 
     // Write the enquiry into the enquiry table...
-    if (!$model->processEnquiry($validate, $params, $id, $unit_id))
+    if (!$model->processEnquiry($validate, $params, $id, ''))
     {
 
       // Set the message
       $msg = JText::_('COM_ENQUIRY_PROBLEM_SENDING_ENQUIRY');
 
       // Save the data in the session.
-      $app->setUserState('com_accommodation.enquiry.data', $data);
+      $app->setUserState('com_realestate.enquiry.data', $data);
 
       // Redirect back to the contact form.
-      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false), $msg);
+      $this->setRedirect(JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '#email', false), $msg);
 
       return false;
     }
@@ -172,13 +173,11 @@ class RealestateControllerListing extends JControllerForm {
     // Save the user form data into the session
     $app->setUserState($context, $validate);
 
-    // Flush the data from the session
-    // $app->setUserState('com_accommodation.enquiry.data', null);
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
     if ($Itemid)
     {
       $this->setRedirect(
-              JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=enquiry', false), $msg
+              JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&view=enquiry', false), $msg
       );
     }
     else

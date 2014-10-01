@@ -195,7 +195,7 @@ class JControllerForm extends JControllerLegacy
 	}
 
 	/**
-	 * Method to check if you can add a new record.
+	 * Method to check if you can edit an existing record.
 	 *
 	 * Extended classes can override this if necessary.
 	 *
@@ -376,7 +376,7 @@ class JControllerForm extends JControllerLegacy
 			$urlVar = $key;
 		}
 
-    // Get the previous record id (if any) and the current record id.
+		// Get the previous record id (if any) and the current record id.
 		$recordId = (int) (count($cid) ? $cid[0] : $this->input->getInt($urlVar));
 		$checkin = property_exists($table, 'checked_out');
 
@@ -622,7 +622,7 @@ class JControllerForm extends JControllerLegacy
 		// Determine the name of the primary key for the data.
 		if (empty($key))
 		{
-      $key = $table->getKeyName();
+			$key = $table->getKeyName();
 		}
 
 		// To avoid data collisions the urlVar may be different from the primary key.
@@ -786,7 +786,7 @@ class JControllerForm extends JControllerLegacy
 				$this->holdEditId($context, $recordId);
 				$app->setUserState($context . '.data', null);
 				$model->checkout($recordId);
-        
+
 				// Redirect back to the edit screen.
 				$this->setRedirect(
 					JRoute::_(

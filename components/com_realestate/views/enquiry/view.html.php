@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HTML View class for the HelloWorld Component
  */
-class AccommodationViewEnquiry extends JViewLegacy
+class RealestateViewEnquiry extends JViewLegacy
 {
 
   // Overwriting JView display method
@@ -18,13 +18,13 @@ class AccommodationViewEnquiry extends JViewLegacy
 
     // If the enquiry data is not set just redirect to the homepage.
     // TO DO - Set it to redirect to the property page...
-    if (!$app->getUserState('com_accommodation.enquiry.data'))
+    if (!$app->getUserState('com_realestate.enquiry.data'))
     {
       $app->redirect('/');
     }
 
     // Set the default model to the listing model
-    $model = $this->setModel(JModelLegacy::getInstance('Listing', 'AccommodationModel'), true);
+    $model = $this->setModel(JModelLegacy::getInstance('Listing', 'RealestateModel'), true);
 
     if (!$this->item = $this->get('Item'))
     {
@@ -65,7 +65,7 @@ class AccommodationViewEnquiry extends JViewLegacy
    */
   protected function setDocument()
   {
-    $this->title = JText::sprintf('COM_ACCOMMODATION_ENQUIRY_SENT_TITLE', $this->item->unit_title);
+    $this->title = JText::sprintf('COM_ACCOMMODATION_ENQUIRY_SENT_TITLE', $this->item->title);
     // Set document and page titles
     $this->document->setTitle($this->title);
     $this->document->setDescription($this->title);

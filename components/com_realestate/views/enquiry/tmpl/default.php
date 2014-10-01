@@ -12,7 +12,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
   <?php echo $this->escape($this->document->title) ?>
 </h2>
 
-<?php echo JText::sprintf('COM_ACCOMMODATION_ENQUIRY_SENT_HEADER', $this->escape($this->item->unit_title)); ?>
+<?php echo JText::sprintf('COM_ACCOMMODATION_ENQUIRY_SENT_HEADER', $this->escape($this->item->title)); ?>
 
 <?php $modules = JModuleHelper::getModules('postenquiry'); //If you want to use a different position for the modules, change the name here in your override. ?>
 <div class="row-fluid">

@@ -33,7 +33,7 @@ require_once JPATH_LIBRARIES . '/cms.php';
  * @package  Joomla.Cli
  * @since    2.5
  */
-class RealestateImages extends JApplicationCli
+class RentalImages extends JApplicationCli
 {
 
   /**
@@ -46,6 +46,10 @@ class RealestateImages extends JApplicationCli
   public function doExecute()
   {
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
+
+    // The source folder for the pics 
+    //$src = '/home/adam/Pictures/_images';
+    $src = 'D:\Pics\_images';
 
     // Add and get an instance of the realestate model image thingy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
@@ -60,11 +64,8 @@ class RealestateImages extends JApplicationCli
       $baseDir[] = COM_IMAGE_BASE . $image->unit_id . '/thumbs/';
       $baseDir[] = COM_IMAGE_BASE . $image->unit_id . '/thumb/';
 
-      // The base path for the images created below
-      $filepath = COM_IMAGE_BASE . $image->unit_id;
-
-      // 
-      $image_path = $filepath . '/' . $image->image_file_name;
+      // The source path for the image being processed
+      $image_path = $src . '/' . $image->image_file_name;
 
       // Image has been uploaded, let's create some image profiles...
       try
@@ -117,4 +118,4 @@ class RealestateImages extends JApplicationCli
 
 }
 
-JApplicationCli::getInstance('RealestateImages')->execute();
+JApplicationCli::getInstance('RentalImages')->execute();

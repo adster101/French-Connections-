@@ -46,22 +46,27 @@ if (!empty($this->item->languages_spoken))
 }
 
 
-$min_prices = JHtml::_('general.price',$this->item->price, $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
+$min_prices = JHtml::_('general.price', $this->item->price, $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
 ?>
 
-<div class="container">
-  <h1 class="page-header">
+<div class="container page-header">
+  <h1>
     <?php echo $this->document->title; ?>
   </h1>
+  <h3>          
+    <?php echo JText::sprintf('COM_REALESTATE_PROPERTY_SUB_TITLE', $this->item->city_title, $this->item->department, $min_prices['GBP'], $min_prices['EUR']); ?>
+  </h3>
 </div>
-<div class="navbar-property-navigator" data-spy="affix" data-offset-top="640" >
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-10 col-md-9 col-sm-8 hidden-xs">
-        <ul class="nav nav-pills">
+<div class = "navbar-property-navigator" data-spy = "affix" data-offset-top = "640" >
+  <div class = "container">
+    <div class = "row">
+      <div class = "col-lg-10 col-md-9 col-sm-8 hidden-xs">
+        <ul class = "nav nav-pills">
           <li>
-            <a href="<?php echo $route ?>#top">
-              <span class="glyphicon glyphicon-home"> </span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TOP'); ?>
+            <a href = "<?php echo $route ?>#top">
+              <span class = "glyphicon glyphicon-home"> </span>&nbsp;
+              <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TOP');
+              ?>
             </a>
           </li>
           <li>
@@ -144,20 +149,25 @@ $min_prices = JHtml::_('general.price',$this->item->price, $this->item->base_cur
     </div>
   </div>
   <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
+    <h3><?php echo JText::_('COM_REALESTATE_PROPERTY_LOCATION'); ?></h3>
+    <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+    <p class="key text-right">
+      <span>
+        <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
+        &nbsp;&ndash;&nbsp;
+        <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
+      </span>
+    </p>
     <div class="well well-light-blue">
       <?php if ($this->item->price) : ?> 
-          <p>
-            <strong class="lead">&pound;<?php echo $min_prices['GBP'] ?></strong>
-            <?php if ($this->item->additional_price_notes) : ?>
-              <br />
-              <?php echo '&nbsp;' . htmlspecialchars($this->item->additional_price_notes); ?>
-            <?php endif; ?>
-            <br />
-            (<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)
-          </p>             
+        <p>
+          <strong class="lead">&pound;<?php echo $min_prices['GBP'] ?></strong>
+          (<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)
+        </p>             
       <?php else: ?>
         <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
       <?php endif; ?>
+
       <!-- Number of bedrooms, if any -->
       <?php if ($this->item->single_bedrooms) : ?>
         <p class="dotted">
@@ -179,14 +189,22 @@ $min_prices = JHtml::_('general.price',$this->item->price, $this->item->base_cur
           <span class="pull-right"><?php echo $this->item->bathrooms; ?></span>
         </p>
       <?php endif; ?>
-     
+      <!-- Vendor's price notes -->
+      <?php if ($this->item->additional_price_notes) : ?>
+        <p class='dotted'>
+          <?php echo JText::_('COM_REALESTATE_LISTING_ADDITIONAL_PRICE_NOTES'); ?>
+          <span class="pull-right">
+            <?php echo htmlspecialchars($this->item->additional_price_notes); ?>
+          </span>
+        </p>
+      <?php endif; ?>
+      <hr/>
       <p class="center">
-        <a class="btn btn-primary btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id); ?>#email">
+        <a class="btn btn-primary btn-lg" href="<?php echo JRoute::_('index.php?option=com_realestate&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id); ?>#email">
           <?php echo JText::_('COM_REALESTATE_LISTING_CONTACT_OWNER'); ?>  
         </a>
       </p>
     </div>  
-    <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
   </div> 
 </div>
 

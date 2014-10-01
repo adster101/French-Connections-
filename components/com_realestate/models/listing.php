@@ -60,7 +60,7 @@ class RealestateModelListing extends JModelForm
   {
 
     // Get the form.
-    $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))
     {

@@ -48,8 +48,9 @@ class RealestateImages extends JApplicationCli
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
     // The source folder for the pics 
-    $src = '/home/adam/Pictures/_images';
-
+    //$src = '/home/adam/Pictures/_images';
+    $src = 'D:\Pics\_images';
+    
     //$move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
     // Add and get an instance of the realestate model image thingy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
@@ -58,7 +59,7 @@ class RealestateImages extends JApplicationCli
     // Script to process real estate images for all properties in the #__realestate_property table
     $images = $this->_getProps();
     
-    $this->out('Got image list...' . $e->getMessage());
+    $this->out('Got image list...');
 
     foreach ($images as $image)
     {

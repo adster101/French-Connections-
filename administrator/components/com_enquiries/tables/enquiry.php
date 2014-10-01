@@ -12,17 +12,19 @@ jimport('joomla.application.component.model');
 /**
  * Hello Table class
  */
-class EnquiriesTableEnquiry extends JTable {
+class EnquiriesTableEnquiry extends JTable
+{
 
   /**
    * Constructor
    *
    * @param object Database connector object
    */
-  function __construct(&$db) {
+  function __construct(&$db)
+  {
     parent::__construct('#__enquiries', 'id', $db);
   }
- 
+
   /**
    * Method to set the publishing state for a row or list of rows in the database
    * table.  The method respects checked out rows by other users and will attempt
@@ -35,7 +37,8 @@ class EnquiriesTableEnquiry extends JTable {
    * @return	boolean	True on success.
    * @since	1.6
    */
-  public function publish($pks = null, $state = 1, $userId = 0) {
+  public function publish($pks = null, $state = 1, $userId = 0)
+  {
     $k = $this->_tbl_key;
 
     // Sanitize input.
@@ -44,12 +47,15 @@ class EnquiriesTableEnquiry extends JTable {
     $state = (int) $state;
 
     // If there are no primary keys set check to see if the instance key is set.
-    if (empty($pks)) {
-      if ($this->$k) {
+    if (empty($pks))
+    {
+      if ($this->$k)
+      {
         $pks = array($this->$k);
       }
       // Nothing to set publishing state on, return false.
-      else {
+      else
+      {
         $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
         return false;
       }
@@ -65,15 +71,19 @@ class EnquiriesTableEnquiry extends JTable {
             ' WHERE (' . $where . ')'
     );
 
-    try {
+    try
+    {
       $this->_db->execute();
-    } catch (RuntimeException $e) {
+    }
+    catch (RuntimeException $e)
+    {
       $this->setError($e->getMessage());
       return false;
     }
 
     // If the JTable instance value is in the list of primary keys that were set, set the instance.
-    if (in_array($this->$k, $pks)) {
+    if (in_array($this->$k, $pks))
+    {
       $this->state = $state;
     }
 
@@ -81,15 +91,39 @@ class EnquiriesTableEnquiry extends JTable {
     return true;
   }
 
-  public function check() {
+  public function check()
+  {
 
-    if (isset($this->start_date) && isset($this->end_date)) {
+    if (!empty($this->start_date))
+    {
+      // Convert the start date to the correct format. Should be done prior to here.
       $this->start_date = JFactory::getDate($this->start_date)->calendar('Y-m-d');
-      $this->end_date = JFactory::getDate($this->end_date)->calendar('Y-m-d');
-      return true;
+
+      $date_parts = explode('-',$this->start_date);
+
+      // Valid date format, so check if valid date
+      if (!checkdate($date_parts[1], $date_parts[2], $date_parts[0]))
+      {
+        return false;
+      }
     }
 
-    return false;
+    if (!empty($this->end_date))
+    {
+      // Convert the end date to the correct format. Should be done prior to here.
+      $this->end_date = JFactory::getDate($this->end_date)->calendar('Y-m-d');
+
+      // Explode date and check its a valid date
+      $date_parts = explode('-',$this->end_date);
+      
+      // Valid date format, so check if valid date
+      if (!checkdate($date_parts[1], $date_parts[2], $date_parts[0]))
+      {
+        return false;
+      }
+    }
+
+    return true;
   }
 
 }
