@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 JLoader::import('frenchconnections.library');
 
 // Register the JHtmlProperty class
-JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
+//JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
 
 $controller = JControllerLegacy::getInstance('Realestate');
 $controller->execute(JFactory::getApplication()->input->get('task'));

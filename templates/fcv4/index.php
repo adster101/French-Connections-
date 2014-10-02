@@ -124,15 +124,17 @@ else
               <jdoc:include type="modules" name="position-15" style="none" />
             </div>
           </div>
-          <hr />
-
+          <div class="row">
+            <div class="col-lg-12">
+              <jdoc:include type="modules" name="position-10" style="html5" />
+            </div>
+          </div>
         </div>
         <div class="col-lg-3 col-md-5">
           <jdoc:include type="modules" name="position-13" style="none" />
         </div>       
       </div>
     </div>
-
   <?php endif; ?>
   <footer>
     <div class="container">

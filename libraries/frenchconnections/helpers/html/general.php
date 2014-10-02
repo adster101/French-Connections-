@@ -90,7 +90,6 @@ class JHtmlGeneral {
     }
 
 
-
     // And convert the price to the pound equivalent
 
     return $prices;

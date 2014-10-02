@@ -15349,9 +15349,12 @@ function getPath(event) {
   if (chosen === '') {
     jQuery(".typeahead").attr('value', 'france');
   }
-
+  
+  // get the current pathway as an array
+  var pathArray = window.location.pathname.split( '/' );
+  
   // The path of the search, e.g. /search or /fr/search
-  var path = '/accommodation';
+  var path = '/' + pathArray[1];
 
   // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
   var inputs = jQuery('#property-search').find(':input');
@@ -15368,30 +15371,24 @@ function getPath(event) {
 
   path = path + '/' + stripVowelAccent(s_kwds);
 
-  // get the current pathway as an array
-  var pathArray = window.location.pathname.split( '/' );
+
   
   // Loop over the path aray 
   for (i = 0; i < pathArray.length; i++) {
     
     if (pathArray[i].indexOf('property_') >= 0) {
-      console.log(pathArray[i]);
       path = path + '/' + [pathArray[i]];
     }
     if (pathArray[i].indexOf('accommodation_') >= 0) {
-      console.log(pathArray[i]);
       path = path + '/' + [pathArray[i]];
     }
     if (pathArray[i].indexOf('external') >= 0) {
-      console.log(pathArray[i]);
       path = path + '/' + [pathArray[i]];
     }
     if (pathArray[i].indexOf('internal_') >= 0) {
-      console.log(pathArray[i]);
       path = path + '/' + [pathArray[i]];
     }
     if (pathArray[i].indexOf('suitability_') >= 0) {
-      console.log(pathArray[i]);
       path = path + '/' + [pathArray[i]];
     }
     
@@ -15432,11 +15429,8 @@ function getPath(event) {
   if (offers === 'true') {
     path = path + '?offers=true';
   }
-
-
+  
   return path;
-
-
 }
 
 function initmap() {

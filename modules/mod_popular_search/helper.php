@@ -16,23 +16,16 @@ defined('_JEXEC') or die;
  * @subpackage  mod_search
  * @since       1.5
  */
-class modFcSearchHelper {
+class modFcSearchHelper
+{
   /*
    * Get the list of regions alias so we can plug those into the search map - language aware!
    *
    * @return aww
    */
 
-
-
-  /*
-   * Get the list of regions alias so we can plug those into the search map - language aware!
-   *
-   * @return aww
-   */
-
-  public static function getPopularSearches($level = '') {
-
+  public static function getPopularSearches($level = '')
+  {
 
     $lang = JFactory::getLanguage()->getTag();
 
@@ -42,28 +35,35 @@ class modFcSearchHelper {
     $query = $db->getQuery(true);
 
     $query->select('count(*) as count, c.title, c.alias');
-    $query->from($db->quoteName('#__search_log') . ' as a');    
+    $query->from($db->quoteName('#__search_log') . ' as a');
 
-    if ($lang == 'fr-FR') {
-      $query->join('left',$db->quoteName('#__classifications_translations') . ' on c.id = a.location_id');
-    } else {
-      $query->join('left',$db->quoteName('#__classifications') . ' as c on c.id = a.location_id');
+    if ($lang == 'fr-FR')
+    {
+      $query->join('left', $db->quoteName('#__classifications_translations') . ' on c.id = a.location_id');
     }
-    
-    if (!empty($level)) {
+    else
+    {
+      $query->join('left', $db->quoteName('#__classifications') . ' as c on c.id = a.location_id');
+    }
+
+    if (!empty($level))
+    {
       $query->where('c.level = ' . (int) $level);
     }
-    
+
     $query->where('c.title is not null');
-    
+
     $query->group('a.location_id');
     $query->order('count desc');
-    
-    $db->setQuery($query, 0,8);
 
-    try {
+    $db->setQuery($query, 0, 8);
+
+    try
+    {
       $searches = $db->loadObjectList();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       // Log any exception
     }
     return $searches;

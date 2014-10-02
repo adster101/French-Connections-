@@ -6,7 +6,7 @@ $language = JFactory::getLanguage();
 $lang = $language->getTag();
 $app = JFactory::getApplication();
 
-$Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_realestate'));
+$Itemid = SearchHelper::getItemid(array('component', 'com_realestate'));
 
 $this->item->itemid = $Itemid;
 

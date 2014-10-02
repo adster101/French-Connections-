@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension 
+  type="module" 
+  version="3.1" 
+  method="upgrade" 
+  client="site">
+  <name>mod_featuredrealestateproperty</name>
+  <!-- The following elements are optional and free of formatting constraints -->
+  <creationDate>23 May 2012</creationDate>
+  <author>Adam Rifat</author>
+  <authorEmail>adamrifat@frenchconnections.co.uk</authorEmail>
+  <authorUrl>http://www.frenchconnections.co.uk</authorUrl>
+  <copyright>Copyright Info</copyright>
+  <license>License Info</license>
+  <!--  The version string is stored in the extension table -->
+  <version>3.0.0</version>
+  <!-- The description is optional and defaults to the name -->
+  <description>Shows a list of featured properties.</description>
+
+  <!-- Note the folder attribute: This attribute describes what to copy into the module folder -->
+  <files>
+    <filename module="mod_featuredproperty">mod_featuredproperty.php</filename>
+    <filename>mod_featuredproperty.xml</filename>
+    <folder>tmpl</folder>
+  </files>
+  <languages>
+    <language tag="en-GB">en-GB.mod_featuredrealestateproperty.ini</language>
+    <language tag="en-GB">en-GB.mod_featuredrealestateproperty.sys.ini</language>
+  </languages>
+  <config>
+    <fields name="params">
+      <fieldset
+        name="basic">
+        <field
+          name="type"
+          type="category"
+          extension="com_featuredproperties"
+          label="Featured on"
+        />
+        <field 
+          type="integer"
+          first="1"
+          last="25"
+          step="1"
+          label="Count"
+          name="count"
+        />
+        <field 
+          type="list"
+          name="format"
+          label="Display format">
+          <option 
+            value="horizontal">Horizontal</option>
+          <option 
+            value="vertical">Vertical</option>
+        </field>
+        <field 
+          type="list"
+          name="offers"
+          label="With offer"
+          description="Show properties with a current special offer"
+          default="0">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </field>
+        <field 
+          type="list"
+          name="related"
+          label="Related"
+          description="Show related props for post enquiry page"
+          default="0">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </field>     
+      </fieldset>
+      <fieldset name="advanced">
+        <field
+          name="layout"
+          type="modulelayout"
+          label="JFIELD_ALT_LAYOUT_LABEL"
+          description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+        <field
+          name="moduleclass_sfx"
+          type="textarea" rows="3"
+          label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+          description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+        <field
+          name="cache"
+          type="list"
+          default="1"
+          label="COM_MODULES_FIELD_CACHING_LABEL"
+          description="COM_MODULES_FIELD_CACHING_DESC">
+          <option
+            value="1">JGLOBAL_USE_GLOBAL</option>
+          <option
+            value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+        </field>
+        <field
+          name="cache_time"
+          type="text"
+          default="900"
+          label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+          description="COM_MODULES_FIELD_CACHE_TIME_DESC" />
+        <field
+          name="cachemode"
+          type="list"
+          default="static">
+          <option
+            value="static">
+          </option>
+          <option
+            value="id">
+          </option>
+        </field>
+      </fieldset>
+    </fields> 
+  </config>
+</extension>

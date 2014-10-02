@@ -20,5 +20,4 @@ class RealestateController extends JControllerLegacy {
 
     return $this;
   }
-
 }
