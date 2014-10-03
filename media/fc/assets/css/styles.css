@@ -6707,7 +6707,7 @@ Contains styles that apply at the global level, or can be applied to any section
   background: #eaf3fe;
 }
 .view-search .search-result {
-  padding: 20px 0;
+  padding: 10px 10px;
   border-top: 1px solid #d2e5fd;
 }
 .view-search .search-result .rates > .lead {

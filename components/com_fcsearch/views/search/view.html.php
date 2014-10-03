@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class FcSearchViewSearch extends JViewLegacy {
+class FcSearchViewSearch extends JViewLegacy
+{
 
   protected $query;
   protected $params;
@@ -32,15 +33,18 @@ class FcSearchViewSearch extends JViewLegacy {
    * 
    * @return void
    */
-  private function addHeadLinks($pages, $document) {
+  private function addHeadLinks($pages, $document)
+  {
 
     // If we have next links then add a rel=next head link
-    if ($pages->next->link) {
+    if ($pages->next->link)
+    {
       $document->addHeadLink($pages->next->link, 'next', 'rel');
     }
 
     // If we have next links then add a rel=prev head link
-    if ($pages->previous->link) {
+    if ($pages->previous->link)
+    {
       $document->addHeadLink($pages->previous->link, 'prev', 'rel');
     }
   }
@@ -54,7 +58,8 @@ class FcSearchViewSearch extends JViewLegacy {
    *
    * @since   2.5
    */
-  public function display($tpl = null) {
+  public function display($tpl = null)
+  {
 
     // Get the app instance
     $app = JFactory::getApplication();
@@ -64,13 +69,16 @@ class FcSearchViewSearch extends JViewLegacy {
     $this->state = $this->get('State');
     $this->localinfo = $this->get('LocalInfo');
 
-    if ($this->localinfo === false) {
+    if ($this->localinfo === false)
+    {
 
       $this->results = false;
       $this->total = 0;
       $this->document->setMetaData('robots', 'noindex, nofollow');
       $this->pagination = '';
-    } else {
+    }
+    else
+    {
 
       $this->results = $this->get('Results');
 
@@ -92,7 +100,8 @@ class FcSearchViewSearch extends JViewLegacy {
       $app->setUserState('user.search', $search_url);
 
       // Configure the pathway.
-      if (!empty($this->crumbs)) {
+      if (!empty($this->crumbs))
+      {
         $app->getPathWay()->setPathway($this->crumbs);
       }
     }
@@ -103,7 +112,8 @@ class FcSearchViewSearch extends JViewLegacy {
     JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseError(500, implode("\n", $errors));
       return false;
     }
@@ -119,7 +129,8 @@ class FcSearchViewSearch extends JViewLegacy {
     // Check for layout override only if this is not the active menu item
     // If it is the active menu item, then the view and category id will match
     $active = $app->getMenu()->getActive();
-    if (isset($active->query['layout'])) {
+    if (isset($active->query['layout']))
+    {
       // We need to set the layout in case this is an alternative menu item (with an alternative layout)
       $this->setLayout($active->query['layout']);
     }
@@ -138,7 +149,8 @@ class FcSearchViewSearch extends JViewLegacy {
    *
    * @since   2.5
    */
-  protected function getFilters() {
+  protected function getFilters()
+  {
     $filter_str = array();
 
     // Get the input...
@@ -149,12 +161,15 @@ class FcSearchViewSearch extends JViewLegacy {
     $filters = array('property', 'external', 'accommodation', 'internal', 'activities', 'kitchen');
 
     // Create hidden input elements for each part of the URI.
-    foreach ($filters as $filter) {
+    foreach ($filters as $filter)
+    {
 
       $filter_test = $app->input->get($filter, array(), 'array');
 
-      if (is_array($filter_test)) {
-        foreach ($filter_test as $key => $value) {
+      if (is_array($filter_test))
+      {
+        foreach ($filter_test as $key => $value)
+        {
 
           $filter_str[] = $value;
         }
@@ -175,14 +190,16 @@ class FcSearchViewSearch extends JViewLegacy {
    *
    * @since   2.5
    */
-  protected function prepareDocument() {
+  protected function prepareDocument()
+  {
 
     $document = JFactory::getDocument();
     $app = JFactory::getApplication();
     $input = $app->input;
 
     // Get the pagination object 
-    if ($this->pagination) {
+    if ($this->pagination)
+    {
       $pages = $this->pagination->getData();
     }
 
@@ -226,18 +243,21 @@ class FcSearchViewSearch extends JViewLegacy {
    *
    * @return	array	An array of JHtmlOption elements.
    */
-  protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_') {
+  protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_')
+  {
     // Build the filter options.
     $options = array();
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
 
-    for ($i = 50; $i < 250; $i = $i + 50) {
+    for ($i = 50; $i < 250; $i = $i + 50)
+    {
       $options[] = JHtml::_('select.option', $budget . $i, $i);
     }
 
 
-    for ($i = $start; $i < $end; $i = $i + $step) {
+    for ($i = $start; $i < $end; $i = $i + $step)
+    {
       $options[] = JHtml::_('select.option', $budget . $i, $i);
     }
 
@@ -249,7 +269,8 @@ class FcSearchViewSearch extends JViewLegacy {
    *
    * @return	array	An array of JHtmlOption elements.
    */
-  protected function getSortFields() {
+  protected function getSortFields()
+  {
     // Build the filter options.
     $options = array();
 
@@ -272,36 +293,44 @@ class FcSearchViewSearch extends JViewLegacy {
    * 
    * @return type string
    */
-  private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '') {
-
+  private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '')
+  {
+    $inflector = JStringInflector::getInstance();
+    $inflector->addWord('Chateau', 'Chateaux ');
     $accommodation_type = '';
     $property_type = '';
     $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location), ucwords($location));
 
     // Work out the property type we have
     // TO DO - extend this to add a canonical tag if multiple property types are selected.
-    if (!empty($property_types)) {
+    if (!empty($property_types))
+    {
       $property_parts = explode('_', $property_types[0]);
       $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
     }
 
     // Work out the accommodation type we have
     // TO DO - extend this to add a canonical tag if both accommodation type are selected.
-    if (!empty($accommodation_types)) {
+    if (!empty($accommodation_types))
+    {
       $accommodation_parts = explode('_', $accommodation_types[0]);
       $accommodation_type = JStringNormalise::toSpaceSeparated($accommodation_parts[1]);
     }
 
     // Work out the meta title pattern to use
-    if ($property_type && $accommodation_type) {
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_TITLE', ucwords($accommodation_type), ucwords($property_type), ucwords($location));
-    } elseif ($accommodation_type) {
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($accommodation_type), ucwords($location), ucwords($location), ucfirst($accommodation_type));
-    } elseif ($property_type) {
-      $inflector = JStringInflector::getInstance();
-      $inflector->addWord('Chateau', 'Chateaux ');
+    if ($property_type && $accommodation_type)
+    {
       $plural_property_type = $inflector->toPlural($property_type);
-      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location), ucwords($location), ucfirst($plural_property_type));
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_TITLE', ucwords($accommodation_type), ucwords($plural_property_type), ucwords($location));
+    }
+    elseif ($accommodation_type)
+    {
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($accommodation_type), ucwords($location), ucfirst($accommodation_type));
+    }
+    elseif ($property_type)
+    {
+      $plural_property_type = $inflector->toPlural($property_type);
+      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location), ucfirst($plural_property_type));
     }
 
     // Amend the title based on bedroom and occupancy filter
