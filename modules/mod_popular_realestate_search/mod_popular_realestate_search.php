@@ -12,17 +12,14 @@ defined('_JEXEC') or die;
 // Include the syndicate functions only once
 require_once __DIR__ . '/helper.php';
 
-
-$lang = JFactory::getLanguage();
-
-$lang->load('com_fcsearch', JPATH_SITE, null, false, true);
+JLoader::import('frenchconnections.library');
 
 $app  = JFactory::getApplication();
 
 $regions = &modPopularSearchHelper::getPopularSearches(3);
 $popular = &modPopularSearchHelper::getPopularSearches();
 
-require JModuleHelper::getLayoutPath('mod_popular_search', $params->get('layout', 'default'));
+require JModuleHelper::getLayoutPath('mod_popular_realestate_search', $params->get('layout', 'default'));
 
 $document = JFactory::getDocument();
 

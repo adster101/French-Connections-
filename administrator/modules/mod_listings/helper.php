@@ -154,7 +154,7 @@ abstract class ModListingHelper
     return $properties;
   }
 
-  public static function getRealestatePropertyList(array $properties)
+  public static function getRealestatePropertyList($properties = array())
   {
 
     foreach ($properties as $property)

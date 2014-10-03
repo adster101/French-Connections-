@@ -30,12 +30,15 @@ class modFeaturedRealestatePropertyHelper
     $query->select('
       a.id,
       b.title,
+      (b.single_bedrooms + b.double_bedrooms) as bedrooms,
       left(b.description,150) as description,
       i.image_file_name as thumbnail,
-      g.title,
+      g.title as location,
       g.alias,
       b.base_currency,
-      (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
+      b.price,
+      b.description,
+      b.bathrooms
     ');
 
     $query->from('#__realestate_property as a');

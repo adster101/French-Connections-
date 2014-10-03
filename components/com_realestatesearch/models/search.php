@@ -89,15 +89,13 @@ class RealestateSearchModelSearch extends JModelList
 
     $query = $db->getQuery(true);
 
-    $query->insert('#__search_log');
-    $query->columns('location_id, bedrooms, occupancy, date_created');
+    $query->insert('#__realestate_search_log');
+    $query->columns('location_id, date_created');
 
     $location_id = $this->getState('search.location', '');
-    $bedrooms = $this->getState('search.bedrooms', '');
-    $occupancy = $this->getState('search.occupancy', '');
     $date = JFactory::getDate()->calendar('Y-m-d');
 
-    $query->values((int) $location_id . ',' . (int) $bedrooms . ',' . (int) $occupancy . ',' . $db->quote($date));
+    $query->values((int) $location_id . ',' . $db->quote($date));
 
     $db->setQuery($query);
 
@@ -264,7 +262,6 @@ class RealestateSearchModelSearch extends JModelList
         a.id as property_id,
         b.*,
         j.title as location_title,
-        f.title as department,
         e.image_file_name as thumbnail
 
       ');

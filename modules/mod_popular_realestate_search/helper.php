@@ -35,7 +35,7 @@ class modPopularSearchHelper
     $query = $db->getQuery(true);
 
     $query->select('count(*) as count, c.title, c.alias');
-    $query->from($db->quoteName('#__search_log') . ' as a');
+    $query->from($db->quoteName('#__realestate_search_log') . ' as a');
 
     if ($lang == 'fr-FR')
     {
