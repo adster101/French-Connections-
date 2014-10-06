@@ -90,7 +90,7 @@ class RealestateControllerListing extends JControllerForm {
     $id = $this->input->get('id', '', 'int');
 
     // Get the itemID of the accommodation component. 
-    $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_realestate'));
+    $Itemid = SearchHelper::getItemid(array('component', 'com_realestate'));
 		$context = "$this->option.enquiry.data";
 
     // Get the data from POST

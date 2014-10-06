@@ -17,6 +17,7 @@ $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 $uri = JUri::getInstance()->toString();
 $link = 'index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id;
+$min_prices = JHtml::_('general.price', $this->item->price, $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
 
 if ((int) $preview && $preview == 1)
 {
@@ -46,7 +47,6 @@ if (!empty($this->item->languages_spoken))
 }
 
 
-$min_prices = JHtml::_('general.price', $this->item->price, $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
 ?>
 
 <div class="container page-header">
@@ -194,7 +194,7 @@ $min_prices = JHtml::_('general.price', $this->item->price, $this->item->base_cu
         <p class='dotted'>
           <?php echo JText::_('COM_REALESTATE_LISTING_ADDITIONAL_PRICE_NOTES'); ?>
           <span class="pull-right">
-            <?php echo htmlspecialchars($this->item->additional_price_notes); ?>
+            <?php echo JText::_($this->item->additional_price_notes); ?>
           </span>
         </p>
       <?php endif; ?>

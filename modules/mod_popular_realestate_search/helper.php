@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  mod_search
  * @since       1.5
  */
-class modPopularSearchHelper
+class modPopularRealestateSearchHelper
 {
   /*
    * Get the list of regions alias so we can plug those into the search map - language aware!

@@ -13,7 +13,6 @@ $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 $Itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
 ?>
-<hr />
 <div class='row'>
   <div class="col-lg-6 col-md-6 col-sm-6">
     <h3>
@@ -40,7 +39,6 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
       </p>
     <?php endforeach; ?>
   </div>
-
 </div>
 
 

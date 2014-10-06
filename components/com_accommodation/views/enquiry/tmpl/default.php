@@ -26,20 +26,24 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
           $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id);
           ?>
           <?php if ($item->title) : ?>     
-            <div class="clearfix">
-              <p>
-                <a href="<?php echo $route ?>">
-                  <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="thumbnail img-rounded pull-left" />
-                </a>
-                <a href="<?php echo $route ?>">
-                  <strong><?php echo $this->escape($item->title); ?></strong> 
-                </a> | 
-                <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_UNIT_OCCUPANCY_BEDROOMS', $item->occupancy, $item->bedrooms); ?>
-                <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
-                <?php endif; ?>
-              </p>
-            <?php endif; ?>
-          </div> 
+            <div class="media">
+              <a class="pull-left" href="<?php echo $route ?>">
+                <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' />
+              </a>
+              <div class="media-body">
+                <h4>
+                  <a href="<?php echo $route ?>">
+                    <strong><?php echo $this->escape($item->title); ?></strong> 
+                  </a> 
+                </h4>
+                <p>
+                  <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_UNIT_OCCUPANCY_BEDROOMS', $item->occupancy, $item->bedrooms); ?>
+                  <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
+                  <?php endif; ?>
+                </p>     
+              </div> 
+            </div>
+          <?php endif; ?>
         <?php endforeach; ?>
       </div>    
     </div>

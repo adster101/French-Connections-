@@ -82,11 +82,13 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
               <td>
                 <?php if (!empty($item->message)) : ?>
                   <?php echo JHtml::_('string.truncate', $item->message, 175, true, false); ?>
-                <?php endif; ?>                  
-                <p class="small">
-                  (<?php echo JText::sprintf('COM_ENQUIRIES_FROM', $item->start_date); ?>
-                  <?php echo JText::sprintf('COM_ENQUIRIES_TO', $item->end_date); ?>)
-                </p>
+                <?php endif; ?>                
+                <?php if (!empty($item->start_date) && !empty($item->end_date)) : ?>
+                  <p class="small">
+                    (<?php echo JText::sprintf('COM_ENQUIRIES_FROM', $item->start_date); ?>
+                    <?php echo JText::sprintf('COM_ENQUIRIES_TO', $item->end_date); ?>)
+                  </p>
+                <?php endif; ?>                
 
               </td>
               <td>
@@ -98,8 +100,7 @@ $canEdit = $user->authorise('core.edit', 'com_enquiries');
                 <?php endif; ?>
               </td>
               <td>
-                <?php echo $this->escape($item->unit_title); ?>
-                (<?php echo (int) $item->property_id; ?>)
+                <?php echo (int) $item->property_id; ?>
               </td>
 
             </tr>

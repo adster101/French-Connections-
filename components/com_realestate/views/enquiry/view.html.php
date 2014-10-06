@@ -28,7 +28,7 @@ class RealestateViewEnquiry extends JViewLegacy
 
     if (!$this->item = $this->get('Item'))
     {
-      throw new Exception(JText::_('WOOT'), 410);
+      throw new Exception(JText::_('There has been an error, please try again...'), 500);
     }
 
     // Get the location breadcrumb trail

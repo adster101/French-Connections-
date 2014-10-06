@@ -16,8 +16,8 @@ JLoader::import('frenchconnections.library');
 
 $app  = JFactory::getApplication();
 
-$regions = &modPopularSearchHelper::getPopularSearches(3);
-$popular = &modPopularSearchHelper::getPopularSearches();
+$regions = &modPopularRealestateSearchHelper::getPopularSearches(3);
+$popular = &modPopularRealestateSearchHelper::getPopularSearches();
 
 require JModuleHelper::getLayoutPath('mod_popular_realestate_search', $params->get('layout', 'default'));
 

@@ -86,7 +86,7 @@ class RealestateSearchViewSearch extends JViewLegacy
 
       // Has to be done after getState, as with all really.
       $this->location_options = $this->get('RefineLocationOptions');
-      
+
       // Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');
 
@@ -119,9 +119,7 @@ class RealestateSearchViewSearch extends JViewLegacy
     $this->sidebar = JHtmlSidebar::render();
 
     // Log the search
-    JSearchHelper::logSearch('Log some useful search information...', 'com_fcsearch');
-
-
+    JSearchHelper::logSearch('Log some useful search information...', 'com_realestatesearch');
 
     // Check for layout override only if this is not the active menu item
     // If it is the active menu item, then the view and category id will match
@@ -198,6 +196,9 @@ class RealestateSearchViewSearch extends JViewLegacy
     if ($this->pagination)
     {
       $pages = $this->pagination->getData();
+    
+      // Add next and prev links to head
+      $this->addHeadLinks($pages, $document);
     }
 
     $property_type = $input->get('property', array(), 'array');
@@ -205,9 +206,6 @@ class RealestateSearchViewSearch extends JViewLegacy
 
     $bedrooms = $this->state->get('list.bedrooms');
     $occupancy = $this->state->get('list.occupancy');
-
-    // Add next and prev links to head
-    $this->addHeadLinks($pages, $document);
 
     // Location title - e.g. the location being searched on
     $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
@@ -247,12 +245,6 @@ class RealestateSearchViewSearch extends JViewLegacy
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
 
-    for ($i = 50; $i < 250; $i = $i + 50)
-    {
-      $options[] = JHtml::_('select.option', $budget . $i, $i);
-    }
-
-
     for ($i = $start; $i < $end; $i = $i + $step)
     {
       $options[] = JHtml::_('select.option', $budget . $i, $i);
@@ -274,8 +266,6 @@ class RealestateSearchViewSearch extends JViewLegacy
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_PLEASE_CHOOSE'));
     $options[] = JHtml::_('select.option', 'order_price_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_PRICE_ASC'));
     $options[] = JHtml::_('select.option', 'order_price_DESC', JText::_('COM_FCSEARCH_SEARCH_ORDER_PRICE_DESC'));
-    $options[] = JHtml::_('select.option', 'order_occupancy_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_OCCUPANCY'));
-    $options[] = JHtml::_('select.option', 'order_reviews_desc', JText::_('COM_FCSEARCH_SEARCH_ORDER_REVIEWS'));
     return $options;
   }
 
@@ -293,42 +283,8 @@ class RealestateSearchViewSearch extends JViewLegacy
   private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '')
   {
 
-    $accommodation_type = '';
-    $property_type = '';
-    $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location), ucwords($location));
+    $title = JText::sprintf('COM_REALESTATE_SEARCH_TITLE', ucwords($location));
 
-    // Work out the property type we have
-    // TO DO - extend this to add a canonical tag if multiple property types are selected.
-    if (!empty($property_types))
-    {
-      $property_parts = explode('_', $property_types[0]);
-      $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
-    }
-
-    // Work out the accommodation type we have
-    // TO DO - extend this to add a canonical tag if both accommodation type are selected.
-    if (!empty($accommodation_types))
-    {
-      $accommodation_parts = explode('_', $accommodation_types[0]);
-      $accommodation_type = JStringNormalise::toSpaceSeparated($accommodation_parts[1]);
-    }
-
-    // Work out the meta title pattern to use
-    if ($property_type && $accommodation_type)
-    {
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_TITLE', ucwords($accommodation_type), ucwords($property_type), ucwords($location));
-    }
-    elseif ($accommodation_type)
-    {
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($accommodation_type), ucwords($location), ucwords($location), ucfirst($accommodation_type));
-    }
-    elseif ($property_type)
-    {
-      $inflector = JStringInflector::getInstance();
-      $inflector->addWord('Chateau', 'Chateaux ');
-      $plural_property_type = $inflector->toPlural($property_type);
-      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location), ucwords($location), ucfirst($plural_property_type));
-    }
 
     // Amend the title based on bedroom and occupancy filter
     $title .= ($bedrooms) ? ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : '';

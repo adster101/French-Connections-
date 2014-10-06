@@ -122,18 +122,14 @@ class EnquiriesModelEnquiries extends JModelList
       e.adults,
       e.children,
       e.replied,
-      e.date_replied,
-      u.unit_title
+      e.date_replied
     ');
 
     // From the hello table
     $query->from('#__enquiries e');
+    
     // Join on p.id so we can get the enqs for property owned by current user
     $query->leftJoin('#__property p on p.id = e.property_id');
-
-    // Joing on unit versions to get the unit title    
-    $query->leftJoin('#__unit_versions u on u.unit_id = e.unit_id');
-    $query->where('u.review = 0');
 
     // Filter by published state
     $state = $this->getState('filter.state');

@@ -17,8 +17,9 @@ $items = $menu->getItems('component', 'com_fcsearch');
 $Itemid = is_array($items) ? $items[0]->id : array();
 $isListing = ($active->component == 'com_accommodation') ? true : false;
 $isShortlist = ($active->component == 'com_shortlist') ? true : false;
+$isRealestate = ($active->component == 'com_realestate') ? true : false;
 ?>
-<?php if (!empty($search_url) && ($isListing || $isShortlist)) : ?>
+<?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate)) : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
     <p>
       <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    

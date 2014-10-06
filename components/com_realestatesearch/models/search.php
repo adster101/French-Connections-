@@ -61,11 +61,16 @@ class RealestateSearchModelSearch extends JModelList
    */
   public $data = '';
 
-
+  /*
+   * The Item ID of the menu item
+   */
+  public $itemid = '';
+  
   /*
    * Description, the description of the locality being searched on.
    */
   public $description = '';
+  
   public $currencies = '';
 
   public function __construct($config = array())
@@ -261,6 +266,7 @@ class RealestateSearchModelSearch extends JModelList
       $query->select('
         a.id as property_id,
         b.*,
+        (b.double_bedrooms + b.single_bedrooms) as bedrooms,
         j.title as location_title,
         e.image_file_name as thumbnail
 
@@ -616,52 +622,37 @@ class RealestateSearchModelSearch extends JModelList
     $query = $db->getQuery(true);
 
     $query->select('e.title, count(e.id) as count');
-    $query->from('#__property a');
-    $query->leftJoin('#__unit b on b.property_id = a.id');
-    $query->leftJoin('#__property_versions c on c.property_id = a.id');
-
-    $query->leftJoin('#__unit_versions d on d.unit_id = b.id');
+    $query->from('#__realestate_property a');
+    $query->leftJoin('#__realestate_property_versions b on b.realestate_property_id = A.id');
 
     if ($this->getState('search.level') == 1)
     { // Country level
-      $query->join('left', '#__classifications e on e.id = c.area');
-      $query->group('c.area');
-      $query->where('c.country = ' . (int) $this->getState('search.location'));
+      $query->join('left', '#__classifications e on e.id = b.area');
+      $query->group('b.area');
+      $query->where('b.country = ' . (int) $this->getState('search.location'));
     }
     elseif ($this->getState('search.level') == 2)
     { // Area level
-      $query->join('left', '#__classifications e on e.id = c.region');
-      $query->group('c.region');
-      $query->where('c.area = ' . (int) $this->getState('search.location'));
+      $query->join('left', '#__classifications e on e.id = b.region');
+      $query->group('b.region');
+      $query->where('b.area = ' . (int) $this->getState('search.location'));
     }
     elseif ($this->getState('search.level') == 3)
     { // Region level
-      $query->join('left', '#__classifications e on e.id = c.department');
-      $query->group('c.department');
-      $query->where('c.region = ' . (int) $this->getState('search.location'));
+      $query->join('left', '#__classifications e on e.id = b.department');
+      $query->group('b.department');
+      $query->where('b.region = ' . (int) $this->getState('search.location'));
     }
     elseif ($this->getState('search.level') == 4)
     { // Department level
-      $query->join('left', '#__classifications e on e.id = c.city');
-      $query->group('c.city');
-      $query->where('c.department = ' . (int) $this->getState('search.location'));
+      $query->join('left', '#__classifications e on e.id = b.city');
+      $query->group('b.city');
+      $query->where('b.department = ' . (int) $this->getState('search.location'));
     }
     elseif ($this->getState('search.level') == 5)
     { // City level
-      $query->join('left', '#__classifications e on e.id = c.city');
-      $query->group('c.city');
-    }
-
-    /*
-     * This section deals with the filtering options.
-     * Filters are applied via functions as they are reused in the getPropertyType filter methods
-     */
-    if ($this->getState('list.arrival') || $this->getState('list.departure'))
-    {
-
-      $arrival = $this->getState('list.arrival', '');
-      $departure = $this->getState('list.departure', '');
-      $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
+      $query->join('left', '#__classifications e on e.id = b.city');
+      $query->group('b.city');
     }
 
     if ($this->getState('list.bedrooms'))
@@ -669,13 +660,6 @@ class RealestateSearchModelSearch extends JModelList
       $bedrooms = $this->getState('list.bedrooms', '');
       $query = $this->getFilterBedrooms($query, $bedrooms, $db);
     }
-
-    if ($this->getState('list.occupancy'))
-    {
-      $occupancy = $this->getState('list.occupancy', '');
-      $query = $this->getFilterOccupancy($query, $occupancy, $db);
-    }
-
     // Sort out the budget requirements
     if ($this->getState('list.min_price') || $this->getState('list.max_price'))
     {
@@ -684,35 +668,14 @@ class RealestateSearchModelSearch extends JModelList
       $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
     }
 
-    if ($this->getState('list.property_type'))
-    {
-      $property_type = $this->getState('list.property_type');
-      $query = $this->getFilterPropertyType($query, $property_type, $db);
-    }
-
-    if ($this->getState('list.offers', ''))
-    {
-      $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
-    }
-
-    // Apply the rest of the filter, if there are any
-    //$query = $this->getFilterState('property_type', $query);
-    //$query = $this->getFilterState('accommodation_type', $query);
-    //$query = $this->getFilterState('kitchen', $query);
-    $query = $this->getFilterState('activities', $query, '#__property_attributes');
-    $query = $this->getFilterState('suitability', $query);
-    $query = $this->getFilterState('external_facilities', $query);
-    $query = $this->getFilterState('property_facilities', $query);
     // Make sure we only get live properties...
     $query->where('a.expiry_date >= ' . $db->quote($this->date));
-    $query->where('b.published = 1');
-    $query->where('c.review = 0');
-    $query->where('d.review = 0');
-    $query->where('d.unit_id is not null');
+    $query->where('a.published = 1');
+    $query->where('b.review = 0');
 
     if ($this->getState('search.level') == 5)
     { // City level
-      $query->where('c.city = ' . (int) $this->getState('search.location', ''));
+      $query->where('b.city = ' . (int) $this->getState('search.location', ''));
     }
 
     // Get the options.
@@ -725,7 +688,7 @@ class RealestateSearchModelSearch extends JModelList
     catch (Exception $e)
     {
       // TO DO Log this.
-      return flase;
+      return false;
     }
 
     return $locations;
@@ -1367,13 +1330,13 @@ class RealestateSearchModelSearch extends JModelList
     if ($min_price)
     {
 
-      $query = $query->where('from_price >= ' . (int) $min_price);
+      $query = $query->where('price >= ' . (int) $min_price);
     }
 
     if ($max_price)
     {
 
-      $query = $query->where('from_price <= ' . (int) $max_price);
+      $query = $query->where('price <= ' . (int) $max_price);
     }
 
     return $query;
@@ -1572,7 +1535,7 @@ class RealestateSearchModelSearch extends JModelList
     {
       if ($v->parent_id)
       {
-        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=' . (int) $this->itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->link = 'index.php?option=com_realestatesearch&Itemid=' . (int) $this->itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
         $pathArr->$k->name = $v->title;
       }
     }

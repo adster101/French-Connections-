@@ -91,6 +91,15 @@
       description="COM_ENQUIRIES_CONFIG_FIELD_HOLIDAY_MAKER_ENQUIRY_EMAIL_DESC"
     />
     <field 
+      name="buyer_realestate_email_enquiry_template"
+      type="textarea"
+      filter="safehtml"
+      cols="10"
+      rows="10"
+      label="COM_ENQUIRIES_FIELD_CONFIG_BUYER_REALESTATE_ENQUIRY_EMAIL_LABEL"
+      description="COM_ENQUIRIES_CONFIG_FIELD_BUYER_REALESTATE_ENQUIRY_EMAIL_DESC"
+    />
+    <field 
       name="car_hire_affiliate"
       type="menuitem"
       label="Car hire affiliate page"
@@ -126,6 +135,15 @@
       rows="10"
       label="COM_ENQUIRIES_FIELD_CONFIG_OWNER_ENQUIRY_EMAIL_LABEL"
       description="COM_ENQUIRIES_CONFIG_FIELD_OWNER_ENQUIRY_EMAIL_DESC"
+    />
+    <field 
+      name="owner_email_realestate_enquiry_template"
+      type="textarea"
+      filter="safehtml"
+      cols="10"
+      rows="10"
+      label="COM_REALESTATE_ENQUIRIES_FIELD_CONFIG_OWNER_ENQUIRY_EMAIL_LABEL"
+      description="COM_REALESTATE_ENQUIRIES_CONFIG_FIELD_OWNER_ENQUIRY_EMAIL_DESC"
     />
   
     <field 

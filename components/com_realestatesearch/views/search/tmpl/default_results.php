@@ -30,7 +30,11 @@ $s_kwds = $this->state->get('list.searchterm', '');
 $search_data = new stdClass;
 $search_data->searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $bedrooms = $this->state->get('list.bedrooms');
+$refine_budget_min = $this->getBudgetFields(25000, 1500000, 50000, 'min_');
+$refine_budget_max = $this->getBudgetFields(25000, 1500000, 50000, 'max_');
 
+$min_budget = $this->state->get('list.min_price');
+$max_budget = $this->state->get('list.max_price');
 ?>
 
 <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_realestatesearch&lang=en&Itemid=199&s_kwds=' . $s_kwds) ?>" method="POST">
@@ -61,7 +65,19 @@ $bedrooms = $this->state->get('list.bedrooms');
         <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
       </select>
     </div>
-   
+    <div class="form-group">
+      <label class="sr-only" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
+      <select id="min_price" name="min" class="form-control">
+        <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', 'min_' . $min_budget); ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="max_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE'); ?></label>
+      <select id="max_price" name="max" class="form-control">
+        <?php echo JHtml::_('select.options', $refine_budget_max, 'value', 'text', 'max_' . $max_budget); ?>
+      </select>
+    </div>
+
     <button class="property-search-button btn btn-primary" href="#">
       <i class="icon-search icon-white"> </i>
       <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>

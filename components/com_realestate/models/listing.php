@@ -16,6 +16,11 @@ class RealestateModelListing extends JModelForm
    */
   protected $item;
 
+  /*
+   * The Item ID of the menu item
+   */
+  public $itemid = '';
+  
   /**
    * @var boolean review
    */
@@ -29,6 +34,8 @@ class RealestateModelListing extends JModelForm
     $input = JFactory::getApplication()->input;
 
     $this->preview = ($input->get('preview', 0, 'boolean')) ? true : false;
+    
+    $this->itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
   }
 
   /**
@@ -200,11 +207,13 @@ class RealestateModelListing extends JModelForm
       $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
     }
 
-    try {
+    try
+    {
 
       $this->item = $this->_db->setQuery($query)->loadObject();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // TO DO - Log me baby
     }
 
@@ -217,7 +226,7 @@ class RealestateModelListing extends JModelForm
 
     if (!empty($this->item->city))
     {
-    $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
+      $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
     }
 
     return $this->item;
@@ -275,7 +284,7 @@ class RealestateModelListing extends JModelForm
       return false;
     }
 
-    JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_fcsearch/models');
+    JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_realestatesearch/models');
 
     $app = JFactory::getApplication();
 
@@ -293,7 +302,7 @@ class RealestateModelListing extends JModelForm
     $app->input->set('s_kwds', $location);
     $app->input->set('limit', 4);
 
-    $model = JModelLegacy::getInstance('Search', 'FcSearchModel');
+    $model = JModelLegacy::getInstance('Search', 'RealestateSearchModel');
 
     $model->getLocalInfo(); // Must call this first, probably should be a protected method called internally from the model
     $results = $model->getResults(); // Get the property listings, related to this one, if any.s
@@ -374,10 +383,12 @@ class RealestateModelListing extends JModelForm
     $table = JTable::getInstance('Classification', 'ClassificationTable');
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
 
-    try {
+    try
+    {
       $path = $table->getPath($pk = $this->item->city);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       // Log the exception here...
       return false;
@@ -391,7 +402,7 @@ class RealestateModelListing extends JModelForm
       {
         $city = trim(preg_replace('/\(.*?\)/', '', $v->title));
 
-        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->link = 'index.php?option=com_realestatesearch&Itemid=' . (int) $this->itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
         $pathArr->$k->name = $city;
       }
     }
@@ -436,10 +447,12 @@ class RealestateModelListing extends JModelForm
 
       $db->setQuery($query);
 
-      try {
+      try
+      {
         $db->execute();
       }
-      catch (RuntimeException $e) {
+      catch (RuntimeException $e)
+      {
         $this->setError($e->getMessage());
         return false;
       }
@@ -481,7 +494,6 @@ class RealestateModelListing extends JModelForm
     $car_hire_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));
     $currency_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('currency_affiliate'));
     $ferry_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('ferry_affiliate'));
-    $shortlist_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('shortlist_page'));
     $minutes_until_safe_to_send = '';
 
     // Add enquiries paths
@@ -542,7 +554,7 @@ class RealestateModelListing extends JModelForm
 
         $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email;
         // This assumes that name is in synch with the user profile table first and last name fields...
-        $owner_name = htmlspecialchars($item->name);
+        $owner_name = htmlspecialchars($item->firstname);
       }
       else
       {
@@ -564,14 +576,14 @@ class RealestateModelListing extends JModelForm
       $full_name = $firstname . ' ' . $surname;
 
       // Prepare email body
-      $body = JText::sprintf($params->get('owner_email_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $arrival, $end, $adults, $children);
+      $body = JText::sprintf($params->get('owner_email_realestate_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $arrival, $end, $adults, $children);
 
       $mail = JFactory::getMailer();
       $mail->addRecipient($owner_email, $owner_name);
       $mail->addReplyTo(array($mailfrom, $fromname));
       $mail->setSender(array($mailfrom, $fromname));
       $mail->addBCC($mailfrom, $fromname);
-      $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title, $id));
+      $mail->setSubject($sitename . ': ' . JText::sprintf('COM_REALESTATE_NEW_ENQUIRY_RECEIVED', $item->title, $id));
       $mail->setBody($body);
 
       // If there is a secondary email then add that as a recipient
@@ -588,14 +600,14 @@ class RealestateModelListing extends JModelForm
 
       // Prepare email body for the holidaymaker email
       // TO DO - Make the property link not hard coded 
-      $property_link = JUri::base() . 'listing/' . (int) $id . '?unit_id=' . (int) $unit_id;
-      $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname, $property_link, $property_link, $car_hire_link, $currency_link, $ferry_link, $shortlist_link);
+      $property_link = JUri::base() . 'forsale/' . (int) $id;
+      $body = JText::sprintf($params->get('buyer_realestate_email_enquiry_template'), $firstname, $property_link, $property_link, $car_hire_link, $currency_link, $ferry_link);
 
       $mail->ClearAllRecipients();
       $mail->ClearAddresses();
       $mail->setBody($body);
       $mail->isHtml(true);
-      $mail->setSubject(JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_SENT', $item->unit_title));
+      $mail->setSubject(JText::sprintf('COM_REALESTATE_NEW_ENQUIRY_SENT', $item->title));
       $mail->addRecipient($email);
 
       if (!$mail->Send())
@@ -703,11 +715,13 @@ class RealestateModelListing extends JModelForm
 
     $this->_db->setQuery($query);
 
-    try {
+    try
+    {
 
       $row = $this->_db->loadObject();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       
     }
 

@@ -18,6 +18,8 @@ $route = JRoute::_('index.php?option=com_realestate&Itemid=' . $Itemid_property 
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
 $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
+$prices = JHtml::_('general.price', $this->result->price, $this->result->base_currency, '', '');
+
 ?>
 
 <div class="search-result">
@@ -33,11 +35,11 @@ $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $desc
     <div class="col-xs-12 col-sm-3">
       <p class="rates">
         <?php if ($this->result->price) : ?>
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
           <span class="lead">
-            <?php echo '&pound;' . round($this->result->price); ?>
+            <?php echo '&pound;' . round($prices['GBP']); ?>
           </span>
-
+          (<?php echo '&euro;' . round($prices['EUR']); ?>)
+          
         <?php else : ?>
           <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
         <?php endif; ?>
@@ -66,10 +68,10 @@ $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $desc
       <div class="row">
         <div class="col-md-9 col-sm-9">
           <p>
-            Bedroom count etc here?
+            <?php echo JText::sprintf('COM_REALESTATE_SEARCH_FACILITY_COUNT', $this->result->bedrooms, $this->result->bathrooms) ?>
           </p>
           <p>
-            <?php echo JHtml::_('string.truncate', $this->result->description, 100, true, false); ?>
+            <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
           </p>
           <p class=""><?php echo JText::sprintf('COM_FCSEARCH_REF', $this->result->id); ?></p>
         </div>
@@ -79,19 +81,6 @@ $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $desc
               <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
             </a>
           </p>
-          <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
-            <?php if ($logged_in) : ?>
-              <?php echo $shortlist->render($displayData); ?>
-
-            <?php else : ?>
-              <a class="shortlist" href="<?php echo JRoute::_($login_route); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
-                <i class="glyphicon glyphicon-heart"></i>
-              </a>    
-            <?php endif; ?>
-          </p> 
-
-
-
         </div>
       </div>
     </div>
