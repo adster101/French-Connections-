@@ -7,7 +7,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 // Initialize Joomla framework
-        const _JEXEC = 1;
+const _JEXEC = 1;
 
 // Load system defines
 if (file_exists(dirname(__DIR__) . '/defines.php'))
@@ -50,7 +50,7 @@ class RealestateImages extends JApplicationCli
     // The source folder for the pics 
     //$src = '/home/adam/Pictures/_images';
     $src = 'D:\Pics\_images';
-    
+
     //$move = copy('D:\\\Pics/_images/' . $blah['fde_filename'], $image_path);
     // Add and get an instance of the realestate model image thingy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
@@ -58,7 +58,7 @@ class RealestateImages extends JApplicationCli
 
     // Script to process real estate images for all properties in the #__realestate_property table
     $images = $this->_getProps();
-    
+
     $this->out('Got image list...');
 
     foreach ($images as $image)
@@ -80,7 +80,7 @@ class RealestateImages extends JApplicationCli
         $model->generateImageProfile($image_path, (int) $image->realestate_property_id, $image->image_file_name, 'thumb', 210, 120);
       }
       catch (Exception $e) {
-        
+
         $this->out('Problem creating image profiles...' . $e->getMessage());
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->realestate_property_id . ')', JLog::ERROR, 'import_images');
       }

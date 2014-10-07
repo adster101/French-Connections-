@@ -75,7 +75,7 @@ abstract class JFeedParser
 			// Expand the element for processing.
 			$el = $this->expandToSimpleXml();
 
-			// Get the list of namespaces used within this element.
+      // Get the list of namespaces used within this element.
 			$ns = $el->getNamespaces(true);
 
 			// Get an array of available namespace objects for the element.
@@ -96,7 +96,7 @@ abstract class JFeedParser
 				}
 			}
 
-			// Process the element.
+      // Process the element.
 			$this->processElement($feed, $el, $namespaces);
 
 			// Skip over this element's children since it has been processed.
@@ -150,7 +150,7 @@ abstract class JFeedParser
 		// Build the internal method name.
 		$method = 'handle' . ucfirst($el->getName());
 
-		// If we are dealing with an item then it is feed entry time.
+    // If we are dealing with an item then it is feed entry time.
 		if ($el->getName() == $this->entryElementName)
 		{
 			// Create a new feed entry for the item.
