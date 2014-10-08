@@ -42,7 +42,7 @@ class JFeedParserdocument extends JFeedParser
    */
   protected function initialise()
   {
-    // We want to move forward to the first element after the <channel> element.
+// We want to move forward to the first element after the <channel> element.
     $this->moveToNextElement('properties');
     $this->moveToNextElement();
   }
@@ -59,21 +59,22 @@ class JFeedParserdocument extends JFeedParser
     $feed = new stdClass();
     $feed->properties = array();
 
-    // Detect the feed version.
+// Detect the feed version.
     $this->initialise();
 
-    // Let's get this party started...
+// Let's get this party started...
     do
     {
-      // Expand the element for processing.
+// Expand the element for processing.
       $el = $this->expandToSimpleXml();
 
-      // Process the element.
+// Process the element.
       $this->processElement($feed, $el);
 
-      // Skip over this element's children since it has been processed.
+// Skip over this element's children since it has been processed.
       $this->moveToClosingElement();
-    } while ($this->moveToNextElement());
+    }
+    while ($this->moveToNextElement());
 
     return $feed;
   }
@@ -94,22 +95,23 @@ class JFeedParserdocument extends JFeedParser
 
     $images = array();
     $listing = new stdClass();
-    
+
     $listing->region = (string) $el->Address->region;
     $listing->agency_reference = (string) $el->Price->reference;
     $listing->price = (int) $el->Price->price;
-    $listing->base_currency = (int) $el->Price->currency;
+    $listing->base_currency = (string) $el->Price->currency;
     $listing->description = (string) $el->Description->description;
     $listing->title = JHtml::_('string.truncate', $el->Description->description, 120, true, false);
     $listing->single_bedrooms = (int) $el->Description->bedrooms;
     $listing->bathrooms = (int) $el->Description->bathrooms;
     $listing->latitude = (string) $el->latitude;
     $listing->longitude = (string) $el->longitude;
-    $listing->country = (int) 2;
-    $listing->region = (string) $el->Address->region;
-    $listing->department = (string) $el->Address->subRegion;
-    $listing->city = (string) $el->Address->location;
 
+    $city = $this->nearestcity((string) $el->latitude, (string) $el->longitude, (string) $el->Address->subRegion);
+
+    $listing->city = (int) $city;
+    
+    
     // Add an EPC diagram if there is one
     if (!empty($el->EPC))
     {
@@ -121,11 +123,52 @@ class JFeedParserdocument extends JFeedParser
     {
       $images[] = (string) $image->image;
     }
-    
+
     $listing->images = $images;
-    
+
     $feed->properties[] = $listing;
-   
+  }
+
+  /*
+   * Get the nearest town or city based on the town/city given and department
+   */
+
+  public function nearestcity($latitude = '', $longitude = '', $department = '')
+  {
+    try
+    {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+
+      $query->select("a.id, b.title");
+
+      $query->from('#__classifications a');
+      $query->innerjoin('#__classifications b on b.id = a.parent_id');
+      $query->where('b.alias = ' . $db->quote(JStringNormalise::toDashSeparated(JApplication::stringURLSafe($department))));
+      $query->order('
+        ( 3959 * acos(cos(radians(' . $longitude . ')) *
+          cos(radians(a.latitude)) *
+          cos(radians(a.longitude) - radians(' . $latitude . '))
+          + sin(radians(' . $longitude . '))
+          * sin(radians(a.latitude))) ) 
+        ');
+
+      $db->setQuery($query, 0, 1);
+      $rows = $db->loadObject();
+    }
+    catch (Exception $e)
+    {
+      return false;
+    }
+
+    // If there's a nearest city then return it.
+    if (!empty($rows))
+    {
+      return $rows->id;
+    }
+
+    return false;
   }
 
 }
+

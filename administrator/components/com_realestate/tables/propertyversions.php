@@ -121,7 +121,6 @@ class RealestateTablePropertyVersions extends JTable {
     if (empty($row)) {
       return false;
     }
-
     // Bind the object with the row and return.
     return $this->bind($row);
   }
