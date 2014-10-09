@@ -101,17 +101,29 @@ class JFeedParserdocument extends JFeedParser
     $listing->price = (int) $el->Price->price;
     $listing->base_currency = (string) $el->Price->currency;
     $listing->description = (string) $el->Description->description;
-    $listing->title = JHtml::_('string.truncate', $el->Description->description, 120, true, false);
+    $listing->title = JHtml::_('string.truncate', $el->Description->description, 100, true, false);
     $listing->single_bedrooms = (int) $el->Description->bedrooms;
-    $listing->bathrooms = (int) $el->Description->bathrooms;
+    $listing->bathrooms = (int) $el->Description->fullBathrooms;
     $listing->latitude = (string) $el->latitude;
     $listing->longitude = (string) $el->longitude;
 
-    $city = $this->nearestcity((string) $el->latitude, (string) $el->longitude, (string) $el->Address->subRegion);
+    // This is needed because we don't have lat and long for some feeds
+    if (!empty($el->latitude) && !empty($el->latitude))
+    {
+      $city = $this->nearestcity((string) $el->latitude, (string) $el->longitude, (string) $el->Address->subRegion);
+      $listing->city = (int) $city;
+    }
 
-    $listing->city = (int) $city;
-    
-    
+    if (!empty($el->Address->subRegion))
+    {
+      $listing->department = (string) $el->Address->subRegion;
+    }
+    else
+    {
+      $listing->department = $this->department((string) $el->Address->region);
+    }
+
+
     // Add an EPC diagram if there is one
     if (!empty($el->EPC))
     {
@@ -127,6 +139,40 @@ class JFeedParserdocument extends JFeedParser
     $listing->images = $images;
 
     $feed->properties[] = $listing;
+  }
+
+  /*
+   * Get the nearest town or city based on the town/city given and department
+   */
+
+  public function department($department = '')
+  {
+    try
+    {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+
+      $query->select("a.id");
+
+      $query->from('#__classifications a');
+      $query->where('a.alias = ' . $db->quote(JStringNormalise::toDashSeparated(JApplication::stringURLSafe($department))));
+      
+
+      $db->setQuery($query, 0, 1);
+      $rows = $db->loadObject();
+    }
+    catch (Exception $e)
+    {
+      return false;
+    }
+
+    // If there's a nearest city then return it.
+    if (!empty($rows))
+    {
+      return $rows->id;
+    }
+
+    return false;
   }
 
   /*

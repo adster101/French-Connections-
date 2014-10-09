@@ -822,6 +822,7 @@ class AccommodationModelListing extends JModelForm
   public function getCrumbs()
   {
 
+    $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
     $table = JTable::getInstance('Classification', 'ClassificationTable');
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
@@ -845,7 +846,7 @@ class AccommodationModelListing extends JModelForm
       {
         $city = trim(preg_replace('/\(.*?\)/', '', $v->title));
 
-        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=' . $itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
         $pathArr->$k->name = $city;
       }
     }

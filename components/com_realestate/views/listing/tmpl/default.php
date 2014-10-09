@@ -45,11 +45,9 @@ if (!empty($this->item->languages_spoken))
     }
   }
 }
-
-
 ?>
 
-<div class="container page-header">
+<div class="page-header">
   <h1>
     <?php echo $this->document->title; ?>
   </h1>
@@ -149,15 +147,17 @@ if (!empty($this->item->languages_spoken))
     </div>
   </div>
   <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
-    <h3><?php echo JText::_('COM_REALESTATE_PROPERTY_LOCATION'); ?></h3>
-    <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
-    <p class="key text-right">
-      <span>
-        <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
-        &nbsp;&ndash;&nbsp;
-        <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
-      </span>
-    </p>
+    <?php if (round($this->item->latitude) > 0 && round($this->item->longitude) > 0) : ?>
+      <h3><?php echo JText::_('COM_REALESTATE_PROPERTY_LOCATION'); ?></h3>
+      <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+      <p class="key text-right">
+        <span>
+          <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
+          &nbsp;&ndash;&nbsp;
+          <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
+        </span>
+      </p>
+    <?php endif; ?>
     <div class="well well-light-blue">
       <?php if ($this->item->price) : ?> 
         <p>
@@ -195,6 +195,15 @@ if (!empty($this->item->languages_spoken))
           <?php echo JText::_('COM_REALESTATE_LISTING_ADDITIONAL_PRICE_NOTES'); ?>
           <span class="pull-right">
             <?php echo JText::_($this->item->additional_price_notes); ?>
+          </span>
+        </p>
+      <?php endif; ?>
+      <!-- Vendor's price notes -->
+      <?php if ($this->item->agency_reference) : ?>
+        <p class='dotted'>
+          <?php echo JText::_('COM_REALESTATE_LISTING_AGENCY_REFERENCE'); ?>
+          <span class="pull-right">
+            <?php echo JText::_($this->item->agency_reference); ?>
           </span>
         </p>
       <?php endif; ?>

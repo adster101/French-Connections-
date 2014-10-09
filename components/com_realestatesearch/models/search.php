@@ -812,7 +812,7 @@ class RealestateSearchModelSearch extends JModelList
       return $query;
     }
 
-    $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . (int) $bedrooms);
+    $query->where('( single_bedrooms + double_bedrooms ) = ' . (int) $bedrooms);
 
     return $query;
   }
@@ -1076,6 +1076,8 @@ class RealestateSearchModelSearch extends JModelList
   {
 
     $db = JFactory::getDbo();
+    $query = $db->getQuery();
+
     $id = $this->getState('search.location');
     $lang = JFactory::getLanguage()->getTag();
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.

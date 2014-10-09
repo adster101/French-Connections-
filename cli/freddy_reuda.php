@@ -30,7 +30,7 @@ require_once JPATH_LIBRARIES . '/cms.php';
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.realestateimport');
 
-class AllezFrancais extends RealestateImport
+class FreddyRueda extends RealestateImport
 {
 
   /**
@@ -48,7 +48,7 @@ class AllezFrancais extends RealestateImport
     (JDEBUG) ? $this->out('About to get feed...') : '';
 
     // Get and parse out the feed 
-    $props = $this->parseFeed('http://www.allez-francais.com/allez-francais.xml');
+    $props = $this->parseFeed('http://www.xml2u.com/Xml/Sarl%20Freddy%20Rueda_483/794_Default.xml');
 
     (JDEBUG) ? $this->out('Got feed...') : '';
 
@@ -84,7 +84,7 @@ class AllezFrancais extends RealestateImport
 
           // Get the location details for this property
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
-          $location = $classification->getPath($prop->city);
+          $location = $classification->getPath($prop->department);
 
           $data = array();
           $data['realestate_property_id'] = $property_id;
@@ -94,20 +94,20 @@ class AllezFrancais extends RealestateImport
           $data['area'] = (int) $location[2]->id;
           $data['region'] = (int) $location[3]->id;
           $data['department'] = (int) $location[4]->id;
-          $data['city'] = (int) $location[5]->id;
-          $data['latitude'] = $prop->latitude;
-          $data['longitude'] = $prop->longitude;
+          $data['city'] = 0;
+          $data['latitude'] = 0;
+          $data['longitude'] = 0;
           $data['created_by'] = 1; // TO DO get Allez Francais added to system - surpress renewal reminders
           $data['created_on'] = $db->quote(JFactory::getDate());
-          $data['description'] = $db->quote($prop->description, true);
+          $data['description'] = $db->quote($prop->description);
           $data['single_bedrooms'] = (int) $prop->single_bedrooms;
-          $data['double_bedrooms'] = (int) $prop->double_bedrooms;
+          $data['double_bedrooms'] = 0;
           $data['bathrooms'] = (int) $prop->bathrooms;
           $data['base_currency'] = $db->quote($prop->base_currency);
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
-
+          
           (JDEBUG) ? $this->out('Adding property version...') : '';
 
           $property_version_id = $this->createPropertyVersion($db, $data);
@@ -200,4 +200,4 @@ class AllezFrancais extends RealestateImport
 
 }
 
-JApplicationCli::getInstance('AllezFrancais')->execute();
+JApplicationCli::getInstance('FreddyRueda')->execute();

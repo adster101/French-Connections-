@@ -88,7 +88,7 @@ else
     <?php if ($this->countModules('position-11')) : ?>
       <jdoc:include type="modules" name="position-11" style="no" />
     <?php endif; ?>
-    <jdoc:include type="modules" name="position-3" style="xhtml" />
+    <jdoc:include type="modules" name="position-3" style="html5" />
 
   </div>
   <?php if (!$listing): ?>
