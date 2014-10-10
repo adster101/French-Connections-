@@ -23,11 +23,13 @@ $doc->addScript("http://".$location);
 
 
 echo "
+
 <script type=\"text/javascript\">
 <!--// <![CDATA[
     OA_show($zoneID);
 // ]]> -->
 </script>
+
 ";
 
 ?>
