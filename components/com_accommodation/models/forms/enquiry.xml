@@ -8,13 +8,14 @@
       class="validate-name input-small form-control"
       description="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_PLACEHOLDER"
       filter="string"
       required="true"
       maxlength="20"
       labelclass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_VALIDATION_MESSAGE"
       validate="name"
-		/>
+    />
     
     <field 
       name="guest_surname"
@@ -23,6 +24,7 @@
       class="validate-name form-control"
       description="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_PLACEHOLDER"
       filter="string"
       required="true"
       maxlength="20"
@@ -37,13 +39,14 @@
       maxlength="75"
       description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"
       filter="string"
       class="form-control"
       required="true"
       labelclass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
       validate="email"
-		/>
+    />
     
     <field 
       name="guest_phone"
@@ -54,6 +57,7 @@
       description="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_LABEL"
       message="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_VALIDATION_MESSAGE"
+      hint="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_PLACEHOLDER"
       filter="string"
       validate="telephone"
       labelclass="control-label"
@@ -68,14 +72,16 @@
       cols="8"
       description="COM_ACCOMMODATION_ENQUIRY_MESSAGE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"      
       filter="string"
       validate="message"
       required="true"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
-		/>
+    />
     
-    <field name="start_date"
+    <field 
+      name="start_date"
       type="text"
       id="start_date"
       class="validate-ukdate form-control start_date"
@@ -83,12 +89,14 @@
       label="COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL"
       filter="string"
       validate="startdate"
+      hint="COM_ACCOMMODATION_ENQUIRY_START_DATE_PLACEHOLDER"
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
       required="true"
     />
     
-    <field name="end_date"
+    <field 
+      name="end_date"
       type="text"
       id="end_date"
       class="validate-ukdate form-control end_date"
@@ -97,6 +105,7 @@
       filter="string"
       validate="enddate"
       message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
+      hint="COM_ACCOMMODATION_ENQUIRY_END_DATE_PLACEHOLDER"
       labelclass="control-label"
       required="true"
     />  
@@ -109,6 +118,7 @@
       maxlength="2"
       description="COM_ACCOMMODATION_ENQUIRY_ADULTS_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_ADULTS_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_ADULTS_PLACEHOLDER"      
       filter="integer"
       labelclass="control-label"
       validate="adults"
@@ -120,6 +130,7 @@
       id="enquiry-children"
       class="validate-numeric form-control"
       maxlength="2"
+      hint="COM_ACCOMMODATION_ENQUIRY_CHILDREN_PLACEHOLDER"
       description="COM_ACCOMMODATION_ENQUIRY_CHILDREN_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_CHILDREN_LABEL"
       filter="integer"
