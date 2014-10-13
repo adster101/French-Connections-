@@ -22,7 +22,7 @@ $min_budget = $this->state->get('list.min_price');
 $max_budget = $this->state->get('list.max_price');
 $offers = ($this->state->get('list.offers')) ? '?offers=true' : '';
 
-$Itemid_search = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
+$Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
 // The layout for the anchor based navigation on the property listing
 $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');

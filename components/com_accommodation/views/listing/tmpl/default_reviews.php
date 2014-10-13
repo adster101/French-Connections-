@@ -7,7 +7,7 @@ $logged_in = ($user->guest) ? false : true;
 $params = JComponentHelper::getParams('com_reviews');
 
 // Get the item ID and work out the SEF route to the property listing
-$Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+$Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id);
 ?>
 <?php if ($this->reviews) : ?>
@@ -37,7 +37,7 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id
 <?php endif; ?>
 <?php
 if ($logged_in) :
-  $Itemid_review = FCSearchHelperRoute::getItemid(array('component', 'com_reviews'));
+  $Itemid_review = SearchHelper::getItemid(array('component', 'com_reviews'));
   $review_route = JRoute::_('index.php?option=com_reviews&task=review.add&Itemid=' . $Itemid_review . '&unit_id=' . $this->item->unit_id);
   ?>
   <p>
@@ -48,7 +48,7 @@ if ($logged_in) :
   <?php
 else:
   // Get the review item id and set the review route (only works if user logged in)
-  $Itemid_login = FCSearchHelperRoute::getItemid(array('component', 'com_users'));
+  $Itemid_login = SearchHelper::getItemid(array('component', 'com_users'));
   $login_route = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid_login);
 
   $Itemid_review = $params->get('item_id_review');

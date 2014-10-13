@@ -9,8 +9,7 @@
  */
 defined('_JEXEC') or die;
 
-// Register the JHtmlProperty class
-JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
+JLoader::import('frenchconnections.library');
 
 $controller = JControllerLegacy::getInstance('fcsearch');
 $controller->execute(JFactory::getApplication()->input->get('task'));

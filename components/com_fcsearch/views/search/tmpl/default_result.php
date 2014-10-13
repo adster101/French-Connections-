@@ -12,8 +12,8 @@ $user = JFactory::getUser();
 
 $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
-$Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
-$HolidayMakerLogin = FCSearchHelperRoute::getItemid(array('component', 'com_users'));
+$Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
+$HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
 $login_route = JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin . '&return=' . base64_encode('/shortlist'));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));

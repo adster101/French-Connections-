@@ -11,8 +11,8 @@ $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
-$Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
-$Itemid_search = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
+$Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
+$Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 ?>
 
 <div class="row">

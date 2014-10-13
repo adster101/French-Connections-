@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
-$Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+$Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 ?>
 
 <div class="row-fluid">

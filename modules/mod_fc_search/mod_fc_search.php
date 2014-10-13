@@ -15,8 +15,7 @@ require_once __DIR__ . '/helper.php';
 
 $lang = JFactory::getLanguage();
 
-// Register the JHtmlProperty class
-JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
+JLoader::import('frenchconnections.library');
 
 $lang->load('com_fcsearch', JPATH_SITE, null, false, true);
 

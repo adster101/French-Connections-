@@ -16,9 +16,6 @@ require_once (dirname(__FILE__).'/helper.php');
 
 require_once(JPATH_SITE.'/components/com_content/helpers/route.php');
 
-// Register the FCSearchHelperRoute class
-JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
-
 $helper = new modFeaturedPropertyHelper();
 
 $items = $helper->getFeaturedProperties($params);

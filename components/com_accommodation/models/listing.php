@@ -938,7 +938,7 @@ class AccommodationModelListing extends JModelForm
     $car_hire_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));
     $currency_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('currency_affiliate'));
     $ferry_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('ferry_affiliate'));
-    $shortlist_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('shortlist_page'));
+    $shortlist_link = JUri::base() . JRoute::_('index.php?option=com_users&Itemid=' . (int) $params->get('shortlist_page'));
     $minutes_until_safe_to_send = '';
 
     // Add enquiries paths

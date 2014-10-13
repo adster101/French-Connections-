@@ -22,8 +22,7 @@ class ReviewsController extends JControllerLegacy
         'lang' => 'CMD',
     );
 
-    // Register the JHtmlProperty class
-    JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
+
     
     if ($user->get('guest') == 1)
     {

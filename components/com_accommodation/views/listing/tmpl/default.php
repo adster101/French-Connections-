@@ -6,8 +6,8 @@ $language = JFactory::getLanguage();
 $lang = $language->getTag();
 $app = JFactory::getApplication();
 
-$Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
-$HolidayMakerLogin = FCSearchHelperRoute::getItemid(array('component', 'com_users'));
+$Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
+$HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
 
 $this->item->itemid = $Itemid;
 

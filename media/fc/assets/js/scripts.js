@@ -15223,8 +15223,8 @@ jQuery(document).ready(function() {
       var data = jQuery(this).data();
       var start = data.start;
       var end = data.end;
-      jQuery('.start_date').attr('value', start);
-      jQuery('.end_date').attr('value', end);
+      jQuery('#arrival').attr('value', start);
+      jQuery('#departure').attr('value', end);
       var path = getPath();
 
       // Amend the path that the form is submitted to

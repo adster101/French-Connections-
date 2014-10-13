@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted access');
 
 $app = JFactory::getApplication();
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
-$Itemid_property = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+$Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 ?>
 <div class="container">

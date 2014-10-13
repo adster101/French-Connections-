@@ -118,7 +118,7 @@ class AccommodationControllerListing extends JControllerForm {
     $id = $this->input->get('id', '', 'int');
     $unit_id = $this->input->get('unit_id', '', 'int');
     // Get the itemID of the accommodation component. 
-    $Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_accommodation'));
+    $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 		$context = "$this->option.enquiry.data";
 
     // Get the data from POST

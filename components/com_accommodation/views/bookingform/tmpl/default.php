@@ -1,7 +1,7 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-$Itemid = FCSearchHelperRoute::getItemid(array('component','com_accommodation'));
+$Itemid = SearchHelper::getItemid(array('component','com_accommodation'));
 
 ?>
 <?php if ($this->item->booking_form) : ?>

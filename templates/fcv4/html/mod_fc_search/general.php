@@ -12,7 +12,7 @@ $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 
 
-$Itemid = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
+$Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
 // The layout for the anchor based navigation on the property listing
 $searchterm = '';

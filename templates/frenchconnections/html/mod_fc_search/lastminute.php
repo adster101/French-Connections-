@@ -14,7 +14,7 @@ $lang = $app->input->get('lang', 'en');
 
 $menus = $app->getMenu('site');
 
-$Itemid = FCSearchHelperRoute::getItemid(array('component','com_fcsearch'));
+$Itemid = SearchHelper::getItemid(array('component','com_fcsearch'));
 
 $bedrooms = '';
 $occupancy = '';

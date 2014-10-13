@@ -133,12 +133,12 @@ class StatsModelStats extends JModelList
 
     if ($start_date)
     {
-      $query->where('date_created > ' . $db->quote($start_date));
+      $query->where('date_created >= ' . $db->quote($start_date));
     }
 
     if ($end_date)
     {
-      $query->where('date_created < ' . $db->quote($end_date));
+      $query->where('date_created <= ' . $db->quote($end_date));
     }
 
     // If user not authorised to view all stats just limit them to properties they own

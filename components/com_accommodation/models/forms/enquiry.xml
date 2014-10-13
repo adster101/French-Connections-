@@ -39,7 +39,7 @@
       maxlength="75"
       description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_LABEL"
-      hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"
+      hint="COM_ACCOMMODATION_ENQUIRY_EMAIL_PLACEHOLDER"
       filter="string"
       class="form-control"
       required="true"

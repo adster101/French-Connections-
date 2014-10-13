@@ -14,9 +14,6 @@ JLoader::import('frenchconnections.library');
 // Register the Helloworld helper file
 JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
-// Register the JHtmlProperty class
-JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
-
 $controller = JControllerLegacy::getInstance('Accommodation');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();

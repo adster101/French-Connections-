@@ -71,14 +71,12 @@ class FcSearchModelSearch extends JModelList {
 
     parent::__construct($config);
 
-    // Register the JHtmlProperty class
-    JLoader::register('FCSearchHelperRoute', JPATH_SITE . '/components/com_fcsearch/helpers/route.php');
-
+ 
     $this->currencies = $this->getCurrencyConversions();
 
     $this->date = JFactory::getDate()->calendar('Y-m-d');
 
-    $this->itemid = FCSearchHelperRoute::getItemid(array('component', 'com_fcsearch'));
+    $this->itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
     // Set the default search and what not here?
   }
