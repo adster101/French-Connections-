@@ -71,7 +71,6 @@ class FcSearchViewSearch extends JViewLegacy
 
     if ($this->localinfo === false)
     {
-
       $this->results = false;
       $this->total = 0;
       $this->document->setMetaData('robots', 'noindex, nofollow');
@@ -124,8 +123,6 @@ class FcSearchViewSearch extends JViewLegacy
     // Log the search
     JSearchHelper::logSearch('Log some useful search information...', 'com_fcsearch');
 
-
-
     // Check for layout override only if this is not the active menu item
     // If it is the active menu item, then the view and category id will match
     $active = $app->getMenu()->getActive();
@@ -135,50 +132,8 @@ class FcSearchViewSearch extends JViewLegacy
       $this->setLayout($active->query['layout']);
     }
 
-
     // Need to set valid meta data for the page here, load any JS, CSS Etc
     parent::display($tpl);
-  }
-
-  /**
-   * Method to get hidden input fields for a search form so that control variables
-   * are not lost upon form submission. E.g. if someone is filtering on gites we remember that so that the next search
-   * is still focused on Gites.
-   *
-   * @return  string  A string of hidden input form fields
-   *
-   * @since   2.5
-   */
-  protected function getFilters()
-  {
-    $filter_str = array();
-
-    // Get the input...
-    $app = JFactory::getApplication();
-    $input = $app->input->get('accommodation');
-
-    // Obviously, these the search URL is built up via js prior to the form submit
-    $filters = array('property', 'external', 'accommodation', 'internal', 'activities', 'kitchen');
-
-    // Create hidden input elements for each part of the URI.
-    foreach ($filters as $filter)
-    {
-
-      $filter_test = $app->input->get($filter, array(), 'array');
-
-      if (is_array($filter_test))
-      {
-        foreach ($filter_test as $key => $value)
-        {
-
-          $filter_str[] = $value;
-        }
-      }
-    }
-
-    $fields = '<input type="hidden" name="filter" value="' . implode('/', $filter_str) . '" id="filter" />';
-
-    return $fields;
   }
 
   /**
@@ -200,7 +155,9 @@ class FcSearchViewSearch extends JViewLegacy
     // Get the pagination object 
     if ($this->pagination)
     {
+      // Add next and prev links to head
       $pages = $this->pagination->getData();
+      $this->addHeadLinks($pages, $document);
     }
 
     $property_type = $input->get('property', array(), 'array');
@@ -209,21 +166,24 @@ class FcSearchViewSearch extends JViewLegacy
     $bedrooms = $this->state->get('list.bedrooms');
     $occupancy = $this->state->get('list.occupancy');
 
-    // Add next and prev links to head
-    $this->addHeadLinks($pages, $document);
-
     // Location title - e.g. the location being searched on
-    $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
+    $location = ucwords(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
+
+    // Add Chateua to the inflector
+    $inflector = JStringInflector::getInstance();
+    $inflector->addWord('Chateau', 'Chateaux ');
 
     // Generate the page META title
-    $title = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy);
+    $title = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector);
+    $description = $this->getDescription($property_type, $accommodation_type, $location, $inflector);
 
     // Append the site name to keep the SEOs happy
     $title .= ' - ' . $app->getCfg('sitename');
 
     // Set the page and document title
     $this->document->setTitle($title);
-
+    $this->document->setDescription($description);
+    
     // Add some scripts and shit
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
@@ -293,13 +253,71 @@ class FcSearchViewSearch extends JViewLegacy
    * 
    * @return type string
    */
-  private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '')
+  private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '', $inflector = '')
   {
-    $inflector = JStringInflector::getInstance();
-    $inflector->addWord('Chateau', 'Chateaux ');
     $accommodation_type = '';
     $property_type = '';
-    $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location), ucwords($location));
+    $location_title = str_replace('France', '', $location);
+
+    // Work out the property type we have
+    if (!empty($property_types))
+    {
+      $property_parts = explode('_', $property_types[0]);
+      $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
+    }
+
+    // Work out the accommodation type we have
+    if (!empty($accommodation_types))
+    {
+      $accommodation_parts = explode('_', $accommodation_types[0]);
+      $accommodation_type = JStringNormalise::toSpaceSeparated($accommodation_parts[1]);
+    }
+
+    // Work out the meta title pattern to use
+    if ($property_type && $accommodation_type)
+    {
+      $plural_property_type = $inflector->toPlural($property_type);
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_TITLE', ucwords($location_title), ucwords($accommodation_type), ucwords($plural_property_type));
+    }
+    elseif ($accommodation_type)
+    {
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($accommodation_type), ucwords($location_title));
+    }
+    elseif ($property_type)
+    {
+      $plural_property_type = $inflector->toPlural($property_type);
+      // In this case we want to strip all occurances of France as it appears in the language string
+      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location_title));
+    }
+    else
+    {
+      $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location_title));
+    }
+
+    // Amend the title based on bedroom and occupancy filter
+    $title .= ($bedrooms) ? ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : '';
+    $title .= ($occupancy) ? ' | ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') . ' ' . $occupancy : '';
+
+    return $title;
+  }
+
+  /**
+   * Method to generate a page title for use in the META and H1 elements 
+   * 
+   * @param type $property_types
+   * @param type $accommodation_types
+   * @param type $location
+   * @param type $bedrooms
+   * @param type $occupancy
+   * 
+   * @return type string
+   */
+  private function getDescription($property_types = array(), $accommodation_types = array(), $location = '', $inflector)
+  {
+    $accommodation_type = '';
+    $property_type = '';
+    $location_title = str_replace('France', '', $location);
+
 
     // Work out the property type we have
     // TO DO - extend this to add a canonical tag if multiple property types are selected.
@@ -321,21 +339,22 @@ class FcSearchViewSearch extends JViewLegacy
     if ($property_type && $accommodation_type)
     {
       $plural_property_type = $inflector->toPlural($property_type);
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_TITLE', ucwords($accommodation_type), ucwords($plural_property_type), ucwords($location));
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_PROPERTY_DESCRIPTION', ucwords($accommodation_type), ucwords($location_title), ucwords($property_type));
     }
     elseif ($accommodation_type)
     {
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_TITLE', ucfirst($accommodation_type), ucwords($location), ucfirst($accommodation_type));
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_DESCRIPTION', ucfirst($accommodation_type), ucwords($location_title), ucfirst($accommodation_type));
     }
     elseif ($property_type)
     {
       $plural_property_type = $inflector->toPlural($property_type);
-      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location), ucfirst($plural_property_type));
+      $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_DESCRIPTION', ucfirst($property_type), ucwords($location_title), ucfirst($location_title));
+    }
+    else
+    {
+      $title = JText::sprintf('COM_FCSEARCH_DESCRIPTION', ucwords($location), ucwords($location_title));
     }
 
-    // Amend the title based on bedroom and occupancy filter
-    $title .= ($bedrooms) ? ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : '';
-    $title .= ($occupancy) ? ' | ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') . ' ' . $occupancy : '';
 
     return $title;
   }

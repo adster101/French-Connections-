@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 $document = JFactory::getDocument();
 $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
+$itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 ?>
 <hr />
 <div class='row'>
@@ -20,7 +21,7 @@ $lang = $app->input->get('lang', 'en');
     </h3>
     <?php foreach ($popular as $k => $v) : ?>
       <p>
-        <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $v->alias . '&lang=' . $lang . '&Itemid=165'); ?>'>
+        <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $v->alias . '&lang=' . $lang . '&Itemid=' . (int) $itemid); ?>'>
           <?php echo htmlspecialchars($v->title, ENT_QUOTES, 'UTF-8'); ?>
         </a>
       </p>

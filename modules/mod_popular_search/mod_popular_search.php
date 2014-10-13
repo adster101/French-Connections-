@@ -12,6 +12,7 @@ defined('_JEXEC') or die;
 // Include the syndicate functions only once
 require_once __DIR__ . '/helper.php';
 
+JLoader::import('frenchconnections.library');
 
 $lang = JFactory::getLanguage();
 
