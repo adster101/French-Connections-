@@ -501,7 +501,7 @@ class PropertyControllerListing extends JControllerForm
     // Get the listing unit details
     $current_version = $listing->getItems();
 
-    $days_to_renewal = RentalHelper::getDaysToExpiry($current_version[0]->expiry_date);
+    $days_to_renewal = PropertyHelper::getDaysToExpiry($current_version[0]->expiry_date);
 
     // TO DO - Could the following be moved into a separate method in the model?
     if (empty($current_version[0]->vat_status))

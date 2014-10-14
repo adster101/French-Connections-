@@ -44,7 +44,7 @@ class RealEstateModelListing extends PropertyModelListing
     $this->setState('filter.latest', true);
 
     // List state information.
-    parent::populateState('a.id', 'asc');
+    //parent::populateState('a.id', 'asc');
   }
 
   /**
@@ -104,7 +104,7 @@ class RealEstateModelListing extends PropertyModelListing
         b.use_invoice_details,
         b.latitude,
         b.longitude,
-        0 as images
+        (select count(*) from qitz3_realestate_property_images_library where version_id = b.id) as images
       ');
     $query->from('#__realestate_property as a');
 
@@ -175,7 +175,7 @@ class RealEstateModelListing extends PropertyModelListing
 
     $state->complete = true; // Assume listing is complete
     $state->property_detail = true; // Assume we have all property details
-    $state->images = true; // Assume we have some images
+    $state->gallery = true; // Assume we have some images
 
     $state->id = $listing[0]->id; // The main listing ID
     $state->review = $listing[0]->review; // The overall review status (e.g. 0,1,2)

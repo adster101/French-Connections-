@@ -182,7 +182,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   {
 
     $order_summary = array();
-    $days_to_expiry = RentalHelper::getDaysToExpiry($this->getExpiryDate());
+    $days_to_expiry = PropertyHelper::getDaysToExpiry($this->getExpiryDate());
 
     // Get the user details
     $user = $this->getUser($this->owner_id);

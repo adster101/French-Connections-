@@ -12,7 +12,7 @@ jimport('joomla.application.component.modeladmin');
  * These two functions should be moved to the listing model for consistency
  *
  */
-class RentalModelSubmit extends JModelAdmin {
+class RealEstateModelSubmit extends JModelAdmin {
 
   /**
    * Method to get the record form.
@@ -25,7 +25,7 @@ class RentalModelSubmit extends JModelAdmin {
   public function getForm($data = array(), $loadData = true) {
 
     // Get the form.
-    $form = $this->loadForm('com_rental.submit', 'submit', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_realestate.submit', 'submit', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form)) {
       return false;
     }
@@ -44,7 +44,7 @@ class RentalModelSubmit extends JModelAdmin {
    
 
     // Check the session for previously entered form data.
-    $data = JFactory::getApplication()->getUserState('com_rental.view.listing.data', array());
+    $data = JFactory::getApplication()->getUserState('com_realestate.view.listing.data', array());
 
     if (empty($data)) {
       

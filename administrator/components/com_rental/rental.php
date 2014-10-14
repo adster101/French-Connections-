@@ -18,7 +18,7 @@ JLoader::register('JToolbarButtonPreview', JPATH_ROOT . '/administrator/componen
 JLoader::register('RentalHelper', dirname(__FILE__) . '/helpers/rental.php');
 
 // Register the JHtmlProperty class
-JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
+//JLoader::register('JHtmlProperty', JPATH_COMPONENT . '/helpers/html/property.php');
 
 // Register the Special Offers helper file
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');

@@ -7,7 +7,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 // Initialize Joomla framework
-        const _JEXEC = 1;
+const _JEXEC = 1;
 
 // Load system defines
 if (file_exists(dirname(__DIR__) . '/defines.php'))

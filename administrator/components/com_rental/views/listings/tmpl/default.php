@@ -101,7 +101,7 @@ $canDo = RentalHelper::getActions();
           <tbody>
             <?php foreach ($this->items as $i => $item): ?>
               <?php
-              $days_to_renewal = RentalHelper::getDaysToExpiry($item->expiry_date);
+              $days_to_renewal = PropertyHelper::getDaysToExpiry($item->expiry_date);
               $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
               $value = (!empty($item->value)) ? round($item->value, 2) : '';

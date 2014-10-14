@@ -51,8 +51,8 @@ $data['status'] = $this->status;
               <strong>Property details</strong>
             </td>
             <td>
-              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', $this->items[0], 'property_id', 'btn') ?>
-              <?php echo JHtmlProperty::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'contactdetails', 'edit', 'envelope', 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', $this->items[0], 'property_id', 'btn') ?>
+              <?php echo RentalHelper::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'propertyversions', 'edit', 'compass', 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', $this->items[0], 'property_id', 'btn') ?>
+              <?php echo RentalHelper::progressButton($this->items[0]->id, $this->items[0]->unit_id, 'contactdetails', 'edit', 'envelope', 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', $this->items[0], 'property_id', 'btn') ?>
             </td>
           </tr>
           <tfoot>
@@ -88,10 +88,10 @@ $data['status'] = $this->status;
                     <strong><?php echo JText::_($item->unit_title) ?></strong>
                   </td>
                   <td>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', 'btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', 'btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', 'btn') ?>
-                    <?php echo JHtmlProperty::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', 'btn') ?>
+                    <?php echo RentalHelper::progressButton($item->id, $item->unit_id, 'unitversions', 'edit', 'home', 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', $item, 'unit_id', 'btn') ?>
+                    <?php echo RentalHelper::progressButton($item->id, $item->unit_id, 'images', 'manage', 'pictures', 'IMAGE_GALLERY', $item, 'unit_id', 'btn') ?>
+                    <?php echo RentalHelper::progressButton($item->id, $item->unit_id, 'tariffs', 'edit', 'briefcase', 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', $item, 'unit_id', 'btn') ?>
+                    <?php echo RentalHelper::progressButton($item->id, $item->unit_id, 'availability', 'manage', 'calendar', 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', $item, 'unit_id', 'btn') ?>
                   </td>
                   <?php if ($canDo->get('core.edit.state')) : ?>
                     <td>

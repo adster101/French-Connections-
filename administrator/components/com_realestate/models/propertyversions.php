@@ -12,7 +12,6 @@ jimport('frenchconnections.models.property.propertyversions');
 class RealEstateModelPropertyVersions extends PropertyModelVersions
 {
 
-  
   /**
    * Returns a reference to the a Table object, always creating it.
    *
@@ -26,7 +25,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
   {
     return JTable::getInstance($type, $prefix, $config);
   }
-  
+
   /**
    * Method to auto-populate the model state.
    *
@@ -40,7 +39,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
    */
   protected function populateState($ordering = null, $direction = null)
   {
-   
+
 
     $canDo = PropertyHelper::getActions();
     $this->setState('actions.permissions', $canDo);
@@ -48,6 +47,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
     // List state information.
     parent::populateState();
   }
+
   /**
    * Overidden method to save the form data.
    *
@@ -145,11 +145,22 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
         $this->setError($table->getError());
         return false;
       }
+      
+      // The version id is the id of the version created/updated in the _unit_versions table
+      $new_version_id = ($table->id) ? $table->id : '';
 
       // If not a new and review state == 0 (e.g. an existing property version)  
       // $data['review'] - refers to the property version review state
       if (!$isNew && $data['review'] == 0)
       {
+        // Copy the images against the new version id, but only if the versions are different
+        // If we are updating a new unpublished version, no need to copy images
+        if ($old_version_id != $new_version_id)
+        {
+          JLog::add('About to copy images for realestate property ' . $pk, 'realestatepropertyversions');
+
+          $this->copyUnitImages($old_version_id, $new_version_id);
+        }
 
         // We need to check the review state of the property in case it's a PFR (review state 2) 
         $property = $this->getTable('Property', 'RealEstateTable');
@@ -176,17 +187,8 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
         }
       }
 
-      // The version id is the id of the version created/updated in the _unit_versions table
-      $new_version_id = ($table->id) ? $table->id : '';
-
       $this->setState('new.version.id', $new_version_id);
 
-      // We will always want to update the facilities relating to the version id
-      // E.g. if a new unit, insert facilitites, if new version then we will
-      // save the facilities against the new version id.
-
-
- 
       // Commit the transaction
       $db->transactionCommit();
 
@@ -220,5 +222,58 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
     return true;
   }
+
+  /**
+   * Take a copy of the images for this property.. 
+   * 
+   * @param type $old_version_id
+   * @param type $new_version_id
+   * @return boolean
+   * @throws Exception 
+   */
+  public function copyUnitImages($old_version_id = '', $new_version_id = '')
+  {
+
+    // Get a list of all images stored against the old version
+    $image = JModelLegacy::getInstance('Images', 'RealEstateModel', $config = array('ignore_request' => true));
+
+    $image->setState('version_id', $old_version_id);
+
+    // Get the images assigned to this old unit version id
+    $images = $image->getItems();
+
+    // If there are no images for the current version then return
+    if (empty($images))
+    {
+      return true;
+    }
+
+    // Get a db instance
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->insert('#__realestate_property_images_library');
+
+    $query->columns(array('version_id', 'realestate_property_id', 'image_file_name', 'caption', 'ordering'));
+
+    foreach ($images as $image)
+    {
+      // Only insert if there are some images
+      $insert_string = "$new_version_id, '" . $image->unit_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
+      $query->values($insert_string);
+    }
+
+    // Execute the query
+    $this->_db->setQuery($query);
+
+
+
+    if (!$db->execute($query))
+    {
+      Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_REALESTATE_PROPERTY_VERSION', $this->getError()));
+    }
+    return true;
+  }
+
 }
 

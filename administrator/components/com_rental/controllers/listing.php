@@ -458,13 +458,16 @@ class RentalControllerListing extends JControllerForm
     $lang = JFactory::getLanguage();
     $model = $this->getModel('Submit');
     $data = $this->input->post->get('jform', array(), 'array');
+ 		$cid   = $this->input->post->get('cid', array(), 'array');
+    $property_id = $this->input->post->get('property_id', '', 'int');
+
     $context = "$this->option.edit.$this->context";
     $task = $this->getTask();
     jimport('frenchconnections.models.payment');
     $user = JFactory::getUser();
 
     // Get the record ID from the data array
-    $recordId = $this->input->post->get('property_id', '', 'int');
+		$recordId = (int) (count($cid) ? $cid[0] : $property_id);
 
     // Check that the edit ID is in the session scope
     if (!$this->checkEditId($context, $recordId))
@@ -541,7 +544,7 @@ class RentalControllerListing extends JControllerForm
     // Get the listing unit details
     $current_version = $listing->getItems();
 
-    $days_to_renewal = RentalHelper::getDaysToExpiry($current_version[0]->expiry_date);
+    $days_to_renewal = PropertyHelper::getDaysToExpiry($current_version[0]->expiry_date);
 
     // TO DO - Could the following be moved into a separate method in the model?
     if (empty($current_version[0]->vat_status))

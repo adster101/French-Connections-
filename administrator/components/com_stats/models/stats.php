@@ -70,7 +70,7 @@ class StatsModelStats extends JModelList
     return $graph_data;
   }
 
-  public function preprocessForm(\JForm $form, $data, $group = 'content')
+  public function preprocessForm($form, $data, $group = 'content')
   {
 
     $user = JFactory::getUser();

@@ -15,18 +15,11 @@ $start_date = $this->state->get('filter.start_date');
 $end_date = $this->state->get('filter.end_date');
 $date_filter = $this->state->get('filter.date_filter');
 
-//$user = JFactory::getUser();
-//$userId = $user->get('id');
-//$groups = $user->getAuthorisedGroups();
-//$ordering = ($listOrder == 'a.lft');
-//$originalOrders = array();
-//$listing_id = '';
-
 $canDo = PropertyHelper::getActions();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_realestate'); ?>" method="post" name="adminForm" class="form-validate js-stools-form" id="adminForm">
-  <?php if ($canDo->get('rental.listings.filter')) : // Don't show this for owners  ?>
+  <?php if ($canDo->get('realestate.listings.filter')) : // Don't show this for owners  ?>
     <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
   <?php endif; ?>
   <?php if (!empty($this->sidebar)): ?>
@@ -74,12 +67,12 @@ $canDo = PropertyHelper::getActions();
                     <th>
                       <?php echo JHtml::_('searchtools.sort', 'COM_REALESTATE_LISTING_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
                     </th>
-                    <?php if ($canDo->get('rental.listing.review')) : ?>  
+                    <?php if ($canDo->get('realestate.listing.review')) : ?>  
                       <th width="10%">
                         <?php echo JText::_('COM_REALESTATE_LISTING_HEADING_REVIEW_STATUS'); ?>
                       </th>
                     <?php endif; ?>
-                    <?php if ($canDo->get('rental.listings.showowner')) : ?>
+                    <?php if ($canDo->get('realestate.listings.showowner')) : ?>
                       <th>
                         <?php echo JText::_('COM_REALESTATE_LISTING_HEADING_CREATED_BY'); ?>
                       </th>
@@ -94,7 +87,7 @@ $canDo = PropertyHelper::getActions();
                 <?php
                 $canEditOwn = $canDo->get('core.edit.own');
                 $canPublish = $canDo->get('core.edit.state');
-                $canReview = $canDo->get('rental.listing.review', false);
+                $canReview = $canDo->get('realestate.listing.review', false);
                 $canCheckin = true;
                 ?>
                 <tbody>
@@ -109,12 +102,12 @@ $canDo = PropertyHelper::getActions();
                     }
                     elseif ($item->review == 1)
                     {
-                      $enabled = $canDo->get('rental.listing.submit');
+                      $enabled = $canDo->get('realestate.listing.submit');
                       $enabled = false;
                     }
                     elseif ($item->review == 2)
                     {
-                      $enabled = $canDo->get('rental.listing.review');
+                      $enabled = $canDo->get('realestate.listing.review');
                     }
                     elseif ($item->review == -1)
                     {
@@ -137,12 +130,9 @@ $canDo = PropertyHelper::getActions();
                         <td>
                           <?php echo JHtml::_('image', 'images/property/' . $item->id . '/thumb/' . $item->thumbnail, '') ?>
                           <?php if ($item->review != 2) : ?>
-                            <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=listing.edit&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
-                              <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>
-                                <?php echo JText::_('COM_REALESTATE_LISTING_LESS_THAN_7_DAYS_TO_RENEWAL'); ?>
-                              <?php else: ?>
-                                <?php echo JText::_('COM_REALESTATE_LISTING_MORE_THAN_7_DAYS_TO_RENEWAL'); ?>
-                              <?php endif; ?>
+                          <br />
+                            <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=listing.edit&id=' . (int) $item->id) ?>">
+                              <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
                             </a>                        
                           <?php endif; ?>
                         </td>
@@ -160,7 +150,7 @@ $canDo = PropertyHelper::getActions();
                         </td>
                         <td>
                           <p>
-                            <?php //echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview, $item->expiry_date); ?>
+                            <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview, $item->expiry_date); ?>
                           </p>
                         </td>
                         <td>
@@ -169,7 +159,7 @@ $canDo = PropertyHelper::getActions();
                         <td>
                           <?php echo JText::_($item->created_on); ?>
                         </td>
-                        <?php if ($canDo->get('rental.listing.review')): ?>
+                        <?php if ($canDo->get('realestate.listing.review')): ?>
                           <td>
                             <?php if ($item->checked_out) : ?>
                               <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'listing.', $canCheckin); ?>
@@ -178,7 +168,7 @@ $canDo = PropertyHelper::getActions();
                             <?php endif; ?>
                           </td>
                         <?php endif ?>                        
-                        <?php if ($canDo->get('rental.listings.showowner')) : ?>
+                        <?php if ($canDo->get('realestate.listings.showowner')) : ?>
                           <td>
                             <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
                               <?php echo JText::_($item->name); ?>
@@ -189,7 +179,7 @@ $canDo = PropertyHelper::getActions();
                               <br />
                               <?php echo JText::_($item->phone_1); ?>
                             </span>
-                            <?php if ($canDo->get('rental.notes.view')) : ?>
+                            <?php if ($canDo->get('realestate.notes.view')) : ?>
                               <p>
                                 <?php echo JHtml::_('property.notes', $item->id); ?>
                                 &nbsp;

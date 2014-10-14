@@ -165,7 +165,7 @@ class JHtmlProperty
             'inactive_class' => 'publish'
         ),
         1 => array(
-            'task' => 'submit',
+            'task' => 'view',
             'text' => '',
             'active_title' => '',
             'inactive_title' => 'COM_RENTAL_PROPERTY_NON_SUBMITTED',
@@ -483,8 +483,12 @@ class JHtmlProperty
    * @param type $renewal
    * @return string
    */
-  public static function link($id = '', $title = '', $task = '', $text = '', $class = '', $renewal = false, $option = 'com_rental')
+  public static function link($id = '', $title = '', $task = '', $text = '', $class = '', $renewal = false)
   {
+    $input = JFactory::getApplication()->input;
+    $option = $input->getCmd('option');
+   
+    
     $isRenewal = ($renewal) ? '&renewal=1' : '';
     $route = JRoute::_('index.php?option=' . $option . '&task=' . $task . '&id=' . (int) $id . $isRenewal);
     $html = '';

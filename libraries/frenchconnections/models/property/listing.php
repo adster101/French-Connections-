@@ -254,7 +254,7 @@ class PropertyModelListing extends JModelList
     $listing->id = $units[0]->id; // The main listing ID
     $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
-    $listing->days_to_renewal = RentalHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
+    $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
 
     foreach ($units as $key => $unit)
     {

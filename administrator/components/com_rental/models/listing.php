@@ -390,7 +390,7 @@ class RentalModelListing extends JModelList
       $query->where('e.review = 0');
     }
     
-    $query->where('d.published != -2');
+    //$query->where('d.published != -2');
 
     $query->where('a.created_by !=0');
 
@@ -440,7 +440,7 @@ class RentalModelListing extends JModelList
     $listing->id = $units[0]->id; // The main listing ID
     $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
-    $listing->days_to_renewal = RentalHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
+    $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
 
     foreach ($units as $key => $unit)
     {

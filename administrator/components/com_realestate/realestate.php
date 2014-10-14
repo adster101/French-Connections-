@@ -10,6 +10,9 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_realestate'))
 
 JLoader::import('frenchconnections.library');
 
+// Register the Realestate helper file
+JLoader::register('RealEstateHelper', dirname(__FILE__) . '/helpers/realestate.php');
+
 // import joomla controller library
 jimport('joomla.application.component.controller');
 

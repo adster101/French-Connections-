@@ -37,7 +37,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
     $model = JModelLegacy::getInstance('Listing', 'RealEstateModel', array('ignore_request' => true));
 
     // Set some model options
-    $model->setState('com_realestate.' . $model->getName() . '.id', $this->item->id);
+    $model->setState('com_realestate.' . $model->getName() . '.id', $this->item->realestate_property_id);
     $model->setState('list.limit', 100);
 
     // Get the units

@@ -127,7 +127,7 @@ class RealestateModelProperty extends JModelAdmin
 
     // Update the notes 
     // Get the note model instance
-    $note = JModelLegacy::getInstance('Note', 'RentalModel', $config = array('ignore_request' => true));
+    $note = JModelLegacy::getInstance('Note', 'RealEstateModel', $config = array('ignore_request' => true));
     // Set the property ID
     $data['property_id'] = $data['id'];
     unset($data['id']);

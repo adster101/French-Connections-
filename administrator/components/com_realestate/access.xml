@@ -11,6 +11,14 @@
     <action name="realestate.listing.view" title="Access listing view" description="" />
 		<action name="realestate.propertyversions.view" title="Access property version view" description="" />
 		<action name="realestate.images.view" title="Access property images view" description="" />
+		<action name="realestate.listings.filter" title="Access property images view" description="" />
+		<action name="realestate.listing.review" title="Access property images view" description="" />
+		<action name="realestate.listings.showowner" title="Access property images view" description="" />
+		<action name="realestate.listing.review" title="Access property images view" description="" />
+		<action name="realestate.listing.submit" title="Access property images view" description="" />
+		<action name="realestate.listing.review" title="Access property images view" description="" />
+		<action name="realestate.listings.showowner" title="Access property images view" description="" />
+		<action name="realestate.notes.view" title="Access property images view" description="" />
 
   </section>
 </access>
