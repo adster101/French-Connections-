@@ -487,8 +487,8 @@ class JHtmlProperty
   {
     $input = JFactory::getApplication()->input;
     $option = $input->getCmd('option');
-   
-    
+
+
     $isRenewal = ($renewal) ? '&renewal=1' : '';
     $route = JRoute::_('index.php?option=' . $option . '&task=' . $task . '&id=' . (int) $id . $isRenewal);
     $html = '';
@@ -592,24 +592,25 @@ class JHtmlProperty
    * @param type $state
    * @return type
    */
-  public static function progressTab($state = false, $text = '', $link = '')
+  public static function progressTab($state = false, $state_of_previous = false, $text = '', $link = '', $title = '', $view = '', $tab = '')
   {
-    
-    //$title = empty($displayData['title']) ? '' : (' title="' . $this->escape($displayData['title']) . '"');
-    //$text = empty($displayData['text']) ? '' : ('<span class="j-links-link">' . $displayData['text'] . '</span>');
-
 
     $class = ($state) ? 'publish' : 'warning';
-    
+    $id = ($view == $tab) ? 'active' : '';
+    $id .= ($state) ? ' completed' : '';
+    $id .= (!$state && !$state_of_previous) ? ' disabled' : '';
+    $link = (!$state && !$state_of_previous) ? '' : $link;
     $options = array(
         'class' => $class,
         'text' => JText::_($text),
         'btnClass' => 'btn btn-default',
         'image' => $class,
-        'link' => $link
+        'link' => $link,
+        'id' => $id,
+        'title' => $title
     );
 
-    $layout = new JLayoutFile('joomla.links.link');
+    $layout = new JLayoutFile('frenchconnections.property.link');
 
     return $layout->render($options);
   }

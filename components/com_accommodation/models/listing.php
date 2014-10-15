@@ -927,6 +927,9 @@ class AccommodationModelListing extends JModelForm
     $owner_email = '';
     $owner_name = '';
     $valid = true;
+    $uri = JUri::getInstance();
+    $domain = $uri->toString(array('scheme', 'host'));
+
     jimport('clickatell.SendSMS');
     $sms_params = JComponentHelper::getParams('com_rental');
     $banned_emails = explode(',', $params->get('banned_email'));
@@ -935,10 +938,10 @@ class AccommodationModelListing extends JModelForm
     $mailfrom = $app->getCfg('mailfrom');
     $fromname = $app->getCfg('fromname');
     $sitename = $app->getCfg('sitename');
-    $car_hire_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));
-    $currency_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('currency_affiliate'));
-    $ferry_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('ferry_affiliate'));
-    $shortlist_link = JUri::base() . JRoute::_('index.php?option=com_users&Itemid=' . (int) $params->get('shortlist_page'));
+    $car_hire_link = $domain . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));
+    $currency_link = $domain . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('currency_affiliate'));
+    $ferry_link = $domain . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('ferry_affiliate'));
+    $shortlist_link = $domain . JRoute::_('index.php?option=com_users&view=login&Itemid=' . (int) $params->get('shortlist_page'));
     $minutes_until_safe_to_send = '';
 
     // Add enquiries paths

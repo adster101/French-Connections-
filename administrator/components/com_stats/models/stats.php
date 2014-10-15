@@ -53,7 +53,7 @@ class StatsModelStats extends JModelList
     {
       $id = $input->get('id', '', 'int');
     }
-
+    
     $start_date = JFactory::getDate($this->getState('filter.start_date', ''))->calendar('Y-m-d');
     $end_date = JFactory::getDate($this->getState('filter.end_date', ''))->calendar('Y-m-d');
 
@@ -85,7 +85,7 @@ class StatsModelStats extends JModelList
     {
       $form->removeField('id', 'filter');
     }
-
+    
     // Add or remove the search box depending on the user privileges.
     // If owner and not admin remove the box, retain the property dropdown
     // If admin and not owner remove the dropdown and show the search box
@@ -142,7 +142,7 @@ class StatsModelStats extends JModelList
     }
 
     // If user not authorised to view all stats just limit them to properties they own
-    if (!$user->authorise('com_stats', 'com_stats.view.all'))
+    if (!$user->authorise('stats.view.all','com_stats'))
     {
       $query->leftJoin($db->quoteName('#__property', 'b') . ' ON b.id = a.property_id' );
       $query->where('b.created_by = ' . $user->id);

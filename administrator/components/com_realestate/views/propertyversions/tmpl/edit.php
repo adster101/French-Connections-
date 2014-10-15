@@ -6,15 +6,10 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
-// Add various bits of data to an array
-$data = array();
-//$data['property'] = $this->item;
-//$data['progress'] = $this->progress;
-// So we can pass them into our layout files
-$tabs = new JLayoutFile('frenchconnections.property.realestate_tabs');
-//$progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
+// $this->status is passed into tabs layout, unwise to couple this way? 
+$data = array('status'=>$this->status);
+$tabs = new JLayoutFile('realestate_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
 
-$fieldsets = $this->form->getFieldSets();
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_realestate&view=property&task=edit&realestate_property_id=' . (int) $this->item->realestate_property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <?php echo JHtml::_('form.token'); ?>
@@ -29,8 +24,8 @@ $fieldsets = $this->form->getFieldSets();
         <div class="span12">
         <?php endif; ?>
         <?php
-        //echo $progress_layout->render(array('status'=>$this->status));
-        echo $tabs->render(array('status'=>$this->status));
+        // Render the progress tabs
+        echo $tabs->render($data);
         ?>
         <fieldset class="adminform">       
           <legend>
@@ -134,6 +129,6 @@ $fieldsets = $this->form->getFieldSets();
       <?php echo $field->input; ?>
     <?php endforeach; ?>
     <input type="hidden" name="task" value="" />
-    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_rental&task=images.manage&realestate_property_id=' . (int) $this->item->realestate_property_id, false)); ?>" />
+    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_realestate&task=images.manage&realestate_property_id=' . (int) $this->item->realestate_property_id, false)); ?>" />
 </form>
 

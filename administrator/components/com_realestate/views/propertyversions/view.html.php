@@ -30,7 +30,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
     $this->form = $this->get('Form');
 
     $this->item = $this->get('Item');
-    
+
     $this->script = $this->get('Script');
 
     // Get an instance of our listing model, setting ignore_request to true so we bypass units->populateState
@@ -43,7 +43,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
     // Get the units
     $this->progress = $model->getItems();
 
-    
+
     $this->status = $model->getProgress($this->progress);
 
     // Check for errors.
@@ -88,10 +88,15 @@ class RealEstateViewPropertyversions extends JViewLegacy
 
     // Built the actions for new and existing records.
 
-    if ($canDo->get('core.create'))
+    if ($canDo->get('core.create') && !empty($this->status->expiry_date))
     {
       // We can save the new record
       JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
+      JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
+      JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+    }
+    elseif ($canDo->get('core.create'))
+    {
       JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }

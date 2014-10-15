@@ -59,35 +59,45 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
    */
   public function save($data = array())
   {
-    $dispatcher = JEventDispatcher::getInstance();
     $table = $this->getTable();
+    // Get an instance of the property model so we can load the property details
     $model = JModelLegacy::getInstance('Property', 'RealEstateModel', $config = array('ignore_request' => 'true'));
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
 
-    // Get an db instance and start a transaction
-    $db = JFactory::getDBO();
-    $db->transactionStart();
-
-    $city = (!empty($data['city'])) ? $data['city'] : '';
-
-    // Get the location details (area, region, dept) and update the data array
-    $location_details = $this->getLocationDetails($city);
-
-    // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
-    if (!empty($location_details))
-    {
-      $data['country'] = $location_details[0];
-      $data['area'] = $location_details[1];
-      $data['region'] = $location_details[2];
-      $data['department'] = $location_details[3];
-      $data['city'] = $location_details[4];
-    }
-
     // Allow an exception to be thrown.
-    try {
-      // Load the exisiting row, if there is one.
+    try
+    {
+      // Load the parent property details. 
+      $property = $model->getItem($pk);
+
+      if (!$property)
+      {
+        Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_PROPERTY', $this->getError()));
+      }
+
+      // Get an db instance and start a transaction
+      $db = JFactory::getDBO();
+      $db->transactionStart();
+
+      $city = (!empty($data['city'])) ? $data['city'] : '';
+
+      // Get the location details (area, region, dept) and update the data array
+      $location_details = $this->getLocationDetails($city);
+
+      // Update the location details in the data array...ensures that property will always be in the correct area, region, dept, city etc
+      if (!empty($location_details))
+      {
+        $data['country'] = $location_details[0];
+        $data['area'] = $location_details[1];
+        $data['region'] = $location_details[2];
+        $data['department'] = $location_details[3];
+        $data['city'] = $location_details[4];
+      }
+
+
+      // Load the exisiting property version row
       if ($pk > 0)
       {
         $table->load($pk);
@@ -99,7 +109,6 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
       // If this is a new propery then we need to generate a 'stub' entry into the propery table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
-
       if ($isNew)
       {
         $new_property_id = $this->createNewProperty('Property', 'RealEstateTable');
@@ -120,10 +129,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
       {
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
-        // New method - getExpiryDate(); returns the expiry date of the property.
-        $expiry_date = $model->getPropertyDetail($data['realestate_property_id']);
-
-        if (is_integer($expiry_date))
+        if (!empty($property->expiry_date))
         {
           // As a new version is required amend the data array before we save
           // id here refers to the version id. Unsetting this effectively forces the table class to 
@@ -145,30 +151,21 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
         $this->setError($table->getError());
         return false;
       }
-      
+
       // The version id is the id of the version created/updated in the _unit_versions table
       $new_version_id = ($table->id) ? $table->id : '';
 
       // If not a new and review state == 0 (e.g. an existing property version)  
       // $data['review'] - refers to the property version review state
-      if (!$isNew && $data['review'] == 0)
+      if (!$isNew)
       {
         // Copy the images against the new version id, but only if the versions are different
         // If we are updating a new unpublished version, no need to copy images
         if ($old_version_id != $new_version_id)
         {
-          JLog::add('About to copy images for realestate property ' . $pk, 'realestatepropertyversions');
+          JLog::add('About to copy images for realestate property ' . $pk, 'debug', 'realestatepropertyversions');
 
           $this->copyUnitImages($old_version_id, $new_version_id);
-        }
-
-        // We need to check the review state of the property in case it's a PFR (review state 2) 
-        $property = $this->getTable('Property', 'RealEstateTable');
-
-        // Load the parent property details. TO DO should probably reuse getPropertyDetail method and cache
-        if (!$property->load($table->property_id))
-        {
-          Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_PROPERTY', $this->getError()));
         }
 
         // Update the review status, if it's not already been submitted.
@@ -179,7 +176,9 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
           $property->review = 1;
 
-          if (!$property->store())
+          $property_data = JArrayHelper::fromObject($property);
+          
+          if (!$model->save($property_data))
           {
             $this->setError($property->getError());
             return false;
@@ -195,7 +194,8 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
       // Clean the cache.
       $this->cleanCache();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       // Roll back any queries executed so far
       $db->transactionRollback();
@@ -259,7 +259,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
     foreach ($images as $image)
     {
       // Only insert if there are some images
-      $insert_string = "$new_version_id, '" . $image->unit_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
+      $insert_string = "$new_version_id, '" . $image->realestate_property_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
       $query->values($insert_string);
     }
 

@@ -17,12 +17,8 @@ if ($saveOrder)
   //JHtml::_('fcsortablelist.fcsortable', 'imageList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false);
 }
 
-$app = JFactory::getApplication();
 
-$input = $app->input;
-
-$unit_id = $input->get('unit_id', '', 'int');
-$data = array('progress' => $this->progress, 'status' => $this->status);
+$data = array('status' => $this->status);
 ?>
 
 <div class="row-fluid">
@@ -35,8 +31,8 @@ $data = array('progress' => $this->progress, 'status' => $this->status);
       <div id="j-main-container" class="span12">
       <?php endif; ?>
       <?php
-      $progress = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
-      //echo $progress->render($data);
+      $tabs = new JLayoutFile('realestate_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
+      echo $tabs->render($data);
 
       $layout = new JLayoutFile('frenchconnections.property.realestate_tabs');
       echo $layout->render($data);

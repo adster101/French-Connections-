@@ -15,7 +15,8 @@ JFormHelper::loadFieldClass('list');
  * @subpackage	com_menus
  * @since		1.6
  */
-class JFormFieldCities extends JFormFieldList {
+class JFormFieldCities extends JFormFieldList
+{
 
   /**
    * The form field type.
@@ -25,19 +26,22 @@ class JFormFieldCities extends JFormFieldList {
    */
   protected $type = 'Cities';
 
-  protected function getInput() {
+  protected function getInput()
+  {
 
     // Get the field options.
     $cities = (array) $this->getOptions();
     $data = array();
-    
-		$class = !empty($this->class) ? $this->class : '';
 
-    foreach ($cities as $city) {
+    $class = !empty($this->class) ? $this->class : '';
+
+    foreach ($cities as $city)
+    {
+
       $data[] = array(
           'value' => $city->id,
           'text' => $city->title,
-          'attr' => array('data-latitude' => $city->latitude, 'data-longitude'=>$city->longitude)
+          'attr' => array('data-latitude' => $city->latitude, 'data-longitude' => $city->longitude)
       );
     }
 
@@ -63,15 +67,17 @@ class JFormFieldCities extends JFormFieldList {
    * @return	array	The field option objects.
    * @since	1.6
    */
-  protected function getOptions() {
+  protected function getOptions()
+  {
     // Filter out any regions, areas etc
     $options = array();
     // Get latitude
     $dept = $this->element['department'] ? $this->element['department'] : '';
-    
+
     $items = array();
-    
-    if (!empty($dept)) {
+
+    if (!empty($dept))
+    {
 
       // Initialize variables. // Cache the db result here so it can be reused - or rely on sql cache?
       $options = array();
@@ -87,11 +93,12 @@ class JFormFieldCities extends JFormFieldList {
       $items = $db->loadObjectList();
 
       // Check for a database error.
-      if ($db->getErrorNum()) {
+      if ($db->getErrorNum())
+      {
         JError::raiseWarning(500, $db->getErrorMsg());
       }
     }
-    
+
     return $items;
   }
 

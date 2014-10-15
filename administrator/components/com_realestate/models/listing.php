@@ -179,9 +179,10 @@ class RealEstateModelListing extends PropertyModelListing
 
     $state->id = $listing[0]->id; // The main listing ID
     $state->review = $listing[0]->review; // The overall review status (e.g. 0,1,2)
-    $state->expiry_date = $listing[0]->expiry_date; // The expiry date
+    $state->expiry_date = (empty($listing[0]->expiry_date)) ? '' : $listing[0]->expiry_date; // The expiry date
+    $state->payment = (empty($listing[0]->expiry_date)) ? false : true; // The expiry date
     $state->days_to_renewal = PropertyHelper::getDaysToExpiry($listing[0]->expiry_date); // The calculated days to expiry
-
+    
     if (!$listing[0]->use_invoice_details && empty($listing[0]->first_name) && empty($listing[0]->surname) && empty($listing[0]->email_1) && empty($listing[0]->phone_1))
     {
       $state->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
@@ -200,12 +201,15 @@ class RealEstateModelListing extends PropertyModelListing
     {
       $state->property_detail = false;
       $state->complete = false;
+
     }
 
     // Check if we have some images
     if (empty($listing[0]->images))
     {
       $state->gallery = false;
+      $state->complete = false;
+
     }
 
     return $state;
