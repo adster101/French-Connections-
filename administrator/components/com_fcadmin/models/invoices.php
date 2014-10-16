@@ -147,14 +147,15 @@ class FcadminModelInvoices extends JModelForm
       {
         continue;
       }
-
+      //iconv("UTF-8", "ASCII//IGNORE", $line[24]) Removes odd unicode characters from the MYOB file
       $invoice_id = (int) $line[6];
       $vat_status = $line[23];
       $item_code = $line[11];
       $description = $line[13];
       $quantity = $line[12];
-      $net_line_total = $filter->clean($line[16], 'float');
-      $vat_line = $filter->clean($line[24], 'float');
+      $item_cost = $filter->clean(iconv("UTF-8", "ASCII//IGNORE", $line[14]), 'float');
+      //$net_line_total = $filter->clean($line[16], 'float');
+      $vat_line = $filter->clean(iconv("UTF-8", "ASCII//IGNORE", $line[24]), 'float');
       $user_id = $filter->clean($line[48], 'int');
       $date_created = JFactory::getDate(str_replace('/', '-', $line[7]))->calendar('Y-m-d');
       $invoice_type = $line[28];
@@ -164,10 +165,9 @@ class FcadminModelInvoices extends JModelForm
       $first_name = $line[1];
       $delivery_date = (!empty($line[22])) ? JFactory::getDate(str_replace('/', '-', $line[22]))->calendar('Y-m-d') : null;
       $surname = $filter->clean($line[0], 'string');
-      $address1 = $filter->clean($line[2], 'string');
-      $address2 = $filter->clean($line[3], 'string');
+      $address1 = $filter->clean($line[3], 'string');
+      $address2 = $filter->clean($line[4], 'string');
       $town = $filter->clean($line[5], 'string');
-
 
       // Add this invoice to the array if it's not already present
       if (!array_key_exists($invoice_id, $invoices))
@@ -188,10 +188,9 @@ class FcadminModelInvoices extends JModelForm
         $invoices[$invoice_id]['salutation'] = '';
         $invoices[$invoice_id]['first_name'] = $first_name;
         $invoices[$invoice_id]['surname'] = $surname;
-        $invoices[$invoice_id]['address1'] = $address1;
-        $invoices[$invoice_id]['address2'] = $address2;
-        $invoices[$invoice_id]['town'] = $town;
-        $invoices[$invoice_id]['county'] = '';
+        $invoices[$invoice_id]['address'] = $address1;
+        $invoices[$invoice_id]['town'] = $address2;
+        $invoices[$invoice_id]['county'] = $town;
         $invoices[$invoice_id]['postcode'] = '';
       }
 
@@ -202,7 +201,7 @@ class FcadminModelInvoices extends JModelForm
       $invoice_line['item_code'] = $item_code;
       $invoice_line['item_description'] = $description;
       $invoice_line['quantity'] = $quantity;
-      $invoice_line['total_net'] = $net_line_total;
+      $invoice_line['total_net'] = $item_cost;
       $invoice_line['vat'] = $vat_line;
       $invoices[$invoice_id]['lines'][] = $invoice_line;
     }
@@ -215,7 +214,7 @@ class FcadminModelInvoices extends JModelForm
 
       foreach ($invoice['lines'] as $inv_line)
       {
-        $net_total = $net_total + $inv_line['total_net'];
+        $net_total = $net_total + $inv_line['total_net'] * $inv_line['quantity'];
         $vat_total = $vat_total + $inv_line['vat'];
       }
 

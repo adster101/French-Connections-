@@ -55,7 +55,7 @@ $userId = $user->get('id');
       </p>
 
       <?php if (!empty($this->items[0]->due_date)): ?>
-        <p>For Advertising on Internet site French Connections for 1 year commencing <?php echo $this->items[0]->due_date; ?>reference: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
+        <p>For Advertising on Internet site French Connections for 1 year commencing <?php echo $this->items[0]->due_date; ?> reference: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
       <?php else: ?>
         <p>Sundries reference: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
       <?php endif; ?>
