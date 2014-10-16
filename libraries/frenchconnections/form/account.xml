@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/administrator/components/com_rental/models/rules">
+  <fieldset name="submit">
+    <field
+      name="vat_status"
+      required="true"
+      type="list"
+      default=""
+      class="vat_status input-xxlarge"
+      label="PLG_USER_PROFILE_FIELD_VAT_STATUS_LABEL"
+      labelclass="control-label"
+      description="PLG_USER_PROFILE_FIELD_VAT_STATUS_DESC">
+      <option value="">PLG_USER_PROFILE_FIELD_PLEASE_CHOOSE</option>
+      <option	value="S20">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2</option>
+      <option	value="S2A">PLG_USER_PROFILE_FIELD_VAT_STATUS_S2A</option>
+      <option	value="Z">PLG_USER_PROFILE_FIELD_VAT_STATUS_Z</option>
+      <option	value="ZA">PLG_USER_PROFILE_FIELD_VAT_STATUS_ZA</option>
+      <option	value="ECS">PLG_USER_PROFILE_FIELD_VAT_STATUS_ECS</option>
+    </field>
+      
+    <field
+      name="vat_number"
+      type="text"
+      description="PLG_USER_PROFILE_FIELD_VAT_NUMBER_DESC"
+      label="PLG_USER_PROFILE_FIELD_VAT_NUMBER_LABEL"
+      message="PLG_USER_PROFILE_FIELD_VAT_NUMBER_MESSAGE"
+      size="30"
+      validate="vat"
+      labelclass="control-label"
+      class="validate validate-vat"
+      required="false"
+    />
+      
+    <field
+      name="company_number"
+      type="text"
+      description="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_DESC"
+      label="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_LABEL"
+      message="PLG_USER_PROFILE_FIELD_COMPANY_NUMBER_MESSAGE"
+      size="30"
+      validate="company"
+      labelclass="control-label"
+      class="validate validate-company"
+      required="false"
+    /> 
+   
+    <field
+      name="property_id"
+      type="hidden"
+      filter="int">
+    </field>
+  </fieldset>
+  <fieldset name="address">
+    <field
+      name="address1"
+      type="text"
+      default=""
+      class="input-xlarge"
+      description="PLG_USER_PROFILE_FIELD_ADDRESS1_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_ADDRESS1_LABEL"
+      message="PLG_USER_PROFILE_FIELD_ADDRESS1_MESSAGE"
+      size="30"
+      required="true"
+      labelclass="control-label"
+    />
+    <field
+      name="address2"
+      type="text"
+      class="input-xlarge"
+      description="PLG_USER_PROFILE_FIELD_ADDRESS2_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_ADDRESS2_LABEL"
+      message="PLG_USER_PROFILE_FIELD_ADDRESS2_MESSAGE"
+      size="30"
+      labelclass="control-label"
+    />
+    <field
+      name="city"
+      type="text"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_CITY_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_CITY_LABEL"
+      message="PLG_USER_PROFILE_FIELD_CITY_MESSAGE"
+      size="30"
+      labelclass="control-label"
+      required="true"
+    />
+
+    <field
+      name="region"
+      type="text"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_REGION_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_REGION_LABEL"
+      message="PLG_USER_PROFILE_FIELD_REGION_MESSAGE"
+      size="30"
+      labelclass="control-label"
+      required="true"
+    />
+    
+    <field
+      name="postal_code"
+      type="text"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_POSTAL_CODE_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_POSTAL_CODE_LABEL"
+      message="PLG_USER_PROFILE_FIELD_POSTAL_CODE_MESSAGE"
+      size="30"
+      labelclass="control-label"
+      required="true"
+      class="input-small"
+    />
+    
+    
+    
+
+
+   
+  </fieldset>
+</form>

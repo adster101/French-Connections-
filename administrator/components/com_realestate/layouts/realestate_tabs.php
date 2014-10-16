@@ -13,6 +13,7 @@ $data = $displayData['status'];
 
 $class = (empty($data->expiry_date)) ? 'nav nav-wizard clearfix' : 'nav nav-tabs';
 ?>
+<h4><?php echo JText::_('COM_REALESTATE_PROPERTY_PROGRESS'); ?></h4>
 <ul class="<?php echo $class ?>">
   <?php
   echo JHtml::_('property.progressTab', $data->property_detail, true, 'COM_REALESTATE_PROPERTY_DETAIL', 'index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $data->id, 'WOOT WOOT', $view, 'propertyversions');

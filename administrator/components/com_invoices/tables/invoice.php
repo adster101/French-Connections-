@@ -89,8 +89,8 @@ class InvoicesTableInvoice extends JTable
     $query = $this->_db->getQuery(true)
             ->select($this->_db->quoteName('id'))
             ->from($this->_db->quoteName('#__property'))
-            ->where($this->_db->quoteName('created_by') . ' = ' . $this->_db->quote($this->user_id))
-            ->where($this->_db->quoteName('id') . ' = ' . $this->_db->quote($this->property_id));
+            ->where($this->_db->quoteName('created_by') . ' = ' . (int) $this->user_id)
+            ->where($this->_db->quoteName('id') . ' = ' . (int) $this->property_id);
     $this->_db->setQuery($query);
 
     $id = (int) $this->_db->loadResult();

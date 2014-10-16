@@ -81,8 +81,10 @@ class FcadminModelInvoices extends JModelForm
 
         if (!$table->save($invoice))
         {
-          $message = JText::sprintf('COM_INVOICE_IMPORT_PROBLEM', $invoice['id']);
-          Throw new Exception($message);
+          $message = $table->getError();
+          //Throw new Exception($message);
+          JLog::add($message, JLog::WARNING, 'invoices_import');
+
         }
 
         // Proceed and save the invoice line...
@@ -153,7 +155,7 @@ class FcadminModelInvoices extends JModelForm
       $quantity = $line[12];
       $net_line_total = $filter->clean($line[16], 'float');
       $vat_line = $filter->clean($line[24], 'float');
-      $user_id = $filter->clean($line[0], 'int');
+      $user_id = $filter->clean($line[48], 'int');
       $date_created = JFactory::getDate(str_replace('/', '-', $line[7]))->calendar('Y-m-d');
       $invoice_type = $line[28];
       $currency = $line[29];

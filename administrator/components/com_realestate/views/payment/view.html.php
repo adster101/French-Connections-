@@ -12,7 +12,7 @@ jimport('frenchconnections.models.payment');
 /**
  * HelloWorlds View
  */
-class RentalViewPayment extends JViewLegacy
+class RealEstateViewPayment extends JViewLegacy
 {
 
   /**
@@ -33,7 +33,7 @@ class RentalViewPayment extends JViewLegacy
     $this->renewal = $input->getCmd('renewal', false);
 
     // Get an instance of the Listing model
-    $this->setModel(JModelLegacy::getInstance('Listing', 'RentalModel'));
+    $this->setModel(JModelLegacy::getInstance('Listing', 'RealEstateModel'));
     $model = $this->getModel('Listing');
     $model->setState('com_rental.listing.latest', true);
 

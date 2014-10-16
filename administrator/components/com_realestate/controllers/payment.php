@@ -34,9 +34,9 @@ class RealEstateControllerPayment extends JControllerLegacy
   {
 
     // Get the record ID being renewed
-    $recordId = $this->input->get('id', '', 'int');
+    $recordId = $this->input->get('realestate_property_id', '', 'int');
 
-    $listing = $this->getModel('Listing', 'RentalModel', $config = array('ignore_request' => true));
+    $listing = $this->getModel('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
     $listing->setState('com_rental.listing.id', $recordId);
     $listing->setState('com_rental.listing.latest', true);
 
@@ -44,7 +44,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     $current_listing = $listing->getItems();
 
     // Set the context so we can hold the edit ID
-    $context = "com_rental.edit.payment";
+    $context = "com_realestate.edit.payment";
 
     // Get the renewal state
     $renewal = $this->input->get('renewal', 0, 'int');
