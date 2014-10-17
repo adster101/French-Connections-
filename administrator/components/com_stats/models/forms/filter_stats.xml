@@ -2,7 +2,7 @@
 <form>  
 
   <fields name="filter"> 
-    <fieldset addfieldpath="/libraries/frenchconnections/form/fields" >
+    <fieldset addfieldpath="/libraries/frenchconnections/forms/fields" >
       <field
         name="search"
         type="text"

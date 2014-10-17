@@ -14,7 +14,7 @@ class RentalModelProperty extends JModelAdmin
 
   public function getForm($data = array(), $loadData = true)
   {
-
+    JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
     $form = $this->loadForm('com_rental.listing', 'admin', array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))

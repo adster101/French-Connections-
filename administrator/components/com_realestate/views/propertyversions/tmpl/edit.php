@@ -9,7 +9,7 @@ JHtml::_('behavior.keepalive');
 // $this->status is passed into tabs layout, unwise to couple this way? 
 $data = array('status'=>$this->status);
 $tabs = new JLayoutFile('realestate_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
-
+var_dump($this->status);
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_realestate&view=property&task=edit&realestate_property_id=' . (int) $this->item->realestate_property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
   <?php echo JHtml::_('form.token'); ?>

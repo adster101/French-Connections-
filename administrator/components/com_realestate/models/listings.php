@@ -25,14 +25,11 @@ class RealestateModelListings extends JModelList
       $config['filter_fields'] = array(
           'a.id', 'a.id',
           'title', 'a.title',
-          'alias', 'a.alias',
           'review', 'a.review',
           'access', 'a.access', 'access_level',
-          'language', 'a.language',
           'a.expiry_date', 'a.expiry_date',
           'checked_out', 'a.checked_out',
           'checked_out_time', 'a.checked_out_time',
-          'created_user_id', 'a.created_user_id',
           'a.created_on', 'a.created_on',
           'snoozed', 'published',
           'date_filter',
@@ -175,7 +172,7 @@ class RealestateModelListings extends JModelList
 
     // Filter by snooze state
     // Should only apply to users who can view and change snooze state
-    if ($canDo->get('rental.notes.add'))
+    if ($canDo->get('realestate.notes.add'))
     {
       $snooze_state = $this->getState('filter.snoozed');
 

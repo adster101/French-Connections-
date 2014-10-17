@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form
-  addrulepath="/libraries/frenchconnections/form/rules">
+  addrulepath="/libraries/frenchconnections/forms/rules">
   <fieldset name="review" addrulepath="/administrator/components/com_reviews/models/rules" label="COM_CONTACT_FORM_LABEL">
     <field 
       name="title"

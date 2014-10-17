@@ -15,11 +15,11 @@ $start_date = $this->state->get('filter.start_date');
 $end_date = $this->state->get('filter.end_date');
 $date_filter = $this->state->get('filter.date_filter');
 
-$canDo = PropertyHelper::getActions();
+$canDo = RealEstateHelper::getActions();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_realestate'); ?>" method="post" name="adminForm" class="form-validate js-stools-form" id="adminForm">
-  <?php if ($canDo->get('realestate.listings.filter')) : // Don't show this for owners  ?>
+  <?php if ($canDo->get('realestate.listings.filter')) : // Don't show this for owners   ?>
     <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
   <?php endif; ?>
   <?php if (!empty($this->sidebar)): ?>
@@ -31,7 +31,7 @@ $canDo = PropertyHelper::getActions();
       <div id="j-main-container">
       <?php endif; ?>
 
-      <?php if (empty($this->items)) : // This user doesn't have any listings against their account      ?>
+      <?php if (empty($this->items)) : // This user doesn't have any listings against their account       ?>
         <hr />
         <div class="alert alert-block">
           <strong><?php echo JText::_('COM_REALESTATE_LISTING_NO_LISTINGS'); ?><strong>
@@ -130,8 +130,8 @@ $canDo = PropertyHelper::getActions();
                         <td>
                           <?php echo JHtml::_('image', 'images/property/' . $item->id . '/thumb/' . $item->thumbnail, '') ?>
                           <?php if ($item->review != 2) : ?>
-                          <br />
-                            <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=listing.edit&id=' . (int) $item->id) ?>">
+                            <br />
+                            <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
                               <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
                             </a>                        
                           <?php endif; ?>
@@ -142,7 +142,7 @@ $canDo = PropertyHelper::getActions();
                             <p>
                               <?php echo JText::sprintf('COM_REALESTATE_LISTING_DAYS_TO_RENEWAL', $days_to_renewal); ?>
                             </p>
-                          <?php elseif ($days_to_renewal < 0) : // Property must have expired  ?>
+                          <?php elseif ($days_to_renewal < 0) : // Property must have expired   ?>
                             <p>
                               <?php echo JText::sprintf('COM_REALESTATE_LISTING_PROPERTY_EXPIRED'); ?>
                             </p>
@@ -150,7 +150,10 @@ $canDo = PropertyHelper::getActions();
                         </td>
                         <td>
                           <p>
-                            <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview, $item->expiry_date); ?>
+                            <a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
+                              <i class="icon icon-chevron-right"></i>
+                              <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
+                            </a>
                           </p>
                         </td>
                         <td>

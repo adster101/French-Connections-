@@ -7,7 +7,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
 
 // import our payment library class
-jimport('frenchconnections.models.payment');
+jimport('frenchconnections.models.realestatepayment');
 
 /**
  * HelloWorlds View
@@ -44,7 +44,7 @@ class RealEstateViewPayment extends JViewLegacy
     $previous_version = $model->getItems();
 
     // Add the Property model so we can get the renewal details...
-    $listing = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $this->renewal));
+    $listing = JModelLegacy::getInstance('RealestatePayment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $this->renewal));
 
     // Get the units and image details they against this property
     $this->summary = $listing->getPaymentSummary($current_version, $previous_version);

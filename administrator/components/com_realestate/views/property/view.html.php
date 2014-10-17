@@ -35,7 +35,7 @@ class RealestateViewProperty extends JViewLegacy
 
     $canDo = RealEstateHelper::getActions();
 
-    JToolBarHelper::title(JText::_('COM_REALESTATE_MANAGER_MANAGE_PROPERTY'));
+    JToolBarHelper::title(JText::sprintf('COM_REALESTATE_MANAGER_MANAGE_PROPERTY', $this->id));
 
     JToolBarHelper::back();
 

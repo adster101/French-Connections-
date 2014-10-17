@@ -46,7 +46,7 @@ class ImportControllerNotes extends JControllerForm {
             // Start building a new query to insert any attributes...        
             $query = $db->getQuery(true);
 
-            $query->insert('#__property_notes');
+            $query->insert('#__listing_notes');
 
             $query->columns(array('property_id', 'subject', 'body', 'created_time'));
 

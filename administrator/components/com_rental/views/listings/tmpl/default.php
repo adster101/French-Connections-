@@ -14,6 +14,7 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $start_date = $this->state->get('filter.start_date');
 $end_date = $this->state->get('filter.end_date');
 $date_filter = $this->state->get('filter.date_filter');
+$user = JFactory::getUser();
 
 //$user = JFactory::getUser();
 //$userId = $user->get('id');
@@ -194,11 +195,9 @@ $canDo = RentalHelper::getActions();
                         <br />
                         <?php echo JText::_($item->phone_1); ?>
                       </span>
-                      <?php if ($canDo->get('rental.notes.view')) : ?>
+                      <?php if ($user->authorise('core.admin', 'com_notes')) : ?>
                         <p>
                           <?php echo JHtml::_('property.notes', $item->id); ?>
-                          &nbsp;
-                          <?php //echo JHtml::_('property.stats', $item->id, $item->created_by);  ?>
                         </p>
                       <?php endif; ?>
                       <?php if (property_exists($item, 'enquiries')) : ?>

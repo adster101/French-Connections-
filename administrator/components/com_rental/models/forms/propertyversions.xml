@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	
   addrulepath="/administrator/components/com_rental/models/rules"
-  addfieldpath="/libraries/frenchconnections/form/fields">
+  addfieldpath="/libraries/frenchconnections/forms/fields">
   
   <fieldset name="description">
     <field
@@ -17,9 +17,6 @@
       required="false"
       filter="string"/>
   </fieldset>
-
-
-
   <fieldset name="Location">
     
     <fields

@@ -17,6 +17,7 @@ class RentalModelPayment extends JModelAdmin
 
   public function getPaymentForm($data = array(), $loadData = true)
   {
+		JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
 
     $form = $this->loadForm('com_rental.helloworld', 'payment', array('control' => 'jform', 'load_data' => $loadData));
 
@@ -35,6 +36,7 @@ class RentalModelPayment extends JModelAdmin
 
   public function getForm($data = array(), $loadData = true)
   {
+    JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
 
     $form = $this->loadForm('com_rental.helloworld', 'account', array('control' => 'jform', 'load_data' => $loadData));
 
@@ -75,7 +77,8 @@ class RentalModelPayment extends JModelAdmin
   {
 
     // Determine whether the owner wants to use the invoice address as the card billing address
-    if (!empty($data['use_invoice_address'])) {
+    if (!empty($data['use_invoice_address']))
+    {
       
     }
   }

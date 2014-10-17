@@ -9,7 +9,7 @@ $input = JFactory::getApplication()->input;
 $renewal = ($input->getCmd('renewal', '')) ? '&renewal=1' : '';
 $total = '';
 $total_vat = '';
-$route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this->id);
+$route = JRoute::_('index.php?option=com_realestate&view=listing&id=' . (int) $this->id);
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
@@ -31,7 +31,7 @@ $route = JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this-
         <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
 
         <?php echo $this->payment_summary->render($this->summary); ?>    
-        <a href="<?php echo JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $this->id) . $renewal ?>" class="btn btn-primary btn-large">
+        <a href="<?php echo JRoute::_('index.php?option=com_realestate&view=payment&layout=payment&id=' . (int) $this->id) . $renewal ?>" class="btn btn-primary btn-large">
            <i class="icon icon-white icon-chevron-right">&nbsp;</i>&nbsp;Pay now using our secure server
          
         </a>

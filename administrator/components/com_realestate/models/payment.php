@@ -17,6 +17,7 @@ class RealEstateModelPayment extends JModelAdmin
 
   public function getPaymentForm($data = array(), $loadData = true)
   {
+		JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
 
     $form = $this->loadForm('com_realestate', 'payment', array('control' => 'jform', 'load_data' => $loadData));
 
@@ -35,7 +36,7 @@ class RealEstateModelPayment extends JModelAdmin
 
   public function getForm($data = array(), $loadData = true)
   {
-		JForm::addFieldPath(JPATH_LIBRARIES . '/frenchconnections/form/');
+		JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
 
     $form = $this->loadForm('account', 'account', array('control' => 'jform', 'load_data' => $loadData));
 

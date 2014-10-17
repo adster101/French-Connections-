@@ -9,7 +9,7 @@ defined('_JEXEC') or die('Restricted access');
 class RealEstateControllerPropertyVersions extends JControllerForm
 {
 
-  var $view_list = 'listing';
+  var $view_list = 'listings';
 
   /**
    * Checks whether the owner is allowed to edit this property version via the PropertyHelper class 

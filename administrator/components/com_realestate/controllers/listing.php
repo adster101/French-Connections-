@@ -29,7 +29,7 @@ class RealEstateControllerListing extends PropertyControllerListing
     // Guess the JText message prefix. Defaults to the option.
     if (empty($this->extension))
     {
-      $this->extension = JRequest::getCmd('extension', 'com_rental');
+      $this->extension = JRequest::getCmd('extension', 'com_realestate');
     }
 
     $this->registerTask('checkin', 'review');

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<config>
+<config
+  addfieldpath="/libraries/frenchconnections/forms/fields">
 	
   <fieldset
     name="permissions"

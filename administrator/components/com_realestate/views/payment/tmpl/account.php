@@ -29,7 +29,7 @@ $show_company_number = '';
         <span class='icon icon-flag'> </span>
         Our records indicate that we don't have VAT or invoice details registered on our system. Please complete the following before proceeding.
       </div>
-      <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&task=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
+      <form action="<?php echo JRoute::_('index.php?option=com_realestate&view=payment&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
         <fieldset>
           <div class="control-group">
             <div class="control-label">

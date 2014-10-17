@@ -96,6 +96,7 @@ class RealEstateModelListing extends PropertyModelListing
         a.id,
         a.expiry_date,
         a.review,
+        a.created_by,
         b.title,
         b.city,
         b.department,

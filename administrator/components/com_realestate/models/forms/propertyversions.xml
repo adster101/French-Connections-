@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	
-  addrulepath="/libraries/frenchconnections/form/rules" 
-  addfieldpath="/libraries/frenchconnections/form/fields">
+  addrulepath="/libraries/frenchconnections/forms/rules" 
+  addfieldpath="/libraries/frenchconnections/forms/fields">
   <fieldset 
     name="location"
     label="COM_REALESTATE_LOCATION_DETAILS">    

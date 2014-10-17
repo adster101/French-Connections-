@@ -34,8 +34,10 @@ class PropertyControllerListing extends JControllerForm
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken() or die('Invalid Token');
-
     $app = JFactory::getApplication();
+    JModelLegacy::addIncludePath(JPATH_LIBRARIES . '/frenchconnections/models');
+    JTable::addIncludePath(JPATH_LIBRARIES . '/frenchconnections/tables');
+
     $model = $this->getModel('Payment');
     $data = $this->input->post->get('jform', array(), 'array');
     $context = "$this->option.edit.$this->context";
@@ -57,7 +59,7 @@ class PropertyControllerListing extends JControllerForm
 
       // Redirect back to the edit screen.
       $this->setRedirect(
-              JRoute::_('index.php?option=com_rental&view=payment&layout=account&id=' . (int) $recordId, false)
+              JRoute::_('index.php?option=' . $this->option . '&view=payment&layout=account&id=' . (int) $recordId, false)
       );
       return false;
     }
@@ -74,7 +76,7 @@ class PropertyControllerListing extends JControllerForm
 
     $data['user_id'] = $ownerId;
 
-    $profile = $this->getModel('UserProfile');
+    $profile = $this->getModel('Profile', 'UserModel');
 
     if (!$profile->save($data))
     {
@@ -566,14 +568,7 @@ class PropertyControllerListing extends JControllerForm
     return true;
   }
 
-  public function getModel($name = 'Property', $prefix = '', $config = array())
-  {
-    // Add the component model path
-    $this->addModelPath(JPATH_ADMINISTRATOR . '/components/' . $this->option . '/models/', ucfirst($this->model_prefix));
-    
-    // Get an instance of the model 
-    return parent::getModel($name, ucfirst($this->model_prefix), $config);
-  }
+ 
 
   public function validate($model, $data, $context, $recordId)
   {
@@ -622,7 +617,7 @@ class PropertyControllerListing extends JControllerForm
     }
     return true;
   }
-  
+
   /*
    * View action - checks ownership of record sets the edit id in session and redirects to the view
    *
@@ -686,6 +681,5 @@ class PropertyControllerListing extends JControllerForm
 
     return true;
   }
-
 
 }
