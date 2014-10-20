@@ -11,7 +11,7 @@ jimport('frenchconnections.models.property.listing');
 /**
  * HelloWorldList Model
  */
-class RealEstateModelListing extends PropertyModelListing
+class RealEstateModelListing extends JModelList
 {
 
   /**
@@ -65,7 +65,7 @@ class RealEstateModelListing extends PropertyModelListing
     $id .= ':' . $this->getState('filter.search');
     $id .= ':' . $this->getState('filter.extension');
     $id .= ':' . $this->getState('filter.published');
-    $id .= ':' . $this->getState('com_rental.listing.latest');
+    $id .= ':' . $this->getState('com_realestate.listing.latest');
 
     return parent::getStoreId($id);
   }
@@ -85,7 +85,7 @@ class RealEstateModelListing extends PropertyModelListing
     // Get the access control permissions in a handy array
     $canDo = PropertyHelper::getActions();
     $id = $this->getState($this->context . '.id', '');
-    $latest = $this->getState('com_rental.listing.latest', true);
+    $latest = $this->getState('com_realestate.listing.latest', true);
 
     // Create a new query object.
     $db = JFactory::getDBO();
@@ -105,6 +105,7 @@ class RealEstateModelListing extends PropertyModelListing
         b.use_invoice_details,
         b.latitude,
         b.longitude,
+        d.vat_status,  
         (select count(*) from qitz3_realestate_property_images_library where version_id = b.id) as images
       ');
     $query->from('#__realestate_property as a');

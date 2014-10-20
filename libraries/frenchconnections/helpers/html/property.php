@@ -103,7 +103,7 @@ class JHtmlProperty
     $title = JText::_('COM_RENTAL_HELLOWORLD_VIEW_PROPERTY_NOTES');
 
     return '<a class="modal"'
-            . ' href="' . JRoute::_('index.php?option=com_rental&view=notes&tmpl=component&layout=modal&property_id=' . (int) $id) . '"'
+            . ' href="' . JRoute::_('index.php?option=com_notes&view=notes&tmpl=component&layout=modal&property_id=' . (int) $id) . '"'
             . ' rel="{handler: \'iframe\', size: {x: 800, y: 550}}">'
             . '<span class="label label-info"><i class="icon-drawer-2"></i>' . $title . '</span></a>';
   }
@@ -596,6 +596,7 @@ class JHtmlProperty
   {
 
     $class = ($state) ? 'publish' : 'warning';
+    $title = ($state_of_previous) ? JText::_($title) : JText::_('COM_REALESTATE_PROGRESS_COMPLETE_PREVIOUS_SECTION');
     $id = ($view == $tab) ? 'active' : '';
     $id .= ($state) ? ' completed' : '';
     $id .= (!$state && !$state_of_previous) ? ' disabled' : '';

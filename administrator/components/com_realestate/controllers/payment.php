@@ -37,8 +37,8 @@ class RealEstateControllerPayment extends JControllerLegacy
     $recordId = $this->input->get('realestate_property_id', '', 'int');
 
     $listing = $this->getModel('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
-    $listing->setState('com_rental.listing.id', $recordId);
-    $listing->setState('com_rental.listing.latest', true);
+    $listing->setState('com_realestate.listing.id', $recordId);
+    $listing->setState('com_realestate.listing.latest', true);
 
     // Get the listing unit details
     $current_listing = $listing->getItems();
@@ -151,17 +151,17 @@ class RealEstateControllerPayment extends JControllerLegacy
 
     // import our payment library class
     jimport('frenchconnections.models.payment');
-    $previous_version = array();
+    $previous_version = array();    
     $app = JFactory::getApplication();
     $id = $this->input->get('id', '', 'int');
     $renewal = $this->input->get('renewal', false, 'boolean');
     // Get an instance of the listing model
-    $listing = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
-    $listing->setState('com_rental.listing.latest', true);
+    $listing = JModelLegacy::getInstance('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
+    $listing->setState('com_realestate.listing.latest', true);
     $user = JFactory::getUser();
 
     // Set the listing ID we are processing payment for
-    $listing->setState('com_rental.listing.id', $id);
+    $listing->setState('com_realestate.listing.id', $id);
 
     // Get the listing details (i.e. a list of units that make up the listing
     $current_version = $listing->getItems();
@@ -170,7 +170,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $renewal));
 
     // Instantiate an instance of the property model using the listing detail as the config
-    $model = $this->getModel('Payment', 'RentalModel');
+    $model = $this->getModel('Payment', 'RealEstateModel');
     $form = $model->getPaymentForm();
 
     // Data here is the clients billing address details
@@ -200,7 +200,7 @@ class RealEstateControllerPayment extends JControllerLegacy
       }
 
       // Save the data in the session.
-      $app->setUserState('com_rental.renewal.data', $data);
+      $app->setUserState('com_realestate.renewal.data', $data);
 
       // Redirect back to the edit screen.
       $this->setRedirect(JRoute::_('index.php?option=com_rental&view=renewal&layout=payment&id=' . (int) $data['id'], false));
@@ -209,22 +209,22 @@ class RealEstateControllerPayment extends JControllerLegacy
 
     if (!$renewal)
     {
-      $listing->setState('com_rental.listing.latest', false);
+      $listing->setState('com_realestate.listing.latest', false);
       $previous_version = $listing->getItems();
     }
 
     // Attempt process the payment
-    $return = $payment_model->processPayment($validData, $current_version, $previous_version);
+    $return = $payment_model->processPayment($validData, $current_version, $previous_version, $this->extension);
 
     // Check the return value.
     if ($return === false)
     {
       // Save the data in the session.
-      $app->setUserState('com_rental.renewal.data', $data);
+      $app->setUserState('com_realestate.renewal.data', $data);
 
       // Save failed, go back to the screen and display a notice.
       $message = JText::sprintf('JERROR_SAVE_FAILED', $payment_model->getError());
-      $this->setRedirect('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $data['id'], $message, 'error');
+      $this->setRedirect('index.php?option=com_realestate&view=payment&layout=payment&id=' . (int) $data['id'], $message, 'error');
       return false;
     }
 
@@ -232,7 +232,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     $message = $payment_model->processListing($return, $validData);
 
     // Empty the data stored in the session...
-    $app->setUserState('com_rental.renewal.data', $data);
+    $app->setUserState('com_realestate.renewal.data', $data);
 
     if (RentalHelper::isOwner($user->id))
     {
@@ -240,7 +240,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     }
     else
     {
-      $this->setRedirect('index.php?option=com_rental', $message);
+      $this->setRedirect('index.php?option=com_realestate', $message);
     }
 
     return true;

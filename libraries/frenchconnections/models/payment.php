@@ -178,20 +178,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    *
    */
 
-  public function getPaymentSummary($current = array(), $previous = array())
+  public function getPaymentSummary($current = array(), $previous = array(), $component = 'com_rental')
   {
 
     $order_summary = array();
-    $days_to_expiry = PropertyHelper::getDaysToExpiry($this->getExpiryDate());
 
     // Get the user details
     $user = $this->getUser($this->owner_id);
-    // TODO - If not a renewal 
-    // Get the order summary, consists of item codes and quantities
-    // Compare the expiry date with today, if not due for renewal then don't get 
-    // the payment summary, just get any vouchers that may be applied.
 
-    $order_summary = $this->summary($current);
+    $order_summary = $this->summary($current, $component);
 
     // If we have a previous version and this is not a renewal 
     if (!empty($previous) && !$this->getIsRenewal())
@@ -395,7 +390,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    *
    */
 
-  public function getPaymentForm()
+  public function getPaymentFormDepreciated()
   {
 
     $form = $this->loadForm('com_rental.helloworld', 'payment', array('control' => 'jform', 'load_data' => false));
@@ -476,10 +471,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    *
    */
 
-  public function summary($units = array())
+  public function summary($units = array(), $component = 'com_rental')
   {
     // Get the vat rate from the item costs config params setting
-    $codes = JComponentHelper::getParams('com_rental');
+    $codes = JComponentHelper::getParams($component);
 
     // $units contains the listing including all the units and so on.
     // From this we can generate our pro forma order
@@ -707,7 +702,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    * 
    */
 
-  public function processPayment($data, $current_version = array(), $previous_version = array())
+  public function processPayment($data, $current_version = array(), $previous_version = array(), $component = 'com_rental')
   {
 
     // Determine whether this payment should be saved as an auto-renewal or not
@@ -717,7 +712,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $transaction_id = '';
 
     // Get the order summary details
-    $order = $this->getPaymentSummary($current_version, $previous_version);
+    $order = $this->getPaymentSummary($current_version, $previous_version, $component);
 
     // Get the invoice component parameters which hold the protx settings
     $protx_settings = JComponentHelper::getParams('com_itemcosts');

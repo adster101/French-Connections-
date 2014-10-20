@@ -27,7 +27,7 @@ $total_vat = '';
         <?php $this->payment_summary = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts'); ?>
 
         <?php echo $this->payment_summary->render($this->summary); ?>      
-        <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&view=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+        <form action="<?php echo JRoute::_('index.php?option=com_realestate&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
           <?php foreach ($fieldsets as $fieldset) : ?>
             <fieldset>
               <legend><?php echo JText::_($fieldset->label); ?></legend>

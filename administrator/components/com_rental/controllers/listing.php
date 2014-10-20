@@ -658,9 +658,6 @@ class RentalControllerListing extends JControllerForm
     }
     else
     {
-
-
-
       // Hold the edit ID once the id and user have been authorised.
       $this->holdEditId($context, $id);
 

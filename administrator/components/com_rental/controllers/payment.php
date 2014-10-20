@@ -214,7 +214,7 @@ class RentalControllerPayment extends JControllerLegacy
     }
 
     // Attempt process the payment
-    $return = $payment_model->processPayment($validData, $current_version, $previous_version);
+    $return = $payment_model->processPayment($validData, $current_version, $previous_version, $this->extension);
 
     // Check the return value.
     if ($return === false)

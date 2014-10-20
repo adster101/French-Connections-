@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-class RentalModelNote extends JModelAdmin {
+class NotesModelNote extends JModelAdmin {
 
   /**
    * Method to get the record form.
@@ -35,7 +35,7 @@ class RentalModelNote extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Note', $prefix = 'RentalTable', $config = array()) {
+  public function getTable($type = 'Note', $prefix = 'NotesTable', $config = array()) {
     return JTable::getInstance($type, $prefix, $config);
   }
 

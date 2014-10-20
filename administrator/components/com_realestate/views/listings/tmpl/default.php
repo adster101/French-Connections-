@@ -14,7 +14,7 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $start_date = $this->state->get('filter.start_date');
 $end_date = $this->state->get('filter.end_date');
 $date_filter = $this->state->get('filter.date_filter');
-
+$user = JFactory::getUser();
 $canDo = RealEstateHelper::getActions();
 ?>
 
@@ -95,24 +95,7 @@ $canDo = RealEstateHelper::getActions();
                     <?php
                     $days_to_renewal = PropertyHelper::getDaysToExpiry($item->expiry_date);
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
-
-                    if ($item->review == 0)
-                    {
-                      $enabled = false;
-                    }
-                    elseif ($item->review == 1)
-                    {
-                      $enabled = $canDo->get('realestate.listing.submit');
-                      $enabled = false;
-                    }
-                    elseif ($item->review == 2)
-                    {
-                      $enabled = $canDo->get('realestate.listing.review');
-                    }
-                    elseif ($item->review == -1)
-                    {
-                      $enabled = false;
-                    }
+                    $enabled = ($item->review == 2) ? $canDo->get('rental.listing.review') : false;
                     ?>
                     <?php if ($canEditOwn) : ?>
                       <tr>
@@ -167,7 +150,7 @@ $canDo = RealEstateHelper::getActions();
                             <?php if ($item->checked_out) : ?>
                               <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'listing.', $canCheckin); ?>
                             <?php else: ?>
-                              <?php // echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
+                              <?php  echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
                             <?php endif; ?>
                           </td>
                         <?php endif ?>                        
@@ -182,11 +165,9 @@ $canDo = RealEstateHelper::getActions();
                               <br />
                               <?php echo JText::_($item->phone_1); ?>
                             </span>
-                            <?php if ($canDo->get('realestate.notes.view')) : ?>
+                            <?php if ($user->authorise('notes.admin', 'com_notes')) : ?>
                               <p>
                                 <?php echo JHtml::_('property.notes', $item->id); ?>
-                                &nbsp;
-                                <?php //echo JHtml::_('property.stats', $item->id, $item->created_by); ?>
                               </p>
                             <?php endif; ?>
                             <?php if (property_exists($item, 'enquiries')) : ?>

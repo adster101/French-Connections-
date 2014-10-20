@@ -172,7 +172,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
         if ($property->review < 2)
         {
           // Update the existing property table review state to indicate that the listing has been updated
-          $property->id = $table->property_id;
+          $property->id = $table->realestate_property_id;
 
           $property->review = 1;
 

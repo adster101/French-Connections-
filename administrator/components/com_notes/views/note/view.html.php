@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class RentalViewNote extends JViewLegacy {
+class NotesViewNote extends JViewLegacy {
 
   /**
    * Method to display the view.
@@ -73,7 +73,7 @@ class RentalViewNote extends JViewLegacy {
    */
   protected function setDocument() {
     $document = JFactory::getDocument();
-    $document->setTitle(JText::_('COM_RENTAL_HELLOWORLD_ADD_NOTE'));
+    $document->setTitle(JText::_('COM_NOTE_PLEASE_COMPLETE_ALL_FIELDS'));
     $document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js", 'text/javascript', true, false);
   }
 

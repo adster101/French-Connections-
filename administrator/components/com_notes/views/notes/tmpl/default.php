@@ -46,13 +46,13 @@ $canEdit = $user->authorise('core.edit', 'com_notes');
               <input type="checkbox" name="toggle" value="" class="checklist-toggle" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
             <th>
-              <?php echo JHtml::_('grid.sort', 'COM_USERS_SUBJECT_HEADING', 'a.subject', $listDirn, $listOrder); ?>
+              <?php echo JText::_('COM_NOTES_SUBJECT_HEADING'); ?>
             </th>
             <th>
-              <?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+              <?php echo JText::_('COM_NOTES_DATE_CREATED', 'a.created_time', $listDirn, $listOrder); ?>
             </th>
             <th>
-              <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('grid.sort', 'PRN', 'a.id', $listDirn, $listOrder); ?>
             </th>
           </tr>
         </thead>
@@ -75,16 +75,15 @@ $canEdit = $user->authorise('core.edit', 'com_notes');
                   <?php if ($item->subject) : ?>
                     <?php echo $this->escape($item->subject); ?>
                   <?php else : ?>
-                    <?php echo JText::_('COM_USERS_EMPTY_SUBJECT'); ?>
+                    <?php echo JHtml::_('string.truncate', $item->body, 25, true, false); ?>
                   <?php endif; ?>							
                 </a>
               </td>
-          
               <td>
-                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'notes.', $canChange, 'cb'); ?>
+                <?php echo $this->escape($item->created_on); ?>
               </td>
               <td>
-                <?php echo (int) $item->id; ?>
+                <?php echo (int) $item->property_id; ?>
               </td>
             </tr>
           <?php endforeach; ?>

@@ -48,13 +48,13 @@ class ImportControllerNotes extends JControllerForm {
 
             $query->insert('#__listing_notes');
 
-            $query->columns(array('property_id', 'subject', 'body', 'created_time'));
+            $query->columns(array('property_id', 'subject', 'body', 'created_by','created_on'));
 
             $insert_string = '';
 
             $fields = array();
 
-            $insert_string = $line[0] . ',' . $db->quote('') . ',' . $db->quote($body) . ',' . $db->quote($matches[1]);
+            $insert_string = $line[0] . ',' . $db->quote('') . ',' . $db->quote($body) . ',1,' . $db->quote($matches[1]);
 
             $query->values($insert_string);
 

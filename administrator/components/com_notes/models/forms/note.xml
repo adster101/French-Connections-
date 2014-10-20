@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_rental/models/rules">
-	<fieldset name="note">
-    <field 
+  <fieldset name="note">
+    <field
       name="property_id"
       type="text"
       filter="int"
+      label="COM_NOTES_NOTE_PROPERTY_ID"
+      class="input input-small"
       required="true"
-      class="input-large"
-      readonly="true"
-      label="COM_RENTAL_SNOOZE_PROPERTY_ID"
-			description =""      
-      labelclass="control-label">
-    </field>
+      labelclass="control-label"
+    />
     <field 
       name="subject"
-      type="input"
-      label="Note subject"
+      type="text"
+      label="COM_NOTES_NOTE_SUBJECT"
       labelclass="control-label"
-      class="input"
+      class="input input-xxlarge"
       filter="string"
       required="true">
     </field>
     <field 
       name="body"
       type="textarea"
-			label="COM_RENTAL_SNOOZE_CONTACT_NOTES"
-			description ="COM_RENTAL_IMAGES_EDIT_CAPTION_IMAGE_DESC"      
+      label="COM_RENTAL_SNOOZE_CONTACT_NOTES"
+      description ="COM_RENTAL_IMAGES_EDIT_CAPTION_IMAGE_DESC"      
       labelclass="control-label"
       class="input-xlarge"
-      filter="string">
+      filter="string"
+      hint="COM_NOTES_NOTE_BODY_PLACEHOLDER">
     </field>
   </fieldset>
 </form>

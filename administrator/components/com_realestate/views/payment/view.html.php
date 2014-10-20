@@ -35,12 +35,12 @@ class RealEstateViewPayment extends JViewLegacy
     // Get an instance of the Listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'RealEstateModel'));
     $model = $this->getModel('Listing');
-    $model->setState('com_rental.listing.latest', true);
+    $model->setState('com_realestate.listing.latest', true);
 
 
     $current_version = $model->getItems();
 
-    $model->setState('com_rental.listing.latest', false);
+    $model->setState('com_realestate.listing.latest', false);
     $previous_version = $model->getItems();
 
     // Add the Property model so we can get the renewal details...

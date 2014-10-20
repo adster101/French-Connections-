@@ -17,9 +17,9 @@ $link = empty($displayData['link']) ? '' : (JFilterOutput::ampReplace($displayDa
 ?>
 <li<?php echo $id; ?>>
   <?php if (!empty($link)) : ?>
-    <a href="<?php echo $link ?>" >
+    <a href="<?php echo $link ?>" <?php echo $title ?> rel="tooltip">
     <?php else: ?>
-      <a <?php echo $title; ?> class=""> 
+      <a <?php echo $title; ?> class="" rel="tooltip"> 
       <?php endif; ?>
       <i class="icon-<?php echo $displayData['image']; ?>"></i> 
       <?php echo $text; ?>

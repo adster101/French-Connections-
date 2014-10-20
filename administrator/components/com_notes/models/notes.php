@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       2.5
  */
-class NotesModelNotes extends JModelList {
+class NotesModelNotes extends JModelList
+{
 
   /**
    * Class constructor.
@@ -25,24 +26,16 @@ class NotesModelNotes extends JModelList {
    *
    * @since  2.5
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     // Set the list ordering fields.
-    if (empty($config['filter_fields'])) {
+    if (empty($config['filter_fields']))
+    {
       $config['filter_fields'] = array(
-          'id',
-          'a.id',
-          'a.property_id',
-          'u.name',
-          'subject',
-          'a.subject',
-          'catid',
-          'a.catid',
-          'state', 'a.state',
-          'c.title',
-          'review_time',
-          'a.review_time',
-          'publish_up', 'a.publish_up',
-          'publish_down', 'a.publish_down',
+          'a.created_on',
+          'limitstart',
+          'listlimit',
+          'state'
       );
     }
 
@@ -56,33 +49,43 @@ class NotesModelNotes extends JModelList {
    *
    * @since   2.5
    */
-  protected function getListQuery() {
+  protected function getListQuery()
+  {
+    $input = JFactory::getApplication()->input;
+    $layout = $input->get('layout', '', 'string');
     $db = $this->getDbo();
     $query = $db->getQuery(true);
 
     $query->from('#__listing_notes AS a');
 
     // Filter by a single user.
-    $property_id = (int) $this->getState('filter.property_id');
+    $search = (int) $this->getState('filter.search');
+
+    // If we're in a modal layout assume we have a property ID that we want to filter on.
+    if ($layout == 'modal')
+    {
+      $search = $input->get('property_id', '', 'int');
+    }
 
     // Select the required fields from the table.
     $query->select('
         a.id,
         a.subject,
-        a.created_time,
+        a.created_on,
         a.property_id,
-        a.body,
-        a.state
-        ');
+        a.body
+      ');
 
-    $query->where('a.property_id = ' . $property_id);
+    if (!empty($search))
+    {
+      $query->where('a.property_id = ' . (int) $search);
+    }
 
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');
     $orderDirn = $this->state->get('list.direction');
 
     $query->order($db->escape($orderCol . ' ' . $orderDirn));
-
 
     return $query;
   }
@@ -96,11 +99,14 @@ class NotesModelNotes extends JModelList {
    *
    * @since   1.6
    */
-  protected function populateState($ordering = null, $direction = null) {
-    
-		// List state information.
-		parent::populateState('a.id', 'asc');
+  protected function populateState($ordering = null, $direction = null)
+  {
 
+    $search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+    $this->setState('filter.search', $search);
+
+    // List state information.
+    parent::populateState('a.created_on', 'desc');
   }
 
 }

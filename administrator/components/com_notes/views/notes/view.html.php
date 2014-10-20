@@ -91,7 +91,7 @@ class NotesViewNotes extends JViewLegacy
     
     $user = JFactory::getUser();
 
-		JToolbarHelper::title(JText::_('COM_USERS_VIEW_NOTES_TITLE'), 'user');
+		JToolbarHelper::title(JText::_('COM_NOTES_VIEW_NOTES_TITLE'), 'list-view');
 
 		if ($user->authorise('core.create','com_notes'))
 		{
@@ -101,15 +101,6 @@ class NotesViewNotes extends JViewLegacy
 		if ($user->authorise('core.edit'))
 		{
 			JToolbarHelper::editList('note.edit');
-		}
-
-		if ($user->authorise('core.edit.state','com_notes'))
-		{
-			JToolbarHelper::divider();
-			JToolbarHelper::publish('notes.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('notes.unpublish', 'JTOOLBAR_UNPUBLISH', true);
-
-			JToolbarHelper::divider();
 		}
 
 		if ($this->state->get('filter.state') == -2 && $user->authorise('core.delete','com_notes'))
