@@ -9,10 +9,7 @@
 defined('_JEXEC') or die;
 
 $text = $displayData['text'];
-$property_id = $displayData['property_id'];
-$unit_id = $displayData['unit_id'];
-
-$url = '/listing/' . (int) $property_id . '?unit_id=' . (int) $unit_id . '&preview=1';
+$url = $displayData['url'];
 
 ?>
 <a href="<?php echo $url ?>" class="btn btn-small pull-right" target="_blank">

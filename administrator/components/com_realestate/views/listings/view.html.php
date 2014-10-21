@@ -31,7 +31,7 @@ class RealestateViewListings extends JViewLegacy
     $this->items = $this->get('Items');
     $this->state = $this->get('State');
     $this->filterForm = $this->get('FilterForm');
-    //$this->activeFilters = $this->get('ActiveFilters');
+    $this->activeFilters = $this->get('ActiveFilters');
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
@@ -89,7 +89,7 @@ class RealestateViewListings extends JViewLegacy
 
     if ($canDo->get('core.admin'))
     {
-      JToolBarHelper::preferences('COM_REALESTATE');
+      JToolBarHelper::preferences('com_realestate');
     }
 
     $view = strtolower(JRequest::getVar('view'));

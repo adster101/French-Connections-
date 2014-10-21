@@ -30,7 +30,7 @@ class RealEstateViewListing extends JViewLegacy
 
     // Add the submit model to this view so we can fetch the submit for approval form
     // And handle the associated logic...
-    $submit = $this->setModel(JModelLegacy::getInstance('Submit', 'RealEstateModel'));
+    $property = $this->setModel(JModelLegacy::getInstance('Property', 'RealEstateModel'));
 
     // Find the user details
     $user = JFactory::getUser();
@@ -43,15 +43,15 @@ class RealEstateViewListing extends JViewLegacy
     // Get data from the model
     $this->items = $this->get('Items');
     
+    // Get an instance of this model so we can pass $this->items into getProgress...
+    // TO DO - Call $this->getItems in getProgress and simplify here
     $model = $this->getModel();
     
     $this->status = $model->getProgress($this->items);
 
-    $this->pagination = $this->get('Pagination');
-
     $this->state = $this->get('State');
 
-    $this->form = $submit->getForm($this->items);
+    $this->form = $property->getSubmitForm();
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
@@ -87,7 +87,7 @@ class RealEstateViewListing extends JViewLegacy
     JToolBarHelper::title(count($this->items) > 0 ? JText::sprintf('COM_REALESTATE_LISTING_TITLE', $this->id) : 'No listings');
 
     // TO DO - For owners back should be to OA homepage, probably taken care of by permissions settings
-    JToolBarHelper::back('COM_REALESTATE_BACK_TO_PROPERTY_LIST', '/administrator/index.php?option=com_realestate');
+    JToolBarHelper::back();
     //JToolbarHelper::help('', false, '/support');
 
     if ($layout == 'review')
@@ -101,7 +101,7 @@ class RealEstateViewListing extends JViewLegacy
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->items[0]->id;
-    $bar->appendButton('Preview', 'preview', 'COM_REALESTATE_PROPERTY_PREVIEW', $property_id);
+    $bar->appendButton('Preview', 'preview', 'COM_REALESTATE_PROPERTY_PREVIEW', $property_id,'','com_realestate');
   }
 
   /**

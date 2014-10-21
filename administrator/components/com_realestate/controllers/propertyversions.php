@@ -95,9 +95,8 @@ class RealEstateControllerPropertyVersions extends JControllerForm
     $id = $model->getState($model->getName() . '.id');
 
     // Set a message indicating success...
-    $this->setError(JText::_('COM_REALESTATE_NEW_PROPERTY_CREATED_SUCCESS'));
-    $this->setMessage($this->getError(), 'message');
-
+    $this->setMessage(JText::_('COM_REALESTATE_NEW_PROPERTY_CREATED_SUCCESS'));
+    
     $this->holdEditId('com_realestate.edit.listing', $id);
 
     // Redirect to the edit screen.

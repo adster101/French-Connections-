@@ -38,15 +38,29 @@ class JToolbarButtonPreview extends JToolbarButton
    *
    * @since   3.0
    */
-  public function fetchButton($type = 'Preview', $name = '', $text = '', $property_id = '', $unit_id = '', $property_type = '' )
+  public function fetchButton($type = 'Preview', $name = '', $text = '', $property_id = '', $unit_id = '', $option = 'com_accommodation')
   {
 
     // Store all data to the options array for use with JLayout
     $options = array();
-		$options['text'] = JText::_($text);
+    $options['text'] = JText::_($text);
     $options['class'] = $this->fetchIconClass($name);
     $options['property_id'] = $property_id;
     $options['unit_id'] = $unit_id;
+
+    // Below is a bit of a fudge which basically gets the alias for $option.
+    // Then just manually build the URL for the preview link.
+    // TO DO - Move this to a helper function called in the view and pass the url
+    // as an argument.
+    $app = JApplication::getInstance('site');
+    $menu = $app->getMenu();
+    $items = $menu->getItems('component', $option);
+    
+    // If there is a unit ID append it to the URL, not really necessary but avoids a 301
+    $unit_append = ($unit_id) ? '&unit_id=' . (int) $unit_id . '&preview=1' : '?preview=1';
+    
+    // Add the url to the options for rendering in the layout
+    $options['url'] = '/' . $items[0]->alias . '/' . (int) $property_id . $unit_append;
 
     // Instantiate a new JLayoutFile instance and render the layout
     $layout = new JLayoutFile('frenchconnections.property.admin');

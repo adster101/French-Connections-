@@ -21,10 +21,9 @@ $originalOrders = array();
 $canDo = PropertyHelper::getActions();
 $canEditOwn = $canDo->get('core.edit.own');
 
-$data = array();
-$data['progress'] = $this->items;
-$data['form'] = $this->form;
-$data['status'] = $this->status;
+
+
+
 ?>
 
 <div class="row-fluid">
@@ -39,38 +38,28 @@ $data['status'] = $this->status;
 
       <form action="<?php echo JRoute::_('index.php?option=com_realestate'); ?>" method="post" name="adminForm" class="form-validate form-horizontal" id="adminForm">
 
-        <?php
-        $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
-        //echo $layout->render($data);
-        ?>
 
-        <table class = "table table-striped" id = "articleList">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody>
-            <?php foreach ($this->items as $i => $item):
-              ?>
-              <?php if ($canEditOwn) : ?>
-                <tr>
-                  <td>
-                    <?php echo JHtml::_('property.progressButton', 'propertyversions.edit', $this->status->property_detail, 'COM_REALESTATE_PROPERTY_DETAIL') ?>
-                    <?php echo JHtml::_('property.progressButton', 'images.manage', $this->status->gallery, 'IMAGE_GALLERY') ?>
-                  </td>
-                </tr>
-              <?php endif; ?>
-            <?php endforeach; ?>
-          <input type="hidden" name="extension" value="<?php echo 'com_realestate'; ?>" />
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="7"></td>
-            </tr>
-          </tfoot>
-        </table>
-        <?php echo $this->pagination->getListFooter(); ?>
+
+        <div class="well well-small">
+          <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
+          <hr />
+          <fieldset class="panelform">
+            <div class="control-group">   
+              <?php echo $this->form->getLabel('admin_notes'); ?>
+              <div class="controls">   
+                <?php echo $this->form->getInput('admin_notes'); ?>
+              </div>
+            </div>      
+            <?php echo $this->form->getInput('tos'); ?>  
+            <?php echo $this->form->getLabel('tos'); ?>
+            <hr />
+          </fieldset>
+          <button class="btn btn-primary" onclick="Joomla.submitbutton('listing.submit')">
+            <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
+          </button>
+        </div>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="realestate_property_id" value="<?php echo $item->id ?>" />
+        <input type="hidden" name="property_id" value="<?php echo (int) $this->id ?>" />
 
         <?php echo JHtml::_('form.token'); ?> .
       </form>

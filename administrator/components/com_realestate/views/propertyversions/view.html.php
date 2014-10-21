@@ -103,8 +103,8 @@ class RealEstateViewPropertyversions extends JViewLegacy
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
-    $property_id = $this->item->realestate_property_id;
-    $bar->appendButton('Preview', 'preview', 'COM_REALESTATE_PROPERTY_PREVIEW', $property_id);
+
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->item->realestate_property_id,'','com_realestate');
 
 
     JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');

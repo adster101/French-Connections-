@@ -65,30 +65,20 @@ class RealEstateViewImages extends JViewLegacy
    */
   protected function addToolBar()
   {
-    // Determine the layout we are using.
-    // Should this be done with views?
-    $view = strtolower(JRequest::getVar('view'));
-
-    $user = JFactory::getUser();
-    $userId = $user->id;
-
-    // Get component level permissions
-    $canDo = PropertyHelper::getActions();
-
+   
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->property->title, $this->property->realestate_property_id));
-
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-    JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CLOSE');
+    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
 
     //JToolBarHelper::help('', true);
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
-    $property_id = $this->progress[0]->id;
-    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property->realestate_property_id);
+        
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property->realestate_property_id,'','com_realestate');
+  
   }
-
   /**
    * Method to set up the document properties
    *

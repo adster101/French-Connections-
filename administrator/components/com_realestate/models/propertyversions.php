@@ -13,6 +13,58 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 {
 
   /**
+   * Take a copy of the images for this property.. 
+   * 
+   * @param type $old_version_id
+   * @param type $new_version_id
+   * @return boolean
+   * @throws Exception 
+   */
+  public function copyUnitImages($old_version_id = '', $new_version_id = '')
+  {
+
+    // Get a list of all images stored against the old version
+    $image = JModelLegacy::getInstance('Images', 'RealEstateModel', $config = array('ignore_request' => true));
+
+    $image->setState('version_id', $old_version_id);
+
+    // Get the images assigned to this old unit version id
+    $images = $image->getItems();
+
+    // If there are no images for the current version then return
+    if (empty($images))
+    {
+      return true;
+    }
+
+    // Get a db instance
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->insert('#__realestate_property_images_library');
+
+    $query->columns(array('version_id', 'realestate_property_id', 'image_file_name', 'caption', 'ordering'));
+
+    foreach ($images as $image)
+    {
+      // Only insert if there are some images
+      $insert_string = "$new_version_id, '" . $image->realestate_property_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
+      $query->values($insert_string);
+    }
+
+    // Execute the query
+    $this->_db->setQuery($query);
+
+
+
+    if (!$db->execute($query))
+    {
+      Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_REALESTATE_PROPERTY_VERSION', $this->getError()));
+    }
+    return true;
+  }
+
+  /**
    * Returns a reference to the a Table object, always creating it.
    *
    * @param	type	The table type to instantiate
@@ -49,6 +101,25 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
   }
 
   /**
+   * Method to get the data that should be injected in the form.
+   *
+   * @return	mixed	The data for the form.
+   * @since	1.6
+   */
+  protected function loadFormData()
+  {
+    // Check the session for previously entered form data.
+    $data = JFactory::getApplication()->getUserState('com_realestate.edit.propertyversions.data', array());
+
+    if (empty($data))
+    {
+      $data = $this->getItem();
+    }
+
+    return $data;
+  }
+
+  /**
    * Overidden method to save the form data.
    *
    * @param   array  $data  The filtered form data.
@@ -67,8 +138,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
     $isNew = true;
 
     // Allow an exception to be thrown.
-    try
-    {
+    try {
       // Load the parent property details. 
       $property = $model->getItem($pk);
 
@@ -177,7 +247,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
           $property->review = 1;
 
           $property_data = JArrayHelper::fromObject($property);
-          
+
           if (!$model->save($property_data))
           {
             $this->setError($property->getError());
@@ -194,8 +264,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
       // Clean the cache.
       $this->cleanCache();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       // Roll back any queries executed so far
       $db->transactionRollback();
@@ -222,58 +291,5 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
     return true;
   }
-
-  /**
-   * Take a copy of the images for this property.. 
-   * 
-   * @param type $old_version_id
-   * @param type $new_version_id
-   * @return boolean
-   * @throws Exception 
-   */
-  public function copyUnitImages($old_version_id = '', $new_version_id = '')
-  {
-
-    // Get a list of all images stored against the old version
-    $image = JModelLegacy::getInstance('Images', 'RealEstateModel', $config = array('ignore_request' => true));
-
-    $image->setState('version_id', $old_version_id);
-
-    // Get the images assigned to this old unit version id
-    $images = $image->getItems();
-
-    // If there are no images for the current version then return
-    if (empty($images))
-    {
-      return true;
-    }
-
-    // Get a db instance
-    $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-
-    $query->insert('#__realestate_property_images_library');
-
-    $query->columns(array('version_id', 'realestate_property_id', 'image_file_name', 'caption', 'ordering'));
-
-    foreach ($images as $image)
-    {
-      // Only insert if there are some images
-      $insert_string = "$new_version_id, '" . $image->realestate_property_id . "','" . $image->image_file_name . "','" . mysql_real_escape_string($image->caption) . "','" . $image->ordering . "'";
-      $query->values($insert_string);
-    }
-
-    // Execute the query
-    $this->_db->setQuery($query);
-
-
-
-    if (!$db->execute($query))
-    {
-      Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_REALESTATE_PROPERTY_VERSION', $this->getError()));
-    }
-    return true;
-  }
-
 }
 

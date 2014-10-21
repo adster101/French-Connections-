@@ -31,8 +31,9 @@ abstract class SearchHelper
     // Get the menu items for com_finder.
     if (!$items || !$active)
     {
-      $app = JFactory::getApplication('site');
-      $com = $query[0];
+      //$app = JFactory::getApplication('site');
+      $app = JApplicationSite::getInstance('site');
+
       $menu = $app->getMenu();
       $items = $menu->getItems($query[0], $query[1]);
       $items = is_array($items) ? $items : array();

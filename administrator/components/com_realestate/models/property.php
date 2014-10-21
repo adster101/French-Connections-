@@ -12,10 +12,23 @@ jimport('joomla.application.component.modeladmin');
 class RealestateModelProperty extends JModelAdmin
 {
 
+  public function getSubmitForm($data = array(), $loadData = false)
+  {
+    JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
+    $form = $this->loadForm('com_realestate.submit', 'submit', array('control' => 'jform', 'load_data' => $loadData));
+
+    if (empty($form))
+    {
+      return false;
+    }
+
+    return $form;
+  }
+
   public function getForm($data = array(), $loadData = true)
   {
     JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
-    $form = $this->loadForm('com_rental.listing', 'admin', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_realestate.listing', 'admin', array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))
     {
@@ -116,7 +129,6 @@ class RealestateModelProperty extends JModelAdmin
     else
     {
       // Need to get the value of the renewal/update
-      
     }
 
     if (!parent::save($data))

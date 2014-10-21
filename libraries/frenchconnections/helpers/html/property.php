@@ -156,7 +156,7 @@ class JHtmlProperty
             'inactive_class' => 'publish'
         ),
         0 => array(
-            'task' => '',
+            'task' => 'propertyversions.edit',
             'text' => '',
             'active_title' => '',
             'inactive_title' => 'COM_USERS_ACTIVATED',

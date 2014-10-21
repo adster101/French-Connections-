@@ -72,7 +72,7 @@ class RealestateImport extends JApplicationCli
                         $db->quoteName('created_by')
                     )
             )
-            ->values($db->quote($expiry_date) . ', 1, ' . $db->quote($date) . ',1,1');
+            ->values($db->quote($expiry_date) . ', 1, ' . $db->quote($date) . ',0,1');
 
     $db->setQuery($query);
 

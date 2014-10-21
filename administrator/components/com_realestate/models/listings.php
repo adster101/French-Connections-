@@ -10,7 +10,7 @@ jimport('joomla.application.component.modellist');
  */
 class RealestateModelListings extends JModelList
 {
-
+  
   /**
    * Constructor.
    *
@@ -171,22 +171,19 @@ class RealestateModelListings extends JModelList
     }
 
     // Filter by snooze state
-    // Should only apply to users who can view and change snooze state
-    if ($canDo->get('realestate.notes.add'))
-    {
-      $snooze_state = $this->getState('filter.snoozed');
+    $snooze_state = $this->getState('filter.snoozed');
 
-      // If snooze state is not set or set to hide snoozed...
-      if ($snooze_state == false || $snooze_state == 1)
-      {
-        // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
-        $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
-      }
-      elseif ($snooze_state == 2)
-      {
-        // Don't filter, show snoozed properties. Point?
-      }
+    // If snooze state is not set or set to hide snoozed...
+    if ($snooze_state == false || $snooze_state == 1)
+    {
+      // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
+      $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
     }
+    elseif ($snooze_state == 2)
+    {
+      // Don't filter, show snoozed properties. Point?
+    }
+
 
     // Filter on expiry date
     $date_filter = $this->getState('filter.date_filter');

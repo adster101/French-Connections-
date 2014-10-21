@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form	addrulepath="/libraries/frenchconnections/forms/rules">
+  <fieldset name="submit">
+    <field
+      name="admin_notes"
+      type="textarea"
+      default=""
+      labelclass="control-label"
+      label="COM_RENTAL_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_NOTES_FIELD"
+      description ="COM_RENTAL_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_NOTES_DESCRIPTION"
+      maxlength="75"
+      required="false"
+      cols="10"
+      class="validate submission-notes xxxlarge"
+      filter="string">
+    </field>
+
+    <field
+      name="tos"
+      type="checkbox"
+      required="true"
+      labelclass="checkbox required"
+      filter="int"
+      message="Please confirm that you accept the terms and conditions"
+      label="COM_RENTAL_LISTING_SUBMIT_TERMS_AND_CONDITIONS">
+    </field>
+   
+    <field
+      name="property_id"
+      type="hidden"
+      default=""
+      filter="int">
+    </field>
+  </fieldset>
+</form>

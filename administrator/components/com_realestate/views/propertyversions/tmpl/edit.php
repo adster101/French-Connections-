@@ -7,26 +7,26 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.keepalive');
 
 // $this->status is passed into tabs layout, unwise to couple this way? 
-$data = array('status'=>$this->status);
+$data = array('status' => $this->status);
 $tabs = new JLayoutFile('realestate_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
-
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_realestate&view=property&task=edit&realestate_property_id=' . (int) $this->item->realestate_property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
-  <?php echo JHtml::_('form.token'); ?>
-  <div class="row-fluid">
-    <?php if (!empty($this->sidebar)): ?>
-      <div id="j-sidebar-container" class="span2">
-        <?php echo $this->sidebar; ?>
-        <?php //echo JText::_('COM_REALESTATE_LISTING_DETAILS_HELP'); ?>
-      </div>
-      <div id="" class="span10">
-      <?php else : ?>
-        <div class="span12">
-        <?php endif; ?>
-        <?php
-        // Render the progress tabs
-        echo $tabs->render($data);
-        ?>
+<div class="row-fluid">
+  <?php if (!empty($this->sidebar)): ?>
+    <div id="j-sidebar-container" class="span2">
+      <?php echo $this->sidebar; ?>
+      <?php //echo JText::_('COM_REALESTATE_LISTING_DETAILS_HELP'); ?>
+    </div>
+    <div id="" class="span10">
+    <?php else : ?>
+      <div class="span12">
+      <?php endif; ?>
+      <?php
+      // Render the progress tabs
+      echo $tabs->render($data);
+      ?>
+      <form action="<?php echo JRoute::_('index.php?option=com_realestate&view=property&task=edit&realestate_property_id=' . (int) $this->item->realestate_property_id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
+        <?php echo JHtml::_('form.token'); ?>
+
         <fieldset class="adminform">       
           <legend>
             <?php echo JText::_('COM_REALESTATE_LOCATION_DETAILS'); ?>
@@ -123,12 +123,13 @@ $tabs = new JLayoutFile('realestate_tabs', $basePath = JPATH_ADMINISTRATOR . '/c
             </div>              
           </div>
         </fieldset>            
-      </div>
-    </div>
-    <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
-      <?php echo $field->input; ?>
-    <?php endforeach; ?>
-    <input type="hidden" name="task" value="" />
-    <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_realestate&task=images.manage&realestate_property_id=' . (int) $this->item->realestate_property_id, false)); ?>" />
-</form>
 
+        <?php foreach ($this->form->getFieldset('hidden-details') as $field): ?>
+          <?php echo $field->input; ?>
+        <?php endforeach; ?>
+        <input type="hidden" name="task" value="" />
+        <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_realestate&task=images.manage&realestate_property_id=' . (int) $this->item->realestate_property_id, false)); ?>" />
+      </form>
+
+    </div>
+  </div>

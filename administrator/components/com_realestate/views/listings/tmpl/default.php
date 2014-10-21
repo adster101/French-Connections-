@@ -6,14 +6,11 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('behavior.modal', 'a.modal');
 
-
-$arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+// Include the component helper...
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
-$start_date = $this->state->get('filter.start_date');
-$end_date = $this->state->get('filter.end_date');
-$date_filter = $this->state->get('filter.date_filter');
 $user = JFactory::getUser();
 $canDo = RealEstateHelper::getActions();
 ?>
@@ -95,7 +92,7 @@ $canDo = RealEstateHelper::getActions();
                     <?php
                     $days_to_renewal = PropertyHelper::getDaysToExpiry($item->expiry_date);
                     $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
-                    $enabled = ($item->review == 2) ? $canDo->get('rental.listing.review') : false;
+                    $enabled = ($item->review == 2) ? $canDo->get('realestate.listing.review') : false;
                     ?>
                     <?php if ($canEditOwn) : ?>
                       <tr>
@@ -112,77 +109,72 @@ $canDo = RealEstateHelper::getActions();
                         <?php endif; ?>
                         <td>
                           <?php echo JHtml::_('image', 'images/property/' . $item->id . '/thumb/' . $item->thumbnail, '') ?>
-                          <?php if ($item->review != 2) : ?>
-                            <br />
-                            <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
-                              <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
-                            </a>                        
+                          <?php if ($item->checked_out) : ?>
+                            <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'property.', $canCheckin); ?>
                           <?php endif; ?>
-                        </td>
-                        <td>
-                          <?php echo $item->expiry_date; ?>
-                          <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0 && !empty($days_to_renewal)) : // Property is expiring in the next 28 days ?>
-                            <p>
-                              <?php echo JText::sprintf('COM_REALESTATE_LISTING_DAYS_TO_RENEWAL', $days_to_renewal); ?>
-                            </p>
-                          <?php elseif ($days_to_renewal < 0) : // Property must have expired   ?>
-                            <p>
-                              <?php echo JText::sprintf('COM_REALESTATE_LISTING_PROPERTY_EXPIRED'); ?>
-                            </p>
-                          <?php endif; ?>
-                        </td>
-                        <td>
+                          <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
+                            <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
+                          </a>                        
+                        <?php endif; ?>
+                      </td>
+                      <td>
+                        <?php echo $item->expiry_date; ?>
+                        <?php if ($days_to_renewal <= 28 && $days_to_renewal >= 0 && !empty($days_to_renewal)) : // Property is expiring in the next 28 days ?>
                           <p>
-                            <a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
-                              <i class="icon icon-chevron-right"></i>
-                              <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
-                            </a>
+                            <?php echo JText::sprintf('COM_REALESTATE_LISTING_DAYS_TO_RENEWAL', $days_to_renewal); ?>
                           </p>
-                        </td>
+                        <?php elseif ($days_to_renewal < 0) : // Property must have expired   ?>
+                          <p>
+                            <?php echo JText::sprintf('COM_REALESTATE_LISTING_PROPERTY_EXPIRED'); ?>
+                          </p>
+                        <?php endif; ?>
+                      </td>
+                      <td>
+                        <p>
+                          <a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
+                            <i class="icon icon-chevron-right"></i>
+                            <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
+                          </a>
+                        </p>
+                      </td>
+                      <td>
+                        <?php echo JText::_($item->modified); ?>
+                      </td>
+                      <td>
+                        <?php echo JText::_($item->created_on); ?>
+                      </td>
+                      <?php if ($canDo->get('realestate.listing.review')): ?>
                         <td>
-                          <?php echo JText::_($item->modified); ?>
+                          <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
                         </td>
+                      <?php endif ?>                        
+                      <?php if ($canDo->get('realestate.listings.showowner')) : ?>
                         <td>
-                          <?php echo JText::_($item->created_on); ?>
-                        </td>
-                        <?php if ($canDo->get('realestate.listing.review')): ?>
-                          <td>
-                            <?php if ($item->checked_out) : ?>
-                              <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'listing.', $canCheckin); ?>
-                            <?php else: ?>
-                              <?php  echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
-                            <?php endif; ?>
-                          </td>
-                        <?php endif ?>                        
-                        <?php if ($canDo->get('realestate.listings.showowner')) : ?>
-                          <td>
-                            <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
-                              <?php echo JText::_($item->name); ?>
-                            </a>
+                          <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
+                            <?php echo JText::_($item->name); ?>
+                          </a>
+                          <br />
+                          <span class="small muted">
+                            <a href="mailto:<?php echo JText::_($item->email); ?>"><?php echo JText::_($item->email); ?></a>
                             <br />
-                            <span class="small muted">
-                              <a href="mailto:<?php echo JText::_($item->email); ?>"><?php echo JText::_($item->email); ?></a>
-                              <br />
-                              <?php echo JText::_($item->phone_1); ?>
-                            </span>
-                            <?php if ($user->authorise('notes.admin', 'com_notes')) : ?>
-                              <p>
-                                <?php echo JHtml::_('property.notes', $item->id); ?>
-                              </p>
-                            <?php endif; ?>
-                            <?php if (property_exists($item, 'enquiries')) : ?>
-                              <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
-                            <?php endif; ?>
-                          </td>
-                        <?php endif; ?>
-                        <?php if (property_exists($item, 'value')) : ?>
-                          <td>
-                            <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?> 
-                          </td>
-                        <?php endif; ?>
-                      </tr>
-                    <?php else : ?>
-                    <?php endif; ?>
+                            <?php echo JText::_($item->phone_1); ?>
+                          </span>
+                          <?php if ($user->authorise('notes.admin', 'com_notes')) : ?>
+                            <p>
+                              <?php echo JHtml::_('property.notes', $item->id); ?>
+                            </p>
+                          <?php endif; ?>
+                          <?php if (property_exists($item, 'enquiries')) : ?>
+                            <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
+                          <?php endif; ?>
+                        </td>
+                      <?php endif; ?>
+                      <?php if (property_exists($item, 'value')) : ?>
+                        <td>
+                          <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?> 
+                        </td>
+                      <?php endif; ?>
+                    </tr>
                   <?php endforeach; ?>
                 <input type="hidden" name="extension" value="<?php echo 'com_realestate'; ?>" />
 

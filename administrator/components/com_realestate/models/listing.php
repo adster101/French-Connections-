@@ -13,7 +13,7 @@ jimport('frenchconnections.models.property.listing');
  */
 class RealEstateModelListing extends JModelList
 {
-
+  
   /**
    * Method to auto-populate the model state.
    *
@@ -164,6 +164,14 @@ class RealEstateModelListing extends JModelList
 
   /**
    * 
+   */
+  public function getNotice($listing = array())
+  {
+    
+  }
+
+  /**
+   * 
    * Method takes an array of units and determines the overall status / progress of the listing.
    * Listing needs location, unit, images, availability, tariffs and 
    * 
@@ -172,6 +180,7 @@ class RealEstateModelListing extends JModelList
    */
   public function getProgress($listing = array())
   {
+
     // Create a listing object to hold the status
     $state = new stdClass;
 
@@ -184,7 +193,7 @@ class RealEstateModelListing extends JModelList
     $state->expiry_date = (empty($listing[0]->expiry_date)) ? '' : $listing[0]->expiry_date; // The expiry date
     $state->payment = (empty($listing[0]->expiry_date)) ? false : true; // The expiry date
     $state->days_to_renewal = PropertyHelper::getDaysToExpiry($listing[0]->expiry_date); // The calculated days to expiry
-    
+
     if (!$listing[0]->use_invoice_details && empty($listing[0]->first_name) && empty($listing[0]->surname) && empty($listing[0]->email_1) && empty($listing[0]->phone_1))
     {
       $state->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
@@ -203,7 +212,6 @@ class RealEstateModelListing extends JModelList
     {
       $state->property_detail = false;
       $state->complete = false;
-
     }
 
     // Check if we have some images
@@ -211,9 +219,14 @@ class RealEstateModelListing extends JModelList
     {
       $state->gallery = false;
       $state->complete = false;
-
     }
 
+    // Determine any notices to show to the owner 
+    if ($state->complete && $state->review == 1) 
+    {
+      $state->notice = JText::sprintf('COM_PROPERTY_NON_SUBMITTED_CHANGES', $listing[0]->id);
+    }
+    
     return $state;
   }
 
