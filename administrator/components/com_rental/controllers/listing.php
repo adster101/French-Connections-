@@ -277,7 +277,7 @@ class RentalControllerListing extends JControllerForm
       // Updates the review status for all units and property
       $publish = $model->publishListing($listing);
     }
-    
+
     if (!$publish)
     {
       // TO DO - Log and determine action
@@ -458,7 +458,7 @@ class RentalControllerListing extends JControllerForm
     $lang = JFactory::getLanguage();
     $model = $this->getModel('Submit');
     $data = $this->input->post->get('jform', array(), 'array');
- 		$cid   = $this->input->post->get('cid', array(), 'array');
+    $cid = $this->input->post->get('cid', array(), 'array');
     $property_id = $this->input->post->get('property_id', '', 'int');
 
     $context = "$this->option.edit.$this->context";
@@ -467,7 +467,7 @@ class RentalControllerListing extends JControllerForm
     $user = JFactory::getUser();
 
     // Get the record ID from the data array
-		$recordId = (int) (count($cid) ? $cid[0] : $property_id);
+    $recordId = (int) (count($cid) ? $cid[0] : $property_id);
 
     // Check that the edit ID is in the session scope
     if (!$this->checkEditId($context, $recordId))
@@ -643,29 +643,31 @@ class RentalControllerListing extends JControllerForm
 
     $app->setUserState($context . '.data', null);
 
-    // Check property out to user reviewing
-    if ($checkin && !$model->checkout($id) && !$isOwner)
-    {
+    /* Check property out to user reviewing
+      if ($checkin && !$model->checkout($id) && !$isOwner)
+      {
       // Check-out failed, display a notice but allow the user to see the record.
       $this->setError(JText::sprintf('This property is already checked out.', $model->getError()));
       $this->setMessage($this->getError(), 'error');
       $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option, false
-              )
+      JRoute::_(
+      'index.php?option=' . $this->option, false
+      )
       );
       return false;
-    }
-    else
-    {
-      // Hold the edit ID once the id and user have been authorised.
-      $this->holdEditId($context, $id);
+      }
+      else
+      //{
+     * 
+     */
+    // Hold the edit ID once the id and user have been authorised.
+    $this->holdEditId($context, $id);
 
-      $this->setRedirect(
-              JRoute::_(
-                      'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
-      );
-    }
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=listing&id=' . (int) $id, false)
+    );
+
 
     return true;
   }
