@@ -117,6 +117,8 @@ class AllezFrancais extends RealestateImport
           foreach ($prop->images as $i => $image)
           {
 
+            (JDEBUG) ? $this->out($image) : '';
+
             // Split the URL into an array
             $image_parts = explode('/', $image);
 
