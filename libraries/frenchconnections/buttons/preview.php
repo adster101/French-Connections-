@@ -57,7 +57,7 @@ class JToolbarButtonPreview extends JToolbarButton
     $items = $menu->getItems('component', $option);
     
     // If there is a unit ID append it to the URL, not really necessary but avoids a 301
-    $unit_append = ($unit_id) ? '&unit_id=' . (int) $unit_id . '&preview=1' : '?preview=1';
+    $unit_append = ($unit_id) ? '?unit_id=' . (int) $unit_id . '&preview=1' : '?preview=1';
     
     // Add the url to the options for rendering in the layout
     $options['url'] = '/' . $items[0]->alias . '/' . (int) $property_id . $unit_append;
