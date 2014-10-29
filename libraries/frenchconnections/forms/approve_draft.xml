@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset name="message">
+    <field
+      name="subject"
+      type="text"
+      class="input-xxlarge"
+      filter="string"
+      required="true"
+      label="Subject"
+    />
+    <field
+      name="body"
+      type="editor"
+      label="Message to owner"
+      description =""
+      required="true"
+      class="validate"
+      filter="safehtml">
+    </field>
+  
+    <field 
+      name="id"
+      filter="int"
+      required="true"
+      type="hidden"
+    />
+  </fieldset>
+</form>

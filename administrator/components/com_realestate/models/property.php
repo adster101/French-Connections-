@@ -12,7 +12,7 @@ jimport('joomla.application.component.modeladmin');
 class RealestateModelProperty extends JModelAdmin
 {
 
-  public function getSubmitForm($data = array(), $loadData = false)
+  public function getSubmitForm($data = array(), $loadData = true)
   {
     JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
     $form = $this->loadForm('com_realestate.submit', 'submit', array('control' => 'jform', 'load_data' => $loadData));
@@ -137,18 +137,25 @@ class RealestateModelProperty extends JModelAdmin
       return false;
     }
 
-    // Update the notes 
-    // Get the note model instance
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/models');
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
-    $note = JModelLegacy::getInstance('Note', 'NotesModel', $config = array('ignore_request' => true));
-    // Set the property ID
-    $data['property_id'] = $data['id'];
-    unset($data['id']);
-    // Save the mother load
-    if (!$note->save($data))
+    if (!empty($data['subject']))
     {
-      return false;
+
+      // Update the notes 
+      // Get the note model instance
+      JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/models');
+      JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
+      $note = JModelLegacy::getInstance('Note', 'NotesModel', $config = array('ignore_request' => true));
+
+      // Set the property ID
+      $data['property_id'] = $data['id'];
+
+      unset($data['id']);
+      
+      // Save the mother load
+      if (!$note->save($data))
+      {
+        return false;
+      }
     }
     // Return back to the controller.
     return true;

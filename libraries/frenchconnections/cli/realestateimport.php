@@ -114,7 +114,8 @@ class RealestateImport extends JApplicationCli
     }
     catch (RuntimeException $e)
     {
-      var_dump($query->dump());die;
+      var_dump($query->dump());
+      die;
       throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
     }
 
@@ -154,7 +155,7 @@ class RealestateImport extends JApplicationCli
     $query = $db->getQuery(true);
     $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
     $date = JFactory::getDate();
-   
+
     $query->update('#__realestate_property')
             ->set('expiry_date = ' . $db->quote($expiry_date))
             ->where('id = ' . (int) $id);
@@ -176,14 +177,13 @@ class RealestateImport extends JApplicationCli
     $query = $db->getQuery(true);
 
     $query->update('#__realestate_property_versions')
-            ->set('title = ' . $data['title'] . ',' 
-                  . 'description = ' . $data['description'] . ','
-                  . 'single_bedrooms = ' . $data['single_bedrooms'] . ','
-                  . 'double_bedrooms = ' . $data['double_bedrooms'] . ','
-                  . 'base_currency = ' . $data['base_currency'] . ','
-                  . 'price = ' . $data['price'] . ','
-                  . 'published_on = ' . $data['published_on'])
-            
+            ->set('title = ' . $data['title'] . ','
+                    . 'description = ' . $data['description'] . ','
+                    . 'single_bedrooms = ' . $data['single_bedrooms'] . ','
+                    . 'double_bedrooms = ' . $data['double_bedrooms'] . ','
+                    . 'base_currency = ' . $data['base_currency'] . ','
+                    . 'price = ' . $data['price'] . ','
+                    . 'published_on = ' . $data['published_on'])
             ->where('realestate_property_id = ' . $data['id']);
 
     $db->setQuery($query);
@@ -203,7 +203,6 @@ class RealestateImport extends JApplicationCli
 
   public function email(Exception $e)
   {
-
     $mail = JFactory::getMailer();
     $mail->addRecipient('adamrifat@frenchconnections.co.uk');
     $mail->setBody($e->getMessage() . '<br />' . $e->getTraceAsString() . '<br />' . $e->getLine());
@@ -211,5 +210,4 @@ class RealestateImport extends JApplicationCli
     $mail->isHtml(true);
     $send = $mail->send();
   }
-
 }

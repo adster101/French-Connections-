@@ -73,7 +73,7 @@ $prices = JHtml::_('general.price', $this->result->price, $this->result->base_cu
           <p>
             <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>
           </p>
-          <p class=""><?php echo JText::sprintf('COM_FCSEARCH_REF', $this->result->id); ?></p>
+          <p class=""><?php echo JText::sprintf('COM_FCSEARCH_REF', $this->result->property_id); ?></p>
         </div>
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">

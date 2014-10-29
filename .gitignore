@@ -58,3 +58,7 @@ robots.txt
 /adserver/
 /openx_old/
 /diary/
+/administrator/components/com_cmigrator/
+/administrator/language/en-GB/en-GB.com_cmigrator.ini
+/administrator/language/en-GB/en-GB.com_cmigrator.sys.ini
+/plugins/authentication/cmigrator/

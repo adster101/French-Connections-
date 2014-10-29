@@ -13,7 +13,7 @@ jimport('frenchconnections.models.property.listing');
  */
 class RealEstateModelListing extends JModelList
 {
-  
+
   /**
    * Method to auto-populate the model state.
    *
@@ -37,14 +37,133 @@ class RealEstateModelListing extends JModelList
     // The listing ID
     $id = $input->get('id', '', 'int');
 
-    $context = $this->context;
-
     $this->setState($this->context . '.id', $id);
 
     $this->setState('filter.latest', true);
 
     // List state information.
     //parent::populateState('a.id', 'asc');
+  }
+
+  /**
+   * Controller action to publish a listing. Activated from the PFR 'approve' view
+   * 
+   * @param type $items
+   * @return boolean
+   */
+  public function publishListing($items = array())
+  {
+
+    $db = JFactory::getDbo();
+
+    try
+    {
+
+      // Start a db transaction so we can roll back if necessary
+      $db->transactionStart();
+
+      // Update the property versions 
+      if ($items[0]->property_review)
+      {
+
+        $query = $db->getQuery(true);
+        // Set an update statement - should only be here is there are two versions...
+        // Also updates the 'published on' date
+        $query->update('#__realestate_property_versions');
+        $query->set('
+          review = CASE review
+              WHEN 0 THEN -1
+              WHEN 1 THEN 0
+            END,
+            published_on = CASE review
+              WHEN 0 THEN now()
+            END
+        ');
+
+        // Do this for the property ID
+        $query->where('realestate_property_id=' . (int) $items[0]->id);
+
+        $db->setQuery($query);
+        $db->execute();
+      }
+
+
+
+      // Update the property review and expirty date
+      $query = $db->getQuery(true);
+
+      $query->update('#__realestate_property');
+      $query->set('review = 0');
+      $query->set('published = 1');
+      $query->set('checked_out = \'\'');
+      $query->set('checked_out_time = \'\'');
+      $query->set('value = null');
+
+      // If the expiry date is empty, and the property is being approved then implicity assume it's 
+      // a new property and set the renewal date accordingly. 
+      if (empty($items[0]->expiry_date))
+      {
+        $expiry_date = JFactory::getDate('+1 year');
+        $query->set('expiry_date=' . $db->quote($expiry_date));
+      }
+
+      $query->where('id=' . (int) $items[0]->id);
+
+      $db->setQuery($query);
+      $db->execute();
+
+      $db->transactionCommit();
+    }
+    catch (Exception $e)
+    {
+
+      $db->transactionRollback();
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Below can be moved into a generic helper class method
+   * 
+   * @param type $listing
+   * @param type $body
+   * @param type $subject
+   * @return boolean
+   */
+  public function sendApprovalEmail($listing = array(), $body = '', $subject = '')
+  {
+
+    $app = JFactory::getApplication();
+
+    $owner_email = (JDEBUG) ? $app->getCfg('mailfrom', 'adamrifat@frenchconnections.co.uk') : $listing[0]->email;
+    $owner_name = $listing[0]->account_name;
+    $mailfrom = $app->getCfg('mailfrom');
+    $fromname = $app->getCfg('fromname');
+
+    $mail = JFactory::getMailer();
+
+    $mail->addRecipient($owner_email, $owner_name);
+    $mail->addReplyTo(array($mailfrom, $fromname));
+    $mail->setSender(array($mailfrom, $fromname));
+    $mail->setSubject($subject);
+    $mail->setBody($body);
+    $mail->isHtml(true);
+
+    // If this is a new property then CC a copy to an admin email (e.g. sales@) 
+    if (empty($listing[0]->expiry_date))
+    {
+      $mail->addCC($mailfrom);
+    }
+
+    if (!$mail->Send())
+    {
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -96,6 +215,7 @@ class RealEstateModelListing extends JModelList
         a.id,
         a.expiry_date,
         a.review,
+        b.review as property_version_review,
         a.created_by,
         b.title,
         b.city,
@@ -222,11 +342,11 @@ class RealEstateModelListing extends JModelList
     }
 
     // Determine any notices to show to the owner 
-    if ($state->complete && $state->review == 1) 
+    if ($state->complete && $state->review == 1)
     {
       $state->notice = JText::sprintf('COM_PROPERTY_NON_SUBMITTED_CHANGES', $listing[0]->id);
     }
-    
+
     return $state;
   }
 

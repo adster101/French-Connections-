@@ -41,8 +41,9 @@ abstract class PropertyHelper
 
       // Need to do a lookup from the model.
       $record = JModelLegacy::getInstance('Property', 'RealestateModel')->getItem($recordId);
-      if (empty($record))
+      if (empty($record) || $record->review == 2)
       {
+        // Denied if the review state is locked for edit pending review
         return false;
       }
       // Set the owner ID

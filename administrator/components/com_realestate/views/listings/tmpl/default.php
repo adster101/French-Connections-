@@ -109,9 +109,6 @@ $canDo = RealEstateHelper::getActions();
                         <?php endif; ?>
                         <td>
                           <?php echo JHtml::_('image', 'images/property/' . $item->id . '/thumb/' . $item->thumbnail, '') ?>
-                          <?php if ($item->checked_out) : ?>
-                            <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'property.', $canCheckin); ?>
-                          <?php endif; ?>
                           <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
                             <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
                           </a>                        
@@ -145,7 +142,12 @@ $canDo = RealEstateHelper::getActions();
                       </td>
                       <?php if ($canDo->get('realestate.listing.review')): ?>
                         <td>
-                          <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
+                          <?php if ($item->checked_out) : ?>
+                            <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'listing.', $canCheckin); ?>
+                          <?php else: ?>
+                            <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
+                          <?php endif; ?>
+
                         </td>
                       <?php endif ?>                        
                       <?php if ($canDo->get('realestate.listings.showowner')) : ?>
