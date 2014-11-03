@@ -53,7 +53,7 @@ abstract class ModListingHelper
         date_format(a.modified, "%D %M %Y") as modified,
         b.latitude,
         b.longitude,
-        \'\' as thumbnail,
+        f.image_file_name as thumbnail,
         (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-002") . ' ) as payment
 
       ');
@@ -61,6 +61,8 @@ abstract class ModListingHelper
     $query->join('inner', '#__realestate_property_versions as b on (a.id = b.realestate_property_id and b.id = (select max(c.id) from #__realestate_property_versions as c where c.realestate_property_id = a.id))');
     $query->join('left', '#__user_profile_fc d on a.created_by = d.user_id');
     $query->join('left', '#__users e on a.created_by = e.id');
+    $query->join('left', '#__realestate_property_images_library f on b.id = f.version_id');
+    $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = b.id) or f.ordering is null)');
 
     $query->where('a.created_by=' . (int) $user->id);
 
@@ -213,12 +215,12 @@ abstract class ModListingHelper
     elseif (empty($days_to_renewal))
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
-      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate','propertyversions.edit');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate', 'propertyversions.edit');
     }
     else
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_EDIT_PROPERTY');
-      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate','propertyversions.edit');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate', 'propertyversions.edit');
     }
 
     return $html;

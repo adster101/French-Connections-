@@ -342,7 +342,7 @@ class RealEstateModelListing extends JModelList
     }
 
     // Determine any notices to show to the owner 
-    if ($state->complete && $state->review == 1)
+    if ($state->complete && $state->review == 1 && !empty($state->expiry_date))
     {
       $state->notice = JText::sprintf('COM_PROPERTY_NON_SUBMITTED_CHANGES', $listing[0]->id);
     }
