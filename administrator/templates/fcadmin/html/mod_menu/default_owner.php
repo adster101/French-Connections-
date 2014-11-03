@@ -18,10 +18,10 @@ $user = JFactory::getUser();
  * Property Submenu
  */
 $addRental = $user->authorise('core.create', 'com_rental');
-
+$addRealestate = $user->authorise('core.create', 'com_realestate');
 
 $manage_rental = $user->authorise('core.manage', 'com_rental');
-$manage_realestate = $user->authorise('core.manage', 'com_rental');
+$manage_realestate = $user->authorise('core.manage', 'com_real');
 $manage_offers = $user->authorise('core.manage', 'com_specialoffers');
 
 $manage_account = $user->authorise('core.manage', 'com_invoices');
@@ -67,9 +67,17 @@ if ($manage_rental || $manage_realestate)
     $menu->addChild(
             new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_RENTAL_PROPERTY'), 'index.php?option=com_rental&task=propertyversions.add', 'class:newproperty')
     );
-    $menu->getParent();
   }
+  
+  if ($addRealestate)
+  {
+    //$menu->addSeparator();
 
+    //$menu->addChild(
+           // new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REALESTATE_PROPERTY'), 'index.php?option=com_realestate&task=propertyversions.add', 'class:newproperty')
+   // );
+  }
+    $menu->getParent();
 
   // Determine the parent of the firstly added node
   //$menu->getParent();

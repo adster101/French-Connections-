@@ -87,14 +87,14 @@ if ($manage_realestate) {
 
   if ($manage_realestate) {
 
-    $menu->addChild(new JMenuNode(JText::_('Real Estate Property'), '#', 'class:realestateproperty'), true);
+    $menu->addChild(new JMenuNode(JText::_('Real Estate Property'), 'index.php?option=com_realestate', 'class:realestateproperty'), true);
     $menu->getParent();
 
     if ($addRealestate) {
           $menu->addSeparator();
 
       $menu->addChild(
-              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REAL_ESTATE_PROPERTY'), '#', 'class:newrealestateproperty')
+              new JMenuNode(JText::_('COM_PROPERTY_CREATE_NEW_REAL_ESTATE_PROPERTY'), 'index.php?option=com_realestate&task=propertyversions.add', 'class:newrealestateproperty')
       );
       
     }    $menu->getParent();
