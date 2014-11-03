@@ -42,7 +42,7 @@ class RentalControllerPayment extends JControllerLegacy
 
     // Get the listing unit details
     $current_listing = $listing->getItems();
-
+    
     // Set the context so we can hold the edit ID
     $context = "com_rental.edit.payment";
 

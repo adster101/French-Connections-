@@ -116,7 +116,6 @@ class RentalModelProperty extends JModelAdmin
     else
     {
       // Need to get the value of the renewal/update
-      
     }
 
     if (!parent::save($data))
@@ -127,7 +126,10 @@ class RentalModelProperty extends JModelAdmin
 
     // Update the notes 
     // Get the note model instance
-    $note = JModelLegacy::getInstance('Note', 'RentalModel', $config = array('ignore_request' => true));
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/models');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
+    $note = JModelLegacy::getInstance('Note', 'NotesModel', $config = array('ignore_request' => true));
+    
     // Set the property ID
     $data['property_id'] = $data['id'];
     unset($data['id']);

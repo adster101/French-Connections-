@@ -213,12 +213,12 @@ abstract class ModListingHelper
     elseif (empty($days_to_renewal))
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_PROPERTY_NOT_COMPLETED');
-      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate','propertyversions.edit');
     }
     else
     {
       $msg = JText::_('COM_RENTAL_OWNERS_CONTROL_PANEL_EDIT_PROPERTY');
-      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate','propertyversions.edit');
     }
 
     return $html;

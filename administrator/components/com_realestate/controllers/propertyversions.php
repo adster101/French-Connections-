@@ -20,8 +20,10 @@ class RealEstateControllerPropertyVersions extends JControllerForm
    */
   public function allowEdit($data = array())
   {
+    $input = JFactory::getApplication()->input;
+    
     // Get the property id we're trying to edit
-    $id = $data['realestate_property_id'];
+    $id = (!empty($data['realestate_property_id'])) ? $data['realestate_property_id'] : $input->get('id', '', 'int');
 
     // Test whether this user is allowed to edit it.
     return PropertyHelper::allowEditRealestate($id);

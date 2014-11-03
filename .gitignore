@@ -62,3 +62,4 @@ robots.txt
 /administrator/language/en-GB/en-GB.com_cmigrator.ini
 /administrator/language/en-GB/en-GB.com_cmigrator.sys.ini
 /plugins/authentication/cmigrator/
+/media/com_cmigrator/

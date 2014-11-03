@@ -446,9 +446,9 @@ class JHtmlProperty
    *
    */
 
-  public static function note($msgClass = 'alert alert-danger', $msg = '', $id, $option = 'com_rental')
+  public static function note($msgClass='alert alert-danger',$msg='',$id,$option='com_rental',$action='listing.view')
   {
-    $link = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP', 'listing.view', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'btn btn-primary', false, $option);
+    $link = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP', $action, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'btn btn-primary', false, $option);
     $html = '';
     $html .= '<div class="' . $msgClass . '"><span class="icon icon-info">&nbsp;</span>&nbsp;' . JText::_($msg);
     $html .= '&nbsp;' . $link
@@ -483,14 +483,11 @@ class JHtmlProperty
    * @param type $renewal
    * @return string
    */
-  public static function link($id = '', $title = '', $task = '', $text = '', $class = '', $renewal = false)
+  public static function link($id = '', $title = '', $task = '', $text = '', $class = '', $renewal = false, $option = 'com_rental')
   {
-    $input = JFactory::getApplication()->input;
-    $option = $input->getCmd('option');
-
-
+    $url_param = ($option == 'com_rental') ? 'id' : 'realestate_property_id';
     $isRenewal = ($renewal) ? '&renewal=1' : '';
-    $route = JRoute::_('index.php?option=' . $option . '&task=' . $task . '&id=' . (int) $id . $isRenewal);
+    $route = JRoute::_('index.php?option=' . $option . '&task=' . $task . '&' . $url_param . '=' . (int) $id . $isRenewal);
     $html = '';
     $html .= '<a rel="tooltip" title="' . JText::_($title) . '" href="' . $route . '" class="' . $class . '">'
             . '<i class="icon icon-chevron-right"></i>&nbsp;'
