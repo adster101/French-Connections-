@@ -68,16 +68,6 @@ class RealEstateModelImage extends JModelAdmin
       {
         // Need to delete the main image, the gallery image and thumbs
         $path = JPATH_SITE . '/images/property/' . $table->unit_id . '/';
-        // Delete the actual image file from the file system
-        // This is actually a bad idea as previous versions might need images at some point
-        //foreach ($image_profiles as $profile) {
-        //$image_file_path = $path . $profile . '/' . $table->image_file_name;
-        //if (JFile::exists($image_file_path)) {
-        //if (!JFile::delete($image_file_path)) {
-        //Throw new Exception('Problem deleting image from file system');
-        //}
-        //}
-        //}
       }
     }
     catch (Exception $e)
@@ -117,9 +107,8 @@ class RealEstateModelImage extends JModelAdmin
    */
   public function getForm($data = array(), $loadData = false)
   {
-
     // Get the form.
-    $form = $this->loadForm('com_rental.caption', 'caption', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_realestate.caption', 'caption', array('control' => 'jform', 'load_data' => $loadData));
     if (empty($form))
     {
       return false;
@@ -141,7 +130,7 @@ class RealEstateModelImage extends JModelAdmin
   {
 
     $user = JFactory::getUser();
-    return $user->authorise('rental.images.reorder', $this->option);
+    return $user->authorise('realestate.images.reorder', $this->option);
   }
 
   /**
@@ -172,7 +161,7 @@ class RealEstateModelImage extends JModelAdmin
   protected function getReorderConditions($table)
   {
     $condition = array();
-    $condition[] = 'unit_id = ' . (int) $table->unit_id;
+    $condition[] = 'realestate_property_id = ' . (int) $table->realestate_property_id;
     $condition[] = 'version_id = ' . (int) $table->version_id;
     return $condition;
   }
@@ -184,23 +173,22 @@ class RealEstateModelImage extends JModelAdmin
    */
   public function save($data)
   {
+    
+    $property_version_model = JModelLegacy::getInstance('PropertyVersions', 'RealestateModel');
 
-    $unit = JModelLegacy::getInstance('PropertyVersions', 'RealestateModel');
+    // Hit up the unit versions save method to determine if a new version is needed.
+    if (!$property_version_model->save($data))
+    {
+      return false;
+    }
+
+    $version_id = $property_version_model->getState('new.version.id');
 
     // Image has been uploaded, let's create some image profiles...
     // TO DO - Put the image dimensions in as params against the component
     $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'gallery', 578, 435);
     $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumbs', 100, 100);
     $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumb', 210, 120);
-
-
-    // Hit up the unit versions save method to determine if a new version is needed.
-    if (!$unit->save($data))
-    {
-      return false;
-    }
-
-    $version_id = $unit->getState('new.version.id');
 
     $ordering = $this->getOrderPosition($version_id);
 
@@ -221,8 +209,8 @@ class RealEstateModelImage extends JModelAdmin
       return false;
     }
 
-    $this->setState($this->getName() . '.version_id', $unit->getState($unit->getName() . '.version_id'));
-    $this->setState($this->getName() . '.review', $unit->getState($unit->getName() . '.review'));
+    $this->setState($this->getName() . '.version_id', $version_id);
+    $this->setState($this->getName() . '.review', $property_version_model->getState($property_version_model->getName() . '.review'));
 
 
     // Return to the controller
@@ -331,7 +319,7 @@ class RealEstateModelImage extends JModelAdmin
 
           // Load the existing image
           $existing_image = imagecreatefromjpeg($file_path);
-          
+
           // Make it progressive
           $bit = imageinterlace($existing_image, 1);
 
@@ -340,7 +328,6 @@ class RealEstateModelImage extends JModelAdmin
 
           // Free up memory
           imagedestroy($existing_image);
-          
         }
         else if ($width < $height)
         {

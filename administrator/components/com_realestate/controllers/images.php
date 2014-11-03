@@ -67,6 +67,42 @@ class RealEstateControllerImages extends PropertyControllerImages
     return PropertyHelper::allowEditRealestate($id);
   }
 
+  function delete()
+  {
+
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken('get') or die('Invalid Token');
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    $model = $this->getModel('Image', 'RealestateModel');
+    $table = $this->getModel()->getTable();
+
+
+    // Build up the data
+    $recordId = $input->get('realestate_property_id', '', 'int');
+    $id = $input->get('id', '', 'int');
+
+    // Check that this user is authorised to 'edit' this property
+    if (!$this->allowEdit($data))
+    {
+      
+    }
+
+    if (!$model->delete($id))
+    {
+      $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'error');
+    }
+    else
+    {
+      // Set the message
+      $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
+    }
+    // Set the redirection once the delete has completed...
+    $this->setRedirect(JRoute::_('index.php?option=com_rental&view=images&unit_id=' . (int) $unit_id, false));
+  }
+
   /*
    * View action - checks ownership of record sets the edit id in session and redirects to the view
    *
@@ -101,6 +137,68 @@ class RealEstateControllerImages extends PropertyControllerImages
                     'index.php?option=' . $this->option . '&view=images&realestate_property_id=' . (int) $id, false)
     );
     return true;
+  }
+
+  function updatecaption()
+  {
+
+    // Check that this is a valid call from a logged in user.
+    JSession::checkToken('get') or die('Invalid Token');
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    $model = $this->getModel('Caption', 'RealestateModel');
+    $data = array();
+    $response = array();
+
+    // Build up the data
+    $data['realestate_property_id'] = $input->get('realestate_property_id', '', 'int');
+    $data['caption'] = $input->get('caption', '', 'string');
+    $data['id'] = $input->get('id', '', 'int');
+
+    // Check that this user is authorised to edit (i.e. owns) this this property
+    if (!$this->allowEdit($data, 'unit_id'))
+    {
+      $response['message'] = JText::_('NOT_AUTHORISED');
+      //echo $response;
+      //jexit(); // Exit this request now as results passed back to client via xhr transport.
+    }
+
+    // Consider running this through $model->validate to more carefully check the caption details
+    $form = $model->getForm();
+
+    $validData = $model->validate($form, $data);
+
+    if (!$validData)
+    {
+      // Problem saving, oops
+      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_IS_INVALID');
+      $response['error'] = 1;
+      //echo $response;
+      //jexit(); // Exit this request now as results passed back to client via xhr transport.     
+    }
+
+    // Need to ensure the caption is filtered at some point
+    // If we are happy to save and have something to save
+    // Also, need to amend the save method so that it triggers a new version
+    if (!$model->save($validData))
+    {
+      // Problem saving, oops
+      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
+      $response['error'] = 1;
+      //echo $response;
+      //jexit(); // Exit this request now as results passed back to client via xhr transport.
+    }
+
+    $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_UPDATED');
+    $response['error'] = 0;
+
+    echo json_encode($response);
+
+    jexit(); // Exit this request now as results passed back to client via xhr transport.
+    // Log out to a file
+    // User ID updates caption ID from to on this
   }
 
 }

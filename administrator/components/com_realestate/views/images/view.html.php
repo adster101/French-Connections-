@@ -48,6 +48,7 @@ class RealEstateViewImages extends JViewLegacy
 
     $model = $this->getModel();
     $model->setState('version_id', $this->property->id);
+    $model->setState('list.limit','');
 
     $this->items = $model->getItems();
 

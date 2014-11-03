@@ -13,8 +13,8 @@ $saveOrder = true;
 
 if ($saveOrder)
 {
-  $saveOrderingUrl = 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component';
-  //JHtml::_('fcsortablelist.fcsortable', 'imageList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false);
+  $saveOrderingUrl = 'index.php?option=com_realestate&task=images.saveOrderAjax&tmpl=component';
+  JHtml::_('fcsortablelist.fcsortable', 'imageList', 'adminForm', strtolower($listDirn), $saveOrderingUrl, false);
 }
 
 

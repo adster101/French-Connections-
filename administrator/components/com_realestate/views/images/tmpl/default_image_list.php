@@ -54,11 +54,11 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
             </p>
             <p>
-              <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_rental&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&realestate_property_id=' . (int) $this->items[0]->realestate_property_id ?>" >
+              <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_realestate&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&realestate_property_id=' . (int) $this->items[0]->realestate_property_id ?>" >
                 <i class="icon-pencil-2 icon-white"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
               </a>  
-              <a class="btn btn-danger delete" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&realestate_property_id=' . (int) $this->items[0]->realestate_property_id ?>">
+              <a class="btn btn-danger delete" href="<?php echo '/administrator/index.php?option=com_realestate&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&realestate_property_id=' . (int) $this->items[0]->realestate_property_id ?>">
                 <i class="icon icon-trash"></i>
                 <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
               </a>

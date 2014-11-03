@@ -97,7 +97,7 @@ class RealEstateViewPropertyversions extends JViewLegacy
     }
     elseif ($canDo->get('core.create'))
     {
-      JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
+      JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
     }
 

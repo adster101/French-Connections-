@@ -135,7 +135,7 @@ class PropertyControllerImages extends JControllerForm
     $images = array();
 
     // Check that this user is authorised to upload images here
-    if (!$user->authorise('core.create', $this->extension))
+    if (!$user->authorise('core.create', $this->option))
     {
       jexit();
     }
@@ -218,7 +218,6 @@ class PropertyControllerImages extends JControllerForm
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
         //$file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
-
         // If we are happy to save and have something to save
         if (!$model->save($file))
         {

@@ -8,7 +8,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorld View
  */
-class RentalViewImages extends JViewLegacy
+class RealestateViewImages extends JViewLegacy
 {
 	/**
 	 * display method of Availability View
@@ -24,19 +24,15 @@ class RentalViewImages extends JViewLegacy
     $this->state = $this->get('State');
     $images = $this->getModel();
     $images->setState('version_id',$id);
+    
     // Set the list limit model state so that we return all available images.
     $images->setState('list.limit');
 
     // Assign the Item
 		$this->items = $this->get('Items');
-
-
-    
-    $this->pagination = $this->get('Pagination');
     
 		// Display the template
 		parent::display($tpl);
 
 	}
-
 }

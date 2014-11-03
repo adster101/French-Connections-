@@ -91,26 +91,25 @@ jQuery(function() {
                 .addClass("alert alert-success show")
                 .html(data.result.files[0].message);
 
-        var id = jQuery('input[name=id]').val();
+        //var id = jQuery('input[name=id]').val();
+        var extension = jQuery('input[name=extension]').val();
         var id = data.result.files[0].version_id;
 
-        jQuery('input[name=id]').val(id);
-
         jQuery.get(
-                "/administrator/index.php?option=com_rental&view=images&layout=default_image_list&format=raw",
+                "/administrator/index.php?option=" + extension + "&view=images&layout=default_image_list&format=raw",
                 {
                   version_id: id
                 })
                 .done(function(results) {
           var gallery = jQuery('.image-gallery');
-          
+
           // Update the gallery with the latest list of images
           gallery.empty();
           gallery.html(results);
-          
+
           // Update the review state so that subsequent images don't trigger new versions...
           jQuery('input[name=review]').attr('value', "1");
-          
+
           add_event_handlers();
 
           var imageCount = jQuery('#imageList').length;
@@ -152,9 +151,11 @@ jQuery(function() {
 
 // Add the relevant event handlers to the save caption and delete buttons
 var add_event_handlers = function() {
+  
+  var extension = jQuery('input[name=extension]').val();
 
   // Add the sortable list to the photo gallery
-  var sortableList = new jQuery.JSortableList('#imageList', 'adminForm', '', 'index.php?option=com_rental&task=images.saveOrderAjax&tmpl=component', '', '');
+  var sortableList = new jQuery.JSortableList('#imageList', 'adminForm', '', 'index.php?option=' + extension + '&task=images.saveOrderAjax&tmpl=component', '', '');
 
   // Fade out the the uploaded images from the upload queue after five seconds
   jQuery('li.template-download').css('position', 'static').delay(5000).fadeOut(1500);
