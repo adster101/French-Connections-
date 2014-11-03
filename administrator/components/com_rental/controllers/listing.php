@@ -580,8 +580,9 @@ class RentalControllerListing extends JControllerForm
       $previous_version = $listing->getItems();
       $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => false));
       $order_summary = $payment->getPaymentSummary($current_version, $previous_version);
-
-      if ($order_summary)
+      $order_total = $payment->getOrderTotal($order_summary);
+      
+      if ($order_summary && $order_total > 0) 
       {
         // Redirect to payment screen
         $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_PAYMENT_WITH_CHANGES');
