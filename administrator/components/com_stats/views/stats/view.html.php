@@ -35,10 +35,10 @@ class StatsViewStats extends JViewLegacy
   {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_STATS_VIEW_STATS'));
-    $document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true);
-    $document->addScript(JURI::root() . "administrator/components/com_rental/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
-    $document->addScript(JURI::root() . "administrator/components/com_rental/js/tariffs.js", 'text/javascript', true);
-    $document->addStyleSheet(JURI::root() . "administrator/components/com_rental/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
+    //$document->addScript(JURI::root() . "/media/fc/js/general.js", 'text/javascript', true);
+    $document->addScript(JURI::root() . "/media/fc/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
+    $document->addScript(JURI::root() . "/media/fc/js/date-range.js", 'text/javascript', true);
+    $document->addStyleSheet(JURI::root() . "/media/fc/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
   }
 
   /**

@@ -17,8 +17,7 @@ jQuery(document).ready(function(){
       showButtonPanel: true,
 			onSelect: function( selectedDate ) {
 				jQuery('.end_date').datepicker( "option", "minDate", selectedDate );
-			},
-      minDate: new Date()
+			}
 		});
     
 		jQuery('.end_date').datepicker({
