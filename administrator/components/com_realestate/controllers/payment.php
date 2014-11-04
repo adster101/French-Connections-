@@ -150,7 +150,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
     // import our payment library class
-    jimport('frenchconnections.models.payment');
+    jimport('frenchconnections.models.realestatepayment');
     $previous_version = array();    
     $app = JFactory::getApplication();
     $id = $this->input->get('id', '', 'int');
