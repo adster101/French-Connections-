@@ -38,6 +38,7 @@
       id="offer-description"
       description="COM_SPECIALOFFERS_DESCRIPTION_DESC"
       label="COM_SPECIALOFFERS_DESCRIPTION_LABEL"
+      message="COM_SPECIALOFFERS_DESCRIPTION_VALIDATION_MESSAGE"
       filter="safehtml"
       validate="description"
       required="true"

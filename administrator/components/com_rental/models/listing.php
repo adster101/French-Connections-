@@ -72,8 +72,7 @@ class RentalModelListing extends JModelList
 
     $db = JFactory::getDbo();
 
-    try
-    {
+    try {
 
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
@@ -117,7 +116,7 @@ class RentalModelListing extends JModelList
           $query->where('review = 0');
           $db->setQuery($query);
           $db->execute();
-          
+
           // Clear the query
           $query->clear();
 
@@ -127,9 +126,7 @@ class RentalModelListing extends JModelList
           $query->where('unit_id=' . (int) $unit->unit_id);
           $query->where('review = 1');
           $db->setQuery($query);
-          $db->execute();          
-          
-          
+          $db->execute();
         }
       }
 
@@ -158,8 +155,7 @@ class RentalModelListing extends JModelList
 
       $db->transactionCommit();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       $db->transactionRollback();
 
@@ -180,8 +176,7 @@ class RentalModelListing extends JModelList
 
     $db = JFactory::getDbo();
 
-    try
-    {
+    try {
 
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
@@ -202,8 +197,7 @@ class RentalModelListing extends JModelList
 
       $db->transactionCommit();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       $db->transactionRollback();
 
@@ -212,8 +206,7 @@ class RentalModelListing extends JModelList
 
     return true;
   }
-  
-  
+
   /**
    * Below can be moved into a generic helper class method
    * 
@@ -226,7 +219,7 @@ class RentalModelListing extends JModelList
   {
 
     $app = JFactory::getApplication();
-    
+
     $owner_email = (JDEBUG) ? $app->getCfg('mailfrom', 'adamrifat@frenchconnections.co.uk') : $listing[0]->email;
     $owner_name = $listing[0]->account_name;
     $mailfrom = $app->getCfg('mailfrom');
@@ -240,7 +233,7 @@ class RentalModelListing extends JModelList
     $mail->setSubject($subject);
     $mail->setBody($body);
     $mail->isHtml(true);
-    
+
     // If this is a new property then CC a copy to an admin email (e.g. sales@) 
     if (empty($listing[0]->expiry_date))
     {
@@ -389,8 +382,8 @@ class RentalModelListing extends JModelList
       $query->where('b.review = 0');
       $query->where('e.review = 0');
     }
-    
-    //$query->where('d.published != -2');
+
+    $query->where('d.published != -2');
 
     $query->where('a.created_by !=0');
 

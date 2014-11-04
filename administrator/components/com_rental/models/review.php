@@ -109,7 +109,7 @@ class RentalModelReview extends JModelAdmin
     }
     else if ($layout == 'reject')
     {
-      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_BODY', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_BODY', $user->name, $recordId);
       $data['subject'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_SUBJECT', $user->name, $recordId);
     }
     else if ($layout == 'approve')

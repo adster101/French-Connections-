@@ -138,7 +138,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    */
   public function getPaymentDue($current_order_summary = array(), $previous_order_summary = array())
   {
-    // TO DO - Take into account the number of images on previous version and if >=8 don't charge for additional images. If previous version had less than 
     $order_lines_due = array();
     $quantity_to_charge = '';
 
@@ -160,12 +159,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         // The previous version didn't have any of these, so bill 'em all
         $order_lines_due[$item]['quantity'] = $quantity['quantity'];
       }
-
-      // Determine whether this is an 'upgrade' from basic to unlimitied....
     }
-
-
-
 
     return $order_lines_due;
   }

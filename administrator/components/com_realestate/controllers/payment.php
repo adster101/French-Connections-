@@ -167,7 +167,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     $current_version = $listing->getItems();
 
     // Instantiate the payment model
-    $payment_model = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $renewal));
+    $payment_model = JModelLegacy::getInstance('RealestatePayment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => $renewal));
 
     // Instantiate an instance of the property model using the listing detail as the config
     $model = $this->getModel('Payment', 'RealEstateModel');

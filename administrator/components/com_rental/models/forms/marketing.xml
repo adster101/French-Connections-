@@ -21,32 +21,11 @@
       name="lwl"
       type="checkbox"
       label="COM_RENTAL_MARKETING_LONG_WINTER_LET"
-      class="input"
+      class="input checkbox"
       filter="int">
     </field>
   </fieldset>
-  <fieldset 
-    name="frtranslation"
-    label="COM_RENTAL_MARKETNG_FRENCH_TRANSLATION_FIELDSET_LEGEND"
-    description="COM_RENTAL_MARKETING_FRENCH_TRANSLATION_FIELDSET_DESCRIPTION">
-    <field 
-      name="frtranslation"
-      type="radio"
-      class=""
-      label="COM_RENTAL_MARKETING_FRENCH_TRANSLATION"      
-      filter="int"
-      default="0">
-      <option value="0">COM_RENTAL_MARKETING_FRENCH_TRANSLATION_OFF</option>
-      <option value="1">COM_RENTAL_MARKETING_FRENCH_TRANSLATION_ON</option>
-
-    </field>
-    <field
-      name="translationservice"
-      type="note"
-      description="COM_RENTAL_MARKETING_FRENCH_TRANSLATION_SERVICE"
-      class="notice notice-info"
-    />
-  </fieldset>
+ 
   <fieldset name="hidden">
   
     <field
