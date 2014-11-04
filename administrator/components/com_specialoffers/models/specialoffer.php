@@ -498,7 +498,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
     // Prepare the email.
     $subject = htmlspecialchars(JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_SUBJECT', $unit_detail->property_id, $unit_detail->firstname), ENT_QUOTES, 'UTF-8');
-    $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $start_date, $end_date, $siteURL, $intasure);
+    $msg = JText::sprintf('COM_SPECIALOFFERS_NEW_OFFER_CONFIRMATION_BODY', htmlspecialchars($unit_detail->firstname, ENT_QUOTES, 'UTF-8'), htmlspecialchars($unit_detail->unit_title, ENT_QUOTES, 'UTF-8'), $start_date, $end_date, $siteURL);
     JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
   }
 }

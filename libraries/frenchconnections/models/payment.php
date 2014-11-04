@@ -971,7 +971,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
       if (!$this->updateProperty($listing_id, $total, 0, $expiry_date = $date, $published = 1, $autorenewal = $transaction_id))
       {
-        // Log this
+        // TO DO - Log this
         return false;
       }
 
