@@ -946,7 +946,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $billing_name = $billing_details['BillingFirstnames'] . ' ' . $billing_details['BillingSurname'];
     $transaction_number = $payment_details['VendorTxCode'];
     $auth_code = $payment_details['TxAuthNo'];
-    $address = $billing_details['BillingAddress1'] . ' ' . $biling_details['BillingAddress2'] . ' ' . $billing_details['BillingCity'] . ' ' . $billing_details['BillingPostCode'] . ' ' . $billing_details['BillingCountry'];
+    $address = $billing_details['BillingAddress1'] . ' ' . $billing_details['BillingAddress2'] . ' ' . $billing_details['BillingCity'] . ' ' . $billing_details['BillingPostCode'] . ' ' . $billing_details['BillingCountry'];
     $billing_email = (JDEBUG) ? 'accounts@frenchconnections.co.uk' : $billing_details['BillingEmailAddress'];
     $cc = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : '';
     $html = false;

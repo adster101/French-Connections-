@@ -234,7 +234,7 @@ class RealEstateControllerPayment extends JControllerLegacy
     // Empty the data stored in the session...
     $app->setUserState('com_realestate.renewal.data', $data);
 
-    if (RentalHelper::isOwner($user->id))
+    if (PropertyHelper::isOwner($user->id))
     {
       $this->setRedirect('index.php', $message);
     }
