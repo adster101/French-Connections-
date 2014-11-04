@@ -51,8 +51,7 @@ class FcadminModelInvoices extends JModelForm
 
     $warnings = array();
 
-    try
-    {
+    try {
 
       // This reads the uploaded invoice file and processed it into an array keyed by invoice ID
       $invoices = $this->processFile($file);
@@ -79,12 +78,13 @@ class FcadminModelInvoices extends JModelForm
           continue;
         }
 
+
+
         if (!$table->save($invoice))
         {
           $message = $table->getError();
           //Throw new Exception($message);
           JLog::add($message, JLog::WARNING, 'invoices_import');
-
         }
 
         // Proceed and save the invoice line...
@@ -101,8 +101,7 @@ class FcadminModelInvoices extends JModelForm
         $table->reset();
       }
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       $db->transactionRollback();
       // Add the error message back to the message queue so we know what's causing the problem...
       $app->enqueueMessage($e->getMessage(), 'error');
@@ -165,9 +164,12 @@ class FcadminModelInvoices extends JModelForm
       $first_name = $line[1];
       $delivery_date = (!empty($line[22])) ? JFactory::getDate(str_replace('/', '-', $line[22]))->calendar('Y-m-d') : null;
       $surname = $filter->clean($line[0], 'string');
-      $address1 = $filter->clean($line[3], 'string');
-      $address2 = $filter->clean($line[4], 'string');
-      $town = $filter->clean($line[5], 'string');
+      //$address1 = $filter->clean($line[3], 'string');
+      //$address2 = $filter->clean($line[4], 'string');
+      //$town = $filter->clean($line[5], 'string');
+
+      // Get the user address details from the user profile details
+      $address = $this->getAddress($user_id);
 
       // Add this invoice to the array if it's not already present
       if (!array_key_exists($invoice_id, $invoices))
@@ -188,10 +190,10 @@ class FcadminModelInvoices extends JModelForm
         $invoices[$invoice_id]['salutation'] = '';
         $invoices[$invoice_id]['first_name'] = $first_name;
         $invoices[$invoice_id]['surname'] = $surname;
-        $invoices[$invoice_id]['address'] = $address1;
-        $invoices[$invoice_id]['town'] = $address2;
-        $invoices[$invoice_id]['county'] = $town;
-        $invoices[$invoice_id]['postcode'] = '';
+        $invoices[$invoice_id]['address'] = $address->address1 . ', ' . $address->address2;
+        $invoices[$invoice_id]['town'] = $address->city;
+        $invoices[$invoice_id]['county'] = $address->region;
+        $invoices[$invoice_id]['postcode'] = $address->postcode;
       }
 
       // Generate a new line for this invoice
@@ -223,6 +225,26 @@ class FcadminModelInvoices extends JModelForm
     }
 
     return $invoices;
+  }
+
+  public function getAddress($user_id = '')
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery();
+
+    $query->select('address1,address2,city,region,country,postcode');
+    $query->from('#__user_profile_fc');
+    $query->where('user_id=' . (int) $user_id);
+
+    $db->setQuery($query);
+
+    try {
+      $row = $db->loadObject();
+    }
+    catch (Exception $e) {
+      Throw new Exception('User ' . $user_id . 'not found in system. Please add this user and try again.' . $e->getMessage());
+    }
+    return $row;
   }
 
 }

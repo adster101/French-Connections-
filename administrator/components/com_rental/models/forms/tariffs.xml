@@ -56,8 +56,9 @@
       filter="int"
       validate="nonzero"
       class="input-large"
-      id="21"
-      placeholder="true">
+      id="21">
+      <option value="">JSELECT</option>
+ 
     </field>
 
     <field
