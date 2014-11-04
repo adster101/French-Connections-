@@ -316,7 +316,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
      */
     foreach ($order as $line => $line_detail)
     {
-      $order_total = $order_total + $line_detail->line_value;
+      $order_total = $order_total + $line_detail->line_value + $line_detail->vat;
     }
 
 
