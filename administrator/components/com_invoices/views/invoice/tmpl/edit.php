@@ -42,7 +42,9 @@ $userId = $user->get('id');
       <p><strong>Invoice to:</strong></p>
       <p>
         <?php echo $this->escape($this->items[0]->first_name . ' ' . $this->items[0]->surname); ?><br />
-        <?php echo $this->escape($this->items[0]->address); ?><br />
+        <?php echo $this->escape($this->items[0]->address1); ?><br />
+        <?php echo ($this->items[0]->address2) ? $this->escape($this->items[0]->address2) . "<br />" : ''; ?>
+        <?php echo ($this->items[0]->address3) ? $this->escape($this->items[0]->address3) . "<br />" : ''; ?>
         <?php echo $this->escape($this->items[0]->town); ?><br />
         <?php echo $this->escape($this->items[0]->county); ?><br />
         <?php echo $this->escape($this->items[0]->postcode); ?><br />
