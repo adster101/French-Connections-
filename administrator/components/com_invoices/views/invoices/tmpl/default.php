@@ -187,7 +187,7 @@ if (!empty($this->extra_sidebar))
                 <?php echo $item->property_id; ?>
               </td>
               <td>
-                <?php echo $item->date_created; ?>
+                <?php echo JHtml::date($item->date_created, 'd m Y'); ?>
               </td>
               <td>
                 <?php echo $item->total_net; ?>

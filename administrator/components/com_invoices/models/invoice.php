@@ -105,7 +105,7 @@ class InvoicesModelinvoice extends JModelList
     $query->select('il.item_code,il.item_description,il.quantity,il.total_net as line_value,il.vat as line_vat_value');
     $query->from('#__invoice_lines il');
 
-    $query->select('i.id,i.due_date,i.property_id,i.date_created,i.total_net,i.vat,i.property_id,i.first_name,i.surname,i.address1,i.address2,i.address3,i.town,i.county,i.postcode');
+    $query->select('i.id,i.due_date,i.property_id,date_format(i.date_created, "%d %m %Y") as date_created,i.total_net,i.vat,i.property_id,i.first_name,i.surname,i.address1,i.address2,i.address3,i.town,i.county,i.postcode');
     $query->leftJoin('#__invoices i on il.invoice_id = i.id');
 
     $query->where('invoice_id = ' . (int) $this->getState($this->context . '.invoice.id', ''));
