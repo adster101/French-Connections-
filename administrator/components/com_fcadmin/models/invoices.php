@@ -190,10 +190,12 @@ class FcadminModelInvoices extends JModelForm
         $invoices[$invoice_id]['salutation'] = '';
         $invoices[$invoice_id]['first_name'] = $first_name;
         $invoices[$invoice_id]['surname'] = $surname;
-        $invoices[$invoice_id]['address'] = $address->address1 . ', ' . $address->address2;
+        $invoices[$invoice_id]['address1'] = $address->address1;
+        $invoices[$invoice_id]['address2'] = (!empty($address->address2)) ? $address->address2 : '';
+        $invoices[$invoice_id]['address3'] = (!empty($address->address3)) ? $address->address3 : '';
         $invoices[$invoice_id]['town'] = $address->city;
         $invoices[$invoice_id]['county'] = $address->region;
-        $invoices[$invoice_id]['postcode'] = $address->postcode;
+        $invoices[$invoice_id]['postcode'] = $address->postal_code;
       }
 
       // Generate a new line for this invoice
@@ -230,9 +232,9 @@ class FcadminModelInvoices extends JModelForm
   public function getAddress($user_id = '')
   {
     $db = JFactory::getDbo();
-    $query = $db->getQuery();
+    $query = $db->getQuery(true);
 
-    $query->select('address1,address2,city,region,country,postcode');
+    $query->select('address1,address2,address3,city,region,country,postal_code');
     $query->from('#__user_profile_fc');
     $query->where('user_id=' . (int) $user_id);
 
