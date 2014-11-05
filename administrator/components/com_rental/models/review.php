@@ -100,11 +100,14 @@ class RentalModelReview extends JModelAdmin
 
     $uri = JUri::getInstance();
     $domain = $uri->toString(array('scheme', 'host'));
-
+        
+    // Below can be used when live. TO DO - Figure out how to use JRoute here to avoid hardcoding.
+    // $listing_url = $domain . '/listing/' . (int) $recordId;
+    $listing_url = 'http://www.frenchconnections.co.uk/listing/' . (int) $recordId;
 
     if (empty($table->expiry_date))
     {
-      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $listing_url, $listing_url, $listing_url);
       $data['subject'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_GOING_LIVE_EMAIL_SUBJECT', $user->name, $recordId);
     }
     else if ($layout == 'reject')
