@@ -14,7 +14,9 @@ $logged_in = ($user->guest) ? false : true;
 $action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
-$login_route = JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin . '&return=' . base64_encode('/shortlist'));
+$Shortlist_ItemID = SearchHelper::getItemid(array('component', 'com_shortlist'));
+$shortlist_route = JRoute::_('index.php?Itemid=' . (int) $Shortlist_ItemID);
+$login_route = JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin . '&return=' . base64_encode($shortlist_route));
 $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $this->result->id . '&unit_id=' . (int) $this->result->unit_id);
 $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $inShortlist = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 1 : 0;
@@ -98,7 +100,7 @@ $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $desc
               <?php echo $shortlist->render($displayData); ?>
 
             <?php else : ?>
-              <a class="shortlist" href="<?php echo JRoute::_($login_route); ?>" data-toggle="tooltip" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
+              <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                 <i class="glyphicon glyphicon-heart"></i>
               </a>    
             <?php endif; ?>

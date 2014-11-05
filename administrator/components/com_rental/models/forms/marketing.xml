@@ -22,6 +22,7 @@
       type="checkbox"
       label="COM_RENTAL_MARKETING_LONG_WINTER_LET"
       class="input checkbox"
+      labelclass="control-label"
       filter="int">
     </field>
   </fieldset>

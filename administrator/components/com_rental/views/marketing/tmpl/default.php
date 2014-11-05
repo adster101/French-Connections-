@@ -30,7 +30,9 @@ $fieldsets = $this->form->getFieldSets();
             <?php echo JText::_($fieldset->description); ?>
             <?php foreach ($this->form->getFieldset($fieldset->name) as $field) : ?>
               <div class="control-group">
-                <?php echo $field->label; ?>
+                <div class='control-label'>
+                  <?php echo $field->label; ?>
+                </div>
                 <div class="controls">
                   <?php echo $field->input; ?>
                 </div>

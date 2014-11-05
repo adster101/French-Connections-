@@ -278,10 +278,10 @@ class Renewals extends JApplicationCli {
   public function saveNotes($notes = array()) {
 
     // Add the tables to the include path
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
 
     // Get an instance of the note table
-    $table = JTable::getInstance('Note', 'RentalTable');
+    $table = JTable::getInstance('Note', 'NotesTable');
 
     foreach ($notes as $note) {
       if (!$table->bind($note)) {

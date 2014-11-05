@@ -200,6 +200,27 @@ class RealEstateControllerImages extends PropertyControllerImages
     // Log out to a file
     // User ID updates caption ID from to on this
   }
+  
+  public function postSaveHook(\JModelLegacy $model, $validData = array())
+  {
 
+    // Get the contents of the request data
+    $input = JFactory::getApplication()->input;
+    
+    // If the task is save and next
+    if ($this->task == 'saveandnext')
+    {
+      // Check if we have a next field in the request data
+      $next = $input->get('next', '', 'base64');
+      // And set the redirect if we have
+      if ($next)
+      {
+        $this->setRedirect(base64_decode($next));
+      } else {
+        $this->setRedirect(JRoute::_('index.php?option=com_realestate'));
+        
+      }
+    }
+  }
 }
 

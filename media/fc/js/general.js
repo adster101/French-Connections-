@@ -152,9 +152,9 @@ jQuery(document).ready(function() {
   // Bind a change function to all forms that need validation.
   // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
-    window.onbeforeunload = function() {
-      return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    };
+    //window.onbeforeunload = function() {
+      //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    //};
   });
 
   try {

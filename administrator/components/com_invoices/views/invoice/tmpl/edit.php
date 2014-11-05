@@ -32,6 +32,12 @@ $userId = $user->get('id');
       </p>
       <p class="small">
         VAT Reg. Number: GB 801 2299 61<br>Company Registration Number: 3216862
+        French Connections <br />
+        Bracon House <br />
+        High Street <br />
+        Etchingham <br />
+        E Sussex <br />
+        TN19 7AJ
       </p>
       <p class="large">
         <strong>

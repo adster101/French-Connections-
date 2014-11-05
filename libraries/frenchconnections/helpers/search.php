@@ -35,7 +35,12 @@ abstract class SearchHelper
       $app = JApplicationSite::getInstance('site');
 
       $menu = $app->getMenu();
-      $items = $menu->getItems($query[0], $query[1]);
+
+      // This set to retrieve menu items regardless of whether the user is logged in or not.
+      $attributes = array($query[0], 'access');
+      $values = array($query[1], array(1,2,3));
+      
+      $items = $menu->getItems($attributes, $values);
       $items = is_array($items) ? $items : array();
     }
 

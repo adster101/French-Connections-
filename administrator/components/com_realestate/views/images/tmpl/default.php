@@ -58,6 +58,9 @@ $data = array('status' => $this->status);
           <input type="hidden" name="boxchecked" value="0" />
           <input type="hidden" name="id" value="<?php echo (int) $this->property->id ?>" />
           <input type="hidden" name="property_id" value="<?php echo (int) $this->property->realestate_property_id ?>" />
+          
+          <input type="hidden" name="next" value="<?php echo base64_encode(JRoute::_('index.php?option=com_realestate&task=payment.summary&realestate_property_id=' . (int) $this->property->realestate_property_id, false)); ?>" />
+
           <?php echo JHtml::_('form.token'); ?>
         </fieldset>
       </form>
