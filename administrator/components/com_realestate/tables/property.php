@@ -25,7 +25,7 @@ class RealEstateTableProperty extends JTable
     parent::__construct('#__realestate_property', 'id', $db);
   }
 
-  public function store($updateNulls = true)
+  public function store($updateNulls = false)
   {
     $date = JFactory::getDate();
     $user = JFactory::getUser();
@@ -53,7 +53,7 @@ class RealEstateTableProperty extends JTable
       }
     }
 
-    return parent::store($updateNulls = true);
+    return parent::store($updateNulls = false);
   }
 
 }

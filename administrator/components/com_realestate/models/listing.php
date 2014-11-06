@@ -346,6 +346,18 @@ class RealEstateModelListing extends JModelList
     {
       $state->notice = JText::sprintf('COM_PROPERTY_NON_SUBMITTED_CHANGES', $listing[0]->id);
     }
+    else if ($state->review == 2 && empty($state->expiry_date))
+    { // Instantiate a new JLayoutFile instance and render the layout
+      $layout = new JLayoutFile('joomla.toolbar.standard');
+
+      $options = array(
+          'text' => JText::_('COM_RENTAL_LISTING_APPROVE_CHANGES'),
+          'doTask' => "Joomla.submitbutton('listing.review')",
+          'btnClass' => 'btn btn-primary',
+          'class' => 'icon icon-chevron-right');
+      $btn = $layout->render($options);
+      $state->notice = JText::_('COM_REALESTATE_LISTING_SUBMITTED_FOR_REVIEW') . $btn;
+    }
 
     return $state;
   }

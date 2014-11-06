@@ -203,7 +203,7 @@ class RealEstateControllerPayment extends JControllerLegacy
       $app->setUserState('com_realestate.renewal.data', $data);
 
       // Redirect back to the edit screen.
-      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=renewal&layout=payment&id=' . (int) $data['id'], false));
+      $this->setRedirect(JRoute::_('index.php?option=com_realestate&view=renewal&layout=payment&id=' . (int) $data['id'], false));
       return false;
     }
 

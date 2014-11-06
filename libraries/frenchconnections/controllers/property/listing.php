@@ -282,7 +282,7 @@ class PropertyControllerListing extends JControllerForm
     $app = JFactory::getApplication();
     $context = "$this->option.edit.review";
 
-    $recordId = (int) (count($cid) ? $cid[0] : $app->input->get('property_id', ''));
+    $recordId = (int) (count($cid) ? $cid[0] : $app->input->get('realestate_property_id', ''));
     $checkin = property_exists($table, 'checked_out');
 
     // Check user is authed to review

@@ -195,7 +195,7 @@ abstract class ModListingHelper
     elseif ($review == 1 && !empty($expiry_date) && $days_to_renewal > 28)
     {
       $msg = JText::_('COM_RENTAL_RENTAL_EDIT_NON_SUBMITTED');
-      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate');
+      $html = JHtml::_('property.note', 'alert alert-info', $msg, $id, 'com_realestate','propertyversions.edit');
     }
     elseif ($days_to_renewal <= 28 && $days_to_renewal >= 7 && !empty($days_to_renewal))
     {
