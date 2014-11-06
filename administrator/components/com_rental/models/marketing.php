@@ -88,7 +88,6 @@ class RentalModelMarketing extends JModelAdmin
     
     // Update the various additional marketing bits
     $data['lwl'] = ($data['lwl']) ? $data['lwl'] : '';
-    $data['frtranslation'] = ($data['frtranslation']) ? $data['frtranslation'] : '';
     
     if (!$model->save($data))
     {
