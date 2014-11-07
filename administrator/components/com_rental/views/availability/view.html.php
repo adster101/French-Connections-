@@ -60,7 +60,7 @@ class RentalViewAvailability extends JViewLegacy
     $this->availability_array = RentalHelper::getAvailabilityByDay($availability = $this->availability);
 
     // Build the calendar taking into account current availability...
-    $this->calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability = $this->availability_array);
+    $this->calendar = RentalHelper::getOwnerAvailabilityCalendar($months = 18, $availability = $this->availability_array);
 
     // Set the toolbar
     $this->addToolBar();
