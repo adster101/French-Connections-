@@ -6,15 +6,83 @@ defined('_JEXEC') or die('Restricted access');
 class Fc_RedirectControllerRedirect extends JControllerLegacy
 {
 
+  public function GeoRegionSearch()
+  {
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $db = JFactory::getDbo();
+    $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+    $parts = explode('/', $input->get('filter', '', 'string'));
+
+    // Look up the location
+    $query = $db->getQuery(true);
+
+    // We're interested in the alias 
+    $query->select('alias, id');
+    $query->from('#__classifications a');
+
+    $part = array_pop($parts);
+    $query->where('a.id = ' . (int) $part);
+
+    // Serious redirects
+    $db->setQuery($query);
+
+    try
+    {
+      // Get the location 
+      $location = $db->loadObject();
+
+      if (!$location)
+      {
+        throw new Exception('Page not found', 404);
+      }
+
+      $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+      $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias));
+
+      // 301 redirect
+      $app->redirect($route, true);
+    }
+    catch (Exception $e)
+    {
+
+      $uri = JUri::getInstance();
+
+      // Log this as a redirect error
+      // Redirect to home page
+
+      JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+      JLog::add('Problem 301 redirecting old search type url: ' . $e->getMessage() . ' :: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=france');
+      $app->redirect($route, true);
+    }
+  }
+
+  /**
+   * Deals with legacy search urls 
+   * e.g. /en/search/gite/var
+   */
+  public function PropertySearch()
+  {
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    var_dump($input->get('filter', '', 'string'));
+    
+    // Define array which maps e.g. gite => property_gite_14 or whatever it is
+    
+    die;
+  }
+
   public function Search()
   {
 
     // Define variables
-    $allowable_params = array('s_reg' => 'int', 's_dept' => 'int', 's_area' => 'int', 's_kwds' => 'string', 's_ptype' => 'int', 'lang' => 'string');
+    $allowable_params = array('vtab' => 'string', 'component' => 'string', 'filter' => 'string', 'sr_reg' => 'int', 'sr_dept' => 'int', 'sr_area' => 'int', 's_reg' => 'int', 's_dept' => 'int', 's_area' => 'int', 's_kwds' => 'string', 's_ptype' => 'int', 'lang' => 'string');
     $params_present = new stdClass;
     $app = JFactory::getApplication();
     $input = $app->input;
     $db = JFactory::getDbo();
+    $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
     // Loop over allowed params and check the input to see if they are present
     foreach ($allowable_params as $k => $v)
@@ -31,16 +99,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
     // We're interested in the alias 
     $query->select('alias, id');
-
-    // Switch on the language parameter
-    if ($params_present->lang == 'en-GB')
-    {
-      $query->from('#__classifications a');
-    }
-    else
-    {
-      $query->from('#__classifications_translations a');
-    }
+    $query->from('#__classifications a');
 
     // If a keyword search then see if it maps to a location
     if (!empty($params_present->s_kwds))
@@ -49,7 +108,14 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       $alias = JApplication::stringURLSafe($params_present->s_kwds);
       $query->where('a.alias = ' . $db->quote($alias));
     }
-    elseif ($params_present->s_area || $params_present->s_reg || $params_present->s_dept)
+    elseif (
+            !empty($params_present->s_area) ||
+            !empty($params_present->s_reg) ||
+            !empty($params_present->s_dept) ||
+            !empty($params_present->sr_area) ||
+            !empty($params_present->sr_reg) ||
+            !empty($params_present->sr_dept)
+    )
     {
 
       // Must have a location based search
@@ -68,9 +134,47 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       {
         $query->where('a.id = ' . (int) $params_present->s_area);
       }
+      elseif (!empty($params_present->sr_dept))
+      {
+        $query->where('a.id = ' . (int) $params_present->sr_dept);
+      }
+      elseif (!empty($params_present->sr_reg))
+      {
+        $query->where('a.id = ' . (int) $params_present->sr_reg);
+      }
+      elseif (!empty($params_present->sr_area))
+      {
+        $query->where('a.id = ' . (int) $params_present->sr_area);
+      }
       else
       {
         $query->where('a.id = 2'); // If no areas are present, and no keywords are present then default to France? Could redirect to homepage
+      }
+    }
+    elseif (!empty($params_present->filter))
+    {
+      // Array filter removes empty array value
+      $parts = array_filter(explode('/', $params_present->filter));
+      // TO DO - Make sure this works for 123-asd and aasdasd aliases
+      if (count($parts) === 1)
+      {
+        $id = (int) $parts[0];
+
+        if ($id > 0)
+        {
+          $query->where('a.id = ' . (int) $id);
+        }
+        else
+        {
+          // Take the keyword search and make it an alias
+          $alias = JApplication::stringURLSafe($parts[0]);
+          $query->where('a.alias = ' . $db->quote($alias));
+        }
+      }
+      else
+      {
+        $part = array_pop(array_filter($parts));
+        $query->where('a.id = ' . (int) $part);
       }
     }
     else
@@ -93,45 +197,39 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
       if (!$location)
       {
-        throw new Exception('Redirect failed');
+        // Set the alias to france so we get something sensible
+        $location->alias = 'france';
+
+        // Log the problem for review
+        $uri = JUri::getInstance();
+
+        JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+        JLog::add('Problem 301 redirecting old search type url: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
       }
-
       // Route the new url - Don't use JRoute here as it appends the URL base to it.
-      // $route = JRoute::_('index.php?option=com_fcsearch&Itemid=165&s_kwds=' . JApplication::stringURLSafe($location->alias));
-
-      if ($params_present->lang == 'en-GB')
+      if (empty($params_present->component))
       {
-        // Hardcoded aliases. Slightly better than giving two 301 redirects to google
-        $route = '/accommodation/' . JApplication::stringURLSafe($location->alias);
+        $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+        $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias));
       }
       else
       {
-        $route = '/fr/hebergement' . JApplication::stringURLSafe($location->alias);
-        ;
+        $Itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
+        $route = JRoute::_('index.php?option=com_realestatesearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias));
       }
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (RuntimeException $e)
+    catch (Exception $e)
     {
-
+      // Log the problem for review
       $uri = JUri::getInstance();
 
-      // Log this as a redirect error
-      // Redirect to home page
       JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
-      JLog::add('Problem 301 redirecting old search type url: ' . $e->getMessage() . ' :: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
-      $app->redirect('/');
-    }
-  }
+      JLog::add('Exception 301 redirecting old search type url: ' . $e->getMessage() . '::' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
 
-  public function SpecialitySearch()
-  {
-    $app = JFactory::getApplication();
-    $input = $app->input;
-    var_dump($input);
-    echo "Speciality";
-    die;
+      throw new Exception('Page not found', 404);
+    }
   }
 
 }
