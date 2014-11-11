@@ -43,7 +43,7 @@ class plgUserRegistration extends JPlugin
 
     $name = $form->getName();
     // Check we are manipulating a valid form.
-    if (!in_array($name, array('com_users.registration', 'com_users.login')))
+    if (!in_array($name, array('com_users.registration', 'com_users.login', 'com_contact.contact')))
     {
       return true;
     }
