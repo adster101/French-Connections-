@@ -3,7 +3,7 @@
   <fieldset 
     name="specialoffer" 
     addrulepath="/administrator/components/com_specialoffers/models/rules" 
-    addfieldpath="/administrator/components/com_specialoffers/models/fields" 
+    addfieldpath="/libraries/frenchconnections/forms/fields" 
     label="COM_SPECIALOFFER_DETAILS">
     <field 
       name="unit_id" 
@@ -15,7 +15,8 @@
       required="true"
       message="COM_SPECIALOFFERS_PROPERTY_ID_VALIDATION_MESSAGE"
       labelclass="control-label"
-      class="required validate-prn">
+      class="required validate-prn"
+      component="com_specialoffers">
       <option value="">JGLOBAL_SELECT_AN_OPTION</option>
     </field>
     <field 

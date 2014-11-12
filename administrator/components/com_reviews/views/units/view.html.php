@@ -9,7 +9,7 @@ jimport('joomla.application.component.view');
 /**
  * HelloWorlds View
  */
-class SpecialOffersViewUnits extends JViewLegacy
+class ReviewsViewUnits extends JViewLegacy
 {
 
   protected $items;
@@ -27,6 +27,8 @@ class SpecialOffersViewUnits extends JViewLegacy
     $this->items = $this->get('Items');
     $this->state = $this->get('State');
     $this->pagination = $this->get('Pagination');
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
     
 
     parent::display($tpl);

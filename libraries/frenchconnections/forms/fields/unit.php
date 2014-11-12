@@ -25,6 +25,8 @@ class JFormFieldUnit extends JFormField
 	 * @since  1.6
 	 */
 	public $type = 'Unit';
+  
+  public $component;
 
 	/**
 	 * Method to get the user field input markup.
@@ -35,8 +37,12 @@ class JFormFieldUnit extends JFormField
 	 */
 	protected function getInput()
 	{
-		$html = array();
-		$link = 'index.php?option=com_specialoffers&amp;view=units&amp;layout=modal&amp;tmpl=component&amp;field=' . $this->id;
+		
+    $html = array();
+    
+    $option = (string) $this->element['component'];
+    
+		$link = 'index.php?option=' . $option . '&amp;view=units&amp;layout=modal&amp;tmpl=component&amp;field=' . $this->id;
 
 		// Initialize some field attributes.
 		$attr = !empty($this->class) ? ' class="' . $this->class . '"' : '';

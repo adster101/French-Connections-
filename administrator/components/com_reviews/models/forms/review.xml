@@ -3,6 +3,7 @@
   <fieldset 
     name="review" 
     addrulepath="/administrator/components/com_reviews/models/rules" 
+    addfieldpath="/libraries/frenchconnections/forms/fields" 
     label="COM_CONTACT_FORM_LABEL">
     
     <field 
@@ -68,9 +69,10 @@
 
     <field
       name="unit_id"
-      type="text"
+      type="unit"
       filter="int"
       default=""
+      component="com_reviews" 
       required="true"
       message="Please supply a property ID"
       labelclass="control-label"
