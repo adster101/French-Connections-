@@ -66,11 +66,61 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
   {
     $app = JFactory::getApplication();
     $input = $app->input;
-    var_dump($input->get('filter', '', 'string'));
-    
+    $db = JFactory::getDbo();
+    $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+
+    $filter = $input->get('filter', '', 'string');
+
+    $parts = array_filter(explode('/', $filter));
+
     // Define array which maps e.g. gite => property_gite_14 or whatever it is
+    $propertyArr = array('apartment' => 'property_apartment_1', 'manoir' => 'property_manoir_15', 'farmhouse' => 'property_farmhouse_10', 'country-house' => 'property_country-house_9', 'cottage' => 'property_cottage_7', 'converted-barn' => 'property_converted-barn_8', 'chalet' => 'property_chalet_5', 'chateau' => 'property_chateau_6', 'auberge' => 'property_auberge_2', 'appartment' => 'property_apartement_1', 'gite' => 'property_gite_11');
+
+    // Look up the location
+    $query = $db->getQuery(true);
+
+    // We're interested in the alias 
+    $query->select('alias, id');
+    $query->from('#__classifications a');
+
+    // Take the keyword search and make it an alias
+    $alias = JApplication::stringURLSafe($parts[1]);
+    $query->where('a.alias = ' . $db->quote($alias));
+
+    $db->setQuery($query);
     
-    die;
+    try
+    {
+      // Get the location 
+      $location = $db->loadObject();
+
+      if (!$location)
+      {
+        // Set the alias to france so we get something sensible
+        $location->alias = 'france';
+
+        // Log the problem for review
+        $uri = JUri::getInstance();
+
+        JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+        JLog::add('Problem 301 redirecting old search type url: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      }
+      // Route the new url - Don't use JRoute here as it appends the URL base to it.
+      $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias) . '/' . $propertyArr[$parts[0]]);
+
+      // 301 redirect
+      $app->redirect($route, true);
+    }
+    catch (Exception $e)
+    {
+      // Log the problem for review
+      $uri = JUri::getInstance();
+
+      JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+      JLog::add('Exception 301 redirecting old search type url: ' . $e->getMessage() . '::' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+
+      throw new Exception('Page not found', 404);
+    }
   }
 
   public function Search()

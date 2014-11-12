@@ -210,7 +210,7 @@ function getPath(event) {
   var pathArray = window.location.pathname.split( '/' );
   
   // The path of the search, e.g. /search or /fr/search
-  var path = '/' + pathArray[1];
+  var path = '/accommodation';
 
   // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
   var inputs = jQuery('#property-search').find(':input');
@@ -249,8 +249,6 @@ function getPath(event) {
     }
     
   }
-
-
 
   if (arrival !== '' && typeof(arrival) !== 'undefined') {
     path = path + '/arrival_' + arrival;

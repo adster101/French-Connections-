@@ -126,6 +126,11 @@ class AccommodationModelListing extends JModelForm
     // Get the property id
     $id = $input->get('id', '', 'int');
 
+    if (!$id)
+    {
+      JFactory::getApplication()->redirect('/');
+    }
+
     // Get the unit id
     $unit_id = $input->get('unit_id', '', 'int');
 
@@ -354,7 +359,6 @@ class AccommodationModelListing extends JModelForm
       $this->item->city = trim(preg_replace('/\(.*?\)/', '', $this->item->city));
     }
 
-
     return $this->item;
   }
 
@@ -539,7 +543,7 @@ class AccommodationModelListing extends JModelForm
         $query->where('a.published = 1');
 
         $result = $this->_db->setQuery($query)->loadObjectList();
-        
+
         return $result;
       }
       catch (Exception $e)
@@ -622,14 +626,14 @@ class AccommodationModelListing extends JModelForm
 
         // Only want those assigned to the current property
         $query->where('unit_id = ' . $unit_id);
-        
+
         // Order them by date stayed or date created?
         $query->order('date DESC');
 
         $db->setQuery($query);
 
         $reviews = $db->loadObjectList();
-                
+
         $this->reviews = $reviews;
 
         // Return the reviews, if any
