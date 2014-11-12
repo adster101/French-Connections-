@@ -79,34 +79,7 @@ class ReviewsModelReview extends JModelAdmin
   
 
   
-  /* Method to preprocess the special offer edit form */
-
-  protected function preprocessForm(JForm $form, $data)
-  {
-
-    // Get the user
-    $user = JFactory::getUser();
-
-    // If the user is authorised to edit state then we assume they have general admin rights
-    if ($user->authorise('core.edit.state', 'com_reviews'))
-    {
-
-      $form->setFieldAttribute('unit_id', 'type', 'unit');
-
-      if (!empty($data->property_id))
-      {
-        $form->setFieldAttribute('unit_id', 'readonly', 'true');
-      }
-    }
-    else
-    {
-      // Remove these fields for non authed user groups.
-      $form->removeField('published');
-      $form->removeField('approved_by');
-      $form->removeField('approved_date');
-      $form->removeField('id');
-    }
-  }
+  
   
   
 }
