@@ -62,7 +62,7 @@ class Renewals extends JApplicationCli {
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
 
     // Process the manual renewals
-    //$manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
+    $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
     
     // Process the auto renewals
     $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
