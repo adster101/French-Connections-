@@ -8,12 +8,12 @@
  */
 defined('_JEXEC') or die;
 
-$app = JFactory::getApplication();
+      $app = JApplicationSite::getInstance('site');
 $lang = $app->input->get('lang', 'en');
 $search_url = $app->getUserState('user.search');
 $menu = $app->getMenu();
 $active = $menu->getActive();
-$items = $menu->getItems('component', 'com_fcsearch');
+$items = $menu->getItems(array('component','access'), array('com_fcsearch', array(1,2,3)));
 $Itemid = is_array($items) ? $items[0]->id : array();
 $isListing = ($active->component == 'com_accommodation') ? true : false;
 $isShortlist = ($active->component == 'com_shortlist') ? true : false;

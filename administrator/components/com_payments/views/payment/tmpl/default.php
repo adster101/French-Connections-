@@ -39,9 +39,9 @@ $vat_total = '';
       </p>
 
       <p>
-        Date created
+        Date created:
         <strong>
-          <?php echo $this->escape($this->items[0]->DateCreated) ?>
+          <?php echo JHtml::date($this->escape($this->items[0]->DateCreated), 'D d M Y') ?>
         </strong>
       </p>
 

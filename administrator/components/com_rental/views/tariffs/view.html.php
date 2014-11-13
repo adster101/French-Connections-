@@ -99,14 +99,21 @@ class RentalViewTariffs extends JViewLegacy
 
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
 
+    // Add the back 'cancel' button
+    JToolBarHelper::custom('images.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+
     if ($canDo->get('core.edit.own'))
     {
-      JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
-      JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
-      JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-      JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE');
-      JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
+      $bar = JToolbar::getInstance('actions');
+
+      // We can save the new record
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'tariffs.apply', false);
+      $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'tariffs.saveandnext', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'tariffs.save', false);
     }
+    
+    // Add the preview and new unit buttons
+    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->progress[0]->id;

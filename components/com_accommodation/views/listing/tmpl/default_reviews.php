@@ -36,9 +36,10 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id
   </p>
 <?php endif; ?>
 <?php
+$Itemid_review = SearchHelper::getItemid(array('component', 'com_reviews'));
+$review_route = JRoute::_('index.php?option=com_reviews&task=review.add&Itemid=' . $Itemid_review . '&unit_id=' . $this->item->unit_id, false);
+
 if ($logged_in) :
-  $Itemid_review = SearchHelper::getItemid(array('component', 'com_reviews'));
-  $review_route = JRoute::_('index.php?option=com_reviews&task=review.add&Itemid=' . $Itemid_review . '&unit_id=' . $this->item->unit_id);
   ?>
   <p>
     <a href="<?php echo $review_route ?>">
@@ -48,12 +49,9 @@ if ($logged_in) :
   <?php
 else:
   // Get the review item id and set the review route (only works if user logged in)
-  $Itemid_login = SearchHelper::getItemid(array('component', 'com_users'));
+  $Itemid_login = SearchHelper::getItemid(array('component', 'com_reviews'));
   $login_route = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid_login);
 
-  $Itemid_review = $params->get('item_id_review');
-  
-  $review_route = JRoute::_('index.php?option=com_reviews&task=review.add&Itemid=' . $Itemid_review . '&unit_id=' . $this->item->unit_id);
   ?>
   <a class="login" href="<?php echo $login_route . '?return=' . base64_encode($review_route) ?>">
     <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW') ?>

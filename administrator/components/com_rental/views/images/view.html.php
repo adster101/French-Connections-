@@ -42,7 +42,7 @@ class RentalViewImages extends JViewLegacy
     $this->state = $this->get('State');
     $images = $this->getModel();
     $images->setState('version_id', $this->unit->id);
-    
+
     // Set the list limit model state so that we return all available images.
     $images->setState('list.limit');
 
@@ -76,11 +76,15 @@ class RentalViewImages extends JViewLegacy
     $canDo = RentalHelper::getActions();
 
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
+    JToolBarHelper::custom('images.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+    $bar = JToolbar::getInstance('actions');
 
+    // We can save the new record
+    $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'unitversions.apply', false);
+    $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'images.saveandnext', false);
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'unitversions.save', false);
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-    JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-    JToolBarHelper::cancel('images.cancel', 'JTOOLBAR_CLOSE');
     JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     //JToolBarHelper::help('', true);

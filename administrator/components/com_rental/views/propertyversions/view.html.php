@@ -99,14 +99,18 @@ class RentalViewPropertyversions extends JViewLegacy
 
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->property_id));
 
+    JToolBarHelper::custom('propertyversions.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+
     // Built the actions for new and existing records.
 
     if ($canDo->get('core.create'))
     {
+      $bar = JToolbar::getInstance('actions');
+
       // We can save the new record
-      JToolBarHelper::apply('propertyversions.apply', 'JTOOLBAR_APPLY');
-      JToolBarHelper::save('propertyversions.save', 'JTOOLBAR_SAVE');
-      JToolBarHelper::custom('propertyversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'propertyversions.apply', false);
+      $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'propertyversions.save', false);
     }
 
     // Get a toolbar instance so we can append the preview button
@@ -115,9 +119,6 @@ class RentalViewPropertyversions extends JViewLegacy
     $unit_id = $this->status->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
 
-    //JToolbarHelper::help('', false, '/support/rental-property/1139-location-details');
-
-    JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
     JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     //RentalHelper::addSubmenu('listings');
@@ -145,5 +146,6 @@ class RentalViewPropertyversions extends JViewLegacy
     $document->addScript(JURI::root() . "/media/fc/js/locate.js", 'text/javascript', true, false);
     $document->addStyleSheet(JURI::root() . "/media/fc/css/helloworld.css", 'text/css', "screen");
   }
+
 }
 

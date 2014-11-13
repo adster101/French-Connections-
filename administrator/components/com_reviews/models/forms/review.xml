@@ -78,6 +78,12 @@
       labelclass="control-label"
       label="Unit ID for review"
     />
+    
+    <field
+      name="property_id"
+      type="hidden"
+      filter="int"
+    />
 
     <field 
       name="published" 

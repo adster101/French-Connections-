@@ -25,7 +25,7 @@ abstract class RentalHelper
    * @param	int $value
    * @param	int $i
    */
-  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $icon = '', $button_text = '', $item = '', $urlParam = 'property_id', $btnClass = '', $current_view = '')
+  public static function progressButton($listing_id = '', $unit_id = '', $controller = '', $action = 'edit', $button_text = '', $item = '', $urlParam = 'property_id', $btnClass = '', $current_view = '')
   {
 
     $progress_icon = 'warning';
@@ -95,15 +95,15 @@ abstract class RentalHelper
     $html .='<a class="' . $btnClass . '"'
             . ' href="' . JRoute::_('index.php?option=com_rental&task=' . $controller . '.' . $action . '&' . $urlParam . '=' . (int) $id . '&' . JSession::getFormToken() . '=1') . '"'
             . ' rel="tooltip">';
-    if ($icon)
-    {
-      $html .= '<span class="icon icon-' . $icon . '"></span>';
-    }
-    $html .= '&nbsp;' . Jtext::_($button_text);
-    if (!empty($progress_icon) && $icon)
+
+    if (!empty($progress_icon))
     {
       $html .= '&nbsp;<span class="icon icon-' . $progress_icon . '"></span>';
-    }
+    } 
+    
+    $html .= '&nbsp;' . Jtext::_($button_text);
+
+
     $html .= '</a>';
 
     if (!$btnClass)
@@ -112,7 +112,7 @@ abstract class RentalHelper
     }
 
     return $html;
-  } 
+  }
 
   /*
    * Determines a list of notices to display for a property notifying the user of which units and which sections need attention
@@ -460,7 +460,8 @@ abstract class RentalHelper
 
     return $calendar;
   }
-/**
+
+  /**
    * Generates HTML to display an availability calendar.
    *
    * PHP Calendar (version 2.3), written by Keith Devens (adapted here)
@@ -472,7 +473,8 @@ abstract class RentalHelper
    * @param type $first_day
    * @return string False on failure or error, true otherwise.
    */
-  public static function getOwnerAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true) {
+  public static function getOwnerAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
+  {
 
     // Get the view
     $app = JFactory::getApplication();
@@ -491,7 +493,8 @@ abstract class RentalHelper
     $year = date("y", $now);
 
     // The loop loops over some code which outputs a calendar. It does this $months times
-    for ($z = 0; $z <= $months; $z++) {
+    for ($z = 0; $z <= $months; $z++)
+    {
 
       $calendar.='<div class="span3"><div class="calendar-container">';
 
@@ -510,7 +513,8 @@ abstract class RentalHelper
 
       $calendar.= '<table class="table table-condensed avCalendar">' . "\n";
       $calendar.= '<thead><tr><th colspan="7"><p class="month-year">' . $title . '</p></th></tr><tr class="days">' . "\n";
-      if ($day_name_length) { #if the day names should be shown ($day_name_length > 0)
+      if ($day_name_length)
+      { #if the day names should be shown ($day_name_length > 0)
         #if day_name_length is >3, the full name of the day will be printed
         foreach ($day_names as $d)
           $calendar .= '<th abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
@@ -520,8 +524,10 @@ abstract class RentalHelper
 
       if ($weekday > 0)
         $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>';#initial 'empty' days
-      for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++) {
-        if ($weekday == 7) {
+      for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++)
+      {
+        if ($weekday == 7)
+        {
           $weekday = 0; #start a new week
           $calendar .= "</tr>\n<tr>";
         }
@@ -533,33 +539,45 @@ abstract class RentalHelper
         $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
         $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
 
-        if ($status) { // Availability is true, i.e. available
-          if ($status_yesterday != $status) {
+        if ($status)
+        { // Availability is true, i.e. available
+          if ($status_yesterday != $status)
+          {
             $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
-          } else {
+          }
+          else
+          {
             $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
           }
-        } else { // Availability is false i.e. unavailable
-          if ($status_yesterday != $status) {
+        }
+        else
+        { // Availability is false i.e. unavailable
+          if ($status_yesterday != $status)
+          {
 
             $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
-          } else {
+          }
+          else
+          {
 
             $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
           }
         }
       }
 
-      if ($weekday != 7) {
+      if ($weekday != 7)
+      {
         $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>'; #remaining "empty" days
       }
       $calendar.="</table></div></div>";
 
-      if (($z % 4 === 3)) {
+      if (($z % 4 === 3))
+      {
         $calendar.='</div><div class="row-fluid">';
       }
 
-      if ($z == $months) {
+      if ($z == $months)
+      {
         $calendar.='</div>';
       }
 

@@ -103,13 +103,18 @@ class RentalViewUnitversions extends JViewLegacy
 
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id));
 
+    JToolBarHelper::custom('propertyversions.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+
     // Built the actions for new and existing records.
     // For new records, check the create permission.
     if ($canDo->get('core.create'))
     {
-      JToolBarHelper::apply('unitversions.apply', 'JTOOLBAR_APPLY');
-      JToolBarHelper::save('unitversions.save', 'JTOOLBAR_SAVE');
-      JToolBarHelper::custom('unitversions.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+      $bar = JToolbar::getInstance('actions');
+
+      // We can save the new record
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'unitversions.apply', false);
+      $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'unitversions.saveandnext', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'unitversions.save', false);
     }
 
     // Get a toolbar instance so we can append the preview button
@@ -118,7 +123,6 @@ class RentalViewUnitversions extends JViewLegacy
     $unit_id = $this->progress[0]->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
 
-    JToolBarHelper::cancel('unitversions.cancel', 'JTOOLBAR_CLOSE');
     JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     $help = JToolbar::getInstance('help');

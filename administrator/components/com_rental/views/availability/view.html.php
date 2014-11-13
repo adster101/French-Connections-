@@ -77,24 +77,22 @@ class RentalViewAvailability extends JViewLegacy
    */
   protected function addToolBar()
   {
-    // Determine the layout we are using.
-    // Should this be done with views?
-    $view = strtolower(JRequest::getVar('view'));
-
-    // Get component level permissions
-    $canDo = RentalHelper::getActions();
 
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
+    JToolBarHelper::custom('availability.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
 
+    $bar = JToolbar::getInstance('actions');
+
+    // We can save the new record
+    $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'availability.apply', false);
+    $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'availability.saveandnext', false);
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'availability.save', false);
+    
+    // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
 
-    // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-    JToolBarHelper::custom('images.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
-    JToolBarHelper::cancel('availability.cancel', 'JTOOLBAR_CLOSE');
-    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
-
-    // Get a toolbar instance so we can append the preview button
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->item->id);
+    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     //JToolBarHelper::help('', '');
   }

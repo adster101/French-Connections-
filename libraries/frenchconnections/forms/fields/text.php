@@ -225,7 +225,6 @@ class FcFormFieldText extends JFormField
               . JText::_($this->description) . '"><span class="icon icon-info">&nbsp;</span></a>';
     }
 
-
     return implode($html);
   }
 
