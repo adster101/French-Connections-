@@ -593,7 +593,7 @@ class JHtmlProperty
   {
 
     $class = ($state) ? 'publish' : 'warning';
-    $title = ($state_of_previous) ? JText::_($title) : JText::_('COM_REALESTATE_PROGRESS_COMPLETE_PREVIOUS_SECTION');
+    $title = ($state_of_previous) ? JText::_($title) : '';
     $id = ($view == $tab) ? 'active' : '';
     $id .= ($state) ? ' completed' : '';
     $id .= (!$state && !$state_of_previous) ? ' disabled' : '';

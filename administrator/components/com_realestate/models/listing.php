@@ -284,14 +284,6 @@ class RealEstateModelListing extends JModelList
 
   /**
    * 
-   */
-  public function getNotice($listing = array())
-  {
-    
-  }
-
-  /**
-   * 
    * Method takes an array of units and determines the overall status / progress of the listing.
    * Listing needs location, unit, images, availability, tariffs and 
    * 

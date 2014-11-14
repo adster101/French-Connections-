@@ -167,6 +167,8 @@
       validate="url"
       filter="string"
       labelclass="control-label"
+      hint="COM_RENTAL_CONTACT_WEBSITE_PLACEHOLDER"
+
     />
   </fieldset>
   

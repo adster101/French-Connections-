@@ -100,7 +100,7 @@ class RentalViewTariffs extends JViewLegacy
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
 
     // Add the back 'cancel' button
-    JToolBarHelper::custom('images.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+    JToolBarHelper::custom('tariffs.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
 
     if ($canDo->get('core.edit.own'))
     {

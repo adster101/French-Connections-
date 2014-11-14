@@ -34,7 +34,7 @@ $vat_total = '';
         <?php echo $this->escape($this->items[0]->InvoiceName); ?> |
         <strong>PRN: </strong><?php echo $this->escape($this->items[0]->property_id); ?> |
         <strong>User ID: </strong><?php echo $this->escape($this->items[0]->user_id); ?> |
-        <strong>Expires: </strong><?php echo $this->escape($this->items[0]->expiry_date); ?> |
+        <strong>Expires: </strong><?php echo JHtml::date($this->escape($this->items[0]->expiry_date), 'd-M-Y'); ?> |
 
       </p>
 

@@ -14,7 +14,7 @@ $class = (empty($data->expiry_date) && $data->review < 2) ? 'nav nav-wizard clea
 
 $property_message = ($data->property_detail) ? 'COM_REALESTATE_PROGRESS_PROPERTY_DETAIL_COMPLETE' : 'COM_REALESTATE_PROGRESS_COMPLETE_PROPERTY_DETAIL';
 $image_message = ($data->gallery) ? 'COM_REALESTATE_PROGRESS_IMAGE_DETAIL_COMPLETE' : 'COM_REALESTATE_PROGRESS_COMPLETE_IMAGE_DETAIL';
-$tabs_heading = (empty($data->expiry_date) && $data->review < 2) ? 'COM_REALESTATE_PROPERTY_PROGRESS' : 'COM_REALESTATE_PROPERTY_STATUS';
+$tabs_heading = (empty($data->expiry_date) && $data->review < 2) ? 'COM_PROPERTY_PROPERTY_PROGRESS' : 'COM_REALESTATE_PROPERTY_STATUS';
   
 ?>
 <h4><?php echo JText::_($tabs_heading); ?></h4>

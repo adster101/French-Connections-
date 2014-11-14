@@ -66,13 +66,22 @@ class RentalViewAutorenewals extends JViewLegacy
   {
 
     JToolBarHelper::title(($this->id) ? JText::sprintf('COM_RENTAL_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->id) : JText::_('COM_RENTAL_MANAGER_HELLOWORLD_NEW'));
+    JToolBarHelper::custom('autorenewals.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
 
-    // Get component level permissions
-    $canDo = RentalHelper::getActions();
+    $bar = JToolbar::getInstance('actions');
 
     // We can save the new record
-    JToolBarHelper::save('autorenewals.save', 'JTOOLBAR_SAVE');
-    JToolBarHelper::cancel('autorenewals.cancel', 'JTOOLBAR_CANCEL');
+    $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'autorenewals.apply', false);
+
+    // TO DO - Work this out to show for new props only
+    //if ($this->progress)
+    //{
+    //$bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
+    //}
+
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'autorenewals.save', false);
+
+    // We can save the new record
     //JToolBarHelper::help('COM_RENTAL_HELLOWORLD_NEW_PROPERTY_HELP_VIEW', true);
   }
 

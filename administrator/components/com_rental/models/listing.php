@@ -72,7 +72,8 @@ class RentalModelListing extends JModelList
 
     $db = JFactory::getDbo();
 
-    try {
+    try
+    {
 
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
@@ -155,7 +156,8 @@ class RentalModelListing extends JModelList
 
       $db->transactionCommit();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       $db->transactionRollback();
 
@@ -176,7 +178,8 @@ class RentalModelListing extends JModelList
 
     $db = JFactory::getDbo();
 
-    try {
+    try
+    {
 
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
@@ -197,7 +200,8 @@ class RentalModelListing extends JModelList
 
       $db->transactionCommit();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       $db->transactionRollback();
 
@@ -311,6 +315,7 @@ class RentalModelListing extends JModelList
         e.property_id,
         d.ordering,
         e.unit_title,
+        e.description,
         e.changeover_day,
         d.published,
         d.availability_last_updated_on,
@@ -425,35 +430,72 @@ class RentalModelListing extends JModelList
    */
   public function getProgress($units = array())
   {
+
     // Create a listing object to hold the status
     $listing = new stdClass;
-
+    $unit_state = new StdClass;
+    $listing->units = array();
+    
     $listing->complete = true; // Assume listing is complete
+    $listing->location_detail = true; // Assume we have all property details
+    $listing->contact_detail = true; // Assume we have all property details
 
     $listing->id = $units[0]->id; // The main listing ID
+    // Set a 'default' unit ID 
+    // TO DO - Expand this for when there are multiple units, e.g. using a 'unit switcher'
+    $listing->unit_id = $units[0]->unit_id;
+
     $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
+    $listing->payment = (empty($units[0]->expiry_date)) ? false : true; // The expiry date
     $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
-
+    
+    // Check each of the units for availability, tariffs, images and description etc
     foreach ($units as $key => $unit)
     {
-      if (!$unit->availability || !$unit->tariffs || !$unit->images)
+      $unit_state->unit_detail = true; // Assume we have all property details
+      $unit_state->gallery = true; // Assume we have some images
+      $unit_state->tariffs = true; // Assume we have some images
+      $unit_state->availability = true; // Assume we have some images
+
+      if (empty($unit->unit_title) || empty($unit->description))
       {
+        $unit_state->unit_detail = false; // Assume we have all property details
+        $listing->complete = false; // Listing isn't complete...
+      }
+
+      if (!$unit->availability)
+      {
+        $unit_state->availability = false; // Assume we have some images
+        $listing->complete = false; // Listing isn't complete...
+      }
+
+      if (!$unit->tariffs)
+      {
+        $unit_state->tariffs = false; // Assume we have some images
+        $listing->complete = false; // Listing isn't complete...
+      }
+
+      if (!$unit->images)
+      {
+        $unit_state->gallery = false; // Assume we have some images
         $listing->complete = false; // Listing isn't complete...
       }
     }
 
     if (!$units[0]->use_invoice_details && empty($units[0]->first_name) && empty($units[0]->surname) && empty($units[0]->email_1) && empty($units[0]->phone_1))
     {
+      $listing->contact_detail = false;
       $listing->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
     }
 
     if (!$units[0]->latitude || !$units[0]->longitude)
     {
       $listing->complete = false;
+      $listing->location_detail = false;
     }
 
-    $listing->unit_id = $units[0]->unit_id;
+    $listing->units[$unit->unit_id] = $unit_state;
 
     return $listing;
   }

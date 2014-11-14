@@ -10,11 +10,13 @@ JHtml::_('behavior.keepalive');
 $data = array();
 $data['property'] = $this->item;
 $data['progress'] = $this->progress;
+$data['status'] = $this->status;
 
 // So we can pass them into our layout files
 $tabs_layout = new JLayoutFile('accommodation_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 
+$tabs = new JLayoutFile('realestate_tabs', $basePath = JPATH_ADMINISTRATOR . '/components/com_realestate/layouts');
 $fieldsets = $this->form->getFieldSets('citiestowns');
 $amenities = $this->form->getGroup('amenities');
 ?>
