@@ -97,20 +97,34 @@ class RentalViewContactdetails extends JViewLegacy
 
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_CONTACT_EDIT', $this->item->property_id));
 
+    JToolBarHelper::custom('propertyversions.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+
 
     if ($canDo->get('core.edit.own'))
     {
-      JToolBarHelper::apply('contactdetails.apply', 'JTOOLBAR_APPLY');
-      JToolBarHelper::save('contactdetails.save', 'JTOOLBAR_SAVE');
+      $bar = JToolbar::getInstance('actions');
+
       // We can save the new record
-      JToolBarHelper::cancel('propertyversions.cancel', 'JTOOLBAR_CLOSE');
-      JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'contactdetails.apply', false);
+
+      // TO DO - Work this out to show for new props only
+      //if ($this->progress)
+      //{
+        //$bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
+      //}
+      
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'contactdetails.save', false);
+
+
+      // We can save the new record
     }
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');    // Get the property ID as the first item in the progress array
     $property_id = $this->progress[0]->id;
     $unit_id = $this->progress[0]->unit_id;
+
+    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
   }
