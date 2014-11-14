@@ -109,7 +109,7 @@ class RentalViewTariffs extends JViewLegacy
       // We can save the new record
       $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'tariffs.apply', false);
       $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'tariffs.saveandnext', false);
-      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'tariffs.save', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'tariffs.save', false);
     }
     
     // Add the preview and new unit buttons

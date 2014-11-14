@@ -114,7 +114,7 @@ class RentalViewUnitversions extends JViewLegacy
       // We can save the new record
       $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'unitversions.apply', false);
       $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'unitversions.saveandnext', false);
-      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'unitversions.save', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'unitversions.save', false);
     }
 
     // Get a toolbar instance so we can append the preview button

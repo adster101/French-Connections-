@@ -47,6 +47,10 @@ $fieldsets = $this->form->getFieldSets();
 
       <input type="hidden" name="task" value="" />
       <?php echo JHtml::_('form.token'); ?>
+      <?php
+      $actions = new JLayoutFile('frenchconnections.property.actions');
+      echo $actions->render(array());
+      ?>
     </div>
   </div>
 </form>

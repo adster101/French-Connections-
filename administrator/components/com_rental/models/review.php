@@ -371,6 +371,7 @@ class RentalModelReview extends JModelAdmin
     // Initialise the query.
     $query->select('
       b.property_id,
+      b.lwl,
       c.title,
       d.title,
       e.title,

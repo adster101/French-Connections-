@@ -82,7 +82,7 @@ class RentalViewImages extends JViewLegacy
     // We can save the new record
     $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'unitversions.apply', false);
     $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'images.saveandnext', false);
-    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'unitversions.save', false);
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'unitversions.save', false);
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
     JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);

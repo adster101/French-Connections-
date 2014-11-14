@@ -38,7 +38,8 @@
       class="alert alert-notice" 
       label=""
       labelclass="control-label"
-      description="COM_RENTAL_HELLOWORLD_WEBSITE_NOTE" />
+      description="COM_RENTAL_HELLOWORLD_WEBSITE_NOTE"
+    />
     <field
       name="website"
       type="url"
@@ -50,6 +51,8 @@
       class="validate-url input-xlarge"
       validate="url"
       labelclass="control-label"
+      hint="COM_RENTAL_CONTACT_WEBSITE_PLACEHOLDER"
+
     />
    
   </fieldset> 

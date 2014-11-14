@@ -89,14 +89,16 @@ class RentalViewMarketing extends JViewLegacy
 
     // Set the title on the title bar
     JToolbarHelper::title(JText::sprintf('COM_RENTAL_MARKETING_TITLE', $this->id), 'wand');
+    JToolBarHelper::back();
 
     if ($canDo->get('core.create'))
     {
-      // We can save the new record
-      JToolBarHelper::apply('marketing.apply', 'JTOOLBAR_APPLY');
-      JToolBarHelper::save('marketing.save', 'JTOOLBAR_SAVE');
+      $bar = JToolbar::getInstance('actions');
+
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'marketing.apply', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'marketing.save', false);
     }
-    
+
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', 'index.php');

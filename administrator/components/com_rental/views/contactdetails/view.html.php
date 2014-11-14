@@ -113,7 +113,7 @@ class RentalViewContactdetails extends JViewLegacy
         //$bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
       //}
       
-      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE_FOR_LATER', 'contactdetails.save', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'contactdetails.save', false);
 
 
       // We can save the new record
@@ -123,10 +123,10 @@ class RentalViewContactdetails extends JViewLegacy
     $bar = JToolBar::getInstance('toolbar');    // Get the property ID as the first item in the progress array
     $property_id = $this->progress[0]->id;
     $unit_id = $this->progress[0]->unit_id;
+    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
 
     JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
 
-    $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
   }
 
   /**
