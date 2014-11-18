@@ -58,7 +58,7 @@ class RealestateImport extends JApplicationCli
     return $row->id;
   }
 
-  public function createProperty($db)
+  public function createProperty($db, $user = 1)
   {
     $query = $db->getQuery(true);
     $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
@@ -72,7 +72,7 @@ class RealestateImport extends JApplicationCli
                         $db->quoteName('created_by')
                     )
             )
-            ->values($db->quote($expiry_date) . ', 1, ' . $db->quote($date) . ',0,1');
+            ->values($db->quote($expiry_date) . ', 1, ' . $db->quote($date) . ',0,' . (int) $user);
 
     $db->setQuery($query);
 

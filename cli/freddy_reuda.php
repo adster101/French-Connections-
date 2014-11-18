@@ -45,6 +45,8 @@ class FreddyRueda extends RealestateImport
     // Get a db instance and start a transaction
     $db = JFactory::getDbo();
 
+    $user = JFactory::getUser('frueda@realestatelanguedoc.com')->id;
+
     (JDEBUG) ? $this->out('About to get feed...') : '';
 
     // Get and parse out the feed 
@@ -80,7 +82,7 @@ class FreddyRueda extends RealestateImport
           (JDEBUG) ? $this->out('Adding property entry...') : '';
 
           // Create an entry in the #__realestate_property table
-          $property_id = $this->createProperty($db);
+          $property_id = $this->createProperty($db, $user);
 
           // Get the location details for this property
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
@@ -97,7 +99,7 @@ class FreddyRueda extends RealestateImport
           $data['city'] = 0;
           $data['latitude'] = 0;
           $data['longitude'] = 0;
-          $data['created_by'] = 1; // TO DO get Allez Francais added to system - surpress renewal reminders
+          $data['created_by'] = $user;
           $data['created_on'] = $db->quote(JFactory::getDate());
           $data['description'] = $db->quote($prop->description);
           $data['single_bedrooms'] = (int) $prop->single_bedrooms;
@@ -107,7 +109,7 @@ class FreddyRueda extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
-          
+
           (JDEBUG) ? $this->out('Adding property version...') : '';
 
           $property_version_id = $this->createPropertyVersion($db, $data);
@@ -179,10 +181,10 @@ class FreddyRueda extends RealestateImport
           // Update version to shut down any unpublished versions? Need to deal with this somehow? 
           // $ref = $this->updateProperty($realestate_property_version->id);
         }
-        
+
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
-        
+
         (JDEBUG) ? $this->out('Done processing... ' . $prop->agency_reference) : '';
       }
       catch (Exception $e)

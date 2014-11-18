@@ -7,7 +7,7 @@
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 // Initialize Joomla framework
-const _JEXEC = 1;
+        const _JEXEC = 1;
 
 // Load system defines
 if (file_exists(dirname(__DIR__) . '/defines.php'))
@@ -44,6 +44,7 @@ class AllezFrancais extends RealestateImport
   {
     // Get a db instance and start a transaction
     $db = JFactory::getDbo();
+    $user = JFactory::getUser('allezfrancais')->id;
 
     (JDEBUG) ? $this->out('About to get feed...') : '';
 
@@ -80,7 +81,7 @@ class AllezFrancais extends RealestateImport
           (JDEBUG) ? $this->out('Adding property entry...') : '';
 
           // Create an entry in the #__realestate_property table
-          $property_id = $this->createProperty($db);
+          $property_id = $this->createProperty($db, $user);
 
           // Get the location details for this property
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
@@ -97,7 +98,7 @@ class AllezFrancais extends RealestateImport
           $data['city'] = (int) $location[5]->id;
           $data['latitude'] = $prop->latitude;
           $data['longitude'] = $prop->longitude;
-          $data['created_by'] = 1; // TO DO get Allez Francais added to system - surpress renewal reminders
+          $data['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
           $data['created_on'] = $db->quote(JFactory::getDate());
           $data['description'] = $db->quote($prop->description, true);
           $data['single_bedrooms'] = (int) $prop->single_bedrooms;
@@ -181,10 +182,10 @@ class AllezFrancais extends RealestateImport
           // Update version to shut down any unpublished versions? Need to deal with this somehow? 
           // $ref = $this->updateProperty($realestate_property_version->id);
         }
-        
+
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
-        
+
         (JDEBUG) ? $this->out('Done processing... ' . $prop->agency_reference) : '';
       }
       catch (Exception $e)

@@ -21,9 +21,9 @@ class ImportControllerRealestateimages extends JControllerForm
     JSession::checkToken('POST') or die('Invalid Token');
 
     // Open a handle to the import file
-    $handle = fopen('/home/adam/Documents/qitz3_property_images_library.csv', "r");
+    //$handle = fopen('/home/adam/Documents/qitz3_property_images_library.csv', "r");
 
-    //$handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_realestate_property_images_library.csv', "r");
+    $handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_realestate_property_images_library.csv', "r");
 
     // Get a db instance
     $db = JFactory::getDBO();
