@@ -170,6 +170,8 @@ class ImportControllerProperty_listings extends JControllerForm {
 
       $languages = (string) $registry;
 
+      $query->clear();
+
       $query->insert('#__property_versions');
 
       $query->columns(array(
@@ -179,7 +181,7 @@ class ImportControllerProperty_listings extends JControllerForm {
           'deposit', 'security_deposit', 'payment_deadline', 'evening_meal', 'additional_booking_info',
           'terms_and_conditions', 'use_invoice_details', 'first_name', 'surname', 'address', 'phone_1',
           'phone_2', 'phone_3', 'fax', 'email_1', 'email_2', 'website', 'review', 'created_on', 'created_by',
-          'modified_on', 'modified_by', 'published_on', 'languages_spoken'
+          'modified_on', 'modified_by', 'published_on', 'languages_spoken','lwl','frtranslation'
       ));
 
       $insert_string = '';
@@ -228,9 +230,11 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',1'; // Modified by
       $insert_string .= ',' . $db->quote($line[38]); // published on
       $insert_string .= ',' . $db->quote($languages); // json encoded languages spoken
+      $insert_string .= ',' . $line[41];
+      $insert_string .= ',' . $line[42];
 
       $query->values($insert_string);
-      $db->setQuery($query);
+      $db->setQuery($query,0,0);
 
       if (!$db->execute()) {
         $e = new JException(JText::sprintf('JLIB_DATABASE_ERROR_STORE_FAILED_UPDATE_ASSET_ID', $db->getErrorMsg()));

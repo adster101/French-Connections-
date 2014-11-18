@@ -208,7 +208,7 @@ abstract class RealEstateHelper
   /**
    * Get the actions
    */
-  public static function getActions($assetName = 'com_rental')
+  public static function getActions($assetName = 'com_realestate')
   {
     $user = JFactory::getUser();
     $result = new JObject;

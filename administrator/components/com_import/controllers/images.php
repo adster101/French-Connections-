@@ -11,7 +11,7 @@ jimport('joomla.user.helper');
 /**
  * HelloWorld Controller
  */
-class ImportControllerRealestate_images extends JControllerForm {
+class ImportControllerImages extends JControllerForm {
 
   public function import() {
 
