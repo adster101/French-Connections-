@@ -184,7 +184,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         <?php echo $this->escape($this->offer->description); ?>  
       </p>
       <p>
-        <?php echo JText::sprintf('COM_ACCOMMODATION_OFFER_ENDS', $this->offer->days, $route . '#email' ); ?>
+        <?php echo JText::sprintf('COM_ACCOMMODATION_OFFER_ENDS', $this->offer->days, $route . '#email'); ?>
       </p>
     </div>
   <?php endif; ?>
@@ -476,10 +476,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       <?php endif; ?>
       <table class="table table-striped">
         <tbody>
-          <?php if (array_key_exists('Property Type', $this->unit_facilities) && array_key_exists('Accommodation Type', $this->unit_facilities)) : ?>
+          <?php if ($this->item->property_type && $this->item->accommodation_type) : ?>
             <tr>
               <td><?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE') ?></td>
-              <td><?php echo $this->unit_facilities['Property Type'][0] . ' (' . $this->unit_facilities['Accommodation Type'][0] . ')'; ?></td>        
+              <td><?php echo $this->item->property_type . ' (' . $this->item->accommodation_type . ')'; ?></td>        
             </tr>
           <?php endif; ?>
 
@@ -516,6 +516,14 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                 ?>
                 <?php
                 if ($this->item->twin_bedrooms) : echo JText::sprintf('COM_ACCOMMODATION_SITE_TWIN_BEDROOMS', $this->item->twin_bedrooms);
+                endif;
+                ?>
+                <?php
+                if ($this->item->extra_beds) : echo JText::sprintf('COM_ACCOMMODATION_SITE_EXTRA_BEDROOMS', $this->item->extra_beds);
+                endif;
+                ?>
+                <?php
+                if ($this->item->cots) : echo JText::sprintf('COM_ACCOMMODATION_SITE_COTS', $this->item->cots);
                 endif;
                 ?>
               </td>        

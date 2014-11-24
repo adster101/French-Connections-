@@ -24,7 +24,7 @@ JHtml::_('behavior.caption');
     <?php endif; ?>
     <?php $leadingcount = 0; ?>
     <?php if (!empty($this->lead_items)) : ?>
-      <div id="homepageCarousel" class="carousel slide" data-ride="carousel" data-interval="2500"><!-- Carousel items -->
+      <div id="homepageCarousel" class="carousel slide" data-ride="carousel" data-interval="5000"><!-- Carousel items -->
 
         <div class="carousel-inner">
           <?php foreach ($this->lead_items as &$item) : ?>

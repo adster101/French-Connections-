@@ -73,7 +73,7 @@ class ImportControllerLocations extends JControllerForm {
         $parent_id = 2;
       }
 
-      $alias = JApplication::stringURLSafe($line[2]);
+      $alias = JApplicationHelper::stringURLSafe($line[2]);
       $title = mysql_escape_string(JLanguageTransliterate::utf8_latin_to_ascii($line[2]));
 
       $description = mysql_escape_string(($line[5]));

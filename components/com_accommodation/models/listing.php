@@ -204,6 +204,8 @@ class AccommodationModelListing extends JModelForm
         d.triple_bedrooms,
         d.quad_bedrooms,
         d.twin_bedrooms,
+        d.extra_beds,
+        d.cots,
         d.occupancy,
         d.additional_price_notes,
         d.linen_costs,

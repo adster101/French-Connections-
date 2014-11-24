@@ -64,8 +64,6 @@ class JFormFieldAttributeType extends JFormFieldList
 		$query->where('b.id='.$classificationID);
     $query->where('a.published = 1');
 		
-    
-    
     // Get the options.
 		$db->setQuery($query);
 
@@ -76,11 +74,6 @@ class JFormFieldAttributeType extends JFormFieldList
 			JError::raiseWarning(500, $db->getErrorMsg());
 		}
     
-    // Show a 'please choose' placeholder for single select drop downs
-    if ($showPlaceHolder) {
-      // Add an initial 'please choose' option, can be done in the XML form field declaration
-    	array_unshift($options, JHtml::_('select.option', '', JText::_('COM_RENTAL_PLEASE_CHOOSE')));
-    }
 		// Merge any additional options in the XML definition.
 		$options = array_merge(parent::getOptions(), $options);
         

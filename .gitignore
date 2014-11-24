@@ -65,3 +65,4 @@ robots.txt
 /media/com_cmigrator/
 /administrator/language/en-GB/en-GB.plg_authentication_cmigrator.ini
 /administrator/language/en-GB/en-GB.plg_authentication_cmigrator.sys.ini
+/revive/

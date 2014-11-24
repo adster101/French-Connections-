@@ -31,7 +31,14 @@
       default=""
       label="URL to do a repeat payment"
       description="" />
-
+    
+    <field
+      name="AbortURL"
+      class="input-xxlarge"
+      type="text"
+      default=""
+      label="URL to abort a deferred repeat payment"
+      description="" />
     <field
       name="VendorName"
       type="text"

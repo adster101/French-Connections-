@@ -320,6 +320,7 @@ class RentalModelListing extends JModelList
         d.published,
         d.availability_last_updated_on,
         e.accommodation_type,
+        e.property_type,
         e.created_on,
         g.vat_status,  
         CONCAT(g.firstname, \' \', g.surname) as account_name,
@@ -435,7 +436,7 @@ class RentalModelListing extends JModelList
     $listing = new stdClass;
     $unit_state = new StdClass;
     $listing->units = array();
-    
+
     $listing->complete = true; // Assume listing is complete
     $listing->location_detail = true; // Assume we have all property details
     $listing->contact_detail = true; // Assume we have all property details
@@ -449,7 +450,6 @@ class RentalModelListing extends JModelList
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
     $listing->payment = (empty($units[0]->expiry_date)) ? false : true; // The expiry date
     $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
-    
     // Check each of the units for availability, tariffs, images and description etc
     foreach ($units as $key => $unit)
     {

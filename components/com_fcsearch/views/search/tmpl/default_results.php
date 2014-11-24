@@ -36,6 +36,7 @@ $search_data->arrival = ($this->state->get('list.arrival', '')) ? JFactory::getD
 $search_data->departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this->state->get('list.departure'))->calendar('d-m-Y') : '';
 $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path', 'query', 'fragment'));
 $offers = ($this->state->get('list.offers')) ? true : false;
+$ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
 
 // Prepare the pagination string.  Results X - Y of Z
 // $start = (int) $this->pagination->get('limitstart') + 1;
@@ -45,7 +46,7 @@ $offers = ($this->state->get('list.offers')) ? true : false;
 // $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
 ?>
 
-<form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=165&s_kwds=' . $s_kwds) ?>" method="POST">
+<form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=' . $ItemID . '&s_kwds=' . $s_kwds) ?>" method="POST">
 
   <h1 class="small-h1 page-header">
     <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>

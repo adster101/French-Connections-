@@ -156,7 +156,7 @@ class JFeedParserdocument extends JFeedParser
 
       $query->from('#__classifications a');
       $query->where('a.alias = ' . $db->quote(JStringNormalise::toDashSeparated(JApplication::stringURLSafe($department))));
-      
+
 
       $db->setQuery($query, 0, 1);
       $rows = $db->loadObject();
@@ -181,6 +181,7 @@ class JFeedParserdocument extends JFeedParser
 
   public function nearestcity($latitude = '', $longitude = '', $department = '')
   {
+
     try
     {
       $db = JFactory::getDbo();

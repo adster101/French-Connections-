@@ -160,7 +160,7 @@ class AllezFrancais extends RealestateImport
           $this->updateProperty($db, $id);
 
           (JDEBUG) ? $this->out('Updating version details...') : '';
-
+          
           // Update the property version in case price or description has changed...
           $data = array();
           $data['id'] = $id;
@@ -174,6 +174,7 @@ class AllezFrancais extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
+         
           $this->updatePropertyVersion($db, $data);
 
 
@@ -185,7 +186,7 @@ class AllezFrancais extends RealestateImport
 
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
-
+        
         (JDEBUG) ? $this->out('Done processing... ' . $prop->agency_reference) : '';
       }
       catch (Exception $e)

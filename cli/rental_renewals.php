@@ -216,10 +216,11 @@ class Renewals extends JApplicationCli {
           break;
 
         case ($v->days == "7"):
-
-          // Take shadow payment... 
-          // May need to pass more info here, e.g. billing name, address, user id, 
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary)) {
+          
+          // Attempt to take shadow payment... 
+          $shadowPayment = $payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary, $v->id);
+          
+          if (!$shadowPayment) {
 
             // Problemo - shadow payment failed so generate email
             $body = JText::sprintf(
@@ -229,13 +230,16 @@ class Renewals extends JApplicationCli {
           } else {
             // Don't send an email here if the shadow payment was successful.
             $email = false;
+            
+            // Cancel the repeatdeferred payment
+            $reponse = $payment_model->cancelRepeatPayment($shadowPayment, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'ABORT');
           }
 
           break;
 
         case ($v->days == "0"):
           // Take actual payment
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary)) {
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary, $v->id)) {
             $email = false;
           } else {
             // Success
