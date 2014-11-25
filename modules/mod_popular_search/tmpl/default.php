@@ -33,7 +33,7 @@ $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     </h3>
     <?php foreach ($regions as $region) : ?>
       <p>
-        <a href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=165'); ?>">
+        <a href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=' . (int) $itemid); ?>">
           <?php echo htmlspecialchars($region->title, ENT_QUOTES, 'UTF-8'); ?>
 
         </a>

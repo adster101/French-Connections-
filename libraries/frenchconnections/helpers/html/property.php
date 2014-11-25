@@ -446,7 +446,7 @@ class JHtmlProperty
    *
    */
 
-  public static function note($msgClass='alert alert-danger',$msg='',$id,$option='com_rental',$action='listing.view')
+  public static function note($msgClass = 'alert alert-danger', $msg = '', $id, $option = 'com_rental', $action = 'listing.view')
   {
     $link = JHtml::_('property.link', $id, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON_TOOLTIP', $action, 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'btn btn-primary', false, $option);
     $html = '';
@@ -611,6 +611,28 @@ class JHtmlProperty
     $layout = new JLayoutFile('frenchconnections.property.link');
 
     return $layout->render($options);
+  }
+
+  public static function rating($rating = '')
+  {
+
+    $html = '';
+    $html = '<p>Guest rating: ';
+
+    for ($i = 0; $i < 5; $i++)
+    {
+      if ($i < $rating)
+      {
+        $html .= "<span class='glyphicon glyphicon-star'></span>";
+      }
+      else
+      {
+        $html .= '<span class="glyphicon glyphicon-star-empty"></span>';
+      }
+    }
+    $html .= '</p>';
+    
+    return $html;
   }
 
 }

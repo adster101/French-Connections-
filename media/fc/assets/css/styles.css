@@ -6626,6 +6626,7 @@ Contains styles that apply at the global level, or can be applied to any section
   border-radius: 4px;
   background: #ffffff;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 .quote p,
 .well .quote p {
@@ -6650,6 +6651,12 @@ Contains styles that apply at the global level, or can be applied to any section
   border-width: 10px;
   border-style: solid;
   border-color: #ffffff transparent transparent #ffffff;
+}
+.quote .glyphicon-star,
+.well .quote .glyphicon-star,
+.quote .glyphicon-star-empty,
+.well .quote .glyphicon-star-empty {
+  color: #e9af11;
 }
 .navbar-property-navigator {
   margin-bottom: 20px;

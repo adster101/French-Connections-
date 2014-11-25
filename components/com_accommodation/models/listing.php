@@ -185,14 +185,14 @@ class AccommodationModelListing extends JModelForm
         c.additional_booking_info,
         c.deposit_currency,
         c.terms_and_conditions,
-        c.first_name,
-        c.surname,
-        c.address,
-        c.email_1,
-        c.email_2,
-        c.phone_1,
-        c.phone_2,
-        c.phone_3,
+        c.first_name as alt_first_name,
+        c.surname as alt_surname,
+        c.address as alt_email,
+        c.email_1 as alt_email_1,
+        c.email_2 as alt_email_2,
+        c.phone_1 as alt_phone_1,
+        c.phone_2 as alt_phone_2,
+        c.phone_3 as alt_phone_3,
         c.city as city_id,
         c.languages_spoken,
         k.title as changeover_day,
@@ -228,9 +228,8 @@ class AccommodationModelListing extends JModelForm
         ufc.phone_1, 
         ufc.phone_2, 
         ufc.phone_3,
-        ufc.firstname,
-        ufc.surname,
-        ufc.email_alt,
+        ufc.firstname as firstname,
+        ufc.surname as surname,
         ufc.exchange_rate_eur,
         ufc.exchange_rate_usd,
         ufc.address1,
@@ -1005,7 +1004,6 @@ class AccommodationModelListing extends JModelForm
       // Override anything set in the property version 
       if ($item->use_invoice_details)
       {
-
         $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email;
         // This assumes that name is in synch with the user profile table first and last name fields...
         $owner_name = htmlspecialchars($item->name);
@@ -1013,8 +1011,8 @@ class AccommodationModelListing extends JModelForm
       else
       {
         // We just use the details from the contact page, possibly also send this to the owner...
-        $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email_1;
-        $owner_name = htmlspecialchars($item->firstname) . ' ' . htmlspecialchars($item->surname);
+        $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->alt_email_1;
+        $owner_name = htmlspecialchars($item->alt_first_name) . ' ' . htmlspecialchars($item->alt_surname);
       }
 
       // The details of the enquiry as submitted by the holiday maker
