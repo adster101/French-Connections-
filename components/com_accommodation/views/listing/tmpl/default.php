@@ -200,7 +200,9 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
               <ul class="slides">
                 <?php if (!empty($this->item->video_url)) : ?>
                   <li>
-                    <iframe id="player_1" src="<?php echo $this->escape($this->item->video_url) ?>" width="100%" height="281" frameborder="0"></iframe>
+                    <div class="embed-responsive embed-responsive-16by9">   
+                      <iframe class="embed-responsive-item" id="player_1" src="<?php echo $this->escape($this->item->video_url) ?>"></iframe>
+                    </div> 
                   </li>
                 <?php endif; ?>
                 <?php foreach ($this->images as $images => $image) : ?> 

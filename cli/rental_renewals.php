@@ -10,11 +10,13 @@
         const _JEXEC = 1;
 
 // Load system defines
-if (file_exists(dirname(__DIR__) . '/defines.php')) {
+if (file_exists(dirname(__DIR__) . '/defines.php'))
+{
   require_once dirname(__DIR__) . '/defines.php';
 }
 
-if (!defined('_JDEFINES')) {
+if (!defined('_JDEFINES'))
+{
   define('JPATH_BASE', dirname(__DIR__));
   require_once JPATH_BASE . '/includes/defines.php';
 }
@@ -38,7 +40,8 @@ JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/
  * @package  Joomla.Cli
  * @since    2.5
  */
-class Renewals extends JApplicationCli {
+class Renewals extends JApplicationCli
+{
 
   /**
    * Entry point for the script
@@ -47,10 +50,15 @@ class Renewals extends JApplicationCli {
    *
    * @since   2.5
    */
-  public function doExecute() {
-       
+  public function doExecute()
+  {
+
     // Create an instance of the site application - needed for the CLI app to run the JLayout
     $app = JFactory::getApplication('site');
+
+    // Load the language file for the receipt payment
+    $lang = JFactory::getLanguage();
+    $lang->load('frenchconnections', JPATH_SITE . '/libraries/frenchconnections');
 
     // Get the debug setting
     $debug = (bool) $app->getCfg('debug');
@@ -60,31 +68,33 @@ class Renewals extends JApplicationCli {
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
-    
     // Process the auto renewals
     $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
-    
   }
 
-  private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
+  private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates)
+  {
+
+    $app = JFactory::getApplication();
     
     // Array for holding a list of the contact notes
     $notes = array();
-    
+
     // Get props due for manual renewal
     $props = $this->_getProps();
 
-    if (!$props) {
+    if (!$props)
+    {
       die;
     }
 
     $this->out('About to process manual renewal reminders');
 
     // Process the renewal reminders
-    foreach ($props as $k => $v) {
+    foreach ($props as $k => $v)
+    {
 
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
@@ -105,8 +115,8 @@ class Renewals extends JApplicationCli {
       $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
 
-      $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
-      $cc = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'accounts@frenchconnections.co.uk';
+      $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing->email;
+
       $send_email = true;
 
       SWITCH (true) {
@@ -150,9 +160,11 @@ class Renewals extends JApplicationCli {
           $send_email = false;
           break;
       }
-      if ($send_email) {
+      if ($send_email)
+      {
         // Send the email
-        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc)) {
+        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body))
+        {
           // If the email is sent then write out to the notes table
           $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
         }
@@ -160,14 +172,19 @@ class Renewals extends JApplicationCli {
     }
 
     // Empty the notes array into the database
-    if (!empty($notes)) {
+    if (!empty($notes))
+    {
       $this->saveNotes($notes);
     }
 
     $this->out('Done processing manual reminders...');
   }
 
-  private function _autorenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates) {
+  private function _autorenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates)
+  {
+
+    // Get the application so we can get config details
+    $app = JFactory::getApplication();
 
     // Array for holding a list of the contact notes
     $notes = array();
@@ -175,14 +192,22 @@ class Renewals extends JApplicationCli {
     // Get a list of properties for renewals
     $props = $this->_getProps(true);
 
-    if (!$props) {
+    // Date the payment has been processed
+    $date = JHtml::date('now', 'd M Y');
+
+    if (!$props)
+    {
       die;
     }
 
     $this->out('About to process auto-renewal reminders');
 
-    foreach ($props as $k => $v) {
+    foreach ($props as $k => $v)
+    {
+      // The description of what the owner is paying for
+      $descripion = '\n';
 
+      // The current expiry date
       $expiry_date = JFactory::getDate($v->expiry_date)->calendar('d M Y');
 
       // Get an instance of the listing model
@@ -202,9 +227,7 @@ class Renewals extends JApplicationCli {
       $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
       $email = true;
-
-      $recipient = ($debug) ? 'accounts@frenchconnections.co.uk' : 'adamrifat@frenchconnections.co.uk';
-      $cc = ($debug) ? 'adamrifat@frenchconnections.co.uk' : 'accounts@frenchconnections.co.uk';
+      $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing->email;
 
       SWITCH (true) {
         case ($v->days == "30"):
@@ -216,21 +239,23 @@ class Renewals extends JApplicationCli {
           break;
 
         case ($v->days == "7"):
-          
+
           // Attempt to take shadow payment... 
           $shadowPayment = $payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary, $v->id);
-          
-          if (!$shadowPayment) {
 
+          if (!$shadowPayment)
+          {
             // Problemo - shadow payment failed so generate email
             $body = JText::sprintf(
                             $renewal_templates->get('AUTO_RENEWAL_7_DAYS'), $user->firstname, $payment_summary_layout->render($payment_summary)
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_7_DAYS_SUBJECT'), $v->id);
-          } else {
+          }
+          else
+          {
             // Don't send an email here if the shadow payment was successful.
             $email = false;
-            
+
             // Cancel the repeatdeferred payment
             $reponse = $payment_model->cancelRepeatPayment($shadowPayment, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'ABORT');
           }
@@ -238,17 +263,53 @@ class Renewals extends JApplicationCli {
           break;
 
         case ($v->days == "0"):
+
           // Take actual payment
-          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary, $v->id)) {
+          if (!$payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEAT', $payment_summary, $v->id))
+          {
             $email = false;
-          } else {
+          }
+          else
+          {
             // Success
             // Update listing details here, mainly just update the expiry date for the PRN
             $body = JText::sprintf(
-                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname, $expiry_date, $payment_summary_layout->render($payment_summary), $total
+                            $renewal_templates->get('AUTO_RENEWAL_SUCCESS'), $user->firstname
             );
             $subject = JText::sprintf($renewal_templates->get('AUTO_RENEWAL_SUCCESS_SUBJECT'), $v->id);
+
+            $expiry_date = $payment_model->getNewExpiryDate();
+
+            $total = $payment_model->getOrderTotal($payment_summary);
+
+            //$payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
+            //$payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
+            // Generate billing details
+            $billing_name = $v->BillingFirstnames . ' ' . $v->BillingSurname;
+            $transaction_number = $v->VendorTxCode;
+            $auth_code = $v->TxAuthNo;
+
+            $billing_email = $recipient;
+
+            $address = $v->BillingAddress1 . ' ' . $v->BillingAddress2 . ' ' . $v->BillingCity . ' ' . $v->BillingPostCode . ' ' . $v->BillingCountry;
+            $billing_name = $v->Billingfirstnames . ' ' . $v->BillingSurname;
+
+            // Sort out the description
+            foreach ($payment_summary as $orderline)
+            {
+              $description .= '[' . $orderline->code . ']' . $orderline->item_description . "\n";
+            }
+
+            // Send payment receipt
+            $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $v->id);
+            $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
+
+            $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, $receipt_subject, $receipt_body, false);
+
+            // TO DO - Write this out into the protx payment tables...            
           }
+
+          //$this->sendPaymentReceipt();
 
           break;
 
@@ -264,22 +325,25 @@ class Renewals extends JApplicationCli {
       }
 
       // Send the email
-      if ($email) {
-
-        $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body, $cc);
-
-        $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
+      if ($email)
+      {
+        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body))
+        {
+          $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
+        }
       }
     }
 
-    if (!empty($notes)) {
+    if (!empty($notes))
+    {
       $this->saveNotes($notes);
     }
 
     $this->out('Done processing auto renewal reminders and payments');
   }
 
-  public function saveNotes($notes = array()) {
+  public function saveNotes($notes = array())
+  {
 
     // Add the tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
@@ -287,12 +351,15 @@ class Renewals extends JApplicationCli {
     // Get an instance of the note table
     $table = JTable::getInstance('Note', 'NotesTable');
 
-    foreach ($notes as $note) {
-      if (!$table->bind($note)) {
+    foreach ($notes as $note)
+    {
+      if (!$table->bind($note))
+      {
         return false;
       }
 
-      if (!$table->store()) {
+      if (!$table->store())
+      {
         return false;
       }
 
@@ -306,7 +373,8 @@ class Renewals extends JApplicationCli {
    * Get a list of properties due to expire and are set to manual renewal
    */
 
-  private function _getProps($auto = false) {
+  private function _getProps($auto = false)
+  {
 
     //$this->out('Getting props...');
 
@@ -332,7 +400,15 @@ class Renewals extends JApplicationCli {
       b.SecurityKey,
       b.TxAuthNo, 
       b.user_id, 
-      b.property_id'
+      b.property_id,
+      b.Billingfirstnames,
+      b.BillingSurname,
+      b.BillingAddress1,
+      b.BillingAddress2,
+      b.BillingCity,
+      b.BillingPostCode,
+      b.BillingCountry,
+      b.BillingCounty'
     );
 
     $query->from('#__property a');
@@ -340,17 +416,23 @@ class Renewals extends JApplicationCli {
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
     $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
 
-    if (!$auto) {
+    if (!$auto)
+    {
       $query->where('a.VendorTxCode = \'\'');
-    } else {
+    }
+    else
+    {
       $query->where('a.VendorTxCode > 0');
     }
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $rows = $db->loadObjectList();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       $this->out('Problem getting props...');
       return false;
     }

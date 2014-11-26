@@ -580,7 +580,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       }
 
       // If there are more than eight images in total they should be 'upgraded' to the unlimited package
-      if ($image_count >= 8 )
+      if ($image_count >= 8)
       {
         $item_costs[$codes->get('unlimited-upgrade')]['quantity'] = 1;
       }
@@ -678,6 +678,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     /* Analyse the response from Sage Pay Direct to check that everything is okay
      * * Registration results come back in the Status and StatusDetail fields */
     $arrResponse['VendorTxCode'] = $VendorTxCode;
+
     $strStatus = $arrResponse["Status"];
 
     if ($strStatus == "OK")
@@ -689,7 +690,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
   }
-  
+
   public function cancelRepeatPayment($VendorTxCodeNew, $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'ABORT')
   {
 
@@ -730,6 +731,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
   }
+
   /*
    * 
    */
@@ -739,7 +741,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     // Determine whether this payment should be saved as an auto-renewal or not
     $shouldAutoRenew = (!empty($data['autorenewal'])) ? $data['autorenewal'] : '0';
-    
+
     // Transaction id for repeat payment, if above is true
     $transaction_id = '';
 
@@ -877,8 +879,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $strPost = $strPost . "&AccountType=E";
 
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
-    /* Analyse the response from Sage Pay Direct to check that everything is okay
-     * * Registration results come back in the Status and StatusDetail fields */
+    /* 
+     * Analyse the response from Sage Pay Direct to check that everything is okay
+     * Registration results come back in the Status and StatusDetail fields
+     */
     $arrResponse['VendorTxCode'] = $VendorTxCode;
 
     $strStatus = $arrResponse["Status"];
@@ -986,7 +990,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $auth_code = $payment_details['TxAuthNo'];
     $address = $billing_details['BillingAddress1'] . ' ' . $billing_details['BillingAddress2'] . ' ' . $billing_details['BillingCity'] . ' ' . $billing_details['BillingPostCode'] . ' ' . $billing_details['BillingCountry'];
     $billing_email = (JDEBUG) ? 'accounts@frenchconnections.co.uk' : $billing_details['BillingEmailAddress'];
-    $cc = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : '';
+
     $html = false;
     $description = "\n";
 
@@ -1016,12 +1020,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
+      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $html);
 
       // Send the renewal confirmation email           
       $confirmation_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
       $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
-      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $cc, $html);
+      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $html);
 
       $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES');
 
@@ -1041,12 +1045,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
+      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $html);
 
       // Send the renewal confirmation email           
       $confirmation_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_SUBJECT', $listing_id);
       $confirmation_body = JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_BODY', $billing_name);
-      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $cc, $html);
+      $this->sendEmail($from, $billing_email, $confirmation_subject, $confirmation_body, $html);
 
       $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES');
 
@@ -1064,7 +1068,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
       $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
+      $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $html);
 
       $message = JText::_('COM_RENTAL_HELLOWORLD_NEW_PROPERTY_CONFIRMATION');
 
@@ -1085,7 +1089,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         // Send payment receipt
         $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
         $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-        $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
+        $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $html);
       }
 
       $this->updateProperty($listing_id, $total, $review = 2, '', '', $autorenewal = $transaction_id);
@@ -1104,7 +1108,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         // Send payment receipt
         $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
         $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
-        $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $cc, $html);
+        $this->sendEmail($from, $billing_email, $receipt_subject, $receipt_body, $html);
       }
 
       $this->clearVouchers($listing_id);
@@ -1118,7 +1122,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   /**
    * 
    */
-  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $cc = '', $html = true)
+  public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $html = true)
   {
 
     // Assemble the email data...
@@ -1130,10 +1134,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             ->isHtml($html);
 
     // If debug is off then we should have a $cc, at least for the renewals.
-    if ($cc)
-    {
-      $mail->addCC($cc);
-    }
+    $mail->addBCC('accounts@frenchconnections.co.uk');
 
     if (!$mail->Send())
     {
@@ -1175,8 +1176,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     /*
      * Update the autorenwal transaction id
      */
-    $data['VendorTxCode'] = $autorenewal;
-
+    if (!empty($autorenewal))
+    {
+      $data['VendorTxCode'] = $autorenewal;
+    }
     /*
      * Update the expiry date if one is passed in
      */
@@ -1246,7 +1249,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     //Store the raw response for later as it's useful to see for integration and understanding
     $_SESSION["rawresponse"] = $rawresponse;
     //Split response into name=value pairs
-    $response = split(chr(10), $rawresponse);
+    $response = explode("\n", $rawresponse);
     // Check that a connection was made
     if (curl_error($curlSession))
     {
