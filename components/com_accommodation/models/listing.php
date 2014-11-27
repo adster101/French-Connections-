@@ -194,6 +194,7 @@ class AccommodationModelListing extends JModelForm
         c.phone_2 as alt_phone_2,
         c.phone_3 as alt_phone_3,
         c.city as city_id,
+        c.lwl,
         c.languages_spoken,
         k.title as changeover_day,
         d.toilets,

@@ -18,7 +18,27 @@ defined('_JEXEC') or die;
  */
 abstract class JHtmlRefine
 {
+  public static function removeLWLFilter($lwl)
+  {
+    $html = '';
 
+    if (!$lwl)
+    {
+      return $html;
+    }
+    $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path', 'fragment'));
+
+    $html .='<span>';
+    $html .='<a class="muted" href="' . JRoute::_('http://' . $uri) . '">';
+    $html .='<span class="label label-warning"><i class=" glyphicon glyphicon-remove"></i>Long Winter Let';
+    $html .='</span></a>&nbsp;';
+
+    $html .='</span>';
+
+
+    return $html;
+  }
+  
   /**
    * 
    */

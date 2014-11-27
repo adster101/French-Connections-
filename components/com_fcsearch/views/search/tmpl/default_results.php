@@ -36,6 +36,7 @@ $search_data->arrival = ($this->state->get('list.arrival', '')) ? JFactory::getD
 $search_data->departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this->state->get('list.departure'))->calendar('d-m-Y') : '';
 $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path', 'query', 'fragment'));
 $offers = ($this->state->get('list.offers')) ? true : false;
+$lwl = ($this->state->get('list.lwl')) ? true : false;
 $ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
 
 // Prepare the pagination string.  Results X - Y of Z
@@ -56,13 +57,14 @@ $ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
   </div>
 
   <?php $offer_filter = JHtml::_('refine.removeOffersFilter', (bool) $offers); ?>
+  <?php $lwl_filter = JHtml::_('refine.removeLWLFilter', (bool) $lwl); ?>
   <?php $attribute_filter = JHtml::_('refine.removeAttributeFilters', $this->attribute_options, $uri); ?>
   <?php $property_filter = JHtml::_('refine.removeTypeFilters', $this->property_options, $uri, 'property_'); ?>
   <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
 
-  <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter)) : ?>
+  <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
     <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
-    <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter; ?>
+    <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
     <hr />
   <?php endif; ?>
 

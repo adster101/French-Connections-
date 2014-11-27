@@ -6,6 +6,8 @@ $displayData = ($displayData) ? $displayData : array();
 $uri = ($displayData['uri']) ? $displayData['uri'] : '';
 $lang = ($displayData['lang']) ? $displayData['lang'] : 'en-GB';
 $type = ($displayData['type']) ? $displayData['type'] : '';
+$offers = ($displayData['offers']) ? $displayData['offers'] : ''; 
+$lwl = ($displayData['lwl']) ? $displayData['lwl'] : ''; 
 ?>
 
 <?php if (!empty($displayData['data'])) : ?>
@@ -32,7 +34,7 @@ $type = ($displayData['type']) ? $displayData['type'] : '';
       $remove = true;
     }
     $route = 'index.php?option=com_fcsearch&Itemid=' . $displayData['itemid'] . '&s_kwds=' .
-            JApplication::stringURLSafe($this->escape($displayData['location'])) . $new_uri;
+            JApplication::stringURLSafe($this->escape($displayData['location'])) . $new_uri . $offers . $lwl;
     ?>
     <?php if ($counter >= 5 && $hide) : ?>
       <?php $hide = false; ?>

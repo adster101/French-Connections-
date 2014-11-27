@@ -21,6 +21,7 @@ $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 $min_budget = $this->state->get('list.min_price');
 $max_budget = $this->state->get('list.max_price');
 $offers = ($this->state->get('list.offers')) ? '?offers=true' : '';
+$lwl = ($this->state->get('list.lwl')) ? '?lwl=true' : '';
 
 $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
@@ -65,7 +66,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         <?php if ($key > 0) : ?>
           <p>
             <a class="btn btn-sm btn-default" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
-              <button class="close"> &times;</button>
+              <span class="close"> &times;</span>
               <?php echo $value->name = stripslashes(htmlspecialchars($value->name, ENT_COMPAT, 'UTF-8')); ?>
             </a>
           </p> 
@@ -89,7 +90,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             $tmp = explode('/', $uri); // Split the url out on the slash
             $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // Remove the first 3 value of the URI
             $filters = (!empty($filters)) ? '/' . implode('/', $filters) : '';
-            $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters . $offers;
+            $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters . $offers . $lwl;
             ?>
 
             <?php if ($counter >= 5 && $hide) : ?>
@@ -134,7 +135,9 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
                 'itemid' => $Itemid_search,
                 'uri' => $uri,
                 'lang' => $lang,
-                'type' => 'accommodation_'
+                'type' => 'accommodation_',
+                'offers' => $offers,
+                'lwl' => $lwl
     ));
     ?>
   </div>
@@ -169,7 +172,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
           $remove = true;
         }
         $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' .
-                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . $new_uri . $offers;
+                JApplication::stringURLSafe($this->escape($this->localinfo->title)) . $new_uri . $offers . $lwl;
         ?>
         <?php if ($counter >= 5 && $hide) : ?>
           <?php $hide = false; ?>
@@ -231,7 +234,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             <div class="hide ">
             <?php endif; ?>
             <p>
-              <a href="<?php echo JRoute::_('http://' . $new_uri . $offers) ?>">
+              <a href="<?php echo JRoute::_('http://' . $new_uri . $offers . $lwl) ?>">
                 <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
               </a>
             </p>

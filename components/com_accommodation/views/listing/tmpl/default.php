@@ -353,6 +353,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
             <?php endif; ?>      
           </p>   
         <?php endif; ?>
+        <!-- LWL Bullshine -->
+        <?php if ($this->item->lwl) : ?>
+          <p class="">
+            <?php echo Jtext::_('COM_ACCOMMODATION_THIS_PROPERTY_OFFERS_LONG_WINTER_LETS'); ?>
+          </p>
+        <?php endif; ?>
 
         <?php echo $this->loadTemplate('reviews'); ?>
 

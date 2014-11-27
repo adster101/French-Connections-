@@ -6479,16 +6479,16 @@ Contains styles that mainly apply to the header section of the template
 }
 @media (min-width: 768px) {
   .panel-home-page-search .form-inline .search-control-date {
-    width: 85px;
+    width: 90px;
   }
   .panel-home-page-search .form-inline .search-control-occupancy {
-    width: 85px;
+    width: 95px;
   }
 }
 @media (min-width: 992px) {
   .panel-home-page-search {
     left: 80px;
-    width: 480px;
+    width: 510px;
     position: absolute;
     z-index: 20;
     top: 20px;

@@ -36,9 +36,9 @@ $prices = JHtml::_('general.price', $this->result->price, $this->result->base_cu
       <p class="rates">
         <?php if ($this->result->price) : ?>
           <span class="lead">
-            <?php echo '&pound;' . round($prices['GBP']); ?>
+            <?php echo '&pound;' . number_format(round($prices['GBP'])); ?>
           </span>
-          (<?php echo '&euro;' . round($prices['EUR']); ?>)
+          (<?php echo '&euro;' . number_format(round($prices['EUR'])); ?>)
           
         <?php else : ?>
           <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
