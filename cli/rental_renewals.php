@@ -282,8 +282,8 @@ class Renewals extends JApplicationCli
 
             $total = $payment_model->getOrderTotal($payment_summary);
 
-            //$payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
-            //$payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
+            $payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
+            
             // Generate billing details
             $billing_name = $v->BillingFirstnames . ' ' . $v->BillingSurname;
             $transaction_number = $v->VendorTxCode;

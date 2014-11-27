@@ -7,7 +7,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.filesystem.file');
 
 // require helper file
-require_once('administrator/components/com_media/helpers/media.php');
+require_once(JPATH_ADMINISTRATOR . '/components/com_media/helpers/media.php');
 
 /**
  * HelloWorld Controller

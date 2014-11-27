@@ -47,7 +47,7 @@ else
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
   <?php $doc->addStyleSheet('/media/fc/assets/css/styles.css'); ?>
-  <?php $doc->addScript('/media/fc/assets/js/scripts.js', 'text/javascript', false, true); ?>
+  <?php $doc->addScript('/media/fc/assets/js/scripts.min.js', 'text/javascript', false, true); ?>
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
   <header class="" role="banner"> 

@@ -10,7 +10,7 @@ jimport('joomla.application.component.controlleradmin');
 jimport('joomla.filesystem.file');
 
 // require helper file
-require_once('administrator/components/com_media/helpers/media.php');
+require_once(JPATH_ADMINISTRATOR . '/components/com_media/helpers/media.php');
 
 /**
  * HelloWorld Controller
@@ -438,9 +438,6 @@ class RentalControllerImages extends JControllerForm {
    */
 
   public function manage() {
-
-    // Check that this is a valid call from a logged in user.
-    JSession::checkToken('GET') or die('Invalid Token');
 
     // $id is the listing the user is trying to edit
     $id = $this->input->get('unit_id', '', 'int');
