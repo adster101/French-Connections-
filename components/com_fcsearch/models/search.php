@@ -431,6 +431,15 @@ class FcSearchModelSearch extends JModelList
         $query->order($sort_column . ' ' . $sort_order);
       }
 
+      // If there is no sort column specified and we have an occupancy filter
+      // Show the lowest occupancy first
+      if ($this->getState('list.occupancy') && !$sort_column)
+      {
+        $query->order('occupancy', 'asc');
+      }
+
+
+
       if ($this->getState('search.level') == 5)
       {
         
