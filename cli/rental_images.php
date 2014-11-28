@@ -78,6 +78,9 @@ class RentalImages extends JApplicationCli
       {
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
+      
+      $this->out('Done image...' . $image->image_file_name);
+
     }
   }
 

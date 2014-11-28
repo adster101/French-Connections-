@@ -41,9 +41,11 @@ class ImportControllerArticles extends JControllerForm
     while (($line = fgetcsv($handle, 0, $delimiter = '|')) !== FALSE)
     {
       $data = array();
+      $output = '';
 
 
-      $output = iconv("ISO-8859-1", "UTF-8//TRANSLIT", strip_tags($line[5], "<p>"));
+      $output .= iconv("ISO-8859-1", "UTF-8//TRANSLIT", strip_tags($line[4], "<p>"));
+      $output .= iconv("ISO-8859-1", "UTF-8//TRANSLIT", strip_tags($line[5], "<p>"));
 
       if (!empty($line[10]))
       {
@@ -56,7 +58,7 @@ class ImportControllerArticles extends JControllerForm
         $db->setQuery($query);
         $row = $db->loadObjectList();
 
-        $output = '<h4>Linked resources</h4>';
+        $output .= '<h4>Linked resources</h4>';
 
 
         foreach ($row as $file)
@@ -102,13 +104,12 @@ class ImportControllerArticles extends JControllerForm
 
       //$data['publish_up'] = date('Y-m-d', strtotime($line[14]));
       //$data['publish_down'] = date('Y-m-d', strtotime($line[15]));
-    $model = $this->getModel('Article', 'ContentModel');
+      $model = $this->getModel('Article', 'ContentModel');
 
       if (!$model->save($data))
       {
         $error = $model->getError();
         
-        var_dump($error);die;
       }
     }
 

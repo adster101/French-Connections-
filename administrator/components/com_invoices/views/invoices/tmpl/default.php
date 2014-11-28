@@ -173,7 +173,7 @@ if (!empty($this->extra_sidebar))
                 <td class="">
                   <?php echo (int) $item->id; ?>
                   <br />
-                  <?php if (!empty($item->due_date)): ?>
+                  <?php if ($item->due_date != '0000-00-00'): ?>
                     For Advertising on Internet site French Connections for 1 year commencing <?php echo $item->due_date; ?>
                   <?php else: ?>
                     Sundries

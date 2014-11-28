@@ -309,6 +309,8 @@ class FcSearchModelSearch extends JModelList
       $query->join('left', '#__unit_versions d on d.unit_id = b.id');
 
       // Join the images, innit!
+      // TO DO - Update this so it looks for the 'max' image? Or just return null
+      // and display placeholder image if for some reason the image is unavailable.
       $query->join('left', '#__property_images_library e on d.id = e.version_id');
       $query->where('(e.ordering = 1)');
 

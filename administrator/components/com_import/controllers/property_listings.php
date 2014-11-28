@@ -159,13 +159,15 @@ class ImportControllerProperty_listings extends JControllerForm {
       $db->setQuery($query, 0, 1);
       $airport = $db->loadRow();
 
-      $languages_spoken = array_unique(explode(',', $line[39]));
+      $languages_spoken = array_unique(explode(',', $line[40]));
 
       $languages_spoken_array['language_1'] = $langs[$languages_spoken[0]];
       $languages_spoken_array['language_2'] = (array_key_exists(1, $languages_spoken)) ? ($langs[$languages_spoken[1]]) : '';
       $languages_spoken_array['language_3'] = (array_key_exists(2, $languages_spoken)) ? ($langs[$languages_spoken[2]]) : '';
       $languages_spoken_array['language_4'] = (array_key_exists(3, $languages_spoken)) ? ($langs[$languages_spoken[3]]) : '';
 
+      $website = ($line[34]) ? $line[35] : '';
+      
       $registry->loadArray($languages_spoken_array);
 
       $languages = (string) $registry;
@@ -222,16 +224,16 @@ class ImportControllerProperty_listings extends JControllerForm {
       $insert_string .= ',' . $db->quote($line[31]);
       $insert_string .= ',' . $db->quote($line[32]);
       $insert_string .= ',' . $db->quote($line[33]);
-      $insert_string .= ',' . $db->quote($line[34]); // website
+      $insert_string .= ',' . $db->quote($website); // website
       $insert_string .= ',0'; // Review     
-      $insert_string .= ',' . $db->quote($line[35]); // date created
-      $insert_string .= ',' . $db->quote($line[36]); // owner
-      $insert_string .= ',' . $db->quote($line[37]); // modified
+      $insert_string .= ',' . $db->quote($line[36]); // date created
+      $insert_string .= ',' . $db->quote($line[37]); // owner
+      $insert_string .= ',' . $db->quote($line[38]); // modified
       $insert_string .= ',1'; // Modified by
-      $insert_string .= ',' . $db->quote($line[38]); // published on
+      $insert_string .= ',' . $db->quote($line[39]); // published on
       $insert_string .= ',' . $db->quote($languages); // json encoded languages spoken
-      $insert_string .= ',' . $line[41];
       $insert_string .= ',' . $line[42];
+      $insert_string .= ',' . $line[43];
 
       $query->values($insert_string);
       $db->setQuery($query,0,0);
