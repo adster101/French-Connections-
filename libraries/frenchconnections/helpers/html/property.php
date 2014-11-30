@@ -589,15 +589,15 @@ class JHtmlProperty
    * @param type $state
    * @return type
    */
-  public static function progressTab($state = false, $state_of_previous = false, $text = '', $link = '', $title = '', $view = '', $tab = '')
+  public static function progressTab($state = false, $state_of_previous = false, $expiry_date = '', $text = '', $link = '', $title = '', $view = '', $tab = '')
   {
 
     $class = ($state) ? 'publish' : 'warning';
     $title = ($state_of_previous) ? JText::_($title) : '';
     $id = ($view == $tab) ? 'active' : '';
     $id .= ($state) ? ' completed' : '';
-    $id .= (!$state && !$state_of_previous) ? ' disabled' : '';
-    $link = (!$state && !$state_of_previous) ? '' : $link;
+    $id .= (!$state && !$state_of_previous && empty($expiry_date)) ? ' disabled' : '';
+    $link = (!$state && !$state_of_previous && empty($expiry_date)) ? '' : $link;
     $options = array(
         'class' => $class,
         'text' => JText::_($text),

@@ -305,6 +305,7 @@ class RentalModelListing extends JModelList
         b.latitude, 
         b.longitude,
         b.department,
+        b.city,
         b.use_invoice_details,
         b.first_name,
         b.surname,
@@ -431,7 +432,8 @@ class RentalModelListing extends JModelList
    */
   public function getProgress($units = array())
   {
-
+    
+    $input = JFactory::getApplication()->input;  
     // Create a listing object to hold the status
     $listing = new stdClass;
     $unit_state = new StdClass;
@@ -444,7 +446,7 @@ class RentalModelListing extends JModelList
     $listing->id = $units[0]->id; // The main listing ID
     // Set a 'default' unit ID 
     // TO DO - Expand this for when there are multiple units, e.g. using a 'unit switcher'
-    $listing->unit_id = $units[0]->unit_id;
+    $listing->unit_id = ($input->get('unit_id','','int')) ? $input->get('unit_id','','int') : $units[0]->unit_id;
 
     $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
@@ -452,13 +454,15 @@ class RentalModelListing extends JModelList
     $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
     // Check each of the units for availability, tariffs, images and description etc
     foreach ($units as $key => $unit)
-    {
+    {  
+      
+
       $unit_state->unit_detail = true; // Assume we have all property details
       $unit_state->gallery = true; // Assume we have some images
       $unit_state->tariffs = true; // Assume we have some images
       $unit_state->availability = true; // Assume we have some images
 
-      if (empty($unit->unit_title) || empty($unit->description))
+      if (empty($unit->unit_title) || empty($unit->description) || empty($unit->accommodation_type) || empty($unit->property_type))
       {
         $unit_state->unit_detail = false; // Assume we have all property details
         $listing->complete = false; // Listing isn't complete...
@@ -480,7 +484,10 @@ class RentalModelListing extends JModelList
       {
         $unit_state->gallery = false; // Assume we have some images
         $listing->complete = false; // Listing isn't complete...
-      }
+      }    
+      
+      $listing->units[$unit->unit_id] = $unit_state;
+
     }
 
     if (!$units[0]->use_invoice_details && empty($units[0]->first_name) && empty($units[0]->surname) && empty($units[0]->email_1) && empty($units[0]->phone_1))
@@ -489,13 +496,12 @@ class RentalModelListing extends JModelList
       $listing->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
     }
 
-    if (!$units[0]->latitude || !$units[0]->longitude)
+    if (!$units[0]->latitude || !$units[0]->longitude || empty($units[0]->city) || empty($units[0]->department))
     {
       $listing->complete = false;
       $listing->location_detail = false;
     }
 
-    $listing->units[$unit->unit_id] = $unit_state;
 
     return $listing;
   }
