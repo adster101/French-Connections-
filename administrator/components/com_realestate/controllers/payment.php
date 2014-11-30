@@ -69,12 +69,12 @@ class RealEstateControllerPayment extends JControllerLegacy
     $this->holdEditId($context, $recordId);
     if (empty($current_listing[0]->vat_status))
     {
-      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false);
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false,1);
     }
     else
     {
       // Redirect to the renewal payment/summary form thingy...
-      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false);
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false,1);
     }
 
     $this->setRedirect($route);

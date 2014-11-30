@@ -27,11 +27,11 @@ $tabs_heading = (empty($data->expiry_date) && $data->review < 2) ? 'COM_PROPERTY
 
 <ul class="<?php echo $class ?>">
   <?php
-  echo JHtml::_('property.progressTab', $data->property_detail, true, 'COM_REALESTATE_PROPERTY_DETAIL', 'index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $data->id, $property_message, $view, 'propertyversions');
-  echo JHtml::_('property.progressTab', $data->gallery, $data->property_detail, 'IMAGE_GALLERY', 'index.php?option=com_realestate&task=images.manage&realestate_property_id=' . (int) $data->id, $image_message, $view, 'images');
+  echo JHtml::_('property.progressTab', $data->property_detail, true,$data->expiry_date, 'COM_REALESTATE_PROPERTY_DETAIL', 'index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $data->id, $property_message, $view, 'propertyversions');
+  echo JHtml::_('property.progressTab', $data->gallery, $data->property_detail, $data->expiry_date,'IMAGE_GALLERY', 'index.php?option=com_realestate&task=images.manage&realestate_property_id=' . (int) $data->id, $image_message, $view, 'images');
   if (empty($data->expiry_date) && $data->review < 2)
   {
-    echo JHtml::_('property.progressTab', $data->payment, $data->complete, 'PAYMENT', 'index.php?option=com_realestate&task=payment.summary&realestate_property_id=' . (int) $data->id, 'Wooty woot', $view, 'payment');
+    echo JHtml::_('property.progressTab', $data->payment, $data->complete, $data->expiry_date,'PAYMENT', 'index.php?option=com_realestate&task=payment.summary&realestate_property_id=' . (int) $data->id, 'Wooty woot', $view, 'payment');
   }
   ?>
 </ul>

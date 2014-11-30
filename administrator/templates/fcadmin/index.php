@@ -54,14 +54,7 @@ foreach ($this->submenumodules as $submenumodule)
 }
 
 // Logo file
-if ($this->params->get('logoFile'))
-{
-  $logo = JUri::root() . $this->params->get('logoFile');
-}
-else
-{
-  $logo = $this->baseurl . '/templates/' . $this->template . '/images/logo.png';
-}
+$logo = JUri::root() . $this->baseurl . '/templates/' . $this->template . '/images/logo.png';
 
 // Template Parameters
 $displayHeader = $this->params->get('displayHeader', '1');

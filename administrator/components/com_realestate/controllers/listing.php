@@ -108,6 +108,8 @@ class RealEstateControllerListing extends PropertyControllerListing
     }
 
     // It's all good mother fucker!
+    // TO DO - Maybe want to redirect to payment view if a new property
+    // 
     // Add a subject to the data array so a note is added to the notes table  
      
     $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
