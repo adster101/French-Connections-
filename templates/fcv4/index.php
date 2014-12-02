@@ -16,6 +16,7 @@ $view = $app->input->getCmd('view', '');
 $itemid = $app->input->getCmd('Itemid', '');
 $sitename = $app->getCfg('sitename');
 $listing = false;
+$URI = JURI::getInstance();
 
 $menu = $app->getMenu();
 $active = $menu->getActive();
@@ -46,8 +47,8 @@ else
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
-  <?php $doc->addStyleSheet('//www.frenchconnections.co.uk/media/fc/assets/css/styles.css'); ?>
-  <?php $doc->addScript('//www.frenchconnections.co.uk/media/fc/assets/js/scripts.min.js', 'text/javascript', false, true); ?>
+  <?php $doc->addStyleSheet('//' . $URI->getHost() . '/media/fc/assets/css/styles.css'); ?>
+  <?php $doc->addScript('//' . $URI->getHost() . '/media/fc/assets/js/scripts.min.js', 'text/javascript', false, true); ?>
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
   <header class="" role="banner"> 
@@ -59,7 +60,7 @@ else
       <?php endif; ?>
       <!-- Take brand out of navbar as we're not really using the BS default nav correctly -->
       <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
-        <img src="//www.frenchconnections.co.uk/images/general/logo-4.png" alt="' . $sitename . '" />
+        <img src="<?php echo '//' . $URI->getHost() . '/images/general/logo-4.png' ?>" alt="<?php echo $sitename ?>" />
       </a> 
     </div>
     <div class="container">

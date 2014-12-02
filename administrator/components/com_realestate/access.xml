@@ -17,5 +17,6 @@
 		<action name="realestate.listings.showowner" title="Display owner details on listing view" description="" />
 		<action name="realestate.payment.view" title="Access payment view" description="" />
 		<action name="realestate.review.view" title="Access listing review view" description="" />
+		<action name="realestate.listing.view" title="Access listing review view" description="" />
   </section>
 </access>
