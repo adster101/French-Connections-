@@ -27,7 +27,7 @@ class ImportControllerRealestateimages extends JControllerForm
 
     // Get a db instance
     $db = JFactory::getDBO();
-    $db->truncateTable('#__realestate_property_images_library');
+    //$db->truncateTable('#__realestate_property_images_library');
 
     $previous_property_id = '';
 

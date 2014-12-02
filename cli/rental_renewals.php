@@ -115,7 +115,7 @@ class Renewals extends JApplicationCli
       $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
 
-      $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing->email;
+      $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing[0]->email;
 
       $send_email = true;
 
@@ -163,7 +163,7 @@ class Renewals extends JApplicationCli
       if ($send_email)
       {
         // Send the email
-        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body))
+        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, $subject, $body))
         {
           // If the email is sent then write out to the notes table
           $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
@@ -227,7 +227,7 @@ class Renewals extends JApplicationCli
       $payment_summary = $payment_model->getPaymentSummary($listing);
       $total = $payment_model->getOrderTotal($payment_summary);
       $email = true;
-      $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing->email;
+      $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing[0]->email;
 
       SWITCH (true) {
         case ($v->days == "30"):

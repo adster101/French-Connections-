@@ -15416,11 +15416,11 @@ function getPath(event) {
   }
 
   if (min_price !== '' && typeof(min_price) !== 'undefined') {
-    path = path + '/' + 'min_' + min_price;
+    path = path + '/' + min_price;
   }
 
   if (max_price !== '' && typeof(max_price) !== 'undefined') {
-    path = path + '/' + 'max_ ' + max_price;
+    path = path + '/' + max_price;
   }
 
   // Pull out the offers query string, if it exists
