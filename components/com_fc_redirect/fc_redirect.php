@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 //JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
 JLoader::import('frenchconnections.library');
+require_once JPATH_ROOT . '/components/com_content/helpers/route.php';
 
 
 $controller = JControllerLegacy::getInstance('fc_redirect');

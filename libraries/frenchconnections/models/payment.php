@@ -695,7 +695,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   {
 
     // Check we've got what we need to proceed
-    if (!$VendorTxCode || !$VPSTxId || !$SecurityKey || !$TxAuthNo)
+    if (!$VendorTxCodeNew || !$VPSTxId || !$SecurityKey || !$TxAuthNo)
     {
       return false;
     }
@@ -760,6 +760,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // First off, generate a VendorTxCode and stash what we have in the db
     $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . '-' . rand(0, 32000) * rand(0, 32000);
 
+    $description = 'Payment received for PRN[' . $data['id'] . '] ' . 'OWNER[' . $this->owner_id . ']';
+    
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($order as $item => $line)
     {
@@ -849,7 +851,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $strPost = $strPost . "&ApplyAVSCV2=2";
     // Add the basket
     $strPost = $strPost . "&Basket=" . urlencode($strBasket); //As created above
-
+    $strPost = $strPost . "&Description=" . urlencode($description); //As created above
+    
     /* Billing Details
      * This section is optional in its entirety but if one field of the address is provided then all non-optional fields must be provided
      * If AVS/CV2 is ON for your account, or, if paypal cardtype is specified and its not via PayPal Express then this section is compulsory */

@@ -327,7 +327,7 @@ class Renewals extends JApplicationCli
       // Send the email
       if ($email)
       {
-        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, '[TESTING] - ' . $subject, $body))
+        if ($payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, $subject, $body))
         {
           $notes[$v->id] = array('id' => '', 'subject' => $subject, 'body' => $body, 'property_id' => $v->id);
         }

@@ -249,7 +249,7 @@ class PropertyControllerListing extends JControllerForm
     $property_model->checkin(array($recordId));
 
     // Send the confirmation email
-    $mail = $model->sendApprovalEmail($listing, $validData);
+    $mail = $model->sendApprovalEmail($listing, $validData['body'], $validData['subject']);
 
     // Send confirmation email
     $msg = JText::sprintf('COM_RENTAL_PROPERTY_PUBLISHED', $listing[0]->id);

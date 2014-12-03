@@ -22,7 +22,7 @@ class RealestateViewListing extends JViewLegacy
 
     if (!$this->item = $this->get('Item'))
     {
-      throw new Exception(JText::_('WOOT'), 410);
+      throw new Exception(JText::_('Property not available'), 410);
     }
 
     // Get the images for this property

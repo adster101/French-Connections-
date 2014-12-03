@@ -7,6 +7,8 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
+JHtml::_('behavior.formvalidation');
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_realestate&view=admin&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate">

@@ -132,7 +132,8 @@ class RealestateSearchModelSearch extends JModelList
 
     if ((int) $this->getState('list.searchterm', ''))
     {
-      $app->redirect('/forsale/' . $this->getState('list.searchterm', ''), true);
+      $ItemId = SearchHelper::getItemid(array('component','com_realestate'));
+      $app->redirect(JRoute::_('index.php?option=com_realestate&Itemid=' . $ItemId . '&id=' . $this->getState('list.searchterm', '')));
     }
 
     if (!$this->getState('list.searchterm', ''))

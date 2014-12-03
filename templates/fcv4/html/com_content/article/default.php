@@ -18,6 +18,7 @@ $menu = JFactory::getApplication()->getMenu();
 $active = $menu->getActive();
 $parent_id = $active->parent_id;
 $parent_item = $menu->getItem($parent_id);
+$title = ($parent_item) ? $parent_item->title : $this->params->get('page_title'); 
 $images  = json_decode($this->item->images);
 $urls    = json_decode($this->item->urls);
 $canEdit = $params->get('access-edit');
@@ -31,7 +32,7 @@ $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_da
 	<meta itemprop="inLanguage" content="<?php echo ($this->item->language === '*') ? JFactory::getConfig()->get('language') : $this->item->language; ?>" />
 	<?php if ($this->params->get('show_page_heading', 1)) : ?>
 	<div class="page-header">
-		<h1> <?php echo $this->escape($parent_item->title); ?> </h1>
+		<h1><?php echo $this->escape($title); ?></h1>
 	</div>
 	<?php endif;
 if (!empty($this->item->pagination) && $this->item->pagination && !$this->item->paginationposition && $this->item->paginationrelative)

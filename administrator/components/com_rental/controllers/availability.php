@@ -85,7 +85,7 @@ class RentalControllerAvailability extends JControllerForm {
   public function manage() {
 
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken('GET') or die('Invalid Token');
+    //JSession::checkToken('GET') or die('Invalid Token');
 
     // $id is the listing the user is trying to edit
     $id = $this->input->get('unit_id', '', 'int');

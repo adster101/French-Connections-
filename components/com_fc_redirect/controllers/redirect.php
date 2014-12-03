@@ -6,6 +6,59 @@ defined('_JEXEC') or die('Restricted access');
 class Fc_RedirectControllerRedirect extends JControllerLegacy
 {
 
+  /**
+   * 
+   * Deals with legacy search urls 
+   * e.g. /en/search/gite/var
+   * 
+   */
+  public function Blog()
+  {
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $filter = $input->get('filter', '', 'string');
+
+    $parts = array_filter(explode('/', $filter));
+
+    // Firstly check if there is an alias for this blog post
+    $alias = JFilterOutput::stringURLSafe(array_pop($parts));
+
+    $query->select('id')
+            ->from('#__content')
+            ->where('alias=' . $db->quote($alias));
+
+    $db->setQuery($query);
+
+    try
+    {
+      // Get the location 
+      $row = $db->loadObject();
+
+      // Is there is a content ID we know it must be a post
+      if ($row->id)
+      {
+        
+        $path = '/blog/' . $parts[1] . '/' . $row->id . '-' . $alias;
+
+        // 301 redirect
+        $app->redirect($path, true);
+      }
+    }
+    catch (Exception $e)
+    {
+      // Log the problem for review
+      $uri = JUri::getInstance();
+
+      JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+      JLog::add('Exception 301 redirecting old blog url: ' . $e->getMessage() . '::' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
+
+      throw new Exception('Page not found', 404);
+    }
+  }
+
   public function GeoRegionSearch()
   {
     $app = JFactory::getApplication();
@@ -88,7 +141,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
     $query->where('a.alias = ' . $db->quote($alias));
 
     $db->setQuery($query);
-    
+
     try
     {
       // Get the location 
@@ -103,7 +156,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
         $uri = JUri::getInstance();
 
         JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
-        JLog::add('Problem 301 redirecting old search type url: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+        JLog::add('Problem 301 redirecting old search type url: ' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
       }
       // Route the new url - Don't use JRoute here as it appends the URL base to it.
       $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias) . '/' . $propertyArr[$parts[0]]);
@@ -117,7 +170,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       $uri = JUri::getInstance();
 
       JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
-      JLog::add('Exception 301 redirecting old search type url: ' . $e->getMessage() . '::' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      JLog::add('Exception 301 redirecting old search type url: ' . $e->getMessage() . '::' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
 
       throw new Exception('Page not found', 404);
     }
@@ -254,7 +307,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
         $uri = JUri::getInstance();
 
         JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
-        JLog::add('Problem 301 redirecting old search type url: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+        JLog::add('Problem 301 redirecting old search type url: ' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
       }
       // Route the new url - Don't use JRoute here as it appends the URL base to it.
       if (empty($params_present->component))
@@ -276,7 +329,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       $uri = JUri::getInstance();
 
       JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
-      JLog::add('Exception 301 redirecting old search type url: ' . $e->getMessage() . '::' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      JLog::add('Exception 301 redirecting old search type url: ' . $e->getMessage() . '::' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
 
       throw new Exception('Page not found', 404);
     }
