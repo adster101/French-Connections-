@@ -39,6 +39,7 @@ Thumbs.db
 # French Connections specific files #
 #####################################
 
+index.html
 configuration.php
 logs/
 PhpDocumentor-1.4.4/
