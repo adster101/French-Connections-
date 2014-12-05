@@ -12,7 +12,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
    * e.g. /en/search/gite/var
    * 
    */
-  public function Blog()
+  public function BlogPost()
   {
     $app = JFactory::getApplication();
     $input = $app->input;
@@ -40,12 +40,17 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // Is there is a content ID we know it must be a post
       if ($row->id)
       {
-        
-        $path = '/blog/' . $parts[1] . '/' . $row->id . '-' . $alias;
 
-        // 301 redirect
-        $app->redirect($path, true);
+        // Work out the blog post url manually...
+        $path = '/blog/' . $parts[1] . $row->id . '-' . $alias;
       }
+      else
+      {
+        // Just redirect to the blog homepage
+        $path = '/blog';
+        // 301 redirect
+      }
+      $app->redirect($path, true);
     }
     catch (Exception $e)
     {
@@ -87,10 +92,16 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
       if (!$location)
       {
-        throw new Exception('Page not found', 404);
+        // Set the alias to france so we get something sensible
+        $location->alias = 'france';
+
+        // Log the problem for review
+        $uri = JUri::getInstance();
+
+        JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+        JLog::add('Problem 301 redirecting old Georegion type url: ' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
       }
 
-      $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
       $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias));
 
       // 301 redirect
@@ -105,7 +116,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // Redirect to home page
 
       JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
-      JLog::add('Problem 301 redirecting old search type url: ' . $e->getMessage() . ' :: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      JLog::add('Exception 301 redirecting old Georegion type url: ' . $e->getMessage() . ' :: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
       $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=france');
       $app->redirect($route, true);
     }
