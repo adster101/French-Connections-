@@ -205,7 +205,7 @@ class plgUserProfile_fc extends JPlugin
     $form->loadFile('profile', false);
 
     // Add the rule path to the form so we may validate the user profile details a bit.
-    JForm::addRulePath(JPATH_ADMINISTRATOR . '/components/com_rental/models/rules');
+    JForm::addRulePath(JPATH_LIBRARIES . '/frenchconnections/forms/rules');
 
     if (!empty($data))
     {

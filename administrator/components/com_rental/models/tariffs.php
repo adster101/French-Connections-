@@ -281,7 +281,7 @@ class RentalModelTariffs extends JModelAdmin
 
     // Get the relevant data up front
     $table = $this->getTable('Tariffs', 'RentalTable');
-      
+
     // If there is a unit ID set in copy tariffs then load that data up!
     if (!empty($data['copy_tariffs']))
     {
@@ -354,8 +354,6 @@ class RentalModelTariffs extends JModelAdmin
           $from_price = ($tariff_period['tariff'] < $from_price) ? $tariff_period['tariff'] : $from_price;
         }
 
-
-
         // Flush the table ready for the next lot...
         $table->reset();
       }
@@ -381,6 +379,13 @@ class RentalModelTariffs extends JModelAdmin
     unset($data['end_date']);
     unset($data['tariff']);
 
+    // If the base currency is EUR then calculate the correct price in sterling
+    if ($data['base_currency'] == 'EUR')
+    {
+      $prices = (!empty($from_price)) ? JHtmlGeneral::price($from_price, 'EUR') : '';
+
+      $from_price = $prices['GBP'];
+    }
     // Get an instance of the unit model
     $unit = JModelLegacy::getInstance('Unit', 'RentalModel');
 

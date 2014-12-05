@@ -54,7 +54,7 @@ foreach ($this->submenumodules as $submenumodule)
 }
 
 // Logo file
-  $logo = JUri::root() . $this->params->get('logoFile');
+$logo = JUri::root() . $this->params->get('logoFile');
 
 // Template Parameters
 $displayHeader = $this->params->get('displayHeader', '1');
@@ -128,6 +128,11 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                 <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
                   <jdoc:include type="modules" name="menu" style="none" />
                   <ul class="nav nav-user">
+                    <li> 
+                      <a class="" href="<?php echo JUri::root(); ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
+                        <span class="icon-out-2 small"></span>
+                      </a>
+                    </li>
                     <li class="dropdown">
                       <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span>
                         <b class="caret"></b></a>
@@ -140,7 +145,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                         </li>
                         <li class="divider"></li>
                         <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;       ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                ?></a>
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;        ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                 ?></a>
                         </li>
                         <li class="divider"></li>-->
                         <li class="">
@@ -149,7 +154,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                       </ul>
                     </li>
                   </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                ?>
+                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                 ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                 ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                 ?>
                     <span class="icon-out-2 small"></span></a>-->
                 </div>
                 <!--/.nav-collapse -->

@@ -280,7 +280,7 @@ if (!empty($this->item->languages_spoken))
     <?php if ($this->item->website) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
-        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
+        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
           <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
         </a>
       </p>

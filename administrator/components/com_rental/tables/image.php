@@ -110,7 +110,7 @@ class RentalTableImage extends JTable implements JObservableInterface {
    
     $caption = $this->caption;
     
-    $this->caption = JString::ucwords($caption);
+    $this->caption = PropertyHelper::sentence_case($this->caption);
     
     return parent::check();
   }

@@ -205,7 +205,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $item_costs = $this->getItemCosts($order);
 
     // Add the VAT status to the order summary
-    $vat_status = ($user->vat_status) ? $user->vat_status : 'S2';
+    $vat_status = ($user->vat_status) ? $user->vat_status : 'S20';
 
     // Calculate the value of each line of the order...
     $summary_tmp = $this->getOrderLineTotals($order, $item_costs, $vat_status);
@@ -770,8 +770,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $strBasket = $strBasket . ":" . number_format($line->cost, 2);/** Price ex-Vat * */
       $strBasket = $strBasket . ":" . number_format($line->vat, 2);/** VAT component * */
       $strBasket = $strBasket . ":" . number_format($line->cost, 2);/** Item price * */
-      $strBasket = $strBasket . ":" . number_format($line->line_value, 2);/** Line total * */
-      $sngTotal = $sngTotal + $line->line_value;
+      $strBasket = $strBasket . ":" . number_format($line->line_value + $line->vat, 2);/** Line total * */
+      $sngTotal = $sngTotal + $line->line_value + $line->vat;
     }
 
     // Update the data array with a few more bits and pieces

@@ -26,9 +26,9 @@ abstract class PropertyHelper
     $user = JFactory::getUser();
     $userId = $user->get('id');
 
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models','RealestateModel');
-    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables','RealestateTable');
-    
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models', 'RealestateModel');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables', 'RealestateTable');
+
     // Check general edit permission first.
     if ($user->authorise('core.edit', 'com_realestate'))
     {
@@ -670,6 +670,19 @@ abstract class PropertyHelper
     $listing->availability = 0;
 
     return $listing;
+  }
+
+  function sentence_case($string)
+  {
+    $sentences = preg_split('/([.?!]+)/', $string, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    $new_string = '';
+    foreach ($sentences as $key => $sentence)
+    {
+      $new_string .= ($key & 1) == 0 ?
+              ucfirst(strtolower(trim($sentence))) :
+              $sentence . ' ';
+    }
+    return trim($new_string);
   }
 
 }

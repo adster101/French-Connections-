@@ -120,7 +120,7 @@ class RentalModelContactDetails extends JModelAdmin {
       $data['use_invoice_details'] = false;
     }
 
-    if (empty($data[''])) {
+    if (empty($data['booking_form'])) {
       $data['booking_form'] = false;
     }
 

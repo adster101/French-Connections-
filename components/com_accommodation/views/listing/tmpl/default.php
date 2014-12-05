@@ -714,7 +714,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         <p><?php echo JText::sprintf('COM_ACCOMMODATION_LANGUAGES_SPOKEN', implode(', ', $langs_array)); ?></p>
       <?php endif; ?>
       <?php if ($this->item->booking_form) : ?>
-        <?php $link = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&tmpl=component&view=bookingform'; ?>
+        <?php $link = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&tmpl=component&view=bookingform' . $append; ?>
         <p><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_VIEW', $link); ?></p>
       <?php endif; ?>
 

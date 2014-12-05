@@ -29,8 +29,8 @@ class RealestateControllerListing extends JControllerForm {
     $query = $db->getQuery(true);
 
     $query->select('a.website')
-            ->from('#__property_versions a')
-            ->where('a.property_id = ' . $id)
+            ->from('#__realestate_property_versions a')
+            ->where('a.realestate_property_id = ' . $id)
             ->where('a.website !=\'\'');
 
     $db->setQuery($query);
