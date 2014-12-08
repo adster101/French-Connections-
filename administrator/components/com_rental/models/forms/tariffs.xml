@@ -63,15 +63,16 @@
 
     <field
       name="additional_price_notes"
-      type="textarea"
+      type="editor"
       label="COM_RENTAL_TARIFFS_FIELD_ADDITIONAL_PRICE_NOTES_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_DESC"
       rows="6"
+      height="250"
       labelclass="control-label"
       class="input-xlarge validate-description"
       default=""
       hint="Enter any additional costs that aren't included in the advertised tariffs. For example, linen or heating costs."
-      filter="string"
+      filter="JComponentHelper::filterText"
       buttons="false"
       validate="additionalpricenotes"
       message="COM_RENTAL_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE"

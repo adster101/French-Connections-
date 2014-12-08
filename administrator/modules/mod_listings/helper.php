@@ -65,7 +65,7 @@ abstract class ModListingHelper
     $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = b.id) or f.ordering is null)');
 
     $query->where('a.created_by=' . (int) $user->id);
-
+    $query->where('a.published !=-2');
     $db->setQuery($query);
 
     try
@@ -123,7 +123,7 @@ abstract class ModListingHelper
 
     // Below corrected from where d.ordering = 1 or is null and published = 1
     $query->where('(d.ordering = (select min(ordering) from #__unit h where h.published = 1))');
-
+    $query->where('a.published !=-2');
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
     $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');

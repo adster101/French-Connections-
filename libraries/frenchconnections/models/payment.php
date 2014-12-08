@@ -587,7 +587,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     }
 
     // If this property version has B&B and S/C then add it as an item cost
-    if ($mixed_units)
+    if ($mixed_units && !$this->getIsRenewal())
     {
       $item_costs['1005-014']['quantity'] = 1;
     }
