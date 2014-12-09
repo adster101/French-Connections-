@@ -101,13 +101,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $query->set($db->quoteName('date_redeemed') . ' = ' . $db->quote($date));
     $query->where($db->quoteName('property_id') . ' = ' . (int) $listing_id);
 
-    try
-    {
+    try {
       $db->setQuery($query);
       $db->execute();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       return false;
     }
   }
@@ -493,6 +491,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     foreach ($units as $unit)
     {
 
+      // Don't charge for and add unpublished units
+      if ($unit->published == 0)
+      {
+        continue;
+      }
+      
       if ($unit->accommodation_type == 25)
       {
 
@@ -761,7 +765,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . '-' . rand(0, 32000) * rand(0, 32000);
 
     $description = 'Payment received for PRN[' . $data['id'] . '] ' . 'OWNER[' . $this->owner_id . ']';
-    
+
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($order as $item => $line)
     {
@@ -852,7 +856,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Add the basket
     $strPost = $strPost . "&Basket=" . urlencode($strBasket); //As created above
     $strPost = $strPost . "&Description=" . urlencode($description); //As created above
-    
+
     /* Billing Details
      * This section is optional in its entirety but if one field of the address is provided then all non-optional fields must be provided
      * If AVS/CV2 is ON for your account, or, if paypal cardtype is specified and its not via PayPal Express then this section is compulsory */
@@ -882,7 +886,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $strPost = $strPost . "&AccountType=E";
 
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
-    /* 
+    /*
      * Analyse the response from Sage Pay Direct to check that everything is okay
      * Registration results come back in the Status and StatusDetail fields
      */
@@ -921,7 +925,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     }
 
     // Okay now we have processed the transaction and update it in the db.
-    switch ($strStatus) {
+    switch ($strStatus)
+    {
       case 'OK':
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
         $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $transaction_id);
@@ -1386,12 +1391,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Problem loading vouchers for this property
       return false;
     }

@@ -55,7 +55,7 @@ class FcadminModelInvoices extends JModelForm
 
       // This reads the uploaded invoice file and processed it into an array keyed by invoice ID
       $invoices = $this->processFile($file);
-
+      
       // Start a transaction
       $db->transactionStart();
 
@@ -146,15 +146,17 @@ class FcadminModelInvoices extends JModelForm
       {
         continue;
       }
+      
       //iconv("UTF-8", "ASCII//IGNORE", $line[24]) Removes odd unicode characters from the MYOB file
       $invoice_id = (int) $line[6];
       $vat_status = $line[23];
       $item_code = $line[11];
       $description = $line[13];
       $quantity = $line[12];
-      $item_cost = $filter->clean(iconv("UTF-8", "ASCII//IGNORE", $line[14]), 'float');
+      $item_cost = $filter->clean($line[14], 'float');
+
       //$net_line_total = $filter->clean($line[16], 'float');
-      $vat_line = $filter->clean(iconv("UTF-8", "ASCII//IGNORE", $line[24]), 'float');
+      $vat_line = $filter->clean($line[24], 'float');
       $user_id = $filter->clean($line[48], 'int');
       $date_created = JFactory::getDate(str_replace('/', '-', $line[7]))->calendar('Y-m-d');
       $invoice_type = $line[28];
