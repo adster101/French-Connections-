@@ -69,6 +69,7 @@ class RealEstateModelListing extends JModelList
         $query = $db->getQuery(true);
         // Set an update statement - should only be here is there are two versions...
         // Also updates the 'published on' date
+        // TO DO - Make this into two updates as it doesn't seem to work as expected
         $query->update('#__realestate_property_versions');
         $query->set('
           review = CASE review
@@ -76,7 +77,7 @@ class RealEstateModelListing extends JModelList
               WHEN 1 THEN 0
             END,
             published_on = CASE review
-              WHEN 0 THEN now()
+              WHEN 1 THEN now()
             END
         ');
 
@@ -88,7 +89,7 @@ class RealEstateModelListing extends JModelList
       }
 
 
-
+      $query->clear();
       // Update the property review and expirty date
       $query = $db->getQuery(true);
 
@@ -225,6 +226,10 @@ class RealEstateModelListing extends JModelList
         b.use_invoice_details,
         b.latitude,
         b.longitude,
+        b.first_name,
+        b.surname,
+        b.phone_1,
+        b.email_1,
         d.vat_status,  
         (select count(*) from qitz3_realestate_property_images_library where version_id = b.id) as images
       ');
@@ -306,8 +311,9 @@ class RealEstateModelListing extends JModelList
     $state->payment = (empty($listing[0]->expiry_date)) ? false : true; // The expiry date
     $state->days_to_renewal = PropertyHelper::getDaysToExpiry($listing[0]->expiry_date); // The calculated days to expiry
 
-    if (!$listing[0]->use_invoice_details && empty($listing[0]->first_name) && empty($listing[0]->surname) && empty($listing[0]->email_1) && empty($listing[0]->phone_1))
+    if (!$listing[0]->use_invoice_details && (empty($listing[0]->first_name) || empty($listing[0]->surname) || empty($listing[0]->email_1) || empty($listing[0]->phone_1)))
     {
+      $state->property_detail = false;
       $state->complete = false; // Listing isn't complete... use invoice details unchecked but required fields not present
     }
 
