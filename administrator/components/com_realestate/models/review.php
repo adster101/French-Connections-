@@ -64,6 +64,8 @@ class RealestateModelReview extends JModelAdmin
 
     $uri = JUri::getInstance();
     $domain = $uri->toString(array('scheme', 'host'));
+    
+    $url = '/listing-forsale/' . $recordId;
 
 
     if (empty($table->expiry_date))
@@ -73,12 +75,12 @@ class RealestateModelReview extends JModelAdmin
     }
     else if ($layout == 'reject')
     {
-      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_BODY', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['body'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_BODY', $user->name, $recordId);
       $data['subject'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_REJECTED_EMAIL_SUBJECT', $user->name, $recordId);
     }
     else if ($layout == 'approve')
     {
-      $data['body'] = JText::sprintf('COM_RENTAL_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['body'] = JText::sprintf('COM_REALESTATE_HELLOWORLD_APPROVE_CHANGES_EMAIL_BODY', $user->name, $recordId, $url, $domain . $url);
       $data['subject'] = JText::sprintf('COM_RENTAL_APPROVE_CHANGES_CONFIRMATION_SUBJECT', $user->name, $recordId);
     }
 

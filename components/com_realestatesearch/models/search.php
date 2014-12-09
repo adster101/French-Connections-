@@ -331,7 +331,7 @@ class RealestateSearchModelSearch extends JModelList
           cos(radians(b.latitude)) *
           cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude))) < 10)
+          * sin(radians(b.latitude))) < 20)
         ');
 
         $query->order('
@@ -339,7 +339,7 @@ class RealestateSearchModelSearch extends JModelList
           cos(radians(b.latitude)) *
           cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
           + sin(radians(' . $this->getState('search.longitude', '') . '))
-          * sin(radians(b.latitude))) ) 
+          * sin(radians(b.latitude)))) 
         ');
       }
 

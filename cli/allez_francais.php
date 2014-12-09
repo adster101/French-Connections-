@@ -46,12 +46,13 @@ class AllezFrancais extends RealestateImport
     $db = JFactory::getDbo();
     $user = JFactory::getUser('allezfrancais')->id;
 
-    (JDEBUG) ? $this->out('About to get feed...') : '';
+    
+    $this->out('About to get feed...');
 
     // Get and parse out the feed 
     $props = $this->parseFeed('http://www.allez-francais.com/allez-francais.xml');
 
-    (JDEBUG) ? $this->out('Got feed...') : '';
+    $this->out('Got feed...');
 
     // Add the realestate property models
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
@@ -61,7 +62,7 @@ class AllezFrancais extends RealestateImport
     // Add the classification table so we can get the location details
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
 
-    (JDEBUG) ? $this->out('About to process feed results...') : '';
+    $this->out('About to process feed results...');
 
     // Loop over each of the $props returned from parseFeed above
     foreach ($props->properties as $prop)
@@ -74,11 +75,13 @@ class AllezFrancais extends RealestateImport
 
         // Check whether this property agency reference already exists in the versions table
         $id = $this->getPropertyVersion($prop->agency_reference, $db);
-
+        
+        $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
+        
         if (!$id)
         {
 
-          (JDEBUG) ? $this->out('Adding property entry...') : '';
+          $this->out('Adding property entry...');
 
           // Create an entry in the #__realestate_property table
           $property_id = $this->createProperty($db, $user);
@@ -109,16 +112,16 @@ class AllezFrancais extends RealestateImport
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
 
-          (JDEBUG) ? $this->out('Adding property version...') : '';
+          $this->out('Adding property version...');
 
           $property_version_id = $this->createPropertyVersion($db, $data);
 
-          (JDEBUG) ? $this->out('Working through images...') : '';
+          $this->out('Working through images...');
 
           foreach ($prop->images as $i => $image)
           {
 
-            (JDEBUG) ? $this->out($image) : '';
+            $this->out($image);
 
             // Split the URL into an array
             $image_parts = explode('/', $image);
@@ -154,12 +157,12 @@ class AllezFrancais extends RealestateImport
         else
         {
 
-          (JDEBUG) ? $this->out('Updating expiry date...') : '';
+          $this->out('Updating expiry date...');
 
           // Update the expiry date 
           $this->updateProperty($db, $id);
 
-          (JDEBUG) ? $this->out('Updating version details...') : '';
+          $this->out('Updating version details...');
           
           // Update the property version in case price or description has changed...
           $data = array();
@@ -187,7 +190,7 @@ class AllezFrancais extends RealestateImport
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
         
-        (JDEBUG) ? $this->out('Done processing... ' . $prop->agency_reference) : '';
+        $this->out('Done processing... ' . $prop->agency_reference);
       }
       catch (Exception $e)
       {
@@ -196,8 +199,7 @@ class AllezFrancais extends RealestateImport
 
         // Send an email, woot!
         $this->email($e);
-
-        (JDEBUG) ? $this->out(var_dump($e)) : $this->email($e);
+        
       }
     }
   }

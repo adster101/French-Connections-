@@ -63,7 +63,7 @@ class RealEstateModelListing extends JModelList
       $db->transactionStart();
 
       // Update the property versions 
-      if ($items[0]->property_review)
+      if ($items[0]->review)
       {
 
         $query = $db->getQuery(true);
