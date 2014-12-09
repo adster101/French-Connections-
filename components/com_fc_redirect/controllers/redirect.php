@@ -32,17 +32,23 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
       // Get the location 
       $row = $db->loadObject();
 
       // Is there is a content ID we know it must be a post
       if ($row->id)
       {
-
+        if (!empty($parts[1]))
+        {
+          $category = $parts[1];
+        }
+        else
+        {
+          $category = $parts[0];
+        }
         // Work out the blog post url manually...
-        $path = '/blog/' . $parts[1] . $row->id . '-' . $alias;
+        $path = '/blog/' . $category . '/' . $row->id . '-' . $alias;
       }
       else
       {
@@ -52,8 +58,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       }
       $app->redirect($path, true);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Log the problem for review
       $uri = JUri::getInstance();
 
@@ -85,8 +90,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
     // Serious redirects
     $db->setQuery($query);
 
-    try
-    {
+    try {
       // Get the location 
       $location = $db->loadObject();
 
@@ -107,8 +111,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       $uri = JUri::getInstance();
 
@@ -153,8 +156,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
       // Get the location 
       $location = $db->loadObject();
 
@@ -175,8 +177,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Log the problem for review
       $uri = JUri::getInstance();
 
@@ -304,8 +305,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
     // Serious redirects
     $db->setQuery($query);
 
-    try
-    {
+    try {
       // Get the location 
       $location = $db->loadObject();
 
@@ -334,8 +334,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Log the problem for review
       $uri = JUri::getInstance();
 
