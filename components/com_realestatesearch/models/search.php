@@ -410,7 +410,7 @@ class RealestateSearchModelSearch extends JModelList
 
     $query->select('e.title, count(e.id) as count');
     $query->from('#__realestate_property a');
-    $query->leftJoin('#__realestate_property_versions b on b.realestate_property_id = A.id');
+    $query->leftJoin('#__realestate_property_versions b on b.realestate_property_id = a.id');
 
     if ($this->getState('search.level') == 1)
     { // Country level
