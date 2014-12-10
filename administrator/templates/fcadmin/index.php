@@ -145,7 +145,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                         </li>
                         <li class="divider"></li>
                         <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;        ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                 ?></a>
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;         ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                  ?></a>
                         </li>
                         <li class="divider"></li>-->
                         <li class="">
@@ -154,7 +154,7 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
                       </ul>
                     </li>
                   </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                 ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                 ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                 ?>
+                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                  ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                  ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                  ?>
                     <span class="icon-out-2 small"></span></a>-->
                 </div>
                 <!--/.nav-collapse -->
@@ -279,5 +279,22 @@ $stickyToolbar = $this->params->get('stickyToolbar', '1');
               })(jQuery);
             </script>
           <?php endif; ?>
+          <script>
+            (function(i, s, o, g, r, a, m) {
+              i['GoogleAnalyticsObject'] = r;
+              i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+              }, i[r].l = 1 * new Date();
+              a = s.createElement(o),
+                      m = s.getElementsByTagName(o)[0];
+              a.async = 1;
+              a.src = g;
+              m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-2087119-1', 'auto');
+            ga('require', 'displayfeatures');
+            ga('send', 'pageview');
+          </script>
         </body>
         </html>

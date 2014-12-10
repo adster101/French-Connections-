@@ -37,6 +37,7 @@ class RentalTablePropertyAttributes extends JTable {
       // Firstly need to delete these...in a transaction would be better
       $query = $this->_db->getQuery(true);
 
+      // If we're updating either a new unit or an new unit version
       if ($old_version_id == $new_version_id) {
 
         $query->delete('#__unit_attributes')->where('version_id = ' . $old_version_id);
@@ -50,8 +51,6 @@ class RentalTablePropertyAttributes extends JTable {
           return false;
         }
       }
-
-
 
       $query = $this->_db->getQuery(true);
 

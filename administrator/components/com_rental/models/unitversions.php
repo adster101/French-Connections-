@@ -80,7 +80,13 @@ class RentalModelUnitVersions extends JModelAdmin
   }
 
   /**
-   * Get the tariffs for this unit
+   * This method returns an array of facilities (attributes) stored against a unit version.
+   * Called from getItem the returned data is then bound to the form before it's displayed to the 
+   * owner for editing.
+   * 
+   * @param type $id
+   * @param type $version
+   * @return type array
    * 
    */
   public function getFacilities($id, $version)
@@ -109,6 +115,7 @@ class RentalModelUnitVersions extends JModelAdmin
 
     // Execute the db query, returns an iterator object.
     $result = $this->_db->getIterator();
+
     // Loop over the iterator and do stuff with it
     foreach ($result as $row)
     {
@@ -358,7 +365,7 @@ class RentalModelUnitVersions extends JModelAdmin
 
       JLog::add('About to save facilities for unit version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
-      if (!$this->savePropertyFacilities($data, $table->unit_id, $old_version_id, $new_version_id))
+      if (!$this->saveUnitFacilities($data, $table->unit_id, $old_version_id, $new_version_id, $isNew))
       {
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
@@ -384,10 +391,10 @@ class RentalModelUnitVersions extends JModelAdmin
           $property->id = $table->property_id;
           $property->review = 1;
           $property->modified = JFactory::getDate();
-          
+
           // Logger
           JLog::add('About to update Property review status for ' . $property->id, 'DEBUG', 'unitversions');
-          
+
           // Attempt to save the new property details against the property id
           if (!$property->store())
           {
@@ -424,8 +431,8 @@ class RentalModelUnitVersions extends JModelAdmin
           // If we are updating a new unpublished version, no need to copy images
           if ($old_version_id != $new_version_id)
           {
+            // Copy the unit images against the new version
             JLog::add('About to copy images for unit ' . $pk, 'unitversions');
-
             $this->copyUnitImages($old_version_id, $new_version_id);
           }
         }
@@ -518,6 +525,49 @@ class RentalModelUnitVersions extends JModelAdmin
     return true;
   }
 
+  public function copyUnitFacilities($old_version_id = '', $new_version_id = '')
+  {
+    $db = JFactory::getDBO();
+
+    $query = $db->getQuery(true);
+
+    $query->select('version_id, property_id, attribute_id')
+            ->from('#__unit_attributes')
+            ->where('version_id=' . (int) $old_version_id);
+
+    $db->setQuery($query);
+
+    $facilities = $db->loadRowList();
+
+    if (!$facilities)
+    {
+      return true;
+    }
+    
+    // Clear the query object so we can reuse it
+    $query->clear();
+
+    $query->insert('#__unit_attributes');
+    $query->columns(array('version_id', 'property_id', 'attribute_id'));
+
+    foreach ($facilities as $facility)
+    {
+      // Replace the old version ID with the new one...
+      $facility[0] = $new_version_id;
+
+      $query->values(implode(',', $facility));
+    }
+
+    // Execute the query
+    $this->_db->setQuery($query);
+
+    if (!$db->execute($query))
+    {
+      Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+    }
+    return true;
+  }
+
   /*
    * Method to save the property attributes into the #__attribute_property table.
    *
@@ -525,19 +575,10 @@ class RentalModelUnitVersions extends JModelAdmin
    *
    */
 
-  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '')
+  protected function saveUnitFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $isNew = false)
   {
-
-    if (!is_array($data) || empty($data))
-    {
-      return true;
-    }
-
-    if (empty($old_version_id) || empty($new_version_id))
-    {
-      return true;
-    }
-
+    // TO DO - This all seems a bit shoddy...or it just late in the day?
+    
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...access options need adding.
@@ -576,10 +617,23 @@ class RentalModelUnitVersions extends JModelAdmin
       }
     }
 
-    // If we have any attributes
-    if (count($attributes) > 0)
+    // No attributes means that we're saving from the tariffs screen...or the units screen
+    if (empty($attributes))
     {
-
+      // We're saving a unit either from the images or tariffs screen. 
+      // If this is a new version for an existing unit create a copy of the
+      // facilities against the new version 
+      if (($old_version_id != $new_version_id) && !$isNew) 
+      {
+        $this->copyUnitFacilities($old_version_id, $new_version_id);
+        
+      }
+      
+      return true;
+    }
+    else if (count($attributes) > 0)
+    {
+      // If we have any attributes, this will happen mainly from the unit detail screen
       // Get instance of the tariffs table
       $attributesTable = JTable::getInstance('PropertyAttributes', 'RentalTable', $config = array());
 

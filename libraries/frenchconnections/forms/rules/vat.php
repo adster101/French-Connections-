@@ -18,7 +18,7 @@ class JFormRuleVat extends JFormRule {
    * @var		string
    * @since	1.6
    */
-  protected $regex = '^([a-zA-Z]{2})([0-9]{7,13})$';
+  protected $regex = '^([a-zA-Z]{2})([0-9]{7,13})([a-zA-Z]{1})?$';
 
   public function test(\SimpleXMLElement $element, $value, $group = null, \JRegistry $input = null, \JForm $form = null) { 
 

@@ -11,6 +11,50 @@ jimport('joomla.application.component.modeladmin');
  */
 class RentalModelPropertyVersions extends JModelAdmin
 {
+
+  public function copyPropertyAttributes($old_version_id = '', $new_version_id = '')
+  {
+    $db = JFactory::getDBO();
+
+    $query = $db->getQuery(true);
+
+    $query->select('version_id, property_id, attribute_id')
+            ->from('#__property_attributes')
+            ->where('version_id=' . (int) $old_version_id);
+
+    $db->setQuery($query);
+
+    $facilities = $db->loadRowList();
+
+    if (!$facilities)
+    {
+      return true;
+    }
+
+    // Clear the query object so we can reuse it
+    $query->clear();
+
+    $query->insert('#__property_attributes');
+    $query->columns(array('version_id', 'property_id', 'attribute_id'));
+
+    foreach ($facilities as $facility)
+    {
+      // Replace the old version ID with the new one...
+      $facility[0] = $new_version_id;
+
+      $query->values(implode(',', $facility));
+    }
+
+    // Execute the query
+    $this->_db->setQuery($query);
+
+    if (!$db->execute($query))
+    {
+      Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
+    }
+    return true;
+  }
+
   /*
    *
    * Method to create a 'parent' entry into the #__property table.
@@ -456,7 +500,7 @@ class RentalModelPropertyVersions extends JModelAdmin
 
       JLog::add('About to save facilities for property (' . $table->property_id . 'version ID' . $new_version_id, 'DEBUG', 'unitversions');
 
-      if (!$this->savePropertyFacilities($data, $table->property_id, $old_version_id, $new_version_id, '#__property_attributes', array('activities', 'access')))
+      if (!$this->savePropertyFacilities($data, $table->property_id, $old_version_id, $new_version_id, $isNew))
       {
         Throw New Exception(JText::_('COM_RENTAL_HELLOWORLD_PROBLEM_SAVING_UNIT', $this->getError()));
       }
@@ -503,29 +547,19 @@ class RentalModelPropertyVersions extends JModelAdmin
    *
    */
 
-  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $table = '', $attribute_liat = array())
+  protected function savePropertyFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $isNew = false)
   {
-
-    if (!is_array($data) || empty($data))
-    {
-      return true;
-    }
-
-    if (empty($old_version_id) || empty($new_version_id))
-    {
-      return true;
-    }
-
-
-
+    // TO DO - Surely there is a better way to do this?
     $attributes = array();
 
+    // For now whitelist the attributes that are supposed to be processed here...
+    $whitelist = array('activities', 'access');
 
     // Loop over the data and prepare an array to save
     foreach ($data as $key => $value)
     {
 
-      if (!in_array($key, $attribute_liat))
+      if (!in_array($key, $whitelist))
       {
         continue;
       }
@@ -538,12 +572,12 @@ class RentalModelPropertyVersions extends JModelAdmin
         if (is_array($value))
         {
           // We want to save this in one go so we make an array
-          foreach ($value as $facility)
+          foreach ($value as $attribute)
           {
             // Facilities should be integers
-            if ((int) $facility)
+            if ((int) $attribute)
             {
-              $attributes[] = $facility;
+              $attributes[] = $attribute;
             }
           }
         }
@@ -554,8 +588,20 @@ class RentalModelPropertyVersions extends JModelAdmin
       }
     }
 
-    // If we have any attributes
-    if (count($attributes) > 0)
+    // No attributes means that we're saving from the enquiry settings screen...
+    if (empty($attributes))
+    {
+      // We're saving a unit either from the images or tariffs screen. 
+      // If this is a new version for an existing unit create a copy of the
+      // facilities against the new version 
+      if (($old_version_id != $new_version_id) && !$isNew)
+      {
+        $this->copyPropertyAttributes($old_version_id, $new_version_id);
+      }
+
+      return true;
+    }
+    else if (count($attributes) > 0)
     {
 
       // Firstly need to delete these...in a transaction would be better
@@ -564,7 +610,8 @@ class RentalModelPropertyVersions extends JModelAdmin
       if ($old_version_id == $new_version_id)
       {
 
-        $query->delete($table)->where('version_id = ' . $old_version_id);
+        $query->delete('#__property_attributes')
+                ->where('version_id = ' . $old_version_id);
         $this->_db->setQuery($query);
 
         if (!$this->_db->execute())
@@ -581,7 +628,7 @@ class RentalModelPropertyVersions extends JModelAdmin
 
       $query = $this->_db->getQuery(true);
 
-      $query->insert($table);
+      $query->insert('#__property_attributes');
 
       $query->columns(array('version_id', 'property_id', 'attribute_id'));
 
