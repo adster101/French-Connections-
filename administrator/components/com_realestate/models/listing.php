@@ -66,39 +66,39 @@ class RealEstateModelListing extends JModelList
       if ($items[0]->review)
       {
 
+        // Get a query object
         $query = $db->getQuery(true);
-        // Set an update statement - should only be here is there are two versions...
-        // Also updates the 'published on' date
-        // TO DO - Make this into two updates as it doesn't seem to work as expected
-        $query->update('#__realestate_property_versions');
-        $query->set('
-          review = CASE review
-              WHEN 0 THEN -1
-              WHEN 1 THEN 0
-            END,
-            published_on = CASE review
-              WHEN 1 THEN now()
-            END
-        ');
 
-        // Do this for the property ID
-        $query->where('realestate_property_id=' . (int) $items[0]->id);
+        // Archive the currently published version
+        $query->update('#__realestate_property_versions')
+                ->set('review = -1')
+                ->where('realestate_property_id = ' . (int) $items[0]->id)
+                ->where('review = 0');
+        $db->setQuery($query);
+        $db->execute();
 
+        // Clear the query 
+        $query->clear();
+
+        // Publish the current draft version
+        $query->update('#__realestate_property_versions')
+                ->set('review = 0, published_on = now()')
+                ->where('realestate_property_id = ' . (int) $items[0]->id)
+                ->where('review = 1');
         $db->setQuery($query);
         $db->execute();
       }
 
-
+      // Clear the query, again
       $query->clear();
-      // Update the property review and expirty date
-      $query = $db->getQuery(true);
 
-      $query->update('#__realestate_property');
-      $query->set('review = 0');
-      $query->set('published = 1');
-      $query->set('checked_out = \'\'');
-      $query->set('checked_out_time = \'\'');
-      $query->set('value = null');
+      // Update the property review and expirty date
+      $query->update('#__realestate_property')
+              ->set('review = 0')
+              ->set('published = 1')
+              ->set('checked_out = \'\'')
+              ->set('checked_out_time = \'\'')
+              ->set('value = null');
 
       // If the expiry date is empty, and the property is being approved then implicity assume it's 
       // a new property and set the renewal date accordingly. 

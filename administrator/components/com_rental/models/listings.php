@@ -247,7 +247,7 @@ class RentalModelListings extends JModelList
       else
       {
         $search = $db->Quote('%' . $db->escape($search, true) . '%');
-        $query->where('(b.title LIKE ' . $search . ')');
+        $query->where('(e.unit_title LIKE ' . $search . ')');
       }
     }
 

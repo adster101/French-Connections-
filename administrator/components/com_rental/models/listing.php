@@ -83,21 +83,24 @@ class RentalModelListing extends JModelList
       {
 
         $query = $db->getQuery(true);
-        // Set an update statement - should only be here is there are two versions...
-        // Also updates the 'published on' date
-        $query->update('#__property_versions');
-        $query->set('
-          review = CASE review
-              WHEN 0 THEN -1
-              WHEN 1 THEN 0
-            END,
-            published_on = CASE review
-              WHEN 0 THEN now()
-            END
-        ');
 
-        // Do this for the property ID
-        $query->where('property_id=' . (int) $items[0]->id);
+        // Archive the currently published version
+        $query->update('#__property_versions')
+                ->set('review = -1')
+                ->where('property_id=' . (int) $items[0]->id)
+                ->where('review = 0');
+
+        $db->setQuery($query);
+        $db->execute();
+
+        // Clear the query 
+        $query->clear();
+
+        // Publish the current draft version
+        $query->update('#__property_versions')
+                ->set('review = 0, published_on = now()')
+                ->where('property_id=' . (int) $items[0]->id)
+                ->where('review = 1');
 
         $db->setQuery($query);
         $db->execute();
@@ -111,10 +114,10 @@ class RentalModelListing extends JModelList
           $query = $db->getQuery(true);
 
           // Update the currently published unit to 'archived'
-          $query->update('#__unit_versions');
-          $query->set('review = -1');
-          $query->where('unit_id=' . (int) $unit->unit_id);
-          $query->where('review = 0');
+          $query->update('#__unit_versions')
+                  ->set('review = -1')
+                  ->where('unit_id=' . (int) $unit->unit_id)
+                  ->where('review = 0');
           $db->setQuery($query);
           $db->execute();
 
@@ -122,10 +125,10 @@ class RentalModelListing extends JModelList
           $query->clear();
 
           // Update the new version to published and update the published date
-          $query->update('#__unit_versions');
-          $query->set('review = 0, published_on = now()');
-          $query->where('unit_id=' . (int) $unit->unit_id);
-          $query->where('review = 1');
+          $query->update('#__unit_versions')
+                  ->set('review = 0, published_on = now()')
+                  ->where('unit_id=' . (int) $unit->unit_id)
+                  ->where('review = 1');
           $db->setQuery($query);
           $db->execute();
         }
@@ -134,12 +137,12 @@ class RentalModelListing extends JModelList
       // Update the property review and expirty date
       $query = $db->getQuery(true);
 
-      $query->update('#__property');
-      $query->set('review = 0');
-      $query->set('published = 1');
-      $query->set('checked_out = \'\'');
-      $query->set('checked_out_time = \'\'');
-      $query->set('value = null');
+      $query->update('#__property')
+              ->set('review = 0')
+              ->set('published = 1')
+              ->set('checked_out = \'\'')
+              ->set('checked_out_time = \'\'')
+              ->set('value = null');
 
       // If the expiry date is empty, and the property is being approved then implicity assume it's 
       // a new property and set the renewal date accordingly. 
@@ -432,8 +435,8 @@ class RentalModelListing extends JModelList
    */
   public function getProgress($units = array())
   {
-    
-    $input = JFactory::getApplication()->input;  
+
+    $input = JFactory::getApplication()->input;
     // Create a listing object to hold the status
     $listing = new stdClass;
     $unit_state = new StdClass;
@@ -446,7 +449,7 @@ class RentalModelListing extends JModelList
     $listing->id = $units[0]->id; // The main listing ID
     // Set a 'default' unit ID 
     // TO DO - Expand this for when there are multiple units, e.g. using a 'unit switcher'
-    $listing->unit_id = ($input->get('unit_id','','int')) ? $input->get('unit_id','','int') : $units[0]->unit_id;
+    $listing->unit_id = ($input->get('unit_id', '', 'int')) ? $input->get('unit_id', '', 'int') : $units[0]->unit_id;
 
     $listing->review = $units[0]->review; // The overall review status (e.g. 0,1,2)
     $listing->expiry_date = $units[0]->expiry_date; // The expiry date
@@ -454,8 +457,8 @@ class RentalModelListing extends JModelList
     $listing->days_to_renewal = PropertyHelper::getDaysToExpiry($units[0]->expiry_date); // The calculated days to expiry
     // Check each of the units for availability, tariffs, images and description etc
     foreach ($units as $key => $unit)
-    {  
-      
+    {
+
 
       $unit_state->unit_detail = true; // Assume we have all property details
       $unit_state->gallery = true; // Assume we have some images
@@ -484,10 +487,9 @@ class RentalModelListing extends JModelList
       {
         $unit_state->gallery = false; // Assume we have some images
         $listing->complete = false; // Listing isn't complete...
-      }    
-      
-      $listing->units[$unit->unit_id] = $unit_state;
+      }
 
+      $listing->units[$unit->unit_id] = $unit_state;
     }
 
     if (!$units[0]->use_invoice_details && empty($units[0]->first_name) && empty($units[0]->surname) && empty($units[0]->email_1) && empty($units[0]->phone_1))

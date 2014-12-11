@@ -51,7 +51,7 @@ class RealEstateControllerListing extends PropertyControllerListing
     $user = JFactory::getUser();
 
     // Get the record ID from the data array
-		$recordId = $this->input->getInt('id');
+    $recordId = $this->input->getInt('id');
 
     // Check whether this user owns this record or has permissions to submit it for review...
     if (!PropertyHelper::allowEditRealestate($recordId))
@@ -109,31 +109,52 @@ class RealEstateControllerListing extends PropertyControllerListing
 
     // It's all good mother fucker!
     // TO DO - Maybe want to redirect to payment view if a new property
-    // 
-    // Add a subject to the data array so a note is added to the notes table  
-     
-    $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
 
-    // Update the data array 
-    $validData['subject'] = JText::_('COM_PROPERTY_SUBMITTED_FOR_REVIEW');
-    $validData['review'] = 2;
-    
-    if (!$model->save($validData))
-    {
-      $message = JText::_('COM_REALESTATE_PROPERTY_PROBLEM_SUBMITTING_FOR_REVIEW');
-      Throw new Exception($message, 500);
-    }
+    $listing = $this->getModel('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
+    $listing->setState('com_realestate.listing.id', $recordId);
+    $listing->setState('com_realestate.listing.latest', true);
 
-    if (PropertyHelper::isOwner($user->id))
+    // Get the listing unit details
+    $current_version = $listing->getItems();
+
+    $days_to_renewal = PropertyHelper::getDaysToExpiry($current_version[0]->expiry_date);
+
+    if (empty($days_to_renewal))
     {
-      $redirect = JRoute::_('index.php');
+      // New property, better request some wedge 
+      $message = JText::_('COM_RENTAL_PAYMENT_DUE_BLURB');
+      $redirect = JRoute::_('index.php?option=' . $this->extension . '&task=payment.summary&realestate_property_id=' . (int) $recordId, false);
+      $this->setRedirect($redirect, $message);
+      return true;
     }
     else
     {
-      $redirect = JRoute::_('index.php?option=' . $this->extension);
-    }
+      // No payment due here, so just submit for to PFR queue
+      // Add a subject to the data array so a note is added to the notes table  
+      $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
 
-    $this->setRedirect($redirect, $message);
+      // Update the data array 
+      $validData['subject'] = JText::_('COM_PROPERTY_SUBMITTED_FOR_REVIEW');
+      $validData['review'] = 2;
+
+      if (!$model->save($validData))
+      {
+        $message = JText::_('COM_REALESTATE_PROPERTY_PROBLEM_SUBMITTING_FOR_REVIEW');
+        Throw new Exception($message, 500);
+      }
+      
+      if (PropertyHelper::isOwner($user->id))
+      {
+        $redirect = JRoute::_('index.php');
+      }
+      else
+      {
+        $redirect = JRoute::_('index.php?option=' . $this->extension);
+      }
+
+      $this->setRedirect($redirect, $message);
+      return true;
+    }
 
     return true;
   }

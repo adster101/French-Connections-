@@ -24,7 +24,6 @@ $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation
     <?php if ($item->title) : ?>     
       <div class="span3"> 
         <p>
-
           <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id) ?>">
             <?php if (!empty($item->offer)) : ?>
               <span class="offer">
