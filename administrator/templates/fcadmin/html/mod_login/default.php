@@ -13,52 +13,61 @@ JHtml::_('bootstrap.tooltip');
 ?>
 
 <form action="<?php echo JRoute::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="form-login" class="form-vertical">
-  <fieldset class="loginform">
-    <div class="control-group">
-      <div class="controls">
-        <span class="add-on">
-          <label for="mod-login-username">
-            <?php echo JText::_('JGLOBAL_USERNAME'); ?>
-          </label>
-        </span>
-        <input name="username" tabindex="1" id="mod-login-username" type="text" class="input-xlarge" placeholder="<?php echo JText::_('JGLOBAL_USERNAME'); ?>" size="15"/>
-      </div>
+  <fieldset class="">
+    <div class="form-group">
+      <label for="mod-login-username" class="required">
+        <?php echo JText::_('JGLOBAL_USERNAME'); ?>
+      </label>
+      <input name="username" tabindex="1" id="mod-login-username" type="text" class="form-control required" placeholder="<?php echo JText::_('JGLOBAL_USERNAME'); ?>" size="15"/>
     </div>
-    <div class="control-group">
-      <div class="controls">
-        <span class="add-on">
-          <label for="mod-login-password">
-            <?php echo JText::_('JGLOBAL_PASSWORD'); ?>
-          </label>
-        </span>
-        <input name="passwd" tabindex="2" id="mod-login-password" type="password" class="input-xlarge" placeholder="<?php echo JText::_('JGLOBAL_PASSWORD'); ?>" size="15"/>
-      </div>
+    <div class="form-group">
+      <span class="add-on">
+        <label for="mod-login-password">
+          <?php echo JText::_('JGLOBAL_PASSWORD'); ?>
+        </label>
+      </span>
+      <input name="passwd" tabindex="2" id="mod-login-password" type="password" class="form-control required" placeholder="<?php echo JText::_('JGLOBAL_PASSWORD'); ?>" size="15"/>
     </div>
     <?php if (count($twofactormethods) > 1): ?>
-      <div class="control-group">
+      <div class="form-group">
         <div class="controls">
-          <span class="add-on">
-            <label for="mod-login-secretkey">
-              <?php echo JText::_('JGLOBAL_SECRETKEY'); ?>
-            </label>
-          </span>
-          <input name="secretkey" autocomplete="off" tabindex="3" id="mod-login-secretkey" type="text" class="input-medium" placeholder="<?php echo JText::_('JGLOBAL_SECRETKEY'); ?>" size="15"/>
-          <span class="btn width-auto hasTooltip" title="<?php echo JText::_('JGLOBAL_SECRETKEY_HELP'); ?>">
-            <i class="icon-help"></i>
-          </span>
+          <label for="mod-login-secretkey">
+            <?php echo JText::_('JGLOBAL_SECRETKEY'); ?>
+          </label>
+          <div class="input-group">
+            <input name="secretkey" autocomplete="off" tabindex="3" id="mod-login-secretkey" type="text" class="form-control" placeholder="<?php echo JText::_('JGLOBAL_SECRETKEY'); ?>" size="15"/>
+            <span class="input-group-addon" title="<?php echo JText::_('JGLOBAL_SECRETKEY_HELP'); ?>">
+              <i class="glyphicon glyphicon-info-sign"></i>
+            </span>
+          </div>
         </div>
       </div>
     <?php endif; ?>
-   
-    <div class="control-group">
-      <div class="controls">
-        <div class="btn-group pull-left">
-          <button tabindex="3" class="btn btn-primary btn-large">
-            <i class="icon-lock icon-white"></i> <?php echo JText::_('MOD_LOGIN_LOGIN'); ?>
-          </button>
-        </div>
+
+    <div class="form-group">
+      <div class="">
+        <button tabindex="3" class="btn btn-primary btn-large">
+          <i class="icon-lock icon-white"></i> <?php echo JText::_('MOD_LOGIN_LOGIN'); ?>
+        </button>
       </div>
     </div>
+    <p>   
+      <a href="<?php echo JRoute::_('/index.php?option=com_registerowner&task=password.reset'); ?>">
+        <strong>
+          <span class='glyphicon glyphicon-info-sign'></span>
+          &nbsp;Forgot you password?
+        </strong>
+      </a>
+    </p>
+    <p>
+      <a href="/advertise/register">
+        <strong>
+          <span class='glyphicon glyphicon-hand-right'></span>
+          &nbsp;Don't have an account? Sign up.
+        </strong>
+      </a>
+    </p>
+
     <input type="hidden" name="option" value="com_login"/>
     <input type="hidden" name="task" value="login"/>
     <input type="hidden" name="return" value="<?php echo $return; ?>"/>

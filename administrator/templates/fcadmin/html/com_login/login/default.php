@@ -15,24 +15,23 @@ JHtml::_('behavior.noframes');
 // in your layout override.
 ?>
 
-<div class="">
+<div class="container">
 
-  <div class="row-fluid">
-    <div class="span6">
+  <div class="row">
+    <div class="col-lg-6">
       <?php
       $loginmodule = LoginModelLogin::getLoginModule('mod_login');
       echo JModuleHelper::renderModule($loginmodule, array('style' => 'well', 'id' => 'section-box'));
       ?>
     </div>
-    <div class="span6">
-
+    <div class="col-lg-6 center">
       <?php
       //Get any other modules in the login position.
       //If you want to use a different position for the modules, change the name here in your override.
       $modules = JModuleHelper::getModules('login');
 
       foreach ($modules as $module)
-      // Render the login modules
+        // Render the login modules
         if ($module->module != 'mod_login') {
           echo JModuleHelper::renderModule($module, array('style' => 'html5', 'id' => 'section-box'));
         }

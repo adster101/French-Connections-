@@ -8,7 +8,7 @@ defined('_JEXEC') or die('Restricted access');
  */
 class PlaceofinterestController extends JControllerLegacy {
 
-  public function display($cachable = true, $urlparams = array()) {
+  public function display($cachable = false, $urlparams = array()) {
     
     $input = JFactory::getApplication()->input;
 

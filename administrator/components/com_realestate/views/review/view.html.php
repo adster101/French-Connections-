@@ -86,6 +86,7 @@ class RealEstateViewReview extends JViewLegacy
       JToolBarHelper::back();
 
       JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_REVIEW_PROPERTY_SEND_APPROVAL_EMAIL', false);
+      JToolBarHelper::custom('listing.publishwithoutemail', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_APPROVE_WITHOUT_EMAIL', false);
     }
     elseif ($layout == 'reject')
     {
@@ -99,7 +100,7 @@ class RealEstateViewReview extends JViewLegacy
     {
 
       JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY', $this->id));
-      JToolBarHelper::back('JTOOLBAR_BACK','index.php?option=com_realestate');
+      JToolBarHelper::back('JTOOLBAR_BACK', 'index.php?option=com_realestate');
       JToolBarHelper::custom('listing.approve', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_APPROVE', false);
       JToolBarHelper::custom('listing.reject', 'unpublish', 'unpublish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_REJECT', false);
       JToolBarHelper::custom('listing.release', 'locked', 'locked', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_CHECKIN', false);
@@ -108,7 +109,7 @@ class RealEstateViewReview extends JViewLegacy
       $bar = JToolBar::getInstance('toolbar');
       $property_id = $this->items[0]->id;
       $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, '', 'com_realestate');
-      
+
       $bar->appendButton('Link', 'edit', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', 'index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $this->id);
     }
   }

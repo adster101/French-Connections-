@@ -35,6 +35,7 @@ class RentalControllerListing extends JControllerForm
     $this->registerTask('checkin', 'review');
     $this->registerTask('reject', 'approve');
     $this->registerTask('decline', 'publish');
+    $this->registerTask('publishwithoutemail', 'publish');
   }
 
   public function accountupdate()
@@ -287,8 +288,12 @@ class RentalControllerListing extends JControllerForm
     // Get a new instance of the property model and checkin the record
     $property_model->checkin(array($recordId));
 
-    // Send the confirmation email
-    $mail = $model->sendApprovalEmail($listing, $validData['body'], $validData['subject']);
+    // Temporary work around to allow approval of changes without sending email to owner
+    if ($task == 'publish')
+    {
+      // Send the confirmation email
+      $mail = $model->sendApprovalEmail($listing, $validData['body'], $validData['subject']);
+    }
 
     // Send confirmation email
     $msg = JText::sprintf('COM_RENTAL_PROPERTY_PUBLISHED', $listing[0]->id);
@@ -581,8 +586,8 @@ class RentalControllerListing extends JControllerForm
       $payment = JModelLegacy::getInstance('Payment', 'FrenchConnectionsModel', $config = array('listing' => $current_version, 'renewal' => false));
       $order_summary = $payment->getPaymentSummary($current_version, $previous_version);
       $order_total = $payment->getOrderTotal($order_summary);
-      
-      if ($order_summary && $order_total > 0) 
+
+      if ($order_summary && $order_total > 0)
       {
         // Redirect to payment screen
         $message = JText::_('COM_RENTAL_PAYMENT_DUE_FOR_PAYMENT_WITH_CHANGES');
@@ -722,3 +727,4 @@ class RentalControllerListing extends JControllerForm
   }
 
 }
+

@@ -5,7 +5,6 @@ defined('_JEXEC') or die('Restricted access');
 
 class Fc_RedirectControllerRedirect extends JControllerLegacy
 {
-
   /**
    * 
    * Deals with legacy search urls 
@@ -49,6 +48,68 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
         }
         // Work out the blog post url manually...
         $path = '/blog/' . $category . '/' . $row->id . '-' . $alias;
+      }
+      else
+      {
+        // Just redirect to the blog homepage
+        $path = '/blog';
+        // 301 redirect
+      }
+      $app->redirect($path, true);
+    }
+    catch (Exception $e) {
+      // Log the problem for review
+      $uri = JUri::getInstance();
+
+      JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+      JLog::add('Exception 301 redirecting old blog url: ' . $e->getMessage() . '::' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
+
+      throw new Exception('Page not found', 404);
+    }
+  }
+  /**
+   * 
+   * Deals with legacy search urls 
+   * e.g. /en/search/gite/var
+   * 
+   */
+  public function BlogTag()
+  {
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $filter = $input->get('filter', '', 'string');
+
+    $parts = array_filter(explode('/', $filter));
+
+    // Firstly check if there is an alias for this blog post
+    $alias = JFilterOutput::stringURLSafe(array_pop($parts));
+
+    $query->select('id')
+            ->from('#__tags ')
+            ->where('alias=' . $db->quote($alias));
+
+    $db->setQuery($query);
+
+    try {
+      // Get the location 
+      $row = $db->loadObject();
+      
+      // Is there is a content ID we know it must be a post
+      if ($row->id)
+      {
+        if (!empty($parts[1]))
+        {
+          $category = $parts[1];
+        }
+        else
+        {
+          $category = $parts[0];
+        }
+        // Work out the blog post url manually...
+        $path = '/component/tags/tag/' . $row->id . '-' . $alias;
       }
       else
       {

@@ -153,7 +153,7 @@ class PropertyControllerListing extends JControllerForm
     $model = $this->getModel('Property');
 
     $input = JFactory::getApplication()->input;
-    
+
     $recordId = $input->get('id', '', 'int');
 
 
@@ -193,6 +193,8 @@ class PropertyControllerListing extends JControllerForm
     $input = $app->input;
     $recordId = $input->get('id', '', 'int');
     $data = $input->get('jform', '', array());
+    // Get the task 
+    $task = $this->getTask();
 
     // Get the various models we will be using
     $model = $this->getModel();
@@ -248,9 +250,11 @@ class PropertyControllerListing extends JControllerForm
     // Get a new instance of the properyt model and checkin the record
     $property_model->checkin(array($recordId));
 
-    // Send the confirmation email
-    $mail = $model->sendApprovalEmail($listing, $validData['body'], $validData['subject']);
-
+    if ($task == 'publish')
+    {
+      // Send the confirmation email
+      $mail = $model->sendApprovalEmail($listing, $validData['body'], $validData['subject']);
+    }
     // Send confirmation email
     $msg = JText::sprintf('COM_RENTAL_PROPERTY_PUBLISHED', $listing[0]->id);
     $this->setRedirect(

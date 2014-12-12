@@ -88,6 +88,7 @@ class RentalViewReview extends JViewLegacy
       JToolBarHelper::back();
 
       JToolBarHelper::custom('listing.publish', 'publish', 'publish', 'COM_RENTAL_REVIEW_PROPERTY_SEND_APPROVAL_EMAIL', false);
+      JToolBarHelper::custom('listing.publishwithoutemail', 'publish', 'publish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_APPROVE_WITHOUT_EMAIL', false);
     }
     elseif ($layout == 'reject')
     {

@@ -101,11 +101,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $query->set($db->quoteName('date_redeemed') . ' = ' . $db->quote($date));
     $query->where($db->quoteName('property_id') . ' = ' . (int) $listing_id);
 
-    try {
+    try
+    {
       $db->setQuery($query);
       $db->execute();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       return false;
     }
   }
@@ -496,7 +498,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       {
         continue;
       }
-      
+
       if ($unit->accommodation_type == 25)
       {
 
@@ -678,6 +680,22 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $strPost = $strPost . "&RelatedVendorTxCode=" . $VendorTxCode;
     $strPost = $strPost . "&RelatedSecurityKey=" . $SecurityKey;
     $strPost = $strPost . "&RelatedTxAuthNo=" . $TxAuthNo;
+
+    // Update the data array with a few more bits and pieces
+    $data['Amount'] = $sngTotal;
+    $data['VendorTxCode'] = $VendorTxCode;
+    $data['user_id'] = $this->owner_id;
+    $data['property_id'] = $data['id'];
+    $data['DateCreated'] = JFactory::getDate()->toSql();
+    $data['id'] = '';
+    
+    // Store the transaction in the protx payment page
+    if (!$this->saveProtxTransaction($data))
+    {
+      // Error is set in the function
+      return false;
+    }
+
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
     /* Analyse the response from Sage Pay Direct to check that everything is okay
      * * Registration results come back in the Status and StatusDetail fields */
@@ -925,8 +943,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     }
 
     // Okay now we have processed the transaction and update it in the db.
-    switch ($strStatus)
-    {
+    switch ($strStatus) {
       case 'OK':
         //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
         $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $transaction_id);
@@ -1391,10 +1408,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Problem loading vouchers for this property
       return false;
     }

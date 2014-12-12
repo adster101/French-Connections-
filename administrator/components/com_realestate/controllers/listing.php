@@ -33,6 +33,7 @@ class RealEstateControllerListing extends PropertyControllerListing
     }
 
     $this->registerTask('checkin', 'review');
+    $this->registerTask('publishwithoutemail', 'publish');
   }
 
   /**
@@ -142,7 +143,7 @@ class RealEstateControllerListing extends PropertyControllerListing
         $message = JText::_('COM_REALESTATE_PROPERTY_PROBLEM_SUBMITTING_FOR_REVIEW');
         Throw new Exception($message, 500);
       }
-      
+
       if (PropertyHelper::isOwner($user->id))
       {
         $redirect = JRoute::_('index.php');

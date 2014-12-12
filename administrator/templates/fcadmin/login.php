@@ -17,7 +17,7 @@ JHtml::_('bootstrap.framework');
 JHtml::_('bootstrap.tooltip');
 
 // Add Stylesheets
-$doc->addStyleSheet('templates/' . $this->template . '/css/template.css');
+//$doc->addStyleSheet('templates/' . $this->template . '/css/template.css');
 
 // Load optional RTL Bootstrap CSS
 JHtml::_('bootstrap.loadCss', false, $this->direction);
@@ -38,6 +38,7 @@ $itemid = $app->input->getCmd('Itemid', '');
 $sitename = $app->getCfg('sitename');
 
 $cookieName = md5('autologin');
+$uri = JURI::getInstance();
 
 // If Cookie is set then we know this owner can be autologged in
 $cookie = $app->input->cookie->get($cookieName);
@@ -46,100 +47,71 @@ $cookie = $app->input->cookie->get($cookieName);
 $config = JFactory::getConfig();
 $debug = (boolean) $config->get('debug');
 ?>
+
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>" >
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <jdoc:include type="head" />
-      <?php if ($cookie) : ?>
-        <script type="text/javascript">
-          window.addEvent('domready', function()
-          {
-            document.forms[0].submit();
-          });
-        </script>
-      <?php endif; ?>
-      <script type="text/javascript">
-        window.addEvent('domready', function()
-        {
-          document.getElementById('form-login').username.select();
-          document.getElementById('form-login').username.focus();
-        });
-      </script>
-      <style type="text/css">
-        /* Responsive Styles */
-        @media (max-width: 480px) {
-          .view-login .container {
-            margin-top: -170px;
-          }
-          .btn {
-            font-size: 13px;
-            padding: 4px 10px 4px;
-          }
-        }
-        <?php if ($debug) : ?>
-          .view-login .container {
-            position: static;
-            margin-top: 20px;
-            margin-left: auto;
-            margin-right: auto;
-          }
-          .view-login .navbar-fixed-bottom {
-            display: none;
-          }
-        <?php endif; ?>
-      </style>
-      <!--[if lt IE 9]>
-        <script src="../media/jui/js/html5.js"></script>
-      <![endif]-->
-  </head>
-  <body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " "; ?>">
-    <!-- Container -->
-    <div class="container">
-      <!-- Header -->
-      <header class="header" role="banner">
-        <div class="row-fluid">
-          <div class="span5">
-            <a class="brand pull-left" href="<?php echo $this->baseurl; ?>">
-              <img src="/images/general/logo-3.png" alt="French Connections" />
-            </a>
-          </div>
-          <div class="span7 header-search">
-            <jdoc:include type="modules" name="position-0" style="none" />
-          </div>
-        </div>
-      </header>
-      <hr />
+<html lang="<?php echo $this->language; ?>">
+  <head>  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <jdoc:include type="head" />
+  <?php $doc->addStyleSheet('//' . $uri->getHost() . '/media/fc/assets/css/styles.css'); ?>
+  <?php if ($cookie) : ?>  <jdoc:include type="head" />
+
+    <script type="text/javascript">
+      window.addEvent('domready', function()
+      {
+        document.forms[0].submit();
+      });
+    </script>
+  <?php endif; ?>
+  <script type="text/javascript">
+    window.addEvent('domready', function()
+    {
+      document.getElementById('form-login').username.select();
+      document.getElementById('form-login').username.focus();
+    });
+  </script>
+</head>
+
+<body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " "; ?>">
+  <header class="" role="banner"> 
+    <div class="container"> 
       <?php if ($this->countModules('position-1')) : ?>
-        <nav class="navigation" role="navigation">
-          <jdoc:include type="modules" name="position-1" style="nav" />
-        </nav>
-      <?php endif; ?>
-      <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
-        One moment while we create your account...<br /><br />
-        <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
-      </p>
-      
-      <div id="content" <?php echo ($cookie) ? "class='hide'" : '' ?>>
-        <!-- Begin Content -->
-        <div id="element-box" class="">
-          <jdoc:include type="message" />
-          <jdoc:include type="component" />
+        <div class="banner-container">
+          <jdoc:include type="modules" name="position-1" style="xhtml" />
         </div>
-        <noscript>
-          <?php echo JText::_('JGLOBAL_WARNJAVASCRIPT') ?>
-        </noscript>
-        <!-- End Content -->
+      <?php endif; ?>
+      <!-- Take brand out of navbar as we're not really using the BS default nav correctly -->
+      <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
+        <img src="<?php echo '//' . $uri->getHost() . '/images/general/logo-4.png' ?>" alt="<?php echo $sitename ?>" />
+      </a> 
+    </div>
+   
+  </header> 
+    <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
+      One moment while we create your account...<br /><br />
+      <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
+    </p>
+
+    <div id="content" <?php echo ($cookie) ? "class='hide'" : '' ?>>
+      <!-- Begin Content -->
+      <div id="element-box" class="">
+        <jdoc:include type="message" />
+        <jdoc:include type="component" />
       </div>
+      <noscript>
+      <?php echo JText::_('JGLOBAL_WARNJAVASCRIPT') ?>
+      </noscript>
+      <!-- End Content -->
     </div>
-    <div class="navbar navbar-fixed-bottom hidden-phone">
-      <p class="pull-right">
-        &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
-      </p>
-      <a class="login-joomla" href="http://www.joomla.org" target="_blank" class="hasTooltip" title="<?php echo JHtml::tooltipText('TPL_ISIS_ISFREESOFTWARE'); ?>">Joomla!&#174;</a>
-      <a href="/" target="_blank" class="pull-left"><i class="icon-share icon-white"></i> <?php echo JText::_('COM_LOGIN_RETURN_TO_SITE_HOME_PAGE') ?></a>
-    </div>
-    <jdoc:include type="modules" name="debug" style="none" />
-  </body>
+  </div>
+  <div class="container">
+    <p>
+      &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
+    </p>
+   </div>
+<jdoc:include type="modules" name="debug" style="none" />
+</body>
 </html>
