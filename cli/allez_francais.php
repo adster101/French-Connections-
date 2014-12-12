@@ -71,7 +71,7 @@ class AllezFrancais extends RealestateImport
       {
         $db->transactionStart();
 
-        (JDEBUG) ? $this->out('Processing... ' . $prop->agency_reference) : '';
+        $this->out('Processing... ' . $prop->agency_reference);
 
         // Check whether this property agency reference already exists in the versions table
         $id = $this->getPropertyVersion($prop->agency_reference, $db);

@@ -33,7 +33,7 @@ class RealestateImport extends JApplicationCli
   {
 
     $query = $db->getQuery(true);
-    $query->select('id');
+    $query->select('realestate_property_id ');
     $query->from('#__realestate_property_versions');
     $query->where('agency_reference = ' . $db->quote((string) $agency_reference));
     $query->where('review = 0');
@@ -55,7 +55,7 @@ class RealestateImport extends JApplicationCli
     }
 
     // Return the property version ID
-    return $row->id;
+    return $row->realestate_property_id;
   }
 
   public function createProperty($db, $user = 1)
@@ -114,8 +114,6 @@ class RealestateImport extends JApplicationCli
     }
     catch (RuntimeException $e)
     {
-      var_dump($query->dump());
-      die;
       throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
     }
 
@@ -143,7 +141,6 @@ class RealestateImport extends JApplicationCli
     }
     catch (RuntimeException $e)
     {
-      var_dump($e);
       throw new Exception('Problem creating an image entry in the database for Allez Francais XML import createImage()');
     }
 
@@ -154,8 +151,6 @@ class RealestateImport extends JApplicationCli
   {
     $query = $db->getQuery(true);
     $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
-    $date = JFactory::getDate();
-
     $query->update('#__realestate_property')
             ->set('expiry_date = ' . $db->quote($expiry_date))
             ->where('id = ' . (int) $id);
@@ -194,7 +189,6 @@ class RealestateImport extends JApplicationCli
     }
     catch (RuntimeException $e)
     {
-      var_dump($e);
       throw new Exception('Problem updating real estate property version in Allez Francais XML import updatePropertyVersion()');
     }
 
