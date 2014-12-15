@@ -103,6 +103,7 @@ class RentalImages extends JApplicationCli
 
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->where('b.id is not null');
+    $query->where('a.property_id = 5374');
 
     $db->setQuery($query);
 

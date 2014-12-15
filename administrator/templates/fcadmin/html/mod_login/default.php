@@ -8,8 +8,12 @@
  */
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.keepalive');
 JHtml::_('bootstrap.tooltip');
+
+// Register the global SearchHelper class
+JLoader::register('SearchHelper', JPATH_LIBRARIES . '/frenchconnections/helpers/search.php');
+$Itemid = SearchHelper::getItemid(array('component','com_registerowner'));
+
 ?>
 
 <form action="<?php echo JRoute::_('index.php', true, $params->get('usesecure')); ?>" method="post" id="form-login" class="form-vertical">
@@ -43,7 +47,6 @@ JHtml::_('bootstrap.tooltip');
         </div>
       </div>
     <?php endif; ?>
-
     <div class="form-group">
       <div class="">
         <button tabindex="3" class="btn btn-primary btn-large">
@@ -52,7 +55,7 @@ JHtml::_('bootstrap.tooltip');
       </div>
     </div>
     <p>   
-      <a href="<?php echo JRoute::_('/index.php?option=com_registerowner&task=password.reset'); ?>">
+      <a href="<?php echo JRoute::_('/advertise/register?view=resetpassword'); ?>">
         <strong>
           <span class='glyphicon glyphicon-info-sign'></span>
           &nbsp;Forgot you password?
