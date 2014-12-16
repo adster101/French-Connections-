@@ -12,7 +12,8 @@
 		<action name="realestate.propertyversions.view" title="Access property version view" description="" />
 		<action name="realestate.images.view" title="Access property images view" description="" />
 		<action name="realestate.images.reorder" title="Change image ordering" description="" />
-		<action name="realestate.listings.filter" title="Filter listings view" description="" />
+		<action name="realestate.images.delete" title="Delete images permission" description="" />
+    <action name="realestate.listings.filter" title="Filter listings view" description="" />
 		<action name="realestate.listing.review" title="Review changes to a listing" description="" />
 		<action name="realestate.listings.showowner" title="Display owner details on listing view" description="" />
 		<action name="realestate.payment.view" title="Access payment view" description="" />
