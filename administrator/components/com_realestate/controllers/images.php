@@ -77,8 +77,6 @@ class RealEstateControllerImages extends PropertyControllerImages
     $input = $app->input;
 
     $model = $this->getModel('Image', 'RealestateModel');
-    $table = $this->getModel()->getTable();
-
 
     // Build up the data
     $recordId = $input->get('realestate_property_id', '', 'int');
@@ -100,7 +98,7 @@ class RealEstateControllerImages extends PropertyControllerImages
       $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
     }
     // Set the redirection once the delete has completed...
-    $this->setRedirect(JRoute::_('index.php?option=com_rental&view=images&unit_id=' . (int) $unit_id, false));
+    $this->setRedirect(JRoute::_('index.php?option=com_realestate&view=images&realestate_property_id=' . (int) $recordId, false));
   }
 
   /*

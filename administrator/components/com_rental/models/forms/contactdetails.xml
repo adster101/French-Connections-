@@ -214,9 +214,9 @@
     />
     <field 
       name="additional_booking_info"
-      type="textarea"
+      type="editor"
       maxlength="250"
-      filter="string"
+      filter="JComponentHelper::filterText"
       class="input-xxlarge"
       cols="10"
       rows="5"

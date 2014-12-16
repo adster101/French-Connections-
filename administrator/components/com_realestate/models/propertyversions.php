@@ -79,6 +79,25 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
   }
 
   /**
+   * Method to get the data that should be injected in the form.
+   *
+   * @return	mixed	The data for the form.
+   * @since	1.6
+   */
+  protected function loadFormData()
+  {
+    // Check the session for previously entered form data.
+    $data = JFactory::getApplication()->getUserState('com_realestate.edit.propertyversions.data', array());
+
+    if (empty($data))
+    {
+      $data = $this->getItem();
+    }
+
+    return $data;
+  }
+
+  /**
    * Method to auto-populate the model state.
    *
    * Note. Calling getState in this method will result in recursion.
@@ -101,22 +120,24 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
   }
 
   /**
-   * Method to get the data that should be injected in the form.
-   *
-   * @return	mixed	The data for the form.
-   * @since	1.6
+   * 
+   * 
    */
-  protected function loadFormData()
+  public function preprocessForm(\JForm $form, $data, $group = 'content')
   {
-    // Check the session for previously entered form data.
-    $data = JFactory::getApplication()->getUserState('com_realestate.edit.propertyversions.data', array());
 
-    if (empty($data))
+    $input = JFactory::getApplication()->input->get('jform', false, 'array');
+
+    if (empty($input['use_invoice_details']) && ($input))
     {
-      $data = $this->getItem();
+      // User has selected not to use the invoice address. Therefore these fields are required.
+      $form->setFieldAttribute('first_name', 'required', 'true');
+      $form->setFieldAttribute('surname', 'required', 'true');
+      $form->setFieldAttribute('phone_1', 'required', 'true');
+      $form->setFieldAttribute('email_1', 'required', 'true');
     }
-
-    return $data;
+    
+    parent::preprocessForm($form, $data);
   }
 
   /**
@@ -136,6 +157,14 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
+
+    /*
+     * We need to check if the use_invoice_details flag is set. If not present then need to update the field.
+     */
+    if (empty($data['use_invoice_details']))
+    {
+      $data['use_invoice_details'] = false;
+    }
 
     // Allow an exception to be thrown.
     try {
@@ -291,5 +320,6 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
     return true;
   }
+
 }
 

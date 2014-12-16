@@ -392,6 +392,7 @@ class RentalModelReview extends JModelAdmin
       b.terms_and_conditions,
       b.use_invoice_details,
       b.first_name,
+      b.getting_there,
       b.surname,
       b.address,
       b.phone_1,
