@@ -870,7 +870,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     /** It can be changed dynamically, per transaction, if you wish.  See the Sage Pay Direct Protocol document */
     if ($strTransactionType !== "AUTHENTICATE")
-      $strPost = $strPost . "&ApplyAVSCV2=2";
+      $strPost = $strPost . "&ApplyAVSCV2=0";
     // Add the basket
     $strPost = $strPost . "&Basket=" . urlencode($strBasket); //As created above
     $strPost = $strPost . "&Description=" . urlencode($description); //As created above
