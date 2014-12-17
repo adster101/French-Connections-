@@ -106,7 +106,7 @@ $canDo = RentalHelper::getActions();
               $auto_renew = (!empty($item->VendorTxCode)) ? true : false;
 
               $value = (!empty($item->value)) ? round($item->value, 2) : '';
-              
+
               if ($item->review == 0)
               {
                 $enabled = false;
@@ -166,8 +166,12 @@ $canDo = RentalHelper::getActions();
                       <?php echo JHtml::_('property.autorenewalstate', $auto_renew, $item->id); ?>
                     </p>
                     <p>
+                      <?php echo JHtml::link('index.php?option=com_rental&task=marketing.edit&property_id=' . (int) $item->id, JText::_('COM_RENTAL_SUBMENU_ADDITIONAL_MARKETING')); ?>
+                    </p>
+                    <p>
                       <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview, $item->expiry_date); ?>
                     </p>
+
                   </td>
                   <td>
                     <?php echo JText::_($item->modified); ?>

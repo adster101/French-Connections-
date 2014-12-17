@@ -628,6 +628,9 @@ class AccommodationModelListing extends JModelForm
 
         // Only want those assigned to the current property
         $query->where('unit_id = ' . $unit_id);
+        
+        // And those that are published
+        $query->where('published = 1');
 
         // Order them by date stayed or date created?
         $query->order('date DESC');

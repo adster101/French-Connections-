@@ -664,7 +664,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     // Loop over the order lines and make the basket - wrap into separate function
     foreach ($payment_summary as $item => $line)
     {
-      $sngTotal = $sngTotal + $line->line_value;
+      $sngTotal = $sngTotal + $line->line_value + $line->vat;
     }
 
     /* Now to build the Sage Pay Direct POST.  For more details see the Sage Pay Direct Protocol 2.23
@@ -688,7 +688,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $data['property_id'] = $data['id'];
     $data['DateCreated'] = JFactory::getDate()->toSql();
     $data['id'] = '';
-    
+
     // Store the transaction in the protx payment page
     if (!$this->saveProtxTransaction($data))
     {
@@ -1354,11 +1354,21 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    */
   public function getNewExpiryDate($period = 'P365D')
   {
-
-    /**
-     * Get the date now
-     */
-    $date = JFactory::getDate();
+    $days_to_expiry = PropertyHelper::getDaysToExpiry($this->getExpiryDate());
+    
+    $expiry_date = $this->getExpiryDate();
+    
+    if (empty($expiry_date) || $days_to_expiry < 0)
+    {
+      /**
+       * Get the date now
+       */
+      $date = JFactory::getDate();
+    }
+    elseif ($days_to_expiry > 0)
+    {
+      $date = JFactory::getDate($this->getExpiryDate());
+    }
 
     /*
      * Add the date period to it

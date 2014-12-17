@@ -26,7 +26,7 @@ class modPopularSearchHelper
 
   public static function getPopularSearches($level = '')
   {
-
+    $date = JHtml::date('-2 weeks', 'Y-m-d');
     $lang = JFactory::getLanguage()->getTag();
 
     // Get the list of regions, which are at level 2
@@ -52,6 +52,7 @@ class modPopularSearchHelper
     }
 
     $query->where('c.title is not null');
+    $query->where('a.date_created > ' . $db->quote($date));
 
     $query->group('a.location_id');
     $query->order('count desc');

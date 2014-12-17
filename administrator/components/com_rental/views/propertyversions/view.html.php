@@ -142,7 +142,7 @@ class RentalViewPropertyversions extends JViewLegacy
     JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
     $document->addScript(JURI::root() . "/media/fc/js/general.js");
 
-    $document->addScript("http://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
+    $document->addScript("//maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
     $document->addScript(JURI::root() . "/media/fc/js/locate.js", 'text/javascript', true, false);
     $document->addStyleSheet(JURI::root() . "/media/fc/css/helloworld.css", 'text/css', "screen");
   }
