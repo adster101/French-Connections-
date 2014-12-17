@@ -34,6 +34,8 @@ require_once JPATH_ADMINISTRATOR . '/components/com_rental/models/listing.php';
 // Register the Helloworld helper method
 JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
 
+// Register the global PropertyHelper class
+JLoader::register('PropertyHelper', JPATH_LIBRARIES . '/frenchconnections/helpers/property.php');
 /**
  * Cron job to trash expired cache data
  *

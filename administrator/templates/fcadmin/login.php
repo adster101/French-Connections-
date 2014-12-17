@@ -18,7 +18,6 @@ JHtml::_('bootstrap.tooltip');
 
 // Add Stylesheets
 //$doc->addStyleSheet('templates/' . $this->template . '/css/template.css');
-
 // Load optional RTL Bootstrap CSS
 JHtml::_('bootstrap.loadCss', false, $this->direction);
 
@@ -88,30 +87,32 @@ $debug = (boolean) $config->get('debug');
         <img src="<?php echo '//' . $uri->getHost() . '/images/general/logo-4.png' ?>" alt="<?php echo $sitename ?>" />
       </a> 
     </div>
-   
-  </header> 
-    <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
-      One moment while we create your account...<br /><br />
-      <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
-    </p>
 
-    <div id="content" <?php echo ($cookie) ? "class='hide'" : '' ?>>
-      <!-- Begin Content -->
-      <div id="element-box" class="">
+  </header> 
+  <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
+    One moment while we create your account...<br /><br />
+    <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
+  </p>
+
+  <div id="content" <?php echo ($cookie) ? "class='hide'" : '' ?>>
+    <!-- Begin Content -->
+    <div id="element-box" class="">
+      <div class="container">
         <jdoc:include type="message" />
-        <jdoc:include type="component" />
       </div>
-      <noscript>
-      <?php echo JText::_('JGLOBAL_WARNJAVASCRIPT') ?>
-      </noscript>
-      <!-- End Content -->
+      <jdoc:include type="component" />
     </div>
+    <noscript>
+    <?php echo JText::_('JGLOBAL_WARNJAVASCRIPT') ?>
+    </noscript>
+    <!-- End Content -->
   </div>
-  <div class="container">
-    <p>
-      &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
-    </p>
-   </div>
+</div>
+<div class="container">
+  <p>
+    &copy; <?php echo date('Y'); ?> <?php echo $sitename; ?>
+  </p>
+</div>
 <jdoc:include type="modules" name="debug" style="none" />
 </body>
 </html>

@@ -1358,7 +1358,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     
     $expiry_date = $this->getExpiryDate();
     
-    if (empty($expiry_date) || $days_to_expiry < 0)
+    if (empty($expiry_date) || $days_to_expiry <= 0 )
     {
       /**
        * Get the date now
