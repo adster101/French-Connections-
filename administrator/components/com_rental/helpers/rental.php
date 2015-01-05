@@ -355,7 +355,7 @@ abstract class RentalHelper
 
     $calendar = '<div class="row">';
 
-    $showlinks = ($view == 'availability') ? true : false;
+    $showlinks = $link;
 
     // Init calendar string
     // Get now
