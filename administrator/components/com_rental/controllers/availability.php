@@ -98,7 +98,7 @@ class RentalControllerAvailability extends JControllerForm {
                       'index.php?option=' . $this->option, false)
       );
 
-      $this->setMessage('blah', 'error');
+      $this->setMessage('There was a problem fetching availability for this property.', 'error');
 
       return false;
     }

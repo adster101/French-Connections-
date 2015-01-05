@@ -47,6 +47,7 @@
       filter="string"
       labelclass="control-label"
       class="input-xxlarge"
+      hint="COM_VOUCHERS_NOTE_PLACEHOLDER"
     />
     
     <field

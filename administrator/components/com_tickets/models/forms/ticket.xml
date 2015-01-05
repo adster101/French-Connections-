@@ -98,7 +98,6 @@
       labelclass="control-label"
       label="Assigned to"
       description=""
-      required="true"
       class="input-small"
       filter="int"
 

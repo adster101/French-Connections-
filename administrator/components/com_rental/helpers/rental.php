@@ -99,8 +99,8 @@ abstract class RentalHelper
     if (!empty($progress_icon))
     {
       $html .= '&nbsp;<span class="icon icon-' . $progress_icon . '"></span>';
-    } 
-    
+    }
+
     $html .= '&nbsp;' . Jtext::_($button_text);
 
 
@@ -411,29 +411,15 @@ abstract class RentalHelper
 
         // Check whether availability status is set for the preceeding day
         $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
-        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
+        // $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
 
         if ($status)
         { // Availability is true, i.e. available
-          if ($status_yesterday != $status)
-          {
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
-          }
-          else
-          {
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
-          }
+          $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
         }
         else
         { // Availability is false i.e. unavailable
-          if ($status_yesterday != $status)
-          {
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
-          }
-          else
-          {
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
-          }
+          $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
         }
       }
 
@@ -541,27 +527,11 @@ abstract class RentalHelper
 
         if ($status)
         { // Availability is true, i.e. available
-          if ($status_yesterday != $status)
-          {
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
-          }
-          else
-          {
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
-          }
+          $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
         }
         else
         { // Availability is false i.e. unavailable
-          if ($status_yesterday != $status)
-          {
-
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
-          }
-          else
-          {
-
-            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
-          }
+          $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
         }
       }
 
