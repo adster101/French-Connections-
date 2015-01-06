@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class FcSearchControllerMapSearch extends JControllerLegacy {
+class RealEstateSearchControllerMapSearch extends JControllerLegacy {
 
   /**
    * Method to find search query suggestions.
@@ -56,7 +56,7 @@ class FcSearchControllerMapSearch extends JControllerLegacy {
     }
 
     // Get an instance of the search model
-    $model = $this->getModel('Search', 'FcSearchModel');
+    $model = $this->getModel('Search', 'RealEstateSearchModel');
     
     // Populate the state information
     $model->populateState();
@@ -67,16 +67,18 @@ class FcSearchControllerMapSearch extends JControllerLegacy {
     // Set the location
     $model->location = $localInfo->id;
 
-
-
     // Get a list of markers for this map/search combinations
     $results = $model->getMapMarkers();
 
+    // Get the realestate property for sale item id
+    $Itemid = SearchHelper::getItemid(array('component', 'com_realestate'));
+    
     // Process the results so we don't need to do that in the browser
     foreach ($results as &$result) {
-      $result->link = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $result->id . '&unit_id=' . (int) $result->unit_id);
-      $result->thumbnail = '/images/property/' . $result->unit_id . '/thumbs/' . $result->thumbnail;
+      $result->link = JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $result->property_id);
+      $result->thumbnail = '/images/property/' . $result->property_id . '/thumbs/' . $result->thumbnail;
       $result->description = JHtml::_('string.truncate', $result->description, 125, true, false);
+      $result->unit_title = JHtml::_('string.truncate', $result->description, 25, true, false);
     }
 
 

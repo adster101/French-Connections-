@@ -56,7 +56,7 @@ module.exports = function(grunt) {
     uglify: {
       build: {
         src: 'media/fc/assets/js/scripts.js',
-        dest: 'media/fc/assets/js/scripts.min.js',
+        dest: 'media/fc/assets/js/<%= grunt.template.today("yyyymmddhhmmss") %>.scripts.min.js',
         options: {
           mangle: false
         }
@@ -92,6 +92,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-replace');
 
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition

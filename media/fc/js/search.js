@@ -20,12 +20,22 @@ jQuery(document).ready(function() {
 
     // If the selected tab is the map tag then grab the markers
     if (selectedTab == '#mapsearch') {
-
-      var path = window.location.pathname.replace('/accommodation/', '');
-
+    
+      // The path of the search, e.g. /search or /fr/search
+      // This must either be 'forsale' or 'accommodation'
+      var action = jQuery('#property-search').attr('action').split('/');
+      
+      // Filter out the empty elements
+      action = action.filter(function(e){return e}); 
+      
+      var s_kwds = action[1];
+      var option = action[0];
+      
+      var component = (option == 'forsale') ? 'com_realestatesearch' : 'com_fcsearch';
+     
       // Do an ajax call to get a list of towns...
-      jQuery.getJSON("/index.php?option=com_fcsearch&task=mapsearch.markers&format=json", {
-        s_kwds: path
+      jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
+        s_kwds: s_kwds        
       },
       function(data) {
 

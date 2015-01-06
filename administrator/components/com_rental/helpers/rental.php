@@ -415,11 +415,25 @@ abstract class RentalHelper
 
         if ($status)
         { // Availability is true, i.e. available
-          $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
+          if ($status_yesterday != $status)
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
+          }
+          else
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
+          }
         }
         else
         { // Availability is false i.e. unavailable
-          $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
+          if ($status_yesterday != $status)
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
+          }
+          else
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
+          }
         }
       }
 

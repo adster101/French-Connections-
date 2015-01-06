@@ -24,16 +24,7 @@ class AttributeTableAttribute extends JTable
 		parent::__construct('#__attributes', 'id', $db);
 	}
   
-  public function store (){
-    $lang = JApplication::getUserState('com_attributes.edit.lang','en-GB');
-    
-    // TO DO: Determine if this is a 'translation' - for now, determine this is the case if the editing language is fr-FR
-		$this->saveAttributeTranslation($lang);
-    
-    // Attempt to store the data.
-		return parent::store($updateNulls);
-  }
-    
+  
 
   public function load($pk = null, $reset = true) 
 	{		

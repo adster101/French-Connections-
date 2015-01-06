@@ -234,14 +234,14 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     // Get any discount vouchers being applied to this order
     // Appears as a duplicate call but this retrieves discount vouchers, 
-    // which apply to all order line, including any other vouchers!
+    // which apply to the total order line, including any other vouchers!
     $vouchers = $this->getVouchers($this->listing_id, true);
 
     // Loop over each order line and merge the item cost in
     foreach ($order_summary as $order => &$line)
     {
       // This bit check to see if there is a note field in the order line
-      // If so, it would've come from a voucher containing a note...
+      // If so, it would've come from a (non-discount) voucher containing a note...
       if (array_key_exists('note', $line))
       {
         $description = $item_costs[$order]["item_description"] . ' - ' . $order_summary[$order]['note'];
@@ -286,7 +286,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $discount = array();
       $discount['quantity'] = 1;
       $discount['code'] = $vouchers[0]->item_cost_id;
-      $discount['item_description'] = $vouchers[0]->description;
+      // Append any notes to the discount voucher
+      $discount['item_description'] = $vouchers[0]->description . ' - ' . $vouchers[0]->note;
       $discount['cost'] = ($order_total * $vouchers[0]->cost);
       $discount['vat'] = ($vat_total * $vouchers[0]->cost);
       $discount['line_value'] = ($order_total * $vouchers[0]->cost);
@@ -1398,7 +1399,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $query = $db->getQuery(true);
     $date = JFactory::getDate()->calendar('Y-m-d');
     $vouchers = array();
-    $query->select('a.item_cost_id, a.date_redeemed, b.cost, b.description, a.note');
+    $query->select('a.item_cost_id, a.quantity, a.date_redeemed, b.cost, b.description, a.note');
     $query->from('#__vouchers a');
     $query->where('property_id = ' . (int) $property_id);
     $query->where('end_date >= ' . $db->quote($date));
@@ -1428,11 +1429,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
 
+    // Discount vouchers are ignored and only applied once
     if (!$discount && count($rows) > 0)
     {
       foreach ($rows as $row)
       {
-        $vouchers[$row->item_cost_id]['quantity'] = 1;
+        $vouchers[$row->item_cost_id]['quantity'] = $row->quantity;
         $vouchers[$row->item_cost_id]['note'] = $row->note;
       }
 

@@ -106,7 +106,7 @@ abstract class ModListingHelper
       date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
       a.review,
-      (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-002") . ' ) as payment, 
+      (select count(*) from #__vouchers v left join #__item_costs b on b.code = v.item_cost_id where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and b.catid = 65 ) as payment, 
       f.image_file_name as thumbnail
     ');
 

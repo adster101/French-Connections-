@@ -9,8 +9,6 @@
 defined('_JEXEC') or die;
 
 $app = JFactory::getApplication();
-$lang = $app->input->get('lang', 'en');
-
 
 $Itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
 
@@ -21,7 +19,7 @@ $refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, '
 ?>
 <div class="well well-light-blue">  
   <h4><?php echo JText::_('COM_REALESTATESEARCH_PROPERTY_SEARCH') ?></h4>
-  <form class="form-inline" id="property-search" method="POST" action="<?php echo JRoute::_('index.php?option=com_realestatesearch&lang=' . $lang . '&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>">
+  <form class="form-inline" id="property-search" method="POST" action="<?php echo JRoute::_('index.php?option=com_realestatesearch&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>">
     <?php echo JHtml::_('form.token'); ?>
     <div class="form-group">
       <label class="sr-only" for="q">

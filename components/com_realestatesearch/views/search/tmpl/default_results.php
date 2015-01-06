@@ -12,6 +12,7 @@ $lang = JFactory::getLanguage();
 $lang->load('com_accommodation', JPATH_SITE, null, false, true);
 $lang->load('com_shortlist', JPATH_SITE, null, false, true);
 
+$Itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
 
 if (JDEBUG)
 {
@@ -37,7 +38,7 @@ $min_budget = $this->state->get('list.min_price');
 $max_budget = $this->state->get('list.max_price');
 ?>
 
-<form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_realestatesearch&lang=en&Itemid=199&s_kwds=' . $s_kwds) ?>" method="POST">
+<form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_realestatesearch&lang=en&Itemid=' . $Itemid . '&s_kwds=' . $s_kwds) ?>" method="POST">
 
   <h1 class="small-h1 page-header">
     <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
