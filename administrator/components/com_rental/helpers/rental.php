@@ -411,7 +411,7 @@ abstract class RentalHelper
 
         // Check whether availability status is set for the preceeding day
         $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
-        // $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
+        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
 
         if ($status)
         { // Availability is true, i.e. available

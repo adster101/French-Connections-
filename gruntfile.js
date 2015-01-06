@@ -56,7 +56,7 @@ module.exports = function(grunt) {
     uglify: {
       build: {
         src: 'media/fc/assets/js/scripts.js',
-        dest: 'media/fc/assets/js/<%= grunt.template.today("yyyymmddhhmmss") %>.scripts.min.js',
+        dest: 'media/fc/assets/js/<%= grunt.template.today("yyyymmddHMss") %>.scripts.min.js',
         options: {
           mangle: false
         }
