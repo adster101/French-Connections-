@@ -318,6 +318,7 @@ class AccommodationModelListing extends JModelForm
       {
         $query->where('c.review = 0');
         $query->where('d.review = 0');
+        $query->where('a.published = 1');
       }
       else
       {
@@ -327,7 +328,6 @@ class AccommodationModelListing extends JModelForm
 
       if (!$this->preview)
       {
-        // TO DO: We should check the expiry date at some point.
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
       }
 
@@ -537,12 +537,9 @@ class AccommodationModelListing extends JModelForm
           $query->innerJoin('#__unit_versions b ON (b.unit_id = a.id and b.id = (select max(c.id) from #__unit_versions c where unit_id = a.id))');
         }
 
-        //$query->join('left', '#__unit_versions b on a.id = b.unit_id');
         $query->where('a.property_id = ' . (int) $id);
-        //$query->where('a.published = 1');
-        $query->order('ordering');
-
         $query->where('a.published = 1');
+        $query->order('ordering');
 
         $result = $this->_db->setQuery($query)->loadObjectList();
 

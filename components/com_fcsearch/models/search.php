@@ -102,10 +102,12 @@ class FcSearchModelSearch extends JModelList
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $db->execute();
     }
-    catch (RuntimeException $e) {
+    catch (RuntimeException $e)
+    {
       // TO DO log me baby
       return false;
     }
@@ -249,7 +251,8 @@ class FcSearchModelSearch extends JModelList
       return clone($this->retrieve($store, false));
     }
 
-    try {
+    try
+    {
 
       $sort_column = $this->getState('list.sort_column', '');
       $sort_order = $this->getState('list.direction', '');
@@ -456,6 +459,7 @@ class FcSearchModelSearch extends JModelList
 
       // Make sure we only get live properties...
       $query->where('a.expiry_date >= ' . $db->quote($this->date));
+      $query->where('a.published = 1');
       $query->where('b.published = 1');
       $query->where('d.unit_id is not null');
       $query->where('c.review = 0');
@@ -466,7 +470,8 @@ class FcSearchModelSearch extends JModelList
       // Return a copy of the query object.
       return clone($this->retrieve($store, true));
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Oops, exceptional
     }
   }
@@ -479,13 +484,15 @@ class FcSearchModelSearch extends JModelList
   public function getRefinePropertyOptions()
   {
 
-    try {
+    try
+    {
 
       $return = $this->getRefineByTypeOptions('property_type', 'getRefinePropertyOptions');
 
       return $return;
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       // Catch and log the error.
       return false;
@@ -500,13 +507,15 @@ class FcSearchModelSearch extends JModelList
   public function getRefineAccommodationOptions()
   {
 
-    try {
+    try
+    {
 
       $return = $this->getRefineByTypeOptions('accommodation_type', 'getRefineAccommodationOptions');
 
       return $return;
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       // Catch and log the error.
       return false;
@@ -540,7 +549,8 @@ class FcSearchModelSearch extends JModelList
       return $this->retrieve($store, true);
     }
 
-    try {
+    try
+    {
 
       // Create a new query object.
       $db = $this->getDbo();
@@ -657,6 +667,7 @@ class FcSearchModelSearch extends JModelList
 
       // Make sure we only get live properties with no pending changes...
       $query->where('a.expiry_date >= ' . $db->quote($this->date));
+      $query->where('a.published = 1');
       $query->where('b.published = 1');
       $query->where('c.review = 0');
       $query->where('d.review = 0');
@@ -677,7 +688,8 @@ class FcSearchModelSearch extends JModelList
       // Return a copy of the query object.
       return $this->retrieve($store, true);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       // Catch and log the error.
       return false;
@@ -805,6 +817,7 @@ class FcSearchModelSearch extends JModelList
     $query = $this->getFilterState('property_facilities', $query);
     // Make sure we only get live properties...
     $query->where('a.expiry_date >= ' . $db->quote($this->date));
+    $query->where('a.published = 1');
     $query->where('b.published = 1');
     $query->where('c.review = 0');
     $query->where('d.review = 0');
@@ -818,10 +831,12 @@ class FcSearchModelSearch extends JModelList
     // Get the options.
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $locations = $db->loadObjectList();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // TO DO Log this.
       return flase;
     }
@@ -846,7 +861,8 @@ class FcSearchModelSearch extends JModelList
     }
 
     // Cached data not available so proceed
-    try {
+    try
+    {
 
       $attributes = array();
       $app = JFactory::getApplication();
@@ -958,6 +974,7 @@ class FcSearchModelSearch extends JModelList
       $query = $this->getFilterState('property_facilities', $query);
 
       $query->where('a.expiry_date >= ' . $db->quote($this->date));
+      $query->where('a.published = 1');
       $query->where('c.review = 0');
       $query->where('b.published = 1');
       $query->where('d.review = 0');
@@ -1022,7 +1039,8 @@ class FcSearchModelSearch extends JModelList
       // Return the total.
       return $this->retrieve($store);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log the exception and return false
       //JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
@@ -1071,11 +1089,13 @@ class FcSearchModelSearch extends JModelList
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
 
       $markers = $db->loadObjectList();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       return false;
     }
 
@@ -1339,24 +1359,35 @@ class FcSearchModelSearch extends JModelList
   private function getFilterAvailability(JDatabaseQueryMysqli $query, $arrival = '', $departure = '', $db = '')
   {
 
-    if (empty($arrival) && empty($departure))
+    if (empty($arrival) || empty($departure))
     {
       return $query;
     }
 
     // Join the availability table
-    $query->join('left', '#__availability arr on d.unit_id = arr.unit_id');
+    $query->join('inner', '#__availability arr on d.unit_id = arr.unit_id');
     $query->where('arr.availability = 1');
+
+    if ($arrival)
+    {
+      $query->where('arr.start_date <= ' . $db->quote($arrival));
+    }
+
+    if ($departure)
+    {
+      // Take one day of departure date to ensure we check a 7 day period rather than an eight day period
+      $query->where('arr.end_date >= ' . $query->dateAdd($departure,'-1','DAY'));
+    }
 
     /*
      * Possible fix for availabilty search
      * 
-     */
-    $query->where('((arr.start_date <= ' . $query->dateAdd($arrival, '-1', 'DAY')
-            . 'AND arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY') . ')'
-            . ' OR (arr.start_date <= ' . $query->dateAdd($arrival, '1', 'DAY')
-            . 'AND arr.end_date >= ' . $query->dateAdd($departure, '1', 'DAY') . '))');
 
+      $query->where('((arr.start_date <= ' . $query->dateAdd($arrival, '-1', 'DAY')
+      . 'AND arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY') . ')'
+      . ' OR (arr.start_date <= ' . $query->dateAdd($arrival, '1', 'DAY')
+      . 'AND arr.end_date >= ' . $query->dateAdd($departure, '1', 'DAY') . '))');
+     */
     return $query;
   }
 
@@ -1613,7 +1644,8 @@ class FcSearchModelSearch extends JModelList
 
     $query = $db->getQuery(true);
 
-    try {
+    try
+    {
       $query->select('currency, exchange_rate');
       $query->from('#__currency_conversion');
 
@@ -1621,7 +1653,8 @@ class FcSearchModelSearch extends JModelList
 
       $results = $db->loadObjectList($key = 'currency');
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log this error
     }
 

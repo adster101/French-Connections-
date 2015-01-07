@@ -194,6 +194,7 @@ class RealestateModelListing extends JModelForm
 
     if (!$this->preview)
     {
+      $query->where('a.published = 1');
       $query->where('b.review = 0');
     }
     else
