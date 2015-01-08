@@ -17,8 +17,7 @@ $itemid = $app->input->getCmd('Itemid', '');
 $sitename = $app->getCfg('sitename');
 $listing = false;
 $URI = JURI::getInstance();
-$script_path = (JDEBUG) ? '/media/fc/assets/js/scripts.js' : '/media/fc/assets/js/20150106175341.scripts.min.js';
-
+$script_path = (JDEBUG) ? '/media/fc/assets/js/scripts.js' : '/media/fc/assets/js/201501079934.scripts.min.js';
 $menu = $app->getMenu();
 $active = $menu->getActive();
 $siteHome = ($active == $menu->getDefault('en-GB')) ? 'home' : 'sub';

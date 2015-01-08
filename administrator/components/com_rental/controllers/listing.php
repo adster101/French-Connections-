@@ -529,6 +529,20 @@ class RentalControllerListing extends JControllerForm
     }
 
     // TO DO - Save the submittions note into the notes table, if there is a note.
+    if (!empty($validData['admin_notes']))
+    {
+      
+      // Add the user
+      $validData['user_id'] = $user->id;
+      
+      // Add the PRN to the data 
+      $validData['property_id'] = $recordId;
+      
+      // Let's save the admin notes...
+      $model->save($validData);
+      
+    }
+    
     // It's all good.
     // Here we need to determine how to handle this submission for review.
     // If the expiry date is within 7 days then we need to redirect the user to the renewal screen.
@@ -596,6 +610,8 @@ class RentalControllerListing extends JControllerForm
       else
       {
         // If we get here it means there is no payment due for this so we just lock it for editing.
+        // TO DO - Does this method need to be moved?
+        
         $payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
         $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
 

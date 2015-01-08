@@ -61,7 +61,7 @@
       name="occupancy"
       type="integer"
       first="1"
-      last="20"
+      last="30"
       step="1"
       label="COM_RENTAL_HELLOWORLD_FIELD_OCCUPANCY_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_OCCUPANCY_DESC"

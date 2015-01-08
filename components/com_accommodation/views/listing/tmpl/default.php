@@ -160,7 +160,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <?php endif; ?>
         </div>
         <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block"> 
-          <a href="">
+          <a href="<?php echo 'https://www.facebook.com/dialog/share?app_id=612921288819888&display=page&href=' . urlencode($uri) . '&redirect_uri=' . urlencode($uri) ?>"
             <span class="glyphicon social-icon facebook"></span>
           </a> 
           <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >

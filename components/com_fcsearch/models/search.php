@@ -1543,13 +1543,13 @@ class FcSearchModelSearch extends JModelList
 
         foreach ($filters as $key => $value)
         {
-          $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.property_id = d.unit_id');
+          $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.version_id = d.id');
           $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
         }
       }
       else
       {
-        $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.property_id = d.unit_id');
+        $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.version_id = d.id');
         $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
       }
     }

@@ -99,7 +99,7 @@
       name="phone_1"
       type="tel"
       filter="string"
-      label="Phone number"
+      label="COM_RENTAL_CONTACT_PHONE_1"
       maxlength="25"
       labelclass="control-label"  
       hint="COM_RENTAL_ENQUIRY_SETTINGS_PHONE_EXAMPLE"
@@ -111,6 +111,28 @@
       class="badge badge-info" 
       description="COM_RENTAL_ENQUIRY_SETTINGS_PHONT_NOTE" />
   
+    <field 
+      name="phone_2"
+      type="tel"
+      filter="string"
+      label="COM_RENTAL_CONTACT_PHONE_2"
+      maxlength="25"
+      labelclass="control-label"  
+      hint="COM_RENTAL_ENQUIRY_SETTINGS_PHONE_EXAMPLE"
+      class="validate validate-tel"
+    />
+    
+    <field 
+      name="phone_3"
+      type="tel"
+      filter="string"
+      label="COM_RENTAL_CONTACT_PHONE_3"
+      maxlength="25"
+      labelclass="control-label"  
+      hint="COM_RENTAL_ENQUIRY_SETTINGS_PHONE_EXAMPLE"
+      class="validate validate-tel"
+    />
+    
     <field 
       name="email_1"
       type="email"
