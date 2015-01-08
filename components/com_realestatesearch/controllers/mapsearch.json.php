@@ -33,7 +33,7 @@ class RealEstateSearchControllerMapSearch extends JControllerLegacy {
     $return = array();
 
     // Require the component router
-    require_once(JPATH_SITE . '/components/com_fcsearch/router.php');
+    require_once(JPATH_SITE . '/components/com_realestatesearch/router.php');
 
     // Get the application instance
     $app = JFactory::getApplication();
@@ -48,7 +48,7 @@ class RealEstateSearchControllerMapSearch extends JControllerLegacy {
     $segments = array_filter(explode('/', $filter_vars));
 
     // Get the vars for this request
-    $vars = FcSearchParseRoute($segments);
+    $vars = RealestateSearchParseRoute($segments);
 
     // And set them in the input scope
     foreach ($vars as $key => $value) {

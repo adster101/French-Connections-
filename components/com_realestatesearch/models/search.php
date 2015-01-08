@@ -493,7 +493,7 @@ class RealestateSearchModelSearch extends JModelList
   {
 
     // The query resultset should be stored in the local model cache already
-    $store = $this->getStoreId('getMapMarkers');
+    $store = $this->getStoreId('getRealEstateMapMarkers');
 
     // Get the info from the cache if we can
     if ($this->retrieve($store))
@@ -668,19 +668,7 @@ class RealestateSearchModelSearch extends JModelList
     $this->setState('list.bedrooms', $input->get('bedrooms', '', 'int'));
     $app->setUserState('list.bedrooms', $input->get('bedrooms', '', 'int'));
 
-    // Occupancy
-    $this->setState('list.occupancy', $input->get('occupancy', '', 'int'));
-    $app->setUserState('list.occupancy', $input->get('occupancy', '', 'int'));
-
-    // Property type
-    $this->setState('list.property_type', $input->get('property', '', 'array'));
-    $app->setUserState('list.property_type', $input->get('property', '', 'array'));
-
-    // Accommodation type
-    $this->setState('list.accommodation_type', $input->get('accommodation', '', 'array'));
-    $app->setUserState('list.accommodation_type', $input->get('accommodation', '', 'array'));
-
-    // Budget and price, innit!
+   // Budget and price, innit!
     $this->setState('list.min_price', $input->get('min', '', 'int'));
     $app->setUserState('list.min_price', $input->get('min', '', 'array'));
 
@@ -701,27 +689,6 @@ class RealestateSearchModelSearch extends JModelList
     // Set the match limit.
     $this->setState('match.limit', 10000);
 
-    // Get the rest of the filter options such as property type, facilities and activites etc.
-    // populateFilterState is effectively setState as above only the input may be an array 
-    $activities = $input->get('activities', '', 'array');
-    $this->populateFilterState($activities, 'activities');
-    $app->setUserState('list.activities', $activities);
-
-    $property_facilities = $input->get('internal', '', 'array');
-    $this->populateFilterState($property_facilities, 'property_facilities');
-    $app->setUserState('list.facilities', $property_facilities);
-
-    $external_facilities = $input->get('external', '', 'array');
-    $this->populateFilterState($external_facilities, 'external_facilities');
-    $app->setUserState('list.external_facilities', $external_facilities);
-
-    $kitchen_facilities = $input->get('kitchen', '', 'array');
-    $this->populateFilterState($kitchen_facilities, 'kitchen_facilities');
-    $app->setUserState('list.kitchen_facilities', $kitchen_facilities);
-
-    $suitability = $input->get('suitability', '', 'array');
-    $this->populateFilterState($suitability, 'suitability');
-    $app->setUserState('list.suitability', $suitability);
 
     // Load the parameters.
     $this->setState('params', $params);
@@ -766,39 +733,6 @@ class RealestateSearchModelSearch extends JModelList
   }
 
   /**
-   * Adds the availability filters to the results query
-   * @param JDatabaseQueryMysqli $query
-   * @param type $arrival
-   * @param type $departure
-   * @param type $db
-   * @return \JDatabaseQueryMysqli
-   */
-  private function getFilterAvailability(JDatabaseQueryMysqli $query, $arrival = '', $departure = '', $db = '')
-  {
-
-    if (empty($arrival) && empty($departure))
-    {
-      return $query;
-    }
-
-    // Join the availability table
-    $query->join('left', '#__availability arr on d.unit_id = arr.unit_id');
-    $query->where('arr.availability = 1');
-
-    if ($arrival)
-    {
-      $query->where('arr.start_date <= ' . $db->quote($arrival));
-    }
-
-    if ($departure)
-    {
-      $query->where('arr.end_date >= ' . $db->quote($departure));
-    }
-
-    return $query;
-  }
-
-  /**
    * Add bedroom count filter
    * @param JDatabaseQueryMysqli $query
    * @param type $bedrooms
@@ -814,83 +748,6 @@ class RealestateSearchModelSearch extends JModelList
     }
 
     $query->where('( single_bedrooms + double_bedrooms ) = ' . (int) $bedrooms);
-
-    return $query;
-  }
-
-  /**
-   * 
-   * @param JDatabaseQueryMysqli $query
-   * @param type $occupancy
-   * @param type $db
-   * @return \JDatabaseQueryMysqli
-   */
-  private function getFilterOccupancy(JDatabaseQueryMysqli $query, $occupancy = '', $db = '')
-  {
-    if (empty($occupancy))
-    {
-      return $query;
-    }
-
-    $query = $query->where('d.occupancy >= ' . (int) $occupancy);
-
-    return $query;
-  }
-
-  /**
-   * 
-   * @param JDatabaseQueryMysqli $query
-   * @param type $property_type
-   * @param type $db
-   * @return \JDatabaseQueryMysqli
-   */
-  private function getFilterPropertyType(JDatabaseQueryMysqli $query, $property_type = array())
-  {
-
-    if (empty($property_type))
-    {
-      return $query;
-    }
-
-    $types = array();
-
-    // Get each of the property attribute id we are filtering on.
-    foreach ($property_type as $type)
-    {
-      $ids = explode('_', $type);
-      $types[] = $ids[2];
-    }
-
-    $query = $query->where('d.property_type in (' . implode(',', $types) . ')');
-
-    return $query;
-  }
-
-  /**
-   * 
-   * @param JDatabaseQueryMysqli $query
-   * @param type $property_type
-   * @param type $db
-   * @return \JDatabaseQueryMysqli
-   */
-  private function getFilterAccommodationType(JDatabaseQueryMysqli $query, $accommodation_type = array())
-  {
-
-    if (empty($accommodation_type))
-    {
-      return $query;
-    }
-
-    $types = array();
-
-    // Get each of the property attribute id we are filtering on.
-    foreach ($accommodation_type as $type)
-    {
-      $ids = explode('_', $type);
-      $types[] = $ids[2];
-    }
-
-    $query = $query->where('d.accommodation_type in (' . implode(',', $types) . ')');
 
     return $query;
   }
@@ -992,46 +849,14 @@ class RealestateSearchModelSearch extends JModelList
     {
       // Add the list state for page specific data.
       $id .= ':';
-      $id .= $lang;
       $id .= ':' . $this->getState('list.start');
       $id .= ':' . $this->getState('list.limit');
       $id .= ':' . $this->getState('list.sort_column');
       $id .= ':' . $this->getState('list.direction');
       $id .= ':' . $this->getState('list.searchterm');
-      $id .= ':' . $this->getState('list.start_date');
-      $id .= ':' . $this->getState('list.end_date');
       $id .= ':' . $this->getState('list.bedrooms');
-      $id .= ':' . $this->getState('list.occupancy');
-      $id .= ':' . $this->getState('list.language');
       $id .= ':' . $this->getState('list.max_price');
       $id .= ':' . $this->getState('list.min_price');
-
-      // Get each of the filter attribute id and build that into the cache key...
-      $facilities = array();
-      $facilities[] = $this->getState('list.activities', '');
-      $facilities[] = $this->getState('list.property_facilities', '');
-      $facilities[] = $this->getState('list.external_facilities', '');
-      $facilities[] = $this->getState('list.kitchen_facilities', '');
-      $facilities[] = $this->getState('list.property_type');
-      $facilities[] = $this->getState('list.accommodation_type');
-
-      foreach ($facilities as $key => $value)
-      {
-
-        // For the activities...
-        if (is_array($value) && !empty($value))
-        {
-          foreach ($value as $x => $y)
-          {
-            $id .= ':' . $y;
-            $y = '';
-          }
-        }
-        elseif ($value)
-        {
-          $id .= ':' . $value;
-        }
-      }
     }
 
     return $id;
