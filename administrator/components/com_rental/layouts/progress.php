@@ -20,9 +20,9 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
     <hr />
     <fieldset class="panelform">
       <div class="control-group">   
-        <?php echo $form->getLabel('admin_notes'); ?>
+        <?php echo $form->getLabel('body'); ?>
         <div class="controls">   
-          <?php echo $form->getInput('admin_notes'); ?>
+          <?php echo $form->getInput('body'); ?>
         </div>
       </div>      
       <?php echo $form->getInput('tos'); ?>  

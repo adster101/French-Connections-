@@ -65,34 +65,24 @@ class RentalModelSubmit extends JModelAdmin
 
   /**
    * The submisssion notes are saved...into the notes table
+   * TO DO - Change this to use the notes model so it can be reused
+   * 
    * @param type $data
    */
   public function save($data)
   {
 
-    $user = JFactory::getUser();
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/models');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
+    
+    $note = JModelLegacy::getInstance('Note', 'NotesModel');
 
-    $db = JFactory::getDbo();
-
-    $query = $db->getQuery(true);
-
-    $query->insert('#__listing_notes')
-            ->columns('property_id, subject, body, created_by')
-            ->values(array($data['property_id'], $db->quote(''), $db->quote($data['admin_notes']), $data['user_id']));
-
-    $db->setQuery($query);
-
-    try
+    if (!$note->save($data))
     {
-      $db->execute();
-    }
-    catch (Exception $e)
-    {
-      var_dump($e);die;
+      // TO DO Log this
       return false;
-    }
-
-     var_dump($data);die;
+    }   
+    
     return true;
   }
 

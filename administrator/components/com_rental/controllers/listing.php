@@ -529,7 +529,7 @@ class RentalControllerListing extends JControllerForm
     }
 
     // TO DO - Save the submittions note into the notes table, if there is a note.
-    if (!empty($validData['admin_notes']))
+    if (!empty($validData['body']))
     {
       
       // Add the user

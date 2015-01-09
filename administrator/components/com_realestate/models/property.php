@@ -131,13 +131,14 @@ class RealestateModelProperty extends JModelAdmin
       // Need to get the value of the renewal/update
     }
 
+    // Save the data
     if (!parent::save($data))
     {
       // Oops...
       return false;
     }
 
-    if (!empty($data['subject']))
+    if (!empty($data['subject']) || !empty($data['body']))
     {
 
       // Update the notes 

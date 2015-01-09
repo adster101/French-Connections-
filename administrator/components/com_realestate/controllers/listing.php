@@ -107,10 +107,7 @@ class RealEstateControllerListing extends PropertyControllerListing
 
       return false;
     }
-
-    // It's all good mother fucker!
-    // TO DO - Maybe want to redirect to payment view if a new property
-
+    
     $listing = $this->getModel('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
     $listing->setState('com_realestate.listing.id', $recordId);
     $listing->setState('com_realestate.listing.latest', true);

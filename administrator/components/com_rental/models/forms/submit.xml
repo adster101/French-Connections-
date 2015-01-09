@@ -2,7 +2,7 @@
 <form	addrulepath="/administrator/components/com_rental/models/rules">
   <fieldset name="submit">
     <field
-      name="admin_notes"
+      name="body"
       type="textarea"
       default=""
       labelclass="control-label"

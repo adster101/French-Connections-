@@ -17,6 +17,7 @@ $append = '';
 $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 $uri = JUri::getInstance()->toString();
+
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
@@ -65,7 +66,6 @@ $displayData->action = $action;
 $displayData->inShortlist = $inShortlist;
 $displayData->unit_id = $this->item->unit_id;
 $displayData->class = ' btn btn-default';
-
 
 // Add the reviews to item for the above layout.
 // TO DO - refactor so that $this->item contains all elements of the listing for use in layouts?
@@ -160,8 +160,20 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           <?php endif; ?>
         </div>
         <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block"> 
-          <a href="<?php echo 'https://www.facebook.com/dialog/share?app_id=612921288819888&display=page&href=' . urlencode($uri) . '&redirect_uri=' . urlencode($uri) ?>"
-            <span class="glyphicon social-icon facebook"></span>
+          <a target="_blank" href="<?php
+          echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
+          . urlencode($uri)
+          . '&redirect_uri='
+          . urlencode($uri)
+          . '&picture='
+          . JURI::root() . 'images/property/'
+          . $this->item->unit_id
+          . '/thumbs/'
+          . urlencode($this->images[0]->image_file_name)
+          . '&name=' . urlencode($this->item->unit_title)
+          . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
+          ?>"
+             <span class="glyphicon social-icon facebook"></span>
           </a> 
           <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
             <span class="glyphicon social-icon twitter"></span>
@@ -676,17 +688,17 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
       </p>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL'); ?>
-        <?php echo ($this->item->use_invoice_details) ? $this->item->phone_1 : $this->item->alt_phone_1; // Assumes there is at least one phone?>
+        <?php echo ($this->item->use_invoice_details) ? $this->item->phone_1 : $this->item->alt_phone_1; // Assumes there is at least one phone ?>
       </p>
 
-      <?php if ($this->item->use_invoice_details) : // Show owners second phone number if there is one on the account ?>
+      <?php if ($this->item->use_invoice_details) : // Show owners second phone number if there is one on the account  ?>
         <?php if (!empty($this->item->phone_2)) : ?>
           <p>
             <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
             <?php echo $this->item->phone_2; ?>
           </p>
         <?php endif; ?>
-      <?php else: // Show the alt second phone number if one has been entered ?>
+      <?php else: // Show the alt second phone number if one has been entered  ?>
         <?php if (!empty($this->item->alt_phone_2)) : ?>
           <p>
             <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
@@ -695,14 +707,14 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
         <?php endif; ?>
       <?php endif; ?>
 
-      <?php if ($this->item->use_invoice_details) : // Show owners third phone number if there is one on the account ?>
+      <?php if ($this->item->use_invoice_details) : // Show owners third phone number if there is one on the account  ?>
         <?php if (!empty($this->item->phone_3)) : ?>
           <p>
             <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
             <?php echo $this->item->phone_3; ?>
           </p>
         <?php endif; ?>
-      <?php else: // Show the alt third phone number if one has been entered ?>
+      <?php else: // Show the alt third phone number if one has been entered  ?>
         <?php if (!empty($this->item->alt_phone_3)) : ?>
           <p>
             <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
