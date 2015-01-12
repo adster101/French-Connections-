@@ -54,7 +54,7 @@ foreach ($this->submenumodules as $submenumodule)
 }
 
 // Logo file
-$logo = JUri::root() . $this->params->get('logoFile');
+$logo = '/' . $this->params->get('logoFile');
 
 // Template Parameters
 $displayHeader = $this->params->get('displayHeader', '1');

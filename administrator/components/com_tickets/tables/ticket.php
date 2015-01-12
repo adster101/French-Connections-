@@ -21,7 +21,10 @@ class TicketsTableTicket extends JTable {
    * @param JDatabase A database connector object
    */
   public function __construct(&$db) {
-    parent::__construct('#__tickets', 'id', $db);
+      parent::__construct('#__tickets', 'id', $db);
+  
+    // Add observers for, e.g. tags
+		JTableObserverTags::createObserver($this, array('typeAlias' => 'com_tickets.ticket'));
   }
 
   public function store($updateNulls = false) {

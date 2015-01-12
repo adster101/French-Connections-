@@ -342,7 +342,7 @@ class RentalControllerImages extends JControllerForm {
         $file['delete_url'] = '';
         $file['delete_type'] = 'DELETE';
         $file['message'] = empty($file['error']) ? JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_UPLOADED') : '';
-        $file['thumbnail_url'] = JURI::root() . '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
+        $file['thumbnail_url'] = '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
 
         // If we are happy to save and have something to save
         if (!$model->save($file)) {

@@ -1,7 +1,13 @@
 jQuery(document).ready(function() {
 
+  jQuery('.view-featured-fp-link').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'FP Homepage link click-through');
+  });
 
-
+  jQuery('.view-search-fp-link').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'FP Search link click-through');
+  });
+  
   // Check whether placeholder is supported or not.
   if (document.createElement("input").placeholder == undefined) {
     // Placeholder is not supported, so remove the attribute
@@ -14,7 +20,7 @@ jQuery(document).ready(function() {
       autoclose: true
     });
   }
-  
+
   try {
 
     var nowTemp = new Date();
@@ -51,10 +57,10 @@ jQuery(document).ready(function() {
       autoclose: true
 
     }).on('changeDate', function(ev) {
-      });
+    });
 
   } catch (e) {
-  // what to do!?
+    // what to do!?
   }
 
   // Load the google maps crap, only if there is a #map on the page.
@@ -153,7 +159,7 @@ jQuery(document).ready(function() {
   // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
     //window.onbeforeunload = function() {
-      //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
   });
 
@@ -175,7 +181,7 @@ jQuery(document).ready(function() {
       });
     }
   } catch (e) {
-  // what to do!?
+    // what to do!?
   }
 
   // Add special offer counter... 
@@ -252,7 +258,7 @@ var loadGoogleMaps = function(func) {
     script.type = 'text/javascript';
 
     script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-    'callback=' + func;
+            'callback=' + func;
     document.body.appendChild(script);
   }
 }

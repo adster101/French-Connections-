@@ -15,7 +15,8 @@ jimport('joomla.application.component.view');
 /**
  * View class for a list of Invoices.
  */
-class TicketsViewTicket extends JViewLegacy {
+class TicketsViewTicket extends JViewLegacy
+{
 
   protected $item;
   protected $form;
@@ -24,19 +25,15 @@ class TicketsViewTicket extends JViewLegacy {
   /**
    * Display the view
    */
-  public function display($tpl = null) {
-
-    $app = JFactory::getApplication();
-
-
+  public function display($tpl = null)
+  {
     $this->form = $this->get('Form');
-    
     $this->state = $this->get('State');
-
     $this->item = $this->get('Item');
-
+   
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       throw new Exception(implode("\n", $errors));
     }
 
@@ -57,15 +54,17 @@ class TicketsViewTicket extends JViewLegacy {
    *
    * @since	1.6
    */
-  protected function addToolbar($canDo) {
-    
-		$isNew		= ($this->item->id == 0);
+  protected function addToolbar($canDo)
+  {
+
+    $isNew = ($this->item->id == 0);
 
     $title = ($isNew) ? JText::_('COM_TICKETS_TICKET_NEW') : JText::sprintf('COM_TICKETS_TICKET_TITLE', $this->item->title, $this->item->id);
-    
+
     JToolBarHelper::title($title);
 
-    if ($canDo->get('core.create')) {
+    if ($canDo->get('core.create'))
+    {
       JToolBarHelper::apply('ticket.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('ticket.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::save2new('ticket.save');
