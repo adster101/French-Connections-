@@ -42,7 +42,9 @@ $total_vat = '';
               <?php endforeach; ?>
             </fieldset>
           <?php endforeach; ?>
-          <?php echo JHtmlProperty::button('btn btn-primary btn-large', 'payment.process', 'icon-next', 'Submit payment'); ?>
+          <button class="btn btn-primary btn-large payment-button" onclick="Joomla.submitbutton('payment.process')" data-loading-text="Processing payment...">
+            <span class="icon icon-next">&nbsp;</span>&nbsp;Submit payment</span>
+          </button>
           <hr />
           <input type="hidden" name="task" value="" />
           <input type="hidden" name="renewal" value="<?php echo $this->renewal; ?>" />
