@@ -35,7 +35,8 @@ class RentalControllerImages extends JControllerForm {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
 
-    //$this->registerTask('saveandnext', 'save');
+    $this->registerTask('save', 'cancel');
+    
   }
 
   /**

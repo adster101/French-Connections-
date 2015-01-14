@@ -625,7 +625,7 @@ class AccommodationModelListing extends JModelForm
 
         // Only want those assigned to the current property
         $query->where('unit_id = ' . $unit_id);
-        
+
         // And those that are published
         $query->where('published = 1');
 
@@ -656,6 +656,18 @@ class AccommodationModelListing extends JModelForm
    *
    */
 
+  public function getAvailabilityCalendar()
+  {
+       // Get availability as an array of days
+    $availability = $this->getAvailability(); 
+            
+    $availability_by_day = RentalHelper::getAvailabilityByDay($availability);
+
+    // Build the calendar taking into account current availability...
+    $calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability_by_day, 2, 0, $link = false);
+
+  }
+
   public function getAvailability()
   {
     // Get the state for this property ID
@@ -675,13 +687,7 @@ class AccommodationModelListing extends JModelForm
     // Attempt to load the availability for this property
     $availability = $model->getAvailability($unit_id);
 
-    // Get availability as an array of days
-    $this->availability_array = RentalHelper::getAvailabilityByDay($availability);
-
-    // Build the calendar taking into account current availability...
-    $calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability = $this->availability_array, 2, 0, $link = false);
-
-    return $calendar;
+    return $availability;
   }
 
   /*
