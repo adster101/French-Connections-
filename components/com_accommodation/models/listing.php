@@ -658,14 +658,15 @@ class AccommodationModelListing extends JModelForm
 
   public function getAvailabilityCalendar()
   {
-       // Get availability as an array of days
+    // Get availability as an array of days
     $availability = $this->getAvailability(); 
             
     $availability_by_day = RentalHelper::getAvailabilityByDay($availability);
 
     // Build the calendar taking into account current availability...
     $calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability_by_day, 2, 0, $link = false);
-
+    
+    return $calendar;
   }
 
   public function getAvailability()
@@ -703,7 +704,7 @@ class AccommodationModelListing extends JModelForm
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
     $model = JModelLegacy::getInstance('Tariffs', 'RentalModel');
 
-    $tariffs = $model->getTariffs($unit_id);
+    $tariffs = $model->getTariffs($unit_id, false);
 
 
 

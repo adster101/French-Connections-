@@ -334,6 +334,146 @@ abstract class RentalHelper
     return $session->get('com_rental.property.' . $propertyId . '.lang', $lang->getTag());
   }
 
+  public static function getTabbedAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
+  {
+
+    $availability = RentalHelper::getAvailabilityByDay($availability);
+
+    // String to hold the calendar HTML
+    $calendar = '';
+
+    $showlinks = $link;
+
+    // Init calendar string
+    // Get now
+    $now = time();
+
+    // Set the month and year as per now
+    $month = date("m", $now);
+    $year = date("y", $now);
+
+    $calendar .= JHtml::_('bootstrap.startTabSet', 'availability', array('active' => $month));
+
+    // The loop loops over some code which outputs a calendar. We do this $months times
+    for ($z = 0; $z <= $months; $z++)
+    {
+      // Get first date of month
+      $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
+
+      // Get the detail of the first date of the month (month name, day name, day of week and year)
+      list($month, $year, $month_name, $day_of_week) = explode(',', gmstrftime('%m,%Y,%B,%w', $first_of_month));
+
+
+      $calendar .= JHtml::_('bootstrap.addTab', 'availability', $month, htmlentities(ucfirst(substr($month_name, 0, 3))), true);
+
+      $calendar .= '<table class="availability table table-bordered avCalendar">' . "\n";
+
+
+      // Generate the title heading for the month
+      $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names
+      // Generates the first day of the calendar month (e.g. the day the 1st of the month falls on)
+      $weekday = ($day_of_week + 7 - $first_day) % 7; #adjust for $first_day
+      // Generate the table heading row
+      $table_header = RentalHelper::getTableHeader($first_day, $title);
+
+      $calendar .= $table_header;
+      
+      $calendar .= '<tbody><tr>' . "\n";
+
+      // Pad out the beginning of the month if first day doesn't fall on a sunday
+      if ($weekday > 0)
+      {
+        $calendar .= '<td colspan="' . $weekday . '">&nbsp;</td>'; #initial 'empty' days
+      }
+
+      for ($day = 1, $days_in_month = gmdate('t', $first_of_month); $day <= $days_in_month; $day++, $weekday++)
+      {
+        if ($weekday == 7)
+        {
+          $weekday = 0; #start a new week
+          $calendar .= "</tr>\n<tr>" . "\n";
+        }
+
+        $today = date('d-m-Y', gmmktime(0, 0, 0, $month, $day, $year));
+        $yesterday = date('d-m-Y', gmmktime(0, 0, 0, $month, $day - 1, $year));
+
+        // Check whether availability status is set for the preceeding day
+        $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
+        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
+
+        if ($status)
+        { // Availability is true, i.e. available
+          if ($status_yesterday != $status)
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable-available'), $showlinks);
+          }
+          else
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('available'), $showlinks);
+          }
+        }
+        else
+        { // Availability is false i.e. unavailable
+          if ($status_yesterday != $status)
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('available-unavailable'), $showlinks);
+          }
+          else
+          {
+            $calendar .= RentalHelper::generateDateCell($today, $day, array('unavailable'), $showlinks);
+          }
+        }
+      }
+
+      if ($weekday != 7)
+      {
+        $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>'; #remaining "empty" days
+      }
+      $calendar.="</tr></tbody></table>";
+
+      $calendar .= JHtml::_('bootstrap.endTab');
+
+
+      $month++;
+    }
+		
+    $calendar .= JHtml::_('bootstrap.endTabSet'); 
+
+
+    return $calendar;
+  }
+
+  public static function getTableHeader($first_day_of_month = '', $title = '', $day_name_length = 2)
+  {
+    $str = '';
+
+    // Get a list of day name to use in the table cell headings...
+    // Generate all the day names according to the current locale
+    $day_names = array();
+
+    for ($n = 0, $t = (3 + $first_day_of_month) * 86400; $n < 7; $n++, $t+=86400)
+    {
+      $day_names[$n] = ucfirst(gmstrftime('%A', $t)); #%A means full textual day name
+    }
+
+    if (!empty($title))
+    {
+      $str .= '<caption><p><strong>' . $title . '</strong></p></caption>' . "\n";
+    }
+
+    $str .= '<thead><tr class="days">' . "\n";
+
+    // Loop over each day name and add a header
+    foreach ($day_names as $d)
+    {
+      $str .= '<th class="month-year" abbr="' . htmlentities($d) . '">' . htmlentities($day_name_length < 4 ? substr($d, 0, $day_name_length) : $d) . '</th>';
+    }
+
+    $str .="</tr></thead>";
+
+    return $str;
+  }
+
   /**
    * Generates HTML to display an availability calendar.
    *
@@ -346,13 +486,9 @@ abstract class RentalHelper
    * @param type $first_day
    * @return string False on failure or error, true otherwise.
    */
-  public static function getAvailabilityCalendar($months = 12, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
+  public static function getAvailabilityCalendar($months = 18, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
   {
-
-    // Get the view
-    $app = JFactory::getApplication();
-    $view = $app->input->get('view', '', 'string');
-
+    // String to hold the calendar HTML
     $calendar = '<div class="row">';
 
     $showlinks = $link;
@@ -387,6 +523,7 @@ abstract class RentalHelper
       $calendar.='<table class="availability table table-bordered avCalendar">' . "\n";
       $calendar.= '<caption><strong>' . $title . '</strong></caption>' . "\n";
       $calendar.= '<thead><tr class="days">' . "\n";
+
       if ($day_name_length)
       { #if the day names should be shown ($day_name_length > 0)
         #if day_name_length is >3, the full name of the day will be printed
@@ -595,7 +732,7 @@ abstract class RentalHelper
     $class = implode(' ', $classes);
     if (!empty($today))
     {
-      $return .= '<td data-date=' . $today . ' class="' . $class . '">';
+      $return .= '<td data-date=' . $today . ' class="' . $class . '">' . "\n";
 
       if ($showlinks)
       {
@@ -606,7 +743,7 @@ abstract class RentalHelper
         $return .= '<span>' . $day . '</span>';
       }
 
-      $return .= '</td>';
+      $return .= '</td>' . "\n";
     }
 
     return $return;
