@@ -36,20 +36,20 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
             <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="fp-media-object img-responsive" />
           </a>
         </p>
-            <h4 class="fp-media-heading"><a href="<?php echo $region ?>"><?php echo htmlspecialchars($item->title); ?></a></h4>
-            <p>
-              <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_SLEEPS', $item->occupancy); ?>
-              <?php if (!empty($item->price)) : ?> 
-                <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_PRICE_FROM', $prices['GBP']) ?>
-              <?php endif; ?><br />
-              <?php // echo JHTml::_('string.truncate', $item->description, 25, true, false); ?>
-              <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
-                <?php echo htmlspecialchars($item->unit_title); ?>&nbsp;&raquo;
-              </a>
-            </p>     
+        <h4 class="fp-media-heading"><a href="<?php echo $region ?>"><?php echo htmlspecialchars($item->title); ?></a></h4>
+        <p>
+          <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_SLEEPS', $item->occupancy); ?>
+          <?php if (!empty($item->price)) : ?> 
+            <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_PRICE_FROM', $prices['GBP']) ?>
+          <?php endif; ?><br />
+          <?php // echo JHTml::_('string.truncate', $item->description, 25, true, false); ?>
+          <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
+            <?php echo htmlspecialchars($item->unit_title); ?>&nbsp;&raquo;
+          </a>
+        </p>     
       </div>
-  <?php endif; ?>
-<?php endforeach; ?>
+    <?php endif; ?>
+  <?php endforeach; ?>
 </div>
 
 

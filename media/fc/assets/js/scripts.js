@@ -14744,16 +14744,7 @@ function checkAll_button(n, task) {
 
 jQuery(document).ready(function() {
 
-  jQuery('.payment-button')
-  .click(function (event) {
-    alert("woot");
-    event.preventDefault();
-    var btn = jQuery(this)
-    btn.button('loading')
-    setTimeout(function () {
-      btn.button('reset')
-    }, 3000)
-  });
+  
 
   jQuery('.view-featured-fp-link').on('click', function() {
     ga('send', 'event', 'button', 'click', 'FP Homepage link click-through');
@@ -15117,7 +15108,6 @@ Joomla.submitbutton = function(task)
 {
   if (task == '')
   {
-    alert("woot");
     return false;
   }
   else
@@ -15142,6 +15132,11 @@ Joomla.submitbutton = function(task)
     {
       // Unbind the onbeforeunload event
       window.onbeforeunload = null;
+      
+      if (action[0] == 'payment') {
+        jQuery('.payment-button').button('loading');
+      }
+      
       Joomla.submitform(task);
       return true;
     }
