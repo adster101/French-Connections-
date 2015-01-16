@@ -89,7 +89,7 @@ $Itemid = SearchHelper::getItemid(array('component','com_accommodation'));
       <?php echo strip_tags($this->item->additional_booking_info, "<td>,<tr>,<table>,<tbody>,<ul>,<li>,<p>,<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<strong>") ?>
     <?php endif; ?>
     <?php if (!empty($this->item->terms_and_conditions)) : ?>
-      <?php echo $this->escape(strip_tags($this->item->terms_and_conditions)) ?>
+      <?php echo strip_tags($this->item->terms_and_conditions,"<td>,<tr>,<table>,<tbody>,<ul>,<li>,<p>,<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<strong>") ?>
     <?php endif; ?>
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_ARRANGE_INSURANCE'); ?></p>
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FORM_SIGNATURE'); ?></p>

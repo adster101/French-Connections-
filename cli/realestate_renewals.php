@@ -111,8 +111,8 @@ class RealestateRenewals extends JApplicationCli
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
           break;
         case ($v->days == "30"):
-          $subject = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_SUBJECT_30_DAYS'), $listing[0]->first_name, $listing[0]->surname, $v->id);
-          $body = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_DAYS_30'), $listing[0]->first_name, $v->id, $listing[0]->title, $expiry_date, $expiry_date);
+          $subject = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_SUBJECT_30_DAYS'), $listing[0]->account_name, $v->id);
+          $body = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_DAYS_30'), $listing[0]->account_name, $v->id, $listing[0]->title, $expiry_date, $expiry_date);
           break;
         default:
           $send_email = false;

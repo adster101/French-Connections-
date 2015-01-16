@@ -13,6 +13,8 @@ $lang = $app->input->get('lang', 'en');
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+$view = $app->input->get('view','','string');
+
 ?>
 
 <div class="row">
@@ -27,7 +29,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     <?php if ($item->title) : ?>     
       <div class="col-lg-3 col-sm-3"> 
         <p>
-          <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
+          <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="<?php echo 'view-' . $view . '-fp-image-link' ?>" href="<?php echo $property ?>">
             <?php if (!empty($item->offer)) : ?>
               <span class="offer">
                 <?php echo htmlspecialchars($item->offer); ?>
@@ -43,7 +45,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
                 <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_PRICE_FROM', $prices['GBP']) ?>
               <?php endif; ?><br />
               <?php // echo JHTml::_('string.truncate', $item->description, 25, true, false); ?>
-              <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
+              <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail <?php echo 'view-' . $view . '-fp-link' ?>" href="<?php echo $property ?>">
                 <?php echo htmlspecialchars($item->unit_title); ?>&nbsp;&raquo;
               </a>
             </p>     
