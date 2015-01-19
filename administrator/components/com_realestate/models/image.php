@@ -324,7 +324,7 @@ class RealEstateModelImage extends JModelAdmin
           $bit = imageinterlace($existing_image, 1);
 
           // Save it out
-          imagejpeg($existing_image, $file_path);
+          imagejpeg($existing_image, $file_path,100);
 
           // Free up memory
           imagedestroy($existing_image);
@@ -386,7 +386,7 @@ class RealEstateModelImage extends JModelAdmin
           imageinterlace($blank_image, 1);
 
           // Save it out
-          imagejpeg($blank_image, $file_path);
+          imagejpeg($blank_image, $file_path,100);
 
           // Free up memory
           imagedestroy($blank_image);
