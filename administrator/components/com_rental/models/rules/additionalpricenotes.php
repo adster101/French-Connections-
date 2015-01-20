@@ -38,13 +38,16 @@ class JFormRuleAdditionalpricenotes extends JFormRule
 	 */
 	public function test(SimpleXMLElement $element, $value, $group = null, JRegistry $input = null, JForm $form = null)
 	{
-    // If value is greater than 750 characters they will need to try again
-		if (strlen($value) > 1500) {
+    
+    $raw = strip_tags($value);
+    
+    $word_count = count(explode(' ',$raw));
+
+    // If value is greater than 1500 words they will need to try again
+		if (strlen($word_count) > 1500) {
       return false;
   	}
 
 		return true;
 	}  
-  
-  
 }
