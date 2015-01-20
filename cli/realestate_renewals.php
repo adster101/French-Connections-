@@ -44,7 +44,6 @@ JLoader::register('PropertyHelper', JPATH_LIBRARIES . '/frenchconnections/helper
  */
 class RealestateRenewals extends JApplicationCli
 {
-
   /**
    * Entry point for the script
    *
@@ -62,8 +61,9 @@ class RealestateRenewals extends JApplicationCli
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
+    
     // Process the manual renewals
-    $renewals = $this->_manualrenewals($debug, $renewal_templates);
+    $this->_manualrenewals($debug, $renewal_templates);
   }
 
   private function _manualrenewals($debug = false, JRegistry $renewal_templates)
@@ -107,12 +107,12 @@ class RealestateRenewals extends JApplicationCli
       SWITCH (true)
       {
         case ($v->days < 0):
-          $body = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $listing[0]->first_name);
+          $body = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $listing[0]->account_name);
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
           break;
         case ($v->days == "30"):
-          $subject = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_SUBJECT_30_DAYS'), $listing[0]->first_name, $listing[0]->surname, $v->id);
-          $body = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_DAYS_30'), $listing[0]->first_name, $v->id, $listing[0]->title, $expiry_date, $expiry_date);
+          $subject = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_SUBJECT_30_DAYS'), $listing[0]->account_name, $v->id);
+          $body = JText::sprintf($renewal_templates->get('RENEWAL_REALESTATE_REMINDER_DAYS_30'), $listing[0]->account_name, $v->id, $listing[0]->title, $expiry_date, $expiry_date);
           break;
         default:
           $send_email = false;
@@ -180,9 +180,10 @@ class RealestateRenewals extends JApplicationCli
 
   private function _getProps()
   {
-
-    //$this->out('Getting props...');
-
+    $users_to_ignore = array();
+    $users_to_ignore[] = JUser::getInstance('allezfrancais')->id;
+    $users_to_ignore[] = JUser::getInstance('frueda@realestatelanguedoc.com')->id;
+    
     $db = JFactory::getDBO();
     /**
      * Get the date now
@@ -204,7 +205,8 @@ class RealestateRenewals extends JApplicationCli
     $query->from('#__realestate_property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,30)');
-
+    $query->where('a.created_by not in (' . implode(',',$users_to_ignore) . ')');
+    
     $db->setQuery($query);
 
     try {
