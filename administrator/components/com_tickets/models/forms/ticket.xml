@@ -81,7 +81,7 @@
     </field>     
     <field
       type="category"
-      name="area"
+      name="catid"
       label="Project area"
       labelclass="control-label"
       filter="int"
@@ -112,7 +112,16 @@
       filter="int"
     />    
      
-
+    <field 
+      name="tags" 
+      type="tag"
+      labelclass="control-label"
+      label="JTAG" 
+      description="JTAG_DESC"
+      class="inputbox span12 small"
+      multiple="true"
+      custom="deny"
+    />
     
   </fieldset>
 

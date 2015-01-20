@@ -14744,8 +14744,25 @@ function checkAll_button(n, task) {
 
 jQuery(document).ready(function() {
 
+  jQuery('.payment-button')
+  .click(function (event) {
+    alert("woot");
+    event.preventDefault();
+    var btn = jQuery(this)
+    btn.button('loading')
+    setTimeout(function () {
+      btn.button('reset')
+    }, 3000)
+  });
 
+  jQuery('.view-featured-fp-link').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'FP Homepage link click-through');
+  });
 
+  jQuery('.view-search-fp-link').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'FP Search link click-through');
+  });
+  
   // Check whether placeholder is supported or not.
   if (document.createElement("input").placeholder == undefined) {
     // Placeholder is not supported, so remove the attribute
@@ -14758,7 +14775,7 @@ jQuery(document).ready(function() {
       autoclose: true
     });
   }
-  
+
   try {
 
     var nowTemp = new Date();
@@ -14897,9 +14914,9 @@ jQuery(document).ready(function() {
   // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
     //window.onbeforeunload = function() {
-      //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
-  });
+    });
 
   try {
     // If the tinymce editor is loaded
@@ -15176,10 +15193,11 @@ jQuery(document).ready(function() {
       var option = action[0];
       
       var component = (option == 'forsale') ? 'com_realestatesearch' : 'com_fcsearch';
-     
+      var path = getPath();
+      
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
-        s_kwds: s_kwds        
+        s_kwds: path        
       },
       function(data) {
 

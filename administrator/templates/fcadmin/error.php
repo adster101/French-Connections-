@@ -67,14 +67,14 @@ $stickyToolbar = $params->get('stickyToolbar', '1');
 		$debug = JFactory::getConfig()->get('debug_lang');
 		if ((defined('JDEBUG') && JDEBUG) || $debug) : ?>
 		<!-- Load additional CSS styles for debug mode-->
-		<link rel="stylesheet" href="<?php echo JUri::root() ?>/media/cms/css/debug.css" type="text/css" />
+		<link rel="stylesheet" href="/media/cms/css/debug.css" type="text/css" />
 	<?php endif; ?>
 	<?php
 	// If Right-to-Left
 	if ($this->direction == 'rtl')
 	{
 	?>
-		<link rel="stylesheet" href="<?php echo JUri::root() ?>/media/jui/css/bootstrap-rtl.css" type="text/css" />
+		<link rel="stylesheet" href="/media/jui/css/bootstrap-rtl.css" type="text/css" />
 	<?php
 	}
 	// Load specific language related CSS

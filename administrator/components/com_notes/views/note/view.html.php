@@ -74,7 +74,7 @@ class NotesViewNote extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_NOTE_PLEASE_COMPLETE_ALL_FIELDS'));
-    $document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js", 'text/javascript', true, false);
+    $document->addScript("/administrator/components/com_rental/js/submitbutton.js", 'text/javascript', true, false);
   }
 
 }

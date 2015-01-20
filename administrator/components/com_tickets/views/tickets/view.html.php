@@ -162,8 +162,8 @@ class TicketsViewTickets extends JViewLegacy
   protected function setDocument()
   {
     $document = JFactory::getDocument();
-    //$document->addScript(JURI::root() . "media/fc/js/jquery.placeholder.js", 'text/javascript', true, false);
-    $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
+    //$document->addScript("media/fc/js/jquery.placeholder.js", 'text/javascript', true, false);
+    $document->addScript("media/fc/js/general.js", 'text/javascript', true);
   }
 
 }

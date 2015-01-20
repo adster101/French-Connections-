@@ -70,11 +70,10 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
 
     JToolBarHelper::title($isNew ? JText::_('COM_SPECIALOFFER_OFFER_NEW') : JText::sprintf('COM_SPECIALOFFER_OFFER_EDIT', $this->item->id), 'helloworld');
 
-    $document->addScript(JURI::root() . "/media/fc/js/general.js", false, true);
-    $document->addScript(JURI::root() . "/media/fc/js/jquery-ui-1.8.23.custom.min.js", false, true);
-    $document->addScript(JURI::root() . "/media/fc/js/date-range.js", false, true);
-    $document->addScript(JURI::root() . "/media/fc/js/general.js", false, true);
-    $document->addStyleSheet(JURI::root() . "/media/fc/css/jquery-ui-1.8.23.custom.css");
+    $document->addScript("/media/fc/js/general.js", false, true);
+    $document->addScript("/media/fc/js/jquery-ui-1.8.23.custom.min.js", false, true);
+    $document->addScript("/media/fc/js/date-range.js", false, true);
+    $document->addStyleSheet("/media/fc/css/jquery-ui-1.8.23.custom.css");
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
   }

@@ -107,9 +107,8 @@ class RentalViewAvailability extends JViewLegacy
     $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
-    //$document->addScript(JURI::root() . "/administrator/components/com_rental/js/submitbutton.js");
-    $document->addScript(JURI::root() . "/administrator/components/com_rental/js/availability.js", false, true);
-    $document->addStyleSheet(JURI::root() . "media/fc/css/availability.css", 'text/css', "screen");
+    $document->addScript("/administrator/components/com_rental/js/availability.js", false, true);
+    $document->addStyleSheet("/media/fc/css/availability.css", 'text/css', "screen");
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_START_DATE');
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_END_DATE');
   }

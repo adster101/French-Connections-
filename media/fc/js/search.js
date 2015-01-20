@@ -32,10 +32,11 @@ jQuery(document).ready(function() {
       var option = action[0];
       
       var component = (option == 'forsale') ? 'com_realestatesearch' : 'com_fcsearch';
-     
+      var path = getPath();
+      
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
-        s_kwds: s_kwds        
+        s_kwds: path        
       },
       function(data) {
 

@@ -1,7 +1,15 @@
 jQuery(document).ready(function() {
 
+  
 
+  jQuery('.view-featured-fp-link').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'FP Homepage link click-through');
+  });
 
+  jQuery('.view-search-fp-link').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'FP Search link click-through');
+  });
+  
   // Check whether placeholder is supported or not.
   if (document.createElement("input").placeholder == undefined) {
     // Placeholder is not supported, so remove the attribute
@@ -14,7 +22,7 @@ jQuery(document).ready(function() {
       autoclose: true
     });
   }
-  
+
   try {
 
     var nowTemp = new Date();
@@ -153,9 +161,9 @@ jQuery(document).ready(function() {
   // Gives an alert if unsaved changes will be lost.
   jQuery('form.form-validate').change(function() {
     //window.onbeforeunload = function() {
-      //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
-  });
+    });
 
   try {
     // If the tinymce editor is loaded
@@ -356,7 +364,6 @@ Joomla.submitbutton = function(task)
 {
   if (task == '')
   {
-    alert("woot");
     return false;
   }
   else
@@ -381,6 +388,11 @@ Joomla.submitbutton = function(task)
     {
       // Unbind the onbeforeunload event
       window.onbeforeunload = null;
+      
+      if (action[0] == 'payment') {
+        jQuery('.payment-button').button('loading');
+      }
+      
       Joomla.submitform(task);
       return true;
     }

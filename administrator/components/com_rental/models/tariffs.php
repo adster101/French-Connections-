@@ -122,8 +122,10 @@ class RentalModelTariffs extends JModelAdmin
    * @param type $properties
    * @return boolean
    */
-  public function getTariffs($id = '', $properties = array())
+  public function getTariffs($id = '', $show_expired = true)
   {
+    
+    $date = JHtml::date('now', 'Y-m-d');
 
     $query = $this->_db->getQuery(true);
     $query->select("
@@ -136,6 +138,11 @@ class RentalModelTariffs extends JModelAdmin
     $query->where($this->_db->quoteName('unit_id') . ' = ' . $this->_db->quote($id));
 
     $this->_db->setQuery($query);
+
+    if (!$show_expired)
+    {
+      $query->where('end_date >= ' . $this->_db->quote($date));
+    }
 
     try
     {

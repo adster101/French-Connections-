@@ -14,15 +14,26 @@ jimport('joomla.application.component.modelform');
 /**
  * Methods supporting a list of Invoices records.
  */
-class TicketsModelTicket extends JModelAdmin {
+class TicketsModelTicket extends JModelAdmin
+{
 
-  public function getItem($pk = null) {
-    if ($item = parent::getItem($pk)) {
+  public function getItem($pk = null)
+  {
+    if ($item = parent::getItem($pk))
+    {
 
       // Decode any notes that have been saved against this issue
       $registry = new JRegistry;
       $registry->loadString($item->notes);
       $item->notes = $registry->toArray();
+      
+      // Get the tags
+      if (!empty($item->id))
+      {
+        $item->tags = new JHelperTags;
+        $item->tags->getTagIds($item->id, 'com_tickets.ticket');
+        $item->metadata['tags'] = $item->tags;
+      }
     }
 
     return $item;
@@ -37,7 +48,8 @@ class TicketsModelTicket extends JModelAdmin {
    * @return	JTable	A database object
    * @since	1.6
    */
-  public function getTable($type = 'Ticket', $prefix = 'TicketsTable', $config = array()) {
+  public function getTable($type = 'Ticket', $prefix = 'TicketsTable', $config = array())
+  {
     return JTable::getInstance($type, $prefix, $config);
   }
 
@@ -49,11 +61,13 @@ class TicketsModelTicket extends JModelAdmin {
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = true) {
+  public function getForm($data = array(), $loadData = true)
+  {
 
     // Get the form.
     $form = $this->loadForm('com_tickets.ticket', 'ticket', array('control' => 'jform', 'load_data' => $loadData));
-    if (empty($form)) {
+    if (empty($form))
+    {
       return false;
     }
     return $form;
@@ -65,18 +79,21 @@ class TicketsModelTicket extends JModelAdmin {
    * @return	mixed	The data for the form.
    * @since	1.6
    */
-  protected function loadFormData() {
+  protected function loadFormData()
+  {
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_tickets.edit.ticket.data', array());
 
-    if (empty($data)) {
+    if (empty($data))
+    {
       $data = $this->getItem();
     }
 
     return $data;
   }
 
-  public function save($data) {
+  public function save($data)
+  {
 
     $data['notes'] = array();
     $registry = new JRegistry;
@@ -90,28 +107,32 @@ class TicketsModelTicket extends JModelAdmin {
 
     // Set the updated data and time
     $data['date_updated'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
-    
-    if (isset($data['note']) && !empty($data['note']) || $data['state'] != $item->state) {
+
+    if (isset($data['note']) && !empty($data['note']) || $data['state'] != $item->state)
+    {
       // If we have an id and it's not empty
-      if (isset($data['id']) && !empty($data['id'])) {
+      if (isset($data['id']) && !empty($data['id']))
+      {
 
         // Decode any notes that have been saved against this issue
         $data['notes'] = $item->notes;
-        
-        if ($data['state'] != $item->state) {
+
+        if ($data['state'] != $item->state)
+        {
           $note['user'] = $user->get('name');
           $note['description'] = 'Status changed from ' . $states[$item->state] . ' to ' . $states[$data['state']];
           $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
           $data['notes'][] = $note;
         }
 
-        if (!empty($data['note'])) {
+        if (!empty($data['note']))
+        {
           $note['user'] = $user->get('name');
           $note['description'] = $data['note'];
           $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
           $data['notes'][] = $note;
         }
-        
+
         $registry->loadArray($data['notes']);
         $data['notes'] = (string) $registry;
       }

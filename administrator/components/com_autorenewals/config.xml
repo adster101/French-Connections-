@@ -148,6 +148,24 @@
       filter="safehtml"
     />     
   </fieldset>
+  <fieldset 
+    name="realestate"
+    description="Update the email settings for manual renewals"
+    label="Manual realestate renewal emails">
+    <field 
+      name="RENEWAL_REALESTATE_REMINDER_SUBJECT_30_DAYS"
+      type="text"
+      label="30 day reminder (subject)"
+      filter="string"
+      class="input-xxlarge"
+    />
+    <field 
+      name="RENEWAL_REALESTATE_REMINDER_DAYS_30" 
+      type="editor" default="default" 
+      label="30 day reminder (body)" 
+      filter="safehtml"
+    />
+    </fieldset>
 </config>
 <!--
 ########################################################################################

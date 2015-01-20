@@ -18,7 +18,6 @@ jimport('joomla.application.component.controller');
 
 // Define some global paths
 define('COM_IMAGE_BASE',	JPATH_ROOT.'/images/property');
-define('COM_IMAGE_BASEURL', JURI::root().'images/property');
 
 // Get an instance of the controller prefixed by HelloWorld
 $controller = JControllerLegacy::getInstance('RealEstate');

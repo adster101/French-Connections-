@@ -16,30 +16,9 @@ $published = $this->state->get('filter.published');
     <h3><?php echo JText::_('COM_TICKETS_BATCH_OPTIONS'); ?></h3>
   </div>
   <div class="modal-body">
-    <?php if ($published >= 0) : ?>
-      <div class="control-group">
-        <div class="controls">
-          <?php echo JHtml::_('batch.item', 'com_tickets'); ?>
-        </div>
-      </div>
-      <hr />
-
-    <?php endif; ?>
     <div class="control-group">
-      <div class="controlls">
-        <label>State</label>
-        <select>
-          <?php echo JHtml::_('select.options', TicketsHelper::getStateOptions(), 'value', 'text'); ?>
-        </select>
-      </div>
-    </div>
-    <hr />
-    <div class="control-group">
-      <div class="controlls">
-        <label>Severity</label>
-        <select>
-          <?php echo JHtml::_('select.options', TicketsHelper::getSeverities(), 'value', 'text'); ?>
-        </select>
+      <div class="controls">
+        <?php echo JHtml::_('batch.tag'); ?>
       </div>
     </div>
   </div>
@@ -50,7 +29,7 @@ $published = $this->state->get('filter.published');
         document.id('batch-tag-id)').value = ''" data-dismiss="modal">
               <?php echo JText::_('JCANCEL'); ?>
     </button>
-    <button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('ticket.batch');">
+    <button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('tickets.batch');">
       <?php echo JText::_('JGLOBAL_BATCH_PROCESS'); ?>
     </button>
   </div>

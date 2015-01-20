@@ -74,7 +74,7 @@ class EnquiriesViewEnquiry extends JViewLegacy {
 
 
 
-    $document->addScript(JURI::root() . "/administrator/components/com_enquiries/js/submitbutton.js", false, true);
+    $document->addScript("/administrator/components/com_enquiries/js/submitbutton.js", false, true);
   }
 
   /**

@@ -108,7 +108,7 @@ class RealestateViewListings extends JViewLegacy
   {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_REALESTATE_ADMINISTRATION'));
-    $document->addScript(JURI::root() . "media/fc/js/general.js", 'text/javascript', true);
+    $document->addScript("media/fc/js/general.js", 'text/javascript', true);
 
     JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
   }

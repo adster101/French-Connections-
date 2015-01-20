@@ -30,7 +30,6 @@ class RealEstateSearchControllerMapSearch extends JControllerLegacy {
    * 
    */
   public function markers($cachable = false, $urlparams = false) {
-    $return = array();
 
     // Require the component router
     require_once(JPATH_SITE . '/components/com_realestatesearch/router.php');
@@ -46,7 +45,11 @@ class RealEstateSearchControllerMapSearch extends JControllerLegacy {
 
     // Break it up into segments
     $segments = array_filter(explode('/', $filter_vars));
-
+    
+    // Need to remove the first element of the array as it will contain 'forsale'
+    // which is the alias used to route the normal http url
+    array_shift($segments);
+    
     // Get the vars for this request
     $vars = RealestateSearchParseRoute($segments);
 
