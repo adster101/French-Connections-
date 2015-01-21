@@ -52,7 +52,7 @@ if (!empty($this->item->languages_spoken))
     <?php echo $this->document->title; ?>
   </h1>
   <h3>          
-    <?php echo JText::sprintf('COM_REALESTATE_PROPERTY_SUB_TITLE', $this->item->city_title, $this->item->department, $min_prices['GBP'], $min_prices['EUR']); ?>
+    <?php echo JText::sprintf('COM_REALESTATE_PROPERTY_SUB_TITLE', $this->item->city_title, $this->item->department, number_format($min_prices['GBP']), number_format($min_prices['EUR'])); ?>
   </h3>
 </div>
 <div class = "navbar-property-navigator" data-spy = "affix" data-offset-top = "640" >
@@ -161,8 +161,8 @@ if (!empty($this->item->languages_spoken))
     <div class="well well-light-blue">
       <?php if ($this->item->price) : ?> 
         <p>
-          <strong class="lead">&pound;<?php echo $min_prices['GBP'] ?></strong>
-          (<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)
+          <strong class="lead">&pound;<?php echo number_format($min_prices['GBP']) ?></strong>
+          (<i>Approx:</i> &euro;<?php echo number_format($min_prices['EUR']); ?>)
         </p>             
       <?php else: ?>
         <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
