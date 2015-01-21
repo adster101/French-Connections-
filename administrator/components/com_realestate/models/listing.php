@@ -230,6 +230,7 @@ class RealEstateModelListing extends JModelList
         b.surname,
         b.phone_1,
         b.email_1,
+        CONCAT(d.firstname, \' \', d.surname) as account_name,
         d.vat_status,  
         (select count(*) from qitz3_realestate_property_images_library where version_id = b.id) as images
       ');
