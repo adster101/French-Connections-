@@ -94,14 +94,14 @@ class TicketsModelTicket extends JModelAdmin
 
   public function save($data)
   {
-
     $data['notes'] = array();
     $registry = new JRegistry;
     $note = array();
     $user = JFactory::getUser();
     $isNew = true;
-
-    $states = array('closed', 'open', 'testing', 'pending', NULL);
+    $params = JComponentHelper::getParams('com_tickets');
+    $states = array('closed', 'open', 'testing', 'pending', 'fixed', NULL);
+    $severities = array('Critical', 'High', 'Medium', 'Low', 'Minor', NULL);
 
     // Attempt to load the existing item
     // TO DO - Save notes into separate table then we can do away with this lookup
@@ -134,7 +134,7 @@ class TicketsModelTicket extends JModelAdmin
     if (($data['severity'] != $item->severity) && !$isNew)
     {
       $note['user'] = $user->get('name');
-      $note['description'] = 'Severity changed from ' . $states[$item->severity] . ' to ' . $states[$data['severity']];
+      $note['description'] = 'Severity changed from ' . $severities[$item->severity] . ' to ' . $severities[$data['severity']];
       $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
       $data['notes'][] = $note;
     }
@@ -155,14 +155,25 @@ class TicketsModelTicket extends JModelAdmin
       $data['notes'] = (string) $registry;
     }
 
+    $ret = parent::save($data);
 
-    if ($isNew)
+    if ($ret)
     {
-      // TO DO - Send notification email to user specified in params
-      // Email should include all ticket detail including notes...
+      if ($isNew)
+      {
+        // Get the email address of who to notify about this new ticket
+        $notify = $params->get('notify', '', 'string');
+        $from = JFactory::getApplication()->getCfg('mailfrom');
+        $from_name = JFactory::getApplication()->getCfg('sitename');
+        $subject = JText::sprintf('COM_TICKETS_NEW_TICKET_SUBJECT', $data['title']);
+        $body = JText::sprintf('COM_TICKETS_NEW_TICKET_BODY', $user->name, $data['description'], $severities[$data['severity']]);
+        // Email should include all ticket detail including notes...
+        JFactory::getMailer()->sendMail($from, $from_name, $notify, $subject, $body, true);
+      }
+      return $ret;
     }
 
-    return parent::save($data);
+    return $ret;
   }
 
 }

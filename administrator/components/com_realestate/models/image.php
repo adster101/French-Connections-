@@ -255,7 +255,7 @@ class RealEstateModelImage extends JModelAdmin
    *
    */
 
-  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 550, $max_height = 375)
+  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 768, $max_height = 586)
   {
 
     if (empty($image))

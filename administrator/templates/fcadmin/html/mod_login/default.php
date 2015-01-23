@@ -13,6 +13,8 @@ JHtml::_('bootstrap.tooltip');
 // Register the global SearchHelper class
 JLoader::register('SearchHelper', JPATH_LIBRARIES . '/frenchconnections/helpers/search.php');
 $Itemid = SearchHelper::getItemid(array('component','com_registerowner'));
+$non_ssl_url = JUri::getInstance();
+$non_ssl_url->setScheme('http');
 
 ?>
 
@@ -55,7 +57,7 @@ $Itemid = SearchHelper::getItemid(array('component','com_registerowner'));
       </div>
     </div>
     <p>   
-      <a href="<?php echo JRoute::_('/advertise/register?view=resetpassword'); ?>">
+      <a href="<?php echo JRoute::_($non_ssl_url->toString(array('scheme','host')) . '/advertise/register?view=resetpassword'); ?>">
         <strong>
           <span class='glyphicon glyphicon-info-sign'></span>
           &nbsp;Forgot you password?
@@ -63,7 +65,7 @@ $Itemid = SearchHelper::getItemid(array('component','com_registerowner'));
       </a>
     </p>
     <p>
-      <a href="/advertise/register">
+      <a href="<?php echo JRoute::_($non_ssl_url->toString(array('scheme','host')) . '/advertise/register'); ?>">
         <strong>
           <span class='glyphicon glyphicon-hand-right'></span>
           &nbsp;Don't have an account? Sign up.

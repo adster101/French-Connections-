@@ -17,7 +17,17 @@
       label="JCONFIG_PERMISSIONS_LABEL"
       section="component" />
   </fieldset>
-
+  <fieldset 
+    name="basic"
+    label="Basic">
+    <field 
+      name="notify"
+      type="text"
+      class="inputbox"
+      filter="string"
+      label="Notify new"
+      description="Email address(s) to send a notification for new tickets" />
+  </fieldset>
 </config>
 <!--
 ########################################################################################
@@ -92,4 +102,4 @@ http://docs.joomla.org/Usergroup_parameter_type
 <field name="myusergroups" type="usergroup" default="" label="Select a user group" description="" />
 
 
- -->
+-->
