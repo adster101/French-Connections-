@@ -44,6 +44,7 @@ JLoader::register('PropertyHelper', JPATH_LIBRARIES . '/frenchconnections/helper
  */
 class RealestateRenewals extends JApplicationCli
 {
+
   /**
    * Entry point for the script
    *
@@ -61,7 +62,6 @@ class RealestateRenewals extends JApplicationCli
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    
     // Process the manual renewals
     $this->_manualrenewals($debug, $renewal_templates);
   }
@@ -104,8 +104,7 @@ class RealestateRenewals extends JApplicationCli
 
       $send_email = true;
 
-      SWITCH (true)
-      {
+      SWITCH (true) {
         case ($v->days < 0):
           $body = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $listing[0]->account_name);
           $subject = JText::sprintf($renewal_templates->get('RENEWAL_REMINDER_SUBJECT_EXPIRED'), $v->id);
@@ -124,6 +123,8 @@ class RealestateRenewals extends JApplicationCli
         // Assemble the email data...
         $mail = JFactory::getMailer()
                 ->setSender('accounts@frenchconnections.co.uk')
+                ->addBCC('adamrifat@frenchconnections.co.uk')
+                ->addBCC('accounts@frenchconnections.co.uk')
                 ->addRecipient($recipient)
                 ->setSubject($subject)
                 ->setBody($body)
@@ -183,7 +184,7 @@ class RealestateRenewals extends JApplicationCli
     $users_to_ignore = array();
     $users_to_ignore[] = JUser::getInstance('allezfrancais')->id;
     $users_to_ignore[] = JUser::getInstance('frueda@realestatelanguedoc.com')->id;
-    
+
     $db = JFactory::getDBO();
     /**
      * Get the date now
@@ -205,14 +206,16 @@ class RealestateRenewals extends JApplicationCli
     $query->from('#__realestate_property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,30)');
-    $query->where('a.created_by not in (' . implode(',',$users_to_ignore) . ')');
-    
+    $query->where('a.created_by not in (' . implode(',', $users_to_ignore) . ')');
+
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->out('Problem getting props...');
       return false;
     }
