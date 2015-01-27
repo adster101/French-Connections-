@@ -211,6 +211,9 @@ class RentalModelListings extends JModelList
 
       // Exclude unpublished properties.......
       $query->where('a.expiry_date IS NOT NULL');
+      
+      // Exclude properties where a non-renewal reason has been given
+      $query->where ('a.renewalreason = ""');
 
       // We need to pull in additional information for this report, yippee!!
       $query->select('(select count(*) from ' . $db->quoteName('#__enquiries', 'enq') . ' where property_id = a.id and enq.date_created >= SUBDATE(a.expiry_date, INTERVAL 1 YEAR)) as enquiries');

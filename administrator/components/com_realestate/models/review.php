@@ -63,14 +63,14 @@ class RealestateModelReview extends JModelAdmin
     $user = JFactory::getUser($userId);
 
     $uri = JUri::getInstance();
+    $uri->setScheme('http');
     $domain = $uri->toString(array('scheme', 'host'));
     
-    $url = '/listing-forsale/' . $recordId;
-
+    $url = $domain . '/listing-forsale/' . $recordId;
 
     if (empty($table->expiry_date))
     {
-      $data['body'] = JText::sprintf('COM_REALESTATE_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $domain, $recordId, $domain, $recordId);
+      $data['body'] = JText::sprintf('COM_REALESTATE_REVIEW_GOING_LIVE_LETTER', $user->name, $recordId, $url, $url);
       $data['subject'] = JText::sprintf('COM_RENTAL_REVIEW_CHANGES_GOING_LIVE_EMAIL_SUBJECT', $user->name, $recordId);
     }
     else if ($layout == 'reject')

@@ -92,21 +92,21 @@ class RealEstateViewImages extends JViewLegacy
     JHtml::_('bootstrap.framework');
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->property->title, $this->property->realestate_property_id));
-    $document->addScript("media/fc/js/libs/blueimp/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/tmpl.min.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/load-image.min.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/canvas-to-blob.min.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/jquery.iframe-transport.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/jquery.fileupload.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/jquery.fileupload-process.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/jquery.fileupload-image.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/jquery.fileupload-validate.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/libs/blueimp/jquery.fileupload-ui.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/main.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/vendor/jquery.ui.widget.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/tmpl.min.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/load-image.min.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/canvas-to-blob.min.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/jquery.iframe-transport.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/jquery.fileupload.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/jquery.fileupload-process.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/jquery.fileupload-image.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/jquery.fileupload-validate.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/libs/blueimp/jquery.fileupload-ui.js", 'text/javascript', true, false);
+    $document->addScript("/media/fc/js/main.js", 'text/javascript', true, false);
     // TO DO - Move this to media folder and add to grunt to concat 
-    $document->addStyleSheet("media/fc/css/jquery.fileupload.css", 'text/css', "screen");
-    $document->addStyleSheet("media/fc/css/jquery.fileupload-ui.css", 'text/css', "screen");
-    $document->addStyleSheet("media/fc/css/helloworld.css", 'text/css', "screen");
+    $document->addStyleSheet("/media/fc/css/jquery.fileupload.css", 'text/css', "screen");
+    $document->addStyleSheet("/media/fc/css/jquery.fileupload-ui.css", 'text/css', "screen");
+    $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

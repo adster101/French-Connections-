@@ -60,7 +60,21 @@
       message="COM_REVIEW_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
-
+   <field
+      name="rating"
+      type="integer"
+      first="1"
+      last="5"
+      step="1"
+      label="COM_REVIEW_RATING_LABEL"
+      description="COM_REVIEW_RATING_DESC"
+      class="form-control"
+      labelclass="control-label"
+      filter="int"
+      required="true"
+      default="">
+      <option value="">JSELECT</option>
+    </field>
     <field
       name="id"
       type="hidden"

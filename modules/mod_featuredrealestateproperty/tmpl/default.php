@@ -12,6 +12,9 @@ $lang = $app->input->get('lang', 'en');
 // Register the Special Offers helper file
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_realestate'));
 $Itemid_search = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
+
+JText::plural($string, $n);
+
 ?>
 
 <div class="row">
