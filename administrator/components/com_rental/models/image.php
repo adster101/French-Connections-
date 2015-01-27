@@ -189,7 +189,7 @@ class RentalModelImage extends JModelAdmin
 
     // Image has been uploaded, let's create some image profiles...
     // TO DO - Put the image dimensions in as params against the component
-    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'gallery', 578, 435);
+    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'gallery');
     $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumbs', 100, 100);
     $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumb', 210, 120);
 
