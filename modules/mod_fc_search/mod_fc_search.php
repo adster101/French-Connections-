@@ -21,9 +21,6 @@ $lang->load('com_fcsearch', JPATH_SITE, null, false, true);
 
 $app = JFactory::getApplication();
 
-$regions = &modFcSearchHelper::getSearchRegions();
-$popular = &modFcSearchHelper::getPopularSearches();
-
 require JModuleHelper::getLayoutPath('mod_fc_search', $params->get('layout', 'default'));
 
 $document = JFactory::getDocument();

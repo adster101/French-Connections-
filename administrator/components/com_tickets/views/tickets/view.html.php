@@ -95,7 +95,7 @@ class TicketsViewTickets extends JViewLegacy
       if (isset($this->items[0]->state))
       {
         JToolBarHelper::divider();
-        JToolBarHelper::archiveList('tickets.archive', 'JTOOLBAR_ARCHIVE');
+        JToolBarHelper::custom('tickets.archive', 'pending','pending', 'COM_TICKETS_MARK_AS_TESTING',true);
       }
 
       if (isset($this->items[0]->checked_out))
@@ -145,6 +145,7 @@ class TicketsViewTickets extends JViewLegacy
     JHtmlSidebar::addFilter(
             JText::_('JOPTION_SELECT_PUBLISHED'), 'filter_published', JHtml::_('select.options', TicketsHelper::getStateOptions(), 'value', 'text', $this->state->get('filter.state'), true)
     );
+    
     JHtmlSidebar::addFilter(
             JText::_('COM_TICKETS_AREA'), 'filter_area', JHtml::_('select.options', JHtml::_('category.options', 'com_tickets'), 'value', 'text', $this->state->get('filter.area'), true)
     );

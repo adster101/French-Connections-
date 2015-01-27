@@ -71,7 +71,6 @@
       labelclass="control-label"
       class="input-xlarge validate-description"
       default=""
-      hint="Enter any additional costs that aren't included in the advertised tariffs. For example, linen or heating costs."
       filter="JComponentHelper::filterText"
       buttons="false"
       validate="additionalpricenotes"

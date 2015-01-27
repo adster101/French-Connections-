@@ -60,9 +60,6 @@ class RentalImages extends JApplicationCli
 
     foreach ($images as $image)
     {
-      $baseDir[] = COM_IMAGE_BASE . $image->unit_id . '/gallery/';
-      $baseDir[] = COM_IMAGE_BASE . $image->unit_id . '/thumbs/';
-      $baseDir[] = COM_IMAGE_BASE . $image->unit_id . '/thumb/';
 
       // The source path for the image being processed
       $image_path = $src . '/' . $image->image_file_name;
@@ -70,17 +67,27 @@ class RentalImages extends JApplicationCli
       // Image has been uploaded, let's create some image profiles...
       try
       {
-        $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'gallery', 578, 435);
-        $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'thumbs', 100, 100);
-        $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'thumb', 210, 120);
+
+        // Fudge to collect up images uploaded since re-launch
+        if (!file_exists($image_path))
+        {
+          // These images must have been uploaded since re-launch...
+          $image_path = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/' . $image->image_file_name;
+          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'gallery');
+        }
+        else
+        {
+          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'gallery');
+          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'thumbs', 100, 100);
+          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'thumb', 210, 120);
+        }
       }
       catch (Exception $e)
       {
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
-      
-      $this->out('Done image...' . $image->image_file_name);
 
+      $this->out('Done image...' . $image->image_file_name);
     }
   }
 
@@ -103,8 +110,6 @@ class RentalImages extends JApplicationCli
 
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->where('b.id is not null');
-    $query->where('a.property_id = 5374');
-
     $db->setQuery($query);
 
     try

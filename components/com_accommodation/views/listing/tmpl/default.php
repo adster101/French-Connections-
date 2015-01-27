@@ -544,6 +544,10 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                 endif;
                 ?>
                 <?php
+                if ($this->item->childrens_beds) : echo JText::sprintf('COM_ACCOMMODATION_SITE_CHILDRENS_BEDS', $this->item->childrens_beds);
+                endif;
+                ?>
+                <?php
                 if ($this->item->cots) : echo JText::sprintf('COM_ACCOMMODATION_SITE_COTS', $this->item->cots);
                 endif;
                 ?>

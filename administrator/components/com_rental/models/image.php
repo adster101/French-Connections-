@@ -189,7 +189,7 @@ class RentalModelImage extends JModelAdmin
 
     // Image has been uploaded, let's create some image profiles...
     // TO DO - Put the image dimensions in as params against the component
-    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'gallery', 578, 435);
+    $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'gallery');
     $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumbs', 100, 100);
     $this->generateImageProfile($data['filepath'], (int) $data['unit_id'], $data['image_file_name'], 'thumb', 210, 120);
 
@@ -277,7 +277,7 @@ class RentalModelImage extends JModelAdmin
    *
    */
 
-  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 550, $max_height = 375)
+  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 780, $max_height = 586)
   {
 
     if (empty($image))
@@ -300,6 +300,7 @@ class RentalModelImage extends JModelAdmin
 
     // Create a folder for the profile, if it doesn't exist
     $dir = COM_IMAGE_BASE . '/' . $property_id . '/' . $profile;
+
     if (!file_exists($dir))
     {
       jimport('joomla.filesystem.folder');
@@ -307,117 +308,115 @@ class RentalModelImage extends JModelAdmin
     }
 
     $file_path = COM_IMAGE_BASE . '/' . $property_id . '/' . $profile . '/' . $image_file_name;
-    if (!file_exists($file_path))
+
+    try
     {
-      try
+
+      $width = $imgObj->getWidth();
+      $height = $imgObj->getHeight();
+
+      // If the width is greater than the height just create it
+      if (($width > $height) && $width > $max_width)
       {
 
-        $width = $imgObj->getWidth();
-        $height = $imgObj->getHeight();
+        // This image is roughly landscape orientated with a width greater than max width allowed
+        $profile = $imgObj->resize($max_width, $max_height, true, 3);
 
-        // If the width is greater than the height just create it
-        if (($width > $height) && $width > $max_width)
+        // Check the aspect ratio. I.e. we want to retain a 4:3 aspect ratio
+        if ($profile->getHeight() > $max_height)
         {
 
-          // This image is roughly landscape orientated with a width greater than max width allowed
-          $profile = $imgObj->resize($max_width, $max_height, true, 3);
+          // Crop out the extra height
+          $profile = $profile->crop($max_width, $max_height, 0, ($profile->getHeight() - $max_height) / 2, false);
+        }
+        else if ($profile->getWidth() > $max_width)
+        {
 
-          // Check the aspect ratio. I.e. we want to retain a 4:3 aspect ratio
-          if ($profile->getHeight() > $max_height)
-          {
+          // Crop out the extra width
+          $profile = $profile->crop($max_width, $max_height, ($profile->getWidth() - $max_width) / 2, 0, false);
+        }
 
-            // Crop out the extra height
-            $profile = $profile->crop($max_width, $max_height, 0, ($profile->getHeight() - $max_height) / 2, false);
-          }
-          else if ($profile->getWidth() > $max_width)
-          {
+        // Put it out to a file
+        $profile->tofile($file_path);
 
-            // Crop out the extra width
-            $profile = $profile->crop($max_width, $max_height, ($profile->getWidth() - $max_width) / 2, 0, false);
-          }
+        // Load the existing image
+        $existing_image = imagecreatefromjpeg($file_path);
 
-          // Put it out to a file
+        // Make it progressive
+        $bit = imageinterlace($existing_image, 1);
+
+        // Save it out
+        imagejpeg($existing_image, $file_path,100);
+
+        // Free up memory
+        imagedestroy($existing_image);
+      }
+      else if ($width < $height)
+      {
+
+        // This image is roughly portrait orientated with a width greater than the max width allowed
+        $profile = $imgObj->resize($max_width, $max_height, false, 2);
+
+        // Check the resultant width
+        if ($profile->getWidth() < $max_width)
+        {
+
+          $blank_image = $this->createBlankImage($max_width, $max_height);
+
+          // Write out the gallery file
           $profile->tofile($file_path);
 
           // Load the existing image
           $existing_image = imagecreatefromjpeg($file_path);
 
-          // Make it progressive
-          $bit = imageinterlace($existing_image, 1);
-
-          // Save it out
-          imagejpeg($existing_image, $file_path);
-
-          // Free up memory
-          imagedestroy($existing_image);
-        }
-        else if ($width < $height)
-        {
-
-          // This image is roughly portrait orientated with a width greater than the max width allowed
-          $profile = $imgObj->resize($max_width, $max_height, false, 2);
-
-          // Check the resultant width
-          if ($profile->getWidth() < $max_width)
-          {
-
-            $blank_image = $this->createBlankImage($max_width, $max_height);
-
-            // Write out the gallery file
-            $profile->tofile($file_path);
-
-            // Load the existing image
-            $existing_image = imagecreatefromjpeg($file_path);
-
-            // Copy the existing image into the new one
-            imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
-
-            // Make it progressive
-            imageinterlace($blank_image, 1);
-
-            // Save it out
-            imagejpeg($blank_image, $file_path);
-
-            // Free up memory
-            imagedestroy($existing_image);
-          }
-          else
-          {
-
-            // Width is okay, just write it out
-            $profile->tofile($file_path);
-          }
-        }
-        else if ((($width > $height) && $width < $max_width) || (($width < $height) && $height < $max_height))
-        {
-
-          // This image is landscape orientated with a width less than 500px
-          // Create a blank image
-          $blank_image = $this->createBlankImage($max_width, $max_height);
-
-          // Write out the gallery file, unprocessed
-          $imgObj->tofile($file_path);
-
-          // Load the existing image
-          $existing_image = imagecreatefromjpeg($file_path);
-
           // Copy the existing image into the new one
-          imagecopy($blank_image, $existing_image, ($max_width - $imgObj->getWidth()) / 2, ($max_height - $imgObj->getHeight()) / 2, 0, 0, $imgObj->getWidth(), $imgObj->getHeight());
-          
+          imagecopy($blank_image, $existing_image, ($max_width - $profile->getWidth()) / 2, ($max_height - $profile->getHeight()) / 2, 0, 0, $profile->getWidth(), $profile->getHeight());
+
           // Make it progressive
           imageinterlace($blank_image, 1);
-          
+
           // Save it out
-          imagejpeg($blank_image, $file_path);
+          imagejpeg($blank_image, $file_path,100);
 
           // Free up memory
           imagedestroy($existing_image);
         }
+        else
+        {
+
+          // Width is okay, just write it out
+          $profile->tofile($file_path);
+        }
       }
-      catch (Exception $e)
+      else if ((($width > $height) && $width < $max_width) || (($width < $height) && $height < $max_height))
       {
-        
+
+        // This image is landscape orientated with a width less than 500px
+        // Create a blank image
+        $blank_image = $this->createBlankImage($max_width, $max_height);
+
+        // Write out the gallery file, unprocessed
+        $imgObj->tofile($file_path);
+
+        // Load the existing image
+        $existing_image = imagecreatefromjpeg($file_path);
+
+        // Copy the existing image into the new one
+        imagecopy($blank_image, $existing_image, ($max_width - $imgObj->getWidth()) / 2, ($max_height - $imgObj->getHeight()) / 2, 0, 0, $imgObj->getWidth(), $imgObj->getHeight());
+
+        // Make it progressive
+        imageinterlace($blank_image, 1);
+
+        // Save it out
+        imagejpeg($blank_image, $file_path,100);
+
+        // Free up memory
+        imagedestroy($existing_image);
       }
+    }
+    catch (Exception $e)
+    {
+      
     }
   }
 

@@ -186,7 +186,7 @@ class RealEstateModelImage extends JModelAdmin
 
     // Image has been uploaded, let's create some image profiles...
     // TO DO - Put the image dimensions in as params against the component
-    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'gallery', 578, 435);
+    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'gallery');
     $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumbs', 100, 100);
     $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumb', 210, 120);
 
@@ -255,7 +255,7 @@ class RealEstateModelImage extends JModelAdmin
    *
    */
 
-  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 550, $max_height = 375)
+  public function generateImageProfile($image = '', $property_id = '', $image_file_name = '', $profile = '', $max_width = 768, $max_height = 586)
   {
 
     if (empty($image))
@@ -324,7 +324,7 @@ class RealEstateModelImage extends JModelAdmin
           $bit = imageinterlace($existing_image, 1);
 
           // Save it out
-          imagejpeg($existing_image, $file_path);
+          imagejpeg($existing_image, $file_path,100);
 
           // Free up memory
           imagedestroy($existing_image);
@@ -386,7 +386,7 @@ class RealEstateModelImage extends JModelAdmin
           imageinterlace($blank_image, 1);
 
           // Save it out
-          imagejpeg($blank_image, $file_path);
+          imagejpeg($blank_image, $file_path,100);
 
           // Free up memory
           imagedestroy($blank_image);

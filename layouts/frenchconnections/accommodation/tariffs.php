@@ -25,7 +25,7 @@ $tariffs_based_on = $displayData->tariffs_based_on;
       <?php echo htmlspecialchars(JFactory::getDate($tariff->end_date)->calendar('d F Y')); ?>
     </td> 
     <td>
-      <?php if ($this->item->base_currency == 'GBP') : ?>
+      <?php if ($base_currency == 'GBP') : ?>
         &pound;<?php echo $prices['GBP'] . '&nbsp;' . htmlspecialchars($tariffs_based_on); ?>  
         <br /> <span class="muted">(<i>Approximately:</i> &euro;<?php echo $prices['EUR']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>
       <?php else: ?>

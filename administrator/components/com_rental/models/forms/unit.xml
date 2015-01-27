@@ -213,21 +213,7 @@
       filter="int">
       <option value="">JSELECT</option>
     </field> 
-    <field
-      name="ensuite"
-      type="integer"
-      first="0"
-      last="10"
-      step="1"
-      label="COM_RENTAL_RENTAL_FIELD_ENSUITE_LABEL"
-      description="COM_RENTAL_RENTAL_FIELD_ENSUITE_DESC"
-      class="bedrooms-select input-small"
-      validate="bathrooms"
-      labelclass="control-label"
-      required="true"
-      filter="int">
-      <option value="">JSELECT</option>
-    </field>  
+   
     <field
       name="toilets"
       type="integer"

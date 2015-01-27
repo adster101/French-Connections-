@@ -26,7 +26,7 @@ class TicketsModelTicket extends JModelAdmin
       $registry = new JRegistry;
       $registry->loadString($item->notes);
       $item->notes = $registry->toArray();
-      
+
       // Get the tags
       if (!empty($item->id))
       {
@@ -94,51 +94,86 @@ class TicketsModelTicket extends JModelAdmin
 
   public function save($data)
   {
-
     $data['notes'] = array();
     $registry = new JRegistry;
     $note = array();
     $user = JFactory::getUser();
-
-    $states = array('closed', 'open', 'testing', 'pending');
+    $isNew = true;
+    $params = JComponentHelper::getParams('com_tickets');
+    $states = array('closed', 'open', 'testing', 'pending', 'fixed', NULL);
+    $severities = array('Critical', 'High', 'Medium', 'Low', 'Minor', NULL);
 
     // Attempt to load the existing item
+    // TO DO - Save notes into separate table then we can do away with this lookup
+    // as any note will need saving
+
     $item = $this->getItem($data['id']);
+
+    if ($item->id)
+    {
+      $isNew = false;
+
+      // Decode any notes that have been saved against this issue
+      $data['notes'] = $item->notes;
+    }
 
     // Set the updated data and time
     $data['date_updated'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
 
-    if (isset($data['note']) && !empty($data['note']) || $data['state'] != $item->state)
+    // TO DO - Wrap the below into a language string or helper function
+    // If the incoming state is different to the current state
+    if (($data['state'] != $item->state) && !$isNew)
     {
-      // If we have an id and it's not empty
-      if (isset($data['id']) && !empty($data['id']))
-      {
-
-        // Decode any notes that have been saved against this issue
-        $data['notes'] = $item->notes;
-
-        if ($data['state'] != $item->state)
-        {
-          $note['user'] = $user->get('name');
-          $note['description'] = 'Status changed from ' . $states[$item->state] . ' to ' . $states[$data['state']];
-          $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
-          $data['notes'][] = $note;
-        }
-
-        if (!empty($data['note']))
-        {
-          $note['user'] = $user->get('name');
-          $note['description'] = $data['note'];
-          $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
-          $data['notes'][] = $note;
-        }
-
-        $registry->loadArray($data['notes']);
-        $data['notes'] = (string) $registry;
-      }
+      $note['user'] = $user->get('name');
+      $note['description'] = 'Status changed from ' . $states[$item->state] . ' to ' . $states[$data['state']];
+      $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
+      $data['notes'][] = $note;
     }
 
-    return parent::save($data);
+    // Check whether the severity has been changed
+    if (($data['severity'] != $item->severity) && !$isNew)
+    {
+      $note['user'] = $user->get('name');
+      $note['description'] = 'Severity changed from ' . $severities[$item->severity] . ' to ' . $severities[$data['severity']];
+      $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
+      $data['notes'][] = $note;
+    }
+
+    // Add the new note to the notes array
+    if (!empty($data['note']))
+    {
+      $note['user'] = $user->get('name');
+      $note['description'] = $data['note'];
+      $note['date'] = JFactory::getDate()->calendar('d-m-Y H:i:s');
+      $data['notes'][] = $note;
+    }
+
+    //
+    if (!empty($data['notes']))
+    {
+      $registry->loadArray($data['notes']);
+      $data['notes'] = (string) $registry;
+    }
+
+    $ret = parent::save($data);
+
+    if ($ret)
+    {
+      if ($isNew)
+      {
+        // Get the email address of who to notify about this new ticket
+        $notify = $params->get('notify', '', 'string');
+        $from = JFactory::getApplication()->getCfg('mailfrom');
+        $from_name = JFactory::getApplication()->getCfg('sitename');
+        $subject = JText::sprintf('COM_TICKETS_NEW_TICKET_SUBJECT', $data['title']);
+        $body = JText::sprintf('COM_TICKETS_NEW_TICKET_BODY', $user->name, $data['description'], $severities[$data['severity']]);
+        // Email should include all ticket detail including notes...
+        JFactory::getMailer()->sendMail($from, $from_name, $notify, $subject, $body, true);
+      }
+      return $ret;
+    }
+
+    return $ret;
   }
 
 }

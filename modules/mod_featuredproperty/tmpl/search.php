@@ -50,8 +50,8 @@ $view = $app->input->get('view','','string');
               </a>
             </p>     
       </div>
-  <?php endif; ?>
-<?php endforeach; ?>
+    <?php endif; ?>
+  <?php endforeach; ?>
 </div>
 
 

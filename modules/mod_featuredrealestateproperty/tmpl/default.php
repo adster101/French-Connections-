@@ -38,7 +38,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_realestatesearc
         <p>
           <?php if (!empty($item->price)) : ?> 
           <p class="">
-            <?php echo JText::sprintf('MOD_FEATURED_REALESTATE_PROPERTY_DETAIL', $prices['GBP'], $item->bedrooms, $item->bathrooms) ?>
+            <?php echo JText::sprintf('MOD_FEATURED_REALESTATE_PROPERTY_DETAIL', number_format($prices['GBP']), $item->bedrooms, $item->bathrooms) ?>
             <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
               <?php echo JHTml::_('string.truncate', $item->title, 25, true, false); ?>&nbsp;&raquo;
             </a>
