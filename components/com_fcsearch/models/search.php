@@ -286,7 +286,7 @@ class FcSearchModelSearch extends JModelList
         j.title as location_title,
         (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
         (select count(unit_id) from qitz3_reviews where unit_id = d.unit_id ) as reviews,
-        (select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) as offer,
+        (select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id order by k.id desc limit 0,1) as offer,
         h.title as accommodation_type,
         g.title as property_type,
         i.title as tariff_based_on,
@@ -449,7 +449,7 @@ class FcSearchModelSearch extends JModelList
 
       if ($this->getState('list.offers', ''))
       {
-        $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
+        $this->getFilterOffers($query, $db);
       }
 
       if ($this->getState('list.lwl', ''))
@@ -637,7 +637,7 @@ class FcSearchModelSearch extends JModelList
 
       if ($this->getState('list.offers', ''))
       {
-        $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
+        $this->getFilterOffers($query, $db);
       }
 
       if ($this->getState('list.lwl', ''))
@@ -799,7 +799,7 @@ class FcSearchModelSearch extends JModelList
 
     if ($this->getState('list.offers', ''))
     {
-      $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
+        $this->getFilterOffers($query, $db);
     }
 
     if ($this->getState('list.lwl', ''))
@@ -956,7 +956,7 @@ class FcSearchModelSearch extends JModelList
 
       if ($this->getState('list.offers', ''))
       {
-        $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id) is not null');
+        $this->getFilterOffers($query, $db);
       }
 
       if ($this->getState('list.lwl', ''))
@@ -1376,7 +1376,7 @@ class FcSearchModelSearch extends JModelList
     if ($departure)
     {
       // Take one day of departure date to ensure we check a 7 day period rather than an eight day period
-      $query->where('arr.end_date >= ' . $query->dateAdd($departure,'-1','DAY'));
+      $query->where('arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY'));
     }
 
     /*
@@ -1409,6 +1409,14 @@ class FcSearchModelSearch extends JModelList
     $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . (int) $bedrooms);
 
     return $query;
+  }
+  
+  private function getFilterOffers(JDatabaseQueryMysqli $query, $db = '')
+  {
+    $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id limit 0,1) is not null');
+
+    return $query;
+    
   }
 
   /**
