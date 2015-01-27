@@ -51,7 +51,7 @@ class TicketsModelTickets extends JModelList {
 
 
     // List state information.
-    parent::populateState('a.id', 'asc');
+    parent::populateState('a.id', 'desc');
   }
 
   /**
