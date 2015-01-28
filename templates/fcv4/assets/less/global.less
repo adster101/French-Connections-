@@ -34,6 +34,30 @@ Contains styles that apply at the global level, or can be applied to any section
 }
 
 
+  // Offer 'ribbon'  
+  span.offer
+    {
+      position: absolute;
+      top:2%;
+      padding: 3px 0px 5px 9px;
+      margin-left: -14px;
+      color: #fff;
+      background-color: fade(#cd3e3f, 60%);
+      #gradient > .vertical(lighten(#cd3e3f, 5% ),#cd3e3f);
+      font-weight:600;
+    } 
+
+    span.offer:after
+    {
+      content: ' ';
+      position: absolute;
+      height: 0;
+      left: 0px;
+      top: 100%;
+      border-width: 7px 7px;
+      border-style: solid;
+      border-color: #7b6c50 #7b6c50 transparent transparent;
+    }
 
 
 

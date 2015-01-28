@@ -123,8 +123,7 @@ $uri->setQuery('');
                     <span class="icon-bar"></span>
                   </a>
                 <?php endif; ?>
-
-                <a class="brand" href="<?php echo $this->baseurl; ?>">
+                <a class="brand" href="<?php echo $this->baseurl . '/' ?>">
                   <img src="<?php echo $logo; ?>" /><br />
                   <span>Home</span>
                 </a>

@@ -14,28 +14,6 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 ?>
-<script>
-  jQuery('#fp-carousel').carousel({
-    interval: 4000
-  });
-  jQuery('.carousel .item').each(function() {
-    var next = jQuery(this).next();
-    if (!next.length) {
-      next = jQuery(this).siblings(':first');
-    }
-    next.children(':first-child').clone().appendTo(jQuery(this));
-
-    for (var i = 0; i < 6; i++) {
-      next = next.next();
-      if (!next.length) {
-        next = jQuery(this).siblings(':first');
-      }
-
-      next.children(':first-child').clone().appendTo(jQuery(this));
-    }
-  });
-</script>
-
 <div class="row">
   <div class="carousel slide hidden-xs" id="fp-carousel" data-ride="carousel">
     <div class="carousel-inner">   
@@ -55,8 +33,8 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
               <p>
                 <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
                   <?php if (!empty($item->offer)) : ?>
-                    <span class="offer">
-                      <?php echo htmlspecialchars($item->offer); ?>
+                    <span class="offer small" data-toggle="tooltip" title="<?php echo htmlspecialchars($item->offer) ?>">
+                      <?php echo JHtml::_('string.truncate', htmlspecialchars($item->offer), 35, true, false); ?>
                     </span>
                   <?php endif; ?>
                   <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="fp-media-object img-responsive" />
