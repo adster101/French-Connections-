@@ -36,6 +36,7 @@ JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/
 
 // Register the global PropertyHelper class
 JLoader::register('PropertyHelper', JPATH_LIBRARIES . '/frenchconnections/helpers/property.php');
+
 /**
  * Cron job to trash expired cache data
  *
@@ -70,17 +71,18 @@ class Renewals extends JApplicationCli
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    // Process the manual renewals
-    $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
     // Process the auto renewals
     $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
+
+    // Process the manual renewals
+    $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
   }
 
   private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates)
   {
 
     $app = JFactory::getApplication();
-    
+
     // Array for holding a list of the contact notes
     $notes = array();
 
@@ -285,7 +287,7 @@ class Renewals extends JApplicationCli
             $total = $payment_model->getOrderTotal($payment_summary);
 
             $payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
-            
+
             // Generate billing details
             $billing_name = $v->BillingFirstnames . ' ' . $v->BillingSurname;
             $transaction_number = $v->VendorTxCode;

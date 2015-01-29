@@ -17,6 +17,9 @@ $params = $this->item->params;
 if ($urls && (!empty($urls->urla) || !empty($urls->urlb) || !empty($urls->urlc))) :
 ?>
 <div class="content-links">
+  <h4 class="page-header">
+    <?php echo JText::_('FC_CONTENT_USEFUL_LINKS'); ?>
+  </h4>
 	<ul class="list list-unstyled">
 		<?php
 			$urlarray = array(
@@ -74,6 +77,6 @@ if ($urls && (!empty($urls->urla) || !empty($urls->urlb) || !empty($urls->urlc))
 				?>
 				</li>
 		<?php endforeach; ?>
-	</ul>
+	</ul> 
 </div>
 <?php endif; ?>

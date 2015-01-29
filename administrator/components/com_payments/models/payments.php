@@ -115,8 +115,7 @@ class PaymentsModelPayments extends JModelList {
 
     $query->leftJoin('#__users up on up.id = a.user_id');
 
-
-
+    $query->where('TxType != \'REPEATDEFERRED\'');
 
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');

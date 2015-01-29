@@ -157,8 +157,7 @@ $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_da
     </div>
   <?php endif; ?>
 
-  <?php
-  if (!$params->get('show_intro')) : echo $this->item->event->afterDisplayTitle;
+  <?php if (!$params->get('show_intro')) : echo $this->item->event->afterDisplayTitle;
   endif;
   ?>
   <?php echo $this->item->event->beforeDisplayContent; ?>
@@ -271,7 +270,7 @@ $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_da
       <?php endif; ?>
       </div>
     <?php endif; ?>
-    <?php if (isset($urls) && ((!empty($urls->urls_position) && ($urls->urls_position == '1')) || ($params->get('urls_position') == '1'))) : ?>
+        <?php if (isset($urls) && ((!empty($urls->urls_position) && ($urls->urls_position == '1')) || ($params->get('urls_position') == '1'))) : ?>
       <?php echo $this->loadTemplate('links'); ?>
     <?php endif; ?>
     <?php if ($info == 0 && $params->get('show_tags', 1) && !empty($this->item->tags->itemTags)) : ?>

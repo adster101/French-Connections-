@@ -82,7 +82,10 @@ $sortFields = $this->getSortFields();
               <?php echo JHtml::_('grid.sort', 'COM_PAYMENTS_PAYMENTS_FIRST_NAME', 'a.InvoiceName', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_PAYMENTS_PAYMENTS_SURNAME', 'a.surname', $listDirn, $listOrder); ?>
+              <?php echo JText::_('COM_PAYMENTS_PAYMENTS_CUSTOMER_ACCOUNT_ID'); ?>
+            </th>
+            <th class="left">
+              <?php echo JText::_('COM_PAYMENT_PAYMENT_TRANSACTION_TYPE'); ?>
             </th>
           </tr>
         </thead>
@@ -133,6 +136,9 @@ $sortFields = $this->getSortFields();
               </td>
               <td>
                 <?php echo $item->user_id; ?>
+              </td>
+              <td>
+                <?php echo $item->TxType; ?>
               </td>
             </tr>
           <?php endforeach; ?>

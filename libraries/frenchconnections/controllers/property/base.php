@@ -33,10 +33,12 @@ class RentalControllerBase extends JControllerForm
     }
 
     // For enquiries and special offers, look up the property id using the table
-    if ($this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs' || $this->context == 'availability' || $this->context == 'invoice')
+    if ($this->context == 'availability' || $this->context == 'images' || $this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs' || $this->context == 'invoice')
     {
-
-      $model = $this->getModel();
+      // Get the unit versions model and instance of the table. 
+      // This is because these views are based around the unit_id. 
+      // TO DO - This controller file can be removed and this method added to RentalHelper...
+      $model = $this->getModel('UnitVersions','RentalModel');
       $table = $model->getTable();
 
       if (!property_exists($table, 'property_id'))
@@ -47,6 +49,7 @@ class RentalControllerBase extends JControllerForm
       $table->load($data[$key]);
       $recordId = $table->property_id;
     }
+
     else
     {
       // Initialise variables.
