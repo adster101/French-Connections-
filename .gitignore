@@ -68,3 +68,14 @@ robots.txt
 /revive/
 /media/fc/assets/pdf/
 /media/fc/assets/
+/administrator/language/en-GB/en-GB.plg_editors-xtd_betterpreview.ini
+/administrator/language/en-GB/en-GB.plg_editors-xtd_betterpreview.sys.ini
+/administrator/language/en-GB/en-GB.plg_system_nnframework.ini
+/administrator/language/en-GB/en-GB.plg_system_betterpreview.sys.ini
+/administrator/language/en-GB/en-GB.plg_system_nnframework.sys.ini
+/administrator/language/en-GB/en-GB.plg_system_betterpreview.ini
+/media/nnframework/
+/media/betterpreview/
+/plugins/editors-xtd/betterpreview/
+/plugins/system/betterpreview/
+/plugins/system/nnframework/
