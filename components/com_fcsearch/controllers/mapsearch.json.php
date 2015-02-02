@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class FcSearchControllerMapSearch extends JControllerLegacy {
+class FcSearchControllerMapSearch extends JControllerLegacy
+{
 
   /**
    * Method to find search query suggestions.
@@ -29,7 +30,8 @@ class FcSearchControllerMapSearch extends JControllerLegacy {
    * @since   2.5
    * 
    */
-  public function markers($cachable = false, $urlparams = false) {
+  public function markers($cachable = false, $urlparams = false)
+  {
     $return = array();
 
     // Require the component router
@@ -42,50 +44,65 @@ class FcSearchControllerMapSearch extends JControllerLegacy {
     $input = $app->input;
 
     // Set the filter vars (this comes in the form of one big long string)
-    $filter_vars = $app->input->get('s_kwds', '', 'string');
+    $url = $app->input->get('s_kwds', '', 'string');
+
+    $uri = JUri::getInstance($url);
+
+    $query_string = $uri->getQuery(true);
+
+    // If we have a query string we set the value in the input 
+    if (count($query_string) > 0)
+    {
+      foreach ($query_string as $key => $value)
+      {
+        $input->set($key, $value);
+      }
+    }
 
     // Break it up into segments
-    $segments = array_filter(explode('/', $filter_vars));
-    
+    $segments = array_filter(explode('/', $uri->getPath()));
+
     // Need to remove the first element of the array as it will contain 'forsale'
     // which is the alias used to route the normal http url
     array_shift($segments);
-    
+
     // Get the vars for this request
     $vars = FcSearchParseRoute($segments);
 
     // And set them in the input scope
-    foreach ($vars as $key => $value) {
+    foreach ($vars as $key => $value)
+    {
       $input->set($key, $value);
     }
 
     // Get an instance of the search model
     $model = $this->getModel('Search', 'FcSearchModel');
-    
+
     // Populate the state information
     $model->populateState();
-    
+
+
+
     // Get the area/region/town etc that the search is being performed against
     $localInfo = $model->getLocalInfo();
 
     // Set the location
     $model->location = $localInfo->id;
 
-
-
     // Get a list of markers for this map/search combinations
     $results = $model->getMapMarkers();
 
     // Process the results so we don't need to do that in the browser
-    foreach ($results as &$result) {
+    foreach ($results as &$result)
+    {
       $result->link = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $result->id . '&unit_id=' . (int) $result->unit_id);
       $result->thumbnail = '/images/property/' . $result->unit_id . '/thumbs/' . $result->thumbnail;
       $result->description = JHtml::_('string.truncate', $result->description, 125, true, false);
     }
 
-
     // Check the data.
-    if (empty($results)) {
+    if (empty($results))
+    {
       $results = array();
     }
 
