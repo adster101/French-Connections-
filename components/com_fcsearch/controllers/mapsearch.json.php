@@ -43,11 +43,13 @@ class FcSearchControllerMapSearch extends JControllerLegacy
     // Get the input date for this request
     $input = $app->input;
 
-    // Set the filter vars (this comes in the form of one big long string)
+    // The 'url' comes as a get variable from the ajax get call
     $url = $app->input->get('s_kwds', '', 'string');
-
+    
+    // Plug this into JUri for easy processing
     $uri = JUri::getInstance($url);
 
+    // Get the query string part
     $query_string = $uri->getQuery(true);
 
     // If we have a query string we set the value in the input 
@@ -59,11 +61,12 @@ class FcSearchControllerMapSearch extends JControllerLegacy
       }
     }
 
-    // Break it up into segments
+    // Break the path up into segments
     $segments = array_filter(explode('/', $uri->getPath()));
 
-    // Need to remove the first element of the array as it will contain 'forsale'
-    // which is the alias used to route the normal http url
+    // Need to remove the first element of the array as it will contain 
+    // 'forsale' or 'accommodation' which is the alias used to route 
+    // the non ajax http request
     array_shift($segments);
 
     // Get the vars for this request
@@ -81,8 +84,6 @@ class FcSearchControllerMapSearch extends JControllerLegacy
     // Populate the state information
     $model->populateState();
 
-
-
     // Get the area/region/town etc that the search is being performed against
     $localInfo = $model->getLocalInfo();
 
@@ -92,7 +93,7 @@ class FcSearchControllerMapSearch extends JControllerLegacy
     // Get a list of markers for this map/search combinations
     $results = $model->getMapMarkers();
 
-    // Process the results so we don't need to do that in the browser
+    // Process the results a bit...could look at adding a template for the frontend
     foreach ($results as &$result)
     {
       $result->link = JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $result->id . '&unit_id=' . (int) $result->unit_id);
