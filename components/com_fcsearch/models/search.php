@@ -91,14 +91,15 @@ class FcSearchModelSearch extends JModelList
     $query = $db->getQuery(true);
 
     $query->insert('#__search_log');
-    $query->columns('location_id, bedrooms, occupancy, date_created');
-
+    $query->columns('location, location_id, bedrooms, occupancy, date_created');
+    
+    $location = $this->getState('list.searchterm', '');;
     $location_id = $this->getState('search.location', '');
     $bedrooms = $this->getState('search.bedrooms', '');
     $occupancy = $this->getState('search.occupancy', '');
     $date = JFactory::getDate()->calendar('Y-m-d');
 
-    $query->values((int) $location_id . ',' . (int) $bedrooms . ',' . (int) $occupancy . ',' . $db->quote($date));
+    $query->values($db->quote($location) . ',' . (int) $location_id . ',' . (int) $bedrooms . ',' . (int) $occupancy . ',' . $db->quote($date));
 
     $db->setQuery($query);
 
