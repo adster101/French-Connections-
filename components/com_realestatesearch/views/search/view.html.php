@@ -224,7 +224,6 @@ class RealestateSearchViewSearch extends JViewLegacy
     $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/general.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript', true);
-    $document->addStyleSheet(JURI::root() . 'media/fc/css/jquery-ui-1.10.1.custom.min.css');
     JText::script('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
     JText::script('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS');
 

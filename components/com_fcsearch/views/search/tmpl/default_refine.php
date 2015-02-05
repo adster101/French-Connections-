@@ -54,7 +54,6 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
     </div>
   </div>
 </div>
-
 <?php if ($this->localinfo->level) : ?>
   <div class="panel panel-default">
     <div class="panel-heading">
