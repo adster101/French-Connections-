@@ -53,7 +53,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $query->select('count(*) as count');
     $query->from($this->_db->quoteName('#__special_offers'));
     $query->where('unit_id = ' . (int) $unit_id);
-    $query->where('published = 1');
+    // Removed the below which prevents owners from scheduling two offers with overlapping dates
+    // $query->where('published = 1'); 
     // If new start date falls between any eisting start and end dates then it can't be valid
     // http://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
     $query->where('(start_date <= ' . $this->_db->Quote($end_date) . ') AND (end_date >= ' . $this->_db->Quote($start_date) . ')');
@@ -287,6 +288,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   public function publish(&$pks, $value = 1)
   {
 
+    // TO DO - Run a check here that ensures that offers with overlapping dates are not being approved...
     $publish = parent::publish($pks, $value);
     if ($publish)
     {
@@ -399,7 +401,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         $app->enqueueMessage($message, 'notice');
         $app->redirect('index.php?option=com_specialoffers');
       }
-  
 
       $data['date_created'] = $date;
 

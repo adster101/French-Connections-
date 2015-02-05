@@ -489,7 +489,7 @@ class RealestateModelListing extends JModelForm
     $banned_emails = explode(',', $params->get('banned_email'));
     $banned_phrases = explode(',', $params->get('banned_text'));
     // The details of where who is sending the email (e.g. FC in this case).
-    $mailfrom = $app->getCfg('mailfrom');
+    $mailfrom = $params->get('admin_enquiry_email_no_reply','');
     $fromname = $app->getCfg('fromname');
     $sitename = $app->getCfg('sitename');
     $car_hire_link = JUri::base() . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));

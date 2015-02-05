@@ -1,88 +1,73 @@
 var infowindow;
-
 jQuery(document).ready(function() {
-  
-  // Works on the tabs on the search results page. Needs to be made more generic
+
+// Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 
-    //jQuery('#map_canvas').hide();
+//jQuery('#map_canvas').hide();
 
     if (!window.google) {
       loadGoogleMaps('initmap'); // Asych load the google maps stuff
     }
-    
-    // Store the selected tab #ref in local storage, IE8+
-    localStorage['selectedTab'] = jQuery(e.target).attr('href');
 
+// Store the selected tab #ref in local storage, IE8+
+    localStorage['selectedTab'] = jQuery(e.target).attr('href');
     // Get the selected tab from the local storage
     var selectedTab = localStorage['selectedTab'];
     var infowindow;
-
     // If the selected tab is the map tag then grab the markers
     if (selectedTab == '#mapsearch') {
-    
-      // The path of the search, e.g. /search or /fr/search
-      // This must either be 'forsale' or 'accommodation'
+
+// The path of the search, e.g. /search or /fr/search
+// This must either be 'forsale' or 'accommodation'
       var action = jQuery('#property-search').attr('action').split('/');
-      
       // Filter out the empty elements
-      action = action.filter(function(e){return e}); 
-      
+      action = action.filter(function(e) {
+        return e
+      });
       var s_kwds = action[1];
       var option = action[0];
-      
       var component = (option == 'forsale') ? 'com_realestatesearch' : 'com_fcsearch';
       var path = getPath();
-      
       // Do an ajax call to get a list of towns...
       jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
-        s_kwds: path        
+        s_kwds: path
       },
       function(data) {
 
         // Get the map instance
         map = document.map;
-
         markers = {};
-
         // Loop over all data (properties) and create a new marker
         for (var i = 0; i < data.length; i++) {
 
           // The lat long of the propert, units will appear stacked on top...
           var myLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
-
           // Create the marker instance
           marker = new google.maps.Marker({
             position: myLatlng,
             map: map
           });
-
           marker.setTitle((i + 1).toString());
           content = '<div class="media"><a class="pull-left" href="' + data[i].link + '"><img class="media-object" src="' + data[i].thumbnail + '"/></a><div class="media-body"><h4 class="media-heading"><a href="' + data[i].link + '">' + data[i].unit_title + '</a></h4><p>' + data[i].description + '</p></div></div>';
           attachContent(marker, content, 300);
-
           markers[i] = marker;
-
           //  Create a new viewpoint bound, so we can centre the map based on the markers
           var bounds = new google.maps.LatLngBounds();
-
           //  Go through each...
           jQuery.each(markers, function(index, marker) {
             bounds.extend(marker.position);
           });
-
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
       }).done(function() {
 
-        });
+      });
     }
 
     jQuery('#map_canvas').show();
-
-  }); 
-
+  });
   jQuery('.lastminute-date-search-link').each(function() {
 
     jQuery(this).on('click', function(event) {
@@ -93,22 +78,15 @@ jQuery(document).ready(function() {
       jQuery('#arrival').attr('value', start);
       jQuery('#departure').attr('value', end);
       var path = getPath();
-
       // Amend the path that the form is submitted to
       jQuery('form#property-search').attr('action', path);
-
       // Submit the form
       jQuery('form#property-search').submit();
       event.preventDefault();
     });
-
-
   });
-
-
   // Get the selected tab, if any and set the tab accordingly...
   var selectedTab = localStorage['selectedTab'];
-
   if (selectedTab == '#mapsearch') {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
@@ -116,39 +94,29 @@ jQuery(document).ready(function() {
   jQuery('.property-search-button').on('click', function(event) {
 
     event.preventDefault();
-
     var path = getPath();
-
     // Amend the path that the form is submitted to
     jQuery('form#property-search').attr('action', path);
-
     // Submit the form
     jQuery('form#property-search').submit();
-
   });
-
   jQuery('#sort_by').on('change', function(event) {
 
     event.preventDefault();
-
     var path = getPath();
-
     // Amend the path that the form is submitted to
     jQuery('form#property-search').attr('action', path);
-
     // Submit the form
     jQuery('form#property-search').submit();
-
   });
-
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
     source: function(query, process) {
       jQuery.get('/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
-      {
-        q: query,
-        items: 25
-      },
+              {
+                q: query,
+                items: 25
+              },
       function(data) {
         process(data);
       }
@@ -161,15 +129,12 @@ jQuery(document).ready(function() {
   // Deal with the more/less options for the refine search bit.
   jQuery(".show").click(function(event) {
 
-    // Get the containing element that we want to show/hide
+// Get the containing element that we want to show/hide
     var el = jQuery(this).prev().prev();
-
     // Prevent the default click behaviour
     event.preventDefault();
-
     // Toggle the containing class 
     el.toggleClass('show');
-
     // Check the open/closed state
     if (el.hasClass('show')) { // Must be 'open' so we want to show less options text
       jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS);
@@ -189,7 +154,6 @@ function getPath(event) {
 
   // The value contained in the typeahead field
   var chosen = jQuery(".typeahead").attr('value');
-
   // Double check that the typeahead has any elements, if not then it means it's already populated, e.g. when you land on a search results page
   //var count = jQuery(".typeahead.dropdown-menu li").length;
 
@@ -211,23 +175,20 @@ function getPath(event) {
   //return false;
   //}
 
-  
+
 
   if (chosen === '') {
     jQuery(".typeahead").attr('value', 'france');
   }
-  
+
   // get the current pathway as an array
-  var pathArray = window.location.pathname.split( '/' );
-  
+  var pathArray = window.location.pathname.split('/');
   // The path of the search, e.g. /search or /fr/search
   // This must either be 'forsale' or 'accommodation'
   var action = jQuery('#property-search').attr('action').split('/');
   var path = '/' + action[1];
-
   // Let's get all the form input elements - more performant to do it in one go rather than getting each via a separate DOM lookup
   var inputs = jQuery('#property-search').find(':input');
-
   // Get each of the values we're interested in adding to the search string
   var s_kwds = inputs.filter('#s_kwds').prop('value');
   var sort_by = inputs.filter('#sort_by').prop('value');
@@ -237,14 +198,10 @@ function getPath(event) {
   var bedrooms = inputs.filter('#bedrooms').prop('value');
   var arrival = inputs.filter('#arrival').prop('value');
   var departure = inputs.filter('#departure').prop('value');
-
   path = path + '/' + stripVowelAccent(s_kwds);
-
-
-  
   // Loop over the path aray 
   for (i = 0; i < pathArray.length; i++) {
-    
+
     if (pathArray[i].indexOf('property_') >= 0) {
       path = path + '/' + [pathArray[i]];
     }
@@ -260,7 +217,7 @@ function getPath(event) {
     if (pathArray[i].indexOf('suitability_') >= 0) {
       path = path + '/' + [pathArray[i]];
     }
-    
+
   }
 
   if (arrival !== '' && typeof(arrival) !== 'undefined') {
@@ -290,13 +247,19 @@ function getPath(event) {
     path = path + '/' + max_price;
   }
 
-  // Pull out the offers query string, if it exists
+  // Pull out the offers and LWL flags...
   var offers = loadPageVar("offers");
+  var lwl = loadPageVar("lwl");
   
-  if (offers === 'true') {
-    path = path + '?offers=true';
+  // Fairly obvious but if we have both add to the string otherwise just add one or the other.
+  if (offers === 'true' & lwl === 'true') {
+    path = path + '?offers=true&lwl=true';
+  } else if (offers === 'true') {
+    path = path + '?offers';
+  } else if (lwl === 'true') {
+    path = path + '?lwl=true';
   }
-  
+
   return path;
 }
 
@@ -323,7 +286,6 @@ function attachContent(marker, num) {
 
     if (infowindow)
       infowindow.close();
-
     infowindow = new google.maps.InfoWindow({
       content: num,
       maxWidth: 300
@@ -338,50 +300,41 @@ function stripVowelAccent(str) {
 
   var s = str;
   var rExps = [
-  /[\xC0-\xC2]/g,
-  /[\xE0-\xE2]/g,
-  /[\xC8-\xCA]/g,
-  /[\xE8-\xEB]/g,
-  /[\xCC-\xCE]/g,
-  /[\xEC-\xEE]/g,
-  /[\xD2-\xD4]/g,
-  /[\xF2-\xF4]/g,
-  /[\xD9-\xDB]/g,
-  /[\xF9-\xFB]/g
+    /[\xC0-\xC2]/g,
+    /[\xE0-\xE2]/g,
+    /[\xC8-\xCA]/g,
+    /[\xE8-\xEB]/g,
+    /[\xCC-\xCE]/g,
+    /[\xEC-\xEE]/g,
+    /[\xD2-\xD4]/g,
+    /[\xF2-\xF4]/g,
+    /[\xD9-\xDB]/g,
+    /[\xF9-\xFB]/g
   ];
-
   var repChar = ['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u'];
-
   for (var i = 0; i < rExps.length; i++) {
     s = s.replace(rExps[i], repChar[i]);
   }
 
-  // Replace braces with spaces
+// Replace braces with spaces
   s = s.replace(/[()]/g, ' ');
-
   // Replace apostrophe with space
   s = s.replace(/[\']/g, ' ');
-
   if (typeof String.prototype.trim !== 'function') {
     String.prototype.trim = function() {
       return this.replace(/^\s+|\s+$/g, '');
     }
   }
 
-  // Trim any trailing space
+// Trim any trailing space
   s = s.trim();
-
   // Remove any duplicate whitespace, and ensure all characters are alphanumeric
   s = s.replace(/(\s|[^A-Za-z0-9\-])+/g, '-');
-
-
-
   s = s.toLowerCase();
-
   return s;
 }
 
 // Pulls out the value of the query paramter sVar 
-function loadPageVar (sVar) {
+function loadPageVar(sVar) {
   return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 }

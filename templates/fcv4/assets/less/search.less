@@ -93,8 +93,36 @@
   .carousel-control 
   {
     width:3%;
-    background-color: fade(#647cb6, 80%);
+    color: transparent;
     background-image: none;
     opacity:1;
+    color: @blue-lighter;
   }
+
+     
+    .carousel-control.right
+    {
+      right:-1.5%;
+    }
+    .carousel-control.left
+    {
+      left:-1.5%;
+    }
+  
+
+  .carousel-indicators 
+  {
+    bottom:-25px;
+  }
+
+  .carousel-indicators li
+  {
+    border:1px solid @blue-lighter;
+  }
+
+  .carousel-indicators .active 
+  {
+    background-color: fade(@blue-lighter,80%);
+  }
+
 }

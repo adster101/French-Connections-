@@ -45,7 +45,7 @@ class modFeaturedRealestatePropertyHelper
 
     // Here we only join the unit version where review is 0. Should ensure that we only take published units
     $query->join('left', '#__realestate_property_versions b on (a.id = b.realestate_property_id and b.id = (select max(c.id) from #__realestate_property_versions c where realestate_property_id = a.id and review = 0))');
-    
+
     // Join the translations table to pick up any translations 
     if ($lang == 'fr-FR')
     {
@@ -64,15 +64,15 @@ class modFeaturedRealestatePropertyHelper
     $query->where('a.published = 1');
     $query->where('i.ordering = 1');
     $query->where('a.expiry_date >= ' . $db->quote($date));
-    
+
     $query->join('left', '#__featured_properties h on h.property_id = a.id');
-    
+
     $query->where('h.published = 1');
     $query->where('h.featured_property_type = ' . $type);
     $query->where('h.start_date <= ' . $db->quote($date));
     $query->where('h.end_date >= ' . $db->quote($date));
     $query->order('rand()');
-    
+
     $db->setQuery($query, 0, $count);
 
     $items = ($items = $db->loadObjectList()) ? $items : array();
@@ -92,6 +92,36 @@ class modFeaturedRealestatePropertyHelper
     // add stylesheets to document header
 
     require(JModuleHelper::getLayoutPath('mod_featuredrealestateproperty', 'default'));
+  }
+
+  /**
+   * Function tagline to return a tagline for a property based on the number of bathrooms 
+   * and bedrooms. Necessary because sometimes properties get added with 0 bedrooms
+   * for example if it's a plot of land or a rennovation.
+   * 
+   * @param type $bedrooms
+   * @param type $bathrooms
+   * @param type $price
+   */
+  public static function tagline($price = '', $bedrooms = 0, $bathrooms = 0)
+  {
+    
+    $bedrooms_str = '';
+    $bathrooms_str = '';
+
+    if ($bedrooms)
+    {
+      $bedrooms_str = ($bedrooms == 1) ? JText::_('MOD_FEATURED_REALESTATE_N_BEDROOMS_1') : JText::plural('MOD_FEATURED_REALESTATE_N_BEDROOMS', $bedrooms);
+    }
+
+    if ($bathrooms)
+    {
+      $bathrooms_str = ($bathrooms == 1) ? JText::_('MOD_FEATURED_REALESTATE_N_BATHROOMS_1') : JText::plural('MOD_FEATURED_REALESTATE_N_BATHROOMS', $bathrooms);
+    }
+
+    $tagline = JText::sprintf('MOD_FEATURED_REALESTATE_PROPERTY_DETAIL', $price, $bedrooms_str, $bathrooms_str);
+
+    return $tagline;
   }
 
 }

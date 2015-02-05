@@ -12,6 +12,7 @@ $lang = $app->input->get('lang', 'en');
 // Register the Special Offers helper file
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_realestate'));
 $Itemid_search = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
+
 ?>
 
 <div class="row">
@@ -38,7 +39,8 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_realestatesearc
         <p>
           <?php if (!empty($item->price)) : ?> 
           <p class="">
-            <?php echo JText::sprintf('MOD_FEATURED_REALESTATE_PROPERTY_DETAIL', number_format($prices['GBP']), $item->bedrooms, $item->bathrooms) ?>
+            <?php echo $helper->tagline(number_format($prices['GBP']), $item->bedrooms, $item->bathrooms); ?>
+            <br />
             <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
               <?php echo JHTml::_('string.truncate', $item->title, 25, true, false); ?>&nbsp;&raquo;
             </a>

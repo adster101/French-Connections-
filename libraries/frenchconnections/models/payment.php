@@ -684,12 +684,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     // Update the data array with a few more bits and pieces
     $data['Amount'] = $sngTotal;
-    $data['VendorTxCode'] = $VendorTxCode;
+    $data['VendorTxCode'] = $VendorTxCodeNew;
     $data['user_id'] = $this->owner_id;
-    $data['property_id'] = $data['id'];
+    $data['property_id'] = $id;
+    $data['TxType'] = $type;
     $data['DateCreated'] = JFactory::getDate()->toSql();
     $data['id'] = '';
-
+    
     // Store the transaction in the protx payment page
     if (!$this->saveProtxTransaction($data))
     {
@@ -697,15 +698,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
 
+    $this->saveProtxTransactionLines($payment_summary, $VendorTxCodeNew);
+
     $arrResponse = $this->requestPost($strPurchaseURL, $strPost);
     /* Analyse the response from Sage Pay Direct to check that everything is okay
      * * Registration results come back in the Status and StatusDetail fields */
-    $arrResponse['VendorTxCode'] = $VendorTxCode;
+    $arrResponse['VendorTxCode'] = $VendorTxCodeNew;
 
     $strStatus = $arrResponse["Status"];
 
     if ($strStatus == "OK")
     {
+      // Update the protx transactio line
+      $this->saveProtxTransaction($arrResponse);
+
       return $VendorTxCodeNew;
     }
     else
@@ -779,6 +785,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $iBasketItems = 0;
     $VendorTxCode = '';
 
+    $strProtocol = $protx_settings->get('VPSProtocol');
+    $strTransactionType = $protx_settings->get('TransactionType');
+    $strVendorName = $protx_settings->get('VendorName');
+    $strCurrency = $protx_settings->get('Currency');
+    $strPurchaseURL = $protx_settings->get('PurchaseURL');
+
     // Okay, so we have validated the form and we have the order summary
     // First off, generate a VendorTxCode and stash what we have in the db
     $VendorTxCode = $this->owner_id . '-' . $data['id'] . '-' . date("ymdHis", time()) . '-' . rand(0, 32000) * rand(0, 32000);
@@ -801,6 +813,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     $data['Amount'] = $sngTotal;
     $data['VendorTxCode'] = $VendorTxCode;
     $data['user_id'] = $this->owner_id;
+    $data['TxType'] = $strTransactionType;
     $data['property_id'] = $data['id'];
     $data['DateCreated'] = JFactory::getDate()->toSql();
     $data['id'] = '';
@@ -815,34 +828,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       return false;
     }
 
-    // So let's put the transaction lines into the database
-    $table = JTable::getInstance('protxtransactionlines', 'RentalTable');
-
-    // Add each of the order lines to the transaction lines table
-    foreach ($order as $line)
-    {
-      $line->VendorTxCode = $VendorTxCode;
-      $line->id = '';
-      // Bind the data.
-      if (!$table->bind($line))
-      {
-        $this->setError($table->getError());
-        return false;
-      }
-
-      // Store the data.
-      if (!$table->store())
-      {
-        $this->setError($table->getError());
-        return false;
-      }
-    }
-
-    $strProtocol = $protx_settings->get('VPSProtocol');
-    $strTransactionType = $protx_settings->get('TransactionType');
-    $strVendorName = $protx_settings->get('VendorName');
-    $strCurrency = $protx_settings->get('Currency');
-    $strPurchaseURL = $protx_settings->get('PurchaseURL');
+    $this->saveProtxTransactionLines($order, $VendorTxCode);
 
     /* Now to build the Sage Pay Direct POST.  For more details see the Sage Pay Direct Protocol 2.23
      * * NB: Fields potentially containing non ASCII characters are URLEncoded when included in the POST */
@@ -1347,6 +1333,34 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     return $table;
   }
 
+  public function saveProtxTransactionLines($data = array(), $VendorTxCode = '')
+  {
+    // So let's put the transaction lines into the database
+    $table = JTable::getInstance('protxtransactionlines', 'RentalTable');
+
+    // Add each of the order lines to the transaction lines table
+    foreach ($data as $line)
+    {
+      $line->VendorTxCode = $VendorTxCode;
+      $line->id = '';
+      // Bind the data.
+      if (!$table->bind($line))
+      {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Store the data.
+      if (!$table->store())
+      {
+        $this->setError($table->getError());
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   /**
    * Generate a new expiry date for the property based on todays date.
    * 
@@ -1356,10 +1370,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
   public function getNewExpiryDate($period = 'P365D')
   {
     $days_to_expiry = PropertyHelper::getDaysToExpiry($this->getExpiryDate());
-    
+
     $expiry_date = $this->getExpiryDate();
-    
-    if (empty($expiry_date) || $days_to_expiry <= 0 )
+
+    if (empty($expiry_date) || $days_to_expiry <= 0)
     {
       /**
        * Get the date now
