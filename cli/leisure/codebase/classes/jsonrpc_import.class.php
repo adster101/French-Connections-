@@ -10,7 +10,6 @@ define('BASE', __DIR__);
 include_once(__DIR__ . '/../includes/dblive.php');
 include_once(__DIR__ . '/belvilla_jsonrpc_curl_gz.class.php');
 
-
 class jsonRpcImport extends belvilla_jsonrpcCall
 {
 
@@ -20,7 +19,7 @@ class jsonRpcImport extends belvilla_jsonrpcCall
   private $txt_location; //the location of the generated txtfiles that will be imported later
   private $serverlocation = "http://demo.leisure-partners.net"; //the url of your website
   private $sendmailto = "adamrifat@frenchconnections.co.uk"; //the emailadres whereto the output will be emailed
-  private $nextdb = array("jsonrpc" => "jsonrpc_b", "jsonrpc_b" => "jsonrpc");//array of next databases
+  private $nextdb = array("jsonrpc" => "jsonrpc_b", "jsonrpc_b" => "jsonrpc"); //array of next databases
   //private $nextdb = array("jsonrpc" => "jsonrpc");
   private $dbname; //the databasename used for this import
   private $dbname_live = CURR_DB; //The current live database, defined in dblive.php
@@ -48,7 +47,7 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
     $this->__echolog("<h1>@Leisure JSON-RPC Import started at " . date("H:i:s") . "</h1>");
     $this->__setImportDatabaseTruncateTables($dbname);
-    
+
     $this->txt_location = "C:/xammp/htdocs/cli/leisure/json2db/json2txt/";
   }
 
@@ -559,7 +558,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ListOfHousesV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $acco_objs = parent::getResult("json");
 
@@ -567,28 +567,24 @@ class jsonRpcImport extends belvilla_jsonrpcCall
       {
         foreach ($acco_objs as $acco_obj)
         {
+          // Just get the FR ones...
           $HouseCode = $acco_obj->HouseCode;
-
           $pos = strpos($HouseCode, 'FR');
-          
           // Get only the FR houses
           if ($pos === 0)
           {
-            array_push($this->all_accos_array, $HouseCode); 
-            
+            array_push($this->all_accos_array, $HouseCode);
             $this->__addTextFileLine("'" . $HouseCode . "'", "list_of_houses");
-
           }
-          
         }
-
-    }
+      }
       else
       {
         $this->__addError($jsonrpc_call . " returned no results", $jsonrpc_call . " returned no results");
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -644,7 +640,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
       array_push($params["Items"], $LanguagePacks[strtolower($l)]);
     }
 
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call, $params);
       $result = parent::getResult("json");
       if (!empty($result))
@@ -910,7 +907,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
                 $Price = $avper->Price;
                 $PriceExclDiscount = $avper->PriceExclDiscount;
 
-                try {
+                try
+                {
                   $ArrivalDate = DateTime::createFromFormat('Y-m-d', $avper->ArrivalDate);
                   $DepartureDate = DateTime::createFromFormat('Y-m-d', $avper->DepartureDate);
 
@@ -921,7 +919,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
                   $line = "'" . $HouseCode . "','" . $ArrivalDate->format('Y-m-d') . "'," . $nights->days . ",'" . $periodId . "','" . $OnRequest . "'," . $PriceExclDiscount . "," . $Price . ",'" . $lastMinute . "','" . $ArrivalTimeFrom . "','" . $ArrivalTimeUntil . "','" . $DepartureTimeFrom . "','" . $DepartureTimeUntil . "'";
                   $this->__addTextFileLine($line, "avail_by_period");
                 }
-                catch (Exception $e) {
+                catch (Exception $e)
+                {
                   $this->__addError("AvailabilityPeriodV1 went wrong for HouseCode: " . $HouseCode . ". Message: " . $e->getMessage(), "AvailabilityPeriodV1 Error");
                 }
               }
@@ -931,7 +930,7 @@ class jsonRpcImport extends belvilla_jsonrpcCall
               $this->__addError("No AvailabilityPeriodV1 for HouseCode: " . $HouseCode, "No AvailabilityPeriodV1");
             }
 
-            
+
             $City = '';
             $line = "'" . $HouseCode . "','" . $Name . "'," . (($HolidayPark == '') ? "NULL" : "'" . $HolidayPark . "'") . "," . $MaxNumberOfPersons . "," . $NumberOfPets . "," . $ExceedNumberOfBabies . "," . $NumberOfStars . ",'" . $ZipPostalCode . "','" . $City . "','" . $Region . "'," . (($SkiArea == '') ? "NULL" : "'" . $SkiArea . "'") . ",'" . $Country . "','" . $CreationDate . "'," . $WGS84Longitude . "," . $WGS84Latitude . "," . $EnqeCount . "," . $EnqePoints . "," . $numberOfBedRooms . "," . $numberOfBathRooms . ",'" . $OptionsAllowed . "'," . $DimensionM2;
             $this->__addTextFileLine($line, "accos");
@@ -947,7 +946,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         $this->__addError(print_r($acco_chunk, true), "loading acco_chunk " . $this->chunks_loaded . "/" . sizeof($this->accocode_chunks) . " failed");
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
 
@@ -964,7 +964,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ReferenceLayoutItemsV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $res_objs = parent::getResult("json");
       if (!empty($res_objs))
@@ -987,7 +988,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         }
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -1002,7 +1004,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ReferenceLayoutDetailsV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $res_objs = parent::getResult("json");
       if (!empty($res_objs))
@@ -1017,7 +1020,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         }
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -1032,7 +1036,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ReferencePropertiesV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $all_props = parent::getResult("json");
 
@@ -1057,7 +1062,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         }
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -1072,7 +1078,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ReferenceRegionsV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $countries = parent::getResult("json");
       if (!empty($countries))
@@ -1096,7 +1103,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         }
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -1111,7 +1119,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ReferenceSkiAreasV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $res_objs = parent::getResult("json");
       if (!empty($res_objs))
@@ -1129,7 +1138,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         }
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -1144,7 +1154,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __generate_ReferenceParksV1($jsonrpc_call)
   {
-    try {
+    try
+    {
       parent::makeCall($jsonrpc_call);
       $res_objs = parent::getResult("json");
       if (!empty($res_objs))
@@ -1205,7 +1216,8 @@ class jsonRpcImport extends belvilla_jsonrpcCall
         }
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->__addError(print_r($e, true), "loading " . $jsonrpc_call . " failed");
     }
   }
@@ -1221,8 +1233,7 @@ class jsonRpcImport extends belvilla_jsonrpcCall
    */
   private function __getPeriod($a_date, $nights)
   {
-    switch ($nights)
-    {
+    switch ($nights) {
       case 2:
         if ($a_date->format('N') == 5)
           return "wk"; //vrijdag

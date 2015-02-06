@@ -18,12 +18,24 @@ $lang = JFactory::getLanguage();
 
 $lang->load('com_fcsearch', JPATH_SITE, null, false, true);
 
-$app  = JFactory::getApplication();
 
-$regions = &modPopularSearchHelper::getPopularSearches(3);
-$popular = &modPopularSearchHelper::getPopularSearches();
+//$regions = &modPopularSearchHelper::getPopularSearches(3);
+//$popular = &modPopularSearchHelper::getPopularSearches();
+
+$cacheparams = new stdClass;
+$cacheparams->cachemode = 'static';
+$cacheparams->class = 'modPopularSearchHelper';
+$cacheparams->method = 'getPopularSearches';
+
+$params->set('cache_time',86400);
+
+// Attempt to get popular searches from cache
+$popular = JModuleHelper::moduleCache($module, $params, $cacheparams);
+
+// Get popular regional searches from cache as well if possible
+$cacheparams->methodparams = 3;
+$regions = JModuleHelper::moduleCache($module, $params, $cacheparams);
 
 require JModuleHelper::getLayoutPath('mod_popular_search', $params->get('layout', 'default'));
 
-$document = JFactory::getDocument();
 

@@ -1,12 +1,15 @@
 <?php
 
+// Import our base Import
+jimport('frenchconnections.cli.import');
+
 /**
  * Cron job to trash expired cache data
  *
  * @package  Joomla.Cli
  * @since    2.5
  */
-class RealestateImport extends JApplicationCli
+class RealestateImport extends Import
 {
 
   public function parseFeed($uri = '')
@@ -29,65 +32,14 @@ class RealestateImport extends JApplicationCli
     return $data;
   }
 
-  public function getPropertyVersion($agency_reference = '', $db)
-  {
-
-    $query = $db->getQuery(true);
-    $query->select('realestate_property_id ');
-    $query->from('#__realestate_property_versions');
-    $query->where('agency_reference = ' . $db->quote((string) $agency_reference));
-    $query->where('review = 0');
-    $db->setQuery($query);
-
-    try
-    {
-      $row = $db->loadObject();
-    }
-    catch (Exception $e)
-    {
-      throw new Exception('Problem getting property version in AF XML import line getPropertyVersion');
-    }
-
-    // Check that we have a result.
-    if (empty($row))
-    {
-      return false;
-    }
-
-    // Return the property version ID
-    return $row->realestate_property_id;
-  }
-
-  public function createProperty($db, $user = 1)
-  {
-    $query = $db->getQuery(true);
-    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
-    $date = JFactory::getDate();
-
-    $query->insert('#__realestate_property')
-            ->columns(
-                    array(
-                        $db->quoteName('expiry_date'), $db->quoteName('published'),
-                        $db->quoteName('created_on'), $db->quoteName('review'),
-                        $db->quoteName('created_by')
-                    )
-            )
-            ->values($db->quote($expiry_date) . ', 1, ' . $db->quote($date) . ',0,' . (int) $user);
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (RuntimeException $e)
-    {
-      throw new Exception('Problem creating a new real estate property in Allez Francais XML import createProperty()');
-    }
-
-    return $db->insertid();
-  }
-
+ 
+  /**
+   * TO DO - Remove these 'create' methods and use the base class methods.
+   * @param type $db
+   * @param type $data
+   * @return type
+   * @throws Exception
+   */
   public function createPropertyVersion($db, $data = array())
   {
     $query = $db->getQuery(true);
@@ -120,53 +72,6 @@ class RealestateImport extends JApplicationCli
     return $db->insertid();
   }
 
-  public function createImage($db, $data)
-  {
-    $query = $db->getQuery(true);
-
-    $query->insert('#__realestate_property_images_library')
-            ->columns(
-                    array(
-                        $db->quoteName('version_id'), $db->quoteName('realestate_property_id'),
-                        $db->quoteName('image_file_name'), $db->quoteName('ordering')
-                    )
-            )
-            ->values(implode(',', $data));
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (RuntimeException $e)
-    {
-      throw new Exception('Problem creating an image entry in the database for Allez Francais XML import createImage()');
-    }
-
-    return $db->insertid();
-  }
-
-  public function updateProperty($db, $id)
-  {
-    $query = $db->getQuery(true);
-    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
-    $query->update('#__realestate_property')
-            ->set('expiry_date = ' . $db->quote($expiry_date))
-            ->where('id = ' . (int) $id);
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (RuntimeException $e)
-    {
-      throw new Exception('Problem updating new real estate property in Allez Francais XML import updateProperty()');
-    }
-  }
-
   public function updatePropertyVersion($db, $data = array())
   {
     $query = $db->getQuery(true);
@@ -193,15 +98,5 @@ class RealestateImport extends JApplicationCli
     }
 
     return $db->insertid();
-  }
-
-  public function email(Exception $e)
-  {
-    $mail = JFactory::getMailer();
-    $mail->addRecipient('adamrifat@frenchconnections.co.uk');
-    $mail->setBody($e->getMessage() . '<br />' . $e->getTraceAsString() . '<br />' . $e->getLine());
-    $mail->setSubject($e->getMessage());
-    $mail->isHtml(true);
-    $send = $mail->send();
   }
 }
