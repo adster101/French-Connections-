@@ -10,19 +10,31 @@
 // No direct access
 defined('_JEXEC') or die;
 // import Joomla controllerform library
-jimport('frenchconnections.controllers.property.base');
+jimport('joomla.application.component.controllerform');
 
 /**
  * HelloWorld Controller
  */
-class InvoicesControllerInvoice extends RentalControllerBase
+class InvoicesControllerInvoice extends JControllerForm
 {
 
   function __construct()
   {
     parent::__construct();
-    
+
     $this->view_list = 'invoices';
+  }
+
+  protected function allowEdit($data = array(), $key = 'property_id')
+  {
+
+    $model = $this->getModel('Invoice', 'InvoicesModel', array('ignore_request'=>false));
+    $items = $model->getItems();
+
+    $recordId = (int) !empty($items[0]->property_id) ? $items[0]->property_id : 0;
+    
+    return PropertyHelper::allowEditRental($recordId, $this->option);
+    
   }
 
 }

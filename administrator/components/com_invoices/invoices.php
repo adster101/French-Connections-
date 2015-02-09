@@ -20,6 +20,9 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_invoices'))
 // Include dependancies
 jimport('joomla.application.component.controller');
 
+JLoader::import('frenchconnections.library');
+
+
 $controller	= JControllerLegacy::getInstance('Invoices');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();

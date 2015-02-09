@@ -14,6 +14,55 @@ defined('_JEXEC') or die;
 abstract class PropertyHelper
 {
 
+  public static function allowEditRental($recordId = '', $option = '')
+  {
+    // Include the model path
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+    
+    // Need to include the rental table path as the RentalModelProperty class uses it...
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
+
+    $user = JFactory::getUser();
+    $userId = $user->get('id');
+    $ownerId = '';
+
+    // Check general edit permission first.
+    if ($user->authorise('core.edit', $option))
+    {
+      return true;
+    }
+    // If we don't have a property ID then we can't authorise
+    if ($recordId === 0)
+    {
+      return false;
+    }
+
+    if ($user->authorise('core.edit.own', $option))
+    {
+      // Now test the owner is the user.
+      if (empty($ownerId) && $recordId)
+      {
+        $model = JModelLegacy::getInstance('Property','RentalModel', array('ignore_request'=>true));
+        
+        // Need to do a lookup from the model.
+        $record = $model->getItem($recordId);
+
+        if (empty($record))
+        {
+          return false;
+        }
+        $ownerId = $record->created_by;
+      }
+
+      // If the owner matches 'the owner' then do the test.
+      if ($ownerId == $userId)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public function allowEditRealestate($recordId = '')
   {
 
@@ -291,7 +340,6 @@ abstract class PropertyHelper
     return $session->get('com_rental.property.' . $propertyId . '.lang', $lang->getTag());
   }
 
- 
   /**
    * Generates an array containing availability for each availability period stored for the property
    *
