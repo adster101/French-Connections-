@@ -89,7 +89,7 @@ class AtLeisure extends Import
       foreach ($result as $k => $acco)
       {
         try
-        {      
+        {
           // Reset the data array
           $data = array();
 
@@ -109,7 +109,7 @@ class AtLeisure extends Import
 
             // Create an entry in the #__realestate_property table
             $property_id = $this->createProperty('#__property', $db, $user);
-  
+
             $data['property']['property_id'] = (int) $property_id;
 
             $this->out('Created new property ID: ' . $property_id);
@@ -136,6 +136,8 @@ class AtLeisure extends Import
           $data['property']['review'] = 0;
           $data['property']['published_on'] = $db->quote(JFactory::getDate());
 
+          $data['location_details'] = $this->getDistances($acco);
+          var_dump($data);
           $data['unit']['id'] = $unit_id;
 
           $this->out('Saving property version...');
@@ -182,7 +184,7 @@ class AtLeisure extends Import
 
 
           // Done so commit all the inserts and what have you...
-          $db->transactionCommit();
+          //$db->transactionCommit();
 
           $this->out('Done processing... ' . $prop->agency_reference);
         }
@@ -219,6 +221,27 @@ class AtLeisure extends Import
     }
 
     return $props;
+  }
+
+  private function getDistances($acco = '')
+  {
+
+
+    $distances = '';
+
+    //DistancesV1
+    if (isset($acco->DistancesV1))
+    {
+      $distances .= '<ul class="list list-unstyled">';
+
+      foreach ($acco->DistancesV1 as $dist)
+      {
+        $distances.='<li>' . $dist->To . "'," . $dist->DistanceInKm . 'Km</li>';
+      }
+      $distances .= '</ul>';
+    }
+
+    return $distances;
   }
 
 }
