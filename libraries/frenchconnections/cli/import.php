@@ -97,7 +97,7 @@ abstract class Import extends JApplicationCli
    * @return type
    * @throws Exception
    */
-  public function createProperty($table = '', $db, $user = 1)
+  public function createProperty($table = '', $db, $user = 1, $published = 1)
   {
     $query = $db->getQuery(true);
     $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
@@ -111,7 +111,7 @@ abstract class Import extends JApplicationCli
                         $db->quoteName('created_by')
                     )
             )
-            ->values($db->quote($expiry_date) . ', 1, ' . $db->quote($date) . ',0,' . (int) $user);
+            ->values($db->quote($expiry_date) . ', ' . (int) $published . ' , ' . $db->quote($date) . ',0,' . (int) $user);
 
     $db->setQuery($query);
 

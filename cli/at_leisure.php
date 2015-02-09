@@ -107,8 +107,8 @@ class AtLeisure extends Import
           {
             $this->out('Adding property entry...');
 
-            // Create an entry in the #__realestate_property table
-            $property_id = $this->createProperty('#__property', $db, $user);
+            // Create an entry in the #__realestate_property table, default to unpublish
+            $property_id = $this->createProperty('#__property', $db, $user, 0);
 
             $data['property']['property_id'] = (int) $property_id;
 
@@ -137,7 +137,7 @@ class AtLeisure extends Import
           $data['property']['published_on'] = $db->quote(JFactory::getDate());
 
           $data['location_details'] = $this->getDistances($acco);
-          var_dump($data);
+          var_dump($acco->LayoutExtendedV2);
           $data['unit']['id'] = $unit_id;
 
           $this->out('Saving property version...');
