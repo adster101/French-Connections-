@@ -14,7 +14,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Invoices records.
  */
-class InvoicesModelinvoice extends JModelList
+class InvoicesModelInvoice extends JModelList
 {
 
   public function getTable($type = 'Invoice', $prefix = 'InvoicesTable', $config = array())
@@ -110,9 +110,7 @@ class InvoicesModelinvoice extends JModelList
 
     $query->where('invoice_id = ' . (int) $this->getState($this->context . '.invoice.id', ''));
 
-    $canDo = InvoicesHelper::getActions();
-
-    if (!$canDo->get('core.edit') && $canDo->get('code.edit.own'))
+    if (!$user->authorise('core.edit', 'com_invoices') && $user->authorise('code.edit.own', 'com_invoices'))
     {
       $query->where('i.user_id = ' . (int) $user->id);
     }

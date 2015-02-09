@@ -33,12 +33,12 @@ class RentalControllerBase extends JControllerForm
     }
 
     // For enquiries and special offers, look up the property id using the table
-    if ($this->context == 'availability' || $this->context == 'images' || $this->context == 'specialoffer' || $this->context == 'enquiry' || $this->context == 'unitversions' || $this->context == 'tariffs' || $this->context == 'invoice')
+    if ($this->context == 'availability' || $this->context == 'images' || $this->context == 'specialoffer' || $this->context == 'unitversions' || $this->context == 'tariffs')
     {
       // Get the unit versions model and instance of the table. 
       // This is because these views are based around the unit_id. 
       // TO DO - This controller file can be removed and this method added to RentalHelper...
-      $model = $this->getModel('UnitVersions','RentalModel');
+      $model = $this->getModel('UnitVersions', 'RentalModel');
       $table = $model->getTable();
 
       if (!property_exists($table, 'property_id'))
@@ -49,7 +49,15 @@ class RentalControllerBase extends JControllerForm
       $table->load($data[$key]);
       $recordId = $table->property_id;
     }
-
+    elseif ($this->context == 'enquiry')
+    {
+      // These use different tables so we have to look up the record ID via the model
+      $model = $this->getModel();
+      $id = $this->input->getInt('id');
+      $item = $model->getItem($id);
+      
+      $recordId = (int) !empty($item->property_id) ? $item->property_id : 0;
+    }
     else
     {
       // Initialise variables.
@@ -62,6 +70,10 @@ class RentalControllerBase extends JControllerForm
       return false;
     }
 
+    // TO DO - This is clunky. We probably don't need this controller at least for enquiry and invocie
+    // views. Would probably be enough to add the below into the 'property' helper class and call it 
+    // from each controller.
+    
     // Fallback on edit.own.
     // First test if the permission is available.
     if ($user->authorise('core.edit.own', $this->option))
