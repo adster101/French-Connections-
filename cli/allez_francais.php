@@ -87,7 +87,7 @@ class AllezFrancais extends RealestateImport
           $this->out('Adding property entry...');
 
           // Create an entry in the #__realestate_property table
-          $property_id = $this->createProperty('#__realestate_property', $db, $user);
+          $property_id = $this->createProperty($db, $user);
 
           // Get the location details for this property
           // TO DO - This should be using the $prop lat and long using the getNearestCity base method

@@ -32,7 +32,45 @@ class RealestateImport extends Import
     return $data;
   }
 
- 
+  /**
+   * Creates new entry in $table 
+   * 
+   * @param type string - The table to create a new record in
+   * @param type $db
+   * @param type $user
+   * @return type
+   * @throws Exception
+   */
+  public function createProperty($db, $user = 1, $published = 1)
+  {
+    $query = $db->getQuery(true);
+    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
+    $date = JFactory::getDate();
+
+    $query->insert($db->quoteName('#__realestate_property'))
+            ->columns(
+                    array(
+                        $db->quoteName('expiry_date'), $db->quoteName('published'),
+                        $db->quoteName('created_on'), $db->quoteName('review'),
+                        $db->quoteName('created_by')
+                    )
+            )
+            ->values($db->quote($expiry_date) . ', ' . (int) $published . ' , ' . $db->quote($date) . ',0,' . (int) $user);
+
+    $db->setQuery($query);
+
+    try
+    {
+      $db->execute();
+    }
+    catch (Exception $e)
+    {
+      throw new Exception('Problem creating a new real estate property in Allez Francais XML import createProperty()');
+    }
+
+    return $db->insertid();
+  }
+
   /**
    * TO DO - Remove these 'create' methods and use the base class methods.
    * @param type $db
@@ -99,4 +137,32 @@ class RealestateImport extends Import
 
     return $db->insertid();
   }
+
+  /**
+   * TO DO - Make reusable
+   * 
+   * @param type $db
+   * @param type $id
+   * @throws Exception
+   */
+  public function updateProperty($db, $id)
+  {
+    $query = $db->getQuery(true);
+    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
+    $query->update('#__realestate_property')
+            ->set('expiry_date = ' . $db->quote($expiry_date))
+            ->where('id = ' . (int) $id);
+
+    $db->setQuery($query);
+
+    try
+    {
+      $db->execute();
+    }
+    catch (RuntimeException $e)
+    {
+      throw new Exception('Problem updating new real estate property in Allez Francais XML import updateProperty()');
+    }
+  }
+
 }

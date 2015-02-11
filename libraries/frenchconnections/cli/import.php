@@ -60,10 +60,10 @@ abstract class Import extends JApplicationCli
    * @return boolean
    * @throws Exception
    */
-  public function getPropertyVersion($table = '', $field = '', $affiliate_reference = '', $db)
+  public function getPropertyVersion($columns = array(), $table = '', $field = '', $affiliate_reference = '', $db)
   {
     $query = $db->getQuery(true);
-    $query->select('id');
+    $query->select($db->quote(implode(',',$columns)));
     $query->from($db->quoteName($table));
     $query->where($db->quoteName($field) . '=' . $db->quote($affiliate_reference));
     $query->where('review = 0');
@@ -85,47 +85,10 @@ abstract class Import extends JApplicationCli
     }
 
     // Return the property version ID
-    return $row->id;
+    return $row;
   }
 
-  /**
-   * Creates new entry in $table 
-   * 
-   * @param type string - The table to create a new record in
-   * @param type $db
-   * @param type $user
-   * @return type
-   * @throws Exception
-   */
-  public function createProperty($table = '', $db, $user = 1, $published = 1)
-  {
-    $query = $db->getQuery(true);
-    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
-    $date = JFactory::getDate();
-
-    $query->insert($db->quoteName($table))
-            ->columns(
-                    array(
-                        $db->quoteName('expiry_date'), $db->quoteName('published'),
-                        $db->quoteName('created_on'), $db->quoteName('review'),
-                        $db->quoteName('created_by')
-                    )
-            )
-            ->values($db->quote($expiry_date) . ', ' . (int) $published . ' , ' . $db->quote($date) . ',0,' . (int) $user);
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (Exception $e)
-    {
-      throw new Exception('Problem creating a new real estate property in Allez Francais XML import createProperty()');
-    }
-
-    return $db->insertid();
-  }
+ 
 
   /**
    * Relies on 
@@ -146,7 +109,6 @@ abstract class Import extends JApplicationCli
     {
       throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
     }
-
     return $table->id;
   }
 
@@ -162,11 +124,11 @@ abstract class Import extends JApplicationCli
   {
     $query = $db->getQuery(true);
 
-    $query->insert('#__realestate_property_images_library')
+    $query->insert('#__property_images_library')
             ->columns(
                     array(
-                        $db->quoteName('version_id'), $db->quoteName('realestate_property_id'),
-                        $db->quoteName('image_file_name'), $db->quoteName('ordering')
+                        $db->quoteName('version_id'), $db->quoteName('unit_id'),
+                        $db->quoteName('url'), $db->quoteName('ordering')
                     )
             )
             ->values(implode(',', $data));
@@ -178,67 +140,13 @@ abstract class Import extends JApplicationCli
       $db->execute();
     }
     catch (RuntimeException $e)
-    {
+    { 
       throw new Exception('Problem creating an image entry in the database for Allez Francais XML import createImage()');
     }
 
     return $db->insertid();
   }
 
-  /**
-   * TO DO - Make reusable
-   * 
-   * @param type $db
-   * @param type $id
-   * @throws Exception
-   */
-  public function updateProperty($db, $id)
-  {
-    $query = $db->getQuery(true);
-    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
-    $query->update('#__realestate_property')
-            ->set('expiry_date = ' . $db->quote($expiry_date))
-            ->where('id = ' . (int) $id);
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (RuntimeException $e)
-    {
-      throw new Exception('Problem updating new real estate property in Allez Francais XML import updateProperty()');
-    }
-  }
-
-  public function updatePropertyVersion($db, $data = array())
-  {
-    $query = $db->getQuery(true);
-
-    $query->update('#__realestate_property_versions')
-            ->set('title = ' . $data['title'] . ','
-                    . 'description = ' . $data['description'] . ','
-                    . 'single_bedrooms = ' . $data['single_bedrooms'] . ','
-                    . 'double_bedrooms = ' . $data['double_bedrooms'] . ','
-                    . 'base_currency = ' . $data['base_currency'] . ','
-                    . 'price = ' . $data['price'] . ','
-                    . 'published_on = ' . $data['published_on'])
-            ->where('realestate_property_id = ' . $data['id']);
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (RuntimeException $e)
-    {
-      throw new Exception('Problem updating real estate property version in Allez Francais XML import updatePropertyVersion()');
-    }
-
-    return $db->insertid();
-  }
 
   public function email(Exception $e)
   {
@@ -250,5 +158,21 @@ abstract class Import extends JApplicationCli
     $send = $mail->send();
   }
 
+  public function getUnit()
+  {
+    return $this->unit;
+  }
+  
+  public function getPropertyTypes()
+  {
+    return $this->property_types;
+  }
+
+  public function getLocationTypes()
+  {
+    return $this->location_types;
+  }
+  
+  
 }
 

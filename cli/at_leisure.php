@@ -35,6 +35,14 @@ require_once(__DIR__ . '/leisure/codebase/classes/belvilla_jsonrpc_curl_gz.class
 class AtLeisure extends Import
 {
 
+  public $bathroomnumbers = array(1031, 1042);
+  public $bedroomnumbers = array(1028, 1030, 1031, 1032, 1033, 1035, 1038, 1040);
+  protected $property_types = array(160 => 1, 150 => 4, 60 => 5, 20 => 6, 30 => 7, 40 => 9, 70 => 10, 130 => 11, 100 => 11, 90 => 12, 140 => 9, 50 => 20);
+  public $expiry_date;
+  protected $location_types = array(360 => 133, 370 => 753, 380 => 135, 385 => 131);
+  public $date;
+  public $unit = array('property_id' => '', 'created_by' => '', 'published' => 1, 'ordering' => 1, 'review' => 0);
+
   /**
    * Entry point for the script
    *
@@ -57,8 +65,19 @@ class AtLeisure extends Import
             "LayoutExtendedV2",
             "DistancesV1")
     );
-    // Get a db instance and start a transaction
+
+    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
+    $date = JFactory::getDate();
+
+    // Get DB instance
     $db = JFactory::getDbo();
+
+    $db->truncateTable('#__property');
+    $db->truncateTable('#__property_versions');
+    $db->truncateTable('#__unit');
+    $db->truncateTable('#__unit_versions');
+    $db->truncateTable('#__property_images_library');
+
 
     $user = JFactory::getUser('atleisure')->id;
     $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
@@ -98,21 +117,29 @@ class AtLeisure extends Import
           $db->transactionStart();
 
           // Check whether this property agency reference already exists in the versions table
-          $id = $this->getPropertyVersion('#__property_versions', 'affiliate_property_id', $acco->HouseCode, $db);
-
-          $this->out('Property version ID: ' . $id . ' for ' . $acco->HouseCode);
+          $property_version = $this->getPropertyVersion(array('id', 'property_id'), '#__property_versions', 'affiliate_property_id', $acco->HouseCode, $db);
 
           // Only create new property stub if version ID not already existsing
-          if (!$id)
+          if (!$property_version->id)
           {
             $this->out('Adding property entry...');
+            $table = JTable::getInstance('Property', 'RentalTable');
+
+            // Array of property details to create
+            $property = array(
+                'expiry_date' => $expiry_date, 'published' => 0, 'created_on' => $db->quote(JFactory::getDate()), 'review' => 0, 'created_by' => $user
+            );
 
             // Create an entry in the #__realestate_property table, default to unpublish
-            $property_id = $this->createProperty('#__property', $db, $user, 0);
+            $property_id = $this->savePropertyVersion($table, $property);
 
-            $data['property']['property_id'] = (int) $property_id;
+            $data['property']['property_id'] = $property_version->property_id;
 
             $this->out('Created new property ID: ' . $property_id);
+          }
+          else
+          {
+            // Update expiry date of property
           }
 
           // Get the nearest city
@@ -122,7 +149,8 @@ class AtLeisure extends Import
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
           $location = $classification->getPath($city_id);
 
-          $data['property']['id'] = $id;
+          $data['property']['id'] = $property_version->id;
+          $data['property']['property_id'] = $property_version->property_id;
           $data['property']['affiliate_property_id'] = $acco->HouseCode;
           $data['property']['country'] = (int) $location[1]->id;
           $data['property']['area'] = (int) $location[2]->id;
@@ -135,58 +163,71 @@ class AtLeisure extends Import
           $data['property']['created_on'] = $db->quote(JFactory::getDate());
           $data['property']['review'] = 0;
           $data['property']['published_on'] = $db->quote(JFactory::getDate());
+          $data['property']['use_invoice_details'] = 1;
+          $data['property']['location_details'] = $this->getDistances($acco);
+          $data['property']['location_type'] = $this->getLocationType($acco);
 
-          $data['location_details'] = $this->getDistances($acco);
-          var_dump($acco->LayoutExtendedV2);
-          $data['unit']['id'] = $unit_id;
+          // TO DO - See about adding nearby activities and access options if possible
+          // Likely append text field to description. Also, add languages spoken (e.g. English)
 
           $this->out('Saving property version...');
 
           // Save out the property version
           $table = JTable::getInstance('PropertyVersions', 'RentalTable');
           $table->set('_tbl_keys', array('id'));
-          $property_version_id = $this->savePropertyVersion($table, $data['property']);
+
+          $this->savePropertyVersion($table, $data['property']);
+
+          // Check whether a unit already exists for this acco
+          $unit_version = $this->getPropertyVersion(array('id, unit_id'), '#__unit_versions', 'property_id', $property_id, $db);
+
+          // Only create new unit stub if version ID not already existsing
+          if (!$unit_version->id)
+          {
+            $this->out('Adding unit entry...');
+
+            $table = JTable::getInstance('Unit', 'RentalTable');
+
+            $unit = $this->getUnit();
+            $data['unit']['property_id'] = $property_id;
+            $data['unit']['created_by'] = $user;
+
+            // Create an entry in the #__realestate_property table, default to unpublish
+            $unit_id = $this->savePropertyVersion($table, $unit);
+
+            $data['unit']['unit_id'] = (int) $unit_id;
+
+            $this->out('Created new unit ID: ' . $unit_id);
+          }
+
+          $data['unit']['id'] = $unit_version->id;
+          $data['unit']['description'] = '<p>' . $acco->LanguagePackENV4->Description . '</p>';
+          $data['unit']['description'] .= '<p>' . $acco->LanguagePackENV4->HouseOwnerTip . '</p>';
+          $data['unit']['occupancy'] = $acco->BasicInformationV3->MaxNumberOfPersons;
+          $data['unit']['unit_title'] = addslashes($acco->BasicInformationV3->Name);
+          $data['unit']['property_type'] = $this->getPropertyType($acco);
+          $data['unit']['accommodation_type'] = 25;
+
+          $roomInfo = $this->getBathrooms($acco);
+
+          $data['unit']['bathrooms'] = $roomInfo[1];
+          
+          // Save out the property version
+          $table = JTable::getInstance('UnitVersions', 'RentalTable');
+          $table->set('_tbl_keys', array('id'));
+
+          $this->savePropertyVersion($table, $data['unit']);
+
+          $unit_id = $table->unit_id;
+          $unit_version_id = $table->unit_id;
 
           $this->out('Working through images...');
 
-          //Media
-          if (isset($acco->MediaV2))
-          {
-            // Set a counter so we can order the pics we want to save
-            $i = 1;
-
-            foreach ($acco->MediaV2 as $media)
-            {
-              if ($media->Type == "Photos")
-              {
-                foreach ($media->TypeContents as $photo)
-                {
-                  foreach ($photo->Versions as $photoversion)
-                  {
-
-                    if ($photoversion->width == '750')
-                    {
-
-                      $url = $photoversion->URL;
-
-                      // Save the image data out to the database...
-                      $this->createImage($db, array($unit_version_id, $unit_id, '', $url, '', $i));
-
-                      $i++;
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-
-
-
+          //$this->getImages($db, $acco, $unit_version_id, $unit_id);
           // Done so commit all the inserts and what have you...
-          //$db->transactionCommit();
+          $db->transactionCommit();
 
-          $this->out('Done processing... ' . $prop->agency_reference);
+          $this->out('Done processing... ');
         }
         catch (Exception $e)
         {
@@ -242,6 +283,113 @@ class AtLeisure extends Import
     }
 
     return $distances;
+  }
+
+  private function getBathrooms($acco)
+  {
+    $numberOfBedRooms = '';
+    $numberOfBathRooms = '';
+
+    if (isset($acco->LayoutExtendedV2))
+    {
+      foreach ($acco->LayoutExtendedV2 as $layout)
+      {
+        $item = $layout->Item;
+
+        if (in_array($item, $this->bedroomnumbers))
+        {
+          $numberOfBedRooms += $layout->NumberOfItems;
+        }
+        if (in_array($item, $this->bathroomnumbers))
+        {
+          $numberOfBathRooms += $layout->NumberOfItems;
+        }
+      }
+    }
+
+    $roomDetail = array($numberOfBedRooms, $numberOfBathRooms);
+
+    return $roomDetail;
+  }
+
+  public function getPropertyType($acco)
+  {
+    $property_types = $this->getPropertyTypes();
+    $property_type = '';
+    //PropertiesV1
+    if (isset($acco->PropertiesV1))
+    {
+      foreach ($acco->PropertiesV1 as $prop)
+      {
+        foreach ($prop->TypeContents as $TypeContent)
+        {
+          if (array_key_exists($TypeContent, $property_types))
+          {
+            $property_type = $property_types[$TypeContent];
+          }
+        }
+      }
+    }
+
+    return $property_type;
+  }
+
+  public function getLocationType($acco)
+  {
+    $location_types = $this->getLocationTypes();
+    $location_type = '';
+    //PropertiesV1
+    if (isset($acco->PropertiesV1))
+    {
+      foreach ($acco->PropertiesV1 as $prop)
+      {
+        foreach ($prop->TypeContents as $TypeContent)
+        {
+          if (array_key_exists($TypeContent, $location_types))
+          {
+            $location_type = $location_types[$TypeContent];
+          }
+        }
+      }
+    }
+
+    return $location_type;
+  }
+
+  public function getImages($db, $acco, $unit_version_id, $unit_id)
+  {
+    //Media
+    if (isset($acco->MediaV2))
+    {
+      // Set a counter so we can order the pics we want to save
+      $i = 1;
+
+      foreach ($acco->MediaV2 as $media)
+      {
+        if ($media->Type == "Photos")
+        {
+          foreach ($media->TypeContents as $photo)
+          {
+            foreach ($photo->Versions as $photoversion)
+            {
+
+              if ($photoversion->Width == '750')
+              {
+
+                $url = $photoversion->URL;
+
+                $data = array($unit_version_id, $unit_id, $db->quote($url), $i);
+
+                // Save the image data out to the database...
+                $this->createImage($db, $data);
+
+                $i++;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
 }
