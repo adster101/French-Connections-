@@ -63,7 +63,7 @@ abstract class Import extends JApplicationCli
   public function getPropertyVersion($columns = array(), $table = '', $field = '', $affiliate_reference = '', $db)
   {
     $query = $db->getQuery(true);
-    $query->select($db->quote(implode(',',$columns)));
+    $query->select($db->quote(implode(',', $columns)));
     $query->from($db->quoteName($table));
     $query->where($db->quoteName($field) . '=' . $db->quote($affiliate_reference));
     $query->where('review = 0');
@@ -88,7 +88,28 @@ abstract class Import extends JApplicationCli
     return $row;
   }
 
- 
+  /**
+   * Relies on 
+   * 
+   * @param type $table
+   * @param type $data
+   * @return type
+   * @throws Exception
+   */
+  public function load($table, $value)
+  {
+
+    try
+    {
+      $table->load($value);
+    }
+    catch (RuntimeException $e)
+    {
+      throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
+    }
+
+    return $table->getProperties();
+  }
 
   /**
    * Relies on 
@@ -98,18 +119,18 @@ abstract class Import extends JApplicationCli
    * @return type
    * @throws Exception
    */
-  public function savePropertyVersion($table, $data = array())
+  public function save($table, $data = array())
   {
-
     try
     {
       $table->save($data);
     }
-    catch (RuntimeException $e)
+    catch (Exception $e)
     {
-      throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
+      throw new Exception('Problem saving data )' . $e->getMessage());
     }
-    return $table->id;
+
+    return $table;
   }
 
   /**
@@ -140,13 +161,12 @@ abstract class Import extends JApplicationCli
       $db->execute();
     }
     catch (RuntimeException $e)
-    { 
+    {
       throw new Exception('Problem creating an image entry in the database for Allez Francais XML import createImage()');
     }
 
     return $db->insertid();
   }
-
 
   public function email(Exception $e)
   {
@@ -162,7 +182,7 @@ abstract class Import extends JApplicationCli
   {
     return $this->unit;
   }
-  
+
   public function getPropertyTypes()
   {
     return $this->property_types;
@@ -172,7 +192,6 @@ abstract class Import extends JApplicationCli
   {
     return $this->location_types;
   }
-  
-  
+
 }
 

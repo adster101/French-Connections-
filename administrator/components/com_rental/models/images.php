@@ -30,6 +30,7 @@ class RentalModelImages extends JModelList {
       id,
       unit_id,
       image_file_name,
+      url,
       caption,
       ordering,
       version_id

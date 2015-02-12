@@ -41,7 +41,8 @@ class AtLeisure extends Import
   public $expiry_date;
   protected $location_types = array(360 => 133, 370 => 753, 380 => 135, 385 => 131);
   public $date;
-  public $unit = array('property_id' => '', 'created_by' => '', 'published' => 1, 'ordering' => 1, 'review' => 0);
+  private $property_version_detail;
+  private $unit_version_detail;
 
   /**
    * Entry point for the script
@@ -109,6 +110,15 @@ class AtLeisure extends Import
       {
         try
         {
+
+          $layout = $this->getLayout($acco);
+
+          $property_table = JTable::getInstance('Property', 'RentalTable');
+          $unit_table = JTable::getInstance('Unit', 'RentalTable');
+
+          $property_version_table = JTable::getInstance('PropertyVersions', 'RentalTable');
+          $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
+
           // Reset the data array
           $data = array();
 
@@ -116,30 +126,29 @@ class AtLeisure extends Import
 
           $db->transactionStart();
 
-          // Check whether this property agency reference already exists in the versions table
-          $property_version = $this->getPropertyVersion(array('id', 'property_id'), '#__property_versions', 'affiliate_property_id', $acco->HouseCode, $db);
+          // Check whether this affiliate property reference already exists in the versions table
+          $this->property_version_detail = $property_version_table->load(array('affiliate_property_id' => $acco->HouseCode), false);
 
           // Only create new property stub if version ID not already existsing
-          if (!$property_version->id)
+          if (!$this->property_version_detail)
           {
-            $this->out('Adding property entry...');
-            $table = JTable::getInstance('Property', 'RentalTable');
+            $this->out('Property not found in versions table, adding property entry...');
 
             // Array of property details to create
             $property = array(
-                'expiry_date' => $expiry_date, 'published' => 0, 'created_on' => $db->quote(JFactory::getDate()), 'review' => 0, 'created_by' => $user
+                'expiry_date' => $expiry_date, 'created_on' => $db->quote(JFactory::getDate()), 'review' => 0, 'created_by' => $user
             );
 
-            // Create an entry in the #__realestate_property table, default to unpublish
-            $property_id = $this->savePropertyVersion($table, $property);
+            // Create an entry in the #__property table
+            $property_detail = $this->save($property_table, $property);
 
-            $data['property']['property_id'] = $property_version->property_id;
-
-            $this->out('Created new property ID: ' . $property_id);
+            // Be aware that the table primary key is updated 
+            $this->out('Created new property ID: ' . $property_detail->id);
           }
           else
           {
-            // Update expiry date of property
+            // Here we know we have the full property version detail
+            $property_detail = $property_table->load($this->property_version_detail->property_id);
           }
 
           // Get the nearest city
@@ -149,83 +158,81 @@ class AtLeisure extends Import
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
           $location = $classification->getPath($city_id);
 
-          $data['property']['id'] = $property_version->id;
-          $data['property']['property_id'] = $property_version->property_id;
-          $data['property']['affiliate_property_id'] = $acco->HouseCode;
-          $data['property']['country'] = (int) $location[1]->id;
-          $data['property']['area'] = (int) $location[2]->id;
-          $data['property']['region'] = (int) $location[3]->id;
-          $data['property']['department'] = (int) $location[4]->id;
-          $data['property']['city'] = (int) $location[5]->id;
-          $data['property']['latitude'] = $acco->BasicInformationV3->WGS84Latitude;
-          $data['property']['longitude'] = $acco->BasicInformationV3->WGS84Longitude;
-          $data['property']['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
-          $data['property']['created_on'] = $db->quote(JFactory::getDate());
-          $data['property']['review'] = 0;
-          $data['property']['published_on'] = $db->quote(JFactory::getDate());
-          $data['property']['use_invoice_details'] = 1;
-          $data['property']['location_details'] = $this->getDistances($acco);
-          $data['property']['location_type'] = $this->getLocationType($acco);
+          $data['property_version']['id'] = $this->property_version_detail->id;
+          $data['property_version']['property_id'] = $property_detail->id;
+          $data['property_version']['affiliate_property_id'] = $acco->HouseCode;
+          $data['property_version']['country'] = (int) $location[1]->id;
+          $data['property_version']['area'] = (int) $location[2]->id;
+          $data['property_version']['region'] = (int) $location[3]->id;
+          $data['property_version']['department'] = (int) $location[4]->id;
+          $data['property_version']['city'] = (int) $location[5]->id;
+          $data['property_version']['latitude'] = $acco->BasicInformationV3->WGS84Latitude;
+          $data['property_version']['longitude'] = $acco->BasicInformationV3->WGS84Longitude;
+          $data['property_version']['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
+          $data['property_version']['created_on'] = $db->quote(JFactory::getDate());
+          $data['property_version']['review'] = 0;
+          $data['property_version']['published_on'] = $db->quote(JFactory::getDate());
+          $data['property_version']['use_invoice_details'] = 1;
+          $data['property_version']['location_type'] = $this->getLocationType($acco);
+          $data['property_version']['location_details'] = $this->getDistances($acco);
 
           // TO DO - See about adding nearby activities and access options if possible
           // Likely append text field to description. Also, add languages spoken (e.g. English)
 
-          $this->out('Saving property version...');
+          $this->out('Saving property version details for ' . $property_detail->id);
 
-          // Save out the property version
-          $table = JTable::getInstance('PropertyVersions', 'RentalTable');
-          $table->set('_tbl_keys', array('id'));
+          // Set the table key back to version id. This ensures a new version is created 
+          // if there isn't one already
+          $property_version_table->set('_tbl_keys', array('id'));
 
-          $this->savePropertyVersion($table, $data['property']);
+          $this->property_version_detail = $this->save($property_version_table, $data['property_version']);
 
-          // Check whether a unit already exists for this acco
-          $unit_version = $this->getPropertyVersion(array('id, unit_id'), '#__unit_versions', 'property_id', $property_id, $db);
+          // Same again, but this time for the unit...
+          // Check whether this affiliate property reference already exists in the versions table
+          $this->unit_version_detail = $unit_version_table->load(array('property_id' => $property_detail->id), false);
 
-          // Only create new unit stub if version ID not already existsing
-          if (!$unit_version->id)
+          // Only create new property stub if version ID not already existsing
+          if (!$this->unit_version_detail)
           {
-            $this->out('Adding unit entry...');
+            $this->out('Unit not found in versions table, adding unit entry...');
 
-            $table = JTable::getInstance('Unit', 'RentalTable');
+            // Array of property details to create
+            $unit = array('property_id' => $property_detail->id, 'created_by' => $user, 'published' => 1, 'ordering' => 1, 'review' => 0);
 
-            $unit = $this->getUnit();
-            $data['unit']['property_id'] = $property_id;
-            $data['unit']['created_by'] = $user;
+            // Create an entry in the #__property table
+            $unit_detail = $this->save($unit_table, $unit);
 
-            // Create an entry in the #__realestate_property table, default to unpublish
-            $unit_id = $this->savePropertyVersion($table, $unit);
-
-            $data['unit']['unit_id'] = (int) $unit_id;
-
-            $this->out('Created new unit ID: ' . $unit_id);
+            // Be aware that the table primary key is updated 
+            $this->out('Created new unit ID: ' . $unit_detail->id);
+          }
+          else
+          {
+            // Load the unit details
+            $unit_detail = $unit_table->load($this->unit_version_detail->unit_id);
           }
 
-          $data['unit']['id'] = $unit_version->id;
-          $data['unit']['description'] = '<p>' . $acco->LanguagePackENV4->Description . '</p>';
-          $data['unit']['description'] .= '<p>' . $acco->LanguagePackENV4->HouseOwnerTip . '</p>';
-          $data['unit']['occupancy'] = $acco->BasicInformationV3->MaxNumberOfPersons;
-          $data['unit']['unit_title'] = addslashes($acco->BasicInformationV3->Name);
-          $data['unit']['property_type'] = $this->getPropertyType($acco);
-          $data['unit']['accommodation_type'] = 25;
+          $data['unit_version']['id'] = $this->unit_version_detail->id;
+          $data['unit_version']['unit_id'] = $unit_detail->id;
+          $data['unit_version']['property_id'] = $unit_detail->property_id;
+          $data['unit_version']['description'] = '<p>' . $acco->LanguagePackENV4->Description . '</p>';
+          $data['unit_version']['description'] .= '<p>' . $acco->LanguagePackENV4->HouseOwnerTip . '</p>';
+          $data['unit_version']['description'] .= '<p>' . $acco->LanguagePackENV4->LayoutSimple . '</p>';
+          $data['unit_version']['occupancy'] = $acco->BasicInformationV3->MaxNumberOfPersons;
+          $data['unit_version']['unit_title'] = addslashes($acco->BasicInformationV3->Name);
+          $data['unit_version']['property_type'] = $this->getPropertyType($acco);
+          $data['unit_version']['accommodation_type'] = 25;
 
-          $roomInfo = $this->getBathrooms($acco);
+          $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
 
-          $data['unit']['bathrooms'] = $roomInfo[1];
-          
-          // Save out the property version
-          $table = JTable::getInstance('UnitVersions', 'RentalTable');
-          $table->set('_tbl_keys', array('id'));
+          $unit_version_table->set('_tbl_keys', array('id'));
 
-          $this->savePropertyVersion($table, $data['unit']);
-
-          $unit_id = $table->unit_id;
-          $unit_version_id = $table->unit_id;
+          $unit_version_detail = $this->save($unit_version_table, $data['unit_version']);
 
           $this->out('Working through images...');
-
-          //$this->getImages($db, $acco, $unit_version_id, $unit_id);
-          // Done so commit all the inserts and what have you...
           $db->transactionCommit();
+
+          $this->getImages($db, $acco, $unit_version_detail->id, $unit_detail->id);
+          // Done so commit all the inserts and what have you...
 
           $this->out('Done processing... ');
         }
@@ -238,7 +245,6 @@ class AtLeisure extends Import
           // Send an email, woot!
           //$this->email($e);
         }
-        die;
       }
     }
   }
@@ -287,7 +293,7 @@ class AtLeisure extends Import
 
   private function getBathrooms($acco)
   {
-    $numberOfBedRooms = '';
+
     $numberOfBathRooms = '';
 
     if (isset($acco->LayoutExtendedV2))
@@ -296,10 +302,6 @@ class AtLeisure extends Import
       {
         $item = $layout->Item;
 
-        if (in_array($item, $this->bedroomnumbers))
-        {
-          $numberOfBedRooms += $layout->NumberOfItems;
-        }
         if (in_array($item, $this->bathroomnumbers))
         {
           $numberOfBathRooms += $layout->NumberOfItems;
@@ -307,9 +309,7 @@ class AtLeisure extends Import
       }
     }
 
-    $roomDetail = array($numberOfBedRooms, $numberOfBathRooms);
-
-    return $roomDetail;
+    return $numberOfBathRooms;
   }
 
   public function getPropertyType($acco)
@@ -390,6 +390,41 @@ class AtLeisure extends Import
         }
       }
     }
+  }
+
+  public function getLayout($acco)
+  {
+    echo $acco->HouseCode;
+    $layoutArr = array();
+
+    if (isset($acco->LayoutExtendedV2))
+    {
+      foreach ($acco->LayoutExtendedV2 as $layout)
+      {
+
+
+        if (empty($layout->ParentItem) && !array_key_exists($layout->Item, $layoutArr))
+        {
+          $layoutArr[$layout->Item] = array();
+        }
+
+        if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $layoutArr))
+        {
+          $layoutArr[$layout->ParentItem][$layout->Item] = array();
+        }
+
+        foreach ($layoutArr as $key => $value)
+        {
+          if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $value))
+          {
+            $layoutArr[$key][$layout->ParentItem][] = $layout->Item;
+          }
+        }
+      }
+    }
+
+    var_dump($layoutArr);
+    die;
   }
 
 }
