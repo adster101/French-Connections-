@@ -67,12 +67,17 @@ class AtLeisure extends Import
             "DistancesV1")
     );
 
-    $expiry_date = JFactory::getDate('+1 week')->calendar('Y-m-d');
-    $date = JFactory::getDate();
+    $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+
+    // Set a reasonable expiry date...
+    $expiry_date = JFactory::getDate('+1 year')->calendar('Y-m-d');
 
     // Get DB instance
     $db = JFactory::getDbo();
 
+    // Get the 'reference' items list
+    $reference_items = $this->_getReferenceLayoutItemsV1($rpc);
+       
     $db->truncateTable('#__property');
     $db->truncateTable('#__property_versions');
     $db->truncateTable('#__unit');
@@ -81,7 +86,6 @@ class AtLeisure extends Import
 
 
     $user = JFactory::getUser('atleisure')->id;
-    $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
     $this->out('About to get houses...');
 
@@ -110,8 +114,6 @@ class AtLeisure extends Import
       {
         try
         {
-
-          $layout = $this->getLayout($acco);
 
           $property_table = JTable::getInstance('Property', 'RentalTable');
           $unit_table = JTable::getInstance('Unit', 'RentalTable');
@@ -221,18 +223,25 @@ class AtLeisure extends Import
           $data['unit_version']['unit_title'] = addslashes($acco->BasicInformationV3->Name);
           $data['unit_version']['property_type'] = $this->getPropertyType($acco);
           $data['unit_version']['accommodation_type'] = 25;
-
+          $data['unit_version']['additional_price_notes'] = $this->additionalCosts($acco);
           $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
+
+          $layout = $this->getLayoutArr($acco);
+          
+          $bedrooms = $this->getBedrooms($layout);
+          print_r($layout);
+
 
           $unit_version_table->set('_tbl_keys', array('id'));
 
           $unit_version_detail = $this->save($unit_version_table, $data['unit_version']);
 
           $this->out('Working through images...');
-          $db->transactionCommit();
 
           $this->getImages($db, $acco, $unit_version_detail->id, $unit_detail->id);
+
           // Done so commit all the inserts and what have you...
+          $db->transactionCommit();
 
           $this->out('Done processing... ');
         }
@@ -245,6 +254,7 @@ class AtLeisure extends Import
           // Send an email, woot!
           //$this->email($e);
         }
+        die;
       }
     }
   }
@@ -279,13 +289,14 @@ class AtLeisure extends Import
     //DistancesV1
     if (isset($acco->DistancesV1))
     {
-      $distances .= '<ul class="list list-unstyled">';
+      $distances .= '<dl class="dl-horizontal">';
 
       foreach ($acco->DistancesV1 as $dist)
       {
-        $distances.='<li>' . $dist->To . "'," . $dist->DistanceInKm . 'Km</li>';
+        $distances.= '<dt>' . str_replace('\'', '', $dist->To) . '</dt>';
+        $distances.= '<dd>' . $dist->DistanceInKm . 'Km </dd>';
       }
-      $distances .= '</ul>';
+      $distances .= '</dl>';
     }
 
     return $distances;
@@ -392,39 +403,109 @@ class AtLeisure extends Import
     }
   }
 
-  public function getLayout($acco)
+  public function getLayoutArr($acco)
   {
-    echo $acco->HouseCode;
     $layoutArr = array();
 
-    if (isset($acco->LayoutExtendedV2))
+    if (!isset($acco->LayoutExtendedV2))
+    {
+      return false;
+    }
+    foreach ($acco->LayoutExtendedV2 as $layout)
+    {
+      if (empty($layout->ParentItem) && !array_key_exists($layout->Item, $layoutArr))
+      {
+        $layoutArr[$layout->Item] = array();
+      }
+
+
+      if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $layoutArr))
+      {
+        $layoutArr[$layout->ParentItem][$layout->Item] = array();
+      }
+    }
+
+    foreach ($layoutArr as $k => $v)
     {
       foreach ($acco->LayoutExtendedV2 as $layout)
       {
-
-
-        if (empty($layout->ParentItem) && !array_key_exists($layout->Item, $layoutArr))
+        if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $v))
         {
-          $layoutArr[$layout->Item] = array();
-        }
-
-        if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $layoutArr))
-        {
-          $layoutArr[$layout->ParentItem][$layout->Item] = array();
-        }
-
-        foreach ($layoutArr as $key => $value)
-        {
-          if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $value))
+          if (empty($layoutArr[$k][$layout->ParentItem][$layout->ParentSequenceNumber]))
           {
-            $layoutArr[$key][$layout->ParentItem][] = $layout->Item;
+            $layoutArr[$k][$layout->ParentItem][$layout->ParentSequenceNumber] = array();
           }
+        }
+
+        if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $v))
+        {
+          $layoutArr[$k][$layout->ParentItem][$layout->ParentSequenceNumber][$layout->Item] = $layout->NumberOfItems;
         }
       }
     }
 
-    var_dump($layoutArr);
-    die;
+    return $layoutArr;
+  }
+
+  public function additionalCosts($acco)
+  {
+
+    $additional_costs = '';
+
+    //CostsOnSite
+    if (isset($acco->LanguagePackENV4->CostsOnSite))
+    {
+      $additional_costs .= '<dl class="dl-horizontal">';
+      foreach ($acco->LanguagePackENV4->CostsOnSite as $cost)
+      {
+        $additional_costs .= '<dt>' . $cost->Description . '</dt>';
+        $additional_costs .= '<dd>' . $cost->Value . '</dd>';
+      }
+      $additional_costs .= '</dl>';
+    }
+    return $additional_costs;
+  }
+
+  /**
+   * Private function __generate_ReferenceLayoutItemsV1
+   * 
+   * calls ReferenceLayoutItemsV1 and creates a txt file to import into out database
+   * 
+   * @param	string		The name of the RPC call
+   * @return 	void 
+   */
+  private function _getReferenceLayoutItemsV1($rpc)
+  {
+    $items = array();
+
+    $rpc->makeCall('ReferenceLayoutItemsV1');
+    $res_objs = $rpc->getResult("json");
+    
+    if (!empty($res_objs))
+    {
+      foreach ($res_objs as $res_obj)
+      {
+
+        foreach ($res_obj->Items as $layout_subtypes)
+        {
+          if (!array_key_exists($res_obj->Number, $items))
+          {
+            $items[$layout_subtypes->Number] = array();
+          }
+          foreach ($layout_subtypes->Description as $layout_subtype_descr)
+          {
+
+            
+            if ($layout_subtype_descr->Language == 'EN')
+            {
+              $items[$layout_subtypes->Number] = $layout_subtype_descr->Description;
+            }
+          }
+        }
+      }
+    }
+    
+    return $items;
   }
 
 }

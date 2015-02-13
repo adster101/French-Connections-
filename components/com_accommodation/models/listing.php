@@ -790,6 +790,7 @@ class AccommodationModelListing extends JModelForm
       d.unit_id,
       d.image_file_name,
       d.caption,
+      d.url,
       d.ordering
     ');
 

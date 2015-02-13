@@ -218,11 +218,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                   </li>
                 <?php endif; ?>
                 <?php foreach ($this->images as $images => $image) : ?> 
+                  <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
                   <li>
-                    <?php if (!$images) : ?>
-                      <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
+                    <?php if ($images == 0) : ?>
+                      <img src="<?php echo $src ?>" />
                     <?php else: ?>
-                      <img src="images/general/ajax-loader-large.gif" data-src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
+                      <img src="images/general/ajax-loader-large.gif" data-src="<?php echo $src ?>" />
                     <?php endif; ?>
                     <p class="flex-caption">
                       <?php echo $image->caption; ?>
