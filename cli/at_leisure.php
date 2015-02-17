@@ -253,6 +253,7 @@ class AtLeisure extends Import
 
           if (!$this->unit_version_detail)
           {
+            // Woot
             $this->getImages($db, $acco, $unit_version_table->id, $unit_table->id);
           }
           // Done so commit all the inserts and what have you...
