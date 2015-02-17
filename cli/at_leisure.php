@@ -270,7 +270,6 @@ class AtLeisure extends Import
           // Send an email, woot!
           //$this->email($e);
         }
-        die;
       }
     }
   }
@@ -610,17 +609,15 @@ class AtLeisure extends Import
     {
       foreach ($res_objs as $res_obj)
       {
-
         foreach ($res_obj->Items as $layout_subtypes)
         {
           if (!array_key_exists($res_obj->Number, $items))
           {
             $items[$layout_subtypes->Number] = array();
           }
+          
           foreach ($layout_subtypes->Description as $layout_subtype_descr)
           {
-
-
             if ($layout_subtype_descr->Language == 'EN')
             {
               $items[$layout_subtypes->Number] = $layout_subtype_descr->Description;
