@@ -138,7 +138,13 @@ $canDo = RentalHelper::getActions();
                     </td>
                   <?php endif; ?>
                   <td>
-                    <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail) ?>
+                    <?php if (!empty($item->url_thumb)) : ?>
+                      
+                      <?php $uri = JURI::getInstance(); ?>
+                    <img src="<?php echo $uri->getScheme() . '://' . $item->url_thumb ?>" />
+                    <?php else: ?>
+                      <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail) ?>
+                    <?php endif; ?>
                     <?php if ($item->review != 2) : ?>
                       <a href="<?php echo JRoute::_('index.php?option=com_rental&task=listing.view&id=' . (int) $item->id) . '&' . JSession::getFormToken() . '=1'; ?>">
                         <?php if ($days_to_renewal <= 7 && !empty($days_to_renewal)) : ?>

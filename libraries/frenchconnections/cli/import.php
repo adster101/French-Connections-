@@ -149,7 +149,8 @@ abstract class Import extends JApplicationCli
             ->columns(
                     array(
                         $db->quoteName('version_id'), $db->quoteName('unit_id'),
-                        $db->quoteName('url'), $db->quoteName('ordering')
+                        $db->quoteName('url'), $db->quoteName('url_thumb'), 
+                        $db->quoteName('caption'), $db->quoteName('ordering')
                     )
             )
             ->values(implode(',', $data));

@@ -123,7 +123,8 @@ class RentalModelListings extends JModelList
       a.VendorTxCode,
       a.review,
       d.id as unit_id,
-      f.image_file_name as thumbnail
+      f.image_file_name as thumbnail,
+      f.url_thumb 
     ');
 
     // Join the user details if the user has the ACL rights.
@@ -211,9 +212,9 @@ class RentalModelListings extends JModelList
 
       // Exclude unpublished properties.......
       $query->where('a.expiry_date IS NOT NULL');
-      
+
       // Exclude properties where a non-renewal reason has been given
-      $query->where ('a.renewalreason = ""');
+      $query->where('a.renewalreason = ""');
 
       // We need to pull in additional information for this report, yippee!!
       $query->select('(select count(*) from ' . $db->quoteName('#__enquiries', 'enq') . ' where property_id = a.id and enq.date_created >= SUBDATE(a.expiry_date, INTERVAL 1 YEAR)) as enquiries');
@@ -247,6 +248,11 @@ class RentalModelListings extends JModelList
         $search = substr($search, 6);
         $query->where('(u.id = ' . $search . ')');
       }
+      elseif (stripos($search, 'dept:') === 0)
+      {
+        $search = substr($search, 5);
+        $query->where('(h.title = ' . $db->quote($db->escape($search, true)) . ')');
+      }
       else
       {
         $search = $db->Quote('%' . $db->escape($search, true) . '%');
@@ -265,9 +271,14 @@ class RentalModelListings extends JModelList
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where unit_id = d.id))');
     $query->where('(d.ordering = 1 or d.ordering is null)');
 
+
+
     // Join the images, innit!
     $query->join('left', '#__property_images_library f on e.id = f.version_id');
     $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = e.id) or f.ordering is null)');
+
+    // Join the classification table...
+    $query->join('left', '#__classifications h on h.id = b.department');
 
     $listOrdering = $this->getState('list.ordering', 'a.id');
     $listDirn = $db->escape($this->getState('list.direction', ''));

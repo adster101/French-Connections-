@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_users
  * @since       2.5
  */
-class JHtmlGeneral {
+class JHtmlGeneral
+{
 
   /**
    * Display an image.
@@ -27,14 +28,16 @@ class JHtmlGeneral {
    *
    * @since   2.5
    */
-  public static function image($src, $class = 'thumbnail') {
+  public static function image($src, $class = 'thumbnail')
+  {
     $src = preg_replace('#[^A-Z0-9\-_\./]#i', '', $src);
     $file = JPATH_SITE . '/' . $src;
 
     jimport('joomla.filesystem.path');
     JPath::check($file);
 
-    if (!file_exists($file)) {
+    if (!file_exists($file))
+    {
       return '<img src="' . JUri::root() . 'images/general/no-image.png" alt="" class="' . $class . '" />';
     }
 
@@ -47,7 +50,8 @@ class JHtmlGeneral {
    *
    */
 
-  public static function button($btnClass = '', $task = '', $iconClass = '', $text) {
+  public static function button($btnClass = '', $task = '', $iconClass = '', $text)
+  {
 
     $html = '';
     $html.='<button class="' . $btnClass . '" onclick="Joomla.submitbutton(\'' . $task . '\')">'
@@ -65,28 +69,32 @@ class JHtmlGeneral {
    * @param type $baseCurrency
    * @param type $exchangeRate
    */
-  public static function price($price = '', $baseCurrency = 'GBP', $exchange_rate_eur = '', $exchange_rate_usd = '') {
+  public static function price($price = '', $baseCurrency = 'GBP', $exchange_rate_eur = '', $exchange_rate_usd = '')
+  {
 
     $prices = array();
     $rates = JHtmlGeneral::getExchangeRates();
-  
+
 
     // If the base currency is set in pounds 
-    if ($baseCurrency == 'GBP') {
-      $prices['GBP'] = $price; 
+    if ($baseCurrency == 'GBP')
+    {
+      $prices['GBP'] = $price;
       // Check whether we have an owner currency override (!?). If so then calculate the euro rate based on that 
-      $prices['EUR'] = ((float) $exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
-        round((($rates['EUR']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+      $prices['EUR'] = ((float) $exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) :
+              round((($rates['EUR']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
       // Likewise for the USD rate
-      $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
-        round((($rates['USD']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
-    } elseif ($baseCurrency == 'EUR') { // Base rate is in euros
+      $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) :
+              round((($rates['USD']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+    }
+    elseif ($baseCurrency == 'EUR')
+    { // Base rate is in euros
       $prices['EUR'] = $price;
-      $prices['GBP'] = ((float) $exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
-        round((($rates['GBP']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
+      $prices['GBP'] = ((float) $exchange_rate_eur > 0) ? round(($exchange_rate_eur * $price), $int = 0, $mode = PHP_ROUND_HALF_UP) :
+              round((($rates['GBP']->exchange_rate) * $price), $int = 0, $mode = PHP_ROUND_HALF_UP);
       // To convert into USD we need to convert from GBP
-      $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) : 
-        round((($rates['USD']->exchange_rate) * $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP);
+      $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) :
+              round((($rates['USD']->exchange_rate) * $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP);
     }
 
 
@@ -100,7 +108,8 @@ class JHtmlGeneral {
    * 
    * @param type $currencyID
    */
-  public static function getExchangeRates($currencyID = '') {
+  public static function getExchangeRates($currencyID = '')
+  {
 
     $exchange_rate = '';
 

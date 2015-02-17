@@ -72,17 +72,19 @@ class AtLeisure extends Import
     // Set a reasonable expiry date...
     $expiry_date = JFactory::getDate('+1 year')->calendar('Y-m-d');
 
+    $date = JFactory::getDate()->calendar('Y-m-d');
+
     // Get DB instance
     $db = JFactory::getDbo();
 
     // Get the 'reference' items list
     $reference_items = $this->_getReferenceLayoutItemsV1($rpc);
 
-    $db->truncateTable('#__property');
-    $db->truncateTable('#__property_versions');
-    $db->truncateTable('#__unit');
-    $db->truncateTable('#__unit_versions');
-    $db->truncateTable('#__property_images_library');
+    //$db->truncateTable('#__property');
+    //$db->truncateTable('#__property_versions');
+    //$db->truncateTable('#__unit');
+    //$db->truncateTable('#__unit_versions');
+    //$db->truncateTable('#__property_images_library');
 
     $user = JFactory::getUser('atleisure')->id;
 
@@ -111,8 +113,7 @@ class AtLeisure extends Import
 
       foreach ($result as $k => $acco)
       {
-        try
-        {
+        try {
 
           $property_table = JTable::getInstance('Property', 'RentalTable');
           $unit_table = JTable::getInstance('Unit', 'RentalTable');
@@ -137,7 +138,7 @@ class AtLeisure extends Import
 
             // Array of property details to create
             $property = array(
-                'expiry_date' => $expiry_date, 'created_on' => $db->quote(JFactory::getDate()), 'review' => 0, 'created_by' => $user
+                'expiry_date' => $expiry_date, 'created_on' => $date, 'review' => 0, 'created_by' => $user
             );
 
             // Create an entry in the #__property table
@@ -170,7 +171,7 @@ class AtLeisure extends Import
           $data['property_version']['latitude'] = $acco->BasicInformationV3->WGS84Latitude;
           $data['property_version']['longitude'] = $acco->BasicInformationV3->WGS84Longitude;
           $data['property_version']['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
-          $data['property_version']['created_on'] = $db->quote(JFactory::getDate());
+          $data['property_version']['created_on'] = $db->quote($date);
           $data['property_version']['review'] = 0;
           $data['property_version']['published_on'] = $db->quote(JFactory::getDate());
           $data['property_version']['use_invoice_details'] = 1;
@@ -261,8 +262,7 @@ class AtLeisure extends Import
 
           $this->out('Done processing... ');
         }
-        catch (Exception $e)
-        {
+        catch (Exception $e) {
           // Roll back any batched inserts etc
           $db->transactionRollback();
 
@@ -399,13 +399,22 @@ class AtLeisure extends Import
           {
             foreach ($photo->Versions as $photoversion)
             {
-
+              $url = '';
+              $uRl_thumb = '';
+              
               if ($photoversion->Width == '750')
               {
-
                 $url = $photoversion->URL;
+              }
 
-                $data = array($unit_version_id, $unit_id, $db->quote($url), $i);
+              if ($photoversion->Width == '255')
+              {
+                $url_thumb = $photoversion->URL;
+              }
+
+              if (!empty($url) && !empty($url_thumb))
+              {
+                $data = array($unit_version_id, $unit_id, $db->quote($url), $db->quote($url_thumb), $db->quote($photo->Tag), $i);
 
                 // Save the image data out to the database...
                 $this->createImage($db, $data);
