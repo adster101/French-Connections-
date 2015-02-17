@@ -77,13 +77,12 @@ class AtLeisure extends Import
 
     // Get the 'reference' items list
     $reference_items = $this->_getReferenceLayoutItemsV1($rpc);
-       
+
     $db->truncateTable('#__property');
     $db->truncateTable('#__property_versions');
     $db->truncateTable('#__unit');
     $db->truncateTable('#__unit_versions');
     $db->truncateTable('#__property_images_library');
-
 
     $user = JFactory::getUser('atleisure')->id;
 
@@ -150,7 +149,7 @@ class AtLeisure extends Import
           else
           {
             // Here we know we have the full property version detail
-            $property_detail = $property_table->load($this->property_version_detail->property_id);
+            $property_detail = $property_table->load($property_version_table->property_id);
           }
 
           // Get the nearest city
@@ -160,8 +159,8 @@ class AtLeisure extends Import
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
           $location = $classification->getPath($city_id);
 
-          $data['property_version']['id'] = $this->property_version_detail->id;
-          $data['property_version']['property_id'] = $property_detail->id;
+          $data['property_version']['id'] = $property_version_table->id;
+          $data['property_version']['property_id'] = $property_table->id;
           $data['property_version']['affiliate_property_id'] = $acco->HouseCode;
           $data['property_version']['country'] = (int) $location[1]->id;
           $data['property_version']['area'] = (int) $location[2]->id;
@@ -181,17 +180,17 @@ class AtLeisure extends Import
           // TO DO - See about adding nearby activities and access options if possible
           // Likely append text field to description. Also, add languages spoken (e.g. English)
 
-          $this->out('Saving property version details for ' . $property_detail->id);
+          $this->out('Saving property version details for ' . $property_table->id);
 
           // Set the table key back to version id. This ensures a new version is created 
           // if there isn't one already
           $property_version_table->set('_tbl_keys', array('id'));
 
-          $this->property_version_detail = $this->save($property_version_table, $data['property_version']);
+          $this->save($property_version_table, $data['property_version']);
 
           // Same again, but this time for the unit...
           // Check whether this affiliate property reference already exists in the versions table
-          $this->unit_version_detail = $unit_version_table->load(array('property_id' => $property_detail->id), false);
+          $this->unit_version_detail = $unit_version_table->load(array('property_id' => $property_table->id), false);
 
           // Only create new property stub if version ID not already existsing
           if (!$this->unit_version_detail)
@@ -199,7 +198,7 @@ class AtLeisure extends Import
             $this->out('Unit not found in versions table, adding unit entry...');
 
             // Array of property details to create
-            $unit = array('property_id' => $property_detail->id, 'created_by' => $user, 'published' => 1, 'ordering' => 1, 'review' => 0);
+            $unit = array('property_id' => $property_table->id, 'created_by' => $user, 'published' => 1, 'ordering' => 1, 'review' => 0);
 
             // Create an entry in the #__property table
             $unit_detail = $this->save($unit_table, $unit);
@@ -210,15 +209,35 @@ class AtLeisure extends Import
           else
           {
             // Load the unit details
-            $unit_detail = $unit_table->load($this->unit_version_detail->unit_id);
+            $unit_detail = $unit_table->load(array('property_id' => $property_table->id));
           }
 
-          $data['unit_version']['id'] = $this->unit_version_detail->id;
+          $data['unit_version']['id'] = $unit_version_table->id;
           $data['unit_version']['unit_id'] = $unit_detail->id;
-          $data['unit_version']['property_id'] = $unit_detail->property_id;
-          $data['unit_version']['description'] = '<p>' . $acco->LanguagePackENV4->Description . '</p>';
-          $data['unit_version']['description'] .= '<p>' . $acco->LanguagePackENV4->HouseOwnerTip . '</p>';
-          $data['unit_version']['description'] .= '<p>' . $acco->LanguagePackENV4->LayoutSimple . '</p>';
+          $data['unit_version']['property_id'] = $property_table->id;
+
+          // Add the description, if there is one
+          if (!empty($acco->LanguagePackENV4->Description))
+          {
+            $data['unit_version']['description'] = '<p>' . $acco->LanguagePackENV4->Description . '</p>';
+          }
+
+          // Process the layout detail
+          if (!empty($acco->LayoutExtendedV2))
+          {
+
+            //$layoutArr = $this->getLayoutArr($acco);
+
+            $layoutStr = $this->getLayout($acco, $reference_items);
+
+            $data['unit_version']['description'] .= $layoutStr;
+          }
+
+          if (!empty($acco->LanguagePackENV4->HouseOwnerTip))
+          {
+            $data['unit_version']['description'] .= '<p>' . $acco->LanguagePackENV4->HouseOwnerTip . '</p>';
+          }
+
           $data['unit_version']['occupancy'] = $acco->BasicInformationV3->MaxNumberOfPersons;
           $data['unit_version']['unit_title'] = addslashes($acco->BasicInformationV3->Name);
           $data['unit_version']['property_type'] = $this->getPropertyType($acco);
@@ -226,20 +245,16 @@ class AtLeisure extends Import
           $data['unit_version']['additional_price_notes'] = $this->additionalCosts($acco);
           $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
 
-          $layout = $this->getLayoutArr($acco);
-          
-          $bedrooms = $this->getBedrooms($layout);
-          print_r($layout);
-
-
           $unit_version_table->set('_tbl_keys', array('id'));
 
-          $unit_version_detail = $this->save($unit_version_table, $data['unit_version']);
+          $this->save($unit_version_table, $data['unit_version']);
 
           $this->out('Working through images...');
 
-          $this->getImages($db, $acco, $unit_version_detail->id, $unit_detail->id);
-
+          if (!$this->unit_version_detail)
+          {
+            $this->getImages($db, $acco, $unit_version_table->id, $unit_table->id);
+          }
           // Done so commit all the inserts and what have you...
           $db->transactionCommit();
 
@@ -407,18 +422,13 @@ class AtLeisure extends Import
   {
     $layoutArr = array();
 
-    if (!isset($acco->LayoutExtendedV2))
-    {
-      return false;
-    }
     foreach ($acco->LayoutExtendedV2 as $layout)
     {
+
       if (empty($layout->ParentItem) && !array_key_exists($layout->Item, $layoutArr))
       {
         $layoutArr[$layout->Item] = array();
       }
-
-
       if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $layoutArr))
       {
         $layoutArr[$layout->ParentItem][$layout->Item] = array();
@@ -429,6 +439,7 @@ class AtLeisure extends Import
     {
       foreach ($acco->LayoutExtendedV2 as $layout)
       {
+
         if (!empty($layout->ParentItem) && array_key_exists($layout->ParentItem, $v))
         {
           if (empty($layoutArr[$k][$layout->ParentItem][$layout->ParentSequenceNumber]))
@@ -444,7 +455,111 @@ class AtLeisure extends Import
       }
     }
 
+
     return $layoutArr;
+  }
+
+  public function getLayout($acco, $reference_layout)
+  {
+
+    $layoutStr = '';
+    $generalStr = array();
+
+    $layoutArr = $this->getLayoutStrArr($acco, $reference_layout);
+
+
+    foreach ($layoutArr as $area => $layout)
+    {
+
+      if (empty($layout))
+      {
+        $generalStr[] = $area;
+      }
+      else
+      {
+        $layoutStr .= '<h4>' . $area . '</h4>';
+        $layoutStr .= '<dl>';
+      }
+
+      foreach ($layout as $room => $contents)
+      {
+
+
+        foreach ($contents as $content)
+        {
+          $layoutStr .= '<dt>' . $room . '</dt>';
+
+          foreach ($content as $name => $quantity)
+          {
+            $layoutStr .= '<dd>' . $name . ' x ' . $quantity . '</dd>';
+          }
+        }
+      }
+      if (!empty($layout))
+      {
+
+        $layoutStr .= '</dl>';
+      }
+    }
+
+    if (!empty($generalStr))
+    {
+
+      $layoutStr .= '<h4>General</h4>';
+      $layoutStr .= '<dl>';
+      $layoutStr .= '<dt>Facilities on site</dt>';
+      $layoutStr .= '<dd>' . implode(', ', $generalStr) . '</dd>';
+      $layoutStr .= '</dl>';
+    }
+
+    return $layoutStr;
+  }
+
+  public function getLayoutStrArr($acco, $reference_layout)
+  {
+
+    $layoutStr = array();
+
+    foreach ($acco->LayoutExtendedV2 as $layout)
+    {
+      $item = $reference_layout[$layout->Item];
+      $parentItem = $reference_layout[$layout->ParentItem];
+
+      if (empty($layout->ParentItem) && !array_key_exists($item, $layoutStr))
+      {
+        $layoutStr[$item] = array();
+      }
+
+      if (!empty($layout->ParentItem) && array_key_exists($parentItem, $layoutStr))
+      {
+        $layoutStr[$parentItem][$item] = array();
+      }
+    }
+
+    foreach ($layoutStr as $k => $v)
+    {
+      foreach ($acco->LayoutExtendedV2 as $layout)
+      {
+
+        $item = $reference_layout[$layout->Item];
+        $parentItem = $reference_layout[$layout->ParentItem];
+
+        if (!empty($layout->ParentItem) && array_key_exists($parentItem, $v))
+        {
+          if (empty($layoutStr[$k][$parentItem][$layout->ParentSequenceNumber]))
+          {
+            $layoutStr[$k][$parentItem][$layout->ParentSequenceNumber] = array();
+          }
+        }
+
+        if (!empty($layout->ParentItem) && array_key_exists($parentItem, $v))
+        {
+          $layoutStr[$k][$parentItem][$layout->ParentSequenceNumber][$item] = $layout->NumberOfItems;
+        }
+      }
+    }
+
+    return $layoutStr;
   }
 
   public function additionalCosts($acco)
@@ -480,7 +595,7 @@ class AtLeisure extends Import
 
     $rpc->makeCall('ReferenceLayoutItemsV1');
     $res_objs = $rpc->getResult("json");
-    
+
     if (!empty($res_objs))
     {
       foreach ($res_objs as $res_obj)
@@ -495,7 +610,7 @@ class AtLeisure extends Import
           foreach ($layout_subtypes->Description as $layout_subtype_descr)
           {
 
-            
+
             if ($layout_subtype_descr->Language == 'EN')
             {
               $items[$layout_subtypes->Number] = $layout_subtype_descr->Description;
@@ -504,7 +619,7 @@ class AtLeisure extends Import
         }
       }
     }
-    
+
     return $items;
   }
 

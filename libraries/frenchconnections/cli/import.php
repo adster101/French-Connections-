@@ -108,7 +108,7 @@ abstract class Import extends JApplicationCli
       throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
     }
 
-    return $table->getProperties();
+    return $table;
   }
 
   /**
@@ -162,7 +162,7 @@ abstract class Import extends JApplicationCli
     }
     catch (RuntimeException $e)
     {
-      throw new Exception('Problem creating an image entry in the database for Allez Francais XML import createImage()');
+      throw new Exception($e->getMessage());
     }
 
     return $db->insertid();
