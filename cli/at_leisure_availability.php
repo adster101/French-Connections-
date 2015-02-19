@@ -44,6 +44,9 @@ class AtLeisure extends Import
    */
   public function doExecute()
   {
+
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+
     JLoader::import('frenchconnections.library');
 
     // Get DB instance
@@ -56,7 +59,10 @@ class AtLeisure extends Import
         "HouseCodes" => $acco_chunk,
         "Items" => array("AvailabilityPeriodV1")
     );
-
+    
+    // 
+    $interval = new DateInterval('P1D');
+    
     $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
     $rpc->makeCall('ListOfHousesV1');
@@ -78,43 +84,60 @@ class AtLeisure extends Import
 
       $rpc->makeCall('DataOfHousesV1', $params);
       $result = $rpc->getResult("json");
-
+      
       foreach ($result as $k => $acco)
       {
-        try {
+        try
+        {
+          $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
 
           $this->out('About to process property ' . $acco->HouseCode . ' (' . $k . ' of ' . count($result) . ')');
-
+  
           $availability = array();
           $counter = 1;
           foreach ($acco->AvailabilityPeriodV1 as $avper)
           {
             $ArrivalDate = DateTime::createFromFormat('Y-m-d', $avper->ArrivalDate);
             $DepartureDate = DateTime::createFromFormat('Y-m-d', $avper->DepartureDate);
+            
+            $arrival_day = JHtml::_('date', $avper->ArrivalDate, 'N');
 
             $nights = $DepartureDate->diff($ArrivalDate);
             $periodId = $this->__getPeriod($ArrivalDate, $nights->days);
 
-            if ($periodId == '1w') // TO DO - and arrivaldate is saturday
+            // Check that the available
+            if ($periodId == '1w' && $arrival_day == 6) 
             {
-              $availability[$counter]['start_date'] = $ArrivalDate;
-              $availability[$counter]['end_date'] = $DepartureDate;
+              // Start date of the availability period
+              $availability[$counter]['start_date'] = JHtml::_('date', $avper->ArrivalDate, 'Y-m-d');
+              
+              // Adjust the end date so it's the Friday rather than the following satrday
+              $availability[$counter]['end_date'] = JHtml::_('date', $DepartureDate->sub($interval)->format('Y-m-d') , 'Y-m-d');
+              
+              // Status is true, i.e. available
               $availability[$counter]['status'] = 1;
-                
+
               $counter++;
             }
           }
-          
-          print_r($availability);die;
 
           $db->transactionStart();
 
+          $unit_id = $props[$acco->HouseCode]->unit_id;
+          
+          // Delete existing availability
+          $availabilityTable->delete($unit_id);
+          
+          // Woot, put some availability back
+          $availabilityTable->save($unit_id, $availability);
+          
           // Done so commit all the inserts and what have you...
           $db->transactionCommit();
 
           $this->out('Done processing... ');
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
           // Roll back any batched inserts etc
           $db->transactionRollback();
 
@@ -147,11 +170,13 @@ class AtLeisure extends Import
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
 
       $props = $db->loadObjectList('affiliate_property_id');
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       throw new Exception($e->getMessage());
     }
 
@@ -169,8 +194,7 @@ class AtLeisure extends Import
    */
   private function __getPeriod($a_date, $nights)
   {
-    switch ($nights)
-    {
+    switch ($nights) {
       case 2:
         if ($a_date->format('N') == 5)
           return "wk"; //vrijdag

@@ -53,7 +53,7 @@ class AtLeisure extends Import
    */
   public function doExecute()
   {
-    // Add the classification table so we can get the location details
+// Add the classification table so we can get the location details
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
@@ -69,22 +69,24 @@ class AtLeisure extends Import
 
     $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
-    // Set a reasonable expiry date...
+// Set a reasonable expiry date...
     $expiry_date = JFactory::getDate('+1 year')->calendar('Y-m-d');
 
     $date = JFactory::getDate()->calendar('Y-m-d');
 
-    // Get DB instance
+// Get DB instance
     $db = JFactory::getDbo();
 
-    // Get the 'reference' items list
+// Get the 'reference' items list
     $reference_items = $this->_getReferenceLayoutItemsV1($rpc);
 
-    //$db->truncateTable('#__property');
-    //$db->truncateTable('#__property_versions');
-    //$db->truncateTable('#__unit');
-    //$db->truncateTable('#__unit_versions');
-    //$db->truncateTable('#__property_images_library');
+    $reference_items_detail = $this->_getReferenceLayoutDetailsV1($rpc);
+
+    $db->truncateTable('#__property');
+    $db->truncateTable('#__property_versions');
+    $db->truncateTable('#__unit');
+    $db->truncateTable('#__unit_versions');
+    $db->truncateTable('#__property_images_library');
 
     $user = JFactory::getUser('atleisure')->id;
 
@@ -98,22 +100,23 @@ class AtLeisure extends Import
 
     $this->out('Got houses...');
 
-    // Chunk up the house codes baby!
+// Chunk up the house codes baby!
     $accocode_chunks = array_chunk($props, 100);
 
-    // Load up 100 property details at a time.
+// Load up 100 property details at a time.
     foreach ($accocode_chunks as $chunk => $acco_chunk)
     {
       $this->out('Processing accommodation chunk ' . $chunk . '/' . count($accocode_chunks));
 
-      $params['HouseCodes'] = $acco_chunk;
+      $params['HouseCodes'] = array('FR-06560-05');
 
       $rpc->makeCall('DataOfHousesV1', $params);
       $result = $rpc->getResult("json");
 
       foreach ($result as $k => $acco)
       {
-        try {
+        try
+        {
 
           $property_table = JTable::getInstance('Property', 'RentalTable');
           $unit_table = JTable::getInstance('Unit', 'RentalTable');
@@ -121,42 +124,42 @@ class AtLeisure extends Import
           $property_version_table = JTable::getInstance('PropertyVersions', 'RentalTable');
           $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
 
-          // Reset the data array
+// Reset the data array
           $data = array();
 
           $this->out('About to process property ' . $acco->HouseCode . ' (' . $k . ' of ' . count($result) . ')');
 
           $db->transactionStart();
 
-          // Check whether this affiliate property reference already exists in the versions table
+// Check whether this affiliate property reference already exists in the versions table
           $this->property_version_detail = $property_version_table->load(array('affiliate_property_id' => $acco->HouseCode), false);
 
-          // Only create new property stub if version ID not already existsing
+// Only create new property stub if version ID not already existsing
           if (!$this->property_version_detail)
           {
             $this->out('Property not found in versions table, adding property entry...');
 
-            // Array of property details to create
+// Array of property details to create
             $property = array(
                 'expiry_date' => $expiry_date, 'created_on' => $date, 'review' => 0, 'created_by' => $user
             );
 
-            // Create an entry in the #__property table
+// Create an entry in the #__property table
             $property_detail = $this->save($property_table, $property);
 
-            // Be aware that the table primary key is updated 
+// Be aware that the table primary key is updated 
             $this->out('Created new property ID: ' . $property_detail->id);
           }
           else
           {
-            // Here we know we have the full property version detail
+// Here we know we have the full property version detail
             $property_detail = $property_table->load($property_version_table->property_id);
           }
 
-          // Get the nearest city
+// Get the nearest city
           $city_id = $this->nearestcity($acco->BasicInformationV3->WGS84Latitude, $acco->BasicInformationV3->WGS84Longitude);
 
-          // Get the location details for this property
+// Get the location details for this property
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
           $location = $classification->getPath($city_id);
 
@@ -178,38 +181,38 @@ class AtLeisure extends Import
           $data['property_version']['location_type'] = $this->getLocationType($acco);
           $data['property_version']['location_details'] = $this->getDistances($acco);
 
-          // TO DO - See about adding nearby activities and access options if possible
-          // Likely append text field to description. Also, add languages spoken (e.g. English)
+// TO DO - See about adding nearby activities and access options if possible
+// Likely append text field to description. Also, add languages spoken (e.g. English)
 
           $this->out('Saving property version details for ' . $property_table->id);
 
-          // Set the table key back to version id. This ensures a new version is created 
-          // if there isn't one already
+// Set the table key back to version id. This ensures a new version is created 
+// if there isn't one already
           $property_version_table->set('_tbl_keys', array('id'));
 
           $this->save($property_version_table, $data['property_version']);
 
-          // Same again, but this time for the unit...
-          // Check whether this affiliate property reference already exists in the versions table
+// Same again, but this time for the unit...
+// Check whether this affiliate property reference already exists in the versions table
           $this->unit_version_detail = $unit_version_table->load(array('property_id' => $property_table->id), false);
 
-          // Only create new property stub if version ID not already existsing
+// Only create new property stub if version ID not already existsing
           if (!$this->unit_version_detail)
           {
             $this->out('Unit not found in versions table, adding unit entry...');
 
-            // Array of property details to create
+// Array of property details to create
             $unit = array('property_id' => $property_table->id, 'created_by' => $user, 'published' => 1, 'ordering' => 1, 'review' => 0);
 
-            // Create an entry in the #__property table
+// Create an entry in the #__property table
             $unit_detail = $this->save($unit_table, $unit);
 
-            // Be aware that the table primary key is updated 
+// Be aware that the table primary key is updated 
             $this->out('Created new unit ID: ' . $unit_detail->id);
           }
           else
           {
-            // Load the unit details
+// Load the unit details
             $unit_detail = $unit_table->load(array('property_id' => $property_table->id));
           }
 
@@ -217,19 +220,19 @@ class AtLeisure extends Import
           $data['unit_version']['unit_id'] = $unit_detail->id;
           $data['unit_version']['property_id'] = $property_table->id;
 
-          // Add the description, if there is one
+// Add the description, if there is one
           if (!empty($acco->LanguagePackENV4->Description))
           {
             $data['unit_version']['description'] = '<p>' . $acco->LanguagePackENV4->Description . '</p>';
           }
 
-          // Process the layout detail
+// Process the layout detail
           if (!empty($acco->LayoutExtendedV2))
           {
 
-            //$layoutArr = $this->getLayoutArr($acco);
+//$layoutArr = $this->getLayoutArr($acco);
 
-            $layoutStr = $this->getLayout($acco, $reference_items);
+            $layoutStr = $this->getLayout($acco, $reference_items, $reference_items_detail);
 
             $data['unit_version']['description'] .= $layoutStr;
           }
@@ -254,21 +257,22 @@ class AtLeisure extends Import
 
           if (!$this->unit_version_detail)
           {
-            // Woot
+// Woot
             $this->getImages($db, $acco, $unit_version_table->id, $unit_table->id);
           }
-          // Done so commit all the inserts and what have you...
+// Done so commit all the inserts and what have you...
           $db->transactionCommit();
 
           $this->out('Done processing... ');
         }
-        catch (Exception $e) {
-          // Roll back any batched inserts etc
+        catch (Exception $e)
+        {
+// Roll back any batched inserts etc
           $db->transactionRollback();
 
           var_dump($e);
-          // Send an email, woot!
-          //$this->email($e);
+// Send an email, woot!
+//$this->email($e);
         }
       }
     }
@@ -285,7 +289,7 @@ class AtLeisure extends Import
 
     foreach ($acco_objs as $acco_obj)
     {
-      // Get only the FR houses
+// Get only the FR houses
       if ($acco_obj->Country == 'FR')
       {
         array_push($props, $acco_obj->HouseCode);
@@ -301,7 +305,7 @@ class AtLeisure extends Import
 
     $distances = '';
 
-    //DistancesV1
+//DistancesV1
     if (isset($acco->DistancesV1))
     {
       $distances .= '<dl class="dl-horizontal">';
@@ -342,7 +346,7 @@ class AtLeisure extends Import
   {
     $property_types = $this->getPropertyTypes();
     $property_type = '';
-    //PropertiesV1
+//PropertiesV1
     if (isset($acco->PropertiesV1))
     {
       foreach ($acco->PropertiesV1 as $prop)
@@ -364,7 +368,7 @@ class AtLeisure extends Import
   {
     $location_types = $this->getLocationTypes();
     $location_type = '';
-    //PropertiesV1
+//PropertiesV1
     if (isset($acco->PropertiesV1))
     {
       foreach ($acco->PropertiesV1 as $prop)
@@ -384,10 +388,10 @@ class AtLeisure extends Import
 
   public function getImages($db, $acco, $unit_version_id, $unit_id)
   {
-    //Media
+//Media
     if (isset($acco->MediaV2))
     {
-      // Set a counter so we can order the pics we want to save
+// Set a counter so we can order the pics we want to save
       $i = 1;
 
       foreach ($acco->MediaV2 as $media)
@@ -399,23 +403,19 @@ class AtLeisure extends Import
             foreach ($photo->Versions as $photoversion)
             {
               $url = '';
-              $uRl_thumb = '';
-              
+
               if ($photoversion->Width == '750')
               {
                 $url = $photoversion->URL;
               }
 
-              if ($photoversion->Width == '255')
+              if (!empty($url))
               {
-                $url_thumb = $photoversion->URL;
-              }
 
-              if (!empty($url) && !empty($url_thumb))
-              {
+                $url_thumb = str_replace('750x500', '255x170', $url);
+
                 $data = array($unit_version_id, $unit_id, $db->quote($url), $db->quote($url_thumb), $db->quote($photo->Tag), $i);
-
-                // Save the image data out to the database...
+// Save the image data out to the database...
                 $this->createImage($db, $data);
 
                 $i++;
@@ -468,15 +468,16 @@ class AtLeisure extends Import
     return $layoutArr;
   }
 
-  public function getLayout($acco, $reference_layout)
+  public function getLayout($acco, $reference_layout, $reference_items_detail)
   {
 
     $layoutStr = '';
     $generalStr = array();
 
-    $layoutArr = $this->getLayoutStrArr($acco, $reference_layout);
+    $layoutArr = $this->getLayoutStrArr($acco, $reference_layout, $reference_items_detail);
 
-
+    print_r($layoutArr);
+    die;
     foreach ($layoutArr as $area => $layout)
     {
 
@@ -524,7 +525,7 @@ class AtLeisure extends Import
     return $layoutStr;
   }
 
-  public function getLayoutStrArr($acco, $reference_layout)
+  public function getLayoutStrArr($acco, $reference_layout, $reference_items_detail)
   {
 
     $layoutStr = array();
@@ -537,6 +538,14 @@ class AtLeisure extends Import
       if (empty($layout->ParentItem) && !array_key_exists($item, $layoutStr))
       {
         $layoutStr[$item] = array();
+        if (!empty($layout->Details))
+        {
+                    
+          foreach ($layout->Details as $detail)
+          {
+            $layoutStr[$item][] = $reference_items_detail[$detail];
+          }
+        }
       }
 
       if (!empty($layout->ParentItem) && array_key_exists($parentItem, $layoutStr))
@@ -576,7 +585,7 @@ class AtLeisure extends Import
 
     $additional_costs = '';
 
-    //CostsOnSite
+//CostsOnSite
     if (isset($acco->LanguagePackENV4->CostsOnSite))
     {
       $additional_costs .= '<dl class="dl-horizontal">';
@@ -615,7 +624,7 @@ class AtLeisure extends Import
           {
             $items[$layout_subtypes->Number] = array();
           }
-          
+
           foreach ($layout_subtypes->Description as $layout_subtype_descr)
           {
             if ($layout_subtype_descr->Language == 'EN')
@@ -627,6 +636,38 @@ class AtLeisure extends Import
       }
     }
 
+    return $items;
+  }
+
+  /**
+   * Private function __generate_ReferenceLayoutItemsV1
+   * 
+   * calls ReferenceLayoutItemsV1 and creates a txt file to import into out database
+   * 
+   * @param	string		The name of the RPC call
+   * @return 	void 
+   */
+  private function _getReferenceLayoutDetailsV1($rpc)
+  {
+    $items = array();
+
+    $rpc->makeCall('ReferenceLayoutDetailsV1');
+    $res_objs = $rpc->getResult("json");
+
+    if (!empty($res_objs))
+    {
+      foreach ($res_objs as $res_obj)
+      {
+
+        foreach ($res_obj->DetailDescription as $descr)
+        {
+          if ($descr->Language == 'EN')
+          {
+            $items[$res_obj->Number] = $descr->Description;
+          }
+        }
+      }
+    }
     return $items;
   }
 

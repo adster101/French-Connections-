@@ -15,6 +15,16 @@
 			component="com_featuredproperties"
 			section="component"/>
   </fieldset>
+  <fieldset
+    name="basic"
+  label="JGLOBAL_FIELDSET_BASIC">
+    <field 
+      name="max"
+      type="text"
+      label="Max for start date"
+      description="The maximum number of properties allowed for a particular starting date" />
+    
+    </fieldset>
 </config>
 <!--
 ########################################################################################

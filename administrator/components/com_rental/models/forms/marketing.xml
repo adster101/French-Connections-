@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_rental/models/rules">
   <fieldset 
+    name="featured"
+    label="COM_RENTAL_MARKETING_FEATURED_PROPERTY_FIELDSET"
+    description="COM_RENTAL_MARKETING_FEATURED_PROPERTY_DESCRIPTION"    
+  >
+  </fieldset>
+    
+  <fieldset 
     name="video"
     label="COM_RENTAL_MARKETING_VIDEO_URL_FIELDSET"
     description="COM_RENTAL_MARKETING_VIDEO_URL_DESCRIPTION">
