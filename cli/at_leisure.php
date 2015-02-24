@@ -38,8 +38,9 @@ class AtLeisure extends Import
   public $bathroomnumbers = array(1031, 1042);
   public $bedroomnumbers = array(1028, 1030, 1031, 1032, 1033, 1035, 1038, 1040);
   protected $property_types = array(160 => 1, 150 => 4, 60 => 5, 20 => 6, 30 => 7, 40 => 9, 70 => 10, 130 => 11, 100 => 11, 90 => 12, 140 => 9, 50 => 20);
-  protected $kitchen_facilities = array('Ceramic hob' => 464, 'Tumble dryer' => 109, 'Dishwasher' => 103, 'Washing machine' => 110, 'Microwave' => 108);
-  protected $external_facilities = array('BBQ' => 474, 'garden' => 98, 'tenniscourt' => 75);
+  protected $kitchen_facilities = array('Fridge freezer' => 486, 'Aga' => 737, 'Oven' => 466, 'Ceramic hob' => 464, 'Tumble dryer' => 109, 'Dishwasher' => 103, 'Washing machine' => 110, 'Microwave' => 108);
+  protected $external_facilities = array('Roof terrace' => 329, 'BBQ' => 474, 'Garden' => 98, 'Tennis court' => 75);
+  protected $internal_facilities = array();
   public $expiry_date;
   protected $location_types = array(360 => 133, 370 => 753, 380 => 135, 385 => 131);
   public $date;
@@ -89,6 +90,7 @@ class AtLeisure extends Import
     //$db->truncateTable('#__unit');
     //$db->truncateTable('#__unit_versions');
     //$db->truncateTable('#__property_images_library');
+    //$db->truncateTable('#__unit_attributes');
 
     $user = JFactory::getUser('atleisure')->id;
 
@@ -110,15 +112,14 @@ class AtLeisure extends Import
     {
       $this->out('Processing accommodation chunk ' . $chunk . '/' . count($accocode_chunks));
 
-      $params['HouseCodes'] = array('FR-02260-02');
-
+      $params['HouseCodes'] = $acco_chunk;
+      
       $rpc->makeCall('DataOfHousesV1', $params);
       $result = $rpc->getResult("json");
 
       foreach ($result as $k => $acco)
       {
-        try
-        {
+        try {
 
           $property_table = JTable::getInstance('Property', 'RentalTable');
           $unit_table = JTable::getInstance('Unit', 'RentalTable');
@@ -229,7 +230,7 @@ class AtLeisure extends Import
           }
 
           $layoutArr = $this->getLayoutStrArr($acco, $reference_items, $reference_items_detail);
-
+          
           $layoutStr = $this->getLayout($layoutArr);
 
           $data['unit_version']['description'] .= $layoutStr;
@@ -240,6 +241,7 @@ class AtLeisure extends Import
           }
 
           $data['unit_version']['occupancy'] = $acco->BasicInformationV3->MaxNumberOfPersons;
+          $data['unit_version']['changeover_day'] = 445;
           $data['unit_version']['unit_title'] = addslashes($acco->BasicInformationV3->Name);
           $data['unit_version']['property_type'] = $this->getPropertyType($acco);
           $data['unit_version']['accommodation_type'] = 25;
@@ -247,14 +249,16 @@ class AtLeisure extends Import
           $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
           $data['unit_version'] = $this->getBedrooms($layoutArr, $data['unit_version']);
 
-          // Work out the facilities and save them against this unit and version
-          $this->_getFacilities($acco, $layoutArr, $unit_version_table->id, $unit_table->id);
-
           $unit_version_table->set('_tbl_keys', array('id'));
 
           $this->save($unit_version_table, $data['unit_version']);
 
           $this->out('Working through images...');
+
+          // Work out the facilities and save them against this unit and version
+          $facilities = $this->_getFacilities($acco, $layoutArr, $unit_version_table->id, $unit_table->id);
+
+          $this->_saveFacilities($facilities, $unit_version_table->id, $unit_table->id);
 
           if (!$this->unit_version_detail)
           {
@@ -266,15 +270,14 @@ class AtLeisure extends Import
 
           $this->out('Done processing... ');
         }
-        catch (Exception $e)
-        {
+        catch (Exception $e) {
           // Roll back any batched inserts etc
           $db->transactionRollback();
 
           var_dump($e);
           // Send an email, woot!
           //$this->email($e);
-        }
+        }  
       }
     }
   }
@@ -326,25 +329,51 @@ class AtLeisure extends Import
   {
 
     $facilities = array();
-    $facilities['internal'] = array();
-    $facilities['external'] = array();
-    $facilities['kitchen'] = array();
 
-    //CostsOnSite
+    // Get whether this property has wifi or not
     if (isset($acco->LanguagePackENV4->CostsOnSite))
     {
       foreach ($acco->LanguagePackENV4->CostsOnSite as $cost)
       {
         if (strpos($cost->Description, 'Wifi') === 0)
         {
-          $facilities['internal'][] = 539;
+          $facilities[] = 539;
         }
       }
     }
 
+    // Internal facilities
+    foreach ($layout as $floor => $plan)
+    {
+      if ($floor == 'airconditioning')
+      {
+        $facilities[] = 74;
+      }
+      elseif ($floor == 'Swimmingpool')
+      {
+        if (strpos($floor['Swimmingpool'], 'private' === 0))
+        {
+          $facilities[] = 100;
+        }
+        else
+        {
+          $facilities[] = 101;
+        }
+      }
+    }
+
+    // External facilities
+    foreach ($layout as $floor => $plan)
+    {
+      if (array_key_exists($floor, $this->external_facilities))
+      {
+        $facilities[] = $this->external_facilities[$floor];
+      }
+    }
+
+    // Sift through the kitchen gubbins
     foreach ($layout as $rooms)
     {
-      // We have a bedroom...
       foreach ($rooms as $roomtype => $room_layout)
       {
         if ($roomtype == 'Kitchen')
@@ -352,37 +381,65 @@ class AtLeisure extends Import
           foreach ($room_layout as $items)
           {
             foreach ($items as $item => $quantity)
-            {      
-              
+            {
               if (array_key_exists($item, $this->kitchen_facilities))
               {
-                $facilities['kitchen'][] = $this->kitchen_facilities[$item];
+                $facilities[] = $this->kitchen_facilities[$item];
               }
             }
           }
-        } 
+        }
       }
     }
+    return $facilities;
+  }
 
+  private function _saveFacilities($facilities = array(), $unit_version_id, $unit_id)
+  {
+    $db = JFactory::getDBO();
 
-    foreach ($layout as $floor => $plan)
+    $query = $db->getQuery(true);
+
+    $query->delete('#__unit_attributes')
+            ->where('version_id = ' . (int) $unit_version_id);
+    
+    $db->setQuery($query);
+    
+    try {
+
+      $db->execute();
+    }
+    catch (Exception $e) {
+      
+    }
+
+    // Clear the query and start the insert
+    $query->clear();
+    $query->insert('#__unit_attributes');
+    $query->columns('version_id,property_id,attribute_id');
+
+    foreach ($facilities as $facility)
     {
-      if ($floor == 'airconditioning')
-      {
-        $facilities['internal'][] = 74;
-      }
+
+      $insert = array();
+
+      $insert[] = $unit_version_id;
+      $insert[] = $unit_id;
+      $insert[] = $facility;
+      $query->values(implode(',', $insert));
+    }
+    $db->setQuery($query);
+
+    try {
+
+      $db->execute();
+    }
+    catch (Exception $e) {
+      var_dump($e);
+      die;
     }
 
-
-
-
-
-
-    print_r($facilities);
-    die;
-
-
-    return $internal_facilities;
+    return true;
   }
 
   private function getBathrooms($acco)
@@ -429,7 +486,8 @@ class AtLeisure extends Import
             $bed = key($beds);
             $quantity = $beds[$bed];
 
-            switch ($bed) {
+            switch ($bed)
+            {
               case 'Single bed':
                 if ($quantity == 1)
                 {
@@ -601,6 +659,7 @@ class AtLeisure extends Import
           {
             foreach ($photo->Versions as $photoversion)
             {
+             
               $url = '';
 
               if ($photoversion->Width == '750')
@@ -742,6 +801,7 @@ class AtLeisure extends Import
         $item = ucfirst($reference_layout[$layout->Item]);
 
         // The parent item (e.g. kitchen or 1st floor)
+
         $parentItem = ucfirst($reference_layout[$layout->ParentItem]);
 
         // does this layout item exist in the rooms array? e.g. this item is a bed and parent item

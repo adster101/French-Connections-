@@ -74,8 +74,12 @@ class AccommodationModelListing extends JModelForm
   public function getForm($data = array(), $loadData = true)
   {
 
+    $owner = JFactory::getUser($this->item->created_by);
+
+    $form = ($owner->username == 'atleisure') ? 'atleisure' : 'enquiry';
+
     // Get the form.
-    $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_accommodation.enquiry', $form, array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))
     {
@@ -165,6 +169,7 @@ class AccommodationModelListing extends JModelForm
 
       $select = '
         a.id as property_id,
+        a.created_by,
         ufc.sms_alert_number,
         ufc.sms_valid,
         ufc.sms_nightwatchman,
@@ -332,13 +337,11 @@ class AccommodationModelListing extends JModelForm
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
       }
 
-      try
-      {
+      try {
 
         $this->item = $this->_db->setQuery($query)->loadObject();
       }
-      catch (Exception $e)
-      {
+      catch (Exception $e) {
         // Runtime exception
         // Different to a null result.
         // TO DO - Log me baby
@@ -437,8 +440,7 @@ class AccommodationModelListing extends JModelForm
 
 
 
-    try
-    {
+    try {
 
       // Get the state for this property ID
       $unit_id = $this->getState('unit.id');
@@ -497,8 +499,7 @@ class AccommodationModelListing extends JModelForm
 
       return $this->facilities;
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Log the exception and return false
       JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
@@ -515,8 +516,7 @@ class AccommodationModelListing extends JModelForm
     if (!isset($this->units))
     {
 
-      try
-      {
+      try {
         // Get the state for this property ID
         $id = $this->getState('property.id');
 
@@ -546,8 +546,7 @@ class AccommodationModelListing extends JModelForm
 
         return $result;
       }
-      catch (Exception $e)
-      {
+      catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching units for - ' . $id . $e->getMessage(), JLOG::ERROR, 'units');
         return false;
@@ -607,8 +606,7 @@ class AccommodationModelListing extends JModelForm
     {
       $unit_id = $this->getState('unit.id');
 
-      try
-      {
+      try {
         // Get the state for this property ID
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
@@ -642,8 +640,7 @@ class AccommodationModelListing extends JModelForm
         // Return the reviews, if any
         return $this->reviews;
       }
-      catch (Exception $e)
-      {
+      catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $unit_id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
@@ -660,13 +657,13 @@ class AccommodationModelListing extends JModelForm
   public function getAvailabilityCalendar()
   {
     // Get availability as an array of days
-    $availability = $this->getAvailability(); 
-            
+    $availability = $this->getAvailability();
+
     $availability_by_day = RentalHelper::getAvailabilityByDay($availability);
 
     // Build the calendar taking into account current availability...
     $calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability_by_day, 2, 0, $link = false);
-    
+
     return $calendar;
   }
 
@@ -730,8 +727,7 @@ class AccommodationModelListing extends JModelForm
     if (!isset($this->offer))
     {
 
-      try
-      {
+      try {
         // Get the state for this property ID
         $id = (!empty($id)) ? $id : (int) $this->getState('unit.id', '');
 
@@ -752,8 +748,7 @@ class AccommodationModelListing extends JModelForm
 
         return $this->offer;
       }
-      catch (Exception $e)
-      {
+      catch (Exception $e) {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
@@ -843,12 +838,10 @@ class AccommodationModelListing extends JModelForm
     $table = JTable::getInstance('Classification', 'ClassificationTable');
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
 
-    try
-    {
+    try {
       $path = $table->getPath($pk = $this->item->city_id);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       // Log the exception here...
       return false;
@@ -907,17 +900,101 @@ class AccommodationModelListing extends JModelForm
 
       $db->setQuery($query);
 
-      try
-      {
+      try {
         $db->execute();
       }
-      catch (RuntimeException $e)
-      {
+      catch (RuntimeException $e) {
         $this->setError($e->getMessage());
         return false;
       }
     }
     return true;
+  }
+
+  public function processAtLeisureBooking($data = array(), $id = '', $unit_id = '')
+  {
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    $id = $input->get('id', 0, 'int');
+    $unit_id = $input->get('unit_id', 0, 'int');
+
+    $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
+
+    // Include the atleisure curl class
+    require_once(JPATH_BASE . '/cli/leisure/codebase/classes/belvilla_jsonrpc_curl_gz.class.php');
+
+    // Get instance of the curl class
+    $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+
+    $affiliate_property_id = $this->getAffiliateCode($id);
+
+    $arrival_date = JHtml::_('date', $data['start_date'], 'Y-m-d');
+    $departure_date = JHtml::_('date', $data['end_date'], 'Y-m-d');
+
+    // First up we have to check the price for this period...
+    $check_availability_params = array(
+        "WebpartnerCode" => "glynis",
+        "WebpartnerPassword" => "gironde",
+        "HouseCode" => "$affiliate_property_id",
+        "ArrivalDate" => "$arrival_date",
+        "DepartureDate" => "$departure_date",
+        "Price" => 421
+    );
+
+    $booking_params = array(
+        "WebpartnerCode" => "glynis",
+        "WebpartnerPassword" => "gironde",
+        "BookingOrOption" => "Booking",
+        "HouseCode" => "$affiliate_property_id",
+        "ArrivalDate" => "$arrival_date",
+        "DepartureDate" => "$departure_date",
+        "NumberOfAdults" => 3,
+        "NumberOfChildren" => 1,
+        "NumberOfBabies" => 0,
+        "NumberOfPets" => 0,
+        "CustomerSurname" => "MyName",
+        "CustomerCountry" => "GB",
+        "CustomerTelephone1Country" => "GB",
+        "CustomerTelephone1Number" => "40-2163600",
+        "CustomerEmail" => "webdistribution@leisure-group.eu",
+        "CustomerLanguage" => "EN",
+        "WebsiteRentPrice" => 421,
+        "Test" => "No"
+    );
+
+    try {
+
+      $rpc->makeCall('CheckAvailabilityV1', $check_availability_params);
+      $result = $rpc->getResult("json");
+
+      if ($result->Available == 'Yes')
+      {
+        $booking_params["WebsiteRentPrice"] = $result->CorrectPrice;
+      }
+      else
+      {
+        // Deal with this by returning an error message, mostly means not available
+        $message = "COM_ACCOMMODATION_AT_LEISURE_DATES_UNAVAILABLE";
+        JFactory::getApplication()->enqueueMessage($message, 'error');
+        return false;
+      }
+
+      $rpc->makeCall('PlaceBookingV1', $booking_params);
+
+      $result = $rpc->getResult("json");
+
+      // Must be okay, so set the json as a session variable
+      $app->setUserState('com_accommodation.atleisure.data', $result);
+
+
+      return true;
+    }
+    catch (Exception $e) {
+      JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+      return false;
+    }
   }
 
   /**
@@ -951,7 +1028,7 @@ class AccommodationModelListing extends JModelForm
     $banned_emails = explode(',', $params->get('banned_email'));
     $banned_phrases = explode(',', $params->get('banned_text'));
     // The details of where who is sending the email (e.g. FC in this case).
-    $mailfrom = $params->get('admin_enquiry_email_no_reply','');
+    $mailfrom = $params->get('admin_enquiry_email_no_reply', '');
     $fromname = $app->getCfg('fromname');
     $sitename = $app->getCfg('sitename');
     $car_hire_link = $domain . JRoute::_('index.php?option=com_content&Itemid=' . (int) $params->get('car_hire_affiliate'));
@@ -1178,17 +1255,39 @@ class AccommodationModelListing extends JModelForm
 
     $this->_db->setQuery($query);
 
-    try
-    {
+    try {
 
       $row = $this->_db->loadObject();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       
     }
 
     return $row->count;
+  }
+
+  public function getAffiliateCode($id = '')
+  {
+
+    $db = JFactory::getDBO();
+
+    $query = $db->getQuery(true);
+
+    $query->select('affiliate_property_id')
+            ->from('#__property_versions')
+            ->where('property_id = ' . (int) $id)
+            ->where('review = 0');
+
+    $db->setQuery($query);
+
+    try {
+      $result = $db->loadObject();
+    }
+    catch (Exception $e) {
+      return false;
+    }
+
+    return $result->affiliate_property_id;
   }
 
 }

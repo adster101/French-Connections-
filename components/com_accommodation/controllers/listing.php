@@ -13,9 +13,94 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class AccommodationControllerListing extends JControllerForm {
+class AccommodationControllerListing extends JControllerForm
+{
 
-  public function saveNotes($notes = array()) {
+  public function bookatleisure()
+  {
+
+    // Check for request forgeries.
+    JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+    $app = JFactory::getApplication();
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    $model = $this->getModel();
+
+    $id = $this->input->get('id', '', 'int');
+    $unit_id = $this->input->get('unit_id', '', 'int');
+    // Get the itemID of the accommodation component. 
+    $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
+
+    // Get the data from POST
+    $data = $this->input->post->get('jform', array(), 'array');
+
+    $model->getItem();
+
+    // Validate the posted data.
+    $form = $model->getForm();
+    if (!$form)
+    {
+      JError::raiseError(500, $model->getError());
+      return false;
+    }
+
+    // Validate the data. 
+    // Returns either false or the validated, filtered data.
+    $validate = $model->validate($form, $data);
+
+    // TO DO - Possibly better to move save from model to here?
+    if ($validate === false)
+    {
+      // Get the validation messages.
+      $errors = $model->getErrors();
+      // Push up to five validation messages out to the user.
+      for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
+          $app->enqueueMessage($errors[$i]->getMessage(), 'error');
+        }
+        else
+        {
+          $app->enqueueMessage($errors[$i], 'error');
+        }
+      }
+
+      // Trap any errors 
+      $errors = $app->getMessageQueue();
+
+      // Save the data in the session.
+      $app->setUserState('com_accommodation.enquiry.data', $data);
+      $app->setUserState('com_accommodation.enquiry.messages', $errors);
+
+      // Redirect back to the contact form.
+      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+      return false;
+    }
+
+    // Write the enquiry into the enquiry table...
+    if (!$model->processAtLeisureBooking($validate, $id, $unit_id))
+    {
+      // Trap any errors 
+      $errors = $app->getMessageQueue();
+
+      // Save the data in the session.
+      $app->setUserState('com_accommodation.enquiry.data', $data);
+      $app->setUserState('com_accommodation.enquiry.messages', $errors);
+
+      // Redirect back to the contact form.
+      $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+      return false;
+    }
+
+    $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisurebook'));
+
+    return true;
+  }
+
+  public function saveNotes($notes = array())
+  {
 
     // Add the tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
@@ -23,7 +108,8 @@ class AccommodationControllerListing extends JControllerForm {
     // Get an instance of the note table
     $table = JTable::getInstance('Note', 'RentalTable');
 
-    foreach ($notes as $note) {
+    foreach ($notes as $note)
+    {
       if (!$table->bind($note))
       {
         return false;
@@ -40,11 +126,13 @@ class AccommodationControllerListing extends JControllerForm {
     return true;
   }
 
-  public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true)) {
+  public function getModel($name = '', $prefix = '', $config = array('ignore_request' => true))
+  {
     return parent::getModel($name, $prefix, array('ignore_request' => false));
   }
 
-  public function viewsite() {
+  public function viewsite()
+  {
     // Check for request forgeries.
     JSession::checkToken('GET') or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -98,14 +186,16 @@ class AccommodationControllerListing extends JControllerForm {
         // Redirect the user to the actual flippin' website
         $this->setRedirect(JRoute::_($website, false));
       }
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
 
       // Log error   
       throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR', $id, $e->getMessage()), 500);
     }
   }
 
-  public function enquiry() {
+  public function enquiry()
+  {
 
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
@@ -119,7 +209,7 @@ class AccommodationControllerListing extends JControllerForm {
     $unit_id = $this->input->get('unit_id', '', 'int');
     // Get the itemID of the accommodation component. 
     $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
-		$context = "$this->option.enquiry.data";
+    $context = "$this->option.enquiry.data";
 
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
@@ -137,6 +227,7 @@ class AccommodationControllerListing extends JControllerForm {
 
         // Redirect back to the contact form.
         $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+
         return false;
       }
     }
@@ -159,7 +250,8 @@ class AccommodationControllerListing extends JControllerForm {
       // Get the validation messages.
       $errors = $model->getErrors();
       // Push up to five validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
+      {
         if ($errors[$i] instanceof Exception)
         {
           $app->enqueueMessage($errors[$i]->getMessage(), 'error');

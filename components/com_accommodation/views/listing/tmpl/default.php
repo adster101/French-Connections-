@@ -21,6 +21,7 @@ $uri = JUri::getInstance()->toString();
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
+$owner = JFactory::getUser($this->item->created_by)->username;
 
 if ((int) $preview && $preview == 1)
 {
@@ -681,7 +682,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   </div>
   <div class="row">
     <div class="col-lg-7 col-md-7 col-sm-7">
-      <?php echo $this->loadTemplate('form'); ?>
+      <?php echo ($owner == 'atleisure') ? $this->loadTemplate('atleisure_form') : $this->loadTemplate('form'); ?>
     </div>
     <div class="col-lg-5 col-md-5 col-sm-5">
       <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4> 

@@ -46,17 +46,17 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
 ?>
 
 <?php if (count($errors > 0)) : ?>
-
   <div class="contact-error">
     <?php echo $render->render($errors); ?>
   </div>
-
 <?php endif; ?>
 
 <div class="well well-sm well-light-blue">
   <form class="form-validate form-horizontal" id="contact-form" action="" method="post">
     <?php echo JHtml::_('form.token'); ?>
 
+    
+    
     <fieldset class="adminform">
       <div class="form-group">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
@@ -82,12 +82,7 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
           <?php echo $this->form->getInput('guest_phone'); ?>
         </div>
       </div>
-      <div class="form-group">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
-          <?php echo $this->form->getLabel('message'); ?>
-          <?php echo $this->form->getInput('message'); ?>
-        </div>
-      </div>
+
       <div class="form-group">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
           <?php echo $this->form->getLabel('start_date'); ?>  

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
+   
+    <field 
+      name="guest_forename"
+      type="text"
+      id="first-name"
+      class="validate-name input-small form-control"
+      description="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_PLACEHOLDER"
+      filter="string"
+      required="true"
+      maxlength="20"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_VALIDATION_MESSAGE"
+      validate="name"
+    />
+    
+    <field 
+      name="guest_surname"
+      type="text"
+      id="last-name"
+      class="validate-name form-control"
+      description="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_PLACEHOLDER"
+      filter="string"
+      required="true"
+      maxlength="20"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_VALIDATION_MESSAGE"
+      validate="name"
+    />   
+    
+    <field 
+      name="guest_email"
+      type="email"
+      maxlength="75"
+      description="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_EMAIL_TEXT_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_EMAIL_PLACEHOLDER"
+      filter="string"
+      class="form-control"
+      required="true"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
+      validate="email"
+    />
+    
+    <field 
+      name="guest_phone"
+      type="tel"
+      id="guest-telephone"
+      class="input-medium form-control"
+      maxlength="20"
+      description="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_LABEL"
+      message="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_VALIDATION_MESSAGE"
+      hint="COM_ACCOMMODATION_ENQUIRY_TELEPHONE_PLACEHOLDER"
+      filter="string"
+      validate="telephone"
+      labelclass="control-label"
+    />
+          
+    <field 
+      name="start_date"
+      type="text"
+      id="start_date"
+      class="validate-ukdate form-control start_date"
+      description="COM_ACCOMMODATION_ENQUIRY_START_DATE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL"
+      filter="string"
+      validate="startdate"
+      hint="COM_ACCOMMODATION_ENQUIRY_START_DATE_PLACEHOLDER"
+      message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
+      labelclass="control-label"
+      required="true"
+    />
+    
+    <field 
+      name="end_date"
+      type="text"
+      id="end_date"
+      class="validate-ukdate form-control end_date"
+      description="COM_ACCOMMODATION_ENQUIRY_END_DATE_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL"
+      filter="string"
+      validate="enddate"
+      message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
+      hint="COM_ACCOMMODATION_ENQUIRY_END_DATE_PLACEHOLDER"
+      labelclass="control-label"
+      required="true"
+    />  
+ 
+    <field 
+      name="adults"
+      type="text"
+      id="enquiry-adults"
+      class="validate-numeric form-control"
+      maxlength="2"
+      description="COM_ACCOMMODATION_ENQUIRY_ADULTS_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_ADULTS_LABEL"
+      hint="COM_ACCOMMODATION_ENQUIRY_ADULTS_PLACEHOLDER"      
+      filter="integer"
+      labelclass="control-label"
+      validate="adults"
+    /> 
+    
+    <field 
+      name="children"
+      type="text"
+      id="enquiry-children"
+      class="validate-numeric form-control"
+      maxlength="2"
+      hint="COM_ACCOMMODATION_ENQUIRY_CHILDREN_PLACEHOLDER"
+      description="COM_ACCOMMODATION_ENQUIRY_CHILDREN_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_CHILDREN_LABEL"
+      filter="integer"
+      labelclass="control-label"
+      validate="adults"
+    /> 
+    
+
+
+    
+  </fieldset>
+</form>
