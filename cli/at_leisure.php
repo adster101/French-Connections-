@@ -705,12 +705,9 @@ class AtLeisure extends Import
 
       foreach ($layout as $room => $contents)
       {
-
-
         foreach ($contents as $content)
         {
           $layoutStr .= '<dt>' . $room . '</dt>';
-
           foreach ($content as $name => $quantity)
           {
             $layoutStr .= '<dd>' . $name . ' x ' . $quantity . '</dd>';
@@ -718,17 +715,14 @@ class AtLeisure extends Import
         }
       }
 
-
       if (!empty($layout))
       {
-
         $layoutStr .= '</dl>';
       }
     }
 
     if (!empty($generalStr))
     {
-
       $layoutStr .= '<h4>General</h4>';
       $layoutStr .= '<dl>';
       $layoutStr .= '<dt>Facilities on site</dt>';
