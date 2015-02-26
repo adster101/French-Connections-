@@ -112,31 +112,38 @@
  
     <field 
       name="adults"
-      type="text"
+      type="integer"
       id="enquiry-adults"
       class="validate-numeric form-control"
       maxlength="2"
       description="COM_ACCOMMODATION_ENQUIRY_ADULTS_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_ADULTS_LABEL"
-      hint="COM_ACCOMMODATION_ENQUIRY_ADULTS_PLACEHOLDER"      
       filter="integer"
       labelclass="control-label"
       validate="adults"
-    /> 
+      first="1"
+      last="10"
+      step="1">
+      <option value="">COM_ACCOMMODATION_ENQUIRY_ADULTS_PLACEHOLDER</option>
+    </field>
+     
     
     <field 
       name="children"
-      type="text"
+      type="integer"
       id="enquiry-children"
       class="validate-numeric form-control"
       maxlength="2"
-      hint="COM_ACCOMMODATION_ENQUIRY_CHILDREN_PLACEHOLDER"
       description="COM_ACCOMMODATION_ENQUIRY_CHILDREN_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_CHILDREN_LABEL"
       filter="integer"
       labelclass="control-label"
       validate="adults"
-    /> 
+      first="1"
+      last="10"
+      step="1">
+      <option value="">COM_ACCOMMODATION_ENQUIRY_CHILDREN_PLACEHOLDER</option>
+    </field>
     
 
 

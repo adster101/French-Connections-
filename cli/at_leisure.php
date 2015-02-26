@@ -85,12 +85,12 @@ class AtLeisure extends Import
 
     $reference_items_detail = $this->_getReferenceLayoutDetailsV1($rpc);
 
-    //$db->truncateTable('#__property');
-    //$db->truncateTable('#__property_versions');
-    //$db->truncateTable('#__unit');
-    //$db->truncateTable('#__unit_versions');
-    //$db->truncateTable('#__property_images_library');
-    //$db->truncateTable('#__unit_attributes');
+    $db->truncateTable('#__property');
+    $db->truncateTable('#__property_versions');
+    $db->truncateTable('#__unit');
+    $db->truncateTable('#__unit_versions');
+    $db->truncateTable('#__property_images_library');
+    $db->truncateTable('#__unit_attributes');
 
     $user = JFactory::getUser('atleisure')->id;
 
@@ -144,7 +144,11 @@ class AtLeisure extends Import
 
             // Array of property details to create
             $property = array(
-                'expiry_date' => $expiry_date, 'created_on' => $date, 'review' => 0, 'created_by' => $user
+                'expiry_date' => $expiry_date, 
+                'created_on' => $date, 
+                'review' => 0, 
+                'created_by' => $user,
+                'is_bookable' => 1
             );
 
             // Create an entry in the #__property table
@@ -247,6 +251,7 @@ class AtLeisure extends Import
           $data['unit_version']['accommodation_type'] = 25;
           $data['unit_version']['additional_price_notes'] = $this->additionalCosts($acco);
           $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
+          $data['unit_version']['base_currency'] = 'EUR';
           $data['unit_version'] = $this->getBedrooms($layoutArr, $data['unit_version']);
 
           $unit_version_table->set('_tbl_keys', array('id'));

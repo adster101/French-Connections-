@@ -46,6 +46,7 @@ class AtLeisure extends Import
   {
 
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
 
     JLoader::import('frenchconnections.library');
 
@@ -59,10 +60,10 @@ class AtLeisure extends Import
         "HouseCodes" => $acco_chunk,
         "Items" => array("AvailabilityPeriodV1")
     );
-    
+
     // 
     $interval = new DateInterval('P1D');
-    
+
     $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
     $rpc->makeCall('ListOfHousesV1');
@@ -75,6 +76,15 @@ class AtLeisure extends Import
     // Chunk up the house codes baby!
     $accocode_chunks = array_chunk(array_keys($props), 100);
 
+    // Get the tables for processing values into relevant tables
+    $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
+
+    $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'RentalTable');
+    $tariffsTable->set('_tbl_keys', array('id'));
+
+    // Get an instance of the unit model for saving the from price and availability last updated on
+    $unit_model = JModelLegacy::getInstance('Unit', 'RentalModel');
+
     // Load up 100 property details at a time.
     foreach ($accocode_chunks as $chunk => $acco_chunk)
     {
@@ -84,39 +94,53 @@ class AtLeisure extends Import
 
       $rpc->makeCall('DataOfHousesV1', $params);
       $result = $rpc->getResult("json");
-      
+
       foreach ($result as $k => $acco)
       {
         try
         {
-          $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
 
-          $this->out('About to process property ' . $acco->HouseCode . ' (' . $k . ' of ' . count($result) . ')');
-  
+          $this->out('About to process property ' . $acco->HouseCode . ' (' . $k . ' of ' . count($result));
+          $start_time = time();
           $availability = array();
+          $tariffs = array();
+
           $counter = 1;
           foreach ($acco->AvailabilityPeriodV1 as $avper)
           {
             $ArrivalDate = DateTime::createFromFormat('Y-m-d', $avper->ArrivalDate);
             $DepartureDate = DateTime::createFromFormat('Y-m-d', $avper->DepartureDate);
-            
+
             $arrival_day = JHtml::_('date', $avper->ArrivalDate, 'N');
 
             $nights = $DepartureDate->diff($ArrivalDate);
             $periodId = $this->__getPeriod($ArrivalDate, $nights->days);
 
             // Check that the available
-            if ($periodId == '1w' && $arrival_day == 6) 
+            if ($periodId == '1w' && $arrival_day == 6)
             {
               // Start date of the availability period
               $availability[$counter]['start_date'] = JHtml::_('date', $avper->ArrivalDate, 'Y-m-d');
-              
+
               // Adjust the end date so it's the Friday rather than the following satrday
-              $availability[$counter]['end_date'] = JHtml::_('date', $DepartureDate->sub($interval)->format('Y-m-d') , 'Y-m-d');
-              
+              $availability[$counter]['end_date'] = JHtml::_('date', $DepartureDate->sub($interval)->format('Y-m-d'), 'Y-m-d');
+
               // Status is true, i.e. available
               $availability[$counter]['status'] = 1;
 
+              // Sort out the tariffs as well
+              if (!array_key_exists($avper->Price, $tariffs))
+              {
+                $tariffs[$avper->Price] = array();
+                $tariffs[$avper->Price]['start_date'] = array();
+                $tariffs[$avper->Price]['end_date'] = array();
+              }
+
+              if ($tariffs[$avper->Price]['start_date'] > $avper->ArrivalDate)
+              {
+                $tariffs[$avper->Price]['start_date'] = $avper->ArrivalDate;
+                $tariffs[$avper->Price]['end_date'] = $avper->DepartureDate;
+              }
               $counter++;
             }
           }
@@ -124,17 +148,44 @@ class AtLeisure extends Import
           $db->transactionStart();
 
           $unit_id = $props[$acco->HouseCode]->unit_id;
-          
+
+          $availabilityTable->reset();
+
           // Delete existing availability
           $availabilityTable->delete($unit_id);
-          
+
           // Woot, put some availability back
           $availabilityTable->save($unit_id, $availability);
-          
+
+          $tariffsTable->delete($unit_id);
+
+          foreach ($tariffs as $price => $dates)
+          {
+            $tariff = array();
+            $tariff['id'] = '';
+            $tariff['unit_id'] = $unit_id;
+            $tariff['start_date'] = $dates['start_date'];
+            $tariff['end_date'] = $dates['end_date'];
+            $tariff['tariff'] = $price;
+
+            $tariffsTable->save($tariff);
+          }
+
+          // Set the data and save the from price against the unit
+          $unit_data['from_price'] = min(array_keys($tariffs));
+          $unit_data['availability_last_updated_on'] = JHtml::_('date', 'now', 'Y-m-d');
+          $unit_data['id'] = $unit_id;
+
+          if (!$unit_model->save($unit_data))
+          {
+            throw new Exception('Problem saving the unit from price/availability date');
+          }
+
           // Done so commit all the inserts and what have you...
           $db->transactionCommit();
 
-          $this->out('Done processing... ');
+          $end_time = time() - $start_time;
+          $this->out('Done processing... ' . $end_time);
         }
         catch (Exception $e)
         {

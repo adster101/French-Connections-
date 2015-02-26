@@ -9,6 +9,10 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 
 $accepted_methods = array('Mastercard', 'VISA', 'American Express', 'Maestro', 'PayPal');
 $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->SecondTermAmount;
+
+$success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
+
+
 ?>
 <div class="container">
   <h2 class="page-header">
@@ -22,6 +26,10 @@ $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->Sec
       <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_SUMMARY') ?>
       <hr />
       <dl class="dl-horizontal">
+        <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL') ?></dt>
+        <dd><?php echo $this->booking_urls->data['start_date'] ?></dd>
+        <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL') ?></dt>
+        <dd><?php echo $this->booking_urls->data['end_date'] ?></dd>
         <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_REFERENCE') ?></dt>
         <dd><?php echo $this->booking_urls->BookingNumber ?></dd>
         <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_DEPOSIT') ?></dt>
@@ -49,7 +57,7 @@ $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->Sec
           <?php endforeach; ?>   
           <hr />
           <button class="btn btn-primary btn-lg"><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PAY_NOW') ?></button>
-          <INPUT type="hidden" name="urlsuccess" value="http://www.frenchconnections.co.uk"/>
+          <INPUT type="hidden" name="urlsuccess" value="<?php echo JRoute::_($success) ?>"/>
           <INPUT type="hidden" name="urlfailure"value="http://www.frenchconnections.co.uk"/>
         </fieldset>  
       </form>
@@ -62,6 +70,5 @@ $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->Sec
         </div>
       </div>
     </div>
-
   </div>
 </div> 
