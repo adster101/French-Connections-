@@ -85,12 +85,12 @@ class AtLeisure extends Import
 
     $reference_items_detail = $this->_getReferenceLayoutDetailsV1($rpc);
 
-    $db->truncateTable('#__property');
-    $db->truncateTable('#__property_versions');
-    $db->truncateTable('#__unit');
-    $db->truncateTable('#__unit_versions');
-    $db->truncateTable('#__property_images_library');
-    $db->truncateTable('#__unit_attributes');
+    //$db->truncateTable('#__property');
+    //$db->truncateTable('#__property_versions');
+    //$db->truncateTable('#__unit');
+    //$db->truncateTable('#__unit_versions');
+    //$db->truncateTable('#__property_images_library');
+    //$db->truncateTable('#__unit_attributes');
 
     $user = JFactory::getUser('atleisure')->id;
 
