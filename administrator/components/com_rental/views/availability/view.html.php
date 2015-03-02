@@ -92,8 +92,6 @@ class RentalViewAvailability extends JViewLegacy
     $bar = JToolBar::getInstance('toolbar');
 
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->item->id);
-    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
-
     //JToolBarHelper::help('', '');
   }
 
