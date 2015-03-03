@@ -538,6 +538,9 @@ class RentalControllerListing extends JControllerForm
       // Add the PRN to the data 
       $validData['property_id'] = $recordId;
       
+      // Add a subject line
+      $validData['subject'] = JText::_('COM_PROPERTY_SUBMISSION_NOTES_SUBJECT');
+      
       // Let's save the admin notes...
       $model->save($validData);
       

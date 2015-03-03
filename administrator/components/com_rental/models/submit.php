@@ -76,7 +76,9 @@ class RentalModelSubmit extends JModelAdmin
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
     
     $note = JModelLegacy::getInstance('Note', 'NotesModel');
-
+    
+    
+    
     if (!$note->save($data))
     {
       // TO DO Log this

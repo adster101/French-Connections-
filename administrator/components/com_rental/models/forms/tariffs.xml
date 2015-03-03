@@ -3,8 +3,9 @@
   This document describes the tariff form on the property manager screen.
   The actual tariff fields are injected via a plugin hook.
 -->
-<form	addrulepath="/administrator/components/com_rental/models/rules" 
-      addfieldpath="/administrator/components/com_specialoffers/models/fields">
+<form	
+  addrulepath="/libraries/frenchconnections/forms/rules" 
+  addfieldpath="/administrator/components/com_specialoffers/models/fields">
   <fieldset name="additional-fields">
     <field
       name="unit_id"
@@ -75,6 +76,22 @@
       buttons="false"
       validate="additionalpricenotes"
       message="COM_RENTAL_HELLOWORLD_FIELD_ADDITIONAL_PRICE_NOTES_MESSAGE"
+    />
+    <field
+      name="linen_costs"
+      type="textarea"
+      label="COM_RENTAL_TARIFFS_FIELD_LINEN_COSTS_LABEL"
+      description="COM_RENTAL_TARIFFS_FIELD_LINEN_COSTS_DESC"
+      height="250"
+      rows="4"
+      maxlength="250"
+      labelclass="control-label"
+      class="input-xlarge validate-description"
+      default=""
+      filter="JComponentHelper::filterText"
+      buttons="false"
+      validate="Fc.length"
+      message="COM_RENTAL_HELLOWORLD_FIELD_LINEN_COSTS_MESSAGE"
     />
 
     <field

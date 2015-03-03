@@ -17,7 +17,6 @@ $data['progress'] = $this->items;
 $data['form'] = $this->form;
 $data['status'] = $this->status;
 
-$new_unit = JToolbar::getInstance('unit');
 ?>
 
 <div class="row-fluid">
@@ -50,13 +49,21 @@ $new_unit = JToolbar::getInstance('unit');
         ?>
         <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
 
+        <hr />
+        <h4><?php echo JText::_('COM_RENTAL_ADD_NEW_UNIT_TITLE'); ?></h4>
         <p>
-          <?php echo $new_unit->render(); ?>
+          <?php echo JText::_('COM_RENTAL_ADD_NEW_UNIT_BLURB'); ?>
+        </p>
+        <p>
+          <a id="newUnit" class="btn btn-success" href="<?php echo JRoute::_('index.php?option=com_rental&task=unitversions.add&property_id=' . (int) $this->items[0]->id); ?>">
+            <i class="icon icon-plus"></i>&nbsp;
+            <?php echo JText::_('COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT'); ?>
+          </a>       
         </p>
 
         <?php echo $this->pagination->getListFooter(); ?>
         <input type="hidden" name="task" value="" />
-        <input type="hidden" name="property_id" value="<?php echo $item->id ?>" />
+        <input type="hidden" name="property_id" value="<?php echo $this->id ?>" />
         <?php echo JHtml::_('form.token'); ?> .
       </form>
     </div>

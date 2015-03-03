@@ -7,10 +7,10 @@ JHtml::_('behavior.tooltip');
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>
-    <div id="j-sidebar-container" class="span2">
+    <div id="j-sidebar-container" class="span4">
       <?php echo $this->sidebar; ?>
     </div>
-    <div id="j-main-container" class="span10">
+    <div id="j-main-container" class="span8">
     <?php else : ?>
       <div id="j-main-container" class="span12">
       <?php endif; ?> 

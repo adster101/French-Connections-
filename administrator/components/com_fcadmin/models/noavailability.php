@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  * @subpackage  com_banners
  * @since       1.6
  */
-class FcadminModelJobfile extends JModelList
+class FcadminModelNoavailability extends JModelList
 {
 
   /**
@@ -34,24 +34,27 @@ class FcadminModelJobfile extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
+    // Initialise the query.
     $query->select('
-      a.id as JobNo,
-      concat("PRN: ", a.id, " owned by ", b.firstname, " ", b.surname, "(", a.created_by, ")") as JobName,
-      a.id as SubJobOf,
-      "D" as Header,
-      concat("PRN: ", a.id, " owned by ", b.firstname, " ", b.surname, "(", a.created_by, ")") as Description,
-      "" as Contact,
-      "0%" as PercentComplete,
-      "" as StartDate,
-      "" as FinishDate, 
-      "" as Manager,
-      concat(b.surname, " (", a.created_by, "), ", b.firstname) as LinkedCustomer,
-      "N" as InactiveJob,  
-      "N" as TrackReimbursables
-    ');
-    $query->from($db->quoteName('#__property', 'a'));
-    $query->leftJoin($db->quoteName('#__user_profile_fc', 'b') . ' on a.created_by = b.user_id');
-    $query->order('a.id', 'asc');
+        a.id as PRN,
+        h.email,
+        replace(e.unit_title, ",","") as unit,
+        h.name,
+        h.id as accountID
+      ');
+    $query->from('#__property as a');
+    $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id and c.review = 0))');
+    $query->join('left', '#__unit d on d.property_id = a.id');
+    $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where f.unit_id = d.id and f.review = 0))');
+    $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
+    $query->join('left', '#__users h on a.created_by = h.id');
+    $query->where('b.review = 0');
+    $query->where('e.review = 0');
+    $query->where('d.published != -2');
+    $query->where('a.created_by !=0');
+    $query->where('a.expiry_date >=' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
+    $query->where('(select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) = 0');
+    $query->order('a.id');
 
     return $query;
   }
@@ -82,6 +85,7 @@ class FcadminModelJobfile extends JModelList
       foreach ($items as $item)
       {
         $bits = JArrayHelper::fromObject($item);
+        
         $this->content .= implode("\t", $bits) . "\r\n";
       }
     }

@@ -71,6 +71,8 @@ class FcadminViewmyobsync extends JViewLegacy
     // Add the download job file link
     $bar->appendButton('Link', 'download', 'COM_FCADMIN_DOWNLOAD_JOB_FILE', 'index.php?option=com_fcadmin&task=downloads.jobfiles&format=raw');
 
+    // Add a back button for usability...
+    JToolbarHelper::back();
 
     if ($user->authorise('core.admin', 'com_fcadmin'))
     {
