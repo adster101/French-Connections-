@@ -1,7 +1,13 @@
 module.exports = function(grunt) {
 
+
+
   // 1. All configuration goes here 
   grunt.initConfig({
+    // Add a 'global' opts object that we can access in each task...
+    opts: {
+      date: grunt.template.today('yyyymmddHMss')
+    },
     pkg: grunt.file.readJSON('package.json'),
     copy: {
       main: {
@@ -24,7 +30,9 @@ module.exports = function(grunt) {
         },
         files: {
           //compiling frontend.less into frontend.css
-          "media/fc/assets/css/styles.css": "templates/fcv4/assets/less/styles.less"
+          "media/fc/assets/css/styles.css": "templates/fcv4/assets/less/styles.less",
+          "media/fc/assets/css/<%= opts.date %>.styles.min.css": "templates/fcv4/assets/less/styles.less"
+
         }
       }
     },
@@ -56,7 +64,7 @@ module.exports = function(grunt) {
     uglify: {
       build: {
         src: 'media/fc/assets/js/scripts.js',
-        dest: 'media/fc/assets/js/<%= grunt.template.today("yyyymmddHMss") %>.scripts.min.js',
+        dest: 'media/fc/assets/js/<%= opts.date %>.scripts.min.js',
         options: {
           mangle: false
         }
@@ -83,6 +91,28 @@ module.exports = function(grunt) {
           livereload: true
         }
       }
+    },
+    replace: {
+      // Copies the 'assets' include file and replaces the timestamp string
+      // Just need to remember to upload the latest asset files...
+      woot: {
+        options: {
+          patterns: [
+            {
+              match: 'timestamp',
+              replacement: '<%= opts.date %>'
+            }
+          ]
+        },
+        files: [
+          {
+
+            src: ['templates/fcv4/assets.tmp.php'],
+            dest: 'templates/fcv4/assets.php'
+
+          }
+        ]
+      }
     }
   });
 
@@ -96,6 +126,6 @@ module.exports = function(grunt) {
 
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
-  grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy']);
+  grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy', 'replace']);
   grunt.registerTask('default', ['init']);
 };

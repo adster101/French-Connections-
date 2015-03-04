@@ -10,14 +10,12 @@ defined('_JEXEC') or die;
 
 // Load template settings
 $app = JFactory::getApplication();
-$doc = JFactory::getDocument();
 $option = $app->input->getCmd('option', '');
 $view = $app->input->getCmd('view', '');
 $itemid = $app->input->getCmd('Itemid', '');
 $sitename = $app->getCfg('sitename');
 $listing = false;
 $URI = JURI::getInstance();
-$script_path = (JDEBUG) ? '/media/fc/assets/js/scripts.js' : '/media/fc/assets/js/2015020594516.scripts.min.js';
 $menu = $app->getMenu();
 $active = $menu->getActive();
 $siteHome = ($active == $menu->getDefault('en-GB')) ? 'home' : 'sub';
@@ -47,8 +45,9 @@ else
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
-  <?php $doc->addStyleSheet('//' . $URI->getHost() . '/media/fc/assets/css/styles.css'); ?>
-  <?php $doc->addScript('//' . $URI->getHost() . $script_path, 'text/javascript', false, true); ?>
+  <?php 
+  include_once JPATH_THEMES . '/' . $this->template . '/assets.php'; ?>
+
   <meta name="google-site-verification" content="gxNKICR23M3sV86ZSmOoGcFZCNH-AvkUI1MTTW3nau4" />
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
