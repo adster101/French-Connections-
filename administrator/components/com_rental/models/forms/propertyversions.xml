@@ -199,8 +199,8 @@
       label="COM_RENTAL_HELLOWORLD_FIELD_DISTANCETOCOAST_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_DISTANCETOCOAST_DESC"
       required="false"
-      filter="int"
-      maxlength="2">
+      filter="double"
+      maxlength="6">
     </field>
     
     <field

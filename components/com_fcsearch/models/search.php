@@ -92,8 +92,9 @@ class FcSearchModelSearch extends JModelList
 
     $query->insert('#__search_log');
     $query->columns('location, location_id, bedrooms, occupancy, date_created');
-    
-    $location = $this->getState('list.searchterm', '');;
+
+    $location = $this->getState('list.searchterm', '');
+    ;
     $location_id = $this->getState('search.location', '');
     $bedrooms = $this->getState('search.bedrooms', '');
     $occupancy = $this->getState('search.occupancy', '');
@@ -433,15 +434,20 @@ class FcSearchModelSearch extends JModelList
         $query->clear('order');
         $query->order($sort_column . ' ' . $sort_order);
       }
-
+      
+      // If there is no sort column specified and we have a bedroom filter
+      // Sort on number of bedrooms asc
+      if ($this->getState('list.bedrooms') && !$sort_column)
+      {
+        $query->order('bedrooms', 'asc');
+      }
+      
       // If there is no sort column specified and we have an occupancy filter
       // Show the lowest occupancy first
       if ($this->getState('list.occupancy') && !$sort_column)
       {
         $query->order('occupancy', 'asc');
       }
-
-
 
       if ($this->getState('search.level') == 5)
       {
@@ -800,7 +806,7 @@ class FcSearchModelSearch extends JModelList
 
     if ($this->getState('list.offers', ''))
     {
-        $this->getFilterOffers($query, $db);
+      $this->getFilterOffers($query, $db);
     }
 
     if ($this->getState('list.lwl', ''))
@@ -1407,17 +1413,21 @@ class FcSearchModelSearch extends JModelList
       return $query;
     }
 
-    $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) = ' . (int) $bedrooms);
+    if (!$this->getState('list.occupancy', ''))
+    {
+      
+    }
+
+    $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) >= ' . (int) $bedrooms);
 
     return $query;
   }
-  
+
   private function getFilterOffers(JDatabaseQueryMysqli $query, $db = '')
   {
     $query->where('(select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id limit 0,1) is not null');
 
     return $query;
-    
   }
 
   /**

@@ -23,16 +23,23 @@ class RentalModelUnit extends JModelAdmin
    *
    * @since   11.1
    */
-  protected function canEditState()
+  protected function canEditState($table)
   {
 
     $comtask = JRequest::getVar('task', '', 'POST', 'string');
     $task = explode('.', $comtask);
     $user = JFactory::getUser();
+    
+   
 
     if ($task[1] == 'orderdown' || $task[1] == 'orderup')
     {
       return $user->authorise('rental.unit.reorder', $this->option);
+    }
+    // Uh oh, someone trying to unpublish a unit that is in the first position...
+    elseif ($task[1] == 'unpublish' && $table->ordering == 1) 
+    {
+      return false;
     }
     else
     {
@@ -89,5 +96,7 @@ class RentalModelUnit extends JModelAdmin
     $condition[] = 'property_id = ' . (int) $table->property_id;
     return $condition;
   }
+
+  
 
 }

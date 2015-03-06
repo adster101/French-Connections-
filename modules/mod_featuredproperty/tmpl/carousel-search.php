@@ -13,6 +13,12 @@ $lang = $app->input->get('lang', 'en');
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+
+// Add an additional item to the FPs for the 'promo' slot
+$item = new stdClass();
+$item->promo = true;
+$item->description = JText::_('MOD_FEATURED_PROPERTY_ADVERTISE_HERE');
+array_push($items, $item);
 ?>
 <div class="row">
   <div class="carousel slide hidden-xs" id="fp-carousel" data-ride="carousel">
@@ -34,7 +40,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
       $region = JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $item->alias . '&lang=' . $lang . '&Itemid=' . (int) $Itemid_search);
       $property = JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id);
       ?>
-      <?php if ($item->title) : ?>        
+      <?php if (!empty($item->title)) : ?>        
         <div class="col-lg-3 col-sm-3"> 
           <p>
             <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
@@ -63,6 +69,18 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
         <?php if (($key % 4 === 3)) : ?>
         </div><div class="item">
         <?php endif; ?>
+      <?php elseif ($item->promo) : ?>
+        <div class="col-lg-3 col-sm-3"> 
+          <p>
+            <img src='/images/general/no-image.png/' class="fp-media-object img-responsive" />
+          </p>
+          <h4 class="fp-media-heading">
+            Advertise here
+          </h4>
+          <p><?php echo $item->description ?></p>
+
+        </div>
+
       <?php endif; ?>
     <?php endforeach; ?>  
   </div>   

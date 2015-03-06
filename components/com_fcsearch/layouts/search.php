@@ -32,7 +32,7 @@ $lastminute = (!empty($displayData->lastminute)) ? $displayData->lastminute : fa
     <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
   </label>
   <select id="bedrooms" name="bedrooms" class="form-control" >
-    <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
+    <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => '10+'), 'value', 'text', $bedrooms); ?>
   </select>
 </div>
 <div class="form-group">
