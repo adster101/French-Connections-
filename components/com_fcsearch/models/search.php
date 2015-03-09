@@ -256,7 +256,7 @@ class FcSearchModelSearch extends JModelList
     try
     {
 
-      $sort_column = $this->getState('list.sort_column', '');
+      $sort_column = $this->getState('list.sort_column', 'search_ordering');
       $sort_order = $this->getState('list.direction', '');
 
       // Create a new query object.
