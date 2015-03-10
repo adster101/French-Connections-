@@ -90,7 +90,7 @@ class EnquiriesModelEnquiries extends JModelList
       $form->setField($type_field, 'filter', true);
     }
   }
-
+public function 
   /**
    * Method to build an SQL query to load the list data.
    * This is 'interesting' because it uses a union to return data from property and realestate props
@@ -192,7 +192,7 @@ class EnquiriesModelEnquiries extends JModelList
     $union->select('*');
     
     // Money shot
-    $union->from('(' . $query->__toString() . ' UNION ALL ' . $query2->__toString() . ') as e');
+    $union->from('(' . $query->__toString() . ' UNION ' . $query2->__toString() . ') as e');
             
     $union->order($db->escape($listOrdering) . ' ' . $listDirn);
     

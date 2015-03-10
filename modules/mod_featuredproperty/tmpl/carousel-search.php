@@ -72,7 +72,7 @@ array_push($items, $item);
       <?php elseif ($item->promo) : ?>
         <div class="col-lg-3 col-sm-3"> 
           <p>
-            <img src='/images/general/no-image.png/' class="fp-media-object img-responsive" />
+            <img src='/images/general/logo-5.png' class="fp-media-object img-responsive" />
           </p>
           <h4 class="fp-media-heading">
             Advertise here

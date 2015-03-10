@@ -104,12 +104,10 @@ class FcSearchModelSearch extends JModelList
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
       $db->execute();
     }
-    catch (RuntimeException $e)
-    {
+    catch (RuntimeException $e) {
       // TO DO log me baby
       return false;
     }
@@ -253,10 +251,9 @@ class FcSearchModelSearch extends JModelList
       return clone($this->retrieve($store, false));
     }
 
-    try
-    {
+    try {
 
-      $sort_column = $this->getState('list.sort_column', 'search_ordering');
+      $sort_column = $this->getState('list.sort_column', '');
       $sort_order = $this->getState('list.direction', '');
 
       // Create a new query object.
@@ -434,14 +431,14 @@ class FcSearchModelSearch extends JModelList
         $query->clear('order');
         $query->order($sort_column . ' ' . $sort_order);
       }
-      
+
       // If there is no sort column specified and we have a bedroom filter
       // Sort on number of bedrooms asc
       if ($this->getState('list.bedrooms') && !$sort_column)
       {
         $query->order('bedrooms', 'asc');
       }
-      
+
       // If there is no sort column specified and we have an occupancy filter
       // Show the lowest occupancy first
       if ($this->getState('list.occupancy') && !$sort_column)
@@ -449,9 +446,9 @@ class FcSearchModelSearch extends JModelList
         $query->order('occupancy', 'asc');
       }
 
-      if ($this->getState('search.level') == 5)
+      if (!$sort_column && !$this->getState('list.occupancy') && !$this->getState('list.bedrooms'))
       {
-        
+        $query->order('search_ordering ASC');
       }
 
       if ($this->getState('list.offers', ''))
@@ -477,8 +474,7 @@ class FcSearchModelSearch extends JModelList
       // Return a copy of the query object.
       return clone($this->retrieve($store, true));
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Oops, exceptional
     }
   }
@@ -491,15 +487,13 @@ class FcSearchModelSearch extends JModelList
   public function getRefinePropertyOptions()
   {
 
-    try
-    {
+    try {
 
       $return = $this->getRefineByTypeOptions('property_type', 'getRefinePropertyOptions');
 
       return $return;
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       // Catch and log the error.
       return false;
@@ -514,15 +508,13 @@ class FcSearchModelSearch extends JModelList
   public function getRefineAccommodationOptions()
   {
 
-    try
-    {
+    try {
 
       $return = $this->getRefineByTypeOptions('accommodation_type', 'getRefineAccommodationOptions');
 
       return $return;
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       // Catch and log the error.
       return false;
@@ -556,8 +548,7 @@ class FcSearchModelSearch extends JModelList
       return $this->retrieve($store, true);
     }
 
-    try
-    {
+    try {
 
       // Create a new query object.
       $db = $this->getDbo();
@@ -695,8 +686,7 @@ class FcSearchModelSearch extends JModelList
       // Return a copy of the query object.
       return $this->retrieve($store, true);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
 
       // Catch and log the error.
       return false;
@@ -838,12 +828,10 @@ class FcSearchModelSearch extends JModelList
     // Get the options.
     $db->setQuery($query);
 
-    try
-    {
+    try {
       $locations = $db->loadObjectList();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // TO DO Log this.
       return flase;
     }
@@ -868,8 +856,7 @@ class FcSearchModelSearch extends JModelList
     }
 
     // Cached data not available so proceed
-    try
-    {
+    try {
 
       $attributes = array();
       $app = JFactory::getApplication();
@@ -1046,8 +1033,7 @@ class FcSearchModelSearch extends JModelList
       // Return the total.
       return $this->retrieve($store);
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Log the exception and return false
       //JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
@@ -1096,13 +1082,11 @@ class FcSearchModelSearch extends JModelList
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
 
       $markers = $db->loadObjectList();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       return false;
     }
 
@@ -1663,8 +1647,7 @@ class FcSearchModelSearch extends JModelList
 
     $query = $db->getQuery(true);
 
-    try
-    {
+    try {
       $query->select('currency, exchange_rate');
       $query->from('#__currency_conversion');
 
@@ -1672,8 +1655,7 @@ class FcSearchModelSearch extends JModelList
 
       $results = $db->loadObjectList($key = 'currency');
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       // Log this error
     }
 

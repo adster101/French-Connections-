@@ -80,7 +80,7 @@ class RentalViewImages extends JViewLegacy
     $bar = JToolbar::getInstance('actions');
 
     // We can save the new record
-    $bar->appendButton('Standard', 'cancel', 'JTOOLBAR_CLOSE', 'images.cancel', false);
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'images.cancel', false);
     $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'images.saveandnext', false);
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
