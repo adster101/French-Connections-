@@ -24,7 +24,7 @@ class AccommodationModelListing extends JModelForm
   public function __construct($config = array())
   {
 
-    parent::__construct($config = array());
+    parent::__construct($config);
 
     $input = JFactory::getApplication()->input;
 
@@ -126,9 +126,10 @@ class AccommodationModelListing extends JModelForm
     // Get the input values etc
     $app = JFactory::getApplication('site');
     $input = $app->input;
+		$cid   = $input->post->get('cid', array(), 'array');
 
     // Get the property id
-    $id = $input->get('id', '', 'int');
+    $id = ($input->get('id', '', 'int')) ? $input->get('id', '', 'int') : $input->get('cid', array(), 'array');
 
     if (!$id)
     {
@@ -154,7 +155,7 @@ class AccommodationModelListing extends JModelForm
    *
    * @return object The message to be displayed to the user
    */
-  public function getItem()
+  public function getItem($show_expired = false)
   {
 
     if (!isset($this->item))
@@ -332,7 +333,9 @@ class AccommodationModelListing extends JModelForm
         $query->where('d.review in (0,1)');
       }
 
-      if (!$this->preview)
+      // Logic is if not a preview and not show_expired then we skip the expiry date
+      // check. Basically, only checkes expiry date for viewing a live property 
+      if (!$this->preview && !$show_expired)
       {
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
       }
@@ -571,7 +574,6 @@ class AccommodationModelListing extends JModelForm
 
     $app = JFactory::getApplication();
 
-    $input = $app->input;
     $filter = JFilterInput::getInstance();
 
     $location = JApplication::stringURLSafe($filter->clean($this->item->department, 'string'));
@@ -583,7 +585,7 @@ class AccommodationModelListing extends JModelForm
 
     // Set s_kwds in the input data. E.g. spoof a location search...
     $app->input->set('s_kwds', $location);
-    $app->input->set('limit', 4);
+    $app->input->set('limit', 6);
 
     $model = JModelLegacy::getInstance('Search', 'FcSearchModel');
 

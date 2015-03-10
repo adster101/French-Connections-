@@ -432,7 +432,7 @@ class RentalModelUnitVersions extends JModelAdmin
           if ($old_version_id != $new_version_id)
           {
             // Copy the unit images against the new version
-            JLog::add('About to copy images for unit ' . $pk, 'unitversions');
+            JLog::add('About to copy images for unit ' . $pk, 'DEBUG', 'unitversions');
             $this->copyUnitImages($old_version_id, $new_version_id);
           }
         }

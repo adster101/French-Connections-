@@ -59,7 +59,10 @@ class EnquiriesControllerEnquiries extends JControllerAdmin
     }
     $extension = $this->input->get('extension');
     $extensionURL = ($extension) ? '&extension=' . $extension : '';
-    $this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $extensionURL, false));
+    $this->setRedirect(JRoute::_('/administrator/index.php?option=' . $this->option . '&view=' . $this->view_list . $extensionURL, false));
+  
+    return true;
+    
   }
 
 }
