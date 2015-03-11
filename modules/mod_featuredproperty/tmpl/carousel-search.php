@@ -19,6 +19,9 @@ $item = new stdClass();
 $item->promo = true;
 $item->description = JText::_('MOD_FEATURED_PROPERTY_ADVERTISE_HERE');
 array_push($items, $item);
+
+// Chunk up the items array
+$chunks = array_chunk($items, 4);
 ?>
 <div class="row">
   <div class="carousel slide hidden-xs" id="fp-carousel" data-ride="carousel">
@@ -28,69 +31,67 @@ array_push($items, $item);
           <li data-target="#fp-carousel" data-slide-to="<?php echo $key ?>" <?php echo ($key == 0) ? 'class="active"' : ''; ?>></li>
         <?php endforeach; ?>
       <?php endif; ?>
-</ol>
-<div class="carousel-inner">   
-  <div class="item active">
-    <?php foreach ($items as $key => $item) : ?>
-      <?php
-      $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
-      $description = JHTml::_('string.truncate', $item->description, 75, true, false);
-      $title = JText::sprintf('MOD_FEATURED_PROPERTY_THUMB_TITLE', $item->id, $description);
-      $region = JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $item->alias . '&lang=' . $lang . '&Itemid=' . (int) $Itemid_search);
-      $property = JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id);
-      ?>
-      <?php if (!empty($item->title)) : ?>        
-        <div class="col-lg-3 col-sm-3"> 
-          <p>
-            <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
-              <?php if (!empty($item->offer)) : ?>
-                <span class="offer small" data-toggle="tooltip" title="<?php echo htmlspecialchars($item->offer) ?>">
-                  <?php echo JHtml::_('string.truncate', htmlspecialchars($item->offer), 35, true, false); ?>
-                </span>
-              <?php endif; ?>
-              <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="fp-media-object img-responsive" />
-            </a>
-          </p>
-          <h4 class="fp-media-heading">
-            <a href="<?php echo $region ?>"><?php echo htmlspecialchars($item->title); ?></a>
-          </h4>
-          <p>
-            <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_SLEEPS', $item->occupancy); ?>
-            <?php if (!empty($item->price)) : ?> 
-              <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_PRICE_FROM', $prices['GBP']) ?>
-            <?php endif; ?><br />
-            <?php // echo JHTml::_('string.truncate', $item->description, 25, true, false); ?>
-            <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
-              <?php echo htmlspecialchars($item->unit_title); ?>&nbsp;&raquo;
-            </a>
-          </p>     
-        </div> 
-        <?php if (($key % 4 === 3)) : ?>
-        </div><div class="item">
-        <?php endif; ?>
-      <?php elseif ($item->promo) : ?>
-        <div class="col-lg-3 col-sm-3"> 
-          <p>
-            <img src='/images/general/logo-5.png' class="fp-media-object img-responsive" />
-          </p>
-          <h4 class="fp-media-heading">
-            Advertise here
-          </h4>
-          <p><?php echo $item->description ?></p>
-
+    </ol>
+    <div class="carousel-inner">
+      <?php foreach ($chunks as $key => $chunk) : ?>
+        <div class="item <?php echo ($key == 0) ? 'active' : ''; ?>">
+          <?php foreach ($chunk as $item) : ?>
+            <?php
+            $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
+            $description = JHTml::_('string.truncate', $item->description, 75, true, false);
+            $title = JText::sprintf('MOD_FEATURED_PROPERTY_THUMB_TITLE', $item->id, $description);
+            $region = JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $item->alias . '&lang=' . $lang . '&Itemid=' . (int) $Itemid_search);
+            $property = JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $item->id . '&unit_id=' . (int) $item->unit_id);
+            ?>
+            <?php if ($item->title) : ?>
+              <div class="col-lg-3 col-sm-3">
+                <p>
+                  <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
+                    <?php if (!empty($item->offer)) : ?>
+                      <span class="offer small" data-toggle="tooltip" title="<?php echo htmlspecialchars($item->offer) ?>">
+                        <?php echo JHtml::_('string.truncate', htmlspecialchars($item->offer), 35, true, false); ?>
+                      </span>
+                    <?php endif; ?>
+                    <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' class="fp-media-object img-responsive" />
+                  </a>
+                </p>
+                <h4 class="fp-media-heading">
+                  <a href="<?php echo $region ?>"><?php echo htmlspecialchars($item->title); ?></a>
+                </h4>
+                <p>
+                  <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_SLEEPS', $item->occupancy); ?>
+                  <?php if (!empty($item->price)) : ?>
+                    <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_PRICE_FROM', $prices['GBP']) ?>
+                  <?php endif; ?><br />
+                  <?php // echo JHTml::_('string.truncate', $item->description, 25, true, false); ?>
+                  <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
+                    <?php echo htmlspecialchars($item->unit_title); ?>&nbsp;&raquo;
+                  </a>
+                </p>
+              </div>
+            <?php elseif ($item->promo) : ?>
+              <div class="col-lg-3 col-sm-3"> 
+                <p>
+                  <img src='/images/general/logo-5.png' class="fp-media-object img-responsive" />
+                </p>
+                <h4 class="fp-media-heading">
+                  Advertise here
+                </h4>
+                <p><?php echo $item->description ?></p>
+              </div>
+            <?php endif; ?>
+          <?php endforeach; ?>
         </div>
+      <?php endforeach; ?>
+    </div> 
+    <a class="left carousel-control" href="#fp-carousel" data-slide="prev">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+    </a>
+    <a class="right carousel-control" href="#fp-carousel" data-slide="next">
+      <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+  </div>
+</div>
 
-      <?php endif; ?>
-    <?php endforeach; ?>  
-  </div>   
-</div>
-<a class="left carousel-control" href="#fp-carousel" data-slide="prev">
-  <i class="glyphicon glyphicon-chevron-left"></i>
-</a>
-<a class="right carousel-control" href="#fp-carousel" data-slide="next">
-  <i class="glyphicon glyphicon-chevron-right"></i>
-</a>
-</div>
-</div>
 
 
