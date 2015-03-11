@@ -311,6 +311,7 @@ class FcSearchViewSearch extends JViewLegacy
     }
 
     // Amend the title based on bedroom and occupancy filter
+    $bedrooms = ($bedrooms == 10) ? "$bedrooms+" : $bedrooms;
     $title .= ($bedrooms) ? ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : '';
     $title .= ($occupancy) ? ' | ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') . ' ' . $occupancy : '';
 
