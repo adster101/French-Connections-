@@ -10,7 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 <?php
 // Load the most popular search module 
 $module = JModuleHelper::getModule('mod_popular_realestate_search');
-echo JModuleHelper::renderModule($module);
+echo JModuleHelper::renderModule($module, array('cache'));
 ?>
 
 </div>

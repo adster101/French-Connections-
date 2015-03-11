@@ -379,9 +379,10 @@ class Renewals extends JApplicationCli
 
   private function _getProps($auto = false)
   {
-
-    //$this->out('Getting props...');
-
+    // Could just as easily be done with comma separated list as a param on the rental component
+    $users_to_ignore = array();
+    $users_to_ignore[] = JUser::getInstance('atleisure')->id;
+    
     $db = JFactory::getDBO();
     /**
      * Get the date now
@@ -419,6 +420,8 @@ class Renewals extends JApplicationCli
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
     $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
+    $query->where('a.created_by not in (' . implode(',', $users_to_ignore) . ')');
+
 
     if (!$auto)
     {

@@ -176,6 +176,7 @@ class JFeedParserdocument extends JFeedParser
   }
 
   /*
+   * 
    * Get the nearest town or city based on the town/city given and department
    */
 

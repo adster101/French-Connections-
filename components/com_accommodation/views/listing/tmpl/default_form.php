@@ -20,6 +20,7 @@ $doc = JDocument::getInstance();
 // Include the JDocumentRendererMessage class file
 require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
+
 ?>
 
 <?php
@@ -33,11 +34,16 @@ $render = new JDocumentRendererMessage($doc);
 defined('_JEXEC') or die;
 $app = JFactory::getApplication();
 
-
 $id = $this->item->property_id ? $this->item->property_id : '';
 $unit_id = $this->item->unit_id ? $this->item->unit_id : '';
 
 $errors = $app->getUserState('com_accommodation.enquiry.messages');
+
+// Probably better to do this with a live bookable flag?
+$owner = JFactory::getUser($this->item->created_by);
+
+$task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.enquiry';
+
 ?>
 
 <?php if (count($errors > 0)) : ?>
@@ -49,7 +55,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
 <?php endif; ?>
 
 <div class="well well-sm well-light-blue">
-  <form class="form-validate form-horizontal" id="contact-form" action="<?php echo JRoute::_('index.php?option=com_accommodation&id=' . (int) $id . '&unit_id=' . (int) $unit_id) . '#email'; ?>" method="post">
+  <form class="form-validate form-horizontal" id="contact-form" action="" method="post">
     <?php echo JHtml::_('form.token'); ?>
 
     <fieldset class="adminform">
@@ -117,7 +123,7 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
 
     <div class="form-actions"><button class="btn btn-primary btn-large validate" type="submit"><?php echo JText::_('COM_ACCOMMODATION_SEND_ENQUIRY'); ?></button>
       <input type="hidden" name="option" value="com_accommodation" />
-      <input type="hidden" name="task" value="listing.enquiry" />
+      <input type="hidden" name="task" value="<?php echo $task ?>" />
     </div>
   </form>
 

@@ -1,0 +1,1 @@
+<?php define("CURR_DB","leisure"); define("FIRSTDATE","2011-05-12"); ?>

@@ -31,6 +31,11 @@ class FeaturedPropertiesTableFeaturedProperty extends JTable
    */
   public function check()
   {
+    
+    $params = JComponentHelper::getParams('com_featuredproperties');
+    
+    $max = $params->get('max', 4);
+
     // Only do this for new FP slots
     if (empty($this->id))
     {
@@ -46,7 +51,7 @@ class FeaturedPropertiesTableFeaturedProperty extends JTable
 
       $count = (int) $result->count;
 
-      if ($count >= 4)
+      if ($count >= (int) $max)
       {
         $this->setError(JText::_('COM_FEATUREDPROPERTIES_MORE_THAN_FOUR'));
         return false;

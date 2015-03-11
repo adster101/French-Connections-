@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>  
-  <fields name="filter"> 
+  <fields name="filter"    
+          addfieldpath="/libraries/frenchconnections/forms/fields"> 
     <fieldset>
       <field
         name="search"
@@ -73,9 +74,12 @@
         <option value="expiry_date">COM_RENTAL_FILTER_EXPIRY_DATE</option>
         <option value="created_on">COM_RENTAL_FILTER_CREATED_DATE</option>
       </field>  
+        
     </fieldset>
   </fields> 
   <fields name="list">
+
+   
     <field
       name="fullordering"
       type="hidden"
@@ -93,4 +97,13 @@
       onchange="this.form.submit();">
     </field>
   </fields>
+  <field
+      name="department_filter"
+      type="departments"
+      labelclass="element-invisible"
+      label="COM_RENTAL_HELLOWORLD_FILTER_REPORT"
+      class="input-large"
+      onchange="this.form.submit();"> 
+      <option value="">COM_RENTAL_FILTER_DEPARTMENT</option>
+    </field>      
 </form>

@@ -46,7 +46,6 @@ class AllezFrancais extends RealestateImport
     $db = JFactory::getDbo();
     $user = JFactory::getUser('allezfrancais')->id;
 
-    
     $this->out('About to get feed...');
 
     // Get and parse out the feed 
@@ -54,6 +53,9 @@ class AllezFrancais extends RealestateImport
 
     $this->out('Got feed...');
 
+     // Add realestate and rental tables to the include path
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables');
+    
     // Add the realestate property models
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
     $model = JModelLegacy::getInstance('Image', 'RealEstateModel');
@@ -74,10 +76,12 @@ class AllezFrancais extends RealestateImport
         $this->out('Processing... ' . $prop->agency_reference);
 
         // Check whether this property agency reference already exists in the versions table
-        $id = $this->getPropertyVersion($prop->agency_reference, $db);
+        $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
+        
+        $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
         
         $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
-        
+
         if (!$id)
         {
 
@@ -87,6 +91,7 @@ class AllezFrancais extends RealestateImport
           $property_id = $this->createProperty($db, $user);
 
           // Get the location details for this property
+          // TO DO - This should be using the $prop lat and long using the getNearestCity base method
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
           $location = $classification->getPath($prop->city);
 
@@ -113,7 +118,8 @@ class AllezFrancais extends RealestateImport
           $data['published_on'] = $db->quote(JFactory::getDate());
 
           $this->out('Adding property version...');
-
+          
+          $table = JTable::getInstance('PropertyVersions', 'RealestateTable');
           $property_version_id = $this->createPropertyVersion($db, $data);
 
           $this->out('Working through images...');
@@ -163,7 +169,7 @@ class AllezFrancais extends RealestateImport
           $this->updateProperty($db, $id);
 
           $this->out('Updating version details...');
-          
+
           // Update the property version in case price or description has changed...
           $data = array();
           $data['id'] = $id;
@@ -177,7 +183,7 @@ class AllezFrancais extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
-         
+
           $this->updatePropertyVersion($db, $data);
 
 
@@ -189,17 +195,16 @@ class AllezFrancais extends RealestateImport
 
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
-        
+
         $this->out('Done processing... ' . $prop->agency_reference);
       }
       catch (Exception $e)
       {
         // Roll back any batched inserts etc
         $db->transactionRollback();
-
+        var_dump($e);die;
         // Send an email, woot!
         $this->email($e);
-        
       }
     }
   }

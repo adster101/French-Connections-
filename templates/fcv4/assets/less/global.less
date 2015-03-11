@@ -13,6 +13,11 @@ Contains styles that apply at the global level, or can be applied to any section
     border: 1px solid darken(@blue-baby, 10%);
 }
 
+// Override the odd left alignment on dl
+.dl-horizontal dt {
+  text-align:left;
+}
+
 // Import the custom font for the headings...
 @font-face {
   font-family: 'District Thin';
