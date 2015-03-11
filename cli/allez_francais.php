@@ -201,7 +201,7 @@ class AllezFrancais extends RealestateImport
       {
         // Roll back any batched inserts etc
         $db->transactionRollback();
-
+        var_dump($e);die;
         // Send an email, woot!
         $this->email($e);
       }
