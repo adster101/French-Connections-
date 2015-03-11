@@ -18,6 +18,7 @@ abstract class FcadminHelper {
     JHtmlSidebar::addEntry(JText::_('Menu'), '#');
     JHtmlSidebar::addEntry(JText::_('Admin'), 'index.php?option=com_fcadmin', $submenu == 'fcadmin');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_IMPORT_INVOICES'), 'index.php?option=com_fcadmin&view=myobsync', $submenu == 'myobsync');
+    JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NO_AVAILABILITY'), 'index.php?option=com_fcadmin&view=noavailability&format=raw', $submenu == 'noavailability');
     
   }
 

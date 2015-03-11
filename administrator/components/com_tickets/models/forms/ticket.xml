@@ -100,7 +100,6 @@
       description=""
       class="input-small"
       filter="int"
-
     />
     <field
       name="created_by"

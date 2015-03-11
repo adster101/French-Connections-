@@ -81,3 +81,4 @@ robots.txt
 /plugins/system/nnframework/
 /cli/leisure/json2db/json2txt/
 /cli/leisure/json2db/errors/
+/cli/website.php

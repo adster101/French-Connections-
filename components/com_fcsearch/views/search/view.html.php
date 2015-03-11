@@ -183,7 +183,7 @@ class FcSearchViewSearch extends JViewLegacy
     // Set the page and document title
     $this->document->setTitle($title);
     $this->document->setDescription($description);
-    
+
     // Add some scripts and shit
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
@@ -238,6 +238,8 @@ class FcSearchViewSearch extends JViewLegacy
     $options[] = JHtml::_('select.option', 'order_price_DESC', JText::_('COM_FCSEARCH_SEARCH_ORDER_PRICE_DESC'));
     $options[] = JHtml::_('select.option', 'order_occupancy_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_OCCUPANCY'));
     $options[] = JHtml::_('select.option', 'order_reviews_desc', JText::_('COM_FCSEARCH_SEARCH_ORDER_REVIEWS'));
+    $options[] = JHtml::_('select.option', 'order_bedrooms_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_BEDROOMS_LOW_TO_HIGH'));
+    $options[] = JHtml::_('select.option', 'order_bedrooms_DESC', JText::_('COM_FCSEARCH_SEARCH_ORDER_BEDROOMS_HIGH_TO_LOW'));
     return $options;
   }
 
@@ -254,9 +256,14 @@ class FcSearchViewSearch extends JViewLegacy
    */
   private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '', $inflector = '')
   {
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
     $accommodation_type = '';
     $property_type = '';
     $location_title = str_replace('France', '', $location);
+    $lwl = $input->get('lwl', false, 'boolean');
+    $offers = $input->get('offers', false, 'boolean');
 
     // Work out the property type we have
     if (!empty($property_types))
@@ -293,7 +300,18 @@ class FcSearchViewSearch extends JViewLegacy
       $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location_title));
     }
 
+    if ($lwl)
+    {
+      $title = JText::sprintf('COM_FCSEARCH_TITLE_LONG_WINTER_LETS', $location);
+    }
+
+    if ($offers)
+    {
+      $title = JText::sprintf('COM_FCSEARCH_TITLE_SPECIAL_OFFERS', $location);
+    }
+
     // Amend the title based on bedroom and occupancy filter
+    $bedrooms = ($bedrooms == 10) ? "$bedrooms+" : $bedrooms;
     $title .= ($bedrooms) ? ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : '';
     $title .= ($occupancy) ? ' | ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') . ' ' . $occupancy : '';
 

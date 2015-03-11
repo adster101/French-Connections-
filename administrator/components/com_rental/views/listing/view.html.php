@@ -111,6 +111,7 @@ class RentalViewListing extends JViewLegacy
     $property_id = $this->items[0]->id;
     $unit_id = $this->items[0]->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
+
   }
 
   /**

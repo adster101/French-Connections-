@@ -5,6 +5,7 @@ defined('_JEXEC') or die('Restricted access');
 
 class Fc_RedirectControllerRedirect extends JControllerLegacy
 {
+
   /**
    * 
    * Deals with legacy search urls 
@@ -31,7 +32,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       // Get the location 
       $row = $db->loadObject();
 
@@ -57,7 +59,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       }
       $app->redirect($path, true);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log the problem for review
       $uri = JUri::getInstance();
 
@@ -67,6 +70,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       throw new Exception('Page not found', 404);
     }
   }
+
   /**
    * 
    * Deals with legacy search urls 
@@ -93,10 +97,11 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       // Get the location 
       $row = $db->loadObject();
-      
+
       // Is there is a content ID we know it must be a post
       if ($row->id)
       {
@@ -119,7 +124,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       }
       $app->redirect($path, true);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log the problem for review
       $uri = JUri::getInstance();
 
@@ -127,6 +133,64 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       JLog::add('Exception 301 redirecting old blog url: ' . $e->getMessage() . '::' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
 
       throw new Exception('Page not found', 404);
+    }
+  }
+
+  public function GuideCity()
+  {
+    $app = JFactory::getApplication();
+    $input = $app->input;
+    $db = JFactory::getDbo();
+    $Itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+    $parts = explode('-', $input->get('filter', '', 'string'));
+
+    // Look up the location
+    $query = $db->getQuery(true);
+
+    // We're interested in the alias 
+    $query->select('alias, id');
+    $query->from('#__classifications a');
+
+    $part = array_shift($parts);
+    $query->where('a.id = ' . (int) $part);
+
+    // Serious redirects
+    $db->setQuery($query);
+
+    try
+    {
+      // Get the location 
+      $location = $db->loadObject();
+
+      if (!$location)
+      {
+        // Set the alias to france so we get something sensible
+        $location->alias = 'france';
+
+        // Log the problem for review
+        $uri = JUri::getInstance();
+
+        JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+        JLog::add('Problem 301 redirecting /guide/city type url: ' . JUri::current() . '?' . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      }
+
+      $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=' . JApplication::stringURLSafe($location->alias));
+
+      // 301 redirect
+      $app->redirect($route, true);
+    }
+    catch (Exception $e)
+    {
+
+      $uri = JUri::getInstance();
+
+      // Log this as a redirect error
+      // Redirect to home page
+
+      JLog::addLogger(array('text_file' => '301-redirect-search'), JLog::ALL, array('redirect-search'));
+      JLog::add('Exception 301 redirecting /guide/city type url: ' . $e->getMessage() . ' :: ' . JUri::current() . $uri->getQuery(), JLog::ALL, 'redirect-search');
+      $route = JRoute::_('index.php?option=com_fcsearch&Itemid=' . $Itemid . '&s_kwds=france');
+      $app->redirect($route, true);
     }
   }
 
@@ -151,7 +215,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
     // Serious redirects
     $db->setQuery($query);
 
-    try {
+    try
+    {
       // Get the location 
       $location = $db->loadObject();
 
@@ -172,7 +237,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       $uri = JUri::getInstance();
 
@@ -217,7 +283,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       // Get the location 
       $location = $db->loadObject();
 
@@ -238,7 +305,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log the problem for review
       $uri = JUri::getInstance();
 
@@ -366,7 +434,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
     // Serious redirects
     $db->setQuery($query);
 
-    try {
+    try
+    {
       // Get the location 
       $location = $db->loadObject();
 
@@ -395,7 +464,8 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // 301 redirect
       $app->redirect($route, true);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log the problem for review
       $uri = JUri::getInstance();
 

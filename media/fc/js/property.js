@@ -25,7 +25,7 @@ jQuery(document).ready(function() {
     sync: '#carousel',
     useCss: false,
     animationLoop: false,
-    controlNav: false,
+            controlNav: false,
     video: true,
     after: function(slider) {
       var slides = slider.slides;
@@ -40,7 +40,7 @@ jQuery(document).ready(function() {
 });
 
 function initPropertyMap() {
-  
+
   var data = jQuery('#property_map_canvas').data();
   var lat = data.lat;
   var lon = data.lon;
@@ -95,18 +95,21 @@ function initPropertyMap() {
 
       markers[i] = marker;
 
-      //  Create a new viewpoint bound, so we can centre the map based on the markers
-      var bounds = new google.maps.LatLngBounds();
 
-      //  Go through each...
-      jQuery.each(markers, function(index, marker) {
-        bounds.extend(marker.position);
-      });
-
-      //  Fit these bounds to the map
-      map.fitBounds(bounds);
     }
 
+    //  Create a new viewpoint bound, so we can centre the map based on the markers
+    var bounds = new google.maps.LatLngBounds();
+
+    //  Go through each...
+    jQuery.each(markers, function(index, marker) {
+      bounds.extend(marker.position);
+    });
+    
+    bounds.extend(prnmarker.position);
+
+    //  Fit these bounds to the map
+    map.fitBounds(bounds);
 
 
   }).fail(function(e) {

@@ -112,8 +112,6 @@ class RentalViewTariffs extends JViewLegacy
       $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'tariffs.save', false);
     }
     
-    // Add the preview and new unit buttons
-    JToolBarHelper::custom('unitversions.add', 'plus', '', 'COM_RENTAL_HELLOWORLD_ADD_NEW_UNIT', false);
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->progress[0]->id;

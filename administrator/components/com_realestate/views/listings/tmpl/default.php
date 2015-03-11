@@ -161,7 +161,8 @@ $canDo = RealEstateHelper::getActions();
                             <br />
                             <?php echo JText::_($item->phone_1); ?>
                           </span>
-                          <?php if ($user->authorise('notes.admin', 'com_notes')) : ?>
+
+                          <?php if ($user->authorise('core.manage', 'com_notes')) : ?>
                             <p>
                               <?php echo JHtml::_('property.notes', $item->id); ?>
                             </p>
