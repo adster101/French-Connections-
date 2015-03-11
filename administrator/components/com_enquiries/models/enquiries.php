@@ -93,9 +93,6 @@ class EnquiriesModelEnquiries extends JModelList
 
   /**
    * Method to build an SQL query to load the list data.
-   * This is 'interesting' because it uses a union to return data from property and realestate props
-   * Which is achieved by calling __toString() on each query and constructing a third query to 
-   * actually perform the join.
    *
    * @return	string	An SQL query
    *
@@ -109,7 +106,7 @@ class EnquiriesModelEnquiries extends JModelList
     // Create a new query object.
     $db = JFactory::getDBO();
     $query = $db->getQuery(true);
-    
+
     // Select some fields
     $query->select('
       e.id,
@@ -134,8 +131,6 @@ class EnquiriesModelEnquiries extends JModelList
     // Join on p.id so we can get the enqs for property owned by current user
     $query->leftJoin('#__property p on p.id = e.property_id');
 
-    
-    
     // Filter by published state
     $state = $this->getState('filter.state');
 
@@ -174,29 +169,11 @@ class EnquiriesModelEnquiries extends JModelList
       $query->where('e.date_created >= ' . $db->quote($db->escape($date, true)));
     }
 
-    $listOrdering = $this->getState('list.ordering', 'e.date_created');
+    $listOrdering = $this->getState('list.ordering', 'date_created');
     $listDirn = $db->escape($this->getState('list.direction', 'desc'));
-        
-    // Clone the query 
-    $query2 = clone($query);
-    
-    // Clear the join field 
-    $query2->clear('join');
-    
-    // And rejoin on the realestate bit
-    $query2->leftJoin('#__realestate_property p on p.id = e.property_id');
-    
-    // Get a new query to construct the union
-    $union = $db->getQuery(true);
-        
-    $union->select('*');
-    
-    // Money shot
-    $union->from('(' . $query->__toString() . ' UNION ALL ' . $query2->__toString() . ') as e');
-            
-    $union->order($db->escape($listOrdering) . ' ' . $listDirn);
-    
-    return $union;
+    $query->order($db->escape($listOrdering) . ' ' . $listDirn);
+
+    return $query;
   }
 
 }
