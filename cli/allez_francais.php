@@ -46,7 +46,6 @@ class AllezFrancais extends RealestateImport
     $db = JFactory::getDbo();
     $user = JFactory::getUser('allezfrancais')->id;
 
-
     $this->out('About to get feed...');
 
     // Get and parse out the feed 
@@ -77,8 +76,10 @@ class AllezFrancais extends RealestateImport
         $this->out('Processing... ' . $prop->agency_reference);
 
         // Check whether this property agency reference already exists in the versions table
-        $id = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
-
+        $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
+        
+        $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
+        
         $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
 
         if (!$id)
@@ -201,7 +202,7 @@ class AllezFrancais extends RealestateImport
       {
         // Roll back any batched inserts etc
         $db->transactionRollback();
-
+        var_dump($e);die;
         // Send an email, woot!
         $this->email($e);
       }

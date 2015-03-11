@@ -79,7 +79,7 @@ class AccommodationModelListing extends JModelForm
     $form = ($owner->username == 'atleisure') ? 'atleisure' : 'enquiry';
 
     // Get the form.
-    $form = $this->loadForm('com_accommodation.enquiry', $form, array('control' => 'jform', 'load_data' => $loadData));
+    $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))
     {
@@ -171,6 +171,7 @@ class AccommodationModelListing extends JModelForm
       $select = '
         a.id as property_id,
         a.created_by,
+        a.is_bookable,
         ufc.sms_alert_number,
         ufc.sms_valid,
         ufc.sms_nightwatchman,
@@ -340,11 +341,13 @@ class AccommodationModelListing extends JModelForm
         $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
       }
 
-      try {
+      try
+      {
 
         $this->item = $this->_db->setQuery($query)->loadObject();
       }
-      catch (Exception $e) {
+      catch (Exception $e)
+      {
         // Runtime exception
         // Different to a null result.
         // TO DO - Log me baby
@@ -443,7 +446,8 @@ class AccommodationModelListing extends JModelForm
 
 
 
-    try {
+    try
+    {
 
       // Get the state for this property ID
       $unit_id = $this->getState('unit.id');
@@ -502,7 +506,8 @@ class AccommodationModelListing extends JModelForm
 
       return $this->facilities;
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       // Log the exception and return false
       JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
       return false;
@@ -519,7 +524,8 @@ class AccommodationModelListing extends JModelForm
     if (!isset($this->units))
     {
 
-      try {
+      try
+      {
         // Get the state for this property ID
         $id = $this->getState('property.id');
 
@@ -549,7 +555,8 @@ class AccommodationModelListing extends JModelForm
 
         return $result;
       }
-      catch (Exception $e) {
+      catch (Exception $e)
+      {
         // Log the exception and return false
         JLog::add('Problem fetching units for - ' . $id . $e->getMessage(), JLOG::ERROR, 'units');
         return false;
@@ -608,7 +615,8 @@ class AccommodationModelListing extends JModelForm
     {
       $unit_id = $this->getState('unit.id');
 
-      try {
+      try
+      {
         // Get the state for this property ID
         // Generate a logger instance for reviews
         JLog::addLogger(array('text_file' => 'property.view.php'), JLog::ALL, array('reviews'));
@@ -642,7 +650,8 @@ class AccommodationModelListing extends JModelForm
         // Return the reviews, if any
         return $this->reviews;
       }
-      catch (Exception $e) {
+      catch (Exception $e)
+      {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $unit_id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
@@ -729,7 +738,8 @@ class AccommodationModelListing extends JModelForm
     if (!isset($this->offer))
     {
 
-      try {
+      try
+      {
         // Get the state for this property ID
         $id = (!empty($id)) ? $id : (int) $this->getState('unit.id', '');
 
@@ -750,7 +760,8 @@ class AccommodationModelListing extends JModelForm
 
         return $this->offer;
       }
-      catch (Exception $e) {
+      catch (Exception $e)
+      {
         // Log the exception and return false
         JLog::add('Problem fetching reviews for - ' . $id . $e->getMessage(), JLOG::ERROR, 'reviews');
         return false;
@@ -840,10 +851,12 @@ class AccommodationModelListing extends JModelForm
     $table = JTable::getInstance('Classification', 'ClassificationTable');
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
 
-    try {
+    try
+    {
       $path = $table->getPath($pk = $this->item->city_id);
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
 
       // Log the exception here...
       return false;
@@ -902,10 +915,12 @@ class AccommodationModelListing extends JModelForm
 
       $db->setQuery($query);
 
-      try {
+      try
+      {
         $db->execute();
       }
-      catch (RuntimeException $e) {
+      catch (RuntimeException $e)
+      {
         $this->setError($e->getMessage());
         return false;
       }
@@ -952,21 +967,21 @@ class AccommodationModelListing extends JModelForm
         "HouseCode" => "$affiliate_property_id",
         "ArrivalDate" => "$arrival_date",
         "DepartureDate" => "$departure_date",
-        "NumberOfAdults" => 3,
-        "NumberOfChildren" => 1,
+        "NumberOfAdults" => $data['adults'],
+        "NumberOfChildren" => $data['children'],
         "NumberOfBabies" => 0,
         "NumberOfPets" => 0,
-        "CustomerSurname" => "MyName",
+        "CustomerSurname" => $data['surname'],
         "CustomerCountry" => "GB",
         "CustomerTelephone1Country" => "GB",
-        "CustomerTelephone1Number" => "40-2163600",
-        "CustomerEmail" => "webdistribution@leisure-group.eu",
+        "CustomerTelephone1Number" => $data['guest_phone'],
+        "CustomerEmail" => $data['guest_email'],
         "CustomerLanguage" => "EN",
-        "WebsiteRentPrice" => 421,
-        "Test" => "No"
+        "WebsiteRentPrice" => 421
     );
 
-    try {
+    try
+    {
 
       $rpc->makeCall('CheckAvailabilityV1', $check_availability_params);
       $result = $rpc->getResult("json");
@@ -986,14 +1001,17 @@ class AccommodationModelListing extends JModelForm
       $rpc->makeCall('PlaceBookingV1', $booking_params);
 
       $result = $rpc->getResult("json");
-
+      
+      $result->data = $data;
+      
       // Must be okay, so set the json as a session variable
       $app->setUserState('com_accommodation.atleisure.data', $result);
 
 
       return true;
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
       return false;
     }
@@ -1257,11 +1275,13 @@ class AccommodationModelListing extends JModelForm
 
     $this->_db->setQuery($query);
 
-    try {
+    try
+    {
 
       $row = $this->_db->loadObject();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       
     }
 
@@ -1282,14 +1302,36 @@ class AccommodationModelListing extends JModelForm
 
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $result = $db->loadObject();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       return false;
     }
 
     return $result->affiliate_property_id;
+  }
+
+  public function preprocessForm(\JForm $form, $data, $group = 'content')
+  {
+    
+    if (!$this->getItem())
+    {
+       return false;
+    }
+    
+    $owner = JFactory::getUser($this->item->created_by)->username;
+        
+    if ($owner == 'atleisure')
+    {
+      $form->removeField('message');
+      $form->setFieldAttribute('adults', 'required', 'true');
+      $form->setFieldAttribute('children', 'required', 'true');
+    }
+    
+    parent::preprocessForm($form, $data, $group);
   }
 
 }

@@ -60,10 +60,10 @@ abstract class Import extends JApplicationCli
    * @return boolean
    * @throws Exception
    */
-  public function getPropertyVersion($columns = array(), $table = '', $field = '', $affiliate_reference = '', $db)
+  public function getPropertyVersion($table = '', $field = '', $affiliate_reference = '', $db)
   {
     $query = $db->getQuery(true);
-    $query->select($db->quote(implode(',', $columns)));
+    $query->select('*');
     $query->from($db->quoteName($table));
     $query->where($db->quoteName($field) . '=' . $db->quote($affiliate_reference));
     $query->where('review = 0');

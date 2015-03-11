@@ -28,6 +28,7 @@ $displayData->unit_id = $this->result->unit_id;
 $displayData->class = '';
 $description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
 $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
+$uri = JUri::getInstance();
 ?>
 
 <div class="search-result">
@@ -70,7 +71,11 @@ $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $desc
     <div class="col-xs-12 col-sm-3">
       <p>
         <a href="<?php echo $route ?>" title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>">
-          <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
+          <?php if (!empty($this->result->thumbnail)) : ?>
+            <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
+          <?php else: ?>
+            <img width="210" class="img-responsive" src="<?php echo $uri->getScheme() . '://' . $this->result->url_thumb ?>" />
+          <?php endif; ?>
         </a>  
       </p>
     </div>

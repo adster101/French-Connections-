@@ -31,6 +31,8 @@ class AccommodationViewAtleisurebook extends JViewLegacy
     {
       throw new Exception(JText::_('WOOT'), 410);
     }
+    
+    $this->images = $this->get('Images');
 
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');

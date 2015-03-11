@@ -19,16 +19,17 @@ $item = new stdClass();
 $item->promo = true;
 $item->description = JText::_('MOD_FEATURED_PROPERTY_ADVERTISE_HERE');
 array_push($items, $item);
+$chunks = array_chunk($items, 4);
+
 ?>
 <div class="row">
   <div class="carousel slide hidden-xs" id="fp-carousel" data-ride="carousel">
-    <ol class="carousel-indicators">    
-      <li data-target="#fp-carousel" data-slide-to="0" class="active"></li>  
-      <?php foreach ($items as $key => $item) : ?>
-        <?php if (($key % 4 === 3)) : ?>
-        </li><li data-target="#fp-carousel" data-slide-to="<?php echo ($key % 4 === 3) ?>">
+    <ol class="carousel-indicators">   
+      <?php if (count($chunks) > 1) : ?>
+        <?php foreach ($chunks as $key => $item) : ?>
+          <li data-target="#fp-carousel" data-slide-to="<?php echo $key ?>" <?php echo ($key == 0) ? 'class="active"' : ''; ?>></li>
+        <?php endforeach; ?>
       <?php endif; ?>
-    <?php endforeach; ?>
 </ol>
 <div class="carousel-inner">   
   <div class="item active">
@@ -72,7 +73,7 @@ array_push($items, $item);
       <?php elseif ($item->promo) : ?>
         <div class="col-lg-3 col-sm-3"> 
           <p>
-            <img src='/images/general/no-image.png/' class="fp-media-object img-responsive" />
+            <img src='/images/general/logo-5.png/' class="fp-media-object img-responsive" />
           </p>
           <h4 class="fp-media-heading">
             Advertise here

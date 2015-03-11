@@ -164,5 +164,38 @@ class RealestateImport extends Import
       throw new Exception('Problem updating new real estate property in Allez Francais XML import updateProperty()');
     }
   }
+ /**
+   * TO DO - Make re-usable
+   * 
+   * @param type $db
+   * @param type $data
+   * @return type
+   * @throws Exception
+   */
+  public function createImage($db, $data)
+  {
+    $query = $db->getQuery(true);
 
+    $query->insert('#__property_images_library')
+            ->columns(
+                    array(
+                        $db->quoteName('version_id'), $db->quoteName('unit_id'),
+                        $db->quoteName('caption'), $db->quoteName('ordering')
+                    )
+            )
+            ->values(implode(',', $data));
+
+    $db->setQuery($query);
+
+    try
+    {
+      $db->execute();
+    }
+    catch (RuntimeException $e)
+    {
+      throw new Exception($e->getMessage());
+    }
+
+    return $db->insertid();
+  }
 }

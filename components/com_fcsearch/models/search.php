@@ -293,6 +293,7 @@ class FcSearchModelSearch extends JModelList
         g.title as property_type,
         i.title as tariff_based_on,
         e.image_file_name as thumbnail,
+        e.url_thumb,
         k.title as changeover_day
       ');
       if ($this->getState('search.level') == 5)

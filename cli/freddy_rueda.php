@@ -74,7 +74,9 @@ class FreddyRueda extends RealestateImport
         (JDEBUG) ? $this->out('Processing... ' . $prop->agency_reference) : '';
 
         // Check whether this property agency reference already exists in the versions table
-        $id = $this->getPropertyVersion($prop->agency_reference, $db);
+        $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
+
+        $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
 
         if (!$id)
         {
@@ -193,7 +195,7 @@ class FreddyRueda extends RealestateImport
         $db->transactionRollback();
 
         // Send an email, woot!
-        $this->email($e);
+        // $this->email($e);
 
         (JDEBUG) ? $this->out(var_dump($e)) : $this->email($e);
       }

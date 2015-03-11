@@ -21,6 +21,8 @@ $uri = JUri::getInstance()->toString();
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
+
+// TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
 
 if ((int) $preview && $preview == 1)
@@ -144,7 +146,8 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
           </li>
           <li>
             <a href="<?php echo $route ?>#email">
-              <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_CONTACT'); ?>
+              <?php $contact_anchor_label = ($this->item->is_bookable) ? 'COM_ACCOMMODATION_NAVIGATOR_BOOK_NOW' : 'COM_ACCOMMODATION_NAVIGATOR_CONTACT'; ?>
+              <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_($contact_anchor_label); ?>
             </a>
           </li>
         </ul>
@@ -383,7 +386,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
             <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
           </a>
           <a class="btn btn-primary btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
+            <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
           </a>
         </p>
       </div>  
@@ -676,80 +679,22 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   <div class="row" id="email">
     <div class="col-lg-12">
       <?php if ($this->item->unit_title) : ?>
-        <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->unit_title)) ?></h2> 
+        <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
       <?php endif; ?>
     </div>
   </div>
   <div class="row">
     <div class="col-lg-7 col-md-7 col-sm-7">
-      <?php echo ($owner == 'atleisure') ? $this->loadTemplate('atleisure_form') : $this->loadTemplate('form'); ?>
+      <?php echo $this->loadTemplate('form'); ?>
     </div>
     <div class="col-lg-5 col-md-5 col-sm-5">
-      <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4> 
-      <p>
-        <?php if ($this->item->use_invoice_details) : ?>
-          <?php echo $this->escape($this->item->firstname); ?>&nbsp;<?php echo $this->escape($this->item->surname); ?><br />
-        <?php else: ?>
-          <?php echo $this->escape($this->item->alt_first_name); ?>&nbsp;<?php echo $this->escape($this->item->alt_surname); ?><br />
-        <?php endif; ?>
-        <span class="small">(<?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_ADVERTISING_SINCE', $this->item->advertising_since)); ?>)</span>
-      </p>
-      <p>
-        <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL'); ?>
-        <?php echo ($this->item->use_invoice_details) ? $this->item->phone_1 : $this->item->alt_phone_1; // Assumes there is at least one phone ?>
-      </p>
+      <?php if ($this->item->is_bookable) : ?>
+        <?php echo $this->loadTemplate($owner); ?>
 
-      <?php if ($this->item->use_invoice_details) : // Show owners second phone number if there is one on the account  ?>
-        <?php if (!empty($this->item->phone_2)) : ?>
-          <p>
-            <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
-            <?php echo $this->item->phone_2; ?>
-          </p>
-        <?php endif; ?>
-      <?php else: // Show the alt second phone number if one has been entered  ?>
-        <?php if (!empty($this->item->alt_phone_2)) : ?>
-          <p>
-            <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
-            <?php echo $this->item->alt_phone_2; ?>
-          </p>
-        <?php endif; ?>
+      <?php else: ?>
+        <?php echo $this->loadTemplate('contact_owner'); ?>
       <?php endif; ?>
 
-      <?php if ($this->item->use_invoice_details) : // Show owners third phone number if there is one on the account  ?>
-        <?php if (!empty($this->item->phone_3)) : ?>
-          <p>
-            <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
-            <?php echo $this->item->phone_3; ?>
-          </p>
-        <?php endif; ?>
-      <?php else: // Show the alt third phone number if one has been entered  ?>
-        <?php if (!empty($this->item->alt_phone_3)) : ?>
-          <p>
-            <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
-            <?php echo $this->item->alt_phone_3; ?>
-          </p>
-        <?php endif; ?>
-      <?php endif; ?> 
-      <?php if (count($langs_array) > 0) : ?>
-        <p><?php echo JText::sprintf('COM_ACCOMMODATION_LANGUAGES_SPOKEN', implode(', ', $langs_array)); ?></p>
-      <?php endif; ?>
-      <?php if ($this->item->booking_form) : ?>
-        <?php $link = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&tmpl=component&view=bookingform' . $append; ?>
-        <p><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_VIEW', $link); ?></p>
-      <?php endif; ?>
-
-      <?php if ($this->item->website) : ?>
-        <p>
-          <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
-          <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
-            <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
-          </a>
-        </p>
-      <?php endif; ?>
-      <hr />
-      <p>
-        <?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
-      </p>
     </div>
   </div>
 </div>

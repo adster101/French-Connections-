@@ -144,7 +144,11 @@ class AtLeisure extends Import
 
             // Array of property details to create
             $property = array(
-                'expiry_date' => $expiry_date, 'created_on' => $date, 'review' => 0, 'created_by' => $user
+                'expiry_date' => $expiry_date, 
+                'created_on' => $date, 
+                'review' => 0, 
+                'created_by' => $user,
+                'is_bookable' => 1
             );
 
             // Create an entry in the #__property table
@@ -247,6 +251,7 @@ class AtLeisure extends Import
           $data['unit_version']['accommodation_type'] = 25;
           $data['unit_version']['additional_price_notes'] = $this->additionalCosts($acco);
           $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
+          $data['unit_version']['base_currency'] = 'EUR';
           $data['unit_version'] = $this->getBedrooms($layoutArr, $data['unit_version']);
 
           $unit_version_table->set('_tbl_keys', array('id'));
@@ -705,12 +710,9 @@ class AtLeisure extends Import
 
       foreach ($layout as $room => $contents)
       {
-
-
         foreach ($contents as $content)
         {
           $layoutStr .= '<dt>' . $room . '</dt>';
-
           foreach ($content as $name => $quantity)
           {
             $layoutStr .= '<dd>' . $name . ' x ' . $quantity . '</dd>';
@@ -718,17 +720,14 @@ class AtLeisure extends Import
         }
       }
 
-
       if (!empty($layout))
       {
-
         $layoutStr .= '</dl>';
       }
     }
 
     if (!empty($generalStr))
     {
-
       $layoutStr .= '<h4>General</h4>';
       $layoutStr .= '<dl>';
       $layoutStr .= '<dt>Facilities on site</dt>';
