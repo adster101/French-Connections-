@@ -35,7 +35,7 @@ class FcadminModelUserCards extends JModelList
 
     // Select the required fields from the table.
     $query->select('
-      a.surname as aca_contact_lastname,
+      concat(a.surname," (", a.user_id,")") as aca_contact_lastname,
       a.firstname as aca_contact_firstname,
       a.user_id as aca_acc_id,
       "N" as status,

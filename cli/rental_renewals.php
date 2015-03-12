@@ -395,6 +395,7 @@ class Renewals extends JApplicationCli
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
+    
     $query->select('
       a.id, 
       datediff(a.expiry_date, now()) as days, 
@@ -421,7 +422,7 @@ class Renewals extends JApplicationCli
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
     $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
     $query->where('a.created_by not in (' . implode(',', $users_to_ignore) . ')');
-
+    $query->where('renewalreason = \'\'');
 
     if (!$auto)
     {
