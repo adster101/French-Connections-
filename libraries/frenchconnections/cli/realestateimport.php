@@ -176,11 +176,11 @@ class RealestateImport extends Import
   {
     $query = $db->getQuery(true);
 
-    $query->insert('#__property_images_library')
+    $query->insert('#__realestate_property_images_library')
             ->columns(
                     array(
-                        $db->quoteName('version_id'), $db->quoteName('unit_id'),
-                        $db->quoteName('caption'), $db->quoteName('ordering')
+                        $db->quoteName('version_id'), $db->quoteName('realestate_property_id'),
+                        $db->quoteName('image_file_name'), $db->quoteName('ordering')
                     )
             )
             ->values(implode(',', $data));

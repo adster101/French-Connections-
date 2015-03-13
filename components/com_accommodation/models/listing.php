@@ -126,7 +126,7 @@ class AccommodationModelListing extends JModelForm
     // Get the input values etc
     $app = JFactory::getApplication('site');
     $input = $app->input;
-		$cid   = $input->post->get('cid', array(), 'array');
+    $cid = $input->post->get('cid', array(), 'array');
 
     // Get the property id
     $id = ($input->get('id', '', 'int')) ? $input->get('id', '', 'int') : $input->get('cid', array(), 'array');
@@ -1001,9 +1001,9 @@ class AccommodationModelListing extends JModelForm
       $rpc->makeCall('PlaceBookingV1', $booking_params);
 
       $result = $rpc->getResult("json");
-      
+
       $result->data = $data;
-      
+
       // Must be okay, so set the json as a session variable
       $app->setUserState('com_accommodation.atleisure.data', $result);
 
@@ -1262,9 +1262,9 @@ class AccommodationModelListing extends JModelForm
 
     $query->select('count(' . $this->_db->quoteName('guest_email') . ') as count');
     $query->from($this->_db->quoteName('#__enquiries'));
-    //$query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d") - INTERVAL 1 DAY)');
-    // Just needs to be great than now...surely?
-    $query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d"))');
+    
+    // Checks the number of enquiries that have been sent by this email address in the last day
+    $query->where('(' . $this->_db->quoteName('date_created') . ' > DATE_FORMAT(NOW(), "%Y-%m-%d") - INTERVAL 1 DAY)');
     $query->where(
             $this->_db->quoteName('guest_email') . '=' .
             $this->_db->quote(
@@ -1316,21 +1316,21 @@ class AccommodationModelListing extends JModelForm
 
   public function preprocessForm(\JForm $form, $data, $group = 'content')
   {
-    
+
     if (!$this->getItem())
     {
-       return false;
+      return false;
     }
-    
+
     $owner = JFactory::getUser($this->item->created_by)->username;
-        
+
     if ($owner == 'atleisure')
     {
       $form->removeField('message');
       $form->setFieldAttribute('adults', 'required', 'true');
       $form->setFieldAttribute('children', 'required', 'true');
     }
-    
+
     parent::preprocessForm($form, $data, $group);
   }
 

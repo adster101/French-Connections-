@@ -157,7 +157,7 @@ class AllezFrancais extends RealestateImport
             }
 
             // Save the image data out to the database...
-            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i));
+            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i+1));
           }
         }
         else
