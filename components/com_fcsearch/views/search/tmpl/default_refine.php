@@ -32,6 +32,64 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
 <h4 id="refine"><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?></h4>
 <div class="panel panel-default">
   <div class="panel-heading">
+    <?php echo JText::_('COM_FCSEARCH_REFINE_EXTRAS'); ?>
+
+
+  </div>
+  <div class="panel-body">
+    <?php if (!empty($this->lwl) || !empty($this->so)) : ?>
+      <?php
+      $link = JURI::getInstance();
+      $query_string_original = $link->getQuery(true);
+      $query_string_new = $query_string_original;
+      ?>
+      <?php
+      if (!empty($this->lwl)) :
+        if ($query_string_new['lwl'])
+        {
+          unset($query_string_new['lwl']);
+        }
+        else
+        {
+          $query_string_new['lwl'] = 'true';
+        }
+        $link->setQuery($query_string_new);
+        ?>
+        <p>
+          <a href="<?php echo JRoute::_($link->toString()) ?>">
+            <i class="muted <?php echo (($lwl) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+            <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_LWL); ?> (<?php echo $this->lwl; ?>)
+          </a>
+        </p>  
+      <?php endif; ?>
+      <?php
+      if (!empty($this->so)) :
+              $query_string_new = $query_string_original;
+
+        if ($query_string_new['offers'])
+        {
+          unset($query_string_new['offers']);
+        }
+        else
+        {
+          $query_string_new['offers'] = 'true';
+        }
+        $link->setQuery($query_string_new);
+        ?>
+        <p>
+          <a href="<?php echo JRoute::_($link->toString()) ?>">
+            <i class="muted <?php echo (($offers) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+            <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_OFFERS); ?> (<?php echo $this->so; ?>)
+          </a>
+        </p>  
+      <?php endif; ?>        
+    <?php else : ?>
+      <?php echo '...'; ?>
+    <?php endif; ?> 
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
     <?php echo JText::_('COM_FCSEARCH_REFINE_PRICE'); ?>
   </div>
   <div class="panel-body">
@@ -58,7 +116,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
   <div class="panel panel-default">
     <div class="panel-heading">
       Location
-      <?php //echo JText::_($this->escape($this->localinfo->title));  ?>
+      <?php //echo JText::_($this->escape($this->localinfo->title));      ?>
     </div>
     <div class="panel-body">
       <?php foreach ($items as $key => $value) : ?> 
@@ -98,7 +156,6 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
               <?php endif; ?>
               <p>
                 <a href="<?php echo JRoute::_($route) ?>">
-                  <i class="muted <?php echo ($remove ? 'icon-delete' : 'icon-new'); ?>"> </i>
                   <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
                 </a>
               </p>      
@@ -160,11 +217,14 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         $filters = ($lang == 'en-GB') ? array_flip(array_slice($tmp, 3)) : array_flip(array_slice($tmp, 4)); // The filters being applied in the current URL
         $filter_string = 'property_' . JApplication::stringURLSafe($this->escape($value->title)) . '_' . (int) $value->id;
 
-        if (!array_key_exists($filter_string, $filters)) { // This property filter isn't currently applied
+        if (!array_key_exists($filter_string, $filters))
+        { // This property filter isn't currently applied
           $new_uri = implode('/', array_flip($filters)); // Take the existing filters 
           $new_uri = (!empty($filters)) ? '/' . $filter_string . '/' . $new_uri : '/' . $filter_string; // And append the new filter only adding new uri it it's not empty
           $remove = false;
-        } else { // This property type filter is already being applied
+        }
+        else
+        { // This property type filter is already being applied
           unset($filters[$filter_string]); // Remove it from the filters array
           $new_uri = implode('/', array_flip($filters));  // The new filter part is generated so without this filter which effectively removes the filter from the search
           $new_uri = ($new_uri) ? '/' . $new_uri : '';
@@ -218,11 +278,14 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
 
           $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
           // If the filter string doesn't already exist in the url, then append it to the end
-          if (!array_key_exists($filter_string, $tmp)) {
+          if (!array_key_exists($filter_string, $tmp))
+          {
             $new_uri = implode('/', array_flip($tmp));
             $new_uri = $new_uri . '/' . $filter_string;
             $remove = false;
-          } else {
+          }
+          else
+          {
             unset($tmp[$filter_string]);
             $new_uri = implode('/', array_flip($tmp));
             $remove = true;
