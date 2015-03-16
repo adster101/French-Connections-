@@ -14,7 +14,7 @@ $items = $pathway->getPathWay();
 
 $lang = $app->getLanguage()->getTag();
 
-$uri = str_replace('http://', '', JUri::current());
+$uri = str_replace(array('http://', 'https://'), '', JUri::current());
 $refine_budget_min = $this->getBudgetFields();
 $refine_budget_max = $this->getBudgetFields(250, 5000, 250, 'max_');
 

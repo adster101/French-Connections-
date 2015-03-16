@@ -118,8 +118,8 @@
       label="JTAG" 
       description="JTAG_DESC"
       class="inputbox span12 small"
-      multiple="true"
       custom="deny"
+      mode="nested"
     />
     
   </fieldset>

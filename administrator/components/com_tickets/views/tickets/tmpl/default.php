@@ -23,7 +23,8 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 
 <?php
 //Joomla Component Creator code to allow adding non select list filters
-if (!empty($this->extra_sidebar)) {
+if (!empty($this->extra_sidebar))
+{
   $this->sidebar .= $this->extra_sidebar;
 }
 ?>
@@ -69,6 +70,9 @@ if (!empty($this->extra_sidebar)) {
             <th class='left'>
               <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_SEVERITY', 'a.severity', $listDirn, $listOrder); ?>
             </th>
+            <th class="left">
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_RELEASE_VERSION', 't.release', $listDirn, $listOrder); ?>
+            </th>
             <th class='left'>
               <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_AREA_SORT', 'a.area', $listDirn, $listOrder); ?>
             </th>
@@ -78,13 +82,17 @@ if (!empty($this->extra_sidebar)) {
             <th class='left'>
               <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_DATE_UPDATED', 'a.date_updated', $listDirn, $listOrder); ?>
             </th>
+
           </tr>
         </thead>
         <tfoot>
           <?php
-          if (isset($this->items[0])) {
+          if (isset($this->items[0]))
+          {
             $colspan = count(get_object_vars($this->items[0])) + 1;
-          } else {
+          }
+          else
+          {
             $colspan = 10;
           }
           ?>
@@ -128,6 +136,9 @@ if (!empty($this->extra_sidebar)) {
                 <?php echo $item->severity; ?>
               </td>
               <td>
+                <?php echo $item->version; ?>
+              </td>
+              <td>
                 <?php echo $this->escape($item->area); ?>
 
               </td>
@@ -138,15 +149,11 @@ if (!empty($this->extra_sidebar)) {
               <td>
                 <?php echo $item->date_updated; ?>
               </td>
-
-
-
-
             </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
-      <?php //Load the batch processing form.    ?>
+      <?php //Load the batch processing form.     ?>
       <?php echo $this->loadTemplate('batch'); ?>
 
       <input type="hidden" name="task" value="" />
