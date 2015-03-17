@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form 
+  addrulepath="/libraries/frenchconnections/forms/rules">
+  <fieldset 
+    name="register" 
+    label="">
+    <field
+      name="nature"
+      type="list"
+      id="nature"
+      description="COM_FCCONTACT_NATURE_OF_ENQUIRY_DESCRIPTION"
+      label="COM_FCCONTACT_NATURE_OF_ENQUIRY"
+      class="form-control"
+      message="COM_FCCONTACT_NATURE_OF_ENQUIRY_MESSAGE"
+      default=""
+      required="true"
+      labelclass="col-sm-3 control-label">
+      <option value="">JGLOBAL_SELECT_AN_OPTION</option>
+      <option value="COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES">COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES</option>
+      <option value="COM_FCCONTACT_NATURE_OF_ENQUIRY_EXISTING_RENTAL_ADVERTISER">COM_FCCONTACT_NATURE_OF_ENQUIRY_EXISTING_RENTAL_ADVERTISER</option>
+      <option value="COM_FCCONTACT_NATURE_OF_ENQUIRY_EXISTING_FORSALE_ADVERTISER">COM_FCCONTACT_NATURE_OF_ENQUIRY_EXISTING_FORSALE_ADVERTISER</option>
+      <option value="COM_FCCONTACT_NATURE_OF_ENQUIRY_BANNER_ADVERTISING_ENQUIRY">COM_FCCONTACT_NATURE_OF_ENQUIRY_BANNER_ADVERTISING_ENQUIRY</option>
+      <option value="COM_FCCONTACT_NATURE_OF_ENQUIRY_HOLIDAY_MAKER_ENQUIRY">COM_FCCONTACT_NATURE_OF_ENQUIRY_HOLIDAY_MAKER_ENQUIRY</option>
+    </field>
+    
+    <field 
+      name="name" 
+      type="text"
+      description="COM_FCCONTACT_NAME_DESCRIPTION"
+      hint="COM_FCCONTACT_NAME_PLACEHOLDER"
+      filter="string"
+      maxlength="100"
+      label="COM_FCCONTACT_NAME_LABEL"
+      required="true"
+      class="form-control"
+      size="10"
+      labelclass="col-sm-3 control-label"
+    />
+
+    <field 
+      name="email" 
+      type="email"
+      description="COM_FCCONTACT_EMAIL_DESCRIPTION"
+      field="id"
+      filter="string"
+      hint="COM_FCCONTACT_EMAIL_PLACEHOLDER"
+      label="COM_FCCONTACT_EMAIL_LABEL"
+      message="COM_FCCONTACT_EMAIL_MESSAGE"
+      required="true"
+      size="30"
+      class="form-control"
+      validate="email"
+      labelclass="col-sm-3 control-label"
+    />
+        
+    <field
+      name="tel"
+      type="tel"
+      hint="COM_FCCONTACT_TEL_PLACEHOLDER"
+      id="phone_1"
+      description="COM_FCCONTACT_TEL_DESCRIPTION"
+      filter="string"
+      label="COM_FCCONTACT_TEL_LABEL"
+      message="COM_FCCONTACT_TEL_MESSAGE"
+      size="30"
+      class="form-control"
+      required="true"
+      labelclass="col-sm-3 control-label"
+      validate="tel"
+    />
+    
+    <field
+      name="prn"
+      type="text"
+      filter="int"
+      class="form-control"
+      labelclass="col-sm-3 control-label tooltip"
+      maxlength="6"
+      label="COM_FCCONTACT_PRN_LABEL"
+      description="COM_FCCONTACT_PRN_DESCRIPTION"
+      message="COM_FCCONTACT_PRN_MESSAGE"
+    />
+    
+    <field
+      name="message"
+      type="textarea"
+      filter="string"
+      class="form-control"
+      labelclass="col-sm-3 control-label"
+      label="COM_FCCONTACT_MESSAGE_LABEL"
+      description="COM_FCCONTACT_MESSAGE_DESCRIPTION"
+      message="COM_FCCONTACT_MESSAGE_MESSAGE"
+      validate="Fc.length"
+      maxlength="10000"
+      required="true"
+      rows="6"
+    />
+    
+    <field
+      name="captcha"
+      type="captcha"
+      label="COM_FCCONTACT_CAPTCHA_LABEL"
+      description="COM_FCCONTACT_CAPTCHA_DESCRIPTION"
+      validate="captcha"
+      labelclass="control-label col-sm-3"
+    />
+  </fieldset>
+</form>

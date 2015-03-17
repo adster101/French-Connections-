@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <layout title="COM_FCCONTACT_VIEW_DEFAULT">
+    <message>
+      <![CDATA[COM_FCCONTACT_VIEW_DEFAULT_DESC]]>
+    </message>
+  </layout>
+  <fields
+    name="params"
+    addfieldpath="/administrator/components/com_fccontact/models/fields"
+  >
+    <fieldset name="basic">
+     
+      <field 
+        type="text"
+        name="additional_email"
+        default="sales@frenchconnections.co.uk"
+        validate="email"
+        label="COM_FCCONTACT_MARKETING_EMAIL"
+        description="COM_FCCONTACT_MARKETING_EMAIL_DESC"
+        
+      />
+      <field 
+        type="text"
+        name="contact"
+        default="adamrifat@frenchconnections.co.uk"
+        validate="email"
+        label="COM_FCCONTACT_CONTACT_EMAIL"
+        description="COM_FCCONTACT_CONTACT_EMAIL_DESC"
+        
+      />
+    </fieldset>
+  </fields>
+</metadata>
+
