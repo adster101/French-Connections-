@@ -12,7 +12,7 @@ $description = '';
 
 ?>
 <?php if ($header) :?>
-<h4><?php echo JText::_('SHARE') ?></h4>
+<h4 class="page-header"><?php echo JText::_('SHARE') ?></h4>
   <?php endif;?> 
  <div class="<?php echo $class ?>"> 
           <a target="_blank" href="<?php

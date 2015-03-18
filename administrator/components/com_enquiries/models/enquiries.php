@@ -127,9 +127,6 @@ class EnquiriesModelEnquiries extends JModelList
 
     // From the hello table
     $query->from('#__enquiries e');
-    
-    // Join on p.id so we can get the enqs for property owned by current user
-    $query->leftJoin('#__property p on p.id = e.property_id');
 
     // Filter by published state
     $state = $this->getState('filter.state');
@@ -143,12 +140,6 @@ class EnquiriesModelEnquiries extends JModelList
       $query->where('e.state IN (0,1)');
     }
 
-    // Need to ensure that owners only see reviews assigned to their properties
-    if (!$user->authorise('core.edit', 'com_enquiries') && $user->authorise('core.edit.own', 'com_enquiries'))
-    { // User not permitted to edit their enquiries globally
-      $query->where('p.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
-    }
-
     // Filter by search in title
     $search = $this->getState('filter.search');
 
@@ -156,21 +147,45 @@ class EnquiriesModelEnquiries extends JModelList
     {
       $query->where('e.property_id = ' . (int) $search);
     }
-    elseif(!empty($search))
+    elseif (!empty($search))
     {
       $search = $db->Quote('%' . $db->escape($search, true) . '%');
       $query->where('(e.message LIKE ' . $search . ')');
     }
-
-    $date = $this->getState('filter.date_received');
-
-    if (!empty($date))
-    {
-      $query->where('e.date_created >= ' . $db->quote($db->escape($date, true)));
-    }
-
+    
     $listOrdering = $this->getState('list.ordering', 'date_created');
     $listDirn = $db->escape($this->getState('list.direction', 'desc'));
+    
+    // Need to ensure that owners only see reviews assigned to their properties
+    if (!$user->authorise('core.edit', 'com_enquiries') && $user->authorise('core.edit.own', 'com_enquiries'))
+    {
+      // User not permitted to edit their enquiries globally
+      // Join on p.id so we can get the enqs for property owned by current user
+      $query->leftJoin('#__property p on p.id = e.property_id');
+      $query->where('p.created_by = ' . (int) $user->id); // Assume that this is an owner, or a user who we only want to show reviews assigned to properties they own
+      // Clone the query
+      $query2 = clone($query);
+
+      // Clear the join field
+      $query2->clear('join');
+
+      // And rejoin on the realestate bit as some owners might have both property types.
+      $query2->leftJoin('#__realestate_property p on p.id = e.property_id');
+
+      // Get a new query to construct the union
+      $union = $db->getQuery(true);
+
+      $union->select('*');
+
+      // Money shot
+      $union->from('(' . $query->__toString() . ' UNION ' . $query2->__toString() . ') as e');
+
+      $union->order($db->escape($listOrdering) . ' ' . $listDirn);
+
+      return $union;
+    }
+
+
     $query->order($db->escape($listOrdering) . ' ' . $listDirn);
 
     return $query;

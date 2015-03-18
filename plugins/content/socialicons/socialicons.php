@@ -82,7 +82,7 @@ class PlgContentSocialIcons extends JPlugin
     $displayData->route = $route;
     $displayData->title = $row->title;
     $displayData->header = true;
-    $displayData->class = ' leead glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block';
+    $displayData->class = 'glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block';
             
     $row->text .= $socialicons->render($displayData);
 
