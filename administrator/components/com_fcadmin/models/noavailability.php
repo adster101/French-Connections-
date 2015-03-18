@@ -19,6 +19,31 @@ defined('_JEXEC') or die;
 class FcadminModelNoavailability extends JModelList
 {
 
+  protected $ignore_users = array();
+
+  public function __construct($config = array())
+  {
+    parent::__construct($config);
+
+    // Get the params so we can find users to ignore
+    // Put this into a method...probably
+    $params = JComponentHelper::getParams('com_fcadmin');
+
+    $ignore = $params->get('users_to_ignore', '');
+
+    $users = explode(',', $ignore);
+
+    foreach ($users as $username)
+    {
+      $id = JFactory::getUser($username)->id;
+
+      if ($id)
+      {
+        $this->ignore_users[] = $id;
+      }
+    }
+  }
+
   /**
    * Build an SQL query to load the list data.
    *
@@ -51,7 +76,17 @@ class FcadminModelNoavailability extends JModelList
     $query->where('b.review = 0');
     $query->where('e.review = 0');
     $query->where('d.published != -2');
+    // Make sure we only get published units...
+    $query->where('d.published = 1');
+    $query->where('a.published = 1');
     $query->where('a.created_by !=0');
+
+    // ignore users set in constructor taken from component parameters.
+    if (!empty($this->ignore_users))
+    {
+      $query->where(implode(',', $this->ignore_users));
+    }
+
     $query->where('a.expiry_date >=' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
     $query->where('(select count(*) from qitz3_availability where unit_id = d.id and end_date > CURDATE()) = 0');
     $query->order('a.id');
@@ -85,7 +120,7 @@ class FcadminModelNoavailability extends JModelList
       foreach ($items as $item)
       {
         $bits = JArrayHelper::fromObject($item);
-        
+
         $this->content .= implode("\t", $bits) . "\r\n";
       }
     }
