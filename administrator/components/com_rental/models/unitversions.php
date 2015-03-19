@@ -14,6 +14,7 @@ class RentalModelUnitVersions extends JModelAdmin
 
   public $layout = '';
   public $new_version_required = false;
+  private $fields_to_check = array('unit_title', 'description', 'additional_price_notes', 'linen_costs');
 
   /**
    * Method override to check if you can edit an existing record.
@@ -302,7 +303,7 @@ class RentalModelUnitVersions extends JModelAdmin
       // Check whether this unit is marked as needing a review, if not then we need to check if we should create a new version
       //if (!($data['review'])) // changed to below to prevent property version being reset if being reviewed
       // Will need to check here property review status if unit version review == 0
-      if ($data['review'] == 0)
+      if ($data['review'] == 0 && $this->_hasChanges($table, $data))
       {
 
         // Need to verify the expiry date for this property. If no expiry date then no new version is required.
@@ -543,7 +544,7 @@ class RentalModelUnitVersions extends JModelAdmin
     {
       return true;
     }
-    
+
     // Clear the query object so we can reuse it
     $query->clear();
 
@@ -578,7 +579,7 @@ class RentalModelUnitVersions extends JModelAdmin
   protected function saveUnitFacilities($data = array(), $id = 0, $old_version_id = '', $new_version_id = '', $isNew = false)
   {
     // TO DO - This all seems a bit shoddy...or it just late in the day?
-    
+
     $attributes = array();
 
     // For now whitelist the attributes that are supposed to be processed here...access options need adding.
@@ -623,12 +624,11 @@ class RentalModelUnitVersions extends JModelAdmin
       // We're saving a unit either from the images or tariffs screen. 
       // If this is a new version for an existing unit create a copy of the
       // facilities against the new version 
-      if (($old_version_id != $new_version_id) && !$isNew) 
+      if (($old_version_id != $new_version_id) && !$isNew)
       {
         $this->copyUnitFacilities($old_version_id, $new_version_id);
-        
       }
-      
+
       return true;
     }
     else if (count($attributes) > 0)
@@ -732,6 +732,26 @@ class RentalModelUnitVersions extends JModelAdmin
     }
 
     return $images;
+  }
+
+  private function _hasChanges($table, $data)
+  {
+
+    // Loop over the fields that will trigger a new version and check to see if any differ
+    foreach ($this->fields_to_check as $key => $field)
+    {
+      // Compare the content from the database with the content from the editor
+      if (array_key_exists($field, $data))
+      {
+        // Compare the two strings...
+        $compare = strcmp($table->$field, $data[$field]);
+        if ($compare <> 0)
+        {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }

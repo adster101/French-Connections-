@@ -16,7 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  Content.joomla
  * @since       1.6
  */
-class plgContentVersion extends JPlugin {
+class plgContentVersion extends JPlugin
+{
 
   /**
    * Example after save content method
@@ -28,16 +29,20 @@ class plgContentVersion extends JPlugin {
    * @param   bool		If the content is just about to be created
    * @since   1.6
    */
-  public function onContentBeforeBind($context, $article, $isNew, $data) {
+  public function onContentBeforeBind($context, $article, $isNew, $data)
+  {
 
     $new_version = false;
 
     // Here we check whether we are already editing an unpublished new version of this item
     // So if we are then we can skip all the comparing and simply save straight over the new/unpublished version
 
-    if ($data['review']) {
+    if ($data['review'])
+    {
       return true;
-    } else {
+    }
+    else
+    {
       // A list of fields to check through which will trigger the creation of a new version
       $fields_to_check = array(
           'title' => 1,
@@ -58,15 +63,16 @@ class plgContentVersion extends JPlugin {
           'fax' => 1,
           'email_1' => 1,
           'email_2' => 1,
-          
       );
 
       // Check we are handling a property manager form.
-      if ($context != 'com_rental.unitversions' && $context != 'com_rental.propertyversions' && $context != 'com_rental.contactdetails') {
+      if ($context != 'com_rental.unitversions' && $context != 'com_rental.propertyversions' && $context != 'com_rental.contactdetails')
+      {
         return false;
       }
       // Check if this is a new article.
-      if ($isNew) {
+      if ($isNew)
+      {
         // New article so no need for a new version
         return false;
       }
@@ -77,21 +83,12 @@ class plgContentVersion extends JPlugin {
 
 
       //Check if there is an expiry date for this content, if not then just return out...
-      if (!$data['review']) {
+      if (!$data['review'])
+      {
 
-        // Loop over the fields that will trigger a new version and check to see if any differ
-        foreach ($article as $field => $value) {
-          // Compare the content from the database with the content from the editor
-          if (array_key_exists($field, $fields_to_check)) {
-            // Compare the two strings...
-            $compare = strcmp($article->$field, $data[$field]);
-            if ($compare <> 0) {
-              $new_version = true;
-            }
-          }
-        }
+
       }
-      
+
       return $new_version;
     }
   }

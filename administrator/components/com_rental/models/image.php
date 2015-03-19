@@ -48,8 +48,8 @@ class RentalModelImage extends JModelAdmin
 
     $db = JFactory::getDbo();
     $db->transactionStart();
-    $image_profiles = array('', 'gallery', 'thumb', 'thumbs');
-    $image_file_path = '';
+    $ids = array();
+    $order = array();
 
     try
     {
@@ -66,18 +66,26 @@ class RentalModelImage extends JModelAdmin
       // Delete the image from the database
       if (parent::delete($pks))
       {
-        // Need to delete the main image, the gallery image and thumbs
-        $path = JPATH_SITE . '/images/property/' . $table->unit_id . '/';
-        // Delete the actual image file from the file system
-        // This is actually a bad idea as previous versions might need images at some point
-        //foreach ($image_profiles as $profile) {
-        //$image_file_path = $path . $profile . '/' . $table->image_file_name;
-        //if (JFile::exists($image_file_path)) {
-        //if (!JFile::delete($image_file_path)) {
-        //Throw new Exception('Problem deleting image from file system');
-        //}
-        //}
-        //}
+        // Let reorder this mo fo list of images...
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $query->select('id')
+                ->from($db->quoteName('#__property_images_library'))
+                ->where($db->quoteName('version_id') . ' = ' . $table->version_id);
+        
+        $db->setQuery($query);
+        
+        $rows = $db->loadObjectList();
+        
+        foreach ($rows as $k => $value)
+        {
+          $ids[] = $value->id;
+          $order[]  = $k + 1;
+        }
+        
+        $this->saveorder($ids, $order);
+        
+        
       }
     }
     catch (Exception $e)
