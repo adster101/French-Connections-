@@ -18,7 +18,7 @@ defined('_JEXEC') or die;
 class PlgSystemHTTPS extends JPlugin
 {
 	/**
-	 * Add the canonical uri to the head.
+	 * 301 redirect http requests to https 
 	 *
 	 * @return  void
 	 *
@@ -35,7 +35,7 @@ class PlgSystemHTTPS extends JPlugin
 		}
 
     $uri = JURI::getInstance();
-    
+
 		if ($uri->getScheme() != 'https')
 		{
 			// Forward to https
