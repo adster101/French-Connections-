@@ -42,7 +42,7 @@ $lwl = ($displayData['lwl']) ? $displayData['lwl'] : '';
     <?php endif; ?>
       <p>
         <a href="<?php echo JRoute::_($route) ?>">
-          <i class="muted icon <?php echo ($remove ? 'icon-checkbox' : 'icon-checkbox-unchecked'); ?>"> </i>
+          <i class="muted icon <?php echo ($remove ?  'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
     <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
         </a>
       </p>          

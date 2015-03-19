@@ -200,9 +200,9 @@ class EnquiriesModelEnquiry extends JModelAdmin
 
       $enquiry_detail = JArrayHelper::fromObject($detail);
 
-      $model = JModelLegacy::getInstance('Listing', 'AccommodationModel');
+      $model = JModelLegacy::getInstance('Listing', 'AccommodationModel', array('ignore_request' => true));
 
-      $model->getState();
+      $model->populateState();
       $model->setState('property.id', $enquiry_detail['property_id']);
       $model->setState('unit.id', $enquiry_detail['unit_id']);
       $model->processEnquiry($enquiry_detail, $params, $enquiry_detail['property_id'], $enquiry_detail['unit_id'], true);

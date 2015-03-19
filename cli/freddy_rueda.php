@@ -80,7 +80,7 @@ class FreddyRueda extends RealestateImport
 
         if (!$id)
         {
-
+          // TO DO - Make this a function used by FR and AF
           (JDEBUG) ? $this->out('Adding property entry...') : '';
 
           // Create an entry in the #__realestate_property table
@@ -149,7 +149,7 @@ class FreddyRueda extends RealestateImport
             }
 
             // Save the image data out to the database...
-            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i));
+            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i+1));
           }
         }
         else

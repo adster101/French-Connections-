@@ -6,10 +6,12 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HTML View class for the HelloWorld Component
  */
-class AccommodationViewListing extends JViewLegacy {
+class AccommodationViewListing extends JViewLegacy
+{
 
   // Overwriting JView display method
-  function display($tpl = null) {
+  function display($tpl = null)
+  {
 
     // TODO - Here we should add the relevant admin model and move 
     // getAvailability
@@ -21,12 +23,27 @@ class AccommodationViewListing extends JViewLegacy {
     // getUnits
     // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
     // Assign data to the view
-    
+
     $app = JFactory::getApplication();
 
-    if (!$this->item = $this->get('Item')) {
+    if (!$this->item = $this->get('Item'))
+    {
 
-      throw new Exception(JText::_('WOOT'), 410);
+      // Get the URI
+      $uri = JURI::getInstance();
+
+      // Get the query string
+      $query = $uri->getQuery(true);
+
+      // Append the view
+      $query['view'] = 'expired';
+
+      // Set the query string
+      $uri->setQuery($query);
+
+      // And redirect
+      header('Location: ' . $uri->toString());
+      exit;
     }
 
     // Get the availability for this property
@@ -58,7 +75,7 @@ class AccommodationViewListing extends JViewLegacy {
 
     // Get the special offer is one is current
     $this->offer = $this->get('Offers');
-    
+
     // Get the current list of shortlisted properties for this user
     $this->shortlist = $this->get('Shortlist');
 
@@ -70,13 +87,15 @@ class AccommodationViewListing extends JViewLegacy {
     $model->hit();
 
     // Check for errors.
-    if (count($errors = $this->get('Errors'))) {
+    if (count($errors = $this->get('Errors')))
+    {
       JError::raiseWarning(404, implode("\n", $errors));
       return false;
     }
 
     // Configure the pathway.
-    if (!empty($this->crumbs)) {
+    if (!empty($this->crumbs))
+    {
       $app->getPathWay()->setPathway($this->crumbs);
     }
 
@@ -92,13 +111,17 @@ class AccommodationViewListing extends JViewLegacy {
    *
    * @return void
    */
-  protected function setDocument() {
+  protected function setDocument()
+  {
 
     $document = JFactory::getDocument();
 
-    if ($this->item->accommodation_type == 'Bed and Breakfast') {
+    if ($this->item->accommodation_type == 'Bed and Breakfast')
+    {
       $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_BED_AND_BREAKFAST_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->city, $this->item->department);
-    } else {
+    }
+    else
+    {
       $this->title = JText::sprintf('COM_ACCOMMODATION_PROPERTY_SELF_CATERING_TITLE', $this->item->unit_title, $this->item->property_type, $this->item->city, $this->item->department);
     }
 

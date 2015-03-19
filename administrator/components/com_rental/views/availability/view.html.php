@@ -84,9 +84,9 @@ class RentalViewAvailability extends JViewLegacy
     $bar = JToolbar::getInstance('actions');
 
     // We can save the new record
-    $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'availability.apply', false);
+    //$bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'availability.cancel', false);
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'availability.cancel', false);
     $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'availability.saveandnext', false);
-    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'availability.save', false);
     
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');

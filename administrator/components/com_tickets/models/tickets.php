@@ -34,7 +34,7 @@ class TicketsModelTickets extends JModelList {
           'severity', 'a.severity',
           'catid', 'a.catid',
           'assigned_to', 'a.assigned_to'
-          ,'tag'
+          ,'tag', 't.version'
       );
     }
 
@@ -98,7 +98,8 @@ class TicketsModelTickets extends JModelList {
                     a.checked_out,
                     e.name as editor,
                     a.checked_out_time,
-                    b.name')
+                    b.name,
+                    t.title as version')
     );
     $query->from('`#__tickets` AS a');
 
@@ -106,7 +107,12 @@ class TicketsModelTickets extends JModelList {
     $query->leftJoin('#__users e on a.checked_out = e.id');
     $query->leftJoin('#__tickets_severity c on a.severity = c.id');
     $query->leftJoin('#__categories d on a.catid = d.id');
-
+    $query->join(
+					'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
+					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
+					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_tickets.ticket')
+				);
+    $query->leftJoin($db->quoteName('#__tags', 't') . ' ON ' . $db->quoteName('t.id') . ' = ' . $db->quoteName('tagmap.tag_id'));
     // Filter by published state
     $published = $this->getState('filter.state');
 
@@ -155,12 +161,8 @@ class TicketsModelTickets extends JModelList {
 
 		if (is_numeric($tagId))
 		{
-			$query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId)
-				->join(
-					'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
-					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
-					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_tickets.ticket')
-				);
+			$query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId);
+				
 		}
 
     // Add the list ordering clause.

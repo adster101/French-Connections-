@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" type="plugin" group="content">
+  <name>plg_content_socialicons</name>
+  <author>Joomla! Project</author>
+  <creationDate>November 2005</creationDate>
+  <copyright>Copyright (C) 2005 - 2014 Open Source Matters. All rights reserved.</copyright>
+  <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+  <authorEmail>admin@joomla.org</authorEmail>
+  <authorUrl>www.joomla.org</authorUrl>
+  <version>3.0.0</version>
+  <description>PLG_CONTENT_SOCIALICONS_XML_DESCRIPTION</description>
+  <files>
+    <filename plugin="pagebreak">pagebreak.php</filename>
+    <filename>index.html</filename>
+  </files>
+  <languages>
+    <language tag="en-GB">en-GB.plg_content_socialicons.ini</language>
+    <language tag="en-GB">en-GB.plg_content_socialicons.sys.ini</language>
+  </languages>
+  <config>
+    <fields name="params">
+
+      <fieldset name="basic">
+        <field
+          type="text"
+          name="facebook_appid"
+          label="PLG_CONTENT_SOCIALICONS_FACEBOOK_APP_ID"
+          filter="string"
+          maxlength="50"
+        />
+        <field
+          name="catid"
+          type="category"
+          label="Category"
+          extension="com_content"
+          show_root="true"
+          multiple="true"
+          description="Choose categories for which this plugin will add social icons to"
+        />
+      </fieldset>
+
+    </fields>
+  </config>
+</extension>

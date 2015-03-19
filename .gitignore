@@ -82,3 +82,7 @@ robots.txt
 /cli/leisure/json2db/json2txt/
 /cli/leisure/json2db/errors/
 /cli/website.php
+/administrator/language/overrides/en-GB.override.ini
+/language/overrides/en-GB.override.ini
+/modules/mod_nice_social_bookmark/
+/plugins/content/spshare/
