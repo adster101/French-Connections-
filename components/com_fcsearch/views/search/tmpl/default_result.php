@@ -97,7 +97,7 @@ $uri = JUri::getInstance();
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <a href="<?php echo $route ?>" class="btn btn-primary">
-              <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
+              <?php echo ($this->result->is_bookable) ? JText::_('COM_FCSEARCH_BOOK_NOW') : JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
             </a>
           </p>
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">

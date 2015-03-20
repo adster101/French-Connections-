@@ -266,6 +266,7 @@ class FcSearchModelSearch extends JModelList
       // TO DO - Not sure that c.area, c.region, c.department are needed here?
       $query->select('
         a.id,
+        a.is_bookable,
         d.unit_id,
         d.unit_title,
         c.published_on,

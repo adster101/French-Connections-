@@ -63,9 +63,11 @@ class FcadminModelNoavailability extends JModelList
     $query->select('
         a.id as PRN,
         h.email,
-        replace(e.unit_title, ",","") as unit,
-        h.name,
-        h.id as accountID
+        replace(e.unit_title, ",","") as unit_title,
+        i.firstname,
+        h.id as accountID,
+        i.sms_alert_number,
+        i.sms_valid
       ');
     $query->from('#__property as a');
     $query->join('inner', '#__property_versions as b on (a.id = b.property_id and b.id = (select max(c.id) from #__property_versions as c where c.property_id = a.id and c.review = 0))');
@@ -73,6 +75,7 @@ class FcadminModelNoavailability extends JModelList
     $query->join('left', '#__unit_versions e on (d.id = e.unit_id and e.id = (select max(f.id) from #__unit_versions f where f.unit_id = d.id and f.review = 0))');
     $query->join('left', '#__user_profile_fc g on a.created_by = g.user_id');
     $query->join('left', '#__users h on a.created_by = h.id');
+    $query->join('left', '#__user_profile_fc i on i.user_id = h.id');
     $query->where('b.review = 0');
     $query->where('e.review = 0');
     $query->where('d.published != -2');
