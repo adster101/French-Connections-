@@ -76,7 +76,7 @@ class NoAvailabilityCron extends JApplicationCli
       {
         $body = JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_EMAIL', $item->firstname);
         $subject = JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_EMAIL_SUBJECT', $item->unit_title);
-        $email = DEBUG ? 'adamrifat@frenchconnections.co.uk' : $item->email;
+        $email = DEBUG ? 'glynis@frenchconnections.co.uk' : $item->email;
         $from = $app->getCfg('mailfrom');
         $sender = $app->getCfg('fromname');
 

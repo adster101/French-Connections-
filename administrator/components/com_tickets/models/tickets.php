@@ -14,7 +14,8 @@ jimport('joomla.application.component.modellist');
 /**
  * Methods supporting a list of Invoices records.
  */
-class TicketsModelTickets extends JModelList {
+class TicketsModelTickets extends JModelList
+{
 
   /**
    * Constructor.
@@ -23,8 +24,10 @@ class TicketsModelTickets extends JModelList {
    * @see        JController
    * @since    1.6
    */
-  public function __construct($config = array()) {
-    if (empty($config['filter_fields'])) {
+  public function __construct($config = array())
+  {
+    if (empty($config['filter_fields']))
+    {
       $config['filter_fields'] = array(
           'id', 'a.id',
           'created_by', 'a.created_by',
@@ -34,7 +37,7 @@ class TicketsModelTickets extends JModelList {
           'severity', 'a.severity',
           'catid', 'a.catid',
           'assigned_to', 'a.assigned_to'
-          ,'tag', 't.version'
+          , 'tag', 't.version'
       );
     }
 
@@ -46,7 +49,8 @@ class TicketsModelTickets extends JModelList {
    *
    * Note. Calling getState in this method will result in recursion.
    */
-  protected function populateState($ordering = null, $direction = null) {
+  protected function populateState($ordering = null, $direction = null)
+  {
 
 
 
@@ -65,7 +69,8 @@ class TicketsModelTickets extends JModelList {
    * @return	string		A store id.
    * @since	1.6
    */
-  protected function getStoreId($id = '') {
+  protected function getStoreId($id = '')
+  {
     // Compile the store id.
     $id.= ':' . $this->getState('filter.search');
     $id.= ':' . $this->getState('filter.state');
@@ -79,7 +84,8 @@ class TicketsModelTickets extends JModelList {
    * @return	JDatabaseQuery
    * @since	1.6
    */
-  protected function getListQuery() {
+  protected function getListQuery()
+  {
     // Create a new query object.
     $db = $this->getDbo();
     $query = $db->getQuery(true);
@@ -108,18 +114,21 @@ class TicketsModelTickets extends JModelList {
     $query->leftJoin('#__tickets_severity c on a.severity = c.id');
     $query->leftJoin('#__categories d on a.catid = d.id');
     $query->join(
-					'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
-					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
-					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_tickets.ticket')
-				);
+            'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
+            . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
+            . ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_tickets.ticket')
+    );
     $query->leftJoin($db->quoteName('#__tags', 't') . ' ON ' . $db->quoteName('t.id') . ' = ' . $db->quoteName('tagmap.tag_id'));
     // Filter by published state
     $published = $this->getState('filter.state');
 
 
-    if (is_numeric($published)) {
+    if (is_numeric($published))
+    {
       $query->where('a.state = ' . (int) $published);
-    } else {
+    }
+    else
+    {
       $query->where('a.state in (1,2,3)');
     }
 
@@ -127,7 +136,8 @@ class TicketsModelTickets extends JModelList {
     $area = $this->getState('filter.area');
 
     // Adjusted to pull out all categories under the one being filtered on.
-    if (is_numeric($area)) {
+    if (is_numeric($area))
+    {
       $cat_tbl = JTable::getInstance('Category', 'JTable');
       $cat_tbl->load($area);
       $rgt = $cat_tbl->rgt;
@@ -138,37 +148,40 @@ class TicketsModelTickets extends JModelList {
 
     // Filter by severity 
     $severity = $this->getState('filter.severity');
-    if (is_numeric($severity)) {
+    if (is_numeric($severity))
+    {
       $query->where('a.severity = ' . (int) $severity);
     }
 
     // Filter by assigned to user 
     $user = $this->getState('filter.assigned_to');
-    if (is_numeric($user)) {
+    if (is_numeric($user))
+    {
       $query->where('a.assigned_to = ' . (int) $user);
     }
 
     // Filter by search on property number
     $search = $this->getState('filter.search');
-    if (!empty($search)) {
+    if (!empty($search))
+    {
 
       $search_string = $db->Quote('%' . $db->escape($search, true) . '%');
       $query->where('(a.title like ' . $search_string . ' OR a.description LIKE ' . $search_string . ' OR a.id = ' . (int) $search . ')');
     }
 
-		// Filter by a single tag.
-		$tagId = $this->getState('filter.tag');
+    // Filter by a single tag.
+    $tagId = $this->getState('filter.tag');
 
-		if (is_numeric($tagId))
-		{
-			$query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId);
-				
-		}
+    if (is_numeric($tagId))
+    {
+      $query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId);
+    }
 
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');
     $orderDirn = $this->state->get('list.direction');
-    if ($orderCol && $orderDirn) {
+    if ($orderCol && $orderDirn)
+    {
       $query->order($db->escape($orderCol . ' ' . $orderDirn));
     }
 
