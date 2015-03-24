@@ -5,7 +5,7 @@
 
   <div class="row">
     <div class="col-sm-6 col-md-5 col-lg-6">
-      <?php echo RentalHelper::getTabbedAvailabilityCalendar(11, $this->availability, 2, 0, false); ?>
+      <?php echo RentalHelper::getTabbedAvailabilityCalendar(18, $this->availability, 2, 0, false); ?>
       <h4><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY') ?></h4>
       <table class="table table-condensed availability-key">
         <thead> 

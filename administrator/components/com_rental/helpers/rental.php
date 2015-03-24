@@ -364,7 +364,7 @@ abstract class RentalHelper
       list($month, $year, $month_name, $day_of_week) = explode(',', gmstrftime('%m,%Y,%B,%w', $first_of_month));
 
 
-      $calendar .= JHtml::_('bootstrap.addTab', 'availability', $month, htmlentities(ucfirst(substr($month_name, 0, 3))), true);
+      $calendar .= JHtml::_('bootstrap.addTab', 'availability', $month . $year, ucfirst(substr($month_name, 0, 3) . ' ' . ucfirst(substr($year, 2, 2))), true);
 
       $calendar .= '<table class="availability table table-bordered avCalendar">' . "\n";
 
