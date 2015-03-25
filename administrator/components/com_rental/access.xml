@@ -25,6 +25,7 @@
 		<action name="rental.listing.view" title="Access listing view" description="" />
 		<action name="rental.review.view" title="Access listing review view" description="" />
 		<action name="rental.listings.view" title="Access listings view" description="" />
+		<action name="rental.listings.download" title="Download listings" description="" />
     <action name="rental.notes.view" title="Access notes view" description="" />
 		<action name="rental.note.view" title="Access note view" description="" />
 		<action name="rental.payment.view" title="Access payment view" description="" />
@@ -33,6 +34,7 @@
 		<action name="rental.tariffs.view" title="Access tariffs view" description="" />
 		<action name="rental.unitversions.view" title="Access unit versions" description="" />
 		<action name="rental.marketing.view" title="Access marketing screen" description="" />
+    
 	</section>
   <section name="category">
 		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />

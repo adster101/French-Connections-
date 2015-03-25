@@ -92,6 +92,14 @@ class RentalViewListings extends JViewLegacy
       JToolbarHelper::custom('property.edit', 'refresh', '', 'COM_RENTAL_UPDATE_PROPERTY', true);
     }
 
+    if ($canDo->get('rental.listings.download'))
+    {
+      $bar = JToolbar::getInstance('toolbar');
+
+      // Add a back button.
+      $bar->appendButton('Link', 'download', 'COM_RENTAL_DOWNLOAD_CSV' , 'index.php?option=com_rental&format=raw');
+    }
+
     if ($canDo->get('core.admin'))
     {
       JToolBarHelper::preferences('com_rental');
