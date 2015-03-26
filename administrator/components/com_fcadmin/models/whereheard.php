@@ -32,25 +32,30 @@ class FcadminModelWhereheard extends JModelList
     // Create a new query object.
     $db = $this->getDbo();
     $query = $db->getQuery(true);
+    $select = '';
     
-    $date = JHtml::_('date', '-1 YEAR', 'Y-m-d');
-    
-    $select = "SUM( CASE WHEN MONTH(registerDate) = " . $db->quote(date('m')) . " THEN 1 ELSE 0 END ) AS " . $db->quote(date('m'));
+    for ($x = 6; $x >= 0; $x--)
+    {
+      $int = '-' . $x . ' MONTH';
+      $year = JHtml::_('date', $int, 'Y');
+      $month = JHtml::_('date', $int, 'm');
+      $day = JHtml::_('date', $int, 'd');
 
-    
+      $date = mktime(0, 0, 0, $month, $day, $year);
+
+      $select .= ",SUM( CASE WHEN EXTRACT(YEAR_MONTH FROM registerDate) = " . $db->quote(date('Ym', $date)) . " THEN 1 ELSE 0 END ) AS " . $db->quote(date('m-Y', $date));
+    }
+
     // Select the required fields from the table.
     // Initialise the query.
 
     $query->select('
-      a.where_heard, 
+      a.where_heard
       ' . $select);
     $query->from('#__user_profile_fc as a');
     $query->join('left', '#__users b on a.user_id = b.id');
-    $query->where('b.registerDate >=' . $db->quote($date));
+    $query->where('b.registerDate >=' . $db->quote(JHtml::_('date', '-6 MONTHS', 'Y-m-d')));
     $query->group('where_heard WITH ROLLUP');
-
-
-
 
     return $query;
   }
