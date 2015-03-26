@@ -20,8 +20,8 @@ defined('_JEXEC') or die;
 class PlgCaptchaRecaptcha_fc extends JPlugin
 {
 
-  const RECAPTCHA_API_SERVER = "http://www.google.com/recaptcha/api";
-  const RECAPTCHA_API_SECURE_SERVER = "https://www.google.com/recaptcha/api";
+  const RECAPTCHA_API_SERVER = "//www.google.com/recaptcha/api";
+  const RECAPTCHA_API_SECURE_SERVER = "//www.google.com/recaptcha/api";
   const RECAPTCHA_VERIFY_SERVER = "www.google.com";
 
   /**
@@ -122,10 +122,10 @@ class PlgCaptchaRecaptcha_fc extends JPlugin
           <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" placeholder="Type the text" class="form-control col-lg-12" />
 
       
-          <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=' . $pubkey . '"></script>
+          <script type="text/javascript" src="//www.google.com/recaptcha/api/challenge?k=' . $pubkey . '"></script>
           <noscript>
             <iframe 
-              src="http://www.google.com/recaptcha/api/noscript?k=' . $pubkey . '" 
+              src="//www.google.com/recaptcha/api/noscript?k=' . $pubkey . '" 
               height="300" 
               width="500" 
               frameborder="0">

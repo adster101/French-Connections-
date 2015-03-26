@@ -119,7 +119,8 @@
       description="JTAG_DESC"
       class="inputbox span12 small"
       custom="deny"
-      mode="nested"
+      multiple="true"
+      mode="ajax"
     />
     
   </fieldset>

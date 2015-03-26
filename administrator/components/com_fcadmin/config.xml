@@ -41,13 +41,23 @@
       size="50"
       default="text/plain"
       label="COM_FCADMIN_FIELD_LEGAL_MIME_TYPES_LABEL"
-      description="COM_FCADMIN_FIELD_LEGAL_MIME_TYPES_DESC" />
+      description="COM_FCADMIN_FIELD_LEGAL_MIME_TYPES_DESC" 
+    />
     <field
       name="upload_mime_illegal"
       type="text"
       size="50"
       default="text/html,image/jpeg,image/gif,image/png,image/bmp,application/x-shockwave-flash,application/msword,application/excel,application/pdf,application/powerpoint,text/plain,application/x-zip"
       label="COM_FCADMIN_FIELD_ILLEGAL_MIME_TYPES_LABEL"
-      description="COM_FCADMIN_FIELD_ILLEGAL_MIME_TYPES_DESC" />
+      description="COM_FCADMIN_FIELD_ILLEGAL_MIME_TYPES_DESC" 
+    />
+  </fieldset>
+  <fieldset 
+    name="availability">
+    <field 
+      name="users_to_ignore"
+      type="text"
+      label="COM_FCADMIN_FIELD_USERS_TO_IGNORE_LABEL" 
+    />
   </fieldset>
 </config>

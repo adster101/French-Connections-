@@ -13,30 +13,35 @@ defined('_JEXEC') or die;
 /**
  * invoice Table class
  */
-class TicketsTableTicket extends JTable {
+class TicketsTableTicket extends JTable
+{
 
   /**
    * Constructor
    *
    * @param JDatabase A database connector object
    */
-  public function __construct(&$db) {
-      parent::__construct('#__tickets', 'id', $db);
-  
+  public function __construct(&$db)
+  {
+    parent::__construct('#__tickets', 'id', $db);
+
     // Add observers for, e.g. tags
-		JTableObserverTags::createObserver($this, array('typeAlias' => 'com_tickets.ticket'));
+    JTableObserverTags::createObserver($this, array('typeAlias' => 'com_tickets.ticket'));
   }
 
-  public function store($updateNulls = false) {
-    
+  public function store($updateNulls = false)
+  {
+
     $user = JFactory::getUser();
     $date = JFactory::getDate();
-    
-    if (empty($this->created_by)) {
+
+    if (empty($this->created_by))
+    {
       $this->created_by = $user->get('id');
     }
-    
-    if (empty($this->date_created)) {
+
+    if (empty($this->date_created))
+    {
       $this->date_created = $date->toSql();
     }
     return parent::store($updateNulls);
@@ -54,7 +59,8 @@ class TicketsTableTicket extends JTable {
    * @return	boolean	True on success.
    * @since	1.6
    */
-  public function publish($pks = null, $state = 1, $userId = 0) {
+  public function publish($pks = null, $state = 1, $userId = 0)
+  {
     $k = $this->_tbl_key;
 
     // Sanitize input.
@@ -63,12 +69,15 @@ class TicketsTableTicket extends JTable {
     $state = (int) $state;
 
     // If there are no primary keys set check to see if the instance key is set.
-    if (empty($pks)) {
-      if ($this->$k) {
+    if (empty($pks))
+    {
+      if ($this->$k)
+      {
         $pks = array($this->$k);
       }
       // Nothing to set publishing state on, return false.
-      else {
+      else
+      {
         $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
         return false;
       }
@@ -84,19 +93,35 @@ class TicketsTableTicket extends JTable {
             ' WHERE (' . $where . ')'
     );
 
-    try {
+    try
+    {
       $this->_db->execute();
-    } catch (RuntimeException $e) {
+    }
+    catch (RuntimeException $e)
+    {
       $this->setError($e->getMessage());
       return false;
     }
 
     // If the JTable instance value is in the list of primary keys that were set, set the instance.
-    if (in_array($this->$k, $pks)) {
+    if (in_array($this->$k, $pks))
+    {
       $this->state = $state;
     }
 
     $this->setError('');
+    return true;
+  }
+
+  public function check()
+  {
+
+    if (is_array($this->newTags) && count($this->newTags) > 1)
+    {
+      $this->setError('Tickets should only be assigned to one version at a time!');
+      return false;
+    }
+    
     return true;
   }
 

@@ -60,7 +60,7 @@ $non_ssl_url->setScheme('http');
       <a href="<?php echo JRoute::_($non_ssl_url->toString(array('scheme','host')) . '/advertise/register?view=resetpassword'); ?>">
         <strong>
           <span class='glyphicon glyphicon-info-sign'></span>
-          &nbsp;Forgot you password?
+          &nbsp;Forgot your password?
         </strong>
       </a>
     </p>

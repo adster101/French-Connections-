@@ -71,6 +71,8 @@ class FcContactModelContact extends JModelAdmin
     {
       $form->setFieldAttribute('nature', 'default', 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES');
     }
+    
+    
   }
 
   /**

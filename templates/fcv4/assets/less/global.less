@@ -6,6 +6,25 @@ Contains styles that apply at the global level, or can be applied to any section
 **/
 // FC styles
 
+
+
+.container {
+  .container-fixed();
+
+  @media (min-width: @screen-sm-min) {
+    width: @container-sm;
+  }
+  @media (min-width: @screen-md-min) {
+    width: @container-md;
+  }
+  @media (min-width: @screen-lg-min) {
+    width: @container-lg;
+  }
+  @media (min-width: @screen-xl-min) {
+    width: @container-xl;
+  }
+}
+
 // Add new well colour
 
 .well.well-light-blue {

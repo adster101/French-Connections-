@@ -266,6 +266,7 @@ class FcSearchModelSearch extends JModelList
       // TO DO - Not sure that c.area, c.region, c.department are needed here?
       $query->select('
         a.id,
+        a.is_bookable,
         d.unit_id,
         d.unit_title,
         c.published_on,
@@ -315,7 +316,7 @@ class FcSearchModelSearch extends JModelList
       // TO DO - Update this so it looks for the 'max' image? Or just return null
       // and display placeholder image if for some reason the image is unavailable.
       $query->join('left', '#__property_images_library e on d.id = e.version_id');
-      $query->where('(e.ordering = 1)');
+      $query->where('e.ordering = 1');
 
       // Join the translations table to pick up any translations 
       if ($lang == 'fr-FR')
