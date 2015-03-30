@@ -21,16 +21,36 @@ class Crawler
    */
   public $userAgent = 'frenchconnections/2.1 (http://www.frenchconnections.co.uk)';
 
+  /**
+   * The page where the link was found.
+   * 
+   * @var type 
+   */
+  public $page = '';
+
+  /**
+   * Flag to indicate whether the link to FC was found or not
+   * @var type 
+   */
   public $found = false;
+
+  /**
+   * A list of domains to not crawl
+   * 
+   * @var type 
+   */
+  public $domains_to_ignore = array();
   
   /**
    * 
    * @param type $domain
    */
+  
+  
   function __construct($domain = '')
   {
     $uri = JUri::getInstance($domain);
-    
+
     $this->domain = $uri->getHost();
   }
 
@@ -42,6 +62,12 @@ class Crawler
   function crawl($url = '')
   {
 
+    // Use the root domain if no URL 
+    if (empty($url))
+    {
+      $url = $this->domain;
+    }
+
     try
     {
 
@@ -49,7 +75,7 @@ class Crawler
 
       if (!$response)
       {
-        Throw new Exception('Problem fetching URL ' . $url);
+        //Throw new Exception('Problem fetching URL ' . $url);
         //echo $url . " oops \n";
       }
 
@@ -65,42 +91,48 @@ class Crawler
       {
         $href = $hrefs->item($key);
 
-        $link = $href->getAttribute('href');
+        $link_from_html = $href->getAttribute('href');
 
-        $uri = JURI::getInstance($link);
+        // Get the url details from the link, convenience
+        $uri = JURI::getInstance($link_from_html);
 
+        // Get the host
         $host = $uri->getHost();
 
-        if (strpos)
-          if (empty($host))
-          {
-            $uri->setHost($this->domain);
-            $uri->setScheme('http');
-            $uri->setPath('/' . $link);
-          }
-
-        $host = $uri->getHost();
-
-        $link = $uri->toString();
-        
-        echo $link . "\n";
-        
-        if (strpos($host, 'frenchconnections.co.uk'))
+        // If host is empty then the URLs are relative
+        // so we set the domain from the constructor
+        if (empty($host))
         {
-          
+          $uri->setHost($this->domain);
+          $uri->setScheme('http');
+          $uri->setPath('/' . $link_from_html);
+        }
+
+        //  I don't think we're interested in query string urls
+        $uri->setQuery('');
+
+        // Get the domain which should now be set
+        $domain = $uri->getHost();
+
+        // Convert the uri to a string value
+        $link = $uri->toString();
+
+        //echo $link . "\n";
+
+        if (strpos($domain, 'frenchconnections.co.uk'))
+        {
+
           // Do update, a dance or whatever 
           $this->found = true;
+          $this->page = $url;
         }
 
         // Check that the URL is relative, i.e. on this domain
-        if ((strpos($link, 'smugmug') === false) && (strpos($link, 'javascript') === false) && (strpos($link, 'jpg') === false) && (strpos($link, 'mailto:') === false) && (!in_array($link, $this->links) && ($this->domain == $host)))
+        if ((strpos($link, 'smugmug') === false) && (strpos($link, 'javascript') === false) && (strpos($link, 'jpg') === false) && (strpos($link, 'mailto:') === false) && (!in_array($link, $this->links) && ($this->domain == $domain)))
         {
-
           $this->links[] = $link;
           $this->crawl($link);
         }
-        
-        
       }
 
       return $this->links;
@@ -120,11 +152,11 @@ class Crawler
   function getUrl($url)
   {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_COOKIESESSION, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_COOKIESESSION, false);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
     curl_setopt($ch, CURLOPT_MAXREDIRS, 4);
     curl_setopt($ch, CURLOPT_FORBID_REUSE, true);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
     curl_setopt($ch, CURLOPT_URL, $url);
 
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -132,9 +164,15 @@ class Crawler
     $response = curl_exec($ch);
 
     $base_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-    $http_response_code = curl_getinfo($ch);
-
-
+    $http_response = curl_getinfo($ch);
+    
+    // close cURL resource, and free up system resources
+    curl_close($ch);
+    
+    if (strpos($http_response['content_type'], 'text/html') === false)
+    {
+      return false;
+    }
 
     return $response;
   }

@@ -21,6 +21,17 @@
       filter="int">
     </field>
   </fieldset>
+  <fieldset
+    name="website-visible"
+    label="COM_RENTAL_WEBSITE_VISIBLE">
+    <field
+      name="website_visible"
+      type="checkbox"
+      label="COM_RENTAL_WEBSITE_VISIBLE"
+      filter="int"
+      default="0" 
+    />
+  </fieldset>
   <fieldset 
     name="update-expiry-date"
     label="COM_RENTAL_UPDATE_DATE_LAPSED" >
