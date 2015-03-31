@@ -56,6 +56,7 @@ class AccommodationViewAvailability extends JViewLegacy
 
     // Set document and page titles
     $this->document->setTitle($this->title);
+
   }
 
 }

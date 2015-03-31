@@ -63,19 +63,21 @@ class CrawlerCron extends JApplicationCli
     define('DEBUG', $debug);
 
     $props = $this->_getProps();
-      $model = JModelLegacy::getInstance('Property', 'RentalModel', $config = array('table_path' => JPATH_BASE . '/administrator/components/com_rental/tables/'));
+    $model = JModelLegacy::getInstance('Property', 'RentalModel', $config = array('table_path' => JPATH_BASE . '/administrator/components/com_rental/tables/'));
 
     foreach ($props as $prop)
     {
       echo "Checking " . $prop->id . ' ' . $prop->website . "\n";
+
+      $modified = JHtml::_('date', 'now', 'Y-m-d h:i:s');
 
       $crawler = new Crawler($prop->website);
       $crawler->crawl();
 
       $subject = ($crawler->found) ? JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_FOUND_SUBJECT', $crawler->domain) : JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_NOT_FOUND_SUBJECT', $crawler->domain);
       $body = ($crawler->found) ? JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_FOUND_BODY', $crawler->page) : JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_NOT_FOUND_BODY', $prop->firstname, $crawler->domain);
-      $email = (JDEBUG) ? 'adamrifat@frenchconnections.co.uk' : $prop->email;
-      $data = array('id' => $prop->id, 'website_visible' => $crawler->found, 'subject' => $subject, 'body' => $body);
+      $email = (DEBUG) ? 'adamrifat@frenchconnections.co.uk' : $prop->email;
+      $data = array('id' => $prop->id, 'website_visible' => $crawler->found, 'subject' => $subject, 'body' => $body, 'modified' => $modified);
 
       // Update the property listing whic also does the notes, nice!
       if (!$model->save($data))
@@ -89,7 +91,8 @@ class CrawlerCron extends JApplicationCli
         JFactory::getMailer()->sendMail(
                 $from, $sender, $email, $subject, $body);
       }
-      
+
+      unset($crawler);
     }
 
     // All websites checked, spit out a CSV file?
@@ -126,12 +129,10 @@ class CrawlerCron extends JApplicationCli
 
     $db->setQuery($query);
 
-    try
-    {
+    try {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       $this->out('Problem getting props...');
       return false;
     }

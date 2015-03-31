@@ -49,11 +49,11 @@ module.exports = function(grunt) {
           'media/fc/js/libs/bootstrap3-typeahead.js',
           'bower_components/bootstrap/js/popover.js',
           'bower_components/bootstrap/js/affix.js',
-          'bower_components/bootstrap/js/scrollspy.js',
           'bower_components/bootstrap/js/modal.js',
           'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
           'media/system/js/core-uncompressed.js',
           'media/fc/js/libs/jquery.flexslider.js',
+          'bower_components/overthrow/dist/overthrow.sidescroller.min.js',
           'media/fc/js/general.js',
           'media/fc/js/search.js',
           'media/fc/js/property.js'

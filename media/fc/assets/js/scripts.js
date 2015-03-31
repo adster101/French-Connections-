@@ -11039,177 +11039,6 @@ return jQuery;
 }(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.2.0
- * http://getbootstrap.com/javascript/#scrollspy
- * ========================================================================
- * Copyright 2011-2014 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- * ======================================================================== */
-
-
-+function ($) {
-  'use strict';
-
-  // SCROLLSPY CLASS DEFINITION
-  // ==========================
-
-  function ScrollSpy(element, options) {
-    var process  = $.proxy(this.process, this)
-
-    this.$body          = $('body')
-    this.$scrollElement = $(element).is('body') ? $(window) : $(element)
-    this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
-    this.selector       = (this.options.target || '') + ' .nav li > a'
-    this.offsets        = []
-    this.targets        = []
-    this.activeTarget   = null
-    this.scrollHeight   = 0
-
-    this.$scrollElement.on('scroll.bs.scrollspy', process)
-    this.refresh()
-    this.process()
-  }
-
-  ScrollSpy.VERSION  = '3.2.0'
-
-  ScrollSpy.DEFAULTS = {
-    offset: 10
-  }
-
-  ScrollSpy.prototype.getScrollHeight = function () {
-    return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
-  }
-
-  ScrollSpy.prototype.refresh = function () {
-    var offsetMethod = 'offset'
-    var offsetBase   = 0
-
-    if (!$.isWindow(this.$scrollElement[0])) {
-      offsetMethod = 'position'
-      offsetBase   = this.$scrollElement.scrollTop()
-    }
-
-    this.offsets = []
-    this.targets = []
-    this.scrollHeight = this.getScrollHeight()
-
-    var self     = this
-
-    this.$body
-      .find(this.selector)
-      .map(function () {
-        var $el   = $(this)
-        var href  = $el.data('target') || $el.attr('href')
-        var $href = /^#./.test(href) && $(href)
-
-        return ($href
-          && $href.length
-          && $href.is(':visible')
-          && [[$href[offsetMethod]().top + offsetBase, href]]) || null
-      })
-      .sort(function (a, b) { return a[0] - b[0] })
-      .each(function () {
-        self.offsets.push(this[0])
-        self.targets.push(this[1])
-      })
-  }
-
-  ScrollSpy.prototype.process = function () {
-    var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
-    var scrollHeight = this.getScrollHeight()
-    var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
-    var offsets      = this.offsets
-    var targets      = this.targets
-    var activeTarget = this.activeTarget
-    var i
-
-    if (this.scrollHeight != scrollHeight) {
-      this.refresh()
-    }
-
-    if (scrollTop >= maxScroll) {
-      return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
-    }
-
-    if (activeTarget && scrollTop <= offsets[0]) {
-      return activeTarget != (i = targets[0]) && this.activate(i)
-    }
-
-    for (i = offsets.length; i--;) {
-      activeTarget != targets[i]
-        && scrollTop >= offsets[i]
-        && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
-        && this.activate(targets[i])
-    }
-  }
-
-  ScrollSpy.prototype.activate = function (target) {
-    this.activeTarget = target
-
-    $(this.selector)
-      .parentsUntil(this.options.target, '.active')
-      .removeClass('active')
-
-    var selector = this.selector +
-        '[data-target="' + target + '"],' +
-        this.selector + '[href="' + target + '"]'
-
-    var active = $(selector)
-      .parents('li')
-      .addClass('active')
-
-    if (active.parent('.dropdown-menu').length) {
-      active = active
-        .closest('li.dropdown')
-        .addClass('active')
-    }
-
-    active.trigger('activate.bs.scrollspy')
-  }
-
-
-  // SCROLLSPY PLUGIN DEFINITION
-  // ===========================
-
-  function Plugin(option) {
-    return this.each(function () {
-      var $this   = $(this)
-      var data    = $this.data('bs.scrollspy')
-      var options = typeof option == 'object' && option
-
-      if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
-      if (typeof option == 'string') data[option]()
-    })
-  }
-
-  var old = $.fn.scrollspy
-
-  $.fn.scrollspy             = Plugin
-  $.fn.scrollspy.Constructor = ScrollSpy
-
-
-  // SCROLLSPY NO CONFLICT
-  // =====================
-
-  $.fn.scrollspy.noConflict = function () {
-    $.fn.scrollspy = old
-    return this
-  }
-
-
-  // SCROLLSPY DATA-API
-  // ==================
-
-  $(window).on('load.bs.scrollspy.data-api', function () {
-    $('[data-spy="scroll"]').each(function () {
-      var $spy = $(this)
-      Plugin.call($spy, $spy.data())
-    })
-  })
-
-}(jQuery);
-
-/* ========================================================================
  * Bootstrap: modal.js v3.2.0
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
@@ -14742,7 +14571,15 @@ function checkAll_button(n, task) {
   };
 })(jQuery);
 
+/*! overthrow - An overflow:auto polyfill for responsive design. - v0.7.0 - 2015-03-31
+* Copyright (c) 2015 Scott Jehl, Filament Group, Inc.; Licensed MIT */
+!function(a){var b=a.document,c=b.documentElement,d="overthrow-enabled",e="ontouchmove"in b,f="WebkitOverflowScrolling"in c.style||"msOverflowStyle"in c.style||!e&&a.screen.width>800||function(){var b=a.navigator.userAgent,c=b.match(/AppleWebKit\/([0-9]+)/),d=c&&c[1],e=c&&d>=534;return b.match(/Android ([0-9]+)/)&&RegExp.$1>=3&&e||b.match(/ Version\/([0-9]+)/)&&RegExp.$1>=0&&a.blackberry&&e||b.indexOf("PlayBook")>-1&&e&&-1===!b.indexOf("Android 2")||b.match(/Firefox\/([0-9]+)/)&&RegExp.$1>=4||b.match(/wOSBrowser\/([0-9]+)/)&&RegExp.$1>=233&&e||b.match(/NokiaBrowser\/([0-9\.]+)/)&&7.3===parseFloat(RegExp.$1)&&c&&d>=533}();a.overthrow={},a.overthrow.enabledClassName=d,a.overthrow.addClass=function(){-1===c.className.indexOf(a.overthrow.enabledClassName)&&(c.className+=" "+a.overthrow.enabledClassName)},a.overthrow.removeClass=function(){c.className=c.className.replace(a.overthrow.enabledClassName,"")},a.overthrow.set=function(){f&&a.overthrow.addClass()},a.overthrow.canBeFilledWithPoly=e,a.overthrow.forget=function(){a.overthrow.removeClass()},a.overthrow.support=f?"native":"none"}(this),function(a,b,c){if(b!==c){b.easing=function(a,b,c,d){return c*((a=a/d-1)*a*a+1)+b},b.tossing=!1;var d;b.toss=function(a,e){b.intercept();var f,g,h=0,i=a.scrollLeft,j=a.scrollTop,k={top:"+0",left:"+0",duration:50,easing:b.easing,finished:function(){}},l=!1;if(e)for(var m in k)e[m]!==c&&(k[m]=e[m]);return"string"==typeof k.left?(k.left=parseFloat(k.left),f=k.left+i):(f=k.left,k.left=k.left-i),"string"==typeof k.top?(k.top=parseFloat(k.top),g=k.top+j):(g=k.top,k.top=k.top-j),b.tossing=!0,d=setInterval(function(){h++<k.duration?(a.scrollLeft=k.easing(h,i,k.left,k.duration),a.scrollTop=k.easing(h,j,k.top,k.duration)):(f!==a.scrollLeft?a.scrollLeft=f:(l&&k.finished(),l=!0),g!==a.scrollTop?a.scrollTop=g:(l&&k.finished(),l=!0),b.intercept())},1),{top:g,left:f,duration:b.duration,easing:b.easing}},b.intercept=function(){clearInterval(d),b.tossing=!1}}}(this,this.overthrow),function(a,b,c){if(b!==c){b.scrollIndicatorClassName="overthrow";var d=a.document,e=d.documentElement,f="native"===b.support,g=b.canBeFilledWithPoly,h=(b.configure,b.set),i=b.forget,j=b.scrollIndicatorClassName;b.closest=function(a,c){return!c&&a.className&&a.className.indexOf(j)>-1&&a||b.closest(a.parentNode)};var k=!1;b.set=function(){if(h(),!k&&!f&&g){a.overthrow.addClass(),k=!0,b.support="polyfilled",b.forget=function(){i(),k=!1,d.removeEventListener&&d.removeEventListener("touchstart",u,!1)};var j,l,m,n,o=[],p=[],q=function(){o=[],l=null},r=function(){p=[],m=null},s=function(a){n=j.querySelectorAll("textarea, input");for(var b=0,c=n.length;c>b;b++)n[b].style.pointerEvents=a},t=function(a,b){if(d.createEvent){var e,f=(!b||b===c)&&j.parentNode||j.touchchild||j;f!==j&&(e=d.createEvent("HTMLEvents"),e.initEvent("touchend",!0,!0),j.dispatchEvent(e),f.touchchild=j,j=f,f.dispatchEvent(a))}},u=function(a){if(b.intercept&&b.intercept(),q(),r(),j=b.closest(a.target),j&&j!==e&&!(a.touches.length>1)){s("none");var c=a,d=j.scrollTop,f=j.scrollLeft,g=j.offsetHeight,h=j.offsetWidth,i=a.touches[0].pageY,k=a.touches[0].pageX,n=j.scrollHeight,u=j.scrollWidth,v=function(a){var b=d+i-a.touches[0].pageY,e=f+k-a.touches[0].pageX,s=b>=(o.length?o[0]:0),v=e>=(p.length?p[0]:0);b>0&&n-g>b||e>0&&u-h>e?a.preventDefault():t(c),l&&s!==l&&q(),m&&v!==m&&r(),l=s,m=v,j.scrollTop=b,j.scrollLeft=e,o.unshift(b),p.unshift(e),o.length>3&&o.pop(),p.length>3&&p.pop()},w=function(){s("auto"),setTimeout(function(){s("none")},450),j.removeEventListener("touchmove",v,!1),j.removeEventListener("touchend",w,!1)};j.addEventListener("touchmove",v,!1),j.addEventListener("touchend",w,!1)}};d.addEventListener("touchstart",u,!1)}}}}(this,this.overthrow),function(a){a.overthrow.set()}(this),function(a,b){function c(b,c,d,e){if(document.createEvent){var f=document.createEvent("Event");f.initEvent(c,!0,!0),f.overthrow=d,b.dispatchEvent(f)}else a.document.documentElement[e][c]={e:c,overthrow:d},a.document.documentElement[c]++}if(b&&!(!1 in a.document)){if(b.sidescroller=function(d,e){var f=d,g="overthrow",h=g+"-next",i=g+"-prev",j=g+"-method",k=g+"-refresh",l=g+"-resize",m=e&&e.snapScroll,n=e&&e.skipLinks,o=e&&e.rewind,p=e&&void 0!==e.snapTolerance?e.snapTolerance:30,q=arguments;e=e||{};for(var r=0;r<f.length;r++)!function(){function d(){for(var a=C.querySelectorAll("li"),b=100/a.length+"%",c=0;c<a.length;c++)a[c].style.width=b}function s(){var a=C.querySelectorAll("li"),b=C.querySelector("ul");b.style.width=a[0].offsetWidth*a.length+"px"}function t(a){a&&a.fixedItemWidth?s():d(),c(B,k,{},B.ieID)}function u(a){var b=C.querySelectorAll("li"),c=b.length,d=C.offsetWidth,e=b[0].offsetWidth,f=void 0!==a?a:C.scrollLeft,g=Math.round(f/e),h=10,i=[];g=Math.max(0,g),g=Math.min(c,g),i.push(g);for(var j=2;c>j;j++)d+h>j*e&&i.push(g+j-1);return E=g,i}function v(a,b){var c=1;return b&&b.slideLength&&(c="all"===b.slideLength?a.length:parseInt(b.slideLength,10)),isNaN(c)&&(c=1),c}function w(d){var f=d||a.event;if(f.preventDefault?f.preventDefault():f.returnValue=!1,"keydown"===f.type||G===!1||G===f.type){G=f.type,b.intercept();var g=C.querySelectorAll("li"),j=f.target||f.srcElement,k=C.offsetWidth,l=g[0].offsetWidth,m=C.scrollLeft,n=Math.round(m/l),p=j.className.indexOf("ff")>-1,q=j.className.indexOf("rwd")>-1,r="keydown"!==f.type&&j.className.indexOf("next")>-1||39===f.keyCode,s=v(u(),e),t=n+(r?s:-s),w=l*t,x=C.scrollWidth-k;if(j&&"A"!==j.nodeName)return;q&&(w=0),p&&(w=x),o?0>w?w=x:w>x&&(w=0):0>w?w=0:w>x&&(w=x);var y=u(w);y[y.length-1]==g.length-1&&(w=C.querySelector("ul").offsetWidth-k),(y[0]!==n||w!==m)&&(b.toss(C,{left:w,easing:e.easing}),c(B,r?h:i,{active:y,originalEvent:f},F)),setTimeout(function(){G=!1},900)}}function x(a){b.intercept();var d=C.querySelector("li").offsetWidth,f=C.scrollLeft,g=Math.round(f/d);if(L!==!1){var j=f-L;Math.abs(j)>p&&(g=E+(j>0?1:-1))}var k=d*g;b.toss(C,{left:k,duration:20,easing:e.easing}),E!==g&&(c(B,g>E?h:i,{active:u(k),originalEvent:a},F),E=g)}function y(a){clearTimeout(J),J=setTimeout(function(){c(B,g+"-resize",{},B.ieID),x(a)},100)}function z(a){overthrow.tossing||(clearTimeout(K),K=setTimeout(function(){L===!1&&(L=C.scrollLeft),m?x(a):c(B,g+"-scroll",{},F),L=!1},200))}function A(a){(39===a.keyCode||37===a.keyCode)&&w(a)}var B=f[r],C=f[r].querySelector(".overthrow"),D=a.document.createElement("div"),E=0,F="overthrow"+(new Date).getTime(),G=!1,H="<a href='#' class='sidescroll-prev'>Previous</a><a href='#' class='sidescroll-next'>Next</a>",I="<a href='#' class='sidescroll-rwd'>First</a><a href='#' class='sidescroll-ff'>Last</a>";if("string"==typeof e&&B.options)return c(B,j,{name:e,arguments:Array.prototype.slice.call(q,2)},B.ieID),void t(B.options);if(!B.initialized){B.initialized=!0,B.options=e,B.setAttribute("tabindex","0"),a.document.attachEvent&&(a.document.documentElement[i]=0,a.document.documentElement[h]=0,a.document.documentElement[j]=0,a.document.documentElement[k]=0,a.document.documentElement[l]=0,a.document.documentElement[F]={},a.document.documentElement[F][i]={},a.document.documentElement[F][h]={},a.document.documentElement[F][j]={},a.document.documentElement[F][k]={},a.document.documentElement[F][l]={},B.ieID=F),D.className="sidescroll-nextprev-links",n&&(H+=I),D.innerHTML=H,B.getActiveSlides=u;var J,K,L=!1;a.document.addEventListener?(D.addEventListener("click",w,!1),D.addEventListener("touchend",w,!1),a.addEventListener("resize",y,!1),f[r].addEventListener("keydown",A,!1),C.addEventListener("scroll",z,!1)):a.document.attachEvent&&(D.attachEvent("onclick",w,!1),a.attachEvent("onresize",y,!1),f[r].attachEvent("onkeydown",A,!1),C.attachEvent("onscroll",z,!1)),B.insertBefore(D,C),t(e),c(a.document.documentElement,g+"-init",{sideScroll:B,options:e},a.document.documentElement.ieID)}}()},a.document.attachEvent){var d="overthrow-init"+(new Date).getTime();a.document.documentElement[d]={},a.document.documentElement[d]["overthrow-init"]=0,a.document.documentElement.ieID=d}b.sidescroller.onEvent=function(b,c,d){function e(a){var e={type:b,target:c,overthrow:a.overthrow};d(e)}a.document.addEventListener?c.addEventListener(b,e):a.document.attachEvent&&a.document.documentElement.attachEvent("onpropertychange",function(d){d.propertyName===b&&e(a.document.documentElement[c.ieID][b])})}}}(this,this.overthrow);
 jQuery(document).ready(function() {
+
+  overthrow.sidescroller( document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
+    rewind: true,
+    fixedItemWidth: true
+  });
 
   // Updates hte form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function() {
@@ -14810,10 +14647,10 @@ jQuery(document).ready(function() {
       autoclose: true
 
     }).on('changeDate', function(ev) {
-    });
+      });
 
   } catch (e) {
-    // what to do!?
+  // what to do!?
   }
 
   // Load the google maps crap, only if there is a #map on the page.
@@ -14914,7 +14751,7 @@ jQuery(document).ready(function() {
     //window.onbeforeunload = function() {
     //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
-  });
+    });
 
   try {
     // If the tinymce editor is loaded
@@ -14934,7 +14771,7 @@ jQuery(document).ready(function() {
       });
     }
   } catch (e) {
-    // what to do!?
+  // what to do!?
   }
 
   // Add special offer counter... 
@@ -15011,7 +14848,7 @@ var loadGoogleMaps = function(func) {
     script.type = 'text/javascript';
 
     script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-            'callback=' + func;
+    'callback=' + func;
     document.body.appendChild(script);
   }
 }

@@ -10,6 +10,73 @@ Contains styles that apply at the global level, or can be applied to any section
   border-bottom: 1px dotted;
 }
 
+
+.overthrow-enabled .overthrow {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.overthrow ul {
+  min-width:6240px;
+  padding: 0;
+}
+
+
+ 
+.overthrow ul > li 
+{
+  width:260px;
+  float:left;
+  list-style-type: none;
+}
+
+.overthrow ul > li > .table {
+  width:auto;
+}
+
+.sidescroll-nextprev {
+  overflow: hidden;
+}
+.sidescroll-nextprev .sidescroll {
+  margin-top: -50px;
+  padding-bottom: 50px;
+  bottom: -50px;
+  position: relative;
+}
+
+.sidescroll-nextprev .sidescroll-nextprev-links {
+  bottom: auto;
+  top: 50%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.sidescroll-nextprev .sidescroll-nextprev-links a {
+  position: absolute;
+  text-indent: -9999px;
+  width: 2em;
+  height: 2em;
+  background: @gray-darker;
+  opacity: .8;
+  overflow: hidden;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  border-radius: 100%;
+  z-index: 1;
+}
+.sidescroll-nextprev .sidescroll-nextprev-links a:hover,
+.sidescroll-nextprev .sidescroll-nextprev-links a:focus {
+  opacity: 1;
+}
+.sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-next {
+  background-image: url(img/arrow-right.png);
+  right: 1em;
+}
+.sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-prev {
+  background-image: url(img/arrow-left.png);
+  left: 1em;
+}
+
 .offscreen {
   position:absolute;
   left:-10000px; 
