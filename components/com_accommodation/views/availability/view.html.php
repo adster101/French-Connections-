@@ -25,7 +25,7 @@ class AccommodationViewAvailability extends JViewLegacy
     }
 
     // Get the availability for this property
-    $this->availability = $this->get('Availability');
+    $this->availability = $this->get('AvailabilityCalendar');
 
     // Get the tariffs...
     $this->tariffs = $this->get('Tariffs');

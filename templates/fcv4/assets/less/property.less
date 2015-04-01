@@ -36,45 +36,60 @@ Contains styles that apply at the global level, or can be applied to any section
 
 .sidescroll-nextprev {
   overflow: hidden;
+  position:relative;
 }
 .sidescroll-nextprev .sidescroll {
-  margin-top: -50px;
-  padding-bottom: 50px;
+  margin: -50px 35px 0 35px;
   bottom: -50px;
   position: relative;
 }
 
 .sidescroll-nextprev .sidescroll-nextprev-links {
   bottom: auto;
-  top: 50%;
+  top: 45%;
   position: absolute;
   left: 0;
   width: 100%;
 }
 .sidescroll-nextprev .sidescroll-nextprev-links a {
   position: absolute;
-  text-indent: -9999px;
-  width: 2em;
-  height: 2em;
-  background: @gray-darker;
+  background: white;
   opacity: .8;
   overflow: hidden;
   background-position: 50% 50%;
   background-repeat: no-repeat;
-  border-radius: 100%;
+  border-radius: 4px;
   z-index: 1;
+  color:@blue-light;
+  border: 1px solid @gray;
+  padding: 3px;
 }
 .sidescroll-nextprev .sidescroll-nextprev-links a:hover,
 .sidescroll-nextprev .sidescroll-nextprev-links a:focus {
   opacity: 1;
+  text-decoration:none;
 }
+
 .sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-next {
-  background-image: url(img/arrow-right.png);
-  right: 1em;
+  right: 0em;
 }
+
+.sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-next:before { 
+  font-family: 'Glyphicons Halflings';
+  content:'\e080';
+  line-height:1.5;
+  font-size:21px;
+}
+
 .sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-prev {
-  background-image: url(img/arrow-left.png);
-  left: 1em;
+  left: 0em;
+}
+
+.sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-prev:before{
+  font-family: 'Glyphicons Halflings';
+  content:'\e079';
+  line-height:1.5;
+  font-size:21px;
 }
 
 .offscreen {

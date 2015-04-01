@@ -5,11 +5,6 @@
 
   <div class="row">
     <div class="col-sm-6 col-md-5 col-lg-6">
-      <div class="sidescroll-nextprev clearfix">
-        <div class="overthrow sidescroll">
-          <?php echo RentalHelper::getAvailabilityCalendar(24, $this->availability, 2, 0, false); ?>
-        </div>
-      </div>
       <div>
         <h4><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY') ?></h4>
         <table class="table table-condensed availability-key">
@@ -17,13 +12,18 @@
             <tr>
               <th class="available">&nbsp;</th>
               <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></th>
-
               <th class="unavailable">&nbsp;</th>
               <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></th>
             </tr>
           </thead>
         </table>    
       </div>
+      <div class="sidescroll-nextprev clearfix">
+        <div class="overthrow sidescroll">
+          <?php echo $this->availability; ?>
+        </div>
+      </div>
+
     </div>
     <div class="col-sm-6 col-md-7 col-lg-6">
       <?php
