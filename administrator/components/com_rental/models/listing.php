@@ -474,13 +474,13 @@ class RentalModelListing extends JModelList
       if (!$unit->availability)
       {
         $unit_state->availability = false; // Assume we have some images
-        $listing->complete = ($listing->expiry_date) ? true : false; // Should allow existing props to submit without 
+        $listing->complete = false; // Should allow existing props to submit without 
       }
 
       if (!$unit->tariffs)
       {
         $unit_state->tariffs = false; // Assume we have some images
-        $listing->complete = ($listing->expiry_date) ? true : false; // Should allow existing props to submit without 
+        $listing->complete = false; // Should allow existing props to submit without 
       }
 
       if (!$unit->images)
