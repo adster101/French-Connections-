@@ -10,6 +10,4 @@ defined('_JEXEC') or die;
 
 ?>
 
-<!-- 
-  Possibly need to add scripts here?
--->
+<div id="stlivechat1"></div>

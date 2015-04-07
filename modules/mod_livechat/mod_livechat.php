@@ -10,9 +10,22 @@
 defined('_JEXEC') or die;
 
 $doc = JFactory::getDocument();
-$uri = JUri::getInstance();
+
+/*
+ * Javascript to insert the link
+ * View element calls jSelectArticle when an article is clicked
+ * jSelectArticle creates the link tag, sends it to the editor,
+ * and closes the select frame.
+ */
+$js = "(function(){
+    var c = document.createElement('script');
+    c.type = 'text/javascript'; c.async = true;
+    c.src = '//frenchconnections.smartertrack.com/ChatLink.ashx?config=1&id=stlivechat1';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(c,s);
+  })();";
 
 // Add car trawler scripts here...
-// $doc->addScript('media/fc/js/date-range.js');
+$doc->addScriptDeclaration($js);
 
 require JModuleHelper::getLayoutPath('mod_livechat', $params->get('layout', 'default'));
