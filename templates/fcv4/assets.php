@@ -7,8 +7,8 @@ $doc = JFactory::getDocument();
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-$script_path = (JDEBUG) ? '/media/fc/assets/js/scripts.js' : '/media/fc/assets/js/20150401125647.scripts.min.js';
-$css_path = (JDEBUG) ? '/media/fc/assets/css/styles.css' : '/media/fc/assets/css/20150401125647.styles.min.css';
+$script_path = (JDEBUG) ? '/media/fc/assets/js/scripts.js' : '/media/fc/assets/js/20150407161312.scripts.min.js';
+$css_path = (JDEBUG) ? '/media/fc/assets/css/styles.css' : '/media/fc/assets/css/20150407161312.styles.min.css';
 
 $doc->addStyleSheet('//' . $URI->getHost() . $css_path);
 $doc->addScript('//' . $URI->getHost() . $script_path, 'text/javascript', false, true);

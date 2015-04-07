@@ -1,9 +1,11 @@
 jQuery(document).ready(function() {
 
-  overthrow.sidescroller( document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
-    rewind: true,
-    fixedItemWidth: true
-  });
+  if (jQuery('.overthrow').length) {
+    overthrow.sidescroller( document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
+      rewind: true,
+      fixedItemWidth: true
+    });
+  }
 
   // Updates hte form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function() {
