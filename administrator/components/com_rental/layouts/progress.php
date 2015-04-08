@@ -35,7 +35,7 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
   </div>
 <?php elseif ($view == 'listing' && !$progress->review && $progress->days_to_renewal >= 7 && $progress->complete) : ?>
   <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_BLURB'); ?>
-<?php elseif ($progress->days_to_renewal <= 7 && !$progress->review && !empty($progress->expiry_date)) : ?>
+<?php elseif ($progress->days_to_renewal > 0 && $progress->days_to_renewal <= 7 && !$progress->review && !empty($progress->expiry_date)) : ?>
   <div class="alert alert-warning">       
     <h4>Listing status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>

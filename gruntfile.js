@@ -51,6 +51,7 @@ module.exports = function(grunt) {
           'bower_components/bootstrap/js/affix.js',
           'bower_components/bootstrap/js/modal.js',
           'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
+          'bower_components/js-marker-clusterer/src/markerclusterer_compiled.js',
           'media/system/js/core-uncompressed.js',
           'media/fc/js/libs/jquery.flexslider.js',
           'bower_components/overthrow/dist/overthrow.sidescroller.min.js',

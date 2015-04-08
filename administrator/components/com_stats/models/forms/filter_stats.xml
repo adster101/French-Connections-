@@ -7,6 +7,7 @@
         name="search"
         type="text"
         label="JSEARCH_FILTER"
+        required="true"
         hint="COM_STATS_FILTER_PROPERTY"
       />
         
@@ -16,10 +17,11 @@
         label="COM_STATS_FILTER_PROPERTY"
         description="COM_STATS_FILTER_PROPERTY_DESC"
         class="input-medium"
-        onchange="this.form.submit();">
+        onchange="this.form.submit();"
+        required="true">
         <option value="">JSELECT</option>
       </field>
-    
+ 
       <field
         name="start_date"
         type="text"
@@ -29,6 +31,7 @@
         class="start_date input-small"
         filter="int"
         validate="date" 
+        required="true"
       />
   
       <field
@@ -38,6 +41,7 @@
         description="COM_STATS_FILTER_DATE_RANGE_DESC"
         hint="dd-mm-yyyy"
         validate="date"
+        required="true"
         class="end_date input-small" 
       />   
     </fieldset>
