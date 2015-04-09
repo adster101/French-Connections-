@@ -38,8 +38,8 @@ abstract class SearchHelper
 
       // This set to retrieve menu items regardless of whether the user is logged in or not.
       $attributes = array($query[0], 'access');
-      $values = array($query[1], array(1,2,3));
-      
+      $values = array($query[1], array(1, 2, 3));
+
       $items = $menu->getItems($attributes, $values);
       $items = is_array($items) ? $items : array();
     }
@@ -47,5 +47,35 @@ abstract class SearchHelper
     // Return the first item ID found. Might need to refine this is you want to link to more than one 
     // e.g. search page.
     return $items[0]->id;
+  }
+
+  /**
+   * 
+   */
+  public static function isRealestateProperty($id = '')
+  {
+
+    // Need to look up unit id based on the id.
+    // TO DO - Make this into a function...
+    $db = JFactory::getDbo();
+
+    $query = $db->getQuery(true);
+
+    $query->select('id');
+    $query->from('#__realestate_property');
+    $query->where('id = ' . (int) $id);
+
+    $db->setQuery($query);
+
+    try
+    {
+      $row = $db->loadObject();
+    }
+    catch (Exception $e)
+    {
+      return false;
+    }
+    
+    return $row->id;
   }
 }

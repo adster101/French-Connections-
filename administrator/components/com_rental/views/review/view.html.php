@@ -107,12 +107,14 @@ class RentalViewReview extends JViewLegacy
       JToolBarHelper::custom('listing.reject', 'unpublish', 'unpublish', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_REJECT', false);
       JToolBarHelper::custom('listing.release', 'locked', 'locked', 'COM_RENTAL_HELLOWORLD_REVIEW_PROPERTY_CHECKIN', false);
       JToolBarHelper::custom('listing.view', 'edit', 'edit', 'COM_RENTAL_HELLOWORLD_EDIT_LISTING_BUTTON', false);
+
       // Get a toolbar instance so we can append the preview button
 
       $bar = JToolBar::getInstance('toolbar');
       $property_id = $this->units[0]->id;
       $unit_id = $this->units[0]->unit_id;
       $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
+      $bar->appendButton('Popup', 'drawer', 'COM_RENTAL_HELLOWORLD_VIEW_PROPERTY_NOTES', 'index.php?option=com_notes&amp;view=notes&amp;layout=modal&amp;tmpl=component&property_id=' . $this->id, 650);
     }
   }
 

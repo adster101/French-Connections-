@@ -313,7 +313,7 @@ class EnquiriesModelEnquiry extends JModelAdmin
     $from = ($data['from_email']) ? $data['from_email'] : '';
     $from_name = ($data['from_name']) ? $data['from_name'] : '';
     // To is the holiday maker who made the initial enquiry
-    $to = ($data['email']) ? $data['email'] : '';
+    $to = ($data['guest_email']) ? $data['guest_email'] : '';
 
     $subject = $data['reply_subject'];
     $body = $data['reply_message'];

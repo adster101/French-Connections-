@@ -233,10 +233,15 @@ class RentalModelListings extends JModelList
     $search = $this->getState('filter.search');
     if (!empty($search))
     {
-      if ((int) $search)
+      if ((int) $search && !is_array(explode(',',$search)))
       {
         // This pulls out the property with ID searched on, it's parent and any siblings.
         $query->where('a.id = ' . (int) $search);
+      }
+      elseif (is_array(explode(',', $search)))
+      {
+        $search = $db->escape($search);
+        $query->where('a.id in (' . $search . ')');
       }
       elseif (stripos($search, 'account:') === 0)
       {
@@ -323,7 +328,7 @@ class RentalModelListings extends JModelList
       $query->clear('select');
 
       $query->select('a.id, p.user_id, p.firstname, u.email, a.expiry_date');
-      
+
       try
       {
         $items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));

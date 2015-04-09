@@ -17,5 +17,5 @@ defined('_JEXEC') or die;
  */
 class JFormRuleName extends JFormRule
 {
-	protected $regex = '^[a-zA-Z._]+$';
+	protected $regex = '^[a-zA-Z._\s]+$';
 }

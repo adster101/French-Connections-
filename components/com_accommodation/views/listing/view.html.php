@@ -88,7 +88,7 @@ class AccommodationViewListing extends JViewLegacy
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
-    {
+    {      
       JError::raiseWarning(404, implode("\n", $errors));
       return false;
     }
