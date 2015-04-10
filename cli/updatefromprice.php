@@ -49,67 +49,46 @@ class UpdateFromPriceCron extends JApplicationCli
    */
   public function doExecute()
   {
-    $app = JFactory::getApplication('site');
-    $lang = JFactory::getLanguage();
-    $sms_params = JComponentHelper::getParams('com_rental');
 
-    // Load the FcAdmin language file
-    $lang->load('com_fcadmin', JPATH_ADMINISTRATOR, null, false, true);
+    $date = JHtml::_('date', 'now', 'Y-m-d');
 
-    // Get the debug setting
-    $debug = (bool) $app->getCfg('debug');
-    define('DEBUG', $debug);
+    // TO DO - Pull out current exchange rate and use that
 
-    // Get an instance of the Noavailability FcAdminModel
-    $model = JModelLegacy::getInstance('Noavailability', 'FcAdminModel', $config = array('ignore_request' => true));
+    $db = JFactory::getDbo();
 
-    // Get an instance of the note model so we can save the email to the notes
-    $note = JModelLegacy::getInstance('Note', 'NotesModel', $config = array('table_path' => JPATH_BASE . '/administrator/components/com_notes/tables/'));
+    $query = $db->getQuery(true);
 
-    // A list of properties which need reminding about their availability
-    $items = $model->getItems();
+    $query->select('min(tariff) * 0.7032')
+            ->from($db->quoteName('#__tariffs', 't'))
+            ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
+            ->where($db->quoteName('end_date') . ' > ' . $date);
+
+    $euro_sub_query = $query->__toString();
+
+    $query->clear();
+
+    $query->select('min(tariff)')
+            ->from($db->quoteName('#__tariffs', 't'))
+            ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
+            ->where($db->quoteName('end_date') . ' > ' . $date);
+    
+    $sterling_sub_query = $query->__toString();
+    
+    $query->clear();
+    
+    $query->select('b.id, CASE WHEN d.base_currency = \'EUR\' THEN (' . $euro_sub_query . ') ELSE (' . $sterling_sub_query . ') END as price')
+            ->from($db->quoteName('#__property a'))
+            ->join('inner',$db->quoteName('#__unit', 'b') . ' on ' . $db->quoteName('b.property_id') . ' = ' . $db->quoteName('a.id'))            ->join('inner',$db->quoteName('#__property_versions', 'c') . ' on ' . $db->quoteName('c.property_id') . ' = ' . $db->quoteName('a.id')) 
+            ->join('inner',$db->quoteName('#__unit_versions', 'd') . ' on ' . $db->quoteName('d.unit_id') . ' = ' . $db->quoteName('b.id')) 
+            ->where('c.review = 0')
+            ->where('b.published = 1')
+            ->where('d.review = 0');
+    
+    echo $query->__toString();die;
 
     try
     {
-
-      foreach ($items as $item)
-      {
-        $body = JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_EMAIL', $item->firstname);
-        $subject = JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_EMAIL_SUBJECT', $item->unit_title);
-        $email = DEBUG ? 'glynis@frenchconnections.co.uk' : $item->email;
-        $from = $app->getCfg('mailfrom');
-        $sender = $app->getCfg('fromname');
-
-        // Send the email
-        if (JFactory::getMailer()->sendMail($from, $sender, $email, $subject, $body) !== false)
-        {
-          // Log the email into the notes table...
-          $data = array('id' => '', 'property_id' => $item->PRN, 'subject' => $subject, 'body' => $body);
-
-          if (!$note->save($data))
-          {
-            // Throw an exception...cry...boo hoo!
-          }
-
-          // Only fire up the SMS bit if the owner is subscribed to SMS alerts...
-          if ($item->sms_valid)
-          {
-
-            $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
-            // If the login return 0, means that login failed, you cant send sms after this 
-            if (!$sms->login())
-            {
-              continue;
-            }
-
-            // Send sms using the simple send() call 
-            if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_SMS', $item->firstname, $item->unit_title)))
-            {
-              continue;
-            }
-          }
-        }
-      }
+      
     }
     catch (Exception $e)
     {
