@@ -120,7 +120,7 @@ class CrawlerCron extends JApplicationCli
 
     $query->from('#__property a');
     $query->leftJoin($db->quoteName('#__property_versions', 'b') . ' on a.id = b.property_id');
-    $query->leftJoin($db->quoteName('#__users', 'c') . ' on c.id = a.id');
+    $query->leftJoin($db->quoteName('#__users', 'c') . ' on c.id = a.created_by');
     $query->leftJoin($db->quoteName('#__user_profile_fc', 'd') . ' on d.user_id = c.id');
     $query->where('b.review = 0');
     $query->where('b.website <> \'\'');
