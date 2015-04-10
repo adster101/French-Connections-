@@ -128,7 +128,7 @@ class Crawler
         }
 
         // Check that the URL is relative, i.e. on this domain
-        if ((strpos($link,'villalemas') === false) && (strpos($link,'closdesseguineries') === false) && (strpos($link, 'smugmug') === false) && (strpos($link, 'javascript') === false) && (strpos($link, 'jpg') === false) && (strpos($link, 'mailto:') === false) && (!in_array($link, $this->links) && ($this->domain == $domain)))
+        if ((strpos($link,'motorbikingfrance') === false) && (strpos($link,'villalemas') === false) && (strpos($link,'closdesseguineries') === false) && (strpos($link, 'smugmug') === false) && (strpos($link, 'javascript') === false) && (strpos($link, 'jpg') === false) && (strpos($link, 'mailto:') === false) && (!in_array($link, $this->links) && ($this->domain == $domain)))
         {
           $this->links[] = $link;
           $this->crawl($link);
