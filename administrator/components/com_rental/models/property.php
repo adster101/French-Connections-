@@ -120,7 +120,7 @@ class RentalModelProperty extends JModelAdmin
 
     if (empty($data['website_visible']))
     {
-      unset($data['website_visible']);
+      $data['website_visible'] = '';
     }
     
     if (!parent::save($data))

@@ -231,6 +231,7 @@ class AccommodationModelListing extends JModelForm
         u.name,
         u.email,
         c.website,
+        a.website_visible,
         air.name as airport,
         air.code as airport_code,
         air.id as airport_id,

@@ -27,7 +27,7 @@
     <field
       name="website_visible"
       type="checkbox"
-      label="COM_RENTAL_WEBSITE_VISIBLE"
+      label="COM_RENTAL_WEBSITE_VISIBLE_LABEL_DESC"
       filter="int"
       default="0" 
     />
