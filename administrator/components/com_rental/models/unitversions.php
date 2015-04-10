@@ -751,6 +751,13 @@ class RentalModelUnitVersions extends JModelAdmin
         }
       }
     }
+    
+    // Check if we're uploading an image...
+    if (array_key_exists('image_file_name', $data))
+    {
+      return true;
+    }
+    
     return false;
   }
 
