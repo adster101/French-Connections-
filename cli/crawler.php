@@ -75,7 +75,7 @@ class CrawlerCron extends JApplicationCli
       $crawler->crawl();
 
       $subject = ($crawler->found) ? JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_FOUND_SUBJECT', $crawler->domain) : JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_NOT_FOUND_SUBJECT', $crawler->domain);
-      $body = ($crawler->found) ? JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_FOUND_BODY', $crawler->page) : JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_NOT_FOUND_BODY', $prop->firstname, $crawler->domain);
+      $body = ($crawler->found) ? JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_FOUND_BODY', $crawler->page) : JText::sprintf('COM_FRENCHCONNECTIONS_BACKLINK_NOT_FOUND_BODY', $prop->firstname, $crawler->domain, $crawler->domain, $crawler->domain, $crawler->domain);
       $email = (DEBUG) ? 'adamrifat@frenchconnections.co.uk' : $prop->email;
       $data = array('id' => $prop->id, 'website_visible' => $crawler->found, 'subject' => $subject, 'body' => $body, 'modified' => $modified);
 
@@ -89,7 +89,7 @@ class CrawlerCron extends JApplicationCli
       if (!$crawler->found)
       {
         JFactory::getMailer()->sendMail(
-                $from, $sender, $email, $subject, $body);
+                $from, $sender, $email, $subject, $body, false, null, null, $attachment = '/home/AnXWtLd776/frenchconnections-backlink.txt');
       }
 
       unset($crawler);
