@@ -17,6 +17,7 @@ $doc = JFactory::getDocument();
  * jSelectArticle creates the link tag, sends it to the editor,
  * and closes the select frame.
  */
+
 $js = "(function(){
     var c = document.createElement('script');
     c.type = 'text/javascript'; c.async = true;
@@ -24,6 +25,13 @@ $js = "(function(){
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(c,s);
   })();";
+
+JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+
+$rental_model = JModelLegacy::getInstance('Listings', 'RentalModel');
+
+$items = $rental_model->getItems();
+
 
 // Add car trawler scripts here...
 $doc->addScriptDeclaration($js);
