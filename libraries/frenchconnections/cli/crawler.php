@@ -128,7 +128,8 @@ class Crawler
         }
 
         // Check that the URL is relative, i.e. on this domain
-        if ((strpos($link,'villalemas') === false) && (strpos($link,'closdesseguineries') === false) && (strpos($link, 'smugmug') === false) && (strpos($link, 'javascript') === false) && (strpos($link, 'jpg') === false) && (strpos($link, 'mailto:') === false) && (!in_array($link, $this->links) && ($this->domain == $domain)))
+        // TO DO - Make the below checks for blacklisted domains a bit more elegant
+        if ((strpos($link, 'jdvholidays') === false) && (strpos($link, 'wix.com') === false) && (strpos($link,'motorbikinginfrance') === false) && (strpos($link,'villalemas') === false) && (strpos($link,'closdesseguineries') === false) && (strpos($link, 'smugmug') === false) && (strpos($link, 'javascript') === false) && (strpos($link, 'jpg') === false) && (strpos($link, 'mailto:') === false) && (!in_array($link, $this->links) && ($this->domain == $domain)))
         {
           $this->links[] = $link;
           $this->crawl($link);

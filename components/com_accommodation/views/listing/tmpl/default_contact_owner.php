@@ -57,7 +57,7 @@ defined('_JEXEC') or die('Restricted access');
   <p><?php echo JText::sprintf('COM_ACCOMMODATION_BOOKING_FORM_VIEW', $link); ?></p>
 <?php endif; ?>
 
-<?php if ($this->item->website) : ?>
+<?php if ($this->item->website && $this->item->website_visible) : ?>
   <p>
     <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
     <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=259&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
