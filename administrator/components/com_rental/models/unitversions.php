@@ -753,7 +753,7 @@ class RentalModelUnitVersions extends JModelAdmin
     }
     
     // Check if we're uploading an image...
-    if (array_key_exists('image_file_name', $data))
+    if (array_key_exists('image_file_name', $data) || array_key_exists('caption', $data))
     {
       return true;
     }

@@ -58,4 +58,47 @@ class RentalModelCaption extends JModelAdmin
 		return $form;
 	}
   
+  /**
+   * Save method to save an newly upload image file, taking into account a new version if necessary.
+   * 
+   * @param type $data
+   */
+  public function save($data)
+  {
+    $caption_id = $data['id'];
+    $model = JModelLegacy::getInstance('UnitVersions', 'RentalModel');
+
+    // Need to look up the unit review status here to ensure that we upload new images against the correct version
+    $unit = $model->getItem($data['unit_id']);
+
+    // Set the review state to that of the latest unit version which will have previously been updated (if this is a 2nd, 3rd or 4th image upload etc
+    $data['review'] = $unit->review;
+    $data['id'] = $unit->id;
+    $data['property_id'] = $unit->property_id;
+
+    // Hit up the unit versions save method to determine if a new version is needed.
+    if (!$model->save($data))
+    {
+      return false;
+    }
+
+    $version_id = $model->getState($model->getName() . '.version_id');
+
+    // Arrange the data for saving into the images table
+    $data['id'] = $caption_id;
+    $data['version_id'] = $version_id;
+
+    // Call the parent save method to save the actual image data to the images table
+    if (!parent::save($data))
+    {
+      return false;
+    }
+
+    $this->setState($this->getName() . '.version_id', $model->getState($model->getName() . '.version_id'));
+    $this->setState($this->getName() . '.review', $model->getState($model->getName() . '.review'));
+
+    // Return to the controller
+
+    return true;
+  }
 }
