@@ -304,5 +304,58 @@ class RentalModelListings extends JModelList
     return $return;
   }
 
+  /**
+   * Get the content
+   *
+   * @return  string    The content.
+   *
+   * @since   1.6
+   */
+  public function getContent()
+  {
+    if (!isset($this->content))
+    {
+      $this->setState('list.limit', '');
+
+      // Load the list items.
+      $query = $this->_getListQuery();
+
+      $query->clear('select');
+
+      $query->select('a.id, p.user_id, p.firstname, u.email, a.expiry_date');
+      
+      try
+      {
+        $items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
+      }
+      catch (RuntimeException $e)
+      {
+        $this->setError($e->getMessage());
+
+        return false;
+      }
+
+
+
+      $this->content = '';
+
+      foreach ($items[0] as $key => $value)
+      {
+        $this->content .= $key . "\t";
+      }
+
+      $this->content .= "\r\n";
+
+      foreach ($items as $item)
+      {
+        $bits = JArrayHelper::fromObject($item);
+
+        $this->content .= implode("\t", $bits) . "\r\n";
+      }
+    }
+
+    return $this->content;
+  }
+
 }
 

@@ -110,6 +110,12 @@ class RentalViewTariffs extends JViewLegacy
       $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'tariffs.apply', false);
       $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'tariffs.saveandnext', false);
       $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'tariffs.save', false);
+      
+      JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
+      JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
+      JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
+      //JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE');
+
     }
     
     // Get a toolbar instance so we can append the preview button

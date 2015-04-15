@@ -288,7 +288,7 @@ class Fc_RedirectControllerRedirect extends JControllerLegacy
       // Get the location 
       $location = $db->loadObject();
 
-      if (!$location)
+      if (!$location->alias)
       {
         // Set the alias to france so we get something sensible
         $location->alias = 'france';

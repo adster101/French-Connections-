@@ -71,7 +71,7 @@ if (!empty($this->extra_sidebar))
               <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_SEVERITY', 'a.severity', $listDirn, $listOrder); ?>
             </th>
             <th class="left">
-              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_RELEASE_VERSION', 't.release', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_RELEASE_VERSION', 't.version', $listDirn, $listOrder); ?>
             </th>
             <th class='left'>
               <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_AREA_SORT', 'a.area', $listDirn, $listOrder); ?>

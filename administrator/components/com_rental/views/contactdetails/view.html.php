@@ -105,16 +105,22 @@ class RentalViewContactdetails extends JViewLegacy
       $bar = JToolbar::getInstance('actions');
 
       // We can save the new record
-      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'contactdetails.apply', false);      
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'contactdetails.apply', false);
       $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'contactdetails.save', false);
     }
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');    // Get the property ID as the first item in the progress array
+    
+    if ($canDo->get('core.edit.own'))
+    {
+      // We can save the new record
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'contactdetails.apply', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'contactdetails.save', false);
+    }
     $property_id = $this->progress[0]->id;
     $unit_id = $this->progress[0]->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
-
   }
 
   /**

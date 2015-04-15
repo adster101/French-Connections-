@@ -652,9 +652,13 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   <div class="row">
     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
       <hr />
+      <div class="sidescroll-nextprev">
+      <div class="overthrow sidescroll">
       <?php if ($this->availability) : ?>
         <?php echo $this->availability; ?>
       <?php endif; ?>
+      </div>
+      </div>
     </div>
   </div>
 

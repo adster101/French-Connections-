@@ -115,6 +115,13 @@ class RentalViewPropertyversions extends JViewLegacy
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
+    if ($canDo->get('core.create'))
+    {
+      // We can save the new record
+      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'propertyversions.apply', false);
+      $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'propertyversions.save', false);
+      $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
+    }
     $property_id = $this->status->id;
     $unit_id = $this->progress[0]->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);

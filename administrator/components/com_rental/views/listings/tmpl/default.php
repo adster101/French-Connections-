@@ -212,6 +212,15 @@ $canDo = RentalHelper::getActions();
                       <?php endif; ?>
                       <?php if (property_exists($item, 'enquiries')) : ?>
                         <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
+                        
+                        <?php 
+                        $preview = JUri::getInstance('/listing/' . $item->id . '?unit_id=' . $item->unit_id . '&preview=1' );
+                        $preview->setScheme('http');
+                        $preview->setHost('www.frenchconnections.co.uk');
+                        echo '<p><a target="_blank" href=' . $preview->toString() . '>Preview</a></p>';
+                        ?>
+                        
+                        
                       <?php endif; ?>
                     </td>
                   <?php endif; ?>

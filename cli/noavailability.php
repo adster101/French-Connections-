@@ -58,7 +58,7 @@ class NoAvailabilityCron extends JApplicationCli
 
     // Get the debug setting
     $debug = (bool) $app->getCfg('debug');
-    define('DEBUG', $debug);
+    define('JDEBUG', $debug);
 
     // Get an instance of the Noavailability FcAdminModel
     $model = JModelLegacy::getInstance('Noavailability', 'FcAdminModel', $config = array('ignore_request' => true));
@@ -76,7 +76,7 @@ class NoAvailabilityCron extends JApplicationCli
       {
         $body = JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_EMAIL', $item->firstname);
         $subject = JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_EMAIL_SUBJECT', $item->unit_title);
-        $email = DEBUG ? 'adamrifat@frenchconnections.co.uk' : $item->email;
+        $email = JDEBUG ? 'adamrifat@frenchconnections.co.uk' : $item->email;
         $from = $app->getCfg('mailfrom');
         $sender = $app->getCfg('fromname');
 

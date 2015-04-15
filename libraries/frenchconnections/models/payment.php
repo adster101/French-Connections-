@@ -1021,9 +1021,9 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
       // Straightforward renewal 
       // Update the expiry date
-      $date = $this->getNewExpiryDate();
+      $expiry_date = $this->getNewExpiryDate();
 
-      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date = $date, $published = 1, $autorenewal = $transaction_id))
+      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id))
       {
         // TO DO - Log this
         return false;
@@ -1049,10 +1049,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $total = $this->getOrderTotal($order);
 
       // Generate a new expiry date based on today
-      $date = $this->getNewExpiryDate();
+      $expiry_date = $this->getNewExpiryDate();
 
       // Renewal with amendments, update the total and review state.
-      $this->updateProperty($listing_id, $total, $review = 2, $date, '', '', $autorenewal = $transaction_id);
+      $this->updateProperty($listing_id, $total, $review = 2, $expiry_date, '', '', $autorenewal = $transaction_id);
 
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);

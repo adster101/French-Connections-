@@ -17,6 +17,7 @@ $this->direction = $doc->direction;
 JHtml::_('bootstrap.framework');
 
   $doc->addStyleSheet('media/fc/assets/css/styles.css'); 
+  $doc->addScript('media/fc/assets/js/scripts.js'); 
 
 // Load optional rtl Bootstrap css and Bootstrap bugfixes
 JHtmlBootstrap::loadCss($includeMaincss = false, $this->direction);

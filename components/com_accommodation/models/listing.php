@@ -231,6 +231,7 @@ class AccommodationModelListing extends JModelForm
         u.name,
         u.email,
         c.website,
+        a.website_visible,
         air.name as airport,
         air.code as airport_code,
         air.id as airport_id,
@@ -673,7 +674,7 @@ class AccommodationModelListing extends JModelForm
     $availability_by_day = RentalHelper::getAvailabilityByDay($availability);
 
     // Build the calendar taking into account current availability...
-    $calendar = RentalHelper::getAvailabilityCalendar($months = 18, $availability_by_day, 2, 0, $link = false);
+    $calendar = RentalHelper::getAvailabilityCalendar($months = 23, $availability_by_day, 2, 0, $link = false);
 
     return $calendar;
   }

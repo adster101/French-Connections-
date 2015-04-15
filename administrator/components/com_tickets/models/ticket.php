@@ -100,8 +100,8 @@ class TicketsModelTicket extends JModelAdmin
     $user = JFactory::getUser();
     $isNew = true;
     $params = JComponentHelper::getParams('com_tickets');
-    $states = array('closed', 'open', 'testing', 'pending', 'fixed', NULL);
-    $severities = array('Critical', 'High', 'Medium', 'Low', 'Minor', NULL);
+    $states = array('closed', 'open', 'testing', 'pending', 'fixed');
+    $severities = array('','Critical', 'High', 'Medium', 'Low', 'Minor');
 
     // Attempt to load the existing item
     // TO DO - Save notes into separate table then we can do away with this lookup

@@ -1,5 +1,12 @@
 jQuery(document).ready(function() {
 
+  if (jQuery('.overthrow').length) {
+    overthrow.sidescroller( document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
+      rewind: true,
+      fixedItemWidth: true
+    });
+  }
+
   // Updates hte form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function() {
 
@@ -66,10 +73,10 @@ jQuery(document).ready(function() {
       autoclose: true
 
     }).on('changeDate', function(ev) {
-    });
+      });
 
   } catch (e) {
-    // what to do!?
+  // what to do!?
   }
 
   // Load the google maps crap, only if there is a #map on the page.
@@ -170,7 +177,7 @@ jQuery(document).ready(function() {
     //window.onbeforeunload = function() {
     //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
-  });
+    });
 
   try {
     // If the tinymce editor is loaded
@@ -190,7 +197,7 @@ jQuery(document).ready(function() {
       });
     }
   } catch (e) {
-    // what to do!?
+  // what to do!?
   }
 
   // Add special offer counter... 
@@ -267,7 +274,7 @@ var loadGoogleMaps = function(func) {
     script.type = 'text/javascript';
 
     script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-            'callback=' + func;
+    'callback=' + func;
     document.body.appendChild(script);
   }
 }

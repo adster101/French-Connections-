@@ -262,6 +262,7 @@ abstract class RentalHelper
         'rental.notes.add',
         'rental.images.delete',
         'rental.images.reorder',
+        'rental.listings.download'
     );
 
 
@@ -364,7 +365,7 @@ abstract class RentalHelper
       list($month, $year, $month_name, $day_of_week) = explode(',', gmstrftime('%m,%Y,%B,%w', $first_of_month));
 
 
-      $calendar .= JHtml::_('bootstrap.addTab', 'availability', $month, htmlentities(ucfirst(substr($month_name, 0, 3))), true);
+      $calendar .= JHtml::_('bootstrap.addTab', 'availability', $month . $year, ucfirst(substr($month_name, 0, 3) . ' ' . ucfirst(substr($year, 2, 2))), true);
 
       $calendar .= '<table class="availability table table-bordered avCalendar">' . "\n";
 
@@ -377,7 +378,7 @@ abstract class RentalHelper
       $table_header = RentalHelper::getTableHeader($first_day, $title);
 
       $calendar .= $table_header;
-      
+
       $calendar .= '<tbody><tr>' . "\n";
 
       // Pad out the beginning of the month if first day doesn't fall on a sunday
@@ -436,8 +437,8 @@ abstract class RentalHelper
 
       $month++;
     }
-		
-    $calendar .= JHtml::_('bootstrap.endTabSet'); 
+
+    $calendar .= JHtml::_('bootstrap.endTabSet');
 
 
     return $calendar;
@@ -489,7 +490,8 @@ abstract class RentalHelper
   public static function getAvailabilityCalendar($months = 18, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
   {
     // String to hold the calendar HTML
-    $calendar = '<div class="row">';
+    $calendar = '';
+    $calendar .= '<ul class="clearfix">';
 
     $showlinks = $link;
 
@@ -505,7 +507,7 @@ abstract class RentalHelper
     for ($z = 0; $z <= $months; $z++)
     {
 
-      $calendar.='<div class="col-md-4">';
+      $calendar .= '<li>';
 
       $first_of_month = gmmktime(0, 0, 0, $month, 1, $year);
       #remember that mktime will automatically correct if invalid dates are entered
@@ -520,7 +522,7 @@ abstract class RentalHelper
       $weekday = ($weekday + 7 - $first_day) % 7; #adjust for $first_day
       $title = htmlentities(ucfirst($month_name)) . '&nbsp;' . $year;  #note that some locales don't capitalize month and day names
 
-      $calendar.='<table class="availability table table-bordered avCalendar">' . "\n";
+      $calendar.='<table class=" table table-bordered">' . "\n";
       $calendar.= '<caption><strong>' . $title . '</strong></caption>' . "\n";
       $calendar.= '<thead><tr class="days">' . "\n";
 
@@ -578,20 +580,14 @@ abstract class RentalHelper
       {
         $calendar .= '<td colspan="' . (7 - $weekday) . '">&nbsp;</td>'; #remaining "empty" days
       }
-      $calendar.="</table></div>";
+      $calendar.="</table>";
 
-      if (($z % 3 === 2))
-      {
-        $calendar.='</div><div class="row">';
-      }
+      $calendar .= '</li>';
 
-      if ($z == $months)
-      {
-        $calendar.='</div>';
-      }
 
       $month++;
     }
+    $calendar .= '</ul>';
 
 
 

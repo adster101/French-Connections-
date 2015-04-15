@@ -118,6 +118,11 @@ class RentalModelProperty extends JModelAdmin
       // Need to get the value of the renewal/update
     }
 
+    if (empty($data['website_visible']))
+    {
+      $data['website_visible'] = '';
+    }
+    
     if (!parent::save($data))
     {
       // Oops...

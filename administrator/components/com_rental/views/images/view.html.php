@@ -84,12 +84,14 @@ class RentalViewImages extends JViewLegacy
     $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'images.saveandnext', false);
 
     // Cancel out to the helloworld(s) default view rather than the availabilities view...??
-
     //JToolBarHelper::help('', true);
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->progress[0]->id;
     $unit_id = $this->progress[0]->unit_id;
+    $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'images.cancel', false);
+    $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'images.saveandnext', false);
+
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $this->property_id, $this->unit->unit_id);
   }
 
