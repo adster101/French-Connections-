@@ -330,7 +330,6 @@ class RentalModelUnitVersions extends JModelAdmin
       //$table->set('_tbl_key', 'id');
       $table->set('_tbl_keys', array('id'));
 
-
       // Bind the data.
       if (!$table->bind($data))
       {
