@@ -126,7 +126,7 @@ class RentalViewPropertyversions extends JViewLegacy
   protected function setDocument()
   {
 
-    RentalHelper::addLiveChat($this->progress->expiry_date);
+    RentalHelper::addLiveChat($this->status->expiry_date);
 
     $document = JFactory::getDocument();
     

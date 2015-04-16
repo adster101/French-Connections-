@@ -36,13 +36,13 @@ class FcSearchViewSearch extends JViewLegacy
   private function addHeadLinks($pages, $document)
   {
 
-    // If we have next links then add a rel=next head link
+// If we have next links then add a rel=next head link
     if ($pages->next->link)
     {
       $document->addHeadLink($pages->next->link, 'next', 'rel');
     }
 
-    // If we have next links then add a rel=prev head link
+// If we have next links then add a rel=prev head link
     if ($pages->previous->link)
     {
       $document->addHeadLink($pages->previous->link, 'prev', 'rel');
@@ -61,13 +61,14 @@ class FcSearchViewSearch extends JViewLegacy
   public function display($tpl = null)
   {
 
-    // Get the app instance
+// Get the app instance
     $app = JFactory::getApplication();
 
-    // Get the currencies
-    // Get view data.
+// Get the currencies
+// Get view data.
     $this->state = $this->get('State');
     $this->localinfo = $this->get('LocalInfo');
+
 
     if ($this->localinfo === false)
     {
@@ -83,24 +84,27 @@ class FcSearchViewSearch extends JViewLegacy
 
       $this->pagination = $this->get('Pagination');
 
-      // Has to be done after getState, as with all really.
+// Has to be done after getState, as with all really.
       $this->attribute_options = $this->get('RefineAttributeOptions');
       $this->location_options = $this->get('RefineLocationOptions');
       $this->property_options = $this->get('RefinePropertyOptions');
       $this->accommodation_options = $this->get('RefineAccommodationOptions');
+
+      $this->seo_copy = $this->setPropertyTypeSEOCopy();
+
       $this->lwl = $this->get('RefineLWLOptions');
       $this->so = $this->get('RefineSOOptions');
       $this->shortlist = $this->get('Shortlist');
-      // Get the breadcrumb trail style search 
+// Get the breadcrumb trail style search 
       $this->crumbs = $this->get('Crumbs');
 
       $search_url = JUri::getInstance()->toString();
-      //$query = ($uri->getQuery()) ? '?' . $uri->getQuery() : '';
-      //$search_url = $uri->current() . $query;
-      // Save the search url into the session scope
+//$query = ($uri->getQuery()) ? '?' . $uri->getQuery() : '';
+//$search_url = $uri->current() . $query;
+// Save the search url into the session scope
       $app->setUserState('user.search', $search_url);
 
-      // Configure the pathway.
+// Configure the pathway.
       if (!empty($this->crumbs))
       {
         $app->getPathWay()->setPathway($this->crumbs);
@@ -109,10 +113,10 @@ class FcSearchViewSearch extends JViewLegacy
 
     $this->get('LogSearch');
 
-    // Include the component HTML helpers.
+// Include the component HTML helpers.
     JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-    // Check for errors.
+// Check for errors.
     if (count($errors = $this->get('Errors')))
     {
       JError::raiseError(500, implode("\n", $errors));
@@ -122,19 +126,19 @@ class FcSearchViewSearch extends JViewLegacy
     $this->prepareDocument();
     $this->sidebar = JHtmlSidebar::render();
 
-    // Log the search
+// Log the search
     JSearchHelper::logSearch('Log some useful search information...', 'com_fcsearch');
 
-    // Check for layout override only if this is not the active menu item
-    // If it is the active menu item, then the view and category id will match
+// Check for layout override only if this is not the active menu item
+// If it is the active menu item, then the view and category id will match
     $active = $app->getMenu()->getActive();
     if (isset($active->query['layout']))
     {
-      // We need to set the layout in case this is an alternative menu item (with an alternative layout)
+// We need to set the layout in case this is an alternative menu item (with an alternative layout)
       $this->setLayout($active->query['layout']);
     }
 
-    // Need to set valid meta data for the page here, load any JS, CSS Etc
+// Need to set valid meta data for the page here, load any JS, CSS Etc
     parent::display($tpl);
   }
 
@@ -154,10 +158,10 @@ class FcSearchViewSearch extends JViewLegacy
     $app = JFactory::getApplication();
     $input = $app->input;
 
-    // Get the pagination object 
+// Get the pagination object 
     if ($this->pagination)
     {
-      // Add next and prev links to head
+// Add next and prev links to head
       $pages = $this->pagination->getData();
       $this->addHeadLinks($pages, $document);
     }
@@ -168,25 +172,25 @@ class FcSearchViewSearch extends JViewLegacy
     $bedrooms = $this->state->get('list.bedrooms');
     $occupancy = $this->state->get('list.occupancy');
 
-    // Location title - e.g. the location being searched on
+// Location title - e.g. the location being searched on
     $location = ucwords(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 
-    // Add Chateua to the inflector
+// Add Chateua to the inflector
     $inflector = JStringInflector::getInstance();
     $inflector->addWord('Chateau', 'Chateaux ');
 
-    // Generate the page META title
+// Generate the page META title
     $title = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector);
     $description = $this->getDescription($property_type, $accommodation_type, $location, $inflector);
 
-    // Append the site name to keep the SEOs happy
+// Append the site name to keep the SEOs happy
     $title .= ' - ' . $app->getCfg('sitename');
 
-    // Set the page and document title
+// Set the page and document title
     $this->document->setTitle($title);
     $this->document->setDescription($description);
 
-    // Add some scripts and shit
+// Add some scripts and shit
     $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
     $document->addScript(JURI::root() . 'media/fc/js/general.js', 'text/javascript', true);
@@ -206,7 +210,7 @@ class FcSearchViewSearch extends JViewLegacy
    */
   protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_')
   {
-    // Build the filter options.
+// Build the filter options.
     $options = array();
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
@@ -232,7 +236,7 @@ class FcSearchViewSearch extends JViewLegacy
    */
   protected function getSortFields()
   {
-    // Build the filter options.
+// Build the filter options.
     $options = array();
 
     $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_PLEASE_CHOOSE'));
@@ -267,21 +271,21 @@ class FcSearchViewSearch extends JViewLegacy
     $lwl = $input->get('lwl', false, 'boolean');
     $offers = $input->get('offers', false, 'boolean');
 
-    // Work out the property type we have
+// Work out the property type we have
     if (!empty($property_types))
     {
       $property_parts = explode('_', $property_types[0]);
       $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
     }
 
-    // Work out the accommodation type we have
+// Work out the accommodation type we have
     if (!empty($accommodation_types))
     {
       $accommodation_parts = explode('_', $accommodation_types[0]);
       $accommodation_type = JStringNormalise::toSpaceSeparated($accommodation_parts[1]);
     }
 
-    // Work out the meta title pattern to use
+// Work out the meta title pattern to use
     if ($property_type && $accommodation_type)
     {
       $plural_property_type = $inflector->toPlural($property_type);
@@ -294,7 +298,7 @@ class FcSearchViewSearch extends JViewLegacy
     elseif ($property_type)
     {
       $plural_property_type = $inflector->toPlural($property_type);
-      // In this case we want to strip all occurances of France as it appears in the language string
+// In this case we want to strip all occurances of France as it appears in the language string
       $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location_title));
     }
     else
@@ -312,7 +316,7 @@ class FcSearchViewSearch extends JViewLegacy
       $title = JText::sprintf('COM_FCSEARCH_TITLE_SPECIAL_OFFERS', $location);
     }
 
-    // Amend the title based on bedroom and occupancy filter
+// Amend the title based on bedroom and occupancy filter
     $bedrooms = ($bedrooms == 10) ? "$bedrooms+" : $bedrooms;
     $title .= ($bedrooms) ? ' | ' . $bedrooms . ' ' . JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') : '';
     $title .= ($occupancy) ? ' | ' . JText::_('COM_FCSEARCH_SEARCH_OCCUPANCY') . ' ' . $occupancy : '';
@@ -338,23 +342,23 @@ class FcSearchViewSearch extends JViewLegacy
     $location_title = str_replace('France', '', $location);
 
 
-    // Work out the property type we have
-    // TO DO - extend this to add a canonical tag if multiple property types are selected.
+// Work out the property type we have
+// TO DO - extend this to add a canonical tag if multiple property types are selected.
     if (!empty($property_types))
     {
       $property_parts = explode('_', $property_types[0]);
       $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
     }
 
-    // Work out the accommodation type we have
-    // TO DO - extend this to add a canonical tag if both accommodation type are selected.
+// Work out the accommodation type we have
+// TO DO - extend this to add a canonical tag if both accommodation type are selected.
     if (!empty($accommodation_types))
     {
       $accommodation_parts = explode('_', $accommodation_types[0]);
       $accommodation_type = JStringNormalise::toSpaceSeparated($accommodation_parts[1]);
     }
 
-    // Work out the meta title pattern to use
+// Work out the meta title pattern to use
     if ($property_type && $accommodation_type)
     {
       $plural_property_type = $inflector->toPlural($property_type);
@@ -374,8 +378,35 @@ class FcSearchViewSearch extends JViewLegacy
       $title = JText::sprintf('COM_FCSEARCH_DESCRIPTION', ucwords($location), ucwords($location_title));
     }
 
-
     return $title;
+  }
+
+  public function setPropertyTypeSEOCopy()
+  {
+
+    $app = JFactory::getApplication();
+    $input = $app->input;
+
+    $property_types = $input->get('property', array(), 'array');    
+    
+    // Work out the property type we have
+    // TO DO - extend this to add a canonical tag if multiple property types are selected.
+    if (!empty($property_types))
+    {
+      $property_parts = explode('_', $property_types[0]);
+      $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
+    }
+
+    $property_type_info = json_decode($this->localinfo->property_type_info);
+    
+    if (!empty($property_type_info->$property_type))
+    {
+     return $property_type_info->$property_type;
+    }
+    else
+    {
+      return false;
+    }
   }
 
 }

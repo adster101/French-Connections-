@@ -60,7 +60,7 @@ class ClassificationViewClassification extends JViewLegacy
 		$canDo = ClassificationHelper::getActions($this->item->id);
     
     
-    JToolBarHelper::title($isNew ? JText::_('COM_RENTAL_MANAGER_HELLOWORLD_NEW') : JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->title), 'classification');
+    JToolBarHelper::title($isNew ? JText::_('COM_RENTAL_MANAGER_HELLOWORLD_NEW') : $this->item->title, 'info');
 		// Built the actions for new and existing records.
 		if ($isNew) 
 		{

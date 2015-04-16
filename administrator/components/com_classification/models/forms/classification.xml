@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_classification/models/rules">
-	<fieldset
+  <fieldset
     addFieldPath="/administrator/components/com_classification/models/fields"
     name="classification">
 	      
     <field
-			name="id"
-			type="text"
+      name="id"
+      type="text"
       readonly="true"
       class="readonly"
-			default="0"
+      default="0"
       label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ID_LABEL"
       description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ID_DESC"
       filter="int"
     />
 
     <field
-			name="title"
-			type="text"
-			default=""
-			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_TITLE_LABEL"
-			description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_TITLE_DESC"
+      name="title"
+      type="text"
+      default=""
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_TITLE_LABEL"
+      description ="COM_CLASSIFICATION_FIELD_CLASSIFICATION_TITLE_DESC"
       maxlength="50"
       size="30"
       required="true"
@@ -28,18 +28,18 @@
       filter="string"
     /> 
 
-		<field
-			name="parent_id"
-			type="ClassificationParent"
-			label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_LABEL"
-			description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_DESC"
-			default="1"
-			filter="int"
-			class="validate"
+    <field
+      name="parent_id"
+      type="ClassificationParent"
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_LABEL"
+      description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PARENT_ID_DESC"
+      default="1"
+      filter="int"
+      class="validate"
       required="true">
       <option
-				value="1">COM_CLASSIFICATION_ITEM_ROOT</option>
-		</field>
+        value="1">COM_CLASSIFICATION_ITEM_ROOT</option>
+    </field>
     
     <field
       name="latitude"
@@ -92,13 +92,13 @@
       name="alias"
       type="text"
       class="readonly"
-  		label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ALIAS_LABEL"
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ALIAS_LABEL"
       description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_ALIAS_DESC"
     />
-		<field
-			name="path"
-			type="text"
-			filter="string"
+    <field
+      name="path"
+      type="text"
+      filter="string"
       label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PATH_LABEL"
       description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_PATH_DESC"
       class="input-xxlarge"
@@ -112,24 +112,25 @@
       class="required"
     />
 
-		<field
-			name="level"
-			type="hidden"
-			filter="unset"
+    <field
+      name="level"
+      type="hidden"
+      filter="unset"
     />
 
-		<field
-			name="lft"
-			type="hidden"
-			filter="unset"
+    <field
+      name="lft"
+      type="hidden"
+      filter="unset"
     />
 
-		<field
-			name="rgt"
-			type="hidden"
-			filter="unset"
+    <field
+      name="rgt"
+      type="hidden"
+      filter="unset"
     />      
       
-	</fieldset>	  
-	
+  </fieldset>	
+  
+ 
 </form>

@@ -80,7 +80,7 @@ class RentalViewPayment extends JViewLegacy
     $document = JFactory::getDocument();
 
     // Add the live chat script, or not!
-    RentalHelper::addLiveChat($this->progress->expiry_date);
+    RentalHelper::addLiveChat($this->status->expiry_date);
 
     // Set the page title
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));

@@ -16,7 +16,7 @@ abstract class RentalHelper
    * 
    * return void;
    */
-  public static function addLiveChat($property_status)
+  public static function addLiveChat($property_status = false)
   {
     if (!$property_status)
     {
