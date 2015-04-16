@@ -111,7 +111,6 @@ class RentalViewListing extends JViewLegacy
     $property_id = $this->items[0]->id;
     $unit_id = $this->items[0]->unit_id;
     $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
-
   }
 
   /**
@@ -125,6 +124,8 @@ class RentalViewListing extends JViewLegacy
 
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
     $document->addScript("/media/fc/js/general.js", 'text/javascript', true);
+    // Add the live chat script, or not!
+    RentalHelper::addLiveChat($this->progress->expiry_date);
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT');

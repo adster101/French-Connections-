@@ -12,6 +12,10 @@ $progress = $displayData['status'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 ?>
 
+<?php if (empty($progress->expiry_date) && $progress->review == 1) : ?>
+  <div id="stlivechat21"></div>
+<?php endif; ?>
+
 <!--<div class="row-fluid">
   <div class="span9">-->
 <?php if ($view == 'listing' && $progress->review == 1 && $progress->complete) : //No notices, listing view for a property that needs review      ?>

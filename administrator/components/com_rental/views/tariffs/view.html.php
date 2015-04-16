@@ -110,14 +110,13 @@ class RentalViewTariffs extends JViewLegacy
       $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'tariffs.apply', false);
       $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'tariffs.saveandnext', false);
       $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'tariffs.save', false);
-      
+
       JToolBarHelper::apply('tariffs.apply', 'JTOOLBAR_APPLY');
       JToolBarHelper::save('tariffs.save', 'JTOOLBAR_SAVE');
       JToolBarHelper::custom('tariffs.saveandnext', 'forward-2', '', 'JTOOLBAR_SAVE_AND_NEXT', false);
       //JToolBarHelper::cancel('tariffs.cancel', 'JTOOLBAR_CLOSE');
-
     }
-    
+
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');
     $property_id = $this->progress[0]->id;
@@ -134,7 +133,8 @@ class RentalViewTariffs extends JViewLegacy
    */
   protected function setDocument()
   {
-    $isNew = $this->item->id == 0;
+    // Add the live chat script, or not!
+    RentalHelper::addLiveChat($this->progress->expiry_date);
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

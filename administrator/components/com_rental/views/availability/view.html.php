@@ -105,11 +105,15 @@ class RentalViewAvailability extends JViewLegacy
    */
   protected function setDocument()
   {
-    $isNew = $this->item->id == 0;
+
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
     $document->addScript("/administrator/components/com_rental/js/availability.js", false, true);
     $document->addStyleSheet("/media/fc/css/availability.css", 'text/css', "screen");
+
+    // Add the live chat script, or not!
+    RentalHelper::addLiveChat($this->progress->expiry_date);
+
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_START_DATE');
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_END_DATE');
   }

@@ -103,6 +103,8 @@ class RentalViewImages extends JViewLegacy
   protected function setDocument()
   {
     $document = JFactory::getDocument();
+    // Add the live chat script, or not!
+    RentalHelper::addLiveChat($this->progress->expiry_date);
 
     JHtml::_('bootstrap.framework');
 

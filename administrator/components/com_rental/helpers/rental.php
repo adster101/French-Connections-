@@ -9,6 +9,30 @@ defined('_JEXEC') or die;
 abstract class RentalHelper
 {
 
+  /**
+   * 
+   * @param type $property_status
+   * @param type $document
+   * 
+   * return void;
+   */
+  public static function addLiveChat($property_status)
+  {
+    if (!$property_status)
+    {
+      $js = "(function(){
+        var c = document.createElement('script');
+        c.type = 'text/javascript'; c.async = true;
+        c.src = '//frenchconnections.smartertrack.com/ChatLink.ashx?config=1&id=stlivechat21';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(c,s);
+      })();";
+
+      $document = JFactory::getDocument();
+      $document->addScriptDeclaration($js);
+    }
+  }
+
   public static function filterTariffs($tariffs = array())
   {
 
