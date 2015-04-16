@@ -41,7 +41,7 @@ class RentalController extends JControllerLegacy
    *
    * @return void
    */
-  function display($cachable = false)
+  function display($cachable = true)
   {
 
 

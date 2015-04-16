@@ -24,6 +24,8 @@ $items = ModListingHelper::getList();
 $re_items = ModListingHelper::getRealEstate();
 
 // Process the property list into a more useful object
+// TO DO - This should probably be reusing the rental and realestate listings model...as per the livechat
+// module
 $listings = ModListingHelper::getPropertyList($items);
 
 $re_listings = ModListingHelper::getRealestatePropertyList($re_items);

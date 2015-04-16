@@ -131,8 +131,9 @@ class RentalViewContactdetails extends JViewLegacy
   protected function setDocument()
   {
 
-    $isNew = $this->item->id == 0;
     $document = JFactory::getDocument();
+   // Add the live chat script, or not!
+    RentalHelper::addLiveChat($this->progress->expiry_date);
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_CONTACT_EDIT', $this->item->property_id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

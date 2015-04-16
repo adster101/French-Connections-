@@ -4,9 +4,37 @@ Contains styles that apply at the global level, or can be applied to any section
 19/08/2014 Adam Rifat FCV4
 
 **/
+
 // FC styles
 
 
+#stlivechat21 a { 
+  z-index: 999; 
+  position: fixed; 
+  border-radius: 3px 3px 0px 0px; 
+  -moz-border-radius: 0 0 3px 3px; 
+  font-size: 14px; 
+  right: -122px; 
+  top: 50%;
+  text-decoration: none; 
+  -webkit-transform: rotate(-90deg); 
+  -moz-transform: rotate(-90deg); 
+  -o-transform: rotate(-90deg); 
+  -ms-transform: rotate(-90deg); 
+  transform: rotate(-90deg); 
+  -webkit-transform-origin: top left; 
+  -moz-transform-origin: top left; 
+  -o-transform-origin: top left; 
+  -ms-transform-origin: top left; 
+  transform-origin: top left; 
+  box-shadow: -3px -3px 3px rgba(0,0,0,0.30);  
+  background-color: @brand-primary; 
+  padding:10px 25px 10px;
+}
+
+#stlivechat21 a {
+  color:white;
+} 
 
 .container {
   .container-fixed();
