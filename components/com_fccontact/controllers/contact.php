@@ -74,7 +74,7 @@ class FcContactControllerContact extends JControllerForm
       $app->setUserState('com_fccontact.contact.data', $data);
 
       $this->setRedirect(
-              JRoute::_('index.php?option=com_registerowner', false), $this->getError(), 'error'
+              JRoute::_('index.php?option=com_fccontact', false), $this->getError(), 'error'
       );
 
       return false;
@@ -82,7 +82,7 @@ class FcContactControllerContact extends JControllerForm
 
     // Flush the data from the session
     $app->setUserState('com_fccontact.contact.data', null);
-    $this->setRedirect(JRoute::_('index.php?option=com_fccontact'));
+    $this->setRedirect(JRoute::_('index.php?option=com_fccontact&sent=true'));
 
     $this->setMessage(JText::_('COM_FCCONTACT_EMAIL_SUCCESS'),'success');
 
