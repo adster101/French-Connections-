@@ -63,7 +63,11 @@ jQuery(document).ready(function() {
           
         }
         
-         var markerCluster = new MarkerClusterer(map, markers);
+         var markerCluster = new MarkerClusterer(map, markers,{
+           maxZoom: 10,
+           gridSize: 60,
+           averageCenter: false
+         });
          
       }).done(function() {
 
