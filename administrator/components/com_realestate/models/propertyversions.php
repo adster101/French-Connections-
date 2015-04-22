@@ -96,7 +96,7 @@ class RealEstateModelPropertyVersions extends PropertyModelVersions
 
     return $data;
   }
-
+  
   /**
    * Method to auto-populate the model state.
    *

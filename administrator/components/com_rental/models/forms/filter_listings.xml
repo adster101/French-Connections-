@@ -21,6 +21,7 @@
         <option value="">JOPTION_SELECT_PUBLISHED</option>
         <option value="1">COM_RENTAL_HELLOWORLD_ACTIVE</option>
         <option value="0">COM_RENTAL_HELLOWORLD_INACTIVE</option>
+        <option value="2">COM_RENTAL_HELLOWORLD_ARCHIVED</option>
         <option value="-2">JTRASHED</option>
       </field>  
       <field

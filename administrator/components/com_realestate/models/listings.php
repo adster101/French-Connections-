@@ -159,7 +159,7 @@ class RealestateModelListings extends JModelList
     }
     elseif ($published === '')
     {
-      $query->where('a.published in (0,1,2)');
+      $query->where('a.published in (0,1)');
     }
 
     // Filter by review state

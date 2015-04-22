@@ -119,7 +119,7 @@ class RentalModelListings extends JModelList
       a.published,
       date_format(a.expiry_date, "%D %M %Y") as expiry_date,
       date_format(a.created_on, "%D %M %Y") as created_on,
-      date_format(a.modified, "%D %M %Y") as modified,
+      date_format(a.modified, "%D %M %Y %H:%i:%s") as modified,
       a.VendorTxCode,
       a.review,
       d.id as unit_id,
@@ -165,7 +165,7 @@ class RentalModelListings extends JModelList
     }
     elseif ($published === '')
     {
-      $query->where('a.published in (0,1,2)');
+      $query->where('a.published in (0,1)');
     }
 
     // Filter by review state
@@ -238,7 +238,7 @@ class RentalModelListings extends JModelList
         // This pulls out the property with ID searched on, it's parent and any siblings.
         $query->where('a.id = ' . (int) $search);
       }
-      elseif (is_array(explode(',', $search)))
+      elseif (is_array(explode(',', $search) && (strpos($search,',') > 0)))
       {
         $search = $db->escape($search);
         $query->where('a.id in (' . $search . ')');

@@ -83,6 +83,7 @@ class RentalViewListings extends JViewLegacy
     {
       JToolBarHelper::publish('listings.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('listings.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+      JToolbarHelper::archiveList('listings.archive', 'JTOOLBAR_ARCHIVE', true);
       JToolBarHelper::trash('listings.trash');
     }
 
