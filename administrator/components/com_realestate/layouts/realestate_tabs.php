@@ -31,7 +31,7 @@ $tabs_heading = (empty($data->expiry_date) && $data->review < 2) ? 'COM_PROPERTY
   echo JHtml::_('property.progressTab', $data->gallery, $data->property_detail, $data->expiry_date,'IMAGE_GALLERY', 'index.php?option=com_realestate&task=images.manage&realestate_property_id=' . (int) $data->id, $image_message, $view, 'images');
   if (empty($data->expiry_date) && $data->review < 2)
   {
-    echo JHtml::_('property.progressTab', $data->payment, $data->complete, $data->expiry_date,'PAYMENT', 'index.php?option=com_realestate&task=payment.summary&realestate_property_id=' . (int) $data->id, 'Wooty woot', $view, 'payment');
+    echo JHtml::_('property.progressTab', $data->payment, $data->complete, $data->expiry_date,'PAYMENT', 'index.php?option=com_realestate&task=payment.summary&realestate_property_id=' . (int) $data->id, '', $view, 'payment');
   }
   ?>
 </ul>

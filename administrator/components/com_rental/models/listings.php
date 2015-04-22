@@ -232,14 +232,17 @@ class RentalModelListings extends JModelList
     // TODO - Try and tidy up this logic a bit.
     $search = $this->getState('filter.search');
     if (!empty($search))
-    {
-      if ((int) $search && !is_array(explode(',',$search)))
+    {      
+      // If search cast to int and doesn't contain a comma is true
+      if ((int) $search && (strpos($search,',') === false))
       {
         // This pulls out the property with ID searched on, it's parent and any siblings.
         $query->where('a.id = ' . (int) $search);
       }
-      elseif (is_array(explode(',', $search)))
+      // If the exploded array contains more than one element and the search term contains a comma
+      elseif (count(explode(',', $search) > 1) && (strpos($search,',') > 0))
       {
+        // Escape the search term
         $search = $db->escape($search);
         $query->where('a.id in (' . $search . ')');
       }
