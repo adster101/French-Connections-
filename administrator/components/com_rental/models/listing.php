@@ -142,6 +142,7 @@ class RentalModelListing extends JModelList
               ->set('published = 1')
               ->set('checked_out = \'\'')
               ->set('checked_out_time = \'\'')
+              //->set('snooze_until = \'\'')
               ->set('value = null');
 
       // If the expiry date is empty, and the property is being approved then implicity assume it's 

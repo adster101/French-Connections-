@@ -59,12 +59,10 @@ jQuery(document).ready(function() {
           });
           //  Fit these bounds to the map
           map.fitBounds(bounds);
-          
-          
         }
         
          var markerCluster = new MarkerClusterer(map, markers,{
-           maxZoom: 10,
+           maxZoom: 12,
            gridSize: 60,
            averageCenter: false
          });
