@@ -382,7 +382,7 @@ class Renewals extends JApplicationCli
     // Could just as easily be done with comma separated list as a param on the rental component
     $users_to_ignore = array();
     $users_to_ignore[] = JUser::getInstance('atleisure')->id;
-    
+
     $db = JFactory::getDBO();
     /**
      * Get the date now
@@ -395,7 +395,7 @@ class Renewals extends JApplicationCli
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
-    
+
     $query->select('
       a.id, 
       datediff(a.expiry_date, now()) as days, 
