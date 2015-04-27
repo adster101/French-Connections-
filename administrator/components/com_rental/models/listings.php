@@ -239,12 +239,8 @@ class RentalModelListings extends JModelList
         // This pulls out the property with ID searched on, it's parent and any siblings.
         $query->where('a.id = ' . (int) $search);
       }
-<<<<<<< HEAD
-      elseif (is_array(explode(',', $search) && (strpos($search,',') > 0)))
-=======
       // If the exploded array contains more than one element and the search term contains a comma
       elseif (count(explode(',', $search) > 1) && (strpos($search,',') > 0))
->>>>>>> release-1.9
       {
         // Escape the search term
         $search = $db->escape($search);
