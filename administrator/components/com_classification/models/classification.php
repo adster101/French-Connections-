@@ -138,8 +138,11 @@ class ClassificationModelClassification extends JModelAdmin
 
     foreach ($property_types as $type)
     {
+      // Replace spaces with dashes as per the search component
+      $name = JStringNormalise::toDashSeparated(JApplication::stringURLSafe($type->title));
+      
       $field = $fieldset->addChild('field');
-      $field->addAttribute('name', strtolower($type->title));
+      $field->addAttribute('name', strtolower($name));
       $field->addAttribute('type', 'editor');
       $field->addAttribute('label', $type->title);
       $field->addAttribute('multiple', true);

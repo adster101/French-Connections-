@@ -1217,7 +1217,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
     $table = JTable::getInstance('Property', 'RentalTable');
 
-
     // Store the data.
     if (!$table->save($data))
     {
