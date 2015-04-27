@@ -330,7 +330,6 @@ class RentalModelUnitVersions extends JModelAdmin
       //$table->set('_tbl_key', 'id');
       $table->set('_tbl_keys', array('id'));
 
-
       // Bind the data.
       if (!$table->bind($data))
       {
@@ -753,7 +752,7 @@ class RentalModelUnitVersions extends JModelAdmin
     }
     
     // Check if we're uploading an image...
-    if (array_key_exists('image_file_name', $data))
+    if (array_key_exists('image_file_name', $data) || array_key_exists('caption', $data))
     {
       return true;
     }

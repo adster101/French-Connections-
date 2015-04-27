@@ -115,14 +115,20 @@ class RentalModelProperty extends JModelAdmin
     }
     else
     {
-      // Need to get the value of the renewal/update
+      // Here we are marking the property as 'payment received' which submits to PFR.
+      // Also a payment is being made so we assume some sort of re-instatement and hence 
+      // clear the snooze until date.
+      if ($data['value'] > 0 && $data['review'] == 2)
+      {
+        $data['snooze_until'] = '';
+      }
     }
 
     if (empty($data['website_visible']))
     {
       $data['website_visible'] = '';
     }
-    
+
     if (!parent::save($data))
     {
       // Oops...
@@ -134,7 +140,7 @@ class RentalModelProperty extends JModelAdmin
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/models');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
     $note = JModelLegacy::getInstance('Note', 'NotesModel', $config = array('ignore_request' => true));
-    
+
     // Set the property ID
     $data['property_id'] = $data['id'];
     unset($data['id']);

@@ -71,6 +71,28 @@
 // Large desktops
 @import "../../../../media/jui/less/responsive-1200px-min.less";
 
+#stlivechat21 a { 
+  z-index: 999; 
+  position: fixed; 
+  border-radius: 3px 0 0 3px; 
+  font-size: 14px; 
+  right: 0px; 
+  top: 40%;
+  text-decoration: none; 
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.30);  
+  background-color: @blue; 
+  padding:10px;
+}
+
+#stlivechat21 a:before {
+	font-family: 'IcoMoon';
+	content: "\25\00a0";
+}
+
+#stlivechat21 a {
+  color:white;
+} 
+
 .view-listings {
   .table-striped {
     & tr.alert-success {

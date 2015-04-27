@@ -23,7 +23,7 @@ class AccommodationViewExpired extends JViewLegacy
 
     $model = $this->getModel();
    
-    
+   
     if (!$this->item = $model->getItem(true))
     {
       throw new Exception(JText::_('WOOT'), 500);

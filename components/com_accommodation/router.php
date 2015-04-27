@@ -18,26 +18,29 @@ defined('_JEXEC') or die;
  *
  * @since   2.5
  */
-function AccommodationBuildRoute(&$query) {
+function AccommodationBuildRoute(&$query)
+{
 
   $segments = array();
   // get a menu item based on Itemid or currently active
+
   $app = JFactory::getApplication();
   $menu = $app->getMenu();
 
-  $uri = JFactory::getUri();
-
-  if (empty($query['Itemid'])) {
+  if (empty($query['Itemid']))
+  {
     $menuItem = $menu->getActive();
-  } else {
+  }
+  else
+  {
     $menuItem = $menu->getItem($query['Itemid']);
   }
 
-  if (!empty($query['id'])) {
+  if (!empty($query['id']))
+  {
     $segments[] = $query['id'];
     unset($query['id']);
   }
-
 
   return $segments;
 }
@@ -51,17 +54,16 @@ function AccommodationBuildRoute(&$query) {
  *
  * @since   2.5
  */
-function AccommodationParseRoute($segments) {
-
-
+function AccommodationParseRoute($segments)
+{
   $vars = array();
   $app = JFactory::getApplication();
   $lang = JFactory::getLanguage();
   $lang->load('com_accommodation');
-  $menu = $app->getMenu();
+  JLoader::register('SearchHelper', JPATH_LIBRARIES . '/frenchconnections/helpers/search.php');
 
-  // Count segments
-  $count = count($segments);
+  $accommodation_itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
+  $realestate_itemid = SearchHelper::getItemid(array('component', 'com_realestate'));
 
   // The first segment has to be the alias the search is based on.
   $vars['id'] = (int) $segments[0];
@@ -70,9 +72,11 @@ function AccommodationParseRoute($segments) {
 
   $unit_id = $input->get('unit_id', '', 'int');
 
-  if (empty($unit_id)) {
+  if (empty($unit_id))
+  {
 
     // Need to look up unit id based on the id.
+    // TO DO - Make this into a function...
     $db = JFactory::getDbo();
 
     $query = $db->getQuery(true);
@@ -86,12 +90,22 @@ function AccommodationParseRoute($segments) {
 
     $unit = $db->loadObject();
 
-    if (empty($unit)) {
+    if (empty($unit))
+    {
+
+      // Look up the ID to see if we're dealing with a realestate property
+      if (SearchHelper::isRealestateProperty($segments[0]))
+      {
+        // Work out the link and redirect
+        $link = 'index.php?option=com_realestate&Itemid=' . $realestate_itemid . '&id=' . (int) $segments[0];
+        $app->redirect(JRoute::_($link, true));
+      }
+
       throw new Exception(JText::_('WOOT'), 404);
     }
 
     // Redirect to the correct URL
-    $link = 'index.php?option=com_accommodation&Itemid=259&id=' . (int) $segments[0] . '&unit_id=' . (int) $unit->id;
+    $link = 'index.php?option=com_accommodation&Itemid=' . $accommodation_itemid . '&id=' . (int) $segments[0] . '&unit_id=' . (int) $unit->id;
 
     $app->redirect(JRoute::_($link, true));
   }

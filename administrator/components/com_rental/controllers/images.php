@@ -16,7 +16,8 @@ require_once(JPATH_ADMINISTRATOR . '/components/com_media/helpers/media.php');
 /**
  * HelloWorld Controller
  */
-class RentalControllerImages extends RentalControllerBase {
+class RentalControllerImages extends RentalControllerBase
+{
 
   protected $extension;
 
@@ -28,16 +29,17 @@ class RentalControllerImages extends RentalControllerBase {
    * @since  1.6
    * @see    JController
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension)) {
+    if (empty($this->extension))
+    {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
 
     $this->registerTask('save', 'cancel');
-    
   }
 
   /**
@@ -47,7 +49,8 @@ class RentalControllerImages extends RentalControllerBase {
    *
    * @since   12.2
    */
-  public function reorder() {
+  public function reorder()
+  {
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -57,12 +60,15 @@ class RentalControllerImages extends RentalControllerBase {
 
     $model = $this->getModel();
     $return = $model->reorder($ids, $inc);
-    if ($return === false) {
+    if ($return === false)
+    {
       // Reorder failed.
       $message = JText::sprintf('JLIB_APPLICATION_ERROR_REORDER_FAILED', $model->getError());
       $this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . '&unit_id=' . (int) $unit_id, false), $message, 'error');
       return false;
-    } else {
+    }
+    else
+    {
       // Reorder succeeded.
       $message = JText::_('JLIB_APPLICATION_SUCCESS_ITEM_REORDERED');
       $this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . '&unit_id=' . (int) $unit_id, false), $message);
@@ -74,7 +80,8 @@ class RentalControllerImages extends RentalControllerBase {
    * Proxy for getModel.
    * @since	1.6
    */
-  public function getModel($name = 'Image', $prefix = 'RentalModel') {
+  public function getModel($name = 'Image', $prefix = 'RentalModel')
+  {
     $model = parent::getModel($name, $prefix, array('ignore_request' => true));
     return $model;
   }
@@ -85,9 +92,8 @@ class RentalControllerImages extends RentalControllerBase {
    */
   protected $folder = '';
 
-  
-
-  function updatecaption() {
+  function updatecaption()
+  {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
@@ -104,7 +110,8 @@ class RentalControllerImages extends RentalControllerBase {
     $data['id'] = $input->get('id', '', 'int');
 
     // Check that this user is authorised to edit (i.e. owns) this this property
-    if (!$this->allowEdit($data, 'unit_id')) {
+    if (!$this->allowEdit($data, 'unit_id'))
+    {
       $response['message'] = JText::_('NOT_AUTHORISED');
       //echo $response;
       //jexit(); // Exit this request now as results passed back to client via xhr transport.
@@ -115,7 +122,8 @@ class RentalControllerImages extends RentalControllerBase {
 
     $validData = $model->validate($form, $data);
 
-    if (!$validData) {
+    if (!$validData)
+    {
       // Problem saving, oops
       $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_IS_INVALID');
       $response['error'] = 1;
@@ -126,7 +134,8 @@ class RentalControllerImages extends RentalControllerBase {
     // Need to ensure the caption is filtered at some point
     // If we are happy to save and have something to save
     // Also, need to amend the save method so that it triggers a new version
-    if (!$model->save($data)) {
+    if (!$model->save($validData))
+    {
       // Problem saving, oops
       $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
       $response['error'] = 1;
@@ -136,7 +145,7 @@ class RentalControllerImages extends RentalControllerBase {
 
     $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_UPDATED');
     $response['error'] = 0;
-    
+
     echo json_encode($response);
 
     jexit(); // Exit this request now as results passed back to client via xhr transport.
@@ -144,7 +153,8 @@ class RentalControllerImages extends RentalControllerBase {
     // User ID updates caption ID from to on this
   }
 
-  function delete() {
+  function delete()
+  {
 
     // Check that this is a valid call from a logged in user.
     JSession::checkToken('get') or die('Invalid Token');
@@ -166,9 +176,12 @@ class RentalControllerImages extends RentalControllerBase {
     //return false;
     //}
 
-    if (!$model->delete($id)) {
+    if (!$model->delete($id))
+    {
       $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_IMAGE_COULD_NOT_BE_DELETED'), 'error');
-    } else {
+    }
+    else
+    {
       // Set the message
       $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_IMAGE_SUCCESSFULLY_DELETED'), 'message');
     }
@@ -183,16 +196,17 @@ class RentalControllerImages extends RentalControllerBase {
    *
    */
 
-  function upload() {
+  function upload()
+  {
 
     // Get the app and user instances
     $app = JFactory::getApplication($initialise = false);
     $user = JFactory::getUser();
     $filter = new JFilterInput();
-    
+
     // Load the relevant model(s) so we can save the data back to the db
     $model = $this->getModel('Image');
-    
+
     // Initialise an array to return the info about the uploaded image
     $return = array();
 
@@ -204,10 +218,8 @@ class RentalControllerImages extends RentalControllerBase {
 
     // Get the unit version id
     //$id = $app->input->get('id', '', 'int');
-
     // Get the unit version id
     //$review = $app->input->get('review', '', 'boolean');
-
     // Set the filepath for the images to be moved into
     $this->folder = JPATH_SITE . '/images/property/' . $unit_id . '/';
 
@@ -218,7 +230,8 @@ class RentalControllerImages extends RentalControllerBase {
     JSession::checkToken('GET') or die('Invalid Token');
 
     // Check that this user is authorised to upload images here
-    if (!$user->authorise('core.create', $this->extension)) {
+    if (!$user->authorise('core.create', $this->extension))
+    {
       $app->enqueueMessage(JText::_('COM_RENTAL_IMAGES_NOT_AUTHORISED'), 'message');
       $this->setRedirect(JRoute::_('index.php?option=com_rental&view=images' . $this->getRedirectToItemAppend($unit_id, 'id'), false));
     }
@@ -228,7 +241,7 @@ class RentalControllerImages extends RentalControllerBase {
 
     // Get some data from the request
     $files = JRequest::getVar('jform', array(), 'files', 'array');
-          
+
 
     // Input is in the form of an associative array containing numerically indexed arrays - passed in from PHP/Apache in this format?
     // We want a numerically indexed array containing associative arrays
@@ -237,7 +250,8 @@ class RentalControllerImages extends RentalControllerBase {
             array($this, 'reformatFilesArray'), (array) $files['name'], (array) $files['type'], (array) $files['tmp_name'], (array) $files['size']
     );
 
-    foreach ($uploaded_file as $key => &$file) {
+    foreach ($uploaded_file as $key => &$file)
+    {
 
       // Initialise an error component of the $upload_file array
       $file['error'] = '';
@@ -248,14 +262,16 @@ class RentalControllerImages extends RentalControllerBase {
               $_SERVER['CONTENT_LENGTH'] > ($params->get('upload_maxsize', 0) * 1024 * 1024) ||
               $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('upload_max_filesize')) * 1024 * 1024 ||
               $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('post_max_size')) * 1024 * 1024 ||
-              $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('memory_limit')) * 1024 * 1024) {
+              $_SERVER['CONTENT_LENGTH'] > (int) (ini_get('memory_limit')) * 1024 * 1024)
+      {
         // Not acceptable. Too large a total file size.
         // return an error message and ...
         $file['error'] = JText::_('COM_RENTAL_IMAGES_TOTAL_FILE_SIZE_TOO_LARGE');
       }
 
       // Check that it has a valid name
-      if (!isset($file['name'])) {
+      if (!isset($file['name']))
+      {
         // This file doesn't have a filename after running through make path safe
         $file['error'][] = JText::_('COM_RENTAL_IMAGES_IMAGE_NAME_NOT_VALID');
       }
@@ -264,23 +280,27 @@ class RentalControllerImages extends RentalControllerBase {
       $err = null;
 
       // canUpload does a further raft of checks to ensure that the image is 'safe' (i.e. checks mime type and that it is an image file etc
-      if (!MediaHelper::canUpload($file, $err)) {
+      if (!MediaHelper::canUpload($file, $err))
+      {
         // The file can't be uploaded
         $file['error'][] = JText::_($err);
       }
 
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
-      if (empty($file['error'])) {
+      if (empty($file['error']))
+      {
 
         // Move the file from the tmp location to the property image folder
-        if (!JFile::upload($file['tmp_name'], $file['filepath'])) {
+        if (!JFile::upload($file['tmp_name'], $file['filepath']))
+        {
           // Error in upload
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE');
         }
       }
 
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
-      if (empty($file['error'])) {
+      if (empty($file['error']))
+      {
         // Add the url to the uploaded files array
         $file['caption'] = '';
         $file['image_file_name'] = $file['name'];
@@ -294,7 +314,8 @@ class RentalControllerImages extends RentalControllerBase {
         $file['thumbnail_url'] = '/' . 'images/property/' . $unit_id . '/thumb/' . $file['name'];
 
         // If we are happy to save and have something to save
-        if (!$model->save($file)) {
+        if (!$model->save($file))
+        {
           $file['error'][] = JText::_('COM_MEDIA_ERROR_UNABLE_TO_SAVE_FILE');
         }
 
@@ -324,7 +345,8 @@ class RentalControllerImages extends RentalControllerBase {
    * @return	array
    * @access	protected
    */
-  protected function reformatFilesArray($name, $type, $tmp_name, $size, $caption = '') {
+  protected function reformatFilesArray($name, $type, $tmp_name, $size, $caption = '')
+  {
     // Prepend a unique ID to the filename so that all files have a unique name.
     $name = uniqid() . '-' . JFile::makeSafe(str_replace(' ', '-', $name));
     return array(
@@ -344,24 +366,25 @@ class RentalControllerImages extends RentalControllerBase {
    *
    * @since   3.0
    */
-  public function saveOrderAjax() {
-    
+  public function saveOrderAjax()
+  {
+
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken() or die('Invalid Token');  
-    
+    JSession::checkToken() or die('Invalid Token');
+
     $input = JFactory::getApplication()->input;
-    
+
     $sort = $input->get('sort', array(), 'array');
-    
+
     $order = array();
-    
-    foreach ($sort as $k => $v) {
+
+    foreach ($sort as $k => $v)
+    {
       $order[] = $k + 1;
     }
-    
+
     //$pks = $this->input->post->get('cid', array(), 'array');
     //$order = $this->input->post->get('order', array(), 'array');
-
     // Sanitize the input
     JArrayHelper::toInteger($sort);
     JArrayHelper::toInteger($order);
@@ -372,7 +395,8 @@ class RentalControllerImages extends RentalControllerBase {
     // Save the ordering
     $return = $model->saveorder($sort, $order);
 
-    if ($return) {
+    if ($return)
+    {
       echo "1";
     }
 
@@ -386,14 +410,16 @@ class RentalControllerImages extends RentalControllerBase {
    *
    */
 
-  public function manage() {
+  public function manage()
+  {
 
     // $id is the listing the user is trying to edit
     $id = $this->input->get('unit_id', '', 'int');
 
     $data['id'] = $id;
 
-    if (!$this->allowEdit($data, 'id')) {
+    if (!$this->allowEdit($data, 'id'))
+    {
       $this->setRedirect(
               JRoute::_(
                       'index.php?option=' . $this->option, false)
@@ -404,7 +430,7 @@ class RentalControllerImages extends RentalControllerBase {
       return false;
     }
 
-    $this->holdEditId($this->option . '.edit.' .$this->context, $id);
+    $this->holdEditId($this->option . '.edit.' . $this->context, $id);
 
     $this->setRedirect(
             JRoute::_(
@@ -413,25 +439,29 @@ class RentalControllerImages extends RentalControllerBase {
     return true;
   }
 
-  public function saveandnext() {
+  public function saveandnext()
+  {
 
     // Get the contents of the request data
     $input = JFactory::getApplication()->input;
     // If the task is save and next
-    if ($this->task == 'saveandnext') {
+    if ($this->task == 'saveandnext')
+    {
       // Check if we have a next field in the request data
       $next = $input->get('next', '', 'base64');
       $url = base64_decode($next);
       // And set the redirect if we have
-      if ($next) {
+      if ($next)
+      {
         $this->setRedirect(base64_decode($next));
       }
     }
     return true;
   }
 
-  public function cancel($key = null) {
-    
+  public function cancel($key = null)
+  {
+
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
     // Get the property ID from the form data and redirect 
@@ -447,7 +477,7 @@ class RentalControllerImages extends RentalControllerBase {
                     'index.php?option=' . $this->option . '&view=listing&id=' . (int) $property_id, false
             )
     );
-    
+
     return true;
   }
 

@@ -84,15 +84,6 @@ class RentalViewPropertyversions extends JViewLegacy
    */
   protected function addToolBar()
   {
-    // Determine the view we are using.
-    $view = strtolower(JRequest::getVar('view'));
-
-    // Get the user details
-    $user = JFactory::getUser();
-    $userId = $user->id;
-
-    // Is this a new property?
-    $isNew = $this->item->id == 0;
 
     // Get component level permissions
     $canDo = RentalHelper::getActions();
@@ -135,9 +126,11 @@ class RentalViewPropertyversions extends JViewLegacy
   protected function setDocument()
   {
 
-    $isNew = $this->item->id == 0;
-    $document = JFactory::getDocument();
+    RentalHelper::addLiveChat($this->status->expiry_date);
 
+    $document = JFactory::getDocument();
+    
+    
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');

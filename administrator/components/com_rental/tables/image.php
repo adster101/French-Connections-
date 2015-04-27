@@ -107,10 +107,9 @@ class RentalTableImage extends JTable implements JObservableInterface {
     if (property_exists($this, 'ordering') && $this->id == 0) {
       $this->ordering = self::getNextOrder('version_id = ' . (int) $this->version_id);
     }
-   
-    $caption = $this->caption;
-    
-    $this->caption = PropertyHelper::sentence_case($this->caption);
+       
+    //$this->caption = PropertyHelper::sentence_case($this->caption);
+    $this->caption = ucfirst($this->caption);
     
     return parent::check();
   }

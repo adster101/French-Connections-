@@ -249,7 +249,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                   </li>
                 <?php endif; ?>
                 <?php foreach ($this->images as $images => $image) : ?> 
-                  <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
+                  <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
 
                   <li>
                     <img src="<?php echo $src ?>" /> 

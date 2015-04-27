@@ -2,8 +2,10 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('bootstrap.popover');
+JHtml::_('behavior.formvalidation');
+
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_stats'); ?>" method="post" name="adminForm" id="adminForm" class="form-vertical">
+<form action="<?php echo JRoute::_('index.php?option=com_stats'); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
   
   <?php echo JLayoutHelper::render('frenchconnections.search.simple', array('view' => $this)); ?>
   <hr />

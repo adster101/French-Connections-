@@ -12,6 +12,10 @@ $progress = $displayData['status'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 ?>
 
+<?php if (empty($progress->expiry_date) && $progress->review == 1) : ?>
+  <div id="stlivechat21"></div>
+<?php endif; ?>
+
 <!--<div class="row-fluid">
   <div class="span9">-->
 <?php if ($view == 'listing' && $progress->review == 1 && $progress->complete) : //No notices, listing view for a property that needs review      ?>
@@ -35,26 +39,31 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
   </div>
 <?php elseif ($view == 'listing' && !$progress->review && $progress->days_to_renewal >= 7 && $progress->complete) : ?>
   <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_BLURB'); ?>
-<?php elseif ($progress->days_to_renewal <= 7 && !$progress->review && !empty($progress->expiry_date)) : ?>
+<?php elseif ($progress->days_to_renewal > 0 && $progress->days_to_renewal <= 7 && !$progress->review && !empty($progress->expiry_date)) : ?>
   <div class="alert alert-warning">       
-    <h4>Listing Status</h4>
+    <h4>Listing status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
     <?php echo JHtml::_('property.renewalButton', $progress->days_to_renewal, $progress->id); ?>
   </div>
 <?php elseif ($progress->days_to_renewal < 0 && !empty($progress->expiry_date) && $progress->review < 2) : ?>
   <div class="alert alert-danger">       
-    <h4>Listing Status</h4>
+    <h4>Listing status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_EXPIRED'); ?></p>
     <?php echo JHtml::_('property.renewalButton', $progress->days_to_renewal, $progress->id); ?>
   </div>    
 <?php elseif ($progress->review == 1 && $progress->complete) : ?>
   <div class="alert alert-info">
-    <h4>Listing Status</h4>
+    <h4>Listing status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_UNSUBMITTED_CHANGES'); ?></p>
     <a href="<?php echo JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $progress->id) ?>" class="btn btn-primary">
       <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMIT_FOR_REVIEW_BUTTON'); ?>
       <i class="icon icon-arrow-right-2 icon-white"> </i>
     </a>
+  </div>
+<?php elseif (!$progress->complete && !empty($progress->expiry_date)) : ?>
+  <div class="alert alert-info">
+    <h4>Listing status</h4>
+      <?php echo JText::_('COM_RENTAL_LISTING_COMPLETE_TARIFFS_AVAILABILITY_BEFORE_REVIEW'); ?>
   </div>
 <?php elseif ($progress->review == 2) : ?>
   <div class="alert alert-info">

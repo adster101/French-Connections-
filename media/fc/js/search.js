@@ -1,16 +1,15 @@
 var infowindow;
 jQuery(document).ready(function() {
 
-// Works on the tabs on the search results page. Needs to be made more generic
+  // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 
-//jQuery('#map_canvas').hide();
-
+    //jQuery('#map_canvas').hide();
     if (!window.google) {
       loadGoogleMaps('initmap'); // Asych load the google maps stuff
     }
 
-// Store the selected tab #ref in local storage, IE8+
+    // Store the selected tab #ref in local storage, IE8+
     localStorage['selectedTab'] = jQuery(e.target).attr('href');
     // Get the selected tab from the local storage
     var selectedTab = localStorage['selectedTab'];
@@ -18,8 +17,8 @@ jQuery(document).ready(function() {
     // If the selected tab is the map tag then grab the markers
     if (selectedTab == '#mapsearch') {
 
-// The path of the search, e.g. /search or /fr/search
-// This must either be 'forsale' or 'accommodation'
+      // The path of the search, e.g. /search or /fr/search
+      // This must either be 'forsale' or 'accommodation'
       var action = jQuery('#property-search').attr('action').split('/');
       // Filter out the empty elements
       action = action.filter(function(e) {
@@ -37,7 +36,7 @@ jQuery(document).ready(function() {
 
         // Get the map instance
         map = document.map;
-        markers = {};
+        markers = [];
         // Loop over all data (properties) and create a new marker
         for (var i = 0; i < data.length; i++) {
 
@@ -61,6 +60,13 @@ jQuery(document).ready(function() {
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
+        
+         var markerCluster = new MarkerClusterer(map, markers,{
+           maxZoom: 12,
+           gridSize: 60,
+           averageCenter: false
+         });
+         
       }).done(function() {
 
       });
@@ -250,7 +256,7 @@ function getPath(event) {
   // Pull out the offers and LWL flags...
   var offers = loadPageVar("offers");
   var lwl = loadPageVar("lwl");
-  
+
   // Fairly obvious but if we have both add to the string otherwise just add one or the other.
   if (offers === 'true' & lwl === 'true') {
     path = path + '?offers=true&lwl=true';
@@ -270,7 +276,7 @@ function initmap() {
   var myLatLng = new google.maps.LatLng(46.8, 2.8);
   var myOptions = {
     center: myLatLng,
-    zoom: 6,
+    zoom: 7,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     disableDefaultUI: true,
     zoomControl: true

@@ -142,6 +142,7 @@ class RentalModelListing extends JModelList
               ->set('published = 1')
               ->set('checked_out = \'\'')
               ->set('checked_out_time = \'\'')
+              //->set('snooze_until = \'\'')
               ->set('value = null');
 
       // If the expiry date is empty, and the property is being approved then implicity assume it's 
@@ -474,13 +475,13 @@ class RentalModelListing extends JModelList
       if (!$unit->availability)
       {
         $unit_state->availability = false; // Assume we have some images
-        $listing->complete = ($listing->expiry_date) ? true : false; // Should allow existing props to submit without 
+        $listing->complete = false; // Should allow existing props to submit without 
       }
 
       if (!$unit->tariffs)
       {
         $unit_state->tariffs = false; // Assume we have some images
-        $listing->complete = ($listing->expiry_date) ? true : false; // Should allow existing props to submit without 
+        $listing->complete = false; // Should allow existing props to submit without 
       }
 
       if (!$unit->images)

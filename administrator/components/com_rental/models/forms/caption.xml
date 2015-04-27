@@ -17,7 +17,7 @@
       filter="int">
     </field>
     <field 
-      name="property_id"
+      name="unit_id"
       type="hidden"
       filter="int">
     </field>

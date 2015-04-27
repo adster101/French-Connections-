@@ -1023,7 +1023,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       // Update the expiry date
       $expiry_date = $this->getNewExpiryDate();
 
-      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id))
+      if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id, true))
       {
         // TO DO - Log this
         return false;
@@ -1052,7 +1052,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $expiry_date = $this->getNewExpiryDate();
 
       // Renewal with amendments, update the total and review state.
-      $this->updateProperty($listing_id, $total, $review = 2, $expiry_date, '', '', $autorenewal = $transaction_id);
+      $this->updateProperty($listing_id, $total, $review = 2, $expiry_date, '', '', $autorenewal = $transaction_id, true);
 
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
@@ -1075,7 +1075,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
       $total = $this->getOrderTotal($order);
 
       // Update the review status 
-      $this->updateProperty($listing_id, $total, $review = 2, '', '', $autorenewal = $transaction_id);
+      $this->updateProperty($listing_id, $total, $review = 2, '', '', $autorenewal = $transaction_id, true);
 
       // Send payment receipt
       $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
@@ -1166,9 +1166,10 @@ class FrenchConnectionsModelPayment extends JModelLegacy
    * @param type $expiry_date - The new expiry date
    * @param type $published - The new published state
    * @param type $autorenewal - The autorenewal transaction ID
+   * @param type $reset_snooze - boolean whether to reset the snooze date or not.
    * @return boolean
    */
-  public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '')
+  public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '', $reset_snooze = false)
   {
 
     // Initialise some variable
@@ -1208,9 +1209,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     {
       $data['published'] = $published;
     }
+    
+    if ($reset_snooze)
+    {
+      $data['snooze_until'] = '';
+    }
 
     $table = JTable::getInstance('Property', 'RentalTable');
-
 
     // Store the data.
     if (!$table->save($data))

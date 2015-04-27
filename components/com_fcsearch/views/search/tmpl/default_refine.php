@@ -64,7 +64,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
       <?php endif; ?>
       <?php
       if (!empty($this->so)) :
-              $query_string_new = $query_string_original;
+        $query_string_new = $query_string_original;
 
         if ($query_string_new['offers'])
         {
@@ -121,8 +121,14 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
     <div class="panel-body">
       <?php foreach ($items as $key => $value) : ?> 
         <?php if ($key > 0) : ?>
+          <?php
+          // TO DO - Make this into a function or sommat as it's repeated below.
+          $tmp = explode('/', $uri); // Split the url out on the slash
+          $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // Remove the first 3 value of the URI
+          $filters = (!empty($filters)) ? '/' . implode('/', $filters) : '';
+          ?>
           <p>
-            <a class="btn btn-sm btn-default" href="<?php echo JRoute::_($items[$key - 1]->link); ?>">
+            <a class="btn btn-sm btn-default" href="<?php echo JRoute::_($items[$key - 1]->link . $filters . $offers . $lwl); ?>">
               <span class="close"> &times;</span>
               <?php echo $value->name = stripslashes(htmlspecialchars($value->name, ENT_COMPAT, 'UTF-8')); ?>
             </a>
@@ -173,7 +179,6 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
           <?php echo '...'; ?>
         <?php endif; ?> 
       <?php endif; ?>
-
     </div>
   </div>
 <?php endif; ?>

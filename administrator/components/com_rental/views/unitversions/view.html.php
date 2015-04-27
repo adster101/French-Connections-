@@ -139,7 +139,9 @@ class RentalViewUnitversions extends JViewLegacy
    */
   protected function setDocument()
   {
-    $isNew = $this->item->id == 0;
+    // Add the live chat script, or not!
+    RentalHelper::addLiveChat($this->status->expiry_date);
+
     $document = JFactory::getDocument();
     $document->setTitle($isNew ? JText::_('COM_RENTAL_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id) );
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

@@ -56,7 +56,7 @@ class FcadminModelWhereheard extends JModelList
     $query->join('left', '#__users b on a.user_id = b.id');
     $query->where('b.registerDate >=' . $db->quote(JHtml::_('date', '-6 MONTHS', 'Y-m-d')));
     $query->group('where_heard WITH ROLLUP');
-
+        
     return $query;
   }
 

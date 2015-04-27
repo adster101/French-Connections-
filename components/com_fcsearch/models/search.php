@@ -152,7 +152,7 @@ class FcSearchModelSearch extends JModelList
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude,' . $db->QuoteName('description') . ',' . $db->QuoteName('title'));
+    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude,' . $db->QuoteName('description') . ',' . $db->QuoteName('title') . ',' . $db->quoteName('property_type_info'));
     if ($lang == 'fr')
     {
       $query->from($db->quoteName('#__classifications_translations') . ' AS t');

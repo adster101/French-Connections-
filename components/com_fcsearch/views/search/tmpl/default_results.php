@@ -74,7 +74,7 @@ $ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
       <ul class="nav nav-tabs">
         <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
         <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
-        <?php if ((empty($property_filter) && empty($accommodation_filter))) : ?>
+        <?php if ((empty($property_filter) && empty($accommodation_filter)) || (!empty($property_filter) && !empty($this->seo_copy)) ) : ?>
           <li><a href="#localinfo" data-toggle="tab"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Info</a></li>
         <?php endif; ?>
         <li class="visible-sm-inline-block visible-xs-inline-block pull-right">
@@ -139,7 +139,7 @@ $ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
       </div>
       <div class="tab-pane" id="localinfo">
         <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
-        <?php echo $this->localinfo->description; ?>
+        <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->title; ?>
       </div>
     </div>
     <div class="col-lg-3 col-md-3 refine-search">
