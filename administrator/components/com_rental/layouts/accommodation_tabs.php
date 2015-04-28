@@ -54,7 +54,7 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 
   if (empty($status->expiry_date) && $status->review < 2)
   {
-    echo JHtml::_('property.progressTab', $status->payment, $status->complete,$status->expiry_date, 'PAYMENT', 'index.php?option=com_rentale&task=payment.summary&property_id=' . (int) $status->id, '', $view, 'payment');
+    echo JHtml::_('property.progressTab', $status->payment, $status->complete,$status->expiry_date, 'PAYMENT', 'index.php?option=com_rental&task=payment.summary&id=' . (int) $status->id, '', $view, 'payment');
   }
   ?>
 </ul>

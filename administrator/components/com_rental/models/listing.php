@@ -163,6 +163,11 @@ class RentalModelListing extends JModelList
     catch (Exception $e)
     {
 
+      // Log this so we can track any errors and trace why sometimes property version doesn't
+      // publish correctly. Seems unlikely however...
+      JLog::addLogger(array('text_file' => 'listing.publish.php'), 'DEBUG', array('listing'));
+      JLog::add('Publish listing ' . $items[0]->id . $e->getMessage(), 'DEBUG', 'listing');
+
       $db->transactionRollback();
 
       return false;
