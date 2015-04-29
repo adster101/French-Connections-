@@ -71,6 +71,7 @@ class Renewals extends JApplicationCli
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
+    
     // Process the auto renewals
     $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
 
@@ -312,8 +313,6 @@ class Renewals extends JApplicationCli
 
             // TO DO - Write this out into the protx payment tables...            
           }
-
-          //$this->sendPaymentReceipt();
 
           break;
 
