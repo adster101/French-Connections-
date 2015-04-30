@@ -71,7 +71,6 @@ class Renewals extends JApplicationCli
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    
     // Process the auto renewals
     $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
 
@@ -350,12 +349,12 @@ class Renewals extends JApplicationCli
 
     // Add the tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
-
+   
     // Get an instance of the note table
     $table = JTable::getInstance('Note', 'NotesTable');
-
+    
     foreach ($notes as $note)
-    {
+    {  
       if (!$table->bind($note))
       {
         return false;
@@ -365,8 +364,6 @@ class Renewals extends JApplicationCli
       {
         return false;
       }
-
-      $table->reset();
     }
 
     return true;

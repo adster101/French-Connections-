@@ -286,7 +286,8 @@ abstract class RentalHelper
         'rental.notes.add',
         'rental.images.delete',
         'rental.images.reorder',
-        'rental.listings.download'
+        'rental.listings.download',
+        'rental.listing.snooze24'
     );
 
 

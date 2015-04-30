@@ -23,6 +23,7 @@
 		<action name="rental.contactdetails.view" title="Access contact details view" description="" />
 		<action name="rental.images.view" title="Access images view" description="" />
 		<action name="rental.listing.view" title="Access listing view" description="" />
+		<action name="rental.listing.snooze24" title="Snooze property for 24 hours" description="" />
 		<action name="rental.review.view" title="Access listing review view" description="" />
 		<action name="rental.listings.view" title="Access listings view" description="" />
 		<action name="rental.listings.download" title="Download listings" description="" />

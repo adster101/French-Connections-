@@ -168,8 +168,6 @@ class RealestateRenewals extends JApplicationCli
       {
         return false;
       }
-
-      $table->reset();
     }
 
     return true;
