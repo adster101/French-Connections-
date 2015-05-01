@@ -60,7 +60,7 @@ class RealestateViewListings extends JViewLegacy
   protected function addToolBar()
   {
 
-    $canDo = PropertyHelper::getActions();
+    $canDo = RealEstateHelper::getActions();
 
     JToolBarHelper::title(JText::_('COM_REALESTATE_MANAGER'), 'list');
 
@@ -83,9 +83,14 @@ class RealestateViewListings extends JViewLegacy
     }
 
     // Add the custom snooze button
-    if ($canDo->get('rental.listing.admin'))
+    if ($canDo->get('realestate.listing.admin'))
     {
       JToolbarHelper::custom('property.edit', 'refresh', '', 'COM_REALESTATE_UPDATE_PROPERTY', true);
+    }
+
+    if ($canDo->get('realestate.listing.snooze24'))
+    {
+      JToolbarHelper::custom('listing.snooze24', 'clock', '', 'COM_RENTAL_SNOOZE_24', true);
     }
 
     if ($canDo->get('core.admin'))

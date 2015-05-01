@@ -217,9 +217,9 @@ jQuery(document).ready(function() {
     jQuery(this).on('keyup', function(event) {
 
       // On the keyup event, update the value of the span count element
-      var length = jQuery('#jform_offer_description').val().length;
+      var length = jQuery(this).val().length;
 
-      jQuery('.offer-counter').text(150 - length);
+      jQuery('.offer-counter').text((150 - length));
 
     });
   });

@@ -477,13 +477,13 @@ class RentalModelListing extends JModelList
         $listing->complete = false; // Listing isn't complete...
       }
 
-      if (!$unit->availability)
+      if (!$unit->availability && $unit->published)
       {
         $unit_state->availability = false; // Assume we have some images
         $listing->complete = false; // Should allow existing props to submit without 
       }
 
-      if (!$unit->tariffs)
+      if (!$unit->tariffs && $unit->published)
       {
         $unit_state->tariffs = false; // Assume we have some images
         $listing->complete = false; // Should allow existing props to submit without 

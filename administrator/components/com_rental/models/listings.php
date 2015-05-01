@@ -35,6 +35,7 @@ class RentalModelListings extends JModelList
           'created_user_id', 'a.created_user_id',
           'a.created_on', 'a.created_on',
           'snoozed', 'published',
+          'modified', 'a.modified',
           'date_filter',
           'value', 'a.value'
       );
@@ -55,7 +56,6 @@ class RentalModelListings extends JModelList
    */
   protected function populateState($ordering = null, $direction = null)
   {
-
 
     // List state information.
     parent::populateState('a.id', 'asc');
@@ -176,29 +176,25 @@ class RentalModelListings extends JModelList
       $query->where('a.review = ' . (int) $review_state);
     }
 
-    // Filter by snooze state
-    // Should only apply to users who can view and change snooze state
-    if ($canDo->get('rental.notes.add'))
-    {
-      $snooze_state = $this->getState('filter.snoozed');
-
-      // If snooze state is not set or set to hide snoozed...
-      if ($snooze_state == false || $snooze_state == 1)
-      {
-        // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
-        $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
-      }
-      elseif ($snooze_state == 2)
-      {
-        // Don't filter, show snoozed properties. Point?
-      }
-    }
-
     // Filter on expiry date
     $date_filter = $this->getState('filter.date_filter');
     $start_date = JFactory::getDate($this->getState('filter.start_date'))->calendar('Y-m-d');
     $end_date = JFactory::getDate($this->getState('filter.end_date'))->calendar('Y-m-d');
 
+    // Filter by snooze state
+    // Should only apply to users who can view and change snooze state
+    if ($canDo->get('rental.listings.filter'))
+    {
+      $snooze = $this->getState('filter.snoozed');
+
+      // If snooze state set to hide...
+      if (($snooze == 1 && $date_filter) || ($snooze == false && $date_filter) || $snooze == 1)
+      {
+        // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
+        $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
+      }
+    }
+    
     if ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'expiry_date')
     {
       // This filter includes any properties with snooze dates between the dates being filtered on.

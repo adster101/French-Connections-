@@ -33,7 +33,7 @@ class JFormRuleDescription extends JFormRule
    */
   public function test(&$element, $value, $group = null, &$input = null, &$form = null)
   {
-    $length = strlen($value);
+    $length = mb_strlen($value,'utf-8');
     if ($length > 150)
     {
       return false;

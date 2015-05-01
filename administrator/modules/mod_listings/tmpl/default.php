@@ -7,6 +7,8 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
+$user = JFactory::getUser();
+$userId = $user->id;
 ?>
 <div class="page-header clearfix">
   <a class="btn <?php echo (count($listings)) ? '' : 'btn-large' ?> btn-success pull-right" href="index.php?option=com_rental&amp;task=propertyversions.add"> 
@@ -57,6 +59,7 @@ defined('_JEXEC') or die;
           <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_ENQUIRIES_TOOLTIP', 'index.php?option=com_enquiries', 'COM_RENTAL_VIEW_LISTING_ENQUIRIES'); ?>
           <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_STATISTICS_TOOLTIP', 'index.php?option=com_stats&id=' . (int) $item->id, 'COM_RENTAL_VIEW_LISTING_STATISTICS'); ?>
           <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_ADDITIONAL_MARKETING_TOOLTIP', 'index.php?option=com_rental&task=marketing.edit&property_id=' . (int) $item->id, 'COM_RENTAL_VIEW_LISTING_ADDITIONAL_MARKETING'); ?>    
+          <?php echo JHtml::_('property.quicklink', 'COM_RENTAL_VIEW_LISTING_SMS_ALERT_TOOLTIP', 'index.php?option=com_admin&task=profile.edit&id=' . (int) $user->id .'#sms', 'COM_RENTAL_VIEW_LISTING_SMS_ALERT', 'chevron-right'); ?>    
         </div>
       </div>
     </div>

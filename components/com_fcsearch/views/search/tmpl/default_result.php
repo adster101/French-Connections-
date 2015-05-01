@@ -123,5 +123,4 @@ $uri = JUri::getInstance();
       </div>
     </div>
   </div>
-
 </div>

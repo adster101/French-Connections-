@@ -71,7 +71,7 @@ $canDo = RentalHelper::getActions();
                 <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_LISTING_STATUS'); ?>
               </th>
               <th>
-                <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_DATE_MODIFIED'); ?>
+                <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_MODIFIED', 'a.modified', $listDirn, $listOrder); ?>
               </th>
               <th>
                 <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>

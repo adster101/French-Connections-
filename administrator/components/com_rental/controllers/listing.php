@@ -657,9 +657,9 @@ class RentalControllerListing extends JControllerForm
 
     $model = $this->getModel('Property');
 
-    $model->save(array('snooze_until' => $date, 'id' => $recordId, 'subject' => 'Snoozed for 24h by me'));
+    $model->save(array('snooze_until' => $date, 'id' => $recordId, 'subject' => JText::sprintf('COM_RENTAL_SNOOZED_24H_NOTE_SUBJECT', $user->name)));
 
-    $this->setMessage('Snoozed, innit!');
+    $this->setMessage(JText::_('COM_RENTAL_PROPERTY_SNOOZED_FOR_24H'));
 
     $this->setRedirect(
             JRoute::_(

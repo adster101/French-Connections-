@@ -428,15 +428,20 @@ class JHtmlProperty
    *
    */
 
-  public static function quicklink($title = '', $url = '', $text = '')
+  public static function quicklink($title = '', $url = '', $text = '', $icon = '')
   {
 
     $html = '';
-    $html .= '<p>'
-            . '<a title="' . JText::_($title) . '" href="' . $url . '">'
-            . JText::_($text)
-            . '</a>'
-            . '</p>';
+    $html .= '<p><a title="' . JText::_($title) . '" href="' . $url . '">';
+
+    // Add the optional icon if there is one
+    if ($icon)
+    {
+      $html .= '<span class="icon icon-' . $icon . '">&nbsp;</span>';
+    }
+
+    $html .= JText::_($text) . '</a></p>';
+    
     return $html;
   }
 
@@ -631,7 +636,7 @@ class JHtmlProperty
       }
     }
     $html .= '</p>';
-    
+
     return $html;
   }
 

@@ -14,11 +14,12 @@ $lang->load('com_accommodation', JPATH_SITE);
 
 
 
-<?php if (count($this->items) > 0) : ?> 
+<?php if (count($this->items) > 0) : ?>  
   <p><?php echo $this->pagination->getResultsCounter(); ?></p>
 
+  <div class="search-results">
 
-  <ul class="search-results list-unstyled">
+
     <?php
     for ($i = 0, $n = count($this->items); $i < $n; $i++)
     {
@@ -29,7 +30,7 @@ $lang->load('com_accommodation', JPATH_SITE);
       }
     }
     ?>
-  </ul>
+  </div>
   <div class="search-pagination">
     <div class="pagination">
       <?php echo $this->pagination->getPagesLinks(); ?>

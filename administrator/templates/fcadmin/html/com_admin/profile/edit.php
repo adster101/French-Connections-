@@ -27,7 +27,6 @@ $vat_status = $this->form->getValue('vat_status');
 
 $show_vat_number = ($this->item->vat_status == 'ECS') ? true : false;
 $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true : false;
-
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_admin&view=profile&layout=edit&id=' . $this->item->id); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal" enctype="multipart/form-data">
@@ -194,20 +193,21 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
     </div>   
     <div class="control-group">
       <div class="control-label">
-        <?php echo $this->form->getLabel('country'); ?>
-      </div>
-      <div class="controls">
-        <?php echo $this->form->getInput('country'); ?>
-      </div>
-    </div> 
-    <div class="control-group">
-      <div class="control-label">
         <?php echo $this->form->getLabel('postal_code'); ?>
       </div>
       <div class="controls">
         <?php echo $this->form->getInput('postal_code'); ?>
       </div>
     </div> 
+    <div class="control-group">
+      <div class="control-label">
+        <?php echo $this->form->getLabel('country'); ?>
+      </div>
+      <div class="controls">
+        <?php echo $this->form->getInput('country'); ?>
+      </div>
+    </div> 
+
   </fieldset>
   <fieldset>
     <legend><?php echo JText::_('COM_ADMIN_OVERRIDE_EXCHANGE_RATE') ?></legend>
