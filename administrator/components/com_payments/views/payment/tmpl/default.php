@@ -14,8 +14,6 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
-$user = JFactory::getUser();
-$userId = $user->get('id');
 $total = '';
 $vat_total = '';
 ?>
@@ -35,7 +33,7 @@ $vat_total = '';
         <strong>PRN: </strong><?php echo $this->escape($this->items[0]->property_id); ?> |
         <strong>User ID: </strong><?php echo $this->escape($this->items[0]->user_id); ?> |
         <strong>Expires: </strong><?php echo JHtml::date($this->escape($this->items[0]->expiry_date), 'd-M-Y'); ?> |
-
+        <strong>Payment from: </strong><?php echo $this->escape($this->items[0]->BillingFirstnames . ' ' . $this->items[0]->BillingSurname) ?>
       </p>
 
       <p>
