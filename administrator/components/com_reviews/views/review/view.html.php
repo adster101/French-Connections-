@@ -38,7 +38,6 @@ class ReviewsViewReview extends JViewLegacy {
 
     $this->addToolBar($canDo);
     
-    $this->addSubMenu($canDo);
 
     // Display the template
     parent::display($tpl);
@@ -46,18 +45,7 @@ class ReviewsViewReview extends JViewLegacy {
     $this->setDocument();
   }
 
-  /**
-   * Adds the submenu details for this view
-   */
-  protected function addSubMenu($canDo) {
-
-   
-
-    RentalHelper::addSubmenu('reviews');
-
-    $this->sidebar = JHtmlSidebar::render();
-  }
-
+  
   /**
    * Method to set up the document properties
    *

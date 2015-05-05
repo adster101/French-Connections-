@@ -492,7 +492,6 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
     // The url to link to the owners property in the confirmation email
     $siteURL = JUri::root() . 'listing/' . $property_id . '?unit_id=' . (int) $unit_id;
-    $intasure = $params->get('intasure');
 
     $start_date = JHtml::date($start_date, 'D d M Y');
     $end_date = JHtml::date($end_date, 'D d M Y');
