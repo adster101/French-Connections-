@@ -33,7 +33,8 @@ class VouchersModelVouchers extends JModelList {
           'state', 'a.state',
           'property_id', 'a.property_id',
           'due_date', 'a.due_date',
-          'item_cost_id', 'a.item_cost_id'
+          'item_cost_id', 'a.item_cost_id',
+          'end_date', 'a.end_date'
       );
     }
 
@@ -48,7 +49,7 @@ class VouchersModelVouchers extends JModelList {
   protected function populateState($ordering = null, $direction = null) {
 
     // List state information.
-    parent::populateState('a.id', 'asc');
+    parent::populateState('a.id', 'desc');
   }
 
   /**

@@ -21,14 +21,6 @@ $listOrder = $this->state->get('list.ordering');
 $listDirn = $this->state->get('list.direction');
 ?>
 
-<?php
-//Joomla Component Creator code to allow adding non-select list filters
-if (!empty($this->extra_sidebar))
-{
-  $this->sidebar .= $this->extra_sidebar;
-}
-?>
-
 <form action="<?php echo JRoute::_('index.php?option=com_vouchers'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span3">
@@ -36,7 +28,6 @@ if (!empty($this->extra_sidebar))
     </div>
     <div id="j-main-container" class="span9">
       <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
-      <?php //echo $toolbar = JToolbar::getInstance('toolbar')->render('toolbar'); ?>
     <?php else : ?>
       <div id="j-main-container">
         <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
@@ -44,29 +35,28 @@ if (!empty($this->extra_sidebar))
       <table class="table table-striped" id="invoiceList">
         <thead>
           <tr>
-      
             <th width="1%" class="hidden-phone">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
-              <th class="nowrap">
-                <?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
-              </th>
-              <th class="nowrap">
-                <?php echo JText::_('Voucher description') ?>
-              </th>
-
-            <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_PROPERTY_ID', 'a.property_id', $listDirn, $listOrder); ?>
+            <th class="nowrap">
+              <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+            </th>
+            <th class="nowrap">
+              <?php echo JText::_('Voucher description') ?>
             </th>
 
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_VOUCHERS_QUANTITY_NET', 'a.quantity', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_VOUCHERS_PROPERTY_ID', 'a.property_id', $listDirn, $listOrder); ?>
+            </th>
+
+            <th class='left'>
+              <?php echo JText::_('COM_VOUCHERS_VOUCHERS_QUANTITY_NET'); ?>
             </th>
             <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_VOUCHERS_VOUCHERS_END_DATE', 'a.end_date', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'COM_VOUCHERS_VOUCHERS_END_DATE', 'a.end_date', $listDirn, $listOrder); ?>
             </th>
             <th  class="nowrap  hidden-phone">
-              <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+              <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
             </th>
           </tr>
         </thead>
@@ -90,19 +80,17 @@ if (!empty($this->extra_sidebar))
         <tbody>
           <?php
           foreach ($this->items as $i => $item) :
-            $ordering = ($listOrder == 'a.ordering');
-            $canCreate = $user->authorise('core.create', 'com_vouchers');
-            $canEdit = $user->authorise('core.edit', 'com_vouchers');
-            $canCheckin = $user->authorise('core.manage', 'com_vouchers');
+
             $canChange = $user->authorise('core.edit.state', 'com_vouchers');
             ?>
             <tr class="row<?php echo $i % 2; ?>">
               <td class="center hidden-phone">
                 <?php echo JHtml::_('grid.id', $i, $item->id); ?>
               </td>
-                <td>
-                  <?php echo JHtml::_('vouchers.state', $item->state, $i, $canChange, 'cb'); ?>
-                </td>
+              <td>
+                <?php echo JHtml::_('jgrid.published', $item->state, $i, 'vouchers.', $canChange, 'cb', $item->date_created, $item->end_date); ?>
+                <?php // echo JHtml::_('vouchers.state', $item->state, $i, $canChange, 'cb'); ?>
+              </td>
               <td>
                 <a href="<?php echo JRoute::_('index.php?option=com_vouchers&task=voucher.edit&id=' . (int) $item->id) ?>">
                   <?php echo $this->escape($item->item_cost_id . ' - ' . $item->description) ?>
@@ -128,8 +116,7 @@ if (!empty($this->extra_sidebar))
 
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />
-      <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-      <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+
       <?php echo JHtml::_('form.token'); ?>
     </div>
 </form>
