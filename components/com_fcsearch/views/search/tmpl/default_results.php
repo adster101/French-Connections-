@@ -139,7 +139,7 @@ $ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
       </div>
       <div class="tab-pane" id="localinfo">
         <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
-        <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->title; ?>
+        <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
       </div>
     </div>
     <div class="col-lg-3 col-md-3 refine-search">
