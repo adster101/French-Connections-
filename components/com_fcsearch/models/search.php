@@ -152,7 +152,16 @@ class FcSearchModelSearch extends JModelList
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    $query->select($db->quoteName('id') . ', ' . $db->quoteName('level') . ',latitude, longitude,' . $db->QuoteName('description') . ',' . $db->QuoteName('title') . ',' . $db->quoteName('property_type_info'));
+    $query->select(
+            $db->quoteName('id') . ', ' .
+            $db->quoteName('level') . ',latitude, longitude,' .
+            $db->QuoteName('description') . ',' .
+            $db->QuoteName('title') . ',' .
+            $db->quoteName('property_type_info') . ',' .
+            $db->quoteName('metatitle') . ',' .
+            $db->quoteName('metadescription') . ',' .
+            $db->quoteName('metakeywords')
+    );
     if ($lang == 'fr')
     {
       $query->from($db->quoteName('#__classifications_translations') . ' AS t');
@@ -497,7 +506,7 @@ class FcSearchModelSearch extends JModelList
     $query = $this->_getListQuery();
 
     $lwl_query = clone($query);
-    
+
     $lwl_query->clear('select')->clear('order')->clear('limit')->select('COUNT(*)');
     $lwl_query->where('c.lwl = 1');
     $this->_db->setQuery($lwl_query);
@@ -515,9 +524,9 @@ class FcSearchModelSearch extends JModelList
   {
 
     $db = JFactory::getDbo();
-    
+
     $query = $this->_getListQuery();
-    
+
     $so_query = clone($query);
 
     $so_query->clear('select')->clear('order')->clear('limit')->select('COUNT(*)');
