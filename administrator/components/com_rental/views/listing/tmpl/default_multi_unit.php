@@ -10,6 +10,8 @@ $canDo = RentalHelper::getActions();
 $canEditOwn = $canDo->get('core.edit.own');
 $canPublish = $canDo->get('core.edit.state');
 ?>
+
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -32,6 +34,7 @@ $canPublish = $canDo->get('core.edit.state');
     </tr>
   </tfoot>
 </table>
+
 <table class="table table-striped" id="articleList">
   <thead>
     <tr>
@@ -82,7 +85,15 @@ $canPublish = $canDo->get('core.edit.state');
     <?php endforeach; ?>
   </tbody>
 </table>
+<?php if ($canDo->get('core.edit.state')) : ?>
+  <div class="js-stools-container-filters hidden-phone clearfix">
+    <?php
+    $data['view'] = $this;
+    echo JLayoutHelper::render('joomla.searchtools.default.filters', $data);
+    ?>
+  </div>
 
+<?php endif; ?>
 <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
 <input type="hidden" name="boxchecked" value="" />
 

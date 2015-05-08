@@ -34,30 +34,22 @@ class modPopularSearchHelper
 
     $query = $db->getQuery(true);
 
-    $query->select('count(*) as count, c.title, c.alias');
+    $query->select('count(*) as count, a.location as alias');
     $query->from($db->quoteName('#__search_log') . ' as a');
-
-    if ($lang == 'fr-FR')
-    {
-      $query->join('left', $db->quoteName('#__classifications_translations') . ' on c.id = a.location_id');
-    }
-    else
-    {
-      $query->join('left', $db->quoteName('#__classifications') . ' as c on c.id = a.location_id');
-    }
 
     if (!empty($level))
     {
+      $query->join('left', $db->quoteName('#__classifications') . ' as c on c.id = a.location_id');
       $query->where('c.level = ' . (int) $level);
     }
 
-    $query->where('c.title is not null');
+    $query->where('a.location is not null');
     $query->where('a.date_created > ' . $db->quote($date));
 
     $query->group('a.location_id');
     $query->order('count desc');
 
-    $db->setQuery($query, 0, 8);
+    $db->setQuery($query, 0, 21);
 
     try
     {

@@ -8,7 +8,6 @@
  */
 defined('_JEXEC') or die;
 
-$document = JFactory::getDocument();
 $app = JFactory::getApplication();
 $lang = $app->input->get('lang', 'en');
 $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
@@ -22,7 +21,7 @@ $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     <?php foreach ($popular as $k => $v) : ?>
       <p>
         <a href='<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $v->alias . '&lang=' . $lang . '&Itemid=' . (int) $itemid); ?>'>
-          <?php echo htmlspecialchars($v->title, ENT_QUOTES, 'UTF-8'); ?>
+          <?php echo ucwords(JStringNormalise::toSpaceSeparated(htmlspecialchars($v->alias, ENT_QUOTES, 'UTF-8'))); ?>
         </a>
       </p>
     <?php endforeach; ?>
@@ -34,7 +33,7 @@ $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     <?php foreach ($regions as $region) : ?>
       <p>
         <a href="<?php echo JRoute::_('index.php?option=com_fcsearch&s_kwds=' . $region->alias . '&lang=' . $lang . '&Itemid=' . (int) $itemid); ?>">
-          <?php echo htmlspecialchars($region->title, ENT_QUOTES, 'UTF-8'); ?>
+          <?php echo ucwords(JStringNormalise::toSpaceSeparated(htmlspecialchars($region->alias, ENT_QUOTES, 'UTF-8'))); ?>
 
         </a>
       </p>

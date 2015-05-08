@@ -44,11 +44,11 @@ class RentalModelNearestPropertyList extends JModelList
     $query->select('id, title, level');
     $query->select(
       '(
-        3959 * acos( cos( radians(' . $longitude . ') )
+        3959 * acos( cos( radians(' . $latitude . ') )
         * cos( radians( latitude ) )
         * cos( radians( longitude ) -
-        radians('.$latitude.') ) +
-        sin( radians(' . $longitude . ') )
+        radians(' . $longitude . ') ) +
+        sin( radians(' . $latitude . ') )
         * sin( radians( latitude ) ) ) )
         AS distance
             ');

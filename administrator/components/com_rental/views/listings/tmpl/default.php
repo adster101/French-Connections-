@@ -27,9 +27,8 @@ $canDo = RentalHelper::getActions();
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" class="form-validate js-stools-form" id="adminForm">
-  <?php if ($canDo->get('rental.listings.filter')) : // Don't show this for owners  ?>
-    <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
-  <?php endif; ?>
+  <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
       <?php echo $this->sidebar; ?>
@@ -139,9 +138,9 @@ $canDo = RentalHelper::getActions();
                   <?php endif; ?>
                   <td>
                     <?php if (!empty($item->url_thumb)) : ?>
-                      
+
                       <?php $uri = JURI::getInstance(); ?>
-                    <img src="<?php echo $uri->getScheme() . '://' . $item->url_thumb ?>" />
+                      <img src="<?php echo $uri->getScheme() . '://' . $item->url_thumb ?>" />
                     <?php else: ?>
                       <?php echo JHtml::_('general.image', '/images/property/' . $item->unit_id . '/thumb/' . $item->thumbnail) ?>
                     <?php endif; ?>
@@ -212,15 +211,15 @@ $canDo = RentalHelper::getActions();
                       <?php endif; ?>
                       <?php if (property_exists($item, 'enquiries')) : ?>
                         <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
-                        
-                        <?php 
-                        $preview = JUri::getInstance('/listing/' . $item->id . '?unit_id=' . $item->unit_id . '&preview=1' );
+
+                        <?php
+                        $preview = JUri::getInstance('/listing/' . $item->id . '?unit_id=' . $item->unit_id . '&preview=1');
                         $preview->setScheme('http');
                         $preview->setHost('www.frenchconnections.co.uk');
                         echo '<p><a target="_blank" href=' . $preview->toString() . '>Preview</a></p>';
                         ?>
-                        
-                        
+
+
                       <?php endif; ?>
                     </td>
                   <?php endif; ?>

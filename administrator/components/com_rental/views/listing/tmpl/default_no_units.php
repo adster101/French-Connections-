@@ -30,12 +30,15 @@ $canDo = RentalHelper::getActions();
     <?php else : ?>
       <div id="j-main-container">
       <?php endif; ?>
-      <div id="filter-bar" class="btn-toolbar">
-        <div class="btn-group pull-right hidden-phone">
-          <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-          <?php echo $this->pagination->getLimitBox(); ?>
+      <?php if ($canDo->get('core.edit.state')) : ?>
+        <div class="js-stools-container-filters hidden-phone clearfix">
+          <?php
+          $data['view'] = $this;
+          echo JLayoutHelper::render('joomla.searchtools.default.filters', $data);
+          ?>
         </div>
-      </div>
+
+      <?php endif; ?>
       <hr />
       <div class="alert alert-block">
         <strong>
@@ -48,8 +51,6 @@ $canDo = RentalHelper::getActions();
       <div>
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="boxchecked" value="" />
-        <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-        <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
         <?php echo JHtml::_('form.token'); ?>
       </div>
     </div>

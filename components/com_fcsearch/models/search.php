@@ -308,10 +308,10 @@ class FcSearchModelSearch extends JModelList
       ');
       if ($this->getState('search.level') == 5)
       {
-        $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(c.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(c.latitude))),1) as distance');
       }
 
@@ -363,18 +363,18 @@ class FcSearchModelSearch extends JModelList
       {
         // Add the distance based bit in as this is a town/city search
         $query->where('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        ( 3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(c.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(c.latitude))) < 30)
         ');
 
         $query->order('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        ( 3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(c.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(c.latitude))) ) 
         ');
       }
@@ -658,10 +658,10 @@ class FcSearchModelSearch extends JModelList
       {
         // Add the distance based bit in as this is a town/city search
         $query->where('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        ( 3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(c.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(c.latitude))) < 30)');
       }
 
@@ -963,10 +963,10 @@ class FcSearchModelSearch extends JModelList
       {
         // Add the distance based bit in as this is a town/city search
         $query->where('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        ( 3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(c.latitude)) *
-          cos(radians(c.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(c.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(c.latitude))) < 30)
         ');
       }

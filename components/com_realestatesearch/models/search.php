@@ -279,10 +279,10 @@ class RealestateSearchModelSearch extends JModelList
 
       if ($this->getState('search.level') == 5)
       {
-        $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        $query->select('ROUND(3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(b.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(b.latitude))),1)  as distance');
       }
 
@@ -327,18 +327,18 @@ class RealestateSearchModelSearch extends JModelList
       {
         // Add the distance based bit in as this is a town/city search
         $query->where('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        ( 3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(b.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(b.latitude))) < 20)
         ');
 
         $query->order('
-        ( 3959 * acos(cos(radians(' . $this->getState('search.longitude', '') . ')) *
+        ( 3959 * acos(cos(radians(' . $this->getState('search.latitude', '') . ')) *
           cos(radians(b.latitude)) *
-          cos(radians(b.longitude) - radians(' . $this->getState('search.latitude', '') . '))
-          + sin(radians(' . $this->getState('search.longitude', '') . '))
+          cos(radians(b.longitude) - radians(' . $this->getState('search.longitude', '') . '))
+          + sin(radians(' . $this->getState('search.latitude', '') . '))
           * sin(radians(b.latitude)))) 
         ');
       }

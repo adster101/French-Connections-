@@ -194,10 +194,10 @@ class JFeedParserdocument extends JFeedParser
       $query->innerjoin('#__classifications b on b.id = a.parent_id');
       $query->where('b.alias = ' . $db->quote(JStringNormalise::toDashSeparated(JApplication::stringURLSafe($department))));
       $query->order('
-        ( 3959 * acos(cos(radians(' . $longitude . ')) *
+        ( 3959 * acos(cos(radians(' . $latitude . ')) *
           cos(radians(a.latitude)) *
-          cos(radians(a.longitude) - radians(' . $latitude . '))
-          + sin(radians(' . $longitude . '))
+          cos(radians(a.longitude) - radians(' . $longitude . '))
+          + sin(radians(' . $latitude . '))
           * sin(radians(a.latitude))) ) 
         ');
 
