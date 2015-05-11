@@ -155,6 +155,8 @@ class RentalControllerPayment extends JControllerLegacy
     $app = JFactory::getApplication();
     $id = $this->input->get('id', '', 'int');
     $renewal = $this->input->get('renewal', false, 'boolean');
+    // Get the renewal state
+    $isRenewal = ($renewal) ? '&renewal=1' : '';
     // Get an instance of the listing model
     $listing = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
     $listing->setState('com_rental.listing.latest', true);
@@ -203,7 +205,7 @@ class RentalControllerPayment extends JControllerLegacy
       $app->setUserState('com_rental.renewal.data', $data);
 
       // Redirect back to the edit screen.
-      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=renewal&layout=payment&id=' . (int) $data['id'], false));
+      $this->setRedirect(JRoute::_('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $data['id'] . $isRenewal, false));
       return false;
     }
 
@@ -224,7 +226,7 @@ class RentalControllerPayment extends JControllerLegacy
 
       // Save failed, go back to the screen and display a notice.
       $message = JText::sprintf('JERROR_SAVE_FAILED', $payment_model->getError());
-      $this->setRedirect('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $data['id'], $message, 'error');
+      $this->setRedirect('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $data['id'] . $isRenewal, $message, 'error');
       return false;
     }
 

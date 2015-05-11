@@ -213,7 +213,7 @@ class FcSearchViewSearch extends JViewLegacy
     // Build the filter options.
     $options = array();
 
-    $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
+    $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_' . strtoupper($budget). 'PRICE'));
 
     for ($i = 50; $i < 250; $i = $i + 50)
     {

@@ -313,8 +313,6 @@ class Renewals extends JApplicationCli
             // TO DO - Write this out into the protx payment tables...            
           }
 
-          //$this->sendPaymentReceipt();
-
           break;
 
         case ($v->days < 0):
@@ -351,12 +349,12 @@ class Renewals extends JApplicationCli
 
     // Add the tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
-
+   
     // Get an instance of the note table
     $table = JTable::getInstance('Note', 'NotesTable');
-
+    
     foreach ($notes as $note)
-    {
+    {  
       if (!$table->bind($note))
       {
         return false;
@@ -366,8 +364,6 @@ class Renewals extends JApplicationCli
       {
         return false;
       }
-
-      $table->reset();
     }
 
     return true;
@@ -382,7 +378,7 @@ class Renewals extends JApplicationCli
     // Could just as easily be done with comma separated list as a param on the rental component
     $users_to_ignore = array();
     $users_to_ignore[] = JUser::getInstance('atleisure')->id;
-    
+
     $db = JFactory::getDBO();
     /**
      * Get the date now
@@ -395,7 +391,7 @@ class Renewals extends JApplicationCli
     $date->sub(new DateInterval('P1D'));
 
     $query = $db->getQuery(true);
-    
+
     $query->select('
       a.id, 
       datediff(a.expiry_date, now()) as days, 

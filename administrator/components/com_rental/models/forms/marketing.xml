@@ -33,9 +33,8 @@
       filter="int">
     </field>
   </fieldset>
- 
-  <fieldset name="hidden">
   
+  <fieldset name="hidden">
     <field
       name="property_id"
       type="hidden"

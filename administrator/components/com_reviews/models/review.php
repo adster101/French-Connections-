@@ -82,22 +82,143 @@ class ReviewsModelReview extends JModelAdmin
   }
 
   /**
+   * Updates the status and then checks the status of the offer and if being published for the first 
+   * time triggers and email to the owner.
+   * 
+   * @param type $pks
+   * @param type $value
+   * @return boolean
+   */
+  public function publish(&$pks, $value = 1)
+  {
+    $date = JFactory::getDate()->toSql();
+    $app = JFactory::getApplication();
+
+    // Load the site from email
+    $fromUser = $app->getCfg('mailfrom');
+    
+    $publish = parent::publish($pks, $value);
+
+    if ($publish)
+    {
+      // Item has been published, send a notification email to the owner
+      foreach ($pks as $k => $v)
+      {
+        // Get the review details
+        $item = $this->getItem($v);
+
+        if (!$item)
+        {
+          return false;
+        }
+
+        $user = JFactory::getUser();
+
+        // Offer already created. If not approved and being set to published then update the approved by gubbins
+        if (!$item->approved_by && $value == 1)
+        {
+          $item->approved_by = $user->id;
+          $item->approved_date = $date;
+
+          $table = $this->getTable();
+
+          // Update the offer with the approved by and approved date.
+          if (!$table->save($item))
+          {
+            $this->setError($table->getError());
+            return false;
+          }
+
+          // Get the owner/property detail
+          $property = $this->getPropertyOwner($item->unit_id);
+          $owner = JFactory::getUSer($property->created_by);
+
+          // Get the owners email, setting up to go to site mailfrom is debug is on
+          $toUser = (JDEBUG) ? $app->getCfg('mailfrom') : $owner->email;
+
+          // Prepare the email.
+          $subject = htmlspecialchars(JText::sprintf('COM_REVIEWS_NEW_REVIEW_SUBMITTED', $property->property_id), ENT_QUOTES, 'UTF-8');
+          $msg = htmlspecialchars(JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $owner->name, $property->property_id, ENT_QUOTES, 'UTF-8'));
+          JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, false);
+        }
+      }
+
+      return true;
+    }
+  }
+
+  /**
    * Override save method so we can retrieve the property ID before saving
    */
   public function save($data)
   {
+
+    $app = JFactory::getApplication();
+    $table = $this->getTable();
+    $key = $table->getKeyName();
+    $date = JFactory::getDate()->toSql();
+
+    // Setup a few vars and what not.
+    $send_notification_email = false;
+    $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
+
+    // Get the property details via the unit - only returns property ID and owner acc ID
+    $property_details = $this->getPropertyOwner($data['unit_id']);
+
+    // Get the owner details so we know where to send email
+    $owner = JFactory::getUser($property_details->created_by);
+    // Get the user who is approving the offer
+    $user = JFactory::getUser();
+
+    // Load the site from email
+    $fromUser = $app->getCfg('mailfrom');
+
     if (!$data['unit_id'])
     {
       return false;
     }
 
-    if (empty($data['property_id']))
+    // Load the row if saving an existing record. 
+    if ($pk > 0)
     {
-      $property = $this->getPropertyId($data['unit_id']);
-      $data['property_id'] = $property->property_id;
+      $review = $this->getItem($pk);
+    }
+    else
+    {
+      $table = $this->getTable();
+
+      // Convert to the JObject before adding other data.
+      $properties = $table->getProperties(1);
+      $review = JArrayHelper::toObject($properties, 'JObject');
     }
 
-    return parent::save($data);
+    // If not approved and being set to published then update the approved by gubbins
+    if (empty($review->approved_by) && (!$review->published && $data['published'] == 1))
+    {
+      $data['approved_by'] = $user->id;
+      $data['approved_date'] = $date;
+      // Ensures that we only send notification email when offer is first approved.
+      $send_notification_email = true;
+    }
+
+    if ($return = parent::save($data))
+    {
+      // Trigger email to admin user
+      if ($send_notification_email)
+      {
+
+        // Get the owners email, setting up to go to site mailfrom is debug is on
+        $toUser = (JDEBUG) ? $app->getCfg('mailfrom') : $owner->email;
+
+        // Prepare the email.
+        $subject = htmlspecialchars(JText::sprintf('COM_REVIEWS_NEW_REVIEW_SUBMITTED', $property_details->property_id), ENT_QUOTES, 'UTF-8');
+        $msg = htmlspecialchars(JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $owner->name, $property_details->property_id, ENT_QUOTES, 'UTF-8'));
+        JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
+      }
+    }
+
+    // Save it out
+    return $return;
   }
 
   /**
@@ -106,14 +227,16 @@ class ReviewsModelReview extends JModelAdmin
    * @param int $id
    * @return Object on success, false on failure.
    */
-  private function getPropertyId($unit_id = '')
+  private function getPropertyOwner($unit_id = '')
   {
     $query = $this->_db->getQuery(true);
-    $query->select('property_id');
+    $query->select('a.property_id, b.created_by');
     $query->from($this->_db->quoteName('#__unit', 'a'));
+    $query->leftJoin($this->_db->quoteName('#__property', 'b') . 'on a.property_id = b.id');
     $query->where('a.id = ' . (int) $unit_id);
     $this->_db->setQuery($query);
 
+    $query = $query->__toString();
     try
     {
       $row = $this->_db->loadObject();

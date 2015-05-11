@@ -107,7 +107,7 @@ class RealEstateControllerListing extends PropertyControllerListing
 
       return false;
     }
-    
+
     $listing = $this->getModel('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
     $listing->setState('com_realestate.listing.id', $recordId);
     $listing->setState('com_realestate.listing.latest', true);
@@ -153,6 +153,42 @@ class RealEstateControllerListing extends PropertyControllerListing
       $this->setRedirect($redirect, $message);
       return true;
     }
+
+    return true;
+  }
+
+  public function snooze24()
+  {
+
+    $user = JFactory::getUser();
+
+    $date = JHtml::_('date', '+1 day', 'Y-m-d');
+
+    if (!$user->authorise('realestate.listing.snooze24', 'com_realestate'))
+    {
+      $this->setMessage(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option)
+      );
+    }
+
+    $cid = $this->input->post->get('cid', array(), 'array');
+
+    // Get the record ID from the data array
+    $recordId = (int) (count($cid) ? $cid[0] : 0);
+
+    $model = $this->getModel('Property');
+
+    $model->save(array('snooze_until' => $date, 'id' => $recordId, 'subject' => JText::sprintf('COM_RENTAL_SNOOZED_24H_NOTE_SUBJECT', $user->name)));
+
+    $this->setMessage(JText::_('COM_RENTAL_PROPERTY_SNOOZED_FOR_24H'));
+
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option)
+    );
 
     return true;
   }

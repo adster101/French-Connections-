@@ -4,13 +4,90 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controllerform library
-jimport('frenchconnections.controllers.property.base');
+jimport('joomla.application.component.controllerform');
 
 /**
  * Enquiry Controller
  */
-class EnquiriesControllerEnquiry extends RentalControllerBase
+class EnquiriesControllerEnquiry extends JControllerForm
 {
+
+  /**
+   * allowEdit - 
+   * 
+   * @param type $data
+   * @param type $key
+   * @return boolean
+   */
+  protected function allowEdit($data = array(), $key = 'property_id')
+  {
+
+    $user = JFactory::getUser();
+    $userId = $user->get('id');
+
+    $this->addModelPath(JPATH_ADMINISTRATOR . '/components/com_rental/models', 'RentalModel');
+    $this->addModelPath(JPATH_ADMINISTRATOR . '/components/com_realestate/models', 'RealEstateModel');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables', 'RealEstateTable');
+
+    // Check general edit permission first.
+    if ($user->authorise('core.edit', $this->option))
+    {
+      return true;
+    }
+
+    // Look up the enquiry details so we can get the property ID
+    $model = $this->getModel();
+    $id = $this->input->getInt('id');
+    $item = $model->getItem($id);
+
+    $recordId = (int) !empty($item->property_id) ? $item->property_id : 0;
+
+    // If we don't have a property ID then we can't authorise
+    if ($recordId === 0)
+    {
+      return false;
+    }
+
+    // TO DO - This is clunky. We probably don't need this controller at least for enquiry and invocie
+    // views. Would probably be enough to add the below into the 'property' helper class and call it 
+    // from each controller.
+    // Fallback on edit.own.
+    // First test if the permission is available.
+    if ($user->authorise('core.edit.own', $this->option))
+    {
+      // Now test the owner is the user.
+      $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
+
+      if (empty($ownerId) && $recordId)
+      {
+        // Need to do a lookup from the model.
+        $record = $this->getModel('Property', 'RentalModel')->getItem($recordId);
+
+        if (empty($record->id))
+        {
+          // No record found against the property list so perhaps it a realestate enquiry...
+          $record = $this->getModel('Property', 'RealestateModel')->getItem($recordId);
+          
+          // If still no record then bail!
+          if (empty($record))
+          {
+            return false;
+          }
+        }
+        
+        // Carry on!
+        $ownerId = $record->created_by;
+      }
+
+      // If the owner matches 'the owner' then do the test.
+      if ($ownerId == $userId)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * This method extends the edit method and updates the state to 'read'

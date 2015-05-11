@@ -531,21 +531,20 @@ class RentalControllerListing extends JControllerForm
     // TO DO - Save the submittions note into the notes table, if there is a note.
     if (!empty($validData['body']))
     {
-      
+
       // Add the user
       $validData['user_id'] = $user->id;
-      
+
       // Add the PRN to the data 
       $validData['property_id'] = $recordId;
-      
+
       // Add a subject line
       $validData['subject'] = JText::_('COM_PROPERTY_SUBMISSION_NOTES_SUBJECT');
-      
+
       // Let's save the admin notes...
       $model->save($validData);
-      
     }
-    
+
     // It's all good.
     // Here we need to determine how to handle this submission for review.
     // If the expiry date is within 7 days then we need to redirect the user to the renewal screen.
@@ -614,7 +613,7 @@ class RentalControllerListing extends JControllerForm
       {
         // If we get here it means there is no payment due for this so we just lock it for editing.
         // TO DO - Does this method need to be moved?
-        
+
         $payment->updateProperty($listing_id = $current_version[0]->id, 0, 2);
         $message = JText::_('COM_RENTAL_NO_PAYMENT_DUE_WITH_CHANGES');
 
@@ -630,6 +629,42 @@ class RentalControllerListing extends JControllerForm
     }
 
     $this->setRedirect($redirect, $message);
+
+    return true;
+  }
+
+  public function snooze24()
+  {
+
+    $user = JFactory::getUser();
+  
+    $date = JHtml::_('date', '+1 day', 'Y-m-d');
+    
+    if (!$user->authorise('rental.listing.snooze24', 'com_rental'))
+    {
+      $this->setMessage(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
+      
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option)
+      );
+    }
+
+    $cid = $this->input->post->get('cid', array(), 'array');
+
+    // Get the record ID from the data array
+    $recordId = (int) (count($cid) ? $cid[0] : 0);
+
+    $model = $this->getModel('Property');
+
+    $model->save(array('snooze_until' => $date, 'id' => $recordId, 'subject' => JText::sprintf('COM_RENTAL_SNOOZED_24H_NOTE_SUBJECT', $user->name)));
+
+    $this->setMessage(JText::_('COM_RENTAL_PROPERTY_SNOOZED_FOR_24H'));
+
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option)
+    );
 
     return true;
   }

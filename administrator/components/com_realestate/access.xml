@@ -20,5 +20,7 @@
 		<action name="realestate.review.view" title="Access review view" description="" />
 		<action name="realestate.listing.view" title="Access listing view" description="" />
 		<action name="realestate.property.view" title="Access update property view" description="" />
+		<action name="realestate.listing.snooze24" title="Snooze property for 24 hours" description="" />
+		<action name="realestate.listing.admin" title="Snooze, udpate expirydate or change owner" description="" />
   </section>
 </access>

@@ -100,5 +100,39 @@ class RentalModelMarketing extends JModelAdmin
 
     return true;
   }
+  
+ public function preprocessForm(\JForm $form, $data, $group = 'content')
+  {
 
+    
+    $model = JModelLegacy::getInstance('Units', 'RentalModel', $config = array('ignore_request' => true));
+    $model->setState('filter.search', $data->property_id);
+
+    $units = $model->getItems();
+
+    $addform = new SimpleXMLElement('<form />');
+    $fields = $addform->addChild('fields');
+    $fields->addAttribute('name', 'units');
+    $fieldset = $fields->addChild('fieldset');
+    $fieldset->addAttribute('name', 'availability-calendar');
+    $fieldset->addAttribute('description', 'COM_RENTAL_MARKETING_AVAILABILITY_TARIFFS_FIELDSET_DESCRIPTION');
+    $fieldset->addAttribute('label', 'COM_RENTAL_MARKETING_AVAILABILITY_TARIFFS_FIELDSET_LABEL');
+
+    foreach ($units as $unit)
+    {
+      // Replace spaces with dashes as per the search component
+      $value = '<iframe src=\'http://www.frenchconnections.co.uk/listing/' . $unit->property_id . '?unit_id=' . $unit->unit_id . '&view=availability&tmpl=component\' frameborder=\'0\'></iframe>';
+      $field = $fieldset->addChild('field');
+      $field->addAttribute('name', strtolower($unit->unit_id));
+      $field->addAttribute('type', 'textarea');
+      $field->addAttribute('label', $unit->unit_title);
+      $field->addAttribute('multiple', true);
+      $field->addAttribute('default', $value );
+      $field->addAttribute('filter', 'unset');
+      $field->addAttribute('rows', '3');
+      $field->addAttribute('class', 'input-xxlarge');
+    }
+
+    $form->load($addform);
+  }
 }

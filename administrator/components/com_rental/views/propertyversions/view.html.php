@@ -99,7 +99,7 @@ class RentalViewPropertyversions extends JViewLegacy
       $bar = JToolbar::getInstance('actions');
 
       // We can save the new record
-      $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'propertyversions.apply', false);
+      $bar->appendButton('Standard', 'apply woot', 'JTOOLBAR_APPLY', 'propertyversions.apply', false);
       $bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
       $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'propertyversions.save', false);
     }

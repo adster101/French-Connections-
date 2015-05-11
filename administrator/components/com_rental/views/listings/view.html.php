@@ -83,6 +83,7 @@ class RentalViewListings extends JViewLegacy
     {
       JToolBarHelper::publish('listings.publish', 'JTOOLBAR_PUBLISH', true);
       JToolBarHelper::unpublish('listings.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+      JToolbarHelper::archiveList('listings.archive', 'JTOOLBAR_ARCHIVE', true);
       JToolBarHelper::trash('listings.trash');
     }
 
@@ -98,6 +99,11 @@ class RentalViewListings extends JViewLegacy
 
       // Add a back button.
       $bar->appendButton('Link', 'download', 'COM_RENTAL_DOWNLOAD_CSV' , 'index.php?option=com_rental&format=raw');
+    }
+    
+    if ($canDo->get('rental.listing.snooze24')) 
+    {
+      JToolbarHelper::custom('listing.snooze24', 'clock', '', 'COM_RENTAL_SNOOZE_24', true );
     }
 
     if ($canDo->get('core.admin'))

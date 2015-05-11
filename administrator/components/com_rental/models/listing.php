@@ -163,6 +163,11 @@ class RentalModelListing extends JModelList
     catch (Exception $e)
     {
 
+      // Log this so we can track any errors and trace why sometimes property version doesn't
+      // publish correctly. Seems unlikely however...
+      JLog::addLogger(array('text_file' => 'listing.publish.php'), 'DEBUG', array('listing'));
+      JLog::add('Publish listing ' . $items[0]->id . $e->getMessage(), 'DEBUG', 'listing');
+
       $db->transactionRollback();
 
       return false;
@@ -472,13 +477,13 @@ class RentalModelListing extends JModelList
         $listing->complete = false; // Listing isn't complete...
       }
 
-      if (!$unit->availability)
+      if (!$unit->availability && $unit->published)
       {
         $unit_state->availability = false; // Assume we have some images
         $listing->complete = false; // Should allow existing props to submit without 
       }
 
-      if (!$unit->tariffs)
+      if (!$unit->tariffs && $unit->published)
       {
         $unit_state->tariffs = false; // Assume we have some images
         $listing->complete = false; // Should allow existing props to submit without 

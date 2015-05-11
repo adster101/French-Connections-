@@ -13,7 +13,8 @@ defined('_JEXEC') or die;
  * @package     Joomla.Site
  * @subpackage  com_contact
  */
-class ReviewsControllerReview extends JControllerForm {
+class ReviewsControllerReview extends JControllerForm
+{
 
   /**
    * Method to add a new record.
@@ -22,13 +23,15 @@ class ReviewsControllerReview extends JControllerForm {
    *
    * @since   12.2
    */
-  public function add() {
-    
+  public function add()
+  {
+
     $app = JFactory::getApplication();
     $context = "$this->option.edit.$this->context";
 
     // Access check.
-    if (!$this->allowAdd()) {
+    if (!$this->allowAdd())
+    {
       // Set the internal error and also the redirect error.
       $this->setError(JText::_('JLIB_APPLICATION_ERROR_CREATE_RECORD_NOT_PERMITTED'));
       $this->setMessage($this->getError(), 'error');
@@ -47,22 +50,23 @@ class ReviewsControllerReview extends JControllerForm {
     $app->setUserState($context . '.data', null);
 
     $input = $app->input;
-    
-    $unit_id = $input->get('unit_id','','int');
-    
+
+    $unit_id = $input->get('unit_id', '', 'int');
+
     // Redirect to the edit screen.
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=' . $this->view_item
-                    . $this->getRedirectToItemAppend($unit_id,'unit_id'), false
+                    . $this->getRedirectToItemAppend($unit_id, 'unit_id'), false
             )
     );
 
     return true;
   }
 
-  public function submit() {
-    
+  public function submit()
+  {
+
     // Check for request forgeries.
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -81,36 +85,44 @@ class ReviewsControllerReview extends JControllerForm {
     $data['created_by'] = $CurrentUser->id;
 
     // Check for a valid session cookie
-    if ($params->get('validate_session', 0)) {
-      if (JFactory::getSession()->getState() != 'active') {
+    if ($params->get('validate_session', 0))
+    {
+      if (JFactory::getSession()->getState() != 'active')
+      {
         JError::raiseWarning(403, JText::_('COM_CONTACT_SESSION_INVALID'));
 
         // Save the data in the session.
         $app->setUserState('com_reviews.review.data', $data);
 
         // Redirect back to the contact form.
-        $this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $stub, false));
+        $this->setRedirect(JRoute::_('my-account/review?task=review.add&unit_id=' . (int) $data['unit_id'], false));
         return false;
       }
     }
 
     // Validate the posted data.
     $form = $model->getForm();
-    if (!$form) {
+    if (!$form)
+    {
       JError::raiseError(500, $model->getError());
       return false;
     }
 
     $validData = $model->validate($form, $data);
 
-    if ($validData === false) {
+    if ($validData === false)
+    {
       // Get the validation messages.
       $errors = $model->getErrors();
       // Push up to three validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-        if ($errors[$i] instanceof Exception) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
           $app->enqueueMessage($errors[$i]->getMessage(), 'error');
-        } else {
+        }
+        else
+        {
           $app->enqueueMessage($errors[$i], 'error');
         }
       }
@@ -128,14 +140,15 @@ class ReviewsControllerReview extends JControllerForm {
 
     $table = JTable::getInstance('Review', 'ReviewTable');
 
-    if (!$table) {
+    if (!$table)
+    {
       JError::raiseWarning(403, JText::_('COM_REVIEWS_REVIEW_TABLE_NOT_FOUND'));
 
       // Save the data in the session.
       $app->setUserState('com_reviews.review.data', $data);
 
       // Redirect back to the contact form.
-      $this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $stub, false));
+      $this->setRedirect(JRoute::_('my-account/review?task=review.add&unit_id=' . (int) $data['unit_id'], false));
       return false;
     }
 
@@ -145,87 +158,49 @@ class ReviewsControllerReview extends JControllerForm {
     $validData['guest_email'] = $user->email;
     $validData['date_created'] = JFactory::getDate()->calendar('Y-m-d');
     $validData['date'] = JFactory::getDate($validData['date'])->calendar('Y-m-d');
-    
+
     // Check that we can save the data.
-    if (!$table->save($validData)) {
+    if (!$table->save($validData))
+    {
 
       $errors = $table->getErrors();
 
       // Push up to three validation messages out to the user.
-      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++) {
-        if ($errors[$i] instanceof Exception) {
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
           $app->enqueueMessage($errors[$i]->getMessage(), 'error');
-        } else {
+        }
+        else
+        {
           $app->enqueueMessage($errors[$i], 'error');
         }
       }
 
       // Save the data in the session.
       $app->setUserState('com_reviews.review.data', $data);
-      $this->setRedirect(JRoute::_('index.php?option=com_reviews&view=reviews&Itemid=167&id=' . $stub, false));
+      $this->setRedirect(JRoute::_('my-account/review?task=review.add&unit_id=' . (int) $data['unit_id'], false));
 
       return false;
     }
 
-    // Send the email
-    $sent = false;
-
-    $sent = $this->_sendEmail($data, $params, $property);
-
-
-    // Set the success message if it was a success
-    if (!($sent instanceof Exception)) {
-      $msg = JText::_('COM_REVIEWS_EMAIL_THANKS');
-    } else {
-      $msg = '';
-    }
+    $msg = JText::_('COM_REVIEWS_EMAIL_THANKS');
 
     // Flush the data from the session
     $app->setUserState('com_reviews.review.data', null);
 
     // Redirect if it is set in the parameters, otherwise redirect back to where we came from
-    if ($params->get('redirect')) {
+    if ($params->get('redirect'))
+    {
       $this->setRedirect($params->get('redirect'), $msg);
-    } else {
+    }
+    else
+    {
       $this->setRedirect(JRoute::_('index.php?option=com_reviews', false), $msg, 'success');
     }
-    
+
     return true;
   }
 
-  private function _sendEmail($data, $params, $property) {
-    $app = JFactory::getApplication();
-    $params = JComponentHelper::getParams('com_reviews');
-
-    // If there is a valid user for this property then get the email address
-    if ($property->created_by != 0) {
-      $property_user = JUser::getInstance($property->created_by);
-      $property->email = $property_user->get('email');
-      $property->name = $property_user->get('name');
-    }
-
-    $mailfrom = $app->getCfg('mailfrom');
-    $fromname = $app->getCfg('fromname');
-    $sitename = $app->getCfg('sitename');
-
-    $name = $data['guest_name'];
-    $email = $data['guest_email'];
-    $subject = $data['title'];
-    $body = $data['review_text'];
-
-    // Prepare email body
-    $prefix = JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $property->title, JURI::base());
-    $body = $prefix . "\n" . $name . ' <' . $email . '>' . "\r\n\r\n" . stripslashes($subject) . "\r\n\r\n" . stripslashes($body);
-
-    $mail = JFactory::getMailer();
-    $mail->addRecipient($property->email, $property->name);
-    $mail->addReplyTo(array($mailfrom, $fromname));
-    $mail->setSender(array($mailfrom, $fromname));
-    $mail->addBCC($mailfrom, $fromname);
-    $mail->setSubject($sitename . ': ' . JText::sprintf('COM_REVIEWS_NEW_REVIEW_SUBMITTED', $property->title));
-    $mail->setBody($body);
-    $sent = $mail->Send();
-
-    return $sent;
-  }
 }

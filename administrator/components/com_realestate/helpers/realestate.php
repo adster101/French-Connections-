@@ -227,8 +227,10 @@ abstract class RealEstateHelper
         'realestate.listings.showowner',
         'realestate.listing.review',
         'realestate.listing.submit',
+        'realestate.listing.admin',
         'realestate.listings.showowner',
-        'realestate.notes.view'
+        'realestate.notes.view',
+        'realestate.listing.snooze24'
     );
 
 

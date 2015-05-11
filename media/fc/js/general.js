@@ -217,9 +217,9 @@ jQuery(document).ready(function() {
     jQuery(this).on('keyup', function(event) {
 
       // On the keyup event, update the value of the span count element
-      var length = jQuery('#jform_offer_description').val().length;
+      var length = jQuery(this).val().length;
 
-      jQuery('.offer-counter').text(150 - length);
+      jQuery('.offer-counter').text((150 - length));
 
     });
   });
@@ -402,6 +402,17 @@ Joomla.submitbutton = function(task)
     {
       // Unbind the onbeforeunload event
       window.onbeforeunload = null;
+
+      if (action[1] == 'apply')
+      {
+        jQuery('#toolbar-apply > button').button('loading');
+        jQuery('#actions-apply > button').button('loading');
+      }
+      if (action[1] == 'save')
+      {
+        jQuery('#toolbar-save > button').button('loading');
+        jQuery('#actions-save > button').button('loading');
+      }
 
       if (action[0] == 'payment') {
         jQuery('.payment-button').button('loading');
