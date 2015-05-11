@@ -94,6 +94,9 @@ class ReviewsModelReview extends JModelAdmin
     $date = JFactory::getDate()->toSql();
     $app = JFactory::getApplication();
 
+    // Load the site from email
+    $fromUser = $app->getCfg('mailfrom');
+    
     $publish = parent::publish($pks, $value);
 
     if ($publish)
@@ -135,7 +138,7 @@ class ReviewsModelReview extends JModelAdmin
 
           // Prepare the email.
           $subject = htmlspecialchars(JText::sprintf('COM_REVIEWS_NEW_REVIEW_SUBMITTED', $property->property_id), ENT_QUOTES, 'UTF-8');
-          $msg = htmlspecialchars(JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $owner->name, $item->guest_name, $property->property_id, ENT_QUOTES, 'UTF-8'));
+          $msg = htmlspecialchars(JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $owner->name, $property->property_id, ENT_QUOTES, 'UTF-8'));
           JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, false);
         }
       }
@@ -209,7 +212,7 @@ class ReviewsModelReview extends JModelAdmin
 
         // Prepare the email.
         $subject = htmlspecialchars(JText::sprintf('COM_REVIEWS_NEW_REVIEW_SUBMITTED', $property_details->property_id), ENT_QUOTES, 'UTF-8');
-        $msg = htmlspecialchars(JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $data['guest_name'], $property_details->property_id, ENT_QUOTES, 'UTF-8'));
+        $msg = htmlspecialchars(JText::sprintf('COM_REVIEWS_SUBMISSION_TEXT', $owner->name, $property_details->property_id, ENT_QUOTES, 'UTF-8'));
         JFactory::getMailer()->sendMail($fromUser, $fromUser, $toUser, $subject, $msg, true);
       }
     }
@@ -234,10 +237,12 @@ class ReviewsModelReview extends JModelAdmin
     $this->_db->setQuery($query);
 
     $query = $query->__toString();
-    try {
+    try
+    {
       $row = $this->_db->loadObject();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->setError($e->getMessage());
       return false;
     }

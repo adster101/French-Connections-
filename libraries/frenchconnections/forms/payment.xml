@@ -462,7 +462,6 @@
       <option value="ZM">Zambia</option>
       <option value="ZW">Zimbabwe</option>
     </field>
-    
     <field 
       name="autorenewal" 
       type="checkbox"
@@ -472,19 +471,20 @@
       labelclass="control-label"
       filter="int"
     />
-      
+    
     <field 
       name="tsandcs" 
       type="checkbox"
       label="COM_RENTAL_PAYMENT_AGREE_TO_TSANDCS"
       required="true"
       labelclass="control-label"
-      filter="unset"
+      filter="int"
+      validate="nonzero"
+      
     />
-
   </fieldset>
   
-      
+   
    
 
   <field
