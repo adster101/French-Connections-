@@ -430,7 +430,7 @@ class Renewals extends JApplicationCli
     }
 
     $db->setQuery($query);
-
+    
     try
     {
       $rows = $db->loadObjectList();
