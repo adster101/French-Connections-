@@ -462,12 +462,6 @@
       <option value="ZM">Zambia</option>
       <option value="ZW">Zimbabwe</option>
     </field>
-
-
-  </fieldset>
-  <fieldset   
-    name="autorenewal" 
-    label="COM_RENTAL_HELLOWORLD_PAYMENT_CARD_DETAILS_LEGEND" >
     <field 
       name="autorenewal" 
       type="checkbox"
@@ -477,8 +471,21 @@
       labelclass="control-label"
       filter="int"
     />
+    
+    <field 
+      name="tsandcs" 
+      type="checkbox"
+      label="COM_RENTAL_PAYMENT_AGREE_TO_TSANDCS"
+      required="true"
+      labelclass="control-label"
+      filter="int"
+      validate="nonzero"
       
+    />
   </fieldset>
+  
+   
+   
 
   <field
     type="hidden"

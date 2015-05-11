@@ -73,14 +73,6 @@ class RentalModelPayment extends JModelAdmin
     return JTable::getInstance($type, $prefix, $options);
   }
 
-  public function preprocessForm(\JForm $form, $data, $group = 'content')
-  {
 
-    // Determine whether the owner wants to use the invoice address as the card billing address
-    if (!empty($data['use_invoice_address']))
-    {
-      
-    }
-  }
 
 }

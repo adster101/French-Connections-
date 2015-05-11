@@ -82,7 +82,7 @@ class EnquiriesModelEnquiry extends JModelAdmin
         return false;
       }
     }
-    
+
     return $return;
   }
 
@@ -251,12 +251,18 @@ class EnquiriesModelEnquiry extends JModelAdmin
      * Need to check whether the user has overriden the default contact details
      */
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables');
 
     $property = $this->getTable('PropertyVersions', 'RentalTable');
 
     if (!$property->load($data['property_id'], false))
     {
-      return false;
+      // As a fallback see if this is a realestate property
+      $property = $this->getTable('PropertyVersions', 'RealEstateTable');
+      if (!$property->load($data['property_id']))
+      {
+        return false;
+      }
     }
 
     if ($property->use_invoice_details)
