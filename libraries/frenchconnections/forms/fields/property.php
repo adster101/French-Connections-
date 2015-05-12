@@ -53,12 +53,20 @@ class JFormFieldProperty extends JFormFieldList {
 
     $db = JFactory::getDbo();
 
-    // Construct the query
+    // Construct the query which gets the rental property IDs
     $query = $db->getQuery(true)
             ->select('a.id AS value, a.id AS title')
             ->from('#__property AS a')
             ->where('a.created_by = ' . (int) $user->id);
 
+    // Construct the query which gets the rental property IDs
+    $query2 = $db->getQuery(true)
+            ->select('a.id AS value, a.id AS title')
+            ->from('#__realestate_property AS a')
+            ->where('a.created_by = ' . (int) $user->id);          
+    
+    $query->union($query2);
+    
     // Setup the query
     $db->setQuery($query);
     $items = $db->loadObjectList();

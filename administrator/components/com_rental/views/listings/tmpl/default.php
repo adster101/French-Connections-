@@ -196,8 +196,9 @@ $canDo = RentalHelper::getActions();
                   <?php if ($canDo->get('rental.listings.showowner')) : ?>
                     <td>
                       <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
-                        <?php echo JText::_($item->name); ?>
+                        <?php echo JText::_($item->name) ?>
                       </a>
+                        <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_OWNER_ACC_ID',$item->created_by) ?>
                       <br />
                       <span class="small muted">
                         <a href="mailto:<?php echo JText::_($item->email); ?>"><?php echo JText::_($item->email); ?></a>
@@ -208,18 +209,18 @@ $canDo = RentalHelper::getActions();
                         <p>
                           <?php echo JHtml::_('property.notes', $item->id); ?>
                         </p>
-                      <?php endif; ?>
-                      <?php if (property_exists($item, 'enquiries')) : ?>
-                        <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
-
-                        <?php
+                          <?php
                         $preview = JUri::getInstance('/listing/' . $item->id . '?unit_id=' . $item->unit_id . '&preview=1');
                         $preview->setScheme('http');
                         $preview->setHost('www.frenchconnections.co.uk');
                         echo '<p><a target="_blank" href=' . $preview->toString() . '>Preview</a></p>';
                         ?>
-
-
+                      <?php endif; ?>
+                      <?php if (property_exists($item, 'enquiries')) : ?>
+                        <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
+                      <?php endif; ?>
+                      <?php if (property_exists($item, 'existing') ) : ?>
+                        <?php echo ($item->existing > 1) ? JText::sprintf('COM_RENTAL_PROPERTY_LISTING_EXISTING_PROPERTY_COUNT', $item->existing) : ''; ?>
                       <?php endif; ?>
                     </td>
                   <?php endif; ?>

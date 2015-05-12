@@ -71,11 +71,11 @@ class Renewals extends JApplicationCli
 
     // Get the renewal template emails 
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
-    // Process the auto renewals
-    $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
-
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
+
+    // Process the auto renewals
+    $autorenewals = $this->_autorenewals($debug, $payment_summary_layout, $renewal_templates);
   }
 
   private function _manualrenewals($debug = false, JLayoutFile $payment_summary_layout, JRegistry $renewal_templates)
@@ -123,7 +123,8 @@ class Renewals extends JApplicationCli
 
       $send_email = true;
 
-      SWITCH (true) {
+      SWITCH (true)
+      {
         case ($v->days < 0):
           $body = JText::sprintf(
                           $renewal_templates->get('RENEWAL_REMINDER_EXPIRED'), $user->firstname
@@ -233,7 +234,8 @@ class Renewals extends JApplicationCli
       $email = true;
       $recipient = ($debug) ? $app->getCfg('mailfrom', '') : $listing[0]->email;
 
-      SWITCH (true) {
+      SWITCH (true)
+      {
         case ($v->days == "30"):
 
           $body = JText::sprintf(
@@ -349,12 +351,12 @@ class Renewals extends JApplicationCli
 
     // Add the tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_notes/tables');
-   
+
     // Get an instance of the note table
     $table = JTable::getInstance('Note', 'NotesTable');
-    
+
     foreach ($notes as $note)
-    {  
+    {
       if (!$table->bind($note))
       {
         return false;
@@ -426,17 +428,17 @@ class Renewals extends JApplicationCli
     }
     else
     {
-      $query->where('a.VendorTxCode > 0');
+      $query->where('a.VendorTxCode != \'\'');
     }
 
+    // echo $query->__toString();
+
     $db->setQuery($query);
-    
-    try
-    {
+
+    try {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e)
-    {
+    catch (Exception $e) {
       $this->out('Problem getting props...');
       return false;
     }

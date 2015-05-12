@@ -18,7 +18,7 @@ abstract class PropertyHelper
   {
     // Include the model path
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
-    
+
     // Need to include the rental table path as the RentalModelProperty class uses it...
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables', 'RentalTable');
 
@@ -42,8 +42,8 @@ abstract class PropertyHelper
       // Now test the owner is the user.
       if (empty($ownerId) && $recordId)
       {
-        $model = JModelLegacy::getInstance('Property','RentalModel', array('ignore_request'=>true));
-        
+        $model = JModelLegacy::getInstance('Property', 'RentalModel', array('ignore_request' => true));
+
         // Need to do a lookup from the model.
         $record = $model->getItem($recordId);
 
@@ -139,6 +139,42 @@ abstract class PropertyHelper
     $days_to_renewal = (!empty($days_to_renewal)) ? $days_to_renewal : '';
 
     return $days_to_renewal;
+  }
+
+  /**
+   * Given a property ID checks both realestate and rental tables to determine
+   * property type.
+   * @param type $id
+   * @return boolean 
+   */
+  public static function getPropertyType($id = '')
+  {
+
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables');
+
+    $rental = JTable::getInstance('PropertyVersions', 'RentalTable');
+    $realestate = JTable::getInstance('PropertyVersions', 'RealEstateTable');
+    
+    // Most likely this is a rental property
+    $rental->load($id);
+
+    // If we have and ID then return rental 
+    if ($rental->property_id)
+    {
+      return 'rental';
+    }
+
+    // Okay, perhaps we have a realestate property
+    $realestate->load($id);
+
+    // 
+    if ($realestate->property_id)
+    {
+      return 'realestate';
+    }
+
+    return false;
   }
 
   /*
