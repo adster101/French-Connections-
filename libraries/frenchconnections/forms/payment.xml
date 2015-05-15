@@ -480,13 +480,9 @@
       labelclass="control-label"
       filter="int"
       validate="nonzero"
-      
     />
   </fieldset>
-  
-   
-   
-
+ 
   <field
     type="hidden"
     filter="int"
