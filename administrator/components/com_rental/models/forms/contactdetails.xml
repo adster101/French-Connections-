@@ -163,7 +163,7 @@
 
     <field 
       name="booking_form"
-      type="inlinecheckbox"
+      type="checkbox"
       filter="int"
       class="btn-group"
       label="COM_RENTAL_HELLOWORLD_BOOKING_FORM_SHOW"
@@ -173,16 +173,7 @@
       <option value="0">JNO</option>
     </field>    
     
-    <field 
-      name="address"
-      type="text"
-      class="input-xxlarge"
-      filter="string"
-      label="COM_RENTAL_HELLOWORLD_BOOKING_FORM_ADDRESS"
-      labelclass="control-label"
-      maxlength="175"
-    />    
-    
+ 
     <field
       name="deposit_currency"
       labelclass="control-label"
@@ -220,7 +211,7 @@
       label="COM_RENTAL_BOOKING_FORM_FIELD_PAYMENT_DEADLINE_LABEL"
       maxlength="25"
       filter="string"
-      class="input-mini"
+      class="input-large"
       labelclass="control-label"
     />    
     <field 
@@ -257,7 +248,16 @@
       buttons="false"
     />    
   </fieldset>
-
+  <field 
+    name="address"
+    type="text"
+    class="input-xxlarge"
+    filter="string"
+    label="COM_RENTAL_HELLOWORLD_BOOKING_FORM_ADDRESS"
+    labelclass="control-label"
+    maxlength="175"
+  />    
+    
   <fieldset name="hidden-details">
     <field
       name="property_id"

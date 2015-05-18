@@ -29,9 +29,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_CONTACT_DETAILS'); ?></legend> 
       <?php echo $this->form->getLabel('contact_override_note'); ?>
       <div class="control-group">
-        <div class="control-label">
-          <?php echo $this->form->getLabel('use_invoice_details'); ?>
-        </div>
+        <?php echo $this->form->getLabel('use_invoice_details'); ?>
         <div class="controls">
           <?php echo $this->form->getInput('use_invoice_details'); ?>
         </div>
@@ -110,9 +108,7 @@ $progress_layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR .
       </div>
       <?php foreach ($this->form->getFieldset('booking-form') as $field): ?>
         <div class="control-group">
-          <?php if ($field->name != 'jform[booking_form]') : ?>
-            <?php echo $field->label; ?>
-          <?php endif; ?>
+          <?php echo $field->label; ?>
           <div class="controls">
             <?php echo $field->input; ?>
           </div>
