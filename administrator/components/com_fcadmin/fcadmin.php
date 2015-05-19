@@ -7,7 +7,11 @@ if (!JFactory::getUser()->authorise('core.create', 'com_fcadmin'))
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
-  
+
+$params = JComponentHelper::getParams('com_media');
+
+define('COM_MEDIA_BASE',    JPATH_ROOT . '/' . $params->get($path, 'images'));
+
 // import joomla controller library
 jimport('joomla.application.component.controller');
  
