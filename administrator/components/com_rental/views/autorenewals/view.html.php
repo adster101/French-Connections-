@@ -70,15 +70,6 @@ class RentalViewAutorenewals extends JViewLegacy
 
     $bar = JToolbar::getInstance('actions');
 
-    // We can save the new record
-    $bar->appendButton('Standard', 'apply', 'JTOOLBAR_APPLY', 'autorenewals.apply', false);
-
-    // TO DO - Work this out to show for new props only
-    //if ($this->progress)
-    //{
-    //$bar->appendButton('Standard', 'forward-2', 'JTOOLBAR_SAVE_AND_NEXT', 'propertyversions.saveandnext', false);
-    //}
-
     $bar->appendButton('Standard', 'save', 'JTOOLBAR_SAVE', 'autorenewals.save', false);
 
     // We can save the new record

@@ -9,6 +9,9 @@
 
 defined('_JEXEC') or die;
 
+// Bootstrao the fc library for the usk us gubbins
+JLoader::import('frenchconnections.library');
+
 $controller = JControllerLegacy::getInstance('fccontact');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();

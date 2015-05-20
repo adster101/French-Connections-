@@ -9,18 +9,27 @@
 
 defined('_JEXEC') or die;
 
+
+
 // Include the syndicate functions only once
 require_once __DIR__ . '/helper.php';
 
-$lang = JFactory::getLanguage();
+// Set the input var so we can pick it up in the contact model
 $app  = JFactory::getApplication();
-JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_fccontact/models');
-$paths = JForm::addFormPath(JPATH_SITE . '/components/com_fccontact/models/forms');
+$app->input->set('askus', true);
 
+// Load the contact language string
+$lang = JFactory::getLanguage();
 $lang->load('com_fccontact', JPATH_BASE);
 
+// Add the model and form include paths
+JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_fccontact/models');
+JForm::addFormPath(JPATH_SITE . '/components/com_fccontact/models/forms');
+
+// Get the contact model
 $model = JModelLegacy::getInstance('Contact','FcContactModel');
 
-$form = $model->getForm('askus');
+// Load the form info
+$form = $model->getForm();
 
 require JModuleHelper::getLayoutPath('mod_askus', $params->get('layout', 'default'));

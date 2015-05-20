@@ -37,8 +37,8 @@ class RentalViewProperty extends JViewLegacy
 
     JToolBarHelper::title(JText::_('COM_RENTAL_MANAGER_HELLOWORLDS'), 'helloworld');
 
-    JToolBarHelper::back();
-
+    JToolBarHelper::back();    
+    
     if ($canDo->get('core.edit'))
     {
       JToolBarHelper::save('property.save');

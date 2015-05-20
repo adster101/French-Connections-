@@ -9,7 +9,8 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class RentalControllerAutoRenewals extends JControllerForm {
+class RentalControllerAutoRenewals extends JControllerForm
+{
 
   protected $extension;
 
@@ -23,7 +24,8 @@ class RentalControllerAutoRenewals extends JControllerForm {
    *
    * @since   1.6
    */
-  protected function allowEdit($data = array(), $key = 'id') {
+  protected function allowEdit($data = array(), $key = 'id')
+  {
 
     // Initialise variables.
     $recordId = (int) isset($data[$key]) ? $data[$key] : 0;
@@ -31,31 +33,37 @@ class RentalControllerAutoRenewals extends JControllerForm {
     $userId = $user->get('id');
 
     // This covers the case where the user is creating a new property (i.e. id is 0 or not set
-    if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension)) {
+    if ($recordId === 0 && $user->authorise('core.edit.own', $this->extension))
+    {
       return true;
     }
 
     // Check general edit permission first.
-    if ($user->authorise('core.edit', $this->extension)) {
+    if ($user->authorise('core.edit', $this->extension))
+    {
       return true;
     }
 
     // Fallback on edit.own.
     // First test if the permission is available.
-    if ($user->authorise('core.edit.own', $this->extension)) {
+    if ($user->authorise('core.edit.own', $this->extension))
+    {
       // Now test the owner is the user.
       $ownerId = (int) isset($data['created_by']) ? $data['created_by'] : 0;
-      if (empty($ownerId) && $recordId) {
+      if (empty($ownerId) && $recordId)
+      {
         // Need to do a lookup from the model.
         $record = $this->getModel('Property')->getItem($recordId);
-        if (empty($record)) {
+        if (empty($record))
+        {
           return false;
         }
         $ownerId = $record->created_by;
       }
 
       // If the owner matches 'me' then do the test.
-      if ($ownerId == $userId) {
+      if ($ownerId == $userId)
+      {
         return true;
       }
     }
@@ -70,11 +78,13 @@ class RentalControllerAutoRenewals extends JControllerForm {
    * @since  1.6
    * @see    JController
    */
-  public function __construct($config = array()) {
+  public function __construct($config = array())
+  {
     parent::__construct($config);
 
     // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension)) {
+    if (empty($this->extension))
+    {
       $this->extension = JRequest::getCmd('extension', 'com_rental');
     }
   }
@@ -84,7 +94,8 @@ class RentalControllerAutoRenewals extends JControllerForm {
    *
    */
 
-  public function showtransactionlist() {
+  public function showtransactionlist()
+  {
 
     $app = JFactory::getApplication();
     $model = $this->getModel();
@@ -93,7 +104,8 @@ class RentalControllerAutoRenewals extends JControllerForm {
 
     $context = "$this->option.edit.$this->context";
     // Determine the name of the primary key for the data.
-    if (empty($key)) {
+    if (empty($key))
+    {
       $key = $table->getKeyName();
     }
 
@@ -101,7 +113,8 @@ class RentalControllerAutoRenewals extends JControllerForm {
 
     //$recordId = (int) (count($cid) ? $cid[0] : $this->input->getInt($urlVar));
 
-    if (!$this->allowEdit(array($key => $recordId), $key)) {
+    if (!$this->allowEdit(array($key => $recordId), $key))
+    {
       $this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
       $this->setMessage($this->getError(), 'error');
       $this->setRedirect(
@@ -133,7 +146,8 @@ class RentalControllerAutoRenewals extends JControllerForm {
    *
    * @since   12.2
    */
-  public function cancel($key = null) {
+  public function cancel($key = null)
+  {
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
     $app = JFactory::getApplication();
@@ -142,16 +156,19 @@ class RentalControllerAutoRenewals extends JControllerForm {
     $checkin = property_exists($table, 'checked_out');
     $context = "$this->option.edit.$this->context";
 
-    if (empty($key)) {
+    if (empty($key))
+    {
       $key = $table->getKeyName();
     }
 
     $recordId = $app->input->getInt($key);
 
     // Attempt to check-in the current record.
-    if ($recordId) {
+    if ($recordId)
+    {
       // Check we are holding the id in the edit list.
-      if (!$this->checkEditId($context, $recordId)) {
+      if (!$this->checkEditId($context, $recordId))
+      {
 
         // Somehow the person just went to the form - we don't allow that.
         $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $recordId));
@@ -181,15 +198,14 @@ class RentalControllerAutoRenewals extends JControllerForm {
     return true;
   }
 
-  public function postSaveHook(JModelLegacy $model, $validData = array()) {
-
-    parent::postSaveHook($model, $validData);
+  public function postSaveHook(JModelLegacy $model, $validData = array())
+  {
 
     $this->setMessage(
             JText::sprintf('COM_RENTAL_HELLOWORLD_UPDATED_AUTORENEWAL_DETAILS', $validData['id'])
     );
 
-    // Redirect to the list screen.
+    // Redirect to the list screen as there is no autorenewals list view...
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option, false

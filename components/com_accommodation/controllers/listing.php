@@ -148,7 +148,8 @@ class AccommodationControllerListing extends JControllerForm
     $query->select('a.website')
             ->from('#__property_versions a')
             ->where('a.property_id = ' . $id)
-            ->where('a.website !=\'\'');
+            ->where('a.website !=\'\'')
+            ->where('a.review = 0');
 
     $db->setQuery($query);
 

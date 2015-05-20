@@ -59,6 +59,12 @@ class FcContactModelContact extends JModelAdmin
     return $data;
   }
 
+  /**
+   * 
+   * @param JForm $form
+   * @param type $data
+   * @param type $group
+   */
   public function preprocessForm(JForm $form, $data, $group = 'content')
   {
     parent::preprocessForm($form, $data, $group);
@@ -75,8 +81,13 @@ class FcContactModelContact extends JModelAdmin
 
     if ($askus)
     {
-      $form->setFieldAttribute('nature','required', 'false');
-      $form->setFieldAttribute('prn','required', 'false');
+      $form->setFieldAttribute('nature', 'required', 'false');
+
+      $form->setFieldAttribute('name', 'labelclass', '');
+      $form->setFieldAttribute('email', 'labelclass', '');
+      $form->setFieldAttribute('tel', 'labelclass', '');
+      $form->setFieldAttribute('message', 'labelclass', '');
+      $form->setFieldAttribute('prn', 'required', 'false');
       $form->removeField('captcha');
     }
   }
@@ -106,11 +117,12 @@ class FcContactModelContact extends JModelAdmin
   public function save($data)
   {
 
-    $app = JFactory::getApplication();
-    $menuItem = $app->getMenu()->getActive();
-    $params = $menuItem->params;
+    $Itemid = SearchHelper::getItemid(array('component', 'com_fccontact'));
 
-    $subject = JText::sprintf('COM_FCCONTACT_EMAIL_SUBJECT', JText::_($data['nature']), $data['prn']);
+    $menu = JMenu::getInstance('site');
+    $params = $menu->getParams($Itemid);
+
+    $subject = JText::sprintf('COM_FCCONTACT_EMAIL_SUBJECT', $data['name'], JText::_($data['nature']), $data['prn']);
 
     $body = JText::sprintf('COM_FCCONTACT_EMAIL_BODY', $data['message'], $data['tel']);
 
