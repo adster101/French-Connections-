@@ -37,6 +37,3 @@ foreach ($output as $item)
 ?>
 unread messages.
 
-<br />
-<br />
-<br />
