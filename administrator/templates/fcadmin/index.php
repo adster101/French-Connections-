@@ -150,7 +150,7 @@ $uri->setQuery('');
                         </li>
                         <li class="divider"></li>
                         <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;              ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                       ?></a>
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;               ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                        ?></a>
                         </li>
                         <li class="divider"></li>-->
                         <li class="">
@@ -161,7 +161,7 @@ $uri->setQuery('');
                       </ul>
                     </li>
                   </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                       ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                       ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                       ?>
+                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                        ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                        ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                        ?>
                     <span class="icon-out-2 small"></span></a>-->
                 </div>
                 <!--/.nav-collapse -->
@@ -178,7 +178,7 @@ $uri->setQuery('');
                       <jdoc:include type="modules" name="status" style="no" />
 
                       <jdoc:include type="modules" name="title" />
-                    
+
                     </div>
                   </div>
                 </div>     
@@ -235,12 +235,12 @@ $uri->setQuery('');
                 <?php endif; ?>
                 <!-- End Content -->
             </section>
-
           </div>
           <?php if ($this->countModules('owner-footer')) : ?> 
             <footer id="status" class="navbar navbar-fixed-bottom"> 
               <div class="clearfix">
                 <div class="container">
+                  
                   <div class="row">
                     <div class="span8">
                       <jdoc:include type="modules" name="owner-footer" style="no" />

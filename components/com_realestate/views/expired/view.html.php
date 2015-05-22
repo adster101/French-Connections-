@@ -6,51 +6,38 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * HTML View class for the HelloWorld Component
  */
-class RealestateViewListing extends JViewLegacy
+class RealEstateViewExpired extends JViewLegacy
 {
 
   // Overwriting JView display method
   function display($tpl = null)
   {
 
-    // TODO - Here we should add the relevant admin model and move 
-    // getImages
-    // getCrumbs
-    // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
-    // Assign data to the view
+    // Assign data to the view   
     $app = JFactory::getApplication();
 
-    if (!$this->item = $this->get('Item'))
+    $app->setHeader('status', 410, true);
+    
+    // Set the default model to the listing model
+    $this->setModel(JModelLegacy::getInstance('Listing', 'RealEstateModel'), true);
+
+    
+    $model = $this->getModel();
+   
+    // Set Preview property to true so we get inactive props as well in case expired property has 
+    // been marked as inactive for some reason.
+    $model->preview = true;
+    
+    if (!$this->item = $model->getItem(true))
     {
-      // Get the URI
-      $uri = JURI::getInstance();
-
-      // Get the query string
-      $query = $uri->getQuery(true);
-
-      // Append the view
-      $query['view'] = 'expired';
-
-      // Set the query string
-      $uri->setQuery($query);
-
-      // And redirect
-      header('Location: ' . $uri->toString());
-      exit;
+      throw new Exception(JText::_('WOOT'), 500);
     }
-
-    // Get the images for this property
-    $this->images = $this->get('Images');
 
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');
 
-    // Get the enquiry form
-    $this->form = $this->get('Form');
-
-    // Update the hit counter for this view
-    $model = $this->getModel();
-    $model->hit();
+    // Get nearby props that are also of interest
+    $this->related = $this->get('RelatedProps');
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
@@ -74,18 +61,17 @@ class RealestateViewListing extends JViewLegacy
 
   /**
    * Method to set up the document properties
+   * TO DO - Move this into the model?
    *
    * @return void
    */
   protected function setDocument()
   {
-
-    $this->title = JText::sprintf('COM_REALESTATE_PROPERTY_TITLE', $this->item->title);
-
+    $this->title = JText::sprintf('COM_REALESTATE_PROPERTY_EXPIRED_TITLE', $this->item->title);
     // Set document and page titles
     $this->document->setTitle($this->title);
     $this->document->setDescription($this->title);
     $this->document->setMetaData('keywords', $this->title);
+    $this->document->setMetaData('robots', 'noindex');
   }
-
 }

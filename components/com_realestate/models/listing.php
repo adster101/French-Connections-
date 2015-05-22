@@ -24,7 +24,7 @@ class RealestateModelListing extends JModelForm
   /**
    * @var boolean review
    */
-  protected $preview = false;
+  public $preview = false;
 
   public function __construct($config = array())
   {

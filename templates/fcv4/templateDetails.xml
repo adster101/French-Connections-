@@ -44,6 +44,7 @@
 		<position>position-14</position>
 		<position>position-15</position>
 		<position>postenquiry</position>
+		<position>postrealestateenquiry</position>
 		<position>footer</position>
 	</positions>
 	<languages folder="language">

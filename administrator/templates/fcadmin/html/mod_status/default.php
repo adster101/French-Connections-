@@ -36,13 +36,13 @@ if ($params->get('show_loggedin_users_admin', 1))
 //  Print the inbox message.
 if ($params->get('show_messages', 1))
 {
-	$active = $unread ? ' badge-important' : '';
+	$active = $unread ? ' badge-important' : ' badge-default';
   
 	$output[] = '<div class="label label-notification pull-right"'
 		. ' title="' . JText::plural('MOD_STATUS_MESSAGES', $unread) . '">'
-		. ($hideLinks ? '' : '<a class="lead" href="' . $inboxLink . '">') 
-		. '<span class="badge' . $active . '">' . $unread . '</span>'
-		. ($hideLinks ? '' : '&nbsp;<i class="icon-envelope"></i>&nbsp;&nbsp;</a>')
+		. '<a class="" href="' . $inboxLink . '">'
+		. '<span class="badge' . $active . '">' . $unread 
+		. '</span>&nbsp;&nbsp;<i class="notification-icon icon-envelope"></i></a>'
 		. '</div>';
 }
 
