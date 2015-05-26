@@ -17,7 +17,7 @@ class RentalModelPayment extends JModelAdmin
 
   public function getPaymentForm($data = array(), $loadData = true)
   {
-		JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
+    JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
 
     $form = $this->loadForm('com_rental.helloworld', 'payment', array('control' => 'jform', 'load_data' => $loadData));
 
@@ -68,11 +68,38 @@ class RentalModelPayment extends JModelAdmin
     return $data;
   }
 
+  /*
+   * param JForm $form The JForm instance for the view being edited
+   * param array $data The form data as derived from the view (may be empty)
+   *
+   * @return void
+   *
+   */
+
+  protected function preprocessForm(JForm $form, $data)
+  {
+
+    $input = JFactory::getApplication()->input;
+
+    $formData = $input->get('jform', array(), 'array');
+
+    $filter = JFilterInput::getInstance();
+
+    $use_invoice_address = $filter->clean($formData['use_invoice_address'], 'int');
+
+    if ($use_invoice_address)
+    {
+      $fieldset = $form->getFieldset('billing-details');
+
+      foreach ($fieldset as $field)
+      {
+        $form->setFieldAttribute($field->name, 'required', false);
+      }
+    }
+  }
+
   public function getTable($type = 'Property', $prefix = 'RentalTable', $options = array())
   {
     return JTable::getInstance($type, $prefix, $options);
   }
-
-
-
 }

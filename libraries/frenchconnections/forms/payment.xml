@@ -105,8 +105,22 @@
     />
   </fieldset>
 
-  <fieldset name="billing-details" label="COM_RENTAL_HELLOWORLD_PAYMENT_BILLING_DETAILS_LEGEND" description="">
-
+  <fieldset 
+    name="billing-details"
+    id="billing"
+    label="COM_RENTAL_HELLOWORLD_PAYMENT_BILLING_DETAILS_LEGEND" 
+    description="">
+    
+    <field 
+      name="use_invoice_address" 
+      type="checkbox"
+      label="COM_RENTAL_BILLING_ADDRESS_SAME_AS_INVOICE"
+      required="false"
+      labelclass="control-label"
+      filter="int"
+      validate="nonzero"
+    />
+    
     <field
       name="BillingFirstnames"
       type="text"
@@ -471,18 +485,17 @@
       labelclass="control-label"
       filter="int"
     />
-    
-    <field 
-      name="tsandcs" 
-      type="checkbox"
-      label="COM_RENTAL_PAYMENT_AGREE_TO_TSANDCS"
-      required="true"
-      labelclass="control-label"
-      filter="int"
-      validate="nonzero"
-    />
+   
   </fieldset>
- 
+  <field 
+    name="tsandcs" 
+    type="checkbox"
+    label="COM_RENTAL_PAYMENT_AGREE_TO_TSANDCS"
+    required="true"
+    labelclass="control-label"
+    filter="int"
+    validate="nonzero"
+  />   
   <field
     type="hidden"
     filter="int"

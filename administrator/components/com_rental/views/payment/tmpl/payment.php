@@ -29,7 +29,7 @@ $total_vat = '';
         <?php echo $this->payment_summary->render($this->summary); ?>      
         <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&view=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
           <?php foreach ($fieldsets as $fieldset) : ?>
-            <fieldset>
+            <fieldset id="<?php echo $fieldset->id ?>">
               <legend><?php echo JText::_($fieldset->label); ?></legend>
               <p><?php echo JText::_($fieldset->description); ?></p>
               <?php foreach ($this->form->getFieldset($fieldset->name) as $field) : ?>
@@ -42,6 +42,12 @@ $total_vat = '';
               <?php endforeach; ?>
             </fieldset>
           <?php endforeach; ?>
+          <div class="control-group">
+              <?php echo $this->form->getLabel('tsandcs'); ?>
+            <div class="controls">
+              <?php echo $this->form->getInput('tsandcs'); ?>
+            </div>
+          </div> 
           <button class="btn btn-primary btn-large payment-button" onclick="Joomla.submitbutton('payment.process')" data-loading-text="Processing payment...">
             <span class="icon icon-next">&nbsp;</span>&nbsp;Submit payment</span>
           </button>
