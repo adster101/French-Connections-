@@ -16,7 +16,7 @@ $data = array();
 $data['progress'] = $this->items;
 $data['form'] = $this->form;
 $data['status'] = $this->status;
-
+$canDo = RentalHelper::getActions();
 ?>
 
 <div class="row-fluid">
@@ -29,11 +29,14 @@ $data['status'] = $this->status;
       <div class="span12 form-inline">
       <?php endif; ?>
 
-      <form action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" method="post" name="adminForm" class="form-validate form-horizontal" id="adminForm">
+      <form action="<?php echo JRoute::_('index.php?option=com_rental&view=listing&id=' . (int) $this->id); ?>" method="post" name="adminForm" class="form-validate form-horizontal" id="adminForm">
+
         <?php
         $layout = new JLayoutFile('progress', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
         echo $layout->render($data);
+        ?>
 
+        <?php
         if (count($this->items) == 1)
         {
           echo $this->loadTemplate('single_unit');
@@ -47,6 +50,7 @@ $data['status'] = $this->status;
           echo $this->loadTemplate('no_units');
         }
         ?>
+
         <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
 
         <hr />

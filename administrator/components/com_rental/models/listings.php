@@ -144,8 +144,6 @@ class RentalModelListings extends JModelList
       $query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
     }
 
-
-
     // Fundamental check to ensure owners only see their own listings.
     // This is an ACL check, e.g. core.edit.own and core.edit
     // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
@@ -194,7 +192,7 @@ class RentalModelListings extends JModelList
         $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
       }
     }
-    
+
     if ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'expiry_date')
     {
       // This filter includes any properties with snooze dates between the dates being filtered on.
@@ -222,21 +220,27 @@ class RentalModelListings extends JModelList
               $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
               ' and a.' . $db->escape($date_filter) . ' <=' .
               $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
+      $query->select('(select count(*) from ' . $db->quoteName('#__property', 'props') . ' where props.created_by = a.created_by) as ');
+    }
+    elseif ($date_filter == 'created_on')
+    {
+
+      $query->select('(select count(*) from ' . $db->quoteName('#__property', 'props') . ' where props.created_by = a.created_by) as existing');
     }
 
     // Filter by search in title
     // TODO - Try and tidy up this logic a bit.
     $search = $this->getState('filter.search');
     if (!empty($search))
-    {      
+    {
       // If search cast to int and doesn't contain a comma is true
-      if ((int) $search && (strpos($search,',') === false))
+      if ((int) $search && (strpos($search, ',') === false))
       {
         // This pulls out the property with ID searched on, it's parent and any siblings.
         $query->where('a.id = ' . (int) $search);
       }
       // If the exploded array contains more than one element and the search term contains a comma
-      elseif (count(explode(',', $search) > 1) && (strpos($search,',') > 0))
+      elseif (count(explode(',', $search) > 1) && (strpos($search, ',') > 0))
       {
         // Escape the search term
         $search = $db->escape($search);
@@ -328,12 +332,10 @@ class RentalModelListings extends JModelList
 
       $query->select('a.id, p.user_id, p.firstname, u.email, a.expiry_date');
 
-      try
-      {
+      try {
         $items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
       }
-      catch (RuntimeException $e)
-      {
+      catch (RuntimeException $e) {
         $this->setError($e->getMessage());
 
         return false;

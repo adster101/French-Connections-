@@ -45,15 +45,15 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
                 <?php echo JText::_('JPUBLISHED'); ?>
               </th>    
               <th>
-                <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_TITLE', 'so.title', $listDirn, $listOrder); ?>
+                <?php echo JHtml::_('searchtools.sort', 'COM_SPECIALOFFERS_OFFER_TITLE', 'so.title', $listDirn, $listOrder); ?>
 
               </th>
               <th>
-                <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_PROPERTY_ID', 'c.unit_title', $listDirn, $listOrder); ?>
+                <?php echo JHtml::_('searchtools.sort', 'COM_SPECIALOFFERS_PROPERTY_ID', 'c.unit_title', $listDirn, $listOrder); ?>
               </th>
 
               <th>
-                <?php echo JHtml::_('grid.sort', 'COM_SPECIALOFFERS_OFFER_START_DATE', 'a.start_date', $listDirn, $listOrder); ?>
+                <?php echo JHtml::_('searchtools.sort', 'COM_SPECIALOFFERS_OFFER_START_DATE', 'a.start_date', $listDirn, $listOrder); ?>
 
               </th>
               <th>
@@ -111,7 +111,7 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
                 </td>
               </tr>					
             <?php endforeach; ?>
-          <input type="hidden" name="extension" value="<?php echo 'com_reviews'; ?>" />
+          <input type="hidden" name="extension" value="<?php echo 'com_specialoffers'; ?>" />
           </tbody>
         </table>   
         <?php echo $this->pagination->getListFooter(); ?>
@@ -121,9 +121,6 @@ $canEdit = $user->authorise('core.edit', 'com_specialoffers');
 
       <input type="hidden" name="task" value="" />
       <input type="hidden" name="boxchecked" value="0" />
-      <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-      <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
-
       <?php echo JHtml::_('form.token'); ?>
 
     </div>

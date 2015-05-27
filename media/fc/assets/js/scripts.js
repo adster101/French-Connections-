@@ -15295,7 +15295,7 @@ function getPath(event) {
   if (offers === 'true' & lwl === 'true') {
     path = path + '?offers=true&lwl=true';
   } else if (offers === 'true') {
-    path = path + '?offers';
+    path = path + '?offers=true';
   } else if (lwl === 'true') {
     path = path + '?lwl=true';
   }

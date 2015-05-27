@@ -27,7 +27,9 @@ class RentalViewListing extends JViewLegacy
 
     // Get the model state
     $this->state = $this->get('State');
-
+    $this->filterForm = $this->get('FilterForm');
+    $this->activeFilters = $this->get('ActiveFilters');
+    
     // Add the submit model to this view so we can fetch the submit for approval form
     // And handle the associated logic...
     $submit = $this->setModel(JModelLegacy::getInstance('Submit', 'RentalModel'));

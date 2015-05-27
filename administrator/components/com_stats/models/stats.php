@@ -53,7 +53,9 @@ class StatsModelStats extends JModelList
     {
       $id = $input->get('id', '', 'int');
     }
-    
+
+    $property_type = PropertyHelper::getPropertyType($id);
+
     $start_date = JFactory::getDate($this->getState('filter.start_date', ''))->calendar('Y-m-d');
     $end_date = JFactory::getDate($this->getState('filter.end_date', ''))->calendar('Y-m-d');
 
@@ -61,15 +63,22 @@ class StatsModelStats extends JModelList
     $graph_data = array();
 
     // Get the various data to populate the report
-    $graph_data['views'] = $this->getData($id, '#__property_views', $start_date, $end_date);
-    $graph_data['enquiries'] = $this->getData($id, '#__enquiries', $start_date, $end_date);
-    $graph_data['clicks'] = $this->getData($id, '#__website_views', $start_date, $end_date);
-    $graph_data['reviews'] = $this->getData($id, '#__reviews', $start_date, $end_date);
+    $graph_data['views'] = $this->getData($id, '#__property_views', $start_date, $end_date, $property_type);
+    $graph_data['enquiries'] = $this->getData($id, '#__enquiries', $start_date, $end_date, $property_type);
+    $graph_data['clicks'] = $this->getData($id, '#__website_views', $start_date, $end_date, $property_type);
+    $graph_data['reviews'] = $this->getData($id, '#__reviews', $start_date, $end_date, $property_type);
 
 
     return $graph_data;
   }
 
+  /**
+   * preprocessForm - Checks which user the group is in and amends the form 
+   * 
+   * @param type $form
+   * @param type $data
+   * @param type $group
+   */
   public function preprocessForm($form, $data, $group = 'content')
   {
 
@@ -77,6 +86,8 @@ class StatsModelStats extends JModelList
 
     $groups = JAccess::getGroupsByUser($user->id, false);
 
+    // If in the owner user group then remove the search box 
+    // and present the user a list of their properties.
     if (in_array(10, $groups))
     {
       $form->removeField('search', 'filter');
@@ -85,7 +96,7 @@ class StatsModelStats extends JModelList
     {
       $form->removeField('id', 'filter');
     }
-    
+
     // Add or remove the search box depending on the user privileges.
     // If owner and not admin remove the box, retain the property dropdown
     // If admin and not owner remove the dropdown and show the search box
@@ -109,18 +120,19 @@ class StatsModelStats extends JModelList
     }
   }
 
-  public function getData($id = '', $table = '', $start_date = '', $end_date)
+  public function getData($id = '', $table = '', $start_date = '', $end_date, $property_type = 'rental')
   {
 
     $user = JFActory::getUser();
 
+    $property_table = ($property_type == 'rental') ? '#__property' : '#__realestate_property';  
+    
     if (empty($id))
     {
       return false;
     }
 
     // Add in the number of page view this property has had in the last twelve months...
-
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
@@ -128,7 +140,7 @@ class StatsModelStats extends JModelList
        count(a.id) as count
      ');
     $query->from($db->quoteName($table, 'a'));
-    
+
     $query->where('property_id = ' . (int) $id);
 
     if ($start_date)
@@ -142,9 +154,9 @@ class StatsModelStats extends JModelList
     }
 
     // If user not authorised to view all stats just limit them to properties they own
-    if (!$user->authorise('stats.view.all','com_stats'))
+    if (!$user->authorise('stats.view.all', 'com_stats'))
     {
-      $query->leftJoin($db->quoteName('#__property', 'b') . ' ON b.id = a.property_id' );
+      $query->leftJoin($db->quoteName($property_table, 'b') . ' ON b.id = a.property_id');
       $query->where('b.created_by = ' . $user->id);
     }
 
@@ -152,7 +164,8 @@ class StatsModelStats extends JModelList
 
     try {
       $rows = $db->loadRow();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       return false;
     }
 

@@ -16,8 +16,8 @@
         description=""
         onchange="this.form.submit();"> 
         <option value="">COM_VOUCHERS_OPTION_ALL</option>
-        <option value="0">COM_VOUCHERS_OPTION_UNPUBLISHED</option>
         <option value="1">COM_VOUCHERS_OPTION_PUBLISHED</option>
+        <option value="0">COM_VOUCHERS_OPTION_UNPUBLISHED</option>
         <option value="-2">JTRASHED</option>
       </field> 
 
@@ -27,7 +27,6 @@
     <field
       name="fullordering"
       type="hidden"
-      default="e.date_created DESC"
       filter="string">
     </field>
     <field

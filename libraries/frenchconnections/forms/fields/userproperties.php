@@ -57,6 +57,7 @@ class JFormFieldUserProperties extends JFormFieldGroupedList
     $db->setQuery($query);
 
     $properties = $db->loadObjectList();
+    
     // Loop over each subtree item
     foreach ($properties as $property => $unit)
     {

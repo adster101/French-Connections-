@@ -14,6 +14,25 @@ class RentalModelListing extends JModelList
 {
 
   /**
+   * Constructor.
+   *
+   * @param	array	An optional associative array of configuration settings.
+   * @see		JController
+   * @since	1.6
+   */
+  public function __construct($config = array())
+  {
+    if (empty($config['filter_fields']))
+    {
+      $config['filter_fields'] = array(
+         
+          'published', 'a.published',
+          
+      );
+    }
+    parent::__construct($config);
+  }
+  /**
    * Method to auto-populate the model state.
    *
    * Note. Calling getState in this method will result in recursion.
@@ -299,6 +318,9 @@ class RentalModelListing extends JModelList
     // Get the access control permissions in a handy array
     $canDo = RentalHelper::getActions();
     $id = $this->getState($this->context . '.id', '');
+
+    // If $latest true then we only get the latest version of a property 
+    // otherwise we retrive latest published and draft version (e.g. for a PFR)
     $latest = $this->getState('com_rental.listing.latest', true);
 
     // Create a new query object.
@@ -387,6 +409,16 @@ class RentalModelListing extends JModelList
       $query->where('a.created_by=' . $userId);
       $query->where('d.published = 1');
     }
+    elseif (is_numeric($this->getState('filter.published')) && $canDo->get('core.edit.state'))
+    {
+      // Filter by published state
+      $published = $this->getState('filter.published');
+      $query->where('d.published = ' . (int) $published);
+    }
+    else
+    {
+      $query->where('d.published != -2');
+    }
 
     if ($latest)
     {
@@ -398,8 +430,6 @@ class RentalModelListing extends JModelList
       $query->where('b.review = 0');
       $query->where('e.review = 0');
     }
-
-    $query->where('d.published != -2');
 
     $query->where('a.created_by !=0');
 

@@ -31,8 +31,8 @@ jQuery(document).ready(function() {
   jQuery('#jform_city').on('change', function(e) {
 
     var selected = jQuery(this).find('option:selected');
-    var latitude = selected.data('longitude'); // Errr, lat and long are mixed up in the classifications table
-    var longitude = selected.data('latitude');
+    var latitude = selected.data('latitude'); 
+    var longitude = selected.data('longitude');
     var bounds = new google.maps.LatLngBounds();
     var LatLng = new google.maps.LatLng(latitude, longitude);
     var bounds = new google.maps.LatLngBounds();
@@ -105,30 +105,4 @@ function initialise() {
     map.panTo(marker.getPosition());
 
   });
-}
-
-function updatepropertylist()
-{
-
-  // Get the user ID for the property
-  var id = jQuery('#jform_created_by_id').attr('value');
-
-
-  jQuery.getJSON("/administrator/index.php?option=com_helloworld&task=helloworld.nearestpropertylist",
-          {
-            id: id,
-            format: "json"
-          },
-  function(data) {
-    var options = '';
-    for (var i = 0; i < data.length; i++) {
-      options += '<option value="' + data[i].id + '">' + data[i].title + '</option>';
-    }
-    jQuery("select#jform_parent_id").html(options);
-
-  }
-  );
-
-
-}
-      
+}     

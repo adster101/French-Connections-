@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form	addrulepath="/administrator/components/com_classification/models/rules">
+<form	addrulepath="/libraries/frenchconnections/forms/rules">
   <fieldset
     addFieldPath="/administrator/components/com_classification/models/fields"
     name="classification">
@@ -131,6 +131,42 @@
     />      
       
   </fieldset>	
-  
- 
+  <fieldset 
+    name="meta">
+    <field
+      name="metatitle"
+      type="text"
+      filter="string"
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_METATITLE_LABEL"
+      description="COM_CLASSIFICATION_FIELD_METATITLE_DESC"
+      message="COM_CLASSIFICATION_FIELD_METATITLE_VALIDATION_MESSAGE"
+      class="input-xxlarge"
+      maxlength="100"
+      validate="fc.length"
+    />
+    <field
+      name="metadescription"
+      type="text"
+      filter="string"
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_METADESCRIPTION_LABEL"
+      description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_METADESCRIPTION_DESC"
+      message="COM_CLASSIFICATION_FIELD_METATITLE_VALIDATION_MESSAGE"
+      class="input-xxlarge"
+      maxlength="160"
+      validate="fc.length"
+    />
+    
+    <field
+      name="metakeywords"
+      type="text"
+      filter="string"
+      label="COM_CLASSIFICATION_FIELD_CLASSIFICATION_METAKEYWORDS_LABEL"
+      description="COM_CLASSIFICATION_FIELD_CLASSIFICATION_METAKEYWORDS_DESC"
+      message="COM_CLASSIFICATION_FIELD_METATITLE_VALIDATION_MESSAGE"
+      class="input-xxlarge"
+      maxlength="160"
+      validate="fc.length"
+    />
+  </fieldset>
+
 </form>

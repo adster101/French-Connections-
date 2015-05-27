@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>  
+  <fields name="filter"    
+          addfieldpath="/libraries/frenchconnections/forms/fields"> 
+    <fieldset> 
+      <field
+        name="search"
+        type="hidden"
+        label="COM_CONTENT_FILTER_SEARCH_DESC"
+        hint="COM_RENTAL_PROPERTY_SEARCH_FILTER" 
+        class="input-xlarge" 
+      />
+      <field
+        name="published"
+        type="list"
+        labelclass="element-invisible"
+        label="COM_RENTAL_HELLOWORLD_FILTER_ACTIVE"
+        description=""
+        class="input-medium"
+        onchange="this.form.submit();"> 
+        <option value="">JOPTION_SELECT_PUBLISHED</option>
+        <option value="1">COM_RENTAL_HELLOWORLD_ACTIVE</option>
+        <option value="0">COM_RENTAL_HELLOWORLD_INACTIVE</option>
+        <option value="2">COM_RENTAL_HELLOWORLD_ARCHIVED</option>
+        <option value="-2">JTRASHED</option>
+      </field>  
+  
+        
+    </fieldset>
+  </fields> 
+</form>

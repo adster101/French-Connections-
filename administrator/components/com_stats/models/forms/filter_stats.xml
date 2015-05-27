@@ -17,7 +17,6 @@
         label="COM_STATS_FILTER_PROPERTY"
         description="COM_STATS_FILTER_PROPERTY_DESC"
         class="input-medium"
-        onchange="this.form.submit();"
         required="true">
         <option value="">JSELECT</option>
       </field>
