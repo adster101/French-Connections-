@@ -26,6 +26,9 @@ class RentalModelPayment extends JModelAdmin
       return false;
     }
 
+    // TO DO - This is a bit messy - most likely should remove this method simply use
+    // if then else logic in getForm to determine the form to use. A separate 
+    // method could be called to determine form to load based on layout etc
     $data = JFactory::getApplication()->getUserState('com_rental.renewal.data', array());
     $data['id'] = $id = $this->getState($this->getName() . '.id', '');
 
@@ -48,8 +51,36 @@ class RentalModelPayment extends JModelAdmin
     return $form;
   }
 
+  public function getBillingDetails($data = array())
+  {
+    $user = JFactory::getUser();
+    $user_id = $user->id;
+
+    // Get the dispatcher and load the user's plugins.
+    $dispatcher = JEventDispatcher::getInstance();
+    JPluginHelper::importPlugin('user');
+
+    $user_data = new JObject;
+    $user_data->id = $user_id;
+
+    // Trigger the data preparation event.
+    $dispatcher->trigger('onContentPrepareData', array('com_users.user', &$user_data));
+
+    $data['BillingFirstnames'] = $user_data->firstname;
+    $data['BillingSurname'] = $user_data->surname;
+    $data['BillingAddress1'] = $user_data->address1;
+    $data['BillingAddress2'] = $user_data->address2;
+    $data['BillingCity'] = $user_data->city;
+    $data['BillingPostCode'] = $user_data->postal_code;
+    $data['BillingEmailAddress'] = $user->email;
+    $data['BillingCountry'] = $user_data->country;
+    
+    return $data;
+  }
+
   public function loadFormData()
   {
+
 
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.edit.listing.data', array());
@@ -59,10 +90,9 @@ class RentalModelPayment extends JModelAdmin
 
     // If this is a the payment layout/view then we need to pre-load some data into the form.
     // In particular, we need the property listing id.
-    if (empty($data) && $layout == 'payment')
+    if ($layout == 'payment')
     {
-      // May need to overload getItem to allow the teasing out of the invoice addres details.
-      $this->getItem($pk = null);
+      
     }
 
     return $data;
@@ -79,8 +109,10 @@ class RentalModelPayment extends JModelAdmin
   protected function preprocessForm(JForm $form, $data)
   {
 
+    // Get the input form data 
     $input = JFactory::getApplication()->input;
 
+    // And tease out whether the use_invoice_address field is ticked or not
     $formData = $input->get('jform', array(), 'array');
 
     $filter = JFilterInput::getInstance();
@@ -89,11 +121,12 @@ class RentalModelPayment extends JModelAdmin
 
     if ($use_invoice_address)
     {
+      // Make the billing details optional
       $fieldset = $form->getFieldset('billing-details');
 
       foreach ($fieldset as $field)
       {
-        $form->setFieldAttribute($field->name, 'required', false);
+        $form->setFieldAttribute($field->fieldname, 'required', 'false');
       }
     }
   }
@@ -102,4 +135,5 @@ class RentalModelPayment extends JModelAdmin
   {
     return JTable::getInstance($type, $prefix, $options);
   }
+
 }

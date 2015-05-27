@@ -103,6 +103,15 @@
       labelclass="control-label"
       default=""
     />
+    <field 
+      name="autorenewal" 
+      type="checkbox"
+      label="COM_RENTAL_PAYMENT_AUTO_RENEWAL"
+      default=""
+      required="false"
+      labelclass="control-label"
+      filter="int"
+    />
   </fieldset>
 
   <fieldset 
@@ -117,7 +126,7 @@
       label="COM_RENTAL_BILLING_ADDRESS_SAME_AS_INVOICE"
       required="false"
       labelclass="control-label"
-      filter="int"
+      filter="unset"
       validate="nonzero"
     />
     
@@ -149,6 +158,7 @@
       required="true"
       labelclass="control-label"
     />
+    
     <field
       name="BillingAddress1"
       type="text"
@@ -163,6 +173,7 @@
       required="true"
       labelclass="control-label"
     />
+    
     <field
       name="BillingAddress2"
       type="text"
@@ -204,6 +215,7 @@
       required="true"
       class="input-small"
     />
+    
     <field 
       type="string"
       name="BillingEmailAddress"
@@ -225,8 +237,7 @@
       filter="string"
       labelclass="control-label"
       label="COM_RENTAL_HELLOWORLD_PAYMENT_BILLING_COUNTRY"
-      default="">
-            
+      default="">  
       <option value="">Please select...</option>
       <option value="GB">United Kingdom</option>
       <option value="AF">Afghanistan</option>
@@ -476,17 +487,8 @@
       <option value="ZM">Zambia</option>
       <option value="ZW">Zimbabwe</option>
     </field>
-    <field 
-      name="autorenewal" 
-      type="checkbox"
-      label="COM_RENTAL_PAYMENT_AUTO_RENEWAL"
-      default=""
-      required="false"
-      labelclass="control-label"
-      filter="int"
-    />
-   
   </fieldset>
+  
   <field 
     name="tsandcs" 
     type="checkbox"
@@ -496,6 +498,7 @@
     filter="int"
     validate="nonzero"
   />   
+  
   <field
     type="hidden"
     filter="int"
