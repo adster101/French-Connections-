@@ -99,12 +99,13 @@ class PaymentsModelPayment extends JModelList
 
     $user = JFactory::getUser();
 
-    $query->select('*, (ptl.quantity * ptl.cost) as line_total');
+    $query->select('*, (ptl.quantity * ptl.cost) as line_total, u.name');
     $query->from('#__protx_transactions pt');
 
     $query->leftJoin('#__protx_transaction_lines ptl on ptl.VendorTxCode = pt.VendorTxCode');
     $query->leftJoin('#__property p on p.id = pt.property_id');
     $query->leftJoin('#__item_costs ic on ic.code = ptl.code');
+    $query->leftJoin('#__users u on u.id = pt.user_id');
     $query->where('pt.id = ' . (int) $this->getState($this->context.'.payment.id',''));
 
 		$canDo	= PaymentsHelper::getActions();

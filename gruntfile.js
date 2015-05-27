@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         src: 'media/fc/assets/js/scripts.js',
         dest: 'media/fc/assets/js/<%= opts.date %>.scripts.min.js',
         options: {
-          mangle: false
+          mangle: true
         }
       }
     },
