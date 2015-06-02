@@ -51,13 +51,17 @@
       label="COM_FCADMIN_FIELD_ILLEGAL_MIME_TYPES_LABEL"
       description="COM_FCADMIN_FIELD_ILLEGAL_MIME_TYPES_DESC" 
     />
-  </fieldset>
-  <fieldset 
-    name="availability">
+  
     <field 
       name="users_to_ignore"
       type="text"
       label="COM_FCADMIN_FIELD_USERS_TO_IGNORE_LABEL" 
     />
+    <field
+      name="notification_from"
+      type="user"
+      label="COM_FCADMIN_FIELD_NOTIFICATION_USER_FROM"
+    >
+    </field>
   </fieldset>
 </config>

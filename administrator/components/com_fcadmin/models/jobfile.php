@@ -38,6 +38,7 @@ class FcadminModelJobfile extends JModelList
     // Create a new query object.
     $db = $this->getDbo();
     $query = $db->getQuery(true);
+    
     // Array of user to ignore - mainly affiliates...
     $users_to_ignore = array();
     $users_to_ignore[] = JUser::getInstance('allezfrancais')->id;
