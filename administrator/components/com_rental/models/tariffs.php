@@ -519,6 +519,8 @@ class RentalModelTariffs extends JModelAdmin
         //TO DO - Log this
       }
     }
+    
+    ksort($raw_tariffs);
 
     return $raw_tariffs;
   }

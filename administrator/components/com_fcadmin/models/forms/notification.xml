@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form 
+  addfieldpath="/libraries/frenchconnections/forms/fields"
+  addrulepath="/libraries/frenchconnections/forms/rules">
+  <fieldset
+    name="notification"
+    label="COM_FCADMIN_ADD_NOTIFICATION_LEGEND"
+    description="COM_FCADMIN_ADD_NOTIFICATION_DESCRIPTION">
+    <field 
+      type="text"
+      name="subject"
+      labelclass="control-label"
+      label="COM_FCADMIN_ADD_NOTIFICATION_SUBJECT"
+      class="input-large"
+      maxlength="150"
+      validate="Fc.length"
+      required="true"
+      filter="JComponentHelper::filterText">      
+    </field>
+    <field 
+      type="editor"
+      name="message"
+      required="true"
+      labelclass="control-label"
+      label="COM_FCADMIN_ADD_NOTIFICATION_MESSAGE"
+      validate="Fc.length"
+      filter="JComponentHelper::filterText">      
+    </field>
+  </fieldset>
+</form>
