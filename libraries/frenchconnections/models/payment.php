@@ -910,7 +910,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
     elseif ($strStatus == "NOTAUTHED")
       $strDBStatus = "DECLINED - The transaction was not authorised by the bank.";
     elseif ($strStatus == "REJECTED")
-      $strDBStatus = "REJECTED - The transaction was failed by your 3D-Secure or AVS/CV2 rule-bases.";
+      $strDBStatus = "REJECTED - The billing address much match the address at which the card is registered. Please ensure you're using the correct billing address and try again.";
     elseif ($strStatus == "AUTHENTICATED")
       $strDBStatus = "AUTHENTICATED - The transaction was successfully 3D-Secure Authenticated and can now be Authorised.";
     elseif ($strStatus == "REGISTERED")
