@@ -69,7 +69,6 @@ class RentalModelPayment extends JModelAdmin
     }
 
     $user = JFactory::getUser($owner_id);
-    ;
 
     // Get the dispatcher and load the user's plugins.
     $dispatcher = JEventDispatcher::getInstance();
