@@ -86,3 +86,5 @@ robots.txt
 /language/overrides/en-GB.override.ini
 /modules/mod_nice_social_bookmark/
 /plugins/content/spshare/
+/nbproject/private/
+/nbproject/

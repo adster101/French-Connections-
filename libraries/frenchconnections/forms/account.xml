@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form	addrulepath="/administrator/components/com_rental/models/rules">
+<form	
+  addrulepath="/administrator/components/com_rental/models/rules"  
+  addfieldpath="/libraries/frenchconnections/forms/fields">
+
   <fieldset name="submit">
     <field
       name="vat_status"
@@ -100,6 +103,16 @@
       labelclass="control-label"
       required="true"
     />
+    <field
+      name="country"
+      type="country"
+      required="true"
+      filter="string"
+      labelclass="control-label"
+      label="COM_RENTAL_HELLOWORLD_PAYMENT_BILLING_COUNTRY"
+      default="">  
+      <option value="">Please select...</option>
+    </field>
     
     <field
       name="postal_code"
