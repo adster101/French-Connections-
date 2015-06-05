@@ -8,28 +8,24 @@
  */
 defined('_JEXEC') or die;
 
-
-$user = JFactory::getUser();
-$app = JFactory::getApplication();
-
 // Note. It is important to remove spaces between elements.
 ?>
-<?php // The menu class is deprecated. Use nav instead.  ?>
+<?php // The menu class is deprecated. Use nav instead.   ?>
 <ul class="nav <?php echo $class_sfx; ?>"<?php
-$tag = '';
+    $tag = '';
 
-if ($params->get('tag_id') != null)
-{
-  $tag = $params->get('tag_id') . '';
-  echo ' id="' . $tag . '"';
-}
-?>>
-    <?php
+    if ($params->get('tag_id') != null)
+    {
+      $tag = $params->get('tag_id') . '';
+      echo ' id="' . $tag . '"';
+    }
+    ?>>
+      <?php
       foreach ($list as $i => &$item)
       {
         $class = 'item-' . $item->id;
 
-        if ($item->id == $active_id)
+        if (($item->id == $active_id) OR ($item->type == 'alias' AND $item->params->get('aliasoptions') == $active_id))
         {
           $class .= ' current';
         }
@@ -66,18 +62,14 @@ if ($params->get('tag_id') != null)
         {
           $class .= ' parent';
         }
-        
-        if (!$user->guest && $item->deeper) { 
-          $class = ' hide';
-        }
-        
+
         if (!empty($class))
         {
           $class = ' class="' . trim($class) . '"';
         }
-        
+
         echo '<li' . $class . '>';
-        
+
         // Render the menu item.
         switch ($item->type) :
           case 'separator':
@@ -86,35 +78,39 @@ if ($params->get('tag_id') != null)
           case 'heading':
             require JModuleHelper::getLayoutPath('mod_menu', 'default_' . $item->type);
             break;
+
           default:
             require JModuleHelper::getLayoutPath('mod_menu', 'default_url');
             break;
         endswitch;
 
-        // The next item is deeper.
-        if ($item->deeper && !$user->guest)
+        if ($i == 4)
         {
           $anchor_class = $item->anchor_css ? 'class="' . $item->anchor_css . '" ' : '';
 
           echo '<li class="dropdown">';
-          echo '<a ' . $anchor_class . ' data-toggle="dropdown" href="#" id="' . $item->id . '">' . $user->name . '<span class="caret"></span></a>';
-          echo '<ul class="dropdown-menu pull-right" id="menu1">';
+          echo '<a data-toggle="dropdown" href="#" id="' . $item->id . '">More<span class="caret"></span></a>';
+          echo '<ul class="dropdown-menu" id="menu1">';
+        }
+
+        // The next item is deeper.
+        if ($item->deeper)
+        {
+          echo '<ul class="nav-child unstyled small">';
         }
         elseif ($item->shallower)
         {
           // The next item is shallower.
           echo '</li>';
-          if (!$user->guest) {
-            echo '<li role="presentation" class="divider"></li>';
-            echo '<li><a href="' . JRoute::_('index.php?option=com_users&task=user.logout&' . JSession::getFormToken() . '=1') . '">' . JText::_('JLOGOUT') . '</a></li>';
-          }
           echo str_repeat('</ul></li>', $item->level_diff);
-          
         }
         else
         {
           // The next item is on the same level.
-          echo '</li>';
+          if ($i == count($items))
+          {
+            echo '</li>';
+          }
         }
       }
-      ?></ul>
+      ?></ul></ul>

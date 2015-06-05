@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package     Joomla.Site
  * @subpackage  Templates.protostar
@@ -27,43 +26,45 @@ defined('_JEXEC') or die;
  */
 function modChrome_panel($module, &$params, &$attribs)
 {
-	$moduleTag      = $params->get('module_tag', 'div');
-	$headerTag      = htmlspecialchars($params->get('header_tag', 'h3'));
-	$bootstrapSize  = (int) $params->get('bootstrap_size', 0);
-	$moduleClass    = $bootstrapSize != 0 ? ' span' . $bootstrapSize : '';
+  $moduleTag = $params->get('module_tag', 'div');
+  $headerTag = htmlspecialchars($params->get('header_tag', 'h3'));
+  $bootstrapSize = (int) $params->get('bootstrap_size', 0);
+  $moduleClass = $bootstrapSize != 0 ? ' span' . $bootstrapSize : '';
 
-	// Temporarily store header class in variable
-	$headerClass	= $params->get('header_class');
-	$headerClass	= !empty($headerClass) ? ' class="' . htmlspecialchars($headerClass) . '"' : '';
+  // Temporarily store header class in variable
+  $headerClass = $params->get('header_class');
+  $headerClass = !empty($headerClass) ? ' class="' . htmlspecialchars($headerClass) . '"' : '';
 
-	if (!empty ($module->content)) : ?>
-		<<?php echo $moduleTag; ?> class="moduletable<?php echo $moduleClass; ?>">
-    
+  if (!empty($module->content)) :
+    ?>
+    <<?php echo $moduleTag; ?> class="moduletable<?php echo $moduleClass; ?>">
+
     <!-- This outputs another div but nests the module class suffix into the chrome -->
-		<<?php echo $moduleTag; ?> class="<?php echo htmlspecialchars($params->get('moduleclass_sfx')); ?>">
+    <<?php echo $moduleTag; ?> class="<?php echo htmlspecialchars($params->get('moduleclass_sfx')); ?>">
 
     <?php echo '<div class="panel-body">' ?>
-		<?php if ((bool) $module->showtitle) :?>
-			<<?php echo $headerTag . $headerClass . '>' . $module->title; ?></<?php echo $headerTag; ?>>
-		<?php endif; ?>
+    <?php if ((bool) $module->showtitle) : ?>
+      <<?php echo $headerTag . $headerClass . '>' . $module->title; ?></<?php echo $headerTag; ?>>
+    <?php endif; ?>
 
-			<?php echo $module->content; ?>
+    <?php echo $module->content; ?>
 
-		</<?php echo $moduleTag; ?>>
     </<?php echo $moduleTag; ?>>
     </<?php echo $moduleTag; ?>>
+    </<?php echo $moduleTag; ?>>
 
-	<?php endif;
+    <?php
+  endif;
 }
 
 /*
  * Module chrome for rendering a bootstrap navbar instead of the nav pills etc
  */
 
-
-
-function modChrome_nav($module, &$params, &$attribs) {
-  if ($module->content) {
+function modChrome_nav($module, &$params, &$attribs)
+{
+  if ($module->content)
+  {
     echo '<div class="navbar">';
     echo '<div class="navbar-inner">';
     echo '<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">';
@@ -85,24 +86,29 @@ function modChrome_nav($module, &$params, &$attribs) {
  * 
  */
 
-function modChrome_no($module, &$params, &$attribs) {
-  if ($module->content) {
+function modChrome_no($module, &$params, &$attribs)
+{
+  if ($module->content)
+  {
     echo $module->content;
   }
 }
 
-function modChrome_well($module, &$params, &$attribs) {
+function modChrome_well($module, &$params, &$attribs)
+{
 
-	$headerTag      = htmlspecialchars($params->get('header_tag', 'h3'));
-	$bootstrapSize  = (int) $params->get('bootstrap_size', 0);
-	$moduleClass    = $bootstrapSize != 0 ? 'span' . $bootstrapSize : '';
-  $headerClass	= $params->get('header_class');
-  $moduleClass .= ($params->get('moduleclass_sfx')) ? ' ' . htmlspecialchars($params->get('moduleclass_sfx')) : ''; 
-  
-  if ($module->content) {
+  $headerTag = htmlspecialchars($params->get('header_tag', 'h3'));
+  $bootstrapSize = (int) $params->get('bootstrap_size', 0);
+  $moduleClass = $bootstrapSize != 0 ? 'span' . $bootstrapSize : '';
+  $headerClass = $params->get('header_class');
+  $moduleClass .= ($params->get('moduleclass_sfx')) ? ' ' . htmlspecialchars($params->get('moduleclass_sfx')) : '';
+
+  if ($module->content)
+  {
     echo "<div class=\"well well-sm\">";
     echo "<div class=\"" . $moduleClass . "\">";
-    if ($module->showtitle) {
+    if ($module->showtitle)
+    {
       echo '<' . $headerTag . ' class=' . htmlspecialchars($headerClass) . '>' . $module->title . '</' . $headerTag . '>';
     }
     echo $module->content;
@@ -110,4 +116,32 @@ function modChrome_well($module, &$params, &$attribs) {
   }
 }
 
+/*
+ * html5 (chosen html5 tag and font headder tags)
+ */
+
+function modChrome_ownerloginpanel($module, &$params, &$attribs)
+{
+  $moduleTag = $params->get('module_tag', 'div');
+  $headerTag = htmlspecialchars($params->get('header_tag', 'h3'));
+  $bootstrapSize = (int) $params->get('bootstrap_size', 0);
+  $moduleClass = $bootstrapSize != 0 ? ' span' . $bootstrapSize : '';
+
+  // Temporarily store header class in variable
+  $headerClass = $params->get('header_class');
+  $headerClass = !empty($headerClass) ? ' class="' . htmlspecialchars($headerClass) . '"' : '';
+
+  if (!empty($module->content)) :
+    ?>
+    <div class="well well-sm pull-right hidden-xs">
+      <?php if ((bool) $module->showtitle) : ?>
+        <div class="panel-heading">
+          <<?php echo $headerTag . $headerClass . '>' . $module->title; ?></<?php echo $headerTag; ?>>
+        </div>       
+      <?php endif; ?>
+      <?php echo $module->content; ?>
+    </div>
+    <?php
+  endif;
+}
 ?>
