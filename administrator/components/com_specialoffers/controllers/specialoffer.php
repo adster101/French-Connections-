@@ -88,12 +88,21 @@ class SpecialOffersControllerSpecialOffer extends RentalControllerBase
     {
       $key = $table->getKeyName();
     }
-
+    
+    // Use the special offer model to look up the item 
+    // so we can pump the unit_id into the allowEdit method.
+    $item = $model->getItem($ids[0]);
+    
+    if(!$item)
+    {
+      return false;
+    }
+    
     // The record ID of the offer that is being cancelled.
     $recordId = (int) (count($ids) ? $ids[0] : '');
 
     // Check that the offer can be edited by the owner attempting 
-    if (!$this->allowEdit(array($key => $recordId), $key))
+    if (!$this->allowEdit(array($key => $item->unit_id), $key))
     {
       $this->setMessage(JText::_('COM_SPECIALOFFERS_YOU_CANNOT_EXPIRE_THIS_OFFER'), 'error');
       // redirect back to the list of special offers for this property...
@@ -102,17 +111,14 @@ class SpecialOffersControllerSpecialOffer extends RentalControllerBase
                       'index.php?option=' . $this->option, false
               )
       );
-
       return false;
     }
 
     if (!$model->canceloffer($recordId))
     {
-
       return false;
     }
-
-
+    
     // Update the end_date for the offer
     $table->end_date = JFactory::getDate()->toSql();
 
