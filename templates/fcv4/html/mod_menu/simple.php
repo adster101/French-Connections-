@@ -84,7 +84,7 @@ defined('_JEXEC') or die;
             break;
         endswitch;
 
-        if ($i == 4)
+        if ($i == 3)
         {
           $anchor_class = $item->anchor_css ? 'class="' . $item->anchor_css . '" ' : '';
 
