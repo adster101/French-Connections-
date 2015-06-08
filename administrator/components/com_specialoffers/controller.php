@@ -17,7 +17,7 @@ class SpecialOffersController extends JControllerLegacy
    *
    * @return void
    */
-  function display($cachable = false)
+  public function display($cachable = false, $urlparams = array())
   {
     // set default view if not set
     JRequest::setVar('view', JRequest::getCmd('view', 'SpecialOffers'));
@@ -36,7 +36,7 @@ class SpecialOffersController extends JControllerLegacy
 
       return false;
     }
-    parent::display($cachable);
+    parent::display($cachable, $urlparams);
   }
 
 }

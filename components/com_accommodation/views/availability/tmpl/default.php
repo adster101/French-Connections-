@@ -19,7 +19,12 @@
         </table>    
       </div>
       <div class="sidescroll-nextprev clearfix">
-        <div class="overthrow sidescroll">
+        <!-- 
+          Inline style block to correct iOS sizing issue - PLEASE DO NOT REMOVE
+          http://stackoverflow.com/questions/23083462/how-to-get-an-iframe-to-be-responsive-in-ios-safari
+          https://www.frenchconnections.co.uk/administrator/index.php?option=com_tickets&task=ticket.edit&id=908
+        -->
+        <div class="overthrow sidescroll" style="width:1px;min-width:100%">
           <?php echo $this->availability; ?>
         </div>
       </div>

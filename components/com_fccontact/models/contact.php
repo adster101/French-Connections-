@@ -59,6 +59,12 @@ class FcContactModelContact extends JModelAdmin
     return $data;
   }
 
+  /**
+   * 
+   * @param JForm $form
+   * @param type $data
+   * @param type $group
+   */
   public function preprocessForm(JForm $form, $data, $group = 'content')
   {
     parent::preprocessForm($form, $data, $group);
@@ -66,13 +72,24 @@ class FcContactModelContact extends JModelAdmin
     $input = JFactory::getApplication()->input;
 
     $presales = $input->get('pre-sales', false, 'boolean');
+    $askus = $input->get('askus', false, 'boolean');
 
     if ($presales)
     {
       $form->setFieldAttribute('nature', 'default', 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES');
     }
-    
-    
+
+    if ($askus)
+    {
+      $form->setFieldAttribute('nature', 'required', 'false');
+
+      $form->setFieldAttribute('name', 'labelclass', '');
+      $form->setFieldAttribute('email', 'labelclass', '');
+      $form->setFieldAttribute('tel', 'labelclass', '');
+      $form->setFieldAttribute('message', 'labelclass', '');
+      $form->setFieldAttribute('prn', 'required', 'false');
+      $form->removeField('captcha');
+    }
   }
 
   /**
@@ -100,29 +117,25 @@ class FcContactModelContact extends JModelAdmin
   public function save($data)
   {
 
-    $app = JFactory::getApplication();
-    $menuItem = $app->getMenu()->getActive();
-    $params = $menuItem->params;
+    $Itemid = SearchHelper::getItemid(array('component', 'com_fccontact'));
 
-    $subject = JText::sprintf(
-                    'COM_FCCONTACT_EMAIL_SUBJECT', JText::_($data['nature']), $data['prn']
-    );
+    $menu = JMenu::getInstance('site');
+    $params = $menu->getParams($Itemid);
 
-    $body = JText::sprintf(
-                    'COM_FCCONTACT_EMAIL_BODY', $data['message'], $data['tel']
-    );
+    $subject = JText::sprintf('COM_FCCONTACT_EMAIL_SUBJECT', $data['name'], JText::_($data['nature']), $data['prn']);
+
+    $body = JText::sprintf('COM_FCCONTACT_EMAIL_BODY', $data['message'], $data['tel']);
 
     $from = $data['email'];
-
     $name = $data['name'];
 
     $to = $params->get('contact', 'fchelpdesk@frenchconnections.co.uk');
-    
+
     if ($data['nature'] == 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES')
     {
       $cc = $params->get('additional_email');
     }
-    
+
     // Send the registration email. the true argument means it will go as HTML
     $send = JFactory::getMailer()
             ->sendMail($from, $name, $to, $subject, $body, true, $cc);

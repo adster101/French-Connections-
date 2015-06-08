@@ -9,23 +9,59 @@
 
 defined('_JEXEC') or die;
 
-$hideLinks = false;
+$hideLinks = $input->getBool('hidemainmenu');
 $task      = $input->getCmd('task');
 $output    = array();
-?>
-You have 
-<?php //  Print the inbox message.
+
+
+
+// Print the frontend logged in  users.
+if ($params->get('show_loggedin_users', 1))
+{
+	$output[] = '<div class="btn-group loggedin-users">'
+		. '<span class="badge">' . $online_num . '</span> '
+		. JText::plural('MOD_STATUS_USERS', $online_num)
+		. '</div>';
+}
+
+// Print the back-end logged in users.
+if ($params->get('show_loggedin_users_admin', 1))
+{
+	$output[] = '<div class="btn-group backloggedin-users">'
+		. '<span class="badge">' . $count . '</span> '
+		. JText::plural('MOD_STATUS_BACKEND_USERS', $count)
+		. '</div>';
+}
+
+//  Print the inbox message.
 if ($params->get('show_messages', 1))
 {
-	$active = $unread ? ' badge-warning' : '';
-	$output[] = '<div class="btn-group hasTooltip ' . $inboxClass . '"'
-		. ' title="' . JText::plural('MOD_STATUS_MESSAGES', $unread) . '"'
-		. ' alt="' . JText::plural('MOD_STATUS_MESSAGES', $unread) . '">'
-		. ($hideLinks ? '' : '<a href="' . $inboxLink . '">')
-		. '<i class="icon icon-envelope">&nbsp;</i> '
-		. '<span class="badge' . $active . '">' . $unread . '</span>'
+	$active = $unread ? ' badge-important' : ' badge-default';
+  
+	$output[] = '<div class="label label-notification pull-right"'
+		. ' title="' . JText::plural('MOD_STATUS_MESSAGES', $unread) . '">'
+		. '<a class="" href="' . $inboxLink . '">'
+		. '<span class="badge' . $active . '">' . $unread 
+		. '</span>&nbsp;&nbsp;<i class="notification-icon icon-envelope"></i></a>'
+		. '</div>';
+}
+
+// Print the logout link.
+if ($task == 'edit' || $task == 'editA' || $input->getInt('hidemainmenu'))
+{
+	$logoutLink = '';
+}
+else
+{
+	$logoutLink = JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1');
+}
+
+if ($params->get('show_logout', 0))
+{
+	$output[] = '<div class="btn-group logout">'
+		. ($hideLinks ? '' : '<a href="' . $logoutLink . '">')
+		. '<i class="icon-minus-2"></i> ' . JText::_('JLOGOUT')
 		. ($hideLinks ? '' : '</a>')
-		. '<div class="btn-group divider"></div>'
 		. '</div>';
 }
 
@@ -34,9 +70,3 @@ foreach ($output as $item)
 {
 	echo $item;
 }
-?>
-unread messages.
-
-<br />
-<br />
-<br />

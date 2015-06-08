@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form 
+  addfieldpath="/libraries/frenchconnections/forms/fields">
+  <fieldset
+    name="images"
+    label="COM_FCADMIN_RETRIEVE_IMAGES_LEGEND"
+    description="COM_FCADMIN_RETRIEVE_IMAGES_DESCRIPTION">
+    <field 
+      type="unit"
+      name="unit_id"
+      labelclass="control-label"
+      label="COM_FCADMIN_CHOOSE_UNIT_LABEL"
+      component="com_fcadmin">
+    </field>
+  </fieldset>
+</form>

@@ -155,7 +155,7 @@ abstract class PropertyHelper
 
     $rental = JTable::getInstance('PropertyVersions', 'RentalTable');
     $realestate = JTable::getInstance('PropertyVersions', 'RealEstateTable');
-    
+
     // Most likely this is a rental property
     $rental->load($id);
 

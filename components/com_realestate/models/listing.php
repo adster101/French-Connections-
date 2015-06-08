@@ -24,7 +24,7 @@ class RealestateModelListing extends JModelForm
   /**
    * @var boolean review
    */
-  protected $preview = false;
+  public $preview = false;
 
   public function __construct($config = array())
   {
@@ -138,7 +138,29 @@ class RealestateModelListing extends JModelForm
 
     $select = '
         a.id as property_id,
-        b.*,
+        b.agency_reference,
+        b.realestate_property_id,
+        b.latitude,
+        b.longitude,
+        b.country,
+        b.area,
+        b.region,
+        b.department,
+        b.city,
+        b.use_invoice_details,
+        b.first_name as alt_first_name,
+        b.surname as alt_surname,
+        b.email_1 as alt_email_1,
+        b.phone_1 as alt_phone_1,
+        b.phone_2 as alt_phone_2,
+        b.description,
+        b.title,
+        b.single_bedrooms,
+        b.double_bedrooms,
+        b.bathrooms,
+        b.additional_price_notes,
+        b.base_currency,
+        b.price,
         e.title as city_title,
         f.title as department,
         g.title as region,

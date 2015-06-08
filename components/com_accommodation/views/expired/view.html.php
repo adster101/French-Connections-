@@ -21,9 +21,13 @@ class AccommodationViewExpired extends JViewLegacy
     // Set the default model to the listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'AccommodationModel'), true);
 
+    
     $model = $this->getModel();
    
-   
+    // Set Preview property to true so we get inactive props as well in case expired property has 
+    // been marked as inactive for some reason.
+    $model->preview = true;
+    
     if (!$this->item = $model->getItem(true))
     {
       throw new Exception(JText::_('WOOT'), 500);

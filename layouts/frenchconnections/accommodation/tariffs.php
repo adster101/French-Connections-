@@ -27,10 +27,10 @@ $tariffs_based_on = $displayData->tariffs_based_on;
     <td>
       <?php if ($base_currency == 'GBP') : ?>
         &pound;<?php echo $prices['GBP'] . '&nbsp;' . htmlspecialchars($tariffs_based_on); ?>  
-        <br /> <span class="muted">(<i>Approximately:</i> &euro;<?php echo $prices['EUR']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>
+        <br /> <span class="muted">(&euro;<?php echo $prices['EUR']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>
       <?php else: ?>
         &euro;<?php echo $prices['EUR'] . '&nbsp;' . htmlspecialchars($tariffs_based_on); ?>  
-        <br /> <span class="muted">(<i>Approximately:</i> &pound;<?php echo $prices['GBP']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>  
+        <br /> <span class="muted">(&pound;<?php echo $prices['GBP']; ?> / &dollar;<?php echo $prices['USD']; ?>)</span>  
       <?php endif; ?>
     </td>
   </tr>

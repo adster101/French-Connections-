@@ -20,7 +20,8 @@ abstract class FcadminHelper {
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_IMPORT_INVOICES'), 'index.php?option=com_fcadmin&view=myobsync', $submenu == 'myobsync');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NO_AVAILABILITY'), 'index.php?option=com_fcadmin&view=noavailability&format=raw', $submenu == 'noavailability');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_WHERE_HEARD'), 'index.php?option=com_fcadmin&view=whereheard&format=raw', $submenu == 'whereheard');
-    
+    JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_IMAGES'), 'index.php?option=com_fcadmin&view=images', $submenu == 'images');
+    JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NOTIFICATIONS'), 'index.php?option=com_fcadmin&view=notification', $submenu == 'notification');
   }
 
 }

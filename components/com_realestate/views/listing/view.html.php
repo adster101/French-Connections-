@@ -22,12 +22,26 @@ class RealestateViewListing extends JViewLegacy
 
     if (!$this->item = $this->get('Item'))
     {
-      throw new Exception(JText::_('Property not available'), 410);
+      // Get the URI
+      $uri = JURI::getInstance();
+
+      // Get the query string
+      $query = $uri->getQuery(true);
+
+      // Append the view
+      $query['view'] = 'expired';
+
+      // Set the query string
+      $uri->setQuery($query);
+
+      // And redirect
+      header('Location: ' . $uri->toString());
+      exit;
     }
 
     // Get the images for this property
     $this->images = $this->get('Images');
-    
+
     // Get the location breadcrumb trail
     $this->crumbs = $this->get('Crumbs');
 

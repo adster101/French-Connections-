@@ -41,7 +41,7 @@ class RentalController extends JControllerLegacy
    *
    * @return void
    */
-  function display($cachable = false)
+  public function display($cachable = false, $urlparams = array())
   {
 
 
@@ -80,7 +80,7 @@ class RentalController extends JControllerLegacy
     }
 
     // call parent behavior
-    parent::display($cachable);
+    parent::display($cachable, $urlparams);
   }
 
   function changeLanguage()

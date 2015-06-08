@@ -42,6 +42,12 @@ $total_vat = '';
               <?php endforeach; ?>
             </fieldset>
           <?php endforeach; ?>
+          <div class="control-group">
+            <?php echo $this->form->getLabel('tsandcs'); ?>
+            <div class="controls">
+              <?php echo $this->form->getInput('tsandcs'); ?>
+            </div>
+          </div> 
           <?php echo JHtmlProperty::button('btn btn-primary btn-large', 'payment.process', 'icon-next', 'Submit payment'); ?>
           <hr />
           <input type="hidden" name="task" value="" />

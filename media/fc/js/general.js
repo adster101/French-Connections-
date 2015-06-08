@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {
 
   if (jQuery('.overthrow').length) {
-    overthrow.sidescroller( document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
+    overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
       fixedItemWidth: true
     });
@@ -73,10 +73,10 @@ jQuery(document).ready(function() {
       autoclose: true
 
     }).on('changeDate', function(ev) {
-      });
+    });
 
   } catch (e) {
-  // what to do!?
+    // what to do!?
   }
 
   // Load the google maps crap, only if there is a #map on the page.
@@ -145,6 +145,39 @@ jQuery(document).ready(function() {
     })
   });
 
+  // TO DO -make the below into a encapsulated function and reduce code here
+  // e.g. the show_contact method below is too similar to this functionality 
+  // so should be made generic (and reusable)
+  var use_invoice = jQuery('#jform_use_invoice_address');
+  if (use_invoice.length)
+  {
+    
+    use_invoice.attr('checked', false);
+
+    jQuery("#jform_use_invoice_address").on('change', function(e) {
+
+      var siblings = jQuery(this).parent().parent().siblings('div');
+      var inputs = siblings.find(':input');
+      var checked = jQuery(this).is(':checked');
+
+      // Loop over each input and activate/deactive the required attr
+      inputs.each(function() {
+        field = jQuery(this);
+
+        if (!checked) {
+          field.addClass('required');
+          field.attr('required', 'required');
+        } else {
+          field.removeClass('required');
+          field.removeAttr('required');
+        }
+      });
+
+      // Just show/hide all the form fields as appropriate
+      siblings.toggle();
+    })
+  }
+
   if (jQuery("#contactDetails").length) {
 
     var checked = jQuery('#jform_use_invoice_details');
@@ -177,7 +210,7 @@ jQuery(document).ready(function() {
     //window.onbeforeunload = function() {
     //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
-    });
+  });
 
   try {
     // If the tinymce editor is loaded
@@ -197,7 +230,7 @@ jQuery(document).ready(function() {
       });
     }
   } catch (e) {
-  // what to do!?
+    // what to do!?
   }
 
   // Add special offer counter... 
@@ -274,7 +307,7 @@ var loadGoogleMaps = function(func) {
     script.type = 'text/javascript';
 
     script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true&' +
-    'callback=' + func;
+            'callback=' + func;
     document.body.appendChild(script);
   }
 }
@@ -355,7 +388,7 @@ var toggle = function(elem, show) {
   }
 }
 
-var show_contact = function(that) {
+var show_contact = function(that, selector) {
 
   if (jQuery(that).is(':checked')) {
     jQuery("#contactDetails").hide();

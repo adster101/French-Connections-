@@ -347,23 +347,23 @@ class FcSearchViewSearch extends JViewLegacy
     $location_title = str_replace('France', '', $location);
 
 
-// Work out the property type we have
-// TO DO - extend this to add a canonical tag if multiple property types are selected.
+    // Work out the property type we have
+    // TO DO - extend this to add a canonical tag if multiple property types are selected.
     if (!empty($property_types))
     {
       $property_parts = explode('_', $property_types[0]);
       $property_type = JStringNormalise::toSpaceSeparated($property_parts[1]);
     }
 
-// Work out the accommodation type we have
-// TO DO - extend this to add a canonical tag if both accommodation type are selected.
+    // Work out the accommodation type we have
+    // TO DO - extend this to add a canonical tag if both accommodation type are selected.
     if (!empty($accommodation_types))
     {
       $accommodation_parts = explode('_', $accommodation_types[0]);
       $accommodation_type = JStringNormalise::toSpaceSeparated($accommodation_parts[1]);
     }
 
-// Work out the meta title pattern to use
+    // Work out the meta title pattern to use
     if ($property_type && $accommodation_type)
     {
       $plural_property_type = $inflector->toPlural($property_type);
@@ -371,7 +371,7 @@ class FcSearchViewSearch extends JViewLegacy
     }
     elseif ($accommodation_type)
     {
-      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_DESCRIPTION', ucfirst($accommodation_type), ucwords($location_title), ucfirst($accommodation_type));
+      $title = JText::sprintf('COM_FCSEARCH_ACCOMMODATION_TYPE_DESCRIPTION', ucfirst($accommodation_type), ucwords($location_title));
     }
     elseif ($property_type)
     {

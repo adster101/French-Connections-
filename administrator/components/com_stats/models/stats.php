@@ -159,6 +159,12 @@ class StatsModelStats extends JModelList
       $query->leftJoin($db->quoteName($property_table, 'b') . ' ON b.id = a.property_id');
       $query->where('b.created_by = ' . $user->id);
     }
+    
+    // Don't account for enquiries that are marked as SPAM
+    if ($table == '#__enquiries')
+    {
+      $query->where('a.state in (0,1)');
+    }
 
     $db->setQuery($query);
 

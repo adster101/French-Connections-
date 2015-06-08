@@ -289,7 +289,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                 <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
               <?php endif; ?>
               <br />
-              (<i>Approx:</i> &euro;<?php echo $min_prices['EUR']; ?>)
+              (&euro;<?php echo $min_prices['EUR']; ?>)
             </p>             
           <?php else: ?>
             <p>
@@ -298,7 +298,7 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
                 <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
               <?php endif; ?>
               <br />
-              (<i>Approx:</i> &euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)
+              (&euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)
             </p> 
           <?php endif; ?>
         <?php else: ?>

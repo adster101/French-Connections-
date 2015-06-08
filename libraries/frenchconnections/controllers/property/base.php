@@ -48,16 +48,7 @@ class RentalControllerBase extends JControllerForm
 
       $table->load($data[$key]);
       $recordId = $table->property_id;
-    }
-    elseif ($this->context == 'enquiry')
-    {
-      // These use different tables so we have to look up the record ID via the model
-      $model = $this->getModel();
-      $id = $this->input->getInt('id');
-      $item = $model->getItem($id);
-      
-      $recordId = (int) !empty($item->property_id) ? $item->property_id : 0;
-    }
+    }  
     else
     {
       // Initialise variables.

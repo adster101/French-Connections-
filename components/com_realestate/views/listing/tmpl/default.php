@@ -253,30 +253,33 @@ if (!empty($this->item->languages_spoken))
   </div>
   <div class="col-lg-5 col-md-5 col-sm-5">
     <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4> 
-    <p>
+    <?php if ($this->item->use_invoice_details) : ?>
       <?php echo $this->escape($this->item->firstname); ?>&nbsp;<?php echo $this->escape($this->item->surname); ?><br />
-    </p>
+    <?php else: ?>
+      <?php echo $this->escape($this->item->alt_first_name); ?>&nbsp;<?php echo $this->escape($this->item->alt_surname); ?><br />
+    <?php endif; ?>
     <p>
       <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL'); ?>
-      <?php echo $this->item->phone_1; ?>
+      <?php echo ($this->item->use_invoice_details) ? $this->item->phone_1 : $this->item->alt_phone_1; // Assumes there is at least one phone  ?>
     </p>
-
-    <?php if ($this->item->phone_2) : ?>
-      <p>
-        <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
-        <?php echo $this->item->phone_2; ?>
-      </p>
+    <?php if ($this->item->use_invoice_details) : // Show owners second phone number if there is one on the account   ?>
+      <?php if (!empty($this->item->phone_2)) : ?>
+        <p>
+          <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
+          <?php echo $this->item->phone_2; ?>
+        </p>
+      <?php endif; ?>
+    <?php else: // Show the alt second phone number if one has been entered  ?>
+      <?php if (!empty($this->item->alt_phone_2)) : ?>
+        <p>
+          <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL2'); ?>
+          <?php echo $this->item->alt_phone_2; ?>
+        </p>
+      <?php endif; ?>
     <?php endif; ?>
-    <?php if ($this->item->phone_3) : ?>
-      <p>
-        <?php echo JText::_('COM_ACCOMMODATION_CONTACT_TEL3'); ?>
-        <?php echo $this->item->phone_3; ?>
-      </p>
-    <?php endif; ?>  
     <?php if (count($langs_array) > 0) : ?>
       <p><?php echo JText::sprintf('COM_ACCOMMODATION_LANGUAGES_SPOKEN', implode(', ', $langs_array)); ?></p>
     <?php endif; ?>
-
     <?php if ($this->item->website) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>

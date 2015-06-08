@@ -42,7 +42,7 @@ class RentalControllerPayment extends JControllerLegacy
 
     // Get the listing unit details
     $current_listing = $listing->getItems();
-    
+
     // Set the context so we can hold the edit ID
     $context = "com_rental.edit.payment";
 
@@ -69,12 +69,12 @@ class RentalControllerPayment extends JControllerLegacy
     $this->holdEditId($context, $recordId);
     if (empty($current_listing[0]->vat_status))
     {
-      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false,1);
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false, 1);
     }
     else
     {
       // Redirect to the renewal payment/summary form thingy...
-      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false,1);
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false, 1);
     }
 
     $this->setRedirect($route);
@@ -215,6 +215,13 @@ class RentalControllerPayment extends JControllerLegacy
       $previous_version = $listing->getItems();
     }
 
+    // Inject the billing details if required
+    if ($data['use_invoice_address'])
+    {
+      // Assume we don't have any card billing details
+      $validData = $model->getBillingDetails($validData);
+    }
+
     // Attempt process the payment
     $return = $payment_model->processPayment($validData, $current_version, $previous_version, $this->extension);
 
@@ -234,7 +241,7 @@ class RentalControllerPayment extends JControllerLegacy
     $message = $payment_model->processListing($return, $validData);
 
     // Empty the data stored in the session...
-    $app->setUserState('com_rental.renewal.data', $data);
+    $app->setUserState('com_rental.renewal.data', null);
 
     if (RentalHelper::isOwner($user->id))
     {

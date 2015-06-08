@@ -69,12 +69,12 @@ class RealEstateControllerPayment extends JControllerLegacy
     $this->holdEditId($context, $recordId);
     if (empty($current_listing[0]->vat_status))
     {
-      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false,1);
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&layout=account&id=' . (int) $recordId . $isRenewal, false, 1);
     }
     else
     {
       // Redirect to the renewal payment/summary form thingy...
-      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false,1);
+      $route = JRoute::_('index.php?option=' . $this->extension . '&view=payment&id=' . (int) $recordId . $isRenewal, false, 1);
     }
 
     $this->setRedirect($route);
@@ -151,7 +151,7 @@ class RealEstateControllerPayment extends JControllerLegacy
 
     // import our payment library class
     jimport('frenchconnections.models.realestatepayment');
-    $previous_version = array();    
+    $previous_version = array();
     $app = JFactory::getApplication();
     $id = $this->input->get('id', '', 'int');
     $renewal = $this->input->get('renewal', false, 'boolean');
@@ -212,6 +212,14 @@ class RealEstateControllerPayment extends JControllerLegacy
       $listing->setState('com_realestate.listing.latest', false);
       $previous_version = $listing->getItems();
     }
+
+    // Inject the billing details if required
+    if ($data['use_invoice_address'])
+    {
+      // Assume we don't have any card billing details
+      $validData = $model->getBillingDetails($validData);
+    }
+
 
     // Attempt process the payment
     $return = $payment_model->processPayment($validData, $current_version, $previous_version, $this->extension);

@@ -206,6 +206,7 @@ class plgUserProfile_fc extends JPlugin
 
     // Add the rule path to the form so we may validate the user profile details a bit.
     JForm::addRulePath(JPATH_LIBRARIES . '/frenchconnections/forms/rules');
+    JForm::addFieldPath(JPATH_LIBRARIES . '/frenchconnections/forms/fields');
 
     if (!empty($data))
     {

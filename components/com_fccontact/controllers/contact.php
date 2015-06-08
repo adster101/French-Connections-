@@ -24,8 +24,7 @@ class FcContactControllerContact extends JControllerForm
     $app = JFactory::getApplication();
     $model = $this->getModel();
     $state = $model->get('state');
-    $params = $state->get('parameters.menu');
-
+    $return = $this->input->get('return', '', 'base64');
 
     // Get the data from POST
     $data = $this->input->post->get('jform', array(), 'array');
@@ -84,8 +83,14 @@ class FcContactControllerContact extends JControllerForm
     $app->setUserState('com_fccontact.contact.data', null);
     $this->setRedirect(JRoute::_('index.php?option=com_fccontact&sent=true'));
 
-    $this->setMessage(JText::_('COM_FCCONTACT_EMAIL_SUCCESS'),'success');
-
+    $this->setMessage(JText::_('COM_FCCONTACT_EMAIL_SUCCESS'), 'success');
+    
+    // And set the redirect if we have
+    if ($return)
+    {
+      $this->setRedirect(base64_decode($return));
+    }
+    
     return true;
   }
 
