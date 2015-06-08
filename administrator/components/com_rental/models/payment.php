@@ -53,15 +53,29 @@ class RentalModelPayment extends JModelAdmin
 
   public function getBillingDetails($data = array())
   {
-    $user = JFactory::getUser();
-    $user_id = $user->id;
+
+    $model = JModelLegacy::getInstance('Property', 'RentalModel', array('ignore_request' => true));
+
+    $property_id = $data['id'];
+    
+    $property = $model->getItem($property_id);
+
+    $owner_id = $property->created_by;
+
+    if (!$owner_id)
+    {
+      // Uh oh, no owner id. With out card billing details payment will fail anyway...
+      return $data;
+    }
+
+    $user = JFactory::getUser($owner_id);
 
     // Get the dispatcher and load the user's plugins.
     $dispatcher = JEventDispatcher::getInstance();
     JPluginHelper::importPlugin('user');
 
     $user_data = new JObject;
-    $user_data->id = $user_id;
+    $user_data->id = $owner_id;
 
     // Trigger the data preparation event.
     $dispatcher->trigger('onContentPrepareData', array('com_users.user', &$user_data));
@@ -74,8 +88,13 @@ class RentalModelPayment extends JModelAdmin
     $data['BillingPostCode'] = $user_data->postal_code;
     $data['BillingEmailAddress'] = $user->email;
     $data['BillingCountry'] = $user_data->country;
-    
+
     return $data;
+  }
+
+  private function _getOWnerID(int $property_id = null)
+  {
+    
   }
 
   public function loadFormData()

@@ -18,6 +18,8 @@ $listing = false;
 $URI = JURI::getInstance();
 $menu = $app->getMenu();
 $active = $menu->getActive();
+$header = $app->input->get('header', 'default', 'string');
+
 $siteHome = ($active == $menu->getDefault('en-GB')) ? 'home' : 'sub';
 // Header variable to A/B test a new header
 $header = $app->input->get('header', 'default', 'string');
@@ -53,8 +55,14 @@ else
   <meta name="google-site-verification" content="gxNKICR23M3sV86ZSmOoGcFZCNH-AvkUI1MTTW3nau4" />
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
+<<<<<<< HEAD
   
   <?php include_once JPATH_THEMES . '/' . $this->template . '/inc/' . $header . '.php'; ?>
+=======
+  <?php include_once JPATH_THEMES . '/' . $this->template . '/includes/' . $header . '.php'; ?>
+  
+
+>>>>>>> release-2.2
 
   <div class="container">
     <jdoc:include type="message" /> 
