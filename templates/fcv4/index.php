@@ -18,12 +18,7 @@ $listing = false;
 $URI = JURI::getInstance();
 $menu = $app->getMenu();
 $active = $menu->getActive();
-$header = $app->input->get('header', 'default', 'string');
-
 $siteHome = ($active == $menu->getDefault('en-GB')) ? 'home' : 'sub';
-// Header variable to A/B test a new header
-$header = $app->input->get('header', 'default', 'string');
-
 if ($active)
 {
   $listing = ($active->component == 'com_accommodation') ? true : false;
@@ -50,19 +45,43 @@ else
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1;">
   <jdoc:include type="head" />
-  <?php include_once JPATH_THEMES . '/' . $this->template . '/assets.php'; ?>
+  <?php 
+  include_once JPATH_THEMES . '/' . $this->template . '/assets.php'; ?>
 
   <meta name="google-site-verification" content="gxNKICR23M3sV86ZSmOoGcFZCNH-AvkUI1MTTW3nau4" />
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
-<<<<<<< HEAD
-  
-  <?php include_once JPATH_THEMES . '/' . $this->template . '/inc/' . $header . '.php'; ?>
-=======
-  <?php include_once JPATH_THEMES . '/' . $this->template . '/includes/' . $header . '.php'; ?>
+  <header class="" role="banner"> 
+    <div class="container"> 
+      <?php if ($this->countModules('position-0')) : ?>
+        <div class="banner-container">
+          <jdoc:include type="modules" name="position-0" style="none" />
+        </div>
+      <?php endif; ?>
+      <!-- Take brand out of navbar as we're not really using the BS default nav correctly -->
+      <a class="navbar-brand" href="<?php echo $this->baseurl; ?>">
+        <img src="<?php echo '//' . $URI->getHost() . '/images/general/logo-4.png' ?>" alt="<?php echo $sitename ?>" />
+      </a> 
+    </div>
+    <div class="container">
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".fc-navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>   
+          </button> 
+        </div>
+        <?php if ($this->countModules('position-1')) : ?>  
+          <div class="collapse navbar-collapse fc-navbar-collapse">
+            <jdoc:include type="modules" name="position-1" style="none" />
+          </div>
+        <?php endif; ?>  
+      </nav>       
+    </div>
+  </header>  
   
 
->>>>>>> release-2.2
 
   <div class="container">
     <jdoc:include type="message" /> 
