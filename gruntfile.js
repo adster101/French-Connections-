@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
 
 
@@ -19,19 +19,32 @@ module.exports = function(grunt) {
             dest: 'media/fc/assets/fonts/',
             flatten: true
           }
-
         ]
       }
     },
     less: {
       development: {
         options: {
-          compress: true //minifying the result
+          compress: false //minifying the result
         },
         files: {
           //compiling frontend.less into frontend.css
-          "media/fc/assets/css/styles.css": "templates/fcv4/assets/less/styles.less",
-          "media/fc/assets/css/<%= opts.date %>.styles.min.css": "templates/fcv4/assets/less/styles.less"
+          'media/fc/assets/css/styles.css': 'templates/fcv4/assets/less/styles.less'
+        }
+      }
+    },
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: {
+          // Merge the slick styles into main style sheet
+          'media/fc/assets/css/styles.css':
+                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
+          'media/fc/assets/css/<%= opts.date %>.styles.min.css':
+                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css']
 
         }
       }
@@ -52,6 +65,7 @@ module.exports = function(grunt) {
           'bower_components/bootstrap/js/modal.js',
           'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
           'bower_components/js-marker-clusterer/src/markerclusterer_compiled.js',
+          'bower_components/slick-carousel/slick/slick.min.js',
           'media/system/js/core-uncompressed.js',
           'media/fc/js/libs/jquery.flexslider.js',
           'bower_components/overthrow/dist/overthrow.sidescroller.min.js',
@@ -107,7 +121,6 @@ module.exports = function(grunt) {
         },
         files: [
           {
-
             src: ['templates/fcv4/assets.tmp.php'],
             dest: 'templates/fcv4/assets.php'
 
@@ -124,9 +137,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
-  grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy', 'replace']);
+  grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy', 'replace', 'cssmin']);
   grunt.registerTask('default', ['init']);
 };

@@ -82,8 +82,73 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
+$search_url = $app->getUserState('user.search');
 ?>
 
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <?php if (!empty($search_url)) : ?>
+        <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
+          <span class="glyphicon glyphicon-circle-arrow-left"></span>
+          <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
+        </a>
+      <?php endif; ?> 
+      <div class="pull-right">
+
+        <?php if ($logged_in) : ?>
+          <?php echo $shortlist->render($displayData); ?>
+        <?php else : ?>
+          <a class="btn btn-default" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
+            <span class="glyphicon glyphicon-heart muted"></span>
+            <span class="hidden-xs"><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
+          </a>
+
+        <?php endif; ?>
+        <button class='btn btn-default' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="glyphicon glyphicon-share-alt"></span>
+          <span class="hidden-xs">
+            <?php echo JText::_('COM_ACCOMMODATION_SHARE') ?>
+          </span>
+          <span class="caret hidden-xs"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+          <li> 
+            <a target="_blank" href="<?php
+            echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
+            . urlencode($uri)
+            . '&redirect_uri='
+            . urlencode($uri)
+            . '&picture='
+            . JURI::root() . 'images/property/'
+            . $this->item->unit_id
+            . '/thumbs/'
+            . urlencode($this->images[0]->image_file_name)
+            . '&name=' . urlencode($this->item->unit_title)
+            . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
+            ?>">
+              <span class="glyphicon social-icon facebook"></span>  
+              <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
+            </a>
+          </li> 
+          <li>
+            <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
+              <span class="glyphicon social-icon twitter"></span>
+              <?php echo JText::_('COM_ACCOMMODATION_TWITTER') ?>
+            </a>
+          </li>
+          <li>
+            <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
+              <span class="glyphicon social-icon google-plus"></span>
+              <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
+
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container">
   <h1 class="page-header">
     <?php echo $this->document->title; ?>
@@ -91,104 +156,6 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
   <?php if (count($this->units) > 1) : ?>
     <?php echo $this->loadTemplate('units'); ?>
   <?php endif; ?>
-</div>
-<div class="navbar-property-navigator" data-spy="affix" data-offset-top="640" >
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-10 col-md-9 col-sm-8 hidden-xs">
-        <ul class="nav nav-pills">
-          <li>
-            <a href="<?php echo $route ?>#top">
-              <span class="glyphicon glyphicon-home"> </span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TOP'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#about">
-              <span class="glyphicon glyphicon-info-sign"> </span>          
-              <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?>
-            </a>
-          </li>
-          <?php if (!empty($this->item->location_details)) : ?>
-            <li>
-              <a href="<?php echo $route ?>#location">
-                <span class="glyphicon glyphicon-map-marker"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_LOCATION'); ?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <?php if (!empty($this->item->getting_there)) : ?>
-            <li>
-              <a href="<?php echo $route ?>#gettingthere">
-                <span class="glyphicon glyphicon-plane"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TRAVEL'); ?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <?php if ($this->item->reviews && count($this->item->reviews) > 0) : ?>
-            <li>
-              <a href="<?php echo $route ?>#reviews">
-                <span class="glyphicon glyphicon-power-cord "></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_REVIEWS'); ?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <li>
-            <a href="<?php echo $route ?>#facilities">
-              <span class="glyphicon glyphicon-power-cord"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_FACILITIES'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#availability">
-              <span class="glyphicon glyphicon-calendar"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_AVAILABILITY'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#tariffs">
-              <span class="glyphicon glyphicon-credit-card"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TARIFFS'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#email">
-              <?php $contact_anchor_label = ($this->item->is_bookable) ? 'COM_ACCOMMODATION_NAVIGATOR_BOOK_NOW' : 'COM_ACCOMMODATION_NAVIGATOR_CONTACT'; ?>
-              <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_($contact_anchor_label); ?>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-2 col-md-3 col-sm-4">
-        <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
-          <?php if ($logged_in) : ?>
-            <?php echo $shortlist->render($displayData); ?>
-          <?php else : ?>
-            <a class="btn btn-default" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
-              <span class="glyphicon glyphicon-heart muted"></span>
-              <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
-            </a>    
-          <?php endif; ?>
-        </div>
-        <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block"> 
-          <a target="_blank" href="<?php
-          echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
-          . urlencode($uri)
-          . '&redirect_uri='
-          . urlencode($uri)
-          . '&picture='
-          . JURI::root() . 'images/property/'
-          . $this->item->unit_id
-          . '/thumbs/'
-          . urlencode($this->images[0]->image_file_name)
-          . '&name=' . urlencode($this->item->unit_title)
-          . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
-          ?>"
-             <span class="glyphicon social-icon facebook"></span>
-          </a> 
-          <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
-            <span class="glyphicon social-icon twitter"></span>
-          </a>
-          <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
-            <span class="glyphicon social-icon google-plus"></span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 <div class="container">
   <?php if (count($this->offer)) : ?>
@@ -207,7 +174,8 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
 
   <div class="row" id="main">
     <div class="col-lg-7 col-md-7 col-sm-12">
-      <?php echo $this->loadTemplate('gallery'); ?>
+    <?php echo $this->loadTemplate('gallery'); ?>
+
     </div>
     <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
       <div class="well well-light-blue">
