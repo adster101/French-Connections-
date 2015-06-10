@@ -83,19 +83,24 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $search_url = $app->getUserState('user.search');
+$modules = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.  
 ?>
 
+<div class="container hidden-xs">
+  <h1 class="page-header">
+    <?php echo $this->document->title; ?>
+  </h1>
+  <?php if (count($this->units) > 1) : ?>
+    <?php echo $this->loadTemplate('units'); ?>
+  <?php endif; ?>
+  <?php foreach ($modules as $module) : // Render the cross-sell modules etc  ?>
+    <?php echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box')); ?>
+  <?php endforeach; ?>
+</div>
 <div class="container">
   <div class="row">
     <div class="col-xs-12">
-      <?php if (!empty($search_url)) : ?>
-        <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
-          <span class="glyphicon glyphicon-circle-arrow-left"></span>
-          <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
-        </a>
-      <?php endif; ?> 
-      <div class="pull-right">
-
+      <div class="pull-right hidden-xs hidden-sm">
         <?php if ($logged_in) : ?>
           <?php echo $shortlist->render($displayData); ?>
         <?php else : ?>
@@ -103,8 +108,8 @@ $search_url = $app->getUserState('user.search');
             <span class="glyphicon glyphicon-heart muted"></span>
             <span class="hidden-xs"><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
           </a>
-
         <?php endif; ?>
+
         <button class='btn btn-default' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="glyphicon glyphicon-share-alt"></span>
           <span class="hidden-xs">
@@ -141,21 +146,12 @@ $search_url = $app->getUserState('user.search');
             <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
               <span class="glyphicon social-icon google-plus"></span>
               <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
-
             </a>
           </li>
         </ul>
       </div>
     </div>
   </div>
-</div>
-<div class="container">
-  <h1 class="page-header">
-    <?php echo $this->document->title; ?>
-  </h1>
-  <?php if (count($this->units) > 1) : ?>
-    <?php echo $this->loadTemplate('units'); ?>
-  <?php endif; ?>
 </div>
 <div class="container">
   <?php if (count($this->offer)) : ?>
@@ -173,42 +169,59 @@ $search_url = $app->getUserState('user.search');
   <?php endif; ?>
 
   <div class="row" id="main">
-    <div class="col-lg-7 col-md-7 col-sm-12">
-    <?php echo $this->loadTemplate('gallery'); ?>
-
-    </div>
-    <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
-      <div class="well well-light-blue">
-        <?php if ($this->tariffs) : ?> 
-          <?php if (min($price_range) == max($price_range)) : ?>
-            <p>
-              <strong class="lead">&pound;<?php echo $min_prices['GBP'] ?></strong>
-              <?php if ($this->item->tariffs_based_on) : ?>
-                <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
-              <?php endif; ?>
-              <br />
-              (&euro;<?php echo $min_prices['EUR']; ?>)
-            </p>             
+    <div class="col-lg-5 col-md-5 col-md-push-7 col-sm-5 col-sm-push-7 col-xs-12 key-facts">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <?php if ($this->tariffs) : ?> 
+            <?php if (min($price_range) == max($price_range)) : ?>
+              <p>
+                <span class="lead"><strong>&pound;<?php echo $min_prices['GBP'] ?></strong></span>
+                (&euro;<?php echo $min_prices['EUR']; ?>)
+                <br />
+                <?php if ($this->item->tariffs_based_on) : ?>
+                  <span class="small">
+                    <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
+                  </span>
+                <?php endif; ?>
+              </p>             
+            <?php else: ?>
+              <p>
+                <span class="lead"><strong>&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong></span>
+                (&euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)
+                <br />
+                <?php if ($this->item->tariffs_based_on) : ?>
+                  <span class="small">
+                    <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
+                  </span>
+                <?php endif; ?>
+              </p> 
+            <?php endif; ?>
           <?php else: ?>
-            <p>
-              <strong class="lead">&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong>
-              <?php if ($this->item->tariffs_based_on) : ?>
-                <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
-              <?php endif; ?>
-              <br />
-              (&euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)
-            </p> 
+            <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
           <?php endif; ?>
-        <?php else: ?>
-          <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
-        <?php endif; ?>
-        <!-- Max capacity/occupancy -->
-        <?php if ($this->item->occupancy) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY'); ?>
-            <span class="pull-right"><?php echo $this->item->occupancy; ?></span>
-          </p>
-        <?php endif; ?>
+          <!-- Max capacity/occupancy -->
+          <?php if ($this->item->occupancy) : ?>
+            <p class="dotted">
+              <?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY'); ?>
+              <span class="pull-right"><?php echo $this->item->occupancy; ?></span>
+            </p>
+          <?php endif; ?>
+            <p>
+              <a class="btn btn-danger btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
+                <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
+              </a>
+            </p>
+            <p>
+              <a class="btn btn-warning btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
+              </a>
+            </p>
+
+        </div>
+      </div>
+      <div class="well well-light-blue hidden-xs">
+
+
         <!-- Number of bedrooms, if any -->
         <?php if ($this->item->bedrooms) : ?>
           <p class="dotted">
@@ -276,37 +289,21 @@ $search_url = $app->getUserState('user.search');
             <?php echo Jtext::_('COM_ACCOMMODATION_THIS_PROPERTY_OFFERS_LONG_WINTER_LETS'); ?>
           </p>
         <?php endif; ?>
-
         <?php echo $this->loadTemplate('reviews'); ?>
 
-        <p class="center">
-          <a class="btn btn-info btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
-          </a>
-          <a class="btn btn-primary btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
-            <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
-          </a>
-        </p>
-      </div>  
-    </div> 
-  </div>
+      </div> 
+      <div class="hidden-xs">
 
-  <div class="row" id="about">
-    <div class="col-lg-7 col-md-7 col-sm-7" >
+      </div>
+    </div> 
+    <div class="col-lg-7 col-md-7 col-md-pull-5 col-sm-pull-5 col-sm-7 col-xs-12">
+      <?php echo $this->loadTemplate('gallery'); ?>
       <?php if ($this->item->unit_title) : ?>
         <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>  
       <?php endif; ?>
       <?php if ($this->item->description) : ?>
         <?php echo $this->item->description; ?>
       <?php endif; ?>
-    </div>
-    <div class="col-lg-5 col-md-5 col-sm-5">
-      <?php
-      jimport('joomla.application.module.helper');
-      $modules = JModuleHelper::getModule('mod_OpenX_spc', 'MPU-LISTING');
-      $attribs['style'] = 'html5';
-      echo JModuleHelper::renderModule($modules, $attribs);
-      ?>
     </div>
   </div>
   <?php if (!empty($this->item->location_details)) : ?>

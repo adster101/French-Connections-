@@ -13,25 +13,24 @@ $lang = $app->input->get('lang', 'en');
 $search_url = $app->getUserState('user.search');
 $menu = $app->getMenu();
 $active = $menu->getActive();
-$items = $menu->getItems(array('component','access'), array('com_fcsearch', array(1,2,3)));
+$items = $menu->getItems(array('component', 'access'), array('com_fcsearch', array(1, 2, 3)));
 $Itemid = is_array($items) ? $items[0]->id : array();
 $isListing = ($active->component == 'com_accommodation') ? true : false;
 $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 $isRealestate = ($active->component == 'com_realestate') ? true : false;
-$layout = $app->input->getCmd('layout','');
+$layout = $app->input->getCmd('layout', '');
 ?>
-<?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate) && $layout != 'one') : ?>
-  <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
-    <p>
-      <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    
-        <span class="glyphicon glyphicon-circle-arrow-left"></span>
-        <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
-      </a>
-    </p>
-  </div>
-<?php endif; ?>
+<p class="pull-left">
+  <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
+    <span class="glyphicon glyphicon-circle-arrow-left"></span>
+    <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
+  </a>
+</p>
 
-<ol class="breadcrumb<?php echo $moduleclass_sfx; ?> visible-lg-inline-block visible-md-inline-block visible-sm-inline-block hidden-xs hidden-sm">
+<ol class="breadcrumb <?php echo $moduleclass_sfx; ?> hidden-xs">
+  <?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate)) : ?>
+
+  <?php endif; ?>
   <?php
   if ($params->get('showHere', 1))
   {

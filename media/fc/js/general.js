@@ -1,5 +1,39 @@
 jQuery(document).ready(function() {
 
+  jQuery('.slick-slider').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    asNavFor: '.carousel-ribbon',
+    lazyLoad: 'progressive',
+    arrows: true,
+    fade: true,
+  });
+
+  jQuery('.carousel-ribbon').slick({
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    fade: false,
+    asNavFor: '.slick-slider',
+    focusOnSelect: true,
+    arrows: true,
+    draggable: false,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 5
+        }
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4
+        }
+      }
+    ]
+  });
+
+
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
@@ -151,7 +185,7 @@ jQuery(document).ready(function() {
   var use_invoice = jQuery('#jform_use_invoice_address');
   if (use_invoice.length)
   {
-    
+
     use_invoice.attr('checked', false);
 
     jQuery("#jform_use_invoice_address").on('change', function(e) {

@@ -42,9 +42,9 @@ module.exports = function (grunt) {
         files: {
           // Merge the slick styles into main style sheet
           'media/fc/assets/css/styles.css':
-                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
+                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css', 'bower_components/slick-carousel/slick/slick-theme.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
-                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css']
+                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css', 'bower_components/slick-carousel/slick/slick-.css']
 
         }
       }
@@ -67,7 +67,6 @@ module.exports = function (grunt) {
           'bower_components/js-marker-clusterer/src/markerclusterer_compiled.js',
           'bower_components/slick-carousel/slick/slick.min.js',
           'media/system/js/core-uncompressed.js',
-          'media/fc/js/libs/jquery.flexslider.js',
           'bower_components/overthrow/dist/overthrow.sidescroller.min.js',
           'media/fc/js/general.js',
           'media/fc/js/search.js',
