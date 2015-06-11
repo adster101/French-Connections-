@@ -18,18 +18,18 @@ $Itemid = is_array($items) ? $items[0]->id : array();
 $isListing = ($active->component == 'com_accommodation') ? true : false;
 $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 $isRealestate = ($active->component == 'com_realestate') ? true : false;
-$layout = $app->input->getCmd('layout', '');
+$layout = $app->input->getCmd('layout', 'default');
 ?>
-<p class="pull-left">
-  <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
-    <span class="glyphicon glyphicon-circle-arrow-left"></span>
-    <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
-  </a>
-</p>
+
 
 <ol class="breadcrumb <?php echo $moduleclass_sfx; ?> hidden-xs">
-  <?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate)) : ?>
-
+  <?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate) && $layout == 'default') : ?>
+    <li>
+      <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
+        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+        <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
+      </a>
+    </li>
   <?php endif; ?>
   <?php
   if ($params->get('showHere', 1))

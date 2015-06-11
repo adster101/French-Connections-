@@ -103,15 +103,30 @@ Contains styles that mainly apply to the header section of the template
 // Alt simple header  
 
 .simple {
-  
+
+ 
+
   .navbar-header {
     .navbar-toggle {
+      margin:20px 0 0 0;
     }
   }
   
   .navbar {
     min-height:82px;
     margin-bottom:0;
+    
+      .navbar-brand {
+        img {
+          width:85%;
+        }
+        
+        @media (min-width: @screen-sm-min) {
+          img {
+            width:100%;
+          }
+        }
+      }
 
       .navbar-nav {    
 

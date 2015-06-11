@@ -7,6 +7,8 @@ jQuery(document).ready(function() {
     lazyLoad: 'progressive',
     arrows: true,
     fade: true,
+    prevArrow: '<a class="slick-prev"><span class="glyphicon glyphicon-chevron-left"></span></a>',
+    nextArrow: '<a class="slick-next"><span class="glyphicon glyphicon-chevron-right"></span></a>',
   });
 
   jQuery('.carousel-ribbon').slick({
@@ -15,7 +17,7 @@ jQuery(document).ready(function() {
     fade: false,
     asNavFor: '.slick-slider',
     focusOnSelect: true,
-    arrows: true,
+    arrows: false,
     draggable: false,
     responsive: [
       {

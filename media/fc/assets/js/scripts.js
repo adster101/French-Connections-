@@ -13511,6 +13511,8 @@ jQuery(document).ready(function() {
     lazyLoad: 'progressive',
     arrows: true,
     fade: true,
+    prevArrow: '<a class="slick-prev"><span class="glyphicon glyphicon-chevron-left"></span></a>',
+    nextArrow: '<a class="slick-next"><span class="glyphicon glyphicon-chevron-right"></span></a>',
   });
 
   jQuery('.carousel-ribbon').slick({
@@ -13519,7 +13521,7 @@ jQuery(document).ready(function() {
     fade: false,
     asNavFor: '.slick-slider',
     focusOnSelect: true,
-    arrows: true,
+    arrows: false,
     draggable: false,
     responsive: [
       {
@@ -14357,41 +14359,6 @@ jQuery(window).load(function() {
     loadGoogleMaps('initPropertyMap');
   }
 })
-
-jQuery(document).ready(function() {
-
-  //jQuery('#recaptcha_widget a').tooltip()
-  // The slider being synced must be initialized first
-  jQuery('#carousel').flexslider({
-    animation: "slide",
-    itemWidth: 100,
-    itemMargin: 5,
-    animationLoop: false,
-    asNavFor: '#slider',
-    controlNav: false,
-    slideshow: false
-  });
-
-  jQuery('#slider').flexslider({
-    animation: "fade",
-    animationLoop: false,
-    slideshow: false,
-    sync: '#carousel',
-    useCss: false,
-    animationLoop: false,
-            controlNav: false,
-    video: true,
-    after: function(slider) {
-      var slides = slider.slides;
-      var index = slider.animatingTo;
-      var slide = $(slides[index]);
-      var img = slide.find('img[data-src]');
-      if (img) {
-        img.attr("src", img.attr('data-src')).removeAttr("data-src");
-      }
-    }
-  });
-});
 
 function initPropertyMap() {
 

@@ -83,7 +83,8 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $search_url = $app->getUserState('user.search');
-$modules = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.  
+$crumbs = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.  
+$mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.  
 ?>
 
 <div class="container hidden-xs">
@@ -93,67 +94,80 @@ $modules = JModuleHelper::getModules('breadcrumbs'); //If you want to use a diff
   <?php if (count($this->units) > 1) : ?>
     <?php echo $this->loadTemplate('units'); ?>
   <?php endif; ?>
-  <?php foreach ($modules as $module) : // Render the cross-sell modules etc  ?>
-    <?php echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box')); ?>
+
+  <!-- Begin breadcrumbs -->
+  <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc   ?>
+    <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
   <?php endforeach; ?>
+  <!-- End breadcrumbs -->
 </div>
+
 <div class="container">
   <div class="row">
     <div class="col-xs-12">
-      <div class="pull-right hidden-xs hidden-sm">
-        <?php if ($logged_in) : ?>
-          <?php echo $shortlist->render($displayData); ?>
-        <?php else : ?>
-          <a class="btn btn-default" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
-            <span class="glyphicon glyphicon-heart muted"></span>
-            <span class="hidden-xs"><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
+      <div class="property-buttons-row">
+        <?php if (!empty($search_url)) : ?>
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">    
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
           </a>
         <?php endif; ?>
-
-        <button class='btn btn-default' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="glyphicon glyphicon-share-alt"></span>
-          <span class="hidden-xs">
+        <div class="pull-right">
+          <?php if ($logged_in) : ?>
+            <?php echo $shortlist->render($displayData); ?>
+          <?php else : ?>
+            <a class="btn btn-default btn-sm" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
+              <span class="glyphicon glyphicon-heart muted"></span>
+              <span class=""><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
+            </a>
+          <?php endif; ?>
+          <button class='btn btn-default hidden-xs btn-sm' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-share-alt"></span>
             <?php echo JText::_('COM_ACCOMMODATION_SHARE') ?>
-          </span>
-          <span class="caret hidden-xs"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-          <li> 
-            <a target="_blank" href="<?php
-            echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
-            . urlencode($uri)
-            . '&redirect_uri='
-            . urlencode($uri)
-            . '&picture='
-            . JURI::root() . 'images/property/'
-            . $this->item->unit_id
-            . '/thumbs/'
-            . urlencode($this->images[0]->image_file_name)
-            . '&name=' . urlencode($this->item->unit_title)
-            . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
-            ?>">
-              <span class="glyphicon social-icon facebook"></span>  
-              <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
-            </a>
-          </li> 
-          <li>
-            <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
-              <span class="glyphicon social-icon twitter"></span>
-              <?php echo JText::_('COM_ACCOMMODATION_TWITTER') ?>
-            </a>
-          </li>
-          <li>
-            <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
-              <span class="glyphicon social-icon google-plus"></span>
-              <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
-            </a>
-          </li>
-        </ul>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li> 
+              <a target="_blank" href="<?php
+              echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
+              . urlencode($uri)
+              . '&redirect_uri='
+              . urlencode($uri)
+              . '&picture='
+              . JURI::root() . 'images/property/'
+              . $this->item->unit_id
+              . '/thumbs/'
+              . urlencode($this->images[0]->image_file_name)
+              . '&name=' . urlencode($this->item->unit_title)
+              . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
+              ?>">
+                <span class="glyphicon social-icon facebook"></span>  
+                <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
+              </a>
+            </li> 
+            <li>
+              <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
+                <span class="glyphicon social-icon twitter"></span>
+                <?php echo JText::_('COM_ACCOMMODATION_TWITTER') ?>
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
+                <span class="glyphicon social-icon google-plus"></span>
+                <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
 <div class="container">
+
+
+
+
   <?php if (count($this->offer)) : ?>
     <div class="well well-small special-offer">
       <h4>   
@@ -167,9 +181,8 @@ $modules = JModuleHelper::getModules('breadcrumbs'); //If you want to use a diff
       </p>
     </div>
   <?php endif; ?>
-
   <div class="row" id="main">
-    <div class="col-lg-5 col-md-5 col-md-push-7 col-sm-5 col-sm-push-7 col-xs-12 key-facts">
+    <div class="col-lg-4 col-lg-push-8 col-md-4 col-md-push-8 col-sm-5 col-sm-push-7 col-xs-12 key-facts">
       <div class="panel panel-default">
         <div class="panel-body">
           <?php if ($this->tariffs) : ?> 
@@ -202,26 +215,23 @@ $modules = JModuleHelper::getModules('breadcrumbs'); //If you want to use a diff
           <!-- Max capacity/occupancy -->
           <?php if ($this->item->occupancy) : ?>
             <p class="dotted">
-              <?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY'); ?>
-              <span class="pull-right"><?php echo $this->item->occupancy; ?></span>
+              <?php echo JText::sprintf('COM_ACCOMMODATION_SITE_OCCUPANCY_BEDS_BATHROOMS', $this->item->property_type, $this->item->occupancy, $this->item->bedrooms, $this->item->bathrooms);
+              ?>
             </p>
           <?php endif; ?>
-            <p>
-              <a class="btn btn-danger btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
-                <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
-              </a>
-            </p>
-            <p>
-              <a class="btn btn-warning btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
-                <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
-              </a>
-            </p>
-
+          <p>
+            <a class="btn btn-danger btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
+              <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
+            </a>
+          </p>
+          <p>
+            <a class="btn btn-warning btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
+              <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
+            </a>
+          </p>
         </div>
       </div>
-      <div class="well well-light-blue hidden-xs">
-
-
+      <div class="well well-sm well-light-blue hidden-xs">
         <!-- Number of bedrooms, if any -->
         <?php if ($this->item->bedrooms) : ?>
           <p class="dotted">
@@ -290,22 +300,33 @@ $modules = JModuleHelper::getModules('breadcrumbs'); //If you want to use a diff
           </p>
         <?php endif; ?>
         <?php echo $this->loadTemplate('reviews'); ?>
-
       </div> 
-      <div class="hidden-xs">
-
+      <div>
+        <div class="text-center hidden-xs">
+          <?php foreach ($mpu as $item) : // Render the cross-sell modules etc   ?>
+            <?php echo JModuleHelper::renderModule($item, array('style' => 'no', 'id' => 'section-box')); ?>
+          <?php endforeach; ?> 
+        </div>
       </div>
     </div> 
-    <div class="col-lg-7 col-md-7 col-md-pull-5 col-sm-pull-5 col-sm-7 col-xs-12">
+    <div class="col-lg-8 col-lg-pull-4 col-md-8 col-md-pull-4 col-sm-pull-5 col-sm-7 col-xs-12">
+      <!-- Start gallery -->
       <?php echo $this->loadTemplate('gallery'); ?>
-      <?php if ($this->item->unit_title) : ?>
-        <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>  
-      <?php endif; ?>
-      <?php if ($this->item->description) : ?>
-        <?php echo $this->item->description; ?>
-      <?php endif; ?>
+      <!-- End gallery -->
+
+      <div id="about">
+        <?php if ($this->item->unit_title) : ?>
+          <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>  
+        <?php endif; ?>
+        <?php if ($this->item->description) : ?>
+          <?php echo $this->item->description; ?>
+        <?php endif; ?>
+      </div>
     </div>
   </div>
+    <!-- Start navigator -->
+  <?php echo $this->loadTemplate('navigator'); ?>
+  <!-- End navigator -->
   <?php if (!empty($this->item->location_details)) : ?>
     <div class="row" id="location">
       <div class="col-lg- col-md-7 col-sm-12">

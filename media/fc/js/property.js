@@ -4,41 +4,6 @@ jQuery(window).load(function() {
   }
 })
 
-jQuery(document).ready(function() {
-
-  //jQuery('#recaptcha_widget a').tooltip()
-  // The slider being synced must be initialized first
-  jQuery('#carousel').flexslider({
-    animation: "slide",
-    itemWidth: 100,
-    itemMargin: 5,
-    animationLoop: false,
-    asNavFor: '#slider',
-    controlNav: false,
-    slideshow: false
-  });
-
-  jQuery('#slider').flexslider({
-    animation: "fade",
-    animationLoop: false,
-    slideshow: false,
-    sync: '#carousel',
-    useCss: false,
-    animationLoop: false,
-            controlNav: false,
-    video: true,
-    after: function(slider) {
-      var slides = slider.slides;
-      var index = slider.animatingTo;
-      var slide = $(slides[index]);
-      var img = slide.find('img[data-src]');
-      if (img) {
-        img.attr("src", img.attr('data-src')).removeAttr("data-src");
-      }
-    }
-  });
-});
-
 function initPropertyMap() {
 
   var data = jQuery('#property_map_canvas').data();

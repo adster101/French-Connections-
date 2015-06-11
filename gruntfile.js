@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
 
 
@@ -42,10 +42,9 @@ module.exports = function (grunt) {
         files: {
           // Merge the slick styles into main style sheet
           'media/fc/assets/css/styles.css':
-                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css', 'bower_components/slick-carousel/slick/slick-theme.css'],
+                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
-                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css', 'bower_components/slick-carousel/slick/slick-.css']
-
+                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css']
         }
       }
     },
@@ -87,23 +86,14 @@ module.exports = function (grunt) {
     watch: {
       woot: {
         files: ['templates/fcv4/assets/less/*.less'], //watched files
-        tasks: ['less'], //tasks to run
-        options: {
-          livereload: true                        //reloads the browser
-        }
+        tasks: ['less'] //tasks to run
       },
       site: {
-        files: ['templates/fcv4/*.php'],
-        options: {
-          livereload: true
-        }
+        files: ['templates/fcv4/*.php']
       },
-      script: {
-        files: ['media/fc/js/*.js'],
-        tasks: ['concat', 'uglify'],
-        options: {
-          livereload: true
-        }
+      livereload: {
+        files: ['media/fc/assets/css/*'],
+        options: {livereload: false}
       }
     },
     replace: {
