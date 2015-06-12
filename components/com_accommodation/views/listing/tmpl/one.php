@@ -8,6 +8,7 @@ $app = JFactory::getApplication();
 
 $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
+$searchID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
 $this->item->itemid = $Itemid;
 
@@ -21,6 +22,7 @@ $uri = JUri::getInstance()->toString();
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
+$search_route = 'index.php?option=com_fcsearch&Itemid=' . (int) $searchID . '&s_kwds=france';
 
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
@@ -105,12 +107,17 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 <div class="container">
   <div class="row">
     <div class="col-xs-12">
-      <div class="property-buttons-row">
+      <div class="property-buttons-row clearfix">
         <?php if (!empty($search_url)) : ?>
           <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">    
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
           </a>
+        <?php else: ?>
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_route ?>" title="">    
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            <?php echo JText::_('COM_ACCOMMODATION_BROWSE_SEARCH_RESULTS'); ?>
+          </a>          
         <?php endif; ?>
         <div class="pull-right">
           <?php if ($logged_in) : ?>
