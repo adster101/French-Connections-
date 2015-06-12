@@ -19,6 +19,7 @@ jQuery(document).ready(function() {
     focusOnSelect: true,
     arrows: false,
     draggable: false,
+    lazyLoad: 'progressive',
     responsive: [
       {
         breakpoint: 1200,
@@ -34,7 +35,6 @@ jQuery(document).ready(function() {
       }
     ]
   });
-
 
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {

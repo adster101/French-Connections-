@@ -47,7 +47,6 @@ $config = JFactory::getConfig();
 $debug = (boolean) $config->get('debug');
 ?>
 
-
 <!DOCTYPE html>
 <html lang="<?php echo $this->language; ?>">
   <head>  
@@ -56,22 +55,20 @@ $debug = (boolean) $config->get('debug');
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
   <?php $doc->addStyleSheet('//' . $uri->getHost() . '/media/fc/assets/css/styles.css'); ?>
-  <?php if ($cookie) : ?>  <jdoc:include type="head" />
+  <?php if ($cookie) : ?> 
 
     <script type="text/javascript">
-      window.addEvent('domready', function()
-      {
+      jQuery(function($) {
         document.forms[0].submit();
       });
     </script>
   <?php endif; ?>
   <script type="text/javascript">
-    window.addEvent('domready', function()
-    {
-      document.getElementById('form-login').username.select();
-      document.getElementById('form-login').username.focus();
+    jQuery(function($) {
+      $("#form-login input[name='username']").focus();
     });
   </script>
+
 </head>
 
 <body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " "; ?>">
@@ -89,7 +86,7 @@ $debug = (boolean) $config->get('debug');
     </div>
 
   </header> 
-  <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
+  <p class="lead text-center <?php echo (!$cookie) ? "hide" : '' ?>">
     One moment while we create your account...<br /><br />
     <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
   </p>

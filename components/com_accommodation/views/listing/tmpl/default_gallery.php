@@ -22,7 +22,7 @@ defined('_JEXEC') or die('Restricted access');
           <?php else: ?>
             <img class="img-responsive" data-lazy="<?php echo $src ?>" />
           <?php endif; ?>
-          <p class="flex-caption">
+          <p>
             <?php echo $image->caption; ?>
             <span class="muted small">(<?php echo $images + 1 ?> / <?php echo count($this->images) ?>)</span>
           </p>

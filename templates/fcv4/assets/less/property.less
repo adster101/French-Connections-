@@ -154,6 +154,18 @@ Contains styles that apply at the global level, or can be applied to any section
   margin-bottom: 20px;
 }
 
+.slick-slider, 
+.carousel-ribbon {
+  visibility:hidden;
+}
+
+.slick-slider.slick-initialized , 
+.carousel-ribbon.slick-initialized {
+  visibility:visible;
+  transition: visibility 0.3s ease-in;
+}
+
+
 /* Arrows */
 .slick-prev,
 .slick-next

@@ -13523,6 +13523,7 @@ jQuery(document).ready(function() {
     focusOnSelect: true,
     arrows: false,
     draggable: false,
+    lazyLoad: 'progressive',
     responsive: [
       {
         breakpoint: 1200,
