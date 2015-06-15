@@ -13062,7 +13062,7 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
 }else b.touchObject.startX!==b.touchObject.curX&&(b.slideHandler(b.currentSlide),b.touchObject={})},b.prototype.swipeHandler=function(a){var b=this;if(!(b.options.swipe===!1||"ontouchend"in document&&b.options.swipe===!1||b.options.draggable===!1&&-1!==a.type.indexOf("mouse")))switch(b.touchObject.fingerCount=a.originalEvent&&void 0!==a.originalEvent.touches?a.originalEvent.touches.length:1,b.touchObject.minSwipe=b.listWidth/b.options.touchThreshold,b.options.verticalSwiping===!0&&(b.touchObject.minSwipe=b.listHeight/b.options.touchThreshold),a.data.action){case"start":b.swipeStart(a);break;case"move":b.swipeMove(a);break;case"end":b.swipeEnd(a)}},b.prototype.swipeMove=function(a){var d,e,f,g,h,b=this;return h=void 0!==a.originalEvent?a.originalEvent.touches:null,!b.dragging||h&&1!==h.length?!1:(d=b.getLeft(b.currentSlide),b.touchObject.curX=void 0!==h?h[0].pageX:a.clientX,b.touchObject.curY=void 0!==h?h[0].pageY:a.clientY,b.touchObject.swipeLength=Math.round(Math.sqrt(Math.pow(b.touchObject.curX-b.touchObject.startX,2))),b.options.verticalSwiping===!0&&(b.touchObject.swipeLength=Math.round(Math.sqrt(Math.pow(b.touchObject.curY-b.touchObject.startY,2)))),e=b.swipeDirection(),"vertical"!==e?(void 0!==a.originalEvent&&b.touchObject.swipeLength>4&&a.preventDefault(),g=(b.options.rtl===!1?1:-1)*(b.touchObject.curX>b.touchObject.startX?1:-1),b.options.verticalSwiping===!0&&(g=b.touchObject.curY>b.touchObject.startY?1:-1),f=b.touchObject.swipeLength,b.touchObject.edgeHit=!1,b.options.infinite===!1&&(0===b.currentSlide&&"right"===e||b.currentSlide>=b.getDotCount()&&"left"===e)&&(f=b.touchObject.swipeLength*b.options.edgeFriction,b.touchObject.edgeHit=!0),b.swipeLeft=b.options.vertical===!1?d+f*g:d+f*(b.$list.height()/b.listWidth)*g,b.options.verticalSwiping===!0&&(b.swipeLeft=d+f*g),b.options.fade===!0||b.options.touchMove===!1?!1:b.animating===!0?(b.swipeLeft=null,!1):(b.setCSS(b.swipeLeft),void 0)):void 0)},b.prototype.swipeStart=function(a){var c,b=this;return 1!==b.touchObject.fingerCount||b.slideCount<=b.options.slidesToShow?(b.touchObject={},!1):(void 0!==a.originalEvent&&void 0!==a.originalEvent.touches&&(c=a.originalEvent.touches[0]),b.touchObject.startX=b.touchObject.curX=void 0!==c?c.pageX:a.clientX,b.touchObject.startY=b.touchObject.curY=void 0!==c?c.pageY:a.clientY,b.dragging=!0,void 0)},b.prototype.unfilterSlides=b.prototype.slickUnfilter=function(){var a=this;null!==a.$slidesCache&&(a.unload(),a.$slideTrack.children(this.options.slide).detach(),a.$slidesCache.appendTo(a.$slideTrack),a.reinit())},b.prototype.unload=function(){var b=this;a(".slick-cloned",b.$slider).remove(),b.$dots&&b.$dots.remove(),b.$prevArrow&&"object"!=typeof b.options.prevArrow&&b.$prevArrow.remove(),b.$nextArrow&&"object"!=typeof b.options.nextArrow&&b.$nextArrow.remove(),b.$slides.removeClass("slick-slide slick-active slick-visible").attr("aria-hidden","true").css("width","")},b.prototype.unslick=function(a){var b=this;b.$slider.trigger("unslick",[b,a]),b.destroy()},b.prototype.updateArrows=function(){var b,a=this;b=Math.floor(a.options.slidesToShow/2),a.options.arrows===!0&&a.options.infinite!==!0&&a.slideCount>a.options.slidesToShow&&(a.$prevArrow.removeClass("slick-disabled"),a.$nextArrow.removeClass("slick-disabled"),0===a.currentSlide?(a.$prevArrow.addClass("slick-disabled"),a.$nextArrow.removeClass("slick-disabled")):a.currentSlide>=a.slideCount-a.options.slidesToShow&&a.options.centerMode===!1?(a.$nextArrow.addClass("slick-disabled"),a.$prevArrow.removeClass("slick-disabled")):a.currentSlide>=a.slideCount-1&&a.options.centerMode===!0&&(a.$nextArrow.addClass("slick-disabled"),a.$prevArrow.removeClass("slick-disabled")))},b.prototype.updateDots=function(){var a=this;null!==a.$dots&&(a.$dots.find("li").removeClass("slick-active").attr("aria-hidden","true"),a.$dots.find("li").eq(Math.floor(a.currentSlide/a.options.slidesToScroll)).addClass("slick-active").attr("aria-hidden","false"))},b.prototype.visibility=function(){var a=this;document[a.hidden]?(a.paused=!0,a.autoPlayClear()):a.options.autoplay===!0&&(a.paused=!1,a.autoPlay())},a.fn.slick=function(){var g,a=this,c=arguments[0],d=Array.prototype.slice.call(arguments,1),e=a.length,f=0;for(f;e>f;f++)if("object"==typeof c||"undefined"==typeof c?a[f].slick=new b(a[f],c):g=a[f].slick[c].apply(a[f].slick,d),"undefined"!=typeof g)return g;return a}});
 
 /**
- * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13090,7 +13090,10 @@ Joomla.submitform = function(task, form) {
         form.onsubmit();
     }
     if (typeof form.fireEvent == "function") {
-        form.fireEvent('submit');
+        form.fireEvent('onsubmit');
+    }
+    if (typeof jQuery == "function") {
+        jQuery(form).submit();
     }
     form.submit();
 };
@@ -13181,36 +13184,49 @@ Joomla.checkAll = function(checkbox, stub) {
 /**
  * Render messages send via JSON
  *
- * @param   object  messages    JavaScript object containing the messages to render
+ * @param   object  messages    JavaScript object containing the messages to render. Example:
+ *                              var messages = {
+ *                              	"message": ["Message one", "Message two"],
+ *                              	"error": ["Error one", "Error two"]
+ *                              };
  * @return  void
  */
 Joomla.renderMessages = function(messages) {
-    var $ = jQuery.noConflict(), $container, $div, $h4, $divList, $p;
-    Joomla.removeMessages();
-    $container = $('#system-message-container');
+	Joomla.removeMessages();
 
-    $.each(messages, function(type, item) {
-        $div = $('<div/>', {
-            'id' : 'system-message',
-            'class' : 'alert alert-' + type
-        });
-        $container.append($div)
+	var messageContainer = document.getElementById('system-message-container');
 
-        $h4 = $('<h4/>', {
-            'class' : 'alert-heading',
-            'text' : Joomla.JText._(type)
-        });
-        $div.append($h4);
+	for (var type in messages) {
+		if (messages.hasOwnProperty(type)) {
+			// Array of messages of this type
+			var typeMessages = messages[type];
 
-        $divList = $('<div/>');
-        $.each(item, function(index, item) {
-            $p = $('<p/>', {
-                html : item
-            });
-            $divList.append($p);
-        });
-        $div.append($divList);
-    });
+			// Create the alert box
+			var messagesBox = document.createElement('div');
+			messagesBox.className = 'alert alert-' + type;
+
+			// Title
+			var title = Joomla.JText._(type);
+
+			// Skip titles with untranslated strings
+			if (typeof title != 'undefined') {
+				var titleWrapper = document.createElement('h4');
+				titleWrapper.className = 'alert-heading';
+				titleWrapper.innerHTML = Joomla.JText._(type);
+
+				messagesBox.appendChild(titleWrapper)
+			}
+
+			// Add messages to the message box
+			for (var i = typeMessages.length - 1; i >= 0; i--) {
+				var messageWrapper = document.createElement('p');
+				messageWrapper.innerHTML = typeMessages[i];
+				messagesBox.appendChild(messageWrapper);
+			};
+
+			messageContainer.appendChild(messagesBox);
+		}
+	}
 };
 
 
@@ -13220,7 +13236,15 @@ Joomla.renderMessages = function(messages) {
  * @return  void
  */
 Joomla.removeMessages = function() {
-    jQuery('#system-message-container').empty();
+	var messageContainer = document.getElementById('system-message-container');
+
+	// Empty container with a while for Chrome performance issues
+	while (messageContainer.firstChild) messageContainer.removeChild(messageContainer.firstChild);
+
+	// Fix Chrome bug not updating element height
+	messageContainer.style.display='none';
+	messageContainer.offsetHeight;
+	messageContainer.style.display='';
 }
 
 /**
@@ -13467,7 +13491,7 @@ function submitform(pressbutton) {
         document.adminForm.onsubmit();
     }
     if (typeof document.adminForm.fireEvent == "function") {
-        document.adminForm.fireEvent('submit');
+        document.adminForm.fireEvent('onsubmit');
     }
     document.adminForm.submit();
 }

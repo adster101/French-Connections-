@@ -56,7 +56,6 @@ $debug = (boolean) $config->get('debug');
   <jdoc:include type="head" />
   <?php $doc->addStyleSheet('//' . $uri->getHost() . '/media/fc/assets/css/styles.css'); ?>
   <?php if ($cookie) : ?> 
-
     <script type="text/javascript">
       jQuery(function($) {
         document.forms[0].submit();
@@ -68,7 +67,6 @@ $debug = (boolean) $config->get('debug');
       $("#form-login input[name='username']").focus();
     });
   </script>
-
 </head>
 
 <body class="site <?php echo $option . " view-" . $view . " layout-" . $layout . " task-" . $task . " itemid-" . $itemid . " "; ?>">
