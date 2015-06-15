@@ -20,17 +20,19 @@ $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 $isRealestate = ($active->component == 'com_realestate') ? true : false;
 $layout = $app->input->getCmd('layout', 'default');
 ?>
-
-
-<ol class="breadcrumb <?php echo $moduleclass_sfx; ?> hidden-xs">
-  <?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate) && $layout == 'default') : ?>
-    <li>
-      <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
+<?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate) && $layout != 'one') : ?>
+  <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
+    <p>
+      <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    
         <span class="glyphicon glyphicon-circle-arrow-left"></span>
         <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
       </a>
-    </li>
+    </p>
+  </div>
   <?php endif; ?>
+
+<ol class="breadcrumb <?php echo $moduleclass_sfx; ?> hidden-xs">
+
   <?php
   if ($params->get('showHere', 1))
   {

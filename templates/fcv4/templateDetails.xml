@@ -49,6 +49,7 @@
 		<position>owner-login</position>
 		<position>nav-simple</position>
 		<position>property-mpu</position>
+		<position>breadcrumbs-tmp</position>
 	</positions>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.tpl_frenchconnections.ini</language>
