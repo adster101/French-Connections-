@@ -46,6 +46,8 @@
 		<position>postenquiry</position>
 		<position>postrealestateenquiry</position>
 		<position>footer</position>
+		<position>owner-login</position>
+		<position>nav-simple</position>
 	</positions>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.tpl_frenchconnections.ini</language>

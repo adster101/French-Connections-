@@ -57,19 +57,15 @@ $debug = (boolean) $config->get('debug');
   <jdoc:include type="head" />
   <?php $doc->addStyleSheet('//' . $uri->getHost() . '/media/fc/assets/css/styles.css'); ?>
   <?php if ($cookie) : ?>  <jdoc:include type="head" />
-
     <script type="text/javascript">
-      window.addEvent('domready', function()
-      {
+      jQuery(function($) {
         document.forms[0].submit();
       });
     </script>
   <?php endif; ?>
   <script type="text/javascript">
-    window.addEvent('domready', function()
-    {
-      document.getElementById('form-login').username.select();
-      document.getElementById('form-login').username.focus();
+    jQuery(function($) {
+      $("#form-login input[name='username']").focus();
     });
   </script>
 </head>

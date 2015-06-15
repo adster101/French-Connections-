@@ -80,9 +80,6 @@ else
       </nav>       
     </div>
   </header>  
-  
-
-
   <div class="container">
     <jdoc:include type="message" /> 
     <!-- Begin Content -->
