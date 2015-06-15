@@ -195,7 +195,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       $message_data['user_id_from'] = 8891; // Parameterise this...
       $message_data['user_id_to'] = $user->id;
       $message_data['subject'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_SUBJECT');
-      $message_data['message'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_BODY');
+      $message_data['message'] = JText::sprintf('COM_REGISTEROWNER_WELCOME_MESSAGE_BODY', $data['firstname']);
       $message_data['date_time'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
 
       if (!$message->save($message_data))

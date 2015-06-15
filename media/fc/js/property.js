@@ -4,6 +4,46 @@ jQuery(window).load(function() {
   }
 })
 
+jQuery(document).ready(function() {
+
+  jQuery('.slick-slider').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    asNavFor: '.carousel-ribbon',
+    lazyLoad: 'progressive',
+    arrows: true,
+    fade: true,
+    prevArrow: '<a class="slick-prev"><span class="glyphicon glyphicon-chevron-left"></span></a>',
+    nextArrow: '<a class="slick-next"><span class="glyphicon glyphicon-chevron-right"></span></a>',
+  });
+
+  jQuery('.carousel-ribbon').slick({
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    fade: false,
+    asNavFor: '.slick-slider',
+    focusOnSelect: true,
+    arrows: false,
+    draggable: false,
+    lazyLoad: 'progressive',
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 5
+        }
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4
+        }
+      }
+    ]
+  });
+
+});
+
 function initPropertyMap() {
 
   var data = jQuery('#property_map_canvas').data();
@@ -70,7 +110,7 @@ function initPropertyMap() {
     jQuery.each(markers, function(index, marker) {
       bounds.extend(marker.position);
     });
-    
+
     bounds.extend(prnmarker.position);
 
     //  Fit these bounds to the map
