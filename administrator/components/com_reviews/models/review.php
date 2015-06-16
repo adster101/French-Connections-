@@ -189,7 +189,7 @@ class ReviewsModelReview extends JModelAdmin
 
       // Convert to the JObject before adding other data.
       $properties = $table->getProperties(1);
-      $review = JArrayHelper::toObject($properties, 'JObject');
+      $review = JArrayHelper::toObject($properties);
     }
 
     // If not approved and being set to published then update the approved by gubbins
@@ -197,6 +197,7 @@ class ReviewsModelReview extends JModelAdmin
     {
       $data['approved_by'] = $user->id;
       $data['approved_date'] = $date;
+      $data['property_id'] = $property_details->property_id;
       // Ensures that we only send notification email when offer is first approved.
       $send_notification_email = true;
     }

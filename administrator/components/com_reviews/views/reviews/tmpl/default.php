@@ -74,7 +74,8 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
                 <?php echo JText::_('JSTATUS'); ?>
               </th>
               <th>
-                <?php echo JText::_('JGRID_HEADING_ID'); ?>
+                                <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+
               </th>
             </tr>
           </thead>
@@ -117,8 +118,7 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
 
         <input type="hidden" name="task" value="" />
         <input type="hidden" name="boxchecked" value="0" />
-        <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
-        <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
+       
 
         <?php echo JHtml::_('form.token'); ?>
 

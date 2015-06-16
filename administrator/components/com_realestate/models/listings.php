@@ -10,7 +10,7 @@ jimport('joomla.application.component.modellist');
  */
 class RealestateModelListings extends JModelList
 {
-  
+
   /**
    * Constructor.
    *
@@ -214,6 +214,10 @@ class RealestateModelListings extends JModelList
               $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
               ' and a.' . $db->escape($date_filter) . ' <=' .
               $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
+      $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
+    } elseif ($date_filter == 'created_on')
+    {
+      $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
     }
 
     // Filter by search in title
@@ -285,4 +289,3 @@ class RealestateModelListings extends JModelList
   }
 
 }
-

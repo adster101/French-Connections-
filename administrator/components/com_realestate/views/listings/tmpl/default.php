@@ -28,7 +28,7 @@ $canDo = RealEstateHelper::getActions();
       <div id="j-main-container">
       <?php endif; ?>
 
-      <?php if (empty($this->items)) : // This user doesn't have any listings against their account       ?>
+      <?php if (empty($this->items)) : // This user doesn't have any listings against their account ?>
         <hr />
         <div class="alert alert-block">
           <strong><?php echo JText::_('COM_REALESTATE_LISTING_NO_LISTINGS'); ?><strong>
@@ -169,6 +169,9 @@ $canDo = RealEstateHelper::getActions();
                           <?php endif; ?>
                           <?php if (property_exists($item, 'enquiries')) : ?>
                             <?php echo JText::sprintf('COM_RENTAL_PROPERTY_LISTING_ENQUIRY_CLICK_COUNT', $item->enquiries, $item->clicks); ?>
+                          <?php endif; ?>
+                          <?php if (property_exists($item, 'existing')) : ?>
+                            <?php echo ($item->existing > 1) ? JText::sprintf('COM_RENTAL_PROPERTY_LISTING_EXISTING_PROPERTY_COUNT', $item->existing) : ''; ?>
                           <?php endif; ?>
                         </td>
                       <?php endif; ?>

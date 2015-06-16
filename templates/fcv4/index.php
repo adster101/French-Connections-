@@ -53,7 +53,11 @@ else
   <meta name="google-site-verification" content="gxNKICR23M3sV86ZSmOoGcFZCNH-AvkUI1MTTW3nau4" />
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
+  
+  <!-- Start header -->
   <?php include_once JPATH_THEMES . '/' . $this->template . '/inc/' . $header . '.php'; ?>
+  <!-- Finish header -->
+  
   <div class="container">
     <jdoc:include type="message" /> 
     <!-- Begin Content -->
@@ -118,9 +122,9 @@ else
   <!-- End Content -->
 <jdoc:include type="modules" name="debug" style="html5" />
 <script>
-  (function(i, s, o, g, r, a, m) {
+  (function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
+    i[r] = i[r] || function () {
       (i[r].q = i[r].q || []).push(arguments)
     }, i[r].l = 1 * new Date();
     a = s.createElement(o),
@@ -134,7 +138,7 @@ else
   ga('require', 'displayfeatures');
   ga('send', 'pageview');
 </script>
-<script>(function() {
+<script>(function () {
     var _fbq = window._fbq || (window._fbq = []);
     if (!_fbq.loaded) {
       var fbds = document.createElement('script');

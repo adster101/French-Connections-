@@ -46,7 +46,7 @@ class ReviewsModelReviews extends JModelList
 
 
     // List state information.
-		parent::populateState('id', 'desc');
+		parent::populateState('a.id', 'desc');
 	}
 
   /**
@@ -123,11 +123,19 @@ class ReviewsModelReviews extends JModelList
       }
     }
 
-		$listOrdering = $this->getState('list.ordering','a.id');
+		
 
- 		$listDirn = $db->escape($this->getState('list.direction', 'DESC'));
-    $query->order($listOrdering,$listDirn);
+    
+    $listOrdering = $this->getState('list.ordering', 'a.id');
+    $listDirn = $db->escape($this->getState('list.direction', 'desc'));
 
+    // Order if we have a specific ordering.
+    if ($listOrdering)
+    {
+      $query->order($db->escape($listOrdering) . ' ' . $listDirn);
+    }
+
+    
 		return $query;
 	}
 }

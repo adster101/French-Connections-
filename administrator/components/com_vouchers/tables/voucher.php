@@ -13,31 +13,37 @@ defined('_JEXEC') or die;
 /**
  * invoice Table class
  */
-class VouchersTableVoucher extends JTable {
+class VouchersTableVoucher extends JTable
+{
 
   /**
    * Constructor
    *
    * @param JDatabase A database connector object
    */
-  public function __construct(&$db) {
+  public function __construct(&$db)
+  {
     parent::__construct('#__vouchers', 'id', $db);
   }
 
-  public function store($updateNulls = false) {
-    
+  public function store($updateNulls = false)
+  {
+
     $user = JFactory::getUser();
     $date = JFactory::getDate();
 
-    if (!empty($this->end_date)) {
+    if (!empty($this->end_date))
+    {
       $this->end_date = JFactory::getDate($this->end_date)->calendar('Y-m-d');
     }
-    
-    if (empty($this->created_by)) {
+
+    if (empty($this->created_by))
+    {
       $this->created_by = $user->get('id');
     }
-    
-    if (empty($this->date_created)) {
+
+    if (empty($this->date_created))
+    {
       $this->date_created = $date->toSql();
     }
     return parent::store($updateNulls);
@@ -55,7 +61,8 @@ class VouchersTableVoucher extends JTable {
    * @return	boolean	True on success.
    * @since	1.6
    */
-  public function publish($pks = null, $state = 1, $userId = 0) {
+  public function publish($pks = null, $state = 1, $userId = 0)
+  {
     $k = $this->_tbl_key;
 
     // Sanitize input.
@@ -64,12 +71,15 @@ class VouchersTableVoucher extends JTable {
     $state = (int) $state;
 
     // If there are no primary keys set check to see if the instance key is set.
-    if (empty($pks)) {
-      if ($this->$k) {
+    if (empty($pks))
+    {
+      if ($this->$k)
+      {
         $pks = array($this->$k);
       }
       // Nothing to set publishing state on, return false.
-      else {
+      else
+      {
         $this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
         return false;
       }
@@ -87,18 +97,30 @@ class VouchersTableVoucher extends JTable {
 
     try {
       $this->_db->execute();
-    } catch (RuntimeException $e) {
+    }
+    catch (RuntimeException $e) {
       $this->setError($e->getMessage());
       return false;
     }
 
     // If the JTable instance value is in the list of primary keys that were set, set the instance.
-    if (in_array($this->$k, $pks)) {
+    if (in_array($this->$k, $pks))
+    {
       $this->state = $state;
     }
 
     $this->setError('');
     return true;
+  }
+
+  public function check()
+  {
+    if (!$this->property_id)
+    {
+      throw new UnexpectedValueException(sprintf('Please enter a PRN'));
+    }
+    
+    return parent::check();
   }
 
 }

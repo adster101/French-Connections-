@@ -17,6 +17,10 @@ jQuery(document).ready(function() {
 
   })
 
+  jQuery('#enquiry').on('click', function() {
+    ga('send', 'event', 'button', 'click', 'Rental \'enquiry\' button clicked');
+  });
+
   jQuery('.view-featured-fp-link').on('click', function() {
     ga('send', 'event', 'button', 'click', 'FP Homepage link click-through');
   });
