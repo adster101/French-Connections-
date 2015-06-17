@@ -28,7 +28,6 @@ defined('_JEXEC') or die('Restricted access');
           </p>
         </div>
       <?php endforeach; ?>
-      </ul>
     </div>
     <div class="carousel-ribbon hidden-xs">
       <?php if (!empty($this->item->video_url)) : ?>

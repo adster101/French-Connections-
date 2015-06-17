@@ -1,5 +1,4 @@
 jQuery(document).ready(function() {
-
   
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
@@ -18,7 +17,7 @@ jQuery(document).ready(function() {
   })
 
   jQuery('#enquiry').on('click', function() {
-    ga('send', 'event', 'button', 'click', 'Rental \'enquiry\' button clicked');
+    ga('send', 'event', 'button', 'click', 'enquiry-button-clicked');
   });
 
   jQuery('.view-featured-fp-link').on('click', function() {

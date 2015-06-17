@@ -308,11 +308,12 @@ $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), 
             <?php echo Jtext::_('COM_ACCOMMODATION_THIS_PROPERTY_OFFERS_LONG_WINTER_LETS'); ?>
           </p>
         <?php endif; ?>
+        <!-- END LWL Bullshine -->
 
         <?php echo $this->loadTemplate('reviews'); ?>
 
         <p class="center">
-          <a class="btn btn-info btn-lg"  id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
+          <a class="btn btn-info btn-lg"  id="availability" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
             <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
           </a>
           <a class="btn btn-primary btn-lg"  id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">

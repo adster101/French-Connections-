@@ -41,7 +41,6 @@ jQuery(document).ready(function() {
       }
     ]
   });
-
 });
 
 function initPropertyMap() {
