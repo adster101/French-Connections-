@@ -5,6 +5,8 @@ jQuery(window).load(function() {
 })
 
 jQuery(document).ready(function() {
+  
+  
 
   jQuery('.slick-slider').slick({
     slidesToShow: 1,
