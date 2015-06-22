@@ -14354,6 +14354,21 @@ jQuery(window).load(function() {
 
 jQuery(document).ready(function() {
 
+  // Get a handle to a jQuery collection 
+  var collapse = jQuery('.collapse');
+  
+  // If the collection contains ought 
+  if (collapse && window.innerWidth < 768 ) {
+    
+    // Init the collapse plugin
+    collapse.collapse();
+    
+  }
+
+
+
+
+
   jQuery('.slick-slider').slick({
     slidesToShow: 1,
     slidesToScroll: 1,

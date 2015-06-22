@@ -64,6 +64,8 @@ if (!empty($this->item->languages_spoken))
 
 $amenities = ($this->item->local_amenities) ? json_decode($this->item->local_amenities) : array();
 
+$accordion_navigator = new JLayoutFile('frenchconnections.property.accordion');
+$accordion_data = new StdClass;
 // Shortlist button thingy
 $shortlist = new JLayoutFile('frenchconnections.general.shortlist');
 $displayData = new StdClass;
@@ -98,7 +100,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
   <?php endif; ?>
 
   <!-- Begin breadcrumbs -->
-  <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc   ?>
+  <?php foreach ($crumbs as $module) : // Render the breadcrumbs module ?>
     <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
   <?php endforeach; ?>
   <!-- End breadcrumbs -->
@@ -306,28 +308,32 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       </div> 
       <div>
         <div class="text-center hidden-xs">
-          <?php foreach ($mpu as $item) : // Render the cross-sell modules etc   ?>
+          <?php foreach ($mpu as $item) : // Render the property page MPU   ?>
             <?php echo JModuleHelper::renderModule($item, array('style' => 'no', 'id' => 'section-box')); ?>
           <?php endforeach; ?> 
         </div>
       </div>
     </div> 
     <div class="col-lg-8 col-lg-pull-4 col-md-8 col-md-pull-4 col-sm-pull-5 col-sm-7 col-xs-12">
+
       <!-- Start gallery -->
       <?php echo $this->loadTemplate('gallery'); ?>
       <!-- End gallery -->
 
-      <div class="panel-group">
+      <div id="property-accordion" class="panel-group">
         <div id="about" class="panel panel-default">
           <div class="panel-heading">
             <?php if ($this->item->unit_title) : ?>
-              <h4>
-                <span class="glyphicon glyphicon-home"></span>&nbsp;<?php echo $this->escape($this->item->unit_title) ?>
-              </h4>  
+              <?php
+              $accordion_data->title = $this->escape($this->item->unit_title);
+              $accordion_data->target = 'description-panel';
+              $accordion_data->glyph = 'home';
+              echo $accordion_navigator->render($accordion_data);
+              ?>
             <?php endif; ?>
           </div>
           <?php if ($this->item->description) : ?>
-            <div class="collapse in" id="collapseExample"> 
+            <div class="panel-collpase collapse in" id="description-panel"> 
               <div class="panel-body">
                 <?php echo $this->item->description; ?>
               </div>
@@ -339,13 +345,16 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <div id="location" class="panel panel-default">
             <?php if ($this->item->unit_title) : ?>
               <div class="panel-heading">
-                <h4>
-                  <span class="glyphicon glyphicon-map-marker"></span>&nbsp;
-                  <?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?>
-                </h4>  
+                <?php
+                $accordion_data->title = $this->escape(JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region));
+                $accordion_data->target = 'location-panel';
+                $accordion_data->glyph = 'map-marker';
+                echo $accordion_navigator->render($accordion_data);
+                ?>
+
               </div>
             <?php endif; ?>
-            <div class="collapse in" id="location-panel"> 
+            <div class="panel-collpase collapse in" id="location-panel"> 
               <div class="panel-body">
                 <?php if ($this->item->location_details) : ?>
                   <?php echo $this->item->location_details; ?>
@@ -404,13 +413,16 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <div class="panel panel-default">
             <?php if ($this->item->unit_title) : ?>
               <div class="panel-heading">
-                <h4>
-                  <span class="glyphicon glyphicon-"></span>&nbsp;
-                  <?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->unit_title)) ?>
-                </h4> 
+              <?php
+              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_REVIEWS_AT', $this->item->unit_title)));
+              $accordion_data->target = 'reviews-panel';
+              $accordion_data->glyph = 'star';
+              echo $accordion_navigator->render($accordion_data);
+              ?>
+
               </div>
             <?php endif; ?>
-            <div class="collapse in" id="reviews-panel"> 
+            <div class="panel-collpase collapse in" id="reviews-panel"> 
               <div class="panel-body">
                 <div class="well well-sm well-light-blue">
                   <?php foreach ($this->reviews as $review) : ?>
@@ -438,13 +450,15 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <div class="panel panel-default">
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
-              <h4>
-                <span class="glyphicon glyphicon-map-marker"></span>&nbsp;
-                <?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?>
-              </h4> 
+              <?php
+              $accordion_data->title = $this->escape(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title));
+              $accordion_data->target = 'facilities-panel';
+              $accordion_data->glyph = 'th-list';
+              echo $accordion_navigator->render($accordion_data);
+              ?>
             </div>
           <?php endif; ?>
-          <div class="collapse in" id="facilities-panel"> 
+          <div class="panel-collpase collapse in" id="facilities-panel"> 
             <div class="panel-body">
               <table class="table table-striped">
                 <tbody>
@@ -565,10 +579,15 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <div class="panel panel-default" id="availability">
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
-              <h4><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h4> 
+              <?php
+              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)));
+              $accordion_data->target = 'availability-panel';
+              $accordion_data->glyph = 'calendar';
+              echo $accordion_navigator->render($accordion_data);
+              ?>
             </div>
           <?php endif; ?> 
-          <div class="collapse in" id="availability-panel"> 
+          <div class="panel-collpase collapse in" id="availability-panel"> 
             <div class="panel-body">
               <?php if ($this->item->changeover_day) : ?>
                 <p>
@@ -609,12 +628,16 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <div class="panel panel-default" id="tariffs">
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
-              <h4>
-                <?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?>
-              </h4> 
+              <?php
+              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)));
+              $accordion_data->target = 'tariffs-panel';
+              $accordion_data->glyph = 'euro';
+              echo $accordion_navigator->render($accordion_data);
+              ?>
+             
             </div>
           <?php endif; ?> 
-          <div class="collapse in" id="tariffs-panel"> 
+          <div class="panel-collpase collapse in" id="tariffs-panel"> 
             <div class="panel-body">
               <?php if ($this->tariffs) : ?>
                 <?php echo $this->loadTemplate('tariffs'); ?>
@@ -622,7 +645,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                 <p>No tariffs were found for this property. Please enquire with the owner for rental rates for this property</p>
               <?php endif; ?>
               <?php if ($this->item->additional_price_notes) : ?>
-                <h2><?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?></h2>
+                <h5>
+                  <?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?>
+                </h5>
                 <?php echo $this->item->additional_price_notes ?>
               <?php endif; ?>
             </div>

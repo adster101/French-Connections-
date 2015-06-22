@@ -1,6 +1,5 @@
 /**
 
-Contains styles that apply at the global level, or can be applied to any section of the template
 19/08/2014 Adam Rifat FCV4
 
 
@@ -109,6 +108,26 @@ Contains styles that apply at the global level, or can be applied to any section
 
 .view-listing {
 
+  .panel-group
+  
+  a {     
+    text-decoration:none;
+
+    &:after { 
+        font-family: 'Glyphicons Halflings';
+        vertical-align:top;
+        content:"\e113";
+        float:right;
+    }
+
+    &.collapsed:after {
+      content:"\e114";
+    }
+  }
+  
+
+
+
   .nav-tabs {
     > li.active a {
       font-weight:600;
@@ -157,6 +176,7 @@ Contains styles that apply at the global level, or can be applied to any section
 .slick-slider, 
 .carousel-ribbon {
   visibility:hidden;
+  margin-bottom:20px;
 }
 
 .slick-slider.slick-initialized , 
