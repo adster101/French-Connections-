@@ -158,7 +158,7 @@ if (!empty($this->item->languages_spoken))
       <?php if ($this->item->price) : ?> 
         <p>
           <strong class="lead">&pound;<?php echo number_format($min_prices['GBP']) ?></strong>
-          (<i>Approx:</i> &euro;<?php echo number_format($min_prices['EUR']); ?>)
+          (&euro;<?php echo number_format($min_prices['EUR']); ?>)
         </p>             
       <?php else: ?>
         <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>

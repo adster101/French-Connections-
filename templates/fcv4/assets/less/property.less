@@ -112,15 +112,17 @@
   
   a {     
     text-decoration:none;
-
-    &:after { 
-        font-family: 'Glyphicons Halflings';
-        vertical-align:top;
-        content:"\e113";
-        float:right;
+    display:block;
+    
+    &.collapsible:after 
+    { 
+      font-family: 'Glyphicons Halflings';
+      vertical-align:top;
+      content:"\e113";
+      float:right;
     }
 
-    &.collapsed:after {
+    &.collapsible.collapsed:after {
       content:"\e114";
     }
   }

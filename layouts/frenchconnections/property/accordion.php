@@ -7,13 +7,15 @@ $glyph = $displayData->glyph;
 ?>
 
 <h4 class="panel-title">
-  <span class="glyphicon glyphicon-<?php echo $glyph ?>"></span>&nbsp;
   <a 
+    class="collapsible"
     data-toggle="collapse"
     role="button" 
     href="#<?php echo $target ?>" 
     aria-expanded="true"
     aria-controls="<?php echo $target ?>">
-      <?php echo $this->escape($title) ?>
+    <span class="glyphicon glyphicon-<?php echo $glyph ?>"></span>&nbsp;
+
+    <?php echo $this->escape($title) ?>
   </a>
 </h4>  

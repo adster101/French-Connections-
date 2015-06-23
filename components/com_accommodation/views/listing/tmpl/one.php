@@ -85,7 +85,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $search_url = $app->getUserState('user.search');
-$crumbs = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.  
+$crumbs = JModuleHelper::getModules('breadcrumbs-tmp'); //If you want to use a different position for the modules, change the name here in your override.  
 $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.  
 ?>
 
@@ -93,15 +93,16 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
   <h1 class="page-header">
     <?php echo $this->document->title; ?>
   </h1>
-  <?php if (count($this->units) > 1) : ?>
-    <?php echo $this->loadTemplate('units'); ?>
-  <?php endif; ?>
+
 
   <!-- Begin breadcrumbs -->
   <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc   ?>
     <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
   <?php endforeach; ?>
   <!-- End breadcrumbs -->
+  <?php if (count($this->units) > 1) : ?>
+    <?php echo $this->loadTemplate('units'); ?>
+  <?php endif; ?>
 </div>
 
 <div class="container">

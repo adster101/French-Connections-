@@ -2,7 +2,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 ?>
-<div class="navbar-property-navigator hidden-xs" data-spy="affix" data-offset-top="640">
+<div class="navbar-property-navigator hidden-xs" data-spy="affix" data-offset-top="400">
 
   <ul class="nav nav-pills">
     <li>
@@ -45,6 +45,12 @@ defined('_JEXEC') or die('Restricted access');
     <li>
       <a href="<?php echo $route ?>#facilities">
         <span class="glyphicon glyphicon-th-list"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_FACILITIES'); ?>
+      </a>
+    </li>
+    <li>
+      <a href="<?php echo $route ?>#email">
+        <?php $contact_anchor_label = ($this->item->is_bookable) ? 'COM_ACCOMMODATION_NAVIGATOR_BOOK_NOW' : 'COM_ACCOMMODATION_NAVIGATOR_CONTACT'; ?>
+        <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_($contact_anchor_label); ?>
       </a>
     </li>
   </ul>

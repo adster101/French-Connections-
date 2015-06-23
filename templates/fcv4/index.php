@@ -64,9 +64,6 @@ else
     <?php if ($this->countModules('position-11')) : ?>
       <jdoc:include type="modules" name="position-11" style="no" />
     <?php endif; ?>
-    <?php if ($header == 'default') : ?>
-      <jdoc:include type="modules" name="breadcrumbs-tmp" style="html5" />
-    <?php endif; ?>
     <jdoc:include type="modules" name="position-3" style="html5" />
   </div>
   <?php if (!$listing): ?>

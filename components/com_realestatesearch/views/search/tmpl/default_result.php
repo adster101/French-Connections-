@@ -19,7 +19,6 @@ $location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.s
 $description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
 $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
 $prices = JHtml::_('general.price', $this->result->price, $this->result->base_currency, '', '');
-
 ?>
 
 <div class="search-result">

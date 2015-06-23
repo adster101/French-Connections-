@@ -19,6 +19,8 @@ $isListing = ($active->component == 'com_accommodation') ? true : false;
 $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 $isRealestate = ($active->component == 'com_realestate') ? true : false;
 $layout = $app->input->getCmd('layout', 'default');
+// An array of layouts to ignore for A/B testing purposes
+$layouts_to_ignore = array('one','accordion');
 ?>
 <?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate) && $layout == 'default') : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">

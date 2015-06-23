@@ -32,7 +32,7 @@ $search_data = new stdClass;
 $search_data->searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $bedrooms = $this->state->get('list.bedrooms');
 $refine_budget_min = $this->getBudgetFields(25000, 1500000, 50000, 'min_');
-$refine_budget_max = $this->getBudgetFields(25000, 1500000, 50000, 'max_');
+$refine_budget_max = $this->getBudgetFields(25000, 1500000, 50000, 'max_', 'COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE');
 
 $min_budget = $this->state->get('list.min_price');
 $max_budget = $this->state->get('list.max_price');
