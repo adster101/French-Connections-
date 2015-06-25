@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-  
+
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
@@ -9,12 +9,14 @@ jQuery(document).ready(function() {
 
   // Updates hte form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function() {
-
     var el = jQuery(this);
     var action = el.attr('value');
     jQuery(".atleisure-booking-form").attr("action", action);
+  });
 
-  })
+  jQuery('#main-nav li > a').on('click', function() {
+    ga('send', 'event', 'Navigation', 'Main', jQuery(this).attr('href'));
+  });
 
   jQuery('#enquiry').on('click', function() {
     ga('send', 'event', 'button', 'click', 'enquiry-button-clicked');
@@ -464,7 +466,7 @@ Joomla.submitbutton = function(task)
       return false;
     }
   }
-}
+};
 
 jQuery(function() {
   var activeTab = jQuery('a[href="' + location.hash + '"]');

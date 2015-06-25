@@ -22,8 +22,8 @@ class ImportControllerImages extends JControllerForm {
     $userfile = JRequest::getVar('import_file', null, 'files', 'array');
 
     // Open a handle to the import file
-    $handle = fopen('/home/AnXWtLd776/qitz3_property_images_library', "r");
-    //$handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
+    //$handle = fopen('/home/AnXWtLd776/qitz3_property_images_library', "r");
+    $handle = fopen('D:\\\users\dev1\Documents\Migration\qitz3_property_images_library.csv', "r");
     
     // Get a db instance
     $db = JFactory::getDBO();

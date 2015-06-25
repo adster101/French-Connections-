@@ -27,17 +27,13 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
-require '../vendor/autoload.php';
-
-use OpenCloud\Rackspace;
-
 /**
  * Cron job to trash expired cache data
  *
  * @package  Joomla.Cli
  * @since    2.5
  */
-class RentalImages extends JApplicationCli
+class PreProcessRentalImages extends JApplicationCli
 {
 
   /**
@@ -49,27 +45,16 @@ class RentalImages extends JApplicationCli
    */
   public function doExecute()
   {
-    try {
-    // Instantiate a Rackspace client.
-    $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
-        'username' => 'fcadmin01',
-        'apiKey' => '971715d42f3a40d3bcb42f7286477f45'
-    ));
-         
-    $objectStoreService = $client->objectStoreService(null, 'LON');
-    
-    $container = $objectStoreService->createContainer('images');
-    
-    $container = $objectStoreService->getContainer('images');
-  
-    } catch (Exception $e)
-    {
-      var_dump($e);
-    }
-    
-    die;
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
+   
+    // Create a log file for the email kickers
+    jimport('joomla.error.log');
 
+    jimport('joomla.filesystem.folder');
+
+    JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
+
+ 
     // The source folder for the pics 
     //$src = '/home/adam/Pictures/_images';
     $src = 'D:\Pics\_images';
@@ -78,8 +63,8 @@ class RentalImages extends JApplicationCli
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
     $model = JModelLegacy::getInstance('Image', 'RentalModel');
 
-    // Script to process real estate images for all properties in the #__realestate_property table
-    $images = $this->_getProps();
+    // Get a list of all images in the property image library table...
+    $images = $this->_getImages();
 
     foreach ($images as $image)
     {
@@ -87,22 +72,31 @@ class RentalImages extends JApplicationCli
       // The source path for the image being processed
       $image_path = $src . '/' . $image->image_file_name;
 
-      // Image has been uploaded, let's create some image profiles...
       try
       {
+        // If file exists in original image path move it to the unit folder
+        if (file_exists($image_path))
+        {
+          $image_path_to_copy = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/' . $image->image_file_name;
+          $move = copy($image_path, $image_path_to_copy);
 
-        // Fudge to collect up images uploaded since re-launch
-        if (!file_exists($image_path))
-        {
-          // These images must have been uploaded since re-launch...
-          $image_path = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/' . $image->image_file_name;
-          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'gallery');
-        }
-        else
-        {
-          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'gallery');
-          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'thumbs', 100, 100);
-          $model->generateImageProfile($image_path, (int) $image->unit_id, $image->image_file_name, 'thumb', 210, 120);
+          if (!$move)
+          {
+            throw new Exception('Problem moving image ' . $image->image_file_name . ' for unit ' . $image->unit_id);
+          }
+
+          $baseDir[] = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/gallery/';
+          $baseDir[] = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/thumbs/';
+          $baseDir[] = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/thumb/';
+
+          // Create folders for each of the profiles for the property, if they don't exist
+          foreach ($baseDir as $dir)
+          {
+            if (file_exists($dir))
+            {
+              JFolder::delete($dir);
+            }
+          }
         }
       }
       catch (Exception $e)
@@ -118,13 +112,12 @@ class RentalImages extends JApplicationCli
    * Get a list of properties due to expire and are set to manual renewal
    */
 
-  private function _getProps()
+  private function _getImages()
   {
 
     $this->out('Getting props and images...');
 
     $db = JFactory::getDBO();
-
 
     $query = $db->getQuery(true);
     $query->select('a.id as unit_id, b.image_file_name');
@@ -150,4 +143,4 @@ class RentalImages extends JApplicationCli
 
 }
 
-JApplicationCli::getInstance('RentalImages')->execute();
+JApplicationCli::getInstance('PreProcessRentalImages')->execute();
