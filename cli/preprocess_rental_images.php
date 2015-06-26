@@ -58,26 +58,24 @@ class PreProcessRentalImages extends JApplicationCli
     // The source folder for the pics 
     //$src = '/home/adam/Pictures/_images';
     $src = 'D:\Pics\_images';
-
-    // Add and get an instance of the realestate model image thingy
-    JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
-    $model = JModelLegacy::getInstance('Image', 'RentalModel');
-
+     
     // Get a list of all images in the property image library table...
     $images = $this->_getImages();
 
     foreach ($images as $image)
     {
-
+      
       // The source path for the image being processed
       $image_path = $src . '/' . $image->image_file_name;
 
       try
-      {
+      {    
+        
+        $image_path_to_copy = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/' . $image->image_file_name;
+
         // If file exists in original image path move it to the unit folder
-        if (file_exists($image_path))
+        if (file_exists($image_path) && !file_exists($image_path_to_copy))
         {
-          $image_path_to_copy = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/' . $image->image_file_name;
           $move = copy($image_path, $image_path_to_copy);
 
           if (!$move)
@@ -105,6 +103,7 @@ class PreProcessRentalImages extends JApplicationCli
       }
 
       $this->out('Done image...' . $image->image_file_name);
+      
     }
   }
 

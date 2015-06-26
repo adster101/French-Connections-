@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+JLoader::import('frenchconnections.library');
+
 $controller = JControllerLegacy::getInstance('registerowner');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
