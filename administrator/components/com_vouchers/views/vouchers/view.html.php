@@ -38,8 +38,6 @@ class VouchersViewVouchers extends JViewLegacy {
     }
     
     $canDo = VouchersHelper::getActions();
-
-
     $this->addToolbar($canDo);
 
     parent::display($tpl);

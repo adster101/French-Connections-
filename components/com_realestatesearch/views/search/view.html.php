@@ -237,12 +237,12 @@ class RealestateSearchViewSearch extends JViewLegacy
    *
    * @return	array	An array of JHtmlOption elements.
    */
-  protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_')
+  protected function getBudgetFields($start = 250, $end = 5000, $step = 250, $budget = 'min_', $select = 'COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE')
   {
     // Build the filter options.
     $options = array();
 
-    $options[] = JHtml::_('select.option', '', JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE'));
+    $options[] = JHtml::_('select.option', '', JText::_($select));
 
     for ($i = $start; $i < $end; $i = $i + $step)
     {

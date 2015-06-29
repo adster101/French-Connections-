@@ -21,20 +21,12 @@ $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 ?>
 
-<?php
-//Joomla Component Creator code to allow adding non select list filters
-if (!empty($this->extra_sidebar))
-{
-  $this->sidebar .= $this->extra_sidebar;
-}
-?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_tickets'); ?>" method="post" name="adminForm" id="adminForm" class="js-stools-form">
 
   <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
   <?php if (!empty($this->sidebar)): ?>
     <div id="j-sidebar-container" class="span2">
-      <?php echo $this->sidebar; ?>
     </div>
     <div id="j-main-container" class="span10">
     <?php else : ?>

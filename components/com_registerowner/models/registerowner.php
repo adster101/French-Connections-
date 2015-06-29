@@ -102,9 +102,16 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_messages/tables');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_messages/models');
+    
     $message_data = array();
+    
+    $Itemid = SearchHelper::getItemid(array('component', 'com_registerowner'));
 
-    try {
+    $menu = JMenu::getInstance('site');
+    $params = $menu->getParams($Itemid);
+    
+    try
+    {
 
       // Get an db instance and start a transaction
       $db->transactionStart();
@@ -192,10 +199,10 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       // While we're at it let's add an entry into the messages table so they will be greeted with
       // a lovingly hand crafted message of thanks for signing up.
       $message = $this->getTable('Message', 'MessagesTable');
-      $message_data['user_id_from'] = 8891; // Parameterise this...
+      $message_data['user_id_from'] = $params->get('user_notification_from',''); // Parameterise this...
       $message_data['user_id_to'] = $user->id;
       $message_data['subject'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_SUBJECT');
-      $message_data['message'] = JText::_('COM_REGISTEROWNER_WELCOME_MESSAGE_BODY');
+      $message_data['message'] = JText::sprintf('COM_REGISTEROWNER_WELCOME_MESSAGE_BODY', $data['firstname']);
       $message_data['date_time'] = JFactory::getDate()->calendar('Y-m-d H:i:s');
 
       if (!$message->save($message_data))
@@ -218,7 +225,9 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
 
       // Return the user object we've just created
       return $user;
-    } catch (Exception $e) {
+    }
+    catch (Exception $e)
+    {
       // Roll back any queries executed so far
       $db->transactionRollback();
 
@@ -246,7 +255,8 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
     $lifetime = 60;
 
     // Generates a unique 'series' identifier which acts as a 'salt'
-    do {
+    do
+    {
       $series = JUserHelper::genRandomPassword(20);
       $query = $this->_db->getQuery(true)
               ->select($this->_db->quoteName('series'))
@@ -258,11 +268,12 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       {
         $unique = true;
       }
-    } while ($unique === false);
+    }
+    while ($unique === false);
 
     // Generate a random token
     $token = JUserHelper::genRandomPassword(16);
-    
+
     // Sets the cookieValue to the unhashed series and token values, dot separated...
     $cookieValue = $token . '.' . $series;
 

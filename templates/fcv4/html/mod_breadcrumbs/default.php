@@ -8,18 +8,21 @@
  */
 defined('_JEXEC') or die;
 
-      $app = JApplicationSite::getInstance('site');
+$app = JApplicationSite::getInstance('site');
 $lang = $app->input->get('lang', 'en');
 $search_url = $app->getUserState('user.search');
 $menu = $app->getMenu();
 $active = $menu->getActive();
-$items = $menu->getItems(array('component','access'), array('com_fcsearch', array(1,2,3)));
+$items = $menu->getItems(array('component', 'access'), array('com_fcsearch', array(1, 2, 3)));
 $Itemid = is_array($items) ? $items[0]->id : array();
 $isListing = ($active->component == 'com_accommodation') ? true : false;
 $isShortlist = ($active->component == 'com_shortlist') ? true : false;
 $isRealestate = ($active->component == 'com_realestate') ? true : false;
+$layout = $app->input->getCmd('layout', 'default');
+// An array of layouts to ignore for A/B testing purposes
+$layouts_to_ignore = array('one','accordion');
 ?>
-<?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate)) : ?>
+<?php if (!empty($search_url) && ($isListing || $isShortlist || $isRealestate) && $layout == 'default') : ?>
   <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
     <p>
       <a class="btn btn-primary btn-xs" href="<?php echo $search_url ?>" title="">    
@@ -28,9 +31,10 @@ $isRealestate = ($active->component == 'com_realestate') ? true : false;
       </a>
     </p>
   </div>
-<?php endif; ?>
+  <?php endif; ?>
 
-<ol class="breadcrumb<?php echo $moduleclass_sfx; ?> visible-lg-inline-block visible-md-inline-block visible-sm-inline-block hidden-xs hidden-sm">
+<ol class="breadcrumb <?php echo $moduleclass_sfx; ?> hidden-xs">
+
   <?php
   if ($params->get('showHere', 1))
   {
@@ -84,18 +88,3 @@ $isRealestate = ($active->component == 'com_realestate') ? true : false;
   endforeach;
   ?>
 </ol>
-
-<?php if ($isListing) : ?>
-  <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block pull-right">
-    <form class="form-inline" id="property-search" method="POST" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=' . $lang . '&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>">
-      <?php echo JHtml::_('form.token'); ?>
-      <label class="sr-only" for="q">
-        <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
-      </label>
-      <input id="s_kwds" class="typeahead search-box form-control" type="text" name="s_kwds" autocomplete="Off" value="" placeholder="<?php echo JText::_('COM_ACCOMMODATION_SEARCH_DESTINATION_OR_PROPERTY') ?>" />
-      <button class="property-search-button btn btn-primary">
-        <span class="glyphicon glyphicon-search"><span class="sr-only"><?php echo JText::_('JSEARCH') ?></span></span>
-      </button>
-    </form>
-  </div>
-<?php endif; ?>

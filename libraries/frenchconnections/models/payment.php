@@ -957,7 +957,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         break;
 
       case 'REJECTED':
-        $this->setError("REJECTED - The transaction was failed by your 3D-Secure or AVS/CV2 rule-bases.");
+        $this->setError($strDBStatus);
         return false;
         break;
 

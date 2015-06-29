@@ -15,7 +15,7 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
 // The layout for the anchor based navigation on the property listing
 $bedrooms = '';
 $refine_budget_min = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, 'min_');
-$refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, 'max_','COM_FCSEARCH_SEARCH_MAXIMUM_PRICE');
+$refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, 'max_','COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE');
 ?>
 <div class="well well-light-blue">  
   <h4><?php echo JText::_('COM_REALESTATESEARCH_PROPERTY_SEARCH') ?></h4>
@@ -43,7 +43,7 @@ $refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, '
       </select>
     </div>
     <div class="form-group">
-      <label class="sr-only" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
+      <label class="" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
       <select id="min_price" name="min" class="form-control">
         <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', ''); ?>
       </select>

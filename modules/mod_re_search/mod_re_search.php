@@ -16,11 +16,9 @@ require_once __DIR__ . '/helper.php';
 $lang = JFactory::getLanguage();
 
 JLoader::import('frenchconnections.library');
+$lang->load('frenchconnections', JPATH_SITE . '/libraries/frenchconnections');
 
 $lang->load('com_fcsearch', JPATH_SITE, null, false, true);
-
-$app = JFactory::getApplication();
-
 
 require JModuleHelper::getLayoutPath('mod_re_search', $params->get('layout', 'default'));
 

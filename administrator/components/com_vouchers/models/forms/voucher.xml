@@ -14,8 +14,11 @@
       filter="string"
       value_field="description"
       key_field="id"
-      default=""
-    />
+      default="">
+          <option value="">JSELECT</option>
+
+    </field>
+    
     
     <field
       name="property_id"
@@ -25,7 +28,6 @@
       required="true"
       class="input-small"
       filter="int"
-      default=""
     />
     
     <field 

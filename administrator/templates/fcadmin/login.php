@@ -47,7 +47,6 @@ $config = JFactory::getConfig();
 $debug = (boolean) $config->get('debug');
 ?>
 
-
 <!DOCTYPE html>
 <html lang="<?php echo $this->language; ?>">
   <head>  
@@ -56,7 +55,7 @@ $debug = (boolean) $config->get('debug');
     <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
   <?php $doc->addStyleSheet('//' . $uri->getHost() . '/media/fc/assets/css/styles.css'); ?>
-  <?php if ($cookie) : ?>  <jdoc:include type="head" />
+  <?php if ($cookie) : ?> 
     <script type="text/javascript">
       jQuery(function($) {
         document.forms[0].submit();
@@ -85,7 +84,7 @@ $debug = (boolean) $config->get('debug');
     </div>
 
   </header> 
-  <p class="lead center <?php echo (!$cookie) ? "hide" : '' ?>">
+  <p class="lead text-center <?php echo (!$cookie) ? "hide" : '' ?>">
     One moment while we create your account...<br /><br />
     <img src="/images/general/ajax-loader.gif" alt="Please wait..." />      
   </p>

@@ -42,8 +42,6 @@ class TicketsViewTickets extends JViewLegacy
     $canDo = TicketsHelper::getActions();
 
     //TicketsHelper::addSubmenu('tickets');
-    //$this->sidebar = JHtmlSidebar::render();
-    $this->setDocument();
 
     $this->addToolbar($canDo);
 
@@ -155,16 +153,5 @@ class TicketsViewTickets extends JViewLegacy
     );
   }
 
-  /**
-   * Method to set up the document properties
-   *
-   * @return void
-   */
-  protected function setDocument()
-  {
-    $document = JFactory::getDocument();
-    //$document->addScript("media/fc/js/jquery.placeholder.js", 'text/javascript', true, false);
-    $document->addScript("media/fc/js/general.js", 'text/javascript', true);
-  }
-
+  
 }

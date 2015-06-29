@@ -46,7 +46,7 @@ $chunks = array_chunk($items, 4);
             <?php if ($item->title) : ?>
               <div class="col-lg-3 col-sm-3">
                 <p>
-                  <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="" href="<?php echo $property ?>">
+                  <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="view-search-fp-link" href="<?php echo $property ?>">
                     <?php if (!empty($item->offer)) : ?>
                       <span class="offer small" data-toggle="tooltip" title="<?php echo htmlspecialchars($item->offer) ?>">
                         <?php echo JHtml::_('string.truncate', htmlspecialchars($item->offer), 35, true, false); ?>
@@ -64,7 +64,7 @@ $chunks = array_chunk($items, 4);
                     <?php echo JText::sprintf('MOD_FEATURED_PROPERTY_PRICE_FROM', $prices['GBP']) ?>
                   <?php endif; ?><br />
                   <?php // echo JHTml::_('string.truncate', $item->description, 25, true, false); ?>
-                  <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail" href="<?php echo $property ?>">
+                  <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="fp-thumbnail view-search-fp-link" href="<?php echo $property ?>">
                     <?php echo htmlspecialchars($item->unit_title); ?>&nbsp;&raquo;
                   </a>
                 </p>

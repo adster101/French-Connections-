@@ -196,8 +196,8 @@ class RentalModelListings extends JModelList
     if ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'expiry_date')
     {
       // This filter includes any properties with snooze dates between the dates being filtered on.
-      // This allows us to show properties that expired outside the dated being filtered on but
-      // were snoozed to appear between the dated being filtered. We also, exlude properties that 
+      // This allows us to show properties that expired outside the dates being filtered on but
+      // have been snoozed to appear between the dated being filtered. We also, exlude properties that 
       // are no longer expired. That is, they have been renewed since they were snoozed...
       $query->where('((a.' . $db->escape($date_filter) . ' >=' . $db->quote($start_date) . ' and a.'
               . $db->escape($date_filter) . ' <=' . $db->quote($end_date) . ')' .
@@ -220,12 +220,11 @@ class RentalModelListings extends JModelList
               $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
               ' and a.' . $db->escape($date_filter) . ' <=' .
               $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
-      $query->select('(select count(*) from ' . $db->quoteName('#__property', 'props') . ' where props.created_by = a.created_by) as ');
+      $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
     }
     elseif ($date_filter == 'created_on')
     {
-
-      $query->select('(select count(*) from ' . $db->quoteName('#__property', 'props') . ' where props.created_by = a.created_by) as existing');
+      $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
     }
 
     // Filter by search in title

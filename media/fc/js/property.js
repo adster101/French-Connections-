@@ -6,36 +6,53 @@ jQuery(window).load(function() {
 
 jQuery(document).ready(function() {
 
-  //jQuery('#recaptcha_widget a').tooltip()
-  // The slider being synced must be initialized first
-  jQuery('#carousel').flexslider({
-    animation: "slide",
-    itemWidth: 100,
-    itemMargin: 5,
-    animationLoop: false,
-    asNavFor: '#slider',
-    controlNav: false,
-    slideshow: false
+  // Get a handle to a jQuery collection 
+  var collapse = jQuery('.panel-group .collapse');
+  
+  // If the collection contains ought 
+  if (collapse && window.innerWidth < 768 ) {
+    
+    // Init the collapse plugin
+    collapse.collapse();
+    
+    jQuery('.collapsible').addClass('collapsed');
+    
+  }
+
+  jQuery('.slick-slider').slick({
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    asNavFor: '.carousel-ribbon',
+    lazyLoad: 'progressive',
+    arrows: true,
+    fade: true,
+    prevArrow: '<a class="slick-prev"><span class="glyphicon glyphicon-chevron-left"></span></a>',
+    nextArrow: '<a class="slick-next"><span class="glyphicon glyphicon-chevron-right"></span></a>',
   });
 
-  jQuery('#slider').flexslider({
-    animation: "fade",
-    animationLoop: false,
-    slideshow: false,
-    sync: '#carousel',
-    useCss: false,
-    animationLoop: false,
-            controlNav: false,
-    video: true,
-    after: function(slider) {
-      var slides = slider.slides;
-      var index = slider.animatingTo;
-      var slide = $(slides[index]);
-      var img = slide.find('img[data-src]');
-      if (img) {
-        img.attr("src", img.attr('data-src')).removeAttr("data-src");
+  jQuery('.carousel-ribbon').slick({
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    fade: false,
+    asNavFor: '.slick-slider',
+    focusOnSelect: true,
+    arrows: false,
+    draggable: false,
+    lazyLoad: 'progressive',
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 5
+        }
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 4
+        }
       }
-    }
+    ]
   });
 });
 
@@ -105,7 +122,7 @@ function initPropertyMap() {
     jQuery.each(markers, function(index, marker) {
       bounds.extend(marker.position);
     });
-    
+
     bounds.extend(prnmarker.position);
 
     //  Fit these bounds to the map

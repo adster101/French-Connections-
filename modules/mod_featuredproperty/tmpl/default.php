@@ -28,7 +28,7 @@ $view = $app->input->get('view', '', 'string');
     <?php if ($item->title) : ?>     
       <div class="col-lg-3 col-sm-6"> 
         <p>
-          <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="<?php echo 'view-' . $view . '-fp-image-link' ?>" href="<?php echo $property ?>">
+          <a title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>" class="<?php echo 'view-' . $view . '-fp-link' ?>" href="<?php echo $property ?>">
             <?php if (!empty($item->offer)) : ?>
               <span class="offer small" data-toggle="tooltip" title="<?php echo htmlspecialchars($item->offer) ?>">
                 <?php echo JHtml::_('string.truncate', htmlspecialchars($item->offer), 35, true, false); ?>

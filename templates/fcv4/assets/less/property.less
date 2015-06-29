@@ -1,6 +1,5 @@
 /**
 
-Contains styles that apply at the global level, or can be applied to any section of the template
 19/08/2014 Adam Rifat FCV4
 
 
@@ -109,6 +108,28 @@ Contains styles that apply at the global level, or can be applied to any section
 
 .view-listing {
 
+  .panel-group
+  
+  a {     
+    text-decoration:none;
+    display:block;
+    
+    &.collapsible:after 
+    { 
+      font-family: 'Glyphicons Halflings';
+      vertical-align:top;
+      content:"\e113";
+      float:right;
+    }
+
+    &.collapsible.collapsed:after {
+      content:"\e114";
+    }
+  }
+  
+
+
+
   .nav-tabs {
     > li.active a {
       font-weight:600;
@@ -150,30 +171,70 @@ Contains styles that apply at the global level, or can be applied to any section
   .quote(@padding:15px);
 }
 
-.navbar-property-navigator {
+.navbar-property-navigator, .property-buttons-row {
   margin-bottom: 20px;
-  padding:10px 0;
-  .nav > li > a {
-    font-size:85%;
-    padding:10px;
-
-    > .glyphicon {
-        display:none;
-    }
-  }
-
-  // Restore font size for desktop sized screens
-  @media (min-width: @screen-lg-desktop) {
-    .nav > li > a {     
-      padding:10px 15px;
-      font-size:100%;
-      > .glyphicon {
-          display:inline-block;
-      }
-    }
-  }
 }
 
+.slick-slider, 
+.carousel-ribbon {
+  visibility:hidden;
+  margin-bottom:20px;
+}
+
+.slick-slider.slick-initialized , 
+.carousel-ribbon.slick-initialized {
+  visibility:visible;
+  transition: visibility 0.3s ease-in;
+}
+
+
+/* Arrows */
+.slick-prev,
+.slick-next
+{
+  position: absolute;
+  top: 45%;
+  background-image: none;
+  padding: 15px 10px 10px ;
+  font-size: 25px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #FFF;
+  border-radius: 4px;
+  cursor:pointer;
+}
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus
+{
+  color: #FFF;
+   
+}
+.slick-prev:hover:before,
+.slick-prev:focus:before,
+.slick-next:hover:before,
+.slick-next:focus:before
+{
+  color: #FFF;
+    
+}
+.slick-prev.slick-disabled:before,
+.slick-next.slick-disabled:before
+{
+   
+}
+
+
+.slick-prev
+{
+}
+
+
+
+.slick-next
+{
+    right: 0px;
+}
 
 
 
