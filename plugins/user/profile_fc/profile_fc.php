@@ -185,12 +185,12 @@ class plgUserProfile_fc extends JPlugin
     }
 
     require_once(JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
+    $user = JFactory::getUser();
     $input = JFactory::getApplication()->input;
     $form_data = $input->get('jform', array(), 'array');
     $vat_status = '';
     $lang = JFactory::getLanguage();
     $lang->load('com_rental');
-
 
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
@@ -236,6 +236,19 @@ class plgUserProfile_fc extends JPlugin
     {
       $form->removeField('dummy_validation_code');
     }
+
+    /* If the user doesn't have manage users permissions and no active or live properties
+      we don't want them to update some of their account settings...
+      if (!$user->authorise('core.manage', 'com_users') && RentalHelper::hasActiveProperty($user->id))
+      {
+      $form->setFieldAttribute('firstname', 'required', 'false');
+      $form->setFieldAttribute('firstname', 'readonly', 'true');
+
+      $form->setFieldAttribute('surname', 'required', 'false');
+      $form->setFieldAttribute('surname', 'readonly', 'true');
+      }
+
+     */
 
     return true;
   }

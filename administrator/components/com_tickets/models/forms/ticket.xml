@@ -58,10 +58,11 @@
       labelclass="control-label"
       description="">
       <option value="">JSELECT</option>
-      <option value="1">COM_TICKETS_OPEN</option>
-      <option value="0">COM_TICKETS_CLOSED</option>
-      <option value="2">COM_TICKETS_TESTING_FILTER</option>
+      <option value="1">COM_TICKETS_OPEN</option>  
       <option value="3">COM_TICKETS_PENDING_FILTER</option>
+      <option value="2">COM_TICKETS_TESTING_FILTER</option>
+      <option value="4">COM_TICKETS_FIXED_FILTER</option>
+      <option value="0">COM_TICKETS_CLOSED</option>
     </field>
     <field 
       name="severity"
