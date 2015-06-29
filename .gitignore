@@ -89,3 +89,5 @@ robots.txt
 /nbproject/private/
 /nbproject/
 /vendor/
+/composer.json
+/composer.lock

@@ -999,4 +999,15 @@ abstract class RentalHelper
     return $listing;
   }
 
+  public static function hasActiveProperty($user = '')
+  {
+    $db = JFactory::getDbo();
+    
+    $query = $db->getQuery(true);
+    
+    $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
+
+    return true;
+  }
+
 }
