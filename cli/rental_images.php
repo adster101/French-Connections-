@@ -116,6 +116,8 @@ class RentalImages extends JApplicationCli
    * 210x120
    * 100x100
    * 
+   * TO DO - Make it send up the images to CDN...and then remove the profile gallery
+   * 
    */
 
   public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
@@ -178,7 +180,7 @@ class RentalImages extends JApplicationCli
         // Put it out to a file
         $file_name = $image_file_path . $this->profiles[$key] . '_' . $image_file_name;
         $thumb->tofile($file_name);
-        
+
         imagedestroy($thumb);
       }
     }
@@ -207,13 +209,11 @@ class RentalImages extends JApplicationCli
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
-    $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date','now','Y-m-d')));
+    $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
     $db->setQuery($query);
 
     try {
       $rows = $db->loadObjectList();
-      
-      var_dump($rows);die;
     }
     catch (Exception $e) {
       $this->out('Problem getting props...');
