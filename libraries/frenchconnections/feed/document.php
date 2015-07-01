@@ -59,19 +59,19 @@ class JFeedParserdocument extends JFeedParser
     $feed = new stdClass();
     $feed->properties = array();
 
-// Detect the feed version.
+    // Detect the feed version.
     $this->initialise();
 
-// Let's get this party started...
+    // Let's get this party started...
     do
     {
-// Expand the element for processing.
+      // Expand the element for processing.
       $el = $this->expandToSimpleXml();
-
-// Process the element.
+      
+      // Process the element.
       $this->processElement($feed, $el);
 
-// Skip over this element's children since it has been processed.
+    // Skip over this element's children since it has been processed.
       $this->moveToClosingElement();
     }
     while ($this->moveToNextElement());
@@ -122,7 +122,6 @@ class JFeedParserdocument extends JFeedParser
     {
       $listing->department = $this->department((string) $el->Address->region);
     }
-
 
     // Add an EPC diagram if there is one
     if (!empty($el->EPC))

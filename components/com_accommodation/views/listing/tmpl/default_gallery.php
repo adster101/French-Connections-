@@ -15,12 +15,21 @@ defined('_JEXEC') or die('Restricted access');
         </div>
       <?php endif; ?>
       <?php foreach ($this->images as $images => $image) : ?> 
-        <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
+        <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
+        <?php
+        $srcset = array();
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '330x248_' . $image->image_file_name . $image->url . ' 400w' : JURI::getInstance()->toString(array('scheme'));
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '770x580_' . $image->image_file_name . $image->url . ' 767w' : JURI::getInstance()->toString(array('scheme'));
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '408x307_' . $image->image_file_name . $image->url . ' 768w' : JURI::getInstance()->toString(array('scheme'));
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '617x464_' . $image->image_file_name . $image->url . ' 992w' : JURI::getInstance()->toString(array('scheme'));
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '770x580_' . $image->image_file_name . $image->url . ' 1200w' : JURI::getInstance()->toString(array('scheme'));
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '903x586_' . $image->image_file_name . $image->url . ' 1900w' : JURI::getInstance()->toString(array('scheme'));
+        ?>
         <div>
           <?php if ($images == 0) : ?>
-            <img class="img-responsive" data-lazy="<?php echo $src ?>" />
+            <img class="img-responsive center-block" srcset="<?php echo implode(',', $srcset) ?>"/>
           <?php else: ?>
-            <img class="img-responsive" data-lazy="<?php echo $src ?>" />
+            <img class="img-responsive center-block" srcset="<?php echo implode(',', $srcset) ?>"/>
           <?php endif; ?>
           <p>
             <?php echo $image->caption; ?>
@@ -40,7 +49,7 @@ defined('_JEXEC') or die('Restricted access');
         </div>
       <?php endif; ?>
       <?php foreach ($this->images as $images => $image) : ?> 
-        <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
+        <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/100x100_' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
         <div>
           <img src="<?php echo $src ?>" /> 
         </div>     

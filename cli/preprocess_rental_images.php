@@ -46,7 +46,7 @@ class PreProcessRentalImages extends JApplicationCli
   public function doExecute()
   {
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
-   
+
     // Create a log file for the email kickers
     jimport('joomla.error.log');
 
@@ -54,23 +54,23 @@ class PreProcessRentalImages extends JApplicationCli
 
     JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
 
- 
+
     // The source folder for the pics 
     //$src = '/home/adam/Pictures/_images';
     $src = 'D:\Pics\_images';
-     
+
     // Get a list of all images in the property image library table...
     $images = $this->_getImages();
 
     foreach ($images as $image)
     {
-      
+
       // The source path for the image being processed
       $image_path = $src . '/' . $image->image_file_name;
 
       try
-      {    
-        
+      {
+
         $image_path_to_copy = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/' . $image->image_file_name;
 
         // If file exists in original image path move it to the unit folder
@@ -102,8 +102,7 @@ class PreProcessRentalImages extends JApplicationCli
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
 
-      $this->out('Done image...' . $image->image_file_name);
-      
+      $this->out('Done image...' . $image->image_file_name . 'for unit ' . $image->unit_id);
     }
   }
 
@@ -124,7 +123,12 @@ class PreProcessRentalImages extends JApplicationCli
     $query->from('#__unit a');
 
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
+    $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
+    $query->where('c.created_by not in (8290)');
+    $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
+    
+
     $db->setQuery($query);
 
     try
