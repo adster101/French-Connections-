@@ -52,6 +52,8 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'bower_components/jquery/dist/jquery.js',
+          'bower_components/picturefill/dist/picturefill.min.js',
+          'bower_components/lazysizes/lazysizes.min.js',
           'bower_components/bootstrap/js/carousel.js',
           'bower_components/bootstrap/js/tab.js',
           'bower_components/bootstrap/js/transition.js',

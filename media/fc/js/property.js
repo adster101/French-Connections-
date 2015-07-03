@@ -23,7 +23,6 @@ jQuery(document).ready(function() {
     slidesToShow: 1,
     slidesToScroll: 1,
     asNavFor: '.carousel-ribbon',
-    lazyLoad: 'progressive',
     arrows: true,
     fade: true,
     prevArrow: '<a class="slick-prev"><span class="glyphicon glyphicon-chevron-left"></span></a>',
@@ -38,7 +37,6 @@ jQuery(document).ready(function() {
     focusOnSelect: true,
     arrows: false,
     draggable: false,
-    lazyLoad: 'progressive',
     responsive: [
       {
         breakpoint: 1200,

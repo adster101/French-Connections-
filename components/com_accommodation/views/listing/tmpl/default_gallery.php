@@ -15,21 +15,22 @@ defined('_JEXEC') or die('Restricted access');
         </div>
       <?php endif; ?>
       <?php foreach ($this->images as $images => $image) : ?> 
-        <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
+        <?php 
+        $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
         <?php
         $srcset = array();
-        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '330x248_' . $image->image_file_name . $image->url . ' 400w' : JURI::getInstance()->toString(array('scheme'));
-        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '770x580_' . $image->image_file_name . $image->url . ' 767w' : JURI::getInstance()->toString(array('scheme'));
-        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '408x307_' . $image->image_file_name . $image->url . ' 768w' : JURI::getInstance()->toString(array('scheme'));
-        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '617x464_' . $image->image_file_name . $image->url . ' 992w' : JURI::getInstance()->toString(array('scheme'));
-        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '770x580_' . $image->image_file_name . $image->url . ' 1200w' : JURI::getInstance()->toString(array('scheme'));
-        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '903x586_' . $image->image_file_name . $image->url . ' 1900w' : JURI::getInstance()->toString(array('scheme'));
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '210x120_' . $image->image_file_name . $image->url . ' 210w' : JURI::getInstance()->toString(array('scheme')) .$image->url . ' 210w';
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '330x248_' . $image->image_file_name . $image->url . ' 330w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 330w';
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '408x307_' . $image->image_file_name . $image->url . ' 408w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 408w';
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '617x464_' . $image->image_file_name . $image->url . ' 617w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 617w';
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '770x580_' . $image->image_file_name . $image->url . ' 770w' : JURI::getInstance()->toString(array('scheme')) . $image->url. ' 770w';
+        $srcset[] = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . '903x586_' . $image->image_file_name . $image->url . ' 903w' : JURI::getInstance()->toString(array('scheme')) . $image->url. ' 903w';
         ?>
         <div>
           <?php if ($images == 0) : ?>
-            <img class="img-responsive center-block" srcset="<?php echo implode(',', $srcset) ?>"/>
+            <img src="" class="img-responsive lazyload" data-srcset="<?php echo implode(',', $srcset) ?>" sizes="(max-width: 991px) 60vw, (max-width: 1200px) 60vw" />
           <?php else: ?>
-            <img class="img-responsive center-block" srcset="<?php echo implode(',', $srcset) ?>"/>
+            <img src="" class="img-responsive lazyload" data-srcset="<?php echo implode(',', $srcset) ?>" sizes="(max-width: 991px) 60vw, (max-width: 1200px) 60vw" />
           <?php endif; ?>
           <p>
             <?php echo $image->caption; ?>
@@ -65,7 +66,7 @@ defined('_JEXEC') or die('Restricted access');
         <?php endif; ?>
         <?php foreach ($this->images as $images => $image) : ?> 
           <div>
-            <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
+            <img class="lazyload" data-src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
             <p>
               <?php echo $this->escape($image->caption); ?>
             </p>

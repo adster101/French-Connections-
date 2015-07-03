@@ -28,10 +28,7 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 require_once JPATH_LIBRARIES . '/cms.php';
 
 jimport('joomla.filesystem.folder');
-
-
-//require '../vendor/autoload.php';
-//use OpenCloud\Rackspace;
+jimport('frenchconnections.images.filter.interlace');
 
 /**
  * Cron job to trash expired cache data
@@ -41,6 +38,8 @@ jimport('joomla.filesystem.folder');
  */
 class RentalImages extends JApplicationCli
 {
+
+  private $users_to_ignore = '9436';
 
   /**
    * Array to hole the 
@@ -58,32 +57,17 @@ class RentalImages extends JApplicationCli
    */
   public function doExecute()
   {
-//    try {
-//      // Instantiate a Rackspace client.
-//      $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
-//          'username' => 'fcadmin01',
-//          'apiKey' => '971715d42f3a40d3bcb42f7286477f45'
-//      ));
-//
-//      $objectStoreService = $client->objectStoreService(null, 'LON');
-//
-//      $container = $objectStoreService->createContainer('images');
-//
-//      $container = $objectStoreService->getContainer('images');
-//    }
-//    catch (Exception $e) {
-//      var_dump($e);
-//      die;
-//    }
+
     // Add and get an instance of the realestate model image thingy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
     $model = JModelLegacy::getInstance('Image', 'RentalModel');
 
     // Script to process real estate images for all properties in the #__realestate_property table
     $images = $this->_getImages();
+    
+    $total = count($images);
 
-
-    foreach ($images as $image)
+    foreach ($images as $i => $image)
     {
 
       // The source path for the image being processed
@@ -100,7 +84,7 @@ class RentalImages extends JApplicationCli
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
 
-      $this->out('Done image...' . $image->image_file_name);
+      $this->out('Done image...' . $image->image_file_name . ' ' . $i . ' of ' . $total);
     }
   }
 
@@ -125,9 +109,10 @@ class RentalImages extends JApplicationCli
   public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
   {
 
+    
     $image = $image_path . '/' . $unit_id . '/' . $image_file_name;
-    $image_file_path = $image_path . '/' . $unit_id . '/profiles/';
-
+    $image_file_path = $image_path . '/profiles/' . $unit_id . '/' ;
+    
     if (!file_exists($image))
     {
       // Change this to throw exception
@@ -137,6 +122,7 @@ class RentalImages extends JApplicationCli
     // Create a new image object ready for processing
     $imgObj = new JImage($image);
 
+    
     // Create a folder for the profile, if it doesn't exist
     if (!file_exists($image_file_path))
     {
@@ -160,15 +146,7 @@ class RentalImages extends JApplicationCli
         $profile = $imgObj->resize($max_width, $max_height, true, 3);
 
         $thumbs = $profile->generateThumbs($this->profiles, 5);
-
-        // Load the existing image
-        // $existing_image = imagecreatefromjpeg($file_path);
-        // Make it progressive
-        // $bit = imageinterlace($existing_image, 1);
-        // Save it out
-        // imagejpeg($existing_image, $file_path, 100);
-        // Free up memory
-        // imagedestroy($existing_image);
+        
       }
       else if ($width < $height)
       {
@@ -182,15 +160,21 @@ class RentalImages extends JApplicationCli
       {
         // Put it out to a file
         $file_name = $image_file_path . $this->profiles[$key] . '_' . $image_file_name;
+
+
         if (!file_exists($file_name))
         {
+          // Set the interlace filter on the thumb
+          $thumb->filter('interlace');
+          
+          // Save it out at full quality
           $thumb->tofile($file_name);
         }
       }
     }
     catch (Exception $e)
     {
-      $this->out($e->message);
+      $this->out($e->getMessage());
     }
   }
 
@@ -215,6 +199,8 @@ class RentalImages extends JApplicationCli
     $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
     $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
+    $query->where('c.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
+
     $db->setQuery($query);
 
 

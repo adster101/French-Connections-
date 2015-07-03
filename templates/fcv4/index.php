@@ -47,7 +47,7 @@ else
   <head>  
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1;">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   <jdoc:include type="head" />
   <?php include_once JPATH_THEMES . '/' . $this->template . '/assets.php'; ?>
   <meta name="google-site-verification" content="gxNKICR23M3sV86ZSmOoGcFZCNH-AvkUI1MTTW3nau4" />

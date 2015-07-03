@@ -343,14 +343,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <?php echo $this->item->description; ?>
       <?php endif; ?>
     </div>
-    <div class="col-lg-5 col-md-5 col-sm-5">
-      <?php
-      jimport('joomla.application.module.helper');
-      $modules = JModuleHelper::getModule('mod_OpenX_spc', 'MPU-LISTING');
-      $attribs['style'] = 'html5';
-      echo JModuleHelper::renderModule($modules, $attribs);
-      ?>
-    </div>
+   
   </div>
   <?php if (!empty($this->item->location_details)) : ?>
     <div class="row" id="location">

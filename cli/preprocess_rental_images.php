@@ -36,6 +36,8 @@ require_once JPATH_LIBRARIES . '/cms.php';
 class PreProcessRentalImages extends JApplicationCli
 {
 
+  private $users_to_ignore = '9436';
+
   /**
    * Entry point for the script
    *
@@ -53,7 +55,6 @@ class PreProcessRentalImages extends JApplicationCli
     jimport('joomla.filesystem.folder');
 
     JLog::addLogger(array('text_file' => 'images.import.php'), JLog::ALL, array('import_images'));
-
 
     // The source folder for the pics 
     //$src = '/home/adam/Pictures/_images';
@@ -82,19 +83,6 @@ class PreProcessRentalImages extends JApplicationCli
           {
             throw new Exception('Problem moving image ' . $image->image_file_name . ' for unit ' . $image->unit_id);
           }
-
-          $baseDir[] = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/gallery/';
-          $baseDir[] = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/thumbs/';
-          $baseDir[] = 'C:\xampp\htdocs\images\property' . '/' . (int) $image->unit_id . '/thumb/';
-
-          // Create folders for each of the profiles for the property, if they don't exist
-          foreach ($baseDir as $dir)
-          {
-            if (file_exists($dir))
-            {
-              JFolder::delete($dir);
-            }
-          }
         }
       }
       catch (Exception $e)
@@ -102,7 +90,7 @@ class PreProcessRentalImages extends JApplicationCli
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
 
-      $this->out('Done image...' . $image->image_file_name . 'for unit ' . $image->unit_id);
+      $this->out('Done image...' . $image->image_file_name . ' for unit ' . $image->unit_id);
     }
   }
 
@@ -125,9 +113,8 @@ class PreProcessRentalImages extends JApplicationCli
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
-    $query->where('c.created_by not in (8290)');
+    $query->where('c.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
     $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
-    
 
     $db->setQuery($query);
 
