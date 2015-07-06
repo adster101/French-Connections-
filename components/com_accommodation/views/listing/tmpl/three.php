@@ -8,6 +8,7 @@ $app = JFactory::getApplication();
 
 $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 $HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
+$searchID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
 $this->item->itemid = $Itemid;
 
@@ -21,6 +22,7 @@ $uri = JUri::getInstance()->toString();
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
 $inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
+$search_route = 'index.php?option=com_fcsearch&Itemid=' . (int) $searchID . '&s_kwds=france';
 
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
@@ -82,17 +84,15 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
-
+$search_url = $app->getUserState('user.search');
 $crumbs = JModuleHelper::getModules('breadcrumbs-tmp'); //If you want to use a different position for the modules, change the name here in your override.  
 $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.  
-
 ?>
 
-<div class="container">
+<div class="container hidden-xs">
   <h1 class="page-header">
     <?php echo $this->document->title; ?>
   </h1>
-  
   <!-- Begin breadcrumbs -->
   <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc   ?>
     <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
@@ -102,99 +102,68 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
     <?php echo $this->loadTemplate('units'); ?>
   <?php endif; ?>
 </div>
-<div class="navbar-property-navigator" data-spy="affix" data-offset-top="640" >
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-10 col-md-9 col-sm-8 hidden-xs">
-        <ul class="nav nav-pills">
-          <li>
-            <a href="<?php echo $route ?>#top">
-              <span class="glyphicon glyphicon-home"> </span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TOP'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#about">
-              <span class="glyphicon glyphicon-info-sign"> </span>          
-              <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?>
-            </a>
-          </li>
-          <?php if (!empty($this->item->location_details)) : ?>
-            <li>
-              <a href="<?php echo $route ?>#location">
-                <span class="glyphicon glyphicon-map-marker"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_LOCATION'); ?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <?php if (!empty($this->item->getting_there)) : ?>
-            <li>
-              <a href="<?php echo $route ?>#gettingthere">
-                <span class="glyphicon glyphicon-plane"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TRAVEL'); ?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <?php if ($this->item->reviews && count($this->item->reviews) > 0) : ?>
-            <li>
-              <a href="<?php echo $route ?>#reviews">
-                <span class="glyphicon glyphicon-power-cord "></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_REVIEWS'); ?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <li>
-            <a href="<?php echo $route ?>#facilities">
-              <span class="glyphicon glyphicon-power-cord"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_FACILITIES'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#availability">
-              <span class="glyphicon glyphicon-calendar"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_AVAILABILITY'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#tariffs">
-              <span class="glyphicon glyphicon-credit-card"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TARIFFS'); ?>
-            </a>
-          </li>
-          <li>
-            <a href="<?php echo $route ?>#email">
-              <?php $contact_anchor_label = ($this->item->is_bookable) ? 'COM_ACCOMMODATION_NAVIGATOR_BOOK_NOW' : 'COM_ACCOMMODATION_NAVIGATOR_CONTACT'; ?>
-              <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_($contact_anchor_label); ?>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-2 col-md-3 col-sm-4">
-        <div class="visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="property-buttons-row clearfix">
+        <?php if (!empty($search_url)) : ?>
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">    
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
+          </a>
+        <?php else: ?>
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_route ?>" title="">    
+            <span class="glyphicon glyphicon-circle-arrow-left"></span>
+            <?php echo JText::_('COM_ACCOMMODATION_BROWSE_SEARCH_RESULTS'); ?>
+          </a>          
+        <?php endif; ?>
+        <div class="pull-right">
           <?php if ($logged_in) : ?>
             <?php echo $shortlist->render($displayData); ?>
           <?php else : ?>
-            <a class="btn btn-default" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
+            <a class="btn btn-default btn-sm" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
               <span class="glyphicon glyphicon-heart muted"></span>
-              <?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?>
-            </a>    
+              <span class=""><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
+            </a>
           <?php endif; ?>
-        </div>
-        <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block"> 
-          <a target="_blank" href="<?php
-          echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
-          . urlencode($uri)
-          . '&redirect_uri='
-          . urlencode($uri)
-          . '&picture='
-          . JURI::root() . 'images/property/'
-          . $this->item->unit_id
-          . '/thumbs/'
-          . urlencode($this->images[0]->image_file_name)
-          . '&name=' . urlencode($this->item->unit_title)
-          . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
-          ?>"
-             <span class="glyphicon social-icon facebook"></span>
-          </a> 
-          <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
-            <span class="glyphicon social-icon twitter"></span>
-          </a>
-          <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
-            <span class="glyphicon social-icon google-plus"></span>
-          </a>
+          <button class='btn btn-default hidden-xs btn-sm' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-share-alt"></span>
+            <?php echo JText::_('COM_ACCOMMODATION_SHARE') ?>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+            <li> 
+              <a target="_blank" href="<?php
+              echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
+              . urlencode($uri)
+              . '&redirect_uri='
+              . urlencode($uri)
+              . '&picture='
+              . JURI::root() . 'images/property/'
+              . $this->item->unit_id
+              . '/thumbs/'
+              . urlencode($this->images[0]->image_file_name)
+              . '&name=' . urlencode($this->item->unit_title)
+              . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
+              ?>">
+                <span class="glyphicon social-icon facebook"></span>  
+                <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
+              </a>
+            </li> 
+            <li>
+              <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
+                <span class="glyphicon social-icon twitter"></span>
+                <?php echo JText::_('COM_ACCOMMODATION_TWITTER') ?>
+              </a>
+            </li>
+            <li>
+              <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
+                <span class="glyphicon social-icon google-plus"></span>
+                <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -214,181 +183,204 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       </p>
     </div>
   <?php endif; ?>
-
   <div class="row" id="main">
-    <div class="col-lg-7 col-md-7 col-sm-12">
-      <?php echo $this->loadTemplate('gallery'); ?>
-    </div>
-    <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
-      <div class="well well-light-blue">
-        <?php if ($this->tariffs) : ?> 
-          <?php if (min($price_range) == max($price_range)) : ?>
-            <p>
-              <strong class="lead">&pound;<?php echo $min_prices['GBP'] ?></strong>
-              <?php if ($this->item->tariffs_based_on) : ?>
-                <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
-              <?php endif; ?>
-              <br />
-              (&euro;<?php echo $min_prices['EUR']; ?>)
-            </p>             
-          <?php else: ?>
-            <p>
-              <strong class="lead">&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong>
-              <?php if ($this->item->tariffs_based_on) : ?>
-                <?php echo '&nbsp;' . htmlspecialchars($this->item->tariffs_based_on); ?>
-              <?php endif; ?>
-              <br />
-              (&euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)
-            </p> 
-          <?php endif; ?>
-        <?php else: ?>
-          <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
-        <?php endif; ?>
-        <!-- Max capacity/occupancy -->
-        <?php if ($this->item->occupancy) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY'); ?>
-            <span class="pull-right"><?php echo $this->item->occupancy; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- Number of bedrooms, if any -->
-        <?php if ($this->item->bedrooms) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS'); ?>
-            <span class="pull-right"><?php echo $this->item->bedrooms; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- Number of bathrooms, if any -->
-        <?php if ($this->item->bathrooms) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_BATHROOMS'); ?>
-            <span class="pull-right"><?php echo $this->item->bathrooms; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- Number of separate toilets, if any -->
-        <?php if ($this->item->toilets) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_TOILETS'); ?>
-            <span class="pull-right"><?php echo $this->item->toilets; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- Distance to coast -->
-        <?php if ($this->item->distance_to_coast) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_DISTANCE_TO_COAST'); ?>
-            <span class="pull-right"><?php echo $this->item->distance_to_coast; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- Changeover day -->
-        <?php if ($this->item->changeover_day) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY'); ?>
-            <span class="pull-right"><?php echo $this->item->changeover_day; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- Accommodation type -->
-        <?php if ($this->item->accommodation_type) : ?>
-          <p class="dotted">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_ACCOMMODATION_TYPE'); ?>
-            <span class="pull-right"><?php echo $this->item->accommodation_type; ?></span>
-          </p>
-        <?php endif; ?>
-        <!-- External facilities inc pool type-->
-        <?php if (array_key_exists('External Facilities', $this->unit_facilities) || (array_key_exists('Suitability', $this->unit_facilities))) : ?>
-          <p class=" clearfix">
-            <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?> 
-              <span>
-                <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
-                <?php echo implode(', ', $this->unit_facilities['External Facilities']) ?>
-              </span>
-            <?php endif; ?>  
-          </p>
-          <p>
-            <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
-              <span>
-                <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY'); ?></strong>
-                <?php echo implode(', ', $this->unit_facilities['Suitability']) ?>
-              </span>         
-            <?php endif; ?>      
-          </p>   
-        <?php endif; ?>
-        <!-- LWL Bullshine -->
-        <?php if ($this->item->lwl) : ?>
-          <p class="">
-            <?php echo Jtext::_('COM_ACCOMMODATION_THIS_PROPERTY_OFFERS_LONG_WINTER_LETS'); ?>
-          </p>
-        <?php endif; ?>
-        <!-- END LWL Bullshine -->
-
-        <?php echo $this->loadTemplate('reviews'); ?>
-
-        <p class="center">
-          <a class="btn btn-info btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
-            <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
-          </a>
-          <a class="btn btn-primary btn-lg"  id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
-            <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
-          </a>
-        </p>
-      </div>  
-    </div> 
-  </div>
-
-  <div class="row" id="about">
-    <div class="col-lg-7 col-md-7 col-sm-7" >
+    <div class="col-lg-3 col-lg-push-9 col-md-3 col-md-push-9 col-sm-5 col-sm-push-7 col-xs-12 key-facts">
       <?php if ($this->item->unit_title) : ?>
-        <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>  
+        <h3>
+          <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?>
+        </h3> 
+      <?php endif; ?>     
+      <?php echo $this->loadTemplate('form'); ?>
+      <?php if ($this->item->is_bookable) : ?>
+        <?php echo $this->loadTemplate($owner); ?>
+      <?php else: ?>
+        <?php echo $this->loadTemplate('contact_owner'); ?>
+      <?php endif; ?>
+      <div>
+        <div class="text-center hidden-xs">
+          <?php foreach ($mpu as $item) : // Render the cross-sell modules etc   ?>
+            <?php echo JModuleHelper::renderModule($item, array('style' => 'no', 'id' => 'section-box')); ?>
+          <?php endforeach; ?> 
+        </div>
+      </div>
+    </div> 
+    <div class="col-lg-9 col-lg-pull-3 col-md-9 col-md-pull-3 col-sm-pull-5 col-sm-7 col-xs-12">
+      <div class="row"> 
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+          <!-- Start gallery -->
+          <?php echo $this->loadTemplate('gallery'); ?>
+          <!-- End gallery -->
+        </div>  
+        <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12" id="email">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <?php if ($this->tariffs) : ?> 
+                <?php if (min($price_range) == max($price_range)) : ?>
+                  <p>
+                    <span class="lead"><strong>&pound;<?php echo $min_prices['GBP'] ?></strong></span>
+                    (&euro;<?php echo $min_prices['EUR']; ?>)
+                    <br />
+                    <?php if ($this->item->tariffs_based_on) : ?>
+                      <span class="small">
+                        <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
+                      </span>
+                    <?php endif; ?>
+                  </p>             
+                <?php else: ?>
+                  <p>
+                    <span class="lead"><strong>&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong></span>
+                    (&euro;<?php echo $min_prices['EUR'] . ' - &euro;' . $max_prices['EUR']; ?>)
+                    <br />
+                    <?php if ($this->item->tariffs_based_on) : ?>
+                      <span class="small">
+                        <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
+                      </span>
+                    <?php endif; ?>
+                  </p> 
+                <?php endif; ?>
+              <?php else: ?>
+                <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
+              <?php endif; ?>
+            </div>
+          </div>
+          <div class="well well-sm well-light-blue hidden-xs">
+            <!-- Max capacity/occupancy -->
+            <?php if ($this->item->occupancy) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY'); ?>
+                <span class="pull-right"><?php echo $this->item->occupancy; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- Number of bedrooms, if any -->
+            <?php if ($this->item->bedrooms) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS'); ?>
+                <span class="pull-right"><?php echo $this->item->bedrooms; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- Number of bathrooms, if any -->
+            <?php if ($this->item->bathrooms) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_BATHROOMS'); ?>
+                <span class="pull-right"><?php echo $this->item->bathrooms; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- Number of separate toilets, if any -->
+            <?php if ($this->item->toilets) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_TOILETS'); ?>
+                <span class="pull-right"><?php echo $this->item->toilets; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- Distance to coast -->
+            <?php if ($this->item->distance_to_coast) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_DISTANCE_TO_COAST'); ?>
+                <span class="pull-right"><?php echo $this->item->distance_to_coast; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- Changeover day -->
+            <?php if ($this->item->changeover_day) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY'); ?>
+                <span class="pull-right"><?php echo $this->item->changeover_day; ?></span>
+              </p>
+            <?php endif; ?>
+            <?php if ($this->item->property_type) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE'); ?>
+                <span class="pull-right"><?php echo $this->item->property_type; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- Accommodation type -->
+            <?php if ($this->item->accommodation_type) : ?>
+              <p class="dotted">
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_ACCOMMODATION_TYPE'); ?>
+                <span class="pull-right"><?php echo $this->item->accommodation_type; ?></span>
+              </p>
+            <?php endif; ?>
+            <!-- External facilities inc pool type-->
+            <?php if (array_key_exists('External Facilities', $this->unit_facilities) || (array_key_exists('Suitability', $this->unit_facilities))) : ?>
+              <p class=" clearfix">
+                <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?> 
+                  <span>
+                    <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?></strong>
+                    <?php echo implode(', ', $this->unit_facilities['External Facilities']) ?>
+                  </span>
+                <?php endif; ?>  
+              </p>
+              <p>
+                <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
+                  <span>
+                    <strong><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY'); ?></strong>
+                    <?php echo implode(', ', $this->unit_facilities['Suitability']) ?>
+                  </span>         
+                <?php endif; ?>      
+              </p>   
+            <?php endif; ?>
+            <!-- LWL Bullshine -->
+            <?php if ($this->item->lwl) : ?>
+              <p class="">
+                <?php echo Jtext::_('COM_ACCOMMODATION_THIS_PROPERTY_OFFERS_LONG_WINTER_LETS'); ?>
+              </p>
+            <?php endif; ?>
+          </div> 
+
+        </div>
+      </div>   
+      <!-- Start navigator -->
+      <?php echo $this->loadTemplate('navigator'); ?>
+      <!-- End navigator -->
+      
+      <!-- Start reviews -->
+      <?php echo $this->loadTemplate('reviews'); ?>
+      <!-- End reviews -->
+      <div id="about">
+      <?php if ($this->item->unit_title) : ?>
+            <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>  
       <?php endif; ?>
       <?php if ($this->item->description) : ?>
         <?php echo $this->item->description; ?>
       <?php endif; ?>
-    </div>
-    <div class="col-lg-5 col-md-5 col-sm-5">
-      <?php
-      jimport('joomla.application.module.helper');
-      $modules = JModuleHelper::getModule('mod_OpenX_spc', 'MPU-LISTING');
-      $attribs['style'] = 'html5';
-      echo JModuleHelper::renderModule($modules, $attribs);
-      ?>
-    </div>
-  </div>
-  <?php if (!empty($this->item->location_details)) : ?>
-    <div class="row" id="location">
-      <div class="col-lg- col-md-7 col-sm-12">
+      </div>
+
+      <?php if (!empty($this->item->location_details)) : ?>
+          <div class="row" id="location">
+            <div class="col-lg- col-md-7 col-sm-12">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h2>  
+                  <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h2>  
         <?php endif; ?>
         <?php if ($this->item->location_details) : ?>
           <?php echo $this->item->location_details; ?>
         <?php endif; ?> 
         <?php if (!empty($amenities)) : ?>
-          <h4>Local amenities</h4>
+                  <h4>Local amenities</h4>
           <?php foreach ($amenities as $k => $v) : ?>
-            <p><strong><?php echo JText::_('COM_ACCOMMODATION_' . $this->escape(strtoupper($k))); ?></strong>
-              <?php echo JString::ucwords($this->escape($v)); ?></p>
+                      <p><strong><?php echo JText::_('COM_ACCOMMODATION_' . $this->escape(strtoupper($k))); ?></strong>
+            <?php echo JString::ucwords($this->escape($v)); ?></p>
           <?php endforeach; ?>
         <?php endif; ?>
-      </div>
-      <div class="col-lg-5 col-md-5 col-sm-12">   
-        <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?></h2>  
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12">   
+              <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?></h2>  
 
-        <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
-        <p class="key text-right">
-          <span>
-            <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
-            &nbsp;&ndash;&nbsp;
-            <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
-          </span>
-        </p>
-      </div>
-    </div>
-  <?php endif; ?>
+              <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+              <p class="key text-right">
+                <span>
+                  <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
+                  &nbsp;&ndash;&nbsp;
+                  <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
+                </span>
+              </p>
+            </div>
+          </div>
+      <?php endif; ?>
 
-  <?php if (!empty($this->item->getting_there)) : ?>
-    <div class="row" id="gettingthere">
-      <div class="col-lg-7 col-md-7 col-sm-12">
+      <?php if (!empty($this->item->getting_there)) : ?>
+          <div class="row" id="gettingthere">
+            <div class="col-lg-7 col-md-7 col-sm-12">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h2>  
+                  <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?></h2>  
         <?php endif; ?>
         <?php if ($this->item->getting_there) : ?>
           <?php echo $this->item->getting_there; ?>
@@ -409,10 +401,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       </div>
     </div>
   <?php endif; ?>
-
-
   <?php if ($this->reviews) : ?>
-
     <div class="row" id="reviews">
       <div class="col-lg-7 col-md-7 col-sm-7">
         <?php if ($this->item->unit_title) : ?>
@@ -563,7 +552,6 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
   <?php endif; ?> 
   <div class="row" id="availability">
     <div class="col-lg-7 col-md-7 col-sm-7">
-
       <?php if ($this->item->changeover_day) : ?>
         <p>
           <strong>
@@ -621,27 +609,8 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       <?php endif; ?>
     </div>  
   </div>
-  <div class="row" id="email">
-    <div class="col-lg-12">
-      <?php if ($this->item->unit_title) : ?>
-        <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
-      <?php endif; ?>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-lg-7 col-md-7 col-sm-7">
-      <?php echo $this->loadTemplate('form'); ?>
-    </div>
-    <div class="col-lg-5 col-md-5 col-sm-5">
-      <?php if ($this->item->is_bookable) : ?>
-        <?php echo $this->loadTemplate($owner); ?>
-
-      <?php else: ?>
-        <?php echo $this->loadTemplate('contact_owner'); ?>
-      <?php endif; ?>
-
-    </div>
-  </div>
+</div>
+</div>
 </div>
 
 

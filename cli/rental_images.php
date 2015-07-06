@@ -181,7 +181,6 @@ class RentalImages extends JApplicationCli
         $file_name = $image_file_path . $this->profiles[$key] . '_' . $image_file_name;
         $thumb->tofile($file_name);
 
-        imagedestroy($thumb);
       }
     }
     catch (Exception $e) {
@@ -209,7 +208,9 @@ class RentalImages extends JApplicationCli
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
+    $query->where('a.id = 163826');
     $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
+    
     $db->setQuery($query);
 
     try {

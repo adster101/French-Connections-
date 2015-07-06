@@ -3,7 +3,6 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 <div class="navbar-property-navigator hidden-xs" data-spy="affix" data-offset-top="400">
-
   <ul class="nav nav-pills">
     <li>
       <a href="<?php echo $route ?>#about">
