@@ -102,8 +102,6 @@ class RentalImages extends JApplicationCli
    * 210x120
    * 100x100
    * 
-   * TO DO - Make it send up the images to CDN...and then remove the profile gallery
-   * 
    */
 
   public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
