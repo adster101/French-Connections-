@@ -91,10 +91,12 @@ class RentalImages extends JApplicationCli
       $image_path = JPATH_BASE . '/images/property';
 
       // Image has been uploaded, let's create some image profiles...
-      try {
+      try
+      {
         $this->processImage($image_path, (int) $image->unit_id, $image->image_file_name);
       }
-      catch (Exception $e) {
+      catch (Exception $e)
+      {
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
 
@@ -124,7 +126,7 @@ class RentalImages extends JApplicationCli
   {
 
     $image = $image_path . '/' . $unit_id . '/' . $image_file_name;
-    $image_file_path = $image_path . '/' . $unit_id . '/profiles/';
+    $image_file_path = 'D:\images' . '/' . $unit_id . '/';
 
     if (!file_exists($image))
     {
@@ -141,7 +143,8 @@ class RentalImages extends JApplicationCli
       JFolder::create($image_file_path);
     }
 
-    try {
+    try
+    {
 
       // Image width
       $width = $imgObj->getWidth();
@@ -152,25 +155,14 @@ class RentalImages extends JApplicationCli
       // If the width is greater than the height just create it
       if (($width > $height))
       {
-
         // This image is roughly landscape orientated with a width greater than max possible image width
         $profile = $imgObj->resize($max_width, $max_height, true, 3);
-
         $thumbs = $profile->generateThumbs($this->profiles, 5);
-
-        // Load the existing image
-        // $existing_image = imagecreatefromjpeg($file_path);
-        // Make it progressive
-        // $bit = imageinterlace($existing_image, 1);
-        // Save it out
-        // imagejpeg($existing_image, $file_path, 100);
-        // Free up memory
-        // imagedestroy($existing_image);
       }
       else if ($width < $height)
       {
         // This image is roughly portrait orientation
-        $profile = $imgObj->resize($max_width, $max_height, false, 2);
+        $profile = $imgObj->resize($max_width, $max_height, true, 2);
         $thumbs = $profile->generateThumbs($this->profiles, 5);
       }
 
@@ -180,10 +172,10 @@ class RentalImages extends JApplicationCli
         // Put it out to a file
         $file_name = $image_file_path . $this->profiles[$key] . '_' . $image_file_name;
         $thumb->tofile($file_name);
-
       }
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->out($e->message);
     }
   }
@@ -208,15 +200,16 @@ class RentalImages extends JApplicationCli
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
-    $query->where('a.id = 163826');
     $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
-    
+
     $db->setQuery($query);
 
-    try {
+    try
+    {
       $rows = $db->loadObjectList();
     }
-    catch (Exception $e) {
+    catch (Exception $e)
+    {
       $this->out('Problem getting props...');
       return false;
     }

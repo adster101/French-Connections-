@@ -67,9 +67,9 @@
       name="message"
       type="textarea"
       id="review-text"
-      row="8"
-      class="validate-message form-control input-xlarge"
-      cols="8"
+ 
+      class="validate-message form-control "
+
       description="COM_ACCOMMODATION_ENQUIRY_MESSAGE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
       hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"      
@@ -124,7 +124,7 @@
       first="1"
       last="10"
       step="1">
-      <option value="">COM_ACCOMMODATION_ENQUIRY_ADULTS_PLACEHOLDER</option>
+      <option value=""></option>
     </field>
      
     
@@ -142,7 +142,7 @@
       first="1"
       last="10"
       step="1">
-      <option value="">COM_ACCOMMODATION_ENQUIRY_CHILDREN_PLACEHOLDER</option>
+      <option value=""></option>
     </field>
     
 
