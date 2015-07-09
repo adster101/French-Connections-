@@ -193,7 +193,6 @@
     <field 
       type="fc.text"
       name="price"
-      filter="int"
       class="input-small"
       labelclass="control-label"
       label="COM_REALESTATE_FIELD_PRICE_LABEL"
@@ -201,6 +200,7 @@
       message="COM_REALESTATE_FIELD_PRICE_MESSAGE"
       required="true"
       default=""
+      filter="RealEstateHelper::filterPrice"
     />
    
     <field 

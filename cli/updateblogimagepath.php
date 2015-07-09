@@ -46,50 +46,14 @@ class UpdateBlogImagePathCron extends JApplicationCli
   public function doExecute()
   {
 
-    $articles = $this->getArticles();
-    
-    $db = JFactory::getDBO();
-    
-    $query = $db->getQuery(true);
     
     
-
-    foreach ($articles as $article)
-    {
-
-      if ((strpos($article->introtext, '/blog/') > 0) && (strpos($article->introtext, '/images/') === false))
-      {
-
-        $article->introtext = str_replace('/blog/', '/images/blog/', $article->introtext);
-          
-        
-        $query->update('#__content')
-                ->set('introtext = ' . $db->quote($article->introtext))
-                ->where('id = ' . $article->id);
-        $db->setQuery($query);
-        
-        $db->execute();
-
-        $query->clear();
-               
-      }
-    }
   }
 
   public function getArticles()
   {
 
-    $db = JFactory::getDBO();
-
-    $query = $db->getQuery(true);
-
-    $query->select('*')
-            ->from('#__content')
-            ->where('catid in ( 149,145,144,143,142,140,139)');
-
-    $db->setQuery($query);
-
-    $articles = $db->loadObjectList($key = 'id');
+    
 
     return $articles;
   }

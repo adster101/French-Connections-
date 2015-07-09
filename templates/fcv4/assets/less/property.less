@@ -171,9 +171,18 @@
   .quote(@padding:15px);
 }
 
+// Property navigator gubbins
+
 .navbar-property-navigator, .property-buttons-row {
   margin-bottom: 20px;
 }
+      
+@media (max-width: @screen-tablet) {
+  .navbar-property-navigator > ul > li > a {
+    padding:10px 10px;
+  }    
+}
+
 
 .slick-slider, 
 .carousel-ribbon {

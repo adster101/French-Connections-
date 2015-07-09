@@ -82,7 +82,19 @@ if (!empty($this->item->languages_spoken))
       </div>
       <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block"> 
-          <a href="">
+          <a href="<?php
+          echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
+          . urlencode($uri)
+          . '&redirect_uri='
+          . urlencode($uri)
+          . '&picture='
+          . JURI::root() . 'images/property/'
+          . $this->item->realestate_property_id
+          . '/thumbs/'
+          . urlencode($this->images[0]->image_file_name)
+          . '&name=' . urlencode($this->item->unit_title)
+          . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
+          ?>">
             <span class="glyphicon social-icon facebook"></span>
           </a> 
           <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->title) ?>" >
@@ -143,7 +155,7 @@ if (!empty($this->item->languages_spoken))
     </div>
   </div>
   <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
-    <?php if ((round($this->item->latitude,2) > 0) && (round($this->item->longitude,2) > 0)) : ?>
+    <?php if ((round($this->item->latitude, 2) > 0) && (round($this->item->longitude, 2) > 0)) : ?>
       <h3><?php echo JText::_('COM_REALESTATE_PROPERTY_LOCATION'); ?></h3>
       <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
       <p class="key text-right">

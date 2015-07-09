@@ -239,16 +239,17 @@ class plgUserProfile_fc extends JPlugin
 
     /* If the user doesn't have manage users permissions and no active or live properties
       we don't want them to update some of their account settings...
-      if (!$user->authorise('core.manage', 'com_users') && RentalHelper::hasActiveProperty($user->id))
-      {
+     * */
+    if (!$user->authorise('core.manage', 'com_users'))
+    {
       $form->setFieldAttribute('firstname', 'required', 'false');
       $form->setFieldAttribute('firstname', 'readonly', 'true');
 
       $form->setFieldAttribute('surname', 'required', 'false');
       $form->setFieldAttribute('surname', 'readonly', 'true');
-      }
+    }
 
-     */
+
 
     return true;
   }
