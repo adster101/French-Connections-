@@ -5,22 +5,15 @@ defined('_JEXEC') or die('Restricted access');
 <div class="navbar-property-navigator hidden-xs" data-spy="affix" data-offset-top="250">
   <ul class="nav nav-pills">
     <li>
-      <a href="<?php echo $route ?>#about">
+      <a href="<?php echo $route ?>#top">
         <span class="glyphicon glyphicon-info-sign"></span>          
-        <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?>
+        <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TOP'); ?>
       </a>
     </li>
     <?php if (!empty($this->item->location_details)) : ?>
       <li>
         <a href="<?php echo $route ?>#location">
           <span class="glyphicon glyphicon-map-marker"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_LOCATION'); ?>
-        </a>
-      </li>
-    <?php endif; ?>
-    <?php if (!empty($this->item->getting_there)) : ?>
-      <li>
-        <a href="<?php echo $route ?>#gettingthere">
-          <span class="glyphicon glyphicon-plane"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TRAVEL'); ?>
         </a>
       </li>
     <?php endif; ?>

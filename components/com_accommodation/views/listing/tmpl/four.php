@@ -92,7 +92,7 @@ $crumbs = JModuleHelper::getModules('breadcrumbs-tmp'); //If you want to use a d
 $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.  
 ?>
 
-<div class="container hidden-xs">
+<div id="top" class="container hidden-xs">
   <h1 class="page-header">
     <?php echo $this->document->title; ?>
   </h1>
