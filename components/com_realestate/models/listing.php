@@ -184,7 +184,8 @@ class RealestateModelListing extends JModelForm
         ufc.city as owner_city,
         ufc.region as county,
         ufc.country,
-        ufc.postal_code';
+        ufc.postal_code,
+        u.email';
 
     $query = $this->_db->getQuery(true);
 
@@ -618,6 +619,7 @@ class RealestateModelListing extends JModelForm
 
       if (!$mail->Send())
       {
+        
         return false;
       }
 

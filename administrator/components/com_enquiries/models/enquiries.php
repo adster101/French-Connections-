@@ -150,7 +150,7 @@ class EnquiriesModelEnquiries extends JModelList
     elseif (!empty($search))
     {
       $search = $db->Quote('%' . $db->escape($search, true) . '%');
-      $query->where('(e.message LIKE ' . $search . ')');
+      $query->where('(e.message LIKE ' . $search . ') OR (CONCAT(e.guest_forename," ",e.guest_surname) LIKE ' . $search . ') OR (e.guest_email LIKE ' . $search . ')');
     }
     
     $listOrdering = $this->getState('list.ordering', 'date_created');

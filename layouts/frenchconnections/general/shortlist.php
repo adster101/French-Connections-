@@ -15,6 +15,7 @@ $class = $displayData->class;
    data-placement="left" 
    data-toggle="popover" 
    data-id='<?php echo $unit_id ?>' 
+   data-token='<?php echo JSession::getFormToken(); ?>'
    data-content="<ul class='nav nav-pills nav-stacked'>
    <li><div class='checkbox'><label><input type='checkbox' <?php echo ($inShortlist) ? 'checked' : '';?> 
    value='<?php echo $inShortlist?>'> My Shortlist</input></label></div></li><li class='divider'><hr /></li><li>

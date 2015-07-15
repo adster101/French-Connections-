@@ -291,14 +291,13 @@ class Renewals extends JApplicationCli
             $payment_model->updateProperty($v->id, $total, 0, $expiry_date, 1);
 
             // Generate billing details
-            $billing_name = $v->BillingFirstnames . ' ' . $v->BillingSurname;
             $transaction_number = $v->VendorTxCode;
             $auth_code = $v->TxAuthNo;
 
             $billing_email = $recipient;
 
             $address = $v->BillingAddress1 . ' ' . $v->BillingAddress2 . ' ' . $v->BillingCity . ' ' . $v->BillingPostCode . ' ' . $v->BillingCountry;
-            $billing_name = $v->Billingfirstnames . ' ' . $v->BillingSurname;
+            $billing_name = $v->firstname . ' ' . $v->surname;
 
             // Sort out the description
             foreach ($payment_summary as $orderline)
@@ -412,13 +411,16 @@ class Renewals extends JApplicationCli
       b.BillingCity,
       b.BillingPostCode,
       b.BillingCountry,
-      b.BillingCounty'
+      b.BillingCounty,
+      c.firstname,
+      c.surname'
     );
 
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
     $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
+    $query->join('left', '#__user_profile_fc c on c.user_id = a.created_by');
     $query->where('a.created_by not in (' . implode(',', $users_to_ignore) . ')');
     $query->where('renewalreason = \'\'');
 

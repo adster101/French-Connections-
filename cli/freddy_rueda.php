@@ -195,9 +195,8 @@ class FreddyRueda extends RealestateImport
         $db->transactionRollback();
 
         // Send an email, woot!
-        // $this->email($e);
+        $this->email($e);
 
-        (JDEBUG) ? $this->out(var_dump($e)) : $this->email($e);
       }
     }
   }

@@ -323,7 +323,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <?php echo $this->loadTemplate('reviews'); ?>
 
         <p class="center">
-          <a class="btn btn-info btn-lg"  id="availability" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
+          <a class="btn btn-info btn-lg" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
             <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
           </a>
           <a class="btn btn-primary btn-lg"  id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">

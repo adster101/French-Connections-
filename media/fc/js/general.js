@@ -23,11 +23,12 @@ jQuery(document).ready(function() {
   });
 
   jQuery('.view-featured-fp-link').on('click', function() {
-    ga('send', 'event', 'button', 'click', 'FP Homepage link click-through');
+    ga('send', 'event', 'Featured property', 'Homepage', jQuery(this).attr('href'));
   });
 
+  // Tracks click through from properties featured on search pages.
   jQuery('.view-search-fp-link').on('click', function() {
-    ga('send', 'event', 'button', 'click', 'FP Search link click-through');
+    ga('send', 'event', 'Featured property', 'Search pages', jQuery(this).attr('href'));
   });
 
   // Check whether placeholder is supported or not.
@@ -122,7 +123,7 @@ jQuery(document).ready(function() {
     var favourite = jQuery('.popover').siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
-    var userToken = document.getElementsByTagName("input")[0].name;
+    var userToken = dataObj.token;
     url_params.id = dataObj.id;
     url_params.action = dataObj.action;
 

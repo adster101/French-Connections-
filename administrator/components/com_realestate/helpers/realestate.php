@@ -8,6 +8,7 @@ defined('_JEXEC') or die;
  */
 abstract class RealEstateHelper
 {
+
   /**
    * @param	int $value
    * @param	int $i
@@ -99,7 +100,7 @@ abstract class RealEstateHelper
     }
 
     return $html;
-  } 
+  }
 
   /*
    * Determines a list of notices to display for a property notifying the user of which units and which sections need attention
@@ -204,7 +205,6 @@ abstract class RealEstateHelper
     return $options;
   }
 
-
   /**
    * Get the actions
    */
@@ -241,7 +241,6 @@ abstract class RealEstateHelper
     return $result;
   }
 
-
   /*
    * Get the default language
    */
@@ -252,7 +251,23 @@ abstract class RealEstateHelper
     return $lang;
   }
 
+  /**
+   * Filters the price to remove , or periods which some people were entering
+   * 
+   * @param type $value
+   * @return boolean
+   */
+  public static function filterPrice($value)
+  {
+    // Cast to int after removing period or commas
+    $value = (int) preg_replace('/[\.,]/i', '', $value);
 
- 
+    if (!$value)
+    {
+      return '';
+    }
+
+    return $value;
+  }
 
 }

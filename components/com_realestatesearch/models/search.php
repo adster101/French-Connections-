@@ -65,12 +65,11 @@ class RealestateSearchModelSearch extends JModelList
    * The Item ID of the menu item
    */
   public $itemid = '';
-  
+
   /*
    * Description, the description of the locality being searched on.
    */
   public $description = '';
-  
   public $currencies = '';
 
   public function __construct($config = array())
@@ -132,7 +131,7 @@ class RealestateSearchModelSearch extends JModelList
 
     if ((int) $this->getState('list.searchterm', ''))
     {
-      $ItemId = SearchHelper::getItemid(array('component','com_realestate'));
+      $ItemId = SearchHelper::getItemid(array('component', 'com_realestate'));
       $app->redirect(JRoute::_('index.php?option=com_realestate&Itemid=' . $ItemId . '&id=' . $this->getState('list.searchterm', '')));
     }
 
@@ -265,10 +264,11 @@ class RealestateSearchModelSearch extends JModelList
       $query = $db->getQuery(true);
 
       $query->select('
-        a.id as property_id,
+        a.id as property_id, 
         b.*,
+        CASE WHEN b.base_currency = \'EUR\' THEN (b.price / h.exchange_rate) ELSE (b.price) END as price,
         (b.double_bedrooms + b.single_bedrooms) as bedrooms,
-        j.title as location_title,
+        g.title as location_title,
         e.image_file_name as thumbnail
 
       ');
@@ -286,22 +286,15 @@ class RealestateSearchModelSearch extends JModelList
           * sin(radians(b.latitude))),1)  as distance');
       }
 
-     
+
       // Join the images, innit!
       $query->join('left', '#__realestate_property_images_library e on b.id = e.version_id');
       $query->where('(e.ordering = 1)');
 
-      // Join the translations table to pick up any translations 
-      if ($lang == 'fr-FR')
-      {
-        $query->select('k.unit_title, k.description');
-        $query->join('left', '#__unit_versions_translations k on k.version_id = d.id');
-        $query->join('left', '#__classifications_translations j ON j.id = c.city');
-      }
-      else
-      {
-        $query->join('left', '#__classifications j ON j.id = b.city');
-      }
+      $query->join('left', '#__classifications g ON g.id = b.city');
+
+      $query->join('left', '#__currency_conversion h ON h.currency = b.base_currency');
+
 
       if ($this->getState('search.level') == 1)
       { // Country level
@@ -381,7 +374,6 @@ class RealestateSearchModelSearch extends JModelList
     }
   }
 
- 
   /**
    * Method to pull out the location based drilldowns for refine search
    * 
@@ -480,7 +472,6 @@ class RealestateSearchModelSearch extends JModelList
 
     return $locations;
   }
-
 
   /*
    * Method to get a load of marker information based on getPropertyList
@@ -668,7 +659,7 @@ class RealestateSearchModelSearch extends JModelList
     $this->setState('list.bedrooms', $input->get('bedrooms', '', 'int'));
     $app->setUserState('list.bedrooms', $input->get('bedrooms', '', 'int'));
 
-   // Budget and price, innit!
+    // Budget and price, innit!
     $this->setState('list.min_price', $input->get('min', '', 'int'));
     $app->setUserState('list.min_price', $input->get('min', '', 'array'));
 
@@ -949,7 +940,5 @@ class RealestateSearchModelSearch extends JModelList
     // Return the path.
     return $this->retrieve($store);
   }
-
- 
 
 }

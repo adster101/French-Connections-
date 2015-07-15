@@ -65,7 +65,8 @@ defined('_JEXEC') or die('Restricted access');
     </a>
   </p>
 <?php endif; ?>
-<hr />
 <p>
-  <?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
+  <strong>
+    <?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
+  </strong>
 </p>
