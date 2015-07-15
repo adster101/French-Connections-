@@ -555,7 +555,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
     </div>
     <div class="row">
       <div class="col-lg-7 col-md-7 col-sm-7">
-        <?php echo $this->loadTemplate('form'); ?>
+        <?php echo $this->loadTemplate('top_form'); ?>
       </div>
       <div class="col-lg-5 col-md-5 col-sm-5">
         <?php if ($this->item->is_bookable) : ?>
