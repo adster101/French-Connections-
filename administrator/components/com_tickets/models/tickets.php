@@ -129,7 +129,7 @@ class TicketsModelTickets extends JModelList
     }
     else
     {
-      $query->where('a.state in (1,2,3)');
+      $query->where('a.state in (1,2,3,4)');
     }
 
     // Filter by project area

@@ -37,15 +37,19 @@ Contains styles that mainly apply to the header section of the template
 
 .navbar-brand {
   height:auto;
+  
 }
+
+
 
 .navbar-nav > li > a, .navbar-nav > li > .dropdown-menu > li > a {
   font-size:85%;
 }
 
 
-// Remove the default float left from navbar-header
   @media (min-width: @screen-desktop) {
+
+    // Make the main menu font size 100%
     .navbar-nav > li > a, .navbar-nav > li > .dropdown-menu > li > a  {
       font-size:100%;
     }
@@ -113,23 +117,26 @@ Contains styles that mainly apply to the header section of the template
   }
   
   .navbar {
-    min-height:82px;
-    margin-bottom:0;
+
     
       .navbar-brand {
+        width:125px;
+
         img {
-          width:85%;
+          width:100%;
         }
         
-        @media (min-width: @screen-sm-min) {
+        @media (min-width: @screen-sm-max) {
+        width:100%;          
           img {
             width:100%;
           }
         }
       }
 
-      .navbar-nav {    
+      .navbar-nav {   
 
+        margin-top:20px;
 
         > li {
           
@@ -147,7 +154,7 @@ Contains styles that mainly apply to the header section of the template
     .navbar-nav {
       > li > a {
         color: @gray-darker;
-        padding:31px 10px; 
+        padding:10px; 
 
         &:hover,
         &:focus {
@@ -177,15 +184,18 @@ Contains styles that mainly apply to the header section of the template
 
 .navbar-brand.simple {
   padding: 0;
+
+
 }
 
 header.simple {
   border-bottom: 5px solid #fdd53d;
-  margin-bottom:7px;
+  margin-bottom:20px;
 }
 
 // Default navbar
 .navbar-default.simple {
   background-color: @white;
   border-color: @white;
+  margin-bottom:0;
 }

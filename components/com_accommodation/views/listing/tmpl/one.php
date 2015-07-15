@@ -228,12 +228,12 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             </p>
           <?php endif; ?>
           <p>
-            <a class="btn btn-danger btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
+            <a class="btn btn-danger btn-block" id="enquiry" href="<?php echo $this->route . $append ?>#email">
               <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
             </a>
           </p>
           <p>
-            <a class="btn btn-warning btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
+            <a class="btn btn-warning btn-block" href="<?php echo $this->route . $append; ?>#availability">
               <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
             </a>
           </p>
@@ -332,9 +332,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       </div>
     </div>
   </div>
-    <!-- Start navigator -->
-  <?php echo $this->loadTemplate('navigator'); ?>
-  <!-- End navigator -->
+
   <?php if (!empty($this->item->location_details)) : ?>
     <div class="row" id="location">
       <div class="col-lg- col-md-7 col-sm-12">
@@ -540,11 +538,11 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
     <div class="col-lg-5 col-md-5 col-sm-5">
     </div>
   </div>
-
-  <?php if ($this->item->unit_title) : ?>
-    <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
-  <?php endif; ?> 
   <div class="row" id="availability">
+
+    <?php if ($this->item->unit_title) : ?>
+      <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
+    <?php endif; ?> 
     <div class="col-lg-7 col-md-7 col-sm-7">
 
       <?php if ($this->item->changeover_day) : ?>
@@ -625,6 +623,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 
     </div>
   </div>
+  <!-- Start navigator -->
+  <?php echo $this->loadTemplate('navigator'); ?>
+  <!-- End navigator -->
 </div>
 
 

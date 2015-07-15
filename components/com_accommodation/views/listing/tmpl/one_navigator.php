@@ -5,7 +5,13 @@ defined('_JEXEC') or die('Restricted access');
 <div class="navbar-property-navigator hidden-xs" data-spy="affix" data-offset-top="300">
   <ul class="nav nav-pills">
     <li>
-      <a href="<?php echo $this->route ?>#about">
+      <a href="<?php echo $this->route ?>#top">
+        <span class="glyphicon glyphicon-home"></span>          
+        <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_SUMMARY'); ?>
+      </a>
+    </li>
+    <li>
+      <a href="<?php echo $this->route; ?>#about">
         <span class="glyphicon glyphicon-info-sign"></span>          
         <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?>
       </a>
@@ -24,11 +30,13 @@ defined('_JEXEC') or die('Restricted access');
         </a>
       </li>
     <?php endif; ?>
-    <li>
-      <a href="<?php echo $this->route ?>#reviews">
-        <span class="glyphicon glyphicon-star"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_REVIEWS'); ?>
-      </a>
-    </li>
+    <?php if ($this->item->reviews && count($this->item->reviews) > 0) : ?>
+      <li>
+        <a href="<?php echo $this->route ?>#reviews">
+          <span class="glyphicon glyphicon-power-cord "></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_REVIEWS'); ?>
+        </a>
+      </li>
+    <?php endif; ?>
     <li>
       <a href="<?php echo $this->route ?>#availability">
         <span class="glyphicon glyphicon-calendar"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_AVAILABILITY'); ?>
@@ -45,7 +53,7 @@ defined('_JEXEC') or die('Restricted access');
       </a>
     </li>
     <li>
-      <a href="<?php echo $this->route ?>#contact">
+      <a href="<?php echo $this->route ?>#email">
         <?php $contact_anchor_label = ($this->item->is_bookable) ? 'COM_ACCOMMODATION_NAVIGATOR_BOOK_NOW' : 'COM_ACCOMMODATION_NAVIGATOR_CONTACT'; ?>
         <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_($contact_anchor_label); ?>
       </a>

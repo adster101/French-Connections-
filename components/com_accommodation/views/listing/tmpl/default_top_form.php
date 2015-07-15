@@ -52,7 +52,7 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
 
 <?php endif; ?>
 
-<div class="panel panel-default">
+<div class="panel panel-default" id="contact">
   <?php if ($this->item->unit_title) : ?>
     <div class="panel-heading">
       <h5>
@@ -113,12 +113,12 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-4 col-md-4">
+          <div class="col-lg-4 col-md-4 col-sm-4">
             <?php echo $this->form->getLabel('adults'); ?>
             <?php echo $this->form->getInput('adults'); ?>
           </div>
 
-          <div class="col-lg-4 col-md-4">
+          <div class="col-lg-4 col-md-4 col-sm-4">
 
             <?php echo $this->form->getLabel('children'); ?>
             <?php echo $this->form->getInput('children'); ?>

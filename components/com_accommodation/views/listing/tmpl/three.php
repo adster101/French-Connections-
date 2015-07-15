@@ -354,11 +354,11 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           </p>
         </div>
       <?php endif; ?>
-      
+
       <!-- Begin reviews -->
       <?php echo $this->loadTemplate('reviews'); ?>
       <!-- End reviews -->
-      
+
       <div id="facilities">
         <?php if ($this->item->unit_title) : ?>
           <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h2> 
@@ -483,51 +483,51 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           </tbody>
         </table>
       </div>
-
-      <?php if ($this->item->unit_title) : ?>
-        <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
-      <?php endif; ?> 
-      <div class="row" id="availability">
-        <div class="col-lg-7 col-md-7 col-sm-7">
-          <?php if ($this->item->changeover_day) : ?>
+      <div id="availability">
+        <?php if ($this->item->unit_title) : ?>
+          <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
+        <?php endif; ?> 
+        <div class="row">
+          <div class="col-lg-7 col-md-7 col-sm-7">
+            <?php if ($this->item->changeover_day) : ?>
+              <p>
+                <strong>
+                  <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY') ?>
+                </strong>
+                <?php echo htmlspecialchars($this->item->changeover_day) ?>
+              </p>
+            <?php endif; ?>   
             <p>
-              <strong>
-                <?php echo JText::_('COM_ACCOMMODATION_CHANGEOVER_DAY') ?>
-              </strong>
-              <?php echo htmlspecialchars($this->item->changeover_day) ?>
+              <?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
             </p>
-          <?php endif; ?>   
-          <p>
-            <?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
-          </p>
-        </div>
-        <div class="col-lg-5 col-md-5 col-sm-5">
-          <table class="table table-condensed availability-key">
-            <thead> 
-              <tr>
-                <th class="available">&nbsp;</th>
-                <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></th>
+          </div>
+          <div class="col-lg-5 col-md-5 col-sm-5">
+            <table class="table table-condensed availability-key">
+              <thead> 
+                <tr>
+                  <th class="available">&nbsp;</th>
+                  <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></th>
 
-                <th class="unavailable">&nbsp;</th>
-                <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></th>
-              </tr>
-            </thead>
-          </table>    
+                  <th class="unavailable">&nbsp;</th>
+                  <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></th>
+                </tr>
+              </thead>
+            </table>    
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-          <hr />
-          <div class="sidescroll-nextprev">
-            <div class="overthrow sidescroll">
-              <?php if ($this->availability) : ?>
-                <?php echo $this->availability; ?>
-              <?php endif; ?>
+        <div class="row">
+          <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+            <hr />
+            <div class="sidescroll-nextprev">
+              <div class="overthrow sidescroll">
+                <?php if ($this->availability) : ?>
+                  <?php echo $this->availability; ?>
+                <?php endif; ?>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
       <div id="tariffs">
         <?php if ($this->item->unit_title) : ?>
           <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h2> 
@@ -545,25 +545,27 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       </div>  
     </div>
   </div>
-  <div class="row" id="email">
-    <div class="col-lg-12">
-      <?php if ($this->item->unit_title) : ?>
-        <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
-      <?php endif; ?>
+  <div class="hidden-md hidden-sm hidden-lg">
+    <div class="row" id="email">
+      <div class="col-lg-12">
+        <?php if ($this->item->unit_title) : ?>
+          <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
+        <?php endif; ?>
+      </div>
     </div>
-  </div>
     <div class="row">
-    <div class="col-lg-7 col-md-7 col-sm-7">
-      <?php echo $this->loadTemplate('form'); ?>
+      <div class="col-lg-7 col-md-7 col-sm-7">
+        <?php echo $this->loadTemplate('form'); ?>
+      </div>
+      <div class="col-lg-5 col-md-5 col-sm-5">
+        <?php if ($this->item->is_bookable) : ?>
+          <?php echo $this->loadTemplate($owner); ?>
+        <?php else: ?>
+          <?php echo $this->loadTemplate('contact_owner'); ?>
+        <?php endif; ?>
+      </div>
     </div>
-    <div class="col-lg-5 col-md-5 col-sm-5">
-      <?php if ($this->item->is_bookable) : ?>
-        <?php echo $this->loadTemplate($owner); ?>
-      <?php else: ?>
-        <?php echo $this->loadTemplate('contact_owner'); ?>
-      <?php endif; ?>
-    </div>
-  </div>
 
+  </div>
 </div>
 
