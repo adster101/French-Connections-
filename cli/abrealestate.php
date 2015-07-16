@@ -30,30 +30,34 @@ require_once JPATH_LIBRARIES . '/cms.php';
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.realestateimport');
 
-class FreddyRueda extends RealestateImport
+class ABRealestate extends RealestateImport
 {
 
   /**
+   * 
    * Entry point for the script
    *
    * @return  void
    *
    * @since   2.5
+   * 
    */
   public function doExecute()
   {
     // Get a db instance and start a transaction
     $db = JFactory::getDbo();
+    $user = JFactory::getUser('abrealestate')->id;
 
-    $user = JFactory::getUser('frueda@realestatelanguedoc.com')->id;
-
-    (JDEBUG) ? $this->out('About to get feed...') : '';
+    $this->out('About to get feed...');
 
     // Get and parse out the feed 
-    $props = $this->parseFeed('http://www.xml2u.com/Xml/Sarl%20Freddy%20Rueda_483/794_Default.xml');
+    $props = $this->parseFeed('http://www.ab-real-estate.com/xml/xmlfc.xml', 'Properties');
+        
+    $this->out('Got feed...');
 
-    (JDEBUG) ? $this->out('Got feed...') : '';
-
+     // Add realestate and rental tables to the include path
+    JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables');
+    
     // Add the realestate property models
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
     $model = JModelLegacy::getInstance('Image', 'RealEstateModel');
@@ -62,7 +66,7 @@ class FreddyRueda extends RealestateImport
     // Add the classification table so we can get the location details
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
 
-    (JDEBUG) ? $this->out('About to process feed results...') : '';
+    $this->out('About to process feed results...');
 
     // Loop over each of the $props returned from parseFeed above
     foreach ($props->properties as $prop)
@@ -71,36 +75,26 @@ class FreddyRueda extends RealestateImport
       {
         $db->transactionStart();
 
-        (JDEBUG) ? $this->out('Processing... ' . $prop->agency_reference) : '';
+        $this->out('Processing... ' . $prop->agency_reference);
 
         // Check whether this property agency reference already exists in the versions table
         $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
-
+        
         $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
-
-        $dept = JStringNormalise::toDashSeparated(JApplication::stringURLSafe($prop->region));
+        
+        $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
 
         if (!$id)
         {
-          // TO DO - Make this a function used by FR and AF
-          (JDEBUG) ? $this->out('Adding property entry...') : '';
+
+          $this->out('Adding property entry...');
 
           // Create an entry in the #__realestate_property table
           $property_id = $this->createProperty($db, $user);
 
-          // Set the towns for the property dependent on the department
-          if ($dept == 'herault')
-          {
-            $prop->city = 112674;
-          }
-          elseif ($dept == 'aude')
-          {
-            $prop->city = 140038;
-          }
-
           // Get the location details for this property
+          // TO DO - This should be using the $prop lat and long using the getNearestCity base method
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
-
           $location = $classification->getPath($prop->city);
 
           $data = array();
@@ -112,27 +106,30 @@ class FreddyRueda extends RealestateImport
           $data['region'] = (int) $location[3]->id;
           $data['department'] = (int) $location[4]->id;
           $data['city'] = (int) $location[5]->id;
-          $data['latitude'] = $location[5]->latitude;
-          $data['longitude'] = $location[5]->longitude;
-          $data['created_by'] = $user;
+          $data['latitude'] = $prop->latitude;
+          $data['longitude'] = $prop->longitude;
+          $data['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
           $data['created_on'] = $db->quote(JFactory::getDate());
-          $data['description'] = $db->quote($prop->description);
+          $data['description'] = $db->quote($prop->description, true);
           $data['single_bedrooms'] = (int) $prop->single_bedrooms;
           $data['double_bedrooms'] = 0;
           $data['bathrooms'] = (int) $prop->bathrooms;
-          $data['base_currency'] = $db->quote($prop->base_currency);
+          $data['base_currency'] = $db->quote('EUR');
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
 
-          (JDEBUG) ? $this->out('Adding property version...') : '';
-
+          $this->out('Adding property version...');
+          
+          JTable::getInstance('PropertyVersions', 'RealestateTable');
           $property_version_id = $this->createPropertyVersion($db, $data);
 
-          (JDEBUG) ? $this->out('Working through images...') : '';
+          $this->out('Working through images...');
 
           foreach ($prop->images as $i => $image)
           {
+
+            $this->out($image);
 
             // Split the URL into an array
             $image_parts = explode('/', $image);
@@ -162,18 +159,18 @@ class FreddyRueda extends RealestateImport
             }
 
             // Save the image data out to the database...
-            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i + 1));
+            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i+1));
           }
         }
         else
         {
 
-          (JDEBUG) ? $this->out('Updating expiry date...') : '';
+          $this->out('Updating expiry date...');
 
           // Update the expiry date 
           $this->updateProperty($db, $id);
 
-          (JDEBUG) ? $this->out('Updating version details...') : '';
+          $this->out('Updating version details...');
 
           // Update the property version in case price or description has changed...
           $data = array();
@@ -188,6 +185,7 @@ class FreddyRueda extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
+
           $this->updatePropertyVersion($db, $data);
 
 
@@ -200,7 +198,7 @@ class FreddyRueda extends RealestateImport
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
 
-        (JDEBUG) ? $this->out('Done processing... ' . $prop->agency_reference) : '';
+        $this->out('Done processing... ' . $prop->agency_reference);
       }
       catch (Exception $e)
       {
@@ -209,10 +207,11 @@ class FreddyRueda extends RealestateImport
 
         // Send an email, woot!
         $this->email($e);
+        
       }
     }
   }
 
 }
 
-JApplicationCli::getInstance('FreddyRueda')->execute();
+JApplicationCli::getInstance('ABRealestate')->execute();
