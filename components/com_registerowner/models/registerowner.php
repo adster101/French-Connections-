@@ -162,19 +162,14 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
         Throw new Exception('Problem creating user profile');
       }
 
-      // Get the menu based params 
-      $params = $this->state->get('parameters.menu');
-
       // Get the config setting to set the email details for
       $config = JFactory::getConfig();
       $data['fromname'] = $config->get('fromname');
-      $data['mailfrom'] = $params->get('email_from');
+      $data['mailfrom'] = $config->get('mailfrom');
       $data['sitename'] = $config->get('sitename');
 
       $data['siteurl'] = JUri::root() . 'administrator';
-      // Set the link to activate the user account.
-      $uri = JUri::getInstance();
-
+      
       //$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'] . '&advertiser=true', false);
 
       $emailSubject = JText::sprintf(
@@ -186,8 +181,18 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       );
 
       // Send the registration email. the true argument means it will go as HTML
-      $return = JFactory::getMailer()->sendMail($data['mailfrom'], $data['fromname'], $data['email'], $emailSubject, $emailBody, true, $data['mailfrom']);
+      $return = JFactory::getMailer()->sendMail(
+              $data['mailfrom'], 
+              $data['fromname'], 
+              $data['email'], 
+              $emailSubject, 
+              $emailBody, 
+              true, 
+              '',
+              'accounts@frenchconnections.co.uk');
 
+      // TO DO - Send a copy of this email to accounts@ as well.
+      
       if (!$return)
       {
         // Log out to file that email wasn't sent for what ever reason;

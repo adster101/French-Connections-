@@ -61,11 +61,11 @@ class FcSearchViewSearch extends JViewLegacy
   public function display($tpl = null)
   {
 
-// Get the app instance
+    // Get the app instance
     $app = JFactory::getApplication();
 
-// Get the currencies
-// Get view data.
+    // Get the currencies
+    // Get view data.
     $this->state = $this->get('State');
     $this->localinfo = $this->get('LocalInfo');
 
@@ -190,11 +190,7 @@ class FcSearchViewSearch extends JViewLegacy
     $this->document->setTitle($title);
     $this->document->setDescription($description);
 
-    // Add some scripts and shit
-    $document->addScript(JURI::root() . 'media/jui/js/cookies.jquery.min.js', 'text/javascript', true);
-    $document->addScript(JURI::root() . 'media/fc/js/search.js', 'text/javascript', true);
-    $document->addScript(JURI::root() . 'media/fc/js/general.js', 'text/javascript', true);
-    $document->addScript(JURI::root() . 'media/fc/js/jquery-ui-1.10.1.custom.min.js', 'text/javascript', true);
+    
     JText::script('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
     JText::script('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS');
 

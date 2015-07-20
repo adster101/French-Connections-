@@ -2,9 +2,9 @@ module.exports = function(grunt) {
 
 
 
-  // 1. All configuration goes here 
+// 1. All configuration goes here 
   grunt.initConfig({
-    // Add a 'global' opts object that we can access in each task...
+// Add a 'global' opts object that we can access in each task...
     opts: {
       date: grunt.template.today('yyyymmddHMss')
     },
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
           compress: false //minifying the result
         },
         files: {
-          //compiling frontend.less into frontend.css
+//compiling frontend.less into frontend.css
           'media/fc/assets/css/styles.css': 'templates/fcv4/assets/less/styles.less'
         }
       }
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       },
       target: {
         files: {
-          // Merge the slick styles into main style sheet
+// Merge the slick styles into main style sheet
           'media/fc/assets/css/styles.css':
                   ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
@@ -67,6 +67,7 @@ module.exports = function(grunt) {
           'bower_components/slick-carousel/slick/slick.min.js',
           'media/system/js/core-uncompressed.js',
           'bower_components/overthrow/dist/overthrow.sidescroller.min.js',
+          'media/jui/js/cookies.jquery.min.js',
           'media/fc/js/general.js',
           'media/fc/js/search.js',
           'media/fc/js/property.js'
@@ -97,8 +98,8 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      // Copies the 'assets' include file and replaces the timestamp string
-      // Just need to remember to upload the latest asset files...
+// Copies the 'assets' include file and replaces the timestamp string
+// Just need to remember to upload the latest asset files...
       woot: {
         options: {
           patterns: [
@@ -118,7 +119,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
   // 3. Where we tell Grunt we plan to use this plug-in.
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -127,7 +127,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
   grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy', 'replace', 'cssmin']);

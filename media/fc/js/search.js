@@ -60,13 +60,13 @@ jQuery(document).ready(function() {
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
-        
-         var markerCluster = new MarkerClusterer(map, markers,{
-           maxZoom: 12,
-           gridSize: 60,
-           averageCenter: false
-         });
-         
+
+        var markerCluster = new MarkerClusterer(map, markers, {
+          maxZoom: 12,
+          gridSize: 60,
+          averageCenter: false
+        });
+
       }).done(function() {
 
       });
@@ -133,24 +133,23 @@ jQuery(document).ready(function() {
 
 
   // Deal with the more/less options for the refine search bit.
-  jQuery(".show").click(function(event) {
+  jQuery("a.show").click(function(event) {
 
-// Get the containing element that we want to show/hide
-    var el = jQuery(this).prev().prev();
     // Prevent the default click behaviour
     event.preventDefault();
-    // Toggle the containing class 
-    el.toggleClass('show');
+
+    // Get the containing element that we want to show/hide
+    jQuery(this).prev().prev().toggleClass('show');
+
     // Check the open/closed state
-    if (el.hasClass('show')) { // Must be 'open' so we want to show less options text
-      jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS);
-    } else if (el.hasClass('hide')) { // Must be 'closed' so we want to show more options texts
-      jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS);
-    }
+    jQuery(this).html(function(i, v) {
+      return v.trim() === Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS')
+              ? Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS')
+              : Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
+    });
   })
 
 }) // End of on DOM ready
-
 
 function getPath(event) {
 
