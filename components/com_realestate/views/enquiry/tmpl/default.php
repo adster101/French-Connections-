@@ -19,7 +19,7 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
       <p><?php echo JText::sprintf('COM_REALESTATE_RELATED_RENTALS_BLURB', $this->item->title) ?></p>
       <?php foreach ($this->related as $key => $item) : ?>
         <?php
-        $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
+        $prices = JHtml::_('general.price', $item->price, 'GBP', '', '');
         $route = JRoute::_('index.php?option=com_realestate&Itemid=' . $Itemid_property . '&id=' . (int) $item->property_id);
         ?>
         <?php if ($item->title) : ?>     
@@ -33,11 +33,14 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
                   <strong><?php echo $this->escape($item->title); ?></strong> 
                 </a>
               </h4>
+              <?php if (!empty($item->price)) : ?> 
+                <p>
+                  <strong>&pound;<?php echo round($prices['GBP']) ?></strong>
+                </p>
+              <?php endif; ?>
               <p>
-                <?php echo JText::sprintf('COM_REALESTATE_SITE_UNIT_OCCUPANCY_BEDROOMS', $item->bedrooms, $item->bathrooms); ?>
-                <?php if (!empty($item->price)) : ?> |&nbsp;&pound;<?php echo $prices['GBP'] ?>
-                <?php endif; ?>
-              </p>
+                <?php echo (!empty($item->bedrooms)) ? JText::sprintf('COM_REALESTATE_SITE_UNIT_OCCUPANCY_BEDROOMS', $item->bedrooms, $item->bathrooms) : ''; ?>
+              </p> 
             </div>
           </div>
         <?php endif; ?>
