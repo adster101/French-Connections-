@@ -152,7 +152,7 @@ class RealestateModelListing extends JModelForm
         b.use_invoice_details,
         b.first_name as alt_first_name,
         b.surname as alt_surname,
-        b.email_1 as alt_email_1,
+        b.email_1,
         b.phone_1 as alt_phone_1,
         b.phone_2 as alt_phone_2,
         b.description,
