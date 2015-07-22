@@ -167,7 +167,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       $data['fromname'] = $config->get('fromname');
       $data['mailfrom'] = $config->get('mailfrom');
       $data['sitename'] = $config->get('sitename');
-
+      
       $data['siteurl'] = JUri::root() . 'administrator';
       
       //$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'] . '&advertiser=true', false);
@@ -188,11 +188,10 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
               $emailSubject, 
               $emailBody, 
               true, 
-              '',
-              'accounts@frenchconnections.co.uk');
+              '', 
+              $config->get('bcc','accounts@frenchconnections.co.uk'));
 
       // TO DO - Send a copy of this email to accounts@ as well.
-      
       if (!$return)
       {
         // Log out to file that email wasn't sent for what ever reason;

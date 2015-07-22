@@ -131,20 +131,34 @@ class FcContactModelContact extends JModelAdmin
 
     $to = $params->get('contact', 'fchelpdesk@frenchconnections.co.uk');
 
-    if ($data['nature'] == 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES')
-    {
-      $cc = $params->get('additional_email');
-    }
+
 
     // Send the registration email. the true argument means it will go as HTML
     $send = JFactory::getMailer()
-            ->sendMail($from, $name, $to, $subject, $body, true, $cc);
+            ->sendMail($from, $name, $to, $subject, $body, true);
 
     if (!$send)
     {
       // Log out to file that email wasn't sent for what ever reason;
       // Trigger email to admin / office user. e.g. as per registration.php
       Throw new Exception('Problem sending email for contact form.');
+    }
+
+    // Send another email directly to Nick from no-reply@
+    if ($data['nature'] == 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES')
+    {
+      $cc = $params->get('additional_email');
+
+      // Send the registration email. the true argument means it will go as HTML
+      $send = JFactory::getMailer()
+              ->sendMail('no-reply@frenchconnections.co.uk', $name, $cc, $subject, $body, true);
+
+      if (!$send)
+      {
+        // Log out to file that email wasn't sent for what ever reason;
+        // Trigger email to admin / office user. e.g. as per registration.php
+        Throw new Exception('Problem sending email for contact form.');
+      }
     }
 
     // Return the user object we've just created

@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+sjQuery(document).ready(function() {
 
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
@@ -114,6 +114,7 @@ jQuery(document).ready(function() {
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
       popover = jQuery(this).data('bs.popover'); // Get the popover instance
       popover.options.html = true;
+      
       jQuery(this).popover('toggle'); // Manually open the popover 
     });
   })

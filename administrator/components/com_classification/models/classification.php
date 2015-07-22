@@ -144,6 +144,7 @@ class ClassificationModelClassification extends JModelAdmin
       $field = $fieldset->addChild('field');
       $field->addAttribute('name', strtolower($name));
       $field->addAttribute('type', 'editor');
+      $field->addAttribute('filter', 'safehtml');
       $field->addAttribute('label', $type->title);
       $field->addAttribute('multiple', true);
       $field->addAttribute('default', '');
@@ -154,7 +155,7 @@ class ClassificationModelClassification extends JModelAdmin
 
   public function save($data)
   {
-    // Wrap up the amenities if they are present and save 'em
+    // Wrap up the property type data present and save 'em
     if (isset($data['type']) && is_array($data['type']))
     {
       $registry = new JRegistry;

@@ -16,6 +16,14 @@
         filter="int"
         label="Notification from user"
       />
+      <field 
+        type="text"
+        name="bcc"
+        default=""
+        filter="email"
+        label="BCC"
+      />
+
     </fieldset>
   </fields>
 </metadata>
