@@ -72,9 +72,6 @@ class EnquiriesViewEnquiry extends JViewLegacy {
     // Set the document title
     $this->document->setTitle($this->title);
 
-
-
-    $document->addScript("/administrator/components/com_enquiries/js/submitbutton.js", false, true);
   }
 
   /**

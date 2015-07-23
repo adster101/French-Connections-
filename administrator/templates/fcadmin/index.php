@@ -66,6 +66,7 @@ $uri = JUri::getInstance();
 $uri->setScheme('http');
 $uri->setPath('');
 $uri->setQuery('');
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -73,6 +74,7 @@ $uri->setQuery('');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <jdoc:include type="head" />
       <meta http-equiv="X-UA-Compatible" content="IE=9">
+        <?php include_once JPATH_THEMES . '/' . $this->template . '/assets.php'; ?>
 
         <!-- Template color -->
         <?php if ($this->params->get('templateColor')) : ?>
@@ -105,10 +107,6 @@ $uri->setQuery('');
             }
           </style>
         <?php endif; ?>
-
-        <!--[if lt IE 9]>
-        <script src="../media/jui/js/html5.js"></script>
-        <![endif]-->
         </head>
 
         <body class="admin <?php echo $option . ' view-' . $view . ' layout-' . $layout . ' task-' . $task . ' itemid-' . $itemid; ?>" <?php if ($stickyToolbar) : ?>data-spy="scroll" data-target=".subhead" data-offset="87"<?php endif; ?>>
@@ -150,7 +148,7 @@ $uri->setQuery('');
                         </li>
                         <li class="divider"></li>
                         <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;               ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                        ?></a>
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;                ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                         ?></a>
                         </li>
                         <li class="divider"></li>-->
                         <li class="">
@@ -161,7 +159,7 @@ $uri->setQuery('');
                       </ul>
                     </li>
                   </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                        ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                        ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                        ?>
+                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                         ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                         ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                         ?>
                     <span class="icon-out-2 small"></span></a>-->
                 </div>
                 <!--/.nav-collapse -->
@@ -240,7 +238,7 @@ $uri->setQuery('');
             <footer id="status" class="navbar navbar-fixed-bottom"> 
               <div class="clearfix">
                 <div class="container">
-                  
+
                   <div class="row">
                     <div class="span8">
                       <jdoc:include type="modules" name="owner-footer" style="no" />

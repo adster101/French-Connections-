@@ -138,7 +138,6 @@ class RentalViewContactdetails extends JViewLegacy
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_CONTACT_EDIT', $this->item->property_id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
-    $document->addScript("/media/fc/js/general.js");
     $document->addStyleSheet("/administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
   }
 

@@ -1,4 +1,4 @@
-sjQuery(document).ready(function() {
+jQuery(document).ready(function() {
 
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
@@ -103,24 +103,23 @@ sjQuery(document).ready(function() {
       }
     })
   }
-
+  
+  // TO DO - What a fucking mess!
   jQuery('.shortlist').each(function() { // For each result
-
     // Get the data-action state
     jQuery(this).popover({// Initialise a popover
       trigger: 'manual' // Take control of when the popover is opened
     }).click(function(event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      popover = jQuery(this).data('bs.popover'); // Get the popover instance
-      popover.options.html = true;
-      
       jQuery(this).popover('toggle'); // Manually open the popover 
-    });
+    })
   })
 
+  // TO DO - What a fucking mess!
   jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
+    // favourite is the anchor element that triggers a popover
     var favourite = jQuery('.popover').siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
@@ -135,19 +134,26 @@ sjQuery(document).ready(function() {
       data: url_params
     }).done(function(data) {
 
+      var popover = jQuery('.popover').data('bs.popover');
+
       if (data == 1) {
         dataObj.action = (dataObj.action === 'add') ? 'remove' : 'add'; // action is the state the object is changing *to* not what what it is now...
-        favourite.data(dataObj);
 
         if (dataObj.action == 'remove') {
           favourite.addClass('in-shortlist');
+          favourite.attr('data-state', true);
+          favourite.attr('data-content', '<ul class=\'nav nav-pills nav-stacked\'><li><div class=\'checkbox\'><label><input type=\'checkbox\' checked value=\'1\'> My Shortlist</input></label></div></li><li class=\'divider\'><hr /></li><li><a href=\'/my-account/shortlist\'>View shortlist</a></li></ul>');
         } else {
           favourite.removeClass('in-shortlist');
-        } // If action is remove then add icon-checkbox else remove it
+          favourite.attr('data-state', false);
+          favourite.attr('data-content', '<ul class=\'nav nav-pills nav-stacked\'><li><div class=\'checkbox\'><label><input type=\'checkbox\' value=\'0\'> My Shortlist</input></label></div></li><li class=\'divider\'><hr /></li><li><a href=\'/my-account/shortlist\'>View shortlist</a></li></ul>');
+        }
+
+        // If action is remove then add icon-checkbox else remove it
         favourite.attr('data-action', dataObj.action);
 
       } else {
-        popover = jQuery('.popover').data('bs.popover');
+
         popover.options.content = '<p>Session expired.<br /> Please login.</p>';
       }
     })
@@ -243,7 +249,6 @@ sjQuery(document).ready(function() {
 
   // Add special offer counter... 
   jQuery('#jform_offer_description').each(function() {
-
 
     // Assign this to that so we can use this later...
     var that = this;

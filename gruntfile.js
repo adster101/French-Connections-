@@ -1,10 +1,8 @@
 module.exports = function(grunt) {
 
-
-
-// 1. All configuration goes here 
+  // 1. All configuration goes here 
   grunt.initConfig({
-// Add a 'global' opts object that we can access in each task...
+    // Add a 'global' opts object that we can access in each task...
     opts: {
       date: grunt.template.today('yyyymmddHMss')
     },
@@ -28,7 +26,7 @@ module.exports = function(grunt) {
           compress: false //minifying the result
         },
         files: {
-//compiling frontend.less into frontend.css
+          //compiling frontend.less into frontend.css
           'media/fc/assets/css/styles.css': 'templates/fcv4/assets/less/styles.less'
         }
       }
@@ -40,7 +38,7 @@ module.exports = function(grunt) {
       },
       target: {
         files: {
-// Merge the slick styles into main style sheet
+          // Merge the slick styles into main style sheet
           'media/fc/assets/css/styles.css':
                   ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
@@ -73,6 +71,33 @@ module.exports = function(grunt) {
           'media/fc/js/property.js'
         ],
         dest: 'media/fc/assets/js/scripts.js'
+      },
+      admin: {
+        src: [
+          'media/fc/js/general.js',
+          'media/fc/js/jquery-ui-1.8.23.custom.min.js',
+          'media/fc/js/date-range.js',
+          'administrator/components/com_rental/js/availability.js',
+          'media/fc/js/locate.js',
+          'media/fc/js/tariffs.js'
+        ],
+        dest: 'media/fc/assets/js/admin.scripts.js'
+      },
+      images: {
+        src: [
+          'media/fc/js/libs/blueimp/vendor/jquery.ui.widget.js',
+          'media/fc/js/libs/blueimp/tmpl.min.js',
+          'media/fc/js/libs/blueimp/load-image.min.js',
+          'media/fc/js/libs/blueimp/canvas-to-blob.min.js',
+          'media/fc/js/libs/blueimp/jquery.iframe-transport.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-process.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-image.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-validate.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-ui.js',
+          'media/fc/js/main.js'     
+        ],
+        dest: 'media/fc/assets/js/images.admin.scripts.js'
       }
     },
     uglify: {
@@ -82,7 +107,21 @@ module.exports = function(grunt) {
         options: {
           mangle: true
         }
-      }
+      },
+      admin: {
+        src: 'media/fc/assets/js/admin.scripts.js',
+        dest: 'media/fc/assets/js/<%= opts.date %>.admin.scripts.min.js',
+        options: {
+          mangle: true
+        }
+      },
+     images: {
+        src: 'media/fc/assets/js/images.admin.scripts.js',
+        dest: 'media/fc/assets/js/<%= opts.date %>.images.admin.scripts.min.js',
+        options: {
+          mangle: true
+        }       
+     }
     },
     watch: {
       woot: {

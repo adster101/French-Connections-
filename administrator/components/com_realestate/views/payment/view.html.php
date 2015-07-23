@@ -82,8 +82,6 @@ class RealEstateViewPayment extends JViewLegacy
     // Set the page title
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
 
-    $document->addScript("/media/fc/js/general.js", false, true);
-
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
   }

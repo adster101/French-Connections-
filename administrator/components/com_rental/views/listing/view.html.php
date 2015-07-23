@@ -125,7 +125,7 @@ class RentalViewListing extends JViewLegacy
     $document = JFactory::getDocument();
 
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
-    $document->addScript("/media/fc/js/general.js", 'text/javascript', true);
+
     // Add the live chat script, or not!
     RentalHelper::addLiveChat($this->progress->expiry_date);
 

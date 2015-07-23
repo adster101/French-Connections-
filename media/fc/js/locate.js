@@ -45,7 +45,6 @@ jQuery(document).ready(function() {
     document.getElementById('jform_latitude').value = LatLng.lat().toFixed(6);
     document.getElementById('jform_longitude').value = LatLng.lng().toFixed(6);
 
-
   })
 
 })

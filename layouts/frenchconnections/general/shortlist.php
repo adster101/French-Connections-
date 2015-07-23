@@ -13,8 +13,10 @@ $class = $displayData->class;
 <a class="shortlist<?php echo ($inShortlist) ? ' in-shortlist' : '' ?> <?php echo $class ?>"
    data-animation="false" 
    data-placement="left" 
-   data-toggle="popover" 
-   data-id='<?php echo $unit_id ?>' 
+   data-toggle="popover"
+   data-state=""
+   data-id='<?php echo $unit_id ?>'
+   data-html="true"
    data-token='<?php echo JSession::getFormToken(); ?>'
    data-content="<ul class='nav nav-pills nav-stacked'>
    <li><div class='checkbox'><label><input type='checkbox' <?php echo ($inShortlist) ? 'checked' : '';?> 
