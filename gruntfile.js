@@ -74,6 +74,7 @@ module.exports = function(grunt) {
       },
       admin: {
         src: [
+          'media/system/js/core.js',
           'media/fc/js/general.js',
           'media/fc/js/jquery-ui-1.8.23.custom.min.js',
           'media/fc/js/date-range.js',
@@ -95,7 +96,7 @@ module.exports = function(grunt) {
           'media/fc/js/libs/blueimp/jquery.fileupload-image.js',
           'media/fc/js/libs/blueimp/jquery.fileupload-validate.js',
           'media/fc/js/libs/blueimp/jquery.fileupload-ui.js',
-          'media/fc/js/main.js'     
+          'media/fc/js/main.js'
         ],
         dest: 'media/fc/assets/js/images.admin.scripts.js'
       }
@@ -112,16 +113,16 @@ module.exports = function(grunt) {
         src: 'media/fc/assets/js/admin.scripts.js',
         dest: 'media/fc/assets/js/<%= opts.date %>.admin.scripts.min.js',
         options: {
-          mangle: true
+          mangle: false
         }
       },
-     images: {
+      images: {
         src: 'media/fc/assets/js/images.admin.scripts.js',
         dest: 'media/fc/assets/js/<%= opts.date %>.images.admin.scripts.min.js',
         options: {
-          mangle: true
-        }       
-     }
+          mangle: false
+        }
+      }
     },
     watch: {
       woot: {

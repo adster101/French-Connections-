@@ -13552,13 +13552,19 @@ jQuery(document).ready(function() {
     });
   }
 
-  // Updates hte form action based on the payment selection for @leisure booking.
+  // Updates the form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function() {
     var el = jQuery(this);
     var action = el.attr('value');
     jQuery(".atleisure-booking-form").attr("action", action);
   });
 
+  // Google analytics event tracking
+  jQuery('#search-tabs li > a').on('click', function(e) {
+    ga('send', 'event', 'Navigation', 'Search', e.target.hash);
+  });
+
+  // Google analytics event tracking
   jQuery('#main-nav li > a').on('click', function() {
     ga('send', 'event', 'Navigation', 'Main', jQuery(this).attr('href'));
   });
@@ -13648,7 +13654,7 @@ jQuery(document).ready(function() {
       }
     })
   }
-  
+
   // TO DO - What a fucking mess!
   jQuery('.shortlist').each(function() { // For each result
     // Get the data-action state
@@ -13830,7 +13836,7 @@ jQuery(document).ready(function() {
   // Change hash for page-reload
   jQuery('.nav-tabs a').on('shown', function(e) {
     window.location.hash = e.target.hash.replace("#", "#" + prefix);
-  })
+  });
 });
 
 var infowindow;
@@ -13978,7 +13984,7 @@ Joomla.submitbutton = function(task)
 
     if (action[1] != 'cancel' && action[1] != 'close')
     {
-      var forms = $$('form.form-validate');
+      var forms = jQuery('form.form-validate');
       for (var i = 0; i < forms.length; i++)
       {
         if (!document.formvalidator.isValid(forms[i]))
@@ -14014,7 +14020,7 @@ Joomla.submitbutton = function(task)
     }
     else
     {
-      alert(Joomla.JText._('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE', ''));
+      alert(Joomla.JText._('JGLOBAL_VALIDATION_FORM_FAILED', ''));
       return false;
     }
   }

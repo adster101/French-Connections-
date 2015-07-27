@@ -71,7 +71,7 @@ $ItemID = SearchHelper::getItemid(array('component','com_fcsearch'));
 
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-tabs" id="search-tabs">
         <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
         <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
         <?php if ((empty($property_filter) && empty($accommodation_filter)) || (!empty($property_filter) && !empty($this->seo_copy)) ) : ?>

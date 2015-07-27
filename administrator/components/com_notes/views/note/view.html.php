@@ -73,7 +73,11 @@ class NotesViewNote extends JViewLegacy {
    */
   protected function setDocument() {
     $document = JFactory::getDocument();
-    $document->setTitle(JText::_('COM_NOTE_PLEASE_COMPLETE_ALL_FIELDS'));
+    $document->setTitle(JText::_('COM_NOTES_VIEW_NOTES_TITLE'));
+    
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
+    
   }
+  
 
 }

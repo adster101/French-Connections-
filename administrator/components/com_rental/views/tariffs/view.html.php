@@ -138,7 +138,7 @@ class RentalViewTariffs extends JViewLegacy
     $document = JFactory::getDocument();
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
    
     $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");
     $document->addStyleSheet("/media/fc/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");

@@ -36,6 +36,8 @@ class ItemcostsViewItemcost extends JViewLegacy
     {
       throw new Exception(implode("\n", $errors));
     }
+    
+		JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
 
     $this->addToolbar();
     parent::display($tpl);
@@ -46,7 +48,6 @@ class ItemcostsViewItemcost extends JViewLegacy
    */
   protected function addToolbar()
   {
-    JFactory::getApplication()->input->set('hidemainmenu', true);
 
     $user = JFactory::getUser();
     $isNew = ($this->item->id == 0);

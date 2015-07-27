@@ -85,7 +85,7 @@ class RentalViewPayment extends JViewLegacy
     // Set the page title
     JToolBarHelper::title(JText::sprintf('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_SUMMARY', $this->id));
 
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
     JText::script('COM_RENTAL_HELLOWORLD_UNSAVED_CHANGES');
   }
 

@@ -75,7 +75,7 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     $document->addScript("/media/fc/js/date-range.js", false, true);
     $document->addStyleSheet("/media/fc/css/jquery-ui-1.8.23.custom.css");
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
   }
 
   /**

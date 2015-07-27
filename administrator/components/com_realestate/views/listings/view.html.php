@@ -115,7 +115,7 @@ class RealestateViewListings extends JViewLegacy
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_REALESTATE_ADMINISTRATION'));
 
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
   }
 
 }

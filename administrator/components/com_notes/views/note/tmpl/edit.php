@@ -8,15 +8,11 @@
  */
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.formvalidation');
-JHtml::_('behavior.framework');
+JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_notes') ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
-
-  
   <?php foreach ($this->form->getFieldSets() as $name => $fieldset): ?>
-
     <fieldset class="panelform">
       <?php foreach ($this->form->getFieldset() as $field) : ?>
         <div class="control-group">
@@ -30,5 +26,4 @@ JHtml::_('behavior.keepalive');
   <?php endforeach; ?>
   <input type="hidden" name="task" value="note.save" />
   <?php echo JHtml::_('form.token'); ?>
-
 </form>
