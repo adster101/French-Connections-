@@ -6,6 +6,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 JHtml::_('behavior.core');
+JHtml::_('behavior.formvalidator');
 
 
 $property_status_icon = (!$this->items[0]->property_version_review) ? 'publish' : 'warning';

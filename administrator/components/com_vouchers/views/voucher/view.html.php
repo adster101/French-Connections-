@@ -45,6 +45,7 @@ class VouchersViewVoucher extends JViewLegacy {
 
     InvoicesHelper::addSubmenu('vouchers');
 
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
 
     $this->addToolbar($canDo);
 

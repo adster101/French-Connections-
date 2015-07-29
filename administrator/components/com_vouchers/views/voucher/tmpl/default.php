@@ -17,42 +17,29 @@ $user = JFactory::getUser();
 $userId = $user->get('id');
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_vouchers&id=' . (int) $this->item->id) ?>" method="post" name="adminForm" id="adminForm" class="validate form-horizontal">
-  <?php if (!empty($this->sidebar)): ?>
-    <div id="j-sidebar-container" class="span2">
-      <?php echo $this->sidebar; ?>
-    </div>
-    <div id="j-main-container" class="span10">
-    <?php else : ?>
-      <div id="j-main-container">
-      <?php endif; ?>
-      <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_VOUCHERS_VOUCHER_DETAIL'); ?></legend>
-        <?php foreach ($this->form->getFieldset('voucher') as $field): ?>
-          <div class="control-group">
-            <?php echo $field->label; ?>
-            <div class="controls">
-              <?php echo $field->input; ?>
-            </div>
-          </div>
-        <?php endforeach; ?>
-      </fieldset>     
+<form action="<?php echo JRoute::_('index.php?option=com_vouchers&id=' . (int) $this->item->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-horizontal">
 
-    </div>
-      <input type="hidden" name="boxchecked" value="0" />
+  <div id="j-main-container" class="span10">
 
-    <?php echo JHtml::_('form.token'); ?>
-    <input type="hidden" name="task" value="" />
+    <fieldset class="adminform">
+      <legend><?php echo JText::_('COM_VOUCHERS_VOUCHER_DETAIL'); ?></legend>
+      <?php foreach ($this->form->getFieldset('voucher') as $field): ?>
+      <div class="control-group">
+        <?php echo $field->label; ?>
+        <div class="controls">
+          <?php echo $field->input; ?>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </fieldset>     
+
+  </div>
+  <input type="hidden" name="boxchecked" value="0" />
+
+  <?php echo JHtml::_('form.token'); ?>
+  <input type="hidden" name="task" value="" />
 
 </form>
-<script type="text/javascript">
-  Joomla.submitbutton = function(task)
-  {
-    if (task == 'voucher.cancel' || document.formvalidator.isValid(document.id('adminForm')))
-    {
-      Joomla.submitform(task, document.getElementById('adminForm'));
-    }
-  }
-</script>
+
 
 
