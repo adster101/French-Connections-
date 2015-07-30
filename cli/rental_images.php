@@ -64,7 +64,7 @@ class RentalImages extends JApplicationCli
 
     // Script to process real estate images for all properties in the #__realestate_property table
     $images = $this->_getImages();
-    
+
     $total = count($images);
 
     foreach ($images as $i => $image)
@@ -107,10 +107,9 @@ class RentalImages extends JApplicationCli
   public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
   {
 
-    
     $image = $image_path . '/' . $unit_id . '/' . $image_file_name;
-    $image_file_path = $image_path . '/profiles/' . $unit_id . '/' ;
-    
+    $image_file_path = $image_path . '/profiles/' . $unit_id . '/';
+
     if (!file_exists($image))
     {
       // Change this to throw exception
@@ -120,7 +119,7 @@ class RentalImages extends JApplicationCli
     // Create a new image object ready for processing
     $imgObj = new JImage($image);
 
-    
+
     // Create a folder for the profile, if it doesn't exist
     if (!file_exists($image_file_path))
     {
@@ -144,7 +143,6 @@ class RentalImages extends JApplicationCli
         $profile = $imgObj->resize($max_width, $max_height, true, 3);
 
         $thumbs = $profile->generateThumbs($this->profiles, 5);
-        
       }
       else if ($width < $height)
       {
@@ -164,9 +162,9 @@ class RentalImages extends JApplicationCli
         {
           // Set the interlace filter on the thumb
           $thumb->filter('interlace');
-          
+
           // Save it out at full quality
-          $thumb->tofile($file_name);
+          $thumb->tofile($file_name, $type = IMAGETYPE_JPEG, array('quality' => 85));
         }
       }
     }
