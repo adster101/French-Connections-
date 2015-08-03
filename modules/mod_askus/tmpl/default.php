@@ -41,13 +41,15 @@ defined('_JEXEC') or die;
       <?php echo $form->getLabel('message'); ?> 
       <?php echo $form->getInput('message'); ?>
     </div>
+    <?php echo $form->getLabel('nature'); ?>
+    <?php echo $form->getInput('nature'); ?>
 
     <button class="btn btn-primary btn-lg btn-block " type="submit">
       <?php echo JText::_('COM_FCCONTACT_SEND_MESSAGE'); ?>
     </button>
     <input type="hidden" name="task" value="contact.send" />
     <input type="hidden" name="return" value="<?php echo base64_encode(JUri::getInstance()->toString() . '?sent=true'); ?>" />
-    
+
     <?php echo JHtml::_('form.token'); ?>
   </fieldset>
 </form>

@@ -71,18 +71,20 @@ class FcContactModelContact extends JModelAdmin
 
     $input = JFactory::getApplication()->input;
 
-    $presales = $input->get('pre-sales', false, 'boolean');
     $askus = $input->get('askus', false, 'boolean');
 
+    /* This was used when coming to the contact form from the advertise page, i.e. the 'sane' way
+    $presales = $input->get('pre-sales', false, 'boolean');
     if ($presales)
     {
       $form->setFieldAttribute('nature', 'default', 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES');
     }
+    */
 
     if ($askus)
     {
-      $form->setFieldAttribute('nature', 'required', 'false');
-
+      $form->setFieldAttribute('nature', 'default', 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES');
+      $form->setFieldAttribute('nature', 'type', 'hidden');
       $form->setFieldAttribute('name', 'labelclass', '');
       $form->setFieldAttribute('email', 'labelclass', '');
       $form->setFieldAttribute('tel', 'labelclass', '');

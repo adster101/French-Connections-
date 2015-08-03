@@ -36,25 +36,12 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     $this->item = $item;
     $this->form = $form;
 
-
-    $this->addSubMenu();
-
     $this->addToolBar($canDo);
 
     $this->setDocument();
 
     // Display the template
     parent::display($tpl);
-  }
-
-  /**
-   * Adds the submenu details for this view
-   */
-  protected function addSubMenu()
-  {
-
-    //RentalHelper::addSubmenu('specialoffers');
-    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**
