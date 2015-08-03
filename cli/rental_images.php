@@ -46,7 +46,7 @@ class RentalImages extends JApplicationCli
    * 
    * @var type array
    */
-  public $profiles = array('903x586', '770x580', '617x464', '408x307', '330x248', '210x120', '100x100');
+  public $profiles = array('903x586', '770x580', '617x464', '408x307', '330x248', '210x120');
 
   /**
    * Entry point for the script

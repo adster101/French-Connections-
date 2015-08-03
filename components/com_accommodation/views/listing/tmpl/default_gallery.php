@@ -54,9 +54,9 @@ $cdn = $menu->params->get('cdn', '');
         </div>
       <?php endif; ?>
       <?php foreach ($this->images as $images => $image) : ?> 
-        <?php $src = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/100x100_' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
+        <?php $src = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/210x120_' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
         <div>
-          <img src="<?php echo $src ?>" /> 
+          <img width="100" src="<?php echo $src ?>" /> 
         </div>     
       <?php endforeach; ?>
     </div>
