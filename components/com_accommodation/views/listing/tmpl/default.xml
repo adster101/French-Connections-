@@ -5,6 +5,15 @@
       <![CDATA[COM_ACCOMMODATION_VIEW_DEFAULT_DESC]]>
     </message>
   </layout>
- 
+  <fields name="params">
+    <fieldset name="basic">
+      <field
+        name="cdn"
+        type="url"
+        label="CDN URL"
+        class="input-xxlarge"
+        default="" />
+    </fieldset>
+  </fields>
 </metadata>
 
