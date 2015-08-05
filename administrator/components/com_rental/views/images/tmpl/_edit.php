@@ -2,8 +2,8 @@
 // No direct access
 
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 
 $format = JRequest::getVar('format', 'html', 'GET', 'string');
 $image_properties = $this->item->images->getProperties();

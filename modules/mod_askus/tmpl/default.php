@@ -18,8 +18,8 @@ defined('_JEXEC') or die;
    * @license     GNU General Public License version 2 or later; see LICENSE.txt
    */
   defined('_JEXEC') or die;
-  JHtml::_('behavior.formvalidation');
-  JHtml::_('behavior.tooltip');
+  JHtml::_('behavior.formvalidator');
+  JHtml::_('bootstrap.tooltip');
   ?>
 
 <form id="contact-form" action="<?php echo JRoute::_('/contact-us?askus=true'); ?>" method="post" class="">

@@ -279,7 +279,7 @@ class JFormFieldMedia extends JFormField
 		$options = array(
 			'onShow' => 'jMediaRefreshImgpathTip',
 		);
-		JHtml::_('behavior.tooltip', '.hasTipImgpath', $options);
+		JHtml::_('bootstrap.tooltip', '.hasTipImgpath', $options);
 
 		if (!empty($this->class))
 		{
@@ -325,7 +325,7 @@ class JFormFieldMedia extends JFormField
 				$options = array(
 					'onShow' => 'jMediaRefreshPreviewTip',
 				);
-				JHtml::_('behavior.tooltip', '.hasTipPreview', $options);
+				JHtml::_('bootstrap.tooltip', '.hasTipPreview', $options);
 				break;
 		}
 

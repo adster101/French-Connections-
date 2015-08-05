@@ -19,7 +19,7 @@ if ($templateparams->get('html5') != 1) :
 endif;
 
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
-JHtml::_('behavior.tooltip');
+JHtml::_('bootstrap.tooltip');
 JHtml::core();
 
 $n = count($this->items);

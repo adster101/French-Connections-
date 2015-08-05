@@ -106,7 +106,7 @@ class FOFFormFieldRules extends JFormFieldRules implements FOFFormField
 
     protected function getInput25()
     {
-        JHtml::_('behavior.tooltip');
+        JHtml::_('bootstrap.tooltip');
 
         // Initialise some field attributes.
         $section = $this->element['section'] ? (string) $this->element['section'] : '';

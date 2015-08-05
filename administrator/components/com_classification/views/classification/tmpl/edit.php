@@ -3,8 +3,8 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.tabstate');
 ?>
 <form class="form-validate" action="<?php echo JRoute::_('index.php?option=com_classification&view=classification&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">

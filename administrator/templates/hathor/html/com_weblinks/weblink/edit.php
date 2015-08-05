@@ -13,7 +13,7 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
 $saveHistory = $this->state->get('params')->get('save_history', 0);
 
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 ?>
 <script type="text/javascript">
 	Joomla.submitbutton = function(task)

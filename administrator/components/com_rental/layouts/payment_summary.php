@@ -1,8 +1,8 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 
 $language = JFactory::getLanguage();
 $language->load('plg_user_profile_fc', JPATH_ADMINISTRATOR, 'en-GB', true);

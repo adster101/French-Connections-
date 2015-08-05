@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted Access');
 // load tooltip behavior
 JHtml::_('bootstrap.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 JHtml::_('dropdown.init');
 
 $arr = JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');

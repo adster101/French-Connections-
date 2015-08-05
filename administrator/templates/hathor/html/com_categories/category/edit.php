@@ -16,7 +16,7 @@ $input = JFactory::getApplication()->input;
 
 $saveHistory = $this->state->get('params')->get('save_history', 0);
 
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
 
 $assoc = JLanguageAssociations::isEnabled();

@@ -557,7 +557,7 @@ HTML;
 		}
 		else
 		{
-			JHtml::_('behavior.tooltip');
+			JHtml::_('bootstrap.tooltip');
 		}
 
 		// Getting all header row elements
@@ -1010,7 +1010,7 @@ HTML;
 
 		if (in_array($validate, array('true', 'yes', '1', 'on')))
 		{
-			JHtml::_('behavior.formvalidation');
+			JHtml::_('behavior.formvalidator');
 			$class = ' form-validate';
 			$this->loadValidationScript($form);
 		}
@@ -1354,7 +1354,7 @@ JS;
 			{
 				// Joomla! 2.5 has a conflict with the jQueryUI tooltip, therefore we
 				// have to use native Joomla! 2.5 tooltips
-				JHtml::_('behavior.tooltip');
+				JHtml::_('bootstrap.tooltip');
 
 				$tooltipText = JText::_($title) . '::' . JText::_($tooltip);
 

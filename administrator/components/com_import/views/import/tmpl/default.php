@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
+JHtml::_('bootstrap.tooltip');
 ?>
 <div class="row-fluid">
   <?php if (!empty($this->sidebar)): ?>

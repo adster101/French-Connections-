@@ -56,7 +56,6 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     $document = JFactory::getDocument();
 
     JToolBarHelper::title($isNew ? JText::_('COM_SPECIALOFFER_OFFER_NEW') : JText::sprintf('COM_SPECIALOFFER_OFFER_EDIT', $this->item->id), 'helloworld');
-
     $document->addStyleSheet("/media/fc/css/jquery-ui-1.8.23.custom.css");
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
