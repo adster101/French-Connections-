@@ -20,7 +20,7 @@ use OpenCloud\Rackspace;
 class RentalModelImage extends JModelAdmin
 {
 
-  public $profiles = array('903x586', '770x580', '617x464', '408x307', '210x120', '100x100');
+  public $profiles = array('903x586', '770x580', '617x464', '408x307', '210x120');
 
   /**
    * Method override to check if you can edit an existing record.
@@ -305,17 +305,8 @@ class RentalModelImage extends JModelAdmin
   public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
   {
 
-    // Instantiate a Rackspace client.
-    $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
-        'username' => 'fcadmin01',
-        'apiKey' => '971715d42f3a40d3bcb42f7286477f45'
-    ));
 
-    // Obtain an Object Store service object from the client.
-    $objectStoreService = $client->objectStoreService(null, 'LON');
 
-    $container = $objectStoreService->getContainer('test');
-    
     $image = $image_path;
 
     if (!file_exists($image))
@@ -325,7 +316,7 @@ class RentalModelImage extends JModelAdmin
     }
 
     // Create a new image object ready for processing
-    $imgObj = new FcImage($image);
+    $imgObj = new JImage($image);
 
     try
     {
@@ -343,13 +334,13 @@ class RentalModelImage extends JModelAdmin
         // This image is roughly landscape orientated with a width greater than max possible image width
         $profile = $imgObj->resize($max_width, $max_height, true, 3);
 
-        $thumbs = $profile->generateThumbs($this->profiles, 5);
+        $thumbs = $profile->generateThumbs($this->profiles, 3);
       }
       else if ($width < $height)
       {
         // This image is roughly portrait orientation
-        $profile = $imgObj->resize($max_width, $max_height, false, 2);
-        $thumbs = $profile->generateThumbs($this->profiles, 5);
+        $profile = $imgObj->resize($max_width, $max_height, false, 6);
+        $thumbs = $profile->generateThumbs($this->profiles, 2);
       }
 
       // Create a profile for each 
@@ -358,21 +349,20 @@ class RentalModelImage extends JModelAdmin
         // Put it out to a file
         $file_name = JPATH_SITE . '/images/property/' . $unit_id . '/' . $this->profiles[$key] . '_' . $image_file_name;
 
-
         if (!file_exists($file_name))
         {
           // Set the interlace filter on the thumb
           $thumb->filter('interlace');
-          // Maybe give this up? Just createThumbs and then loop over the returned 
-          // array and upload each one deleting as you go.
-          // Save it out to the cloud...
-          $object = $container->uploadObject($unit_id . '/' . $this->profiles[$key] . '_' . $image_file_name, $thumb->handle);
+
+          // Save it out...
+          $thumb->tofile($file_name, $type = IMAGETYPE_JPEG, array('quality' => 90));
         }
       }
     }
     catch (Exception $e)
     {
-      $this->out($e->getMessage());
+      // Deal with this exception...
+      // This is an AJAX request so ensure property message is shown...
     }
   }
 
