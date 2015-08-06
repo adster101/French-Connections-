@@ -46,7 +46,7 @@ class RentalImages extends JApplicationCli
    * 
    * @var type array
    */
-  public $profiles = array('903x586', '770x580', '617x464', '408x307', '330x248', '210x120');
+  public $profiles = array('900x600', '770x513', '617x464', '408x272', '330x220', '210x140');
 
   /**
    * Entry point for the script
@@ -84,7 +84,7 @@ class RentalImages extends JApplicationCli
         JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->unit_id . ')', JLog::ERROR, 'import_images');
       }
 
-      $this->out('Done image...' . $image->image_file_name . ' ' . $i . ' of ' . $total);
+      $this->out('Done image...' . $image->image_file_name . ' ' . $i . ' of ' . $total . '(' . round(($i / $total)) * 100 . '%)');
     }
   }
 
@@ -104,11 +104,14 @@ class RentalImages extends JApplicationCli
    * 
    */
 
-  public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
+  public function processImage($image_path = '', $unit_id = '', $image_file_name = '')
   {
 
+
+
     $image = $image_path . '/' . $unit_id . '/' . $image_file_name;
-    $image_file_path = $image_path . '/profiles/' . $unit_id . '/';
+    $image_file_path = 'D:\images' . '/' . $unit_id . '/';
+
 
     if (!file_exists($image))
     {
@@ -140,15 +143,12 @@ class RentalImages extends JApplicationCli
       {
 
         // This image is roughly landscape orientated with a width greater than max possible image width
-        $profile = $imgObj->resize($max_width, $max_height, true, 3);
-
-        $thumbs = $profile->generateThumbs($this->profiles, 5);
+        $thumbs = $imgObj->generateThumbs($this->profiles, 5);
       }
       else if ($width < $height)
       {
         // This image is roughly portrait orientation
-        $profile = $imgObj->resize($max_width, $max_height, false, 2);
-        $thumbs = $profile->generateThumbs($this->profiles, 5);
+        $thumbs = $imgObj->generateThumbs($this->profiles, 5);
       }
 
       // Create a profile for each 
@@ -156,7 +156,6 @@ class RentalImages extends JApplicationCli
       {
         // Put it out to a file
         $file_name = $image_file_path . $this->profiles[$key] . '_' . $image_file_name;
-
 
         if (!file_exists($file_name))
         {

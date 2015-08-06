@@ -72,7 +72,7 @@ $uri = JUri::getInstance();
       <p>
         <a href="<?php echo $route ?>" title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>">
           <?php if (!empty($this->result->thumbnail)) : ?>
-            <img class="img-responsive" src='http://4e2a14ede1b074f03957-a358347f37218a98b98454e9b3f3a83e.r94.cf3.rackcdn.com/<?php echo $this->result->unit_id . '/210x120_' . $this->result->thumbnail ?>' />
+            <img class="img-responsive" src='http://4e2a14ede1b074f03957-a358347f37218a98b98454e9b3f3a83e.r94.cf3.rackcdn.com/<?php echo $this->result->unit_id . '/210x140_' . $this->result->thumbnail ?>' />
           <?php else: ?>
             <img width="210" class="img-responsive" src="<?php echo $uri->getScheme() . '://' . $this->result->url_thumb ?>" />
           <?php endif; ?>

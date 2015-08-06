@@ -2,8 +2,7 @@
 defined('_JEXEC') or die('Restricted access');
 $app = JFactory::getApplication();
 $menu = $app->getMenu()->getActive();
-$cdn = $menu->params->get('cdn', '');
-
+$cdn = '/images/property/profiles/';
 ?>
 
 <!-- Image gallery -->
@@ -19,22 +18,20 @@ $cdn = $menu->params->get('cdn', '');
         </div>
       <?php endif; ?>
       <?php foreach ($this->images as $images => $image) : ?> 
-        <?php 
-        $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
+        <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
         <?php
         $srcset = array();
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/210x120_' . $image->image_file_name . $image->url . ' 210w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 210w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/330x248_' . $image->image_file_name . $image->url . ' 330w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 330w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/408x307_' . $image->image_file_name . $image->url . ' 408w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 408w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/330x220_' . $image->image_file_name . $image->url . ' 330w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 330w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/408x272_' . $image->image_file_name . $image->url . ' 408w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 408w';
         $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/617x464_' . $image->image_file_name . $image->url . ' 617w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 617w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/770x580_' . $image->image_file_name . $image->url . ' 770w' : JURI::getInstance()->toString(array('scheme')) . $image->url. ' 770w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/903x586_' . $image->image_file_name . $image->url . ' 903w' : JURI::getInstance()->toString(array('scheme')) . $image->url. ' 903w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/770x513_' . $image->image_file_name . $image->url . ' 770w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 770w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/900x600_' . $image->image_file_name . $image->url . ' 900w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 900w';
         ?>
         <div>
           <?php if ($images == 0) : ?>
-            <img src="" class="img-responsive lazyload" data-srcset="<?php echo implode(',', $srcset) ?>" sizes="(max-width: 991px) 60vw, (max-width: 1200px) 60vw" />
+            <img src="" class="img-responsive lazyload" data-srcset="<?php echo implode(',', $srcset) ?>" sizes="(max-width: 767px) 100vw, 60vw" />
           <?php else: ?>
-            <img src="" class="img-responsive lazyload" data-srcset="<?php echo implode(',', $srcset) ?>" sizes="(max-width: 991px) 60vw, (max-width: 1200px) 60vw" />
+            <img src="" class="img-responsive lazyload" data-srcset="<?php echo implode(',', $srcset) ?>" sizes="(max-width: 767px) 100vw, (max-width:991px) 58vw, (min-width: 992px) 66vw, 60vw" />
           <?php endif; ?>
           <p>
             <?php echo $image->caption; ?>
@@ -54,7 +51,7 @@ $cdn = $menu->params->get('cdn', '');
         </div>
       <?php endif; ?>
       <?php foreach ($this->images as $images => $image) : ?> 
-        <?php $src = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/210x120_' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
+        <?php $src = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/210x140_' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
         <div>
           <img width="100" src="<?php echo $src ?>" /> 
         </div>     

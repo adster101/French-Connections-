@@ -28,7 +28,6 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 require_once JPATH_LIBRARIES . '/cms.php';
 
 jimport('joomla.filesystem.folder');
-jimport('frenchconnections.images.filter.interlace');
 
 /**
  * Cron job to trash expired cache data
@@ -36,17 +35,8 @@ jimport('frenchconnections.images.filter.interlace');
  * @package  Joomla.Cli
  * @since    2.5
  */
-class RentalImages extends JApplicationCli
+class Uploadimagestocdn extends JApplicationCli
 {
-
-  private $users_to_ignore = '9436';
-
-  /**
-   * Array to hole the 
-   * 
-   * @var type array
-   */
-  public $profiles = array('903x586', '770x580', '617x464', '408x307', '330x248', '210x120');
 
   /**
    * Entry point for the script
@@ -68,13 +58,37 @@ class RentalImages extends JApplicationCli
     $objectStoreService = $client->objectStoreService(null, 'LON');
 
     $container = $objectStoreService->getContainer('images');
-    $handle = fopen($file_name, 'r');
 
-    $object = $container->uploadObject($unit_id . '/' . $this->profiles[$key] . '_' . $image_file_name, $handle);
+    $images = $this->_getImages();
+
+    foreach ($images as $image)
+    {
+      if (!$image->cdn)
+      {
+        // The file path
+        $file = JPATH_BASE . 'images/profiles/' . $image->property_id . '/' . $image->image_file_name;
+        
+        // The cloud 'object' file name
+        $file_name = $image->property_id . '/' . $image->image_file_name;
+        
+        // Open the image for reading
+        $handle = fopen($file, 'r');
+        
+        // Upload the object to the cloud files server
+        $object = $container->uploadObject($file_name, $handle);
+      
+        // TO DO - Add error handling here.
+        // TO DO - Update image detail in table to indicate image has been upload to cloud file server
+        // TO DO - Remove profile pic from file system (possibly to archive?)
+        
+      }
+    }
   }
 
   /*
    * Get a list of properties due to expire and are set to manual renewal
+   * TO DO - This will be worthwhile doing as a UNION so we can process rental
+   * and realestate images in one go
    */
 
   private function _getImages()
@@ -85,7 +99,7 @@ class RentalImages extends JApplicationCli
     $db = JFactory::getDBO();
 
     $query = $db->getQuery(true);
-    $query->select('a.id as unit_id, b.image_file_name');
+    $query->select('b.*');
 
     $query->from('#__unit a');
 
@@ -94,9 +108,9 @@ class RentalImages extends JApplicationCli
     $query->where('b.id is not null');
     $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
     $query->where('c.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
+    $query->where('b.cdn = 0');
 
     $db->setQuery($query);
-
 
     try
     {
@@ -113,4 +127,4 @@ class RentalImages extends JApplicationCli
 
 }
 
-JApplicationCli::getInstance('RentalImages')->execute();
+JApplicationCli::getInstance('Uploadimagestocdn')->execute();
