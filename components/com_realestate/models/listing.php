@@ -46,6 +46,7 @@ class RealestateModelListing extends JModelForm
    * @param	array	Configuration array for model. Optional.
    * @return	JTable	A database object
    * @since	1.6
+   * 
    */
   public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array())
   {
@@ -86,7 +87,7 @@ class RealestateModelListing extends JModelForm
   protected function loadFormData()
   {
     // Check the session for previously entered form data.
-    $data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
+    $data = JFactory::getApplication()->getUserState('com_realestate.enquiry.data', array());
 
     if (empty($data))
     {
