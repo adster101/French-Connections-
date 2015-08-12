@@ -754,13 +754,13 @@ class RealestateSearchModelSearch extends JModelList
     if ($min_price)
     {
 
-      $query = $query->where('price >= ' . (int) $min_price);
+      $query = $query->where('CASE WHEN b.base_currency = \'EUR\' THEN (b.price / h.exchange_rate) ELSE (b.price) END >=' . (int) $min_price);
     }
 
     if ($max_price)
     {
 
-      $query = $query->where('price <= ' . (int) $max_price);
+      $query = $query->where('CASE WHEN b.base_currency = \'EUR\' THEN (b.price / h.exchange_rate) ELSE (b.price) END <= ' . (int) $max_price);
     }
 
     return $query;
