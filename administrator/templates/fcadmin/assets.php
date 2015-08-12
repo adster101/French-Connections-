@@ -8,7 +8,7 @@ $doc = JFactory::getDocument();
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-if ($view == 'images' && $option == 'com_rental')
+if ($view == 'images' && ($option == 'com_rental' || $option == 'com_realestate'))
 {
   $script_path = (JDEBUG) ? '/media/fc/assets/js/images.admin.scripts.js' : '/media/fc/assets/js/2015072316826.images.admin.scripts.min.js';
 }

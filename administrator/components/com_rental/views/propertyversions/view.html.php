@@ -136,7 +136,6 @@ class RentalViewPropertyversions extends JViewLegacy
     JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
 
     $document->addScript("//maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
-    $document->addScript("/media/fc/js/locate.js", 'text/javascript', true, false);
     $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");
   }
 
