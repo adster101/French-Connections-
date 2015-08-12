@@ -43,7 +43,7 @@ $refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, '
       </select>
     </div>
     <div class="form-group">
-      <label class="" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
+      <label class="sr-only" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
       <select id="min_price" name="min" class="form-control">
         <?php echo JHtml::_('select.options', $refine_budget_min, 'value', 'text', ''); ?>
       </select>
