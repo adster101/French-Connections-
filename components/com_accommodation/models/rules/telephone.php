@@ -43,7 +43,7 @@ class JFormRuleTelephone extends JFormRule
 
     // $value is prefiltered by Jform and will only contain alpha numeric chars (+ and spaces are stripped).
     // Test that the string matches the pattern
-    if (preg_match('/^[0-9+\s]{11,25}$/', $value, $matches))
+    if (preg_match('/^[0-9\s+()]{11,25}$/', $value, $matches))
     {
       // Yay
       return true;
