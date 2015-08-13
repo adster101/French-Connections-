@@ -61,7 +61,12 @@
       name="notification_from"
       type="user"
       label="COM_FCADMIN_FIELD_NOTIFICATION_USER_FROM"
-    >
-    </field>
+    />
+    <field
+      name="cdn"
+      type="url"
+      label="CDN path"
+      class="input-xxlarge"
+    />
   </fieldset>
 </config>

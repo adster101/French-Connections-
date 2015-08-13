@@ -29,6 +29,11 @@ require_once JPATH_LIBRARIES . '/cms.php';
 
 jimport('joomla.filesystem.folder');
 
+// Include the rackspace bits and bobs
+require 'vendor/autoload.php';
+
+use OpenCloud\Rackspace;
+
 /**
  * Cron job to trash expired cache data
  *
@@ -39,6 +44,14 @@ class Uploadimagestocdn extends JApplicationCli
 {
 
   /**
+   *  A list of users to ignore - rental and realestate.
+   * 
+   * @var type 
+   * 
+   */
+  private $users_to_ignore = '9436, 8290, 7931, 9773';
+
+  /**
    * Entry point for the script
    *
    * @return  void
@@ -47,6 +60,7 @@ class Uploadimagestocdn extends JApplicationCli
    */
   public function doExecute()
   {
+    $images = $this->_getImages();
 
     // Instantiate a Rackspace client.
     $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
@@ -59,7 +73,6 @@ class Uploadimagestocdn extends JApplicationCli
 
     $container = $objectStoreService->getContainer('images');
 
-    $images = $this->_getImages();
 
     foreach ($images as $image)
     {
@@ -67,20 +80,19 @@ class Uploadimagestocdn extends JApplicationCli
       {
         // The file path
         $file = JPATH_BASE . 'images/profiles/' . $image->property_id . '/' . $image->image_file_name;
-        
+
         // The cloud 'object' file name
         $file_name = $image->property_id . '/' . $image->image_file_name;
-        
+
         // Open the image for reading
         $handle = fopen($file, 'r');
-        
+
         // Upload the object to the cloud files server
         $object = $container->uploadObject($file_name, $handle);
-      
+
         // TO DO - Add error handling here.
         // TO DO - Update image detail in table to indicate image has been upload to cloud file server
         // TO DO - Remove profile pic from file system (possibly to archive?)
-        
       }
     }
   }
@@ -99,10 +111,9 @@ class Uploadimagestocdn extends JApplicationCli
     $db = JFactory::getDBO();
 
     $query = $db->getQuery(true);
+
     $query->select('b.*');
-
     $query->from('#__unit a');
-
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
     $query->where('b.id is not null');
@@ -111,6 +122,9 @@ class Uploadimagestocdn extends JApplicationCli
     $query->where('b.cdn = 0');
 
     $db->setQuery($query);
+
+    echo $query->__toString();
+    die;
 
     try
     {

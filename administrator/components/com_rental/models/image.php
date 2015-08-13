@@ -6,13 +6,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
 
-jimport('frenchconnections.images.fcimage');
-
 jimport('frenchconnections.images.filter.interlace');
-
-require 'vendor/autoload.php';
-
-use OpenCloud\Rackspace;
 
 /**
  * HelloWorld Model
@@ -304,8 +298,6 @@ class RentalModelImage extends JModelAdmin
 
   public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
   {
-
-
 
     $image = $image_path;
 

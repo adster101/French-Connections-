@@ -6,11 +6,15 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla modelform library
 jimport('joomla.application.component.modeladmin');
 
+jimport('frenchconnections.images.filter.interlace');
+
 /**
  * HelloWorld Model
  */
 class RealEstateModelImage extends JModelAdmin
 {
+
+  public $profiles = array('903x586', '770x580', '617x464', '408x307', '210x120');
 
   /**
    * Method override to check if you can edit an existing record.
@@ -72,20 +76,18 @@ class RealEstateModelImage extends JModelAdmin
         $query->select('id')
                 ->from($db->quoteName('#__realestate_property_images_library'))
                 ->where($db->quoteName('version_id') . ' = ' . $table->version_id);
-        
+
         $db->setQuery($query);
-        
+
         $rows = $db->loadObjectList();
-        
+
         foreach ($rows as $k => $value)
         {
           $ids[] = $value->id;
-          $order[]  = $k + 1;
+          $order[] = $k + 1;
         }
-        
+
         $this->saveorder($ids, $order);
-        
-        
       }
     }
     catch (Exception $e)
@@ -191,7 +193,7 @@ class RealEstateModelImage extends JModelAdmin
    */
   public function save($data)
   {
-    
+
     $property_version_model = JModelLegacy::getInstance('PropertyVersions', 'RealestateModel');
 
     // Hit up the unit versions save method to determine if a new version is needed.
@@ -203,10 +205,8 @@ class RealEstateModelImage extends JModelAdmin
     $version_id = $property_version_model->getState('new.version.id');
 
     // Image has been uploaded, let's create some image profiles...
-    // TO DO - Put the image dimensions in as params against the component
-    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'gallery');
-    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumbs', 100, 100);
-    $this->generateImageProfile($data['filepath'], (int) $data['realestate_property_id'], $data['image_file_name'], 'thumb', 210, 120);
+    $this->processImage($data['filepath'], $data['realestate_property_id'], $data['image_file_name']);
+
 
     $ordering = $this->getOrderPosition($version_id);
 
@@ -265,6 +265,68 @@ class RealEstateModelImage extends JModelAdmin
     }
 
     return $result->ordering;
+  }
+
+  public function processImage($image_path = '', $unit_id = '', $image_file_name = '', $max_width = 903, $max_height = 586)
+  {
+
+    $image = $image_path;
+
+    if (!file_exists($image))
+    {
+      // Change this to throw exception
+      return false;
+    }
+
+    // Create a new image object ready for processing
+    $imgObj = new JImage($image);
+
+    try
+    {
+
+      // Image width
+      $width = $imgObj->getWidth();
+
+      // Image height
+      $height = $imgObj->getHeight();
+
+      // If the width is greater than the height just create it
+      if (($width > $height))
+      {
+
+        // This image is roughly landscape orientated with a width greater than max possible image width
+        $profile = $imgObj->resize($max_width, $max_height, true, 3);
+
+        $thumbs = $profile->generateThumbs($this->profiles, 3);
+      }
+      else if ($width < $height)
+      {
+        // This image is roughly portrait orientation
+        $profile = $imgObj->resize($max_width, $max_height, false, 6);
+        $thumbs = $profile->generateThumbs($this->profiles, 2);
+      }
+
+      // Create a profile for each 
+      foreach ($thumbs as $key => $thumb)
+      {
+        // Put it out to a file
+        $file_name = JPATH_SITE . '/images/property/' . $unit_id . '/' . $this->profiles[$key] . '_' . $image_file_name;
+
+        if (!file_exists($file_name))
+        {
+          // Set the interlace filter on the thumb
+          $thumb->filter('interlace');
+
+          // Save it out...
+          $thumb->tofile($file_name, $type = IMAGETYPE_JPEG, array('quality' => 90));
+        }
+      }
+    }
+    catch (Exception $e)
+    {
+      // Deal with this exception...
+      // This is an AJAX request so ensure property message is shown...
+    }
   }
 
   /*
@@ -342,7 +404,7 @@ class RealEstateModelImage extends JModelAdmin
           $bit = imageinterlace($existing_image, 1);
 
           // Save it out
-          imagejpeg($existing_image, $file_path,100);
+          imagejpeg($existing_image, $file_path, 100);
 
           // Free up memory
           imagedestroy($existing_image);
@@ -404,7 +466,7 @@ class RealEstateModelImage extends JModelAdmin
           imageinterlace($blank_image, 1);
 
           // Save it out
-          imagejpeg($blank_image, $file_path,100);
+          imagejpeg($blank_image, $file_path, 100);
 
           // Free up memory
           imagedestroy($blank_image);

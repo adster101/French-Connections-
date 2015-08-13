@@ -2,7 +2,8 @@
 defined('_JEXEC') or die('Restricted access');
 $app = JFactory::getApplication();
 $menu = $app->getMenu()->getActive();
-$cdn = '/images/property/profiles/';
+$cdn = $menu->params->get('cdn', '');
+
 ?>
 
 <!-- Image gallery -->
