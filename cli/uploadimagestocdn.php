@@ -61,7 +61,7 @@ class Uploadimagestocdn extends JApplicationCli
   public function doExecute()
   {
     $images = $this->_getImages();
-
+    
     // Instantiate a Rackspace client.
     $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
         'username' => 'fcadmin01',
@@ -71,7 +71,7 @@ class Uploadimagestocdn extends JApplicationCli
     // Obtain an Object Store service object from the client.
     $objectStoreService = $client->objectStoreService(null, 'LON');
 
-    $container = $objectStoreService->getContainer('images');
+    $container = $objectStoreService->getContainer('test');
 
 
     foreach ($images as $image)
@@ -79,11 +79,12 @@ class Uploadimagestocdn extends JApplicationCli
       if (!$image->cdn)
       {
         // The file path
-        $file = JPATH_BASE . 'images/profiles/' . $image->property_id . '/' . $image->image_file_name;
+        $file = JPATH_BASE . '/images/property/' . $image->id . '/' . $image->image_file_name;
 
         // The cloud 'object' file name
-        $file_name = $image->property_id . '/' . $image->image_file_name;
+        $file_name = $image->id . '/' . $image->image_file_name;
 
+        // TO DO - here will need to prepend the list of profile sizes to filename in a foreach
         // Open the image for reading
         $handle = fopen($file, 'r');
 
@@ -112,7 +113,7 @@ class Uploadimagestocdn extends JApplicationCli
 
     $query = $db->getQuery(true);
 
-    $query->select('b.*');
+    $query->select('b.unit_id AS id, b.image_file_name, b.cdn');
     $query->from('#__unit a');
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
@@ -121,10 +122,19 @@ class Uploadimagestocdn extends JApplicationCli
     $query->where('c.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
     $query->where('b.cdn = 0');
 
-    $db->setQuery($query);
+    $union = $db->getQuery(true);
 
-    echo $query->__toString();
-    die;
+    $union->select('b.realestate_property_id AS id, b.image_file_name, b.cdn');
+    $union->from($db->quoteName('#__realestate_property','a'));
+    $union->join('left', $db->quoteName('#__realestate_property_images_library', 'b') . 'on a.id = b.realestate_property_id');
+    $union->where('b.id is not null');
+    $union->where('a.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
+    $union->where('a.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
+    $union->where('b.cdn = 0');
+
+    $query->union($union);
+
+    $db->setQuery($query);
 
     try
     {
@@ -133,6 +143,7 @@ class Uploadimagestocdn extends JApplicationCli
     catch (Exception $e)
     {
       $this->out('Problem getting props...');
+      $this->out($e->getMessage());
       return false;
     }
 
