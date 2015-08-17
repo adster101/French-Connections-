@@ -125,11 +125,9 @@ class RealEstateViewPropertyversions extends JViewLegacy
 
     $document->setTitle(JText::sprintf('COM_REALESTATE_MANAGER_HELLOWORLD_EDIT', $this->item->id));
     JText::script('COM_REALESTATE_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
-    $document->addScript("/media/fc/js/general.js", 'text/javascript', true, false);
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
 
     $document->addScript("//maps.googleapis.com/maps/api/js?key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI&sensor=true");
-    $document->addScript("/media/fc/js/locate.js", 'text/javascript', true, false);
     $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");
   }
 

@@ -280,10 +280,10 @@ if (!empty($this->item->languages_spoken))
     <?php if (count($langs_array) > 0) : ?>
       <p><?php echo JText::sprintf('COM_ACCOMMODATION_LANGUAGES_SPOKEN', implode(', ', $langs_array)); ?></p>
     <?php endif; ?>
-    <?php if ($this->item->website) : ?>
+    <?php if ($this->item->website && $this->item->website_visible) : ?>
       <p>
         <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE'); ?>
-        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id) . '&' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
+        <a target="_blank" rel="nofollow" href="<?php echo JRoute::_('index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id) . '?' . JSession::getFormToken() . '=1&task=listing.viewsite'; ?>">
           <?php echo JText::_('COM_ACCOMMODATION_CONTACT_WEBSITE_VISIT'); ?>
         </a>
       </p>

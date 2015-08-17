@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
 ?>   

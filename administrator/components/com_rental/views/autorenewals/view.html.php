@@ -53,9 +53,8 @@ class RentalViewAutorenewals extends JViewLegacy
   protected function setDocument()
   {
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
     $document = JFactory::getDocument();
-    $document->addScript("/media/fc/js/general.js", 'text/javascript', true);
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
   }
 

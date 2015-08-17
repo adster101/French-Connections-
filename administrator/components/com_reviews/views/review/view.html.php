@@ -54,7 +54,6 @@ class ReviewsViewReview extends JViewLegacy {
   protected function setDocument() {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('Manage review'));
-    $document->addScript("/administrator/components/com_rental/js/submitbutton.js");
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
   }
 

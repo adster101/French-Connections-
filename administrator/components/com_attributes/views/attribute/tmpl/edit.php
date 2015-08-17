@@ -3,8 +3,8 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 
 $this->lang = ($this->lang == '*') ? 'en-GB' : $this->lang;
 ?>

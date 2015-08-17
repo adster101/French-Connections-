@@ -8,6 +8,8 @@
  */
 defined('_JEXEC') or die;
 
+JHtml::_('behavior.core');
+
 $app = JFactory::getApplication();
 $pathway = $app->getPathway();
 $items = $pathway->getPathWay();
@@ -33,8 +35,6 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
 <div class="panel panel-default">
   <div class="panel-heading">
     <?php echo JText::_('COM_FCSEARCH_REFINE_EXTRAS'); ?>
-
-
   </div>
   <div class="panel-body">
     <?php if (!empty($this->lwl) || !empty($this->so)) : ?>
@@ -139,7 +139,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         <?php endif; ?>
 
       <?php endforeach; ?>
-      <?php if ($this->localinfo->level < 5) : ?>
+      <?php if ($this->localinfo->level < 10) : ?>
         <p>Refine location</p>
         <?php if (!empty($this->location_options)) : ?>
 
@@ -156,7 +156,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' . JApplication::stringURLSafe($this->escape($value->title)) . $filters . $offers . $lwl;
             ?>
 
-            <?php if ($counter >= 5 && $hide) : ?>
+            <?php if ($counter >= 10 && $hide) : ?>
               <?php $hide = false; ?>
               <div class="hide ">
               <?php endif; ?>
@@ -238,7 +238,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
         $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' .
                 JApplication::stringURLSafe($this->escape($this->localinfo->title)) . $new_uri . $offers . $lwl;
         ?>
-        <?php if ($counter >= 5 && $hide) : ?>
+        <?php if ($counter >= 10 && $hide) : ?>
           <?php $hide = false; ?>
           <div class="hide ">
           <?php endif; ?>
@@ -296,7 +296,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE . '/c
             $remove = true;
           }
           ?>
-          <?php if ($counter >= 5 && $hide) : ?>
+          <?php if ($counter >= 10 && $hide) : ?>
             <?php $hide = false; ?>
             <div class="hide ">
             <?php endif; ?>

@@ -18,12 +18,5 @@
       class="validate"
       filter="safehtml">
     </field>
-  
-    <field 
-      name="id"
-      filter="int"
-      required="true"
-      type="hidden"
-    />
   </fieldset>
 </form>

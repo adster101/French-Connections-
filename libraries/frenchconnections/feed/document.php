@@ -42,7 +42,7 @@ class JFeedParserdocument extends JFeedParser
    */
   protected function initialise()
   {
-// We want to move forward to the first element after the <channel> element.
+    // We want to move forward to the first element after the <channel> element.
     $this->moveToNextElement('properties');
     $this->moveToNextElement();
   }
@@ -59,19 +59,19 @@ class JFeedParserdocument extends JFeedParser
     $feed = new stdClass();
     $feed->properties = array();
 
-// Detect the feed version.
+    // Detect the feed version.
     $this->initialise();
 
-// Let's get this party started...
+    // Let's get this party started...
     do
     {
-// Expand the element for processing.
+      // Expand the element for processing.
       $el = $this->expandToSimpleXml();
 
-// Process the element.
+      // Process the element.
       $this->processElement($feed, $el);
 
-// Skip over this element's children since it has been processed.
+      // Skip over this element's children since it has been processed.
       $this->moveToClosingElement();
     }
     while ($this->moveToNextElement());
@@ -104,13 +104,13 @@ class JFeedParserdocument extends JFeedParser
     $listing->title = JHtml::_('string.truncate', $el->Description->description, 100, true, false);
     $listing->single_bedrooms = (int) $el->Description->bedrooms;
     $listing->bathrooms = (int) $el->Description->fullBathrooms;
-    $listing->latitude = (string) $el->latitude;
-    $listing->longitude = (string) $el->longitude;
+    $listing->latitude = (string) $el->Address->latitude;
+    $listing->longitude = (string) $el->Address->longitude;
 
     // This is needed because we don't have lat and long for some feeds
-    if (!empty($el->latitude) && !empty($el->latitude))
+    if (!empty($el->Address->latitude) && !empty($el->Address->latitude))
     {
-      $city = $this->nearestcity((string) $el->latitude, (string) $el->longitude, (string) $el->Address->subRegion);
+      $city = $this->nearestcity((string) $el->Address->latitude, (string) $el->Address->longitude, (string) $el->Address->subRegion);
       $listing->city = (int) $city;
     }
 

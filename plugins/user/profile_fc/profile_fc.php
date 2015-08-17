@@ -73,7 +73,7 @@ class plgUserProfile_fc extends JPlugin
     JFormHelper::addFieldPath(dirname(__FILE__) . '/fields');
     $doc = JFactory::getDocument();
     $doc->addScript('/media/fc/js/general.js', 'text/javascript', true);
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
   }
 
   /**

@@ -129,7 +129,6 @@ class RentalViewListings extends JViewLegacy
   {
     $document = JFactory::getDocument();
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
-    $document->addScript("/media/fc/js/general.js", 'text/javascript', true);
 
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
   }

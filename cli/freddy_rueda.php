@@ -78,6 +78,8 @@ class FreddyRueda extends RealestateImport
 
         $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
 
+        $dept = JStringNormalise::toDashSeparated(JApplication::stringURLSafe($prop->region));
+
         if (!$id)
         {
           // TO DO - Make this a function used by FR and AF
@@ -86,9 +88,20 @@ class FreddyRueda extends RealestateImport
           // Create an entry in the #__realestate_property table
           $property_id = $this->createProperty($db, $user);
 
+          // Set the towns for the property dependent on the department
+          if ($dept == 'herault')
+          {
+            $prop->city = 112674;
+          }
+          elseif ($dept == 'aude')
+          {
+            $prop->city = 140038;
+          }
+
           // Get the location details for this property
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
-          $location = $classification->getPath($prop->department);
+
+          $location = $classification->getPath($prop->city);
 
           $data = array();
           $data['realestate_property_id'] = $property_id;
@@ -98,9 +111,9 @@ class FreddyRueda extends RealestateImport
           $data['area'] = (int) $location[2]->id;
           $data['region'] = (int) $location[3]->id;
           $data['department'] = (int) $location[4]->id;
-          $data['city'] = 0;
-          $data['latitude'] = 0;
-          $data['longitude'] = 0;
+          $data['city'] = (int) $location[5]->id;
+          $data['latitude'] = $location[5]->latitude;
+          $data['longitude'] = $location[5]->longitude;
           $data['created_by'] = $user;
           $data['created_on'] = $db->quote(JFactory::getDate());
           $data['description'] = $db->quote($prop->description);
@@ -149,7 +162,7 @@ class FreddyRueda extends RealestateImport
             }
 
             // Save the image data out to the database...
-            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i+1));
+            $this->createImage($db, array($property_version_id, $property_id, $db->quote($image_name), $i + 1));
           }
         }
         else
@@ -196,7 +209,6 @@ class FreddyRueda extends RealestateImport
 
         // Send an email, woot!
         $this->email($e);
-
       }
     }
   }

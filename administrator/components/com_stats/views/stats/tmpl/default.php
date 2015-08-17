@@ -2,7 +2,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 JHtml::_('bootstrap.popover');
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_stats'); ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">

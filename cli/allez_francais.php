@@ -65,6 +65,8 @@ class AllezFrancais extends RealestateImport
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
 
     $this->out('About to process feed results...');
+    
+    jimport('joomla.filesystem.folder');
 
     // Loop over each of the $props returned from parseFeed above
     foreach ($props->properties as $prop)
@@ -119,7 +121,7 @@ class AllezFrancais extends RealestateImport
 
           $this->out('Adding property version...');
           
-          $table = JTable::getInstance('PropertyVersions', 'RealestateTable');
+          JTable::getInstance('PropertyVersions', 'RealestateTable');
           $property_version_id = $this->createPropertyVersion($db, $data);
 
           $this->out('Working through images...');
@@ -130,18 +132,19 @@ class AllezFrancais extends RealestateImport
             $this->out($image);
 
             // Split the URL into an array
-            $image_parts = explode('/', $image);
+            $image_url = explode('?', $image);
+            
+            $image_parts = explode('/', $image_url[0]);
 
             // Get the last two parts and implode it to make the name
             $image_name = implode('-', array_slice($image_parts, -2, 2));
-
+            
             // The ultimate file path where we want to store the image
             $filepath = JPATH_SITE . '/images/property/' . $property_id . '/' . $image_name;
 
             // Check the property directory exists...
             if (!file_exists(JPATH_SITE . '/images/property/' . $property_id))
             {
-              jimport('joomla.filesystem.folder');
               JFolder::create(JPATH_SITE . '/images/property/' . $property_id);
             }
 
@@ -197,6 +200,7 @@ class AllezFrancais extends RealestateImport
         $db->transactionCommit();
 
         $this->out('Done processing... ' . $prop->agency_reference);
+        
       }
       catch (Exception $e)
       {

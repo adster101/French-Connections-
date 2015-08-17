@@ -12,7 +12,6 @@
       label="COM_FCCONTACT_NATURE_OF_ENQUIRY"
       class="form-control"
       message="COM_FCCONTACT_NATURE_OF_ENQUIRY_MESSAGE"
-      default=""
       required="true"
       labelclass="col-sm-3 control-label">
       <option value="">JGLOBAL_SELECT_AN_OPTION</option>

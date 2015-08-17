@@ -7,8 +7,8 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
-JHtml::_('behavior.formvalidation');
-JHtml::_('behavior.tooltip');
+JHtml::_('behavior.formvalidator');
+JHtml::_('bootstrap.tooltip');
 ?>
 <h1 class="page-header">
   <?php echo $this->document->title; ?>

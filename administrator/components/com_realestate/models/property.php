@@ -130,6 +130,11 @@ class RealestateModelProperty extends JModelAdmin
     {
       // Need to get the value of the renewal/update
     }
+    
+    if (empty($data['website_visible']))
+    {
+      $data['website_visible'] = '';
+    }
 
     // Save the data
     if (!parent::save($data))

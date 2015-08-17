@@ -1,7 +1,5 @@
 module.exports = function(grunt) {
 
-
-
   // 1. All configuration goes here 
   grunt.initConfig({
     // Add a 'global' opts object that we can access in each task...
@@ -67,11 +65,40 @@ module.exports = function(grunt) {
           'bower_components/slick-carousel/slick/slick.min.js',
           'media/system/js/core-uncompressed.js',
           'bower_components/overthrow/dist/overthrow.sidescroller.min.js',
+          'media/jui/js/cookies.jquery.min.js',
           'media/fc/js/general.js',
           'media/fc/js/search.js',
           'media/fc/js/property.js'
         ],
         dest: 'media/fc/assets/js/scripts.js'
+      },
+      admin: {
+        src: [
+          'media/system/js/core.js',
+          'media/fc/js/general.js',
+          'media/fc/js/jquery-ui-1.8.23.custom.min.js',
+          'media/fc/js/date-range.js',
+          'administrator/components/com_rental/js/availability.js',
+          'media/fc/js/locate.js',
+          'media/fc/js/tariffs.js'
+        ],
+        dest: 'media/fc/assets/js/admin.scripts.js'
+      },
+      images: {
+        src: [
+          'media/fc/js/libs/blueimp/vendor/jquery.ui.widget.js',
+          'media/fc/js/libs/blueimp/tmpl.min.js',
+          'media/fc/js/libs/blueimp/load-image.min.js',
+          'media/fc/js/libs/blueimp/canvas-to-blob.min.js',
+          'media/fc/js/libs/blueimp/jquery.iframe-transport.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-process.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-image.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-validate.js',
+          'media/fc/js/libs/blueimp/jquery.fileupload-ui.js',
+          'media/fc/js/main.js'
+        ],
+        dest: 'media/fc/assets/js/images.admin.scripts.js'
       }
     },
     uglify: {
@@ -80,6 +107,20 @@ module.exports = function(grunt) {
         dest: 'media/fc/assets/js/<%= opts.date %>.scripts.min.js',
         options: {
           mangle: true
+        }
+      },
+      admin: {
+        src: 'media/fc/assets/js/admin.scripts.js',
+        dest: 'media/fc/assets/js/<%= opts.date %>.admin.scripts.min.js',
+        options: {
+          mangle: false
+        }
+      },
+      images: {
+        src: 'media/fc/assets/js/images.admin.scripts.js',
+        dest: 'media/fc/assets/js/<%= opts.date %>.images.admin.scripts.min.js',
+        options: {
+          mangle: false
         }
       }
     },
@@ -97,8 +138,8 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      // Copies the 'assets' include file and replaces the timestamp string
-      // Just need to remember to upload the latest asset files...
+// Copies the 'assets' include file and replaces the timestamp string
+// Just need to remember to upload the latest asset files...
       woot: {
         options: {
           patterns: [
@@ -112,13 +153,18 @@ module.exports = function(grunt) {
           {
             src: ['templates/fcv4/assets.tmp.php'],
             dest: 'templates/fcv4/assets.php'
-
+          },
+          {
+            src: ['administrator/templates/fcadmin/assets.tmp.php'],
+            dest: 'administrator/templates/fcadmin/assets.php'
           }
         ]
+
+
+
       }
     }
   });
-
   // 3. Where we tell Grunt we plan to use this plug-in.
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -127,7 +173,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
   grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy', 'replace', 'cssmin']);

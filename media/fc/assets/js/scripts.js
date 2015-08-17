@@ -13526,6 +13526,23 @@ function checkAll_button(n, task) {
 /*! overthrow - An overflow:auto polyfill for responsive design. - v0.7.0 - 2015-04-01
 * Copyright (c) 2015 Scott Jehl, Filament Group, Inc.; Licensed MIT */
 !function(a){var b=a.document,c=b.documentElement,d="overthrow-enabled",e="ontouchmove"in b,f="WebkitOverflowScrolling"in c.style||"msOverflowStyle"in c.style||!e&&a.screen.width>800||function(){var b=a.navigator.userAgent,c=b.match(/AppleWebKit\/([0-9]+)/),d=c&&c[1],e=c&&d>=534;return b.match(/Android ([0-9]+)/)&&RegExp.$1>=3&&e||b.match(/ Version\/([0-9]+)/)&&RegExp.$1>=0&&a.blackberry&&e||b.indexOf("PlayBook")>-1&&e&&-1===!b.indexOf("Android 2")||b.match(/Firefox\/([0-9]+)/)&&RegExp.$1>=4||b.match(/wOSBrowser\/([0-9]+)/)&&RegExp.$1>=233&&e||b.match(/NokiaBrowser\/([0-9\.]+)/)&&7.3===parseFloat(RegExp.$1)&&c&&d>=533}();a.overthrow={},a.overthrow.enabledClassName=d,a.overthrow.addClass=function(){-1===c.className.indexOf(a.overthrow.enabledClassName)&&(c.className+=" "+a.overthrow.enabledClassName)},a.overthrow.removeClass=function(){c.className=c.className.replace(a.overthrow.enabledClassName,"")},a.overthrow.set=function(){f&&a.overthrow.addClass()},a.overthrow.canBeFilledWithPoly=e,a.overthrow.forget=function(){a.overthrow.removeClass()},a.overthrow.support=f?"native":"none"}(this),function(a,b,c){if(b!==c){b.easing=function(a,b,c,d){return c*((a=a/d-1)*a*a+1)+b},b.tossing=!1;var d;b.toss=function(a,e){b.intercept();var f,g,h=0,i=a.scrollLeft,j=a.scrollTop,k={top:"+0",left:"+0",duration:50,easing:b.easing,finished:function(){}},l=!1;if(e)for(var m in k)e[m]!==c&&(k[m]=e[m]);return"string"==typeof k.left?(k.left=parseFloat(k.left),f=k.left+i):(f=k.left,k.left=k.left-i),"string"==typeof k.top?(k.top=parseFloat(k.top),g=k.top+j):(g=k.top,k.top=k.top-j),b.tossing=!0,d=setInterval(function(){h++<k.duration?(a.scrollLeft=k.easing(h,i,k.left,k.duration),a.scrollTop=k.easing(h,j,k.top,k.duration)):(f!==a.scrollLeft?a.scrollLeft=f:(l&&k.finished(),l=!0),g!==a.scrollTop?a.scrollTop=g:(l&&k.finished(),l=!0),b.intercept())},1),{top:g,left:f,duration:b.duration,easing:b.easing}},b.intercept=function(){clearInterval(d),b.tossing=!1}}}(this,this.overthrow),function(a,b,c){if(b!==c){b.scrollIndicatorClassName="overthrow";var d=a.document,e=d.documentElement,f="native"===b.support,g=b.canBeFilledWithPoly,h=(b.configure,b.set),i=b.forget,j=b.scrollIndicatorClassName;b.closest=function(a,c){return!c&&a.className&&a.className.indexOf(j)>-1&&a||b.closest(a.parentNode)};var k=!1;b.set=function(){if(h(),!k&&!f&&g){a.overthrow.addClass(),k=!0,b.support="polyfilled",b.forget=function(){i(),k=!1,d.removeEventListener&&d.removeEventListener("touchstart",u,!1)};var j,l,m,n,o=[],p=[],q=function(){o=[],l=null},r=function(){p=[],m=null},s=function(a){n=j.querySelectorAll("textarea, input");for(var b=0,c=n.length;c>b;b++)n[b].style.pointerEvents=a},t=function(a,b){if(d.createEvent){var e,f=(!b||b===c)&&j.parentNode||j.touchchild||j;f!==j&&(e=d.createEvent("HTMLEvents"),e.initEvent("touchend",!0,!0),j.dispatchEvent(e),f.touchchild=j,j=f,f.dispatchEvent(a))}},u=function(a){if(b.intercept&&b.intercept(),q(),r(),j=b.closest(a.target),j&&j!==e&&!(a.touches.length>1)){s("none");var c=a,d=j.scrollTop,f=j.scrollLeft,g=j.offsetHeight,h=j.offsetWidth,i=a.touches[0].pageY,k=a.touches[0].pageX,n=j.scrollHeight,u=j.scrollWidth,v=function(a){var b=d+i-a.touches[0].pageY,e=f+k-a.touches[0].pageX,s=b>=(o.length?o[0]:0),v=e>=(p.length?p[0]:0);b>0&&n-g>b||e>0&&u-h>e?a.preventDefault():t(c),l&&s!==l&&q(),m&&v!==m&&r(),l=s,m=v,j.scrollTop=b,j.scrollLeft=e,o.unshift(b),p.unshift(e),o.length>3&&o.pop(),p.length>3&&p.pop()},w=function(){s("auto"),setTimeout(function(){s("none")},450),j.removeEventListener("touchmove",v,!1),j.removeEventListener("touchend",w,!1)};j.addEventListener("touchmove",v,!1),j.addEventListener("touchend",w,!1)}};d.addEventListener("touchstart",u,!1)}}}}(this,this.overthrow),function(a){a.overthrow.set()}(this),function(a,b){function c(b,c,d,e){if(document.createEvent){var f=document.createEvent("Event");f.initEvent(c,!0,!0),f.overthrow=d,b.dispatchEvent(f)}else a.document.documentElement[e][c]={e:c,overthrow:d},a.document.documentElement[c]++}if(b&&!(!1 in a.document)){if(b.sidescroller=function(d,e){var f=d,g="overthrow",h=g+"-next",i=g+"-prev",j=g+"-method",k=g+"-refresh",l=g+"-resize",m=e&&e.snapScroll,n=e&&e.skipLinks,o=e&&e.rewind,p=e&&void 0!==e.snapTolerance?e.snapTolerance:30,q=arguments;e=e||{};for(var r=0;r<f.length;r++)!function(){function d(){for(var a=C.querySelectorAll("li"),b=100/a.length+"%",c=0;c<a.length;c++)a[c].style.width=b}function s(){var a=C.querySelectorAll("li"),b=C.querySelector("ul");b.style.width=a[0].offsetWidth*a.length+"px"}function t(a){a&&a.fixedItemWidth?s():d(),c(B,k,{},B.ieID)}function u(a){var b=C.querySelectorAll("li"),c=b.length,d=C.offsetWidth,e=b[0].offsetWidth,f=void 0!==a?a:C.scrollLeft,g=Math.round(f/e),h=10,i=[];g=Math.max(0,g),g=Math.min(c,g),i.push(g);for(var j=2;c>j;j++)d+h>j*e&&i.push(g+j-1);return E=g,i}function v(a,b){var c=1;return b&&b.slideLength&&(c="all"===b.slideLength?a.length:parseInt(b.slideLength,10)),isNaN(c)&&(c=1),c}function w(d){var f=d||a.event;if(f.preventDefault?f.preventDefault():f.returnValue=!1,"keydown"===f.type||G===!1||G===f.type){G=f.type,b.intercept();var g=C.querySelectorAll("li"),j=f.target||f.srcElement,k=C.offsetWidth,l=g[0].offsetWidth,m=C.scrollLeft,n=Math.round(m/l),p=j.className.indexOf("ff")>-1,q=j.className.indexOf("rwd")>-1,r="keydown"!==f.type&&j.className.indexOf("next")>-1||39===f.keyCode,s=v(u(),e),t=n+(r?s:-s),w=l*t,x=C.scrollWidth-k;if(j&&"A"!==j.nodeName)return;q&&(w=0),p&&(w=x),o?0>w?w=x:w>x&&(w=0):0>w?w=0:w>x&&(w=x);var y=u(w);y[y.length-1]==g.length-1&&(w=C.querySelector("ul").offsetWidth-k),(y[0]!==n||w!==m)&&(b.toss(C,{left:w,easing:e.easing}),c(B,r?h:i,{active:y,originalEvent:f},F)),setTimeout(function(){G=!1},900)}}function x(a){b.intercept();var d=C.querySelector("li").offsetWidth,f=C.scrollLeft,g=Math.round(f/d);if(L!==!1){var j=f-L;Math.abs(j)>p&&(g=E+(j>0?1:-1))}var k=d*g;b.toss(C,{left:k,duration:20,easing:e.easing}),E!==g&&(c(B,g>E?h:i,{active:u(k),originalEvent:a},F),E=g)}function y(a){clearTimeout(J),J=setTimeout(function(){c(B,g+"-resize",{},B.ieID),x(a)},100)}function z(a){overthrow.tossing||(clearTimeout(K),K=setTimeout(function(){L===!1&&(L=C.scrollLeft),m?x(a):c(B,g+"-scroll",{},F),L=!1},200))}function A(a){(39===a.keyCode||37===a.keyCode)&&w(a)}var B=f[r],C=f[r].querySelector(".overthrow"),D=a.document.createElement("div"),E=0,F="overthrow"+(new Date).getTime(),G=!1,H="<a href='#' class='sidescroll-prev'><span class='sr-only'>Previous</span></a><a href='#' class='sidescroll-next'><span class='sr-only'>Next</span></a>",I="<a href='#' class='sidescroll-rwd'>First</a><a href='#' class='sidescroll-ff'>Last</a>";if("string"==typeof e&&B.options)return c(B,j,{name:e,arguments:Array.prototype.slice.call(q,2)},B.ieID),void t(B.options);if(!B.initialized){B.initialized=!0,B.options=e,B.setAttribute("tabindex","0"),a.document.attachEvent&&(a.document.documentElement[i]=0,a.document.documentElement[h]=0,a.document.documentElement[j]=0,a.document.documentElement[k]=0,a.document.documentElement[l]=0,a.document.documentElement[F]={},a.document.documentElement[F][i]={},a.document.documentElement[F][h]={},a.document.documentElement[F][j]={},a.document.documentElement[F][k]={},a.document.documentElement[F][l]={},B.ieID=F),D.className="sidescroll-nextprev-links",n&&(H+=I),D.innerHTML=H,B.getActiveSlides=u;var J,K,L=!1;a.document.addEventListener?(D.addEventListener("click",w,!1),D.addEventListener("touchend",w,!1),a.addEventListener("resize",y,!1),f[r].addEventListener("keydown",A,!1),C.addEventListener("scroll",z,!1)):a.document.attachEvent&&(D.attachEvent("onclick",w,!1),a.attachEvent("onresize",y,!1),f[r].attachEvent("onkeydown",A,!1),C.attachEvent("onscroll",z,!1)),B.insertBefore(D,C),t(e),c(a.document.documentElement,g+"-init",{sideScroll:B,options:e},a.document.documentElement.ieID)}}()},a.document.attachEvent){var d="overthrow-init"+(new Date).getTime();a.document.documentElement[d]={},a.document.documentElement[d]["overthrow-init"]=0,a.document.documentElement.ieID=d}b.sidescroller.onEvent=function(b,c,d){function e(a){var e={type:b,target:c,overthrow:a.overthrow};d(e)}a.document.addEventListener?c.addEventListener(b,e):a.document.attachEvent&&a.document.documentElement.attachEvent("onpropertychange",function(d){d.propertyName===b&&e(a.document.documentElement[c.ieID][b])})}}}(this,this.overthrow);
+/*!
+ * jQuery Cookie Plugin v1.2
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2011, Klaus Hartl
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.opensource.org/licenses/GPL-2.0
+ */
+(function(f,b,g){var a=/\+/g;function e(h){return h}function c(h){return decodeURIComponent(h.replace(a," "))}var d=f.cookie=function(n,m,r){if(m!==g){r=f.extend({},d.defaults,r);if(m===null){r.expires=-1}if(typeof r.expires==="number"){var o=r.expires,q=r.expires=new Date();q.setDate(q.getDate()+o)}m=d.json?JSON.stringify(m):String(m);return(b.cookie=[encodeURIComponent(n),"=",d.raw?m:encodeURIComponent(m),r.expires?"; expires="+r.expires.toUTCString():"",r.path?"; path="+r.path:"",r.domain?"; domain="+r.domain:"",r.secure?"; secure":""].join(""))}var h=d.raw?e:c;var p=b.cookie.split("; ");for(var l=0,k;(k=p[l]&&p[l].split("="));l++){if(h(k.shift())===n){var j=h(k.join("="));return d.json?JSON.parse(j):j}}return null};d.defaults={};f.removeCookie=function(i,h){if(f.cookie(i)!==null){f.cookie(i,null,h);return true}return false}})(jQuery,document);
+/*!
+  @Persistent tabs and accordions for Joomla 3.0 admin
+  @Based on http://stackoverflow.com/a/10524697
+  @By: Youjoomla LLC
+  @License:GNU/GPL v2.
+*/
+(function(a){a(document).ready(function(){function c(){var g=window.location.search.substring(1),l=g.split("&"),j={};for(var h=0;h<l.length;h++){var k=l[h].split("=");j[unescape(k[0])]=unescape(k[1])}return j}if(c().layout=="edit"){if(!c().id){uniQueid=c().extension_id}else{uniQueid=c().id}var b=c().view+uniQueid}else{b=""}if(b){a('a[data-toggle="tab"]').on("shown",function(g){a.cookie("last_tab"+b,a(g.target).attr("href"))});var d=a.cookie("last_tab"+b);var f=a(".nav-tabs").find("a").attr("href");if(!d){d=f}if(d){a("ul.nav-tabs").children().removeClass("active");a("a[href="+d+"]").parents("li:first").addClass("active");a("div.tab-content").children().removeClass("active");a(d).addClass("active")}a(".accordion-body").on("shown",function(h){var g=this.get("id");a.cookie("last_accordion"+b,g)});var e=a.cookie("last_accordion"+b);if(e){a('a[data-toggle="collapse"]').addClass("collapsed");a(".accordion-body").removeClass("in").height("0px");a('a[href="#'+e+'"]').removeClass("collapsed");a("#"+e).addClass("in").height("auto")}}})})(jQuery);
 jQuery(document).ready(function() {
 
   if (jQuery('.overthrow').length) {
@@ -13535,13 +13552,19 @@ jQuery(document).ready(function() {
     });
   }
 
-  // Updates hte form action based on the payment selection for @leisure booking.
+  // Updates the form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function() {
     var el = jQuery(this);
     var action = el.attr('value');
     jQuery(".atleisure-booking-form").attr("action", action);
   });
 
+  // Google analytics event tracking
+  jQuery('#search-tabs li > a').on('click', function(e) {
+    ga('send', 'event', 'Navigation', 'Search', e.target.hash);
+  });
+
+  // Google analytics event tracking
   jQuery('#main-nav li > a').on('click', function() {
     ga('send', 'event', 'Navigation', 'Main', jQuery(this).attr('href'));
   });
@@ -13632,22 +13655,22 @@ jQuery(document).ready(function() {
     })
   }
 
+  // TO DO - What a fucking mess!
   jQuery('.shortlist').each(function() { // For each result
-
     // Get the data-action state
     jQuery(this).popover({// Initialise a popover
       trigger: 'manual' // Take control of when the popover is opened
     }).click(function(event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      popover = jQuery(this).data('bs.popover'); // Get the popover instance
-      popover.options.html = true;
       jQuery(this).popover('toggle'); // Manually open the popover 
-    });
+    })
   })
 
+  // TO DO - What a fucking mess!
   jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
     var el = jQuery(this);
+    // favourite is the anchor element that triggers a popover
     var favourite = jQuery('.popover').siblings('a.shortlist');
     var dataObj = favourite.data(); // Get the data attributes of the parent a element
     var url_params = {};
@@ -13662,19 +13685,26 @@ jQuery(document).ready(function() {
       data: url_params
     }).done(function(data) {
 
+      var popover = jQuery('.popover').data('bs.popover');
+
       if (data == 1) {
         dataObj.action = (dataObj.action === 'add') ? 'remove' : 'add'; // action is the state the object is changing *to* not what what it is now...
-        favourite.data(dataObj);
 
         if (dataObj.action == 'remove') {
           favourite.addClass('in-shortlist');
+          favourite.attr('data-state', true);
+          favourite.attr('data-content', '<ul class=\'nav nav-pills nav-stacked\'><li><div class=\'checkbox\'><label><input type=\'checkbox\' checked value=\'1\'> My Shortlist</input></label></div></li><li class=\'divider\'><hr /></li><li><a href=\'/my-account/shortlist\'>View shortlist</a></li></ul>');
         } else {
           favourite.removeClass('in-shortlist');
-        } // If action is remove then add icon-checkbox else remove it
+          favourite.attr('data-state', false);
+          favourite.attr('data-content', '<ul class=\'nav nav-pills nav-stacked\'><li><div class=\'checkbox\'><label><input type=\'checkbox\' value=\'0\'> My Shortlist</input></label></div></li><li class=\'divider\'><hr /></li><li><a href=\'/my-account/shortlist\'>View shortlist</a></li></ul>');
+        }
+
+        // If action is remove then add icon-checkbox else remove it
         favourite.attr('data-action', dataObj.action);
 
       } else {
-        popover = jQuery('.popover').data('bs.popover');
+
         popover.options.content = '<p>Session expired.<br /> Please login.</p>';
       }
     })
@@ -13771,7 +13801,6 @@ jQuery(document).ready(function() {
   // Add special offer counter... 
   jQuery('#jform_offer_description').each(function() {
 
-
     // Assign this to that so we can use this later...
     var that = this;
 
@@ -13807,7 +13836,7 @@ jQuery(document).ready(function() {
   // Change hash for page-reload
   jQuery('.nav-tabs a').on('shown', function(e) {
     window.location.hash = e.target.hash.replace("#", "#" + prefix);
-  })
+  });
 });
 
 var infowindow;
@@ -13955,7 +13984,7 @@ Joomla.submitbutton = function(task)
 
     if (action[1] != 'cancel' && action[1] != 'close')
     {
-      var forms = $$('form.form-validate');
+      var forms = jQuery('form.form-validate');
       for (var i = 0; i < forms.length; i++)
       {
         if (!document.formvalidator.isValid(forms[i]))
@@ -13991,7 +14020,7 @@ Joomla.submitbutton = function(task)
     }
     else
     {
-      alert(Joomla.JText._('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE', ''));
+      alert(Joomla.JText._('JGLOBAL_VALIDATION_FORM_FAILED', ''));
       return false;
     }
   }
@@ -14065,13 +14094,13 @@ jQuery(document).ready(function() {
           //  Fit these bounds to the map
           map.fitBounds(bounds);
         }
-        
-         var markerCluster = new MarkerClusterer(map, markers,{
-           maxZoom: 12,
-           gridSize: 60,
-           averageCenter: false
-         });
-         
+
+        var markerCluster = new MarkerClusterer(map, markers, {
+          maxZoom: 12,
+          gridSize: 60,
+          averageCenter: false
+        });
+
       }).done(function() {
 
       });
@@ -14138,24 +14167,23 @@ jQuery(document).ready(function() {
 
 
   // Deal with the more/less options for the refine search bit.
-  jQuery(".show").click(function(event) {
+  jQuery("a.show").click(function(event) {
 
-// Get the containing element that we want to show/hide
-    var el = jQuery(this).prev().prev();
     // Prevent the default click behaviour
     event.preventDefault();
-    // Toggle the containing class 
-    el.toggleClass('show');
+
+    // Get the containing element that we want to show/hide
+    jQuery(this).prev().prev().toggleClass('show');
+
     // Check the open/closed state
-    if (el.hasClass('show')) { // Must be 'open' so we want to show less options text
-      jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS);
-    } else if (el.hasClass('hide')) { // Must be 'closed' so we want to show more options texts
-      jQuery(this).text(Joomla.JText.COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS);
-    }
+    jQuery(this).html(function(i, v) {
+      return v.trim() === Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS')
+              ? Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS')
+              : Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
+    });
   })
 
 }) // End of on DOM ready
-
 
 function getPath(event) {
 

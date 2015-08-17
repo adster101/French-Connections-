@@ -10,7 +10,7 @@
 	<version>3.0.0</version>
 	<description>PLG_HTTPS_XML_DESCRIPTION</description>
 	<files>
-		<filename plugin="sef">sef.php</filename>
+		<filename plugin="https">https.php</filename>
 		<filename>index.html</filename>
 	</files>
 	<languages>

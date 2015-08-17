@@ -1,8 +1,8 @@
 <?php
 // No direct access
 defined('_JEXEC') or die('Restricted access');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 
 // Get all the fieldsets in the tariffs form group
 $tariff_field_sets = $this->form->getFieldSet('tariffs');

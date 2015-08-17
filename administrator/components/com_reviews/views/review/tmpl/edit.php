@@ -3,8 +3,9 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
+JHtml::_('behavior.core');
 ?>
 <form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_reviews&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">
 

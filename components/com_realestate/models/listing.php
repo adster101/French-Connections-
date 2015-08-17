@@ -139,6 +139,8 @@ class RealestateModelListing extends JModelForm
 
     $select = '
         a.id as property_id,
+        a.website_visible,
+        b.website,
         b.agency_reference,
         b.realestate_property_id,
         b.latitude,

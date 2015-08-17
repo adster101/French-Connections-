@@ -3,7 +3,7 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 $fieldsets = $this->form->getFieldSets();
 ?>
 <form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_specialoffers&layout=edit&id=' . (int) $this->item->id); ?>" id="adminForm" method="post" name="adminForm">

@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 
 /* @var $this UsersViewNotes */
 
-JHtml::_('behavior.tooltip');
+JHtml::_('bootstrap.tooltip');
 JHtml::_('formbehavior.chosen', 'select');
 
 $user = JFactory::getUser();

@@ -12,19 +12,20 @@ jimport('frenchconnections.cli.import');
 class RealestateImport extends Import
 {
 
-  public function parseFeed($uri = '')
+  public function parseFeed($uri = '', $parser = 'document')
   {
     // Fetch and parse the feed.
     // Throw exception if feed not parsed/available.
     // Import the document Feed parser.
-    // This might get messy when we add the Freddy Rueda feed into the mix up.
-    jimport('frenchconnections.feed.document');
+    // The parser name is determined by the name of the root XML node...
+    // not sure if this needs to be the case but appears to be the way it works...
+    jimport('frenchconnections.feed.' . $parser);
 
     // Get an instance of JFeedFactory
     $feed = new JFeedFactory;
 
     // Register the parser, this bit that seems like overkill
-    $feed->registerParser('document', 'JFeedParserDocument');
+    $feed->registerParser($parser, 'JFeedParser' . $parser);
 
     // Get and parse the feed, returns a parsed list of items.
     $data = $feed->getFeed($uri);
@@ -104,7 +105,7 @@ class RealestateImport extends Import
     }
     catch (RuntimeException $e)
     {
-      throw new Exception('Problem creating a new real estate property version in Allez Francais XML import createPropertyVersion()');
+      throw new Exception($e->getMessage());
     }
 
     return $db->insertid();
@@ -132,7 +133,7 @@ class RealestateImport extends Import
     }
     catch (RuntimeException $e)
     {
-      throw new Exception('Problem updating real estate property version in Allez Francais XML import updatePropertyVersion()');
+      throw new Exception('Problem updating real estate property version in realestate XML import updatePropertyVersion()');
     }
 
     return $db->insertid();

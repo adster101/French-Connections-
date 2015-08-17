@@ -64,6 +64,7 @@ class RentalModelReview extends JModelAdmin
   {
 
     // Get the form.
+    JForm::addFormPath(JPATH_LIBRARIES . '/frenchconnections/forms');
     $form = $this->loadForm('com_rental.approve_draft', 'approve_draft', array('control' => 'jform', 'load_data' => $loadData));
 
     if (empty($form))
@@ -100,7 +101,7 @@ class RentalModelReview extends JModelAdmin
 
     $uri = JUri::getInstance();
     $domain = $uri->toString(array('scheme', 'host'));
-        
+
     // Below can be used when live. TO DO - Figure out how to use JRoute here to avoid hardcoding.
     // $listing_url = $domain . '/listing/' . (int) $recordId;
     $listing_url = 'http://www.frenchconnections.co.uk/listing/' . (int) $recordId;

@@ -145,12 +145,7 @@ class RentalViewUnitversions extends JViewLegacy
     $document = JFactory::getDocument();
     $document->setTitle($isNew ? JText::_('COM_RENTAL_HELLOWORLD_NEW_UNIT_EDIT') : JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_UNIT_EDIT', $this->item->unit_title, $this->item->property_id) );
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-    JText::script('COM_RENTAL_RENTAL_ERROR_UNACCEPTABLE');
-    $document->addScript("/media/fc/js/general.js");
-    //$document->addStyleSheet("/administrator/components/com_rental/css/helloworld.css", 'text/css', "screen");
-    //$document->addScript("/administrator/components/com_rental/js/jquery-ui-1.8.23.custom.min.js", 'text/javascript', true);
-    //$document->addScript("/administrator/components/com_rental/js/tariffs.js", 'text/javascript', true);
-    //$document->addStyleSheet("/administrator/components/com_rental/css/jquery-ui-1.8.23.custom.css", 'text/css', "screen");
-  }
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
+   }
 
 }

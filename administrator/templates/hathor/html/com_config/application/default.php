@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.switcher');
 
 // Load submenu template, using element id 'submenu' as needed by behavior.switcher

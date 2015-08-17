@@ -2,8 +2,8 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 ?>
 <form class="form-validate" action="<?php echo JRoute::_('index.php?option=com_rental'); ?>" id="adminForm" method="post" name="adminForm">
   <div>

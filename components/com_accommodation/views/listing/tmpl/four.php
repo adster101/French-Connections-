@@ -238,8 +238,6 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
               </a>
             </p>
           </div>
-
-
         </div>
       </div>
       <div class="hidden-xs">
@@ -292,16 +290,10 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <?php endif; ?>
       </div> 
 
-      <!-- Begin page navigator -->
-      <?php echo $this->loadTemplate('navigator'); ?>
-      <!-- End page navigator -->
-
       <div id="property-accordion" class="panel-group">
         <div id="about" class="panel panel-default">
-
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
-
               <?php
               $accordion_data->title = $this->escape($this->item->unit_title);
               $accordion_data->target = 'description-panel';
@@ -325,7 +317,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
               <div class="panel-heading">
 
                 <?php
-                $accordion_data->title = $this->escape(JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region));
+                $accordion_data->title = $this->escape(JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN_FOUR', $this->item->city));
                 $accordion_data->target = 'location-panel';
                 $accordion_data->glyph = 'map-marker';
                 echo $accordion_navigator->render($accordion_data);
@@ -344,7 +336,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                       <?php echo JString::ucwords($this->escape($v)); ?></p>
                   <?php endforeach; ?>
                 <?php endif; ?>
-                <h3 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?></h3>  
+                <h4 class="page-header">
+                  <?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?>
+                </h4>  
                 <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
                 <p class="key text-right">
                   <span>
@@ -357,9 +351,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 
               <?php if (!empty($this->item->getting_there)) : ?>
                 <?php if ($this->item->unit_title) : ?>
-                  <h3 class="page-header" >
+                  <h4 class="page-header" >
                     <?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?>
-                  </h3>  
+                  </h4>  
                 <?php endif; ?>
                 <?php if ($this->item->getting_there) : ?>
                   <?php echo $this->item->getting_there; ?>
@@ -379,17 +373,15 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           </div>
         </div>
         <!-- Begin reviews -->
-        <div id="reviews" class="panel panel-default">
 
           <?php echo $this->loadTemplate('reviews'); ?>
           <!-- End reviews -->
-        </div>
 
         <div id="facilities" class="panel panel-default">
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
               <?php
-              $accordion_data->title = $this->escape(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title));
+              $accordion_data->title = $this->escape(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT_FOUR'));
               $accordion_data->target = 'facilities-panel';
               $accordion_data->glyph = 'th-list';
               echo $accordion_navigator->render($accordion_data);
@@ -524,7 +516,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
               <?php
-              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)));
+              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT_FOUR')));
               $accordion_data->target = 'availability-panel';
               $accordion_data->glyph = 'calendar';
               echo $accordion_navigator->render($accordion_data);
@@ -581,7 +573,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <?php if ($this->item->unit_title) : ?>
             <div class="panel-heading">
               <?php
-              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)));
+              $accordion_data->title = $this->escape(htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT_FOUR')));
               $accordion_data->target = 'tariffs-panel';
               $accordion_data->glyph = 'euro';
               echo $accordion_navigator->render($accordion_data);
@@ -603,22 +595,26 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             </div>  
           </div>
         </div>
-
-        <div id="email">
-          <?php if ($this->item->unit_title) : ?>
-            <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
-          <?php endif; ?>
-        </div>
-        <div class="row">
-          <div class="col-lg-7 col-md-7 col-sm-7">
-            <?php echo $this->loadTemplate('form'); ?>
-          </div>
-          <div class="col-lg-5 col-md-5 col-sm-5">
-            <?php if ($this->item->is_bookable) : ?>
-              <?php echo $this->loadTemplate($owner); ?>
-            <?php else: ?>
-              <?php echo $this->loadTemplate('contact_owner'); ?>
+        <!-- Begin page navigator -->
+        <?php echo $this->loadTemplate('navigator'); ?>
+        <!-- End page navigator -->
+        <div class="hidden-md hidden-sm hidden-lg">
+          <div id="email">
+            <?php if ($this->item->unit_title) : ?>
+              <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
             <?php endif; ?>
+          </div>
+          <div class="row">
+            <div class="col-lg-7 col-md-7 col-sm-7">
+              <?php echo $this->loadTemplate('form'); ?>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-5">
+              <?php if ($this->item->is_bookable) : ?>
+                <?php echo $this->loadTemplate($owner); ?>
+              <?php else: ?>
+                <?php echo $this->loadTemplate('contact_owner'); ?>
+              <?php endif; ?>
+            </div>
           </div>
         </div>
       </div>

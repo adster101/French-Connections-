@@ -79,6 +79,9 @@ class AccommodationViewListing extends JViewLegacy
     // Get the current list of shortlisted properties for this user
     $this->shortlist = $this->get('Shortlist');
 
+    // Get the route and store it as a class property
+    $this->route = $this->getRoute();
+
     // Check the expiry date here. If not valid throw an error with a 403 code?
     // Get component params
     // Think of some params to store for this component?
@@ -88,7 +91,7 @@ class AccommodationViewListing extends JViewLegacy
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
-    {      
+    {
       JError::raiseWarning(404, implode("\n", $errors));
       return false;
     }
@@ -129,6 +132,32 @@ class AccommodationViewListing extends JViewLegacy
     $this->document->setTitle($this->title);
     $this->document->setDescription($this->title);
     $this->document->setMetaData('keywords', $this->title);
+  }
+
+  public function getRoute()
+  {
+
+    $input = Jfactory::getApplication()->input;
+
+    $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
+    $preview = $input->get('preview', '', 'int');
+    $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
+
+    if ((int) $preview && $preview == 1)
+    {
+      $link .= '&preview=1';
+    }
+
+    $layout = $input->get('layout', '', 'string');
+
+    if ($layout)
+    {
+      $link .= '&layout=' . $layout;
+    }
+
+    $route = JRoute::_($link);
+
+    return $route;
   }
 
 }
