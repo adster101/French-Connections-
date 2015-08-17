@@ -71,8 +71,6 @@ class plgUserProfile_fc extends JPlugin
   {
     parent::__construct($subject, $config);
     JFormHelper::addFieldPath(dirname(__FILE__) . '/fields');
-    $doc = JFactory::getDocument();
-    $doc->addScript('/media/fc/js/general.js', 'text/javascript', true);
     JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
   }
 
