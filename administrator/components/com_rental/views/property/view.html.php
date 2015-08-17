@@ -77,6 +77,9 @@ class RentalViewProperty extends JViewLegacy
     $this->addToolBar();
 
     parent::display($tpl);
+    
+        JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
+
   }
 
 }
