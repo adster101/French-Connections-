@@ -88,9 +88,10 @@
       label="COM_SPECIALOFFERS_APPROVED_BY_LABEL"
       labelclass="control-label" 
     />   
+    
     <field 
       name="approved_date"
-      type="calendar"
+      type="text"
       format="%d-%m-%Y"
       filter="unset"
       readonly="true"

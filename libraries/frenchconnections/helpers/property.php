@@ -518,7 +518,7 @@ abstract class PropertyHelper
     if (!$readonly && !$disabled)
     {
       // Load the calendar behavior
-      JHtml::_('behavior.tooltip');
+      JHtml::_('bootstrap.tooltip');
 
 
       return '<input type="text" title="' . (0 !== (int) $value ? JHtml::_('date', $value) : '') . '" name="' . $name . '" id="' . $id

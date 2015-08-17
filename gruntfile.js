@@ -153,9 +153,15 @@ module.exports = function(grunt) {
           {
             src: ['templates/fcv4/assets.tmp.php'],
             dest: 'templates/fcv4/assets.php'
-
+          },
+          {
+            src: ['administrator/templates/fcadmin/assets.tmp.php'],
+            dest: 'administrator/templates/fcadmin/assets.php'
           }
         ]
+
+
+
       }
     }
   });

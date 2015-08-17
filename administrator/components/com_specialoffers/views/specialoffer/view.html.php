@@ -36,25 +36,12 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     $this->item = $item;
     $this->form = $form;
 
-
-    $this->addSubMenu();
-
     $this->addToolBar($canDo);
 
     $this->setDocument();
 
     // Display the template
     parent::display($tpl);
-  }
-
-  /**
-   * Adds the submenu details for this view
-   */
-  protected function addSubMenu()
-  {
-
-    //RentalHelper::addSubmenu('specialoffers');
-    //$this->sidebar = JHtmlSidebar::render();
   }
 
   /**
@@ -69,10 +56,6 @@ class SpecialOffersViewSpecialOffer extends JViewLegacy
     $document = JFactory::getDocument();
 
     JToolBarHelper::title($isNew ? JText::_('COM_SPECIALOFFER_OFFER_NEW') : JText::sprintf('COM_SPECIALOFFER_OFFER_EDIT', $this->item->id), 'helloworld');
-
-    $document->addScript("/media/fc/js/general.js", false, true);
-    $document->addScript("/media/fc/js/jquery-ui-1.8.23.custom.min.js", false, true);
-    $document->addScript("/media/fc/js/date-range.js", false, true);
     $document->addStyleSheet("/media/fc/css/jquery-ui-1.8.23.custom.css");
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('JGLOBAL_VALIDATION_FORM_FAILED');

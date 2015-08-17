@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 /* @var $this UsersViewNotes */
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.tooltip');
+JHtml::_('bootstrap.tooltip');
 
 $input = JFactory::getApplication()->input;
 

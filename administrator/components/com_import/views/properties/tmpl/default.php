@@ -3,8 +3,8 @@
 defined('_JEXEC') or die('Restricted Access');
 
 // load tooltip behavior
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
+JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.formvalidator');
 ?>
 <form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_import'); ?>" method="post" name="adminForm" id="adminForm">
   <?php if (!empty($this->sidebar)): ?>

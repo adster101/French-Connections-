@@ -181,7 +181,7 @@ class ABRealestate extends RealestateImport
           $data['single_bedrooms'] = (int) $prop->single_bedrooms;
           $data['double_bedrooms'] = (int) $prop->double_bedrooms;
           $data['bathrooms'] = (int) $prop->bathrooms;
-          $data['base_currency'] = $db->quote($prop->base_currency);
+          $data['base_currency'] = $db->quote('EUR');
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());

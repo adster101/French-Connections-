@@ -391,7 +391,7 @@ class FOFRenderJoomla extends FOFRenderAbstract
 		$key		 = $model->getTable()->getKeyName();
 		$keyValue	 = $model->getId();
 
-		JHTML::_('behavior.tooltip');
+		JHTML::_('bootstrap.tooltip');
 
 		$html = '';
 
@@ -400,7 +400,7 @@ class FOFRenderJoomla extends FOFRenderAbstract
 
 		if (in_array($validate, array('true', 'yes', '1', 'on')))
 		{
-			JHtml::_('behavior.formvalidation');
+			JHtml::_('behavior.formvalidator');
 			$class = 'form-validate ';
 			$this->loadValidationScript($form);
 		}
@@ -628,7 +628,7 @@ class FOFRenderJoomla extends FOFRenderAbstract
 
 		if (!empty($tooltip))
 		{
-			JHtml::_('behavior.tooltip');
+			JHtml::_('bootstrap.tooltip');
 
 			$tooltipText = JText::_($title) . '::' . JText::_($tooltip);
 

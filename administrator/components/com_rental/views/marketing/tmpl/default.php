@@ -8,7 +8,7 @@
  */
 defined('_JEXEC') or die;
 
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.framework');
 JHtml::_('behavior.keepalive');
 $fieldsets = $this->form->getFieldSets();
