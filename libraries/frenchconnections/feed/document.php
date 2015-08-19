@@ -118,11 +118,6 @@ class JFeedParserdocument extends JFeedParser
     {
       $listing->department = (string) $el->Address->subRegion;
     }
-    else
-    {
-      $listing->department = $this->department((string) $el->Address->region);
-    }
-
 
     // Add an EPC diagram if there is one
     if (!empty($el->EPC))
@@ -139,6 +134,7 @@ class JFeedParserdocument extends JFeedParser
     $listing->images = $images;
 
     $feed->properties[] = $listing;
+    
   }
 
   /*
