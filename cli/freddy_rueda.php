@@ -51,7 +51,7 @@ class FreddyRueda extends RealestateImport
 
     // Get and parse out the feed 
     $props = $this->parseFeed('http://www.xml2u.com/Xml/Sarl%20Freddy%20Rueda_483/794_Default.xml');
-
+    
     (JDEBUG) ? $this->out('Got feed...') : '';
 
     // Add the realestate property models
@@ -78,7 +78,7 @@ class FreddyRueda extends RealestateImport
 
         $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
 
-        $dept = JStringNormalise::toDashSeparated(JApplication::stringURLSafe($prop->region));
+        $dept = JStringNormalise::toDashSeparated(JApplication::stringURLSafe($prop->department));
 
         if (!$id)
         {
@@ -125,6 +125,7 @@ class FreddyRueda extends RealestateImport
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
 
+          
           (JDEBUG) ? $this->out('Adding property version...') : '';
 
           $property_version_id = $this->createPropertyVersion($db, $data);

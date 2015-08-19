@@ -29,16 +29,6 @@ JHtml::_('behavior.formvalidator');
       </fieldset>
     </div>
   </div>
-
   <input type="hidden" name="task" value="" />
   <?php echo JHtml::_('form.token'); ?>
 </form>
-<script type="text/javascript">
-  Joomla.submitbutton = function(task)
-  {
-    if (task == 'featuredproperty.cancel' || document.formvalidator.isValid(document.id('adminForm')))
-    {
-      Joomla.submitform(task, document.getElementById('adminForm'));
-    }
-  }
-</script>
