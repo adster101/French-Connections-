@@ -61,7 +61,7 @@ class UpdateFromPriceCron extends JApplicationCli
     $query->select('min(tariff) * 0.7032')
             ->from($db->quoteName('#__tariffs', 't'))
             ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
-            ->where($db->quoteName('end_date') . ' > ' . $date);
+            ->where($db->quoteName('end_date') . ' > ' . $db->quote($date));
 
     $euro_sub_query = $query->__toString();
 
@@ -70,7 +70,7 @@ class UpdateFromPriceCron extends JApplicationCli
     $query->select('min(tariff)')
             ->from($db->quoteName('#__tariffs', 't'))
             ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
-            ->where($db->quoteName('end_date') . ' > ' . $date);
+            ->where($db->quoteName('end_date') . ' > ' . $db->quote($date));
 
     $sterling_sub_query = $query->__toString();
 
