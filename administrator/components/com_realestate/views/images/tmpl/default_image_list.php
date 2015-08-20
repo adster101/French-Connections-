@@ -42,7 +42,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
           </div>
           <div class="panel-body">
             <p>
-              <img class="media-object" src="<?php echo '/images/property/' . (int) $item->realestate_property_id . '/thumb/' . $this->escape($item->image_file_name); ?>" />
+              <img class="media-object" src="<?php echo JHtmlGeneral::getImagePath($item->realestate_property_id, $item->cdn, $item->image_file_name, $item->url, '210x120_') ?>" />
             </p>
             <p class="caption">
               <label for="<?php echo $this->escape($item->image_file_name) ?>">Caption</label>  

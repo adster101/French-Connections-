@@ -33,7 +33,8 @@ class RentalModelImages extends JModelList {
       url,
       caption,
       ordering,
-      version_id
+      version_id,
+      cdn
     ');
     $query->from('#__property_images_library');
 

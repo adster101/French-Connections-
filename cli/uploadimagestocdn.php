@@ -60,8 +60,15 @@ class Uploadimagestocdn extends JApplicationCli
    */
   public function doExecute()
   {
+
+    $profiles = array('903x586', '770x580', '617x464', '408x307', '210x120');
+
+    // Create a log file for the email kickers
+    jimport('joomla.error.log');
+    JLog::addLogger(array('text_file' => 'image.to.cdn'), JLog::ALL, array('imagetocdn'));
+
     $images = $this->_getImages();
-    
+
     // Instantiate a Rackspace client.
     $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
         'username' => 'fcadmin01',
@@ -73,25 +80,41 @@ class Uploadimagestocdn extends JApplicationCli
 
     $container = $objectStoreService->getContainer('test');
 
-
     foreach ($images as $image)
     {
       if (!$image->cdn)
       {
-        // The file path
-        $file = JPATH_BASE . '/images/property/' . $image->id . '/' . $image->image_file_name;
 
-        // The cloud 'object' file name
-        $file_name = $image->id . '/' . $image->image_file_name;
 
-        // TO DO - here will need to prepend the list of profile sizes to filename in a foreach
-        // Open the image for reading
-        $handle = fopen($file, 'r');
+        try
+        {
 
-        // Upload the object to the cloud files server
-        $object = $container->uploadObject($file_name, $handle);
+          foreach ($profiles as $profile)
+          {
+            // The file path
+            $file = JPATH_BASE . '/images/property/' . $image->id . '/' . $profile . '_' . $image->image_file_name;
 
-        // TO DO - Add error handling here.
+            // The cloud 'object' file name
+            $file_name = $image->id . '/' . $profile . '_' . $image->image_file_name;
+
+            // TO DO - here will need to prepend the list of profile sizes to filename in a foreach
+            // Open the image for reading
+            $handle = fopen($file, 'r');
+
+            // Upload the object to the cloud files server
+            $object = $container->uploadObject($file_name, $handle);
+          }
+        }
+        catch (Exception $e)
+        {
+          // For whatever reason there's an exception
+          // Log the message and details out to a file
+          JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->id . ')', JLog::ERROR, 'imagetocdn');
+
+          // Image should be retried as 
+        }
+
+
         // TO DO - Update image detail in table to indicate image has been upload to cloud file server
         // TO DO - Remove profile pic from file system (possibly to archive?)
       }
@@ -120,25 +143,28 @@ class Uploadimagestocdn extends JApplicationCli
     $query->where('b.id is not null');
     $query->where('c.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
     $query->where('c.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
+    $query->where('c.id = 163914');
     $query->where('b.cdn = 0');
 
-    $union = $db->getQuery(true);
+    /*
+      $union = $db->getQuery(true);
 
-    $union->select('b.realestate_property_id AS id, b.image_file_name, b.cdn');
-    $union->from($db->quoteName('#__realestate_property','a'));
-    $union->join('left', $db->quoteName('#__realestate_property_images_library', 'b') . 'on a.id = b.realestate_property_id');
-    $union->where('b.id is not null');
-    $union->where('a.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
-    $union->where('a.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
-    $union->where('b.cdn = 0');
+      $union->select('b.realestate_property_id AS id, b.image_file_name, b.cdn');
+      $union->from($db->quoteName('#__realestate_property', 'a'));
+      $union->join('left', $db->quoteName('#__realestate_property_images_library', 'b') . 'on a.id = b.realestate_property_id');
+      $union->where('b.id is not null');
+      $union->where('a.expiry_date > ' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
+      $union->where('a.created_by not in (' . $db->quote($this->users_to_ignore) . ')');
+      $union->where('b.cdn = 0');
 
-    $query->union($union);
-
+      $query->union($union);
+     */
     $db->setQuery($query);
 
     try
     {
       $rows = $db->loadObjectList();
+      var_dump($rows);
     }
     catch (Exception $e)
     {

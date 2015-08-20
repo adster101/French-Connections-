@@ -20,6 +20,39 @@ class JHtmlGeneral
 {
 
   /**
+   * Returns an image path based on 
+   * 
+   * 
+   * @param type $property_reference
+   * @param type $cdn
+   * @param type $image_file_name
+   * @param type $url
+   */
+  public static function getImagePath($property_reference, $cdn, $image_file_name, $url, $profile = '')
+  {
+
+    $image_path = '';
+
+    if (!empty($url))
+    {
+      // TO DO - May need to amend this to adjust http to https when we go to https
+      $image_path = $url;
+    }
+
+    if ($cdn)
+    {
+      // TO DO - Figure out best way to get cdn path here
+      $image_path = $path_to_cdn . '/' . (int) $property_reference . '/' . $profile . $image_file_name;
+    }
+    else
+    {
+      $image_path = '/images/property/' . (int) $property_reference . '/' . $profile . $image_file_name;
+    }
+
+    return $image_path;
+  }
+
+  /**
    * Display an image.
    *
    * @param   string  $src  The source of the image

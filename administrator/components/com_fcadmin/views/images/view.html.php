@@ -39,7 +39,7 @@ class FcadminViewImages extends JViewLegacy
     // Get the image list if we have any
     if (!empty($this->unit_id))
     {
-      $folder = JPATH_ROOT . '/images/property/' . $this->unit_id . '/gallery/';
+      $folder = JPATH_ROOT . '/images/property/' . $this->unit_id;
       $model = $this->getModel();
       $model->setState('folder', $folder);
       

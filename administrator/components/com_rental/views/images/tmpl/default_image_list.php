@@ -42,12 +42,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
           </div>
           <div class="panel-body">
             <p>
-              <?php if (empty($item->url)) : ?>
-                <img class="media-object" src="<?php echo '/images/property/' . (int) $item->unit_id . '/thumb/' . $this->escape($item->image_file_name); ?>" />
-              <?php else: ?>
-                <img class="media-object" src="<?php echo 'http://' . $item->url ?>" />
-
-              <?php endif; ?>
+              <img class="media-object" src="<?php echo JHtmlGeneral::getImagePath($item->unit_id, $item->cdn, $item->image_file_name, $item->url) ?>" />
             </p>
             <p class="caption">
               <label for="<?php echo $this->escape($item->image_file_name) ?>">Caption</label>  
