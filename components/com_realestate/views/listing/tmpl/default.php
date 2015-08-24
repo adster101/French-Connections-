@@ -155,7 +155,7 @@ if (!empty($this->item->languages_spoken))
     </div>
   </div>
   <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
-    <?php if ((round($this->item->latitude, 2) > 0) && (round($this->item->longitude, 2) > 0)) : ?>
+    <?php if ((round($this->item->latitude, 2) <> 0) && (round($this->item->longitude, 2) <> 0)) : ?>
       <h3><?php echo JText::_('COM_REALESTATE_PROPERTY_LOCATION'); ?></h3>
       <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
       <p class="key text-right">
