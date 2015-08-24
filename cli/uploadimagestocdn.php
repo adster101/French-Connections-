@@ -63,11 +63,17 @@ class Uploadimagestocdn extends JApplicationCli
 
     $profiles = array('903x586', '770x580', '617x464', '408x307', '210x120');
 
+    $images = $this->_getImages();
+
+    if (count($images) < 1)
+    {
+      $this->out('No images to process. Nice!');
+      exit;
+    }
+
     // Create a log file for the email kickers
     jimport('joomla.error.log');
     JLog::addLogger(array('text_file' => 'image.to.cdn'), JLog::ALL, array('imagetocdn'));
-
-    $images = $this->_getImages();
 
     // Instantiate a Rackspace client.
     $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
@@ -82,10 +88,11 @@ class Uploadimagestocdn extends JApplicationCli
 
     foreach ($images as $image)
     {
+
+      $error = false;
+
       if (!$image->cdn)
       {
-
-
         try
         {
 
@@ -103,6 +110,9 @@ class Uploadimagestocdn extends JApplicationCli
 
             // Upload the object to the cloud files server
             $object = $container->uploadObject($file_name, $handle);
+
+            // Do a bit of munge to the std output 
+            $this->out('Image ' . $file_name . ' uploaded okay...');
           }
         }
         catch (Exception $e)
@@ -111,14 +121,54 @@ class Uploadimagestocdn extends JApplicationCli
           // Log the message and details out to a file
           JLog::add($e->getMessage() . ' - ' . $image->image_file_name . '(' . $image->id . ')', JLog::ERROR, 'imagetocdn');
 
-          // Image should be retried as 
+          // Set the error flag
+          $error = true;
         }
 
+        if (!$error)
+        {
 
-        // TO DO - Update image detail in table to indicate image has been upload to cloud file server
-        // TO DO - Remove profile pic from file system (possibly to archive?)
+          // Update image detail in table to indicate image has been uploaded
+          // TO DO - Need to consider how to differentiate between rental and forsale.
+          // Possibly abstract this whole bit into a method with a table argument.
+          // Would need separate calls to _getImages. 
+
+          $this->_updateImage($image->image_id, 1);
+
+          // TO DO - Remove profile pic from file system 
+          // $this->_removeProfiles();
+        }
       }
     }
+  }
+
+  /**
+   * 
+   */
+  private function _updateImage($id = '', $state = 0)
+  {
+    $db = JFactory::getDBO();
+
+    $query = $db->getQuery(true);
+
+    $query->update($db->quoteName('#__property_images_library'));
+
+    $query->set('cdn = ' . $state . ' where id = ' . (int) $id);
+
+    $db->setQuery($query);
+
+    try
+    {
+      $db->execute();
+    }
+    catch (Exception $e)
+    {
+      JLog::add($e->getMessage() . ' - ' . $id, JLog::ERROR, 'imagetocdn');
+
+      return false;
+    }
+
+    return true;
   }
 
   /*
@@ -136,7 +186,7 @@ class Uploadimagestocdn extends JApplicationCli
 
     $query = $db->getQuery(true);
 
-    $query->select('b.unit_id AS id, b.image_file_name, b.cdn');
+    $query->select('b.id as image_id, b.unit_id AS id, b.image_file_name, b.cdn');
     $query->from('#__unit a');
     $query->join('left', '#__property_images_library b on a.id = b.unit_id');
     $query->join('left', '#__property c on c.id = a.property_id');
@@ -164,7 +214,6 @@ class Uploadimagestocdn extends JApplicationCli
     try
     {
       $rows = $db->loadObjectList();
-      var_dump($rows);
     }
     catch (Exception $e)
     {
