@@ -447,7 +447,6 @@ class Renewals extends JApplicationCli
 
     return $rows;
   }
-
 }
 
 JApplicationCli::getInstance('Renewals')->execute();

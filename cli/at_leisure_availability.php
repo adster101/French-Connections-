@@ -80,7 +80,6 @@ class AtLeisure extends Import
     $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
 
     $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'RentalTable');
-    $tariffsTable->set('_tbl_keys', array('id'));
 
     // Get an instance of the unit model for saving the from price and availability last updated on
     $unit_model = JModelLegacy::getInstance('Unit', 'RentalModel');
@@ -156,9 +155,16 @@ class AtLeisure extends Import
 
           // Woot, put some availability back
           $availabilityTable->save($unit_id, $availability);
-
+          
+          // Set the pk to unit_id as we want to delete all tariffs for this property
+          $tariffsTable->set('_tbl_keys', array('unit_id'));
+          
           $tariffsTable->delete($unit_id);
 
+          // Reset the table pk to id so we can insert new tariffs
+          $tariffsTable->set('_tbl_keys', array('id'));
+
+          
           foreach ($tariffs as $price => $dates)
           {
             $tariff = array();
@@ -192,7 +198,7 @@ class AtLeisure extends Import
           // Roll back any batched inserts etc
           $db->transactionRollback();
 
-          var_dump($e);
+          var_dump($e->getMessage());
           // Send an email, woot!
           //$this->email($e);
         }

@@ -23,12 +23,12 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
         <?php foreach ($this->related as $key => $item) : ?>
           <?php
           $prices = JHtml::_('general.price', $item->price, $item->base_currency, '', '');
-          $route = JRoute::_('index.php?option=com_realestate&Itemid=' . $Itemid_property . '&id=' . (int) $item->id);
+          $route = JRoute::_('index.php?option=com_realestate&Itemid=' . $Itemid_property . '&id=' . (int) $item->property_id);
           ?>
           <?php if ($item->title) : ?>     
             <div class="media">
               <a class="pull-left" href="<?php echo $route ?>">
-                <img src='/images/property/<?php echo $item->unit_id . '/thumb/' . $item->thumbnail ?>' />
+                <img src='/images/property/<?php echo $item->property_id . '/thumb/' . $item->thumbnail ?>' />
               </a>
               <div class="media-body">
                 <h4>

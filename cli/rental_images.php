@@ -47,7 +47,7 @@ class RentalImages extends JApplicationCli
    * 
    * @var type array
    */
-  public $profiles = array('903x586', '770x580', '617x464', '408x307', '330x248', '210x120', '100x100');
+  public $profiles = array('903x586', '770x580', '617x464', '408x307', '330x248', '100x100');
 
   /**
    * Entry point for the script
@@ -58,23 +58,7 @@ class RentalImages extends JApplicationCli
    */
   public function doExecute()
   {
-//    try {
-//      // Instantiate a Rackspace client.
-//      $client = new Rackspace(Rackspace::US_IDENTITY_ENDPOINT, array(
-//          'username' => 'fcadmin01',
-//          'apiKey' => '971715d42f3a40d3bcb42f7286477f45'
-//      ));
-//
-//      $objectStoreService = $client->objectStoreService(null, 'LON');
-//
-//      $container = $objectStoreService->createContainer('images');
-//
-//      $container = $objectStoreService->getContainer('images');
-//    }
-//    catch (Exception $e) {
-//      var_dump($e);
-//      die;
-//    }
+
     // Add and get an instance of the realestate model image thingy
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
     $model = JModelLegacy::getInstance('Image', 'RentalModel');
@@ -171,7 +155,7 @@ class RentalImages extends JApplicationCli
       {
         // Put it out to a file
         $file_name = $image_file_path . $this->profiles[$key] . '_' . $image_file_name;
-        $thumb->tofile($file_name);
+        $thumb->tofile($file_name, $type = IMAGETYPE_JPEG, array('quality'=>'90'));
       }
     }
     catch (Exception $e)
