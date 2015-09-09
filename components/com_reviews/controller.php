@@ -9,21 +9,17 @@ defined('_JEXEC') or die('Restricted access');
 class ReviewsController extends JControllerLegacy
 {
 
-  public function display($cachable = true, $urlparams = array())
+  public function display($cachable = false, $urlparams = array())
   {
 
     $input = JFactory::getApplication()->input;
-
-
     $user = JFactory::getUser();
-
+    
     $safeurlparams = array(
         'id' => 'INT',
         'lang' => 'CMD',
     );
 
-
-    
     if ($user->get('guest') == 1)
     {
       // Redirect to login page.
