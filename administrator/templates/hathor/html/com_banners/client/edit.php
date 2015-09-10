@@ -12,16 +12,17 @@ defined('_JEXEC') or die;
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 
 JHtml::_('behavior.formvalidator');
-?>
-<script type="text/javascript">
+
+JFactory::getDocument()->addScriptDeclaration("
 	Joomla.submitbutton = function(task)
 	{
-		if (task == 'client.cancel' || document.formvalidator.isValid(document.id('client-form')))
+		if (task == 'client.cancel' || document.formvalidator.isValid(document.getElementById('client-form')))
 		{
 			Joomla.submitform(task, document.getElementById('client-form'));
 		}
 	}
-</script>
+");
+?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_banners&layout=edit&id='.(int) $this->item->id); ?>" method="post" name="adminForm" id="client-form" class="form-validate">
 
