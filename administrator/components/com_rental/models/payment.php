@@ -100,7 +100,6 @@ class RentalModelPayment extends JModelAdmin
   public function loadFormData()
   {
 
-
     // Check the session for previously entered form data.
     $data = JFactory::getApplication()->getUserState('com_rental.edit.listing.data', array());
 

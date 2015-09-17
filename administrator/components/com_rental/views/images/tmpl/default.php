@@ -75,3 +75,47 @@ $data = array('progress' => $this->progress, 'status' => $this->status);
   </div>
 
 
+  <!-- Modal -->
+
+  <div id="modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">
+        <?php echo JText::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
+      </h3>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Default function. Usually would be overriden by the component
+     */
+    Joomla.submitbutton = function(pressbutton) {
+      if (pressbutton == 'images.updatecaption') {
+
+        form = document.getElementById("captionForm");
+
+        if (document.formvalidator.isValid(form))
+        {
+          Joomla.submitform('images.updatecaption', form);
+
+        } else {
+          alert(Joomla.JText._('JGLOBAL_VALIDATION_FORM_FAILED', ''));
+          return false;
+        }
+
+      } else {
+        Joomla.submitform(pressbutton);
+      }
+    }
+
+    jQuery('#modal').on('hidden', function() {
+      jQuery(this).removeData('modal');
+      jQuery(this).find('.modal-body').empty();
+    })
+  </script>

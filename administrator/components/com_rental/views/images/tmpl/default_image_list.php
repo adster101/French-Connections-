@@ -10,7 +10,6 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 ?>
 
-
 <p>
   <?php echo JText::_('COM_RENTAL_RENTAL_KEY'); ?>
   &nbsp;&nbsp;
@@ -30,14 +29,20 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
         <div class="panel panel-default">
           <div class="panel-heading">
             <div class="lead">
-              <div class="thumbnail-default pull-left">
+              <div class="thumbnail-default pull-left">    
                 <?php if ($i == 0) : ?>
-                  <span class="icon-default pull-left">&nbsp;</span>
-                <?php else: ?>
-                  <span class="icon pull-left">&nbsp;</span>
-                <?php endif; ?>
+                  <span class="icon-default">&nbsp;</span>&nbsp;
+                <?php endif; ?> 
+                <span class="icon icon-move muted">&nbsp;</span>
               </div>
-              <span class="icon icon-move muted pull-right">&nbsp;</span>
+              <div class="pull-right">
+                &nbsp;
+                <a class="delete muted" 
+                   title="<?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>"
+                   href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
+                  <i class="icon icon-trash"></i>
+                </a>
+              </div>
             </div>
           </div>
           <div class="panel-body">
@@ -46,26 +51,24 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
                 <img class="media-object" src="<?php echo '/images/property/' . (int) $item->unit_id . '/thumb/' . $this->escape($item->image_file_name); ?>" />
               <?php else: ?>
                 <img class="media-object" src="<?php echo 'http://' . $item->url ?>" />
-
               <?php endif; ?>
             </p>
-            <p class="caption">
-              <label for="<?php echo $this->escape($item->image_file_name) ?>">Caption</label>  
-              <input placeholder="<?php echo JText::_('COM_RENTAL_CAPTION_PLACEHOLDER') ?>" id="<?php echo $this->escape($item->image_file_name) ?>" class="input span12" type="text" name="jform[caption]" value="<?php echo $this->escape($item->caption); ?>" maxlength="75" />
-              <br />
-              <span class="muted"><?php echo Jtext::_('COM_RENTAL_HELLOWORLD_REMAINING_CHARS_CAPTION'); ?></span>
-              <br /> 
-              <span class="message-container"></span>
-            </p>
             <p>
-              <a class="btn btn-primary update-caption" href="<?php echo '/administrator/index.php?option=com_rental&task=images.updatecaption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>" >
+              <span class="muted">
+                <?php if (empty($item->caption)) : ?>
+                  <?php echo JText::_('COM_RENTAL_CAPTION_PLACEHOLDER') ?>
+                <?php else: ?>
+                  <?php echo JHtml::_('string.truncate', $this->escape($item->caption), 30); ?>
+                <?php endif; ?>
+              </span>
+              <a 
+                class="update-caption" 
+                data-toggle="modal"
+                data-target="#modal"
+                href=<?php echo '/administrator/index.php?option=com_rental&tmpl=nohead&view=caption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>>
                 <i class="icon-pencil-2 icon-white"></i>
-                <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_UPDATE_CAPTION'); ?>
+                <?php echo empty($item->caption) ? Jtext::_('COM_RENTAL_HELLOWORLD_ADD_CAPTION') : Jtext::_('COM_RENTAL_HELLOWORLD_EDIT_CAPTION'); ?>
               </a>  
-              <a class="btn btn-danger delete" href="<?php echo '/administrator/index.php?option=com_rental&task=images.delete&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>">
-                <i class="icon icon-trash"></i>
-                <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_DELETE_IMAGE'); ?>
-              </a>
             </p>
           </div>
         </div>
