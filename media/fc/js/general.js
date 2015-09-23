@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
@@ -7,33 +7,41 @@ jQuery(document).ready(function() {
     });
   }
 
+
+
   // Updates the form action based on the payment selection for @leisure booking.
-  jQuery('.atleisure-booking-form input').on('change', function() {
+  jQuery('.atleisure-booking-form input').on('change', function () {
     var el = jQuery(this);
     var action = el.attr('value');
     jQuery(".atleisure-booking-form").attr("action", action);
   });
 
+
+  // Event tracking for enquiry form 
+  //jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function () {
+    //ga('send', 'event','Enquiry Form', 'Rental property', jQuery(this).parent().parent().find('label').text());
+  //});
+
   // Google analytics event tracking
-  jQuery('#search-tabs li > a').on('click', function(e) {
+  jQuery('#search-tabs li > a').on('click', function (e) {
     ga('send', 'event', 'Navigation', 'Search', e.target.hash);
   });
 
   // Google analytics event tracking
-  jQuery('#main-nav li > a').on('click', function() {
+  jQuery('#main-nav li > a').on('click', function () {
     ga('send', 'event', 'Navigation', 'Main', jQuery(this).attr('href'));
   });
 
-  jQuery('#enquiry').on('click', function() {
+  jQuery('#enquiry').on('click', function () {
     ga('send', 'event', 'button', 'click', 'enquiry-button-clicked');
   });
 
-  jQuery('.view-featured-fp-link').on('click', function() {
+  jQuery('.view-featured-fp-link').on('click', function () {
     ga('send', 'event', 'Featured property', 'Homepage', jQuery(this).attr('href'));
   });
 
   // Tracks click through from properties featured on search pages.
-  jQuery('.view-search-fp-link').on('click', function() {
+  jQuery('.view-search-fp-link').on('click', function () {
     ga('send', 'event', 'Featured property', 'Search pages', jQuery(this).attr('href'));
   });
 
@@ -57,12 +65,12 @@ jQuery(document).ready(function() {
 
     var checkin = jQuery('.start_date.date').datepicker({
       format: "dd-mm-yyyy",
-      beforeShowDay: function(date) {
+      beforeShowDay: function (date) {
         return date.valueOf() >= now.valueOf();
       },
       autoclose: true
 
-    }).on('changeDate', function(ev) {
+    }).on('changeDate', function (ev) {
       if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
 
         var newDate = new Date(ev.date);
@@ -76,7 +84,7 @@ jQuery(document).ready(function() {
 
     var checkout = jQuery('.end_date.date').datepicker({
       format: "dd-mm-yyyy",
-      beforeShowDay: function(date) {
+      beforeShowDay: function (date) {
         if (!checkin.datepicker("getDate").valueOf()) {
           return date.valueOf() >= new Date().valueOf();
         } else {
@@ -85,7 +93,7 @@ jQuery(document).ready(function() {
       },
       autoclose: true
 
-    }).on('changeDate', function(ev) {
+    }).on('changeDate', function (ev) {
     });
 
   } catch (e) {
@@ -103,7 +111,7 @@ jQuery(document).ready(function() {
   });
 
   if (jQuery('#newUnit').length) {
-    jQuery('#newUnit').on('click', function(event) {
+    jQuery('#newUnit').on('click', function (event) {
       if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {
         event.preventDefault();
       }
@@ -111,11 +119,11 @@ jQuery(document).ready(function() {
   }
 
   // TO DO - What a fucking mess!
-  jQuery('.shortlist').each(function() { // For each result
+  jQuery('.shortlist').each(function () { // For each result
     // Get the data-action state
     jQuery(this).popover({// Initialise a popover
       trigger: 'manual' // Take control of when the popover is opened
-    }).click(function(event) {
+    }).click(function (event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
       jQuery(this).popover('toggle'); // Manually open the popover 
@@ -123,7 +131,7 @@ jQuery(document).ready(function() {
   })
 
   // TO DO - What a fucking mess!
-  jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
+  jQuery('body').on('change', '.popover input ', function (ev) { // When a pop over span is clicked
     var el = jQuery(this);
     // favourite is the anchor element that triggers a popover
     var favourite = jQuery('.popover').siblings('a.shortlist');
@@ -138,7 +146,7 @@ jQuery(document).ready(function() {
       dateType: "json",
       url: url,
       data: url_params
-    }).done(function(data) {
+    }).done(function (data) {
 
       var popover = jQuery('.popover').data('bs.popover');
 
@@ -174,14 +182,14 @@ jQuery(document).ready(function() {
 
     use_invoice.attr('checked', false);
 
-    jQuery("#jform_use_invoice_address").on('change', function(e) {
+    jQuery("#jform_use_invoice_address").on('change', function (e) {
 
       var siblings = jQuery(this).parent().parent().siblings('div');
       var inputs = siblings.find(':input');
       var checked = jQuery(this).is(':checked');
 
       // Loop over each input and activate/deactive the required attr
-      inputs.each(function() {
+      inputs.each(function () {
         field = jQuery(this);
 
         if (!checked) {
@@ -204,7 +212,7 @@ jQuery(document).ready(function() {
 
     show_contact(checked);
 
-    jQuery("#jform_use_invoice_details").on('change', function(e) {
+    jQuery("#jform_use_invoice_details").on('change', function (e) {
 
       show_contact(this);
 
@@ -216,7 +224,7 @@ jQuery(document).ready(function() {
     var vatID = jQuery("#jform_vat_status")[0].value;
     show_vat(vatID);
 
-    jQuery("#jform_vat_status").change(function(e) {
+    jQuery("#jform_vat_status").change(function (e) {
       // Get the selected vat_aid_id code
       var vatID = jQuery(this)[0].value;
       show_vat(vatID);
@@ -226,7 +234,7 @@ jQuery(document).ready(function() {
 
   // Bind a change function to all forms that need validation.
   // Gives an alert if unsaved changes will be lost.
-  jQuery('form.form-validate').change(function() {
+  jQuery('form.form-validate').change(function () {
     //window.onbeforeunload = function() {
     //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
@@ -236,13 +244,13 @@ jQuery(document).ready(function() {
     // If the tinymce editor is loaded
     if (window.tinymce) {
       // Bind the addEditor event to editor(s)
-      tinymce.on('addEditor', function(editor) {
+      tinymce.on('addEditor', function (editor) {
         // Bind the blur event to editor(s)
-        tinyMCE.activeEditor.on('blur', function(e) {
+        tinyMCE.activeEditor.on('blur', function (e) {
           // Check whether the actie editor 'is dirty'
           if (tinyMCE.activeEditor.isDirty()) {
             // If so, do the business on before unload
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
               return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
             };
           }
@@ -254,7 +262,7 @@ jQuery(document).ready(function() {
   }
 
   // Add special offer counter... 
-  jQuery('#jform_offer_description').each(function() {
+  jQuery('#jform_offer_description').each(function () {
 
     // Assign this to that so we can use this later...
     var that = this;
@@ -266,7 +274,7 @@ jQuery(document).ready(function() {
     // Add the maxlength attribute
     jQuery(this).attr('maxlength', 150);
 
-    jQuery(this).on('keyup', function(event) {
+    jQuery(this).on('keyup', function (event) {
 
       // On the keyup event, update the value of the span count element
       var length = jQuery(this).val().length;
@@ -289,7 +297,7 @@ jQuery(document).ready(function() {
   }
 
   // Change hash for page-reload
-  jQuery('.nav-tabs a').on('shown', function(e) {
+  jQuery('.nav-tabs a').on('shown', function (e) {
     window.location.hash = e.target.hash.replace("#", "#" + prefix);
   });
 });
@@ -304,7 +312,7 @@ var RecaptchaOptions = {
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
 function attachContent(marker, num, width) {
-  google.maps.event.addListener(marker, 'click', function() {
+  google.maps.event.addListener(marker, 'click', function () {
 
     if (infowindow)
       infowindow.close();
@@ -317,7 +325,7 @@ function attachContent(marker, num, width) {
   });
 }
 
-var loadGoogleMaps = function(func) {
+var loadGoogleMaps = function (func) {
 
   if (typeof google === 'object' && typeof google.maps === 'object') {
     window[func];
@@ -349,17 +357,17 @@ function initialise() {
     position: myLatLng,
     map: map
   });
-  google.maps.event.addListener(map, 'zoom_changed', function() {
+  google.maps.event.addListener(map, 'zoom_changed', function () {
     // 3 seconds after the center of the map has changed, pan back to the
     // marker.
-    window.setTimeout(function() {
+    window.setTimeout(function () {
       map.panTo(marker.getPosition());
     }, 1500);
   });
 }
 
 /* define some useful functions, innit! */
-var show_vat = function(vatID) {
+var show_vat = function (vatID) {
   vat_number = jQuery('#vat_number');
   company_number = jQuery('#company_number');
 
@@ -395,7 +403,7 @@ var show_vat = function(vatID) {
 /* 
  * Simple function which adds or removed the required class and toggles the required attribute
  */
-var toggle = function(elem, show) {
+var toggle = function (elem, show) {
 
   field = jQuery(elem);
   if (show) {
@@ -407,18 +415,18 @@ var toggle = function(elem, show) {
   }
 }
 
-var show_contact = function(that, selector) {
+var show_contact = function (that, selector) {
 
   if (jQuery(that).is(':checked')) {
     jQuery("#contactDetails").hide();
 
     // Loop over and deactivate all form fields.
-    jQuery('#contactDetails').find('input[type=text]').each(function() {
+    jQuery('#contactDetails').find('input[type=text]').each(function () {
       toggle(this, false);
     })
   } else {
     jQuery("#contactDetails").show();
-    jQuery('#contactDetails').find('input[type=text]').each(function() {
+    jQuery('#contactDetails').find('input[type=text]').each(function () {
       toggle(this, true);
     })
   }
@@ -426,7 +434,7 @@ var show_contact = function(that, selector) {
 
 
 /* Fires on occasion when a button has it bound to it's onclick event */
-Joomla.submitbutton = function(task)
+Joomla.submitbutton = function (task)
 {
   if (task == '')
   {
@@ -481,7 +489,7 @@ Joomla.submitbutton = function(task)
   }
 };
 
-jQuery(function() {
+jQuery(function () {
   var activeTab = jQuery('a[href="' + location.hash + '"]');
   activeTab && activeTab.tab('show');
 });

@@ -13021,27 +13021,6 @@ return jQuery;
 
 }(window.jQuery));
 
-(function(){var d=null;function e(a){return function(b){this[a]=b}}function h(a){return function(){return this[a]}}var j;
-function k(a,b,c){this.extend(k,google.maps.OverlayView);this.c=a;this.a=[];this.f=[];this.ca=[53,56,66,78,90];this.j=[];this.A=!1;c=c||{};this.g=c.gridSize||60;this.l=c.minimumClusterSize||2;this.J=c.maxZoom||d;this.j=c.styles||[];this.X=c.imagePath||this.Q;this.W=c.imageExtension||this.P;this.O=!0;if(c.zoomOnClick!=void 0)this.O=c.zoomOnClick;this.r=!1;if(c.averageCenter!=void 0)this.r=c.averageCenter;l(this);this.setMap(a);this.K=this.c.getZoom();var f=this;google.maps.event.addListener(this.c,
-"zoom_changed",function(){var a=f.c.getZoom();if(f.K!=a)f.K=a,f.m()});google.maps.event.addListener(this.c,"idle",function(){f.i()});b&&b.length&&this.C(b,!1)}j=k.prototype;j.Q="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m";j.P="png";j.extend=function(a,b){return function(a){for(var b in a.prototype)this.prototype[b]=a.prototype[b];return this}.apply(a,[b])};j.onAdd=function(){if(!this.A)this.A=!0,n(this)};j.draw=function(){};
-function l(a){if(!a.j.length)for(var b=0,c;c=a.ca[b];b++)a.j.push({url:a.X+(b+1)+"."+a.W,height:c,width:c})}j.S=function(){for(var a=this.o(),b=new google.maps.LatLngBounds,c=0,f;f=a[c];c++)b.extend(f.getPosition());this.c.fitBounds(b)};j.z=h("j");j.o=h("a");j.V=function(){return this.a.length};j.ba=e("J");j.I=h("J");j.G=function(a,b){for(var c=0,f=a.length,g=f;g!==0;)g=parseInt(g/10,10),c++;c=Math.min(c,b);return{text:f,index:c}};j.$=e("G");j.H=h("G");
-j.C=function(a,b){for(var c=0,f;f=a[c];c++)q(this,f);b||this.i()};function q(a,b){b.s=!1;b.draggable&&google.maps.event.addListener(b,"dragend",function(){b.s=!1;a.L()});a.a.push(b)}j.q=function(a,b){q(this,a);b||this.i()};function r(a,b){var c=-1;if(a.a.indexOf)c=a.a.indexOf(b);else for(var f=0,g;g=a.a[f];f++)if(g==b){c=f;break}if(c==-1)return!1;b.setMap(d);a.a.splice(c,1);return!0}j.Y=function(a,b){var c=r(this,a);return!b&&c?(this.m(),this.i(),!0):!1};
-j.Z=function(a,b){for(var c=!1,f=0,g;g=a[f];f++)g=r(this,g),c=c||g;if(!b&&c)return this.m(),this.i(),!0};j.U=function(){return this.f.length};j.getMap=h("c");j.setMap=e("c");j.w=h("g");j.aa=e("g");
-j.v=function(a){var b=this.getProjection(),c=new google.maps.LatLng(a.getNorthEast().lat(),a.getNorthEast().lng()),f=new google.maps.LatLng(a.getSouthWest().lat(),a.getSouthWest().lng()),c=b.fromLatLngToDivPixel(c);c.x+=this.g;c.y-=this.g;f=b.fromLatLngToDivPixel(f);f.x-=this.g;f.y+=this.g;c=b.fromDivPixelToLatLng(c);b=b.fromDivPixelToLatLng(f);a.extend(c);a.extend(b);return a};j.R=function(){this.m(!0);this.a=[]};
-j.m=function(a){for(var b=0,c;c=this.f[b];b++)c.remove();for(b=0;c=this.a[b];b++)c.s=!1,a&&c.setMap(d);this.f=[]};j.L=function(){var a=this.f.slice();this.f.length=0;this.m();this.i();window.setTimeout(function(){for(var b=0,c;c=a[b];b++)c.remove()},0)};j.i=function(){n(this)};
-function n(a){if(a.A)for(var b=a.v(new google.maps.LatLngBounds(a.c.getBounds().getSouthWest(),a.c.getBounds().getNorthEast())),c=0,f;f=a.a[c];c++)if(!f.s&&b.contains(f.getPosition())){for(var g=a,u=4E4,o=d,v=0,m=void 0;m=g.f[v];v++){var i=m.getCenter();if(i){var p=f.getPosition();if(!i||!p)i=0;else var w=(p.lat()-i.lat())*Math.PI/180,x=(p.lng()-i.lng())*Math.PI/180,i=Math.sin(w/2)*Math.sin(w/2)+Math.cos(i.lat()*Math.PI/180)*Math.cos(p.lat()*Math.PI/180)*Math.sin(x/2)*Math.sin(x/2),i=6371*2*Math.atan2(Math.sqrt(i),
-Math.sqrt(1-i));i<u&&(u=i,o=m)}}o&&o.F.contains(f.getPosition())?o.q(f):(m=new s(g),m.q(f),g.f.push(m))}}function s(a){this.k=a;this.c=a.getMap();this.g=a.w();this.l=a.l;this.r=a.r;this.d=d;this.a=[];this.F=d;this.n=new t(this,a.z(),a.w())}j=s.prototype;
-j.q=function(a){var b;a:if(this.a.indexOf)b=this.a.indexOf(a)!=-1;else{b=0;for(var c;c=this.a[b];b++)if(c==a){b=!0;break a}b=!1}if(b)return!1;if(this.d){if(this.r)c=this.a.length+1,b=(this.d.lat()*(c-1)+a.getPosition().lat())/c,c=(this.d.lng()*(c-1)+a.getPosition().lng())/c,this.d=new google.maps.LatLng(b,c),y(this)}else this.d=a.getPosition(),y(this);a.s=!0;this.a.push(a);b=this.a.length;b<this.l&&a.getMap()!=this.c&&a.setMap(this.c);if(b==this.l)for(c=0;c<b;c++)this.a[c].setMap(d);b>=this.l&&a.setMap(d);
-a=this.c.getZoom();if((b=this.k.I())&&a>b)for(a=0;b=this.a[a];a++)b.setMap(this.c);else if(this.a.length<this.l)z(this.n);else{b=this.k.H()(this.a,this.k.z().length);this.n.setCenter(this.d);a=this.n;a.B=b;a.ga=b.text;a.ea=b.index;if(a.b)a.b.innerHTML=b.text;b=Math.max(0,a.B.index-1);b=Math.min(a.j.length-1,b);b=a.j[b];a.da=b.url;a.h=b.height;a.p=b.width;a.M=b.textColor;a.e=b.anchor;a.N=b.textSize;a.D=b.backgroundPosition;this.n.show()}return!0};
-j.getBounds=function(){for(var a=new google.maps.LatLngBounds(this.d,this.d),b=this.o(),c=0,f;f=b[c];c++)a.extend(f.getPosition());return a};j.remove=function(){this.n.remove();this.a.length=0;delete this.a};j.T=function(){return this.a.length};j.o=h("a");j.getCenter=h("d");function y(a){a.F=a.k.v(new google.maps.LatLngBounds(a.d,a.d))}j.getMap=h("c");
-function t(a,b,c){a.k.extend(t,google.maps.OverlayView);this.j=b;this.fa=c||0;this.u=a;this.d=d;this.c=a.getMap();this.B=this.b=d;this.t=!1;this.setMap(this.c)}j=t.prototype;
-j.onAdd=function(){this.b=document.createElement("DIV");if(this.t)this.b.style.cssText=A(this,B(this,this.d)),this.b.innerHTML=this.B.text;this.getPanes().overlayMouseTarget.appendChild(this.b);var a=this;google.maps.event.addDomListener(this.b,"click",function(){var b=a.u.k;google.maps.event.trigger(b,"clusterclick",a.u);b.O&&a.c.fitBounds(a.u.getBounds())})};function B(a,b){var c=a.getProjection().fromLatLngToDivPixel(b);c.x-=parseInt(a.p/2,10);c.y-=parseInt(a.h/2,10);return c}
-j.draw=function(){if(this.t){var a=B(this,this.d);this.b.style.top=a.y+"px";this.b.style.left=a.x+"px"}};function z(a){if(a.b)a.b.style.display="none";a.t=!1}j.show=function(){if(this.b)this.b.style.cssText=A(this,B(this,this.d)),this.b.style.display="";this.t=!0};j.remove=function(){this.setMap(d)};j.onRemove=function(){if(this.b&&this.b.parentNode)z(this),this.b.parentNode.removeChild(this.b),this.b=d};j.setCenter=e("d");
-function A(a,b){var c=[];c.push("background-image:url("+a.da+");");c.push("background-position:"+(a.D?a.D:"0 0")+";");typeof a.e==="object"?(typeof a.e[0]==="number"&&a.e[0]>0&&a.e[0]<a.h?c.push("height:"+(a.h-a.e[0])+"px; padding-top:"+a.e[0]+"px;"):c.push("height:"+a.h+"px; line-height:"+a.h+"px;"),typeof a.e[1]==="number"&&a.e[1]>0&&a.e[1]<a.p?c.push("width:"+(a.p-a.e[1])+"px; padding-left:"+a.e[1]+"px;"):c.push("width:"+a.p+"px; text-align:center;")):c.push("height:"+a.h+"px; line-height:"+a.h+
-"px; width:"+a.p+"px; text-align:center;");c.push("cursor:pointer; top:"+b.y+"px; left:"+b.x+"px; color:"+(a.M?a.M:"black")+"; position:absolute; font-size:"+(a.N?a.N:11)+"px; font-family:Arial,sans-serif; font-weight:bold");return c.join("")}window.MarkerClusterer=k;k.prototype.addMarker=k.prototype.q;k.prototype.addMarkers=k.prototype.C;k.prototype.clearMarkers=k.prototype.R;k.prototype.fitMapToMarkers=k.prototype.S;k.prototype.getCalculator=k.prototype.H;k.prototype.getGridSize=k.prototype.w;
-k.prototype.getExtendedBounds=k.prototype.v;k.prototype.getMap=k.prototype.getMap;k.prototype.getMarkers=k.prototype.o;k.prototype.getMaxZoom=k.prototype.I;k.prototype.getStyles=k.prototype.z;k.prototype.getTotalClusters=k.prototype.U;k.prototype.getTotalMarkers=k.prototype.V;k.prototype.redraw=k.prototype.i;k.prototype.removeMarker=k.prototype.Y;k.prototype.removeMarkers=k.prototype.Z;k.prototype.resetViewport=k.prototype.m;k.prototype.repaint=k.prototype.L;k.prototype.setCalculator=k.prototype.$;
-k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.prototype.onAdd=k.prototype.onAdd;k.prototype.draw=k.prototype.draw;s.prototype.getCenter=s.prototype.getCenter;s.prototype.getSize=s.prototype.T;s.prototype.getMarkers=s.prototype.o;t.prototype.onAdd=t.prototype.onAdd;t.prototype.draw=t.prototype.draw;t.prototype.onRemove=t.prototype.onRemove;
-})();
 /*
      _ _      _       _
  ___| (_) ___| | __  (_)___
@@ -13069,463 +13048,501 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
 // Only define the Joomla namespace if not defined.
 Joomla = window.Joomla || {};
 
-Joomla.editors = {};
-// An object to hold each editor instance on page
-Joomla.editors.instances = {};
+// Only define editors if not defined
+Joomla.editors = Joomla.editors || {};
 
-/**
- * Generic submit form
- */
-Joomla.submitform = function(task, form) {
-    if (typeof(form) === 'undefined') {
-        form = document.getElementById('adminForm');
-    }
+// An object to hold each editor instance on page, only define if not defined.
+Joomla.editors.instances = Joomla.editors.instances || {};
 
-    if (typeof(task) !== 'undefined' && task !== "") {
-        form.task.value = task;
-    }
+(function( Joomla, document ) {
+	"use strict";
 
-    // Submit the form.
-    if (typeof form.onsubmit == 'function') {
-        form.onsubmit();
-    }
-    if (typeof form.fireEvent == "function") {
-        form.fireEvent('onsubmit');
-    }
-    if (typeof jQuery == "function") {
-        jQuery(form).submit();
-    }
-    form.submit();
-};
+	/**
+	 * Generic submit form
+	 */
+	Joomla.submitform = function(task, form, validate) {
+		if (!form) {
+			form = document.getElementById('adminForm');
+		}
 
-/**
- * Default function. Usually would be overriden by the component
- */
-Joomla.submitbutton = function(pressbutton) {
-    Joomla.submitform(pressbutton);
-}
+		if (task) {
+			form.task.value = task;
+		}
 
-/**
- * Custom behavior for JavaScript I18N in Joomla! 1.6
- *
- * Allows you to call Joomla.JText._() to get a translated JavaScript string pushed in with JText::script() in Joomla.
- */
-Joomla.JText = {
-    strings: {},
-    '_': function(key, def) {
-        return typeof this.strings[key.toUpperCase()] !== 'undefined' ? this.strings[key.toUpperCase()] : def;
-    },
-    load: function(object) {
-        for (var key in object) {
-            this.strings[key.toUpperCase()] = object[key];
-        }
-        return this;
-    }
-};
+		// Toggle HTML5 validation
+		form.noValidate = !validate;
 
-/**
- * Method to replace all request tokens on the page with a new one.
- */
-Joomla.replaceTokens = function(n) {
-    var els = document.getElementsByTagName('input'), i;
-    for (i = 0; i < els.length; i++) {
-        if ((els[i].type == 'hidden') && (els[i].name.length == 32) && els[i].value == '1') {
-            els[i].name = n;
-        }
-    }
-};
+		// Submit the form.
+		// Create the input type="submit"
+		var button = document.createElement('input');
+		button.style.display = 'none';
+		button.type = 'submit';
 
-/**
- * USED IN: administrator/components/com_banners/views/client/tmpl/default.php
- *
- * Verifies if the string is in a valid email format
- *
- * @param string
- * @return boolean
- */
-Joomla.isEmail = function(text) {
-    var regex = new RegExp("^[\\w-_\.]*[\\w-_\.]\@[\\w]\.+[\\w]+[\\w]$");
-    return regex.test(text);
-};
+		// Append it and click it
+		form.appendChild(button).click();
 
-/**
- * USED IN: all list forms.
- *
- * Toggles the check state of a group of boxes
- *
- * Checkboxes must have an id attribute in the form cb0, cb1...
- *
- * @param   mixed   The number of box to 'check', for a checkbox element
- * @param   string  An alternative field name
- */
-Joomla.checkAll = function(checkbox, stub) {
-    if (!stub) {
-        stub = 'cb';
-    }
-    if (checkbox.form) {
-        var c = 0, i, e;
-        for (i = 0, n = checkbox.form.elements.length; i < n; i++) {
-            e = checkbox.form.elements[i];
-            if (e.type == checkbox.type) {
-                if ((stub && e.id.indexOf(stub) == 0) || !stub) {
-                    e.checked = checkbox.checked;
-                    c += (e.checked == true ? 1 : 0);
-                }
-            }
-        }
-        if (checkbox.form.boxchecked) {
-            checkbox.form.boxchecked.value = c;
-        }
-        return true;
-    }
-    return false;
-}
+		// If "submit" was prevented, make sure we don't get a build up of buttons
+		form.removeChild(button);
+	};
 
-/**
- * Render messages send via JSON
- *
- * @param   object  messages    JavaScript object containing the messages to render. Example:
- *                              var messages = {
- *                              	"message": ["Message one", "Message two"],
- *                              	"error": ["Error one", "Error two"]
- *                              };
- * @return  void
- */
-Joomla.renderMessages = function(messages) {
-	Joomla.removeMessages();
+	/**
+	 * Default function. Usually would be overriden by the component
+	 */
+	Joomla.submitbutton = function( pressbutton ) {
+		Joomla.submitform( pressbutton );
+	};
 
-	var messageContainer = document.getElementById('system-message-container');
+	/**
+	 * Custom behavior for JavaScript I18N in Joomla! 1.6
+	 *
+	 * Allows you to call Joomla.JText._() to get a translated JavaScript string pushed in with JText::script() in Joomla.
+	 */
+	Joomla.JText = {
+		strings: {},
+		'_': function( key, def ) {
+			return typeof this.strings[ key.toUpperCase() ] !== 'undefined' ? this.strings[ key.toUpperCase() ] : def;
+		},
+		load: function( object ) {
+			for ( var key in object ) {
+				if (!object.hasOwnProperty(key)) continue;
+				this.strings[ key.toUpperCase() ] = object[ key ];
+			}
+			return this;
+		}
+	};
 
-	for (var type in messages) {
-		if (messages.hasOwnProperty(type)) {
+	/**
+	 * Method to replace all request tokens on the page with a new one.
+	 * Used in Joomla Installation
+	 */
+	Joomla.replaceTokens = function( newToken ) {
+		if (!/^[0-9A-F]{32}$/i.test(newToken)) { return; }
+
+		var els = document.getElementsByTagName( 'input' ),
+			i, el, n;
+
+		for ( i = 0, n = els.length; i < n; i++ ) {
+			el = els[i];
+
+			if ( el.type == 'hidden' && el.value == '1' && el.name.length == 32 ) {
+				el.name = newToken;
+			}
+		}
+	};
+
+	/**
+	 * USED IN: administrator/components/com_banners/views/client/tmpl/default.php
+	 * Actually, probably not used anywhere. Can we deprecate in favor of <input type="email">?
+	 *
+	 * Verifies if the string is in a valid email format
+	 *
+	 * @param string
+	 * @return boolean
+	 */
+	Joomla.isEmail = function( text ) {
+		var regex = /^[\w.!#$%&‚Äô*+\/=?^`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]{2,})+$/i;
+		return regex.test( text );
+	};
+
+	/**
+	 * USED IN: all list forms.
+	 *
+	 * Toggles the check state of a group of boxes
+	 *
+	 * Checkboxes must have an id attribute in the form cb0, cb1...
+	 *
+	 * @param   mixed   The number of box to 'check', for a checkbox element
+	 * @param   string  An alternative field name
+	 */
+	Joomla.checkAll = function( checkbox, stub ) {
+		if (!checkbox.form) return false;
+
+		stub = stub ? stub : 'cb';
+
+		var c = 0,
+			i, e, n;
+
+		for ( i = 0, n = checkbox.form.elements.length; i < n; i++ ) {
+			e = checkbox.form.elements[ i ];
+
+			if ( e.type == checkbox.type && e.id.indexOf( stub ) === 0 ) {
+				e.checked = checkbox.checked;
+				c += e.checked ? 1 : 0;
+			}
+		}
+
+		if ( checkbox.form.boxchecked ) {
+			checkbox.form.boxchecked.value = c;
+		}
+
+		return true;
+	};
+
+	/**
+	 * Render messages send via JSON
+	 * Used by some javascripts such as validate.js
+	 *
+	 * @param   object  messages    JavaScript object containing the messages to render. Example:
+	 *                              var messages = {
+	 *                              	"message": ["Message one", "Message two"],
+	 *                              	"error": ["Error one", "Error two"]
+	 *                              };
+	 * @return  void
+	 */
+	Joomla.renderMessages = function( messages ) {
+		Joomla.removeMessages();
+
+		var messageContainer = document.getElementById( 'system-message-container' ),
+			type, typeMessages, messagesBox, title, titleWrapper, i, messageWrapper;
+
+		for ( type in messages ) {
+			if ( !messages.hasOwnProperty( type ) ) { continue; }
 			// Array of messages of this type
-			var typeMessages = messages[type];
+			typeMessages = messages[ type ];
 
 			// Create the alert box
-			var messagesBox = document.createElement('div');
+			messagesBox = document.createElement( 'div' );
 			messagesBox.className = 'alert alert-' + type;
 
 			// Title
-			var title = Joomla.JText._(type);
+			title = Joomla.JText._( type );
 
 			// Skip titles with untranslated strings
-			if (typeof title != 'undefined') {
-				var titleWrapper = document.createElement('h4');
+			if ( typeof title != 'undefined' ) {
+				titleWrapper = document.createElement( 'h4' );
 				titleWrapper.className = 'alert-heading';
-				titleWrapper.innerHTML = Joomla.JText._(type);
+				titleWrapper.innerHTML = Joomla.JText._( type );
 
-				messagesBox.appendChild(titleWrapper)
+				messagesBox.appendChild( titleWrapper );
 			}
 
 			// Add messages to the message box
-			for (var i = typeMessages.length - 1; i >= 0; i--) {
-				var messageWrapper = document.createElement('p');
-				messageWrapper.innerHTML = typeMessages[i];
-				messagesBox.appendChild(messageWrapper);
-			};
+			for ( i = typeMessages.length - 1; i >= 0; i-- ) {
+				messageWrapper = document.createElement( 'p' );
+				messageWrapper.innerHTML = typeMessages[ i ];
+				messagesBox.appendChild( messageWrapper );
+			}
 
-			messageContainer.appendChild(messagesBox);
+			messageContainer.appendChild( messagesBox );
 		}
-	}
-};
+	};
 
 
-/**
- * Remove messages
- *
- * @return  void
- */
-Joomla.removeMessages = function() {
-	var messageContainer = document.getElementById('system-message-container');
+	/**
+	 * Remove messages
+	 *
+	 * @return  void
+	 */
+	Joomla.removeMessages = function() {
+		var messageContainer = document.getElementById( 'system-message-container' );
 
-	// Empty container with a while for Chrome performance issues
-	while (messageContainer.firstChild) messageContainer.removeChild(messageContainer.firstChild);
+		// Empty container with a while for Chrome performance issues
+		while ( messageContainer.firstChild ) messageContainer.removeChild( messageContainer.firstChild );
 
-	// Fix Chrome bug not updating element height
-	messageContainer.style.display='none';
-	messageContainer.offsetHeight;
-	messageContainer.style.display='';
-}
+		// Fix Chrome bug not updating element height
+		messageContainer.style.display = 'none';
+		messageContainer.offsetHeight;
+		messageContainer.style.display = '';
+	};
 
-/**
- * USED IN: administrator/components/com_cache/views/cache/tmpl/default.php
- * administrator/components/com_installer/views/discover/tmpl/default_item.php
- * administrator/components/com_installer/views/update/tmpl/default_item.php
- * administrator/components/com_languages/helpers/html/languages.php
- * libraries/joomla/html/html/grid.php
- *
- * @param isitchecked
- * @param form
- * @return
- */
-Joomla.isChecked = function(isitchecked, form) {
-    if (typeof(form) === 'undefined') {
-        form = document.getElementById('adminForm');
-    }
+	/**
+	 * USED IN: administrator/components/com_cache/views/cache/tmpl/default.php
+	 * administrator/components/com_installer/views/discover/tmpl/default_item.php
+	 * administrator/components/com_installer/views/update/tmpl/default_item.php
+	 * administrator/components/com_languages/helpers/html/languages.php
+	 * libraries/joomla/html/html/grid.php
+	 *
+	 * @param isitchecked
+	 * @param form
+	 * @return
+	 */
+	Joomla.isChecked = function( isitchecked, form ) {
+		if ( typeof form  === 'undefined' ) {
+			form = document.getElementById( 'adminForm' );
+		}
 
-    if (isitchecked == true) {
-        form.boxchecked.value++;
-    } else {
-        form.boxchecked.value--;
-    }
+		form.boxchecked.value += isitchecked ? 1 : -1;
 
-    // Toggle main toggle checkbox depending on checkbox selection
-    var c = true, i, e;
-    for (i = 0, n = form.elements.length; i < n; i++) {
-        e = form.elements[i];
-        if (e.type == 'checkbox') {
-            if (e.name != 'checkall-toggle' && e.checked == false) {
-                c = false;
-                break;
-            }
-        }
-    }
-    if (form.elements['checkall-toggle']) {
-        form.elements['checkall-toggle'].checked = c;
-    }
-}
+		// If we don't have a checkall-toggle, done.
+		if ( !form.elements[ 'checkall-toggle' ] ) return;
 
-/**
- * USED IN: libraries/joomla/html/toolbar/button/help.php
- *
- * Pops up a new window in the middle of the screen
- */
-Joomla.popupWindow = function(mypage, myname, w, h, scroll) {
-    var winl = (screen.width - w) / 2, wint, winprops, win;
-    wint = (screen.height - h) / 2;
-    winprops = 'height=' + h + ',width=' + w + ',top=' + wint + ',left=' + winl
-            + ',scrollbars=' + scroll + ',resizable'
-    win = window.open(mypage, myname, winprops)
-    win.window.focus();
-}
+		// Toggle main toggle checkbox depending on checkbox selection
+		var c = true,
+			i, e, n;
 
-/**
- * USED IN: libraries/joomla/html/html/grid.php
- */
-Joomla.tableOrdering = function(order, dir, task, form) {
-    if (typeof(form) === 'undefined') {
-        form = document.getElementById('adminForm');
-    }
+		for ( i = 0, n = form.elements.length; i < n; i++ ) {
+			e = form.elements[ i ];
 
-    form.filter_order.value = order;
-    form.filter_order_Dir.value = dir;
-    Joomla.submitform(task, form);
-}
+			if ( e.type == 'checkbox' && e.name != 'checkall-toggle' && !e.checked ) {
+				c = false;
+				break;
+			}
+		}
 
-/**
- * USED IN: administrator/components/com_modules/views/module/tmpl/default.php
- *
- * Writes a dynamically generated list
- *
- * @param string
- *          The parameters to insert into the <select> tag
- * @param array
- *          A javascript array of list options in the form [key,value,text]
- * @param string
- *          The key to display for the initial state of the list
- * @param string
- *          The original key that was selected
- * @param string
- *          The original item value that was selected
- */
-function writeDynaList(selectParams, source, key, orig_key, orig_val) {
-    var html = '\n  <select ' + selectParams + '>', i, selected;
-    i = 0;
-    for (x in source) {
-        if (source[x][0] == key) {
-            selected = '';
-            if ((orig_key == key && orig_val == source[x][1])
-                    || (i == 0 && orig_key != key)) {
-                selected = 'selected="selected"';
-            }
-            html += '\n     <option value="' + source[x][1] + '" ' + selected
-                    + '>' + source[x][2] + '</option>';
-        }
-        i++;
-    }
-    html += '\n </select>';
+		form.elements[ 'checkall-toggle' ].checked = c;
+	};
 
-    document.writeln(html);
-}
+	/**
+	 * USED IN: libraries/joomla/html/toolbar/button/help.php
+	 *
+	 * Pops up a new window in the middle of the screen
+	 */
+	Joomla.popupWindow = function( mypage, myname, w, h, scroll ) {
+		var winl = ( screen.width - w ) / 2,
+			wint = ( screen.height - h ) / 2,
+			winprops = 'height=' + h +
+				',width=' + w +
+				',top=' + wint +
+				',left=' + winl +
+				',scrollbars=' + scroll +
+				',resizable';
 
-/**
- * USED IN: administrator/components/com_content/views/article/view.html.php
- *
- * Changes a dynamically generated list
- *
- * @param string
- *          The name of the list to change
- * @param array
- *          A javascript array of list options in the form [key,value,text]
- * @param string
- *          The key to display
- * @param string
- *          The original key that was selected
- * @param string
- *          The original item value that was selected
- */
-function changeDynaList(listname, source, key, orig_key, orig_val) {
-    var list = document.adminForm[listname];
+		window.open( mypage, myname, winprops )
+			.window.focus();
+	};
 
-    // empty the list
-    for (i in list.options.length) {
-        list.options[i] = null;
-    }
-    i = 0;
-    for (x in source) {
-        if (source[x][0] == key) {
-            opt = new Option();
-            opt.value = source[x][1];
-            opt.text = source[x][2];
+	/**
+	 * USED IN: libraries/joomla/html/html/grid.php
+	 * In other words, on any reorderable table
+	 */
+	Joomla.tableOrdering = function( order, dir, task, form ) {
+		if ( typeof form  === 'undefined' ) {
+			form = document.getElementById( 'adminForm' );
+		}
 
-            if ((orig_key == key && orig_val == opt.value) || i == 0) {
-                opt.selected = true;
-            }
-            list.options[i++] = opt;
-        }
-    }
-    list.length = i;
-}
+		form.filter_order.value = order;
+		form.filter_order_Dir.value = dir;
+		Joomla.submitform( task, form );
+	};
 
-/**
- * USED IN: administrator/components/com_menus/views/menus/tmpl/default.php
- *
- * @param radioObj
- * @return
- */
-// return the value of the radio button that is checked
-// return an empty string if none are checked, or
-// there are no radio buttons
-function radioGetCheckedValue(radioObj) {
-    if (!radioObj) {
-        return '';
-    }
-    var n = radioObj.length, i;
-    if (n == undefined) {
-        if (radioObj.checked) {
-            return radioObj.value;
-        } else {
-            return '';
-        }
-    }
-    for (i = 0; i < n; i++) {
-        if (radioObj[i].checked) {
-            return radioObj[i].value;
-        }
-    }
-    return '';
-}
+	/**
+	 * USED IN: administrator/components/com_modules/views/module/tmpl/default.php
+	 *
+	 * Writes a dynamically generated list
+	 *
+	 * @param string
+	 *          The parameters to insert into the <select> tag
+	 * @param array
+	 *          A javascript array of list options in the form [key,value,text]
+	 * @param string
+	 *          The key to display for the initial state of the list
+	 * @param string
+	 *          The original key that was selected
+	 * @param string
+	 *          The original item value that was selected
+	 */
+	window.writeDynaList = function ( selectParams, source, key, orig_key, orig_val ) {
+		var html = '<select ' + selectParams + '>',
+			hasSelection = key == orig_key,
+			i = 0,
+			selected, x, item;
 
-/**
- * USED IN: administrator/components/com_banners/views/banner/tmpl/default/php
- * administrator/components/com_categories/views/category/tmpl/default.php
- * administrator/components/com_categories/views/copyselect/tmpl/default.php
- * administrator/components/com_content/views/copyselect/tmpl/default.php
- * administrator/components/com_massmail/views/massmail/tmpl/default.php
- * administrator/components/com_menus/views/list/tmpl/copy.php
- * administrator/components/com_menus/views/list/tmpl/move.php
- * administrator/components/com_messages/views/message/tmpl/default_form.php
- * administrator/components/com_newsfeeds/views/newsfeed/tmpl/default.php
- * components/com_content/views/article/tmpl/form.php
- * templates/beez/html/com_content/article/form.php
- *
- * @param frmName
- * @param srcListName
- * @return
- */
-function getSelectedValue(frmName, srcListName) {
-    var form = document[frmName],
-    srcList = form[srcListName];
+		for ( x in source ) {
+			if (!source.hasOwnProperty(x)) { continue; }
 
-    i = srcList.selectedIndex;
-    if (i != null && i > -1) {
-        return srcList.options[i].value;
-    } else {
-        return null;
-    }
-}
+			item = source[ x ];
 
-/**
- * USED IN: all over :)
- *
- * @param id
- * @param task
- * @return
- */
-function listItemTask(id, task) {
-    var f = document.adminForm, i, cbx,
-    cb = f[id];
-    if (cb) {
-        for (i = 0; true; i++) {
-            cbx = f['cb'+i];
-            if (!cbx)
-                break;
-            cbx.checked = false;
-        } // for
-        cb.checked = true;
-        f.boxchecked.value = 1;
-        submitbutton(task);
-    }
-    return false;
-}
+			if ( item[ 0 ] != key ) { continue; }
 
-/**
- * Default function. Usually would be overriden by the component
- *
- * @deprecated  12.1 This function will be removed in a future version. Use Joomla.submitbutton() instead.
- */
-function submitbutton(pressbutton) {
-    submitform(pressbutton);
-}
+			selected = '';
 
-/**
- * Submit the admin form
- *
- * @deprecated  12.1 This function will be removed in a future version. Use Joomla.submitform() instead.
- */
-function submitform(pressbutton) {
-    if (pressbutton) {
-        document.adminForm.task.value = pressbutton;
-    }
-    if (typeof document.adminForm.onsubmit == "function") {
-        document.adminForm.onsubmit();
-    }
-    if (typeof document.adminForm.fireEvent == "function") {
-        document.adminForm.fireEvent('onsubmit');
-    }
-    document.adminForm.submit();
-}
+			if ( ( hasSelection && orig_val == item[ 1 ] ) || ( !hasSelection && i === 0 ) ) {
+				selected = 'selected="selected"';
+			}
 
-// needed for Table Column ordering
-/**
- * USED IN: libraries/joomla/html/html/grid.php
- */
-function saveorder(n, task) {
-    checkAll_button(n, task);
-}
+			html += '<option value="' + item[ 1 ] + '" ' + selected + '>' + item[ 2 ] + '</option>';
 
-function checkAll_button(n, task) {
-    if (!task) {
-        task = 'saveorder';
-    }
-    var j, box;
-    for (j = 0; j <= n; j++) {
-        box = document.adminForm['cb'+j];
-        if (box) {
-            if (box.checked == false) {
-                box.checked = true;
-            }
-        } else {
-            alert("You cannot change the order of items, as an item in the list is `Checked Out`");
-            return;
-        }
-    }
-    submitform(task);
-}
+			i++;
+		}
+		html += '</select>';
 
-/*! overthrow - An overflow:auto polyfill for responsive design. - v0.7.0 - 2015-04-01
-* Copyright (c) 2015 Scott Jehl, Filament Group, Inc.; Licensed MIT */
-!function(a){var b=a.document,c=b.documentElement,d="overthrow-enabled",e="ontouchmove"in b,f="WebkitOverflowScrolling"in c.style||"msOverflowStyle"in c.style||!e&&a.screen.width>800||function(){var b=a.navigator.userAgent,c=b.match(/AppleWebKit\/([0-9]+)/),d=c&&c[1],e=c&&d>=534;return b.match(/Android ([0-9]+)/)&&RegExp.$1>=3&&e||b.match(/ Version\/([0-9]+)/)&&RegExp.$1>=0&&a.blackberry&&e||b.indexOf("PlayBook")>-1&&e&&-1===!b.indexOf("Android 2")||b.match(/Firefox\/([0-9]+)/)&&RegExp.$1>=4||b.match(/wOSBrowser\/([0-9]+)/)&&RegExp.$1>=233&&e||b.match(/NokiaBrowser\/([0-9\.]+)/)&&7.3===parseFloat(RegExp.$1)&&c&&d>=533}();a.overthrow={},a.overthrow.enabledClassName=d,a.overthrow.addClass=function(){-1===c.className.indexOf(a.overthrow.enabledClassName)&&(c.className+=" "+a.overthrow.enabledClassName)},a.overthrow.removeClass=function(){c.className=c.className.replace(a.overthrow.enabledClassName,"")},a.overthrow.set=function(){f&&a.overthrow.addClass()},a.overthrow.canBeFilledWithPoly=e,a.overthrow.forget=function(){a.overthrow.removeClass()},a.overthrow.support=f?"native":"none"}(this),function(a,b,c){if(b!==c){b.easing=function(a,b,c,d){return c*((a=a/d-1)*a*a+1)+b},b.tossing=!1;var d;b.toss=function(a,e){b.intercept();var f,g,h=0,i=a.scrollLeft,j=a.scrollTop,k={top:"+0",left:"+0",duration:50,easing:b.easing,finished:function(){}},l=!1;if(e)for(var m in k)e[m]!==c&&(k[m]=e[m]);return"string"==typeof k.left?(k.left=parseFloat(k.left),f=k.left+i):(f=k.left,k.left=k.left-i),"string"==typeof k.top?(k.top=parseFloat(k.top),g=k.top+j):(g=k.top,k.top=k.top-j),b.tossing=!0,d=setInterval(function(){h++<k.duration?(a.scrollLeft=k.easing(h,i,k.left,k.duration),a.scrollTop=k.easing(h,j,k.top,k.duration)):(f!==a.scrollLeft?a.scrollLeft=f:(l&&k.finished(),l=!0),g!==a.scrollTop?a.scrollTop=g:(l&&k.finished(),l=!0),b.intercept())},1),{top:g,left:f,duration:b.duration,easing:b.easing}},b.intercept=function(){clearInterval(d),b.tossing=!1}}}(this,this.overthrow),function(a,b,c){if(b!==c){b.scrollIndicatorClassName="overthrow";var d=a.document,e=d.documentElement,f="native"===b.support,g=b.canBeFilledWithPoly,h=(b.configure,b.set),i=b.forget,j=b.scrollIndicatorClassName;b.closest=function(a,c){return!c&&a.className&&a.className.indexOf(j)>-1&&a||b.closest(a.parentNode)};var k=!1;b.set=function(){if(h(),!k&&!f&&g){a.overthrow.addClass(),k=!0,b.support="polyfilled",b.forget=function(){i(),k=!1,d.removeEventListener&&d.removeEventListener("touchstart",u,!1)};var j,l,m,n,o=[],p=[],q=function(){o=[],l=null},r=function(){p=[],m=null},s=function(a){n=j.querySelectorAll("textarea, input");for(var b=0,c=n.length;c>b;b++)n[b].style.pointerEvents=a},t=function(a,b){if(d.createEvent){var e,f=(!b||b===c)&&j.parentNode||j.touchchild||j;f!==j&&(e=d.createEvent("HTMLEvents"),e.initEvent("touchend",!0,!0),j.dispatchEvent(e),f.touchchild=j,j=f,f.dispatchEvent(a))}},u=function(a){if(b.intercept&&b.intercept(),q(),r(),j=b.closest(a.target),j&&j!==e&&!(a.touches.length>1)){s("none");var c=a,d=j.scrollTop,f=j.scrollLeft,g=j.offsetHeight,h=j.offsetWidth,i=a.touches[0].pageY,k=a.touches[0].pageX,n=j.scrollHeight,u=j.scrollWidth,v=function(a){var b=d+i-a.touches[0].pageY,e=f+k-a.touches[0].pageX,s=b>=(o.length?o[0]:0),v=e>=(p.length?p[0]:0);b>0&&n-g>b||e>0&&u-h>e?a.preventDefault():t(c),l&&s!==l&&q(),m&&v!==m&&r(),l=s,m=v,j.scrollTop=b,j.scrollLeft=e,o.unshift(b),p.unshift(e),o.length>3&&o.pop(),p.length>3&&p.pop()},w=function(){s("auto"),setTimeout(function(){s("none")},450),j.removeEventListener("touchmove",v,!1),j.removeEventListener("touchend",w,!1)};j.addEventListener("touchmove",v,!1),j.addEventListener("touchend",w,!1)}};d.addEventListener("touchstart",u,!1)}}}}(this,this.overthrow),function(a){a.overthrow.set()}(this),function(a,b){function c(b,c,d,e){if(document.createEvent){var f=document.createEvent("Event");f.initEvent(c,!0,!0),f.overthrow=d,b.dispatchEvent(f)}else a.document.documentElement[e][c]={e:c,overthrow:d},a.document.documentElement[c]++}if(b&&!(!1 in a.document)){if(b.sidescroller=function(d,e){var f=d,g="overthrow",h=g+"-next",i=g+"-prev",j=g+"-method",k=g+"-refresh",l=g+"-resize",m=e&&e.snapScroll,n=e&&e.skipLinks,o=e&&e.rewind,p=e&&void 0!==e.snapTolerance?e.snapTolerance:30,q=arguments;e=e||{};for(var r=0;r<f.length;r++)!function(){function d(){for(var a=C.querySelectorAll("li"),b=100/a.length+"%",c=0;c<a.length;c++)a[c].style.width=b}function s(){var a=C.querySelectorAll("li"),b=C.querySelector("ul");b.style.width=a[0].offsetWidth*a.length+"px"}function t(a){a&&a.fixedItemWidth?s():d(),c(B,k,{},B.ieID)}function u(a){var b=C.querySelectorAll("li"),c=b.length,d=C.offsetWidth,e=b[0].offsetWidth,f=void 0!==a?a:C.scrollLeft,g=Math.round(f/e),h=10,i=[];g=Math.max(0,g),g=Math.min(c,g),i.push(g);for(var j=2;c>j;j++)d+h>j*e&&i.push(g+j-1);return E=g,i}function v(a,b){var c=1;return b&&b.slideLength&&(c="all"===b.slideLength?a.length:parseInt(b.slideLength,10)),isNaN(c)&&(c=1),c}function w(d){var f=d||a.event;if(f.preventDefault?f.preventDefault():f.returnValue=!1,"keydown"===f.type||G===!1||G===f.type){G=f.type,b.intercept();var g=C.querySelectorAll("li"),j=f.target||f.srcElement,k=C.offsetWidth,l=g[0].offsetWidth,m=C.scrollLeft,n=Math.round(m/l),p=j.className.indexOf("ff")>-1,q=j.className.indexOf("rwd")>-1,r="keydown"!==f.type&&j.className.indexOf("next")>-1||39===f.keyCode,s=v(u(),e),t=n+(r?s:-s),w=l*t,x=C.scrollWidth-k;if(j&&"A"!==j.nodeName)return;q&&(w=0),p&&(w=x),o?0>w?w=x:w>x&&(w=0):0>w?w=0:w>x&&(w=x);var y=u(w);y[y.length-1]==g.length-1&&(w=C.querySelector("ul").offsetWidth-k),(y[0]!==n||w!==m)&&(b.toss(C,{left:w,easing:e.easing}),c(B,r?h:i,{active:y,originalEvent:f},F)),setTimeout(function(){G=!1},900)}}function x(a){b.intercept();var d=C.querySelector("li").offsetWidth,f=C.scrollLeft,g=Math.round(f/d);if(L!==!1){var j=f-L;Math.abs(j)>p&&(g=E+(j>0?1:-1))}var k=d*g;b.toss(C,{left:k,duration:20,easing:e.easing}),E!==g&&(c(B,g>E?h:i,{active:u(k),originalEvent:a},F),E=g)}function y(a){clearTimeout(J),J=setTimeout(function(){c(B,g+"-resize",{},B.ieID),x(a)},100)}function z(a){overthrow.tossing||(clearTimeout(K),K=setTimeout(function(){L===!1&&(L=C.scrollLeft),m?x(a):c(B,g+"-scroll",{},F),L=!1},200))}function A(a){(39===a.keyCode||37===a.keyCode)&&w(a)}var B=f[r],C=f[r].querySelector(".overthrow"),D=a.document.createElement("div"),E=0,F="overthrow"+(new Date).getTime(),G=!1,H="<a href='#' class='sidescroll-prev'><span class='sr-only'>Previous</span></a><a href='#' class='sidescroll-next'><span class='sr-only'>Next</span></a>",I="<a href='#' class='sidescroll-rwd'>First</a><a href='#' class='sidescroll-ff'>Last</a>";if("string"==typeof e&&B.options)return c(B,j,{name:e,arguments:Array.prototype.slice.call(q,2)},B.ieID),void t(B.options);if(!B.initialized){B.initialized=!0,B.options=e,B.setAttribute("tabindex","0"),a.document.attachEvent&&(a.document.documentElement[i]=0,a.document.documentElement[h]=0,a.document.documentElement[j]=0,a.document.documentElement[k]=0,a.document.documentElement[l]=0,a.document.documentElement[F]={},a.document.documentElement[F][i]={},a.document.documentElement[F][h]={},a.document.documentElement[F][j]={},a.document.documentElement[F][k]={},a.document.documentElement[F][l]={},B.ieID=F),D.className="sidescroll-nextprev-links",n&&(H+=I),D.innerHTML=H,B.getActiveSlides=u;var J,K,L=!1;a.document.addEventListener?(D.addEventListener("click",w,!1),D.addEventListener("touchend",w,!1),a.addEventListener("resize",y,!1),f[r].addEventListener("keydown",A,!1),C.addEventListener("scroll",z,!1)):a.document.attachEvent&&(D.attachEvent("onclick",w,!1),a.attachEvent("onresize",y,!1),f[r].attachEvent("onkeydown",A,!1),C.attachEvent("onscroll",z,!1)),B.insertBefore(D,C),t(e),c(a.document.documentElement,g+"-init",{sideScroll:B,options:e},a.document.documentElement.ieID)}}()},a.document.attachEvent){var d="overthrow-init"+(new Date).getTime();a.document.documentElement[d]={},a.document.documentElement[d]["overthrow-init"]=0,a.document.documentElement.ieID=d}b.sidescroller.onEvent=function(b,c,d){function e(a){var e={type:b,target:c,overthrow:a.overthrow};d(e)}a.document.addEventListener?c.addEventListener(b,e):a.document.attachEvent&&a.document.documentElement.attachEvent("onpropertychange",function(d){d.propertyName===b&&e(a.document.documentElement[c.ieID][b])})}}}(this,this.overthrow);
+		document.writeln( html );
+	};
+
+	/**
+	 * USED IN: administrator/components/com_content/views/article/view.html.php
+	 * actually, probably not used anywhere.
+	 *
+	 * Changes a dynamically generated list
+	 *
+	 * @param string
+	 *          The name of the list to change
+	 * @param array
+	 *          A javascript array of list options in the form [key,value,text]
+	 * @param string
+	 *          The key to display
+	 * @param string
+	 *          The original key that was selected
+	 * @param string
+	 *          The original item value that was selected
+	 */
+	window.changeDynaList = function ( listname, source, key, orig_key, orig_val ) {
+		var list = document.adminForm[ listname ],
+			hasSelection = key == orig_key,
+			i, x, item, opt;
+
+		// empty the list
+		while ( list.firstChild ) list.removeChild( list.firstChild );
+
+		i = 0;
+
+		for ( x in source ) {
+			if (!source.hasOwnProperty(x)) { continue; }
+
+			item = source[x];
+
+			if ( item[ 0 ] != key ) { continue; }
+
+			opt = new Option();
+			opt.value = item[ 1 ];
+			opt.text = item[ 2 ];
+
+			if ( ( hasSelection && orig_val == opt.value ) || (!hasSelection && i === 0) ) {
+				opt.selected = true;
+			}
+
+			list.options[ i++ ] = opt;
+		}
+
+		list.length = i;
+	};
+
+	/**
+	 * USED IN: administrator/components/com_menus/views/menus/tmpl/default.php
+	 * Probably not used at all
+	 *
+	 * @param radioObj
+	 * @return
+	 */
+	// return the value of the radio button that is checked
+	// return an empty string if none are checked, or
+	// there are no radio buttons
+	window.radioGetCheckedValue = function ( radioObj ) {
+		if ( !radioObj ) { return ''; }
+
+		var n = radioObj.length,
+			i;
+
+		if ( n === undefined ) {
+			return radioObj.checked ? radioObj.value : '';
+		}
+
+		for ( i = 0; i < n; i++ ) {
+			if ( radioObj[ i ].checked ) {
+				return radioObj[ i ].value;
+			}
+		}
+
+		return '';
+	};
+
+	/**
+	 * USED IN: administrator/components/com_users/views/mail/tmpl/default.php
+	 * Let's get rid of this and kill it
+	 *
+	 * @param frmName
+	 * @param srcListName
+	 * @return
+	 */
+	window.getSelectedValue = function ( frmName, srcListName ) {
+		var srcList = document[ frmName ][ srcListName ],
+			i = srcList.selectedIndex;
+
+		if ( i !== null && i > -1 ) {
+			return srcList.options[ i ].value;
+		} else {
+			return null;
+		}
+	};
+
+	/**
+	 * USED IN: all over :)
+	 *
+	 * @param id
+	 * @param task
+	 * @return
+	 */
+	window.listItemTask = function ( id, task ) {
+		var f = document.adminForm,
+			i = 0, cbx,
+			cb = f[ id ];
+
+		if ( !cb ) return false;
+
+		while ( true ) {
+			cbx = f[ 'cb' + i ];
+
+			if ( !cbx ) break;
+
+			cbx.checked = false;
+
+			i++;
+		}
+
+		cb.checked = true;
+		f.boxchecked.value = 1;
+		window.submitform( task );
+
+		return false;
+	};
+
+	/**
+	 * Default function. Usually would be overriden by the component
+	 *
+	 * @deprecated  12.1 This function will be removed in a future version. Use Joomla.submitbutton() instead.
+	 */
+	window.submitbutton = function ( pressbutton ) {
+		Joomla.submitbutton( pressbutton );
+	};
+
+	/**
+	 * Submit the admin form
+	 *
+	 * @deprecated  12.1 This function will be removed in a future version. Use Joomla.submitform() instead.
+	 */
+	window.submitform = function ( pressbutton ) {
+		Joomla.submitform(pressbutton);
+	};
+
+	// needed for Table Column ordering
+	/**
+	 * USED IN: libraries/joomla/html/html/grid.php
+	 * There's a better way to do this now, can we try to kill it?
+	 */
+	window.saveorder = function ( n, task ) {
+		window.checkAll_button( n, task );
+	};
+
+	/**
+	 * Checks all the boxes unless one is missing then it assumes it's checked out.
+	 * Weird. Probably only used by ^saveorder
+	 *
+	 * @param   integer  n     The total number of checkboxes expected
+	 * @param   string   task  The task to perform
+	 *
+	 * @return  void
+	 */
+	window.checkAll_button = function ( n, task ) {
+		task = task ? task : 'saveorder';
+
+		var j, box;
+
+		for ( j = 0; j <= n; j++ ) {
+			box = document.adminForm[ 'cb' + j ];
+
+			if ( box ) {
+				box.checked = true;
+			} else {
+				alert( "You cannot change the order of items, as an item in the list is `Checked Out`" );
+				return;
+			}
+		}
+
+		Joomla.submitform( task );
+	};
+
+}( Joomla, document ));
+
 /*!
  * jQuery Cookie Plugin v1.2
  * https://github.com/carhartl/jquery-cookie
@@ -13543,7 +13560,7 @@ function checkAll_button(n, task) {
   @License:GNU/GPL v2.
 */
 (function(a){a(document).ready(function(){function c(){var g=window.location.search.substring(1),l=g.split("&"),j={};for(var h=0;h<l.length;h++){var k=l[h].split("=");j[unescape(k[0])]=unescape(k[1])}return j}if(c().layout=="edit"){if(!c().id){uniQueid=c().extension_id}else{uniQueid=c().id}var b=c().view+uniQueid}else{b=""}if(b){a('a[data-toggle="tab"]').on("shown",function(g){a.cookie("last_tab"+b,a(g.target).attr("href"))});var d=a.cookie("last_tab"+b);var f=a(".nav-tabs").find("a").attr("href");if(!d){d=f}if(d){a("ul.nav-tabs").children().removeClass("active");a("a[href="+d+"]").parents("li:first").addClass("active");a("div.tab-content").children().removeClass("active");a(d).addClass("active")}a(".accordion-body").on("shown",function(h){var g=this.get("id");a.cookie("last_accordion"+b,g)});var e=a.cookie("last_accordion"+b);if(e){a('a[data-toggle="collapse"]').addClass("collapsed");a(".accordion-body").removeClass("in").height("0px");a('a[href="#'+e+'"]').removeClass("collapsed");a("#"+e).addClass("in").height("auto")}}})})(jQuery);
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
@@ -13552,33 +13569,41 @@ jQuery(document).ready(function() {
     });
   }
 
+
+
   // Updates the form action based on the payment selection for @leisure booking.
-  jQuery('.atleisure-booking-form input').on('change', function() {
+  jQuery('.atleisure-booking-form input').on('change', function () {
     var el = jQuery(this);
     var action = el.attr('value');
     jQuery(".atleisure-booking-form").attr("action", action);
   });
 
+
+  // Event tracking for enquiry form 
+  //jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function () {
+    //ga('send', 'event','Enquiry Form', 'Rental property', jQuery(this).parent().parent().find('label').text());
+  //});
+
   // Google analytics event tracking
-  jQuery('#search-tabs li > a').on('click', function(e) {
+  jQuery('#search-tabs li > a').on('click', function (e) {
     ga('send', 'event', 'Navigation', 'Search', e.target.hash);
   });
 
   // Google analytics event tracking
-  jQuery('#main-nav li > a').on('click', function() {
+  jQuery('#main-nav li > a').on('click', function () {
     ga('send', 'event', 'Navigation', 'Main', jQuery(this).attr('href'));
   });
 
-  jQuery('#enquiry').on('click', function() {
+  jQuery('#enquiry').on('click', function () {
     ga('send', 'event', 'button', 'click', 'enquiry-button-clicked');
   });
 
-  jQuery('.view-featured-fp-link').on('click', function() {
+  jQuery('.view-featured-fp-link').on('click', function () {
     ga('send', 'event', 'Featured property', 'Homepage', jQuery(this).attr('href'));
   });
 
   // Tracks click through from properties featured on search pages.
-  jQuery('.view-search-fp-link').on('click', function() {
+  jQuery('.view-search-fp-link').on('click', function () {
     ga('send', 'event', 'Featured property', 'Search pages', jQuery(this).attr('href'));
   });
 
@@ -13602,12 +13627,12 @@ jQuery(document).ready(function() {
 
     var checkin = jQuery('.start_date.date').datepicker({
       format: "dd-mm-yyyy",
-      beforeShowDay: function(date) {
+      beforeShowDay: function (date) {
         return date.valueOf() >= now.valueOf();
       },
       autoclose: true
 
-    }).on('changeDate', function(ev) {
+    }).on('changeDate', function (ev) {
       if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
 
         var newDate = new Date(ev.date);
@@ -13621,7 +13646,7 @@ jQuery(document).ready(function() {
 
     var checkout = jQuery('.end_date.date').datepicker({
       format: "dd-mm-yyyy",
-      beforeShowDay: function(date) {
+      beforeShowDay: function (date) {
         if (!checkin.datepicker("getDate").valueOf()) {
           return date.valueOf() >= new Date().valueOf();
         } else {
@@ -13630,7 +13655,7 @@ jQuery(document).ready(function() {
       },
       autoclose: true
 
-    }).on('changeDate', function(ev) {
+    }).on('changeDate', function (ev) {
     });
 
   } catch (e) {
@@ -13648,7 +13673,7 @@ jQuery(document).ready(function() {
   });
 
   if (jQuery('#newUnit').length) {
-    jQuery('#newUnit').on('click', function(event) {
+    jQuery('#newUnit').on('click', function (event) {
       if (!confirm(Joomla.JText._('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT'))) {
         event.preventDefault();
       }
@@ -13656,11 +13681,11 @@ jQuery(document).ready(function() {
   }
 
   // TO DO - What a fucking mess!
-  jQuery('.shortlist').each(function() { // For each result
+  jQuery('.shortlist').each(function () { // For each result
     // Get the data-action state
     jQuery(this).popover({// Initialise a popover
       trigger: 'manual' // Take control of when the popover is opened
-    }).click(function(event) {
+    }).click(function (event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
       jQuery(this).popover('toggle'); // Manually open the popover 
@@ -13668,7 +13693,7 @@ jQuery(document).ready(function() {
   })
 
   // TO DO - What a fucking mess!
-  jQuery('body').on('change', '.popover input ', function(ev) { // When a pop over span is clicked
+  jQuery('body').on('change', '.popover input ', function (ev) { // When a pop over span is clicked
     var el = jQuery(this);
     // favourite is the anchor element that triggers a popover
     var favourite = jQuery('.popover').siblings('a.shortlist');
@@ -13683,7 +13708,7 @@ jQuery(document).ready(function() {
       dateType: "json",
       url: url,
       data: url_params
-    }).done(function(data) {
+    }).done(function (data) {
 
       var popover = jQuery('.popover').data('bs.popover');
 
@@ -13719,14 +13744,14 @@ jQuery(document).ready(function() {
 
     use_invoice.attr('checked', false);
 
-    jQuery("#jform_use_invoice_address").on('change', function(e) {
+    jQuery("#jform_use_invoice_address").on('change', function (e) {
 
       var siblings = jQuery(this).parent().parent().siblings('div');
       var inputs = siblings.find(':input');
       var checked = jQuery(this).is(':checked');
 
       // Loop over each input and activate/deactive the required attr
-      inputs.each(function() {
+      inputs.each(function () {
         field = jQuery(this);
 
         if (!checked) {
@@ -13749,7 +13774,7 @@ jQuery(document).ready(function() {
 
     show_contact(checked);
 
-    jQuery("#jform_use_invoice_details").on('change', function(e) {
+    jQuery("#jform_use_invoice_details").on('change', function (e) {
 
       show_contact(this);
 
@@ -13761,7 +13786,7 @@ jQuery(document).ready(function() {
     var vatID = jQuery("#jform_vat_status")[0].value;
     show_vat(vatID);
 
-    jQuery("#jform_vat_status").change(function(e) {
+    jQuery("#jform_vat_status").change(function (e) {
       // Get the selected vat_aid_id code
       var vatID = jQuery(this)[0].value;
       show_vat(vatID);
@@ -13771,7 +13796,7 @@ jQuery(document).ready(function() {
 
   // Bind a change function to all forms that need validation.
   // Gives an alert if unsaved changes will be lost.
-  jQuery('form.form-validate').change(function() {
+  jQuery('form.form-validate').change(function () {
     //window.onbeforeunload = function() {
     //return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     //};
@@ -13781,13 +13806,13 @@ jQuery(document).ready(function() {
     // If the tinymce editor is loaded
     if (window.tinymce) {
       // Bind the addEditor event to editor(s)
-      tinymce.on('addEditor', function(editor) {
+      tinymce.on('addEditor', function (editor) {
         // Bind the blur event to editor(s)
-        tinyMCE.activeEditor.on('blur', function(e) {
+        tinyMCE.activeEditor.on('blur', function (e) {
           // Check whether the actie editor 'is dirty'
           if (tinyMCE.activeEditor.isDirty()) {
             // If so, do the business on before unload
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
               return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
             };
           }
@@ -13799,7 +13824,7 @@ jQuery(document).ready(function() {
   }
 
   // Add special offer counter... 
-  jQuery('#jform_offer_description').each(function() {
+  jQuery('#jform_offer_description').each(function () {
 
     // Assign this to that so we can use this later...
     var that = this;
@@ -13811,7 +13836,7 @@ jQuery(document).ready(function() {
     // Add the maxlength attribute
     jQuery(this).attr('maxlength', 150);
 
-    jQuery(this).on('keyup', function(event) {
+    jQuery(this).on('keyup', function (event) {
 
       // On the keyup event, update the value of the span count element
       var length = jQuery(this).val().length;
@@ -13834,7 +13859,7 @@ jQuery(document).ready(function() {
   }
 
   // Change hash for page-reload
-  jQuery('.nav-tabs a').on('shown', function(e) {
+  jQuery('.nav-tabs a').on('shown', function (e) {
     window.location.hash = e.target.hash.replace("#", "#" + prefix);
   });
 });
@@ -13849,7 +13874,7 @@ var RecaptchaOptions = {
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
 function attachContent(marker, num, width) {
-  google.maps.event.addListener(marker, 'click', function() {
+  google.maps.event.addListener(marker, 'click', function () {
 
     if (infowindow)
       infowindow.close();
@@ -13862,7 +13887,7 @@ function attachContent(marker, num, width) {
   });
 }
 
-var loadGoogleMaps = function(func) {
+var loadGoogleMaps = function (func) {
 
   if (typeof google === 'object' && typeof google.maps === 'object') {
     window[func];
@@ -13894,17 +13919,17 @@ function initialise() {
     position: myLatLng,
     map: map
   });
-  google.maps.event.addListener(map, 'zoom_changed', function() {
+  google.maps.event.addListener(map, 'zoom_changed', function () {
     // 3 seconds after the center of the map has changed, pan back to the
     // marker.
-    window.setTimeout(function() {
+    window.setTimeout(function () {
       map.panTo(marker.getPosition());
     }, 1500);
   });
 }
 
 /* define some useful functions, innit! */
-var show_vat = function(vatID) {
+var show_vat = function (vatID) {
   vat_number = jQuery('#vat_number');
   company_number = jQuery('#company_number');
 
@@ -13940,7 +13965,7 @@ var show_vat = function(vatID) {
 /* 
  * Simple function which adds or removed the required class and toggles the required attribute
  */
-var toggle = function(elem, show) {
+var toggle = function (elem, show) {
 
   field = jQuery(elem);
   if (show) {
@@ -13952,18 +13977,18 @@ var toggle = function(elem, show) {
   }
 }
 
-var show_contact = function(that, selector) {
+var show_contact = function (that, selector) {
 
   if (jQuery(that).is(':checked')) {
     jQuery("#contactDetails").hide();
 
     // Loop over and deactivate all form fields.
-    jQuery('#contactDetails').find('input[type=text]').each(function() {
+    jQuery('#contactDetails').find('input[type=text]').each(function () {
       toggle(this, false);
     })
   } else {
     jQuery("#contactDetails").show();
-    jQuery('#contactDetails').find('input[type=text]').each(function() {
+    jQuery('#contactDetails').find('input[type=text]').each(function () {
       toggle(this, true);
     })
   }
@@ -13971,7 +13996,7 @@ var show_contact = function(that, selector) {
 
 
 /* Fires on occasion when a button has it bound to it's onclick event */
-Joomla.submitbutton = function(task)
+Joomla.submitbutton = function (task)
 {
   if (task == '')
   {
@@ -14026,7 +14051,7 @@ Joomla.submitbutton = function(task)
   }
 };
 
-jQuery(function() {
+jQuery(function () {
   var activeTab = jQuery('a[href="' + location.hash + '"]');
   activeTab && activeTab.tab('show');
 });
