@@ -6817,6 +6817,14 @@ A/B testing styles for new advertise with us page
   text-align: center;
   border-radius: 0;
 }
+.jumbotron.advertise-with-us h1 {
+  font-size: 52px;
+}
+.jumbotron.advertise-with-us .btn-default {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
 .item-page-advertise {
   background: #f2f5f1;
 }
@@ -6857,9 +6865,44 @@ A/B testing styles for new advertise with us page
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.25);
   border-top: 5px solid #525f79;
 }
+.panel-why-advertise-with-us {
+  border-radius: 0;
+  color: #525f79;
+  border-color: none;
+  margin-right: 120px;
+  border: none;
+}
+.panel-why-advertise-with-us > .panel-heading {
+  color: #8592ac;
+  background-color: #ffffff;
+  border-color: none;
+}
+.panel-why-advertise-with-us > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: none;
+}
+.panel-why-advertise-with-us > .panel-heading .badge {
+  color: #ffffff;
+  background-color: #8592ac;
+}
+.panel-why-advertise-with-us > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: none;
+}
+.panel-why-advertise-with-us > .panel-body {
+  padding: 0;
+}
+.panel-why-advertise-with-us > .panel-heading {
+  background-color: transparent;
+  color: #525f79;
+  text-align: center;
+  font-family: "District Thin";
+  font-weight: 700;
+}
 .why-advertise-with-us {
   background: #ffffff;
   border-top: 1px solid #525f79;
+}
+.advertise-askus {
+  background: #f2f5f1;
 }
 .dotted {
   border-bottom: 1px dotted;

@@ -46,7 +46,7 @@ $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_da
     <?php endif; ?>
     <?php if ($params->get('show_title') || $params->get('show_author')) : ?>
         <div class="jumbotron advertise-with-us" style="background: url('<?php echo htmlspecialchars($images->image_fulltext); ?>') no-repeat center">
-            <h2>
+            <h1>
                 <?php if ($params->get('show_title')) : ?>
                     <?php if ($params->get('link_titles') && !empty($this->item->readmore_link)) : ?>
                         <a href="<?php echo $this->item->readmore_link; ?>" itemprop="url"> <?php echo $this->escape($this->item->title); ?></a>
@@ -55,15 +55,22 @@ $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_da
                     <?php endif; ?>
                 <?php endif; ?>
 
-            </h2>
+            </h1>
             <p class="lead">
                 <?php
-                if ($images->image_fulltext_caption):
-                    echo htmlspecialchars($images->image_fulltext_caption);
+                if ($images->image_fulltext_alt):
+                    echo htmlspecialchars($images->image_fulltext_alt);
                 endif;
                 ?>
             </p>
-            <p><a class="btn btn-default btn-lg " href="#" role="button">Learn more</a></p>
+            <p>
+                <a class="btn btn-default btn-lg btn-clear" href="#" role="button"> <?php
+                    if ($images->image_fulltext_caption):
+                        echo htmlspecialchars($images->image_fulltext_caption);
+                    endif;
+                    ?>
+                </a>
+            </p>
 
 
         </div>
