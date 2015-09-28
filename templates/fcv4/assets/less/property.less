@@ -29,8 +29,43 @@ A/B testing styles for new advertise with us page
 
 .item-page-advertise {
     background:@gray-lighter;
-
 }
+
+.testimonial blockquote {
+    background:@gray-darker;
+    border:none;
+    margin-bottom:0;
+    color:@white;
+    padding:@line-height-computed * 2 @line-height-computed * 4;
+    > p {
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.4;
+        font-size:@font-size-xxlarge;
+        font-family:District Thin;
+        font-style: italic;
+        display:inline;
+
+    }
+    > footer {
+        background:transparent;
+        color:@white;
+        border:none; 
+        font-weight:bold; 
+    }
+}
+
+.testimonial blockquote:after{
+    content:'\201D';
+    font-size: 300px;
+    text-align:right;
+    color:@gray;
+    font-style:italic;
+    float:right;
+    line-height:60px;
+}
+
 
 .panel-pricing {
 
@@ -52,6 +87,7 @@ A/B testing styles for new advertise with us page
 
     }   
 }
+
 .panel-pricing.recommended {
     background-color: #d6dae3;
     box-shadow: 0 10px 15px rgba(0,0,0,.25);  
@@ -65,11 +101,11 @@ A/B testing styles for new advertise with us page
     .panel-variant(none; @panel-default-text; white; none);
     margin-right: @line-height-computed * 6; 
     border: none;
-    
+
     > .panel-body {
         padding:0;
     }
-    
+
     > .panel-heading {
         background-color:transparent;
         color:@gray-darker;
@@ -77,10 +113,7 @@ A/B testing styles for new advertise with us page
         font-family: "District Thin";
         font-weight:700;
     }  
-    
 }
-
-
 
 .why-advertise-with-us {
     background: @white;
@@ -88,14 +121,14 @@ A/B testing styles for new advertise with us page
 }
 
 .advertise-askus {
-    background:@gray-lighter;
+    background: @gray-lighter;
+    padding: @line-height-computed * 2;
 }
 
 // Dotted underline 
 .dotted {
     border-bottom: 1px dotted;
 }
-
 
 .overthrow-enabled .overthrow {
     overflow: auto;
@@ -106,8 +139,6 @@ A/B testing styles for new advertise with us page
     min-width:6240px;
     padding: 0;
 }
-
-
 
 .overthrow ul > li 
 {

@@ -25,6 +25,8 @@ $user = JFactory::getUser();
 $info = $params->get('info_block_position', 0);
 JHtml::_('behavior.caption');
 $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_date') || $params->get('show_create_date') || $params->get('show_hits') || $params->get('show_category') || $params->get('show_parent_category') || $params->get('show_author'));
+$modules = JModuleHelper::getModules('advertise-with-us'); //If you want to use a different position for the modules, change the name here in your override.  
+
 ?>
 <div class="item-page<?php echo $this->pageclass_sfx; ?>" itemscope itemtype="http://schema.org/Article">
     <meta itemprop="inLanguage" content="<?php echo ($this->item->language === '*') ? JFactory::getConfig()->get('language') : $this->item->language; ?>" />
@@ -327,4 +329,9 @@ $useDefList = ($params->get('show_modify_date') || $params->get('show_publish_da
         echo $this->item->pagination;
         ?>
     <?php endif; ?>
-    <?php echo $this->item->event->afterDisplayContent; ?> </div>
+    <?php echo $this->item->event->afterDisplayContent; ?> 
+
+      <?php foreach ($modules as $module) : // Render the cross-sell modules etc  ?>
+        <?php echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box')); ?>
+      <?php endforeach; ?>
+</div>
