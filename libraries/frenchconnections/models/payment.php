@@ -785,16 +785,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         if (strlen($data["BillingAddress2"]) > 0) {
             $strPost = $strPost . "&BillingAddress2=" . urlencode($data["BillingAddress2"]);
         }
+
         $strPost = $strPost . "&BillingCity=" . urlencode($data["BillingCity"]);
         $strPost = $strPost . "&BillingPostCode=" . urlencode($data["BillingPostCode"]);
         $strPost = $strPost . "&BillingCountry=" . urlencode($data["BillingCountry"]);
 
-        if (strlen($data['BillingState']) > 0) {
-            $strPost = $strPost . "&BillingState=" . urlencode($data["BillingState"]);
-        }
         /* Delivery Details
          * * This section is optional in its entirety but if one field of the address is provided then all non-optional fields must be provided
          * * If paypal cardtype is specified then this section is compulsory */
+
         $strPost = $strPost . "&DeliveryFirstnames=" . urlencode($data["BillingFirstnames"]);
         $strPost = $strPost . "&DeliverySurname=" . urlencode($data["BillingSurname"]);
         $strPost = $strPost . "&DeliveryAddress1=" . urlencode($data["BillingAddress1"]);
@@ -852,41 +851,34 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
                 //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
                 $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $transaction_id);
                 return $return;
-                break;
             case 'MALFORMED':
-                $this->setError("MALFORMED - The StatusDetail was:" . mysql_real_escape_string(substr($strStatusDetail, 0, 255)));
+                // $this->setError("MALFORMED - The StatusDetail was:" . mysql_real_escape_string(substr($strStatusDetail, 0, 255)));
+                $this->setError(JText::_('COM_RENTAL_PAYMENT_FAILED_MALFORMED'));
                 return false;
-                break;
 
             case 'INVALID':
                 $this->setError("INVALID - The StatusDetail was:" . mysql_real_escape_string(substr($strStatusDetail, 0, 255)));
                 return false;
-                break;
 
             case 'NOTAUTHED':
                 $this->setError("DECLINED - The transaction was not authorised by the bank.");
                 return false;
-                break;
 
             case 'DECLINED':
                 $this->setError("DECLINED - The transaction was not authorised by the bank.");
                 return false;
-                break;
 
             case 'REJECTED':
                 $this->setError($strDBStatus);
                 return false;
-                break;
 
             case 'ERROR':
                 $this->setError("ERROR - There was an error during the payment process.  The error details are: " . mysql_real_escape_string($strStatusDetail));
                 return false;
-                break;
 
             default:
                 $this->setError("UNKNOWN - An unknown status was returned from Sage Pay.  The Status was: " . mysql_real_escape_string($strStatus) . ", with StatusDetail:" . mysql_real_escape_string($strStatusDetail));
                 return false;
-                break;
         }
     }
 

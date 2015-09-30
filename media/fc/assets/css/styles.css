@@ -6828,6 +6828,41 @@ A/B testing styles for new advertise with us page
 .item-page-advertise {
   background: #f2f5f1;
 }
+.item-page-advertise .bigger {
+  font-size: 16px;
+}
+.item-page-advertise .nav-tabs {
+  text-align: center;
+  border: 0;
+  margin-top: 40px;
+}
+.item-page-advertise .nav-tabs > li {
+  margin-bottom: 0;
+  float: none;
+  display: inline-block;
+  text-transform: uppercase;
+}
+.item-page-advertise .nav-tabs > li > a {
+  background: transparent;
+  padding: 20px;
+  border: none;
+  color: #abb4c6;
+  border: 3px solid transparent;
+}
+.item-page-advertise .nav-tabs > li > a:hover {
+  background: transparent;
+  color: #525f79;
+  border: 3px solid #dddddd;
+  border-radius: 40px;
+}
+.item-page-advertise .nav-tabs > li.active > a,
+.item-page-advertise .nav-tabs > li.active > a:hover,
+.item-page-advertise .nav-tabs > li.active > a:focus {
+  background: transparent;
+  color: #525f79;
+  border: 3px solid #dddddd;
+  border-radius: 40px;
+}
 .testimonial blockquote {
   background: #525f79;
   border: none;
@@ -6865,7 +6900,7 @@ A/B testing styles for new advertise with us page
   border-radius: 0;
   color: #525f79;
   border-color: none;
-  margin: 80px;
+  margin: 40px 80px;
   border: none;
   padding: 40px;
   border-top: 5px solid #ffffff;
@@ -6885,12 +6920,21 @@ A/B testing styles for new advertise with us page
 .panel-pricing > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: none;
 }
+.panel-pricing > .panel-body {
+  font-size: 16px;
+}
 .panel-pricing > .panel-heading {
   background-color: transparent;
   color: #525f79;
   text-align: center;
-  font-family: "District Thin";
+}
+.panel-pricing > .panel-heading > h4 {
   font-weight: 700;
+  font-family: "District Thin";
+}
+.panel-pricing > .panel-heading > p > span {
+  font-size: 35px;
+  font-family: District Thin;
 }
 .panel-pricing.recommended {
   background-color: #d6dae3;
@@ -6901,8 +6945,8 @@ A/B testing styles for new advertise with us page
   border-radius: 0;
   color: #525f79;
   border-color: none;
-  margin-right: 120px;
   border: none;
+  margin: 0 60px;
 }
 .panel-why-advertise-with-us > .panel-heading {
   color: #8592ac;
@@ -6921,17 +6965,30 @@ A/B testing styles for new advertise with us page
 }
 .panel-why-advertise-with-us > .panel-body {
   padding: 0;
+  line-height: 1.5;
 }
 .panel-why-advertise-with-us > .panel-heading {
   background-color: transparent;
   color: #525f79;
-  text-align: center;
-  font-family: "District Thin";
-  font-weight: 700;
+  padding: 0;
+  margin-bottom: 20px;
+}
+.panel-why-advertise-with-us > .panel-heading span {
+  float: left;
+  color: #647cb6;
+  font-size: 65px;
+  margin-top: -10px;
+  margin-right: 10px;
 }
 .why-advertise-with-us {
   background: #ffffff;
-  border-top: 1px solid #525f79;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.why-advertise-with-us-header {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
 }
 .advertise-askus {
   background: #f2f5f1;

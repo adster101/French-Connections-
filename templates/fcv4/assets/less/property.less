@@ -12,6 +12,7 @@ A/B testing styles for new advertise with us page
 
 **/
 
+
 .jumbotron.advertise-with-us {
     text-align:center;
     border-radius:0;
@@ -29,6 +30,48 @@ A/B testing styles for new advertise with us page
 
 .item-page-advertise {
     background:@gray-lighter;
+
+    .bigger {
+        font-size: 16px;
+    }
+
+    .nav-tabs {
+        text-align:center;
+        border:0;
+        margin-top:@line-height-computed * 2;
+        > li {
+            margin-bottom:0;
+            float:none;
+            display:inline-block;
+            text-transform:uppercase;
+
+            > a {
+                background:transparent;
+                padding:20px;
+                border:none;
+                color:@gray;
+                border: 3px solid transparent;
+
+                &:hover {
+                    background:transparent;
+                    color:@gray-darker;
+                    border: 3px solid @nav-tabs-active-link-hover-border-color;
+                    border-radius: 40px;
+                }
+            }
+            // Active state, and its :hover to override normal :hover
+            &.active > a {
+                &,
+                &:hover,
+                    &:focus {
+                    background:transparent;
+                    color:@gray-darker;
+                    border: 3px solid @nav-tabs-active-link-hover-border-color;
+                    border-radius: 40px;
+                }
+            }
+        }
+    }
 }
 
 .testimonial blockquote {
@@ -66,25 +109,32 @@ A/B testing styles for new advertise with us page
     line-height:60px;
 }
 
-
 .panel-pricing {
 
     background-color:white;
     border-radius:0;
     color:@gray-darker;
     .panel-variant(none; @panel-default-text; white; none);
-    margin: @line-height-computed * 4; 
+    margin: @line-height-computed * 2 @line-height-computed * 4 ; 
     border: none;
     padding:@line-height-computed * 2;
     border-top: 5px solid @white;
-
+    > .panel-body {
+        font-size:16px;
+    }
     > .panel-heading {
         background-color:transparent;
         color:@gray-darker;
         text-align:center;
-        font-family: "District Thin";
-        font-weight:700;
+        > h4{
+            font-weight:700;
+            font-family: "District Thin";
+        }
+        > p > span {
+            font-size: 35px;
+            font-family:District Thin;
 
+        }
     }   
 }
 
@@ -99,25 +149,39 @@ A/B testing styles for new advertise with us page
     border-radius:0;
     color:@gray-darker;
     .panel-variant(none; @panel-default-text; white; none);
-    margin-right: @line-height-computed * 6; 
     border: none;
+    margin:0 @line-height-computed * 3;
 
     > .panel-body {
         padding:0;
+        line-height:@line-height-small;
     }
 
     > .panel-heading {
         background-color:transparent;
         color:@gray-darker;
-        text-align:center;
-        font-family: "District Thin";
-        font-weight:700;
+        padding:0;
+        margin-bottom:@line-height-computed;
+        span {
+            float:left;
+            color:@brand-primary;
+            font-size:65px;
+            margin-top:-10px;
+            margin-right:10px;
+        }
     }  
 }
 
 .why-advertise-with-us {
     background: @white;
-    border-top:1px solid @gray-darker;
+    padding-top:@line-height-computed * 2;
+    padding-bottom:@line-height-computed * 2;   
+}
+
+.why-advertise-with-us-header {
+    text-align:center;
+    margin-top:@line-height-computed;
+    margin-bottom:@line-height-computed * 2 ;
 }
 
 .advertise-askus {

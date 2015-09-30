@@ -88,7 +88,6 @@ class RentalModelPayment extends JModelAdmin
     $data['BillingPostCode'] = $user_data->postal_code;
     $data['BillingEmailAddress'] = $user->email;
     $data['BillingCountry'] = $user_data->country;
-    $data['BillingState'] = $user_data->region;
 
     return $data;
   }
