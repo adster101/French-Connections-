@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <access component="com_rental">
-	<section name="component">
-		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
-		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
-		<action name="core.create" title="JACTION_CREATE" description="JACTION_CREATE_COMPONENT_DESC" />
-		<action name="core.delete" title="JACTION_DELETE" description="JACTION_DELETE_COMPONENT_DESC" />
-		<action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />
-		<action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_EDITOWN_COMPONENT_DESC" />
-		<action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
-    <action name="rental.unit.reorder" title="JACTION_REORDER" description="JACTION_EDITREORDER_COMPONENT_DESC" />
-		<action name="rental.listing.submit" title="Submit for review" description="" />
-		<action name="rental.listing.review" title="Review and approve changes" description="" />
-		<action name="rental.listing.admin" title="Snooze, udpate expirydate or change owner" description="" />
-		<action name="rental.listings.showowner" title="View owner details" description="" />
-		<action name="rental.listings.filter" title="Show listings view filters" description="" />
-		<action name="rental.notes.add" title="Create note permission" description="" />
-		<action name="rental.images.delete" title="Delete images permission" description="" />
-		<action name="rental.images.reorder" title="Reorder images permission" description="" />
-		<action name="rental.autorenewals.view" title="Access autorenewal view" description="" />
-		<action name="rental.availability.view" title="Access availability view" description="" />
-		<action name="rental.availability.delete" title="Delete availability" description="" />
-		<action name="rental.contactdetails.view" title="Access contact details view" description="" />
-		<action name="rental.images.view" title="Access images view" description="" />
-		<action name="rental.listing.view" title="Access listing view" description="" />
-		<action name="rental.listing.snooze24" title="Snooze property for 24 hours" description="" />
-		<action name="rental.review.view" title="Access listing review view" description="" />
-		<action name="rental.listings.view" title="Access listings view" description="" />
-		<action name="rental.listings.download" title="Download listings" description="" />
-    <action name="rental.notes.view" title="Access notes view" description="" />
-		<action name="rental.note.view" title="Access note view" description="" />
-		<action name="rental.payment.view" title="Access payment view" description="" />
-		<action name="rental.property.view" title="Access property view" description="" />
-		<action name="rental.propertyversions.view" title="Access property version view" description="" />
-		<action name="rental.tariffs.view" title="Access tariffs view" description="" />
-		<action name="rental.unitversions.view" title="Access unit versions" description="" />
-		<action name="rental.marketing.view" title="Access marketing screen" description="" />
-	</section>
-  <section name="category">
-		<action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />
-		<action name="core.delete" title="JACTION_DELETE" description="COM_CATEGORIES_ACCESS_DELETE_DESC" />
-		<action name="core.edit" title="JACTION_EDIT" description="COM_CATEGORIES_ACCESS_EDIT_DESC" />
-		<action name="core.edit.state" title="JACTION_EDITSTATE" description="COM_CATEGORIES_ACCESS_EDITSTATE_DESC" />
-		<action name="core.edit.own" title="JACTION_EDITOWN" description="COM_CATEGORIES_ACCESS_EDITOWN_DESC" />
-	</section>
+    <section name="component">
+        <action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
+        <action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
+        <action name="core.create" title="JACTION_CREATE" description="JACTION_CREATE_COMPONENT_DESC" />
+        <action name="core.delete" title="JACTION_DELETE" description="JACTION_DELETE_COMPONENT_DESC" />
+        <action name="core.edit" title="JACTION_EDIT" description="JACTION_EDIT_COMPONENT_DESC" />
+        <action name="core.edit.state" title="JACTION_EDITSTATE" description="JACTION_EDITOWN_COMPONENT_DESC" />
+        <action name="core.edit.own" title="JACTION_EDITOWN" description="JACTION_EDITOWN_COMPONENT_DESC" />
+        <action name="rental.unit.reorder" title="JACTION_REORDER" description="JACTION_EDITREORDER_COMPONENT_DESC" />
+        <action name="rental.listing.submit" title="Submit for review" description="" />
+        <action name="rental.listing.review" title="Review and approve changes" description="" />
+        <action name="rental.listing.admin" title="Snooze, udpate expirydate or change owner" description="" />
+        <action name="rental.listings.showowner" title="View owner details" description="" />
+        <action name="rental.listings.filter" title="Show listings view filters" description="" />
+        <action name="rental.notes.add" title="Create note permission" description="" />
+        <action name="rental.images.delete" title="Delete images permission" description="" />
+        <action name="rental.images.reorder" title="Reorder images permission" description="" />
+        <action name="rental.caption.view" title="Access update caption view" description="" />
+        <action name="rental.autorenewals.view" title="Access autorenewal view" description="" />
+        <action name="rental.availability.view" title="Access availability view" description="" />
+        <action name="rental.availability.delete" title="Delete availability" description="" />
+        <action name="rental.contactdetails.view" title="Access contact details view" description="" />
+        <action name="rental.images.view" title="Access images view" description="" />
+        <action name="rental.listing.view" title="Access listing view" description="" />
+        <action name="rental.listing.snooze24" title="Snooze property for 24 hours" description="" />
+        <action name="rental.review.view" title="Access listing review view" description="" />
+        <action name="rental.listings.view" title="Access listings view" description="" />
+        <action name="rental.listings.download" title="Download listings" description="" />
+        <action name="rental.notes.view" title="Access notes view" description="" />
+        <action name="rental.note.view" title="Access note view" description="" />
+        <action name="rental.payment.view" title="Access payment view" description="" />
+        <action name="rental.property.view" title="Access property view" description="" />
+        <action name="rental.propertyversions.view" title="Access property version view" description="" />
+        <action name="rental.tariffs.view" title="Access tariffs view" description="" />
+        <action name="rental.unitversions.view" title="Access unit versions" description="" />
+        <action name="rental.marketing.view" title="Access marketing screen" description="" />
+    </section>
+    <section name="category">
+        <action name="core.create" title="JACTION_CREATE" description="COM_CATEGORIES_ACCESS_CREATE_DESC" />
+        <action name="core.delete" title="JACTION_DELETE" description="COM_CATEGORIES_ACCESS_DELETE_DESC" />
+        <action name="core.edit" title="JACTION_EDIT" description="COM_CATEGORIES_ACCESS_EDIT_DESC" />
+        <action name="core.edit.state" title="JACTION_EDITSTATE" description="COM_CATEGORIES_ACCESS_EDITSTATE_DESC" />
+        <action name="core.edit.own" title="JACTION_EDITOWN" description="COM_CATEGORIES_ACCESS_EDITOWN_DESC" />
+    </section>
 </access>

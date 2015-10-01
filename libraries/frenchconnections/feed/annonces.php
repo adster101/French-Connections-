@@ -97,23 +97,19 @@ class JFeedParserAnnonces extends JFeedParser {
         $listing->single_bedrooms = (int) $el->nombre_chambres;
         $listing->latitude = (string) str_replace(',', '.', $el->latitude);
         $listing->longitude = (string) str_replace(',', '.', $el->longitude);
+        
         // This is needed because we don't have lat and long for some feeds
         if (!empty($listing->latitude) && !empty($listing->latitude)) {
             $city = $this->nearestcity((string) $listing->latitude, (string) $listing->longitude);
             $listing->city = (int) $city;
         }
-
-        // Get the images
-        foreach ($el->photos as $image) {
-            $images[] = (string) $image->photo;
-        }
-
-        $listing->images = $images;
-
-
+        
+        // Get the photos as an array. 
+        $imageArr = JArrayHelper::fromObject($el->photos);
+        
+        $listing->images = $imageArr['photo'];
+        
         $feed->properties[] = $listing;
-
-        var_dump($listing->images);die;
         
         return $feed;
     }
