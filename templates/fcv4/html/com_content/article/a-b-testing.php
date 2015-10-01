@@ -47,7 +47,7 @@ $modules = JModuleHelper::getModules('advertise-with-us'); //If you want to use 
         <div class="clearfix"> </div>
     <?php endif; ?>
     <?php if ($params->get('show_title') || $params->get('show_author')) : ?>
-        <div class="jumbotron advertise-with-us" style="background: url('<?php echo htmlspecialchars($images->image_fulltext); ?>') no-repeat center">
+        <div class="jumbotron advertise-with-us" style="background: url('<?php echo htmlspecialchars($images->image_fulltext); ?>') no-repeat center top / 1400px">
             <h1>
                 <?php if ($params->get('show_title')) : ?>
                     <?php if ($params->get('link_titles') && !empty($this->item->readmore_link)) : ?>
