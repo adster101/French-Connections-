@@ -12,7 +12,7 @@
 /*jslint nomen: true, unparam: true, regexp: true */
 /*global $, window, document */
 
-jQuery(function() {
+jQuery(function () {
 
   'use strict';
   // Initialize the jQuery File Upload widget:
@@ -28,9 +28,9 @@ jQuery(function() {
     filesContainer: jQuery('ul.files'),
     uploadTemplateId: null,
     downloadTemplateId: null,
-    downloadTemplate: function(o) {
+    downloadTemplate: function (o) {
       var rows = jQuery();
-      jQuery.each(o.files, function(index, file) {
+      jQuery.each(o.files, function (index, file) {
         var row = jQuery('<li class="template-download fade">' +
                 '<span class="preview"></span>' +
                 '<p class="name"></p>' +
@@ -57,9 +57,9 @@ jQuery(function() {
       return rows;
 
     },
-    uploadTemplate: function(o) {
+    uploadTemplate: function (o) {
       var rows = jQuery();
-      jQuery.each(o.files, function(index, file) {
+      jQuery.each(o.files, function (index, file) {
         var row = jQuery('<li class="template-upload fade clearfix">' +
                 '<span class="preview"></span>' +
                 '<p><span class="name"></span> (<span class="size"></span>)</p>' +
@@ -81,7 +81,7 @@ jQuery(function() {
     // Uncomment the following to send cross-domain cookies:
     //xhrFields: {withCredentials: true},
     //url: 'server/php/'
-  }).bind('fileuploaddone', function(e, data) {
+  }).bind('fileuploaddone', function (e, data) {
     // File has been uploaded, need to refresh the existing images list
     try {
 
@@ -100,31 +100,31 @@ jQuery(function() {
                 {
                   version_id: id
                 })
-                .done(function(results) {
-          var gallery = jQuery('.image-gallery');
+                .done(function (results) {
+                  var gallery = jQuery('.image-gallery');
 
-          // Update the gallery with the latest list of images
-          gallery.empty();
-          gallery.html(results);
+                  // Update the gallery with the latest list of images
+                  gallery.empty();
+                  gallery.html(results);
 
-          // Update the review state so that subsequent images don't trigger new versions...
-          jQuery('input[name=review]').attr('value', "1");
+                  // Update the review state so that subsequent images don't trigger new versions...
+                  jQuery('input[name=review]').attr('value', "1");
 
-          add_event_handlers();
+                  add_event_handlers();
 
-          var imageCount = jQuery('#imageList').length;
+                  var imageCount = jQuery('#imageList').length;
 
-          var span = jQuery('#images > a span:nth-child(2)');
+                  var span = jQuery('#images > a span:nth-child(2)');
 
-          if (imageCount > 0) {
-            span.removeClass('icon-warning');
-            span.addClass('icon-ok');
-          } else {
-            span.removeClass('icon-ok');
-            span.addClass('icon-warning');
-          }
+                  if (imageCount > 0) {
+                    span.removeClass('icon-warning');
+                    span.addClass('icon-ok');
+                  } else {
+                    span.removeClass('icon-ok');
+                    span.addClass('icon-warning');
+                  }
 
-        });
+                });
 
       } else {
 
@@ -138,7 +138,7 @@ jQuery(function() {
   });
 
   // Prevent the default browser drag drop behaviour
-  jQuery(document).bind('drop dragover', function(e) {
+  jQuery(document).bind('drop dragover', function (e) {
     e.preventDefault();
   });
 
@@ -146,12 +146,16 @@ jQuery(function() {
   // Add the event handlers to the save caption and delete buttons
   add_event_handlers();
 
+  /*
+   * 
+   */
+
+
 });
 
-
 // Add the relevant event handlers to the save caption and delete buttons
-var add_event_handlers = function() {
-  
+var add_event_handlers = function () {
+
   var extension = jQuery('input[name=extension]').val();
 
   // Add the sortable list to the photo gallery
@@ -160,109 +164,19 @@ var add_event_handlers = function() {
   // Fade out the the uploaded images from the upload queue after five seconds
   jQuery('li.template-download').css('position', 'static').delay(5000).fadeOut(1500);
 
-  // Attach caption counters to the captions
-  jQuery('.caption').captionCounter();
-
-  jQuery('.update-caption').updateCaption();
-
   // Add a confirmation popup to the delete button
   jQuery('.delete').confirmDelete();
 
-
-
 };
+
+// Here we are attaching event handlers to modal events triggered when updating
 
 // Extend the jQuery instance with a few helpful methods...TO DO make into a plugin?
 jQuery.fn.extend({
-  captionCounter: function() {
-    // Update the caption count and what not...
-    jQuery(this).each(function() {
+  confirmDelete: function () {
 
-      var that = this;
-      var length = jQuery(that).find('input').val().length;
-      var input = jQuery(that).find('input[type=text]');
-
-      // Update the span element with the initial value of the caption
-      jQuery(that).find('span.caption-count').text(75 - length);
-
-      jQuery(input).on('keyup', function(event) {
-
-        // On the keyup event, update the value of the span count element
-        var length = jQuery(that).find('input').val().length;
-
-        jQuery(that).find('span.caption-count').text(75 - length);
-
-      });
-    });
-  },
-  updateCaption: function() {
-
-    // Bind a click event to the save caption buttons
-    jQuery(this).each(function()
-    {
-
-      jQuery(this).on('click', function(event) {
-
-        // Prevent the default click event
-        event.preventDefault();
-
-        // Unbind the not save message...
-        // window.onbeforeunload = null;
-
-        var that = this;
-
-        // Update the caption via the GET ajax thingamy bob
-        var url = jQuery(this).attr('href');
-        var defaultValue = jQuery(this).parent().siblings('p').find('input[type=text]').prop('defaultValue');
-        var caption = jQuery(this).parent().siblings('p').find('input[type=text]').val();
-
-        jQuery.getJSON(
-                url, {
-          caption: caption
-        }).done(function(data) {
-
-          if (data.error === 1) {
-            // There was an error 
-
-          } else {
-            // Save and update was okay
-            // Update the defaultValue 
-
-            jQuery(that).parent().siblings('p').find('input[type=text]').prop('defaultValue', caption);
-          }
-
-          // Update the caption bit with a message
-          jQuery(that).parent().siblings('p').find('span.message-container').append(data.message);
-          jQuery('span.message').delay(5000).fadeOut(1000);
-
-        });
-
-      });
-    });
-
-    // On window un-load check that all captions have been saved
-    window.onbeforeunload = function() {
-      var changed = false;
-
-      jQuery('#imageList').find('input[type=text]').each(function() {
-        var a = jQuery(this).prop('defaultValue');
-        var b = jQuery(this).attr('value');
-        var equal = a.toUpperCase() === b.toUpperCase();
-
-        if (!equal) {
-          changed = true;
-        }
-      });
-
-      if (changed) {
-        return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-      }
-    };
-  },
-  confirmDelete: function() {
-
-    jQuery(this).each(function() {
-      jQuery(this).on('click', function(event) {
+    jQuery(this).each(function () {
+      jQuery(this).on('click', function (event) {
         if (!confirm(Joomla.JText._('COM_RENTAL_IMAGES_CONFIRM_DELETE_IMAGE'))) {
           event.preventDefault();
         }
@@ -273,3 +187,41 @@ jQuery.fn.extend({
   }
 
 });
+
+jQuery(document).on('click', '.update-caption', function (e) {
+
+  e.preventDefault();
+  var $this = jQuery(this);
+  var href = $this.attr('href');
+
+
+  jQuery('#modal').modal()
+          .find('.modal-body')
+          .load(href, function (response, status, xhr) {
+
+            if (status == "error") {
+              var msg = "Sorry but there was an error: ";
+              jQuery(".modal-body").html(msg + xhr.status + " " + xhr.statusText);
+            } else {
+
+              var $data = jQuery(response);
+              var el = $data.find('input[type=text]');
+              var length = el.val().length;
+
+              // Update the span element with the initial value of the caption
+              jQuery('.caption-count').text(75 - length);
+              jQuery('#jform_caption').on('keyup', function (event) {
+
+                // On the keyup event, update the value of the span count element
+                var length = jQuery(this).val().length;
+
+                jQuery('.caption-count').text(75 - length);
+
+              });
+            }
+          })
+          .on('hide', function () {
+            jQuery(this).removeData('modal');
+            jQuery(this).find('.modal-body').empty();
+          })
+})

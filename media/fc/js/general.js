@@ -7,8 +7,6 @@ jQuery(document).ready(function () {
     });
   }
 
-
-
   // Updates the form action based on the payment selection for @leisure booking.
   jQuery('.atleisure-booking-form input').on('change', function () {
     var el = jQuery(this);
@@ -18,9 +16,21 @@ jQuery(document).ready(function () {
 
 
   // Event tracking for enquiry form 
-  //jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function () {
-    //ga('send', 'event','Enquiry Form', 'Rental property', jQuery(this).parent().parent().find('label').text());
-  //});
+  jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function (event) {
+    var target = jQuery(event.target);
+    var input = '';
+
+    if (target.is('select'))
+    {
+      input = jQuery(this).siblings('label').text();
+
+    } else {
+      input = jQuery(this).parent().parent().find('label').text();
+    }
+    console.log(input);
+    ga('send', 'event', 'Enquiry Form', 'Rental property', input);
+
+  });
 
   // Google analytics event tracking
   jQuery('#search-tabs li > a').on('click', function (e) {

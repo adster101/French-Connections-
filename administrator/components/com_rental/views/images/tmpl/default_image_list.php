@@ -63,8 +63,6 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
               </span>
               <a 
                 class="update-caption" 
-                data-toggle="modal"
-                data-target="#modal"
                 href=<?php echo '/administrator/index.php?option=com_rental&tmpl=nohead&view=caption&' . JSession::getFormToken() . '=1&id=' . (int) $item->id . '&unit_id=' . (int) $this->items[0]->unit_id ?>>
                 <i class="icon-pencil-2 icon-white"></i>
                 <?php echo empty($item->caption) ? Jtext::_('COM_RENTAL_HELLOWORLD_ADD_CAPTION') : Jtext::_('COM_RENTAL_HELLOWORLD_EDIT_CAPTION'); ?>

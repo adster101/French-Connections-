@@ -22,14 +22,12 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
     <?php echo $this->form->getLabel('caption'); ?>
     <div class="controls">
       <?php echo $this->form->getInput('caption'); ?>
+    <p class="caption">
+    <?php echo Jtext::_('COM_RENTAL_HELLOWORLD_REMAINING_CHARS_CAPTION'); ?>
+  </p>      
     </div>
   </div>
-  <p class="caption">
-
-    <span class="muted"><?php echo Jtext::_('COM_RENTAL_HELLOWORLD_REMAINING_CHARS_CAPTION'); ?></span>
-    <br /> 
-    <span class="message-container"></span>
-  </p> 
+ 
   <?php echo JHtml::_('form.token'); ?>
   <?php echo $this->form->getInput('unit_id'); ?>
   <?php echo $this->form->getInput('id'); ?>

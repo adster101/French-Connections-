@@ -61,41 +61,41 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
     <?php endif; ?>   
   </div>
   <div class="panel-body">
-    <form class="form-validate form-vertical small" id="contact-form" action="" method="post">
+    <form class="form-validate form-vertical small" id="rental-contact-form" action="" method="post">
       <?php echo JHtml::_('form.token'); ?>
       <fieldset class="adminform">
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('guest_forename'); ?>
             <?php echo $this->form->getInput('guest_forename'); ?>
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('guest_surname'); ?>
             <?php echo $this->form->getInput('guest_surname'); ?>
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('guest_email'); ?>
             <?php echo $this->form->getInput('guest_email'); ?>
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('guest_phone'); ?>
             <?php echo $this->form->getInput('guest_phone'); ?>
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('message'); ?>
             <?php echo $this->form->getInput('message'); ?>
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('start_date'); ?> 
             <div class="input-group start_date date">
               <?php echo $this->form->getInput('start_date'); ?> 
@@ -104,7 +104,7 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-10 col-sm-8">
+          <div class="col-lg-12 col-sm-12">
             <?php echo $this->form->getLabel('end_date'); ?>  
             <div class="input-group end_date date">
               <?php echo $this->form->getInput('end_date'); ?> 
@@ -113,12 +113,12 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-lg-4 col-md-4 col-sm-4">
+          <div class="col-lg-6 col-md-6 col-sm-4">
             <?php echo $this->form->getLabel('adults'); ?>
             <?php echo $this->form->getInput('adults'); ?>
           </div>
 
-          <div class="col-lg-4 col-md-4 col-sm-4">
+          <div class="col-lg-6 col-md-6 col-sm-4">
 
             <?php echo $this->form->getLabel('children'); ?>
             <?php echo $this->form->getInput('children'); ?>
