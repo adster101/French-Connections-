@@ -232,7 +232,7 @@ class RentalControllerPayment extends JControllerLegacy
       $app->setUserState('com_rental.renewal.data', $data);
 
       // Save failed, go back to the screen and display a notice.
-      $message = JText::sprintf('JERROR_SAVE_FAILED', $payment_model->getError());
+      $message = JText::_($payment_model->getError());
       $this->setRedirect('index.php?option=com_rental&view=payment&layout=payment&id=' . (int) $data['id'] . $isRenewal, $message, 'error');
       return false;
     }
