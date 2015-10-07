@@ -157,11 +157,6 @@ class RentalControllerImages extends RentalControllerBase
     // Also, need to amend the save method so that it triggers a new version
     if (!$model->save($validData))
     {
-      // Problem saving, oops
-      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
-      $response['error'] = 1;
-      //echo $response;
-      //jexit(); // Exit this request now as results passed back to client via xhr transport.
     }
 
 

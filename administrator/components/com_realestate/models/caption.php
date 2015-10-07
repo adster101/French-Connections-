@@ -11,7 +11,7 @@ jimport('joomla.application.component.modeladmin');
  * 
  *    
  */
-class RealestateModelCaption extends JModelAdmin
+class RealEstateModelCaption extends JModelAdmin
 {
 
   /**
@@ -36,7 +36,7 @@ class RealestateModelCaption extends JModelAdmin
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = false)
+  public function getForm($data = array(), $loadData = true)
   {
     // Get the form.
     $form = $this->loadForm('com_realestate.caption', 'caption', array('control' => 'jform', 'load_data' => $loadData));
@@ -46,6 +46,15 @@ class RealestateModelCaption extends JModelAdmin
     }
 
     return $form;
+  }
+  
+   
+  public function loadFormData()
+  {
+
+    $data = $this->getItem();
+   
+    return $data;
   }
   /**
    * Method to save a caption for an image

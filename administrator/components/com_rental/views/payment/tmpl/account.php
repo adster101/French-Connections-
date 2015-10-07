@@ -26,8 +26,7 @@ $show_company_number = '';
 
       <?php //echo $this->payment_summary->render($this->summary); ?>   
       <div class="alert alert-notice">
-        <span class='icon icon-flag'> </span>
-        Our records indicate that we don't have VAT or invoice details registered on our system. Please complete the following before proceeding.
+        <?php echo JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_PAYMENT_VAT_STATUS_BLURB'); ?>
       </div>
       <form action="<?php echo JRoute::_('index.php?option=com_rental&option=com_rental&task=renewal&layout=payment&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate form-vertical">
         <fieldset>

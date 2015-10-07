@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form	addrulepath="/administrator/components/com_rental/models/rules">
-  <fieldset name="caption">
-    <field
-      name="caption"
-      type="text"
-      default=""
-      size="80"
-      maxlength="75"
-      label="COM_RENTAL_CAPTION"
-      required="true"
-      class="input-xxlarge"
-      validate="caption"
-      filter="string">
-    </field>
-    <field 
-      name="id"
-      type="hidden"
-      filter="int">
-    </field>
-    <field 
-      name="unit_id"
-      type="hidden"
-      filter="int">
-    </field>
-  </fieldset>
+    <fieldset name="caption">
+        <field
+            name="caption"
+            type="text"
+            default=""
+            size="80"
+            maxlength="75"
+            label="COM_RENTAL_CAPTION"
+            required="true"
+            class="input-xxlarge"
+            validate="caption"
+            filter="string">
+        </field>
+        <field 
+            name="id"
+            type="hidden"
+            filter="int">
+        </field>
+        <field 
+            name="unit_id"
+            type="hidden"
+            filter="int">
+        </field>
+    </fieldset>
 </form>

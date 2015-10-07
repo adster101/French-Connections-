@@ -24,6 +24,9 @@ $inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
 $search_route = 'index.php?option=com_fcsearch&Itemid=' . (int) $searchID . '&s_kwds=france';
 
+$average_rating = JHtmlProperty::averageRating($this->reviews);
+
+
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
 
@@ -219,6 +222,18 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                             </mark>
                         </p>
                     <?php endif; ?>
+
+
+                    <?php if ($this->reviews) : ?>
+                        <hr />
+                        <p>
+                            <span class="orange">
+                                <?php echo JHtmlProperty::rating($average_rating); ?> 
+                            </span>
+                            <a href="<?php echo $link . '#reviews' ?>">Read all <?php echo count($this->reviews) ?> reviews</a>
+                        </p>
+                    <?php endif; ?>
+
                     <div class="visible-xs">
                         <p>
                             <a class="btn btn-danger btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
@@ -233,13 +248,17 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                     </div>
                 </div>
             </div>
+
             <div class="hidden-xs">
                 <?php echo $this->loadTemplate('top_form'); ?>
+
                 <?php if ($this->item->is_bookable) : ?>
                     <?php echo $this->loadTemplate($owner); ?>
                 <?php else: ?>
                     <?php echo $this->loadTemplate('contact_owner'); ?>
                 <?php endif; ?>
+
+
             </div>
             <div class="text-center hidden-xs">
                 <?php foreach ($mpu as $item) : // Render the cross-sell modules etc   ?>
