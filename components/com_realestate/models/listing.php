@@ -164,6 +164,7 @@ class RealestateModelListing extends JModelForm
         b.additional_price_notes,
         b.base_currency,
         b.price,
+        b.agency_reference,
         e.title as city_title,
         f.title as department,
         g.title as region,
@@ -601,9 +602,10 @@ class RealestateModelListing extends JModelForm
       $adults = $data['adults'];
       $children = $data['children'];
       $full_name = $firstname . ' ' . $surname;
+      $property_reference = (empty($item->agency_reference)) ? $id : $item->agency_reference;
 
       // Prepare email body
-      $body = JText::sprintf($params->get('owner_email_realestate_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $arrival, $end, $adults, $children);
+      $body = JText::sprintf($params->get('owner_email_realestate_enquiry_template'), $owner_name, $firstname, $surname, $email, $phone, htmlspecialchars($message, ENT_COMPAT, 'UTF-8'), $property_reference);
 
       $mail = JFactory::getMailer();
       $mail->addRecipient($owner_email, $owner_name);

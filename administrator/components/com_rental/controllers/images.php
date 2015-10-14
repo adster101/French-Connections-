@@ -96,25 +96,27 @@ class RentalControllerImages extends RentalControllerBase
   {
 
     // Check that this is a valid call from a logged in user.
-    JSession::checkToken('get') or die('Invalid Token');
+    JSession::checkToken() or die('Invalid Token');
 
-    $app = JFactory::getApplication();
-    $input = $app->input;
     $model = $this->getModel('Caption', 'RentalModel');
-    $data = array();
     $response = array();
-
-    // Build up the data
-    $data['unit_id'] = $input->get('unit_id', '', 'int');
-    $data['caption'] = $input->get('caption', '', 'string');
-    $data['id'] = $input->get('id', '', 'int');
+    $data = $this->input->post->get('jform', array(), 'array');
+    $app = JFactory::getApplication();
 
     // Check that this user is authorised to edit (i.e. owns) this this property
     if (!$this->allowEdit($data, 'unit_id'))
     {
-      $response['message'] = JText::_('NOT_AUTHORISED');
-      //echo $response;
-      //jexit(); // Exit this request now as results passed back to client via xhr transport.
+      $this->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
+      $this->setMessage($this->getError(), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . '&unit_id=' . $data['unit_id']
+              )
+      );
+
+      return false;
     }
 
     // Consider running this through $model->validate to more carefully check the caption details
@@ -124,11 +126,30 @@ class RentalControllerImages extends RentalControllerBase
 
     if (!$validData)
     {
-      // Problem saving, oops
-      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_IS_INVALID');
-      $response['error'] = 1;
-      //echo $response;
-      //jexit(); // Exit this request now as results passed back to client via xhr transport.     
+      // Get the validation messages.
+      $errors = $model->getErrors();
+
+      // Push up to three validation messages out to the user.
+      for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+      {
+        if ($errors[$i] instanceof Exception)
+        {
+          $app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+        }
+        else
+        {
+          $app->enqueueMessage($errors[$i], 'warning');
+        }
+      }
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&view=' . $this->view_list
+                      . '&unit_id=' . $data['unit_id'], false
+              )
+      );
+
+      return false;
     }
 
     // Need to ensure the caption is filtered at some point
@@ -136,21 +157,17 @@ class RentalControllerImages extends RentalControllerBase
     // Also, need to amend the save method so that it triggers a new version
     if (!$model->save($validData))
     {
-      // Problem saving, oops
-      $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_NOT_UPDATED');
-      $response['error'] = 1;
-      //echo $response;
-      //jexit(); // Exit this request now as results passed back to client via xhr transport.
     }
 
-    $response['message'] = JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_UPDATED');
-    $response['error'] = 0;
 
-    echo json_encode($response);
+    $this->setRedirect(
+            JRoute::_(
+                    'index.php?option=' . $this->option . '&view=' . $this->view_list
+                    . '&unit_id=' . $data['unit_id'], false
+            ), JText::_('COM_RENTAL_HELLOWORLD_IMAGES_CAPTION_UPDATED')
+    );
 
-    jexit(); // Exit this request now as results passed back to client via xhr transport.
-    // Log out to a file
-    // User ID updates caption ID from to on this
+    return true;
   }
 
   function delete()

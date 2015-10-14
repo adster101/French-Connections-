@@ -109,7 +109,7 @@ class RentalViewImages extends JViewLegacy
     JHtml::_('bootstrap.framework');
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
-        // TO DO - Move this to media folder and add to grunt to concat 
+    // TO DO - Move this to media folder and add to grunt to concat 
     $document->addStyleSheet("/media/fc/css/jquery.fileupload.css", 'text/css', "screen");
     $document->addStyleSheet("/media/fc/css/jquery.fileupload-ui.css", 'text/css', "screen");
     $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");
@@ -121,6 +121,8 @@ class RentalViewImages extends JViewLegacy
     // Register the JHtmlProperty class
     // TO DO - Move this to main or add to concat etc
     JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/helpers/fcsortablelist.php');
+
+    JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
   }
 
 }

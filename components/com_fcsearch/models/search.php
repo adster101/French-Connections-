@@ -286,6 +286,7 @@ class FcSearchModelSearch extends JModelList
         c.latitude,
         c.longitude,
         c.city,
+        c.distance_to_coast as coast,
         d.occupancy,
         d.bathrooms,
         d.base_currency,
@@ -482,6 +483,11 @@ class FcSearchModelSearch extends JModelList
       $query->where('d.unit_id is not null');
       $query->where('c.review = 0');
       $query->where('d.review = 0');
+      
+      if($sort_column == 'coast') 
+      {
+        $query->where('distance_to_coast > 0');
+      }
       // Push the query into the cache.
       $this->store($store, $query, true);
 

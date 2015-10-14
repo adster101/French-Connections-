@@ -71,7 +71,8 @@ class RentalModelImage extends JModelAdmin
         $query = $db->getQuery(true);
         $query->select('id')
                 ->from($db->quoteName('#__property_images_library'))
-                ->where($db->quoteName('version_id') . ' = ' . $table->version_id);
+                ->where($db->quoteName('version_id') . ' = ' . $table->version_id)
+                ->order('ordering');
         
         $db->setQuery($query);
         

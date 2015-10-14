@@ -231,7 +231,7 @@ class RealEstateControllerPayment extends JControllerLegacy
       $app->setUserState('com_realestate.renewal.data', $data);
 
       // Save failed, go back to the screen and display a notice.
-      $message = JText::sprintf('JERROR_SAVE_FAILED', $payment_model->getError());
+      $message = JText::_($payment_model->getError());
       $this->setRedirect('index.php?option=com_realestate&view=payment&layout=payment&id=' . (int) $data['id'], $message, 'error');
       return false;
     }

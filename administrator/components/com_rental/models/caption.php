@@ -49,7 +49,7 @@ class RentalModelCaption extends JModelAdmin
    * @return	mixed	A JForm object on success, false on failure
    * @since	1.6
    */
-  public function getForm($data = array(), $loadData = false)
+  public function getForm($data = array(), $loadData = true)
   {
 
     // Get the form.
@@ -60,6 +60,14 @@ class RentalModelCaption extends JModelAdmin
     }
 
     return $form;
+  }
+
+  public function loadFormData()
+  {
+
+    $data = $this->getItem();
+   
+    return $data;
   }
 
   /**
@@ -99,7 +107,7 @@ class RentalModelCaption extends JModelAdmin
       $data['image_file_name'] = $image->image_file_name;
       $data['ordering'] = $image->ordering;
       $data['version_id'] = $model->getState($model->getName() . '.version_id');
-      $table->set('_tbl_keys', array('image_file_name','version_id'));
+      $table->set('_tbl_keys', array('image_file_name', 'version_id'));
     }
     else
     {
@@ -108,7 +116,6 @@ class RentalModelCaption extends JModelAdmin
     }
 
     // Arrange the data for saving into the images table
-
     // Call the parent save method to save the actual image data to the images table
     $key = $table->getKeyName();
 

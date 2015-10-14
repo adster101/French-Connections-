@@ -242,6 +242,7 @@ class FcSearchViewSearch extends JViewLegacy
     $options[] = JHtml::_('select.option', 'order_reviews_desc', JText::_('COM_FCSEARCH_SEARCH_ORDER_REVIEWS'));
     $options[] = JHtml::_('select.option', 'order_bedrooms_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_BEDROOMS_LOW_TO_HIGH'));
     $options[] = JHtml::_('select.option', 'order_bedrooms_DESC', JText::_('COM_FCSEARCH_SEARCH_ORDER_BEDROOMS_HIGH_TO_LOW'));
+    $options[] = JHtml::_('select.option', 'order_coast_ASC', JText::_('COM_FCSEARCH_SEARCH_ORDER_DISTANCE_TO_COAST_HIGH_TO_LOW'));
     return $options;
   }
 

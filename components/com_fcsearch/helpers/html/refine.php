@@ -54,13 +54,11 @@ abstract class JHtmlRefine
 
     $html .='<span>';
 
-
     $html .='<a class="muted" href="' . JRoute::_('http://' . $uri) . '">';
     $html .='<span class="label label-warning"><i class=" glyphicon glyphicon-remove"></i>Special offers';
     $html .='</span></a>&nbsp;';
 
     $html .='</span>';
-
 
     return $html;
   }

@@ -241,7 +241,7 @@
       label="COM_RENTAL_HELLOWORLD_PAYMENT_BILLING_COUNTRY"
       default="">  
       <option value="">Please select...</option>
-    </field>
+    </field>    
   </fieldset>
   
   <field 
