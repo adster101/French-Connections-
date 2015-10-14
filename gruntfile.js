@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // 1. All configuration goes here 
   grunt.initConfig({
@@ -16,6 +16,12 @@ module.exports = function(grunt) {
             src: ['bower_components/bootstrap/fonts/*', 'templates/fcv4/assets/fonts/*'],
             dest: 'media/fc/assets/fonts/',
             flatten: true
+          },
+          {
+            expand: true,
+            src: ['bower_components/bootstrap/fonts/*', 'templates/fcv4/assets/fonts/*'],
+            dest: 'media/fc/fonts/',
+            flatten: true
           }
         ]
       }
@@ -27,7 +33,7 @@ module.exports = function(grunt) {
         },
         files: {
           //compiling frontend.less into frontend.css
-          'media/fc/assets/css/styles.css': 'templates/fcv4/assets/less/styles.less'
+          'media/fc/css/styles.css': 'templates/fcv4/assets/less/styles.less'
         }
       }
     },
@@ -39,7 +45,7 @@ module.exports = function(grunt) {
       target: {
         files: {
           // Merge the slick styles into main style sheet
-          'media/fc/assets/css/styles.css':
+          'media/fc/css/styles.css':
                   ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
                   ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css']
@@ -70,7 +76,7 @@ module.exports = function(grunt) {
           'media/fc/js/search.js',
           'media/fc/js/property.js'
         ],
-        dest: 'media/fc/assets/js/scripts.js'
+        dest: 'media/fc/js/scripts.js'
       },
       admin: {
         src: [
@@ -82,7 +88,7 @@ module.exports = function(grunt) {
           'media/fc/js/locate.js',
           'media/fc/js/tariffs.js'
         ],
-        dest: 'media/fc/assets/js/admin.scripts.js'
+        dest: 'media/fc/js/admin.scripts.js'
       },
       images: {
         src: [
@@ -98,26 +104,26 @@ module.exports = function(grunt) {
           'media/fc/js/libs/blueimp/jquery.fileupload-ui.js',
           'media/fc/js/main.js'
         ],
-        dest: 'media/fc/assets/js/images.admin.scripts.js'
+        dest: 'media/fc/js/images.admin.scripts.js'
       }
     },
     uglify: {
       build: {
-        src: 'media/fc/assets/js/scripts.js',
+        src: 'media/fc/js/scripts.js',
         dest: 'media/fc/assets/js/<%= opts.date %>.scripts.min.js',
         options: {
           mangle: true
         }
       },
       admin: {
-        src: 'media/fc/assets/js/admin.scripts.js',
+        src: 'media/fc/js/admin.scripts.js',
         dest: 'media/fc/assets/js/<%= opts.date %>.admin.scripts.min.js',
         options: {
           mangle: false
         }
       },
       images: {
-        src: 'media/fc/assets/js/images.admin.scripts.js',
+        src: 'media/fc/js/images.admin.scripts.js',
         dest: 'media/fc/assets/js/<%= opts.date %>.images.admin.scripts.min.js',
         options: {
           mangle: false

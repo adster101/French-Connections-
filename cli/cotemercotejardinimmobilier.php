@@ -169,7 +169,7 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                     $data['single_bedrooms'] = (int) $prop->single_bedrooms;
                     $data['double_bedrooms'] = 0;
                     $data['bathrooms'] = 0;
-                    $data['base_currency'] = $db->quote($prop->base_currency);
+                    $data['base_currency'] = $db->quote('EUR');
                     $data['price'] = (int) $prop->price;
                     $data['review'] = 0;
                     $data['published_on'] = $db->quote(JFactory::getDate());
@@ -186,7 +186,6 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                 $db->transactionCommit();
 
                 $this->out('Done processing... ' . $prop->agency_reference);
-                              
             } catch (Exception $e) {
                 // Roll back any batched inserts etc
                 $db->transactionRollback();

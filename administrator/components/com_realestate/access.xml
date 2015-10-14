@@ -17,7 +17,7 @@
         <action name="realestate.listing.review" title="Review changes to a listing" description="" />
         <action name="realestate.listings.showowner" title="Display owner details on listing view" description="" />
         <action name="realestate.payment.view" title="Access payment view" description="" />
-        <action name="rental.caption.view" title="Access update caption view" description="" />   
+        <action name="realestate.caption.view" title="Access update caption view" description="" />   
         <action name="realestate.review.view" title="Access review view" description="" />
         <action name="realestate.listing.view" title="Access listing view" description="" />
         <action name="realestate.property.view" title="Access update property view" description="" />
