@@ -14,7 +14,7 @@ defined('_JEXEC') or die('Restricted access');
         </button> 
         <!-- Take brand out of navbar as we're not really using the BS default nav correctly -->
         <a class="navbar-brand simple" href="<?php echo $this->baseurl; ?>">
-          <img src="<?php echo '//' . $URI->getHost() . '/images/general/logo-4.png' ?>" alt="<?php echo $sitename ?>" />
+          <img src="<?php echo '//' . $URI->getHost() . '/images/general/logo.png' ?>" alt="<?php echo $sitename ?>" />
         </a> 
       </div>
       <?php if ($this->countModules('owner-login')) : ?>

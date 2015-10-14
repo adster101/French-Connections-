@@ -38,7 +38,7 @@ if (!defined("K_TCPDF_EXTERNAL_CONFIG")) {
 	/**
 	 * installation path (/var/www/tcpdf/)
 	 */
-	define ("K_PATH_MAIN", "D:/Inetpub/wwwroot/_OPENSOURCE/tcpdf/");
+	define ("K_PATH_MAIN", JPATH_LIBRARIES . "/tcpdf/");
 
 	/**
 	 * url path (http://localhost/tcpdf/)
@@ -99,12 +99,12 @@ if (!defined("K_TCPDF_EXTERNAL_CONFIG")) {
 	/**
 	 * header description string
 	 */
-	define ("PDF_HEADER_STRING", "first row\nsecond row\nthird row");
+	define ("PDF_HEADER_STRING", "first row\nsecond row\nthirPDF_HEADER_STRINGd row");
 
 	/**
 	 * image logo
 	 */
-	define ("PDF_HEADER_LOGO", "tcpdf_logo.jpg");
+	define ("PDF_HEADER_LOGO", "");
 
 	/**
 	 * header logo image width [mm]
@@ -149,12 +149,12 @@ if (!defined("K_TCPDF_EXTERNAL_CONFIG")) {
 	/**
 	 * main font name
 	 */
-	define ("PDF_FONT_NAME_MAIN", "vera"); //vera
+	define ("PDF_FONT_NAME_MAIN", "freesans"); //vera
 
 	/**
 	 * main font size
 	 */
-	define ("PDF_FONT_SIZE_MAIN", 10);
+	define ("PDF_FONT_SIZE_MAIN", 12);
 
 	/**
 	 * data font name
