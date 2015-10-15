@@ -67,15 +67,12 @@
       name="message"
       type="textarea"
       id="review-text"
- 
       class="validate-message form-control "
-
       description="COM_ACCOMMODATION_ENQUIRY_MESSAGE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
       hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"      
       filter="string"
       validate="message"
-      required="true"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
@@ -92,7 +89,6 @@
       hint="COM_ACCOMMODATION_ENQUIRY_START_DATE_PLACEHOLDER"
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
-      required="true"
     />
     
     <field 
@@ -107,7 +103,6 @@
       message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
       hint="COM_ACCOMMODATION_ENQUIRY_END_DATE_PLACEHOLDER"
       labelclass="control-label"
-      required="true"
     />  
  
     <field 
