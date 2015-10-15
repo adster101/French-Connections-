@@ -1049,6 +1049,7 @@ class AccommodationModelListing extends JModelForm
     $sms_params = JComponentHelper::getParams('com_rental');
     $banned_emails = explode(',', $params->get('banned_email'));
     $banned_phrases = explode(',', $params->get('banned_text'));
+
     // The details of where who is sending the email (e.g. FC in this case).
     $mailfrom = $params->get('admin_enquiry_email_no_reply', '');
     $fromname = $app->getCfg('fromname');
@@ -1070,7 +1071,7 @@ class AccommodationModelListing extends JModelForm
     }
 
     // Check the banned phrases list - This is currently done as a form field validation rule
-    if ($this->contains($data['message'], $banned_phrases))
+    if ($this->contains($data['message'], $banned_phrases) && !empty($data['message']))
     {
       $valid = false; // Naughty!!
       $data['state'] = -3;
