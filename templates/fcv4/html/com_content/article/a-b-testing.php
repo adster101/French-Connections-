@@ -66,7 +66,7 @@ $modules = JModuleHelper::getModules('advertise-with-us'); //If you want to use 
                 ?>
             </p>
             <p>
-                <a class="btn btn-default btn-lg btn-clear" href="#" role="button"> <?php
+                <a class="btn btn-default btn-lg btn-clear" href="/advertise/register" role="button"> <?php
                     if ($images->image_fulltext_caption):
                         echo htmlspecialchars($images->image_fulltext_caption);
                     endif;
