@@ -91,3 +91,4 @@ robots.txt
 /vendor/
 /composer.json
 /composer.lock
+/libraries/tcpdf_6_2_12/
