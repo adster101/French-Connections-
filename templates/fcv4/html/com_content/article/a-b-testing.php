@@ -332,6 +332,6 @@ $modules = JModuleHelper::getModules('advertise-with-us'); //If you want to use 
     <?php echo $this->item->event->afterDisplayContent; ?> 
 
       <?php foreach ($modules as $module) : // Render the cross-sell modules etc  ?>
-        <?php echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box')); ?>
+        <?php echo JModuleHelper::renderModule($module, array('style' => 'rounded', 'id' => 'section-box', 'cache' => 0, 'cache_time'=>0)); ?>
       <?php endforeach; ?>
 </div>

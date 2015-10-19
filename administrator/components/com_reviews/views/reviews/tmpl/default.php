@@ -5,6 +5,7 @@
  */
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('bootstrap.tooltip');
+JHtml::_('behavior.modal', 'a.modal');
 
 $listDirn = $this->escape($this->state->get('list.direction'));
 $listOrder = $this->escape($this->state->get('list.ordering'));
@@ -72,11 +73,14 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
                             </th>
                             <th>
                                 <?php echo JText::_('JSTATUS'); ?>
+                            </th>     
+                            <th>
+                                Notes
                             </th>
                             <th>
                                 <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
-
                             </th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -107,8 +111,16 @@ $data = ($option == 'com_rental') ? array('item' => $this->unit, 'progress' => $
                                     <?php echo JHtml::_('jgrid.published', $item->published, $i, 'reviews.', $canChangeState, 'cb'); ?>
                                 </td>
                                 <td>
+                                    <?php if ($user->authorise('core.manage', 'com_notes')) : ?>
+                                        <p>
+                                            <?php echo JHtml::_('property.notes', $item->property_id); ?>
+                                        </p>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
                                     <?php echo $item->id; ?>
                                 </td>
+
                             </tr>
                         <?php endforeach; ?>
                     <input type="hidden" name="extension" value="<?php echo 'com_reviews'; ?>" />

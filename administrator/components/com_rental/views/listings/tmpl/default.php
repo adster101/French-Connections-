@@ -106,13 +106,17 @@ $canDo = RentalHelper::getActions();
 
                             $value = (!empty($item->value)) ? round($item->value, 2) : '';
 
-                            if ($item->review == 0) {
+                            if ($item->review == 0)
+                            {
                                 $enabled = false;
-                            } elseif ($item->review == 1) {
+                            } elseif ($item->review == 1)
+                            {
                                 $enabled = $canDo->get('rental.listing.submit');
-                            } elseif ($item->review == 2) {
+                            } elseif ($item->review == 2)
+                            {
                                 $enabled = $canDo->get('rental.listing.review');
-                            } elseif ($item->review == -1) {
+                            } elseif ($item->review == -1)
+                            {
                                 $enabled = false;
                             }
                             ?>
@@ -167,17 +171,14 @@ $canDo = RentalHelper::getActions();
                                             <?php echo JHtml::link('index.php?option=com_rental&task=marketing.edit&property_id=' . (int) $item->id, JText::_('COM_RENTAL_SUBMENU_ADDITIONAL_MARKETING')); ?>
                                         </p>
                                         <p>
+                                            <?php if ($item->payment) : ?>
+                                                <?php echo JHtml::link('index.php?option=com_rental&task=payment.summary&property_id=' . (int) $item->id, JText::_('COM_RENTAL_PAYMENT_DUE_PROCEED')); ?>
+                                            <?php endif; ?>
+                                        </p>
+                                        <p>
                                             <?php echo JHtml::_('property.renewalButton', $days_to_renewal, $item->id, $item->review, $canReview, $item->expiry_date); ?>
                                         </p>
-                                        <?php if ($item->payment) : ?>
 
-                                            <?php
-                                            $msg = JText::_('COM_RENTAL_PAYMENT_DUE');
-                                            $html = JHtml::_('property.listingmessage', 'alert alert-info', $msg, 'btn btn-info', 'payment.summary', $id, 'icon icon-chevron-right', 'COM_RENTAL_PAYMENT_DUE_PROCEED', false, 'com_rental');
-                                            echo $html;
-                                            ?>
-
-                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <?php echo JText::_($item->modified); ?>
@@ -240,9 +241,11 @@ $canDo = RentalHelper::getActions();
 
                     <tfoot>
                         <?php
-                        if (isset($this->items[0])) {
+                        if (isset($this->items[0]))
+                        {
                             $colspan = count(get_object_vars($this->items[0]));
-                        } else {
+                        } else
+                        {
                             $colspan = 10;
                         }
                         ?>

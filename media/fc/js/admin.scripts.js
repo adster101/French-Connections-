@@ -820,14 +820,29 @@ function initialise() {
 
   });
 }     
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
+  jQuery('.tariffs-container a.delete').on('click', function (e) {
+    e.preventDefault();
 
-  jQuery(function() {
+    if (!confirm(Joomla.JText._('COM_RENTAL_IMAGES_CONFIRM_DELETE_ITEM'))) {
+      return false;
+    }
+    
+    // Remove this tariff from the DOM
+    jQuery(this).closest('li').remove();
+    
+    window.onbeforeunload = function() {
+      return Joomla.JText._('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
+    };
+    
+  })
+
+  jQuery(function () {
 
     // Select each UL with class of tariff-range and for each 
-    jQuery('.tariff-range ol > li').each(function(index) {
-      
+    jQuery('.tariff-range ol > li').each(function (index) {
+
 
       var current = jQuery(this).children().children('input[type=text].tariff_date');
       var start_date_id = '#' + jQuery(current[0]).attr('id');
@@ -846,7 +861,7 @@ jQuery(document).ready(function() {
         buttonImageOnly: true,
         buttonImage: "/media/system/images/calendar.png",
         showButtonPanel: true,
-        onSelect: function(selectedDate) {
+        onSelect: function (selectedDate) {
           jQuery(end_date_id).datepicker("option", "minDate", selectedDate);
         },
         minDate: new Date()
@@ -858,7 +873,7 @@ jQuery(document).ready(function() {
         showOn: "both",
         buttonImageOnly: true,
         buttonImage: "/media/system/images/calendar.png",
-        onSelect: function(selectedDate) {
+        onSelect: function (selectedDate) {
           // This is quite strict - disallows setting of a start date after the end date
           //jQuery( "#jform_tariffs_start_date_tariff_0" ).datepicker( "option", "maxDate", selectedDate );
         },
