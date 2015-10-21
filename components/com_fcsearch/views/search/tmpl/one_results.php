@@ -27,7 +27,7 @@ $sortFields = $this->getSortFields();
 $s_kwds = $this->state->get('list.searchterm', '');
 
 // The layout for the anchor based navigation on the property listing
-$search_layout = new JLayoutFile('search', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
+$search_layout = new JLayoutFile('search_one', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 $search_data = new stdClass;
 $search_data->searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $search_data->bedrooms = $this->state->get('list.bedrooms');
@@ -51,9 +51,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     <h1 class="small-h1 page-header">
         <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
     </h1>
-    <div class="well well-sm well-light-blue clearfix form-inline">  
-        <?php echo $search_layout->render($search_data); ?>
-    </div>
+
 
     <?php $offer_filter = JHtml::_('refine.removeOffersFilter', (bool) $offers); ?>
     <?php $lwl_filter = JHtml::_('refine.removeLWLFilter', (bool) $lwl); ?>
@@ -61,49 +59,45 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
     <?php $property_filter = JHtml::_('refine.removeTypeFilters', $this->property_options, $uri, 'property_'); ?>
     <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
 
-    <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
-        <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
-        <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
-        <hr />
-    <?php endif; ?>
-
-
     <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12">
-            <ul class="nav nav-tabs" id="search-tabs">
-                <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
-                <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
-                <?php if ((empty($property_filter) && empty($accommodation_filter)) || (!empty($property_filter) && !empty($this->seo_copy))) : ?>
-                    <li><a href="#localinfo" data-toggle="tab"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Info</a></li>
-                <?php endif; ?>
-                <li class="visible-sm-inline-block visible-xs-inline-block pull-right">
-                    <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="">  
-                        <span class="glyphicon glyphicon-filter"></span>
-                        <span class="hidden-xs">
-                            <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
-                        </span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="tab-content col-lg-9 col-md-9">
+        <div class="tab-content col-lg-9 col-md-9 col-md-push-3 col-lg-push-3">
+
             <div class="tab-pane active" id="list">
-                <?php if (count($this->results) > 0) : ?>
-                    <div class="clearfix">
+                <div class="well well-sm well-light-blue clearfix form-inline">  
+                    <?php echo $search_layout->render($search_data); ?>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8 col-xs-12 col-md-8 col-sm-8">
                         <p class="pull-left" style='line-height: 28px;'>
                             <?php echo $this->pagination->getResultsCounter(); ?>
                         </p>
-                        <div class="form-inline pull-right">
-                            <label for="sort_by" class="">
+                    </div>
+                    <div class="col-lg-4 col-xs-6 col-md-4 col-sm-4">
+                            <label for="sort_by" class="sr-only">
                                 <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
                             </label>
                             <select id="sort_by" class="form-control" name="order">
                                 <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
                             </select>
-                        </div>
                     </div>
+                    <div class="visible-sm-inline-block visible-xs-inline-block col-xs-6"
+                         <p class=" pull-right">
+                            <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default">  
+                                <span class="glyphicon glyphicon-filter"></span>
+                                <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
+                                </span>
+                            </a>
+                        </p>
+                    </div>
+                </div>   
+                <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
+                    <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
+                    <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
+                    <hr />
+                <?php endif; ?>
+                <?php if (count($this->results) > 0) : ?>
+
                     <div class="search-results list-unstyled clear">
                         <?php
                         JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
@@ -149,19 +143,28 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
                     </thead>
                 </table>
             </div>
-            <div class="tab-pane" id="localinfo">
-                <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
-                <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
-            </div>
+            <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
+            <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
         </div>
-        <div class="col-lg-3 col-md-3 refine-search">
+        <div class="col-lg-3 col-md-3 col-lg-pull-9 col-md-pull-9 refine-search">
+            <ul class="nav nav-stacked nav-pills" id="search-tabs">
+                <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
+                <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
+            </ul>
+            <div class="form-group">
+                <label class="sr-only" for="bedrooms">
+                    <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
+                </label>
+                <select id="bedrooms" name="bedrooms" class="form-control" >
+                    <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => '10+'), 'value', 'text', $bedrooms); ?>
+                </select>
+            </div>
             <?php
             JDEBUG ? $_PROFILER->mark('Start process refine') : null;
             echo $this->loadTemplate('refine');
             JDEBUG ? $_PROFILER->mark('End process refine') : null;
             ?>
         </div>
-
     </div>
 </form>
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>

@@ -88,7 +88,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
         </div>
     </div>
     <div class="row">
-        <div class="tab-content col-lg-9 col-md-9">
+        <div class="tab-content col-lg-9 col-md-9 col-lg-push-3 col-md-push-3">
             <div class="tab-pane active" id="list">
                 <?php if (count($this->results) > 0) : ?>
                     <div class="clearfix">
@@ -154,7 +154,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
                 <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 refine-search">
+        <div class="col-lg-3 col-md-3 col-lg-pull-9 col-md-pull-9 refine-search">
             <?php
             JDEBUG ? $_PROFILER->mark('Start process refine') : null;
             echo $this->loadTemplate('refine');
