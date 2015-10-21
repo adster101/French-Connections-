@@ -44,11 +44,11 @@ module.exports = function (grunt) {
       },
       target: {
         files: {
-          // Merge the slick styles into main style sheet
-          'media/fc/css/styles.css':
-                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css'],
+          // Minify the styles into the assets folder
+          'media/fc/assets/css/styles.css':
+                  ['media/fc/css/styles.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
-                  ['media/fc/assets/css/styles.css', 'bower_components/slick-carousel/slick/slick.css']
+                  ['media/fc/css/styles.css']
         }
       }
     },
@@ -165,9 +165,6 @@ module.exports = function (grunt) {
             dest: 'administrator/templates/fcadmin/assets.php'
           }
         ]
-
-
-
       }
     }
   });
@@ -181,6 +178,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
-  grunt.registerTask('init', ['less', 'concat', 'uglify', 'copy', 'replace', 'cssmin']);
+  grunt.registerTask('init', ['less', 'concat', 'uglify', 'replace', 'cssmin']);
+  
   grunt.registerTask('default', ['init']);
 };
