@@ -2,7 +2,7 @@ var infowindow;
 jQuery(document).ready(function() {
 
   // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 
     //jQuery('#map_canvas').hide();
     if (!window.google) {

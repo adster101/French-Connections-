@@ -68,6 +68,7 @@ module.exports = function (grunt) {
           'bower_components/bootstrap/js/modal.js',
           'bower_components/bootstrap-datepicker/js/bootstrap-datepicker.js',
           'bower_components/js-marker-clusterer/src/markerclusterer_compiled.js',
+          'bower_components/mustache.js/mustache.js',
           'bower_components/slick-carousel/slick/slick.min.js',
           'media/system/js/core-uncompressed.js',
           'bower_components/overthrow/dist/overthrow.sidescroller.min.js',

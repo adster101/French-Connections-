@@ -12,7 +12,6 @@ $lang = JFactory::getLanguage();
 $lang->load('com_accommodation', JPATH_SITE, null, false, true);
 $lang->load('com_shortlist', JPATH_SITE, null, false, true);
 
-
 if (JDEBUG)
 {
     $_PROFILER = JProfiler::getInstance('Application');
@@ -38,6 +37,9 @@ $uri = JUri::getInstance()->toString(array('user', 'pass', 'host', 'port', 'path
 $offers = ($this->state->get('list.offers')) ? true : false;
 $lwl = ($this->state->get('list.lwl')) ? true : false;
 $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+
+$latitude = $this->state->get('search.latitude', '');
+$longitude = $this->state->get('search.longitude', '');
 
 // Prepare the pagination string.  Results X - Y of Z
 // $start = (int) $this->pagination->get('limitstart') + 1;
@@ -74,19 +76,18 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
                         </p>
                     </div>
                     <div class="col-lg-4 col-xs-6 col-md-4 col-sm-4">
-                            <label for="sort_by" class="sr-only">
-                                <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
-                            </label>
-                            <select id="sort_by" class="form-control" name="order">
-                                <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
-                            </select>
+                        <label for="sort_by" class="sr-only">
+                            <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
+                        </label>
+                        <select id="sort_by" class="form-control" name="order">
+                            <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
+                        </select>
                     </div>
-                    <div class="visible-sm-inline-block visible-xs-inline-block col-xs-6"
-                         <p class=" pull-right">
+                    <div class="visible-sm-inline-block visible-xs-inline-block col-xs-6">
+                        <p class=" pull-right">
                             <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default">  
                                 <span class="glyphicon glyphicon-filter"></span>
                                 <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
-                                </span>
                             </a>
                         </p>
                     </div>
@@ -98,7 +99,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
                 <?php endif; ?>
                 <?php if (count($this->results) > 0) : ?>
 
-                    <div class="search-results list-unstyled clear">
+                    <div class="search-results list-unstyled clear" data-results='<?php json_encode($this->results) ?>'>
                         <?php
                         JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
 
@@ -128,37 +129,41 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
             </div>
             <div class="tab-pane" id="mapsearch">
-                <div id="map_canvas"></div>
-                <table class="table table-condensed availability-key hidden-xs ">
-                    <thead> 
-                        <tr>
-                            <th>Colour key: </th>
-                            <th style="background:red">&nbsp;</th>
-                            <th>Lot's of properties</th>
-                            <th style="background:blue">&nbsp;</th>
-                            <th>Some properties</th>
-                            <th style="background:yellow">&nbsp;</th>
-                            <th>Fewer properties</th>
-                        </tr>
-                    </thead>
-                </table>
+
+                <div id="target">Loading...</div>
+                <script id="template" type="x-tmpl-mustache">
+                    <div class='map-search-results monkey'>
+                    {{ #. }}
+                    <div class='map-search-result'>
+                    <h4> {{ unitTitle }} 
+                    <small> {{ propertyType }} </small>
+                    </h4>
+                    </div>
+                    {{ /. }}
+                    </div>
+                </script>
+
+                <div id="search-map"></div>
+
             </div>
             <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
             <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
         </div>
         <div class="col-lg-3 col-md-3 col-lg-pull-9 col-md-pull-9 refine-search">
-            <ul class="nav nav-stacked nav-pills" id="search-tabs">
-                <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
-                <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
+            <ul class="nav nav-stacked nav-pills" id="map-search-tab">
+                <li>
+                    <a href="#list" data-toggle="tab" class='btn btn-default'>
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                        <?php echo JText::_('COM_FCSEARCH_BACK_TO_LIST') ?>
+                    </a>
+                </li>
+                <li>
+                    <a href="#mapsearch" data-toggle="tab">
+                        <img class="img-responsive" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=320x250&zoom=7&scale=2key=AIzaSyAvIkhf8zAayRncfQ9weXMdnYModMHGDPE' ?>" />
+                    </a>
+                </li>
             </ul>
-            <div class="form-group">
-                <label class="sr-only" for="bedrooms">
-                    <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
-                </label>
-                <select id="bedrooms" name="bedrooms" class="form-control" >
-                    <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => '10+'), 'value', 'text', $bedrooms); ?>
-                </select>
-            </div>
+
             <?php
             JDEBUG ? $_PROFILER->mark('Start process refine') : null;
             echo $this->loadTemplate('refine');
@@ -169,3 +174,37 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 </form>
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
 
+<script>
+
+    // Some work to do here on clearing out the map search results if going back to list view
+    // and vice versa.
+    // Also need to integrate the map here? as well
+
+    jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+
+        jQuery(e.target).toggle();
+      jQuery(e.relatedTarget).toggle();
+
+      // Store the selected tab #ref in local storage, IE8+
+      var selectedTab = jQuery(e.target).attr('href');
+      
+      // Set the local storage value so we 'remember' where the user was
+      localStorage['selectedTab'] = selectedTab; 
+      
+
+      var template = jQuery('#template').html();
+      var data = [];
+      jQuery('.search-result').each(function () {
+        var tmp = jQuery(this).data();
+        data = data.concat(tmp);
+      })
+
+      Mustache.parse(template); // optional, speeds up future uses
+
+      var rendered = Mustache.render(template, data);
+      jQuery('#target').html(rendered);
+
+
+    });
+
+</script>
