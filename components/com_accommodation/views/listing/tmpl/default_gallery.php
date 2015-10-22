@@ -22,11 +22,11 @@ $cdn = $menu->params->get('cdn', '');
         <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/profiles/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
         <?php
         $srcset = array();
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/330x220_' . $image->image_file_name . $image->url . ' 330w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 330w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/408x272_' . $image->image_file_name . $image->url . ' 408w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 408w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/617x464_' . $image->image_file_name . $image->url . ' 617w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 617w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/770x513_' . $image->image_file_name . $image->url . ' 770w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 770w';
-        $srcset[] = (!empty($image->image_file_name)) ? $cdn . $this->item->unit_id . '/900x600_' . $image->image_file_name . $image->url . ' 900w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 900w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . '/' . $this->item->unit_id . '/330x220_' . $image->image_file_name . $image->url . ' 330w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 330w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . '/' . $this->item->unit_id . '/408x272_' . $image->image_file_name . $image->url . ' 408w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 408w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . '/' . $this->item->unit_id . '/617x464_' . $image->image_file_name . $image->url . ' 617w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 617w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . '/' . $this->item->unit_id . '/770x513_' . $image->image_file_name . $image->url . ' 770w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 770w';
+        $srcset[] = (!empty($image->image_file_name)) ? $cdn . '/' . $this->item->unit_id . '/900x600_' . $image->image_file_name . $image->url . ' 900w' : JURI::getInstance()->toString(array('scheme')) . $image->url . ' 900w';
         ?>
         <div>
           <?php if ($images == 0) : ?>
