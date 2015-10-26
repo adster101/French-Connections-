@@ -31,6 +31,9 @@ $uri = JUri::getInstance();
 $unit_title = $this->escape(trim($this->result->unit_title));
 $location_title = $this->result->location_title;
 $property_type = $this->result->property_type;
+$thumb = 'http://www.frenchconnections.co.uk/images/property/' . $this->result->unit_id . '/thumb/' . $this->result->thumbnail;
+$tagline = JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
+
 ?>
 
 <div class="search-result" 
@@ -40,6 +43,8 @@ $property_type = $this->result->property_type;
      data-property-type='<?php echo $this->result->property_type ?>'
      data-latitude='<?php echo $this->result->latitude ?>'
      data-longitude='<?php echo $this->result->longitude ?>'
+     data-thumbnail='<?php echo $thumb ?>'
+     data-tagline='<?php echo $tagline ?>'
      >
   <div class="row">
     <div class="col-xs-12 col-sm-9">
@@ -81,7 +86,7 @@ $property_type = $this->result->property_type;
       <p>
         <a href="<?php echo $route ?>" title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>">
           <?php if (!empty($this->result->thumbnail)) : ?>
-            <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
+            <img class="img-responsive" src='<?php echo $thumb; ?>' />
           <?php else: ?>
             <img width="210" class="img-responsive" src="<?php echo $uri->getScheme() . '://' . $this->result->url_thumb ?>" />
           <?php endif; ?>
@@ -93,7 +98,7 @@ $property_type = $this->result->property_type;
         <div class="col-md-9 col-sm-9">
           <p>
             <?php
-            echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
+            echo $tagline;
             echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
             echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
             echo (!empty($this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (float) $this->result->coast) : '';

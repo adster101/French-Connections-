@@ -62,9 +62,8 @@ $longitude = $this->state->get('search.longitude', '');
     <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
 
     <div class="row">
-        <div class="tab-content col-lg-9 col-md-9 col-md-push-3 col-lg-push-3">
+        <div class="tab-content col-lg-10 col-md-10 col-md-push-2 col-lg-push-2">
 
-            <div class="tab-pane active" id="list">
                 <div class="well well-sm well-light-blue clearfix form-inline">  
                     <?php echo $search_layout->render($search_data); ?>
                 </div>
@@ -96,7 +95,9 @@ $longitude = $this->state->get('search.longitude', '');
                     <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
                     <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
                     <hr />
-                <?php endif; ?>
+                <?php endif; ?>         
+                    <div class="tab-pane active" id="list">
+
                 <?php if (count($this->results) > 0) : ?>
 
                     <div class="search-results list-unstyled clear" data-results='<?php json_encode($this->results) ?>'>
@@ -125,31 +126,37 @@ $longitude = $this->state->get('search.longitude', '');
                     echo JModuleHelper::renderModule($module);
                     ?>
                 <?php endif; ?> 
-                <?php echo $this->pagination->getPagesLinks(); ?>
-
             </div>
-            <div class="tab-pane" id="mapsearch">
+            <div class="tab-pane row" id="mapsearch">
+                <div class="col-lg-3">
+                    <div id="target">Loading...</div>
+                    <script id="template" type="x-tmpl-mustache">
+                        <div class='map-search-results'>
+                        {{ #. }} 
+                            <div class='map-search-result'>
+                                <a href={{ url }}>
+                                    <img class='img-responsive' src={{ thumbnail }} />
+                                </a>
+                                    <h4> {{ unitTitle }} 
+                                    <small> {{ propertyType }} </small>
+                                    </h4>
+                                    <p>{{{ tagline }}}</p>
+                            </div>
+                        {{ /. }}
+                        </div>
+                    </script>
+                </div>
+                <div class="col-lg-9">
+                    <div id="map_canvas"></div>
 
-                <div id="target">Loading...</div>
-                <script id="template" type="x-tmpl-mustache">
-                    <div class='map-search-results monkey'>
-                    {{ #. }}
-                    <div class='map-search-result'>
-                    <h4> {{ unitTitle }} 
-                    <small> {{ propertyType }} </small>
-                    </h4>
-                    </div>
-                    {{ /. }}
-                    </div>
-                </script>
-
-                <div id="search-map"></div>
-
+                </div>
             </div>
+            <?php echo $this->pagination->getPagesLinks(); ?>
+
             <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
             <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
         </div>
-        <div class="col-lg-3 col-md-3 col-lg-pull-9 col-md-pull-9 refine-search">
+        <div class="col-lg-2 col-md-2 col-lg-pull-10 col-md-pull-10 refine-search">
             <ul class="nav nav-stacked nav-pills" id="map-search-tab">
                 <li>
                     <a href="#list" data-toggle="tab" class='btn btn-default'>
@@ -159,7 +166,7 @@ $longitude = $this->state->get('search.longitude', '');
                 </li>
                 <li>
                     <a href="#mapsearch" data-toggle="tab">
-                        <img class="img-responsive" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=320x250&zoom=7&scale=2key=AIzaSyAvIkhf8zAayRncfQ9weXMdnYModMHGDPE' ?>" />
+                        <img class="img-responsive" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=200x200&zoom=7&scale=2key=AIzaSyAvIkhf8zAayRncfQ9weXMdnYModMHGDPE' ?>" />
                     </a>
                 </li>
             </ul>
@@ -176,34 +183,40 @@ $longitude = $this->state->get('search.longitude', '');
 
 <script>
 
-    // Some work to do here on clearing out the map search results if going back to list view
-    // and vice versa.
-    // Also need to integrate the map here? as well
-
+    // Also need to integrate map here.
     jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
 
-        jQuery(e.target).toggle();
+      jQuery(e.target).toggle();
       jQuery(e.relatedTarget).toggle();
 
       // Store the selected tab #ref in local storage, IE8+
       var selectedTab = jQuery(e.target).attr('href');
-      
+
+ 
+
       // Set the local storage value so we 'remember' where the user was
-      localStorage['selectedTab'] = selectedTab; 
-      
+      localStorage['selectedTab'] = selectedTab;
+
+      // Init google maps if not already init'ed
+      if (!window.google) {
+        loadGoogleMaps('initmap'); // Asych load the google maps stuff
+      }
 
       var template = jQuery('#template').html();
+
       var data = [];
+
       jQuery('.search-result').each(function () {
         var tmp = jQuery(this).data();
         data = data.concat(tmp);
       })
 
+
+
       Mustache.parse(template); // optional, speeds up future uses
 
       var rendered = Mustache.render(template, data);
       jQuery('#target').html(rendered);
-
 
     });
 
