@@ -172,7 +172,7 @@ $canDo = RentalHelper::getActions();
                                         </p>
                                         <p>
                                             <?php if ($item->payment) : ?>
-                                                <?php echo JHtml::link('index.php?option=com_rental&task=payment.summary&property_id=' . (int) $item->id, JText::_('COM_RENTAL_PAYMENT_DUE_PROCEED')); ?>
+                                                <?php echo JHtml::link('index.php?option=com_rental&task=payment.summary&id=' . (int) $item->id, JText::_('COM_RENTAL_PAYMENT_DUE_PROCEED')); ?>
                                             <?php endif; ?>
                                         </p>
                                         <p>

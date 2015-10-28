@@ -8,7 +8,8 @@ jimport('joomla.application.component.modellist');
 /**
  * HelloWorldList Model
  */
-class RentalModelListings extends JModelList {
+class RentalModelListings extends JModelList
+{
 
     /**
      * Constructor.
@@ -17,8 +18,10 @@ class RentalModelListings extends JModelList {
      * @see		JController
      * @since	1.6
      */
-    public function __construct($config = array()) {
-        if (empty($config['filter_fields'])) {
+    public function __construct($config = array())
+    {
+        if (empty($config['filter_fields']))
+        {
             $config['filter_fields'] = array(
                 'a.id', 'a.id',
                 'title', 'a.title',
@@ -51,7 +54,8 @@ class RentalModelListings extends JModelList {
      * @return	void
      * @since	1.6
      */
-    protected function populateState($ordering = null, $direction = null) {
+    protected function populateState($ordering = null, $direction = null)
+    {
 
         // List state information.
         parent::populateState('a.id', 'asc');
@@ -69,7 +73,8 @@ class RentalModelListings extends JModelList {
      * @return	string		A store id.
      * @since	1.6
      */
-    protected function getStoreId($id = '') {
+    protected function getStoreId($id = '')
+    {
         // Compile the store id.
         $id .= ':' . $this->getState('filter.search');
         $id .= ':' . $this->getState('filter.extension');
@@ -87,7 +92,8 @@ class RentalModelListings extends JModelList {
      *
      * @return	string	An SQL query
      */
-    protected function getListQuery() {
+    protected function getListQuery()
+    {
         // Get the user ID
         $user = JFactory::getUser();
         $userId = $user->get('id');
@@ -118,12 +124,12 @@ class RentalModelListings extends JModelList {
       d.id as unit_id,
       f.image_file_name as thumbnail,
       f.url_thumb,
-              (select count(*) from #__vouchers v where v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($now) . ' and v.item_cost_id = ' . $db->quote("1006-002") . ' ) as payment
-
-    ');
+      (select count(*) from #__vouchers v left join #__item_costs b on b.code = v.item_cost_id where v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($now) . ' and b.catid = 65 ) as payment'
+                );
 
         // Join the user details if the user has the ACL rights.
-        if ($canDo->get('rental.listings.showowner')) {
+        if ($canDo->get('rental.listings.showowner'))
+        {
             $query->select('
         u.email,
         p.phone_1,
@@ -142,7 +148,8 @@ class RentalModelListings extends JModelList {
         // This is an ACL check, e.g. core.edit.own and core.edit
         // if ($user->authorise('core.edit.own') && $user->authorise('core.edit'))
         //If true then has permission to edit all as well as own, otherwise just own
-        if ($canDo->get('core.edit.own') && !$canDo->get('core.edit')) {
+        if ($canDo->get('core.edit.own') && !$canDo->get('core.edit'))
+        {
             $query->where('a.created_by=' . $userId);
         }
 
@@ -150,15 +157,18 @@ class RentalModelListings extends JModelList {
 
         // Filter by published state
         $published = $this->getState('filter.published');
-        if (is_numeric($published)) {
+        if (is_numeric($published))
+        {
             $query->where('a.published = ' . (int) $published);
-        } elseif ($published === '') {
+        } elseif ($published === '')
+        {
             $query->where('a.published in (0,1)');
         }
 
         // Filter by review state
         $review_state = $this->getState('filter.review');
-        if (is_numeric($review_state)) {
+        if (is_numeric($review_state))
+        {
             $query->select('a.value');
             $query->where('a.review = ' . (int) $review_state);
         }
@@ -170,17 +180,20 @@ class RentalModelListings extends JModelList {
 
         // Filter by snooze state
         // Should only apply to users who can view and change snooze state
-        if ($canDo->get('rental.listings.filter')) {
+        if ($canDo->get('rental.listings.filter'))
+        {
             $snooze = $this->getState('filter.snoozed');
 
             // If snooze state set to hide...
-            if (($snooze == 1 && $date_filter) || ($snooze == false && $date_filter) || $snooze == 1) {
+            if (($snooze == 1 && $date_filter) || ($snooze == false && $date_filter) || $snooze == 1)
+            {
                 // ...hide snoozed properties (i.e. only select expired snooze or where snooze hasn't been set
                 $query->where('(a.snooze_until < ' . $db->quote(JFactory::getDate()->calendar("Y-m-d")) . ' OR a.snooze_until is null)');
             }
         }
 
-        if ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'expiry_date') {
+        if ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'expiry_date')
+        {
             // This filter includes any properties with snooze dates between the dates being filtered on.
             // This allows us to show properties that expired outside the dates being filtered on but
             // have been snoozed to appear between the dated being filtered. We also, exlude properties that 
@@ -199,40 +212,49 @@ class RentalModelListings extends JModelList {
             // We need to pull in additional information for this report, yippee!!
             $query->select('(select count(*) from ' . $db->quoteName('#__enquiries', 'enq') . ' where property_id = a.id and enq.date_created >= SUBDATE(a.expiry_date, INTERVAL 1 YEAR)) as enquiries');
             $query->select('(select count(*) from ' . $db->quoteName('#__website_views', 'webviews') . ' where property_id = a.id and webviews.date_created >= SUBDATE(a.expiry_date, INTERVAL 1 YEAR)) as clicks');
-        } elseif ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'created_on') {
+        } elseif ($this->getState('filter.start_date') && $this->getState('filter.end_date') && $date_filter == 'created_on')
+        {
             $query->where('(a.' . $db->escape($date_filter) . ' >=' .
                     $db->quote(JFactory::getDate($start_date)->calendar('Y-m-d')) .
                     ' and a.' . $db->escape($date_filter) . ' <=' .
                     $db->quote(JFactory::getDate($end_date)->calendar('Y-m-d')) . ')');
             $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
-        } elseif ($date_filter == 'created_on') {
+        } elseif ($date_filter == 'created_on')
+        {
             $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
         }
 
         // Filter by search in title
         // TODO - Try and tidy up this logic a bit.
         $search = $this->getState('filter.search');
-        if (!empty($search)) {
+        if (!empty($search))
+        {
             // If search cast to int and doesn't contain a comma is true
-            if ((int) $search && (strpos($search, ',') === false)) {
+            if ((int) $search && (strpos($search, ',') === false))
+            {
                 // This pulls out the property with ID searched on, it's parent and any siblings.
                 $query->where('a.id = ' . (int) $search);
             }
             // If the exploded array contains more than one element and the search term contains a comma
-            elseif (count(explode(',', $search) > 1) && (strpos($search, ',') > 0)) {
+            elseif (count(explode(',', $search) > 1) && (strpos($search, ',') > 0))
+            {
                 // Escape the search term
                 $search = $db->escape($search);
                 $query->where('a.id in (' . $search . ')');
-            } elseif (stripos($search, 'account:') === 0) {
+            } elseif (stripos($search, 'account:') === 0)
+            {
                 $search = $db->Quote('%' . $db->escape(substr($search, 8), true) . '%');
                 $query->where('(u.name LIKE ' . $search . ' OR u.username LIKE ' . $search . ' OR u.email LIKE ' . $search . ')');
-            } elseif (stripos($search, 'accid:') === 0) {
+            } elseif (stripos($search, 'accid:') === 0)
+            {
                 $search = substr($search, 6);
                 $query->where('(u.id = ' . $search . ')');
-            } elseif (stripos($search, 'dept:') === 0) {
+            } elseif (stripos($search, 'dept:') === 0)
+            {
                 $search = substr($search, 5);
                 $query->where('(h.title = ' . $db->quote($db->escape($search, true)) . ')');
-            } else {
+            } else
+            {
                 $search = $db->Quote('%' . $db->escape($search, true) . '%');
                 $query->where('(e.unit_title LIKE ' . $search . ')');
             }
@@ -262,14 +284,16 @@ class RentalModelListings extends JModelList {
         $listDirn = $db->escape($this->getState('list.direction', ''));
 
         // Order if we have a specific ordering.
-        if ($listOrdering) {
+        if ($listOrdering)
+        {
             $query->order($db->escape($listOrdering) . ' ' . $listDirn);
         }
 
         return $query;
     }
 
-    function getLanguages() {
+    function getLanguages()
+    {
         $lang = & JFactory::getLanguage();
         $languages = $lang->getKnownLanguages(JPATH_SITE);
 
@@ -287,8 +311,10 @@ class RentalModelListings extends JModelList {
      *
      * @since   1.6
      */
-    public function getContent() {
-        if (!isset($this->content)) {
+    public function getContent()
+    {
+        if (!isset($this->content))
+        {
             $this->setState('list.limit', '');
 
             // Load the list items.
@@ -298,9 +324,11 @@ class RentalModelListings extends JModelList {
 
             $query->select('a.id, p.user_id, p.firstname, u.email, a.expiry_date');
 
-            try {
+            try
+            {
                 $items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
-            } catch (RuntimeException $e) {
+            } catch (RuntimeException $e)
+            {
                 $this->setError($e->getMessage());
 
                 return false;
@@ -310,13 +338,15 @@ class RentalModelListings extends JModelList {
 
             $this->content = '';
 
-            foreach ($items[0] as $key => $value) {
+            foreach ($items[0] as $key => $value)
+            {
                 $this->content .= $key . "\t";
             }
 
             $this->content .= "\r\n";
 
-            foreach ($items as $item) {
+            foreach ($items as $item)
+            {
                 $bits = JArrayHelper::fromObject($item);
 
                 $this->content .= implode("\t", $bits) . "\r\n";
