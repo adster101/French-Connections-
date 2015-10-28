@@ -15,6 +15,9 @@ defined('_JEXEC') or die;
         <a href="https://plus.google.com/u/0/b/117777438349258851925/" rel="publisher"><span class="glyphicon google-plus"> </span></a>&nbsp;
         <a href="http://www.twitter.com/francelovers" target="_blank"><span class="glyphicon twitter"> </span></a>
     </p>
+    <p>
+        <?php echo JText::_('FOOTER_CONTACT_PHONE_NUMBER') ?>
+    </p>
     <p class="small">
         <?php echo $lineone; ?>
     </p>
