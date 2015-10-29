@@ -19,6 +19,7 @@ if (JDEBUG)
 
 JDEBUG ? $_PROFILER->mark('Start process search results template') : null;
 
+$user = JFactory::getApplication();
 
 $ordering = 'order_' . $this->state->get('list.sort_column') . '_' . $this->state->get('list.direction');
 
@@ -62,13 +63,13 @@ $longitude = $this->state->get('search.longitude', '');
     <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
 
     <div class="row">
-        <div class="tab-content col-lg-10 col-md-10 col-md-push-2 col-lg-push-2">
+        <div class="tab-content col-lg-10 col-md-10">
 
                 <div class="well well-sm well-light-blue clearfix form-inline">  
                     <?php echo $search_layout->render($search_data); ?>
                 </div>
 
-                <div class="row">
+                <div class="row" style="marg">
                     <div class="col-lg-8 col-xs-12 col-md-8 col-sm-8">
                         <p class="pull-left" style='line-height: 28px;'>
                             <?php echo $this->pagination->getResultsCounter(); ?>
@@ -131,17 +132,18 @@ $longitude = $this->state->get('search.longitude', '');
                 <div class="col-lg-3">
                     <div id="target">Loading...</div>
                     <script id="template" type="x-tmpl-mustache">
-                        <div class='map-search-results'>
+                        <div class=''>
                         {{ #. }} 
-                            <div class='map-search-result'>
+                            <div class=''>
                                 <a href={{ url }}>
                                     <img class='img-responsive' src={{ thumbnail }} />
                                 </a>
-                                    <h4> {{ unitTitle }} 
-                                    <small> {{ propertyType }} </small>
-                                    </h4>
-                                    <p>{{{ tagline }}}</p>
+                                <a href={{ url }}>  
+                                  <h4>{{ unitTitle }}</h4>
+                                </a>
+                                <p class='small'>{{{ tagline }}}</p>
                             </div>
+                            <hr />
                         {{ /. }}
                         </div>
                     </script>
@@ -156,7 +158,7 @@ $longitude = $this->state->get('search.longitude', '');
             <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
             <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
         </div>
-        <div class="col-lg-2 col-md-2 col-lg-pull-10 col-md-pull-10 refine-search">
+        <div class="col-lg-2 col-md-2 refine-search">
             <ul class="nav nav-stacked nav-pills" id="map-search-tab">
                 <li>
                     <a href="#list" data-toggle="tab" class='btn btn-default'>
