@@ -65,39 +65,39 @@ $longitude = $this->state->get('search.longitude', '');
     <div class="row">
         <div class="tab-content col-lg-10 col-md-10">
 
-                <div class="well well-sm well-light-blue clearfix form-inline">  
-                    <?php echo $search_layout->render($search_data); ?>
-                </div>
+            <div class="well well-sm well-light-blue clearfix form-inline">  
+                <?php echo $search_layout->render($search_data); ?>
+            </div>
 
-                <div class="row" style="marg">
-                    <div class="col-lg-8 col-xs-12 col-md-8 col-sm-8">
-                        <p class="pull-left" style='line-height: 28px;'>
-                            <?php echo $this->pagination->getResultsCounter(); ?>
-                        </p>
-                    </div>
-                    <div class="col-lg-4 col-xs-6 col-md-4 col-sm-4">
-                        <label for="sort_by" class="sr-only">
-                            <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
-                        </label>
-                        <select id="sort_by" class="form-control" name="order">
-                            <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
-                        </select>
-                    </div>
-                    <div class="visible-sm-inline-block visible-xs-inline-block col-xs-6">
-                        <p class=" pull-right">
-                            <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default">  
-                                <span class="glyphicon glyphicon-filter"></span>
-                                <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
-                            </a>
-                        </p>
-                    </div>
-                </div>   
-                <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
-                    <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
-                    <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
-                    <hr />
-                <?php endif; ?>         
-                    <div class="tab-pane active" id="list">
+            <div class="row" style="marg">
+                <div class="col-lg-8 col-xs-12 col-md-8 col-sm-8">
+                    <p class="pull-left" style='line-height: 28px;'>
+                        <?php echo $this->pagination->getResultsCounter(); ?>
+                    </p>
+                </div>
+                <div class="col-lg-4 col-xs-6 col-md-4 col-sm-4">
+                    <label for="sort_by" class="sr-only">
+                        <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
+                    </label>
+                    <select id="sort_by" class="form-control" name="order">
+                        <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
+                    </select>
+                </div>
+                <div class="visible-sm-inline-block visible-xs-inline-block col-xs-6">
+                    <p class=" pull-right">
+                        <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default">  
+                            <span class="glyphicon glyphicon-filter"></span>
+                            <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
+                        </a>
+                    </p>
+                </div>
+            </div>   
+            <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
+                <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
+                <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
+                <hr />
+            <?php endif; ?>         
+            <div class="tab-pane active" id="list">
 
                 <?php if (count($this->results) > 0) : ?>
 
@@ -128,29 +128,27 @@ $longitude = $this->state->get('search.longitude', '');
                     ?>
                 <?php endif; ?> 
             </div>
-            <div class="tab-pane row" id="mapsearch">
-                <div class="col-lg-3">
+            <div class="tab-pane row map-search-results" id="mapsearch">
+                <div class="col-lg-3 col-md-3">
                     <div id="target">Loading...</div>
                     <script id="template" type="x-tmpl-mustache">
                         <div class=''>
                         {{ #. }} 
-                            <div class=''>
-                                <a href={{ url }}>
-                                    <img class='img-responsive' src={{ thumbnail }} />
-                                </a>
-                                <a href={{ url }}>  
-                                  <h4>{{ unitTitle }}</h4>
-                                </a>
-                                <p class='small'>{{{ tagline }}}</p>
-                            </div>
-                            <hr />
+                        <div class='map-search-result'>
+                        <h3>{{ unitTitle }}</h3>
+                        <p>
+                        <a href={{ url }}>
+                        <img class='img-responsive' src={{ thumbnail }} />
+                        </a>
+                        </p>
+                        <p class='small'>{{{ tagline }}}</p>
+                        </div>
                         {{ /. }}
                         </div>
                     </script>
                 </div>
-                <div class="col-lg-9">
+                <div class="col-lg-9 col-md-9">
                     <div id="map_canvas"></div>
-
                 </div>
             </div>
             <?php echo $this->pagination->getPagesLinks(); ?>
@@ -159,15 +157,15 @@ $longitude = $this->state->get('search.longitude', '');
             <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
         </div>
         <div class="col-lg-2 col-md-2 refine-search">
-            <ul class="nav nav-stacked nav-pills" id="map-search-tab">
+            <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">
                 <li>
                     <a href="#list" data-toggle="tab" class='btn btn-default'>
-                        <i class="glyphicon glyphicon-arrow-left"></i>
+                        <i class="glyphicon glyphicon-list"></i>
                         <?php echo JText::_('COM_FCSEARCH_BACK_TO_LIST') ?>
                     </a>
                 </li>
                 <li>
-                    <a href="#mapsearch" data-toggle="tab">
+                    <a href="#mapsearch" data-toggle="tab" title="View results on map">
                         <img class="img-responsive" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=200x200&zoom=7&scale=2key=AIzaSyAvIkhf8zAayRncfQ9weXMdnYModMHGDPE' ?>" />
                     </a>
                 </li>
@@ -194,32 +192,104 @@ $longitude = $this->state->get('search.longitude', '');
       // Store the selected tab #ref in local storage, IE8+
       var selectedTab = jQuery(e.target).attr('href');
 
- 
-
       // Set the local storage value so we 'remember' where the user was
       localStorage['selectedTab'] = selectedTab;
 
-      // Init google maps if not already init'ed
-      if (!window.google) {
-        loadGoogleMaps('initmap'); // Asych load the google maps stuff
+      if (selectedTab === '#mapsearch') {
+
+        // Init google maps if not already init'ed
+        if (!window.google) {
+          loadGoogleMaps('initmap'); // Asych load the google maps stuff
+        }
+
+        var template = jQuery('#template').html();
+
+        var data = [];
+
+        jQuery('.search-result').each(function () {
+          var tmp = jQuery(this).data();
+          data = data.concat(tmp);
+        });
+
+        // Render the map search results
+        Mustache.parse(template); // optional, speeds up future uses
+        var rendered = Mustache.render(template, data);
+        
+        jQuery('#target').html(rendered);
+
+        jQuery('.map-search-results .map-search-result').hover(
+                function () {
+                  var index = jQuery('.map-search-result').index(this);
+                  console.log(jQuery(this));
+                  markers[index].setAnimation(google.maps.Animation.BOUNCE);
+                },
+                function () {
+                  var index = jQuery('.map-search-result').index(this);
+                  markers[index].setAnimation(null);
+                })
+
+      }
+    })
+
+    function initmap() {
+
+      // Move this to CSS file
+      jQuery('#map_canvas').css('width', '100%');
+      jQuery('#map_canvas').css('height', '800px');
+
+      var myLatLng = new google.maps.LatLng(46.8, 2.8);
+      var myOptions = {
+        center: myLatLng,
+        zoom: 7,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        zoomControl: true
       }
 
-      var template = jQuery('#template').html();
+      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-      var data = [];
+      markers = [];
 
-      jQuery('.search-result').each(function () {
-        var tmp = jQuery(this).data();
-        data = data.concat(tmp);
-      })
+      jQuery('.search-result').each(function (i) {
+        var data = jQuery(this).data();
+
+        // The lat long of the propert, units will appear stacked on top...
+        var myLatlng = new google.maps.LatLng(data.latitude, data.longitude);
+        // Create the marker instance
+        marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          icon: '/images/mapicons/iconflower.png'
+        });
+        marker.setTitle((i + 1).toString());
+        content = '<h4><a href="' + data.url + '">' +
+                data.unitTitle + '</a></h4><div class="media"><a class="pull-left" href="' +
+                data.url + '"><img class="media-object" src="' +
+                data.thumbnail + '"/></a><div class="media-body"><p>' +
+                data.tagline + '</p></div><p><a class="btn btn-primary" href="' + data.url + '">asds</a></div>';
+
+        attachContent(marker, content, 360);
+
+        markers.push(marker);
+
+        //  Create a new viewpoint bound, so we can centre the map based on the markers
+        var bounds = new google.maps.LatLngBounds();
+
+        //  Go through each...
+        jQuery.each(markers, function (index, marker) {
+          bounds.extend(marker.position);
+        });
+
+        //  Fit these bounds to the map
+        map.fitBounds(bounds);
 
 
 
-      Mustache.parse(template); // optional, speeds up future uses
 
-      var rendered = Mustache.render(template, data);
-      jQuery('#target').html(rendered);
+      });
 
-    });
+
+    }
+
 
 </script>

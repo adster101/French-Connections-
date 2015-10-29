@@ -7218,6 +7218,10 @@ A/B testing styles for new advertise with us page
 .slick-next {
   right: 0px;
 }
+.view-search #map-search-tab > li > a[href='#mapsearch'],
+.view-shortlist #map-search-tab > li > a[href='#mapsearch'] {
+  padding: 0;
+}
 .view-search p.offer,
 .view-shortlist p.offer {
   position: relative;
@@ -7252,7 +7256,9 @@ A/B testing styles for new advertise with us page
   margin-bottom: 20px;
 }
 .view-search .search-results,
-.view-shortlist .search-results {
+.view-shortlist .search-results,
+.view-search .map-search-results,
+.view-shortlist .map-search-results {
   margin-top: 20px;
 }
 .view-search .search-results .search-result:nth-child(2n+1),
@@ -7262,70 +7268,114 @@ A/B testing styles for new advertise with us page
   background: #eaf3fe;
 }
 .view-search .search-result,
-.view-shortlist .search-result {
+.view-shortlist .search-result,
+.view-search .map-search-result,
+.view-shortlist .map-search-result {
   padding: 10px 10px;
   border-top: 1px solid #d2e5fd;
 }
 .view-search .search-result .rates > .lead,
-.view-shortlist .search-result .rates > .lead {
+.view-shortlist .search-result .rates > .lead,
+.view-search .map-search-result .rates > .lead,
+.view-shortlist .map-search-result .rates > .lead {
   font-weight: bold;
 }
 .view-search .search-result > h1,
 .view-shortlist .search-result > h1,
+.view-search .map-search-result > h1,
+.view-shortlist .map-search-result > h1,
 .view-search .search-result h2,
 .view-shortlist .search-result h2,
+.view-search .map-search-result h2,
+.view-shortlist .map-search-result h2,
 .view-search .search-result h3,
 .view-shortlist .search-result h3,
+.view-search .map-search-result h3,
+.view-shortlist .map-search-result h3,
 .view-search .search-result h4,
 .view-shortlist .search-result h4,
+.view-search .map-search-result h4,
+.view-shortlist .map-search-result h4,
 .view-search .search-result h5,
 .view-shortlist .search-result h5,
+.view-search .map-search-result h5,
+.view-shortlist .map-search-result h5,
 .view-search .search-result h6,
-.view-shortlist .search-result h6 {
+.view-shortlist .search-result h6,
+.view-search .map-search-result h6,
+.view-shortlist .map-search-result h6 {
   margin-top: 0;
 }
 .view-search .search-result > h1 > small,
 .view-shortlist .search-result > h1 > small,
+.view-search .map-search-result > h1 > small,
+.view-shortlist .map-search-result > h1 > small,
 .view-search .search-result h2 > small,
 .view-shortlist .search-result h2 > small,
+.view-search .map-search-result h2 > small,
+.view-shortlist .map-search-result h2 > small,
 .view-search .search-result h3 > small,
 .view-shortlist .search-result h3 > small,
+.view-search .map-search-result h3 > small,
+.view-shortlist .map-search-result h3 > small,
 .view-search .search-result h4 > small,
 .view-shortlist .search-result h4 > small,
+.view-search .map-search-result h4 > small,
+.view-shortlist .map-search-result h4 > small,
 .view-search .search-result h5 > small,
 .view-shortlist .search-result h5 > small,
+.view-search .map-search-result h5 > small,
+.view-shortlist .map-search-result h5 > small,
 .view-search .search-result h6 > small,
-.view-shortlist .search-result h6 > small {
+.view-shortlist .search-result h6 > small,
+.view-search .map-search-result h6 > small,
+.view-shortlist .map-search-result h6 > small {
   color: #525f79;
 }
 @media (min-width: 768px) {
   .view-search .search-result .rates,
   .view-shortlist .search-result .rates,
+  .view-search .map-search-result .rates,
+  .view-shortlist .map-search-result .rates,
   .view-search .search-result .view-property-button,
   .view-shortlist .search-result .view-property-button,
+  .view-search .map-search-result .view-property-button,
+  .view-shortlist .map-search-result .view-property-button,
   .view-search .search-result .shortlist-button,
   .view-shortlist .search-result .shortlist-button,
+  .view-search .map-search-result .shortlist-button,
+  .view-shortlist .map-search-result .shortlist-button,
   .view-search .search-result .listing-reviews,
-  .view-shortlist .search-result .listing-reviews {
+  .view-shortlist .search-result .listing-reviews,
+  .view-search .map-search-result .listing-reviews,
+  .view-shortlist .map-search-result .listing-reviews {
     text-align: right;
   }
 }
 .view-search .search-result .shortlist-button,
-.view-shortlist .search-result .shortlist-button {
+.view-shortlist .search-result .shortlist-button,
+.view-search .map-search-result .shortlist-button,
+.view-shortlist .map-search-result .shortlist-button {
   float: right;
 }
 .view-search .search-result .shortlist-button a.shortlist,
-.view-shortlist .search-result .shortlist-button a.shortlist {
+.view-shortlist .search-result .shortlist-button a.shortlist,
+.view-search .map-search-result .shortlist-button a.shortlist,
+.view-shortlist .map-search-result .shortlist-button a.shortlist {
   font-size: 21px;
 }
 @media (min-width: 768px) {
   .view-search .search-result .shortlist-button,
-  .view-shortlist .search-result .shortlist-button {
+  .view-shortlist .search-result .shortlist-button,
+  .view-search .map-search-result .shortlist-button,
+  .view-shortlist .map-search-result .shortlist-button {
     float: none;
   }
 }
 .view-search .search-result .rate-per,
-.view-shortlist .search-result .rate-per {
+.view-shortlist .search-result .rate-per,
+.view-search .map-search-result .rate-per,
+.view-shortlist .map-search-result .rate-per {
   white-space: nowrap;
 }
 #fp-carousel {
