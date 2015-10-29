@@ -135,19 +135,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
             </div>
             <div class="tab-pane" id="mapsearch">
                 <div id="map_canvas"></div>
-                <table class="table table-condensed availability-key hidden-xs ">
-                    <thead> 
-                        <tr>
-                            <th>Colour key: </th>
-                            <th style="background:red">&nbsp;</th>
-                            <th>Lot's of properties</th>
-                            <th style="background:blue">&nbsp;</th>
-                            <th>Some properties</th>
-                            <th style="background:yellow">&nbsp;</th>
-                            <th>Fewer properties</th>
-                        </tr>
-                    </thead>
-                </table>
             </div>
             <div class="tab-pane" id="localinfo">
                 <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>

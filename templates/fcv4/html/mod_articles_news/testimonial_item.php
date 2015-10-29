@@ -23,7 +23,7 @@ JHtml::_('behavior.framework');
         <blockquote>
             <p><?php echo strip_tags($item->introtext); ?></p>
             <footer>
-                <?php echo $item->title; ?><?php echo JFactory::getDate($item->created)->calendar('d M Y') ?>
+                <?php echo $item->title; ?>
             </footer>
 
         </blockquote>
