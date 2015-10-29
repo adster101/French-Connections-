@@ -1,7 +1,30 @@
 footer {
-  background-color:@taupe;
-  margin-top:20px;
-  padding:10px 0;
-  border-top:1px solid darken(@taupe, 15%);
+    background-color:@taupe;
+    margin-top:0px;
+    padding:20px;
+    border-top:1px solid darken(@taupe, 15%);
 
+    .nav {
+        margin-bottom:20px;
+    }
+
+    .nav > li > a {
+        color: inherit;
+        padding:5px 0;
+    }
+
+    .nav > li > a {
+        &:hover {
+            background:transparent;
+            text-decoration:underline;
+        } 
+    }
+
+    @media (min-width: @screen-tablet) 
+        {
+        p {
+            text-align:right;
+        }
+
+    }
 }

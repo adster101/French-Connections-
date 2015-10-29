@@ -9,8 +9,16 @@
 defined('_JEXEC') or die;
 ?>
 
-<div class="pull-right">
-<a href="http://www.facebook.com/frenchconnections" target="_blank"><span class="glyphicon social-icon facebook"> </span></a>
-<a href="https://plus.google.com/u/0/b/117777438349258851925/" rel="publisher"><span class="glyphicon social-icon google-plus"> </span></a>
-<a href="http://www.twitter.com/francelovers" target="_blank"><span class="glyphicon social-icon twitter"> </span></a>
+<div class="copyright">
+    <p class="lead">
+        <a href="http://www.facebook.com/frenchconnections" target="_blank"><span class="glyphicon facebook"> </span></a>&nbsp;
+        <a href="https://plus.google.com/u/0/b/117777438349258851925/" rel="publisher"><span class="glyphicon google-plus"> </span></a>&nbsp;
+        <a href="http://www.twitter.com/francelovers" target="_blank"><span class="glyphicon twitter"> </span></a>
+    </p>
+    <p>
+        <?php echo JText::_('FOOTER_CONTACT_PHONE_NUMBER') ?>
+    </p>
+    <p class="small">
+        <?php echo $lineone; ?>
+    </p>
 </div>

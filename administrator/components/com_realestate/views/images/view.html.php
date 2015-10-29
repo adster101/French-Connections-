@@ -94,7 +94,7 @@ class RealEstateViewImages extends JViewLegacy {
         $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");
 
         JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
-        JText::script('COM_RENTAL_IMAGES_CONFIRM_DELETE_IMAGE');
+        JText::script('COM_RENTAL_IMAGES_CONFIRM_DELETE_ITEM');
 
         // Register the JHtmlProperty class
         // TO DO - Move this to main or add to concat etc

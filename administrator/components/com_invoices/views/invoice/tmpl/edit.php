@@ -79,8 +79,8 @@ $userId = $user->get('id');
           <tr>
             <th>Qty</th>
             <th>Description</th>
-            <th align="right">Unit cost</th>
-            <th align="right">Total(GBP)</th>
+            <th>Unit cost</th>
+            <th>Total(GBP)</th>
           </tr>
         </thead>
         <tbody>
@@ -88,8 +88,8 @@ $userId = $user->get('id');
             <tr>
               <td><?php echo $this->escape($item->quantity) ?></td>
               <td><?php echo $this->escape($item->item_description) ?></td>
-              <td text-align="right"><?php echo $this->escape($item->line_value) ?></td>
-              <td text-align="right"><?php echo number_format($this->escape($item->line_value * $item->quantity),2) ?></td>
+              <td><?php echo $this->escape($item->line_value) ?></td>
+              <td><?php echo number_format($this->escape($item->line_value * $item->quantity),2) ?></td>
             </tr>
 
           <?php endforeach; ?>

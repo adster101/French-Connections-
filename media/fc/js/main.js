@@ -177,7 +177,7 @@ jQuery.fn.extend({
 
     jQuery(this).each(function () {
       jQuery(this).on('click', function (event) {
-        if (!confirm(Joomla.JText._('COM_RENTAL_IMAGES_CONFIRM_DELETE_IMAGE'))) {
+        if (!confirm(Joomla.JText._('COM_RENTAL_IMAGES_CONFIRM_DELETE_ITEM'))) {
           event.preventDefault();
         }
         ;

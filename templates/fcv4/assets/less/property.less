@@ -115,10 +115,19 @@ A/B testing styles for new advertise with us page
     border-radius:0;
     color:@gray-darker;
     .panel-variant(none; @panel-default-text; white; none);
-    margin: @line-height-computed * 2 @line-height-computed * 4 ; 
+    margin: @line-height-computed; 
+    padding:@line-height-computed;
+
+    @media (min-width: @screen-tablet) {
+        margin: @line-height-computed * 2 @line-height-computed * 4 ; 
+        padding:@line-height-computed * 2;
+
+    }
+
     border: none;
-    padding:@line-height-computed * 2;
+
     border-top: 5px solid @white;
+
     > .panel-body {
         font-size:16px;
     }
