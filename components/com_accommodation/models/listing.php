@@ -996,7 +996,7 @@ class AccommodationModelListing extends JModelForm
       {
         // Deal with this by returning an error message, mostly means not available
         $message = "COM_ACCOMMODATION_AT_LEISURE_DATES_UNAVAILABLE";
-        JFactory::getApplication()->enqueueMessage($message, 'error');
+        JFactory::getApplication()->enqueueMessage(JText::_($message), 'error');
         return false;
       }
 
@@ -1331,7 +1331,6 @@ class AccommodationModelListing extends JModelForm
     {
       $form->removeField('message');
       $form->setFieldAttribute('adults', 'required', 'true');
-      $form->setFieldAttribute('children', 'required', 'true');
     }
 
     parent::preprocessForm($form, $data, $group);

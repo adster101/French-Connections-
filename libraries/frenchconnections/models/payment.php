@@ -9,7 +9,8 @@ jimport('joomla.application.component.modellegacy');
 /**
  * HelloWorldList Model
  */
-class FrenchConnectionsModelPayment extends JModelLegacy {
+class FrenchConnectionsModelPayment extends JModelLegacy
+{
 
     /**
      * Internal memory based cache array of data.
@@ -61,11 +62,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * __construct - initialise the various class properties that we need to process a listing
      * @param type $config
      */
-    function __construct($config = array()) {
+    function __construct($config = array())
+    {
 
         parent::__construct($config);
 
-        if (array_key_exists('listing', $config)) {
+        if (array_key_exists('listing', $config))
+        {
 
             // Set the model properties here.
             $this->listing = $config['listing'];
@@ -82,7 +85,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         }
     }
 
-    public function clearVouchers($listing_id) {
+    public function clearVouchers($listing_id)
+    {
         // Get the db object
         $db = JFactory::getDBO();
         // Get a date so we can expire all vouchers listed against a property
@@ -97,10 +101,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $query->set($db->quoteName('date_redeemed') . ' = ' . $db->quote($date));
         $query->where($db->quoteName('property_id') . ' = ' . (int) $listing_id);
 
-        try {
+        try
+        {
             $db->setQuery($query);
             $db->execute();
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             return false;
         }
     }
@@ -115,7 +121,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @since	1.6
      * 
      */
-    public function getTable($type = 'Property', $prefix = 'RentalTable', $config = array()) {
+    public function getTable($type = 'Property', $prefix = 'RentalTable', $config = array())
+    {
         return JTable::getInstance($type, $prefix, $config);
     }
 
@@ -128,20 +135,25 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @param type $previous_order_summary
      * @return type
      */
-    public function getPaymentDue($current_order_summary = array(), $previous_order_summary = array()) {
+    public function getPaymentDue($current_order_summary = array(), $previous_order_summary = array())
+    {
         $order_lines_due = array();
         $quantity_to_charge = '';
 
-        foreach ($current_order_summary as $item => $quantity) {
+        foreach ($current_order_summary as $item => $quantity)
+        {
             // The previous version had some of this already (e.g. units) possibly images.
-            if (array_key_exists($item, $previous_order_summary)) {
+            if (array_key_exists($item, $previous_order_summary))
+            {
                 // The previous version had some of this already (e.g. units) possibly images.        
                 $quantity_to_charge = $quantity['quantity'] - $previous_order_summary[$item]['quantity'];
 
-                if ($quantity_to_charge > 0) {
+                if ($quantity_to_charge > 0)
+                {
                     $order_lines_due[$item]['quantity'] = $quantity_to_charge;
                 }
-            } else {
+            } else
+            {
                 // The previous version didn't have any of these, so bill 'em all
                 $order_lines_due[$item]['quantity'] = $quantity['quantity'];
             }
@@ -158,7 +170,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      */
 
-    public function getPaymentSummary($current = array(), $previous = array(), $component = 'com_rental') {
+    public function getPaymentSummary($current = array(), $previous = array(), $component = 'com_rental')
+    {
 
         $order_summary = array();
 
@@ -168,7 +181,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $order_summary = $this->summary($current, $component);
 
         // If we have a previous version and this is not a renewal 
-        if (!empty($previous) && !$this->getIsRenewal()) {
+        if (!empty($previous) && !$this->getIsRenewal())
+        {
             $previous_order_summary = $this->summary($previous);
 
             // Determine whether any additional payment is due.
@@ -180,7 +194,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
         $order = array_merge($order_summary, $vouchers);
 
-        if (empty($order)) {
+        if (empty($order))
+        {
             return false;
         }
 
@@ -209,7 +224,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @param string $vat_status
      * @return array 
      */
-    public function getOrderLineTotals($order_summary = array(), $item_costs = array(), $vat_status) {
+    public function getOrderLineTotals($order_summary = array(), $item_costs = array(), $vat_status)
+    {
 
         // Get the vat rate from the item costs config params setting
         $vat = JComponentHelper::getParams('com_itemcosts')->get('vat');
@@ -220,23 +236,28 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $vouchers = $this->getVouchers($this->listing_id, true);
 
         // Loop over each order line and merge the item cost in
-        foreach ($order_summary as $order => &$line) {
+        foreach ($order_summary as $order => &$line)
+        {
             // This bit check to see if there is a note field in the order line
             // If so, it would've come from a (non-discount) voucher containing a note...
-            if (array_key_exists('note', $line)) {
+            if (array_key_exists('note', $line))
+            {
                 $description = $item_costs[$order]["item_description"] . ' - ' . $order_summary[$order]['note'];
                 $item_costs[$order]["item_description"] = $description;
             }
 
             // Add the cost and detail of each item code to the order line
-            if (array_key_exists($order, $item_costs)) {
+            if (array_key_exists($order, $item_costs))
+            {
                 $line = array_merge($order_summary[$order], $item_costs[$order]);
             }
 
             // Add the vat status etc 
-            if ($vat_status == 'S20' || $vat_status == 'S2A') {
+            if ($vat_status == 'S20' || $vat_status == 'S2A')
+            {
                 $line['vat'] = $line['quantity'] * $line['cost'] * $vat;
-            } else {
+            } else
+            {
                 $line['vat'] = 0;
             }
             $line['line_value'] = $line['quantity'] * $line['cost'];
@@ -246,12 +267,14 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         // 1. For each line calculate the discount
         // 2. Total this up
         // 3. Add a discount line to the order
-        if (!empty($vouchers)) {
+        if (!empty($vouchers))
+        {
 
             $order_total = '';
             $vat_total = '';
 
-            foreach ($order_summary as $k => $v) {
+            foreach ($order_summary as $k => $v)
+            {
                 // Calculate the discounts based on the order 
                 $order_total = $order_total + $v['line_value'];
                 $vat_total = $vat_total + $v['vat'];
@@ -275,14 +298,16 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     /**
      * getOrderTotal - returns the total price for the payment
      */
-    public function getOrderTotal($order = array()) {
+    public function getOrderTotal($order = array())
+    {
 
         $order_total = '';
 
         /*
          * Get the order total
          */
-        foreach ($order as $line => $line_detail) {
+        foreach ($order as $line => $line_detail)
+        {
             $order_total = $order_total + $line_detail->line_value + $line_detail->vat;
         }
 
@@ -295,9 +320,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      */
 
-    public function getItemCosts($order_summary = array()) {
+    public function getItemCosts($order_summary = array())
+    {
 
-        if (empty($order_summary)) {
+        if (empty($order_summary))
+        {
             return array();
         }
 
@@ -306,7 +333,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         // Required objects
         $db = JFactory::getDbo();
 
-        foreach ($items as $key => &$item) {
+        foreach ($items as $key => &$item)
+        {
             $item = $db->quote($item);
         }
 
@@ -331,12 +359,14 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      */
 
-    public function getUserFormDetails() {
+    public function getUserFormDetails()
+    {
 
         // Get a copy of the form we are using to collect the user invoice address and vat status
         $form = $this->loadForm('com_rental.helloworld', 'ordersummary', array('control' => 'jform', 'load_data' => false));
 
-        if (empty($form)) {
+        if (empty($form))
+        {
             return false;
         }
 
@@ -352,11 +382,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      */
 
-    public function getPaymentFormDepreciated() {
+    public function getPaymentFormDepreciated()
+    {
 
         $form = $this->loadForm('com_rental.helloworld', 'payment', array('control' => 'jform', 'load_data' => false));
 
-        if (empty($form)) {
+        if (empty($form))
+        {
             return false;
         }
 
@@ -373,10 +405,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      */
 
-    public function getUser($user_id = '') {
+    public function getUser($user_id = '')
+    {
 
         // Use the cached data if possible.
-        if ($this->retrieve($user_id)) {
+        if ($this->retrieve($user_id))
+        {
             return $this->retrieve($user_id);
         }
 
@@ -389,7 +423,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $return = $table->load($user_id);
 
         // Check for a table object error.
-        if ($return === false && $table->getError()) {
+        if ($return === false && $table->getError())
+        {
             $this->setError($table->getError());
             return false;
         }
@@ -428,7 +463,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      */
 
-    public function summary($units = array(), $component = 'com_rental') {
+    public function summary($units = array(), $component = 'com_rental')
+    {
         // Get the vat rate from the item costs config params setting
         $codes = JComponentHelper::getParams($component);
 
@@ -452,17 +488,21 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $item_costs = array();
 
         // Loop over all the units found
-        foreach ($units as $unit) {
+        foreach ($units as $unit)
+        {
 
             // Don't charge for and add unpublished units
-            if ($unit->published == 0) {
+            if ($unit->published == 0)
+            {
                 continue;
             }
 
-            if ($unit->accommodation_type == 25) {
+            if ($unit->accommodation_type == 25)
+            {
 
                 $selfcatering++;
-            } elseif ($unit->accommodation_type == 24) {
+            } elseif ($unit->accommodation_type == 24)
+            {
 
                 $bandb++;
             }
@@ -472,97 +512,120 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         }
 
         // Work out the unit count
-        if ($bandb > 0 && $selfcatering > 0) {
+        if ($bandb > 0 && $selfcatering > 0)
+        {
             $unit_count = $selfcatering; // Set total units to the number of self-catering
             $mixed_units = true; // Flag the property as having mixed units...
-        } elseif ($bandb == 0 && $selfcatering > 0) {
+        } elseif ($bandb == 0 && $selfcatering > 0)
+        {
             $unit_count = ( $selfcatering - 1 ); // Remove one as the first is included in the package price
-        } elseif ($bandb > 0 && $selfcatering == 0) {
+        } elseif ($bandb > 0 && $selfcatering == 0)
+        {
             $unit_count = 0; // Don't charge for additional units as B&B have unlimited
         }
 
         // If this is a straightforward renewal then calculate everything...based on renewal prices
-        if ($this->getIsRenewal()) {
+        if ($this->getIsRenewal())
+        {
             // Determine the item costs
-            if ($image_count >= 8) {
+            if ($image_count >= 8)
+            {
                 //$item_costs['1004-009']['quantity'] = 1; // Renewal
                 //$item_costs['1002-008']['quantity'] = 1; // Renewal
                 $item_costs[$codes->get('professional-package-renewal')]['quantity'] = 1; // Renewal
-            } else {
+            } else
+            {
                 // Image count must be less than 8 
                 //$item_costs['1002-004']['quantity'] = 1;
                 $item_costs[$codes->get('basic-package-renewal')]['quantity'] = 1;
             }
 
             // Add any additional units not included in base price 
-            if ($unit_count > 0) {
+            if ($unit_count > 0)
+            {
                 //$item_costs['1002-010']['quantity'] = $unit_count;
                 $item_costs[$codes->get('additional-unit-renewal')]['quantity'] = $unit_count;
             }
         }
         // New property being published for first time...
-        elseif (!$this->getIsRenewal() && empty($this->expiry_date)) {
+        elseif (!$this->getIsRenewal() && empty($this->expiry_date))
+        {
             // Determine the item costs
-            if ($image_count >= 8) {
+            if ($image_count >= 8)
+            {
                 //$item_costs['1005-009']['quantity'] = 1;
                 //$item_costs['1003-008']['quantity'] = 1;
                 $item_costs[$codes->get('professional-package')]['quantity'] = 1;
-            } else {
+            } else
+            {
                 // Image count must be less than 8
                 //$item_costs['1003-004']['quantity'] = 1;
                 $item_costs[$codes->get('basic-package')]['quantity'] = 1;
             }
             // Add any additional units not included in base price 
-            if ($unit_count > 0) {
+            if ($unit_count > 0)
+            {
                 //$item_costs['1003-010']['quantity'] = $unit_count;
                 $item_costs[$codes->get('additional-unit')]['quantity'] = $unit_count;
             }
         }
         // Not a renewal and not a new property...just calculate any additional units etc
-        elseif (!$this->getIsRenewal() && !empty($this->expiry_date)) {
+        elseif (!$this->getIsRenewal() && !empty($this->expiry_date))
+        {
             // Add any additional units not included in base price 
-            if ($unit_count > 0) {
+            if ($unit_count > 0)
+            {
                 $item_costs[$codes->get('additional-unit')]['quantity'] = $unit_count;
             }
 
             // If there are more than eight images in total they should be 'upgraded' to the unlimited package
-            if ($image_count >= 8) {
+            if ($image_count >= 8)
+            {
                 $item_costs[$codes->get('unlimited-upgrade')]['quantity'] = 1;
             }
         }
 
         // If this property version has B&B and S/C then add it as an item cost
-        if ($mixed_units && !$this->getIsRenewal()) {
+        if ($mixed_units && !$this->getIsRenewal())
+        {
             $item_costs['1005-014']['quantity'] = 1;
         }
 
         // If renewal
-        if ($this->getIsRenewal()) {
+        if ($this->getIsRenewal())
+        {
             // Do we have a LWL listing?
-            if (!empty($unit->lwl)) {
+            if (!empty($unit->lwl))
+            {
                 $item_costs[$codes->get('lwl-renewal')]['quantity'] = 1;
             }
             // Do we have a video listing
-            if (!empty($unit->video_url)) {
+            if (!empty($unit->video_url))
+            {
                 $item_costs[$codes->get('video-renewal')]['quantity'] = 1;
             }
             // Do we have a translation listing
-            if (!empty($unit->frtranslation)) {
+            if (!empty($unit->frtranslation))
+            {
                 $item_costs[$codes->get('frtranslation-renewal')]['quantity'] = 1;
             }
         }
         //If not renewal
-        elseif (!$this->getIsRenewal()) {
+        elseif (!$this->getIsRenewal())
+        {
             // Do we have a LWL listing?
-            if (!empty($unit->lwl)) {
+            if (!empty($unit->lwl))
+            {
                 $item_costs[$codes->get('lwl')]['quantity'] = 1;
             }
             // Do we have a video listing
-            if (!empty($unit->video_url)) {
+            if (!empty($unit->video_url))
+            {
                 $item_costs[$codes->get('video')]['quantity'] = 1;
             }
             // Do we have a translation listing
-            if (!empty($unit->frtranslation)) {
+            if (!empty($unit->frtranslation))
+            {
                 $item_costs[$codes->get('frtranslation')]['quantity'] = 1;
             }
         }
@@ -572,10 +635,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         return $item_costs;
     }
 
-    public function processRepeatPayment($VendorTxCode = '', $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'REPEAT', $payment_summary = '', $id = '') {
+    public function processRepeatPayment($VendorTxCode = '', $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'REPEAT', $payment_summary = '', $id = '')
+    {
 
         // Check we've got what we need to proceed
-        if (!$VendorTxCode || !$VPSTxId || !$SecurityKey || !$TxAuthNo) {
+        if (!$VendorTxCode || !$VPSTxId || !$SecurityKey || !$TxAuthNo)
+        {
             return false;
         }
         // Get the invoice component parameters which hold the protx settings
@@ -590,7 +655,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $VendorTxCodeNew = $this->owner_id . '-' . $id . '-' . date("ymdHis", time()) . rand(0, 32000) * rand(0, 32000);
 
         // Loop over the order lines and make the basket - wrap into separate function
-        foreach ($payment_summary as $item => $line) {
+        foreach ($payment_summary as $item => $line)
+        {
             $sngTotal = $sngTotal + $line->line_value + $line->vat;
         }
 
@@ -618,7 +684,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $data['id'] = '';
 
         // Store the transaction in the protx payment page
-        if (!$this->saveProtxTransaction($data)) {
+        if (!$this->saveProtxTransaction($data))
+        {
             // Error is set in the function
             return false;
         }
@@ -632,20 +699,24 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
         $strStatus = $arrResponse["Status"];
 
-        if ($strStatus == "OK") {
+        if ($strStatus == "OK")
+        {
             // Update the protx transactio line
             $this->saveProtxTransaction($arrResponse);
 
             return $VendorTxCodeNew;
-        } else {
+        } else
+        {
             return false;
         }
     }
 
-    public function cancelRepeatPayment($VendorTxCodeNew, $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'ABORT') {
+    public function cancelRepeatPayment($VendorTxCodeNew, $VPSTxId = '', $SecurityKey = '', $TxAuthNo = '', $type = 'ABORT')
+    {
 
         // Check we've got what we need to proceed
-        if (!$VendorTxCodeNew || !$VPSTxId || !$SecurityKey || !$TxAuthNo) {
+        if (!$VendorTxCodeNew || !$VPSTxId || !$SecurityKey || !$TxAuthNo)
+        {
             return false;
         }
         // Get the invoice component parameters which hold the protx settings
@@ -671,9 +742,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $arrResponse['VendorTxCode'] = $VendorTxCode;
         $strStatus = $arrResponse["Status"];
 
-        if ($strStatus == "OK") {
+        if ($strStatus == "OK")
+        {
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
@@ -682,7 +755,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * 
      */
 
-    public function processPayment($data, $current_version = array(), $previous_version = array(), $component = 'com_rental') {
+    public function processPayment($data, $current_version = array(), $previous_version = array(), $component = 'com_rental')
+    {
 
         // Determine whether this payment should be saved as an auto-renewal or not
         $shouldAutoRenew = (!empty($data['autorenewal'])) ? $data['autorenewal'] : '0';
@@ -714,7 +788,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $description = 'Payment received for PRN[' . $data['id'] . '] ' . 'OWNER[' . $this->owner_id . ']';
 
         // Loop over the order lines and make the basket - wrap into separate function
-        foreach ($order as $item => $line) {
+        foreach ($order as $item => $line)
+        {
             $iBasketItems = $iBasketItems + 1;
             $strBasket = $strBasket . ':' . 'PRN[' . $data['id'] . '] ' . 'OWNER[' . $this->owner_id . '] ' . '[' . $line->code . '] [' . $line->item_description . ']:' . $line->quantity;
             $strBasket = $strBasket . ":" . number_format($line->cost, 2);/** Price ex-Vat * */
@@ -737,7 +812,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         // Add the total number of items to the basket string
         $strBasket = $iBasketItems . $strBasket;
 
-        if (!$this->saveProtxTransaction($data)) {
+        if (!$this->saveProtxTransaction($data))
+        {
             // Error is set in the function
             return false;
         }
@@ -782,8 +858,15 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $strPost = $strPost . "&BillingFirstnames=" . urlencode($data["BillingFirstnames"]);
         $strPost = $strPost . "&BillingSurname=" . urlencode($data["BillingSurname"]);
         $strPost = $strPost . "&BillingAddress1=" . urlencode($data["BillingAddress1"]);
-        if (strlen($data["BillingAddress2"]) > 0) {
+        if (strlen($data["BillingAddress2"]) > 0)
+        {
             $strPost = $strPost . "&BillingAddress2=" . urlencode($data["BillingAddress2"]);
+        }
+
+        if (strlen($data['BillingState']) > 0)
+        {
+            $strPost = $strPost . "&BillingState=" . urlencode($data["BillingState"]);
+            $strPost = $strPost . "&DeliveryState=" . urlencode($data["BillingState"]);
         }
 
         $strPost = $strPost . "&BillingCity=" . urlencode($data["BillingCity"]);
@@ -841,12 +924,14 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         // response from Protx
         $transaction = $this->saveProtxTransaction($arrResponse, 'VendorTxCode');
 
-        if ($shouldAutoRenew) {
+        if ($shouldAutoRenew)
+        {
             $transaction_id = $transaction->id;
         }
 
         // Okay now we have processed the transaction and update it in the db.
-        switch ($strStatus) {
+        switch ($strStatus)
+        {
             case 'OK':
                 //$this->setMessage("AUTHORISED - The transaction was successfully authorised with the bank.");
                 $return = array('order' => $order, 'payment' => $arrResponse, 'autorenew' => $transaction_id);
@@ -890,7 +975,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @param type $billing_details
      * @return boolean
      */
-    public function processListing($order_payment_details = array(), $billing_details = array()) {
+    public function processListing($order_payment_details = array(), $billing_details = array())
+    {
 
         /*
          * Set up variables used in the listing processing
@@ -914,11 +1000,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $html = false;
         $description = "\n";
 
-        foreach ($order as $orderline) {
+        foreach ($order as $orderline)
+        {
             $description .= '[' . $orderline->code . ']' . $orderline->item_description . "\n";
         }
 
-        if ($this->getIsRenewal() && !$this->getIsReview()) {
+        if ($this->getIsRenewal() && !$this->getIsReview())
+        {
 
             /*
              * Get the payment total that has just been processed
@@ -929,7 +1017,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             // Update the expiry date
             $expiry_date = $this->getNewExpiryDate();
 
-            if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id, true)) {
+            if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id, true))
+            {
                 // TO DO - Log this
                 return false;
             }
@@ -947,7 +1036,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES');
 
             return $message;
-        } else if ($this->getIsRenewal() && $this->getIsReview()) {
+        } else if ($this->getIsRenewal() && $this->getIsReview())
+        {
             // Get the amound paid
             $total = $this->getOrderTotal($order);
 
@@ -970,7 +1060,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES');
 
             return $message;
-        } else if (empty($expiry_date) && !$this->getIsRenewal()) {
+        } else if (empty($expiry_date) && !$this->getIsRenewal())
+        {
 
             // New property
             $total = $this->getOrderTotal($order);
@@ -987,7 +1078,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
             return $message;
             // Send confirmation of submission
-        } else if (!empty($expiry_date) && !$this->getIsRenewal() && $this->getIsReview()) {
+        } else if (!empty($expiry_date) && !$this->getIsRenewal() && $this->getIsReview())
+        {
 
             // Existing property that has been updated. - May not be appropriate here...or this may 
             // only be called when they need to pay extra
@@ -995,7 +1087,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             // If payment made - send payment receipt
             $total = $this->getOrderTotal($order);
 
-            if (round($total, 2) > 0) {
+            if (round($total, 2) > 0)
+            {
                 // Send payment receipt
                 $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
                 $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
@@ -1007,11 +1100,13 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
             $message = JText::_('COM_RENTAL_PROPERTY_EXISTING_PROPERTY_UPDATE_WITH_PAYMENT');
 
             return $message;
-        } else if (!empty($expiry_date) && !$this->getIsRenewal() && !$this->getIsReview()) {
+        } else if (!empty($expiry_date) && !$this->getIsRenewal() && !$this->getIsReview())
+        {
             // Must be processing a voucher or some other gubbins
             $total = $this->getOrderTotal($order);
 
-            if (round($total, 2) > 0) {
+            if (round($total, 2) > 0)
+            {
                 // Send payment receipt
                 $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
                 $receipt_body = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_BODY', $date, $billing_name, $total, $transaction_number, $auth_code, $description, $address, $billing_email);
@@ -1029,7 +1124,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
     /**
      * 
      */
-    public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $html = true) {
+    public function sendEmail($from = array(), $to = '', $emailSubject = '', $emailBody = '', $html = true)
+    {
 
         // Assemble the email data...
         $mail = JFactory::getMailer()
@@ -1043,7 +1139,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $mail->addBCC('accounts@frenchconnections.co.uk');
         $mail->addBCC('adamrifat@frenchconnections.co.uk');
 
-        if (!$mail->Send()) {
+        if (!$mail->Send())
+        {
             return false;
         }
 
@@ -1062,7 +1159,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @param type $reset_snooze - boolean whether to reset the snooze date or not.
      * @return boolean
      */
-    public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '', $reset_snooze = false) {
+    public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '', $reset_snooze = false)
+    {
 
         // Initialise some variable
         $data = array();
@@ -1082,31 +1180,36 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         /*
          * Update the autorenwal transaction id
          */
-        if (!empty($autorenewal)) {
+        if (!empty($autorenewal))
+        {
             $data['VendorTxCode'] = $autorenewal;
         }
         /*
          * Update the expiry date if one is passed in
          */
-        if (!empty($expiry_date)) {
+        if (!empty($expiry_date))
+        {
             $data['expiry_date'] = $expiry_date;
         }
 
         /*
          * Also update the published, if requested...
          */
-        if (!empty($published)) {
+        if (!empty($published))
+        {
             $data['published'] = $published;
         }
 
-        if ($reset_snooze) {
+        if ($reset_snooze)
+        {
             $data['snooze_until'] = '';
         }
 
         $table = JTable::getInstance('Property', 'RentalTable');
 
         // Store the data.
-        if (!$table->save($data)) {
+        if (!$table->save($data))
+        {
             $this->setError($table->getError());
             return false;
         }
@@ -1120,7 +1223,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
       $data = POST data to send (in URL encoded Key=value pairs)
      * *********************************************************** */
 
-    public function requestPost($url, $data) {
+    public function requestPost($url, $data)
+    {
         // Set a one-minute timeout for this script
         set_time_limit(60);
 
@@ -1155,7 +1259,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         //Split response into name=value pairs
         $response = explode("\n", $rawresponse);
         // Check that a connection was made
-        if (curl_error($curlSession)) {
+        if (curl_error($curlSession))
+        {
             // If it wasn't...
             $output['Status'] = "FAIL";
             $output['StatusDetail'] = curl_error($curlSession);
@@ -1165,7 +1270,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         curl_close($curlSession);
 
         // Tokenise the response
-        for ($i = 0; $i < count($response); $i++) {
+        for ($i = 0; $i < count($response); $i++)
+        {
             // Find position of first "=" character
             $splitAt = strpos($response[$i], "=");
             // Create an associative (hash) array with key/value pairs ('trim' strips excess whitespace)
@@ -1184,9 +1290,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @param type $key - Determines whether to update an existing row based on key passed or insert a new row
      * @return boolean
      */
-    public function saveProtxTransaction($data = array(), $key = '') {
+    public function saveProtxTransaction($data = array(), $key = '')
+    {
 
-        if (array_key_exists('CardExpiryDate', $data)) {
+        if (array_key_exists('CardExpiryDate', $data))
+        {
             // Process the expiry date into last day of given month year
             $year = '20' . substr($data['CardExpiryDate'], -2);
             $month = substr($data['CardExpiryDate'], 0, 2);
@@ -1197,19 +1305,22 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         // So let's put the transaction into the database
         $table = JTable::getInstance('protxtransactions', 'RentalTable');
 
-        if (!empty($key)) {
+        if (!empty($key))
+        {
             $table->set('_tbl_keys', array('VendorTxCode'));
             $table->load($data['VendorTxCode']);
         }
 
         // Bind the data.
-        if (!$table->bind($data)) {
+        if (!$table->bind($data))
+        {
             $this->setError($table->getError());
             return false;
         }
 
         // Store the data.
-        if (!$table->store()) {
+        if (!$table->store())
+        {
             $this->setError($table->getError());
             return false;
         }
@@ -1217,22 +1328,26 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         return $table;
     }
 
-    public function saveProtxTransactionLines($data = array(), $VendorTxCode = '') {
+    public function saveProtxTransactionLines($data = array(), $VendorTxCode = '')
+    {
         // So let's put the transaction lines into the database
         $table = JTable::getInstance('protxtransactionlines', 'RentalTable');
 
         // Add each of the order lines to the transaction lines table
-        foreach ($data as $line) {
+        foreach ($data as $line)
+        {
             $line->VendorTxCode = $VendorTxCode;
             $line->id = '';
             // Bind the data.
-            if (!$table->bind($line)) {
+            if (!$table->bind($line))
+            {
                 $this->setError($table->getError());
                 return false;
             }
 
             // Store the data.
-            if (!$table->store()) {
+            if (!$table->store())
+            {
                 $this->setError($table->getError());
                 return false;
             }
@@ -1247,17 +1362,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @param type $period
      * @return type
      */
-    public function getNewExpiryDate($period = 'P365D') {
+    public function getNewExpiryDate($period = 'P365D')
+    {
         $days_to_expiry = PropertyHelper::getDaysToExpiry($this->getExpiryDate());
 
         $expiry_date = $this->getExpiryDate();
 
-        if (empty($expiry_date) || $days_to_expiry <= 0) {
+        if (empty($expiry_date) || $days_to_expiry <= 0)
+        {
             /**
              * Get the date now
              */
             $date = JFactory::getDate();
-        } elseif ($days_to_expiry > 0) {
+        } elseif ($days_to_expiry > 0)
+        {
             $date = JFactory::getDate($this->getExpiryDate());
         }
 
@@ -1282,7 +1400,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @return mixed
      * 
      */
-    public function getVouchers($property_id = '', $discount = false) {
+    public function getVouchers($property_id = '', $discount = false)
+    {
 
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
@@ -1295,9 +1414,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
         $query->join('left', '#__item_costs b on b.code = a.item_cost_id');
 
         // Don't return the discount vouchers 
-        if (!$discount) {
+        if (!$discount)
+        {
             $query->where('b.catid not in (50)');
-        } else {
+        } else
+        {
             $query->where('b.catid in (50)');
         }
 
@@ -1305,16 +1426,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
 
         $db->setQuery($query);
 
-        try {
+        try
+        {
             $rows = $db->loadObjectList();
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             // Problem loading vouchers for this property
             return false;
         }
 
         // Discount vouchers are ignored and only applied once
-        if (!$discount && count($rows) > 0) {
-            foreach ($rows as $row) {
+        if (!$discount && count($rows) > 0)
+        {
+            foreach ($rows as $row)
+            {
                 $vouchers[$row->item_cost_id]['quantity'] = $row->quantity;
                 $vouchers[$row->item_cost_id]['note'] = $row->note;
             }
@@ -1329,7 +1454,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * Get the renewal status
      * @return boolean
      */
-    public function getIsRenewal() {
+    public function getIsRenewal()
+    {
         // Set the renewal status...
         return $this->isRenewal;
     }
@@ -1339,7 +1465,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * 
      * @return void
      */
-    protected function setIsRenewal($renewal = false) {
+    protected function setIsRenewal($renewal = false)
+    {
         $this->isRenewal = $renewal;
     }
 
@@ -1347,7 +1474,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * Get the expiry date
      * @return string
      */
-    protected function getExpiryDate() {
+    protected function getExpiryDate()
+    {
         return $this->expiry_date;
     }
 
@@ -1355,7 +1483,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * 
      * @return type
      */
-    protected function getIsReview() {
+    protected function getIsReview()
+    {
         return $this->isReview;
     }
 
@@ -1363,7 +1492,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * Get the listing ID
      * @return int
      */
-    protected function getListingId() {
+    protected function getListingId()
+    {
         return $this->listing_id;
     }
 
@@ -1372,7 +1502,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * 
      * @return array
      */
-    protected function getListing() {
+    protected function getListing()
+    {
         return $this->listing;
     }
 
@@ -1380,7 +1511,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * Get the user id of the user who owns this property
      * @return int
      */
-    protected function getOwnerId() {
+    protected function getOwnerId()
+    {
         return $this->owner_id;
     }
 
@@ -1395,17 +1527,20 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      * @since   2.5
      *
      */
-    public function retrieve($id) {
+    public function retrieve($id)
+    {
 
         $data = null;
 
         // Use the internal cache if possible.
-        if (isset($this->cache[$id])) {
+        if (isset($this->cache[$id]))
+        {
             return $this->cache[$id];
         }
 
         // Store the data in internal cache.
-        if ($data) {
+        if ($data)
+        {
             $this->cache[$id] = $data;
         }
 
@@ -1422,7 +1557,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy {
      *
      * @since   2.5
      */
-    protected function store($id, $data) {
+    protected function store($id, $data)
+    {
 
         // Store the data in internal cache.
         $this->cache[$id] = $data;

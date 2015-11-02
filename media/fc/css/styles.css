@@ -6349,10 +6349,6 @@ Contains styles that apply at the global level, or can be applied to any section
 19/08/2014 Adam Rifat FCV4
 
 **/
-html,
-body {
-  height: 100%;
-}
 @media print {
   .print-button-bar {
     display: none;
@@ -7255,10 +7251,15 @@ A/B testing styles for new advertise with us page
 .view-shortlist .nav-tabs {
   margin-bottom: 20px;
 }
-.view-search .search-results,
-.view-shortlist .search-results,
 .view-search .map-search-results,
 .view-shortlist .map-search-results {
+  overflow-y: scroll;
+  max-height: 600px;
+}
+.view-search .search-results,
+.view-shortlist .search-results,
+.view-search #mapsearch,
+.view-shortlist #mapsearch {
   margin-top: 20px;
 }
 .view-search .search-results .search-result:nth-child(2n+1),

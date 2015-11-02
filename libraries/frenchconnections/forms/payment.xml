@@ -242,8 +242,19 @@
       default="">  
       <option value="">Please select...</option>
     </field>    
+    <field
+      name="state"
+      type="state"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_REGION_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_REGION_LABEL"
+      message="PLG_USER_PROFILE_FIELD_REGION_MESSAGE"
+      labelclass="control-label"
+      required="false"
+    />
   </fieldset>
-  
+
   <field 
     name="tsandcs" 
     type="checkbox"
