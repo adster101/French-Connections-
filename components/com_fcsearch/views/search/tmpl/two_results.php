@@ -20,7 +20,6 @@ if (JDEBUG)
 
 JDEBUG ? $_PROFILER->mark('Start process search results template') : null;
 
-
 $ordering = 'order_' . $this->state->get('list.sort_column') . '_' . $this->state->get('list.direction');
 
 $sortFields = $this->getSortFields();
@@ -45,6 +44,8 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 // $limit = (int) $this->pagination->get('limit') * $this->pagination->pagesTotal;
 // $limit = (int) ($limit > $total ? $total : $limit);
 // $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
+
+var_dump($this->accommodation_options);
 ?>
 
 <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=' . $ItemID . '&s_kwds=' . $s_kwds) ?>" method="POST">
@@ -88,7 +89,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
         </div>
     </div>
     <div class="row">
-        <div class="tab-content col-lg-9 col-md-9 col-lg-push-3 col-md-push-3">
+        <div class="tab-content col-lg-9 col-md-9">
             <div class="tab-pane active" id="list">
                 <?php if (count($this->results) > 0) : ?>
                     <div class="clearfix">
@@ -135,26 +136,13 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
             </div>
             <div class="tab-pane" id="mapsearch">
                 <div id="map_canvas"></div>
-                <table class="table table-condensed availability-key hidden-xs ">
-                    <thead> 
-                        <tr>
-                            <th>Colour key: </th>
-                            <th style="background:red">&nbsp;</th>
-                            <th>Lot's of properties</th>
-                            <th style="background:blue">&nbsp;</th>
-                            <th>Some properties</th>
-                            <th style="background:yellow">&nbsp;</th>
-                            <th>Fewer properties</th>
-                        </tr>
-                    </thead>
-                </table>
             </div>
             <div class="tab-pane" id="localinfo">
                 <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
                 <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-lg-pull-9 col-md-pull-9 refine-search">
+        <div class="col-lg-3 col-md-3 refine-search">
             <?php
             JDEBUG ? $_PROFILER->mark('Start process refine') : null;
             echo $this->loadTemplate('refine');

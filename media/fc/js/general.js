@@ -216,6 +216,52 @@ jQuery(document).ready(function () {
     })
   }
 
+  var country_select = jQuery('select#jform_BillingCountry');
+
+  if (country_select.length)
+  {
+    country_select.on('change', function (e)
+    {
+      var select = jQuery(this);
+      var value = select.val();
+      var state = jQuery('select#jform_BillingState');
+
+      if (value === 'US')
+      {
+        state.addClass('required');
+        state.attr('required', 'required');
+        state.parent().parent().show();
+      } else {
+        state.removeClass('required');
+        state.removeAttr('required');
+        state.parent().parent().hide();
+      }
+    })
+  }
+  
+    var country_select = jQuery('select#jform_country');
+
+  if (country_select.length)
+  {
+    country_select.on('change', function (e)
+    {
+      var select = jQuery(this);
+      var value = select.val();
+      var state = jQuery('select#jform_state');
+
+      if (value === 'US')
+      {
+        state.addClass('required');
+        state.attr('required', 'required');
+        state.parent().parent().show();
+      } else {
+        state.removeClass('required');
+        state.removeAttr('required');
+        state.parent().parent().hide();
+      }
+    })
+  }
+
   if (jQuery("#contactDetails").length) {
 
     var checked = jQuery('#jform_use_invoice_details');

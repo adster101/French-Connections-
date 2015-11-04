@@ -176,9 +176,7 @@ abstract class Import extends JApplicationCli
     $mail->setBody($e->getMessage() . '<br />' . $e->getTraceAsString() . '<br />' . $e->getLine());
     $mail->setSubject($e->getMessage());
     $mail->isHtml(true);
-    
-    $mail->send();
-    
+    $mail->send(); 
   }
 
   public function getUnit()

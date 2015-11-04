@@ -116,6 +116,18 @@
       <option value="">JSELECT</option>
 
     </field>
+    
+    <field
+      name="state"
+      type="state"
+      default=""
+      description="PLG_USER_PROFILE_FIELD_STATE_DESC"
+      filter="string"
+      label="PLG_USER_PROFILE_FIELD_STATE_LABEL"
+      message="PLG_USER_PROFILE_FIELD_STATE_MESSAGE"
+      labelclass="control-label">
+      <option value="">Please select...</option>
+    </field>   
       
     <field
       name="email_alt"
