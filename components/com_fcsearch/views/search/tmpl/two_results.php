@@ -45,7 +45,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 // $limit = (int) ($limit > $total ? $total : $limit);
 // $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
 
-var_dump($this->accommodation_options);
 ?>
 
 <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=' . $ItemID . '&s_kwds=' . $s_kwds) ?>" method="POST">
