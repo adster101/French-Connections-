@@ -39,15 +39,6 @@ $offers = ($this->state->get('list.offers')) ? true : false;
 $lwl = ($this->state->get('list.lwl')) ? true : false;
 $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
-$latitude = $this->state->get('search.latitude', '');
-$longitude = $this->state->get('search.longitude', '');
-
-// Prepare the pagination string.  Results X - Y of Z
-// $start = (int) $this->pagination->get('limitstart') + 1;
-// $total = (int) $this->pagination->get('total');
-// $limit = (int) $this->pagination->get('limit') * $this->pagination->pagesTotal;
-// $limit = (int) ($limit > $total ? $total : $limit);
-// $pages = JText::sprintf('COM_FCSEARCH_TOTAL_PROPERTIES_FOUND', $total);
 ?>
 
 <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=' . $ItemID . '&s_kwds=' . $s_kwds) ?>" method="POST">
@@ -55,53 +46,45 @@ $longitude = $this->state->get('search.longitude', '');
     <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
   </h1>
 
-
+  <div class="well well-sm well-light-blue clearfix form-inline">  
+    <?php echo $search_layout->render($search_data); ?>
+  </div>
   <?php $offer_filter = JHtml::_('refine.removeOffersFilter', (bool) $offers); ?>
   <?php $lwl_filter = JHtml::_('refine.removeLWLFilter', (bool) $lwl); ?>
   <?php $attribute_filter = JHtml::_('refine.removeAttributeFilters', $this->attribute_options, $uri); ?>
   <?php $property_filter = JHtml::_('refine.removeTypeFilters', $this->property_options, $uri, 'property_'); ?>
   <?php $accommodation_filter = JHtml::_('refine.removeTypeFilters', $this->accommodation_options, $uri, 'accommodation_'); ?>
-
-  <div class="row">
-    <div class="tab-content col-lg-10 col-md-10">
-
-      <div class="well well-sm well-light-blue clearfix form-inline">  
-        <?php echo $search_layout->render($search_data); ?>
-      </div>
-
-      <div class="row" style="marg">
-        <div class="col-lg-8 col-xs-12 col-md-8 col-sm-8">
-          <p class="pull-left" style='line-height: 28px;'>
-            <?php echo $this->pagination->getResultsCounter(); ?>
-          </p>
-        </div>
-        <div class="col-lg-4 col-xs-6 col-md-4 col-sm-4">
-          <label for="sort_by" class="sr-only">
-            <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
-          </label>
-          <select id="sort_by" class="form-control" name="order">
-            <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
-          </select>
-        </div>
-        <div class="visible-sm-inline-block visible-xs-inline-block col-xs-6">
-          <p class=" pull-right">
-            <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default">  
-              <span class="glyphicon glyphicon-filter"></span>
-              <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
-            </a>
-          </p>
-        </div>
-      </div>   
       <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
           <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
           <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
           <hr />
-      <?php endif; ?>         
+      <?php endif; ?> 
+  <div class="row">
+    <div class="tab-content col-lg-9 col-md-9">
+
+      <div class="clearfix">
+        <p class="pull-left">
+          <?php echo $this->pagination->getResultsCounter(); ?> 
+        </p>
+        <p class="pull-right">
+
+          <label for="sort_by" class="sr-only">
+            <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
+          </label>
+          <select id="sort_by" class="form-control sort-order" name="order">
+            <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
+          </select>
+        </p>
+      </div>
+      <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default visible-sm-inline-block visible-xs-inline-block">  
+        <span class="glyphicon glyphicon-filter"></span>
+        <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
+      </a>   
+
+
       <div class="tab-pane active" id="list">
-
         <?php if (count($this->results) > 0) : ?>
-
-            <div class="search-results list-unstyled clear" data-results='<?php json_encode($this->results) ?>'>
+            <div class="search-results list-unstyled" data-results='<?php json_encode($this->results) ?>' style="margin-top:0">
               <?php
               JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
 
@@ -156,20 +139,8 @@ $longitude = $this->state->get('search.longitude', '');
       <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
       <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
     </div>
-    <div class="col-lg-2 col-md-2 refine-search">
-      <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">
-        <li>
-          <a href="#list" data-toggle="tab" class='btn btn-default'>
-            <i class="glyphicon glyphicon-list"></i>
-            <?php echo JText::_('COM_FCSEARCH_BACK_TO_LIST') ?>
-          </a>
-        </li>
-        <li>
-          <a href="#mapsearch" data-toggle="tab" title="View results on map">
-            <img class="img-responsive" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=200x200&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
-          </a>
-        </li>
-      </ul>
+    <div class="col-lg-3 col-md-3 refine-search">
+
 
       <?php
       JDEBUG ? $_PROFILER->mark('Start process refine') : null;

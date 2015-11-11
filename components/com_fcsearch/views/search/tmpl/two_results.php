@@ -67,7 +67,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
         <hr />
     <?php endif; ?>
 
-
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <ul class="nav nav-tabs" id="search-tabs">

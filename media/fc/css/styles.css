@@ -7218,6 +7218,21 @@ A/B testing styles for new advertise with us page
 .view-shortlist #map-search-tab > li > a[href='#mapsearch'] {
   padding: 0;
 }
+.view-search #map-search-tab > li > a > img.map,
+.view-shortlist #map-search-tab > li > a > img.map {
+  max-width: 100%;
+}
+.view-search select.sort-order,
+.view-shortlist select.sort-order {
+  height: inherit;
+  border: none;
+  box-shadow: none;
+  padding: 0 2px;
+}
+.view-search select.sort-order:focus,
+.view-shortlist select.sort-order:focus {
+  box-shadow: none;
+}
 .view-search p.offer,
 .view-shortlist p.offer {
   position: relative;
@@ -7257,9 +7272,7 @@ A/B testing styles for new advertise with us page
   max-height: 600px;
 }
 .view-search .search-results,
-.view-shortlist .search-results,
-.view-search #mapsearch,
-.view-shortlist #mapsearch {
+.view-shortlist .search-results {
   margin-top: 20px;
 }
 .view-search .search-results .search-result:nth-child(2n+1),

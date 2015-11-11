@@ -30,9 +30,12 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 // The layout for the anchor based navigation on the property listing
 $refine_type_layout = new JLayoutFile('refinetype_two', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 
-$suitability_filters = array(24, 25, 111, 115, 117, 118, 121, 598);
+$suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598);
+$facilities_filters = array(74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539,);
 
 $suitabilityArr = array();
+$propertyArr = array();
+$facilitiesArr = array();
 
 foreach ($this->attribute_options as $values)
 {
@@ -41,6 +44,11 @@ foreach ($this->attribute_options as $values)
         if (in_array($value[id], $suitability_filters))
         {
             $suitabilityArr[] = $value;
+        }
+
+        if (in_array($value[id], $facilities_filters))
+        {
+            $facilitiesArr[] = (array) $value;
         }
     }
 }
@@ -53,12 +61,17 @@ foreach ($this->accommodation_options as $key => $values)
         $suitabilityArr[] = (array) $values;
     }
 }
+
+foreach ($this->property_options as $key => $values)
+{
+    $propertyArr[] = (array) $values;
+}
 ?>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3>
+    <h4>
       <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
-    </h3>
+    </h4>
   </div>
   <div class="panel-body">
     <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_PRICE'); ?></h4>
@@ -102,7 +115,6 @@ foreach ($this->accommodation_options as $key => $values)
                         <hr />
                     <?php endif; ?>
                 <?php endif; ?>
-
             <?php endforeach; ?>
             <?php if ($this->localinfo->level < 10) : ?>
                 <?php if (!empty($this->location_options)) : ?>
@@ -147,185 +159,94 @@ foreach ($this->accommodation_options as $key => $values)
         </div>
     <?php endif; ?>
 
-    <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH_ACCOMMODATION_TYPE'); ?></h4>
-    <div class="">
-      <?php
-      echo $refine_type_layout->render(
-              array(
-                  'data' => $suitabilityArr,
-                  'location' => $this->localinfo->title,
-                  'itemid' => $Itemid_search,
-                  'uri' => $uri,
-                  'lang' => $lang,
-                  'offers' => $offers,
-                  'lwl' => $lwl
-      ));
-      ?>
-    </div>
+    <h4 class="page-header"><?php echo JText::_('SUITABILITY'); ?></h4>
+    <?php
+    echo $refine_type_layout->render(
+            array(
+                'data' => $suitabilityArr,
+                'location' => $this->localinfo->title,
+                'itemid' => $Itemid_search,
+                'uri' => $uri,
+                'lang' => $lang,
+                'offers' => $offers,
+                'lwl' => $lwl
+    ));
+    ?>
 
     <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH_PROPERTY_TYPE'); ?></h4>
-    <div id="property" class="">
-      <?php if (!empty($this->property_options)) : ?>
+    <?php
+    echo $refine_type_layout->render(
+            array(
+                'data' => $propertyArr,
+                'location' => $this->localinfo->title,
+                'itemid' => $Itemid_search,
+                'uri' => $uri,
+                'lang' => $lang,
+                'offers' => $offers,
+                'lwl' => $lwl
+    ));
+    ?>
 
-          <?php
-          $counter = 0;
-          $hide = true;
-          foreach ($this->property_options as $key => $value) :
-              ?>
-              <?php
-              $remove = false;
-              $tmp = explode('/', $uri); // Split the url out on the slash
-              $filters = ($lang == 'en-GB') ? array_flip(array_slice($tmp, 3)) : array_flip(array_slice($tmp, 4)); // The filters being applied in the current URL
-              $filter_string = 'property_' . JApplication::stringURLSafe($this->escape($value->title)) . '_' . (int) $value->id;
+    <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_FACILITIES'); ?></h4>
+    <?php
+    echo $refine_type_layout->render(
+            array(
+                'data' => $facilitiesArr,
+                'location' => $this->localinfo->title,
+                'itemid' => $Itemid_search,
+                'uri' => $uri,
+                'lang' => $lang,
+                'offers' => $offers,
+                'lwl' => $lwl
+    ));
+    ?>
 
-              if (!array_key_exists($filter_string, $filters))
-              { // This property filter isn't currently applied
-                  $new_uri = implode('/', array_flip($filters)); // Take the existing filters 
-                  $new_uri = (!empty($filters)) ? '/' . $filter_string . '/' . $new_uri : '/' . $filter_string; // And append the new filter only adding new uri it it's not empty
-                  $remove = false;
-              } else
-              { // This property type filter is already being applied
-                  unset($filters[$filter_string]); // Remove it from the filters array
-                  $new_uri = implode('/', array_flip($filters));  // The new filter part is generated so without this filter which effectively removes the filter from the search
-                  $new_uri = ($new_uri) ? '/' . $new_uri : '';
-                  $remove = true;
-              }
-              $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' .
-                      JApplication::stringURLSafe($this->escape($this->localinfo->title)) . $new_uri . $offers . $lwl;
-              ?>
-              <?php if ($counter >= 10 && $hide) : ?>
-                  <?php $hide = false; ?>
-                  <div class="hide ">
-                <?php endif; ?>
-                <p>
-                  <a href="<?php echo JRoute::_($route) ?>">
-                    <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
-                    <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
-                  </a>
-                </p>          
-                <?php $counter++; ?>
-                <?php if ($counter == count($this->property_options) && !$hide) : ?>
-                  </div>
-              <?php endif; ?>
-              <?php if ($counter == count($this->property_options) && !$hide) : ?>
-                  <hr class="condensed" />
-                  <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
-                    <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>          
-                  </a>
-              <?php endif; ?>
-          <?php endforeach ?>
-      <?php else: ?>
-          <?php echo '...'; ?>
-      <?php endif; ?>
-    </div>
-
-    <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_EXTRAS'); ?></h4>
-    <div class="">
-      <?php if (!empty($this->lwl) || !empty($this->so)) : ?>
-          <?php
-          $link = JURI::getInstance();
-          $query_string_original = $link->getQuery(true);
-          $query_string_new = $query_string_original;
-          ?>
-          <?php
-          if (!empty($this->lwl)) :
-              if ($query_string_new['lwl'])
-              {
-                  unset($query_string_new['lwl']);
-              } else
-              {
-                  $query_string_new['lwl'] = 'true';
-              }
-              $link->setQuery($query_string_new);
-              ?>
-              <p>
-                <a href="<?php echo JRoute::_($link->toString()) ?>">
-                  <i class="muted <?php echo (($lwl) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
-                  <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_LWL); ?> (<?php echo $this->lwl; ?>)
-                </a>
-              </p>  
-          <?php endif; ?>
-          <?php
-          if (!empty($this->so)) :
-              $query_string_new = $query_string_original;
-
-              if ($query_string_new['offers'])
-              {
-                  unset($query_string_new['offers']);
-              } else
-              {
-                  $query_string_new['offers'] = 'true';
-              }
-              $link->setQuery($query_string_new);
-              ?>
-              <p>
-                <a href="<?php echo JRoute::_($link->toString()) ?>">
-                  <i class="muted <?php echo (($offers) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
-                  <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_OFFERS); ?> (<?php echo $this->so; ?>)
-                </a>
-              </p>  
-          <?php endif; ?>        
-      <?php else : ?>
-          <?php echo '...'; ?>
-      <?php endif; ?> 
-    </div>
-    <?php foreach ($this->attribute_options as $key => $values) : ?>
+    <?php if (!empty($this->lwl) || !empty($this->so)) : ?>  
+        <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_EXTRAS'); ?></h4>
         <?php
-        $counter = 0;
-        $hide = true // Init a counter so we don't show all the options at once
+        $link = JURI::getInstance();
+        $query_string_original = $link->getQuery(true);
+        $query_string_new = $query_string_original;
         ?>
-        <h4 class="page-header"><?php echo JTEXT::_($this->escape($key)); ?></h4>
-        <div class="">
-          <?php if (!empty($values)) : ?>
-              <?php
-              foreach ($values as $key => $value) :
-                  $new_uri = '';
-                  $tmp = array_flip(explode('/', $uri));
-                  $remove = '';
+        <?php
+        if (!empty($this->lwl)) :
+            if ($query_string_new['lwl'])
+            {
+                unset($query_string_new['lwl']);
+            } else
+            {
+                $query_string_new['lwl'] = 'true';
+            }
+            $link->setQuery($query_string_new);
+            ?>
+            <p>
+              <a href="<?php echo JRoute::_($link->toString()) ?>">
+                <i class="muted <?php echo (($lwl) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+                <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_LWL); ?> (<?php echo $this->lwl; ?>)
+              </a>
+            </p>  
+        <?php endif; ?>
+        <?php
+        if (!empty($this->so)) :
+            $query_string_new = $query_string_original;
 
-                  $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($value['title'])) . '_' . $key;
-                  // If the filter string doesn't already exist in the url, then append it to the end
-                  if (!array_key_exists($filter_string, $tmp))
-                  {
-                      $new_uri = implode('/', array_flip($tmp));
-                      $new_uri = $new_uri . '/' . $filter_string;
-                      $remove = false;
-                  } else
-                  {
-                      unset($tmp[$filter_string]);
-                      $new_uri = implode('/', array_flip($tmp));
-                      $remove = true;
-                  }
-                  ?>
-                  <?php if ($counter >= 10 && $hide) : ?>
-                      <?php $hide = false; ?>
-                      <div class="hide ">
-                    <?php endif; ?>
-                    <p>
-                      <a href="<?php echo JRoute::_('//' . $new_uri . $offers . $lwl) ?>">
-                        <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked'); ?>"> </i>&nbsp;<?php echo $value['title']; ?> (<?php echo $value['count']; ?>)
-                      </a>
-                    </p>
+            if ($query_string_new['offers'])
+            {
+                unset($query_string_new['offers']);
+            } else
+            {
+                $query_string_new['offers'] = 'true';
+            }
+            $link->setQuery($query_string_new);
+            ?>
+            <p>
+              <a href="<?php echo JRoute::_($link->toString()) ?>">
+                <i class="muted <?php echo (($offers) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+                <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_OFFERS); ?> (<?php echo $this->so; ?>)
+              </a>
+            </p>  
+        <?php endif; ?>        
+    <?php endif; ?> 
 
-                    <?php $counter++; ?>
 
-                    <?php if ($counter == count($values) && !$hide) : ?>
-
-                      </div>
-                  <?php endif; ?>
-                  <?php if ($counter == count($values) && !$hide) : ?>
-                      <hr class="condensed" />
-                      <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
-                        <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>
-                      </a>
-                  <?php endif; ?>      
-
-              <?php endforeach; ?>
-          <?php else: ?>
-              <?php echo '...'; ?>
-          <?php endif; ?> 
-        </div>
-
-    <?php endforeach; ?>
   </div>
-</div>

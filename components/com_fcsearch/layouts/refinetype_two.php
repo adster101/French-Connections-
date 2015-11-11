@@ -7,25 +7,33 @@ $uri = ($displayData['uri']) ? $displayData['uri'] : '';
 $lang = ($displayData['lang']) ? $displayData['lang'] : 'en-GB';
 $offers = ($displayData['offers']) ? $displayData['offers'] : '';
 $lwl = ($displayData['lwl']) ? $displayData['lwl'] : '';
+
+$data = $displayData['data'];
+
+// Sort the data array into alphabetical order 
+foreach ($data as $key => $row) {
+    // replace 0 with the field's index/key
+    $sortable[$key]  = $row['title'];
+}
+array_multisort($sortable, SORT_ASC, $data);
+
 ?>
 
-<?php if (!empty($displayData['data'])) : ?>
+<?php if (!empty($data)) : ?>
 
     <?php
-    $counter = 0;
-    $hide = true;
-    foreach ($displayData['data'] as $key => $value) :
+    foreach ($data as $key => $value) :
         ?>
         <?php
         $remove = false;
         $tmp = explode('/', $uri); // Split the url out on the slash
         $filters = ($lang == 'en-GB') ? array_flip(array_slice($tmp, 3)) : array_flip(array_slice($tmp, 4)); // The filters being applied in the current URL
-        if ($value['search_code'] == 'accommodation_') {
-              $filter_string = $value['search_code'] . JApplication::stringURLSafe($this->escape($value[title])) . '_' . (int) $value[id];
-      
-        } else {
-              $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($this->escape($value[title]))) . '_' . (int) $value[id];
-            
+        if ($value['search_code'] == 'accommodation_')
+        {
+            $filter_string = $value['search_code'] . JApplication::stringURLSafe($this->escape($value[title])) . '_' . (int) $value[id];
+        } else
+        {
+            $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($this->escape($value[title]))) . '_' . (int) $value[id];
         }
 
         if (!array_key_exists($filter_string, $filters))
@@ -43,23 +51,15 @@ $lwl = ($displayData['lwl']) ? $displayData['lwl'] : '';
         $route = 'index.php?option=com_fcsearch&Itemid=' . $displayData['itemid'] . '&s_kwds=' .
                 JApplication::stringURLSafe($this->escape($displayData['location'])) . $new_uri . $offers . $lwl;
         ?>
-          <?php if ($counter >= 8 && $hide) : ?>
-              <?php $hide = false; ?>
-            <div class="hide ">
-        <?php endif; ?>
-          <p>
-            <a href="<?php echo JRoute::_($route) ?>">
-              <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
-          <?php echo $this->escape($value[title]); ?> (<?php echo $value[count]; ?>)
-            </a>
-          </p>          
-        <?php $counter++; ?>
-        <?php if ($counter == count($displayData['data']) && !$hide) : ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($counter == count($displayData['data']) && !$hide) : ?>
-            <a href="#" class="show" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>"><?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?></a>
-        <?php endif; ?>
+
+        <p>
+          <a href="<?php echo JRoute::_($route) ?>">
+            <i class="muted icon <?php echo ($remove ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+            <?php echo $this->escape($value[title]); ?> (<?php echo $value[count]; ?>)
+          </a>
+        </p>          
+
+
     <?php endforeach ?>
 <?php else: ?>
     <?php echo '...'; ?>
