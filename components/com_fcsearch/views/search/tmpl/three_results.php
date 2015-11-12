@@ -48,7 +48,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
   <div class="well well-sm well-light-blue clearfix form-inline">  
     <?php echo $search_layout->render($search_data); ?>
   </div>
-  
+
   <?php $offer_filter = JHtml::_('refine.removeQueryFilter', (bool) $offers, 'offers', 'COM_FCSEARCH_SEARCH_FILTER_OFFERS', $uri); ?>
   <?php $lwl_filter = JHtml::_('refine.removeQueryFilter', (bool) $lwl, 'lwl', 'COM_FCSEARCH_SEARCH_FILTER_LWL', $uri); ?>
   <?php $attribute_filter = JHtml::_('refine.removeAttributeFilters', $this->attribute_options, $uri, ''); ?>
@@ -204,9 +204,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
                   var index = jQuery('.map-search-result').index(this);
                   markers[index].setAnimation(null);
                 });
-
-        console.log(jQuery(window).height());
-        console.log(jQuery('#map_canvas').offset());
 
       }
     })

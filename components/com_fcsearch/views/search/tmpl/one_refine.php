@@ -35,9 +35,7 @@ $longitude = $this->state->get('search.longitude', '');
 ?>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h4>
-      <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
-    </h4>
+    <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
   </div>
   <div class="panel-body">
     <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">

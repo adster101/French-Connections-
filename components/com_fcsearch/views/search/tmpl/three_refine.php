@@ -67,12 +67,29 @@ foreach ($this->property_options as $key => $values)
     $values->search_code = 'property_';
     $propertyArr[] = (array) $values;
 }
+
+
+$latitude = $this->state->get('search.latitude', '');
+$longitude = $this->state->get('search.longitude', '');
 ?>
 <div class="panel panel-default">
   <div class="panel-heading">
     <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
   </div>
   <div class="panel-body">
+    <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">
+      <li>
+        <a href="#list" data-toggle="tab" class='btn btn-default'>
+          <i class="glyphicon glyphicon-list"></i>
+          <?php echo JText::_('COM_FCSEARCH_BACK_TO_LIST') ?>
+        </a>
+      </li>
+      <li>
+        <a href="#mapsearch" data-toggle="tab" title="View results on map">
+          <img class="img-responsive map" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=300x150&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
+        </a>
+      </li>
+    </ul>
     <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_PRICE'); ?></h4>
     <div class="search-field">
       <label class="sr-only" for="min_price"><?php echo JText::_('COM_FCSEARCH_SEARCH_MINIMUM_PRICE_RANGE'); ?></label>
