@@ -83,7 +83,6 @@ abstract class Import extends JApplicationCli
     {
       return false;
     }
-
     // Return the property version ID
     return $row;
   }
