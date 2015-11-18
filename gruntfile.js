@@ -48,7 +48,12 @@ module.exports = function (grunt) {
           'media/fc/assets/css/styles.css':
                   ['media/fc/css/styles.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
-                  ['media/fc/css/styles.css']
+                  ['media/fc/css/styles.css'],
+          'media/fc/css/critical.css':
+                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css'],
+          'media/fc/assets/css/critical.css':
+                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css']
+                
         }
       }
     },
@@ -167,6 +172,22 @@ module.exports = function (grunt) {
           }
         ]
       }
+    },
+    penthouse: {
+      homepage: {
+        outfile: 'media/fc/css/critical-homepage.css',
+        css: 'media/fc/css/styles.css',
+        url: 'http://dev.frenchconnections.co.uk/accommodation',
+        width: 1300,
+        height: 900
+      }, 
+      search: {
+        outfile: 'media/fc/css/critical-search.css',
+        css: 'media/fc/css/styles.css',
+        url: 'http://dev.frenchconnections.co.uk',
+        width: 1300,
+        height: 900
+      },       
     }
   });
   // 3. Where we tell Grunt we plan to use this plug-in.
@@ -177,9 +198,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-penthouse');
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
   grunt.registerTask('init', ['less', 'concat', 'uglify', 'replace', 'cssmin']);
-  
+
   grunt.registerTask('default', ['init']);
 };

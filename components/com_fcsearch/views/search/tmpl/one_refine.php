@@ -38,7 +38,7 @@ $longitude = $this->state->get('search.longitude', '');
     <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
   </div>
   <div class="panel-body">
-    <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">
+    <ul class="nav nav-stacked nav-pills hidden-xs" id="map-search-tab">
       <li>
         <a href="#list" data-toggle="tab" class='btn btn-default'>
           <i class="glyphicon glyphicon-list"></i>

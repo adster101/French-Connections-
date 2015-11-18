@@ -119,7 +119,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
             <div class='map-search-results'>
             {{ #. }} 
             <div class='map-search-result'>
-            <h3><a href={{ url }}>{{ unitTitle }}</a></h3>
+            <h4><a href={{ url }}>{{ unitTitle }}</a></h4>
             <p>
             <a href={{ url }}>
             <img class='img-responsive' src={{ thumbnail }} />
