@@ -10,11 +10,11 @@ defined('_JEXEC') or die('Restricted access');
 
 if ($view == 'images' && ($option == 'com_rental' || $option == 'com_realestate'))
 {
-  $script_path = (JDEBUG) ? '/media/fc/js/images.admin.scripts.js' : '/media/fc/assets/js/2015111817139.images.admin.scripts.min.js';
+  $script_path = (JDEBUG) ? '/media/fc/js/images.admin.scripts.js' : '/media/fc/assets/js/20151119121042.images.admin.scripts.min.js';
 }
 else
 {
-  $script_path = (JDEBUG) ? '/media/fc/js/admin.scripts.js' : '/media/fc/assets/js/2015111817139.admin.scripts.min.js';
+  $script_path = (JDEBUG) ? '/media/fc/js/admin.scripts.js' : '/media/fc/assets/js/20151119121042.admin.scripts.min.js';
 }
 
 //$doc->addStyleSheet('//' . $URI->getHost() . $css_path);

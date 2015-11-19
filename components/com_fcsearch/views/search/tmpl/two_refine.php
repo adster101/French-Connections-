@@ -246,6 +246,5 @@ foreach ($this->property_options as $key => $values)
             </p>  
         <?php endif; ?>        
     <?php endif; ?> 
-
-
   </div>
+</div>

@@ -5726,8 +5726,8 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('/media/fc/fonts/glyphicons-halflings-regular.eot');
+  src: url('/media/fc/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/media/fc/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/media/fc/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/media/fc/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -6418,13 +6418,13 @@ Contains styles that apply at the global level, or can be applied to any section
 }
 @font-face {
   font-family: 'District Thin';
-  src: url('../fonts/DistTh.eot');
-  src: url('../fonts/DistTh.eot?#iefix') format('embedded-opentype'), url('../fonts/DistTh.woff') format('woff'), url('../fonts/DistTh.ttf') format('truetype'), url('../fonts/DistTh.svg#glyphicons_halflingsregular') format('svg');
+  src: url('/media/fc/fonts/DistTh.eot');
+  src: url('/media/fc/fonts/DistTh.eot?#iefix') format('embedded-opentype'), url('/media/fc/fonts/DistTh.woff') format('woff'), url('/media/fc/fonts/DistTh.ttf') format('truetype'), url('/media/fc/fonts/DistTh.svg#glyphicons_halflingsregular') format('svg');
 }
 @font-face {
   font-family: 'Social';
-  src: url('../fonts/Social.eot');
-  src: url('../fonts/Social.eot?#iefix') format('embedded-opentype'), url('../fonts/Social.woff') format('woff'), url('../fonts/Social.ttf') format('truetype'), url('../fonts/Social.svg#glyphicons_halflingsregular') format('svg');
+  src: url('/media/fc/fonts/Social.eot');
+  src: url('/media/fc/fonts/Social.eot?#iefix') format('embedded-opentype'), url('/media/fc/fonts/Social.woff') format('woff'), url('/media/fc/fonts/Social.ttf') format('truetype'), url('/media/fc/fonts/Social.svg#glyphicons_halflingsregular') format('svg');
 }
 span.offer {
   position: absolute;

@@ -1,5 +1,90 @@
 jQuery(document).ready(function () {
 
+  (function () {
+      var _fbq = window._fbq || (window._fbq = []);
+      if (!_fbq.loaded) {
+        var fbds = document.createElement('script');
+        fbds.async = true;
+        fbds.src = '//connect.facebook.net/en_US/fbds.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fbds, s);
+        _fbq.loaded = true;
+      }
+      _fbq.push(['addPixelId', '528120040655478']);
+    })();
+    window._fbq = window._fbq || [];
+    window._fbq.push(['track', 'PixelInitialized', {}]);
+    
+        (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+              m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-2087119-1', 'auto');
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview');
+  // Also need to integrate map here.
+    jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+
+
+
+
+      jQuery(e.target).toggle();
+      jQuery(e.relatedTarget).toggle();
+
+      // Store the selected tab #ref in local storage, IE8+
+      var selectedTab = jQuery(e.target).attr('href');
+
+
+
+      // Set the local storage value so we 'remember' where the user was
+      localStorage['selectedTab'] = selectedTab;
+
+      if (selectedTab === '#mapsearch') {
+
+        // Init google maps if not already init'ed
+        if (!window.google) {
+          loadGoogleMaps('initabsearchmap'); // Asych load the google maps stuff
+        }
+
+        var template = jQuery('#template').html();
+
+        var data = [];
+
+        jQuery('.search-result').each(function () {
+          var tmp = jQuery(this).data();
+          data = data.concat(tmp);
+        });
+
+        // Render the map search results
+        Mustache.parse(template); // optional, speeds up future uses
+        var rendered = Mustache.render(template, data);
+
+        jQuery('#target').html(rendered);
+
+        jQuery('.map-search-results .map-search-result').hover(
+                function () {
+                  var index = jQuery('.map-search-result').index(this);
+                  markers[index].setAnimation(google.maps.Animation.BOUNCE);
+                },
+                function () {
+                  var index = jQuery('.map-search-result').index(this);
+                  markers[index].setAnimation(null);
+                });
+
+      }
+    })
+
+ 
+
+
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
@@ -422,6 +507,67 @@ function initialise() {
   });
 }
 
+   function initabsearchmap() {
+
+      var height = jQuery(window).height() - jQuery("#map_canvas").offset().top;
+
+      // Move this to CSS file
+      jQuery('#map_canvas').css('width', '100%');
+      jQuery('#map_canvas').css('height', height);
+
+      var myLatLng = new google.maps.LatLng(46.8, 2.8);
+      var myOptions = {
+        center: myLatLng,
+        zoom: 7,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        zoomControl: true
+      }
+
+      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+      var markers = [];
+
+      jQuery('.search-result').each(function (i) {
+        var data = jQuery(this).data();
+
+        // The lat long of the propert, units will appear stacked on top...
+        var myLatlng = new google.maps.LatLng(data.latitude, data.longitude);
+        // Create the marker instance
+        marker = new google.maps.Marker({
+          position: myLatlng,
+          map: map,
+          icon: '/images/mapicons/iconflower.png'
+        });
+        marker.setTitle((data.unitTitle).toString());
+        content = '<h4><a href="' + data.url + '">' +
+                data.unitTitle + '</a></h4><div class="media"><a class="pull-left" href="' +
+                data.url + '"><img class="media-object" src="' +
+                data.thumbnail + '"/></a><div class="media-body"><p>' +
+                data.tagline + '</p></div><p><a class="btn btn-primary" href="' + data.url + '">asds</a></div>';
+
+        attachContent(marker, content, 360);
+
+        markers.push(marker);
+
+        //  Create a new viewpoint bound, so we can centre the map based on the markers
+        var bounds = new google.maps.LatLngBounds();
+
+        //  Go through each...
+        jQuery.each(markers, function (index, marker) {
+          bounds.extend(marker.position);
+        });
+
+        //  Fit these bounds to the map
+        map.fitBounds(bounds);
+
+
+
+      });
+
+
+    }
+
 /* define some useful functions, innit! */
 var show_vat = function (vatID) {
   vat_number = jQuery('#vat_number');
@@ -550,4 +696,3 @@ jQuery(function () {
   activeTab && activeTab.tab('show');
 });
 
-  

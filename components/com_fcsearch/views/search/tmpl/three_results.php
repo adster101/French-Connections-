@@ -62,7 +62,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
   <?php endif; ?> 
   <div class="row">
     <div class="tab-content col-lg-9 col-md-9">
-
       <div class="clearfix">
         <p class="pull-left">
           <?php echo $this->pagination->getResultsCounter(); ?> 
@@ -81,8 +80,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
         <span class="glyphicon glyphicon-filter"></span>
         <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
       </a>   
-
-
       <div class="tab-pane active" id="list">
         <?php if (count($this->results) > 0) : ?>
             <div class="search-results list-unstyled" data-results='<?php json_encode($this->results) ?>' style="margin-top:0">
@@ -141,8 +138,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
       <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
     </div>
     <div class="col-lg-3 col-md-3 refine-search">
-
-
       <?php
       JDEBUG ? $_PROFILER->mark('Start process refine') : null;
       echo $this->loadTemplate('refine');
@@ -152,122 +147,3 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
   </div>
 </form>
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
-
-<script>
-
-
-    // Also need to integrate map here.
-    jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-
-
-
-
-      jQuery(e.target).toggle();
-      jQuery(e.relatedTarget).toggle();
-
-      // Store the selected tab #ref in local storage, IE8+
-      var selectedTab = jQuery(e.target).attr('href');
-
-
-
-      // Set the local storage value so we 'remember' where the user was
-      localStorage['selectedTab'] = selectedTab;
-
-      if (selectedTab === '#mapsearch') {
-
-        // Init google maps if not already init'ed
-        if (!window.google) {
-          loadGoogleMaps('initmap'); // Asych load the google maps stuff
-        }
-
-        var template = jQuery('#template').html();
-
-        var data = [];
-
-        jQuery('.search-result').each(function () {
-          var tmp = jQuery(this).data();
-          data = data.concat(tmp);
-        });
-
-        // Render the map search results
-        Mustache.parse(template); // optional, speeds up future uses
-        var rendered = Mustache.render(template, data);
-
-        jQuery('#target').html(rendered);
-
-        jQuery('.map-search-results .map-search-result').hover(
-                function () {
-                  var index = jQuery('.map-search-result').index(this);
-                  markers[index].setAnimation(google.maps.Animation.BOUNCE);
-                },
-                function () {
-                  var index = jQuery('.map-search-result').index(this);
-                  markers[index].setAnimation(null);
-                });
-
-      }
-    })
-
-    function initmap() {
-
-      var height = jQuery(window).height() - jQuery("#map_canvas").offset().top;
-
-      // Move this to CSS file
-      jQuery('#map_canvas').css('width', '100%');
-      jQuery('#map_canvas').css('height', height);
-
-      var myLatLng = new google.maps.LatLng(46.8, 2.8);
-      var myOptions = {
-        center: myLatLng,
-        zoom: 7,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: true,
-        zoomControl: true
-      }
-
-      var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
-      markers = [];
-
-      jQuery('.search-result').each(function (i) {
-        var data = jQuery(this).data();
-
-        // The lat long of the propert, units will appear stacked on top...
-        var myLatlng = new google.maps.LatLng(data.latitude, data.longitude);
-        // Create the marker instance
-        marker = new google.maps.Marker({
-          position: myLatlng,
-          map: map,
-          icon: '/images/mapicons/iconflower.png'
-        });
-        marker.setTitle((data.unitTitle).toString());
-        content = '<h4><a href="' + data.url + '">' +
-                data.unitTitle + '</a></h4><div class="media"><a class="pull-left" href="' +
-                data.url + '"><img class="media-object" src="' +
-                data.thumbnail + '"/></a><div class="media-body"><p>' +
-                data.tagline + '</p></div><p><a class="btn btn-primary" href="' + data.url + '">asds</a></div>';
-
-        attachContent(marker, content, 360);
-
-        markers.push(marker);
-
-        //  Create a new viewpoint bound, so we can centre the map based on the markers
-        var bounds = new google.maps.LatLngBounds();
-
-        //  Go through each...
-        jQuery.each(markers, function (index, marker) {
-          bounds.extend(marker.position);
-        });
-
-        //  Fit these bounds to the map
-        map.fitBounds(bounds);
-
-
-
-      });
-
-
-    }
-
-
-</script>

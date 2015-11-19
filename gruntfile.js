@@ -49,11 +49,8 @@ module.exports = function (grunt) {
                   ['media/fc/css/styles.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
                   ['media/fc/css/styles.css'],
-          'media/fc/css/critical.css':
-                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css'],
           'media/fc/assets/css/critical.css':
                   ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css']
-                
         }
       }
     },
@@ -163,12 +160,16 @@ module.exports = function (grunt) {
         },
         files: [
           {
-            src: ['templates/fcv4/assets.tmp.php'],
-            dest: 'templates/fcv4/assets.php'
+            src: ['templates/fcv4/inc/assets.tmp.php'],
+            dest: 'templates/fcv4/inc/assets.php'
           },
           {
             src: ['administrator/templates/fcadmin/assets.tmp.php'],
             dest: 'administrator/templates/fcadmin/assets.php'
+          },
+          {
+            src: ['templates/fcv4/inc/styles.tmp.php'],
+            dest: 'templates/fcv4/inc/styles.php'
           }
         ]
       }
@@ -180,14 +181,21 @@ module.exports = function (grunt) {
         url: 'http://dev.frenchconnections.co.uk/accommodation',
         width: 1300,
         height: 900
-      }, 
+      },
       search: {
         outfile: 'media/fc/css/critical-search.css',
         css: 'media/fc/css/styles.css',
         url: 'http://dev.frenchconnections.co.uk',
         width: 1300,
         height: 900
-      },       
+      },
+      search: {
+        outfile: 'media/fc/css/critical-property.css',
+        css: 'media/fc/css/styles.css',
+        url: 'http://http://dev.frenchconnections.co.uk/listing/500?unit_id=106694',
+        width: 1300,
+        height: 900
+      },
     }
   });
   // 3. Where we tell Grunt we plan to use this plug-in.
