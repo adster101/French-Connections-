@@ -33,7 +33,9 @@ module.exports = function (grunt) {
         },
         files: {
           //compiling frontend.less into frontend.css
-          'media/fc/css/styles.css': 'templates/fcv4/assets/less/styles.less'
+          'media/fc/css/styles.css': 'templates/fcv4/assets/less/styles.less',
+          'media/fc/css/critical.css':
+                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css', 'media/fc/css/critical-property.css']
         }
       }
     },
@@ -49,8 +51,8 @@ module.exports = function (grunt) {
                   ['media/fc/css/styles.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
                   ['media/fc/css/styles.css'],
-          'media/fc/assets/css/critical.css':
-                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css']
+          'media/fc/assets/css/critical.php':
+                  ['media/fc/css/critical.css']
         }
       }
     },
@@ -178,24 +180,24 @@ module.exports = function (grunt) {
       homepage: {
         outfile: 'media/fc/css/critical-homepage.css',
         css: 'media/fc/css/styles.css',
-        url: 'http://dev.frenchconnections.co.uk/accommodation',
-        width: 1300,
-        height: 900
+        url: 'http://dev.frenchconnections.co.uk',
+        width: 800,
+        height: 300
       },
       search: {
         outfile: 'media/fc/css/critical-search.css',
         css: 'media/fc/css/styles.css',
-        url: 'http://dev.frenchconnections.co.uk',
-        width: 1300,
-        height: 900
+        url: 'http://dev.frenchconnections.co.uk/accommodation/france',
+        width: 800,
+        height: 300
       },
-      search: {
+      property: {
         outfile: 'media/fc/css/critical-property.css',
         css: 'media/fc/css/styles.css',
-        url: 'http://http://dev.frenchconnections.co.uk/listing/500?unit_id=106694',
-        width: 1300,
-        height: 900
-      },
+        url: 'http://dev.frenchconnections.co.uk/listing/106693?unit_id=106694',
+        width: 800,
+        height: 300
+      }
     }
   });
   // 3. Where we tell Grunt we plan to use this plug-in.
@@ -209,7 +211,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-penthouse');
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
-  grunt.registerTask('init', ['less', 'concat', 'uglify', 'replace', 'cssmin']);
+  grunt.registerTask('init', ['penthouse', 'less', 'concat', 'uglify', 'replace', 'cssmin']);
 
   grunt.registerTask('default', ['init']);
 };

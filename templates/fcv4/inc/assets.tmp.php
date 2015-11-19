@@ -11,5 +11,5 @@ $script_path = (JDEBUG) ? '/media/fc/js/scripts.js' : '/media/fc/assets/js/@@tim
 $css_path = (JDEBUG) ? '/media/fc/css/styles.css' : '/media/fc/assets/css/@@timestamp.styles.min.css';
 
 //$doc->addStyleSheet('//' . $URI->getHost() . $css_path);
-$doc->addScript('//' . $URI->getHost() . $script_path);
+$doc->addScript('//' . $URI->getHost() . $script_path, 'text/javascript', true, true);
 
