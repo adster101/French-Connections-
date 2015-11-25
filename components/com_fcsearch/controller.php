@@ -16,8 +16,8 @@ defined('_JEXEC') or die;
  * @subpackage  com_finder
  * @since       2.5
  */
-class FcSearchController extends JControllerLegacy {
-
+class FcSearchController extends JControllerLegacy
+{
     /**
      * Method to display a view.
      *
@@ -29,9 +29,9 @@ class FcSearchController extends JControllerLegacy {
      *
      * @since   2.5
      */
-    public function display($cachable = false, $urlparams = array()) {
+    public function display($cachable = true, $urlparams = array())
+    {
         $input = JFactory::getApplication()->input;
-        $cachable = false;
 
         // Set the default view name and format from the Request.
         $viewName = $input->get('view', 'search', 'word');
@@ -39,7 +39,8 @@ class FcSearchController extends JControllerLegacy {
         $input->set('layout', 'three');
 
         // Don't cache view for search queries
-        if ($input->get('q') || $input->get('f') || $input->get('t')) {
+        if ($input->get('q') || $input->get('f') || $input->get('t'))
+        {
             $cachable = false;
         }
 
@@ -49,6 +50,7 @@ class FcSearchController extends JControllerLegacy {
             'external' => 'array',
             'kitchen' => 'array',
             'activities' => 'array',
+            'suitability' => 'array',
             'internal' => 'array',
             's_kwds' => 'CMD',
             'start' => 'CMD',
@@ -59,7 +61,9 @@ class FcSearchController extends JControllerLegacy {
             'departure' => 'CMD',
             'order' => 'CMD',
             'min' => 'CMD',
-            'max' => 'CMD'
+            'max' => 'CMD',
+            'lwl' => 'boolean',
+            'offers' => 'boolean'
         );
 
         return parent::display($cachable, $safeurlparams);

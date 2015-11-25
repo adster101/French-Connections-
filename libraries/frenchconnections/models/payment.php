@@ -835,8 +835,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         if (strlen($data['CardStartDate']) > 0)
             $strPost = $strPost . "&StartDate=" . $data['CardStartDate'];
         $strPost = $strPost . "&ExpiryDate=" . $data['CardExpiryDate'];
-        if (strlen($data['IssueNumber']) > 0)
-            $strPost = $strPost . "&IssueNumber=" . $data['IssueNumber'];
+
         $strPost = $strPost . "&CV2=" . $data['CV2'];
 
         // Send the IP address of the person entering the card details

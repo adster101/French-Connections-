@@ -181,21 +181,21 @@ module.exports = function (grunt) {
         outfile: 'media/fc/css/critical-homepage.css',
         css: 'media/fc/css/styles.css',
         url: 'http://dev.frenchconnections.co.uk',
-        width: 800,
+        width: 350,
         height: 300
       },
       search: {
         outfile: 'media/fc/css/critical-search.css',
         css: 'media/fc/css/styles.css',
         url: 'http://dev.frenchconnections.co.uk/accommodation/france',
-        width: 800,
+        width: 350,
         height: 300
       },
       property: {
         outfile: 'media/fc/css/critical-property.css',
         css: 'media/fc/css/styles.css',
         url: 'http://dev.frenchconnections.co.uk/listing/106693?unit_id=106694',
-        width: 800,
+        width: 350,
         height: 300
       }
     }
@@ -211,7 +211,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-penthouse');
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
-  grunt.registerTask('init', ['penthouse', 'less', 'concat', 'uglify', 'replace', 'cssmin']);
+  grunt.registerTask('init', ['less', 'concat', 'uglify', 'replace', 'cssmin']);
 
   grunt.registerTask('default', ['init']);
 };

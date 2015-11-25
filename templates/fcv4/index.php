@@ -49,7 +49,7 @@ if ($this->countModules('position-7'))
     <meta name="viewport" content="width=device-width, initial-scale=1;">
   <jdoc:include type="head" />
   <meta name="google-site-verification" content="gxNKICR23M3sV86ZSmOoGcFZCNH-AvkUI1MTTW3nau4" />
-  <style><?php include_once JPATH_SITE . '/media/fc/assets/css/critical.php'; ?></style>
+  <style><?php include_once JPATH_SITE . '/media/fc/assets/css/critical.php'; //Inline the 'critical' portions of CSS ?></style>
 </head>
 <body class="<?php echo $siteHome; ?>-page <?php echo $option . " view-" . $view . " itemid-" . $itemid . ""; ?>" data-spy="scroll" data-target="navbar-property-navigator">
 
@@ -122,17 +122,19 @@ if ($this->countModules('position-7'))
   </div>
   <!-- End Content -->
 <jdoc:include type="modules" name="debug" style="html5" />
-<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=528120040655478&amp;ev=PixelInitialized" /></noscript>
 
-<script src="//platform.twitter.com/oct.js" type="text/javascript"></script>
-<script type="text/javascript">
-    twttr.conversion.trackPid('l526m');
-</script>
 <noscript>
+<img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=528120040655478&amp;ev=PixelInitialized" />
 <img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=l526m&p_id=Twitter" />
 <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=l526m&p_id=Twitter" />
 </noscript>
-<?php include_once JPATH_THEMES . '/' . $this->template . '/inc/styles.php'; ?>
-<?php include_once JPATH_THEMES . '/' . $this->template . '/inc/assets.php'; ?>
+
+<?php
+// Include styles - async loads the main CSS file 
+include_once JPATH_THEMES . '/' . $this->template . '/inc/styles.php';
+
+// Include JS
+include_once JPATH_THEMES . '/' . $this->template . '/inc/assets.php';
+?>
 </body>
 </html>
