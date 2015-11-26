@@ -14212,6 +14212,9 @@ Joomla.editors.instances = Joomla.editors.instances || {};
   @License:GNU/GPL v2.
 */
 (function(a){a(document).ready(function(){function c(){var g=window.location.search.substring(1),l=g.split("&"),j={};for(var h=0;h<l.length;h++){var k=l[h].split("=");j[unescape(k[0])]=unescape(k[1])}return j}if(c().layout=="edit"){if(!c().id){uniQueid=c().extension_id}else{uniQueid=c().id}var b=c().view+uniQueid}else{b=""}if(b){a('a[data-toggle="tab"]').on("shown",function(g){a.cookie("last_tab"+b,a(g.target).attr("href"))});var d=a.cookie("last_tab"+b);var f=a(".nav-tabs").find("a").attr("href");if(!d){d=f}if(d){a("ul.nav-tabs").children().removeClass("active");a("a[href="+d+"]").parents("li:first").addClass("active");a("div.tab-content").children().removeClass("active");a(d).addClass("active")}a(".accordion-body").on("shown",function(h){var g=this.get("id");a.cookie("last_accordion"+b,g)});var e=a.cookie("last_accordion"+b);if(e){a('a[data-toggle="collapse"]').addClass("collapsed");a(".accordion-body").removeClass("in").height("0px");a('a[href="#'+e+'"]').removeClass("collapsed");a("#"+e).addClass("in").height("auto")}}})})(jQuery);
+var markers = [];
+
+
 jQuery(document).ready(function () {
 
   twttr.ready(
@@ -14235,21 +14238,7 @@ jQuery(document).ready(function () {
   window._fbq = window._fbq || [];
   window._fbq.push(['track', 'PixelInitialized', {}]);
 
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-2087119-1', 'auto');
-  ga('require', 'displayfeatures');
-  ga('send', 'pageview');
 
   // Also need to integrate map here.
   jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
@@ -14724,14 +14713,14 @@ function initialise() {
     }, 1500);
   });
 }
+  
 
 function initabsearchmap() {
 
-  var height = jQuery(window).height() - jQuery("#map_canvas").offset().top;
 
   // Move this to CSS file
   jQuery('#map_canvas').css('width', '100%');
-  jQuery('#map_canvas').css('height', height);
+  jQuery('#map_canvas').css('height', '600px');
 
   var myLatLng = new google.maps.LatLng(46.8, 2.8);
   var myOptions = {
@@ -14744,7 +14733,6 @@ function initabsearchmap() {
 
   var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-  var markers = [];
 
   jQuery('.search-result').each(function (i) {
     var data = jQuery(this).data();

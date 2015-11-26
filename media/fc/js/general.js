@@ -1,3 +1,6 @@
+var markers = [];
+
+
 jQuery(document).ready(function () {
 
   twttr.ready(
@@ -21,21 +24,7 @@ jQuery(document).ready(function () {
   window._fbq = window._fbq || [];
   window._fbq.push(['track', 'PixelInitialized', {}]);
 
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-2087119-1', 'auto');
-  ga('require', 'displayfeatures');
-  ga('send', 'pageview');
 
   // Also need to integrate map here.
   jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
@@ -510,14 +499,14 @@ function initialise() {
     }, 1500);
   });
 }
+  
 
 function initabsearchmap() {
 
-  var height = jQuery(window).height() - jQuery("#map_canvas").offset().top;
 
   // Move this to CSS file
   jQuery('#map_canvas').css('width', '100%');
-  jQuery('#map_canvas').css('height', height);
+  jQuery('#map_canvas').css('height', '600px');
 
   var myLatLng = new google.maps.LatLng(46.8, 2.8);
   var myOptions = {
@@ -530,7 +519,6 @@ function initabsearchmap() {
 
   var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-  var markers = [];
 
   jQuery('.search-result').each(function (i) {
     var data = jQuery(this).data();
