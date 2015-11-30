@@ -54,12 +54,28 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
   <?php $attribute_filter = JHtml::_('refine.removeAttributeFilters', $this->attribute_options, $uri, ''); ?>
   <?php $property_filter = JHtml::_('refine.removeAttributeFilters', array('options' => $this->property_options), $uri, 'property_'); ?>
   <?php $accommodation_filter = JHtml::_('refine.removeAttributeFilters', array('options' => $this->accommodation_options), $uri, 'accommodation_'); ?>
+  <div class="row">
+    <div class="col-xs-12">
+      <p class="clearfix">
+      <span class="pull-right">
+        <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default visible-sm-inline-block visible-xs-inline-block">  
+          <span class="glyphicon glyphicon-filter"></span>
+          <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
+        </a>    
 
-  <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
-      <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
-      <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
-      <hr />
-  <?php endif; ?> 
+      </span>
+
+      <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
+          <span class="pull-left">
+          <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
+          <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
+          </span>
+        
+      <?php endif; ?> 
+      </p>
+    </div>
+  </div>
+
   <div class="row">
     <div class="tab-content col-lg-9 col-md-9">
       <div class="clearfix">
@@ -67,7 +83,6 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
           <?php echo $this->pagination->getResultsCounter(); ?> 
         </p>
         <p class="pull-right">
-
           <label for="sort_by" class="sr-only">
             <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
           </label>
@@ -76,10 +91,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
           </select>
         </p>
       </div>
-      <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default visible-sm-inline-block visible-xs-inline-block">  
-        <span class="glyphicon glyphicon-filter"></span>
-        <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
-      </a>   
+
       <div class="tab-pane active" id="list">
         <?php if (count($this->results) > 0) : ?>
             <div class="search-results list-unstyled" data-results='<?php json_encode($this->results) ?>' style="margin-top:0">
@@ -110,7 +122,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
         <?php endif; ?> 
       </div>
       <div class="tab-pane row" id="mapsearch">
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-3 col-md-3 col-sm-4">
           <div id="target">Loading...</div>
           <script id="template" type="x-tmpl-mustache">
             <div class='map-search-results'>
@@ -128,7 +140,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
             </div>
           </script>
         </div>
-        <div class="col-lg-9 col-md-9">
+        <div class="col-lg-9 col-md-9 col-sm-8">
           <div id="map_canvas"></div>
         </div>
       </div>

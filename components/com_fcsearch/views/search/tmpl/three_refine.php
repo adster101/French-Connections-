@@ -71,13 +71,15 @@ foreach ($this->property_options as $key => $values)
 
 $latitude = $this->state->get('search.latitude', '');
 $longitude = $this->state->get('search.longitude', '');
+
+
 ?>
-<div class="panel panel-default">
+<div class="panel panel-default" id="refine">
   <div class="panel-heading">
     <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
   </div>
   <div class="panel-body">
-    <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">
+    <ul class="nav nav-stacked nav-pills hidden-xs" id="map-search-tab">
       <li>
         <a href="#list" data-toggle="tab" class='btn btn-default'>
           <i class="glyphicon glyphicon-list"></i>
@@ -160,7 +162,9 @@ $longitude = $this->state->get('search.longitude', '');
                           <?php $counter++; ?>
                           <?php if ($counter == count($this->location_options) && !$hide) : ?>
                             </div>
+                        
                         <?php endif; ?>
+                        <span></span>
                         <?php if ($counter == count($this->location_options) && !$hide) : ?>
                             <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
                               <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>

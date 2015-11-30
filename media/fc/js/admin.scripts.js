@@ -28,14 +28,13 @@ jQuery(document).ready(function () {
 
 
   // Also need to integrate map here.
-  jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+  jQuery('#map-search-tab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
     jQuery(e.target).toggle();
     jQuery(e.relatedTarget).toggle();
 
     // Store the selected tab #ref in local storage, IE8+
     var selectedTab = jQuery(e.target).attr('href');
-
 
 
     // Set the local storage value so we 'remember' where the user was
@@ -74,9 +73,18 @@ jQuery(document).ready(function () {
               });
 
     }
+
+    location.hash = "#property-search";
+
   });
 
 
+  // Get the selected tab, if any and set the tab accordingly...
+  var selectedTab = localStorage['selectedTab']; 
+  console.log(selectedTab);
+
+    jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
+  
 
 
   if (jQuery('.overthrow').length) {
@@ -500,7 +508,7 @@ function initialise() {
     }, 1500);
   });
 }
-  
+
 
 function initabsearchmap() {
 
