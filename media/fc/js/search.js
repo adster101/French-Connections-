@@ -2,7 +2,7 @@ var infowindow;
 jQuery(document).ready(function() {
 
   // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function(e) {
 
     //jQuery('#map_canvas').hide();
     if (!window.google) {
@@ -271,7 +271,7 @@ function getPath(event) {
 function initmap() {
 
   jQuery('#map_canvas').css('width', '100%');
-  jQuery('#map_canvas').css('height', '600px');
+  jQuery('#map_canvas').css('height', '800px');
   var myLatLng = new google.maps.LatLng(46.8, 2.8);
   var myOptions = {
     center: myLatLng,

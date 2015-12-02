@@ -19,12 +19,15 @@ if (JDEBUG)
 
 JDEBUG ? $_PROFILER->mark('Start process search results template') : null;
 
+$user = JFactory::getApplication();
+
 $ordering = 'order_' . $this->state->get('list.sort_column') . '_' . $this->state->get('list.direction');
+
 $sortFields = $this->getSortFields();
 $s_kwds = $this->state->get('list.searchterm', '');
 
 // The layout for the anchor based navigation on the property listing
-$search_layout = new JLayoutFile('search', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
+$search_layout = new JLayoutFile('search_one', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 $search_data = new stdClass;
 $search_data->searchterm = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
 $search_data->bedrooms = $this->state->get('list.bedrooms');
@@ -41,61 +44,48 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
   <h1 class="small-h1 page-header">
     <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
   </h1>
+
   <div class="well well-sm well-light-blue clearfix form-inline">  
     <?php echo $search_layout->render($search_data); ?>
   </div>
-
+  
   <?php $offer_filter = JHtml::_('refine.removeQueryFilter', (bool) $offers, 'offers', 'COM_FCSEARCH_SEARCH_FILTER_OFFERS', $uri); ?>
   <?php $lwl_filter = JHtml::_('refine.removeQueryFilter', (bool) $lwl, 'lwl', 'COM_FCSEARCH_SEARCH_FILTER_LWL', $uri); ?>
-  <?php $accommodation_filter = JHtml::_('refine.removeAttributeFilters', array('options' => $this->accommodation_options), $uri, 'accommodation_'); ?>
-
-  <?php $property_filter = JHtml::_('refine.removeAttributeFilters', array('options' => $this->property_options), $uri, 'property_'); ?>
   <?php $attribute_filter = JHtml::_('refine.removeAttributeFilters', $this->attribute_options, $uri, ''); ?>
+  <?php $property_filter = JHtml::_('refine.removeAttributeFilters', array('options' => $this->property_options), $uri, 'property_'); ?>
+  <?php $accommodation_filter = JHtml::_('refine.removeAttributeFilters', array('options' => $this->accommodation_options), $uri, 'accommodation_'); ?>
 
   <?php if (!empty($attribute_filter) || !empty($property_filter) || !empty($accommodation_filter) || !empty($offer_filter) || !empty($lwl_filter)) : ?>
       <?php echo JText::_('COM_FCSEARCH_FILTER_APPLIED'); ?>
       <?php echo $attribute_filter, $property_filter, $accommodation_filter, $offer_filter, $lwl_filter; ?>
       <hr />
-  <?php endif; ?>
-
-
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-      <ul class="nav nav-tabs" id="search-tabs">
-        <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
-        <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
-        <?php if ((empty($property_filter) && empty($accommodation_filter)) || (!empty($property_filter) && !empty($this->seo_copy))) : ?>
-            <li><a href="#localinfo" data-toggle="tab"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Info</a></li>
-        <?php endif; ?>
-        <li class="visible-sm-inline-block visible-xs-inline-block pull-right">
-          <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="">  
-            <span class="glyphicon glyphicon-filter"></span>
-            <span class="hidden-xs">
-              <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
-            </span>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <?php endif; ?> 
   <div class="row">
     <div class="tab-content col-lg-9 col-md-9">
+
+      <div class="clearfix">
+        <p class="pull-left">
+          <?php echo $this->pagination->getResultsCounter(); ?> 
+        </p>
+        <p class="pull-right">
+
+          <label for="sort_by" class="sr-only">
+            <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
+          </label>
+          <select id="sort_by" class="form-control sort-order" name="order">
+            <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
+          </select>
+        </p>
+      </div>
+      <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="btn btn-default visible-sm-inline-block visible-xs-inline-block">  
+        <span class="glyphicon glyphicon-filter"></span>
+        <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
+      </a>   
+
+
       <div class="tab-pane active" id="list">
         <?php if (count($this->results) > 0) : ?>
-            <div class="clearfix">
-              <p class="pull-left" style='line-height: 28px;'>
-                <?php echo $this->pagination->getResultsCounter(); ?>
-              </p>
-              <div class="form-inline pull-right">
-                <label for="sort_by" class="">
-                  <?php echo JText::_('COM_FCSEARCH_SEARCH_SORT_BY'); ?>
-                </label>
-                <select id="sort_by" class="form-control" name="order">
-                  <?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $ordering); ?>
-                </select>
-              </div>
-            </div>
-            <div class="search-results list-unstyled clear">
+            <div class="search-results list-unstyled" data-results='<?php json_encode($this->results) ?>' style="margin-top:0">
               <?php
               JDEBUG ? $_PROFILER->mark('Start process individual results (*10)') : null;
 
@@ -121,26 +111,44 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
             echo JModuleHelper::renderModule($module);
             ?>
         <?php endif; ?> 
-        <?php echo $this->pagination->getPagesLinks(); ?>
+      </div>
+      <div class="tab-pane row" id="mapsearch">
+        <div class="col-lg-3 col-md-3">
+          <div id="target">Loading...</div>
+          <script id="template" type="x-tmpl-mustache">
+            <div class='map-search-results'>
+            {{ #. }} 
+            <div class='map-search-result'>
+            <h4><a href={{ url }}>{{ unitTitle }}</a></h4>
+            <p>
+            <a href={{ url }}>
+            <img class='img-responsive' src={{ thumbnail }} />
+            </a>
+            </p>
+            <p class='small'>{{{ tagline }}}</p>
+            </div>
+            {{ /. }}
+            </div>
+          </script>
+        </div>
+        <div class="col-lg-9 col-md-9">
+          <div id="map_canvas"></div>
+        </div>
+      </div>
+      <?php echo $this->pagination->getPagesLinks(); ?>
 
-      </div>
-      <div class="tab-pane" id="mapsearch">
-        <div id="map_canvas"></div>
-      </div>
-      <div class="tab-pane" id="localinfo">
-        <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
-        <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
-      </div>
+      <h2><?php echo $this->escape(($this->localinfo->title)); ?></h2>
+      <?php echo ($this->seo_copy) ? $this->seo_copy : $this->localinfo->description; ?>
     </div>
     <div class="col-lg-3 col-md-3 refine-search">
+
+
       <?php
       JDEBUG ? $_PROFILER->mark('Start process refine') : null;
       echo $this->loadTemplate('refine');
       JDEBUG ? $_PROFILER->mark('End process refine') : null;
       ?>
     </div>
-
   </div>
 </form>
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
-

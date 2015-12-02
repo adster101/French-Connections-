@@ -92,3 +92,8 @@ robots.txt
 /composer.json
 /composer.lock
 /libraries/tcpdf_6_2_12/
+/cli/beauxvillages_cleanup.php
+/plugins/system/tjminifyhtml/
+/administrator/language/en-GB/en-GB.plg_system_tjminifyhtml.sys.ini
+/administrator/language/en-GB/en-GB.plg_system_tjminifyhtml.ini
+/cli/picture_cleanup.php

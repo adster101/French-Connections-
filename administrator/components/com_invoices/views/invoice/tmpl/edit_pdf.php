@@ -19,9 +19,7 @@ $userId = $user->get('id');
 ?>
 
 
-<p class="bottom">
-    <img alt="French Connections Logo" src="/images/general/logo-3.png">
-</p>
+
 <p>VAT Reg. Number: GB 801 2299 61<br>Company Registration Number: 3216862
     French Connections <br />
     Bracon House <br />

@@ -154,7 +154,9 @@ class FcSearchModelSearch extends JModelList
     $query = $db->getQuery(true);
     $query->select(
             $db->quoteName('id') . ', ' .
-            $db->quoteName('level') . ',latitude, longitude,' .
+            $db->quoteName('level') . ', ' .
+            $db->quoteName('latitude') . ', ' .
+            $db->quoteName('longitude') . ', ' .
             $db->QuoteName('description') . ',' .
             $db->QuoteName('title') . ',' .
             $db->quoteName('property_type_info') . ',' .
@@ -1659,12 +1661,11 @@ class FcSearchModelSearch extends JModelList
     // prices
     // facilities
     // and so on and son on
-    $lang = JFactory::getLanguage()->getTag();
-    if ($page)
+
+      if ($page)
     {
       // Add the list state for page specific data.
       $id .= ':';
-      $id .= $lang;
       $id .= ':' . $this->getState('list.start');
       $id .= ':' . $this->getState('list.limit');
       $id .= ':' . $this->getState('list.sort_column');
@@ -1677,6 +1678,8 @@ class FcSearchModelSearch extends JModelList
       $id .= ':' . $this->getState('list.language');
       $id .= ':' . $this->getState('list.max_price');
       $id .= ':' . $this->getState('list.min_price');
+      $id .= ':' . $this->getState('list.lwl');
+      $id .= ':' . $this->getState('list.offers');
 
       // Get each of the filter attribute id and build that into the cache key...
       $facilities = array();
@@ -1684,8 +1687,9 @@ class FcSearchModelSearch extends JModelList
       $facilities[] = $this->getState('list.property_facilities', '');
       $facilities[] = $this->getState('list.external_facilities', '');
       $facilities[] = $this->getState('list.kitchen_facilities', '');
-      $facilities[] = $this->getState('list.property_type');
-      $facilities[] = $this->getState('list.accommodation_type');
+      $facilities[] = $this->getState('list.property_type','');
+      $facilities[] = $this->getState('list.accommodation_type','');
+      $facilities[] = $this->getState('list.suitability', '');
 
       foreach ($facilities as $key => $value)
       {
@@ -1702,6 +1706,8 @@ class FcSearchModelSearch extends JModelList
         elseif ($value)
         {
           $id .= ':' . $value;
+        }else{
+            $id .= ':';
         }
       }
     }

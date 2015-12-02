@@ -36,7 +36,7 @@ $lwl = ($displayData['lwl']) ? $displayData['lwl'] : '';
     $route = 'index.php?option=com_fcsearch&Itemid=' . $displayData['itemid'] . '&s_kwds=' .
             JApplication::stringURLSafe($this->escape($displayData['location'])) . $new_uri . $offers . $lwl;
     ?>
-    <?php if ($counter >= 5 && $hide) : ?>
+    <?php if ($counter >= 8 && $hide) : ?>
       <?php $hide = false; ?>
       <div class="hide ">
     <?php endif; ?>

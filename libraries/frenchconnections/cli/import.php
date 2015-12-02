@@ -25,11 +25,11 @@ abstract class Import extends JApplicationCli
       $query->from('#__classifications a');
       $query->innerjoin('#__classifications b on b.id = a.parent_id');
       $query->order('
-        ( 3959 * acos(cos(radians(' . $longitude . ')) *
+        ( 3959 * acos(cos(radians(' . $latitude . ')) *
           cos(radians(a.latitude)) *
-          cos(radians(a.longitude) - radians(' . $latitude . '))
-          + sin(radians(' . $longitude . '))
-          * sin(radians(a.latitude))) ) 
+          cos(radians(a.longitude) - radians(' . $longitude . '))
+          + sin(radians(' . $latitude . '))
+          * sin(radians(a.latitude)))) 
         ');
 
       $db->setQuery($query, 0, 1);
@@ -83,7 +83,6 @@ abstract class Import extends JApplicationCli
     {
       return false;
     }
-
     // Return the property version ID
     return $row;
   }
@@ -176,9 +175,7 @@ abstract class Import extends JApplicationCli
     $mail->setBody($e->getMessage() . '<br />' . $e->getTraceAsString() . '<br />' . $e->getLine());
     $mail->setSubject($e->getMessage());
     $mail->isHtml(true);
-    
-    $mail->send();
-    
+    $mail->send(); 
   }
 
   public function getUnit()
