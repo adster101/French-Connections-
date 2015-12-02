@@ -177,4 +177,26 @@ abstract class JHtmlRefine
         return $html;
     }
 
+    public static function getRefineMapLink($layout = '')
+    {
+        $link = JURI::getInstance();
+
+        $query = $link->getQuery(true);
+
+        if ($layout)
+        {
+            $query['layout'] = $layout;
+        } else
+        {
+            unset($query['layout']);
+        }
+
+
+        $link->setQuery($query);
+
+        $link = $link->toString();
+
+        return $link;
+    }
+
 }

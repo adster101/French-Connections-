@@ -31,7 +31,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 $refine_type_layout = new JLayoutFile('refinetype_two', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 
 $suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598);
-$facilities_filters = array(74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539,);
+$facilities_filters = array(74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
 
 $suitabilityArr = array();
 $propertyArr = array();
@@ -71,13 +71,15 @@ foreach ($this->property_options as $key => $values)
 
 $latitude = $this->state->get('search.latitude', '');
 $longitude = $this->state->get('search.longitude', '');
+
+
 ?>
-<div class="panel panel-default">
+<div class="panel panel-default" id="refine">
   <div class="panel-heading">
     <?php echo JText::_('COM_FCSEARCH_SEARCH_REFINE_SEARCH'); ?>
   </div>
   <div class="panel-body">
-    <ul class="nav nav-stacked nav-pills hidden-xs hidden-sm" id="map-search-tab">
+    <ul class="nav nav-stacked nav-pills hidden-xs" id="map-search-tab">
       <li>
         <a href="#list" data-toggle="tab" class='btn btn-default'>
           <i class="glyphicon glyphicon-list"></i>
@@ -160,7 +162,9 @@ $longitude = $this->state->get('search.longitude', '');
                           <?php $counter++; ?>
                           <?php if ($counter == count($this->location_options) && !$hide) : ?>
                             </div>
+                        
                         <?php endif; ?>
+                        <span></span>
                         <?php if ($counter == count($this->location_options) && !$hide) : ?>
                             <a href="#" class="show align-right" title="<?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS') ?>">
                               <?php echo JText::_('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS'); ?>
@@ -263,6 +267,5 @@ $longitude = $this->state->get('search.longitude', '');
             </p>  
         <?php endif; ?>        
     <?php endif; ?> 
-
-
   </div>
+</div>

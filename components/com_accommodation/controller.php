@@ -6,19 +6,26 @@ defined('_JEXEC') or die('Restricted access');
 /**
  * Hello World Component Controller
  */
-class AccommodationController extends JControllerLegacy {
-  /*
-   * Cache is marked as false here so we can control it in the component directly
-   */
-  public function display($cachable = false, $urlparams = array()) {
-    $input = JFactory::getApplication()->input;
+class AccommodationController extends JControllerLegacy
+{
+    /*
+     * Cache is marked as false here so we can control it in the component directly
+     */
 
-    // Set the default view name and format from the Request.
-    $viewName = $input->get('view', 'listing', 'word');
-    $input->set('view', $viewName);
-    parent::display($cachable);
+    public function display($cachable = false, $urlparams = array())
+    {
+        $input = JFactory::getApplication()->input;
 
-    return $this;
-  }
+        // Set the default view name and format from the Request.
+        $viewName = $input->get('view', 'listing', 'word');
+        $input->set('view', $viewName);
 
+        $safeurlparams = array(
+            'unit_id' => 'int',
+            'view' => 'string'
+        );
+        parent::display($cachable, $safeurlparams);
+
+        return $this;
+    }
 }

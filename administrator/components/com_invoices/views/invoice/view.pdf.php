@@ -19,7 +19,8 @@ jimport('tcpdf_6_2_12.tcpdf');
 /**
  * View class for a list of Invoices.
  */
-class InvoicesViewInvoice extends JViewLegacy {
+class InvoicesViewInvoice extends JViewLegacy
+{
 
     protected $items;
     protected $pagination;
@@ -28,7 +29,8 @@ class InvoicesViewInvoice extends JViewLegacy {
     /**
      * Display the view
      */
-    public function display($tpl = null) {
+    public function display($tpl = null)
+    {
 
         $app = JFactory::getApplication();
         $this->id = $app->input->get('id', '', 'int');
@@ -38,7 +40,8 @@ class InvoicesViewInvoice extends JViewLegacy {
         $this->items = $this->get('Items');
 
         // Check for errors.
-        if (count($errors = $this->get('Errors'))) {
+        if (count($errors = $this->get('Errors')))
+        {
             throw new Exception(implode("\n", $errors));
         }
 
@@ -53,8 +56,11 @@ class InvoicesViewInvoice extends JViewLegacy {
         $pdf->SetTitle($this->items[0]->id);
         $pdf->SetSubject('Invoice number ' . $this->items[0]->id);
 
+        // set default header data
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, '', '');
+
         // remove default header/footer
-        $pdf->setPrintHeader(false);
+        $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
 
         // set default monospaced font
@@ -70,7 +76,8 @@ class InvoicesViewInvoice extends JViewLegacy {
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         // set some language-dependent strings (optional)
-        if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+        if (@file_exists(dirname(__FILE__) . '/lang/eng.php'))
+        {
             require_once(dirname(__FILE__) . '/lang/eng.php');
             $pdf->setLanguageArray($l);
         }

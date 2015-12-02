@@ -33,7 +33,9 @@ module.exports = function (grunt) {
         },
         files: {
           //compiling frontend.less into frontend.css
-          'media/fc/css/styles.css': 'templates/fcv4/assets/less/styles.less'
+          'media/fc/css/styles.css': 'templates/fcv4/assets/less/styles.less',
+          'media/fc/css/critical.css':
+                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css', 'media/fc/css/critical-property.css']
         }
       }
     },
@@ -48,7 +50,9 @@ module.exports = function (grunt) {
           'media/fc/assets/css/styles.css':
                   ['media/fc/css/styles.css'],
           'media/fc/assets/css/<%= opts.date %>.styles.min.css':
-                  ['media/fc/css/styles.css']
+                  ['media/fc/css/styles.css'],
+          'media/fc/assets/css/critical.php':
+                  ['media/fc/css/critical.css']
         }
       }
     },
@@ -158,14 +162,41 @@ module.exports = function (grunt) {
         },
         files: [
           {
-            src: ['templates/fcv4/assets.tmp.php'],
-            dest: 'templates/fcv4/assets.php'
+            src: ['templates/fcv4/inc/assets.tmp.php'],
+            dest: 'templates/fcv4/inc/assets.php'
           },
           {
             src: ['administrator/templates/fcadmin/assets.tmp.php'],
             dest: 'administrator/templates/fcadmin/assets.php'
+          },
+          {
+            src: ['templates/fcv4/inc/styles.tmp.php'],
+            dest: 'templates/fcv4/inc/styles.php'
           }
         ]
+      }
+    },
+    penthouse: {
+      homepage: {
+        outfile: 'media/fc/css/critical-homepage.css',
+        css: 'media/fc/css/styles.css',
+        url: 'http://dev.frenchconnections.co.uk',
+        width: 350,
+        height: 300
+      },
+      search: {
+        outfile: 'media/fc/css/critical-search.css',
+        css: 'media/fc/css/styles.css',
+        url: 'http://dev.frenchconnections.co.uk/accommodation/france',
+        width: 350,
+        height: 300
+      },
+      property: {
+        outfile: 'media/fc/css/critical-property.css',
+        css: 'media/fc/css/styles.css',
+        url: 'http://dev.frenchconnections.co.uk/listing/106693?unit_id=106694',
+        width: 350,
+        height: 300
       }
     }
   });
@@ -177,9 +208,10 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-penthouse');
   // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
   // Task definition
   grunt.registerTask('init', ['less', 'concat', 'uglify', 'replace', 'cssmin']);
-  
+
   grunt.registerTask('default', ['init']);
 };

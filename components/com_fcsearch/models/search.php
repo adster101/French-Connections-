@@ -1561,13 +1561,11 @@ class FcSearchModelSearch extends JModelList
 
         if ($min_price)
         {
-
             $query = $query->where('from_price >= ' . (int) $min_price);
         }
 
         if ($max_price)
         {
-
             $query = $query->where('from_price <= ' . (int) $max_price);
         }
 
@@ -1666,7 +1664,9 @@ class FcSearchModelSearch extends JModelList
             $id .= ':' . $this->getState('list.language');
             $id .= ':' . $this->getState('list.max_price');
             $id .= ':' . $this->getState('list.min_price');
-
+            $id .= ':' . $this->getState('list.lwl');
+            $id .= ':' . $this->getState('list.offers');
+            
             // Get each of the filter attribute id and build that into the cache key...
             $facilities = array();
             $facilities[] = $this->getState('list.activities', '');
@@ -1675,6 +1675,7 @@ class FcSearchModelSearch extends JModelList
             $facilities[] = $this->getState('list.kitchen_facilities', '');
             $facilities[] = $this->getState('list.property_type');
             $facilities[] = $this->getState('list.accommodation_type');
+            $facilities[] = $this->getState('list.suitability', '');
 
             foreach ($facilities as $key => $value)
             {
@@ -1690,6 +1691,9 @@ class FcSearchModelSearch extends JModelList
                 } elseif ($value)
                 {
                     $id .= ':' . $value;
+                } else
+                {
+                    $id .= ':';
                 }
             }
         }

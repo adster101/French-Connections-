@@ -313,3 +313,4 @@ $longitude = $this->state->get('search.longitude', '');
         </div>
     <?php endforeach; ?>
   </div>
+</div>
