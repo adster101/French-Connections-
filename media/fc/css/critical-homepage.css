@@ -13,8 +13,24 @@ nav{
 a {
   background: transparent;
 }
+b,
+strong {
+  font-weight: bold;
+}
 img {
   border: 0;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+pre{
+  font-family: monospace, monospace;
+  font-size: 1em;
 }
 button,
 input{
@@ -81,15 +97,29 @@ img {
   max-width: 100%;
   height: auto;
 }
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #f2f5f1;
+}
+h3,
 h4{
   font-family: inherit;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
 }
+h3{
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 h4{
   margin-top: 10px;
   margin-bottom: 10px;
+}
+h3{
+  font-size: 24px;
 }
 h4{
   font-size: 18px;
@@ -100,9 +130,26 @@ p {
 .small {
   font-size: 85%;
 }
-ul{
+ul,
+ol {
   margin-top: 0;
   margin-bottom: 10px;
+}
+pre{
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: #8592ac;
+  background-color: #f5f5f5;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
 }
 .container {
   margin-right: auto;
@@ -135,6 +182,16 @@ ul{
 }
 .panel-body {
   padding: 15px;
+}
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert h4 {
+  margin-top: 0;
+  color: inherit;
 }
 .nav {
   margin-bottom: 0;
@@ -319,6 +376,30 @@ ul{
 .collapse {
   display: none;
 }
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+.label-default {
+  background-color: #d6dae3;
+}
+.label-success {
+  background-color: #5cb85c;
+}
+.label-warning {
+  background-color: #e9af11;
+}
+.label-danger {
+  background-color: #cd3e3f;
+}
 .container:before,
 .container:after,
 .panel-body:before,
@@ -400,6 +481,7 @@ ul{
 }
 
 
+h3,
 h4{
   font-family: "District Thin";
   text-transform: uppercase;

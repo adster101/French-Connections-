@@ -13,6 +13,7 @@ nav{
 a {
   background: transparent;
 }
+b,
 strong {
   font-weight: bold;
 }
@@ -22,6 +23,18 @@ h1 {
 }
 img {
   border: 0;
+}
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+pre {
+  overflow: auto;
+}
+pre{
+  font-family: monospace, monospace;
+  font-size: 1em;
 }
 button,
 input,
@@ -95,7 +108,14 @@ a {
 img {
   vertical-align: middle;
 }
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #f2f5f1;
+}
 h1,
+h3,
 h4,
 h5{
   font-family: inherit;
@@ -103,7 +123,8 @@ h5{
   line-height: 1.1;
   color: inherit;
 }
-h1{
+h1,
+h3{
   margin-top: 20px;
   margin-bottom: 10px;
 }
@@ -114,6 +135,9 @@ h5{
 }
 h1{
   font-size: 36px;
+}
+h3{
+  font-size: 24px;
 }
 h4{
   font-size: 18px;
@@ -139,6 +163,22 @@ ul,
 ol {
   margin-top: 0;
   margin-bottom: 10px;
+}
+pre{
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  word-break: break-all;
+  word-wrap: break-word;
+  color: #8592ac;
+  background-color: #f5f5f5;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
 }
 .container {
   margin-right: auto;
@@ -358,6 +398,16 @@ textarea.form-control {
   display: block;
   width: 100%;
 }
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.alert h4 {
+  margin-top: 0;
+  color: inherit;
+}
 .nav {
   margin-bottom: 0;
   padding-left: 0;
@@ -508,6 +558,30 @@ textarea.form-control {
 }
 .collapse {
   display: none;
+}
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+.label-default {
+  background-color: #d6dae3;
+}
+.label-success {
+  background-color: #5cb85c;
+}
+.label-warning {
+  background-color: #e9af11;
+}
+.label-danger {
+  background-color: #cd3e3f;
 }
 .clearfix:before,
 .clearfix:after,
@@ -784,6 +858,7 @@ textarea.form-control {
   color: #fff;
 }
 h1,
+h3,
 h4,
 h5{
   font-family: "District Thin";

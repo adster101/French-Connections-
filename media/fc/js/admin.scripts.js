@@ -25,8 +25,6 @@ jQuery(document).ready(function () {
   window._fbq = window._fbq || [];
   window._fbq.push(['track', 'PixelInitialized', {}]);
 
-
-
   // Also need to integrate map here.
   jQuery('#map-search-tab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
@@ -71,7 +69,6 @@ jQuery(document).ready(function () {
                 var index = jQuery('.map-search-result').index(this);
                 markers[index].setAnimation(null);
               });
-
     }
 
     location.hash = "#property-search";
@@ -79,14 +76,14 @@ jQuery(document).ready(function () {
   });
 
 
-  // Get the selected tab, if any and set the tab accordingly...
+  // Get the selected tab, if any 
   var selectedTab = localStorage['selectedTab']; 
-  console.log(selectedTab);
-
-    jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   
-
-
+  // and set the tab accordingly...
+  jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
+  
+  
+  
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
