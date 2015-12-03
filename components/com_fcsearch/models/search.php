@@ -94,7 +94,7 @@ class FcSearchModelSearch extends JModelList
         $query->columns('location, location_id, bedrooms, occupancy, date_created');
 
         $location = $this->getState('list.searchterm', '');
-        ;
+
         $location_id = $this->getState('search.location', '');
         $bedrooms = $this->getState('search.bedrooms', '');
         $occupancy = $this->getState('search.occupancy', '');
@@ -107,7 +107,8 @@ class FcSearchModelSearch extends JModelList
         try
         {
             $db->execute();
-        } catch (RuntimeException $e)
+        }
+        catch (RuntimeException $e)
         {
             // TO DO log me baby
             return false;
@@ -166,7 +167,8 @@ class FcSearchModelSearch extends JModelList
         if ($lang == 'fr')
         {
             $query->from($db->quoteName('#__classifications_translations') . ' AS t');
-        } else
+        }
+        else
         {
             $query->from($db->quoteName('#__classifications') . ' AS t');
         }
@@ -271,6 +273,11 @@ class FcSearchModelSearch extends JModelList
             $arrival = $this->getState('list.arrival', '');
             $departure = $this->getState('list.departure', '');
 
+            $min_price = $this->getState('list.min_price', '');
+            $max_price = $this->getState('list.max_price', '');
+
+            $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+
             // Create a new query object.
             $db = $this->getDbo();
             $query = $db->getQuery(true);
@@ -291,17 +298,7 @@ class FcSearchModelSearch extends JModelList
                 c.distance_to_coast as coast,
                 d.occupancy,
                 d.bathrooms,
-                d.base_currency, ';
-            if ($arrival && $departure)
-            {
-                // If arrival and departure dates are entered we only want to tariffs for that period 
-                $select .= ' (select tariff from ' . $db->quoteName('#__tariffs', 'l') . ' where l.start_date <= ' . $db->quote($arrival) . 'AND l.end_date >= ' . $db->quote($departure) . ' and l.unit_id = d.unit_id) as price,';
-            } else
-            {
-                // If no dates then just show the respective 'from' price
-                $select .= 'b.from_price as price,';
-            }
-            $select .= '
+                d.base_currency, 
                 d.accommodation_type as accommodation_id,
                 j.path,
                 left(d.description,500) as description,
@@ -314,7 +311,9 @@ class FcSearchModelSearch extends JModelList
                 i.title as tariff_based_on,
                 e.image_file_name as thumbnail,
                 e.url_thumb,
-                k.title as changeover_day';
+                k.title as changeover_day,'
+                    . '(' . $priceStr . ') as price';
+
 
             // Let's do this!
             $query->select($select);
@@ -347,7 +346,8 @@ class FcSearchModelSearch extends JModelList
                 $query->select('k.unit_title, k.description');
                 $query->join('left', '#__unit_versions_translations k on k.version_id = d.id');
                 $query->join('left', '#__classifications_translations j ON j.id = c.city');
-            } else
+            }
+            else
             {
                 $query->join('left', '#__classifications j ON j.id = c.city');
             }
@@ -356,19 +356,23 @@ class FcSearchModelSearch extends JModelList
             { // Country level
                 $query->join('left', '#__classifications as f on f.id = c.country');
                 $query->where('c.country = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 2)
+            }
+            elseif ($this->getState('search.level') == 2)
             { // Area level
                 $query->join('left', '#__classifications as f on f.id = c.area');
                 $query->where('c.area = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 3)
+            }
+            elseif ($this->getState('search.level') == 3)
             { // Region level
                 $query->join('left', '#__classifications as f on f.id = c.region');
                 $query->where('c.region= ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 4)
+            }
+            elseif ($this->getState('search.level') == 4)
             { // Department level
                 $query->join('left', '#__classifications as f on f.id = c.department');
                 $query->where('c.department = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 5)
+            }
+            elseif ($this->getState('search.level') == 5)
             {
                 // Add the distance based bit in as this is a town/city search
                 $query->where('
@@ -428,10 +432,8 @@ class FcSearchModelSearch extends JModelList
             }
 
             // Sort out the budget requirements
-            if ($this->getState('list.min_price') || $this->getState('list.max_price'))
+            if ($min_price || $max_price)
             {
-                $min_price = $this->getState('list.min_price', '');
-                $max_price = $this->getState('list.max_price', '');
                 $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
             }
 
@@ -489,6 +491,11 @@ class FcSearchModelSearch extends JModelList
             $query->where('c.review = 0');
             $query->where('d.review = 0');
 
+            if ($arrival && $departure)
+            {
+                $query->where('(' . $priceStr . ') is not null');
+            }
+
             if ($sort_column == 'coast')
             {
                 $query->where('distance_to_coast > 0');
@@ -498,7 +505,8 @@ class FcSearchModelSearch extends JModelList
 
             // Return a copy of the query object.
             return clone($this->retrieve($store, true));
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             // Oops, exceptional
         }
@@ -561,7 +569,8 @@ class FcSearchModelSearch extends JModelList
             $return = $this->getRefineByTypeOptions('property_type', 'getRefinePropertyOptions');
 
             return $return;
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
 
             // Catch and log the error.
@@ -583,7 +592,8 @@ class FcSearchModelSearch extends JModelList
             $return = $this->getRefineByTypeOptions('accommodation_type', 'getRefineAccommodationOptions');
 
             return $return;
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
 
             // Catch and log the error.
@@ -621,6 +631,14 @@ class FcSearchModelSearch extends JModelList
         try
         {
 
+            $arrival = $this->getState('list.arrival', '');
+            $departure = $this->getState('list.departure', '');
+
+            $min_price = $this->getState('list.min_price', '');
+            $max_price = $this->getState('list.max_price', '');
+
+
+
             // Create a new query object.
             $db = $this->getDbo();
             $query = $db->getQuery(true);
@@ -636,7 +654,8 @@ class FcSearchModelSearch extends JModelList
             if ($lang == 'fr-FR')
             {
                 $query->leftJoin('#__attributes_translation e on e.id = d.' . (string) $type);
-            } else
+            }
+            else
             {
                 $query->leftJoin('#__attributes e on e.id = d.' . (string) $type);
             }
@@ -645,19 +664,23 @@ class FcSearchModelSearch extends JModelList
             { // Country level
                 $query->join('left', $classification_table . ' as f on f.id = c.country');
                 $query->where('c.country = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 2)
+            }
+            elseif ($this->getState('search.level') == 2)
             { // Area level
                 $query->join('left', $classification_table . ' as f on f.id = c.area');
                 $query->where('c.area = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 3)
+            }
+            elseif ($this->getState('search.level') == 3)
             { // Region level
                 $query->join('left', $classification_table . ' as f on f.id = c.region');
                 $query->where('c.region= ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 4)
+            }
+            elseif ($this->getState('search.level') == 4)
             { // Department level
                 $query->join('left', $classification_table . ' as f on f.id = c.department');
                 $query->where('c.department = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 5)
+            }
+            elseif ($this->getState('search.level') == 5)
             {
                 // Add the distance based bit in as this is a town/city search
                 $query->where('
@@ -668,14 +691,14 @@ class FcSearchModelSearch extends JModelList
           * sin(radians(c.latitude))) < 30)');
             }
 
+
+
             /*
              * This section deals with the filtering options.
              * Filters are applied via functions as they are reused in the getPropertyType filter methods
              */
             if ($this->getState('list.arrival') || $this->getState('list.departure'))
             {
-                $arrival = $this->getState('list.arrival', '');
-                $departure = $this->getState('list.departure', '');
                 $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
             }
 
@@ -694,8 +717,6 @@ class FcSearchModelSearch extends JModelList
             // Sort out the budget requirements
             if ($this->getState('list.min_price') || $this->getState('list.max_price'))
             {
-                $min_price = $this->getState('list.min_price', '');
-                $max_price = $this->getState('list.max_price', '');
                 $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
             }
 
@@ -718,7 +739,6 @@ class FcSearchModelSearch extends JModelList
                 $query = $this->getFilterPropertyType($query, $property_type, $db);
             }
 
-
             //if ($this->getState('list.property_type')) {
             //$property_type = $this->getState('list.property_type');
             //$query = $this->getFilterPropertyType($query, $property_type, $db);
@@ -740,6 +760,14 @@ class FcSearchModelSearch extends JModelList
             $query->where('e.id is not null');
             $query->group('d.' . (string) $type);
 
+
+            if ($arrival && $departure)
+            {
+                $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+
+                $query->where('(' . $priceStr . ') is not null');
+            }
+
             // Get the options.
             $db->setQuery($query);
 
@@ -751,7 +779,8 @@ class FcSearchModelSearch extends JModelList
 
             // Return a copy of the query object.
             return $this->retrieve($store, true);
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
 
             // Catch and log the error.
@@ -782,6 +811,13 @@ class FcSearchModelSearch extends JModelList
             $locations = $this->retrieve($store);
         }
 
+        $arrival = $this->getState('list.arrival', '');
+        $departure = $this->getState('list.departure', '');
+
+        $min_price = $this->getState('list.min_price', '');
+        $max_price = $this->getState('list.max_price', '');
+
+
         $db = JFactory::getDbo();
         $query = $db->getQuery(true);
 
@@ -797,22 +833,26 @@ class FcSearchModelSearch extends JModelList
             $query->join('left', '#__classifications e on e.id = c.area');
             $query->group('c.area');
             $query->where('c.country = ' . (int) $this->getState('search.location'));
-        } elseif ($this->getState('search.level') == 2)
+        }
+        elseif ($this->getState('search.level') == 2)
         { // Area level
             $query->join('left', '#__classifications e on e.id = c.region');
             $query->group('c.region');
             $query->where('c.area = ' . (int) $this->getState('search.location'));
-        } elseif ($this->getState('search.level') == 3)
+        }
+        elseif ($this->getState('search.level') == 3)
         { // Region level
             $query->join('left', '#__classifications e on e.id = c.department');
             $query->group('c.department');
             $query->where('c.region = ' . (int) $this->getState('search.location'));
-        } elseif ($this->getState('search.level') == 4)
+        }
+        elseif ($this->getState('search.level') == 4)
         { // Department level
             $query->join('left', '#__classifications e on e.id = c.city');
             $query->group('c.city');
             $query->where('c.department = ' . (int) $this->getState('search.location'));
-        } elseif ($this->getState('search.level') == 5)
+        }
+        elseif ($this->getState('search.level') == 5)
         { // City level
             $query->join('left', '#__classifications e on e.id = c.city');
             $query->group('c.city');
@@ -882,6 +922,13 @@ class FcSearchModelSearch extends JModelList
         $query->where('d.review = 0');
         $query->where('d.unit_id is not null');
 
+        if ($arrival && $departure)
+        {
+            $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+
+            $query->where('(' . $priceStr . ') is not null');
+        }
+
         if ($this->getState('search.level') == 5)
         { // City level
             $query->where('c.city = ' . (int) $this->getState('search.location', ''));
@@ -893,7 +940,8 @@ class FcSearchModelSearch extends JModelList
         try
         {
             $locations = $db->loadObjectList();
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             // TO DO Log this.
             return flase;
@@ -922,6 +970,12 @@ class FcSearchModelSearch extends JModelList
         try
         {
 
+            $arrival = $this->getState('list.arrival', '');
+            $departure = $this->getState('list.departure', '');
+
+            $min_price = $this->getState('list.min_price', '');
+            $max_price = $this->getState('list.max_price', '');
+
             $attributes = array();
             $app = JFactory::getApplication();
             $lang = $app->getLanguage()->getTag();
@@ -940,19 +994,23 @@ class FcSearchModelSearch extends JModelList
             { // Country level
                 $query->join('left', '#__classifications as f on f.id = c.country');
                 $query->where('c.country = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 2)
+            }
+            elseif ($this->getState('search.level') == 2)
             { // Area level
                 $query->join('left', '#__classifications as f on f.id = c.area');
                 $query->where('c.area = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 3)
+            }
+            elseif ($this->getState('search.level') == 3)
             { // Region level
                 $query->join('left', '#__classifications as f on f.id = c.region');
                 $query->where('c.region = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 4)
+            }
+            elseif ($this->getState('search.level') == 4)
             { // Department level
                 $query->join('left', '#__classifications as f on f.id = c.department');
                 $query->where('c.department = ' . $this->getState('search.location', ''));
-            } elseif ($this->getState('search.level') == 5)
+            }
+            elseif ($this->getState('search.level') == 5)
             {
                 // Add the distance based bit in as this is a town/city search
                 $query->where('
@@ -971,8 +1029,7 @@ class FcSearchModelSearch extends JModelList
             if ($this->getState('list.arrival') || $this->getState('list.departure'))
             {
 
-                $arrival = $this->getState('list.arrival', '');
-                $departure = $this->getState('list.departure', '');
+
                 $query = $this->getFilterAvailability($query, $arrival, $departure, $db);
             }
 
@@ -1003,8 +1060,7 @@ class FcSearchModelSearch extends JModelList
             // Sort out the budget requirements
             if ($this->getState('list.min_price') || $this->getState('list.max_price'))
             {
-                $min_price = $this->getState('list.min_price', '');
-                $max_price = $this->getState('list.max_price', '');
+
                 $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
             }
 
@@ -1033,6 +1089,13 @@ class FcSearchModelSearch extends JModelList
             $query->where('b.published = 1');
             $query->where('d.review = 0');
             $query->group('e.attribute_id');
+
+            if ($arrival && $departure)
+            {
+                $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+
+                $query->where('(' . $priceStr . ') is not null');
+            }
 
             $db->setQuery($query);
 
@@ -1092,7 +1155,8 @@ class FcSearchModelSearch extends JModelList
 
             // Return the total.
             return $this->retrieve($store);
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             // Log the exception and return false
             //JLog::add('Problem fetching facilities for - ' . $id . $e->getMessage(), JLOG::ERROR, 'facilities');
@@ -1146,7 +1210,8 @@ class FcSearchModelSearch extends JModelList
         {
 
             $markers = $db->loadObjectList();
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             return false;
         }
@@ -1390,7 +1455,8 @@ class FcSearchModelSearch extends JModelList
             }
 
             $this->setState('list.' . $label, $ids);
-        } elseif (!empty($input))
+        }
+        elseif (!empty($input))
         {
 
             $id = (int) array_pop(explode('_', $input));
@@ -1613,7 +1679,8 @@ class FcSearchModelSearch extends JModelList
                     $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.version_id = d.id');
                     $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
                 }
-            } else
+            }
+            else
             {
                 $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.version_id = d.id');
                 $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
@@ -1666,7 +1733,7 @@ class FcSearchModelSearch extends JModelList
             $id .= ':' . $this->getState('list.min_price');
             $id .= ':' . $this->getState('list.lwl');
             $id .= ':' . $this->getState('list.offers');
-            
+
             // Get each of the filter attribute id and build that into the cache key...
             $facilities = array();
             $facilities[] = $this->getState('list.activities', '');
@@ -1688,10 +1755,12 @@ class FcSearchModelSearch extends JModelList
                         $id .= ':' . $y;
                         $y = '';
                     }
-                } elseif ($value)
+                }
+                elseif ($value)
                 {
                     $id .= ':' . $value;
-                } else
+                }
+                else
                 {
                     $id .= ':';
                 }
@@ -1723,7 +1792,8 @@ class FcSearchModelSearch extends JModelList
             $db->setQuery($query);
 
             $results = $db->loadObjectList($key = 'currency');
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             // Log this error
         }
@@ -1757,7 +1827,8 @@ class FcSearchModelSearch extends JModelList
         if ($lang == 'fr-FR')
         {
             $table = JTable::getInstance('ClassificationTranslations', 'ClassificationTable');
-        } else
+        }
+        else
         {
             $table = JTable::getInstance('Classification', 'ClassificationTable');
         }
@@ -1813,7 +1884,8 @@ class FcSearchModelSearch extends JModelList
         if ($lang == 'fr-FR')
         {
             $query->from('#__attributes_translation a');
-        } else
+        }
+        else
         {
             $query->from('#__attributes a');
         }
@@ -1835,6 +1907,50 @@ class FcSearchModelSearch extends JModelList
 
         // Return the total.
         return $this->retrieve($store);
+    }
+
+    public function getFromPrice($arrival, $departure, $min, $max)
+    {
+
+        $db = JFactory::getDbo();
+
+        $query = $db->getQuery(true);
+
+        $query->select('tariff');
+
+        $query->from($db->quoteName('#__tariffs', 'l'));
+
+        if ($arrival && $departure)
+        {
+            // If arrival and departure dates are entered we only want to tariffs for that period 
+            $query->where('l.start_date <= ' . $db->quote($arrival));
+            $query->where('l.end_date >= ' . $db->quote($departure));
+
+            if ($min && $max)
+            {
+                $query->where('l.tariff >=' . $min);
+                $query->where('l.tariff <=' . $max);
+            }
+            else if ($min)
+            {
+                $query->where('l.tariff >=' . $min);
+            }
+            else if ($max)
+            {
+                $query->where('l.tariff <=' . $max);
+            }
+            $query->where('l.unit_id = d.unit_id limit 0,1');
+
+            // Return the query as a string so we can append it to the main query
+            $queryStr = $query->__toString();
+        }
+        else
+        {
+            // If no dates then just show the respective 'from' price
+            $queryStr .= 'b.from_price';
+        }
+
+        return $queryStr;
     }
 
 }

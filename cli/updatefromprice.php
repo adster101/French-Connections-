@@ -58,25 +58,16 @@ class UpdateFromPriceCron extends JApplicationCli
 
     $query = $db->getQuery(true);
 
-    $query->select('min(tariff) * 0.7032')
-            ->from($db->quoteName('#__tariffs', 't'))
-            ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
-            ->where($db->quoteName('end_date') . ' > ' . $db->quote($date));
-
-    $euro_sub_query = $query->__toString();
-
-    $query->clear();
-
     $query->select('min(tariff)')
             ->from($db->quoteName('#__tariffs', 't'))
             ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
             ->where($db->quoteName('end_date') . ' > ' . $db->quote($date));
 
-    $sterling_sub_query = $query->__toString();
+    $sub_query = $query->__toString();
 
     $query->clear();
 
-    $query->select('b.id, CASE WHEN d.base_currency = \'EUR\' THEN (' . $euro_sub_query . ') ELSE (' . $sterling_sub_query . ') END as price')
+    $query->select('b.id, (' . $sub_query . ') as price')
             ->from($db->quoteName('#__property','a'))
             ->join('inner', $db->quoteName('#__unit', 'b') . ' on ' . $db->quoteName('b.property_id') . ' = ' . $db->quoteName('a.id'))->join('inner', $db->quoteName('#__property_versions', 'c') . ' on ' . $db->quoteName('c.property_id') . ' = ' . $db->quoteName('a.id'))
             ->join('inner', $db->quoteName('#__unit_versions', 'd') . ' on ' . $db->quoteName('d.unit_id') . ' = ' . $db->quoteName('b.id'))
@@ -86,7 +77,7 @@ class UpdateFromPriceCron extends JApplicationCli
 
     $select = $query->__toString();
 
-    $query->Clear();
+    $query->clear();
 
     $query->update($db->quoteName('#__unit', 'u'))
             ->join('left', '( ' . $select . ') up ON u.id = up.id')

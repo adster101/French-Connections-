@@ -12,7 +12,6 @@ $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->Sec
 
 $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
 
-
 ?>
 <div class="container">
   <h2 class="page-header">

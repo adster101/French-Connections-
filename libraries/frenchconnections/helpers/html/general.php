@@ -75,7 +75,6 @@ class JHtmlGeneral
     $prices = array();
     $rates = JHtmlGeneral::getExchangeRates();
 
-
     // If the base currency is set in pounds 
     if ($baseCurrency == 'GBP')
     {
@@ -96,9 +95,6 @@ class JHtmlGeneral
       $prices['USD'] = ((float) $exchange_rate_usd > 0) ? round(($exchange_rate_usd / $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP) :
               round((($rates['USD']->exchange_rate) * $prices['GBP']), $int = 0, $mode = PHP_ROUND_HALF_UP);
     }
-
-
-    // And convert the price to the pound equivalent
 
     return $prices;
   }

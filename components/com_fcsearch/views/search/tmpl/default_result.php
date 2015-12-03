@@ -29,6 +29,8 @@ $displayData->class = '';
 $description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
 $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
 $uri = JUri::getInstance();
+$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency)
+
 ?>
 
 <div class="search-result">
@@ -44,37 +46,38 @@ $uri = JUri::getInstance();
     <div class="col-xs-12 col-sm-3">
       <p class="rates">
         <?php if ($this->result->price) : ?>
-          <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
-          <span class="lead">
-            <?php echo '&pound;' . round($this->result->price); ?>
-          </span>
-          <span class="rate-per">
-            <?php echo $this->result->tariff_based_on; ?>
-          </span>
+            <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
+            <span class="lead">
+              <?php echo '&pound;' . $price['GBP'] ?>
+              <?php //echo round($this->result->price); ?>
+            </span>
+            <span class="rate-per">
+              <?php echo $this->result->tariff_based_on; ?>
+            </span>
         <?php else : ?>
-          <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
+            <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
         <?php endif; ?>
       </p> 
     </div>
   </div>
   <?php if (!empty($this->result->offer)) : ?>
-    <div class="row">
-      <div class="col-xs-12">
-        <p class="offer">
-          <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
-          <?php echo $this->escape($this->result->offer); ?>
-        </p>       
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="offer">
+            <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
+            <?php echo $this->escape($this->result->offer); ?>
+          </p>       
+        </div>
       </div>
-    </div>
   <?php endif; ?>
   <div class="row">
     <div class="col-xs-12 col-sm-3">
       <p>
         <a href="<?php echo $route ?>" title ="<?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?>">
           <?php if (!empty($this->result->thumbnail)) : ?>
-            <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
+              <img class="img-responsive" src='/images/property/<?php echo $this->result->unit_id . '/thumb/' . $this->result->thumbnail ?>' />
           <?php else: ?>
-            <img width="210" class="img-responsive" src="<?php echo $uri->getScheme() . '://' . $this->result->url_thumb ?>" />
+              <img width="210" class="img-responsive" src="<?php echo $uri->getScheme() . '://' . $this->result->url_thumb ?>" />
           <?php endif; ?>
         </a>  
       </p>
@@ -103,21 +106,21 @@ $uri = JUri::getInstance();
           </p>
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
-              <?php echo $shortlist->render($displayData); ?>
+                <?php echo $shortlist->render($displayData); ?>
 
             <?php else : ?>
-              <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
-                <i class="glyphicon glyphicon-heart"></i>
-              </a>    
+                <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
+                  <i class="glyphicon glyphicon-heart"></i>
+                </a>    
             <?php endif; ?>
           </p> 
 
           <?php if ($this->result->reviews) : ?>
-            <p class="listing-reviews visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
-              <a href="<?php echo $route . '#reviews' ?>">
-                <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
-              </a>
-            </p>
+              <p class="listing-reviews visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
+                <a href="<?php echo $route . '#reviews' ?>">
+                  <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
+                </a>
+              </p>
           <?php endif; ?> 
 
         </div>
