@@ -60,8 +60,8 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
         <?php if ($this->result->price) : ?>
             <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead">
-              <?php echo '&pound;' . $from_price['GBP'] ?>
-              <?php //echo '&pound;' . round($this->result->price); ?>
+              <?php //echo '&pound;' . $from_price['GBP'] ?>
+              <?php echo '&pound;' . round($this->result->price); ?>
             </span>
             <span class="rate-per">
               <?php echo $this->result->tariff_based_on; ?>

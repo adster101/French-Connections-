@@ -29,7 +29,7 @@ $displayData->class = '';
 $description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
 $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
 $uri = JUri::getInstance();
-$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency)
+$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency);
 
 ?>
 
@@ -48,8 +48,8 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
         <?php if ($this->result->price) : ?>
             <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead">
-              <?php echo '&pound;' . $price['GBP'] ?>
-              <?php //echo round($this->result->price); ?>
+              <?php //echo '&pound;' . $price['GBP'] ?>
+              <?php echo round($this->result->price); ?>
             </span>
             <span class="rate-per">
               <?php echo $this->result->tariff_based_on; ?>

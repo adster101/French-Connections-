@@ -1909,14 +1909,14 @@ class FcSearchModelSearch extends JModelList
         return $this->retrieve($store);
     }
 
-    public function getFromPrice($arrival, $departure, $min, $max)
+    public function getFromPrice($arrival, $departure, $min, $max, $EUR = 0.7032)
     {
 
         $db = JFactory::getDbo();
 
         $query = $db->getQuery(true);
 
-        $query->select('tariff');
+        $query->select('CASE WHEN d.base_currency = \'EUR\' THEN (tariff * ' . $EUR . ') ELSE (tariff) END');
 
         $query->from($db->quoteName('#__tariffs', 'l'));
 
