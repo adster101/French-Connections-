@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
 class AccommodationControllerListing extends JControllerForm
 {
 
-    public function bookatleisure()
+    public function getatleisurebookingsummary()
     {
 
         // Check for request forgeries.
@@ -60,7 +60,8 @@ class AccommodationControllerListing extends JControllerForm
                 if ($errors[$i] instanceof Exception)
                 {
                     $app->enqueueMessage($errors[$i]->getMessage(), 'error');
-                } else
+                }
+                else
                 {
                     $app->enqueueMessage($errors[$i], 'error');
                 }
@@ -79,7 +80,7 @@ class AccommodationControllerListing extends JControllerForm
         }
 
         // Write the enquiry into the enquiry table...
-        if (!$model->processAtLeisureBooking($validate, $id, $unit_id))
+        if (!$model->getAtLeisureBookingSummary($validate, $id, $unit_id))
         {
             // Trap any errors 
             $errors = $app->getMessageQueue();
@@ -92,11 +93,18 @@ class AccommodationControllerListing extends JControllerForm
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
             return false;
         }
+        
+        $app->setUserState('com_accommodation.enquiry.data', $data);
 
         $this->setRedirect(
-                JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisurebook', false));
+                JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisure', false));
 
         return true;
+    }
+
+    public function bookatleisure()
+    {
+        
     }
 
     public function saveNotes($notes = array())
@@ -188,7 +196,8 @@ class AccommodationControllerListing extends JControllerForm
                 // Redirect the user to the actual flippin' website
                 $this->setRedirect(JRoute::_($website, false));
             }
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
 
             // Log error   
@@ -257,7 +266,8 @@ class AccommodationControllerListing extends JControllerForm
                 if ($errors[$i] instanceof Exception)
                 {
                     $app->enqueueMessage($errors[$i]->getMessage(), 'error');
-                } else
+                }
+                else
                 {
                     $app->enqueueMessage($errors[$i], 'error');
                 }
@@ -302,7 +312,8 @@ class AccommodationControllerListing extends JControllerForm
             $this->setRedirect(
                     JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=enquiry', false), $msg
             );
-        } else
+        }
+        else
         {
             $this->setRedirect(JRoute::_('/'));
         }

@@ -10,18 +10,21 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $accepted_methods = array('Mastercard', 'VISA', 'American Express', 'Maestro', 'PayPal');
 $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->SecondTermAmount;
 
-$success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
+// TO DO - Should also add a
+$owner = JFactory::getUser($this->item->created_by)->username;
 
+$success = 'invar_dump(dex.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
 ?>
 <div class="container">
-  <h2 class="page-header">
-    <?php echo $this->escape($this->document->title) ?>
-  </h2>
-
-  <?php $modules = JModuleHelper::getModules('postenquiry'); //If you want to use a different position for the modules, change the name here in your override.  ?>
 
   <div class="row"> 
     <div class="col-lg-8 col-md-8 col-sm-7"> 
+      <h2 class="page-header">
+        <?php echo $this->escape($this->document->title) ?>
+      </h2>
+
+      <?php $modules = JModuleHelper::getModules('postenquiry'); //If you want to use a different position for the modules, change the name here in your override.   ?>
+
       <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_SUMMARY') ?>
       <hr />
       <dl class="dl-horizontal">
@@ -44,15 +47,15 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
             <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAYMENT_OPTIONS'); ?>
           </legend>
           <?php foreach ($this->booking_urls->PaymentMethods as $key => $option) : ?>
-            <?php if (in_array($option->Method, $accepted_methods)): ?>  
-              <label> 
-                <input name="option" type="radio" value="<?php echo $option->URL ?>" />
-                <?php echo $option->Method ?>
-                <?php echo '&euro;' . $option->Amount; ?>  
-                <?php echo (!empty($option->Costs)) ? '(&euro;' . $option->Costs . ')' : ''; ?> 
-              </label>
-              <br />
-            <?php endif; ?>
+              <?php if (in_array($option->Method, $accepted_methods)): ?>  
+                  <label> 
+                    <input name="option" type="radio" value="<?php echo $option->URL ?>" />
+                    <?php echo $option->Method ?>
+                    <?php echo '&euro;' . $option->Amount; ?>  
+                    <?php echo (!empty($option->Costs)) ? '(&euro;' . $option->Costs . ')' : ''; ?> 
+                  </label>
+                  <br />
+              <?php endif; ?>
           <?php endforeach; ?>   
           <hr />
           <button class="btn btn-primary btn-lg"><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PAY_NOW') ?></button>
@@ -62,12 +65,7 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
       </form>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-5">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <img class="img-responsive" src="<?php echo JURI::getInstance()->toString(array('scheme')) . $this->images[0]->url_thumb; ?>" />
-          <?php echo $this->item->unit_title ?>
-        </div>
-      </div>
+      <?php echo $this->loadTemplate($owner . '_form'); ?>
     </div>
   </div>
 </div> 
