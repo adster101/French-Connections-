@@ -265,8 +265,6 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 
             <?php echo $this->loadTemplate('contact_owner'); ?>
         <?php endif; ?>
-
-
       </div>
       <div class="text-center hidden-xs">
         <?php foreach ($mpu as $item) : // Render the cross-sell modules etc   ?>
@@ -624,15 +622,14 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <?php endif; ?>
         </div>
         <div class="row">
-          <div class="col-lg-7 col-md-7 col-sm-7">
-            <?php echo $this->loadTemplate('top_form'); ?>
-          </div>
-          <div class="col-lg-5 col-md-5 col-sm-5">
+          <div class="col-xs-12">
             <?php if ($this->item->is_bookable) : ?>
+                <?php echo $this->loadTemplate($owner . '_form'); ?>
                 <?php echo $this->loadTemplate($owner); ?>
-            <?php else: ?>
+            <?php else: ?>    
+                <?php echo $this->loadTemplate('top_form'); ?>
                 <?php echo $this->loadTemplate('contact_owner'); ?>
-            <?php endif; ?>
+            <?php endif; ?>          
           </div>
         </div>
       </div>

@@ -1,8 +1,8 @@
 var infowindow;
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
   // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
 
     //jQuery('#map_canvas').hide();
     if (!window.google) {
@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
       // This must either be 'forsale' or 'accommodation'
       var action = jQuery('#property-search').attr('action').split('/');
       // Filter out the empty elements
-      action = action.filter(function(e) {
+      action = action.filter(function (e) {
         return e
       });
       var s_kwds = action[1];
@@ -32,7 +32,7 @@ jQuery(document).ready(function() {
       jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
         s_kwds: path
       },
-      function(data) {
+      function (data) {
 
         // Get the map instance
         map = document.map;
@@ -54,7 +54,7 @@ jQuery(document).ready(function() {
           //  Create a new viewpoint bound, so we can centre the map based on the markers
           var bounds = new google.maps.LatLngBounds();
           //  Go through each...
-          jQuery.each(markers, function(index, marker) {
+          jQuery.each(markers, function (index, marker) {
             bounds.extend(marker.position);
           });
           //  Fit these bounds to the map
@@ -67,16 +67,16 @@ jQuery(document).ready(function() {
           averageCenter: false
         });
 
-      }).done(function() {
+      }).done(function () {
 
       });
     }
 
     jQuery('#map_canvas').show();
   });
-  jQuery('.lastminute-date-search-link').each(function() {
+  jQuery('.lastminute-date-search-link').each(function () {
 
-    jQuery(this).on('click', function(event) {
+    jQuery(this).on('click', function (event) {
 
       var data = jQuery(this).data();
       var start = data.start;
@@ -97,7 +97,7 @@ jQuery(document).ready(function() {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
 
-  jQuery('.property-search-button').on('click', function(event) {
+  jQuery('.property-search-button').on('click', function (event) {
 
     event.preventDefault();
     var path = getPath();
@@ -106,7 +106,7 @@ jQuery(document).ready(function() {
     // Submit the form
     jQuery('form#property-search').submit();
   });
-  jQuery('#sort_by').on('change', function(event) {
+  jQuery('#sort_by').on('change', function (event) {
 
     event.preventDefault();
     var path = getPath();
@@ -117,13 +117,13 @@ jQuery(document).ready(function() {
   });
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
-    source: function(query, process) {
+    source: function (query, process) {
       jQuery.get('/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
               {
                 q: query,
                 items: 25
               },
-      function(data) {
+      function (data) {
         process(data);
       }
       )
@@ -133,7 +133,7 @@ jQuery(document).ready(function() {
 
 
   // Deal with the more/less options for the refine search bit.
-  jQuery("a.show").click(function(event) {
+  jQuery("a.show").click(function (event) {
 
     // Prevent the default click behaviour
     event.preventDefault();
@@ -142,7 +142,7 @@ jQuery(document).ready(function() {
     jQuery(this).prev().prev().toggleClass('show');
 
     // Check the open/closed state
-    jQuery(this).html(function(i, v) {
+    jQuery(this).html(function (i, v) {
       return v.trim() === Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS')
               ? Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS')
               : Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
@@ -225,30 +225,30 @@ function getPath(event) {
 
   }
 
-  if (arrival !== '' && typeof(arrival) !== 'undefined') {
+  if (arrival !== '' && typeof (arrival) !== 'undefined') {
     path = path + '/arrival_' + arrival;
   }
 
-  if (departure !== '' && typeof(departure) !== 'undefined') {
+  if (departure !== '' && typeof (departure) !== 'undefined') {
     path = path + '/departure_' + departure;
   }
-  if (occupancy !== '' && typeof(occupancy) !== 'undefined') {
+  if (occupancy !== '' && typeof (occupancy) !== 'undefined') {
     path = path + '/occupancy_' + occupancy;
   }
 
-  if (bedrooms !== '' && typeof(bedrooms) !== 'undefined') {
+  if (bedrooms !== '' && typeof (bedrooms) !== 'undefined') {
     path = path + '/bedrooms_' + bedrooms;
   }
 
-  if (sort_by !== '' && typeof(sort_by) !== 'undefined') {
+  if (sort_by !== '' && typeof (sort_by) !== 'undefined') {
     path = path + '/' + sort_by;
   }
 
-  if (min_price !== '' && typeof(min_price) !== 'undefined') {
+  if (min_price !== '' && typeof (min_price) !== 'undefined') {
     path = path + '/' + min_price;
   }
 
-  if (max_price !== '' && typeof(max_price) !== 'undefined') {
+  if (max_price !== '' && typeof (max_price) !== 'undefined') {
     path = path + '/' + max_price;
   }
 
@@ -287,7 +287,7 @@ function initmap() {
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
 function attachContent(marker, num) {
-  google.maps.event.addListener(marker, 'click', function() {
+  google.maps.event.addListener(marker, 'click', function () {
 
     if (infowindow)
       infowindow.close();
@@ -326,7 +326,7 @@ function stripVowelAccent(str) {
   // Replace apostrophe with space
   s = s.replace(/[\']/g, ' ');
   if (typeof String.prototype.trim !== 'function') {
-    String.prototype.trim = function() {
+    String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, '');
     }
   }

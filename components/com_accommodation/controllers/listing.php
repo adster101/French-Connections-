@@ -75,7 +75,7 @@ class AccommodationControllerListing extends JControllerForm
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
             // Redirect back to the contact form.
-            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
 
@@ -90,7 +90,7 @@ class AccommodationControllerListing extends JControllerForm
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
             // Redirect back to the contact form.
-            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
         
@@ -237,7 +237,7 @@ class AccommodationControllerListing extends JControllerForm
                 $app->setUserState($context, $data);
 
                 // Redirect back to the contact form.
-                $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+                $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
 
                 return false;
             }
@@ -281,7 +281,7 @@ class AccommodationControllerListing extends JControllerForm
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
             // Redirect back to the contact form.
-            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false));
+            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
 
@@ -296,7 +296,7 @@ class AccommodationControllerListing extends JControllerForm
             $app->setUserState('com_accommodation.enquiry.data', $data);
 
             // Redirect back to the contact form.
-            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '#email', false), $msg);
+            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false), $msg);
 
             return false;
         }

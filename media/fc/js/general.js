@@ -76,13 +76,13 @@ jQuery(document).ready(function () {
 
 
   // Get the selected tab, if any 
-  var selectedTab = localStorage['selectedTab']; 
-  
+  var selectedTab = localStorage['selectedTab'];
+
   // and set the tab accordingly...
   jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
-  
-  
-  
+
+
+
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
@@ -110,7 +110,6 @@ jQuery(document).ready(function () {
     } else {
       input = jQuery(this).parent().parent().find('label').text();
     }
-    console.log(input);
     ga('send', 'event', 'Enquiry Form', 'Rental property', input);
 
   });
@@ -150,43 +149,46 @@ jQuery(document).ready(function () {
       autoclose: true
     });
   }
-
+var checkin;
   try {
 
     var nowTemp = new Date();
     var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var data = jQuery('.start_date.date').data();
 
-    var checkin = jQuery('.start_date.date').datepicker({
+    checkin = jQuery('.start_date.date').datepicker({      
       format: "dd-mm-yyyy",
+      clearBtn: true,
+      daysOfWeekHighlighted:data.highlight,
+      daysOfWeekDisabled:data.changeover,
       beforeShowDay: function (date) {
         return date.valueOf() >= now.valueOf();
       },
       autoclose: true
 
     }).on('changeDate', function (ev) {
-      if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
 
         var newDate = new Date(ev.date);
-        newDate.setDate(newDate.getDate() + 1);
-        checkout.datepicker("update", newDate);
+        newDate.setDate(newDate.getDate() + 7);
+        jQuery('.end_date.date').datepicker("update", newDate);
+        jQuery('.end_date.date').datepicker("setStartDate", newDate);
 
-      }
+      
       jQuery('.end_date input')[0].focus();
     });
 
 
     var checkout = jQuery('.end_date.date').datepicker({
       format: "dd-mm-yyyy",
+      daysOfWeekHighlighted:data.highlight,
+      daysOfWeekDisabled:data.changeover,
+      clearBtn: true,
       beforeShowDay: function (date) {
-        if (!checkin.datepicker("getDate").valueOf()) {
-          return date.valueOf() >= new Date().valueOf();
-        } else {
-          return date.valueOf() > checkin.datepicker("getDate").valueOf();
-        }
+        return date.valueOf() >= now.valueOf();
+
       },
       autoclose: true
 
-    }).on('changeDate', function (ev) {
     });
 
   } catch (e) {

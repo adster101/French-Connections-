@@ -73,7 +73,6 @@ $task = ($owner->username == 'atleisure') ? 'listing.getatleisurebookingsummary'
               <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" for="start_date"></i></span>
             </div>
           </div>
-
           <div class="col-lg-6">
             <?php echo $this->form->getLabel('end_date'); ?>  
             <div class="input-group end_date date">

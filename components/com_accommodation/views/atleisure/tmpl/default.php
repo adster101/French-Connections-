@@ -13,7 +13,7 @@ $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->Sec
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
 
-$success = 'invar_dump(dex.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
+$success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
 ?>
 <div class="container">
 

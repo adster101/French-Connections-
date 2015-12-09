@@ -1053,6 +1053,14 @@ class AccommodationModelListing extends JModelForm
 
             $result->data = $data;
 
+            if ($result->Available == 'No')
+            {
+                // Deal with this by returning an error message, mostly means not available
+                $message = "COM_ACCOMMODATION_AT_LEISURE_DATES_UNAVAILABLE";
+                JFactory::getApplication()->enqueueMessage(JText::_($message), 'error');
+                return false;
+            }
+
             // Must be okay, so set the json as a session variable
             $app->setUserState('com_accommodation.atleisure.data', $result);
 
@@ -1371,6 +1379,7 @@ class AccommodationModelListing extends JModelForm
         $input = $app->input;
 
         $view = $input->getCmd('view');
+        $layout = $input->getCmd('layout');
 
         if (!$this->getItem())
         {
@@ -1381,12 +1390,20 @@ class AccommodationModelListing extends JModelForm
 
         if ($owner == 'atleisure')
         {
+
+            if ($view != 'atleisure')
+            {
+                $form->removeField('guest_forename');
+                $form->removeField('guest_surname');
+                $form->removeField('guest_email');
+                $form->removeField('guest_phone');
+            }
+
+
             $form->removeField('message');
-            $form->removeField('guest_forename');
-            $form->removeField('guest_surname');
-            $form->removeField('guest_email');
-            $form->removeField('guest_phone');
             $form->setFieldAttribute('adults', 'required', 'true');
+            $form->setFieldAttribute('start_date', 'required', 'true');
+            $form->setFieldAttribute('end_date', 'required', 'true');
         }
 
         parent::preprocessForm($form, $data, $group);
