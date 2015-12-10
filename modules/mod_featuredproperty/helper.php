@@ -35,6 +35,7 @@ class modFeaturedPropertyHelper
       left(c.description,150) as description,
       c.occupancy,
       i.image_file_name as thumbnail,
+      i.url_thumb,
       g.title,
       g.alias,
       c.base_currency,

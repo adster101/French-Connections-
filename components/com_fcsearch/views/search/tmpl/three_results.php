@@ -38,6 +38,7 @@ $uri = JUri::getInstance()->toString();
 $offers = ($this->state->get('list.offers')) ? true : false;
 $lwl = ($this->state->get('list.lwl')) ? true : false;
 $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
+
 ?>
 
 <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=' . $ItemID . '&s_kwds=' . $s_kwds) ?>" method="POST">

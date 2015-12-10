@@ -999,8 +999,8 @@ class AccommodationModelListing extends JModelForm
         JFactory::getApplication()->enqueueMessage(JText::_($message), 'error');
         return false;
       }
-
-      $rpc->makeCall('PlaceBookingV1', $booking_params);
+      
+      //$rpc->makeCall('PlaceBookingV1', $booking_params);
 
       $result = $rpc->getResult("json");
 

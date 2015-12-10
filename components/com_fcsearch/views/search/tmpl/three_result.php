@@ -33,6 +33,7 @@ $location_title = $this->result->location_title;
 $property_type = $this->result->property_type;
 $thumb = ($this->result->thumbnail) ? '/images/property/' . $this->result->unit_id . '/thumb/' . $this->result->thumbnail : $uri->getScheme() . '://' . $this->result->url_thumb;
 $tagline = JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
+$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency,'','')
 ?>
 
 <div class="search-result" 
@@ -59,6 +60,7 @@ $tagline = JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->a
         <?php if ($this->result->price) : ?>
             <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead">
+              <?php //echo '&pound;' . $from_price['GBP'] ?>
               <?php echo '&pound;' . round($this->result->price); ?>
             </span>
             <span class="rate-per">
