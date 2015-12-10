@@ -14618,52 +14618,48 @@ jQuery(document).ready(function () {
       autoclose: true
     });
   }
-var checkin;
-  try {
 
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-    var data = jQuery('.start_date.date').data();
+  var nowTemp = new Date();
+  var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+  var data = jQuery('.start_date.date').data();
 
-    checkin = jQuery('.start_date.date').datepicker({      
-      format: "dd-mm-yyyy",
-      clearBtn: true,
-      daysOfWeekHighlighted:data.highlight,
-      daysOfWeekDisabled:data.changeover,
-      beforeShowDay: function (date) {
-        return date.valueOf() >= now.valueOf();
-      },
-      autoclose: true
+  jQuery('.start_date.date').datepicker({
+    format: "dd-mm-yyyy",
+    clearBtn: true,
+    daysOfWeekHighlighted: data.highlight,
+    daysOfWeekDisabled: data.changeover,
+    beforeShowDay: function (date) {
+      return date.valueOf() >= now.valueOf();
+    },
+    autoclose: true
 
-    }).on('changeDate', function (ev) {
+  }).on('changeDate', function (ev) {
 
-        var newDate = new Date(ev.date);
-        newDate.setDate(newDate.getDate() + 7);
-        jQuery('.end_date.date').datepicker("update", newDate);
-        jQuery('.end_date.date').datepicker("setStartDate", newDate);
+    var newDate = new Date(ev.date);
+    newDate.setDate(newDate.getDate() + 7);
+    jQuery('.end_date.date').datepicker("setStartDate", newDate);
 
-      
-      jQuery('.end_date input')[0].focus();
-    });
+    if (newDate) {
+      jQuery('.end_date.date').datepicker("update", newDate);
+    }
+
+    jQuery('.end_date input')[0].focus();
+  });
 
 
-    var checkout = jQuery('.end_date.date').datepicker({
-      format: "dd-mm-yyyy",
-      daysOfWeekHighlighted:data.highlight,
-      daysOfWeekDisabled:data.changeover,
-      clearBtn: true,
-      beforeShowDay: function (date) {
-        console.log(date);
-        return date.valueOf() >= now.valueOf();
+  jQuery('.end_date.date').datepicker({
+    format: "dd-mm-yyyy",
+    daysOfWeekHighlighted: data.highlight,
+    daysOfWeekDisabled: data.changeover,
+    clearBtn: true,
+    beforeShowDay: function (date) {
+      return date.valueOf() >= new Date().valueOf();
+    },
+    autoclose: true
 
-      },
-      autoclose: true
+  });
 
-    });
 
-  } catch (e) {
-    // what to do!?
-  }
 
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
