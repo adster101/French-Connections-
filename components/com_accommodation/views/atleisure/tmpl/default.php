@@ -3,6 +3,13 @@
 defined('_JEXEC') or die('Restricted access');
 
 $app = JFactory::getApplication();
+
+$doc = JDocument::getInstance();
+
+// Include the JDocumentRendererMessage class file
+require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+$render = new JDocumentRendererMessage($doc);
+
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
@@ -15,57 +22,74 @@ $owner = JFactory::getUser($this->item->created_by)->username;
 
 $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
 ?>
+
+<div class="booking-steps">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <p class="active"><span class="active">1</span>&nbsp;Your details</p>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <p class="text-center"><span>2</span>&nbsp;Payment</p>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <p class="text-right"><span class="step">3</span>&nbsp;Confirmation</p>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="container">
 
   <div class="row"> 
+
     <div class="col-lg-8 col-md-8 col-sm-7"> 
-      <h2 class="page-header">
+      <?php if (count($errors > 0)) : ?>
+
+          <div class="contact-error">
+            <?php echo $render->render($errors); ?>
+          </div>
+
+      <?php endif; ?>
+      <h2 class="">
         <?php echo $this->escape($this->document->title) ?>
       </h2>
 
       <?php $modules = JModuleHelper::getModules('postenquiry'); //If you want to use a different position for the modules, change the name here in your override.   ?>
+      <?php echo $this->loadTemplate($owner . '_form'); ?>
 
-      <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_SUMMARY') ?>
-      <hr />
-      <dl class="dl-horizontal">
-        <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL') ?></dt>
-        <dd><?php echo $this->booking_urls->data['start_date'] ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL') ?></dt>
-        <dd><?php echo $this->booking_urls->data['end_date'] ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_REFERENCE') ?></dt>
-        <dd><?php echo $this->booking_urls->BookingNumber ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_DEPOSIT') ?></dt>
-        <dd><?php echo JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_DEPOSIT_AMOUNT', $this->booking_urls->FirstTermAmount) ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_BALANCE') ?></dt>
-        <dd><?php echo JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_BALANCE_AMOUNT', $this->booking_urls->SecondTermAmount, JHtml::_('date', $this->booking_urls->SecondTermDateTime, 'd M Y')) ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_TOTAL_PAYABLE') ?></dt>
-        <dd><?php echo '&euro;' . $total_payable ?></dd>
-      </dl>
-      <FORM action="#" method="post" class="atleisure-booking-form">
-        <fieldset>
-          <legend>
-            <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAYMENT_OPTIONS'); ?>
-          </legend>
-          <?php foreach ($this->booking_urls->PaymentMethods as $key => $option) : ?>
-              <?php if (in_array($option->Method, $accepted_methods)): ?>  
-                  <label> 
-                    <input name="option" type="radio" value="<?php echo $option->URL ?>" />
-                    <?php echo $option->Method ?>
-                    <?php echo '&euro;' . $option->Amount; ?>  
-                    <?php echo (!empty($option->Costs)) ? '(&euro;' . $option->Costs . ')' : ''; ?> 
-                  </label>
-                  <br />
-              <?php endif; ?>
-          <?php endforeach; ?>   
-          <hr />
-          <button class="btn btn-primary btn-lg"><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PAY_NOW') ?></button>
-          <INPUT type="hidden" name="urlsuccess" value="<?php echo JRoute::_($success) ?>"/>
-          <INPUT type="hidden" name="urlfailure"value="http://www.frenchconnections.co.uk"/>
-        </fieldset>  
-      </form>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-5">
-      <?php echo $this->loadTemplate($owner . '_form'); ?>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Booking summary</h4>
+        </div>
+        <div class="panel-body">
+                 <h5>
+            <?php echo $this->item->unit_title ?>
+          </h5>
+          <p>
+            <img class="img-responsive" src="<?php echo JURI::getInstance()->toString(array('scheme')) . $this->images[0]->url_thumb; ?>" />
+          </p>
+          <dl class="dl-horizontal">
+            <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL') ?></dt>
+            <dd><?php echo $enquiry_data['start_date'] ?></dd>
+            <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL') ?></dt>
+            <dd><?php echo $enquiry_data['end_date'] ?></dd>
+          </dl> 
+          <p>To pay on arrival</p>
+
+          <?php echo $this->item->additional_price_notes ?>
+          <p>
+            Total:
+            <span class="pull-right"><?php echo $enquiry_data->CorrectPrice; ?></span>
+          </p>
+          <p>
+            <strong>To pay now:         </strong>
+            <span class="pull-right"><?php echo round($enquiry_data->CorrectPrice * 0.3); ?></span>
+          </p>
+        </div>
+      </div>
+
     </div>
   </div>
 </div> 

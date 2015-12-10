@@ -16,10 +16,8 @@ class AccommodationViewAtleisure extends JViewLegacy
         // Assign data to the view   
         $app = JFactory::getApplication();
 
-        $urls = $app->getUserState('com_accommodation.atleisure.data');
-
         // TO DO - Set it to redirect to the property page...
-        if (!$urls)
+        if (!$app->getUserState('com_accommodation.atleisure.data'))
         {
             $app->redirect('/');
         }
@@ -39,9 +37,6 @@ class AccommodationViewAtleisure extends JViewLegacy
 
         // Get the booking detail form
         $this->form = $this->get('Form');
-
-        // Get nearby props that are also of interest
-        $this->booking_urls = $urls;
 
         // Check for errors.
         if (count($errors = $this->get('Errors')))

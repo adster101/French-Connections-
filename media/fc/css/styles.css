@@ -7097,6 +7097,30 @@ A/B testing styles for new advertise with us page
 .slick-next {
   right: 0px;
 }
+.booking-steps {
+  background: #324c87;
+  font-size: 18px;
+  font-family: District Thin;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 10px 0;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+.booking-steps p {
+  margin: 0;
+  opacity: 0.6;
+}
+.booking-steps p.active {
+  opacity: 1;
+}
+.booking-steps span {
+  text-align: center;
+  border-radius: 15px;
+  padding: 0 10px;
+  margin: 0;
+  background: #647cb6;
+}
 .view-search #map-search-tab > li > a[href='#mapsearch'],
 .view-shortlist #map-search-tab > li > a[href='#mapsearch'] {
   padding: 0;

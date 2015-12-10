@@ -45,26 +45,12 @@ $owner = JFactory::getUser($this->item->created_by);
 $task = ($owner->username == 'atleisure') ? 'listing.getatleisurebookingsummary' : 'listing.enquiry';
 ?>
 
-<?php if (count($errors > 0)) : ?>
 
-    <div class="contact-error">
-      <?php echo $render->render($errors); ?>
-    </div>
 
-<?php endif; ?>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h5>
-      <?php echo $this->item->unit_title ?>
-    </h5>
-  </div>
-  <div class="panel-body">
     <form class="form-validate form-vertical" id="rental-contact-form" action="" method="post">
       <?php echo JHtml::_('form.token'); ?>
       <fieldset class="adminform">
-        <p>
-          <img class="img-responsive" src="<?php echo JURI::getInstance()->toString(array('scheme')) . $this->images[0]->url_thumb; ?>" />
-        </p>
+  
         <div class="form-group row">
           <div class="col-lg-6">
             <?php echo $this->form->getLabel('start_date'); ?> 
@@ -95,18 +81,7 @@ $task = ($owner->username == 'atleisure') ? 'listing.getatleisurebookingsummary'
 
 
       </fieldset>
-      <p>
-        Total:
-        <span class="pull-right"><?php echo $enquiry_data->CorrectPrice; ?></span>
-      </p>
-      <p>
-        <strong>To pay now:         </strong>
 
-          <span class="pull-right"><?php echo round($enquiry_data->CorrectPrice * 0.3); ?></span>
-      </p>
-      <p>To pay on arrival</p>
-
-      <?php echo $this->item->additional_price_notes ?>
 
       <button type="submit" class="btn btn-danger btn-lg " id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
         <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
@@ -114,8 +89,6 @@ $task = ($owner->username == 'atleisure') ? 'listing.getatleisurebookingsummary'
       <input type="hidden" name="option" value="com_accommodation" />
       <input type="hidden" name="task" value="<?php echo $task ?>" />
     </form>
-  </div>
-</div>
 
 
 
