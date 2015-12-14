@@ -66,7 +66,19 @@ class AccommodationViewAtleisure extends JViewLegacy
      */
     protected function setDocument()
     {
-        $this->title = JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAGE', $this->item->unit_title);
+        $app = JFactory::getApplication();
+
+        $layout = $app->input->getCmd('layout', 'default');
+
+        if ($layout == 'default')
+        {
+            $this->title = JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAGE_YOUR_DETAILS');
+        }
+        elseif ($layout == 'payment')
+        {
+            $this->title = JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAGE_PAYMENT_DETAILS');
+        }
+        
         // Set document and page titles
         $this->document->setTitle($this->title);
         $this->document->setDescription($this->title);

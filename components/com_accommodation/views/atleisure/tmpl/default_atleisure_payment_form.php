@@ -40,20 +40,18 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
     <legend>
       <?php echo $this->escape($this->document->title) ?>
     </legend>
-    <p>
-      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_YOUR_DETAILS_LINE'); ?>
-    </p>
+
     <div class="row form-group">
       <div class="col-lg-6">
         <div class="stacked">
-          <?php echo $this->form->getLabel('guest_surname'); ?>
-          <?php echo $this->form->getInput('guest_surname'); ?>
+          <?php echo $this->form->getLabel('amount'); ?>
+          <?php echo $this->form->getInput('amount'); ?>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="stacked">
-          <?php echo $this->form->getLabel('guest_forename'); ?>
-          <?php echo $this->form->getInput('guest_forename'); ?>
+          <?php echo $this->form->getLabel('creditcard'); ?>
+          <?php echo $this->form->getInput('creditcard'); ?>
         </div>
       </div>
     </div>

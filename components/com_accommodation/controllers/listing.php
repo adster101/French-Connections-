@@ -16,20 +16,21 @@ defined('_JEXEC') or die;
 class AccommodationControllerListing extends JControllerForm
 {
 
-    public function getatleisurebookingsummary()
+    public function atleisurepayment()
     {
-
         // Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         $app = JFactory::getApplication();
-        JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
-        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
-        $model = $this->getModel();
-
         $id = $this->input->get('id', '', 'int');
         $unit_id = $this->input->get('unit_id', '', 'int');
-        // Get the itemID of the accommodation component. 
+
+        JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+
+        $model = $this->getModel();
+
+        // Get the itemID of the accommodation component.
         $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 
         // Get the data from POST
@@ -39,13 +40,14 @@ class AccommodationControllerListing extends JControllerForm
 
         // Validate the posted data.
         $form = $model->getForm();
+
         if (!$form)
         {
             JError::raiseError(500, $model->getError());
             return false;
         }
 
-        // Validate the data. 
+        // Validate the data.
         // Returns either false or the validated, filtered data.
         $validate = $model->validate($form, $data);
 
@@ -67,7 +69,7 @@ class AccommodationControllerListing extends JControllerForm
                 }
             }
 
-            // Trap any errors 
+            // Trap any errors
             $errors = $app->getMessageQueue();
 
             // Save the data in the session.
@@ -82,7 +84,7 @@ class AccommodationControllerListing extends JControllerForm
         // Write the enquiry into the enquiry table...
         if (!$model->getAtLeisureBookingSummary($validate, $id, $unit_id))
         {
-            // Trap any errors 
+            // Trap any errors
             $errors = $app->getMessageQueue();
 
             // Save the data in the session.
@@ -93,12 +95,98 @@ class AccommodationControllerListing extends JControllerForm
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
-        
+    }
+
+    public function getatleisurebookingsummary()
+    {
+
+        // Check for request forgeries.
+        JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+        $app = JFactory::getApplication();
+        JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+        JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+        $model = $this->getModel();
+
+        $id = $this->input->get('id', '', 'int');
+        $unit_id = $this->input->get('unit_id', '', 'int');
+
+        // Get the itemID of the accommodation component.
+        $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
+
+        // Get the data from POST
+        $data = $this->input->post->get('jform', array(), 'array');
+
+        $model->getItem();
+
+        // Validate the posted data.
+        $form = $model->getForm();
+        if (!$form)
+        {
+            JError::raiseError(500, $model->getError());
+            return false;
+        }
+
+        // Validate the data.
+        // Returns either false or the validated, filtered data.
+        $validate = $model->validate($form, $data);
+
+        // TO DO - Possibly better to move save from model to here?
+        if ($validate === false)
+        {
+            // Get the validation messages.
+            $errors = $model->getErrors();
+            // Push up to five validation messages out to the user.
+            for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
+            {
+                if ($errors[$i] instanceof Exception)
+                {
+                    $app->enqueueMessage($errors[$i]->getMessage(), 'error');
+                }
+                else
+                {
+                    $app->enqueueMessage($errors[$i], 'error');
+                }
+            }
+
+            // Trap any errors
+            $errors = $app->getMessageQueue();
+
+            // Save the data in the session.
+            $app->setUserState('com_accommodation.enquiry.data', $data);
+            $app->setUserState('com_accommodation.enquiry.messages', $errors);
+
+            // Redirect back to the contact form.
+            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
+            return false;
+        }
+
+        // Write the enquiry into the enquiry table...
+        if (!$model->getAtLeisureBookingSummary($validate, $id, $unit_id))
+        {
+            // Trap any errors
+            $errors = $app->getMessageQueue();
+
+            // Save the data in the session.
+            $app->setUserState('com_accommodation.enquiry.data', $data);
+            $app->setUserState('com_accommodation.enquiry.messages', $errors);
+
+            // Redirect back to the contact form.
+            $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
+            return false;
+        }
+
         $app->setUserState('com_accommodation.enquiry.data', $data);
 
+        $redirect = $this->input->post->get('next', '','string');
+        
+        if (!$redirect){
         $this->setRedirect(
                 JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisure', false));
 
+        } else {
+           $this->setRedirect($redirect);
+        }
         return true;
     }
 
@@ -167,10 +255,10 @@ class AccommodationControllerListing extends JControllerForm
             $result = $db->loadRow();
 
             if (parse_url($result[0]))
-            { // We have a valid web address 
+            { // We have a valid web address
                 $website = $result[0];
 
-                // Check that the http:// bit is present, if not add it. Should validate urls better 
+                // Check that the http:// bit is present, if not add it. Should validate urls better
                 $website = (strpos($website, 'http://') === 0) ? $website : 'http://' . $website;
 
                 // Log the view
@@ -186,7 +274,7 @@ class AccommodationControllerListing extends JControllerForm
 
                 $data = array($db->quote($id), $db->quote($date), $db->quote($website), $db->quote($ip));
 
-                // Update the value in the db        
+                // Update the value in the db
                 $query->values(implode(',', $data));
 
                 $db->setQuery($query);
@@ -200,7 +288,7 @@ class AccommodationControllerListing extends JControllerForm
         catch (Exception $e)
         {
 
-            // Log error   
+            // Log error
             throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR', $id, $e->getMessage()), 500);
         }
     }
@@ -218,7 +306,7 @@ class AccommodationControllerListing extends JControllerForm
         $params = JComponentHelper::getParams('com_enquiries');
         $id = $this->input->get('id', '', 'int');
         $unit_id = $this->input->get('unit_id', '', 'int');
-        // Get the itemID of the accommodation component. 
+        // Get the itemID of the accommodation component.
         $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
         $context = "$this->option.enquiry.data";
 
@@ -251,7 +339,7 @@ class AccommodationControllerListing extends JControllerForm
             return false;
         }
 
-        // Validate the data. 
+        // Validate the data.
         // Returns either false or the validated, filtered data.
         $validate = $model->validate($form, $data);
 
@@ -273,7 +361,7 @@ class AccommodationControllerListing extends JControllerForm
                 }
             }
 
-            // Trap any errors 
+            // Trap any errors
             $errors = $app->getMessageQueue();
 
             // Save the data in the session.

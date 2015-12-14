@@ -3,6 +3,13 @@
 defined('_JEXEC') or die('Restricted access');
 
 $app = JFactory::getApplication();
+
+$doc = JDocument::getInstance();
+
+// Include the JDocumentRendererMessage class file
+require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+$render = new JDocumentRendererMessage($doc);
+
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
@@ -13,60 +20,33 @@ $total_payable = $this->booking_urls->FirstTermAmount + $this->booking_urls->Sec
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
 
-$success = 'invar_dump(dex.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
+$success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=enquiry';
 
 ?>
-<div class="container">
-  <div class="row"> 
-    <div class="col-lg-8 col-md-8 col-sm-7"> 
-      <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_SUMMARY') ?>
-      <hr />
-      <dl class="dl-horizontal">
-        <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL') ?></dt>
-        <dd><?php echo $this->booking_urls->data['start_date'] ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_END_DATE_LABEL') ?></dt>
-        <dd><?php echo $this->booking_urls->data['end_date'] ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_REFERENCE') ?></dt>
-        <dd><?php echo $this->booking_urls->BookingNumber ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_DEPOSIT') ?></dt>
-        <dd><?php echo JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_DEPOSIT_AMOUNT', $this->booking_urls->FirstTermAmount) ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_BALANCE') ?></dt>
-        <dd><?php echo JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_BALANCE_AMOUNT', $this->booking_urls->SecondTermAmount, JHtml::_('date', $this->booking_urls->SecondTermDateTime, 'd M Y')) ?></dd>
-        <dt><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_TOTAL_PAYABLE') ?></dt>
-        <dd><?php echo '&euro;' . $total_payable ?></dd>
-      </dl>
-      <FORM action="#" method="post" class="atleisure-booking-form">
-        <fieldset>
-          <legend>
-            <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAYMENT_OPTIONS'); ?>
-          </legend>
-          <?php foreach ($this->booking_urls->PaymentMethods as $key => $option) : ?>
-            <?php if (in_array($option->Method, $accepted_methods)): ?>  
-              <label> 
-                <input name="option" type="radio" value="<?php echo $option->URL ?>" />
-                <?php echo $option->Method ?>
-                <?php echo '&euro;' . $option->Amount; ?>  
-                <?php echo (!empty($option->Costs)) ? '(&euro;' . $option->Costs . ')' : ''; ?> 
-              </label>
-              <br />
-            <?php endif; ?>
-          <?php endforeach; ?>   
-          <hr />
-          <button class="btn btn-primary btn-lg"><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PAY_NOW') ?></button>
-          <INPUT type="hidden" name="urlsuccess" value="<?php echo JRoute::_($success) ?>"/>
-          <INPUT type="hidden" name="urlfailure"value="http://www.frenchconnections.co.uk"/>
-        </fieldset>  
-      </form>
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-5">
-                  <?php echo $this->loadTemplate($owner . '_form'); ?>
 
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <img class="img-responsive" src="<?php echo JURI::getInstance()->toString(array('scheme')) . $this->images[0]->url_thumb; ?>" />
-          <?php echo $this->item->unit_title ?>
-        </div>
-      </div>
+<?php echo $this->loadTemplate('steps');?> 
+
+<div class="container">
+
+  <div class="row"> 
+
+    <div class="col-lg-4 col-md-4 col-sm-5 col-lg-push-8 col-md-push-8 col-sm-push-7"> 
+      <?php echo $this->loadTemplate('summary'); ?>
+      
+
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-7 col-lg-pull-4 col-md-pull-4 col-sm-pull-5">
+      <?php if (count($errors > 0)) : ?>
+
+          <div class="contact-error">
+            <?php echo $render->render($errors); ?>
+          </div>
+
+      <?php endif; ?>
+
+
+      <?php echo $this->loadTemplate($owner . '_payment_form'); ?>
+
     </div>
   </div>
 </div> 

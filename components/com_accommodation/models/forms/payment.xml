@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fieldset name="payment" addrulepath="/components/com_accommodation/models/rules" label="">
+    
+     
+    <field 
+      name="amount"
+      type="integer"
+      class="validate-numeric form-control"
+      maxlength="2"
+      description="COM_ACCOMMODATION_ENQUIRY_ADULTS_DESC"
+      label="COM_ACCOMMODATION_ENQUIRY_ADULTS_LABEL"
+      filter="integer"
+      labelclass="control-label"
+      validate="adults"
+      first="1"
+      last="20"
+      step="1">
+      <option value=""></option>
+    </field>
+     
+  
+        
+  </fieldset>
+  
+  
+</form>

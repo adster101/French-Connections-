@@ -206,7 +206,7 @@ class AccommodationModelListing extends JModelForm
         k.title as changeover_day,
         d.toilets,
         (bathrooms) as bathrooms,
-        (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) AS bedrooms, 
+        (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) AS bedrooms,
         d.single_bedrooms,
         d.double_bedrooms,
         d.triple_bedrooms,
@@ -218,7 +218,7 @@ class AccommodationModelListing extends JModelForm
         d.occupancy,
         d.additional_price_notes,
         d.linen_costs,
-        date_format(b.availability_last_updated_on, "%D %M %Y") as availability_last_updated_on, 
+        date_format(b.availability_last_updated_on, "%D %M %Y") as availability_last_updated_on,
         d.unit_title,
         d.description,
         e.title as city,
@@ -235,8 +235,8 @@ class AccommodationModelListing extends JModelForm
         air.name as airport,
         air.code as airport_code,
         air.id as airport_id,
-        ufc.phone_1, 
-        ufc.phone_2, 
+        ufc.phone_1,
+        ufc.phone_2,
         ufc.phone_3,
         ufc.firstname as firstname,
         ufc.surname as surname,
@@ -275,7 +275,7 @@ class AccommodationModelListing extends JModelForm
                 $query->leftJoin('#__unit_versions d ON (d.unit_id = b.id and d.id = (select max(o.id) from #__unit_versions o where unit_id = b.id))');
             }
 
-            // Join the translations table to pick up any translations 
+            // Join the translations table to pick up any translations
             if ($lang === 'fr-FR')
             {
 
@@ -336,7 +336,7 @@ class AccommodationModelListing extends JModelForm
             }
 
             // Logic is if not a preview and not show_expired then we skip the expiry date
-            // check. Basically, only checkes expiry date for viewing a live property 
+            // check. Basically, only checkes expiry date for viewing a live property
             if (!$this->preview && !$show_expired)
             {
                 $query->where('a.expiry_date >= ' . $this->_db->quote(JFactory::getDate()->calendar('Y-m-d')));
@@ -356,7 +356,7 @@ class AccommodationModelListing extends JModelForm
 
             if (empty($this->item))
             {
-                // This property has expired or is otherwise unavailable.                
+                // This property has expired or is otherwise unavailable.
                 return false;
             }
         }
@@ -378,7 +378,7 @@ class AccommodationModelListing extends JModelForm
     /**
      * Function to get maps items to show on the location map.
      * At present, is only 'places of interest'
-     * 
+     *
      */
     public function getMapItems($lat = '', $lon = '')
     {
@@ -417,9 +417,9 @@ class AccommodationModelListing extends JModelForm
     /**
      * Couple of functions to return the faciliies for unit and property
      * Required 'cos the native union bit in joomla doesn't work.
-     * 
+     *
      * @return type
-     * 
+     *
      */
     public function getUnitFacilities()
     {
@@ -443,9 +443,6 @@ class AccommodationModelListing extends JModelForm
     {
 
         $lang = JFactory::getLanguage()->getTag();
-
-
-
 
         try
         {
@@ -567,7 +564,7 @@ class AccommodationModelListing extends JModelForm
 
     /**
      * Gets a list of related properties based on the property someone has just enquired on.
-     * 
+     *
      * @return boolean
      */
     public function getRelatedProps()
@@ -730,7 +727,7 @@ class AccommodationModelListing extends JModelForm
 
     /*
      * Function to return a list of tariffs for a given property
-     * TO DO - Move the below call to the model 
+     * TO DO - Move the below call to the model
      */
 
     public function getOffers($id = null)
@@ -1051,8 +1048,6 @@ class AccommodationModelListing extends JModelForm
             $rpc->makeCall('CheckAvailabilityV1', $check_availability_params);
             $result = $rpc->getResult("json");
 
-            $result->data = $data;
-
             if ($result->Available == 'No')
             {
                 // Deal with this by returning an error message, mostly means not available
@@ -1062,7 +1057,7 @@ class AccommodationModelListing extends JModelForm
             }
 
             // Must be okay, so set the json as a session variable
-            $app->setUserState('com_accommodation.atleisure.data', $result);
+            $app->setUserState('com_accommodation.enquiry.availability', $result);
 
 
             return true;
@@ -1076,14 +1071,14 @@ class AccommodationModelListing extends JModelForm
 
     /**
      * Function to process and send an enquiry onto an owner...
-     * 
+     *
      * Also need to send an email to the holiday maker as an acknowledgement
-     * 
+     *
      * Filter the message based on the banned text phrases and banned email addresses. This seems futile.
-     * How easy is it to generate a new email address or alter the phrasing. 
-     * More robust would be to require a user account, keep a track of how many email a user is sending in a 
-     * certain timeframe and trap any for manual review above that number. Similar to what happens now. 
-     * 
+     * How easy is it to generate a new email address or alter the phrasing.
+     * More robust would be to require a user account, keep a track of how many email a user is sending in a
+     * certain timeframe and trap any for manual review above that number. Similar to what happens now.
+     *
      * @param array $data
      * @param type $params
      * @return boolean
@@ -1118,7 +1113,7 @@ class AccommodationModelListing extends JModelForm
         // Add enquiries paths
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 
-        // Check the banned email list     
+        // Check the banned email list
         if (in_array($data['guest_email'], $banned_emails))
         {
             $valid = false; // Naughty!
@@ -1132,7 +1127,7 @@ class AccommodationModelListing extends JModelForm
             $data['state'] = -3;
         }
 
-        // Check the number of enquiries from this email address    
+        // Check the number of enquiries from this email address
         if ($this->enquiryCount($data['guest_email']) >= $params->get('enqs_per_day', 10))
         {
             $valid = false; //Naughty!!!
@@ -1146,7 +1141,7 @@ class AccommodationModelListing extends JModelForm
         $data['property_id'] = $id;
         $data['unit_id'] = $unit_id;
 
-        // Override flag to ensure that email will get sent even if not valid. 
+        // Override flag to ensure that email will get sent even if not valid.
         // For example, from enquiry manager admin wants to sent a failed enquiry
         if ($override)
         {
@@ -1167,7 +1162,7 @@ class AccommodationModelListing extends JModelForm
             $item = $this->getItem();
 
             // If the property is set to use invoice details
-            // Override anything set in the property version 
+            // Override anything set in the property version
             if ($item->use_invoice_details)
             {
                 $owner_email = (JDEBUG) ? $params->get('admin_enquiry_email') : $item->email;
@@ -1217,7 +1212,7 @@ class AccommodationModelListing extends JModelForm
             }
 
             // Prepare email body for the holidaymaker email
-            // TO DO - Make the property link not hard coded 
+            // TO DO - Make the property link not hard coded
             $property_link = JUri::base() . 'listing/' . (int) $id . '?unit_id=' . (int) $unit_id;
             $body = JText::sprintf($params->get('holiday_maker_email_enquiry_template'), $firstname, $property_link, $property_link, $car_hire_link, $currency_link, $ferry_link, $shortlist_link);
 
@@ -1239,7 +1234,7 @@ class AccommodationModelListing extends JModelForm
 
                 $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
                 /*
-                 *  if the login return 0, means that login failed, you cant send sms after this 
+                 *  if the login return 0, means that login failed, you cant send sms after this
                  */
                 if (!$sms->login())
                 {
@@ -1247,7 +1242,7 @@ class AccommodationModelListing extends JModelForm
                 }
 
                 // Get minutes between now and midnight
-                // If minutes less than 240 
+                // If minutes less than 240
                 // Schedule for tomorrow at eight
                 // Else schedule for today at eight
                 // Set default timezone so we can work out the correct time now
@@ -1276,7 +1271,7 @@ class AccommodationModelListing extends JModelForm
                 }
 
                 /*
-                 * Send sms using the simple send() call 
+                 * Send sms using the simple send() call
                  */
                 if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send))
                 {
@@ -1291,9 +1286,9 @@ class AccommodationModelListing extends JModelForm
     }
 
     /**
-     * Check through the list of banned phrases and return true if one found 
+     * Check through the list of banned phrases and return true if one found
      * http://stackoverflow.com/questions/6228581/how-to-search-array-of-string-in-another-string-in-php
-     * 
+     *
      * @param type $string
      * @param array $search
      * @param type $caseInsensitive
@@ -1379,7 +1374,7 @@ class AccommodationModelListing extends JModelForm
         $input = $app->input;
 
         $view = $input->getCmd('view');
-        $layout = $input->getCmd('layout');
+        $layout = $input->getCmd('layout', 'default');
 
         if (!$this->getItem())
         {
@@ -1397,13 +1392,41 @@ class AccommodationModelListing extends JModelForm
                 $form->removeField('guest_surname');
                 $form->removeField('guest_email');
                 $form->removeField('guest_phone');
+                $form->removeField('message');
+                $form->setFieldAttribute('end_date', 'required', 'true');
+                $form->setFieldAttribute('adults', 'required', 'true');
+                $form->setFieldAttribute('start_date', 'required', 'true');
             }
-
-
-            $form->removeField('message');
-            $form->setFieldAttribute('adults', 'required', 'true');
-            $form->setFieldAttribute('start_date', 'required', 'true');
-            $form->setFieldAttribute('end_date', 'required', 'true');
+            elseif ($view == 'atleisure' && $layout == 'default')
+            {
+                $form->removeField('message');
+                $form->setFieldAttribute('end_date', 'type', 'hidden');
+                $form->setFieldAttribute('adults', 'type', 'hidden');
+                $form->setFieldAttribute('children', 'type', 'hidden');
+                $form->setFieldAttribute('start_date', 'type', 'hidden');
+                $form->setFieldAttribute('end_date', 'type', 'hidden');
+                $form->setFieldAttribute('guest_phone', 'required', 'true');     
+            }
+            elseif ($view == 'atleisure' && $layout == 'payment')
+            {
+                $form->removeField('message');
+                $form->setFieldAttribute('end_date', 'type', 'hidden');
+                $form->setFieldAttribute('adults', 'type', 'hidden');
+                $form->setFieldAttribute('children', 'type', 'hidden');
+                $form->setFieldAttribute('start_date', 'type', 'hidden');
+                $form->setFieldAttribute('end_date', 'type', 'hidden');
+                $form->setFieldAttribute('guest_phone', 'type', 'hidden');
+                $form->setFieldAttribute('guest_forename', 'type', 'hidden');
+                $form->setFieldAttribute('guest_surname', 'type', 'hidden');
+                $form->setFieldAttribute('guest_email', 'type', 'hidden');
+                $form->setFieldAttribute('guest_phone', 'type', 'hidden');
+                
+                $payment = JForm::getInstance('payment', 'payment');
+                
+                $form->load($payment->getXml(), true);
+                
+                
+            }
         }
 
         parent::preprocessForm($form, $data, $group);
