@@ -17,8 +17,9 @@ class AccommodationViewAtleisure extends JViewLegacy
         $app = JFactory::getApplication();
 
         // TO DO - Set it to redirect to the property page...
-        if (!$app->getUserState('com_accommodation.atleisure.data'))
+        if (!empty($app->getUserState('com_accommodation.atleisure.availability')))
         {
+           
             $app->redirect('/');
         }
 

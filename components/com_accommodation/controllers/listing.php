@@ -176,16 +176,18 @@ class AccommodationControllerListing extends JControllerForm
             return false;
         }
 
-        $app->setUserState('com_accommodation.enquiry.data', $data);
+        $app->setUserState('com_accommodation.enquiry.data', $validate);
 
-        $redirect = $this->input->post->get('next', '','string');
-        
-        if (!$redirect){
-        $this->setRedirect(
-                JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisure', false));
+        $redirect = $this->input->post->get('next', '', 'string');
 
-        } else {
-           $this->setRedirect($redirect);
+        if (!$redirect)
+        {
+            $this->setRedirect(
+                    JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisure', false));
+        }
+        else
+        {
+            $this->setRedirect($redirect);
         }
         return true;
     }
