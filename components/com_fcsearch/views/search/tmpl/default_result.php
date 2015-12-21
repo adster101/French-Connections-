@@ -30,7 +30,6 @@ $description = JHTml::_('string.truncate', $this->result->description, 50, true,
 $title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
 $uri = JUri::getInstance();
 $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency);
-
 ?>
 
 <div class="search-result">
@@ -48,8 +47,8 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
         <?php if ($this->result->price) : ?>
             <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead">
-              <?php //echo '&pound;' . $price['GBP'] ?>
-              <?php echo round($this->result->price); ?>
+              <?php //echo '&pound;' . $price['GBP']   ?>
+              <?php echo '&pound;' . round($this->result->price); ?>
             </span>
             <span class="rate-per">
               <?php echo $this->result->tariff_based_on; ?>
@@ -100,14 +99,17 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
         </div>
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
-            <a href="<?php echo $route ?>" class="btn btn-primary">
-              <?php echo ($this->result->is_bookable) ? JText::_('COM_FCSEARCH_BOOK_NOW') : JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
+            <a href="<?php echo $route ?>" class="btn btn-<?php echo ($this->property_view_cta_colour) ? $this->property_view_cta_colour : 'primary' ?>">
+              <?php if ($this->property_view_cta_text) : ?>
+                  <?php echo JText::_('COM_FCSEARCH_BOOK_NOW_' . ucwords($this->property_view_cta_text)) ?>
+              <?php else : ?>
+                  <?php echo ($this->result->is_bookable) ? JText::_('COM_FCSEARCH_BOOK_NOW') : JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
+              <?php endif; ?>
             </a>
           </p>
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
                 <?php echo $shortlist->render($displayData); ?>
-
             <?php else : ?>
                 <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                   <i class="glyphicon glyphicon-heart"></i>
@@ -122,6 +124,11 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
                 </a>
               </p>
           <?php endif; ?> 
+          <?php if ($this->result->is_bookable) : ?>
+              <p>
+                <span class="glyphicon glyphicon-credit-card lead pull-left"></span>&nbsp;Book online securely
+              </p>
+          <?php endif; ?>
 
         </div>
       </div>
