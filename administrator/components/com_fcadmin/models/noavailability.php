@@ -87,7 +87,7 @@ class FcadminModelNoavailability extends JModelList
     // ignore users set in constructor taken from component parameters.
     if (!empty($this->ignore_users))
     {
-      $query->where(implode(',', $this->ignore_users));
+      $query->where('a.created_by not in (' . implode(',', $this->ignore_users) . ')');
     }
 
     $query->where('a.expiry_date >=' . $db->quote(JHtml::_('date', 'now', 'Y-m-d')));
