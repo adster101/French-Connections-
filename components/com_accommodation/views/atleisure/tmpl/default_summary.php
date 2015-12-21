@@ -3,17 +3,17 @@
 defined('_JEXEC') or die('Restricted access');
 
 $app = JFactory::getApplication();
-$input = $app->input;
-
-$start_date = $input->get('start_date', '');
-$end_date = $input->get('end_date', '');
-
-$doc = JDocument::getInstance();
-
-
 
 $availability = $app->getUserState('com_accommodation.enquiry.availability');
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
+
+$start_dateObj = new DateTime(JHtml::_('date', $enquiry_data['start_date'], 'Y-m-d'));
+
+$now = new DateTime();
+
+$interval = $start_dateObj->diff($now);
+$days_to_arrival = $interval->format('%a');
+$balance_due_date = $start_dateObj->add('+42 days');
 
 ?>
 <div class="panel panel-default">
@@ -38,7 +38,12 @@ $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
       <dt>Total:</dt>
       <dd><?php echo '&pound;' . $availability->CorrectPrice; ?></dd>
       <dt>To pay now:</dt>
-      <dd><?php echo '&pound;' . round($availability->CorrectPrice * 0.3); ?></dd>      
+      <?php if ($days_to_arrival < 42) : ?>
+          <dd><?php echo '&pound;' . round($availability->CorrectPrice); ?></dd>
+      <?php else : ?>
+          <dd><?php echo '&pound;' . round($availability->CorrectPrice * 0.3); ?></dd> 
+          <dt>Payable on or before - <?php echo $balance_due_date ?></dt>
+      <?php endif; ?>
     </dl> 
     <p>To pay on arrival</p>
     <?php echo $this->item->additional_price_notes ?>

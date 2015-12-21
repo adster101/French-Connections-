@@ -11,6 +11,8 @@ require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php'
 $render = new JDocumentRendererMessage($doc);
 
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
+$availability = $app->getUserState('com_accommodation.enquiry.availability');
+
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');
 

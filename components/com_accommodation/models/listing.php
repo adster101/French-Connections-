@@ -1059,7 +1059,6 @@ class AccommodationModelListing extends JModelForm
             // Must be okay, so set the json as a session variable
             $app->setUserState('com_accommodation.enquiry.availability', $result);
 
-
             return true;
         }
         catch (Exception $e)
@@ -1405,7 +1404,7 @@ class AccommodationModelListing extends JModelForm
                 $form->setFieldAttribute('children', 'type', 'hidden');
                 $form->setFieldAttribute('start_date', 'type', 'hidden');
                 $form->setFieldAttribute('end_date', 'type', 'hidden');
-                $form->setFieldAttribute('guest_phone', 'required', 'true');     
+                $form->setFieldAttribute('guest_phone', 'required', 'true');
             }
             elseif ($view == 'atleisure' && $layout == 'payment')
             {
@@ -1420,12 +1419,10 @@ class AccommodationModelListing extends JModelForm
                 $form->setFieldAttribute('guest_surname', 'type', 'hidden');
                 $form->setFieldAttribute('guest_email', 'type', 'hidden');
                 $form->setFieldAttribute('guest_phone', 'type', 'hidden');
-                
+
                 $payment = JForm::getInstance('payment', 'payment');
-                
+
                 $form->load($payment->getXml(), true);
-                
-                
             }
         }
 
