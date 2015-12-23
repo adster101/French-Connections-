@@ -276,7 +276,8 @@ class FcSearchModelSearch extends JModelList
             $min_price = $this->getState('list.min_price', '');
             $max_price = $this->getState('list.max_price', '');
 
-            $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+            // This method didn't work correctly - 837 - 23/12/2015
+            // $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
             // Create a new query object.
             $db = $this->getDbo();
@@ -311,9 +312,8 @@ class FcSearchModelSearch extends JModelList
                 i.title as tariff_based_on,
                 e.image_file_name as thumbnail,
                 e.url_thumb,
-                k.title as changeover_day,'
-                    . '(' . $priceStr . ') as price';
-
+                k.title as changeover_day,
+                b.from_price as price';
 
             // Let's do this!
             $query->select($select);
@@ -491,10 +491,13 @@ class FcSearchModelSearch extends JModelList
             $query->where('c.review = 0');
             $query->where('d.review = 0');
 
+            /* Remove price filter on date searches
+             * Ticket 837 - 23/12/2015
             if ($arrival && $departure)
             {
                 $query->where('(' . $priceStr . ') is not null');
             }
+             */
 
             if ($sort_column == 'coast')
             {
@@ -760,13 +763,13 @@ class FcSearchModelSearch extends JModelList
             $query->where('e.id is not null');
             $query->group('d.' . (string) $type);
 
-
+            /* Failed code for 837 - 23/12/2015
             if ($arrival && $departure)
             {
                 $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
                 $query->where('(' . $priceStr . ') is not null');
-            }
+            } */
 
             // Get the options.
             $db->setQuery($query);
@@ -922,12 +925,13 @@ class FcSearchModelSearch extends JModelList
         $query->where('d.review = 0');
         $query->where('d.unit_id is not null');
 
+        /* Failed code fix for 837
         if ($arrival && $departure)
         {
             $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
             $query->where('(' . $priceStr . ') is not null');
-        }
+        }*/
 
         if ($this->getState('search.level') == 5)
         { // City level
@@ -1090,12 +1094,14 @@ class FcSearchModelSearch extends JModelList
             $query->where('d.review = 0');
             $query->group('e.attribute_id');
 
+            /* 
+             * Failed code for 837 - 23/12/2015 
             if ($arrival && $departure)
             {
                 $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
                 $query->where('(' . $priceStr . ') is not null');
-            }
+            }*/
 
             $db->setQuery($query);
 
@@ -1912,7 +1918,11 @@ class FcSearchModelSearch extends JModelList
     public function getFromPrice($arrival, $departure, $min, $max, $EUR = 0.7032)
     {
 
-        $db = JFactory::getDbo();
+        $queryStr .= 'b.from_price';
+        
+        return $queryStr;
+                
+        /*$db = JFactory::getDbo();
 
         $query = $db->getQuery(true);
 
@@ -1950,7 +1960,7 @@ class FcSearchModelSearch extends JModelList
             $queryStr .= 'b.from_price';
         }
 
-        return $queryStr;
+        return $queryStr;*/
     }
 
 }
