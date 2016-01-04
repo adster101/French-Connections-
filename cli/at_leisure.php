@@ -307,8 +307,8 @@ class AtLeisure extends Import
 
         foreach ($acco_objs as $acco_obj)
         {
-            // Get only the FR houses
-            if ($acco_obj->Country == 'FR')
+            // Get only the FR houses and the XX- test houses
+            if ($acco_obj->Country == 'FR' || (strpos($acco_obj->HouseCode, 'XX') !== false))
             {
                 array_push($props, $acco_obj->HouseCode);
             }

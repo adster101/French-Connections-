@@ -81,6 +81,8 @@ class AccommodationModelListing extends JModelForm
         // Get the form.
         $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
 
+
+
         if (empty($form))
         {
             return false;
@@ -97,6 +99,7 @@ class AccommodationModelListing extends JModelForm
      */
     protected function loadFormData()
     {
+
         // Check the session for previously entered form data.
         $data = JFactory::getApplication()->getUserState('com_accommodation.enquiry.data', array());
 
@@ -948,6 +951,8 @@ class AccommodationModelListing extends JModelForm
         $arrival_date = JHtml::_('date', $data['start_date'], 'Y-m-d');
         $departure_date = JHtml::_('date', $data['end_date'], 'Y-m-d');
 
+        $days_to_booking = $this->getDaysToBooking($arrival_date);
+
         // First up we have to check the price for this period...
         $check_availability_params = array(
             "WebpartnerCode" => "glynis",
@@ -975,21 +980,17 @@ class AccommodationModelListing extends JModelForm
             "CustomerTelephone1Country" => "GB",
             "CustomerTelephone1Number" => $data['guest_phone'],
             "CustomerEmail" => $data['guest_email'],
-            "CustomerLanguage" => "EN",
-            "WebsiteRentPrice" => 421
+            "CustomerLanguage" => "EN"
         );
 
         try
         {
 
             $rpc->makeCall('CheckAvailabilityV1', $check_availability_params);
+
             $result = $rpc->getResult("json");
 
-            if ($result->Available == 'Yes')
-            {
-                $booking_params["WebsiteRentPrice"] = $result->CorrectPrice;
-            }
-            else
+            if ($result->Available == 'No')
             {
                 // Deal with this by returning an error message, mostly means not available
                 $message = "COM_ACCOMMODATION_AT_LEISURE_DATES_UNAVAILABLE";
@@ -997,9 +998,22 @@ class AccommodationModelListing extends JModelForm
                 return false;
             }
 
+            // Determine the price to pay depending on when the booking starts
+            if ($days_to_booking < 42)
+            {
+                $booking_params["WebsiteRentPrice"] = $result->CorrectPrice;
+            }
+            else
+            {
+
+                $booking_params["WebsiteRentPrice"] = round($result->CorrectPrice * 0.3, 2);
+            }
+
+
+
             //$rpc->makeCall('PlaceBookingV1', $booking_params);
 
-            $result = $rpc->getResult("json");
+            $rpc->getResult("json");
 
             $result->data = $data;
 
@@ -1405,6 +1419,11 @@ class AccommodationModelListing extends JModelForm
                 $form->setFieldAttribute('start_date', 'type', 'hidden');
                 $form->setFieldAttribute('end_date', 'type', 'hidden');
                 $form->setFieldAttribute('guest_phone', 'required', 'true');
+                $payment = JForm::getInstance('tos', 'tos');
+
+
+
+                $form->load($payment->getXml(), true);
             }
             elseif ($view == 'atleisure' && $layout == 'payment')
             {
@@ -1422,11 +1441,35 @@ class AccommodationModelListing extends JModelForm
 
                 $payment = JForm::getInstance('payment', 'payment');
 
+
+
                 $form->load($payment->getXml(), true);
             }
         }
 
         parent::preprocessForm($form, $data, $group);
+    }
+
+    public function getDaysToBooking()
+    {
+
+        $app = JFactory::getApplication();
+
+        $enquiry_data = $app->getUserState('com_accommodation.enquiry.data', '');
+
+        if (!$enquiry_data)
+        {
+            return false;
+        }
+
+        $start_dateObj = new DateTime(JHtml::_('date', $enquiry_data['start_date'], 'Y-m-d'));
+
+        $now = new DateTime();
+
+        $interval = $start_dateObj->diff($now);
+        $days_to_arrival = $interval->format('%a');
+
+        return $days_to_arrival;
     }
 
 }

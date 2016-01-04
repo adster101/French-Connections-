@@ -70,8 +70,13 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
           <?php echo $this->form->getInput('guest_phone'); ?>
         </div>
       </div>
-      
+
     </div>
+    <hr />
+    <?php foreach ($this->form->getFieldset('tos') as $field): ?>
+        <?php echo $field->label; ?>
+        <?php echo $field->input; ?>
+    <?php endforeach; ?>
 
     <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
         <?php if ($field->hidden): ?>

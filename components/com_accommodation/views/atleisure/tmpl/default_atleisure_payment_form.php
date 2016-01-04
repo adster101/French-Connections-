@@ -41,34 +41,33 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
       <?php echo $this->escape($this->document->title) ?>
     </legend>
 
+    <div class="alert alert-info">
+      <p>
+        <span class="glyphicon glyphicon-lock"></span>
+        Your payment information is encrypted for secure processing
+      </p>
+    </div>
+
     <div class="row form-group">
+
       <div class="col-lg-6">
-        <div class="stacked">
-          <?php echo $this->form->getLabel('amount'); ?>
-          <?php echo $this->form->getInput('amount'); ?>
-        </div>
+        <?php echo $this->form->getLabel('CardNumber'); ?>
+        <?php echo $this->form->getInput('CardNumber'); ?>
       </div>
       <div class="col-lg-6">
-        <div class="stacked">
-          <?php echo $this->form->getLabel('creditcard'); ?>
-          <?php echo $this->form->getInput('creditcard'); ?>
-        </div>
+        <?php echo $this->form->getLabel('CardholderName'); ?>
+        <?php echo $this->form->getInput('CardholderName'); ?>
       </div>
     </div>
     <div class="row form-group">
       <div class="col-lg-6">
-        <div class="stacked">
-          <?php echo $this->form->getLabel('guest_email'); ?>
-          <?php echo $this->form->getInput('guest_email'); ?>
-        </div>
+        <?php echo $this->form->getLabel('ExpiryDate'); ?>
+        <?php echo $this->form->getInput('ExpiryDate'); ?>
       </div>
       <div class="col-lg-6">
-        <div class="stacked">
-          <?php echo $this->form->getLabel('guest_phone'); ?>
-          <?php echo $this->form->getInput('guest_phone'); ?>
-        </div>
+        <?php echo $this->form->getLabel('CVC'); ?>
+        <?php echo $this->form->getInput('CVC'); ?>
       </div>
-      
     </div>
 
     <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
@@ -81,10 +80,10 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
   <button type="submit" class="btn btn-danger btn-block" id="enquiry">
     <span class="glyphicon glyphicon-arrow-right"></span>
 
-    <?php echo JText::_('COM_ACCOMMODATION_BOOKING_YOUR_DETAILS_PROCEED'); ?>
+    <?php echo JText::_('COM_ACCOMMODATION_BOOKING_SUBMIT_PAYMENT'); ?>
   </button>
   <input type="hidden" name="option" value="com_accommodation" />
-  <input type="hidden" name="task" value="listing.getatleisurebookingsummary" />
-  <input type="hidden" name="next" value="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=atleisure&layout=payment'); ?>" />
+  <input type="hidden" name="task" value="listing.processatleisurebooking" />
+  <input type="hidden" name="next" value="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=atleisure&layout=confirmation'); ?>" />
 
 </form>

@@ -52,6 +52,9 @@ class AccommodationViewAtleisure extends JViewLegacy
             $app->getPathWay()->setPathway($this->crumbs);
         }
 
+        // Get the number of days until the booking
+        $this->days_to_arrival = $this->get('DaysToBooking');
+        
         // Set the document
         $this->setDocument();
 

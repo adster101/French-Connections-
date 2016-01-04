@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
 class AccommodationControllerListing extends JControllerForm
 {
 
-    public function atleisurepayment()
+    public function processAtLeisureBooking()
     {
         // Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
@@ -82,7 +82,7 @@ class AccommodationControllerListing extends JControllerForm
         }
 
         // Write the enquiry into the enquiry table...
-        if (!$model->getAtLeisureBookingSummary($validate, $id, $unit_id))
+        if (!$model->processAtLeisureBooking($validate, $id, $unit_id))
         {
             // Trap any errors
             $errors = $app->getMessageQueue();
