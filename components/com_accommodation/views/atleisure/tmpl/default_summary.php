@@ -25,7 +25,7 @@ $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
       <p>          
         <?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_START_DATE_LABEL') ?>
         <span> 
-          <?php echo $enquiry_data['start_date'] ?>
+          <?php echo JHtml::_('date', $enquiry_data['start_date'], 'd M Y') ?>
         </span>
       </p>
       <p>

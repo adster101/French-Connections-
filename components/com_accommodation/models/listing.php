@@ -998,28 +998,16 @@ class AccommodationModelListing extends JModelForm
                 return false;
             }
 
-            // Determine the price to pay depending on when the booking starts
-            if ($days_to_booking < 42)
-            {
-                $booking_params["WebsiteRentPrice"] = $result->CorrectPrice;
-            }
-            else
-            {
+            // Set the price we expect the rental to be
+            $booking_params["WebsiteRentPrice"] = $result->CorrectPrice;
+            
+            // Place the booking
+            $rpc->makeCall('PlaceBookingV1', $booking_params);
 
-                $booking_params["WebsiteRentPrice"] = round($result->CorrectPrice * 0.3, 2);
-            }
-
-
-
-            //$rpc->makeCall('PlaceBookingV1', $booking_params);
-
-            $rpc->getResult("json");
-
-            $result->data = $data;
+            $booking_info = $rpc->getResult("json");
 
             // Must be okay, so set the json as a session variable
-            $app->setUserState('com_accommodation.atleisure.data', $result);
-
+            $app->setUserState('com_accommodation.enquiry.booking_info', $booking_info);
 
             return true;
         }

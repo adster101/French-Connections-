@@ -70,7 +70,6 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
           <?php echo $this->form->getInput('guest_phone'); ?>
         </div>
       </div>
-
     </div>
     <hr />
     <?php foreach ($this->form->getFieldset('tos') as $field): ?>
@@ -91,7 +90,6 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
     <?php echo JText::_('COM_ACCOMMODATION_BOOKING_YOUR_DETAILS_PROCEED'); ?>
   </button>
   <input type="hidden" name="option" value="com_accommodation" />
-  <input type="hidden" name="task" value="listing.getatleisurebookingsummary" />
+  <input type="hidden" name="task" value="listing.processatleisurebooking" />
   <input type="hidden" name="next" value="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . '&view=atleisure&layout=payment'); ?>" />
-
 </form>

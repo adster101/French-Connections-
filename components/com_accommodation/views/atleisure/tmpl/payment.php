@@ -12,6 +12,7 @@ $render = new JDocumentRendererMessage($doc);
 
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
 $availability = $app->getUserState('com_accommodation.enquiry.availability');
+$booking_info = $app->getUserState('com_accommodation.enquiry.booking_info');
 
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_accommodation'));
 JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/helpers/html/general.php');

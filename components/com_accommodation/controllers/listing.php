@@ -95,12 +95,27 @@ class AccommodationControllerListing extends JControllerForm
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
+
+        $app->setUserState('com_accommodation.enquiry.data', $validate);
+
+        $redirect = $this->input->post->get('next', '', 'string');
+
+        if (!$redirect)
+        {
+            $this->setRedirect(
+                    JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id . '&view=atleisure', false));
+        }
+        else
+        {
+            $this->setRedirect($redirect);
+        }
+        return true;
     }
 
     public function getatleisurebookingsummary()
     {
 
-        // Check for request forgeries.
+// Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         $app = JFactory::getApplication();
@@ -111,15 +126,15 @@ class AccommodationControllerListing extends JControllerForm
         $id = $this->input->get('id', '', 'int');
         $unit_id = $this->input->get('unit_id', '', 'int');
 
-        // Get the itemID of the accommodation component.
+// Get the itemID of the accommodation component.
         $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 
-        // Get the data from POST
+// Get the data from POST
         $data = $this->input->post->get('jform', array(), 'array');
 
         $model->getItem();
 
-        // Validate the posted data.
+// Validate the posted data.
         $form = $model->getForm();
         if (!$form)
         {
@@ -127,16 +142,16 @@ class AccommodationControllerListing extends JControllerForm
             return false;
         }
 
-        // Validate the data.
-        // Returns either false or the validated, filtered data.
+// Validate the data.
+// Returns either false or the validated, filtered data.
         $validate = $model->validate($form, $data);
 
-        // TO DO - Possibly better to move save from model to here?
+// TO DO - Possibly better to move save from model to here?
         if ($validate === false)
         {
-            // Get the validation messages.
+// Get the validation messages.
             $errors = $model->getErrors();
-            // Push up to five validation messages out to the user.
+// Push up to five validation messages out to the user.
             for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
             {
                 if ($errors[$i] instanceof Exception)
@@ -149,29 +164,29 @@ class AccommodationControllerListing extends JControllerForm
                 }
             }
 
-            // Trap any errors
+// Trap any errors
             $errors = $app->getMessageQueue();
 
-            // Save the data in the session.
+// Save the data in the session.
             $app->setUserState('com_accommodation.enquiry.data', $data);
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
-            // Redirect back to the contact form.
+// Redirect back to the contact form.
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
 
-        // Write the enquiry into the enquiry table...
+// Write the enquiry into the enquiry table...
         if (!$model->getAtLeisureBookingSummary($validate, $id, $unit_id))
         {
-            // Trap any errors
+// Trap any errors
             $errors = $app->getMessageQueue();
 
-            // Save the data in the session.
+// Save the data in the session.
             $app->setUserState('com_accommodation.enquiry.data', $data);
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
-            // Redirect back to the contact form.
+// Redirect back to the contact form.
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
@@ -200,10 +215,10 @@ class AccommodationControllerListing extends JControllerForm
     public function saveNotes($notes = array())
     {
 
-        // Add the tables to the include path
+// Add the tables to the include path
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
-        // Get an instance of the note table
+// Get an instance of the note table
         $table = JTable::getInstance('Note', 'RentalTable');
 
         foreach ($notes as $note)
@@ -231,14 +246,14 @@ class AccommodationControllerListing extends JControllerForm
 
     public function viewsite()
     {
-        // Check for request forgeries.
+// Check for request forgeries.
         JSession::checkToken('GET') or jexit(JText::_('JINVALID_TOKEN'));
 
         $stub = $this->input->get('id', '', 'int');
         $ip = $_SERVER['REMOTE_ADDR'];
         $id = (int) $stub;
 
-        // Prepare a db query so we can get the website address
+// Prepare a db query so we can get the website address
         $db = JFactory::getDbo();
 
         $query = $db->getQuery(true);
@@ -290,7 +305,7 @@ class AccommodationControllerListing extends JControllerForm
         catch (Exception $e)
         {
 
-            // Log error
+// Log error
             throw new Exception(JText::sprintf('COM_ACCOMMODATION_ERROR_FETCHING_WEBSITE_DETAILS_FOR', $id, $e->getMessage()), 500);
         }
     }
@@ -298,7 +313,7 @@ class AccommodationControllerListing extends JControllerForm
     public function enquiry()
     {
 
-        // Check for request forgeries.
+// Check for request forgeries.
         JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
         $app = JFactory::getApplication();
@@ -308,15 +323,15 @@ class AccommodationControllerListing extends JControllerForm
         $params = JComponentHelper::getParams('com_enquiries');
         $id = $this->input->get('id', '', 'int');
         $unit_id = $this->input->get('unit_id', '', 'int');
-        // Get the itemID of the accommodation component.
+// Get the itemID of the accommodation component.
         $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
         $context = "$this->option.enquiry.data";
 
-        // Get the data from POST
+// Get the data from POST
         $data = $this->input->post->get('jform', array(), 'array');
 
-        // Get the property details we are adding an enquiry for.
-        // Check for a valid session cookie
+// Get the property details we are adding an enquiry for.
+// Check for a valid session cookie
         if ($params->get('validate_session', 0))
         {
             if (JFactory::getSession()->getState() != 'active')
@@ -333,7 +348,7 @@ class AccommodationControllerListing extends JControllerForm
             }
         }
 
-        // Validate the posted data.
+// Validate the posted data.
         $form = $model->getForm();
         if (!$form)
         {
@@ -341,16 +356,16 @@ class AccommodationControllerListing extends JControllerForm
             return false;
         }
 
-        // Validate the data.
-        // Returns either false or the validated, filtered data.
+// Validate the data.
+// Returns either false or the validated, filtered data.
         $validate = $model->validate($form, $data);
 
-        // TO DO - Possibly better to move save from model to here?
+// TO DO - Possibly better to move save from model to here?
         if ($validate === false)
         {
-            // Get the validation messages.
+// Get the validation messages.
             $errors = $model->getErrors();
-            // Push up to five validation messages out to the user.
+// Push up to five validation messages out to the user.
             for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
             {
                 if ($errors[$i] instanceof Exception)
@@ -363,40 +378,40 @@ class AccommodationControllerListing extends JControllerForm
                 }
             }
 
-            // Trap any errors
+// Trap any errors
             $errors = $app->getMessageQueue();
 
-            // Save the data in the session.
+// Save the data in the session.
             $app->setUserState('com_accommodation.enquiry.data', $data);
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
-            // Redirect back to the contact form.
+// Redirect back to the contact form.
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
 
-        // Write the enquiry into the enquiry table...
+// Write the enquiry into the enquiry table...
         if (!$model->processEnquiry($validate, $params, $id, $unit_id))
         {
 
-            // Set the message
+// Set the message
             $msg = JText::_('COM_ENQUIRY_PROBLEM_SENDING_ENQUIRY');
 
-            // Save the data in the session.
+// Save the data in the session.
             $app->setUserState('com_accommodation.enquiry.data', $data);
 
-            // Redirect back to the contact form.
+// Redirect back to the contact form.
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false), $msg);
 
             return false;
         }
 
-        // Save the user form data into the session
+// Save the user form data into the session
         $app->setUserState($context, $validate);
 
-        // Flush the data from the session
-        // $app->setUserState('com_accommodation.enquiry.data', null);
-        // Redirect if it is set in the parameters, otherwise redirect back to where we came from
+// Flush the data from the session
+// $app->setUserState('com_accommodation.enquiry.data', null);
+// Redirect if it is set in the parameters, otherwise redirect back to where we came from
         if ($Itemid)
         {
             $this->setRedirect(
