@@ -151,6 +151,7 @@ jQuery(document).ready(function () {
     });
   }
 
+if (jQuery('.start_date.date').length) {
   // Set a temporary date object
   var nowTemp = new Date();
 
@@ -204,7 +205,7 @@ jQuery(document).ready(function () {
     end.datepicker('update', date);
   })
 
-
+}
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
   if (jQuery('#map').length) {

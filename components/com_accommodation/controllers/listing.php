@@ -146,12 +146,12 @@ class AccommodationControllerListing extends JControllerForm
 // Returns either false or the validated, filtered data.
         $validate = $model->validate($form, $data);
 
-// TO DO - Possibly better to move save from model to here?
+        // TO DO - Possibly better to move save from model to here?
         if ($validate === false)
         {
-// Get the validation messages.
+            // Get the validation messages.
             $errors = $model->getErrors();
-// Push up to five validation messages out to the user.
+            // Push up to five validation messages out to the user.
             for ($i = 0, $n = count($errors); $i < $n && $i < 5; $i++)
             {
                 if ($errors[$i] instanceof Exception)
@@ -164,29 +164,29 @@ class AccommodationControllerListing extends JControllerForm
                 }
             }
 
-// Trap any errors
+            // Trap any errors
             $errors = $app->getMessageQueue();
 
-// Save the data in the session.
+            // Save the data in the session.
             $app->setUserState('com_accommodation.enquiry.data', $data);
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
-// Redirect back to the contact form.
+            // Redirect back to the contact form.
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }
 
-// Write the enquiry into the enquiry table...
+        // Write the enquiry into the enquiry table...
         if (!$model->getAtLeisureBookingSummary($validate, $id, $unit_id))
         {
-// Trap any errors
+            // Trap any errors
             $errors = $app->getMessageQueue();
 
-// Save the data in the session.
+            // Save the data in the session.
             $app->setUserState('com_accommodation.enquiry.data', $data);
             $app->setUserState('com_accommodation.enquiry.messages', $errors);
 
-// Redirect back to the contact form.
+            // Redirect back to the contact form.
             $this->setRedirect(JRoute::_('index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $id . '&unit_id=' . (int) $unit_id, false));
             return false;
         }

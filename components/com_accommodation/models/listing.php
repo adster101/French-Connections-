@@ -1000,14 +1000,16 @@ class AccommodationModelListing extends JModelForm
 
             // Set the price we expect the rental to be
             $booking_params["WebsiteRentPrice"] = $result->CorrectPrice;
-            
+
             // Place the booking
             $rpc->makeCall('PlaceBookingV1', $booking_params);
 
-            $booking_info = $rpc->getResult("json");
+            $booking_info_raw = $rpc->getResult("json");
+
+            //$booking_info = $this->processBookingInfo($booking_info_raw);
 
             // Must be okay, so set the json as a session variable
-            $app->setUserState('com_accommodation.enquiry.booking_info', $booking_info);
+            $app->setUserState('com_accommodation.enquiry.booking_info', $booking_info_raw);
 
             return true;
         }
@@ -1408,28 +1410,6 @@ class AccommodationModelListing extends JModelForm
                 $form->setFieldAttribute('end_date', 'type', 'hidden');
                 $form->setFieldAttribute('guest_phone', 'required', 'true');
                 $payment = JForm::getInstance('tos', 'tos');
-
-
-
-                $form->load($payment->getXml(), true);
-            }
-            elseif ($view == 'atleisure' && $layout == 'payment')
-            {
-                $form->removeField('message');
-                $form->setFieldAttribute('end_date', 'type', 'hidden');
-                $form->setFieldAttribute('adults', 'type', 'hidden');
-                $form->setFieldAttribute('children', 'type', 'hidden');
-                $form->setFieldAttribute('start_date', 'type', 'hidden');
-                $form->setFieldAttribute('end_date', 'type', 'hidden');
-                $form->setFieldAttribute('guest_phone', 'type', 'hidden');
-                $form->setFieldAttribute('guest_forename', 'type', 'hidden');
-                $form->setFieldAttribute('guest_surname', 'type', 'hidden');
-                $form->setFieldAttribute('guest_email', 'type', 'hidden');
-                $form->setFieldAttribute('guest_phone', 'type', 'hidden');
-
-                $payment = JForm::getInstance('payment', 'payment');
-
-
 
                 $form->load($payment->getXml(), true);
             }

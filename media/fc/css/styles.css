@@ -7130,6 +7130,247 @@ A/B testing styles for new advertise with us page
 .payment-summary > p span {
   float: right;
 }
+.payment-btn-group div {
+  height: 134px;
+  font-size: 16px;
+  text-align: center;
+  margin-left: -1px;
+  background-color: #fff;
+  border: 1px solid #c8c8c8;
+  border-bottom-width: 3px;
+  margin-bottom: 20px;
+}
+@media (min-width: 768px) {
+  .payment-btn-group div:first-child {
+    border-radius: 6px 0 0 6px;
+  }
+  .payment-btn-group div:last-child {
+    border-radius: 0 6px 6px 0;
+  }
+}
+.payment-btn-group div:hover {
+  background-color: #f6f6f6;
+  cursor: pointer;
+}
+.payment-btn-group .selected {
+  position: relative;
+  background-color: #DFF0DE!important;
+  color: #000;
+  height: 133px!important;
+  border-top-width: 4px;
+  border-bottom-width: 1px!important;
+  border-color: #2B9B1F!important;
+}
+.payment-btn-group .selected:hover {
+  cursor: default;
+}
+#select-amount .selected .amount {
+  padding-top: 27px!important;
+}
+#select-amount div .amount {
+  display: block;
+  margin-left: -10px;
+  padding-top: 30px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #333;
+}
+@media (max-width: 450px) {
+  #select-amount div .amount {
+    font-size: 21px;
+  }
+}
+#select-amount div.selected .amount {
+  color: #000;
+}
+#select-amount div.selected .amount .currency {
+  color: #2B9B1F;
+}
+#select-amount div .label {
+  display: block;
+  padding-top: 30px;
+}
+#total-amount .amount {
+  display: block;
+  padding-top: 30px;
+  font-size: 30px;
+  font-weight: 600;
+}
+#select-amount div .label {
+  display: block;
+  padding-top: 30px;
+  color: black;
+}
+/*** Paymentsprite ***/
+.payment-sprite {
+  display: inline-block;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-image: url(/images/general/payment-methods.png);
+}
+.icn-ideal {
+  margin-top: 22px;
+  width: 70px;
+  height: 60px;
+  background-position: 0 -499px;
+}
+.icn-mrcash {
+  margin-top: 9px;
+  width: 112px;
+  height: 73px;
+  background-position: 0 -132px;
+}
+.icn-paypal {
+  margin-top: 49px;
+  width: 120px;
+  height: 32px;
+  background-position: 0 -98px;
+}
+.icn-elv {
+  margin-top: 16px;
+  width: 75px;
+  height: 66px;
+  background-position: 0 -431px;
+}
+.icn-banktransfer {
+  margin-top: 35px;
+  width: 128px;
+  height: 47px;
+  background-position: 0 0;
+}
+.icn-cheque {
+  margin-top: 29px;
+  width: 95px;
+  height: 53px;
+  background-position: 0 -207px;
+}
+.icn-creditcard {
+  margin-top: 27px;
+  width: 91px;
+  height: 55px;
+  background-position: 0 -317px;
+}
+.payment-method .label {
+  display: block;
+  margin-top: 15px;
+  color: black;
+}
+/*** /Paymentsprite ***/
+/*** Sidebar ***/
+#stay {
+  background-color: #fff;
+  font-size: 13px;
+  border: 1px solid #dadada;
+  border-radius: 6px;
+  padding: 12px;
+}
+@media (min-width: 992px) {
+  #stay {
+    width: 224px;
+  }
+}
+#stay img {
+  margin-bottom: 5px;
+  border-radius: 4px;
+}
+#stay h3 {
+  margin-bottom: 5px;
+}
+#stay #location {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+#stay .staydata strong {
+  display: block;
+  margin-top: 15px;
+}
+#stay .staydata span {
+  display: block;
+  margin-bottom: 3px;
+}
+/*** /Sidebar ***/
+#pay-now {
+  margin-top: 60px;
+}
+.alignc {
+  text-align: center;
+}
+.butn,
+.butn2,
+.butn3 {
+  display: inline-block;
+  zoom: 1;
+  overflow: hidden;
+  vertical-align: top;
+  text-decoration: none!important;
+}
+.butn {
+  background-color: #299A21;
+  color: #ffffff!important;
+  font-weight: 600;
+  border-bottom-style: solid;
+  border-bottom-color: #166A14;
+}
+.butn:hover {
+  background-color: #21791B;
+  border-bottom-color: #0F400E;
+}
+.butn-large {
+  line-height: 28px;
+  padding: 10px 20px;
+  font-size: 20px;
+  border-radius: 5px;
+  border-bottom-width: 4px;
+}
+.bookingbox {
+  border-top: 1px solid #dadada;
+}
+#costsummary {
+  background-color: #fff;
+  border: 1px solid #dadada;
+  border-radius: 6px;
+  padding: 15px 15px 50px;
+}
+.currency {
+  color: #b9b9b9;
+}
+#bill #travelsum .value .currency {
+  font-size: 16px;
+  color: #b9b9b9;
+}
+#bill #travelsum .description,
+#bill .total .description {
+  font-size: 20px;
+}
+#bill #travelsum .value .amount {
+  font-size: 20px;
+  text-align: right;
+}
+#bill .total.grey {
+  background-color: #f6f6f6;
+  color: #363636;
+}
+#bill .total.green {
+  background-color: #DFF0DE;
+  color: #363636;
+}
+#bill .total.grey .value .currency {
+  color: #b9b9b9;
+}
+#bill .total {
+  margin-top: 15px;
+  border-radius: 6px;
+  font-size: 22px;
+  padding: 12px 16px 12px 13px;
+  font-weight: 600;
+}
+.uw-boekingsnr {
+  background-color: #fff;
+  border: 1px solid #dadada;
+  border-radius: 6px;
+  padding: 15px 15px 5px;
+}
 .view-search #map-search-tab > li > a[href='#mapsearch'],
 .view-shortlist #map-search-tab > li > a[href='#mapsearch'] {
   padding: 0;

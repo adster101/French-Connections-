@@ -70,13 +70,29 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
           <?php echo $this->form->getInput('guest_phone'); ?>
         </div>
       </div>
+    </div> 
+  </fieldset>  
+  <hr />
+  <fieldset>
+    <legend>
+      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_TERMS_AND_CONDITIONS'); ?>
+    </legend>
+    <p>
+      <?php echo JText::_('COM_ACCOMMODATION_BOOKING_TERMS_AND_CONDITIONS_TEXT'); ?>
+    </p>
+    <p>
+        <?php echo JText::_('COM_ACCOMMODATION_BOOKING_BELVILLA_TERMS_AND_CONDITIONS'); ?>
+    </p>
+    <div class="panel panel-default form-inline">
+      <div class="panel-body">
+        <?php foreach ($this->form->getFieldset('tos') as $field): ?>
+            <?php echo $field->label; ?>
+            <?php echo $field->input; ?>
+        <?php endforeach; ?>   
+        <hr />
+        <?php echo JText::_('COM_ACCOMMODATION_BOOKING_FC_TERMS_AND_CONDITIONS_AGREE'); ?>
+      </div>
     </div>
-    <hr />
-    <?php foreach ($this->form->getFieldset('tos') as $field): ?>
-        <?php echo $field->label; ?>
-        <?php echo $field->input; ?>
-    <?php endforeach; ?>
-
     <?php foreach ($this->form->getFieldset('enquiry') as $field): ?>
         <?php if ($field->hidden): ?>
             <?php echo $field->input; ?>
