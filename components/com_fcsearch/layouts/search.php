@@ -72,7 +72,7 @@ $colour = (!empty($displayData->colour)) ? $displayData->colour : 'primary';
     <?php endfor; ?>
   </ul>
 <?php endif; ?>
-<button class="property-search-button btn btn-<?php echo $colour; ?>">
+<button class="property-search-button btn btn-warning">
   <i class="icon-search icon-white"> </i>
   <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
 </button>

@@ -36,13 +36,13 @@ class FcSearchViewSearch extends JViewLegacy
     private function addHeadLinks($pages, $document)
     {
 
-// If we have next links then add a rel=next head link
+        // If we have next links then add a rel=next head link
         if ($pages->next->link)
         {
             $document->addHeadLink($pages->next->link, 'next', 'rel');
         }
 
-// If we have next links then add a rel=prev head link
+        // If we have next links then add a rel=prev head link
         if ($pages->previous->link)
         {
             $document->addHeadLink($pages->previous->link, 'prev', 'rel');
@@ -68,11 +68,6 @@ class FcSearchViewSearch extends JViewLegacy
         // Get view data.
         $this->state = $this->get('State');
         $this->localinfo = $this->get('LocalInfo');
-
-        // Get some GET vars for A/B testing purposes
-        $this->property_view_cta_text = $app->input->get('cta', '', 'string');
-        $this->property_view_cta_colour = $app->input->get('colour', '', 'string');
-
 
         if ($this->localinfo === false)
         {

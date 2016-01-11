@@ -97,7 +97,7 @@ $refine_type_layout = new JLayoutFile('refinetype', $basePath = JPATH_SITE.'/com
       </select>
     </div>
     <div class="search-field">
-      <button class="property-search-button btn btn-<?php echo ($this->property_view_cta_colour) ? $this->property_view_cta_colour : 'primary' ?> btn-small pull-right" href="#">
+      <button class="property-search-button btn btn-warning btn-small pull-right" href="#">
         <?php echo JText::_('COM_FCSEARCH_UPDATE') ?>
       </button>
     </div>
