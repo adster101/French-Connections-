@@ -1000,7 +1000,7 @@ class AccommodationModelListing extends JModelForm
         return false;
       }
       
-      //$rpc->makeCall('PlaceBookingV1', $booking_params);
+      $rpc->makeCall('PlaceBookingV1', $booking_params);
 
       $result = $rpc->getResult("json");
 
