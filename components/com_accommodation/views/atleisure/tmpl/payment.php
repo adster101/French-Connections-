@@ -79,26 +79,26 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
             <?php echo $render->render($errors); ?>
           </div>
       <?php endif; ?>
-      <p>Pay online safely and easily! As soon as we receive your payment in full, you will be emailed the travel documents with the address and information about picking up the key.</p>
+      <h3><?php echo JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_HEADER', $booking_info->BookingNumber); ?></h3>
+      <p><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_TEXT'); ?> </p>
       <div id="select-amount" class="payment-btn-group clearfix">
         <div id="fullamount" class="col-xs-6 selected" data-amount="<?php echo $booking_info->SecondTermAmount ?>">
           <span class="amount"><span class="currency">€</span> <?php echo $booking_info->SecondTermAmount ?></span>
-          <span class="label">total amount</span>
+          <span class="label"><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_TOTAL'); ?></span>
         </div>
         <div id="downpayment" class="col-xs-6" data-amount="<?php echo $booking_info->FirstTermAmount ?>">
           <span class="amount"><span class="currency">€</span> <?php echo $booking_info->FirstTermAmount ?></span>
-          <span class="label">deposit</span>
+          <span class="label"><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOKING_DEPOSIT'); ?></span>
         </div>
       </div>
       <div id="restWarning" class="alert alert-warning" style="display:none;">
-        <strong>Please note:</strong> the remaining sum must be paid by <?php echo JHtml::_('date', $booking_info->SecondTermDateTime, 'd M Y') ?>
+        <?php echo JText::sprintf('COM_ACCOMMODATION_AT_LEISURE_BOOKING_PAYMENT_DUE_BY', JHtml::_('date', $booking_info->SecondTermDateTime, 'd M Y')) ?>
       </div>
       <hr />
       <h3>Payment method</h3>
       <div id="select-method" class="payment-btn-group">
         <div id="paypal" class="col-sm-6 payment-method">
           <span class="payment-sprite icn-paypal">
-
           </span>
           <span class="label">PayPal</span>
         </div>
@@ -109,16 +109,20 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
       </div>
       <div class="row">
         <div id="nomainpaymentmethodwarning" class="col-md-12" style="display:none;margin-top:10px;">
-          <p style="text-align:center;color:#D44343;">Selecteer een betaalmethode alstublieft</p>
+          <p class="text-center" style="color:#D44343;">
+              <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_CHOOSE_PAYMENT_METHOD'); ?>
+          </p>
         </div>
       </div>
       <div id="costsWarning" class="alert alert-warning" style="margin-bottom: 0px; margin-top: 25px; display: none;">
-        <strong>Let op:</strong>&nbsp;<span class="costMessage">aan PayPal gebruik zijn kosten (€ 8,18) verbonden.</span>        
+        <strong>
+            <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PLEASE_NOTE'); ?>
+        </strong>&nbsp;<span class="costMessage"></span>        
       </div>
       <div id="selectCreditCard" class="row subpayment" style="margin-top: 25px; display: none;">
         <div class="col-md-12">
           <div id="costsWarning-creditcard" class="alert alert-warning" style="margin-bottom: 25px;">
-            <strong>Let op:</strong>&nbsp;<span class="costMessageCC">aan creditcard gebruik zijn kosten (€ 6,14) verbonden.</span>      
+            <strong><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PLEASE_NOTE'); ?></strong>&nbsp;<span class="costMessageCC"></span>      
           </div>
         </div>
         <div class="col-sm-4">
@@ -126,7 +130,7 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
         </div>
         <div class="col-sm-8">
           <select id="creditcardselector" class="selectpicker bs-select-hidden" title="Maak uw keuze...">
-            <option value="" class="bs-title-option">Maak uw keuze...</option>
+            <option value="" class="bs-title-option">- Select -</option>
             <option value="A">American Express</option><option value="M">Maestro</option>
             <option value="E">Mastercard</option>
             <option value="V">VISA</option>    
@@ -140,7 +144,3 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
     </div>
   </div> 
 </div>
-
-<?php
-var_dump($booking_info);
-?>

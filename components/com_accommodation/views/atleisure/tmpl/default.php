@@ -31,12 +31,6 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
       <?php echo $this->loadTemplate('summary'); ?>  
     </div>
     <div class="col-lg-8 col-md-7 col-sm-6 col-lg-pull-4 col-md-pull-5 col-sm-pull-6">
-      <?php if (count($errors > 0)) : ?>
-
-          <div class="contact-error">
-            <?php echo $render->render($errors); ?>
-          </div>
-      <?php endif; ?>
       <?php echo $this->loadTemplate($owner . '_form'); ?>
     </div>
   </div>
