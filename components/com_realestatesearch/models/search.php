@@ -267,7 +267,6 @@ class RealestateSearchModelSearch extends JModelList
         a.id as property_id, 
         b.*,
         CASE WHEN b.base_currency = \'EUR\' THEN (b.price / h.exchange_rate) ELSE (b.price) END as price,
-        (b.double_bedrooms + b.single_bedrooms) as bedrooms,
         g.title as location_title,
         e.image_file_name as thumbnail
 

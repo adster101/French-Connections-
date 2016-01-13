@@ -177,19 +177,13 @@ if (!empty($this->item->languages_spoken))
       <?php endif; ?>
 
       <!-- Number of bedrooms, if any -->
-      <?php if ($this->item->single_bedrooms) : ?>
+      <?php if ($this->item->bedrooms) : ?>
         <p class="dotted">
-          <?php echo JText::_('COM_REALESTATE_LISTING_SINGLE_BEDROOMS'); ?>
-          <span class="pull-right"><?php echo $this->item->single_bedrooms; ?></span>
+          <?php echo JText::_('COM_REALESTATE_LISTING_BEDROOMS'); ?>
+          <span class="pull-right"><?php echo $this->item->bedrooms; ?></span>
         </p>
       <?php endif; ?>
-      <!-- Number of bedrooms, if any -->
-      <?php if ($this->item->double_bedrooms) : ?>
-        <p class="dotted">
-          <?php echo JText::_('COM_REALESTATE_LISTING_DOUBLE_BEDROOMS'); ?>
-          <span class="pull-right"><?php echo $this->item->double_bedrooms; ?></span>
-        </p>
-      <?php endif; ?>
+    
       <!-- Number of bathrooms, if any -->
       <?php if ($this->item->bathrooms) : ?>
         <p class="dotted">
