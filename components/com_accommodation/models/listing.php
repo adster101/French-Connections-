@@ -181,6 +181,7 @@ class AccommodationModelListing extends JModelForm
         b.id as unit_id,
         c.location_details,
         c.local_amenities,
+        c.affiliate_property_id,
         c.getting_there,
         c.use_invoice_details,
         c.latitude,
@@ -934,11 +935,10 @@ class AccommodationModelListing extends JModelForm
 
         $app = JFactory::getApplication();
         $input = $app->input;
+        $date = JFactory::getDate();
 
         $id = $input->get('id', 0, 'int');
         $unit_id = $input->get('unit_id', 0, 'int');
-
-        $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
 
         // Include the atleisure curl class
         require_once(JPATH_BASE . '/cli/leisure/codebase/classes/belvilla_jsonrpc_curl_gz.class.php');
@@ -950,8 +950,6 @@ class AccommodationModelListing extends JModelForm
 
         $arrival_date = JHtml::_('date', $data['start_date'], 'Y-m-d');
         $departure_date = JHtml::_('date', $data['end_date'], 'Y-m-d');
-
-        $days_to_booking = $this->getDaysToBooking($arrival_date);
 
         // First up we have to check the price for this period...
         $check_availability_params = array(
@@ -1006,10 +1004,24 @@ class AccommodationModelListing extends JModelForm
 
             $booking_info_raw = $rpc->getResult("json");
 
-            //$booking_info = $this->processBookingInfo($booking_info_raw);
-
             // Must be okay, so set the json as a session variable
             $app->setUserState('com_accommodation.enquiry.booking_info', $booking_info_raw);
+
+            // Write the 'enquiry' out into the enquiry log table
+            JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
+
+            $table = $this->getTable();
+
+            // Set the date created timestamp
+            $data['date_created'] = $date->toSql();
+            $data['property_id'] = $id;
+            $data['unit_id'] = $unit_id;
+
+            // Check that we can save the data and save it out to the enquiry table
+            if (!$table->save($data))
+            {
+                // Cry?
+            }
 
             return true;
         }

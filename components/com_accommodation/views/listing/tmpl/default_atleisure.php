@@ -3,7 +3,8 @@
 defined('_JEXEC') or die('Restricted access');
 ?>
 <div class='well well-light-blue'>
-  <h4><?php echo JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER') ?></h4>
+  <h4><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOK_THIS_PROPERTY_NOW') ?></h4>
+  <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOK_THIS_PROPERTY_NOW_TEXT') ?>
+  <p><span class="muted"><?php echo $this->item->affiliate_property_id; ?></p>
 
-  <p>Tel here? Mention the owner/supplier is Belvilla/@leisure?</p>
 </div>

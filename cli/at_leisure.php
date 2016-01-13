@@ -85,13 +85,6 @@ class AtLeisure extends Import
 
         $reference_items_detail = $this->_getReferenceLayoutDetailsV1($rpc);
 
-        //$db->truncateTable('#__property');
-        //$db->truncateTable('#__property_versions');
-        //$db->truncateTable('#__unit');
-        //$db->truncateTable('#__unit_versions');
-        //$db->truncateTable('#__property_images_library');
-        //$db->truncateTable('#__unit_attributes');
-
         $user = JFactory::getUser('atleisure')->id;
 
         $this->out('About to get houses...');
@@ -166,6 +159,8 @@ class AtLeisure extends Import
                         );
 
                         // Update the property expiry date
+                        // N.B. If we wanted to amend the process to update on each import
+                        // this would be the place to do it.
                         $this->save($property_table, $property);
 
                         // Here we know we have the full property version detail

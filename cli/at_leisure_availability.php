@@ -66,15 +66,12 @@ class AtLeisure extends Import
 
     $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
-    $rpc->makeCall('ListOfHousesV1');
-
-    $houses = $rpc->getResult('json');
-
-    $props = $this->getProps($houses, $user);
+    $props = $this->getProps($user);
+        
     $this->out('Got houses...');
 
     // Chunk up the house codes baby!
-    $accocode_chunks = array_chunk(array_keys($props), 100);
+    $accocode_chunks = array_chunk(array_keys($props), 25);
 
     // Get the tables for processing values into relevant tables
     $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
@@ -211,7 +208,7 @@ class AtLeisure extends Import
     
   }
 
-  private function getProps($acco_objs = array(), $user = '')
+  private function getProps($user = '')
   {
 
     $db = JFactory::getDbo();
