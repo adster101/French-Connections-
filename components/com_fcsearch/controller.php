@@ -29,14 +29,13 @@ class FcSearchController extends JControllerLegacy
      *
      * @since   2.5
      */
-    public function display($cachable = false, $urlparams = array())
+    public function display($cachable = true, $urlparams = array())
     {
         $input = JFactory::getApplication()->input;
 
         // Set the default view name and format from the Request.
         $viewName = $input->get('view', 'search', 'word');
         $input->set('view', $viewName);
-        // $input->set('layout', 'three');
 
         // Don't cache view for search queries
         if ($input->get('q') || $input->get('f') || $input->get('t'))

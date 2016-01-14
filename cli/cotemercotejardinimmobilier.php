@@ -108,8 +108,7 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                     $data['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
                     $data['created_on'] = $db->quote(JFactory::getDate());
                     $data['description'] = $db->quote($prop->description, true);
-                    $data['single_bedrooms'] = (int) $prop->single_bedrooms;
-                    $data['double_bedrooms'] = 0;
+                    $data['bedrooms'] = (int) $prop->bedrooms;
                     $data['bathrooms'] = 0;
                     $data['base_currency'] = $db->quote('EUR');
                     $data['price'] = (int) $prop->price;
@@ -166,8 +165,7 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                     $data['agency_reference'] = $db->quote($prop->agency_reference);
                     $data['title'] = $db->quote($prop->title);
                     $data['description'] = $db->quote($prop->description, true);
-                    $data['single_bedrooms'] = (int) $prop->single_bedrooms;
-                    $data['double_bedrooms'] = 0;
+                    $data['bedrooms'] = (int) $prop->bedrooms;
                     $data['bathrooms'] = 0;
                     $data['base_currency'] = $db->quote('EUR');
                     $data['price'] = (int) $prop->price;
@@ -192,6 +190,7 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
 
                 // Send an email, woot!
                 $this->email($e);
+                
             }
         }
     }

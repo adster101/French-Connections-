@@ -99,7 +99,7 @@ class JFeedParserProperties extends JFeedParser
     $listing->price = (int) $el->Price;
     $listing->title = JHtml::_('string.truncate', $el->Title, 150, true, false);
     $listing->description = JHtml::_('string.truncate', $el->Description, 1500, true, false);
-    $listing->single_bedrooms = (int) $el->Bedrooms;
+    $listing->bedrooms = (int) $el->Bedrooms;
     $listing->bathrooms = (int) $el->Bathrooms;
     $listing->latitude = (string) $el->Latitude;
     $listing->longitude = (string) $el->Longitude;
