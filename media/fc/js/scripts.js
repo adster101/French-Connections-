@@ -11361,9 +11361,15 @@ return jQuery;
  * limitations under the License.
  * ========================================================= */
 
-(function($, undefined){
-
-	var $window = $(window);
+(function(factory){
+    if (typeof define === "function" && define.amd) {
+        define(["jquery"], factory);
+    } else if (typeof exports === 'object') {
+        factory(require('jquery'));
+    } else {
+        factory(jQuery);
+    }
+}(function($, undefined){
 
 	function UTCDate(){
 		return new Date(Date.UTC.apply(Date, arguments));
@@ -11372,10 +11378,20 @@ return jQuery;
 		var today = new Date();
 		return UTCDate(today.getFullYear(), today.getMonth(), today.getDate());
 	}
+	function isUTCEquals(date1, date2) {
+		return (
+			date1.getUTCFullYear() === date2.getUTCFullYear() &&
+			date1.getUTCMonth() === date2.getUTCMonth() &&
+			date1.getUTCDate() === date2.getUTCDate()
+		);
+	}
 	function alias(method){
 		return function(){
 			return this[method].apply(this, arguments);
 		};
+	}
+	function isValidDate(d) {
+		return d && !isNaN(d.getTime());
 	}
 
 	var DateArray = (function(){
@@ -11425,16 +11441,16 @@ return jQuery;
 	// Picker object
 
 	var Datepicker = function(element, options){
-		this.dates = new DateArray();
-		this.viewDate = UTCToday();
-		this.focusDate = null;
-
 		this._process_options(options);
+
+		this.dates = new DateArray();
+		this.viewDate = this.o.defaultViewDate;
+		this.focusDate = null;
 
 		this.element = $(element);
 		this.isInline = false;
 		this.isInput = this.element.is('input');
-		this.component = this.element.is('.date') ? this.element.find('.add-on, .input-group-addon, .btn') : false;
+		this.component = this.element.hasClass('date') ? this.element.find('.add-on, .input-group-addon, .btn') : false;
 		this.hasInput = this.component && this.element.find('input').length;
 		if (this.component && this.component.length === 0)
 			this.component = false;
@@ -11457,7 +11473,7 @@ return jQuery;
 		this.viewMode = this.o.startView;
 
 		if (this.o.calendarWeeks)
-			this.picker.find('tfoot th.today, tfoot th.clear')
+			this.picker.find('tfoot .today, tfoot .clear')
 						.attr('colspan', function(i, val){
 							return parseInt(val) + 1;
 						});
@@ -11467,6 +11483,8 @@ return jQuery;
 		this.setStartDate(this._o.startDate);
 		this.setEndDate(this._o.endDate);
 		this.setDaysOfWeekDisabled(this.o.daysOfWeekDisabled);
+		this.setDaysOfWeekHighlighted(this.o.daysOfWeekHighlighted);
+		this.setDatesDisabled(this.o.datesDisabled);
 
 		this.fillDow();
 		this.fillMonths();
@@ -11526,6 +11544,20 @@ return jQuery;
 					o.minViewMode = 0;
 			}
 
+			switch (o.maxViewMode) {
+				case 0:
+				case 'days':
+					o.maxViewMode = 0;
+					break;
+				case 1:
+				case 'months':
+					o.maxViewMode = 1;
+					break;
+				default:
+					o.maxViewMode = 2;
+			}
+
+			o.startView = Math.min(o.startView, o.maxViewMode);
 			o.startView = Math.max(o.startView, o.minViewMode);
 
 			// true, false, or Number > 0
@@ -11533,8 +11565,6 @@ return jQuery;
 				o.multidate = Number(o.multidate) || false;
 				if (o.multidate !== false)
 					o.multidate = Math.max(0, o.multidate);
-				else
-					o.multidate = 1;
 			}
 			o.multidateSeparator = String(o.multidateSeparator);
 
@@ -11572,10 +11602,27 @@ return jQuery;
 				return parseInt(d, 10);
 			});
 
+			o.daysOfWeekHighlighted = o.daysOfWeekHighlighted||[];
+			if (!$.isArray(o.daysOfWeekHighlighted))
+				o.daysOfWeekHighlighted = o.daysOfWeekHighlighted.split(/[,\s]*/);
+			o.daysOfWeekHighlighted = $.map(o.daysOfWeekHighlighted, function(d){
+				return parseInt(d, 10);
+			});
+
+			o.datesDisabled = o.datesDisabled||[];
+			if (!$.isArray(o.datesDisabled)) {
+				var datesDisabled = [];
+				datesDisabled.push(DPGlobal.parseDate(o.datesDisabled, format, o.language));
+				o.datesDisabled = datesDisabled;
+			}
+			o.datesDisabled = $.map(o.datesDisabled,function(d){
+				return DPGlobal.parseDate(d, format, o.language);
+			});
+
 			var plc = String(o.orientation).toLowerCase().split(/\s+/g),
 				_plc = o.orientation.toLowerCase();
 			plc = $.grep(plc, function(word){
-				return (/^auto|left|right|top|bottom$/).test(word);
+				return /^auto|left|right|top|bottom$/.test(word);
 			});
 			o.orientation = {x: 'auto', y: 'auto'};
 			if (!_plc || _plc === 'auto')
@@ -11594,15 +11641,25 @@ return jQuery;
 			}
 			else {
 				_plc = $.grep(plc, function(word){
-					return (/^left|right$/).test(word);
+					return /^left|right$/.test(word);
 				});
 				o.orientation.x = _plc[0] || 'auto';
 
 				_plc = $.grep(plc, function(word){
-					return (/^top|bottom$/).test(word);
+					return /^top|bottom$/.test(word);
 				});
 				o.orientation.y = _plc[0] || 'auto';
 			}
+			if (o.defaultViewDate) {
+				var year = o.defaultViewDate.year || new Date().getFullYear();
+				var month = o.defaultViewDate.month || 0;
+				var day = o.defaultViewDate.day || 1;
+				o.defaultViewDate = UTCDate(year, month, day);
+			} else {
+				o.defaultViewDate = UTCToday();
+			}
+			o.showOnFocus = o.showOnFocus !== undefined ? o.showOnFocus : true;
+			o.zIndexOffset = o.zIndexOffset !== undefined ? o.zIndexOffset : 10;
 		},
 		_events: [],
 		_secondaryEvents: [],
@@ -11635,34 +11692,33 @@ return jQuery;
 			}
 		},
 		_buildEvents: function(){
-			if (this.isInput){ // single input
-				this._events = [
-					[this.element, {
-						focus: $.proxy(this.show, this),
-						keyup: $.proxy(function(e){
-							if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
-								this.update();
-						}, this),
-						keydown: $.proxy(this.keydown, this)
-					}]
-				];
-			}
-			else if (this.component && this.hasInput){ // component: input + button
-				this._events = [
-					// For components that are not readonly, allow keyboard nav
-					[this.element.find('input'), {
-						focus: $.proxy(this.show, this),
-						keyup: $.proxy(function(e){
-							if ($.inArray(e.keyCode, [27,37,39,38,40,32,13,9]) === -1)
-								this.update();
-						}, this),
-						keydown: $.proxy(this.keydown, this)
-					}],
-					[this.component, {
-						click: $.proxy(this.show, this)
-					}]
-				];
-			}
+            var events = {
+                keyup: $.proxy(function(e){
+                    if ($.inArray(e.keyCode, [27, 37, 39, 38, 40, 32, 13, 9]) === -1)
+                        this.update();
+                }, this),
+                keydown: $.proxy(this.keydown, this),
+                paste: $.proxy(this.paste, this)
+            };
+
+            if (this.o.showOnFocus === true) {
+                events.focus = $.proxy(this.show, this);
+            }
+
+            if (this.isInput) { // single input
+                this._events = [
+                    [this.element, events]
+                ];
+            }
+            else if (this.component && this.hasInput) { // component: input + button
+                this._events = [
+                    // For components that are not readonly, allow keyboard nav
+                    [this.element.find('input'), events],
+                    [this.component, {
+                        click: $.proxy(this.show, this)
+                    }]
+                ];
+            }
 			else if (this.element.is('div')){  // inline datepicker
 				this.isInline = true;
 			}
@@ -11688,6 +11744,15 @@ return jQuery;
 				}]
 			);
 
+			if (this.o.immediateUpdates) {
+				// Trigger input updates immediately on changed year/month
+				this._events.push([this.element, {
+					'changeYear changeMonth': $.proxy(function(e){
+						this.update(e.date);
+					}, this)
+				}]);
+			}
+
 			this._secondaryEvents = [
 				[this.picker, {
 					click: $.proxy(this.click, this)
@@ -11696,13 +11761,14 @@ return jQuery;
 					resize: $.proxy(this.place, this)
 				}],
 				[$(document), {
-					'mousedown touchstart': $.proxy(function(e){
+					mousedown: $.proxy(function(e){
 						// Clicked outside the datepicker, hide it
 						if (!(
 							this.element.is(e.target) ||
 							this.element.find(e.target).length ||
 							this.picker.is(e.target) ||
-							this.picker.find(e.target).length
+							this.picker.find(e.target).length ||
+							this.picker.hasClass('datepicker-inline')
 						)){
 							this.hide();
 						}
@@ -11749,19 +11815,25 @@ return jQuery;
 		},
 
 		show: function(){
+			if (this.element.attr('readonly') && this.o.enableOnReadonly === false)
+				return;
 			if (!this.isInline)
-				this.picker.appendTo('body');
-			this.picker.show();
+				this.picker.appendTo(this.o.container);
 			this.place();
+			this.picker.show();
 			this._attachSecondaryEvents();
 			this._trigger('show');
+			if ((window.navigator.msMaxTouchPoints || 'ontouchstart' in document) && this.o.disableTouchKeyboard) {
+				$(this.element).blur();
+			}
+			return this;
 		},
 
 		hide: function(){
 			if (this.isInline)
-				return;
+				return this;
 			if (!this.picker.is(':visible'))
-				return;
+				return this;
 			this.focusDate = null;
 			this.picker.hide().detach();
 			this._detachSecondaryEvents();
@@ -11777,6 +11849,7 @@ return jQuery;
 			)
 				this.setValue();
 			this._trigger('hide');
+			return this;
 		},
 
 		remove: function(){
@@ -11788,6 +11861,24 @@ return jQuery;
 			if (!this.isInput){
 				delete this.element.data().date;
 			}
+			return this;
+		},
+
+		paste: function(evt){
+			var dateString;
+			if (evt.originalEvent.clipboardData && evt.originalEvent.clipboardData.types
+				&& $.inArray('text/plain', evt.originalEvent.clipboardData.types) !== -1) {
+				dateString = evt.originalEvent.clipboardData.getData('text/plain');
+			}
+			else if (window.clipboardData) {
+				dateString = window.clipboardData.getData('Text');
+			}
+			else {
+				return;
+			}
+			this.setDate(dateString);
+			this.update();
+			evt.preventDefault();
 		},
 
 		_utc_to_local: function(utc){
@@ -11818,14 +11909,39 @@ return jQuery;
 		},
 
 		getUTCDate: function(){
-			return new Date(this.dates.get(-1));
+			var selected_date = this.dates.get(-1);
+			if (typeof selected_date !== 'undefined') {
+				return new Date(selected_date);
+			} else {
+				return null;
+			}
 		},
 
+		clearDates: function(){
+			var element;
+			if (this.isInput) {
+				element = this.element;
+			} else if (this.component) {
+				element = this.element.find('input');
+			}
+
+			if (element) {
+				element.val('');
+			}
+
+			this.update();
+			this._trigger('changeDate');
+
+			if (this.o.autoclose) {
+				this.hide();
+			}
+		},
 		setDates: function(){
 			var args = $.isArray(arguments[0]) ? arguments[0] : arguments;
 			this.update.apply(this, args);
 			this._trigger('changeDate');
 			this.setValue();
+			return this;
 		},
 
 		setUTCDates: function(){
@@ -11833,6 +11949,7 @@ return jQuery;
 			this.update.apply(this, $.map(args, this._utc_to_local));
 			this._trigger('changeDate');
 			this.setValue();
+			return this;
 		},
 
 		setDate: alias('setDates'),
@@ -11842,12 +11959,13 @@ return jQuery;
 			var formatted = this.getFormattedDate();
 			if (!this.isInput){
 				if (this.component){
-					this.element.find('input').val(formatted).change();
+					this.element.find('input').val(formatted);
 				}
 			}
 			else {
-				this.element.val(formatted).change();
+				this.element.val(formatted);
 			}
+			return this;
 		},
 
 		getFormattedDate: function(format){
@@ -11864,41 +11982,57 @@ return jQuery;
 			this._process_options({startDate: startDate});
 			this.update();
 			this.updateNavArrows();
+			return this;
 		},
 
 		setEndDate: function(endDate){
 			this._process_options({endDate: endDate});
 			this.update();
 			this.updateNavArrows();
+			return this;
 		},
 
 		setDaysOfWeekDisabled: function(daysOfWeekDisabled){
 			this._process_options({daysOfWeekDisabled: daysOfWeekDisabled});
 			this.update();
 			this.updateNavArrows();
+			return this;
+		},
+
+		setDaysOfWeekHighlighted: function(daysOfWeekHighlighted){
+			this._process_options({daysOfWeekHighlighted: daysOfWeekHighlighted});
+			this.update();
+			return this;
+		},
+
+		setDatesDisabled: function(datesDisabled){
+			this._process_options({datesDisabled: datesDisabled});
+			this.update();
+			this.updateNavArrows();
 		},
 
 		place: function(){
 			if (this.isInline)
-				return;
+				return this;
 			var calendarWidth = this.picker.outerWidth(),
 				calendarHeight = this.picker.outerHeight(),
 				visualPadding = 10,
-				windowWidth = $window.width(),
-				windowHeight = $window.height(),
-				scrollTop = $window.scrollTop();
+				container = $(this.o.container),
+				windowWidth = container.width(),
+				scrollTop = container.scrollTop(),
+				appendOffset = container.offset();
 
 			var parentsZindex = [];
-			this.element.parents().each(function() {
+			this.element.parents().each(function(){
 				var itemZIndex = $(this).css('z-index');
-				if ( itemZIndex !== 'auto' && itemZIndex !== 0 ) parentsZindex.push( parseInt( itemZIndex ) );
+				if (itemZIndex !== 'auto' && itemZIndex !== 0) parentsZindex.push(parseInt(itemZIndex));
 			});
-			var zIndex = Math.max.apply( Math, parentsZindex ) + 10;
+			var zIndex = Math.max.apply(Math, parentsZindex) + this.o.zIndexOffset;
 			var offset = this.component ? this.component.parent().offset() : this.element.offset();
 			var height = this.component ? this.component.outerHeight(true) : this.element.outerHeight(false);
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
-			var left = offset.left,
-				top = offset.top;
+			var left = offset.left - appendOffset.left,
+				top = offset.top - appendOffset.top;
 
 			this.picker.removeClass(
 				'datepicker-orient-top datepicker-orient-bottom '+
@@ -11913,43 +12047,56 @@ return jQuery;
 			// auto x orientation is best-placement: if it crosses a window
 			// edge, fudge it sideways
 			else {
-				// Default to left
-				this.picker.addClass('datepicker-orient-left');
-				if (offset.left < 0)
+				if (offset.left < 0) {
+					// component is outside the window on the left side. Move it into visible range
+					this.picker.addClass('datepicker-orient-left');
 					left -= offset.left - visualPadding;
-				else if (offset.left + calendarWidth > windowWidth)
-					left = windowWidth - calendarWidth - visualPadding;
+				} else if (left + calendarWidth > windowWidth) {
+					// the calendar passes the widow right edge. Align it to component right side
+					this.picker.addClass('datepicker-orient-right');
+					left = offset.left + width - calendarWidth;
+				} else {
+					// Default to left
+					this.picker.addClass('datepicker-orient-left');
+				}
 			}
 
 			// auto y orientation is best-situation: top or bottom, no fudging,
 			// decision based on which shows more of the calendar
 			var yorient = this.o.orientation.y,
-				top_overflow, bottom_overflow;
+				top_overflow;
 			if (yorient === 'auto'){
-				top_overflow = -scrollTop + offset.top - calendarHeight;
-				bottom_overflow = scrollTop + windowHeight - (offset.top + height + calendarHeight);
-				if (Math.max(top_overflow, bottom_overflow) === bottom_overflow)
-					yorient = 'top';
-				else
-					yorient = 'bottom';
+				top_overflow = -scrollTop + top - calendarHeight;
+				yorient = top_overflow < 0 ? 'bottom' : 'top';
 			}
+
 			this.picker.addClass('datepicker-orient-' + yorient);
 			if (yorient === 'top')
-				top += height;
-			else
 				top -= calendarHeight + parseInt(this.picker.css('padding-top'));
+			else
+				top += height;
 
-			this.picker.css({
-				top: top,
-				left: left,
-				zIndex: zIndex
-			});
+			if (this.o.rtl) {
+				var right = windowWidth - (left + width);
+				this.picker.css({
+					top: top,
+					right: right,
+					zIndex: zIndex
+				});
+			} else {
+				this.picker.css({
+					top: top,
+					left: left,
+					zIndex: zIndex
+				});
+			}
+			return this;
 		},
 
 		_allow_update: true,
 		update: function(){
 			if (!this._allow_update)
-				return;
+				return this;
 
 			var oldDates = this.dates.copy(),
 				dates = [],
@@ -11991,6 +12138,8 @@ return jQuery;
 				this.viewDate = new Date(this.o.startDate);
 			else if (this.viewDate > this.o.endDate)
 				this.viewDate = new Date(this.o.endDate);
+			else
+				this.viewDate = this.o.defaultViewDate;
 
 			if (fromArgs){
 				// setting date by clicking
@@ -12005,15 +12154,19 @@ return jQuery;
 				this._trigger('clearDate');
 
 			this.fill();
+			this.element.change();
+			return this;
 		},
 
 		fillDow: function(){
 			var dowCnt = this.o.weekStart,
 				html = '<tr>';
 			if (this.o.calendarWeeks){
-				var cell = '<th class="cw">&nbsp;</th>';
-				html += cell;
-				this.picker.find('.datepicker-days thead tr:first-child').prepend(cell);
+				this.picker.find('.datepicker-days .datepicker-switch')
+					.attr('colspan', function(i, val){
+						return parseInt(val) + 1;
+					});
+				html += '<th class="cw">&#160;</th>';
 			}
 			while (dowCnt < this.o.weekStart + 7){
 				html += '<th class="dow">'+dates[this.o.language].daysMin[(dowCnt++)%7]+'</th>';
@@ -12067,6 +12220,15 @@ return jQuery;
 				$.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1){
 				cls.push('disabled');
 			}
+			if ($.inArray(date.getUTCDay(), this.o.daysOfWeekHighlighted) !== -1){
+				cls.push('highlighted');
+			}
+			if (this.o.datesDisabled.length > 0 &&
+				$.grep(this.o.datesDisabled, function(d){
+					return isUTCEquals(date, d); }).length > 0) {
+				cls.push('disabled', 'disabled-date');
+			}
+
 			if (this.range){
 				if (date > this.range[0] && date < this.range[this.range.length-1]){
 					cls.push('range');
@@ -12074,6 +12236,12 @@ return jQuery;
 				if ($.inArray(date.valueOf(), this.range) !== -1){
 					cls.push('selected');
 				}
+				if (date.valueOf() === this.range[0]){
+          cls.push('range-start');
+        }
+        if (date.valueOf() === this.range[this.range.length-1]){
+          cls.push('range-end');
+        }
 			}
 			return cls;
 		},
@@ -12088,16 +12256,21 @@ return jQuery;
 				endMonth = this.o.endDate !== Infinity ? this.o.endDate.getUTCMonth() : Infinity,
 				todaytxt = dates[this.o.language].today || dates['en'].today || '',
 				cleartxt = dates[this.o.language].clear || dates['en'].clear || '',
+				titleFormat = dates[this.o.language].titleFormat || dates['en'].titleFormat,
 				tooltip;
-			if (isNaN(year) || isNaN(month)) return;
-			this.picker.find('.datepicker-days thead th.datepicker-switch')
-						.text(dates[this.o.language].months[month]+' '+year);
-			this.picker.find('tfoot th.today')
+			if (isNaN(year) || isNaN(month))
+				return;
+			this.picker.find('.datepicker-days thead .datepicker-switch')
+						.text(DPGlobal.formatDate(new UTCDate(year, month), titleFormat, this.o.language));
+			this.picker.find('tfoot .today')
 						.text(todaytxt)
 						.toggle(this.o.todayBtn !== false);
-			this.picker.find('tfoot th.clear')
+			this.picker.find('tfoot .clear')
 						.text(cleartxt)
 						.toggle(this.o.clearBtn !== false);
+			this.picker.find('thead .datepicker-title')
+						.text(this.o.title)
+						.toggle(this.o.title !== '');
 			this.updateNavArrows();
 			this.fillMonths();
 			var prevMonth = UTCDate(year, month-1, 28),
@@ -12105,6 +12278,9 @@ return jQuery;
 			prevMonth.setUTCDate(day);
 			prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.o.weekStart + 7)%7);
 			var nextMonth = new Date(prevMonth);
+			if (prevMonth.getUTCFullYear() < 100){
+        nextMonth.setUTCFullYear(prevMonth.getUTCFullYear());
+      }
 			nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
 			nextMonth = nextMonth.valueOf();
 			var html = [];
@@ -12158,8 +12334,8 @@ return jQuery;
 			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
 
 			var months = this.picker.find('.datepicker-months')
-						.find('th:eq(1)')
-							.text(year)
+						.find('.datepicker-switch')
+							.text(this.o.maxViewMode < 2 ? 'Months' : year)
 							.end()
 						.find('span').removeClass('active');
 
@@ -12178,10 +12354,22 @@ return jQuery;
 				months.slice(endMonth+1).addClass('disabled');
 			}
 
+			if (this.o.beforeShowMonth !== $.noop){
+				var that = this;
+				$.each(months, function(i, month){
+					if (!$(month).hasClass('disabled')) {
+						var moDate = new Date(year, i, 1);
+						var before = that.o.beforeShowMonth(moDate);
+						if (before === false)
+							$(month).addClass('disabled');
+					}
+				});
+			}
+
 			html = '';
 			year = parseInt(year/10, 10) * 10;
 			var yearCont = this.picker.find('.datepicker-years')
-								.find('th:eq(1)')
+								.find('.datepicker-switch')
 									.text(year + '-' + (year + 9))
 									.end()
 								.find('td');
@@ -12192,6 +12380,8 @@ return jQuery;
 				classes;
 			for (var i = -1; i < 11; i++){
 				classes = ['year'];
+				tooltip = null;
+
 				if (i === -1)
 					classes.push('old');
 				else if (i === 10)
@@ -12200,7 +12390,24 @@ return jQuery;
 					classes.push('active');
 				if (year < startYear || year > endYear)
 					classes.push('disabled');
-				html += '<span class="' + classes.join(' ') + '">'+year+'</span>';
+
+				if (this.o.beforeShowYear !== $.noop) {
+					var yrBefore = this.o.beforeShowYear(new Date(year, 0, 1));
+					if (yrBefore === undefined)
+						yrBefore = {};
+					else if (typeof(yrBefore) === 'boolean')
+						yrBefore = {enabled: yrBefore};
+					else if (typeof(yrBefore) === 'string')
+						yrBefore = {classes: yrBefore};
+					if (yrBefore.enabled === false)
+						classes.push('disabled');
+					if (yrBefore.classes)
+						classes = classes.concat(yrBefore.classes.split(/\s+/));
+					if (yrBefore.tooltip)
+						tooltip = yrBefore.tooltip;
+				}
+
+				html += '<span class="' + classes.join(' ') + '"' + (tooltip ? ' title="'+tooltip+'"' : '') + '>' + year + '</span>';
 				year += 1;
 			}
 			yearCont.html(html);
@@ -12230,13 +12437,13 @@ return jQuery;
 					break;
 				case 1:
 				case 2:
-					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear()){
+					if (this.o.startDate !== -Infinity && year <= this.o.startDate.getUTCFullYear() || this.o.maxViewMode < 2){
 						this.picker.find('.prev').css({visibility: 'hidden'});
 					}
 					else {
 						this.picker.find('.prev').css({visibility: 'visible'});
 					}
-					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear()){
+					if (this.o.endDate !== Infinity && year >= this.o.endDate.getUTCFullYear() || this.o.maxViewMode < 2){
 						this.picker.find('.next').css({visibility: 'hidden'});
 					}
 					else {
@@ -12248,6 +12455,7 @@ return jQuery;
 
 		click: function(e){
 			e.preventDefault();
+			e.stopPropagation();
 			var target = $(e.target).closest('span, td, th'),
 				year, month, day;
 			if (target.length === 1){
@@ -12283,24 +12491,14 @@ return jQuery;
 								this._setDate(date, which);
 								break;
 							case 'clear':
-								var element;
-								if (this.isInput)
-									element = this.element;
-								else if (this.component)
-									element = this.element.find('input');
-								if (element)
-									element.val("").change();
-								this.update();
-								this._trigger('changeDate');
-								if (this.o.autoclose)
-									this.hide();
+								this.clearDates();
 								break;
 						}
 						break;
 					case 'span':
-						if (!target.is('.disabled')){
+						if (!target.hasClass('disabled')){
 							this.viewDate.setUTCDate(1);
-							if (target.is('.month')){
+							if (target.hasClass('month')){
 								day = 1;
 								month = target.parent().find('span').index(target);
 								year = this.viewDate.getUTCFullYear();
@@ -12308,6 +12506,9 @@ return jQuery;
 								this._trigger('changeMonth', this.viewDate);
 								if (this.o.minViewMode === 1){
 									this._setDate(UTCDate(year, month, day));
+									this.showMode();
+								} else {
+									this.showMode(-1);
 								}
 							}
 							else {
@@ -12319,17 +12520,17 @@ return jQuery;
 								if (this.o.minViewMode === 2){
 									this._setDate(UTCDate(year, month, day));
 								}
+								this.showMode(-1);
 							}
-							this.showMode(-1);
 							this.fill();
 						}
 						break;
 					case 'td':
-						if (target.is('.day') && !target.is('.disabled')){
+						if (target.hasClass('day') && !target.hasClass('disabled')){
 							day = parseInt(target.text(), 10)||1;
 							year = this.viewDate.getUTCFullYear();
 							month = this.viewDate.getUTCMonth();
-							if (target.is('.old')){
+							if (target.hasClass('old')){
 								if (month === 0){
 									month = 11;
 									year -= 1;
@@ -12338,7 +12539,7 @@ return jQuery;
 									month -= 1;
 								}
 							}
-							else if (target.is('.new')){
+							else if (target.hasClass('new')){
 								if (month === 11){
 									month = 0;
 									year += 1;
@@ -12363,15 +12564,19 @@ return jQuery;
 			if (!date){
 				this.dates.clear();
 			}
-			if (this.o.multidate === 1 && ix === 0){
-                // single datepicker, don't remove selected date
-            }
-			else if (ix !== -1){
-				this.dates.remove(ix);
+
+			if (ix !== -1){
+				if (this.o.multidate === true || this.o.multidate > 1 || this.o.toggleActive){
+					this.dates.remove(ix);
+				}
+			} else if (this.o.multidate === false) {
+				this.dates.clear();
+				this.dates.push(date);
 			}
 			else {
 				this.dates.push(date);
 			}
+
 			if (typeof this.o.multidate === 'number')
 				while (this.dates.length > this.o.multidate)
 					this.dates.remove(0);
@@ -12385,7 +12590,9 @@ return jQuery;
 
 			this.fill();
 			this.setValue();
-			this._trigger('changeDate');
+			if (!which || which  !== 'view') {
+				this._trigger('changeDate');
+			}
 			var element;
 			if (this.isInput){
 				element = this.element;
@@ -12402,8 +12609,8 @@ return jQuery;
 		},
 
 		moveMonth: function(date, dir){
-			if (!date)
-				return undefined;
+			if (!isValidDate(date))
+				return this.o.defaultViewDate;
 			if (!dir)
 				return date;
 			var new_date = new Date(date.valueOf()),
@@ -12460,9 +12667,11 @@ return jQuery;
 		},
 
 		keydown: function(e){
-			if (this.picker.is(':not(:visible)')){
-				if (e.keyCode === 27) // allow escape to hide and re-show picker
+			if (!this.picker.is(':visible')){
+				if (e.keyCode === 40 || e.keyCode === 27) { // allow down to re-show picker
 					this.show();
+					e.stopPropagation();
+        }
 				return;
 			}
 			var dateChanged = false,
@@ -12478,6 +12687,7 @@ return jQuery;
 					else
 						this.hide();
 					e.preventDefault();
+					e.stopPropagation();
 					break;
 				case 37: // left
 				case 39: // right
@@ -12500,7 +12710,7 @@ return jQuery;
 						newViewDate = new Date(focusDate);
 						newViewDate.setUTCDate(focusDate.getUTCDate() + dir);
 					}
-					if (this.dateWithinRange(newDate)){
+					if (this.dateWithinRange(newViewDate)){
 						this.focusDate = this.viewDate = newViewDate;
 						this.setValue();
 						this.fill();
@@ -12528,7 +12738,7 @@ return jQuery;
 						newViewDate = new Date(focusDate);
 						newViewDate.setUTCDate(focusDate.getUTCDate() + dir * 7);
 					}
-					if (this.dateWithinRange(newDate)){
+					if (this.dateWithinRange(newViewDate)){
 						this.focusDate = this.viewDate = newViewDate;
 						this.setValue();
 						this.fill();
@@ -12540,6 +12750,9 @@ return jQuery;
 					// As such, its behavior should not be hijacked.
 					break;
 				case 13: // enter
+					if (!this.o.forceParse) {
+							break;
+					}
 					focusDate = this.focusDate || this.dates.get(-1) || this.viewDate;
 					if (this.o.keyboardNavigation) {
 						this._toggle_multidate(focusDate);
@@ -12551,6 +12764,11 @@ return jQuery;
 					this.fill();
 					if (this.picker.is(':visible')){
 						e.preventDefault();
+						if (typeof e.stopPropagation === 'function') {
+							e.stopPropagation(); // All modern browsers, IE9+
+						} else {
+							e.cancelBubble = true; // IE6,7,8 ignore "stopPropagation"
+						}
 						if (this.o.autoclose)
 							this.hide();
 					}
@@ -12582,13 +12800,13 @@ return jQuery;
 
 		showMode: function(dir){
 			if (dir){
-				this.viewMode = Math.max(this.o.minViewMode, Math.min(2, this.viewMode + dir));
+				this.viewMode = Math.max(this.o.minViewMode, Math.min(this.o.maxViewMode, this.viewMode + dir));
 			}
 			this.picker
-				.find('>div')
+				.children('div')
 				.hide()
-				.filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName)
-					.css('display', 'block');
+				.filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName)
+					.show();
 			this.updateNavArrows();
 		}
 	};
@@ -12600,9 +12818,8 @@ return jQuery;
 		});
 		delete options.inputs;
 
-		$(this.inputs)
-			.datepicker(options)
-			.bind('changeDate', $.proxy(this.dateUpdated, this));
+		datepickerPlugin.call($(this.inputs), options)
+			.on('changeDate', $.proxy(this.dateUpdated, this));
 
 		this.pickers = $.map(this.inputs, function(i){
 			return $(i).data('datepicker');
@@ -12632,9 +12849,16 @@ return jQuery;
 				return;
 			this.updating = true;
 
-			var dp = $(e.target).data('datepicker'),
-				new_date = dp.getUTCDate(),
+			var dp = $(e.target).data('datepicker');
+
+			if (typeof(dp) === "undefined") {
+				return;
+			}
+
+			var new_date = dp.getUTCDate(),
 				i = $.inArray(e.target, this.inputs),
+				j = i - 1,
+				k = i + 1,
 				l = this.inputs.length;
 			if (i === -1)
 				return;
@@ -12644,16 +12868,16 @@ return jQuery;
 					p.setUTCDate(new_date);
 			});
 
-			if (new_date < this.dates[i]){
+			if (new_date < this.dates[j]){
 				// Date being moved earlier/left
-				while (i >= 0 && new_date < this.dates[i]){
-					this.pickers[i--].setUTCDate(new_date);
+				while (j >= 0 && new_date < this.dates[j]){
+					this.pickers[j--].setUTCDate(new_date);
 				}
 			}
-			else if (new_date > this.dates[i]){
+			else if (new_date > this.dates[k]){
 				// Date being moved later/right
-				while (i < l && new_date > this.dates[i]){
-					this.pickers[i++].setUTCDate(new_date);
+				while (k < l && new_date > this.dates[k]){
+					this.pickers[k++].setUTCDate(new_date);
 				}
 			}
 			this.updateDates();
@@ -12702,7 +12926,7 @@ return jQuery;
 	}
 
 	var old = $.fn.datepicker;
-	$.fn.datepicker = function(option){
+	var datepickerPlugin = function(option){
 		var args = Array.apply(null, arguments);
 		args.shift();
 		var internal_return;
@@ -12717,7 +12941,7 @@ return jQuery;
 					locopts = opts_from_locale(xopts.language),
 					// Options priority: js args, data-attrs, locales, defaults
 					opts = $.extend({}, defaults, locopts, elopts, options);
-				if ($this.is('.input-daterange') || opts.inputs){
+				if ($this.hasClass('input-daterange') || opts.inputs){
 					var ropts = {
 						inputs: opts.inputs || $this.find('input').toArray()
 					};
@@ -12729,28 +12953,41 @@ return jQuery;
 			}
 			if (typeof option === 'string' && typeof data[option] === 'function'){
 				internal_return = data[option].apply(data, args);
-				if (internal_return !== undefined)
-					return false;
 			}
 		});
-		if (internal_return !== undefined)
-			return internal_return;
-		else
+
+		if (
+			internal_return === undefined ||
+			internal_return instanceof Datepicker ||
+			internal_return instanceof DateRangePicker
+		)
 			return this;
+
+		if (this.length > 1)
+			throw new Error('Using only allowed for the collection of a single element (' + option + ' function)');
+		else
+			return internal_return;
 	};
+	$.fn.datepicker = datepickerPlugin;
 
 	var defaults = $.fn.datepicker.defaults = {
 		autoclose: false,
 		beforeShowDay: $.noop,
+		beforeShowMonth: $.noop,
+		beforeShowYear: $.noop,
 		calendarWeeks: false,
 		clearBtn: false,
+		toggleActive: false,
 		daysOfWeekDisabled: [],
+		daysOfWeekHighlighted: [],
+		datesDisabled: [],
 		endDate: Infinity,
 		forceParse: true,
 		format: 'mm/dd/yyyy',
 		keyboardNavigation: true,
 		language: 'en',
 		minViewMode: 0,
+		maxViewMode: 2,
 		multidate: false,
 		multidateSeparator: ',',
 		orientation: "auto",
@@ -12759,7 +12996,12 @@ return jQuery;
 		startView: 0,
 		todayBtn: false,
 		todayHighlight: false,
-		weekStart: 0
+		weekStart: 0,
+		disableTouchKeyboard: false,
+		enableOnReadonly: true,
+		container: 'body',
+		immediateUpdates: false,
+		title: ''
 	};
 	var locale_opts = $.fn.datepicker.locale_opts = [
 		'format',
@@ -12769,13 +13011,14 @@ return jQuery;
 	$.fn.datepicker.Constructor = Datepicker;
 	var dates = $.fn.datepicker.dates = {
 		en: {
-			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+			days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+			daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+			daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
 			months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 			today: "Today",
-			clear: "Clear"
+			clear: "Clear",
+			titleFormat: "MM yyyy"
 		}
 	};
 
@@ -12805,7 +13048,9 @@ return jQuery;
 		validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?/g,
 		nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
 		parseFormat: function(format){
-			// IE treats \0 as a string end in inputs (truncating the value),
+			if (typeof format.toValue === 'function' && typeof format.toDisplay === 'function')
+                return format;
+            // IE treats \0 as a string end in inputs (truncating the value),
 			// so it's a bad format delimiter, anyway
 			var separators = format.replace(this.validParts, '\0').split('\0'),
 				parts = format.match(this.validParts);
@@ -12821,7 +13066,9 @@ return jQuery;
 				return date;
 			if (typeof format === 'string')
 				format = DPGlobal.parseFormat(format);
-			var part_re = /([\-+]\d+)([dmwy])/,
+			if (format.toValue)
+                return format.toValue(date, format, language);
+            var part_re = /([\-+]\d+)([dmwy])/,
 				parts = date.match(/([\-+]\d+)([dmwy])/g),
 				part, dir, i;
 			if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)){
@@ -12887,7 +13134,7 @@ return jQuery;
 			function match_part(){
 				var m = this.slice(0, parts[i].length),
 					p = parts[i].slice(0, m.length);
-				return m === p;
+				return m.toLowerCase() === p.toLowerCase();
 			}
 			if (parts.length === fparts.length){
 				var cnt;
@@ -12926,7 +13173,9 @@ return jQuery;
 				return '';
 			if (typeof format === 'string')
 				format = DPGlobal.parseFormat(format);
-			var val = {
+			if (format.toDisplay)
+                return format.toDisplay(date, format, language);
+            var val = {
 				d: date.getUTCDate(),
 				D: dates[language].daysShort[date.getUTCDay()],
 				DD: dates[language].days[date.getUTCDay()],
@@ -12948,10 +13197,13 @@ return jQuery;
 			return date.join('');
 		},
 		headTemplate: '<thead>'+
+			              '<tr>'+
+			                '<th colspan="7" class="datepicker-title"></th>'+
+			              '</tr>'+
 							'<tr>'+
-								'<th class="prev">&laquo;</th>'+
+								'<th class="prev">&#171;</th>'+
 								'<th colspan="5" class="datepicker-switch"></th>'+
-								'<th class="next">&raquo;</th>'+
+								'<th class="next">&#187;</th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
@@ -12999,6 +13251,9 @@ return jQuery;
 		return this;
 	};
 
+	/* DATEPICKER VERSION
+	 * =================== */
+	$.fn.datepicker.version = '1.5.0';
 
 	/* DATEPICKER DATA-API
 	* ================== */
@@ -13012,14 +13267,14 @@ return jQuery;
 				return;
 			e.preventDefault();
 			// component click requires us to explicitly show it
-			$this.datepicker('show');
+			datepickerPlugin.call($this, 'show');
 		}
 	);
 	$(function(){
-		$('[data-provide="datepicker-inline"]').datepicker();
+		datepickerPlugin.call($('[data-provide="datepicker-inline"]'));
 	});
 
-}(window.jQuery));
+}));
 
 (function(){var d=null;function e(a){return function(b){this[a]=b}}function h(a){return function(){return this[a]}}var j;
 function k(a,b,c){this.extend(k,google.maps.OverlayView);this.c=a;this.a=[];this.f=[];this.ca=[53,56,66,78,90];this.j=[];this.A=!1;c=c||{};this.g=c.gridSize||60;this.l=c.minimumClusterSize||2;this.J=c.maxZoom||d;this.j=c.styles||[];this.X=c.imagePath||this.Q;this.W=c.imageExtension||this.P;this.O=!0;if(c.zoomOnClick!=void 0)this.O=c.zoomOnClick;this.r=!1;if(c.averageCenter!=void 0)this.r=c.averageCenter;l(this);this.setMap(a);this.K=this.c.getZoom();var f=this;google.maps.event.addListener(this.c,
@@ -14290,13 +14545,13 @@ jQuery(document).ready(function () {
 
 
   // Get the selected tab, if any 
-  var selectedTab = localStorage['selectedTab']; 
-  
+  var selectedTab = localStorage['selectedTab'];
+
   // and set the tab accordingly...
   jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
-  
-  
-  
+
+
+
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
@@ -14324,7 +14579,6 @@ jQuery(document).ready(function () {
     } else {
       input = jQuery(this).parent().parent().find('label').text();
     }
-    console.log(input);
     ga('send', 'event', 'Enquiry Form', 'Rental property', input);
 
   });
@@ -14365,48 +14619,61 @@ jQuery(document).ready(function () {
     });
   }
 
-  try {
+if (jQuery('.start_date.date').length) {
+  // Set a temporary date object
+  var nowTemp = new Date();
 
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+  // Get a date object in the correct format for the date picker
+  var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    var checkin = jQuery('.start_date.date').datepicker({
-      format: "dd-mm-yyyy",
-      beforeShowDay: function (date) {
-        return date.valueOf() >= now.valueOf();
-      },
-      autoclose: true
+  // Get the data from the DOM element
+  var data = jQuery('.start_date.date').data();
 
-    }).on('changeDate', function (ev) {
-      if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
+  // Init the date picker on the start date field
+  var start = jQuery('.start_date.date');
 
-        var newDate = new Date(ev.date);
-        newDate.setDate(newDate.getDate() + 1);
-        checkout.datepicker("update", newDate);
+  start.datepicker({
+    format: 'dd-mm-yyyy',
+    daysOfWeekHighlighted: data.highlight,
+    daysOfWeekDisabled: data.changeover,
+    startDate: now,
+    autoclose: true
+  })
 
-      }
-      jQuery('.end_date input')[0].focus();
-    });
+  // Init the date picker on the end date field
+  var end = jQuery('.end_date.date');
 
+  end.datepicker({
+    format: 'dd-mm-yyyy',
+    daysOfWeekHighlighted: data.highlight,
+    daysOfWeekDisabled: data.changeover,
+    startDate: now,
+    autoclose: true
+  })
 
-    var checkout = jQuery('.end_date.date').datepicker({
-      format: "dd-mm-yyyy",
-      beforeShowDay: function (date) {
-        if (!checkin.datepicker("getDate").valueOf()) {
-          return date.valueOf() >= new Date().valueOf();
-        } else {
-          return date.valueOf() > checkin.datepicker("getDate").valueOf();
-        }
-      },
-      autoclose: true
+  // When the start date changes update the startDate for the departure date calendar
+  start.on('changeDate', function (ev) {
 
-    }).on('changeDate', function (ev) {
-    });
+    // Get the start (arrival) date
+    var date = new Date(ev.date);
 
-  } catch (e) {
-    // what to do!?
-  }
+    // If the calendar is set to highlight days add seven days 
+    // Assumes that this property is highlighting one day and that booking period
+    // is for a seven night stay
+    if (data.highlight) {
+      date.setDate(date.getDate() + 7);
+    } else {
+      date.setDate(date.getDate() + 1);
+    }
 
+    // setStartDate
+    end.datepicker('setStartDate', date);
+
+    // Update the calendar object
+    end.datepicker('update', date);
+  })
+
+}
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
   if (jQuery('#map').length) {
@@ -14925,10 +15192,10 @@ window.twttr = (function (d, s, id) {
   return t;
 }(document, "script", "twitter-wjs"));
 var infowindow;
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
 
   // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
 
     //jQuery('#map_canvas').hide();
     if (!window.google) {
@@ -14947,7 +15214,7 @@ jQuery(document).ready(function() {
       // This must either be 'forsale' or 'accommodation'
       var action = jQuery('#property-search').attr('action').split('/');
       // Filter out the empty elements
-      action = action.filter(function(e) {
+      action = action.filter(function (e) {
         return e
       });
       var s_kwds = action[1];
@@ -14958,7 +15225,7 @@ jQuery(document).ready(function() {
       jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
         s_kwds: path
       },
-      function(data) {
+      function (data) {
 
         // Get the map instance
         map = document.map;
@@ -14980,7 +15247,7 @@ jQuery(document).ready(function() {
           //  Create a new viewpoint bound, so we can centre the map based on the markers
           var bounds = new google.maps.LatLngBounds();
           //  Go through each...
-          jQuery.each(markers, function(index, marker) {
+          jQuery.each(markers, function (index, marker) {
             bounds.extend(marker.position);
           });
           //  Fit these bounds to the map
@@ -14993,16 +15260,16 @@ jQuery(document).ready(function() {
           averageCenter: false
         });
 
-      }).done(function() {
+      }).done(function () {
 
       });
     }
 
     jQuery('#map_canvas').show();
   });
-  jQuery('.lastminute-date-search-link').each(function() {
+  jQuery('.lastminute-date-search-link').each(function () {
 
-    jQuery(this).on('click', function(event) {
+    jQuery(this).on('click', function (event) {
 
       var data = jQuery(this).data();
       var start = data.start;
@@ -15023,7 +15290,7 @@ jQuery(document).ready(function() {
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   }
 
-  jQuery('.property-search-button').on('click', function(event) {
+  jQuery('.property-search-button').on('click', function (event) {
 
     event.preventDefault();
     var path = getPath();
@@ -15032,7 +15299,7 @@ jQuery(document).ready(function() {
     // Submit the form
     jQuery('form#property-search').submit();
   });
-  jQuery('#sort_by').on('change', function(event) {
+  jQuery('#sort_by').on('change', function (event) {
 
     event.preventDefault();
     var path = getPath();
@@ -15043,13 +15310,13 @@ jQuery(document).ready(function() {
   });
   // Bind the typeahead business
   jQuery(".typeahead").typeahead({
-    source: function(query, process) {
+    source: function (query, process) {
       jQuery.get('/index.php?option=com_fcsearch&task=suggestions.display&format=json&tmpl=component',
               {
                 q: query,
                 items: 25
               },
-      function(data) {
+      function (data) {
         process(data);
       }
       )
@@ -15059,7 +15326,7 @@ jQuery(document).ready(function() {
 
 
   // Deal with the more/less options for the refine search bit.
-  jQuery("a.show").click(function(event) {
+  jQuery("a.show").click(function (event) {
 
     // Prevent the default click behaviour
     event.preventDefault();
@@ -15068,7 +15335,7 @@ jQuery(document).ready(function() {
     jQuery(this).prev().prev().toggleClass('show');
 
     // Check the open/closed state
-    jQuery(this).html(function(i, v) {
+    jQuery(this).html(function (i, v) {
       return v.trim() === Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS')
               ? Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS')
               : Joomla.JText._('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
@@ -15151,30 +15418,30 @@ function getPath(event) {
 
   }
 
-  if (arrival !== '' && typeof(arrival) !== 'undefined') {
+  if (arrival !== '' && typeof (arrival) !== 'undefined') {
     path = path + '/arrival_' + arrival;
   }
 
-  if (departure !== '' && typeof(departure) !== 'undefined') {
+  if (departure !== '' && typeof (departure) !== 'undefined') {
     path = path + '/departure_' + departure;
   }
-  if (occupancy !== '' && typeof(occupancy) !== 'undefined') {
+  if (occupancy !== '' && typeof (occupancy) !== 'undefined') {
     path = path + '/occupancy_' + occupancy;
   }
 
-  if (bedrooms !== '' && typeof(bedrooms) !== 'undefined') {
+  if (bedrooms !== '' && typeof (bedrooms) !== 'undefined') {
     path = path + '/bedrooms_' + bedrooms;
   }
 
-  if (sort_by !== '' && typeof(sort_by) !== 'undefined') {
+  if (sort_by !== '' && typeof (sort_by) !== 'undefined') {
     path = path + '/' + sort_by;
   }
 
-  if (min_price !== '' && typeof(min_price) !== 'undefined') {
+  if (min_price !== '' && typeof (min_price) !== 'undefined') {
     path = path + '/' + min_price;
   }
 
-  if (max_price !== '' && typeof(max_price) !== 'undefined') {
+  if (max_price !== '' && typeof (max_price) !== 'undefined') {
     path = path + '/' + max_price;
   }
 
@@ -15213,7 +15480,7 @@ function initmap() {
 // The five markers show a secret message when clicked
 // but that message is not within the marker's instance data
 function attachContent(marker, num) {
-  google.maps.event.addListener(marker, 'click', function() {
+  google.maps.event.addListener(marker, 'click', function () {
 
     if (infowindow)
       infowindow.close();
@@ -15252,7 +15519,7 @@ function stripVowelAccent(str) {
   // Replace apostrophe with space
   s = s.replace(/[\']/g, ' ');
   if (typeof String.prototype.trim !== 'function') {
-    String.prototype.trim = function() {
+    String.prototype.trim = function () {
       return this.replace(/^\s+|\s+$/g, '');
     }
   }
@@ -15407,3 +15674,597 @@ function initPropertyMap() {
 
 
 }  
+jQuery.noConflict();
+jQuery(document).ready(function ($) {
+  $('#fullamount').click(function () {
+    $('#downpayment').removeClass('selected');
+    $(this).addClass('selected');
+    $('#restWarning').hide();
+    if (typeof jsonstring.payment2 == 'undefined') {
+      payment1or2 = 'payment1'
+    } else {
+      payment1or2 = 'payment2'
+    }
+    if ($('#paypal').hasClass('selected')) {
+      $('.costMessage').empty().append(jsonstring[payment1or2]['PayPal']['PayPal'].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].PayPal.PayPal.method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].PayPal.PayPal.costs + '</span></div></div>');
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].amountpluscosts)
+    }
+    if ($('#creditcard').hasClass('selected')) {
+      if ($('#creditcardselector').val() === '') {
+        $('.costMessageCC').empty().append(jsonstring[payment1or2]['creditcard']['VISA'].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + woordcreditcard + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].costs + '</span></div></div>');
+        $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].amountpluscosts)
+      }
+      if ($('#creditcardselector').val() !== '') {
+        if ($('#creditcardselector').val() === 'A') {
+          subselect = 'American Express'
+        }
+        if ($('#creditcardselector').val() === 'M') {
+          subselect = 'Maestro'
+        }
+        if ($('#creditcardselector').val() === 'E') {
+          subselect = 'Mastercard'
+        }
+        if ($('#creditcardselector').val() === 'V') {
+          subselect = 'VISA'
+        }
+        $('.costMessageCC').empty().append(jsonstring[payment1or2]['creditcard'][subselect].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2]['creditcard'][subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['creditcard'][subselect].costs + '</span></div></div>');
+        $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard'][subselect].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard'][subselect].amountpluscosts)
+      }
+    }
+  });
+  
+  $('#downpayment').click(function () {
+    $('#fullamount').removeClass('selected');
+    $(this).addClass('selected');
+    $('#restWarning').show();
+    payment1or2 = 'payment1';
+    if ($('#paypal').hasClass('selected')) {
+      $('.costMessage').empty().append(jsonstring[payment1or2]['PayPal']['PayPal'].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].PayPal.PayPal.method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].PayPal.PayPal.costs + '</span></div></div>');
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].amountpluscosts)
+    }
+    if ($('#creditcard').hasClass('selected')) {
+      if ($('#creditcardselector').val() === '') {
+        $('.costMessageCC').empty().append(jsonstring[payment1or2]['creditcard']['VISA'].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + woordcreditcard + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].costs + '</span></div></div>');
+        $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].amountpluscosts)
+      }
+      if ($('#creditcardselector').val() !== '') {
+        if ($('#creditcardselector').val() === 'A') {
+          subselect = 'American Express'
+        }
+        if ($('#creditcardselector').val() === 'M') {
+          subselect = 'Maestro'
+        }
+        if ($('#creditcardselector').val() === 'E') {
+          subselect = 'Mastercard'
+        }
+        if ($('#creditcardselector').val() === 'V') {
+          subselect = 'VISA'
+        }
+        $('.costMessageCC').empty().append(jsonstring[payment1or2]['creditcard'][subselect].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2]['creditcard'][subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['creditcard'][subselect].costs + '</span></div></div>');
+        $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard'][subselect].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard'][subselect].amountpluscosts)
+      }
+    }
+  });
+  $('#ideal').click(function () {
+    $(this).addClass('selected');
+    $('#paypal, #creditcard, #banktransfer, #mrcash, #elv, #cheque').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').show();
+    $('#selectCreditCard').hide();
+    $('#selectCheque').hide();
+    $('#payment-button').data('mainpaymentmethod', 'ideal');
+    $('#payment-button').data('subpaymentmethod', '');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    payment1or2 = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL['iDEAL / ABN AMRO'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL['iDEAL / ABN AMRO'].amount);
+    $('.extrapaymentcost').hide();
+    if ($('#bankselector').val() !== '') {
+      if ($('#bankselector').val() === 'IABNANL2A') {
+        subselect = 'iDEAL / ABN AMRO'
+      }
+      if ($('#bankselector').val() === 'IASNBNL21') {
+        subselect = 'iDEAL / ASN'
+      }
+      if ($('#bankselector').val() === 'IINGBNL2A') {
+        subselect = 'iDEAL / ING Bank'
+      }
+      if ($('#bankselector').val() === 'IKNABNL2H') {
+        subselect = 'iDEAL / KNAB Bank'
+      }
+      if ($('#bankselector').val() === 'IRABONL2U') {
+        subselect = 'iDEAL / Rabobank'
+      }
+      if ($('#bankselector').val() === 'IRBRBNL21') {
+        subselect = 'iDEAL / Regiobank'
+      }
+      if ($('#bankselector').val() === 'ISNSBNL2A') {
+        subselect = 'iDEAL / SNS Bank'
+      }
+      if ($('#bankselector').val() === 'ITRIONL2U') {
+        subselect = 'iDEAL / Triodos Bank'
+      }
+      if ($('#bankselector').val() === 'IFVLBNL22') {
+        subselect = 'iDEAL / van Lanschotbank'
+      }
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL['iDEAL / ABN AMRO'].orgtot);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL['iDEAL / ABN AMRO'].amount);
+      $('.extrapaymentcost').hide();
+      if (jsonstring[payment1or2].iDEAL[subselect].costs !== '0,00') {
+        $('#costsWarning-ideal').show();
+        $('.costMessageIDEAL').empty().append(jsonstring[payment1or2].iDEAL[subselect].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].iDEAL[subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].iDEAL[subselect].costs + '</span></div></div>').show();
+        $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL[subselect].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL[subselect].amountpluscosts)
+      }
+    }
+  });
+  $('#paypal').click(function () {
+    $(this).addClass('selected');
+    $('#ideal, #creditcard, #banktransfer, #mrcash, #elv, #cheque').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').hide();
+    $('#selectCreditCard').hide();
+    $('#selectCheque').hide();
+    $('#payment-button').data('mainpaymentmethod', 'paypal');
+    $('#payment-button').data('subpaymentmethod', 'P');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    payment1or2 = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].amount);
+    $('.extrapaymentcost').hide();
+    if (jsonstring[payment1or2]['PayPal']['PayPal'].costs !== '0,00') {
+      $('#costsWarning').show();
+      $('.costMessage').empty().append(jsonstring[payment1or2]['PayPal']['PayPal'].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2]['PayPal']['PayPal'].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['PayPal']['PayPal'].amountpluscosts)
+    }
+  });
+  $('#creditcard').click(function () {
+    $(this).addClass('selected');
+    $('#ideal, #paypal, #banktransfer, #mrcash, #elv, #cheque').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').hide();
+    $('#selectCreditCard').show();
+    $('#selectCheque').hide();
+    $('#payment-button').data('mainpaymentmethod', 'creditcard');
+    $('#payment-button').data('subpaymentmethod', '');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    payment1or2 = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    if (jsonstring[payment1or2].creditcard.VISA.costs !== '0,00') {
+      $('#costsWarning-creditcard').show();
+      $('.costMessageCC').empty().append(jsonstring[payment1or2].creditcard.VISA.costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + woordcreditcard + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].creditcard.VISA.costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].creditcard.VISA.orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].creditcard.VISA.amountpluscosts)
+    }
+    if ($('#creditcardselector').val() !== '') {
+      if ($('#creditcardselector').val() === 'A') {
+        subselect = 'American Express'
+      }
+      if ($('#creditcardselector').val() === 'M') {
+        subselect = 'Maestro'
+      }
+      if ($('#creditcardselector').val() === 'E') {
+        subselect = 'Mastercard'
+      }
+      if ($('#creditcardselector').val() === 'V') {
+        subselect = 'VISA'
+      }
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].orgtot);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['creditcard']['VISA'].amount);
+      $('.extrapaymentcost').hide();
+      if (jsonstring[payment1or2].creditcard[subselect].costs !== '0,00') {
+        $('#costsWarning-creditcard').show();
+        $('.costMessageCC').empty().append(jsonstring[payment1or2].creditcard[subselect].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].creditcard[subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].creditcard[subselect].costs + '</span></div></div>').show();
+        $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].creditcard[subselect].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].creditcard[subselect].amountpluscosts)
+      }
+    }
+  });
+  $('#banktransfer').click(function () {
+    $(this).addClass('selected');
+    $('#ideal, #paypal, #creditcard, #mrcash, #elv, #cheque').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').hide();
+    $('#selectCreditCard').hide();
+    $('#selectCheque').hide();
+    $('#payment-button').data('mainpaymentmethod', 'banktransfer');
+    $('#payment-button').data('subpaymentmethod', 'bank');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide()
+  });
+  $('#mrcash').click(function () {
+    $(this).addClass('selected');
+    $('#ideal, #paypal, #creditcard, #banktransfer, #elv, #cheque').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').hide();
+    $('#selectCreditCard').hide();
+    $('#selectCheque').hide();
+    $('#payment-button').data('mainpaymentmethod', 'mrcash');
+    $('#payment-button').data('subpaymentmethod', 'C');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    payment1or2 = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].amount);
+    $('.extrapaymentcost').hide();
+    if (jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].costs !== '0,00') {
+      $('#costsWarning').show();
+      $('.costMessage').empty().append(jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['Bancontact / Mister Cash']['Bancontact / Mister Cash'].amountpluscosts)
+    }
+  });
+  $('#elv').click(function () {
+    $(this).addClass('selected');
+    $('#ideal, #paypal, #creditcard, #banktransfer, #mrcash, #cheque').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').hide();
+    $('#selectCreditCard').hide();
+    $('#selectCheque').hide();
+    $('#payment-button').data('mainpaymentmethod', 'elv');
+    $('#payment-button').data('subpaymentmethod', 'L');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    payment1or2 = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].amount);
+    $('.extrapaymentcost').hide();
+    if (jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].costs !== '0,00') {
+      $('#costsWarning').show();
+      $('.costMessage').empty().append(jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2]['Einmaliges Lastschriftverfahren']['Einmaliges Lastschriftverfahren'].amountpluscosts)
+    }
+  });
+  $('#cheque').click(function () {
+    $(this).addClass('selected');
+    $('#ideal, #paypal, #creditcard, #banktransfer, #mrcash, #elv').removeClass('selected');
+    $('#costsWarning').hide();
+    $('#selectBank').hide();
+    $('#selectCreditCard').hide();
+    $('#selectCheque').show();
+    $('#payment-button').data('mainpaymentmethod', 'cheque');
+    $('#payment-button').data('subpaymentmethod', '');
+    $('#select-method').children().css('border-color', '#c8c8c8');
+    $('#select-method').children().children().css('color', 'black');
+    $('#nomainpaymentmethodwarning').hide();
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    if ($('#chequeselector').val() !== '') {
+      if ($('#chequeselector').val() === 'F') {
+        subselect = 'Cheque de banque'
+      }
+      if ($('#chequeselector').val() === 'N') {
+        subselect = 'Cheque de vacances'
+      }
+      $('.totbedr').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].orgtot);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].amount);
+      $('.extrapaymentcost').hide();
+      if (jsonstring[payment1or2].cheque[subselect].costs !== '0,00') {
+        $('#costsWarning-cheque').show();
+        $('.costMessageCH').empty().append(jsonstring[payment1or2].cheque[subselect].costsstring);
+        $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].cheque[subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].cheque[subselect].costs + '</span></div></div>').show();
+        $('.totbedr').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].orgtotpluscosts);
+        $('.nogbet').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].amountpluscosts)
+      }
+    }
+  });
+  $('#bankselector').change(function () {
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    $('#payment-button').data('subpaymentmethod', $(this).val());
+    payment1or2 = '';
+    subselect = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    if ($(this).val() === 'IABNANL2A') {
+      subselect = 'iDEAL / ABN AMRO'
+    }
+    if ($(this).val() === 'IASNBNL21') {
+      subselect = 'iDEAL / ASN'
+    }
+    if ($(this).val() === 'IINGBNL2A') {
+      subselect = 'iDEAL / ING Bank'
+    }
+    if ($(this).val() === 'IKNABNL2H') {
+      subselect = 'iDEAL / KNAB Bank'
+    }
+    if ($(this).val() === 'IRABONL2U') {
+      subselect = 'iDEAL / Rabobank'
+    }
+    if ($(this).val() === 'IRBRBNL21') {
+      subselect = 'iDEAL / Regiobank'
+    }
+    if ($(this).val() === 'ISNSBNL2A') {
+      subselect = 'iDEAL / SNS Bank'
+    }
+    if ($(this).val() === 'ITRIONL2U') {
+      subselect = 'iDEAL / Triodos Bank'
+    }
+    if ($(this).val() === 'IFVLBNL22') {
+      subselect = 'iDEAL / van Lanschotbank'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL['iDEAL / ABN AMRO'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL['iDEAL / ABN AMRO'].amount);
+    $('.extrapaymentcost').hide();
+    if (jsonstring[payment1or2].iDEAL[subselect].costs !== '0,00') {
+      $('#costsWarning-ideal').show();
+      $('.costMessageIDEAL').empty().append(jsonstring[payment1or2].iDEAL[subselect].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].iDEAL[subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].iDEAL[subselect].costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL[subselect].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].iDEAL[subselect].amountpluscosts)
+    }
+  });
+  $('#creditcardselector').change(function () {
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    $('#payment-button').data('subpaymentmethod', $(this).val());
+    payment1or2 = '';
+    subselect = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    if ($(this).val() === 'A') {
+      subselect = 'American Express'
+    }
+    if ($(this).val() === 'M') {
+      subselect = 'Maestro'
+    }
+    if ($(this).val() === 'E') {
+      subselect = 'Mastercard'
+    }
+    if ($(this).val() === 'V') {
+      subselect = 'VISA'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].amount);
+    $('.extrapaymentcost').hide();
+    if (jsonstring[payment1or2].creditcard[subselect].costs !== '0,00') {
+      $('#costsWarning-creditcard').show();
+      $('.costMessageCC').empty().append(jsonstring[payment1or2].creditcard[subselect].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].creditcard[subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].creditcard[subselect].costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring[payment1or2].creditcard[subselect].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring[payment1or2].creditcard[subselect].amountpluscosts)
+    }
+  });
+  $('#chequeselector').change(function () {
+    $('.subpayment').find('.btn-default').css('border-color', '#ccc');
+    $('.nosubpaymentwarning').hide();
+    $('#payment-button').data('subpaymentmethod', $(this).val());
+    payment1or2 = '';
+    subselect = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    if ($(this).val() === 'F') {
+      subselect = 'Cheque de banque'
+    }
+    if ($(this).val() === 'N') {
+      subselect = 'Cheque de vacances'
+    }
+    $('.totbedr').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].orgtot);
+    $('.nogbet').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].amount);
+    $('.extrapaymentcost').hide();
+    if (jsonstring[payment1or2].cheque[subselect].costs !== '0,00') {
+      $('#costsWarning-cheque').show();
+      $('.costMessageCH').empty().append(jsonstring[payment1or2].cheque[subselect].costsstring);
+      $('.extrapaymentcost').empty().append('<div class="cost row"><div class="description col-sm-8" style="font-weight:bold;">' + jsonstring[payment1or2].cheque[subselect].method + '</div><div class="value col-sm-4"><span class="currency">&euro;</span><span class="amount">&nbsp;' + jsonstring[payment1or2].cheque[subselect].costs + '</span></div></div>').show();
+      $('.totbedr').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].orgtotpluscosts);
+      $('.nogbet').empty().append('&nbsp;' + jsonstring.payment1.creditcard['VISA'].amountpluscosts)
+    }
+  });
+  $('#payment-button').click(function () {
+    payment1or2 = '';
+    methodselect = '';
+    if ($('#fullamount').hasClass('selected')) {
+      if (typeof jsonstring.payment2 == 'undefined') {
+        payment1or2 = 'payment1'
+      } else {
+        payment1or2 = 'payment2'
+      }
+    }
+    if ($('#downpayment').hasClass('selected')) {
+      payment1or2 = 'payment1'
+    }
+    mainpaymentmethod = $(this).data('mainpaymentmethod');
+    subpaymentmethod = $(this).data('subpaymentmethod');
+    if (typeof mainpaymentmethod === 'undefined' || mainpaymentmethod == '') {
+      $('#select-method').children().css('border-color', '#D44343');
+      $('#select-method').children().children().css('color', '#D44343');
+      $('#nomainpaymentmethodwarning').show()
+    }
+    if (typeof subpaymentmethod === 'undefined' || subpaymentmethod == '') {
+      $('.subpayment').find('.btn-default').css('border-color', '#D44343');
+      $('.nosubpaymentwarning').show()
+    }
+    if (mainpaymentmethod === 'paypal') {
+      methodselect = 'PayPal';
+      subselect = 'PayPal'
+    }
+    if (mainpaymentmethod === 'ideal') {
+      methodselect = 'iDEAL';
+      if (subpaymentmethod === 'IABNANL2A') {
+        subselect = 'iDEAL / ABN AMRO'
+      }
+      if (subpaymentmethod === 'IASNBNL21') {
+        subselect = 'iDEAL / ASN'
+      }
+      if (subpaymentmethod === 'IINGBNL2A') {
+        subselect = 'iDEAL / ING Bank'
+      }
+      if (subpaymentmethod === 'IKNABNL2H') {
+        subselect = 'iDEAL / KNAB Bank'
+      }
+      if (subpaymentmethod === 'IRABONL2U') {
+        subselect = 'iDEAL / Rabobank'
+      }
+      if (subpaymentmethod === 'IRBRBNL21') {
+        subselect = 'iDEAL / Regiobank'
+      }
+      if (subpaymentmethod === 'ISNSBNL2A') {
+        subselect = 'iDEAL / SNS Bank'
+      }
+      if (subpaymentmethod === 'ITRIONL2U') {
+        subselect = 'iDEAL / Triodos Bank'
+      }
+      if (subpaymentmethod === 'IFVLBNL22') {
+        subselect = 'iDEAL / van Lanschotbank'
+      }
+    }
+    if (mainpaymentmethod === 'creditcard') {
+      methodselect = 'creditcard';
+      if (subpaymentmethod === 'A') {
+        subselect = 'American Express'
+      }
+      if (subpaymentmethod === 'M') {
+        subselect = 'Maestro'
+      }
+      if (subpaymentmethod === 'E') {
+        subselect = 'Mastercard'
+      }
+      if (subpaymentmethod === 'V') {
+        subselect = 'VISA'
+      }
+    }
+    if (mainpaymentmethod === 'mrcash') {
+      methodselect = 'Bancontact / Mister Cash';
+      subselect = 'Bancontact / Mister Cash'
+    }
+    if (mainpaymentmethod === 'cheque') {
+      methodselect = 'cheque';
+      if (subpaymentmethod === 'F') {
+        subselect = 'Cheque de banque'
+      }
+      if (subpaymentmethod === 'N') {
+        subselect = 'Cheque de vacances'
+      }
+    }
+    if (mainpaymentmethod === 'elv') {
+      methodselect = 'Einmaliges Lastschriftverfahren';
+      subselect = 'Einmaliges Lastschriftverfahren'
+    }
+    if (typeof subselect !== 'undefined') {
+      $(this).attr('href', jsonstring[payment1or2][methodselect][subselect].URL);
+      $.post('/cgi/lars/srv/customerpayment/set_olb-time.p', {
+        huovid: huovid,
+        huovnr: huovnr
+      }, function (a) {
+        if (a.status == 'OK') {
+        } else {
+          console.log(a.message)
+        }
+      }, 'json')
+    }
+  });
+});

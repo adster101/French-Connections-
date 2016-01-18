@@ -112,8 +112,8 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
         </div>
         <div class="col-md-3 col-sm-3">  
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
-            <a href="<?php echo $route ?>" class="btn btn-primary">
-              <?php echo ($this->result->is_bookable) ? JText::_('COM_FCSEARCH_BOOK_NOW') : JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
+            <a href="<?php echo $route ?>" class="btn btn-warning">
+              <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
             </a>
           </p>
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">

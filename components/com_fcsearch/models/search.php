@@ -1962,5 +1962,4 @@ class FcSearchModelSearch extends JModelList
 
         return $queryStr;*/
     }
-
 }

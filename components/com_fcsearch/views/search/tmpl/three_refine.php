@@ -106,7 +106,7 @@ $longitude = $this->state->get('search.longitude', '');
       </select>
     </div>
     <div class="search-field">
-      <button class="property-search-button btn btn-primary btn-sm" href="#">
+      <button class="property-search-button btn btn-warning btn-sm" href="#">
         <?php echo JText::_('COM_FCSEARCH_UPDATE') ?>
       </button>     
     </div>

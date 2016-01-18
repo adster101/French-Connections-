@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+  <fieldset name="payment" addrulepath="/components/com_accommodation/models/rules" label="">
+   
+    <field 
+      name="CardNumber"
+      filter="int"
+      class="form-control"
+      description="COM_ACCOMMODATION_BOOKING_CARD_NUMBER"
+      label="COM_ACCOMMODATION_BOOKING_CARD_NUMBER_LABEL"
+      required="true"
+      maxlength="20"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_BOOKING_CARD_NUMBER_MESSAGE" 
+    />
+   
+    <field 
+      name="CardholderName"
+      filter="string"
+      class="form-control"
+      description="COM_ACCOMMODATION_BOOKING_CARD_HOLDER_NAME"
+      label="COM_ACCOMMODATION_BOOKING_CARD_HOLDER_NAME_LABEL"
+      required="true"
+      maxlength="20"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_BOOKING_CARD_HOLDER_NAME_MESSAGE"
+    />
+    <field 
+      name="CVC"
+      filter="string"
+      class="form-control"
+      description="COM_ACCOMMODATION_BOOKING_CVC"
+      label="COM_ACCOMMODATION_BOOKING_CVC_LABEL"
+      hint="COM_ACCOMMODATION_BOOKING_CVC_PLACEHOLDER"
+      required="true"
+      maxlength="20"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_BOOKING_CVC_MESSAGE"
+    />
+    <field 
+      name="ExpiryDate"
+      filter="string"
+      class="form-control"
+      description="COM_ACCOMMODATION_BOOKING_EXPIRY_DATE"
+      label="COM_ACCOMMODATION_BOOKING_EXPIRY_DATE_LABEL"
+      hint="COM_ACCOMMODATION_BOOKING_EXPIRY_DATE_PLACEHOLDER"
+      required="true"
+      maxlength="20"
+      labelclass="control-label"
+      message="COM_ACCOMMODATION_BOOKING_EXPIRY_DATE_MESSAGE"
+    />
+        
+  </fieldset>  
+</form>

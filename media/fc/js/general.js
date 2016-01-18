@@ -76,13 +76,13 @@ jQuery(document).ready(function () {
 
 
   // Get the selected tab, if any 
-  var selectedTab = localStorage['selectedTab']; 
-  
+  var selectedTab = localStorage['selectedTab'];
+
   // and set the tab accordingly...
   jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
-  
-  
-  
+
+
+
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
       rewind: true,
@@ -110,7 +110,6 @@ jQuery(document).ready(function () {
     } else {
       input = jQuery(this).parent().parent().find('label').text();
     }
-    console.log(input);
     ga('send', 'event', 'Enquiry Form', 'Rental property', input);
 
   });
@@ -151,48 +150,61 @@ jQuery(document).ready(function () {
     });
   }
 
-  try {
+if (jQuery('.start_date.date').length) {
+  // Set a temporary date object
+  var nowTemp = new Date();
 
-    var nowTemp = new Date();
-    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+  // Get a date object in the correct format for the date picker
+  var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 
-    var checkin = jQuery('.start_date.date').datepicker({
-      format: "dd-mm-yyyy",
-      beforeShowDay: function (date) {
-        return date.valueOf() >= now.valueOf();
-      },
-      autoclose: true
+  // Get the data from the DOM element
+  var data = jQuery('.start_date.date').data();
 
-    }).on('changeDate', function (ev) {
-      if (ev.date.valueOf() > checkout.datepicker("getDate").valueOf() || !checkout.datepicker("getDate").valueOf()) {
+  // Init the date picker on the start date field
+  var start = jQuery('.start_date.date');
 
-        var newDate = new Date(ev.date);
-        newDate.setDate(newDate.getDate() + 1);
-        checkout.datepicker("update", newDate);
+  start.datepicker({
+    format: 'dd-mm-yyyy',
+    daysOfWeekHighlighted: data.highlight,
+    daysOfWeekDisabled: data.changeover,
+    startDate: now,
+    autoclose: true
+  })
 
-      }
-      jQuery('.end_date input')[0].focus();
-    });
+  // Init the date picker on the end date field
+  var end = jQuery('.end_date.date');
 
+  end.datepicker({
+    format: 'dd-mm-yyyy',
+    daysOfWeekHighlighted: data.highlight,
+    daysOfWeekDisabled: data.changeover,
+    startDate: now,
+    autoclose: true
+  })
 
-    var checkout = jQuery('.end_date.date').datepicker({
-      format: "dd-mm-yyyy",
-      beforeShowDay: function (date) {
-        if (!checkin.datepicker("getDate").valueOf()) {
-          return date.valueOf() >= new Date().valueOf();
-        } else {
-          return date.valueOf() > checkin.datepicker("getDate").valueOf();
-        }
-      },
-      autoclose: true
+  // When the start date changes update the startDate for the departure date calendar
+  start.on('changeDate', function (ev) {
 
-    }).on('changeDate', function (ev) {
-    });
+    // Get the start (arrival) date
+    var date = new Date(ev.date);
 
-  } catch (e) {
-    // what to do!?
-  }
+    // If the calendar is set to highlight days add seven days 
+    // Assumes that this property is highlighting one day and that booking period
+    // is for a seven night stay
+    if (data.highlight) {
+      date.setDate(date.getDate() + 7);
+    } else {
+      date.setDate(date.getDate() + 1);
+    }
 
+    // setStartDate
+    end.datepicker('setStartDate', date);
+
+    // Update the calendar object
+    end.datepicker('update', date);
+  })
+
+}
   // Load the google maps crap, only if there is a #map on the page.
   // Use #map generically and #location_map for property specific pages etc
   if (jQuery('#map').length) {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset name="tos">
+    
+
+    <field
+      name="tos"
+      type="checkbox"
+      required="true"
+      labelclass="checkbox required"
+      filter="int"
+      message="Please confirm that you accept the terms and conditions"
+      label="COM_RENTAL_BOOKING_SUBMIT_TERMS_AND_CONDITIONS">
+    </field>
+   
+    
+  </fieldset>
+</form>

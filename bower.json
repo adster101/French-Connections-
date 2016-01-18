@@ -2,7 +2,7 @@
   "name": "fc",
   "dependencies": {
     "bootstrap": "~3.2.0",
-    "bootstrap-datepicker": "~1.3",
+    "bootstrap-datepicker": "~1.5",
     "echojs": "~1",
     "mustache.js": "mustache#~2.2.0",
     "overthrow": "0.7.0",

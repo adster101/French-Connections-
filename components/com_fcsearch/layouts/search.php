@@ -8,6 +8,7 @@ $occupancy = $displayData->occupancy;
 $arrival = $displayData->arrival;
 $departure = $displayData->departure;
 $lastminute = (!empty($displayData->lastminute)) ? $displayData->lastminute : false;
+$colour = (!empty($displayData->colour)) ? $displayData->colour : 'primary';
 ?>
 <?php echo JHtml::_('form.token'); ?>
 <div class="form-group">
@@ -71,7 +72,7 @@ $lastminute = (!empty($displayData->lastminute)) ? $displayData->lastminute : fa
     <?php endfor; ?>
   </ul>
 <?php endif; ?>
-<button class="property-search-button btn btn-primary" href="#">
+<button class="property-search-button btn btn-warning">
   <i class="icon-search icon-white"> </i>
   <?php echo JText::_('COM_FCSEARCH_SEARCH') ?>
 </button>

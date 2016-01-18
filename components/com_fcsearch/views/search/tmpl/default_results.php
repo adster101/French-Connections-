@@ -31,6 +31,7 @@ $search_data->bedrooms = $this->state->get('list.bedrooms');
 $search_data->occupancy = $this->state->get('list.occupancy');
 $search_data->arrival = ($this->state->get('list.arrival', '')) ? JFactory::getDate($this->state->get('list.arrival'))->calendar('d-m-Y') : '';
 $search_data->departure = ($this->state->get('list.departure', '')) ? JFactory::getDate($this->state->get('list.departure'))->calendar('d-m-Y') : '';
+$search_data->colour = ($this->property_view_cta_colour);
 $uri = JUri::getInstance()->toString();
 $offers = ($this->state->get('list.offers')) ? true : false;
 $lwl = ($this->state->get('list.lwl')) ? true : false;

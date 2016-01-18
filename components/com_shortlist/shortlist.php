@@ -11,6 +11,7 @@ defined('_JEXEC') or die;
 
 // Register the Helloworld helper file
 //JLoader::register('RentalHelper', JPATH_ADMINISTRATOR . '/components/com_rental/helpers/rental.php');
+JLoader::import('frenchconnections.library');
 
 $controller = JControllerLegacy::getInstance('Shortlist');
 $controller->execute(JFactory::getApplication()->input->get('task'));
