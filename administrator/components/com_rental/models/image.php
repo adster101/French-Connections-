@@ -422,6 +422,10 @@ class RentalModelImage extends JModelAdmin
         // Free up memory
         imagedestroy($existing_image);
       }
+      else if ($width == $height) {
+          // Figure out what to do here!
+          // Probably need to crop some portion of the image out 
+      }
     }
     catch (Exception $e)
     {

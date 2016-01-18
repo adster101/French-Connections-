@@ -100,6 +100,7 @@ class RentalModelReview extends JModelAdmin
     $user = JFactory::getUser($userId);
 
     $uri = JUri::getInstance();
+    $uri->setScheme('http');
     $domain = $uri->toString(array('scheme', 'host'));
 
     // Below can be used when live. TO DO - Figure out how to use JRoute here to avoid hardcoding.
