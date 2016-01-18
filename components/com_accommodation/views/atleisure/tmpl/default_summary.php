@@ -41,6 +41,12 @@ $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
         </span>
       </p> 
       <p>
+        <?php echo JText::_('COM_ACCOMMODATION_ENQUIRY_CHILDREN_LABEL') ?>
+        <span>
+          <?php echo $enquiry_data['children'] ?>
+        </span>
+      </p> 
+      <p>
         Total
         <span class="pull-right">
           <strong>
