@@ -184,6 +184,7 @@ class RealestateRenewals extends JApplicationCli
     $users_to_ignore[] = JUser::getInstance('frueda@realestatelanguedoc.com')->id;
     $users_to_ignore[] = JUser::getInstance('contact@cotemercotejardinimmobilier.com')->id;
     $users_to_ignore[] = JUser::getInstance('julie.savill@beauxvillages.com')->id;
+    $users_to_ignore[] = JUser::getInstance('sales@ab-real-estate.com')->id;
 
     $db = JFactory::getDBO();
     /**
