@@ -71,8 +71,6 @@ foreach ($this->property_options as $key => $values)
 
 $latitude = $this->state->get('search.latitude', '');
 $longitude = $this->state->get('search.longitude', '');
-
-
 ?>
 <div class="panel panel-default" id="refine">
   <div class="panel-heading">
@@ -88,7 +86,13 @@ $longitude = $this->state->get('search.longitude', '');
       </li>
       <li>
         <a href="#mapsearch" data-toggle="tab" title="View results on map">
-          <img class="img-responsive map" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=300x150&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
+          <figure>
+            <img class="img-responsive map" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=300x150&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
+            <figcaption>
+              <?php echo JText::_('COM_FCSEARCH_VIEW_RESULTS_ON_MAP'); ?>
+            </figcaption>
+          </figure>
+
         </a>
       </li>
     </ul>
@@ -162,7 +166,7 @@ $longitude = $this->state->get('search.longitude', '');
                           <?php $counter++; ?>
                           <?php if ($counter == count($this->location_options) && !$hide) : ?>
                             </div>
-                        
+
                         <?php endif; ?>
                         <span></span>
                         <?php if ($counter == count($this->location_options) && !$hide) : ?>
@@ -233,7 +237,8 @@ $longitude = $this->state->get('search.longitude', '');
             if ($query_string_new['lwl'])
             {
                 unset($query_string_new['lwl']);
-            } else
+            }
+            else
             {
                 $query_string_new['lwl'] = 'true';
             }
@@ -253,7 +258,8 @@ $longitude = $this->state->get('search.longitude', '');
             if ($query_string_new['offers'])
             {
                 unset($query_string_new['offers']);
-            } else
+            }
+            else
             {
                 $query_string_new['offers'] = 'true';
             }
