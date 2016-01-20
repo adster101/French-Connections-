@@ -14493,9 +14493,60 @@ jQuery(document).ready(function () {
   window._fbq = window._fbq || [];
   window._fbq.push(['track', 'PixelInitialized', {}]);
 
+  // This is purely to accommodate A/B testing of an alternative search layout
+  // This or the above would need to be removed once the 'experiment' is finished.
+  jQuery('#map-search-tab a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+
+    jQuery(e.target).toggle();
+    jQuery(e.relatedTarget).toggle();
+
+    // Store the selected tab #ref in local storage, IE8+
+    var selectedTab = jQuery(e.target).attr('href');
+
+
+    // Set the local storage value so we 'remember' where the user was
+    localStorage['selectedTab'] = selectedTab;
+
+    if (selectedTab === '#mapsearch') {
+
+      // Init google maps if not already init'ed
+      if (!window.google) {
+        loadGoogleMaps('initabsearchmap'); // Asych load the google maps stuff
+      }
+
+      var template = jQuery('#template').html();
+
+      var data = [];
+
+      jQuery('.search-result').each(function () {
+        var tmp = jQuery(this).data();
+        data = data.concat(tmp);
+      });
+
+      // Render the map search results
+      Mustache.parse(template); // optional, speeds up future uses
+      var rendered = Mustache.render(template, data);
+
+      jQuery('#target').html(rendered);
+
+      jQuery('.map-search-results .map-search-result').hover(
+              function () {
+                var index = jQuery('.map-search-result').index(this);
+                markers[index].setAnimation(google.maps.Animation.BOUNCE);
+              },
+              function () {
+                var index = jQuery('.map-search-result').index(this);
+                markers[index].setAnimation(null);
+              });
+    }
+
+    location.hash = "#property-search";
+
+  });
+
   // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('#search-tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    console.log("asdasd");
+  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+
     //jQuery('#map_canvas').hide();
     if (!window.google) {
       loadGoogleMaps('initmap'); // Asych load the google maps stuff
@@ -14567,69 +14618,17 @@ jQuery(document).ready(function () {
     jQuery('#map_canvas').show();
   });
 
-  // Also need to integrate map here.
-  jQuery('#map-search-tab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-
-    jQuery(e.target).toggle();
-    jQuery(e.relatedTarget).toggle();
-
-    // Store the selected tab #ref in local storage, IE8+
-    var selectedTab = jQuery(e.target).attr('href');
-
-
-    // Set the local storage value so we 'remember' where the user was
-    localStorage['selectedTab'] = selectedTab;
-
-    if (selectedTab === '#mapsearch') {
-
-      // Init google maps if not already init'ed
-      if (!window.google) {
-        loadGoogleMaps('initabsearchmap'); // Asych load the google maps stuff
-      }
-
-      var template = jQuery('#template').html();
-
-      var data = [];
-
-      jQuery('.search-result').each(function () {
-        var tmp = jQuery(this).data();
-        data = data.concat(tmp);
-      });
-
-      // Render the map search results
-      Mustache.parse(template); // optional, speeds up future uses
-      var rendered = Mustache.render(template, data);
-
-      jQuery('#target').html(rendered);
-
-      jQuery('.map-search-results .map-search-result').hover(
-              function () {
-                var index = jQuery('.map-search-result').index(this);
-                markers[index].setAnimation(google.maps.Animation.BOUNCE);
-              },
-              function () {
-                var index = jQuery('.map-search-result').index(this);
-                markers[index].setAnimation(null);
-              });
-    }
-
-    location.hash = "#property-search";
-
-  });
-
-
   // Get the selected tab, if any 
   var selectedTab = localStorage['selectedTab'];
-
+  console.log(localStorage['selectedTab']);
   // Default to show the list tab if nothing saved in localStorage
-  if (selectedTab !== 'undefined')
+  if (typeof selectedTab !== 'undefined')
   {
     // and set the tab accordingly...
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
   } else {
     jQuery('.nav li a[href="#list"]').tab('show');
   }
-
 
   if (jQuery('.overthrow').length) {
     overthrow.sidescroller(document.querySelectorAll(".overthrow-enabled .sidescroll-nextprev"), {
@@ -15291,7 +15290,6 @@ jQuery(document).ready(function () {
       event.preventDefault();
     });
   });
-
 
   jQuery('.property-search-button').on('click', function (event) {
 
@@ -16271,3 +16269,8 @@ jQuery(document).ready(function ($) {
     }
   });
 });
+<<<<<<< HEAD
+
+=======
+
+>>>>>>> release-3.1.2
