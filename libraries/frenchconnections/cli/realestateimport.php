@@ -119,6 +119,7 @@ class RealestateImport extends Import
             ->set('title = ' . $data['title'] . ','
                     . 'description = ' . $data['description'] . ','
                     . 'bedrooms = ' . $data['bedrooms'] . ','
+                    . 'bathrooms = ' . $data['bathrooms'] . ','
                     . 'base_currency = ' . $data['base_currency'] . ','
                     . 'price = ' . $data['price'] . ','
                     . 'published_on = ' . $data['published_on'])
