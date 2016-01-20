@@ -1,6 +1,5 @@
 var markers = [];
 
-
 jQuery(document).ready(function () {
 
   twttr.ready(
