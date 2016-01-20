@@ -15268,11 +15268,11 @@ window.twttr = (function (d, s, id) {
 
   return t;
 }(document, "script", "twitter-wjs"));
+
 var infowindow;
 jQuery(document).ready(function () {
 
   jQuery('.lastminute-date-search-link').each(function () {
-
 
     jQuery(this).on('click', function (event) {
 
@@ -16268,8 +16268,3 @@ jQuery(document).ready(function ($) {
     }
   });
 });
-<<<<<<< HEAD
-
-=======
-
->>>>>>> release-3.1.2

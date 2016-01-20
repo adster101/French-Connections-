@@ -88,7 +88,7 @@ $max_budget = $this->state->get('list.max_price');
 
   <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
-      <ul class="nav nav-tabs">
+      <ul id="search-tabs" class="nav nav-tabs">
         <li class="active"><a href="#list" data-toggle="tab"><i class="glyphicon glyphicon-list"></i>&nbsp;List</a></li>
         <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
         <li><a href="#localinfo" data-toggle="tab"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Info</a></li>
