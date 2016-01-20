@@ -26,7 +26,7 @@ jQuery(document).ready(function () {
 
   // Works on the tabs on the search results page. Needs to be made more generic
   jQuery('#search-tabs a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-    console.log("asdasd");
+
     //jQuery('#map_canvas').hide();
     if (!window.google) {
       loadGoogleMaps('initmap'); // Asych load the google maps stuff
@@ -153,7 +153,7 @@ jQuery(document).ready(function () {
   var selectedTab = localStorage['selectedTab'];
 
   // Default to show the list tab if nothing saved in localStorage
-  if (selectedTab !== 'undefined')
+  if (typeof selectedTab !== 'undefined')
   {
     // and set the tab accordingly...
     jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
