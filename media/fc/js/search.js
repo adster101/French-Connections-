@@ -1,79 +1,6 @@
 var infowindow;
 jQuery(document).ready(function () {
 
-  // Works on the tabs on the search results page. Needs to be made more generic
-  jQuery('#search-tabs a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-
-    //jQuery('#map_canvas').hide();
-    if (!window.google) {
-      loadGoogleMaps('initmap'); // Asych load the google maps stuff
-    }
-
-    // Store the selected tab #ref in local storage, IE8+
-    localStorage['selectedTab'] = jQuery(e.target).attr('href');
-    // Get the selected tab from the local storage
-    var selectedTab = localStorage['selectedTab'];
-    var infowindow;
-    // If the selected tab is the map tag then grab the markers
-    if (selectedTab == '#mapsearch') {
-
-      // The path of the search, e.g. /search or /fr/search
-      // This must either be 'forsale' or 'accommodation'
-      var action = jQuery('#property-search').attr('action').split('/');
-      // Filter out the empty elements
-      action = action.filter(function (e) {
-        return e
-      });
-      var s_kwds = action[1];
-      var option = action[0];
-      var component = (option == 'forsale') ? 'com_realestatesearch' : 'com_fcsearch';
-      var path = getPath();
-      // Do an ajax call to get a list of towns...
-      jQuery.getJSON("/index.php?option=" + component + "&task=mapsearch.markers&format=json", {
-        s_kwds: path
-      },
-      function (data) {
-
-        // Get the map instance
-        map = document.map;
-        markers = [];
-        // Loop over all data (properties) and create a new marker
-        for (var i = 0; i < data.length; i++) {
-
-          // The lat long of the propert, units will appear stacked on top...
-          var myLatlng = new google.maps.LatLng(data[i].latitude, data[i].longitude);
-          // Create the marker instance
-          marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map
-          });
-          marker.setTitle((i + 1).toString());
-          content = '<div class="media"><a class="pull-left" href="' + data[i].link + '"><img class="media-object" src="' + data[i].thumbnail + '"/></a><div class="media-body"><h4 class="media-heading"><a href="' + data[i].link + '">' + data[i].unit_title + '</a></h4><p>' + data[i].description + '</p></div></div>';
-          attachContent(marker, content, 300);
-          markers[i] = marker;
-          //  Create a new viewpoint bound, so we can centre the map based on the markers
-          var bounds = new google.maps.LatLngBounds();
-          //  Go through each...
-          jQuery.each(markers, function (index, marker) {
-            bounds.extend(marker.position);
-          });
-          //  Fit these bounds to the map
-          map.fitBounds(bounds);
-        }
-
-        var markerCluster = new MarkerClusterer(map, markers, {
-          maxZoom: 12,
-          gridSize: 60,
-          averageCenter: false
-        });
-
-      }).done(function () {
-
-      });
-    }
-
-    jQuery('#map_canvas').show();
-  });
   jQuery('.lastminute-date-search-link').each(function () {
 
     jQuery(this).on('click', function (event) {
@@ -91,11 +18,6 @@ jQuery(document).ready(function () {
       event.preventDefault();
     });
   });
-  // Get the selected tab, if any and set the tab accordingly...
-  var selectedTab = localStorage['selectedTab'];
-  if (selectedTab == '#mapsearch') {
-    jQuery('.nav li a[href="' + selectedTab + '"]').tab('show');
-  }
 
   jQuery('.property-search-button').on('click', function (event) {
 
