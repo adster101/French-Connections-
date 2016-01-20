@@ -71,7 +71,7 @@ class FreddyRueda extends RealestateImport
       {
         $db->transactionStart();
 
-        (JDEBUG) ? $this->out('Processing... ' . $prop->agency_reference) : '';
+        $this->out('Processing... ' . $prop->agency_reference);
 
         // Check whether this property agency reference already exists in the versions table
         $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
@@ -83,7 +83,7 @@ class FreddyRueda extends RealestateImport
         if (!$id)
         {
           // TO DO - Make this a function used by FR and AF
-          (JDEBUG) ? $this->out('Adding property entry...') : '';
+          $this->out('Adding property entry...');
 
           // Create an entry in the #__realestate_property table
           $property_id = $this->createProperty($db, $user);
@@ -117,8 +117,7 @@ class FreddyRueda extends RealestateImport
           $data['created_by'] = $user;
           $data['created_on'] = $db->quote(JFactory::getDate());
           $data['description'] = $db->quote($prop->description);
-          $data['single_bedrooms'] = (int) $prop->single_bedrooms;
-          $data['double_bedrooms'] = 0;
+          $data['bedrooms'] = (int) $prop->bedrooms;
           $data['bathrooms'] = (int) $prop->bathrooms;
           $data['base_currency'] = $db->quote($prop->base_currency);
           $data['price'] = (int) $prop->price;
@@ -126,11 +125,11 @@ class FreddyRueda extends RealestateImport
           $data['published_on'] = $db->quote(JFactory::getDate());
 
           
-          (JDEBUG) ? $this->out('Adding property version...') : '';
+          $this->out('Adding property version...');
 
           $property_version_id = $this->createPropertyVersion($db, $data);
 
-          (JDEBUG) ? $this->out('Working through images...') : '';
+          $this->out('Working through images...');
 
           foreach ($prop->images as $i => $image)
           {
@@ -169,12 +168,12 @@ class FreddyRueda extends RealestateImport
         else
         {
 
-          (JDEBUG) ? $this->out('Updating expiry date...') : '';
+          $this->out('Updating expiry date...');
 
           // Update the expiry date 
           $this->updateProperty($db, $id);
 
-          (JDEBUG) ? $this->out('Updating version details...') : '';
+          $this->out('Updating version details...');
 
           // Update the property version in case price or description has changed...
           $data = array();
@@ -182,8 +181,7 @@ class FreddyRueda extends RealestateImport
           $data['agency_reference'] = $db->quote($prop->agency_reference);
           $data['title'] = $db->quote($prop->title);
           $data['description'] = $db->quote($prop->description, true);
-          $data['single_bedrooms'] = (int) $prop->single_bedrooms;
-          $data['double_bedrooms'] = (int) $prop->double_bedrooms;
+          $data['bedrooms'] = (int) $prop->bedrooms;
           $data['bathrooms'] = (int) $prop->bathrooms;
           $data['base_currency'] = $db->quote($prop->base_currency);
           $data['price'] = (int) $prop->price;
@@ -201,7 +199,7 @@ class FreddyRueda extends RealestateImport
         // Done so commit all the inserts and what have you...
         $db->transactionCommit();
 
-        (JDEBUG) ? $this->out('Done processing... ' . $prop->agency_reference) : '';
+        $this->out('Done processing... ' . $prop->agency_reference);
       }
       catch (Exception $e)
       {

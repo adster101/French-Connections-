@@ -112,33 +112,18 @@
       buttons="false"
     />
     <field
-      name="single_bedrooms"
+      name="bedrooms"
       type="integer"
       first="1"
       last="20"
       step="1"
-      label="COM_REALESTATE_FIELD_SINGLE_ROOMS_LABEL"
+      label="COM_REALESTATE_FIELD_BEDROOMS_LABEL"
       description="COM_REALESTATE_FIELD_SINGLE_ROOMS_DESC"
       class="input-small"
       labelclass="control-label"
       validate="nonzero"
       filter="int"
       default="">
-      <option value="">JSELECT</option>
-    </field>
-    
-    <field
-      name="double_bedrooms"
-      type="integer"
-      first="1"
-      last="20"
-      step="1"
-      label="COM_REALESTATE_FIELD_DOUBLE_ROOMS_LABEL"
-      description="COM_REALESTATE_FIELD_DOUBLE_ROOMS_DESC"
-      class="bedrooms-select input-small"
-      validate="nonzero"
-      labelclass="control-label"
-      filter="int">
       <option value="">JSELECT</option>
     </field>
     <field

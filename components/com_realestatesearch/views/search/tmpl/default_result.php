@@ -34,26 +34,26 @@ $prices = JHtml::_('general.price', $this->result->price, 'GBP', '', '');
     <div class="col-xs-12 col-sm-3">
       <p class="rates">
         <?php if ($this->result->price) : ?>
-          <span class="lead">
-            <?php echo '&pound;' . number_format(round($prices['GBP'])); ?>
-          </span>
-          (<?php echo '&euro;' . number_format(round($prices['EUR'])); ?>)
-          
+            <span class="lead">
+              <?php echo '&pound;' . number_format(round($prices['GBP'])); ?>
+            </span>
+            (<?php echo '&euro;' . number_format(round($prices['EUR'])); ?>)
+
         <?php else : ?>
-          <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
+            <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
         <?php endif; ?>
       </p> 
     </div>
   </div>
   <?php if (!empty($this->result->offer)) : ?>
-    <div class="row">
-      <div class="col-xs-12">
-        <p class="offer">
-          <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
-          <?php echo $this->escape($this->result->offer); ?>
-        </p>       
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="offer">
+            <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
+            <?php echo $this->escape($this->result->offer); ?>
+          </p>       
+        </div>
       </div>
-    </div>
   <?php endif; ?>
   <div class="row">
     <div class="col-xs-12 col-sm-3">
@@ -67,7 +67,13 @@ $prices = JHtml::_('general.price', $this->result->price, 'GBP', '', '');
       <div class="row">
         <div class="col-md-9 col-sm-9">
           <p>
-            <?php echo JText::sprintf('COM_REALESTATE_SEARCH_FACILITY_COUNT', $this->result->bedrooms, $this->result->bathrooms) ?>
+            <?php if ($this->result->bedrooms && $this->result->bathrooms) : ?>
+                <?php echo JText::sprintf('COM_REALESTATE_SEARCH_FACILITY_COUNT', $this->result->bedrooms, $this->result->bathrooms) ?>
+            <?php elseif ($this->result->bedrooms) : ?>
+                <?php echo JText::sprintf('COM_REALESTATE_SEARCH_BEDROOMS_COUNT', $this->result->bedrooms) ?>
+            <?php elseif ($this->result->bathrooms) : ?>
+                <?php echo JText::sprintf('COM_REALESTATE_SEARCH_BATHROOMS_COUNT', $this->result->bathrooms) ?>
+            <?php endif; ?>
           </p>
           <p>
             <?php echo JHtml::_('string.truncate', $this->result->description, 150, true, false); ?>

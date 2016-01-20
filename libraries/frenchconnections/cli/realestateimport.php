@@ -90,7 +90,7 @@ class RealestateImport extends Import
                         $db->quoteName('area'), $db->quoteName('region'), $db->quoteName('department'),
                         $db->quoteName('city'), $db->quoteName('latitude'), $db->quoteName('longitude'),
                         $db->quoteName('created_by'), $db->quoteName('created_on'), $db->quoteName('description'),
-                        $db->quoteName('single_bedrooms'), $db->quoteName('double_bedrooms'),
+                        $db->quoteName('bedrooms'),
                         $db->quoteName('bathrooms'), $db->quoteName('base_currency'), $db->quoteName('price'),
                         $db->quoteName('review'), $db->quoteName('published_on')
                     )
@@ -118,8 +118,8 @@ class RealestateImport extends Import
     $query->update('#__realestate_property_versions')
             ->set('title = ' . $data['title'] . ','
                     . 'description = ' . $data['description'] . ','
-                    . 'single_bedrooms = ' . $data['single_bedrooms'] . ','
-                    . 'double_bedrooms = ' . $data['double_bedrooms'] . ','
+                    . 'bedrooms = ' . $data['bedrooms'] . ','
+                    . 'bathrooms = ' . $data['bathrooms'] . ','
                     . 'base_currency = ' . $data['base_currency'] . ','
                     . 'price = ' . $data['price'] . ','
                     . 'published_on = ' . $data['published_on'])

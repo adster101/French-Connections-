@@ -93,7 +93,7 @@ class JFeedParserEnvelope extends JFeedParser {
         $listing->price = (string) $el->price;
         $listing->title = JHtml::_('string.truncate', $el->title_en, 125, true, false);
         $listing->description = JHtml::_('string.truncate', $el->summary_en, 1500, true, false);
-        $listing->single_bedrooms = $el->n_beds;
+        $listing->bedrooms = $el->n_beds;
         $listing->bathrooms = $el->n_baths;
         $listing->latitude = (string) str_replace(',', '.', $el->latitude);
         $listing->longitude = (string) str_replace(',', '.', $el->longitude);

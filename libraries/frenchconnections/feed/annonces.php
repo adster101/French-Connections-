@@ -94,7 +94,8 @@ class JFeedParserAnnonces extends JFeedParser {
         $listing->price = (string) $el->prix;
         $listing->title = JHtml::_('string.truncate', $el->$str, 35, true, false);
         $listing->description = JHtml::_('string.truncate', $el->$str, 1500, true, false);
-        $listing->single_bedrooms = (int) $el->nombre_chambres;
+        $listing->bedrooms = (int) $el->nombre_chambre;
+        $listing->bathrooms = (int) $el->nombre_salle_de_bain;
         $listing->latitude = (string) str_replace(',', '.', $el->latitude);
         $listing->longitude = (string) str_replace(',', '.', $el->longitude);
         

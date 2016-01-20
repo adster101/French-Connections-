@@ -414,5 +414,4 @@ class FcSearchViewSearch extends JViewLegacy
             return false;
         }
     }
-
 }

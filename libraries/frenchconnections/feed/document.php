@@ -102,7 +102,7 @@ class JFeedParserdocument extends JFeedParser
     $listing->base_currency = (string) $el->Price->currency;
     $listing->description = (string) $el->Description->description;
     $listing->title = JHtml::_('string.truncate', $el->Description->description, 100, true, false);
-    $listing->single_bedrooms = (int) $el->Description->bedrooms;
+    $listing->bedrooms = (int) $el->Description->bedrooms;
     $listing->bathrooms = (int) $el->Description->fullBathrooms;
     $listing->latitude = (string) $el->Address->latitude;
     $listing->longitude = (string) $el->Address->longitude;
