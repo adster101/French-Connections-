@@ -14469,7 +14469,6 @@ Joomla.editors.instances = Joomla.editors.instances || {};
 (function(a){a(document).ready(function(){function c(){var g=window.location.search.substring(1),l=g.split("&"),j={};for(var h=0;h<l.length;h++){var k=l[h].split("=");j[unescape(k[0])]=unescape(k[1])}return j}if(c().layout=="edit"){if(!c().id){uniQueid=c().extension_id}else{uniQueid=c().id}var b=c().view+uniQueid}else{b=""}if(b){a('a[data-toggle="tab"]').on("shown",function(g){a.cookie("last_tab"+b,a(g.target).attr("href"))});var d=a.cookie("last_tab"+b);var f=a(".nav-tabs").find("a").attr("href");if(!d){d=f}if(d){a("ul.nav-tabs").children().removeClass("active");a("a[href="+d+"]").parents("li:first").addClass("active");a("div.tab-content").children().removeClass("active");a(d).addClass("active")}a(".accordion-body").on("shown",function(h){var g=this.get("id");a.cookie("last_accordion"+b,g)});var e=a.cookie("last_accordion"+b);if(e){a('a[data-toggle="collapse"]').addClass("collapsed");a(".accordion-body").removeClass("in").height("0px");a('a[href="#'+e+'"]').removeClass("collapsed");a("#"+e).addClass("in").height("auto")}}})})(jQuery);
 var markers = [];
 
-
 jQuery(document).ready(function () {
 
   twttr.ready(
@@ -14620,7 +14619,7 @@ jQuery(document).ready(function () {
 
   // Get the selected tab, if any 
   var selectedTab = localStorage['selectedTab'];
-  console.log(localStorage['selectedTab']);
+
   // Default to show the list tab if nothing saved in localStorage
   if (typeof selectedTab !== 'undefined')
   {
