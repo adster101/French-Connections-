@@ -58,6 +58,7 @@
       labelclass="control-label"
       description="">
       <option value="">JSELECT</option>
+      <option value="5">COM_TICKETS_NEW</option>
       <option value="1">COM_TICKETS_OPEN</option>  
       <option value="3">COM_TICKETS_PENDING_FILTER</option>
       <option value="2">COM_TICKETS_TESTING_FILTER</option>

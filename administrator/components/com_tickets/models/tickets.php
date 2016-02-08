@@ -94,8 +94,8 @@ class TicketsModelTickets extends JModelList
     $query->select(
             $this->getState(
                     'list.select', 'a.id,
-                    date_format(a.date_created, "%d %b %Y") as date_created,
-                    date_format(a.date_updated, "%d %b %Y") as date_updated,
+                    date_format(a.date_created, "%d/%m/%y") as date_created,
+                    date_format(a.date_updated, "%d/%m/%y") as date_updated,
                     a.state,
                     c.title as severity,
                     a.title,

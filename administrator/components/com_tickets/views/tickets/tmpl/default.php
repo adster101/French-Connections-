@@ -26,11 +26,11 @@ $listDirn = $this->escape($this->state->get('list.direction'));
 
   <?php echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
   <?php if (!empty($this->sidebar)): ?>
-    <div id="j-sidebar-container" class="span2">
-    </div>
-    <div id="j-main-container" class="span10">
+      <div id="j-sidebar-container" class="span2">
+      </div>
+      <div id="j-main-container" class="span10">
     <?php else : ?>
-      <div id="j-main-container">
+        <div id="j-main-container">
       <?php endif; ?>
 
 
@@ -38,22 +38,22 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <thead>
           <tr>
             <?php if (isset($this->items[0]->ordering)): ?>
-              <th width="1%" class="nowrap center hidden-phone">
-                <?php echo JHtml::_('searchtools.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-              </th>
+                <th width="1%" class="nowrap center hidden-phone">
+                  <?php echo JHtml::_('searchtools.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+                </th>
             <?php endif; ?>
             <th width="1%" class="hidden-phone">
               <input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)" />
             </th>
             <?php if (isset($this->items[0]->state)): ?>
-              <th width="1%" class="nowrap center">
-                <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
-              </th>
+                <th width="1%" class="nowrap center">
+                  <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+                </th>
             <?php endif; ?>
             <?php if (isset($this->items[0]->id)): ?>
-              <th  class="nowrap  hidden-phone">
-                <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
-              </th>
+                <th  class="nowrap  hidden-phone">
+                  <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+                </th>
             <?php endif; ?>
 
             <th class='left'>
@@ -74,18 +74,20 @@ $listDirn = $this->escape($this->state->get('list.direction'));
             <th class='left'>
               <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_DATE_UPDATED', 'a.date_updated', $listDirn, $listOrder); ?>
             </th>
-
+            <th class='left'>
+              <?php echo JHtml::_('searchtools.sort', 'COM_TICKETS_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>
+            </th>
           </tr>
         </thead>
         <tfoot>
           <?php
           if (isset($this->items[0]))
           {
-            $colspan = count(get_object_vars($this->items[0])) + 1;
+              $colspan = count(get_object_vars($this->items[0])) + 1;
           }
           else
           {
-            $colspan = 10;
+              $colspan = 10;
           }
           ?>
           <tr>
@@ -97,51 +99,52 @@ $listDirn = $this->escape($this->state->get('list.direction'));
         <tbody>
           <?php
           foreach ($this->items as $i => $item) :
-            $canChange = $user->authorise('core.edit.state', 'com_vouchers');
-            $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-            ?>
-            <tr class="row<?php echo $i % 2; ?>">
-              <td class="center hidden-phone">
-                <?php echo JHtml::_('grid.id', $i, $item->id); ?>
-              </td>
-              <?php if (isset($this->items[0]->state)): ?>
-                <td>
-                  <?php echo JHtml::_('tickets.state', $item->state, $i, $canChange, 'cb'); ?>
+              $canChange = $user->authorise('core.edit.state', 'com_vouchers');
+              $canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
+              ?>
+              <tr class="row<?php echo $i % 2; ?>">
+                <td class="center hidden-phone">
+                  <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                 </td>
-              <?php endif; ?>
-
-              <?php if (isset($this->items[0]->id)): ?>
-                <td >
-                  <?php echo (int) $item->id; ?>   
-
-                </td>
-              <?php endif; ?>
-              <td>
-                <?php if ($item->checked_out) : ?>
-                  <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'tickets.', $canCheckin); ?>
+                <?php if (isset($this->items[0]->state)): ?>
+                    <td>
+                      <?php echo JHtml::_('tickets.state', $item->state, $i, $canChange, 'cb'); ?>
+                    </td>
                 <?php endif; ?>
-                <a rel="tooltip" title="<?php echo JHtml::_('string.truncate', $item->description, 250); ?>" href="<?php echo JRoute::_('index.php?option=com_tickets&task=ticket.edit&id=' . (int) $item->id) ?>">
-                  <?php echo $this->escape($item->title); ?>
-                </a>
-              </td>
-              <td>
-                <?php echo $item->severity; ?>
-              </td>
-              <td>
-                <?php echo $item->version; ?>
-              </td>
-              <td>
-                <?php echo $this->escape($item->area); ?>
 
-              </td>
-              <td>
-                <?php echo $item->name; ?>
-              </td>
+                <?php if (isset($this->items[0]->id)): ?>
+                    <td >
+                      <?php echo (int) $item->id; ?>   
 
-              <td>
-                <?php echo $item->date_updated; ?>
-              </td>
-            </tr>
+                    </td>
+                <?php endif; ?>
+                <td>
+                  <?php if ($item->checked_out) : ?>
+                      <?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'tickets.', $canCheckin); ?>
+                  <?php endif; ?>
+                  <a rel="tooltip" title="<?php echo JHtml::_('string.truncate', $item->description, 250); ?>" href="<?php echo JRoute::_('index.php?option=com_tickets&task=ticket.edit&id=' . (int) $item->id) ?>">
+                    <?php echo $this->escape($item->title); ?>
+                  </a>
+                </td>
+                <td>
+                  <?php echo $item->severity; ?>
+                </td>
+                <td>
+                  <?php echo $item->version; ?>
+                </td>
+                <td>
+                  <?php echo $this->escape($item->area); ?>
+                </td>
+                <td>
+                  <?php echo $item->name; ?>
+                </td>
+                <td>
+                  <?php echo $item->date_updated; ?>
+                </td>
+                <td>
+                  <?php echo $item->date_created; ?>
+                </td>
+              </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
