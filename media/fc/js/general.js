@@ -70,8 +70,6 @@ jQuery(document).ready(function () {
               });
     }
 
-    location.hash = "#property-search";
-
   });
 
   // Works on the tabs on the search results page. Needs to be made more generic
