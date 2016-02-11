@@ -35,7 +35,8 @@ module.exports = function (grunt) {
           //compiling frontend.less into frontend.css
           'media/fc/css/styles.css': 'templates/fcv4/assets/less/styles.less',
           'media/fc/css/critical.css':
-                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css', 'media/fc/css/critical-property.css']
+                  ['media/fc/css/critical-homepage.css', 'media/fc/css/critical-search.css', 'media/fc/css/critical-property.css'],
+          'administrator/templates/fcadmin/css/template.css': 'administrator/templates/fcadmin/less/template.less'
         }
       }
     },
