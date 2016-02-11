@@ -422,28 +422,14 @@ class RentalModelImage extends JModelAdmin
             }
             else if ($width == $height)
             {
-                // Check the aspect ratio. I.e. we want to retain a 4:3 aspect ratio
-                if ($profile->getHeight() > $max_height)
-                {
 
-                    // Crop out the extra height
-                    $profile = $imgObj->resize($max_width, $max_height, false, 4);
-                }
+                $profile = $imgObj->resize($max_width, $max_height, true, 2);
+
+                $blank_image = $this->createBlankImage($max_width, $max_height);
 
                 // Put it out to a file
                 $profile->tofile($file_path);
-
-                // Load the existing image
-                $existing_image = imagecreatefromjpeg($file_path);
-
-                // Make it progressive
-                $bit = imageinterlace($existing_image, 1);
-
-                // Save it out
-                imagejpeg($existing_image, $file_path, 100);
-
-                // Free up memory
-                imagedestroy($existing_image);
+                
             }
         }
         catch (Exception $e)

@@ -81,7 +81,7 @@ class FcadminModelNotification extends JModelForm
 
     $query = $db->getQuery(true);
 
-    $query->select($from . ' as user_id_from'
+    $query->select('DISTINCT ' . $from . ' as user_id_from'
                     . ', a.id as user_id_to, now() as date_time,'
                     . $db->quote($data['subject']) . ' as subject,'
                     . $db->quote($data['message']) . ' as message')
