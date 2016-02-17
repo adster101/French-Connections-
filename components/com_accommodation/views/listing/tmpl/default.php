@@ -483,7 +483,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                   <?php endif; ?>
 
                   <!-- Distance to coast -->
-                  <?php if ($this->item->distance_to_coast) : ?>
+                  <?php if ($this->item->distance_to_coast && ((int) $this->result->coast)) : ?>
                       <tr class="dotted">
                         <td>
                           <?php echo JText::_('COM_ACCOMMODATION_SITE_DISTANCE_TO_COAST'); ?></td>

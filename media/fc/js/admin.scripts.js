@@ -71,8 +71,6 @@ jQuery(document).ready(function () {
               });
     }
 
-    location.hash = "#property-search";
-
   });
 
   // Works on the tabs on the search results page. Needs to be made more generic
@@ -867,9 +865,21 @@ jQuery(document).ready(function () {
     jQuery('#availabilityModal').on('hidden', function () {
       // Clear the current selections...
       reset();
+      
+      inputs = jQuery(this).find('input');
+      labels = jQuery(this).find('label');
+      
+      inputs.each(function(){
+        jQuery(this).removeClass('required');
+      })
+      labels.each(function(){
+        jQuery(this).removeClass('required');
+      })
+
+      
     })
 
-    jQuery('.modal').on('shown', function () {
+    jQuery('#availabilityModal').on('shown', function () {
 
       // Position modal absolute and bump it down to the scrollPosition
       jQuery(this)
