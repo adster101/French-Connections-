@@ -114,7 +114,7 @@ class RentalViewReview extends JViewLegacy
       $property_id = $this->units[0]->id;
       $unit_id = $this->units[0]->unit_id;
       $bar->appendButton('Preview', 'preview', 'COM_RENTAL_PROPERTY_PREVIEW', $property_id, $unit_id);
-      $bar->appendButton('Popup', 'drawer', 'COM_RENTAL_HELLOWORLD_VIEW_PROPERTY_NOTES', 'index.php?option=com_notes&amp;view=notes&amp;layout=modal&amp;tmpl=component&property_id=' . $this->id, 650);
+      $bar->appendButton('Popup', 'drawer', 'COM_RENTAL_HELLOWORLD_VIEW_PROPERTY_NOTES', 'index.php?option=com_notes&amp;view=notes&amp;layout=modal&amp;tmpl=component&property_id=' . $this->id, 650, 300);
     }
   }
 

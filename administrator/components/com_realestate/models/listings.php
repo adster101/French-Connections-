@@ -152,7 +152,7 @@ class RealestateModelListings extends JModelList
     $query->where('a.created_by !=0');
 
     // Filter by published state
-    $published = $this->getState('filter.published');
+    $published = $this->getState('filter.published', '');
     if (is_numeric($published))
     {
       $query->where('a.published = ' . (int) $published);
@@ -255,7 +255,7 @@ class RealestateModelListings extends JModelList
 
     // Join the images, innit!
     $query->join('left', '#__realestate_property_images_library d on b.id = d.version_id');
-    $query->where('(d.ordering = (select min(ordering) from #__property_images_library e where e.version_id = b.id) or d.ordering is null)');
+    $query->where('(d.ordering = (select min(ordering) from #__realestate_property_images_library e where e.version_id = b.id) or d.ordering is null)');
 
 
 

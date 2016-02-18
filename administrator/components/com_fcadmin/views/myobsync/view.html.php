@@ -62,7 +62,7 @@ class FcadminViewmyobsync extends JViewLegacy
     // Add a batch button
     if ($user->authorise('core.create', 'com_invoices') && $user->authorise('core.edit', 'com_invoices') && $user->authorise('core.edit.state', 'com_invoices'))
     {
-      $bar->appendButton('Popup', 'upload', 'COM_FCADMIN_UPLOAD_INVOICES', 'index.php?option=com_fcadmin&view=invoices&tmpl=component', 800, 600);
+      $bar->appendButton('Popup', 'upload', 'COM_FCADMIN_UPLOAD_INVOICES', 'index.php?option=com_fcadmin&view=invoices&tmpl=component', 800, 300);
     }
 
     // Add the download card file link

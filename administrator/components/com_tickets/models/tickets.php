@@ -94,8 +94,8 @@ class TicketsModelTickets extends JModelList
     $query->select(
             $this->getState(
                     'list.select', 'a.id,
-                    date_format(a.date_created, "%d %b %Y") as date_created,
-                    date_format(a.date_updated, "%d %b %Y") as date_updated,
+                    date_format(a.date_created, "%d/%m/%y") as date_created,
+                    date_format(a.date_updated, "%d/%m/%y") as date_updated,
                     a.state,
                     c.title as severity,
                     a.title,
@@ -129,7 +129,7 @@ class TicketsModelTickets extends JModelList
     }
     else
     {
-      $query->where('a.state in (1,2,3,4)');
+      $query->where('a.state not in (0)');
     }
 
     // Filter by project area

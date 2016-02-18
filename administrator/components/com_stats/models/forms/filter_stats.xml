@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>  
 
+  <fields name="note"> 
+    <field 
+      name="note" 
+      type="note"
+      label=""
+      description="COM_STATS_FILTER_BLURB" 
+      class="alert alert-block"
+    />
+  </fields>
   <fields name="filter"> 
     <fieldset addfieldpath="/libraries/frenchconnections/forms/fields" >
+     
       <field
         name="search"
         type="text"

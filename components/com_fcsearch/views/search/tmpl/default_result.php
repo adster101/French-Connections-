@@ -90,7 +90,7 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
             echo JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
             echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
             echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
-            echo (!empty($this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (float) $this->result->coast) : '';
+            echo (!empty($this->result->coast) && ((int) $this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (float) $this->result->coast) : '';
             ?>
           </p>
           <p>

@@ -33,7 +33,7 @@ $location_title = $this->result->location_title;
 $property_type = $this->result->property_type;
 $thumb = ($this->result->thumbnail) ? '/images/property/' . $this->result->unit_id . '/thumb/' . $this->result->thumbnail : $uri->getScheme() . '://' . $this->result->url_thumb;
 $tagline = JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
-$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency,'','')
+$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency, '', '')
 ?>
 
 <div class="search-result" 
@@ -133,6 +133,11 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
                 </a>
               </p>
           <?php endif; ?> 
+          <?php if ($this->result->is_bookable) : ?>
+              <p>
+                <span class="glyphicon glyphicon-credit-card lead pull-left"></span>&nbsp;Book online securely
+              </p>
+          <?php endif; ?>
         </div>
       </div>
     </div>

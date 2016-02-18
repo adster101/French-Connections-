@@ -175,5 +175,18 @@ class TicketsModelTicket extends JModelAdmin
 
     return $ret;
   }
+  
+  public function preprocessForm(\JForm $form, $data, $group = 'content')
+  {
+
+      $user = JFactory::getUser();
+      $params = JComponentHelper::getParams('com_tickets');
+      
+      if (!$user->authorise('core.manage')) 
+      {
+          $form->removeField('tags');
+      }
+      
+   }
 
 }

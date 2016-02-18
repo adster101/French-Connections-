@@ -24,7 +24,7 @@ jQuery(document).ready(function () {
       reset();
     })
 
-    jQuery('.modal').on('shown', function () {
+    jQuery('#availabilityModal').on('shown', function () {
 
       // Position modal absolute and bump it down to the scrollPosition
       jQuery(this)

@@ -33,6 +33,15 @@ class JHtmlTickets
 				'publish',
 				'publish'
 			),
+			5 => array(
+				'unpublish',
+				'COM_TICKETS_UNPUBLISH',
+				'COM_TICKETS_UNPUBLISH',
+				'COM_TICKETS_UNPUBLISH',
+				true,
+				'publish',
+				'publish'
+			),
 			0 => array(
 				'publish',
 				'COM_TICKETS_PUBLISH',

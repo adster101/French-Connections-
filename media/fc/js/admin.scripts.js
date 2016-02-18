@@ -6,9 +6,9 @@ jQuery(document).ready(function () {
   twttr.ready(
           function (twttr) {
             twttr.conversion.trackPid('l526m');
-
           }
   );
+
   (function () {
     var _fbq = window._fbq || (window._fbq = []);
     if (!_fbq.loaded) {
@@ -70,8 +70,6 @@ jQuery(document).ready(function () {
                 markers[index].setAnimation(null);
               });
     }
-
-    location.hash = "#property-search";
 
   });
 
@@ -800,6 +798,7 @@ window.twttr = (function (d, s, id) {
 
   return t;
 }(document, "script", "twitter-wjs"));
+
 /*! jQuery UI - v1.8.23 - 2012-08-15
 * https://github.com/jquery/jquery-ui
 * Includes: jquery.ui.core.js
@@ -868,7 +867,7 @@ jQuery(document).ready(function () {
       reset();
     })
 
-    jQuery('.modal').on('shown', function () {
+    jQuery('#availabilityModal').on('shown', function () {
 
       // Position modal absolute and bump it down to the scrollPosition
       jQuery(this)
