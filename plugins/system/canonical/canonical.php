@@ -11,24 +11,41 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.plugin.plugin');
 
-class plgSystemCanonical extends JPlugin {
+class plgSystemCanonical extends JPlugin
+{
 
-  function plgSystemCanonical(&$subject, $config) {
-    parent::__construct($subject, $config);
-  }
+    function plgSystemCanonical(&$subject, $config)
+    {
+        parent::__construct($subject, $config);
+    }
 
-  function onBeforeCompileHead() {
-    $mainframe = JFactory::getApplication();
-    if ($mainframe->isAdmin()) {
-      return;
+    function onBeforeCompileHead()
+    {
+        $mainframe = JFactory::getApplication();
+        if ($mainframe->isAdmin())
+        {
+            return;
+        }
+        $doc = JFactory::getDocument();
+        // remove the shits set by Joomla!
+        foreach ($doc->_links as $k => $array)
+        {
+            if ($array['relation'] == 'canonical')
+            {
+                unset($doc->_links[$k]);
+            }
+        }
+
+        $uri = JUri::current();
+
+        $link = new JURI($uri);
+
+        if ($link->getScheme() == 'https')
+        {
+
+            $link->setScheme('http');
+            $doc->addHeadLink(htmlspecialchars($link->toString()), 'canonical');
+        }
     }
-    $doc = JFactory::getDocument();
-    // remove the shits set by Joomla!
-    foreach ($doc->_links as $k => $array) {
-      if ($array['relation'] == 'canonical') {
-        unset($doc->_links[$k]);
-      }
-    }
-  }
 
 }

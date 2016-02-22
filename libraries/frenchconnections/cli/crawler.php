@@ -13,7 +13,8 @@ class Crawler extends PHPCrawler
 
     public function __construct()
     {
-        $handle = fopen('/home/adam/fc-spider.txt','w');
+        //$handle = fopen('/home/AnXWtLd776/sitemap.txt','w');
+        $handle = fopen('/var/www/html/frenchconnections/sitemap.txt','w');
         
         $this->file = $handle;
         

@@ -27,8 +27,6 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
-require_once JPATH_BASE . '/administrator/components/com_rental/models/property.php';
-
 jimport('frenchconnections.cli.crawler');
 
 /**
@@ -56,13 +54,14 @@ class CrawlerCron extends JApplicationCli
         $crawler->addURLFilterRule("#(jpg|jpeg|gif|png|bmp)$# i");
         $crawler->addURLFilterRule("#(css|js)$# i");
         $crawler->addURLFilterRule("#(+\'uri\'+)$# i");
-        $crawler->goMultiProcessed(10, 1);
+        $crawler->addURLFilterRule("#(/en/)# i");
+        $crawler->goMultiProcessed(5, 1);
+        $crawler->setRequestDelay(0.25);
         $crawler->setUrlCacheType(PHPCrawlerUrlCacheTypes::URLCACHE_SQLITE);
         $crawler->obeyRobotsTxt(true);
         
         $crawler->go();
     }
-
 }
 
 JApplicationCli::getInstance('CrawlerCron')->execute();
