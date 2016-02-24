@@ -40,7 +40,7 @@ $ItemID = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
 <form class="form-inline" id="property-search" action="<?php echo JRoute::_('index.php?option=com_fcsearch&lang=en&Itemid=' . $ItemID . '&s_kwds=' . $s_kwds) ?>" method="POST">
   <h1 class="small-h1 page-header">
-    <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
+    <?php echo $this->escape(str_replace(' - French Connections', '', $this->pagetitle)); ?>
   </h1>
   <div class="well well-sm well-light-blue clearfix form-inline">  
     <?php echo $search_layout->render($search_data); ?>

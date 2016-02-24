@@ -356,13 +356,18 @@ class RentalModelTariffs extends JModelAdmin
                     return false;
                 }
 
-                // Get todays as a date
+                // This bit compares checks that the tariff end date
+                // is not expired. There's no point showing a tariff that is 
+                // no longer current.
+                $end_date = new DateTime($tariff_period['end_date']);
                 
-                $end_date = new DateTime($tariff_period['tariff']);
-                $interval = $end_date->diff($now);
-                $length = $interval->format('%a');
 
-                if (!$from_price && $length > 1)
+                if ($end_date < $now)
+                {
+                    continue;
+                }
+                
+                if (!$from_price)
                 {
                     $from_price = $tariff_period['tariff'];
                 }

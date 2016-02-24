@@ -55,8 +55,8 @@ class CrawlerCron extends JApplicationCli
         $crawler->addURLFilterRule("#(css|js)$# i");
         $crawler->addURLFilterRule("#(+\'uri\'+)$# i");
         $crawler->addURLFilterRule("#(/en/)# i");
-        $crawler->goMultiProcessed(5, 1);
-        $crawler->setRequestDelay(0.25);
+        $crawler->goMultiProcessed(20, 1);
+        $crawler->setRequestDelay(60/100);
         $crawler->setUrlCacheType(PHPCrawlerUrlCacheTypes::URLCACHE_SQLITE);
         $crawler->obeyRobotsTxt(true);
         
@@ -65,3 +65,35 @@ class CrawlerCron extends JApplicationCli
 }
 
 JApplicationCli::getInstance('CrawlerCron')->execute();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

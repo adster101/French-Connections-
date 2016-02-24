@@ -80,6 +80,8 @@ class RealestateViewListings extends JViewLegacy
       JToolBarHelper::unpublish('listings.unpublish', 'JTOOLBAR_UNPUBLISH', true);
       JToolbarHelper::archiveList('listings.archive', 'JTOOLBAR_ARCHIVE', true);
       JToolBarHelper::trash('listings.trash');
+      JToolbarHelper::checkin('listings.checkin');
+
     }
 
     // Add the custom snooze button

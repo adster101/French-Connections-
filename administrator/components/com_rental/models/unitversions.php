@@ -275,7 +275,6 @@ class RentalModelUnitVersions extends JModelAdmin
 
       // If this is a new unit then we need to generate a 'stub' entry into the unit table
       // which essentially handles the non versionable stuff (like expiry data, ordering and published state).
-      // TO DO - Move this code to run when user chooses add new property
       if ($isNew)
       {
 
@@ -682,11 +681,7 @@ class RentalModelUnitVersions extends JModelAdmin
     }
 
     $unit_table = $this->getTable('Unit', 'RentalTable');
-
-
-
-    // Optional further sanity check after data has been validated, filtered, and about to be checked...
-    //$this->prepareTable($property_table);
+   
     if (!$unit_table->save($data))
     {
       return false;
