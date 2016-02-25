@@ -865,18 +865,6 @@ jQuery(document).ready(function () {
     jQuery('#availabilityModal').on('hidden', function () {
       // Clear the current selections...
       reset();
-      
-      inputs = jQuery(this).find('input');
-      labels = jQuery(this).find('label');
-      
-      inputs.each(function(){
-        jQuery(this).removeClass('required');
-      })
-      labels.each(function(){
-        jQuery(this).removeClass('required');
-      })
-
-      
     })
 
     jQuery('#availabilityModal').on('shown', function () {

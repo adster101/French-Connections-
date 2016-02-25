@@ -22,6 +22,7 @@ abstract class FcadminHelper {
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_WHERE_HEARD'), 'index.php?option=com_fcadmin&view=whereheard&format=raw', $submenu == 'whereheard');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_IMAGES'), 'index.php?option=com_fcadmin&view=images', $submenu == 'images');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NOTIFICATIONS'), 'index.php?option=com_fcadmin&view=notification', $submenu == 'notification');
+    JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NOPROPERTY'), 'index.php?option=com_fcadmin&view=noproperty&format=raw', $submenu == 'noproperty');
   }
 
 }

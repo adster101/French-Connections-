@@ -90,9 +90,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         // Get the db object
         $db = JFactory::getDBO();
         // Get a date so we can expire all vouchers listed against a property
-        $date = JFactory::getDate('-1 day')->calendar('Y-m-d');
-        $yesterday = JFactory::getDate('')->calendar('Y-m-d');
-
+        $date = JFactory::getDate()->calendar('Y-m-d');
+        $yesterday = JFactory::getDate('-1 day')->calendar('Y-m-d');
 
         $query = $db->getQuery(true);
 
@@ -105,7 +104,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         {
             $db->setQuery($query);
             $db->execute();
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             return false;
         }
@@ -152,7 +152,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
                 {
                     $order_lines_due[$item]['quantity'] = $quantity_to_charge;
                 }
-            } else
+            }
+            else
             {
                 // The previous version didn't have any of these, so bill 'em all
                 $order_lines_due[$item]['quantity'] = $quantity['quantity'];
@@ -256,7 +257,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             if ($vat_status == 'S20' || $vat_status == 'S2A')
             {
                 $line['vat'] = $line['quantity'] * $line['cost'] * $vat;
-            } else
+            }
+            else
             {
                 $line['vat'] = 0;
             }
@@ -501,7 +503,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             {
 
                 $selfcatering++;
-            } elseif ($unit->accommodation_type == 24)
+            }
+            elseif ($unit->accommodation_type == 24)
             {
 
                 $bandb++;
@@ -516,10 +519,12 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         {
             $unit_count = $selfcatering; // Set total units to the number of self-catering
             $mixed_units = true; // Flag the property as having mixed units...
-        } elseif ($bandb == 0 && $selfcatering > 0)
+        }
+        elseif ($bandb == 0 && $selfcatering > 0)
         {
             $unit_count = ( $selfcatering - 1 ); // Remove one as the first is included in the package price
-        } elseif ($bandb > 0 && $selfcatering == 0)
+        }
+        elseif ($bandb > 0 && $selfcatering == 0)
         {
             $unit_count = 0; // Don't charge for additional units as B&B have unlimited
         }
@@ -533,7 +538,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
                 //$item_costs['1004-009']['quantity'] = 1; // Renewal
                 //$item_costs['1002-008']['quantity'] = 1; // Renewal
                 $item_costs[$codes->get('professional-package-renewal')]['quantity'] = 1; // Renewal
-            } else
+            }
+            else
             {
                 // Image count must be less than 8 
                 //$item_costs['1002-004']['quantity'] = 1;
@@ -556,7 +562,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
                 //$item_costs['1005-009']['quantity'] = 1;
                 //$item_costs['1003-008']['quantity'] = 1;
                 $item_costs[$codes->get('professional-package')]['quantity'] = 1;
-            } else
+            }
+            else
             {
                 // Image count must be less than 8
                 //$item_costs['1003-004']['quantity'] = 1;
@@ -705,7 +712,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             $this->saveProtxTransaction($arrResponse);
 
             return $VendorTxCodeNew;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -745,7 +753,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         if ($strStatus == "OK")
         {
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -1035,7 +1044,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_NO_CHANGES');
 
             return $message;
-        } else if ($this->getIsRenewal() && $this->getIsReview())
+        }
+        else if ($this->getIsRenewal() && $this->getIsReview())
         {
             // Get the amound paid
             $total = $this->getOrderTotal($order);
@@ -1059,7 +1069,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             $message = JText::_('COM_RENTAL_HELLOWORLD_RENEWAL_CONFIRMATION_WITH_CHANGES');
 
             return $message;
-        } else if (empty($expiry_date) && !$this->getIsRenewal())
+        }
+        else if (empty($expiry_date) && !$this->getIsRenewal())
         {
 
             // New property
@@ -1077,7 +1088,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
             return $message;
             // Send confirmation of submission
-        } else if (!empty($expiry_date) && !$this->getIsRenewal() && $this->getIsReview())
+        }
+        else if (!empty($expiry_date) && !$this->getIsRenewal() && $this->getIsReview())
         {
 
             // Existing property that has been updated. - May not be appropriate here...or this may 
@@ -1096,10 +1108,14 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
             $this->updateProperty($listing_id, $total, $review = 2, '', '', $autorenewal = $transaction_id);
 
+            // Clear vouchers if there are any...
+            $this->clearVouchers($listing_id);
+
             $message = JText::_('COM_RENTAL_PROPERTY_EXISTING_PROPERTY_UPDATE_WITH_PAYMENT');
 
             return $message;
-        } else if (!empty($expiry_date) && !$this->getIsRenewal() && !$this->getIsReview())
+        }
+        else if (!empty($expiry_date) && !$this->getIsRenewal() && !$this->getIsReview())
         {
             // Must be processing a voucher or some other gubbins
             $total = $this->getOrderTotal($order);
@@ -1373,7 +1389,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
              * Get the date now
              */
             $date = JFactory::getDate();
-        } elseif ($days_to_expiry > 0)
+        }
+        elseif ($days_to_expiry > 0)
         {
             $date = JFactory::getDate($this->getExpiryDate());
         }
@@ -1416,7 +1433,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         if (!$discount)
         {
             $query->where('b.catid not in (50)');
-        } else
+        }
+        else
         {
             $query->where('b.catid in (50)');
         }
@@ -1428,7 +1446,8 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         try
         {
             $rows = $db->loadObjectList();
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             // Problem loading vouchers for this property
             return false;
