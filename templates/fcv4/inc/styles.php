@@ -1,7 +1,7 @@
 <?php
 defined('_JEXEC') or die('Restricted access');
 
-$css_path = (JDEBUG) ? '/media/fc/css/styles.css' : '/media/fc/assets/css/20160225104644.styles.min.css';
+$css_path = (JDEBUG) ? '/media/fc/css/styles.css' : '/media/fc/assets/css/20160229143520.styles.min.css';
 ?>
 <script id="loadcss">
     (function (w) {

@@ -184,7 +184,7 @@ class TicketsModelTicket extends JModelAdmin
       
       if (!$user->authorise('core.manage')) 
       {
-          $form->removeField('tags');
+          $form->setFieldAttribute('tags', 'readonly', 'true');
       }
       
    }

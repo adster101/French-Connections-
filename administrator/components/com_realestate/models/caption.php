@@ -56,25 +56,93 @@ class RealEstateModelCaption extends JModelAdmin
    
     return $data;
   }
+  
   /**
-   * Method to save a caption for an image
+   * Save method to save an newly upload image file, taking into account a new version if necessary.
    * 
    * @param type $data
    */
   public function save($data)
   {
-    // TO DO - We can probably do away with this 'caption' model if we can deal with checking whether 
-    // we need to create a new version in the ImageModel as well as saving the image...
-    // 
-    // One way to do this is to add a new method here:
-    // 
-    // $this->getPropertyVersion($realestate_property_id) - Simply returns the version ID to save the image against creating a new version if required
-    // 
-    // As long as we have a version ID we can proceed and save the image detail with
-    // 
-    // parent::save($image_detail);
-    // 
-    parent::save($data);
-  }
-  
+    $caption_id = $data['id'];
+    $model = JModelLegacy::getInstance('PropertyVersions', 'RealEstateModel');
+
+    // Need to look up the unit review status here to ensure that we upload new images against the correct version
+    $property = $model->getItem($data['realestate_property_id']);
+
+    // Set the review state to that of the latest unit version which will have previously been updated (if this is a 2nd, 3rd or 4th image upload etc
+    $data['review'] = $property->review;
+    $data['id'] = $property->id;
+    $data['property_id'] = $property->property_id;
+
+    // Hit up the unit versions save method to determine if a new version is needed.
+    if (!$model->save($data))
+    {
+      return false;
+    }
+
+    $table = $this->getTable();
+
+    // Here we check if a new version has been created...
+    if ($model->new_version_required)
+    {
+      // Look up the old image data as a new unit version has been created
+      // along with a new set of images saved against the new version id (which means we have to 
+      // update the new caption against a different image object...
+      $image = $this->getItem($caption_id);
+      unset($data['id']);
+      $data['image_file_name'] = $image->image_file_name;
+      $data['ordering'] = $image->ordering;
+      $data['version_id'] = $model->getState($model->getName() . '.version_id');
+      $table->set('_tbl_keys', array('image_file_name', 'version_id'));
+    }
+    else
+    {
+      $data['id'] = $caption_id;
+      $data['version_id'] = $model->getState($model->getName() . '.version_id');
+    }
+
+    // Arrange the data for saving into the images table
+    // Call the parent save method to save the actual image data to the images table
+    $key = $table->getKeyName();
+
+    // Allow an exception to be thrown.
+    try
+    {
+
+      // Bind the data.
+      if (!$table->bind($data))
+      {
+        $this->setError($table->getError());
+
+        return false;
+      }
+
+      // Prepare the row for saving
+      $this->prepareTable($table);
+
+      // Store the data.
+      if (!$table->store())
+      {
+        $this->setError($table->getError());
+        return false;
+      }
+
+      // Clean the cache.
+      $this->cleanCache();
+    }
+    catch (Exception $e)
+    {
+      $this->setError($e->getMessage());
+
+      return false;
+    }
+
+    if (isset($table->$key))
+    {
+      $this->setState($this->getName() . '.id', $table->$key);
+    }
+
+    return true;
+  } 
 }
