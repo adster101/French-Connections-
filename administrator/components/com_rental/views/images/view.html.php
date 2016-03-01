@@ -123,6 +123,7 @@ class RentalViewImages extends JViewLegacy
     JLoader::register('JHtmlFcsortablelist', JPATH_SITE . '/libraries/frenchconnections/helpers/fcsortablelist.php');
 
     JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
+    JText::script('SUCCESS');
   }
 
 }

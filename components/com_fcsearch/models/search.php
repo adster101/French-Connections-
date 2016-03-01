@@ -278,7 +278,6 @@ class FcSearchModelSearch extends JModelList
 
             // This method didn't work correctly - 837 - 23/12/2015
             // $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
-
             // Create a new query object.
             $db = $this->getDbo();
             $query = $db->getQuery(true);
@@ -493,10 +492,10 @@ class FcSearchModelSearch extends JModelList
 
             /* Remove price filter on date searches
              * Ticket 837 - 23/12/2015
-            if ($arrival && $departure)
-            {
-                $query->where('(' . $priceStr . ') is not null');
-            }
+              if ($arrival && $departure)
+              {
+              $query->where('(' . $priceStr . ') is not null');
+              }
              */
 
             if ($sort_column == 'coast')
@@ -764,12 +763,12 @@ class FcSearchModelSearch extends JModelList
             $query->group('d.' . (string) $type);
 
             /* Failed code for 837 - 23/12/2015
-            if ($arrival && $departure)
-            {
-                $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+              if ($arrival && $departure)
+              {
+              $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
-                $query->where('(' . $priceStr . ') is not null');
-            } */
+              $query->where('(' . $priceStr . ') is not null');
+              } */
 
             // Get the options.
             $db->setQuery($query);
@@ -926,12 +925,12 @@ class FcSearchModelSearch extends JModelList
         $query->where('d.unit_id is not null');
 
         /* Failed code fix for 837
-        if ($arrival && $departure)
-        {
-            $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+          if ($arrival && $departure)
+          {
+          $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
-            $query->where('(' . $priceStr . ') is not null');
-        }*/
+          $query->where('(' . $priceStr . ') is not null');
+          } */
 
         if ($this->getState('search.level') == 5)
         { // City level
@@ -1094,14 +1093,14 @@ class FcSearchModelSearch extends JModelList
             $query->where('d.review = 0');
             $query->group('e.attribute_id');
 
-            /* 
+            /*
              * Failed code for 837 - 23/12/2015 
-            if ($arrival && $departure)
-            {
-                $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
+              if ($arrival && $departure)
+              {
+              $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
 
-                $query->where('(' . $priceStr . ') is not null');
-            }*/
+              $query->where('(' . $priceStr . ') is not null');
+              } */
 
             $db->setQuery($query);
 
@@ -1919,47 +1918,83 @@ class FcSearchModelSearch extends JModelList
     {
 
         $queryStr .= 'b.from_price';
-        
-        return $queryStr;
-                
-        /*$db = JFactory::getDbo();
 
+        return $queryStr;
+
+        /* $db = JFactory::getDbo();
+
+          $query = $db->getQuery(true);
+
+          $query->select('CASE WHEN d.base_currency = \'EUR\' THEN (tariff * ' . $EUR . ') ELSE (tariff) END');
+
+          $query->from($db->quoteName('#__tariffs', 'l'));
+
+          if ($arrival && $departure)
+          {
+          // If arrival and departure dates are entered we only want to tariffs for that period
+          $query->where('l.start_date <= ' . $db->quote($arrival));
+          $query->where('l.end_date >= ' . $db->quote($departure));
+
+          if ($min && $max)
+          {
+          $query->where('l.tariff >=' . $min);
+          $query->where('l.tariff <=' . $max);
+          }
+          else if ($min)
+          {
+          $query->where('l.tariff >=' . $min);
+          }
+          else if ($max)
+          {
+          $query->where('l.tariff <=' . $max);
+          }
+          $query->where('l.unit_id = d.unit_id limit 0,1');
+
+          // Return the query as a string so we can append it to the main query
+          $queryStr = $query->__toString();
+          }
+          else
+          {
+          // If no dates then just show the respective 'from' price
+          $queryStr .= 'b.from_price';
+          }
+
+          return $queryStr; */
+    }
+
+    /**
+     * Method to build a database query to load the list data.
+     *
+     * @return  JDatabaseQuery  A database query
+     *
+     * @since   2.5
+     */
+    public function getSuggestions()
+    {
+        // Create a new query object.
+        $db = $this->getDbo();
         $query = $db->getQuery(true);
 
-        $query->select('CASE WHEN d.base_currency = \'EUR\' THEN (tariff * ' . $EUR . ') ELSE (tariff) END');
+        // Select required fields
+        $query->select('title, alias');
 
-        $query->from($db->quoteName('#__tariffs', 'l'));
+        $query->from($db->quoteName('#__classifications'));
 
-        if ($arrival && $departure)
+        $query->where('MATCH(title) AGAINST(' . $db->quote($db->escape($this->getState('list.searchterm'), true)) . ')');
+        $query->Where('published = 1');
+        
+        $db->setQuery($query,0,5);
+
+        try
         {
-            // If arrival and departure dates are entered we only want to tariffs for that period 
-            $query->where('l.start_date <= ' . $db->quote($arrival));
-            $query->where('l.end_date >= ' . $db->quote($departure));
-
-            if ($min && $max)
-            {
-                $query->where('l.tariff >=' . $min);
-                $query->where('l.tariff <=' . $max);
-            }
-            else if ($min)
-            {
-                $query->where('l.tariff >=' . $min);
-            }
-            else if ($max)
-            {
-                $query->where('l.tariff <=' . $max);
-            }
-            $query->where('l.unit_id = d.unit_id limit 0,1');
-
-            // Return the query as a string so we can append it to the main query
-            $queryStr = $query->__toString();
+            $rows = $db->loadObjectList();
         }
-        else
+        catch (Exception $e)
         {
-            // If no dates then just show the respective 'from' price
-            $queryStr .= 'b.from_price';
+            return false;
         }
 
-        return $queryStr;*/
+        return $rows;
     }
+
 }

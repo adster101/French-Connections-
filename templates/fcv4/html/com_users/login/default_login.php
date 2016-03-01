@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.keepalive');
 ?>
+
 <div class="login <?php echo $this->pageclass_sfx ?>">
   <?php if ($this->params->get('show_page_heading')) : ?>
     <div class="page-header">
@@ -66,8 +67,8 @@ JHtml::_('behavior.keepalive');
           <?php echo JText::_('JLOGIN'); ?>
         </button>
       </div>
-
-      <input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('login_redirect_url', $this->form->getValue('return'))); ?>" />
+      <?php echo $this->params->get('login_redirect_url');?>
+      <input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('login_redirect_url')) ?>" />
       <?php echo JHtml::_('form.token'); ?>
     </fieldset>
   </form>

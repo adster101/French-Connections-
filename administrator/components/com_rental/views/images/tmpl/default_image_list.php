@@ -21,7 +21,8 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
     <?php echo JText::_('JHELP'); ?>
   </a> 
 </p>
-
+<div id="system-message-container">
+</div>
 <?php if (!empty($this->items)) : ?>
   <ul id="imageList" class="">
     <?php foreach ($this->items as $i => $item): ?>

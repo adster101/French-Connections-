@@ -11,7 +11,6 @@ if ((int) $preview && $preview == 1)
   $append = '&preview=1';
 }
 ?>
-<ul class="nav nav-tabs" style="margin-bottom:20px">
   <?php
   foreach ($this->units as $unit)
   {
@@ -32,5 +31,4 @@ if ((int) $preview && $preview == 1)
       </a>
     </li>
   <?php } ?>
-</ul>
 
