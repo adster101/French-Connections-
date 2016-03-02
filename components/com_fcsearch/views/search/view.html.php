@@ -179,15 +179,19 @@ class FcSearchViewSearch extends JViewLegacy
         $inflector->addWord('Chateau', 'Chateaux ');
 
         // Generate the page META title
-        $title = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector, $this->localinfo->metatitle);
+        $metatitle = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector, $this->localinfo->metatitle);
+        $pagetitle = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector);
+        
         $description = $this->getDescription($property_type, $accommodation_type, $location, $inflector, $this->localinfo->metadescription);
 
         // Append the site name to keep the SEOs happy
         $title .= ' - ' . $app->getCfg('sitename');
 
         // Set the page and document title
-        $this->document->setTitle($title);
+        $this->document->setTitle($metatitle);
         $this->document->setDescription($description);
+        
+        $this->pagetitle = $pagetitle;
 
 
         JText::script('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');

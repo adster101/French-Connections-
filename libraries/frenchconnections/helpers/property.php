@@ -328,7 +328,7 @@ abstract class PropertyHelper
     $user = JFactory::getUser($editUserID);
 
     // Get a list of the groups that the user is assigned to
-    $groups = JAccess::getGroupsByUser($user->id, true);
+    $groups = JAccess::getGroupsByUser($user->id, false);
 
     if (in_array(10, $groups))
     {

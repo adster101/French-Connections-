@@ -230,7 +230,8 @@ abstract class RealEstateHelper
         'realestate.listing.admin',
         'realestate.listings.showowner',
         'realestate.notes.view',
-        'realestate.listing.snooze24'
+        'realestate.listing.snooze24',
+        'realestate.listings.download'
     );
 
 

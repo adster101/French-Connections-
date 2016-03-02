@@ -63,11 +63,13 @@ class EnquiriesModelEnquiry extends JModelAdmin
         ip_address,
         replied,
         date_replied,
-        b.unit_title'
+        c.unit_title'
       );
 
       $query->from($this->_db->quoteName('#__enquiries', 'a'));
-      $query->leftJoin($this->_db->quoteName('#__unit_versions', 'b') . ' on b.unit_id = a.unit_id');
+      $query->leftJoin($this->_db->quoteName('#__unit', 'b') . ' on a.unit_id = b.id');
+      $query->leftJoin($this->_db->quoteName('#__unit_versions', 'c') . ' ON (c.unit_id = b.id and c.id = (select max(d.id) from #__unit_versions d where unit_id = b.id and d.review = 0))');
+
       $query->where('a.id = ' . (int) $pk);
 
 

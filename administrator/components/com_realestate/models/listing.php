@@ -361,6 +361,8 @@ class RealEstateModelListing extends JModelList
 
     return $state;
   }
-
+  
+  
+  
 }
 

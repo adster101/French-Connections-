@@ -33,7 +33,6 @@ $canDo = PropertyHelper::getActions();
       <div id="filter-bar" class="btn-toolbar">
         <div class="btn-group pull-right hidden-phone">
           <label for="limit" class="element-invisible"><?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?></label>
-          <?php echo $this->pagination->getLimitBox(); ?>
         </div>
       </div>
       <hr />
