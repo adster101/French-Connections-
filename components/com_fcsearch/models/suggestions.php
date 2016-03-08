@@ -61,7 +61,7 @@ class FcSearchModelSuggestions extends JModelList
         $db = $this->getDbo();
         $query = $db->getQuery(true);
 
-
+        $query->select('t.title');
 
         $query->from($db->quoteName('#__classifications') . ' AS t');
 
