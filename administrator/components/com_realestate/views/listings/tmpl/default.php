@@ -64,7 +64,7 @@ $canDo = RealEstateHelper::getActions();
                     <th>
                       <?php echo JHtml::_('searchtools.sort', 'COM_REALESTATE_LISTING_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
                     </th>
-                    <?php if ($canDo->get('realestate.listing.review')) : ?>  
+                    <?php if ($canDo->get('realestate.listing.review')) : ?>
                       <th width="10%">
                         <?php echo JText::_('COM_REALESTATE_LISTING_HEADING_REVIEW_STATUS'); ?>
                       </th>
@@ -75,7 +75,7 @@ $canDo = RealEstateHelper::getActions();
                       </th>
                     <?php endif; ?>
                     <?php if (property_exists($this->items[0], 'value')) : ?>
-                      <th>    
+                      <th>
                         <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_LISTING_HEADING_VALUE', 'a.value', $listDirn, $listOrder); ?>
                       </th>
                     <?php endif; ?>
@@ -111,7 +111,7 @@ $canDo = RealEstateHelper::getActions();
                           <?php echo JHtml::_('image', 'images/property/' . $item->id . '/thumb/' . $item->thumbnail, '') ?>
                           <a href="<?php echo JRoute::_('index.php?option=com_realestate&task=propertyversions.edit&realestate_property_id=' . (int) $item->id) ?>">
                             <?php echo JText::_('COM_REALESTATE_LISTING_EDIT_PROPERTY'); ?>
-                          </a>                        
+                          </a>
                         <?php endif; ?>
                       </td>
                       <td>
@@ -149,7 +149,7 @@ $canDo = RealEstateHelper::getActions();
                           <?php endif; ?>
 
                         </td>
-                      <?php endif ?>                        
+                      <?php endif ?>
                       <?php if ($canDo->get('realestate.listings.showowner')) : ?>
                         <td>
                           <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
@@ -184,7 +184,7 @@ $canDo = RealEstateHelper::getActions();
                       <?php endif; ?>
                       <?php if (property_exists($item, 'value')) : ?>
                         <td>
-                          <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?> 
+                          <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?>
                         </td>
                       <?php endif; ?>
                     </tr>
@@ -219,11 +219,6 @@ $canDo = RealEstateHelper::getActions();
               <input type="hidden" name="boxchecked" value="" />
               <?php echo JHtml::_('form.token'); ?>
             </div>
-            </div>      
+            </div>
 
-            </form>  
-
-
-
-
-
+            </form>
