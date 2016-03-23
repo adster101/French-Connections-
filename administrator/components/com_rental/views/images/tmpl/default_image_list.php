@@ -21,9 +21,11 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
     <?php echo JText::_('JHELP'); ?>
   </a> 
 </p>
-<div id="system-message-container">
+<div id="image-message-container" class="alert alert-success hide">
+  <h4>Success</h4>
+  <span class='icon-publish'></span><?php echo JText::_('COM_IMAGES_ORDERING_SAVED'); ?>
 </div>
-<?php if (!empty($this->items)) : ?>
+    <?php if (!empty($this->items)) : ?>
   <ul id="imageList" class="">
     <?php foreach ($this->items as $i => $item): ?>
       <li class="clearfix" id="sort_<?php echo (int) $item->id ?>">  

@@ -6,5 +6,4 @@ defined('_JEXEC') or die('Restricted access');
   <h4><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOK_THIS_PROPERTY_NOW') ?></h4>
   <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_BOOK_THIS_PROPERTY_NOW_TEXT') ?>
   <p><span class="muted"><?php echo $this->item->affiliate_property_id; ?></p>
-
 </div>

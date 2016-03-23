@@ -25,16 +25,26 @@ class InvoicesControllerInvoice extends JControllerForm
     $this->view_list = 'invoices';
   }
 
+  /**
+   * 
+   * allowEdit - overloaded method to allow for a permissions check.
+   * If user does not 'own' this invoice then they are not allowed to view
+   * 
+   * @param type $data
+   * @param type $key
+   * @return type boolean
+   */
   protected function allowEdit($data = array(), $key = 'property_id')
   {
 
+    // Get the invoice detail from the invoice id.
     $model = $this->getModel('Invoice', 'InvoicesModel', array('ignore_request'=>false));
     $items = $model->getItems();
 
     $recordId = (int) !empty($items[0]->property_id) ? $items[0]->property_id : 0;
     
+    // Check the user has access to this record
     return PropertyHelper::allowEditRental($recordId, $this->option);
-    
   }
 
 }

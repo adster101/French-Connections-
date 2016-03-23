@@ -47,11 +47,14 @@ class RealEstateControllerPropertyVersions extends JControllerForm
     {
         $app = JFactory::getApplication();
         $context = "$this->option.edit.$this->context";
+        // Get an instance of the property versions model
         $model = $this->getModel('PropertyVersions');
+        // Get the table associated with the model
         $table = $model->getTable();
+        // Get a list of the fields associated with the table
         $data = $table->getProperties();
 
-        // Access check.
+        // Access check. Check that we are allowed to add a realestate property
         if (!$this->allowAdd())
         {
             // Set the internal error and also the redirect error.
