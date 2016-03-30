@@ -737,7 +737,7 @@ class RealestateSearchModelSearch extends JModelList
       return $query;
     }
 
-    $query->where('( single_bedrooms + double_bedrooms ) = ' . (int) $bedrooms);
+    $query->where('bedrooms = ' . (int) $bedrooms);
 
     return $query;
   }
