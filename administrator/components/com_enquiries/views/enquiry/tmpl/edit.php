@@ -6,7 +6,7 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('behavior.formvalidator');
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
-?>   
+?>
 <form class="form-validate form-horizontal" action="<?php echo JRoute::_('index.php?option=com_enquiries'); ?>" id="adminForm" method="post" name="adminForm">
   <?php if (!empty($this->sidebar)): ?>
     <div class="span2">
@@ -15,7 +15,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
     <div class="span5">
     <?php else : ?>
       <div id="j-main-container" class="span6">
-        
+
       <?php endif; ?>
 
       <fieldset>
@@ -24,9 +24,9 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
           <div class="control-group">
             <?php echo $field->label; ?>
             <div class="controls">
-              <?php echo $field->input; ?>
+              <?php echo $field->value; ?>
             </div>
-          </div>         
+          </div>
         <?php endforeach; ?>
       </fieldset>
       <fieldset>
@@ -34,9 +34,9 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
           <div class="control-group">
             <?php echo $field->label; ?>
             <div class="controls">
-              <?php echo $field->input; ?>
+              <?php echo $field->value; ?>
             </div>
-          </div>         
+          </div>
         <?php endforeach; ?>
       </fieldset>
 
@@ -44,7 +44,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
 
 
     <div class="span6">
-      <fieldset >       
+      <fieldset >
         <legend><?php echo JText::_('COM_ENQUIRIES_ENQUIRY_RESPOND_TO_ENQUIRY'); ?></legend>
         <?php foreach ($this->form->getFieldset('reply') as $field): ?>
           <div class="control-group">
@@ -52,11 +52,11 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
             <div class="controls">
               <?php echo $field->input; ?>
             </div>
-          </div>   
+          </div>
         <?php endforeach; ?>
       </fieldset>
-      <fieldset class="form-inline">       
-        <?php echo $this->form->getInput('cc_message'); ?>  
+      <fieldset class="form-inline">
+        <?php echo $this->form->getInput('cc_message'); ?>
         <?php echo $this->form->getLabel('cc_message'); ?>
         <hr />
         <button class="btn" onclick="Joomla.submitbutton('enquiry.reply')" href="#">
@@ -64,7 +64,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
           </i>
           <?php echo JText::_('COM_ENQUIRIES_ENQUIRY_REPLY'); ?>
         </button>
-      </fieldset>    
+      </fieldset>
     </div>
   </div>
 </div>
@@ -73,4 +73,4 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
 <?php endforeach; ?>
 <input type="hidden" name="task" value="" />
 <?php echo JHtml::_('form.token'); ?>
-</form>          
+</form>

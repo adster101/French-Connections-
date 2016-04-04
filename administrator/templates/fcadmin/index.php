@@ -28,7 +28,7 @@ $file = 'language/' . $lang->getTag() . '/' . $lang->getTag() . '.css';
 
 if (is_file($file))
 {
-  $doc->addStyleSheetVersion($file);
+    $doc->addStyleSheetVersion($file);
 }
 
 // Detecting Active Variables
@@ -45,12 +45,12 @@ $showSubmenu = false;
 $this->submenumodules = JModuleHelper::getModules('submenu');
 foreach ($this->submenumodules as $submenumodule)
 {
-  $output = JModuleHelper::renderModule($submenumodule);
-  if (strlen($output))
-  {
-    $showSubmenu = true;
-    break;
-  }
+    $output = JModuleHelper::renderModule($submenumodule);
+    if (strlen($output))
+    {
+        $showSubmenu = true;
+        break;
+    }
 }
 
 // Logo file
@@ -66,7 +66,6 @@ $uri = JUri::getInstance();
 $uri->setScheme('http');
 $uri->setPath('');
 $uri->setQuery('');
-
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->language; ?>" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -78,34 +77,34 @@ $uri->setQuery('');
 
         <!-- Template color -->
         <?php if ($this->params->get('templateColor')) : ?>
-          <style type="text/css">
-            .navbar-inner, .navbar-inverse .navbar-inner, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle, #status.status-top {
-              background: <?php echo $this->params->get('templateColor'); ?>;
-            }
-            .navbar-inner, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
-              -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-              -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-              box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
-            }
-          </style>
+            <style type="text/css">
+              .navbar-inner, .navbar-inverse .navbar-inner, .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle, #status.status-top {
+                background: <?php echo $this->params->get('templateColor'); ?>;
+              }
+              .navbar-inner, .navbar-inverse .nav li.dropdown.open > .dropdown-toggle, .navbar-inverse .nav li.dropdown.active > .dropdown-toggle, .navbar-inverse .nav li.dropdown.open.active > .dropdown-toggle {
+                -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+                -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, .25), inset 0 -1px 0 rgba(0, 0, 0, .1), inset 0 30px 10px rgba(0, 0, 0, .2);
+              }
+            </style>
         <?php endif; ?>
 
         <!-- Template header color -->
         <?php if ($this->params->get('headerColor')) : ?>
-          <style type="text/css">
-            .header {
-              background: <?php echo $this->params->get('headerColor'); ?>;
-            }
-          </style>
+            <style type="text/css">
+              .header {
+                background: <?php echo $this->params->get('headerColor'); ?>;
+              }
+            </style>
         <?php endif; ?>
 
         <!-- Sidebar background color -->
         <?php if ($this->params->get('sidebarColor')) : ?>
-          <style type="text/css">
-            .nav-list > .active > a, .nav-list > .active > a:hover {
-              background: <?php echo $this->params->get('sidebarColor'); ?>;
-            }
-          </style>
+            <style type="text/css">
+              .nav-list > .active > a, .nav-list > .active > a:hover {
+                background: <?php echo $this->params->get('sidebarColor'); ?>;
+              }
+            </style>
         <?php endif; ?>
         </head>
 
@@ -115,11 +114,11 @@ $uri->setQuery('');
             <div class="navbar-inner">
               <div class="container">
                 <?php if ($this->params->get('admin_menus') != '0') : ?>
-                  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </a>
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </a>
                 <?php endif; ?>
                 <a class="brand" href="<?php echo $this->baseurl . '/' ?>">
                   <img src="<?php echo $logo; ?>" /><br />
@@ -148,7 +147,7 @@ $uri->setQuery('');
                         </li>
                         <li class="divider"></li>
                         <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;                ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                         ?></a>
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;                 ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                          ?></a>
                         </li>
                         <li class="divider"></li>-->
                         <li class="">
@@ -159,7 +158,7 @@ $uri->setQuery('');
                       </ul>
                     </li>
                   </ul>
-                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                         ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                         ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                         ?>
+                  <!--<a class="brand visible-desktop visible-tablet" href="<?php //echo JUri::root();                          ?>" title="<?php //echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename);                          ?>" target="_blank"><?php //echo JHtml::_('string.truncate', $sitename, 14, false, false);                          ?>
                     <span class="icon-out-2 small"></span></a>-->
                 </div>
                 <!--/.nav-collapse -->
@@ -168,39 +167,39 @@ $uri->setQuery('');
           </nav>
           <!-- Header -->
           <?php if ($displayHeader) : ?>
-            <header class="header">   
-              <div class="container">
-                <div class="container-title">           
-                  <div class="row label-">
-                    <div class="span12"> 
-                      <jdoc:include type="modules" name="status" style="no" />
+              <header class="header">   
+                <div class="container">
+                  <div class="container-title">           
+                    <div class="row label-">
+                      <div class="span12"> 
+                        <jdoc:include type="modules" name="status" style="no" />
 
-                      <jdoc:include type="modules" name="title" />
+                        <jdoc:include type="modules" name="title" />
 
+                      </div>
                     </div>
-                  </div>
-                </div>     
-              </div>
-            </header>
+                  </div>     
+                </div>
+              </header>
           <?php endif; ?>
 
           <?php if (!$cpanel) : ?>
-            <!-- Subheader -->
-            <a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse"><?php echo JText::_('TPL_ISIS_TOOLBAR'); ?>
-              <i class="icon-wrench"></i>
-            </a>
-            <div class="subhead-collapse collapse">
-              <div class="subhead">
-                <div class="container">
-                  <div id="container-collapse" class="container-collapse"></div>
-                  <div class="row">
-                    <div class="span12">
-                      <jdoc:include type="modules" name="toolbar" style="no" />
-                    </div>   
+              <!-- Subheader -->
+              <a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse"><?php echo JText::_('TPL_ISIS_TOOLBAR'); ?>
+                <i class="icon-wrench"></i>
+              </a>
+              <div class="subhead-collapse collapse">
+                <div class="subhead">
+                  <div class="container">
+                    <div id="container-collapse" class="container-collapse"></div>
+                    <div class="row">
+                      <div class="span12">
+                        <jdoc:include type="modules" name="toolbar" style="no" />
+                      </div>   
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
           <?php endif; ?>
           <!-- container-fluid -->
           <div class="container container-main" style="position:relative;left:0;">
@@ -211,101 +210,101 @@ $uri->setQuery('');
               <div class="row-fluid">
                 <!-- Begin Content -->                    
                 <?php if ($showSubmenu) : ?>
-                  <div class="span3">
-                    <jdoc:include type="modules" name="submenu" style="none" />
-                  </div>
-                  <div class="span9">
+                    <div class="span3">
+                      <jdoc:include type="modules" name="submenu" style="none" />
+                    </div>
+                    <div class="span9">
                   <?php else : ?>
-                    <div class="span12">
+                      <div class="span12">
                     <?php endif; ?>
-                    <jdoc:include type="message" />
+                        <jdoc:include type="message" />
                     <?php
                     // Show the page title here if the header is hidden
                     if (!$displayHeader) :
-                      ?>
-                      <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
+                        ?>
+                        <h1 class="content-title"><?php echo JHtml::_('string.truncate', $app->JComponentTitle, 0, false, false); ?></h1>
                     <?php endif; ?>
                     <jdoc:include type="component" />
                   </div>
                 </div>
                 <?php if ($this->countModules('bottom')) : ?>
-                  <jdoc:include type="modules" name="bottom" style="xhtml" />
+                    <jdoc:include type="modules" name="bottom" style="xhtml" />
                 <?php endif; ?>
                 <!-- End Content -->
             </section>
           </div>
           <?php if ($this->countModules('owner-footer')) : ?> 
-            <footer id="status" class="navbar navbar-fixed-bottom"> 
-              <div class="clearfix">
-                <div class="container">
+              <footer id="status" class="navbar navbar-fixed-bottom"> 
+                <div class="clearfix">
+                  <div class="container">
 
-                  <div class="row">
-                    <div class="span8">
-                      <jdoc:include type="modules" name="owner-footer" style="no" />
-                    </div>
-                    <div class="span4">
+                    <div class="row">
+                      <div class="span8">
+                        <jdoc:include type="modules" name="owner-footer" style="no" />
+                      </div>
+                      <div class="span4">
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </footer>  
+              </footer>  
           <?php endif; ?>
           <jdoc:include type="modules" name="debug" style="none" />
           <?php if ($stickyToolbar) : ?>
-            <script>
-              (function($)
-              {
-                // fix sub nav on scroll
-                var $win = $(window)
-                        , $nav = $('.subhead')
-                        , navTop = $('.subhead').length && $('.subhead').offset().top - <?php if ($displayHeader || !$statusFixed) : ?>40<?php else: ?>20<?php endif; ?>
-                        , isFixed = 0
+              <script>
+                  (function ($)
+                  {
+                    // fix sub nav on scroll
+                    var $win = $(window)
+                            , $nav = $('.subhead')
+                            , navTop = $('.subhead').length && $('.subhead').offset().top - <?php if ($displayHeader || !$statusFixed) : ?>40<?php else: ?>20<?php endif; ?>
+                                          , isFixed = 0
 
-                processScroll();
+                                  processScroll();
 
-                // hack sad times - holdover until rewrite for 2.1
-                $nav.on('click', function()
-                {
-                  if (!isFixed) {
-                    setTimeout(function()
-                    {
-                      $win.scrollTop($win.scrollTop() - 97)
-                    }, 10)
-                  }
-                })
+                                  // hack sad times - holdover until rewrite for 2.1
+                                  $nav.on('click', function ()
+                                  {
+                                    if (!isFixed) {
+                                      setTimeout(function ()
+                                      {
+                                        $win.scrollTop($win.scrollTop() - 97)
+                                      }, 10)
+                                    }
+                                  })
 
-                $win.on('scroll', processScroll)
+                                  $win.on('scroll', processScroll)
 
-                function processScroll()
-                {
-                  var i, scrollTop = $win.scrollTop()
-                  if (scrollTop >= navTop && !isFixed) {
-                    isFixed = 1
-                    $nav.addClass('subhead-fixed')
-                  } else if (scrollTop <= navTop && isFixed) {
-                    isFixed = 0
-                    $nav.removeClass('subhead-fixed')
-                  }
-                }
-              })(jQuery);
-            </script>
+                                  function processScroll()
+                                  {
+                                    var i, scrollTop = $win.scrollTop()
+                                    if (scrollTop >= navTop && !isFixed) {
+                                      isFixed = 1
+                                      $nav.addClass('subhead-fixed')
+                                    } else if (scrollTop <= navTop && isFixed) {
+                                      isFixed = 0
+                                      $nav.removeClass('subhead-fixed')
+                                    }
+                                  }
+                                })(jQuery);
+              </script>
           <?php endif; ?>
           <script>
-            (function(i, s, o, g, r, a, m) {
-              i['GoogleAnalyticsObject'] = r;
-              i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-              }, i[r].l = 1 * new Date();
-              a = s.createElement(o),
-                      m = s.getElementsByTagName(o)[0];
-              a.async = 1;
-              a.src = g;
-              m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+              (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                  (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+              })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-            ga('create', 'UA-2087119-1', 'auto');
-            ga('require', 'displayfeatures');
-            ga('send', 'pageview');
+              ga('create', 'UA-2087119-1', 'auto');
+              ga('require', 'displayfeatures');
+              ga('send', 'pageview');
           </script>
         </body>
         </html>

@@ -5786,6 +5786,9 @@ a.badge:focus {
 .view-message #toolbar-redo {
   display: none;
 }
+.view-enquiry label {
+  font-weight: bold;
+}
 #stlivechat21 a {
   z-index: 999;
   position: fixed;

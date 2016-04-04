@@ -81,7 +81,7 @@ class AtLeisure extends Import
     // Get an instance of the unit model for saving the from price and availability last updated on
     $unit_model = JModelLegacy::getInstance('Unit', 'RentalModel');
 
-    // Load up 100 property details at a time.
+    // Load up 25 property details at a time.
     foreach ($accocode_chunks as $chunk => $acco_chunk)
     {
       $this->out('Processing accommodation chunk ' . $chunk . '/' . count($accocode_chunks));

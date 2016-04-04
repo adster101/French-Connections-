@@ -18,7 +18,7 @@ $logged_in = ($user->guest) ? false : true;
 $uri = JUri::getInstance()->toString();
 $link = 'index.php?option=com_realestate&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id;
 $min_prices = JHtml::_('general.price', $this->item->price, $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd);
-$crumbs = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.  
+$crumbs = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.
 $search_route = 'index.php?option=com_realestatesearch&Itemid=' . (int) $Itemid . '&s_kwds=france';
 $search_url = $app->getUserState('user.search');
 
@@ -52,7 +52,7 @@ if (!empty($this->item->languages_spoken))
 ?>
 <h1 class="page-header">
   <?php echo $this->document->title; ?> - <?php echo JText::sprintf('COM_REALESTATE_PROPERTY_SUB_TITLE', $this->item->city_title, $this->item->department, number_format($min_prices['GBP']), number_format($min_prices['EUR'])); ?>
-</h1>   
+</h1>
 <!-- Begin breadcrumbs -->
 
     <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc     ?>
@@ -64,15 +64,15 @@ if (!empty($this->item->languages_spoken))
 
     <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
       <?php if (!empty($search_url)) : ?>
-          <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">    
+          <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_REALESTATE_BACK_TO_SEARCH_RESULTS'); ?>
           </a>
       <?php else: ?>
-          <a class="btn btn-primary" href="<?php echo $search_route ?>" title="">    
+          <a class="btn btn-primary" href="<?php echo $search_route ?>" title="">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_REALESTATE_BROWSE_SEARCH_RESULTS'); ?>
-          </a>          
+          </a>
       <?php endif; ?>
     </div>
     <div class="col-lg-8 col-md-7 col-sm-7 hidden-xs">
@@ -86,7 +86,7 @@ if (!empty($this->item->languages_spoken))
         </li>
         <li>
           <a href="<?php echo $route ?>#about">
-            <span class="glyphicon glyphicon-info-sign"> </span>          
+            <span class="glyphicon glyphicon-info-sign"> </span>
             <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?>
           </a>
         </li>
@@ -98,7 +98,7 @@ if (!empty($this->item->languages_spoken))
       </ul>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-      <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block"> 
+      <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
         <a href="<?php
         echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
         . urlencode($uri)
@@ -113,7 +113,7 @@ if (!empty($this->item->languages_spoken))
         . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
         ?>">
           <span class="glyphicon social-icon facebook"></span>
-        </a> 
+        </a>
         <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->title) ?>" >
           <span class="glyphicon social-icon twitter"></span>
         </a>
@@ -130,9 +130,9 @@ if (!empty($this->item->languages_spoken))
     <!-- Image gallery -->
     <!-- Needs go into a separate template -->
     <div  role="main">
-      <?php if (count($this->images) > 1) : ?>
+      <?php if (count($this->images) > 0) : ?>
           <div class="slick-slider">
-            <?php foreach ($this->images as $images => $image) : ?> 
+            <?php foreach ($this->images as $images => $image) : ?>
                 <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->property_id . '/gallery/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
                 <div>
                   <?php if ($images == 0) : ?>
@@ -148,17 +148,17 @@ if (!empty($this->item->languages_spoken))
             <?php endforeach; ?>
           </div>
           <div class="carousel-ribbon hidden-xs">
-            <?php foreach ($this->images as $images => $image) : ?> 
+            <?php foreach ($this->images as $images => $image) : ?>
                 <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->property_id . '/thumbs/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
                 <div>
-                  <img src="<?php echo $src ?>" /> 
-                </div>     
+                  <img src="<?php echo $src ?>" />
+                </div>
             <?php endforeach; ?>
           </div>
       <?php else : ?>
           <div class="panel panel-default">
             <ul class="slides">
-              <?php foreach ($this->images as $images => $image) : ?> 
+              <?php foreach ($this->images as $images => $image) : ?>
                   <li>
                     <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
                     <p class="flex-caption">
@@ -184,11 +184,11 @@ if (!empty($this->item->languages_spoken))
         </p>
     <?php endif; ?>
     <div class="well well-light-blue">
-      <?php if ($this->item->price) : ?> 
+      <?php if ($this->item->price) : ?>
           <p>
             <strong class="lead">&pound;<?php echo number_format($min_prices['GBP']) ?></strong>
             (&euro;<?php echo number_format($min_prices['EUR']); ?>)
-          </p>             
+          </p>
       <?php else: ?>
           <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
       <?php endif; ?>
@@ -229,17 +229,17 @@ if (!empty($this->item->languages_spoken))
       <hr/>
       <p class="center">
         <a class="btn btn-primary btn-lg" href="<?php echo JRoute::_('index.php?option=com_realestate&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id); ?>#email">
-          <?php echo JText::_('COM_REALESTATE_LISTING_CONTACT_OWNER'); ?>  
+          <?php echo JText::_('COM_REALESTATE_LISTING_CONTACT_OWNER'); ?>
         </a>
       </p>
-    </div>  
-  </div> 
+    </div>
+  </div>
 </div>
 
 <div class="row" id="about">
   <div class="col-lg-7 col-md-7 col-sm-7" >
     <?php if ($this->item->title) : ?>
-        <h2 class="page-header"><?php echo $this->escape($this->item->title) ?></h2>  
+        <h2 class="page-header"><?php echo $this->escape($this->item->title) ?></h2>
     <?php endif; ?>
     <?php if ($this->item->description) : ?>
         <?php echo $this->item->description; ?>
@@ -254,7 +254,7 @@ if (!empty($this->item->languages_spoken))
 <div class="row" id="email">
   <div class="col-lg-12">
     <?php if ($this->item->title) : ?>
-        <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->title)) ?></h2> 
+        <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_EMAIL_THE_OWNER', $this->item->title)) ?></h2>
     <?php endif; ?>
   </div>
 </div>
@@ -263,7 +263,7 @@ if (!empty($this->item->languages_spoken))
     <?php echo $this->loadTemplate('form'); ?>
   </div>
   <div class="col-lg-5 col-md-5 col-sm-5">
-    <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4> 
+    <h4><?php echo htmlspecialchars(JText::_('COM_ACCOMMODATION_CONTACT_THE_OWNER')); ?></h4>
     <?php if ($this->item->use_invoice_details) : ?>
         <?php echo $this->escape($this->item->firstname); ?>&nbsp;<?php echo $this->escape($this->item->surname); ?><br />
     <?php else: ?>
@@ -306,5 +306,3 @@ if (!empty($this->item->languages_spoken))
   </div>
 </div>
 </div>
-
-

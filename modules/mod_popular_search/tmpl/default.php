@@ -39,7 +39,6 @@ $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
       </p>
     <?php endforeach; ?>
   </div>
-
 </div>
 
 

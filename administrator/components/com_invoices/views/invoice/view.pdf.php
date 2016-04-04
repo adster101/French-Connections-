@@ -17,6 +17,7 @@ require_once(JPATH_LIBRARIES . '/tcpdf_6_2_12/config/tcpdf_config_alt.php');
 jimport('tcpdf_6_2_12.tcpdf');
 
 /**
+ * 
  * View class for a list of Invoices.
  */
 class InvoicesViewInvoice extends JViewLegacy
@@ -27,11 +28,13 @@ class InvoicesViewInvoice extends JViewLegacy
     protected $state;
 
     /**
-     * Display the view
+     * Method to display the view
+     * 
+     * @param type $tpl
+     * @throws Exception
      */
     public function display($tpl = null)
     {
-
         $app = JFactory::getApplication();
         $this->id = $app->input->get('id', '', 'int');
 
@@ -100,5 +103,4 @@ class InvoicesViewInvoice extends JViewLegacy
         //JFactory::getApplication()->setHeader('Content-disposition', 'attachment; filename="properties-with-no-availability-' . JFactory::getDate()->calendar('d-m-Y') . '.pdf"; creation-date="' . JFactory::getDate()->toRFC822() . '"', true);
         echo $pdf->Output($this->items[0]->id . '.pdf', 'I');
     }
-
 }

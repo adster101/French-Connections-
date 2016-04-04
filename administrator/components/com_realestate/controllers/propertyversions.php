@@ -12,8 +12,8 @@ class RealEstateControllerPropertyVersions extends JControllerForm
     var $view_list = 'listings';
 
     /**
-     * Checks whether the owner is allowed to edit this property version via the PropertyHelper class 
-     * 
+     * Checks whether the owner is allowed to edit this property version via the PropertyHelper class
+     *
      * @param type $data
      * @param type $key
      * @return type boolean
@@ -47,11 +47,14 @@ class RealEstateControllerPropertyVersions extends JControllerForm
     {
         $app = JFactory::getApplication();
         $context = "$this->option.edit.$this->context";
+        // Get an instance of the property versions model
         $model = $this->getModel('PropertyVersions');
+        // Get the table associated with the model
         $table = $model->getTable();
+        // Get a list of the fields associated with the table
         $data = $table->getProperties();
 
-        // Access check.
+        // Access check. Check that we are allowed to add a realestate property
         if (!$this->allowAdd())
         {
             // Set the internal error and also the redirect error.
@@ -69,8 +72,8 @@ class RealEstateControllerPropertyVersions extends JControllerForm
         }
 
         /*
-         * Pump the dummy data into propertyversions model. 
-         * 
+         * Pump the dummy data into propertyversions model.
+         *
          */
         if (!$model->save($data))
         {
@@ -129,11 +132,10 @@ class RealEstateControllerPropertyVersions extends JControllerForm
         }
 
         // If the property needs to be submitted for review redirect to the
-        // submit for review screen.
-        if ($validData['review'])
+        // submit for review screen when the user hits 'saveandclose'
+        if ($validData['review'] && $this->task == 'save')
         {
             $this->setRedirect('index.php?option=com_realestate&task=listing.view&id=' . $validData['realestate_property_id']);
         }
     }
-
 }

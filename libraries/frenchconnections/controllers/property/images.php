@@ -349,11 +349,39 @@ class PropertyControllerImages extends JControllerForm
 
   public function saveandnext()
   {
-
     // Get the contents of the request data
     $input = JFactory::getApplication()->input;
+
+    // Get an instance of our listing model, setting ignore_request to true so we bypass units->populateState
+    $model = JModelLegacy::getInstance('Listing', 'RealEstateModel', array('ignore_request' => true));
+
+    $property_id = $input->get('property_id', '', 'int');
+
+    // Set some model options
+    $model->setState('com_realestate.' . $model->getName() . '.id', $property_id);
+    $model->setState('list.limit', 100);
+
+    // Get the units
+    $this->progress = $model->getItems();
+
+    $this->status = $model->getProgress($this->progress);
+
+    if (!$this->status->gallery)
+    {
+      
+      $this->setMessage(JText::_('COM_REALESTATE_PLEASE_UPLOAD_AT_LEAST_ONE_IMAGE'), 'error');
+      
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&task=images.manage&realestate_property_id=' . (int) $property_id, false
+              )
+      );
+      
+      return false;
+    }
+
     // If the task is save and next
-    if ($this->task == 'saveandnext')
+    if ($this->task == 'saveandnext' && $this->status->complete)
     {
       // Check if we have a next field in the request data
       $next = $input->get('next', '', 'base64');
@@ -372,7 +400,7 @@ class PropertyControllerImages extends JControllerForm
 
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-    // Get the property ID from the form data and redirect 
+    // Get the property ID from the form data and redirect
     $input = JFactory::getApplication()->input;
 
     $property_id = $input->get('property_id', '', 'int');
@@ -390,4 +418,3 @@ class PropertyControllerImages extends JControllerForm
   }
 
 }
-

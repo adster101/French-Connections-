@@ -20,7 +20,6 @@ class RealEstateViewExpired extends JViewLegacy
     
     // Set the default model to the listing model
     $this->setModel(JModelLegacy::getInstance('Listing', 'RealEstateModel'), true);
-
     
     $model = $this->getModel();
    

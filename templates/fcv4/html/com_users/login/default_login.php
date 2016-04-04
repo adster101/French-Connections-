@@ -9,7 +9,13 @@
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.keepalive');
+// Load library language
+$lang = JFactory::getLanguage();
+$lang->load('frenchconnections', JPATH_SITE . '/libraries/frenchconnections');
+$login_description = $this->params->get('login_description');
+
 ?>
+
 <div class="login <?php echo $this->pageclass_sfx ?>">
   <?php if ($this->params->get('show_page_heading')) : ?>
     <div class="page-header">
@@ -24,7 +30,7 @@ JHtml::_('behavior.keepalive');
     <?php endif; ?>
 
     <?php if ($this->params->get('logindescription_show') == 1) : ?>
-      <?php echo $this->params->get('login_description'); ?>
+      <?php echo JText::_($login_description); ?>
     <?php endif; ?>
 
     <?php if (($this->params->get('login_image') != '')) : ?>
@@ -66,8 +72,7 @@ JHtml::_('behavior.keepalive');
           <?php echo JText::_('JLOGIN'); ?>
         </button>
       </div>
-
-      <input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('login_redirect_url', $this->form->getValue('return'))); ?>" />
+      <input type="hidden" name="return" value="<?php echo base64_encode($this->params->get('login_redirect_url')) ?>" />
       <?php echo JHtml::_('form.token'); ?>
     </fieldset>
   </form>

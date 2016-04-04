@@ -42,7 +42,6 @@ class plgSystemCanonical extends JPlugin
 
         if ($link->getScheme() == 'https')
         {
-
             $link->setScheme('http');
             $doc->addHeadLink(htmlspecialchars($link->toString()), 'canonical');
         }

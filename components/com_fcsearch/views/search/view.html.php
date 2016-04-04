@@ -75,6 +75,8 @@ class FcSearchViewSearch extends JViewLegacy
             $this->total = 0;
             $this->document->setMetaData('robots', 'noindex, nofollow');
             $this->pagination = '';
+
+            $this->alt = $this->get('Suggestions');
         }
         else
         {
@@ -181,7 +183,7 @@ class FcSearchViewSearch extends JViewLegacy
         // Generate the page META title
         $metatitle = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector, $this->localinfo->metatitle);
         $pagetitle = $this->getTitle($property_type, $accommodation_type, $location, $bedrooms, $occupancy, $inflector);
-        
+
         $description = $this->getDescription($property_type, $accommodation_type, $location, $inflector, $this->localinfo->metadescription);
 
         // Append the site name to keep the SEOs happy
@@ -190,7 +192,7 @@ class FcSearchViewSearch extends JViewLegacy
         // Set the page and document title
         $this->document->setTitle($metatitle);
         $this->document->setDescription($description);
-        
+
         $this->pagetitle = $pagetitle;
 
 
@@ -418,4 +420,5 @@ class FcSearchViewSearch extends JViewLegacy
             return false;
         }
     }
+
 }

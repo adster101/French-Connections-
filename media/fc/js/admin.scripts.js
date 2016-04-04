@@ -865,6 +865,17 @@ jQuery(document).ready(function () {
     jQuery('#availabilityModal').on('hidden', function () {
       // Clear the current selections...
       reset();
+
+      // Make the fields not required...
+      $inputs = jQuery(this).find(':input');
+      $inputs.each(function () {
+        $field = jQuery(this);
+
+        $field.removeClass('required');
+        $field.removeAttr('required');
+
+      })
+      
     })
 
     jQuery('#availabilityModal').on('shown', function () {
@@ -877,6 +888,19 @@ jQuery(document).ready(function () {
                 bottom: 'auto',
                 top: '0'
               });
+
+      // Make the various fields required...
+      $inputs = jQuery(this).find(':input');
+
+      $inputs.each(function () {
+        $field = jQuery(this);
+
+        $field.addClass('required');
+        $field.attr('required', 'required');
+
+      })
+
+
 
     });
 
