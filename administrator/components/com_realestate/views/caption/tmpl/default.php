@@ -12,9 +12,9 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 <p>
   <?php if (empty($this->item->url)) : ?>
-    <img class="media-object" src="<?php echo '/images/property/' . (int) $this->item->unit_id . '/thumb/' . $this->escape($this->item->image_file_name); ?>" />
+    <img class="media-object" src="<?php echo '/images/property/' . (int) $this->item->realestate_property_id . '/thumb/' . $this->escape($this->item->image_file_name); ?>" />
   <?php else: ?>
-    <img class="media-object" src="<?php echo 'http://' . $this->item->url ?>" /
+    <img class="media-object" src="<?php echo 'http://' . $this->item->url ?>" />
   <?php endif; ?>
 </p>
 <form action="<?php echo JRoute::_('index.php?option=com_realestate'); ?>" method="post" name="captionForm" id="captionForm" class="form-validate">

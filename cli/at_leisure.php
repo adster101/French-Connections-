@@ -60,16 +60,6 @@ class AtLeisure extends Import
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
-        $params = array(
-            "HouseCodes" => $acco_chunk,
-            "Items" => array("BasicInformationV3",
-                "MediaV2",
-                "PropertiesV1",
-                "LanguagePackENV4",
-                "LayoutExtendedV2",
-                "DistancesV1")
-        );
-
         $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
         // Set a reasonable expiry date...
@@ -100,6 +90,16 @@ class AtLeisure extends Import
         // Chunk up the house codes baby!
         $accocode_chunks = array_chunk($props, 100);
 
+        $params = array(
+            "HouseCodes" => $acco_chunk,
+            "Items" => array("BasicInformationV3",
+                "MediaV2",
+                "PropertiesV1",
+                "LanguagePackENV4",
+                "LayoutExtendedV2",
+                "DistancesV1")
+        );        
+        
         // Load up 100 property details at a time.
         foreach ($accocode_chunks as $chunk => $acco_chunk)
         {
@@ -166,13 +166,13 @@ class AtLeisure extends Import
                         // Here we know we have the full property version detail
                         $property_detail = $property_table->load($property_version_table->property_id);
                     }
-
+                    
                     // Get the nearest city
                     $city_id = $this->nearestcity($acco->BasicInformationV3->WGS84Latitude, $acco->BasicInformationV3->WGS84Longitude);
-
-
+                    
                     // Get the location details for this property
                     $classification = JTable::getInstance('Classification', 'ClassificationTable');
+                    
                     $location = $classification->getPath($city_id);
 
                     $data['property_version']['id'] = $property_version_table->id;
