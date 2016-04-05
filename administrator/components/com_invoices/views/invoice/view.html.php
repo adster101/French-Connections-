@@ -23,7 +23,10 @@ class InvoicesViewInvoice extends JViewLegacy
     protected $state;
 
     /**
-     * Display the view
+     * Method to display the view
+     * 
+     * @param type $tpl
+     * @throws Exception
      */
     public function display($tpl = null)
     {

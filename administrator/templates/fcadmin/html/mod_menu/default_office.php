@@ -105,13 +105,6 @@ if ($manage_realestate) {
 }
 
 
-$menu->addChild(
-        new JMenuNode(JText::_('COM_ENQUIRIES_MENU'), 'index.php?option=com_enquiries', 'class:enquiries'), true
-);
-
-$menu->getParent();
-
-
 /**
  * Site SubMenu
  * */

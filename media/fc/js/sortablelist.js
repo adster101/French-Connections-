@@ -20,18 +20,13 @@
         $('#imageList .thumbnail-default').empty();
         $('#imageList li:nth-child(1) .thumbnail-default').html('<span class="icon-default pull-left">&nbsp;</span>');
         
-        var messages = {
-          "success": ["<span class='icon-publish'></span>Image re-ordering was successfully saved"],
-        };
-        Joomla.renderMessages(messages);
-
+        $('#image-message-container').toggle('hide');
+        
+  
         setTimeout(function(){
-          $( "#system-message-container" ).fadeOut( "slow" );          
+          $( "#image-message-container" ).toggle( "hide" ).fadeOut('slow');          
         },
-        2000)
-
-        
-        
+        2000)        
       }
     });
   }

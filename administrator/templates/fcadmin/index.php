@@ -217,9 +217,7 @@ $uri->setQuery('');
                   <?php else : ?>
                       <div class="span12">
                     <?php endif; ?>
-                    <?php if ($view != 'images') : ?>
                         <jdoc:include type="message" />
-                    <?php endif; ?>
                     <?php
                     // Show the page title here if the header is hidden
                     if (!$displayHeader) :
