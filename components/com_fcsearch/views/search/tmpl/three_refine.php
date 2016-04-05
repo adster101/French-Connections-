@@ -85,14 +85,14 @@ $longitude = $this->state->get('search.longitude', '');
         </a>
       </li>
       <li>
-        <a href="#mapsearch" data-toggle="tab" title="View results on map">
-          <figure>
-            <img class="img-responsive map" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=300x150&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
-            <figcaption>
-              <?php echo JText::_('COM_FCSEARCH_VIEW_RESULTS_ON_MAP'); ?>
-            </figcaption>
-          </figure>
+        <a class="btn btn-default" href="#mapsearch" data-toggle="tab" title="View results on map">
+                    <i class="glyphicon glyphicon-map-marker"></i>
 
+            <?php echo JText::_('COM_FCSEARCH_VIEW_RESULTS_ON_MAP'); ?>
+  
+                   <hr />
+            <img class="img-responsive map" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=300x150&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
+                    
         </a>
       </li>
     </ul>

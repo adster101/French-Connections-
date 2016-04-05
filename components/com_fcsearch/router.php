@@ -22,15 +22,6 @@ function FcSearchBuildRoute(&$query)
 {
     $segments = array();
 
-    // get a menu item based on Itemid or currently active
-    //$app = JFactory::getApplication();
-    //$menu = $app->getMenu();
-    //if (empty($query['Itemid'])) {
-    //$menuItem = $menu->getActive();
-    //} else {  
-    //$menuItem = $menu->getItem($query['Itemid']);
-    //}
-
     if (!empty($query['s_kwds']))
     {
         $segments[] = $query['s_kwds'];
@@ -174,7 +165,7 @@ function FcSearchBuildRoute(&$query)
         }
         unset($query['property']);
     }
-
+            
     return $segments;
 }
 
