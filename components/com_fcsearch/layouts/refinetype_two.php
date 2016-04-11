@@ -42,7 +42,6 @@ array_multisort($sortable, SORT_ASC, $data);
         
         // $filters is the list of applied filters appended via the uri
         $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // The filters being applied in the current URL
-
         if ($value['search_code'] == 'accommodation_' || $value['search_code'] == 'property_')
         {
             $filter_string = $value['search_code'] . JApplication::stringURLSafe($this->escape($value[title])) . '_' . (int) $value[id];

@@ -64,6 +64,8 @@ class FcSearchViewSearch extends JViewLegacy
         // Get the app instance
         $app = JFactory::getApplication();
 
+        
+        
         // Get the currencies
         // Get view data.
         $this->state = $this->get('State');
@@ -76,18 +78,17 @@ class FcSearchViewSearch extends JViewLegacy
             $this->total = 0;
             $this->document->setMetaData('robots', 'noindex, nofollow');
             $this->pagination = '';
-
             $this->alt = $this->get('Suggestions');
         }
         else
         {
-
+            // Check whether the URL is caninical based on the order of the 
+            // filters. SEO related fix requested by Sagittarius. 
+            // https://www.frenchconnections.co.uk/administrator/index.php?option=com_tickets&task=ticket.edit&id=1068
+            SearchHelper::isCanonical($this->localinfo->alias);
+            
             $this->property_type_info = json_decode($this->localinfo->property_type_info);
-
-
-
             $this->results = $this->get('Results');
-
             $this->pagination = $this->get('Pagination');
 
             // Has to be done after getState, as with all really.

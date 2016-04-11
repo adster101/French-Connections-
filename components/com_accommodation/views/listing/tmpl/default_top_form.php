@@ -126,7 +126,7 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
         </div>
       </fieldset>
 
-      <button type="submit" class="btn btn-danger btn-lg btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
+      <button type="submit" class="btn btn-danger btn-lg btn-block" id="enquiry">
         <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
       </button>
       <input type="hidden" name="option" value="com_accommodation" />

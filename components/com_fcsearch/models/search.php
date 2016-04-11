@@ -154,6 +154,7 @@ class FcSearchModelSearch extends JModelList
         $query = $db->getQuery(true);
         $query->select(
                 $db->quoteName('id') . ', ' .
+                $db->quoteName('alias') . ', ' .
                 $db->quoteName('level') . ', ' .
                 $db->quoteName('latitude') . ', ' .
                 $db->quoteName('longitude') . ', ' .
