@@ -89,7 +89,13 @@ abstract class SearchHelper
         $uri = JUri::getInstance();
 
         $path = $uri->getPath();
+
         $queryStr = $uri->getQuery();
+
+        if (!empty($queryStr))
+        {
+            $queryStr = '?' . $queryStr;
+        }
 
         // Split the url 'segments' out into an array
         $filterStr = explode('/', $path);
@@ -101,16 +107,16 @@ abstract class SearchHelper
         sort($filterArr);
 
         $filterStr_sorted = implode('/', $filterArr);
-        
+
         // Compare the two strings...
         $compare = strcmp($filtersStr_unsorted, $filterStr_sorted);
-        
+
         if ($compare <> 0)
         {
             $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
             $route = 'index.php?option=com_fcsearch&Itemid=' . $Itemid_search . '&s_kwds=' .
-                    $location . '/' . $filterStr_sorted . '?' . $queryStr;
+                    $location . '/' . $filterStr_sorted . $queryStr;
 
             // And redirect
             header('Location: ' . JRoute::_($route));
