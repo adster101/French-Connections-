@@ -49,12 +49,34 @@ class CrawlerCron extends JApplicationCli
     {
 
         $crawler = new Crawler();
-        $crawler->setURL("dev.frenchconnections.co.uk");
+        $crawler->setURL("www.frenchconnections.co.uk");
         $crawler->addContentTypeReceiveRule("#text/html#");
+        
+        $crawler->addURLFollowRule("#(accommodation)#");
+        $crawler->addURLFilterRule("#(uri)# i");
+        $crawler->addURLFilterRule("#(/en/)# i");
         $crawler->addURLFilterRule("#(jpg|jpeg|gif|png|bmp)$# i");
         $crawler->addURLFilterRule("#(css|js)$# i");
-        $crawler->addURLFilterRule("#(+\'uri\'+)$# i");
         $crawler->addURLFilterRule("#(/en/)# i");
+        // match property_wiit_1/property_asdasd_22 type urls
+        $crawler->addURLFilterRule("#(property.*?)/(property.*?)#");
+        $crawler->addURLFilterRule("#(property.*?)/(property.*?)/(property.*?)#");
+        $crawler->addURLFilterRule("#(my-account)#");
+        $crawler->addURLFilterRule("#(forsale)#");
+        $crawler->addURLFilterRule("#(analytics)#");
+        $crawler->addURLFilterRule("#(listing)#");
+        $crawler->addURLFilterRule("#(blog)#");
+        $crawler->addURLFilterRule("#(forsale-listing)#");
+        $crawler->addURLFilterRule("#(internal_)# i");
+        $crawler->addURLFilterRule("#(external_)# i");
+        $crawler->addURLFilterRule("#(suitability_)# i");
+        $crawler->addURLFilterRule("#(activities_)# i");
+        $crawler->addURLFilterRule("#(start)# i");
+        $crawler->addURLFilterRule("#(kitchen_)# i");
+        $crawler->addURLFilterRule("#(viewsite)# i");
+        $crawler->addURLFilterRule("#(media)# i");
+        $crawler->addURLFilterRule("#(href)# i");
+        
         $crawler->goMultiProcessed(7, 1);
         $crawler->setRequestDelay(60/100);
         $crawler->setUrlCacheType(PHPCrawlerUrlCacheTypes::URLCACHE_SQLITE);

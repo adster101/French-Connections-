@@ -36,6 +36,7 @@ class FcSearchController extends JControllerLegacy
         // Set the default view name and format from the Request.
         $viewName = $input->get('view', 'search', 'word');
         $input->set('view', $viewName);
+        $input->set('layout', 'three');
 
         // Don't cache view for search queries
         if ($input->get('q') || $input->get('f') || $input->get('t'))

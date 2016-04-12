@@ -64,10 +64,13 @@ class FcSearchViewSearch extends JViewLegacy
         // Get the app instance
         $app = JFactory::getApplication();
 
+        
+        
         // Get the currencies
         // Get view data.
         $this->state = $this->get('State');
         $this->localinfo = $this->get('LocalInfo');
+
 
         if ($this->localinfo === false)
         {
@@ -75,14 +78,17 @@ class FcSearchViewSearch extends JViewLegacy
             $this->total = 0;
             $this->document->setMetaData('robots', 'noindex, nofollow');
             $this->pagination = '';
-
             $this->alt = $this->get('Suggestions');
         }
         else
         {
-
+            // Check whether the URL is caninical based on the order of the 
+            // filters. SEO related fix requested by Sagittarius. 
+            // https://www.frenchconnections.co.uk/administrator/index.php?option=com_tickets&task=ticket.edit&id=1068
+            SearchHelper::isCanonical($this->localinfo->alias);
+            
+            $this->property_type_info = json_decode($this->localinfo->property_type_info);
             $this->results = $this->get('Results');
-
             $this->pagination = $this->get('Pagination');
 
             // Has to be done after getState, as with all really.
@@ -190,11 +196,10 @@ class FcSearchViewSearch extends JViewLegacy
         $title .= ' - ' . $app->getCfg('sitename');
 
         // Set the page and document title
-        $this->document->setTitle($metatitle);
+        $this->document->setTitle($metatitle . $title);
         $this->document->setDescription($description);
 
         $this->pagetitle = $pagetitle;
-
 
         JText::script('COM_FCSEARCH_SEARCH_SHOW_MORE_OPTIONS');
         JText::script('COM_FCSEARCH_SEARCH_SHOW_LESS_OPTIONS');
@@ -301,11 +306,28 @@ class FcSearchViewSearch extends JViewLegacy
         {
             $plural_property_type = $inflector->toPlural($property_type);
             // In this case we want to strip all occurances of France as it appears in the language string
-            $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location_title));
+
+            $dash_separated_property_type = JStringNormalise::toDashSeparated($property_type);
+
+            if (!empty($this->property_type_info->$dash_separated_property_type->meta_title))
+            {
+                $title = $this->property_type_info->$dash_separated_property_type->meta_title;
+            }
+            else
+            {
+                $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_TITLE', ucfirst($plural_property_type), ucwords($location_title));
+            }
         }
         else
         {
-            $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location_title));
+            if (!empty($metatitle))
+            {
+                $title = $metatitle;
+            }
+            else
+            {
+                $title = JText::sprintf('COM_FCSEARCH_TITLE', ucwords($location_title));
+            }
         }
 
         if ($lwl)
@@ -316,11 +338,6 @@ class FcSearchViewSearch extends JViewLegacy
         if ($offers)
         {
             $title = JText::sprintf('COM_FCSEARCH_TITLE_SPECIAL_OFFERS', $location);
-        }
-
-        if (!empty($metatitle))
-        {
-            $title = $metatitle;
         }
 
         // Amend the title based on bedroom and occupancy filter
@@ -378,16 +395,28 @@ class FcSearchViewSearch extends JViewLegacy
         elseif ($property_type)
         {
             $plural_property_type = $inflector->toPlural($property_type);
-            $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_DESCRIPTION', ucfirst($property_type), ucwords($location_title), ucfirst($location_title));
+
+            $dash_separated_property_type = JStringNormalise::toDashSeparated($property_type);
+
+            if (!empty($this->property_type_info->$dash_separated_property_type->meta_description))
+            {
+                $title = $this->property_type_info->$dash_separated_property_type->meta_description;
+            }
+            else
+            {
+                $title = JText::sprintf('COM_FCSEARCH_PROPERTY_TYPE_DESCRIPTION', ucfirst($property_type), ucwords($location_title), ucfirst($location_title));
+            }
         }
         else
         {
-            $title = JText::sprintf('COM_FCSEARCH_DESCRIPTION', ucwords($location), ucwords($location_title));
-        }
-
-        if (!empty($metadescription))
-        {
-            $title = htmlspecialchars($metadescription);
+            if (!empty($metadescription))
+            {
+                $title = htmlspecialchars($metadescription);
+            }
+            else
+            {
+                $title = JText::sprintf('COM_FCSEARCH_DESCRIPTION', ucwords($location), ucwords($location_title));
+            }
         }
 
         return $title;
@@ -413,7 +442,7 @@ class FcSearchViewSearch extends JViewLegacy
 
         if (!empty($property_type_info->$property_type))
         {
-            return $property_type_info->$property_type;
+            return $property_type_info->$property_type->content;
         }
         else
         {

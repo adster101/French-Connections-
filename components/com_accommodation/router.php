@@ -65,7 +65,7 @@ function AccommodationParseRoute($segments)
   $accommodation_itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
   $realestate_itemid = SearchHelper::getItemid(array('component', 'com_realestate'));
 
-  // The first segment has to be the alias the search is based on.
+  // 
   $vars['id'] = (int) $segments[0];
 
   $input = $app->input;

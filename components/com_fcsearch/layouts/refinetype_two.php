@@ -1,5 +1,17 @@
 <?php
 // No direct access to this file
+/**
+ * 
+ * This layout takes a list of available filters for a given search ($displayData['data']
+ * and determines the appropriate URLs to display on the search filters panel.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
 defined('_JEXEC') or die('Restricted access');
 $displayData = ($displayData) ? $displayData : array();
 
@@ -27,8 +39,10 @@ array_multisort($sortable, SORT_ASC, $data);
         <?php
         $remove = false;
         $tmp = explode('/', $uri); // Split the url out on the slash
-        $filters = ($lang == 'en-GB') ? array_flip(array_slice($tmp, 3)) : array_flip(array_slice($tmp, 4)); // The filters being applied in the current URL
-        if ($value['search_code'] == 'accommodation_')
+        
+        // $filters is the list of applied filters appended via the uri
+        $filters = ($lang == 'en-GB') ? array_slice($tmp, 3) : array_slice($tmp, 4); // The filters being applied in the current URL
+        if ($value['search_code'] == 'accommodation_' || $value['search_code'] == 'property_')
         {
             $filter_string = $value['search_code'] . JApplication::stringURLSafe($this->escape($value[title])) . '_' . (int) $value[id];
         } else
@@ -36,15 +50,29 @@ array_multisort($sortable, SORT_ASC, $data);
             $filter_string = $value['search_code'] . JStringNormalise::toUnderscoreSeparated(JApplication::stringURLSafe($this->escape($value[title]))) . '_' . (int) $value[id];
         }
 
-        if (!array_key_exists($filter_string, $filters))
-        { // This property filter isn't currently applied
-            $new_uri = implode('/', array_flip($filters)); // Take the existing filters 
-            $new_uri = (!empty($filters)) ? '/' . $filter_string . '/' . $new_uri : '/' . $filter_string; // And append the new filter only adding new uri it it's not empty
+        if (!in_array($filter_string, $filters))
+        { 
+            // This search filter string isn't currently being 'applied'
+            
+            // Add the new filter to this search filter URL 
+            $filters[] = $filter_string;
+            sort($filters);
+            $new_uri = implode('/', $filters); // Take the existing filters 
+            
+            
+            $new_uri = (!empty($filters)) ? '/' . $new_uri : '/' . $filter_string; // And append the new filter only adding new uri it it's not empty
             $remove = false;
         } else
-        { // This property type filter is already being applied
-            unset($filters[$filter_string]); // Remove it from the filters array
-            $new_uri = implode('/', array_flip($filters));  // The new filter part is generated so without this filter which effectively removes the filter from the search
+        { 
+            // This property type filter is already being applied
+            $key = array_search($filter_string, $filters);
+            
+            // Remove it from the filters array
+            if ($key !== false) {
+                unset($filters[$key]);
+            }
+            
+            $new_uri = implode('/', $filters);  // The new filter part is generated so without this filter which effectively removes the filter from the search
             $new_uri = ($new_uri) ? '/' . $new_uri : '';
             $remove = true;
         }

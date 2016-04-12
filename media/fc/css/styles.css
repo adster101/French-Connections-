@@ -7370,10 +7370,6 @@ A/B testing styles for new advertise with us page
   border-radius: 6px;
   padding: 15px 15px 5px;
 }
-.view-search #map-search-tab > li > a[href='#mapsearch'],
-.view-shortlist #map-search-tab > li > a[href='#mapsearch'] {
-  padding: 0;
-}
 .view-search #map-search-tab > li > a > img.map,
 .view-shortlist #map-search-tab > li > a > img.map {
   max-width: 100%;
