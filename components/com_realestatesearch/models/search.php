@@ -81,9 +81,6 @@ class RealestateSearchModelSearch extends JModelList
 
     $this->date = JFactory::getDate()->calendar('Y-m-d');
 
-    $this->itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
-
-    // Set the default search and what not here?
   }
 
   public function getLogSearch()
@@ -197,9 +194,6 @@ class RealestateSearchModelSearch extends JModelList
 
     $db = $this->getDbo();
 
-    // Get the date
-    $date = JFactory::getDate();
-
     // Get the store id.
     $store = $this->getStoreId('getResults');
 
@@ -242,10 +236,6 @@ class RealestateSearchModelSearch extends JModelList
 
     // Get the store id.
     $store = $this->getStoreId('getListQuery');
-
-    // Get the language from the state
-    $app = JFactory::getApplication();
-    $lang = $app->getLanguage()->getTag();
 
     // Use the cached data if possible.
     if ($this->retrieve($store, true))
@@ -899,6 +889,9 @@ class RealestateSearchModelSearch extends JModelList
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
     // The query resultset should be stored in the local model cache already
     $store = $this->getStoreId('getCrumbs');
+    
+    $itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
+
 
     // Get the info from the cache if we can
     if ($this->retrieve($store))
@@ -928,7 +921,7 @@ class RealestateSearchModelSearch extends JModelList
     {
       if ($v->parent_id)
       {
-        $pathArr->$k->link = 'index.php?option=com_realestatesearch&Itemid=' . (int) $this->itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
+        $pathArr->$k->link = 'index.php?option=com_realestatesearch&Itemid=' . (int) $itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
         $pathArr->$k->name = $v->title;
       }
     }

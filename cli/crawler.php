@@ -49,7 +49,7 @@ class CrawlerCron extends JApplicationCli
     {
 
         $crawler = new Crawler();
-        $crawler->setURL("www.frenchconnections.co.uk");
+        $crawler->setURL("dev.frenchconnections.co.uk");
         $crawler->addContentTypeReceiveRule("#text/html#");
         
         $crawler->addURLFollowRule("#(accommodation)#");
@@ -77,9 +77,8 @@ class CrawlerCron extends JApplicationCli
         $crawler->addURLFilterRule("#(media)# i");
         $crawler->addURLFilterRule("#(href)# i");
         
-        $crawler->goMultiProcessed(7, 1);
+        $crawler->goMultiProcessed(3, PHPCrawlerMultiProcessModes::MPMODE_PARENT_EXECUTES_USERCODE);
         $crawler->setRequestDelay(60/100);
-        $crawler->setUrlCacheType(PHPCrawlerUrlCacheTypes::URLCACHE_SQLITE);
         $crawler->obeyRobotsTxt(true);
         
         $crawler->go();
