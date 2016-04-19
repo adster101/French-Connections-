@@ -31,29 +31,15 @@
     <fields name="params">
       <fieldset
         name="basic">
-        <field
-          name="type"
-          type="category"
-          extension="com_featuredproperties"
-          label="Featured on"
-        />
+        <field name="mymenuitem" type="menuitem" default="45" label="Select a menu item" description="Select a menu item" />
         <field 
           type="integer"
           first="1"
           last="25"
           step="1"
-          label="Count"
-          name="count"
+          label="MOD_FEATURED_PROPERTY_COUNT_LABEL"
+          name="MOD_FEATURED_PROPERTY_COUNT_DESC"
         />
-        <field 
-          type="list"
-          name="format"
-          label="Display format">
-          <option 
-            value="horizontal">Horizontal</option>
-          <option 
-            value="vertical">Vertical</option>
-        </field>
         <field 
           type="list"
           name="offers"
@@ -63,16 +49,14 @@
           <option value="1">Yes</option>
           <option value="0">No</option>
         </field>
-        <field 
-          type="list"
-          name="related"
-          label="Related"
-          description="Show related props for post enquiry page"
-          default="0">
-          <option value="1">Yes</option>
-          <option value="0">No</option>
-        </field>     
+          <field 
+          name="region"
+          type="region"
+          label="MOD_FEATURED_PROPERTY_REGION_LABEL"
+          desc="MOD_FEATURED_PROPERTY_REGION_DESC"
+        />      
       </fieldset>
+
       <fieldset name="advanced">
         <field
           name="layout"
