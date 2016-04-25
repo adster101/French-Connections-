@@ -14,19 +14,58 @@ class modFeaturedPropertyHelper
 
   var $items;
 
+  /**
+   * Returns a list of featured properties to display
+   *
+   **/
   public function getFeaturedProperties(&$params)
   {
+    // The total number of properties to return
     $count = $params->get('count', 4);
+
+    // The featured property 'type' corresponds to a menu item
     $type = $params->get('type');
+
+    // Only return properties with special offers
     $offers_only = $params->get('offers');
+
     // In case we are on the 'special offers' search results page then override the offers flag...
     $input = JFactory::getApplication()->input;
+
+    // User is filtering on special offers show only show FP with offers...
     $offers = $input->get('offers', false, 'boolean');
-    $lang = JFactory::getLanguage()->getTag();
+
+    // Get the region, if any
+    $region = $params->get('region', '');
+
+    // Get the departments specified for this module
+    $departments = $params->get('departments', '');
+
+    $paid_for = $this->_getFeaturedProperties($count, $type, $offers_only, $offers, $region, $departments);
+
+    // Check whether we have enough paid for listing to account for the total required
+    if (count($paid_for) < $count)
+    {
+      $remaining = $count - count($paid_for);
+
+      $padding = $this->_getFeaturedProperties($remaining, '', $offers_only, $offers, $region, $departments);
+
+    }
+
+    $props = array_merge($paid_for, $padding);
+
+    return $props;
+
+  }
+
+
+  private function _getFeaturedProperties($count = 4, $type ='', $offers_only = false, $offers = false, $region = '', $departments = '')
+  {
+
     // Using JHtml::date instead of JDate...
     $date = JHtml::date($input = 'now', 'Y-m-d', false);
     $db = JFactory::getDBO();
-    
+
     $query = $db->getQuery(true);
     $query->select('
       a.id,
@@ -53,19 +92,7 @@ class modFeaturedPropertyHelper
 
     // Same goes for the property version, which we join to get the location
     $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))');
-
-    // Join the translations table to pick up any translations 
-    if ($lang == 'fr-FR')
-    {
-      $query->select('j.unit_title');
-      $query->join('left', '#__unit_versions_translations j on j.version_id = c.id');
-      $query->join('left', '#__classifications_translations g ON g.id = e.department');
-    }
-    else
-    {
-      $query->join('left', '#__classifications g ON g.id = e.department');
-    }
-
+    $query->join('left', '#__classifications g ON g.id = e.department');
     $query->join('left', '#__property_images_library i on c.id = i.version_id');
 
     $query->where('b.ordering = 1');
@@ -76,13 +103,29 @@ class modFeaturedPropertyHelper
 
     // On the last minute page we don't want featured properties, just those with offers.
     // This is set by a module parameter and should only default to true on the last minute page.
-    if (!$offers_only)
+    if ($type)
     {
       $query->join('left', '#__featured_properties h on h.property_id = a.id');
       $query->where('h.published = 1');
       $query->where('h.featured_property_type = ' . $type);
       $query->where('h.start_date <= ' . $db->quote($date));
       $query->where('h.end_date >= ' . $db->quote($date));
+    }
+
+    if ($region)
+    {
+      $query->where('e.region = ' . (int) $region);
+    }
+
+    if ($departments)
+    {
+      $str = array();
+      foreach($departments as $department)
+      {
+        $str[] = 'e.department = ' . $department;
+      }
+
+      $query->where('(' . implode(' OR ', $str) . ')');
     }
 
     if ($offers_only || $offers)
@@ -96,9 +139,6 @@ class modFeaturedPropertyHelper
     $items = ($items = $db->loadObjectList()) ? $items : array();
 
     $this->items = $items;
-    $this->lang = $lang;
-
-
 
     return $items;
   }

@@ -9,30 +9,6 @@ defined('_JEXEC') or die;
 abstract class RentalHelper
 {
 
-  /**
-   * 
-   * @param type $property_status
-   * @param type $document
-   * 
-   * return void;
-   */
-  public static function addLiveChat($property_status = false)
-  {
-    if (!$property_status)
-    {
-      $js = "(function(){
-        var c = document.createElement('script');
-        c.type = 'text/javascript'; c.async = true;
-        c.src = '//frenchconnections.smartertrack.com/ChatLink.ashx?config=1&id=stlivechat21';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(c,s);
-      })();";
-
-      $document = JFactory::getDocument();
-      $document->addScriptDeclaration($js);
-    }
-  }
-
   public static function filterTariffs($tariffs = array())
   {
 
@@ -1002,9 +978,9 @@ abstract class RentalHelper
   public static function hasActiveProperty($user = '')
   {
     $db = JFactory::getDbo();
-    
+
     $query = $db->getQuery(true);
-    
+
     $query->select('(select count(b2.id) + count(c2.id) from ' . $db->quoteName('qitz3_users', 'u') . 'left join ' . $db->quoteName('qitz3_property', 'b2') . ' on b2.created_by = u.id left join ' . $db->quoteName('qitz3_realestate_property', 'c2') . ' on c2.created_by = u.id where u.id = a.created_by ) as existing');
 
     return true;

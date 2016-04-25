@@ -126,11 +126,9 @@ class RentalViewPropertyversions extends JViewLegacy
   protected function setDocument()
   {
 
-    RentalHelper::addLiveChat($this->status->expiry_date);
-
     $document = JFactory::getDocument();
-    
-    
+
+
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_EDIT', $this->item->id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('JGLOBAL_VALIDATION_FORM_FAILED');
@@ -140,4 +138,3 @@ class RentalViewPropertyversions extends JViewLegacy
   }
 
 }
-

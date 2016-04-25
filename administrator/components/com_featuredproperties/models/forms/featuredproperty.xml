@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
-  <fieldset 
-    name="featured-property" 
+  <fieldset
+    name="featured-property"
     label="">
-    
-    <field 
-      label="PRN"    
+
+    <field
+      label="PRN"
       name="property_id"
       labelclass="control-label"
       filter="int"
       type="text"
       required="true"
       class="required"
-    />   
-
+    />
     <field
-      type="category"
       name="featured_property_type"
-      label="Featured property type"
-      labelclass="control-label"
-      filter="int"
-      required="true"
-      extension="com_featuredproperties"
+      type="menuitem"
+      default="45"
+      label="Featured property page"
+      description="Select a menu item"
       class="required"
+      labelclass="control-label"
+    />
 
-    />  
     <field 
       label="Start date"
       name="start_date"
@@ -35,8 +33,8 @@
       class="required"
       default=""
       format="%d-%m-%Y"
-    />        
-    <field 
+    />
+    <field
       label="End date"
       name="end_date"
       labelclass="control-label"
@@ -46,16 +44,16 @@
       class="required"
       default=""
       format="%d-%m-%Y"
-    />        
-    <field 
-      label="Paid status"    
+    />
+    <field
+      label="Paid status"
       name="published"
       filter="int"
       type="list"
       labelclass="control-label">
-      <option value="">JGLOBAL_SELECT_AN_OPTION</option>    
-      <option value="1">Paid</option>    
-      <option value="0">Unpaid</option>    
+      <option value="">JGLOBAL_SELECT_AN_OPTION</option>
+      <option value="1">Paid</option>
+      <option value="0">Unpaid</option>
     </field>
     <field
       label="Notes"
@@ -63,8 +61,8 @@
       labelclass="control-label"
       filter="string"
       name="notes"
-    />       
-    <field 
+    />
+    <field
       type="hidden"
       name="id"
       filter="int"

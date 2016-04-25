@@ -12,9 +12,6 @@ $progress = $displayData['status'];
 $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 ?>
 
-<?php if (empty($progress->expiry_date) && $progress->review == 1) : ?>
-  <div id="stlivechat21"></div>
-<?php endif; ?>
 
 <!--<div class="row-fluid">
   <div class="span9">-->
@@ -23,13 +20,13 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
     <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SUBMISSION_BLURB'); ?>
     <hr />
     <fieldset class="panelform">
-      <div class="control-group">   
+      <div class="control-group">
         <?php echo $form->getLabel('body'); ?>
-        <div class="controls">   
+        <div class="controls">
           <?php echo $form->getInput('body'); ?>
         </div>
-      </div>      
-      <?php echo $form->getInput('tos'); ?>  
+      </div>
+      <?php echo $form->getInput('tos'); ?>
       <?php echo $form->getLabel('tos'); ?>
       <hr />
     </fieldset>
@@ -40,17 +37,17 @@ $form = (!empty($displayData['form'])) ? $displayData['form'] : '';
 <?php elseif ($view == 'listing' && !$progress->review && $progress->days_to_renewal >= 7 && $progress->complete) : ?>
   <?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_BLURB'); ?>
 <?php elseif ($progress->days_to_renewal > 0 && $progress->days_to_renewal <= 7 && !$progress->review && !empty($progress->expiry_date)) : ?>
-  <div class="alert alert-warning">       
+  <div class="alert alert-warning">
     <h4>Listing status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_RENEW_NOW'); ?></p>
     <?php echo JHtml::_('property.renewalButton', $progress->days_to_renewal, $progress->id); ?>
   </div>
 <?php elseif ($progress->days_to_renewal < 0 && !empty($progress->expiry_date) && $progress->review < 2) : ?>
-  <div class="alert alert-danger">       
+  <div class="alert alert-danger">
     <h4>Listing status</h4>
     <p><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_EXPIRED'); ?></p>
     <?php echo JHtml::_('property.renewalButton', $progress->days_to_renewal, $progress->id); ?>
-  </div>    
+  </div>
 <?php elseif ($progress->review == 1 && $progress->complete) : ?>
   <div class="alert alert-info">
     <h4>Listing status</h4>

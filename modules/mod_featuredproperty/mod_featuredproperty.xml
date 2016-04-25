@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension 
-  type="module" 
-  version="3.1" 
-  method="upgrade" 
+<extension
+  type="module"
+  version="3.1"
+  method="upgrade"
   client="site">
   <name>mod_featuredproperty</name>
   <!-- The following elements are optional and free of formatting constraints -->
@@ -30,31 +30,47 @@
   <config>
     <fields name="params">
       <fieldset
-        name="basic">
-        <field name="mymenuitem" type="menuitem" default="45" label="Select a menu item" description="Select a menu item" />
-        <field 
+        name="basic" addfieldpath="/libraries/frenchconnections/forms/fields">
+        <field
+          name="type"
+          type="menuitem"
+          default="45"
+          label="MOD_FEATURED_PROPERTY_FEATURED_ON_LABEL"
+          description="MOD_FEATURED_PROPERTY_FEATURED_ON_DESC" />
+        <field
           type="integer"
           first="1"
           last="25"
           step="1"
           label="MOD_FEATURED_PROPERTY_COUNT_LABEL"
-          name="MOD_FEATURED_PROPERTY_COUNT_DESC"
+          name="count"
         />
-        <field 
+        <field
           type="list"
           name="offers"
-          label="With offer"
-          description="Show properties with a current special offer"
+          label="MOD_FEATURED_PROPERTY_WITH_OFFER_LABEL"
+          description="MOD_FEATURED_PROPERTY_WITH_OFFER_DESC"
           default="0">
           <option value="1">Yes</option>
           <option value="0">No</option>
         </field>
-          <field 
+        <field
           name="region"
-          type="region"
-          label="MOD_FEATURED_PROPERTY_REGION_LABEL"
-          desc="MOD_FEATURED_PROPERTY_REGION_DESC"
-        />      
+          type="regions"
+          label="MOD_FEATURED_PROPERTY_FIELD_REGION_LABEL"
+          labelclass="control-label">
+          <option value="">JOPTION_SELECT_CATEGORY</option>
+        </field>
+        <field
+          name="departments"
+          type="departments"
+          default=""
+          label="MOD_FEATURED_PROPERTY_FIELD_DEPARTMENT_LABEL"
+          description="COM_RENTAL_HELLOWORLD_FIELD_DEPARTMENT_DESC"
+          multiple="true"
+          labelclass="control-label">
+          <option value="">JOPTION_SELECT_CATEGORY</option>
+        </field>
       </fieldset>
 
       <fieldset name="advanced">
@@ -97,6 +113,6 @@
           </option>
         </field>
       </fieldset>
-    </fields> 
+    </fields>
   </config>
 </extension>
