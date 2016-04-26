@@ -6,35 +6,25 @@
 defined('_JEXEC') or die;
 
 $user = JFactory::getUser();
-$logged_in = ($user->guest) ? false : true;
-$action = (array_key_exists($this->result->unit_id, $this->shortlist)) ? 'remove' : 'add';
+$lang = JFactory::getLanguage();
+$lang->load('com_realestate', JPATH_SITE);
+$lang->load('com_realestatesearch', JPATH_SITE);
 $Itemid_property = SearchHelper::getItemid(array('component', 'com_realestate'));
-$HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
-$login_route = JRoute::_('index.php?option=com_users&Itemid='.(int) $HolidayMakerLogin.'&return='.base64_encode('/shortlist'));
 $route = JRoute::_('index.php?option=com_realestate&Itemid='.$Itemid_property.'&id='.(int) $this->result->property_id);
-$location = UCFirst(JStringNormalise::toSpaceSeparated($this->state->get('list.searchterm')));
-$description = JHTml::_('string.truncate', $this->result->description, 50, true, false);
-$title = JText::sprintf('COM_FCSEARCH_THUMBNAIL_TITLE', $this->result->id, $description);
 $prices = JHtml::_('general.price', $this->result->price, 'GBP', '', '');
 
-// Get the short list info so we can determine whether the property is in the shortlist
-//
-$inShortlist = (array_key_exists($this->result->property_id, $this->shortlist)) ? 1 : 0;
-$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
-$displayData = new StdClass;
-$displayData->action = $action;
-$displayData->inShortlist = $inShortlist;
-
-// Unit ID corresponds to realestate_property_id in this case.
-$displayData->unit_id = $this->result->property_id;
-$displayData->class = '';
 ?>
 
 <div class="search-result">
 <div class="row">
 <div class="col-xs-12 col-sm-9">
+       <p class="">
+        <a title="<?php echo JText::sprintf('COM_SHORTLIST_REMOVE_FROM_LIST',$this->escape($this->result->unit_title)); ?>" class="btn btn-danger btn-xs" data-id='<?php echo $this->result->id ?>' href="<?php echo JRoute::_('index.php?option=com_shortlist&task=shortlist.remove&id=' . (int) $this->result->property_id . '&action=remove') ?>">
+          <i class="glyphicon glyphicon-remove small"></i>
+        </a>
+      </p>
       <h3 class="listing-title">
-        <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->title)); ?></a>
+        <a href="<?php echo JRoute::_($route); ?>"><?php echo $this->escape(trim($this->result->unit_title)); ?></a>
         <small>
           <?php echo $this->result->location_title ?>
         </small>
@@ -95,15 +85,7 @@ $displayData->class = '';
               <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
             </a>
           </p>
-          <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
-            <?php if ($logged_in) : ?>
-                <?php echo $shortlist->render($displayData); ?>
-            <?php else : ?>
-                <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
-                  <i class="glyphicon glyphicon-heart"></i>
-                </a>
-            <?php endif; ?>
-          </p>
+
         </div>
       </div>
     </div>

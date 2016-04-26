@@ -117,7 +117,7 @@ class RealestateSearchModelSearch extends JModelList
    * Get the information about the area which is being searched on.
    * TO DO - This should probably be a protected method called internally from say getResults
    * if state not set accordingly.
-   * 
+   *
    * @return boolean
    */
   public function getLocalInfo()
@@ -163,7 +163,7 @@ class RealestateSearchModelSearch extends JModelList
     // Load the result (should only be one) from the database.
     $db->setQuery($query);
 
-    // See if we got a valid search 
+    // See if we got a valid search
     $row = $db->loadObject();
 
     if (!$row)
@@ -254,7 +254,7 @@ class RealestateSearchModelSearch extends JModelList
       $query = $db->getQuery(true);
 
       $query->select('
-        a.id as property_id, 
+        a.id as property_id,
         b.*,
         CASE WHEN b.base_currency = \'EUR\' THEN (b.price / h.exchange_rate) ELSE (b.price) END as price,
         g.title as location_title,
@@ -321,7 +321,7 @@ class RealestateSearchModelSearch extends JModelList
           cos(radians(b.latitude)) *
           cos(radians(b.longitude) - radians(' . $this->getState('search.longitude', '') . '))
           + sin(radians(' . $this->getState('search.latitude', '') . '))
-          * sin(radians(b.latitude)))) 
+          * sin(radians(b.latitude))))
         ');
       }
 
@@ -339,7 +339,7 @@ class RealestateSearchModelSearch extends JModelList
         $query = $this->getFilterPrice($query, $min_price, $max_price, $db);
       }
 
-      // Sort out the ordering required      
+      // Sort out the ordering required
       // No filter function needed here as ordering can simplt be cleared and reinstated, if needed.
       if ($sort_column)
       {
@@ -365,7 +365,7 @@ class RealestateSearchModelSearch extends JModelList
 
   /**
    * Method to pull out the location based drilldowns for refine search
-   * 
+   *
    */
   public function getRefineLocationOptions()
   {
@@ -680,7 +680,7 @@ class RealestateSearchModelSearch extends JModelList
 
   /*
    * Method to generate the filter state ids for later filtering in the db
-   * TO DO - Modify this function to return an array of attribute 'aliases' 
+   * TO DO - Modify this function to return an array of attribute 'aliases'
    *
    */
 
@@ -758,8 +758,8 @@ class RealestateSearchModelSearch extends JModelList
   /*
    * Method to generate various attribute filter options,
    * add them to the query and then return the query object
-   * TO DO - Modify this function to join on attribute rather than ID 
-   * 
+   * TO DO - Modify this function to join on attribute rather than ID
+   *
    * @return  query  The search query being built
    */
 
@@ -874,6 +874,21 @@ class RealestateSearchModelSearch extends JModelList
     return $results;
   }
 
+  public function getShortlist()
+  {
+
+      // Get an instance of the shortlist model
+      JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_shortlist/models');
+      $model = JModelLegacy::getInstance('Shortlist', 'ShortlistModel');
+
+      $user = JFactory::getUser();
+      $user_id = $user->id;
+
+      $shortlist = $model->getShortlist($user_id);
+
+      return $shortlist;
+  }
+
   /**
    * Get the path of the current search. Useful to go back up a level in the search etc
    * @return boolean
@@ -889,7 +904,7 @@ class RealestateSearchModelSearch extends JModelList
     $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
     // The query resultset should be stored in the local model cache already
     $store = $this->getStoreId('getCrumbs');
-    
+
     $itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
 
 

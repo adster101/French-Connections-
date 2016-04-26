@@ -4,12 +4,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 /**
- * A set of helper functions for the property components for working out days until renewal 
+ * A set of helper functions for the property components for working out days until renewal
  * general filters etc etc
- * 
+ *
  * @package frenchconnections
  * @subpackage library
- * 
+ *
  */
 abstract class SearchHelper
 {
@@ -44,13 +44,13 @@ abstract class SearchHelper
             $items = is_array($items) ? $items : array();
         }
 
-        // Return the first item ID found. Might need to refine this is you want to link to more than one 
+        // Return the first item ID found. Might need to refine this is you want to link to more than one
         // e.g. search page.
         return $items[0]->id;
     }
 
     /**
-     * 
+     *
      */
     public static function isRealestateProperty($id = '')
     {
@@ -122,6 +122,20 @@ abstract class SearchHelper
             header('Location: ' . JRoute::_($route));
             exit;
         }
+    }
+
+    public static function getShortlist()
+    {
+        // Get an instance of the shortlist model
+        JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_shortlist/models');
+        $model = JModelLegacy::getInstance('Shortlist', 'ShortlistModel');
+
+        $user = JFactory::getUser();
+        $user_id = $user->id;
+
+        $shortlist = $model->getShortlist($user_id);
+
+        return $shortlist;
     }
 
 }

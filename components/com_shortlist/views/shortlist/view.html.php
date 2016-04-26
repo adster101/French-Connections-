@@ -30,7 +30,7 @@ class ShortlistViewShortlist extends JViewLegacy {
    * @return void
    */
   protected function setDocument() {
-    
+
   }
 
 }
