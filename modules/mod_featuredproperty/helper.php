@@ -72,8 +72,15 @@ class modFeaturedPropertyHelper
       c.occupancy,
       i.image_file_name as thumbnail,
       i.url_thumb,
+      (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
+      j.title as property_type,
+      k.title as accommodation_type,
+      c.bathrooms,
       g.title,
+      l.title as tariff_based_on,
+      m.title as changeover_day,
       g.alias,
+      c.occupancy,
       c.base_currency,
       (select min(tariff) from qitz3_tariffs i where i.unit_id = b.id and end_date > now() group by unit_id ) as price
     ');
@@ -91,6 +98,13 @@ class modFeaturedPropertyHelper
         $query->join('left', '#__property_versions e on (a.id = e.property_id and e.id = (select max(f.id) from qitz3_property_versions f where property_id = a.id and review = 0))');
         $query->join('left', '#__classifications g ON g.id = e.department');
         $query->join('left', '#__property_images_library i on c.id = i.version_id');
+
+        $query->join('left', '#__attributes j on j.id = c.property_type');
+        $query->join('left', '#__attributes k on k.id = c.accommodation_type');
+        $query->join('left', '#__attributes l on l.id = c.tariff_based_on');
+
+        // Take this out by storing changeover day as an int 0-6 etc
+        $query->join('left', '#__attributes m on m.id = c.changeover_day');
 
         $query->where('b.ordering = 1');
         $query->where('a.published = 1');

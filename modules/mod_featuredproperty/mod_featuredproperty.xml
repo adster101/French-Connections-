@@ -64,7 +64,6 @@
         <field
           name="departments"
           type="departments"
-          default=""
           label="MOD_FEATURED_PROPERTY_FIELD_DEPARTMENT_LABEL"
           description="COM_RENTAL_HELLOWORLD_FIELD_DEPARTMENT_DESC"
           multiple="true"

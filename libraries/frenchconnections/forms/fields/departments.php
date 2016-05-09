@@ -64,9 +64,8 @@ class JFormFieldDepartments extends JFormFieldList
 				$item->title = str_repeat('- ', $repeat) . $item->title;
 				$options[] = JHtml::_('select.option', $item->id, $item->title);
 			}
-
+			
 		// Merge any additional options in the XML definition.
-		$options = array_merge(parent::getOptions(), $options);
 		return $options;
 	}
 }

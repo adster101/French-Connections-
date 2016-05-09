@@ -43,7 +43,7 @@ if ($this->countModules('position-7'))
 
 <!DOCTYPE html>
 <html lang="<?php echo $this->language; ?>">
-  <head>  
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1;">
@@ -58,7 +58,7 @@ if ($this->countModules('position-7'))
   <!-- Finish header -->
 
   <div class="container">
-    <jdoc:include type="message" /> 
+    <jdoc:include type="message" />
     <!-- Begin Content -->
     <?php if ($this->countModules('position-11')) : ?>
         <jdoc:include type="modules" name="position-11" style="no" />
@@ -70,6 +70,9 @@ if ($this->countModules('position-7'))
     <?php endif; ?>
     <div class="row">
       <div class="<?php echo $span; ?>">
+        <?php if ($this->countModules('before')): ?>
+            <jdoc:include type="modules" name="before" style="xhtml" />
+        <?php endif; ?>
         <jdoc:include type="component" />
         <?php if ($this->countModules('position-2')): ?>
             <jdoc:include type="modules" name="position-2" style="xhtml" />
@@ -106,7 +109,7 @@ if ($this->countModules('position-7'))
           </div>
           <div class="col-lg-3 col-md-5">
             <jdoc:include type="modules" name="position-13" style="none" />
-          </div>       
+          </div>
         </div>
       </div>
   <?php endif; ?>
@@ -130,7 +133,7 @@ if ($this->countModules('position-7'))
 </noscript>
 
 <?php
-// Include styles - async loads the main CSS file 
+// Include styles - async loads the main CSS file
 include_once JPATH_THEMES . '/' . $this->template . '/inc/styles.php';
 
 // Include JS
