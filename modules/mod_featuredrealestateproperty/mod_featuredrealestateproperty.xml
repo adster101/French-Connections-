@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension 
-  type="module" 
-  version="3.1" 
-  method="upgrade" 
+<extension
+  type="module"
+  version="3.1"
+  method="upgrade"
   client="site">
   <name>mod_featuredrealestateproperty</name>
   <!-- The following elements are optional and free of formatting constraints -->
@@ -33,11 +33,10 @@
         name="basic">
         <field
           name="type"
-          type="category"
-          extension="com_featuredproperties"
-          label="Featured on"
+          type="menuitem"
+          label="Featured on page"
         />
-        <field 
+        <field
           type="integer"
           first="1"
           last="25"
@@ -45,16 +44,16 @@
           label="Count"
           name="count"
         />
-        <field 
+        <field
           type="list"
           name="format"
           label="Display format">
-          <option 
+          <option
             value="horizontal">Horizontal</option>
-          <option 
+          <option
             value="vertical">Vertical</option>
         </field>
-        <field 
+        <field
           type="list"
           name="offers"
           label="With offer"
@@ -63,7 +62,7 @@
           <option value="1">Yes</option>
           <option value="0">No</option>
         </field>
-        <field 
+        <field
           type="list"
           name="related"
           label="Related"
@@ -71,7 +70,7 @@
           default="0">
           <option value="1">Yes</option>
           <option value="0">No</option>
-        </field>     
+        </field>
       </fieldset>
       <fieldset name="advanced">
         <field
@@ -113,6 +112,6 @@
           </option>
         </field>
       </fieldset>
-    </fields> 
+    </fields>
   </config>
 </extension>

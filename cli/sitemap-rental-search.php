@@ -28,7 +28,7 @@ class GenerateSitemap extends Sitemap
             $sitemap_url = 'http://www.frenchconnections.co.uk' . $sitemap;
             $handle = fopen(JPATH_SITE . $sitemap, 'w');
 
-            $locs = $this->_getLocations($level = 4);
+            $locs = $this->_getLocations($level = 5);
 
             $total = count($locs);
 
@@ -39,7 +39,7 @@ class GenerateSitemap extends Sitemap
                 $model = JModelLegacy::getInstance('Search', 'FcSearchModel', $config = array('ignore_request' => true));
 
 
-                // Set the listing ID we are sending the reminder to 
+                // Set the listing ID we are sending the reminder to
                 $model->setState('list.searchterm', $loc->alias);
                 $model->setState('search.location', $loc->id);
                 $model->setState('search.level', $loc->level);

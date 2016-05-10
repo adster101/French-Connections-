@@ -159,7 +159,6 @@ class modFeaturedPropertyHelper
 
         // Do other stuff here to prepare content etc
         /**
-          GENERATING FINAL XHTML CODE START
          * */
         // create instances of basic Joomla! classes
         $document = & JFactory::getDocument();
