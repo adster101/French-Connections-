@@ -13,11 +13,10 @@ class Crawler extends PHPCrawler
 
     public function __construct()
     {
-        //$handle = fopen('/home/AnXWtLd776/sitemap.txt','w');
-        $handle = fopen('/var/www/html/frenchconnections/sitemap.txt', 'w');
+
+$handle = fopen(JPATH_SITE . '/sitemap.txt', 'w');
 
         $this->file = $handle;
-
         parent::__construct();
     }
 
@@ -32,4 +31,5 @@ class Crawler extends PHPCrawler
         //echo $PageInfo->url . "\n";
     }
 
+ 
 }

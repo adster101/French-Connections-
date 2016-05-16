@@ -133,8 +133,6 @@ class RentalViewTariffs extends JViewLegacy
      */
     protected function setDocument()
     {
-        // Add the live chat script, or not!
-        RentalHelper::addLiveChat($this->status->expiry_date);
         $document = JFactory::getDocument();
         $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_TARIFFS_EDIT', $this->item->unit_title, $this->item->property_id));
         JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

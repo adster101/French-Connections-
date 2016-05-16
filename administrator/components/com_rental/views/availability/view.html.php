@@ -110,9 +110,6 @@ class RentalViewAvailability extends JViewLegacy
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_AVAILABILITY_EDIT', $this->unit->unit_title, $this->unit->property_id));
     $document->addStyleSheet("/media/fc/css/availability.css", 'text/css', "screen");
 
-    // Add the live chat script, or not!
-    RentalHelper::addLiveChat($this->status->expiry_date);
-
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_START_DATE');
     JText::script('COM_RENTAL_HELLOWORLD_AVAILABILITY_CHOOSE_END_DATE');
   }

@@ -16,6 +16,16 @@ $this->direction = $doc->direction;
 $input = $app->input;
 $user = JFactory::getUser();
 
+$livechat_js = "(function(){
+  var c = document.createElement('script');
+  c.type = 'text/javascript'; c.async = true;
+  c.src = '//frenchconnections.smartertrack.com/ChatLink.ashx?config=1&id=stlivechat21';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(c,s);
+})();";
+
+$doc->addScriptDeclaration($livechat_js);
+
 // Add JavaScript Frameworks
 JHtml::_('bootstrap.framework');
 $doc->addScriptVersion('templates/' . $this->template . '/js/template.js');
@@ -130,7 +140,7 @@ $uri->setQuery('');
                 <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
                   <jdoc:include type="modules" name="menu" style="none" />
                   <ul class="nav nav-user">
-                    <li> 
+                    <li>
                       <a class="" href="<?php echo (string) $uri; ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
                         <span class="icon-out-2 small"></span>
                       </a>
@@ -167,18 +177,18 @@ $uri->setQuery('');
           </nav>
           <!-- Header -->
           <?php if ($displayHeader) : ?>
-              <header class="header">   
+              <header class="header">
                 <div class="container">
-                  <div class="container-title">           
+                  <div class="container-title">
                     <div class="row label-">
-                      <div class="span12"> 
+                      <div class="span12">
                         <jdoc:include type="modules" name="status" style="no" />
 
                         <jdoc:include type="modules" name="title" />
 
                       </div>
                     </div>
-                  </div>     
+                  </div>
                 </div>
               </header>
           <?php endif; ?>
@@ -195,7 +205,7 @@ $uri->setQuery('');
                     <div class="row">
                       <div class="span12">
                         <jdoc:include type="modules" name="toolbar" style="no" />
-                      </div>   
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -208,7 +218,7 @@ $uri->setQuery('');
 
               <jdoc:include type="modules" name="top" style="xhtml" />
               <div class="row-fluid">
-                <!-- Begin Content -->                    
+                <!-- Begin Content -->
                 <?php if ($showSubmenu) : ?>
                     <div class="span3">
                       <jdoc:include type="modules" name="submenu" style="none" />
@@ -233,8 +243,8 @@ $uri->setQuery('');
                 <!-- End Content -->
             </section>
           </div>
-          <?php if ($this->countModules('owner-footer')) : ?> 
-              <footer id="status" class="navbar navbar-fixed-bottom"> 
+          <?php if ($this->countModules('owner-footer')) : ?>
+              <footer id="status" class="navbar navbar-fixed-bottom">
                 <div class="clearfix">
                   <div class="container">
 
@@ -247,7 +257,7 @@ $uri->setQuery('');
                     </div>
                   </div>
                 </div>
-              </footer>  
+              </footer>
           <?php endif; ?>
           <jdoc:include type="modules" name="debug" style="none" />
           <?php if ($stickyToolbar) : ?>
@@ -306,5 +316,7 @@ $uri->setQuery('');
               ga('require', 'displayfeatures');
               ga('send', 'pageview');
           </script>
+          <div id="stlivechat21"></div>
+
         </body>
         </html>

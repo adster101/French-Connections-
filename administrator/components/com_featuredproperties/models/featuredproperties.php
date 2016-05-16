@@ -84,9 +84,9 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
 
 		// From the hello table
 		$query->from('#__featured_properties a');
-    
-    // Join the category 
-    $query->join('left', '#__categories b on b.id = a.featured_property_type');
+
+    // Join the category
+    $query->join('left', '#__menu b on b.id = a.featured_property_type');
 
     // Filter by published state
 		$published = $this->getState('filter.state');
@@ -98,7 +98,7 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
     }
 
     //$query->where('a.end_date >= ' . $db->quote(JFactory::getDate()));
-    
+
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
@@ -111,9 +111,9 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
         $query->where('(a.notes LIKE '.$search.')');
       }
     }
-    
+
     $type = $this->getState('filter.featured_property_type');
-    
+
     if (!empty($type)){
       $query->where('a.featured_property_type = ' . (int) $type);
     }
@@ -125,4 +125,3 @@ class FeaturedPropertiesModelFeaturedProperties extends JModelList
     return $query;
 	}
 }
-

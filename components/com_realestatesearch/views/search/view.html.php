@@ -25,12 +25,12 @@ class RealestateSearchViewSearch extends JViewLegacy
     protected $user;
 
     /**
-     * Given the pagination object determines if there are next/previous links and adjusts the head 
+     * Given the pagination object determines if there are next/previous links and adjusts the head
      * part of the document accordingly
-     * 
+     *
      * @param type $pages
      * @param type $document
-     * 
+     *
      * @return void
      */
     private function addHeadLinks($pages, $document)
@@ -87,8 +87,12 @@ class RealestateSearchViewSearch extends JViewLegacy
             // Has to be done after getState, as with all really.
             $this->location_options = $this->get('RefineLocationOptions');
 
-            // Get the breadcrumb trail style search 
+            // Get the breadcrumb trail style search
             $this->crumbs = $this->get('Crumbs');
+
+            // Get a list of shortlist properties
+            $this->shortlist = SearchHelper::getShortlist();
+
 
             $search_url = JUri::getInstance()->toString();
             //$query = ($uri->getQuery()) ? '?' . $uri->getQuery() : '';
@@ -192,7 +196,7 @@ class RealestateSearchViewSearch extends JViewLegacy
         $app = JFactory::getApplication();
         $input = $app->input;
 
-        // Get the pagination object 
+        // Get the pagination object
         if ($this->pagination)
         {
             $pages = $this->pagination->getData();
@@ -271,14 +275,14 @@ class RealestateSearchViewSearch extends JViewLegacy
     }
 
     /**
-     * Method to generate a page title for use in the META and H1 elements 
-     * 
+     * Method to generate a page title for use in the META and H1 elements
+     *
      * @param type $property_types
      * @param type $accommodation_types
      * @param type $location
      * @param type $bedrooms
      * @param type $occupancy
-     * 
+     *
      * @return type string
      */
     private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '')
@@ -295,14 +299,14 @@ class RealestateSearchViewSearch extends JViewLegacy
     }
 
     /**
-     * Method to generate a page title for use in the META and H1 elements 
-     * 
+     * Method to generate a page title for use in the META and H1 elements
+     *
      * @param type $property_types
      * @param type $accommodation_types
      * @param type $location
      * @param type $bedrooms
      * @param type $occupancy
-     * 
+     *
      * @return type string
      */
     private function getDescription($property_types = array(), $accommodation_types = array(), $location = '', $inflector, $metadescription = '')

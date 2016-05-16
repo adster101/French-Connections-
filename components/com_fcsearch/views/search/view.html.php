@@ -25,12 +25,12 @@ class FcSearchViewSearch extends JViewLegacy
     protected $user;
 
     /**
-     * Given the pagination object determines if there are next/previous links and adjusts the head 
+     * Given the pagination object determines if there are next/previous links and adjusts the head
      * part of the document accordingly
-     * 
+     *
      * @param type $pages
      * @param type $document
-     * 
+     *
      * @return void
      */
     private function addHeadLinks($pages, $document)
@@ -64,8 +64,8 @@ class FcSearchViewSearch extends JViewLegacy
         // Get the app instance
         $app = JFactory::getApplication();
 
-        
-        
+
+
         // Get the currencies
         // Get view data.
         $this->state = $this->get('State');
@@ -82,11 +82,11 @@ class FcSearchViewSearch extends JViewLegacy
         }
         else
         {
-            // Check whether the URL is caninical based on the order of the 
-            // filters. SEO related fix requested by Sagittarius. 
+            // Check whether the URL is caninical based on the order of the
+            // filters. SEO related fix requested by Sagittarius.
             // https://www.frenchconnections.co.uk/administrator/index.php?option=com_tickets&task=ticket.edit&id=1068
             SearchHelper::isCanonical($this->localinfo->alias);
-            
+
             $this->property_type_info = json_decode($this->localinfo->property_type_info);
             $this->results = $this->get('Results');
             $this->pagination = $this->get('Pagination');
@@ -101,8 +101,11 @@ class FcSearchViewSearch extends JViewLegacy
 
             $this->lwl = $this->get('RefineLWLOptions');
             $this->so = $this->get('RefineSOOptions');
-            $this->shortlist = $this->get('Shortlist');
-            // Get the breadcrumb trail style search 
+
+            // Get a list of shortlisted properties for this user
+            $this->shortlist = SearchHelper::getShortlist();
+
+            // Get the breadcrumb trail style search
             $this->crumbs = $this->get('Crumbs');
 
             $search_url = JUri::getInstance()->toString();
@@ -165,7 +168,7 @@ class FcSearchViewSearch extends JViewLegacy
         $app = JFactory::getApplication();
         $input = $app->input;
 
-        // Get the pagination object 
+        // Get the pagination object
         if ($this->pagination)
         {
             // Add next and prev links to head
@@ -257,14 +260,14 @@ class FcSearchViewSearch extends JViewLegacy
     }
 
     /**
-     * Method to generate a page title for use in the META and H1 elements 
-     * 
+     * Method to generate a page title for use in the META and H1 elements
+     *
      * @param type $property_types
      * @param type $accommodation_types
      * @param type $location
      * @param type $bedrooms
      * @param type $occupancy
-     * 
+     *
      * @return type string
      */
     private function getTitle($property_types = array(), $accommodation_types = array(), $location = '', $bedrooms = '', $occupancy = '', $inflector = '', $metatitle = '')
@@ -349,14 +352,14 @@ class FcSearchViewSearch extends JViewLegacy
     }
 
     /**
-     * Method to generate a page title for use in the META and H1 elements 
-     * 
+     * Method to generate a page title for use in the META and H1 elements
+     *
      * @param type $property_types
      * @param type $accommodation_types
      * @param type $location
      * @param type $bedrooms
      * @param type $occupancy
-     * 
+     *
      * @return type string
      */
     private function getDescription($property_types = array(), $accommodation_types = array(), $location = '', $inflector, $metadescription = '')

@@ -13,7 +13,7 @@ class RealestateViewListing extends JViewLegacy
   function display($tpl = null)
   {
 
-    // TODO - Here we should add the relevant admin model and move 
+    // TODO - Here we should add the relevant admin model and move
     // getImages
     // getCrumbs
     // to the relevant admin model. These methods should then be reused across the review, preview and listing views.
@@ -47,6 +47,9 @@ class RealestateViewListing extends JViewLegacy
 
     // Get the enquiry form
     $this->form = $this->get('Form');
+
+    // Get the current list of shortlisted properties for this user
+    $this->shortlist = SearchHelper::getShortlist();
 
     // Update the hit counter for this view
     $model = $this->getModel();

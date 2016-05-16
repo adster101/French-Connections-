@@ -111,7 +111,7 @@ class RentalViewContactdetails extends JViewLegacy
 
     // Get a toolbar instance so we can append the preview button
     $bar = JToolBar::getInstance('toolbar');    // Get the property ID as the first item in the progress array
-    
+
     if ($canDo->get('core.edit.own'))
     {
       // We can save the new record
@@ -132,8 +132,6 @@ class RentalViewContactdetails extends JViewLegacy
   {
 
     $document = JFactory::getDocument();
-   // Add the live chat script, or not!
-    RentalHelper::addLiveChat($this->status->expiry_date);
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_CONTACT_EDIT', $this->item->property_id));
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');

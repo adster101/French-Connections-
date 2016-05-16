@@ -62,7 +62,7 @@ abstract class ModListingHelper
     $query->join('left', '#__user_profile_fc d on a.created_by = d.user_id');
     $query->join('left', '#__users e on a.created_by = e.id');
     $query->join('left', '#__realestate_property_images_library f on b.id = f.version_id');
-    $query->where('(f.ordering = (select min(ordering) from #__property_images_library g where g.version_id = b.id) or f.ordering is null)');
+    $query->where('(f.ordering = (select min(ordering) from #__realestate_property_images_library g where g.version_id = b.id) or f.ordering is null)');
 
     $query->where('a.created_by=' . (int) $user->id);
     $query->where('a.published !=-2');
@@ -106,7 +106,7 @@ abstract class ModListingHelper
       date_format(a.modified, "%D %M %Y") as modified,
       a.VendorTxCode,
       a.review,
-      (select count(*) from #__vouchers v left join #__item_costs b on b.code = v.item_cost_id where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and b.catid = 65 ) as payment, 
+      (select count(*) from #__vouchers v left join #__item_costs b on b.code = v.item_cost_id where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and b.catid = 65 ) as payment,
       f.image_file_name as thumbnail
     ');
 
@@ -149,7 +149,7 @@ abstract class ModListingHelper
     {
       $property->days_to_renewal = PropertyHelper::getDaysToExpiry($property->expiry_date);
       $property->auto_renewal = (!empty($property->VendorTxCode)) ? true : false;
-      // Done properly, can just pass the object here 
+      // Done properly, can just pass the object here
       $property->message =
               ModListingHelper::getListingStatusMessage($property->expiry_date, $property->days_to_renewal, $property->id, $property->review, $property->payment);
     }
@@ -162,7 +162,7 @@ abstract class ModListingHelper
     foreach ($properties as $property)
     {
       $property->days_to_renewal = PropertyHelper::getDaysToExpiry($property->expiry_date);
-      // Done properly, can just pass the object here 
+      // Done properly, can just pass the object here
       $property->message =
               ModListingHelper::getRealestateStatusMessage($property->expiry_date, $property->days_to_renewal, $property->id, $property->review, $property->payment);
     }
@@ -171,7 +171,7 @@ abstract class ModListingHelper
 
   /**
    * Helper function to generate a message and button for a listing depending on it's $expiry_date
-   * 
+   *
    * @param type $expiry_date
    * @param type $days_to_renewal
    * @param type $id
@@ -228,7 +228,7 @@ abstract class ModListingHelper
 
   /**
    * Helper function to generate a message and button for a listing depending on it's $expiry_date
-   * 
+   *
    * @param type $expiry_date
    * @param type $days_to_renewal
    * @param type $id

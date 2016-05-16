@@ -15,7 +15,7 @@ JFormHelper::loadFieldClass('list');
  * @subpackage	com_menus
  * @since		1.6
  */
-class JFormFieldDepartments extends JFormFieldList
+class JFormFieldRegions extends JFormFieldList
 {
 	/**
 	 * The form field type.
@@ -23,7 +23,7 @@ class JFormFieldDepartments extends JFormFieldList
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'Departments';
+	protected $type = 'Regions';
 
 	/**
 	 * Method to get the field options.
@@ -43,7 +43,7 @@ class JFormFieldDepartments extends JFormFieldList
     $query->where('a.parent_id > 0');
 		$query->where('a.published != -2');
 
-    $query->where('a.level = 4');
+    $query->where('a.level = 3');
     $query->where('a.published = 1');
 		$query->group('a.id, a.title, a.level, a.lft, a.rgt, a.parent_id, a.published');
 		$query->order('a.title ASC');
@@ -64,8 +64,9 @@ class JFormFieldDepartments extends JFormFieldList
 				$item->title = str_repeat('- ', $repeat) . $item->title;
 				$options[] = JHtml::_('select.option', $item->id, $item->title);
 			}
-			
+
 		// Merge any additional options in the XML definition.
+		$options = array_merge(parent::getOptions(), $options);
 		return $options;
 	}
 }

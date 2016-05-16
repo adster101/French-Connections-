@@ -103,13 +103,12 @@ class RentalViewImages extends JViewLegacy
   protected function setDocument()
   {
     $document = JFactory::getDocument();
-    // Add the live chat script, or not!
-    RentalHelper::addLiveChat($this->status->expiry_date);
+  
 
     JHtml::_('bootstrap.framework');
 
     $document->setTitle(JText::sprintf('COM_RENTAL_MANAGER_HELLOWORLD_IMAGES_EDIT', $this->unit->unit_title, $this->unit->property_id));
-    // TO DO - Move this to media folder and add to grunt to concat 
+    // TO DO - Move this to media folder and add to grunt to concat
     $document->addStyleSheet("/media/fc/css/jquery.fileupload.css", 'text/css', "screen");
     $document->addStyleSheet("/media/fc/css/jquery.fileupload-ui.css", 'text/css', "screen");
     $document->addStyleSheet("/media/fc/css/helloworld.css", 'text/css', "screen");

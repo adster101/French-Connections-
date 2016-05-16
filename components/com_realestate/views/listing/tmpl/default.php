@@ -22,7 +22,15 @@ $crumbs = JModuleHelper::getModules('breadcrumbs'); //If you want to use a diffe
 $search_route = 'index.php?option=com_realestatesearch&Itemid=' . (int) $Itemid . '&s_kwds=france';
 $search_url = $app->getUserState('user.search');
 
-
+$action = (array_key_exists($this->item->property_id, $this->shortlist)) ? 'remove' : 'add';
+$inShortlist = (array_key_exists($this->item->property_id, $this->shortlist)) ? 1 : 0;
+// Shortlist button thingy
+$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
+$displayData = new StdClass;
+$displayData->action = $action;
+$displayData->inShortlist = $inShortlist;
+$displayData->unit_id = $this->item->property_id;
+$displayData->class = ' btn btn-default btn-sm';
 if ((int) $preview && $preview == 1)
 {
     $link .= '&preview=1';
@@ -54,51 +62,55 @@ if (!empty($this->item->languages_spoken))
   <?php echo $this->document->title; ?> - <?php echo JText::sprintf('COM_REALESTATE_PROPERTY_SUB_TITLE', $this->item->city_title, $this->item->department, number_format($min_prices['GBP']), number_format($min_prices['EUR'])); ?>
 </h1>
 <!-- Begin breadcrumbs -->
-
-    <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc     ?>
-        <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
-    <?php endforeach; ?>
-
+<?php foreach ($crumbs as $module) : // Render the cross-sell modules etc     ?>
+  <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
+<?php endforeach; ?>
 <div class="navbar-property-navigator" data-spy = "affix" data-offset-top = "640" >
   <div class="row">
-
     <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
       <?php if (!empty($search_url)) : ?>
-          <a class="btn btn-primary" href="<?php echo $search_url ?>" title="">
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_REALESTATE_BACK_TO_SEARCH_RESULTS'); ?>
           </a>
       <?php else: ?>
-          <a class="btn btn-primary" href="<?php echo $search_route ?>" title="">
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_route ?>" title="">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_REALESTATE_BROWSE_SEARCH_RESULTS'); ?>
           </a>
       <?php endif; ?>
     </div>
     <div class="col-lg-8 col-md-7 col-sm-7 hidden-xs">
-      <ul class="nav nav-pills">
-        <li>
-          <a href="<?php echo $route ?>#top">
+          <a class="btn btn-default btn-sm" href="<?php echo $route ?>#top">
             <span class = "glyphicon glyphicon-home"> </span>&nbsp;
             <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_TOP');
             ?>
           </a>
-        </li>
-        <li>
-          <a href="<?php echo $route ?>#about">
+          <a class="btn btn-default btn-sm" href="<?php echo $route ?>#about">
             <span class="glyphicon glyphicon-info-sign"> </span>
             <?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_DESCRIPTION'); ?>
           </a>
-        </li>
-        <li>
-          <a href="<?php echo $route ?>#email">
+          <a class="btn btn-default btn-sm" href="<?php echo $route ?>#email">
             <span class="glyphicon glyphicon-envelope"></span>&nbsp;<?php echo JText::_('COM_ACCOMMODATION_NAVIGATOR_CONTACT'); ?>
           </a>
-        </li>
-      </ul>
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-      <div class="glyphicon-xxlarge visible-lg-inline-block visible-md-inline-block visible-sm-inline-block visible-xs-inline-block">
+      <div class="pull-right">
+      <?php if ($logged_in) : ?>
+          <?php echo $shortlist->render($displayData); ?>
+      <?php else : ?>
+          <a class="btn btn-default btn-sm" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
+            <span class="glyphicon glyphicon-heart muted"></span>
+            <span class=""><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
+          </a>
+      <?php endif; ?>
+      <button class='btn btn-default hidden-xs btn-sm' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="glyphicon glyphicon-share-alt"></span>
+        <?php echo JText::_('COM_ACCOMMODATION_SHARE') ?>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+        <li>
         <a href="<?php
         echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
         . urlencode($uri)
@@ -113,15 +125,24 @@ if (!empty($this->item->languages_spoken))
         . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
         ?>">
           <span class="glyphicon social-icon facebook"></span>
+          <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
         </a>
+      </li>
+      <li>
         <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->title) ?>" >
           <span class="glyphicon social-icon twitter"></span>
+          <?php echo JText::_('COM_ACCOMMODATION_TWITTER') ?>
         </a>
+      </li>
+      <li>
         <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
           <span class="glyphicon social-icon google-plus"></span>
+          <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
         </a>
-      </div>
+      </li>
+    </ul>
     </div>
+  </div>
   </div>
 </div>
 
@@ -304,5 +325,4 @@ if (!empty($this->item->languages_spoken))
       <?php echo JText::_('COM_ACCOMMODATION_CONTACT_PLEASE_MENTION'); ?>
     </p>
   </div>
-</div>
 </div>

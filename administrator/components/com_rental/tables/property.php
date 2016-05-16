@@ -56,4 +56,24 @@ class RentalTableProperty extends JTable
     return parent::store($updateNulls = false);
   }
 
+  /**
+   * public function check
+   * Does a quick check to unset the VendorTxCode if it's set to 0
+   * return boolean
+   *
+   */
+
+  public function check()
+  {
+
+    // Check the VendorTxCode - if none set then we explicitly unset as per the
+    // database default.
+    if (!$this->VendorTxCode)
+    {
+      $this->VendorTxCode = '';
+    }
+
+    return true;
+  }
+
 }

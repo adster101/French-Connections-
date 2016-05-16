@@ -78,8 +78,6 @@ class FcSearchModelSearch extends JModelList
 
         $this->date = JFactory::getDate()->calendar('Y-m-d');
 
-        $this->itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
-
         // Set the default search and what not here?
     }
 
@@ -255,11 +253,7 @@ class FcSearchModelSearch extends JModelList
         // Get the store id.
         $store = $this->getStoreId('getListQuery');
 
-        // Get the language from the state
-        $app = JFactory::getApplication();
-        $lang = $app->getLanguage()->getTag();
-
-        // Use the cached data if possible.
+            // Use the cached data if possible.
         if ($this->retrieve($store, true))
         {
             return clone($this->retrieve($store, false));
@@ -340,17 +334,9 @@ class FcSearchModelSearch extends JModelList
             $query->join('left', '#__property_images_library e on d.id = e.version_id');
             $query->where('e.ordering = 1');
 
-            // Join the translations table to pick up any translations 
-            if ($lang == 'fr-FR')
-            {
-                $query->select('k.unit_title, k.description');
-                $query->join('left', '#__unit_versions_translations k on k.version_id = d.id');
-                $query->join('left', '#__classifications_translations j ON j.id = c.city');
-            }
-            else
-            {
+          
                 $query->join('left', '#__classifications j ON j.id = c.city');
-            }
+            
 
             if ($this->getState('search.level') == 1)
             { // Country level
@@ -1821,6 +1807,7 @@ class FcSearchModelSearch extends JModelList
         $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
         // The query resultset should be stored in the local model cache already
         $store = $this->getStoreId('getCrumbs');
+        $itemid = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 
         // Get the info from the cache if we can
         if ($this->retrieve($store))
@@ -1850,7 +1837,7 @@ class FcSearchModelSearch extends JModelList
         {
             if ($v->parent_id)
             {
-                $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=' . (int) $this->itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
+                $pathArr->$k->link = 'index.php?option=com_fcsearch&Itemid=' . (int) $itemid . '&s_kwds=' . JApplication::stringURLSafe($v->title);
                 $pathArr->$k->name = $v->title;
             }
         }

@@ -12,21 +12,23 @@ $lang->load('com_accommodation', JPATH_SITE);
   <?php echo ($params->get('page_heading', '')) ? $params->get('page_heading') : $this->document->title; ?> (<?php echo $this->pagination->total ?>)
 </h1>
 
-
-
-<?php if (count($this->items) > 0) : ?>  
+<?php if (count($this->items) > 0) : ?>
   <p><?php echo $this->pagination->getResultsCounter(); ?></p>
-
   <div class="search-results">
-
-
     <?php
     for ($i = 0, $n = count($this->items); $i < $n; $i++)
     {
       $this->result = &$this->items[$i];
       if (!empty($this->result->id))
       {
-        echo $this->loadTemplate('shortlist');
+        if (empty($this->result->unit_id))
+        {
+          echo $this->loadTemplate('re_shortlist');
+        }
+        else
+        {
+          echo $this->loadTemplate('shortlist');
+        }
       }
     }
     ?>
@@ -37,10 +39,5 @@ $lang->load('com_accommodation', JPATH_SITE);
     </div>
   </div>
 <?php else: ?>
-
   <p class="lead"><?php echo JText::_('COM_SHORTLIST_SHORTLIST_EMPTY'); ?></p>
-
-
 <?php endif; ?>
-
-

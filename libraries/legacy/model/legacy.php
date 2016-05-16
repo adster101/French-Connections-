@@ -204,7 +204,7 @@ abstract class JModelLegacy extends JObject
 			}
 		}
 
-		return new $modelClass($config);
+        return new $modelClass($config);
 	}
 
 	/**

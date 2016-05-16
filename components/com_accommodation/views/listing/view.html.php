@@ -13,7 +13,7 @@ class AccommodationViewListing extends JViewLegacy
   function display($tpl = null)
   {
 
-    // TODO - Here we should add the relevant admin model and move 
+    // TODO - Here we should add the relevant admin model and move
     // getAvailability
     // getTariffs
     // getImages
@@ -77,7 +77,7 @@ class AccommodationViewListing extends JViewLegacy
     $this->offer = $this->get('Offers');
 
     // Get the current list of shortlisted properties for this user
-    $this->shortlist = $this->get('Shortlist');
+    $this->shortlist = SearchHelper::getShortlist();
 
     // Get the route and store it as a class property
     $this->route = $this->getRoute();

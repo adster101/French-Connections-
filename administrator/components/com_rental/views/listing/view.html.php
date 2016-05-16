@@ -29,7 +29,7 @@ class RentalViewListing extends JViewLegacy
     $this->state = $this->get('State');
     $this->filterForm = $this->get('FilterForm');
     $this->activeFilters = $this->get('ActiveFilters');
-    
+
     // Add the submit model to this view so we can fetch the submit for approval form
     // And handle the associated logic...
     $submit = $this->setModel(JModelLegacy::getInstance('Submit', 'RentalModel'));
@@ -126,11 +126,7 @@ class RentalViewListing extends JViewLegacy
 
     $document->setTitle(JText::_('COM_RENTAL_ADMINISTRATION'));
 
-    // Add the live chat script, or not!
-    RentalHelper::addLiveChat($this->progress->expiry_date);
-
     JText::script('COM_RENTAL_RENTAL_UNSAVED_CHANGES');
     JText::script('COM_RENTAL_LISTING_CONFIRM_ADDITIONAL_UNIT');
   }
-
 }
