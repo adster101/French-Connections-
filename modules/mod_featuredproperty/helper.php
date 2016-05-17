@@ -20,6 +20,9 @@ class modFeaturedPropertyHelper
      * */
     public function getFeaturedProperties(&$params)
     {
+        // Initialise an empty padding array to array_merge later
+        $padding = array();
+
         // The total number of properties to return
         $count = $params->get('count', 4);
 

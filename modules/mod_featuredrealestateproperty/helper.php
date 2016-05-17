@@ -16,6 +16,7 @@ class modFeaturedRealestatePropertyHelper
 
   public function getFeaturedProperties(&$params)
   {
+
     $count = $params->get('count', 4);
     $type = $params->get('type');
 
@@ -46,7 +47,7 @@ class modFeaturedRealestatePropertyHelper
     // Here we only join the unit version where review is 0. Should ensure that we only take published units
     $query->join('left', '#__realestate_property_versions b on (a.id = b.realestate_property_id and b.id = (select max(c.id) from #__realestate_property_versions c where realestate_property_id = a.id and review = 0))');
 
-    // Join the translations table to pick up any translations 
+    // Join the translations table to pick up any translations
     if ($lang == 'fr-FR')
     {
       $query->select('j.unit_title');
@@ -95,17 +96,17 @@ class modFeaturedRealestatePropertyHelper
   }
 
   /**
-   * Function tagline to return a tagline for a property based on the number of bathrooms 
+   * Function tagline to return a tagline for a property based on the number of bathrooms
    * and bedrooms. Necessary because sometimes properties get added with 0 bedrooms
    * for example if it's a plot of land or a rennovation.
-   * 
+   *
    * @param type $bedrooms
    * @param type $bathrooms
    * @param type $price
    */
   public static function tagline($price = '', $bedrooms = 0, $bathrooms = 0)
   {
-    
+
     $bedrooms_str = '';
     $bathrooms_str = '';
 

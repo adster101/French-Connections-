@@ -119,7 +119,7 @@ class FcSearchModelSearch extends JModelList
      * Get the information about the area which is being searched on.
      * TO DO - This should probably be a protected method called internally from say getResults
      * if state not set accordingly.
-     * 
+     *
      * @return boolean
      */
     public function getLocalInfo()
@@ -176,7 +176,7 @@ class FcSearchModelSearch extends JModelList
         // Load the result (should only be one) from the database.
         $db->setQuery($query);
 
-        // See if we got a valid search 
+        // See if we got a valid search
         $row = $db->loadObject();
 
         if (!$row)
@@ -284,7 +284,7 @@ class FcSearchModelSearch extends JModelList
                 d.unit_title,
                 c.published_on,
                 c.title,
-                c.area, 
+                c.area,
                 c.region,
                 c.department,
                 c.latitude,
@@ -293,7 +293,7 @@ class FcSearchModelSearch extends JModelList
                 c.distance_to_coast as coast,
                 d.occupancy,
                 d.bathrooms,
-                d.base_currency, 
+                d.base_currency,
                 d.accommodation_type as accommodation_id,
                 j.path,
                 left(d.description,500) as description,
@@ -307,7 +307,8 @@ class FcSearchModelSearch extends JModelList
                 e.image_file_name as thumbnail,
                 e.url_thumb,
                 k.title as changeover_day,
-                b.from_price as price';
+                b.from_price as price,
+                b.to_price as to_price';
 
             // Let's do this!
             $query->select($select);
@@ -334,9 +335,9 @@ class FcSearchModelSearch extends JModelList
             $query->join('left', '#__property_images_library e on d.id = e.version_id');
             $query->where('e.ordering = 1');
 
-          
+
                 $query->join('left', '#__classifications j ON j.id = c.city');
-            
+
 
             if ($this->getState('search.level') == 1)
             { // Country level
@@ -374,7 +375,7 @@ class FcSearchModelSearch extends JModelList
           cos(radians(c.latitude)) *
           cos(radians(c.longitude) - radians(' . $this->getState('search.longitude', '') . '))
           + sin(radians(' . $this->getState('search.latitude', '') . '))
-          * sin(radians(c.latitude))) ) 
+          * sin(radians(c.latitude))) )
         ');
             }
 
@@ -432,7 +433,7 @@ class FcSearchModelSearch extends JModelList
             $query = $this->getFilterState('external_facilities', $query);
             $query = $this->getFilterState('property_facilities', $query);
 
-            // Sort out the ordering required      
+            // Sort out the ordering required
             // No filter function needed here as ordering can simplt be cleared and reinstated, if needed.
             if ($sort_column)
             {
@@ -502,9 +503,9 @@ class FcSearchModelSearch extends JModelList
     }
 
     /**
-     * 
+     *
      * Gets the total number of LWL properties for the set of search filters applied
-     * 
+     *
      * @return type int
      */
     public function getRefineLWLOptions()
@@ -522,9 +523,9 @@ class FcSearchModelSearch extends JModelList
     }
 
     /**
-     * 
+     *
      * Gets the total number of LWL properties for the set of search filters applied
-     * 
+     *
      * @return type int
      */
     public function getRefineSOOptions()
@@ -546,7 +547,7 @@ class FcSearchModelSearch extends JModelList
 
     /**
      * Proxy for getRefineByTypeOptions which returns data for refinements on filter lists
-     * 
+     *
      * @return mixed
      */
     public function getRefinePropertyOptions()
@@ -569,7 +570,7 @@ class FcSearchModelSearch extends JModelList
 
     /**
      * Proxy for getRefineByTypeOptions which returns data for refinements on filter lists
-     * 
+     *
      * @return mixed
      */
     public function getRefineAccommodationOptions()
@@ -598,7 +599,7 @@ class FcSearchModelSearch extends JModelList
 
         // This basically does the same as the getListQuery only without the refinement on property type
         // Effectively tots up the count of all property types for the props that are returned.
-        // Filter in getListQuery maybe applying one of more of these 
+        // Filter in getListQuery maybe applying one of more of these
 
         $date = date('Y-m-d');
 
@@ -779,7 +780,7 @@ class FcSearchModelSearch extends JModelList
 
     /**
      * Method to pull out the location based drilldowns for refine search
-     * 
+     *
      */
     public function getRefineLocationOptions()
     {
@@ -1081,7 +1082,7 @@ class FcSearchModelSearch extends JModelList
             $query->group('e.attribute_id');
 
             /*
-             * Failed code for 837 - 23/12/2015 
+             * Failed code for 837 - 23/12/2015
               if ($arrival && $departure)
               {
               $priceStr = $this->getFromPrice($arrival, $departure, $min_price, $max_price);
@@ -1120,7 +1121,7 @@ class FcSearchModelSearch extends JModelList
 
             $order = array(
                 //1 => 'Property Type',
-                //2 => 'Accommodation Type',  
+                //2 => 'Accommodation Type',
                 2 => 'external_facilities',
                 3 => 'suitability',
                 4 => 'internal_facilities',
@@ -1394,7 +1395,7 @@ class FcSearchModelSearch extends JModelList
         $this->setState('match.limit', 10000);
 
         // Get the rest of the filter options such as property type, facilities and activites etc.
-        // populateFilterState is effectively setState as above only the input may be an array 
+        // populateFilterState is effectively setState as above only the input may be an array
         $activities = $input->get('activities', '', 'array');
         $this->populateFilterState($activities, 'activities');
         $app->setUserState('list.activities', $activities);
@@ -1425,7 +1426,7 @@ class FcSearchModelSearch extends JModelList
 
     /*
      * Method to generate the filter state ids for later filtering in the db
-     * TO DO - Modify this function to return an array of attribute 'aliases' 
+     * TO DO - Modify this function to return an array of attribute 'aliases'
      *
      */
 
@@ -1490,7 +1491,7 @@ class FcSearchModelSearch extends JModelList
 
         /*
          * Possible fix for availabilty search
-         * 
+         *
 
           $query->where('((arr.start_date <= ' . $query->dateAdd($arrival, '-1', 'DAY')
           . 'AND arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY') . ')'
@@ -1517,7 +1518,7 @@ class FcSearchModelSearch extends JModelList
 
         if (!$this->getState('list.occupancy', ''))
         {
-            
+
         }
 
         $query->where('( single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms ) >= ' . (int) $bedrooms);
@@ -1533,7 +1534,7 @@ class FcSearchModelSearch extends JModelList
     }
 
     /**
-     * 
+     *
      * @param JDatabaseQueryMysqli $query
      * @param type $occupancy
      * @param type $db
@@ -1552,7 +1553,7 @@ class FcSearchModelSearch extends JModelList
     }
 
     /**
-     * 
+     *
      * @param JDatabaseQueryMysqli $query
      * @param type $property_type
      * @param type $db
@@ -1581,7 +1582,7 @@ class FcSearchModelSearch extends JModelList
     }
 
     /**
-     * 
+     *
      * @param JDatabaseQueryMysqli $query
      * @param type $property_type
      * @param type $db
@@ -1639,8 +1640,8 @@ class FcSearchModelSearch extends JModelList
     /*
      * Method to generate various attribute filter options,
      * add them to the query and then return the query object
-     * TO DO - Modify this function to join on attribute rather than ID 
-     * 
+     * TO DO - Modify this function to join on attribute rather than ID
+     *
      * @return  query  The search query being built
      */
 
@@ -1851,7 +1852,7 @@ class FcSearchModelSearch extends JModelList
 
     /**
      * Get a list of attributes based on the ids passed in
-     * 
+     *
      * @param type $ids
      * @return boolean
      */
@@ -1970,7 +1971,7 @@ class FcSearchModelSearch extends JModelList
 
         $query->where('MATCH(title) AGAINST(' . $db->quote($db->escape($this->getState('list.searchterm'), true)) . ')');
         $query->Where('published = 1');
-        
+
         $db->setQuery($query,0,5);
 
         try
