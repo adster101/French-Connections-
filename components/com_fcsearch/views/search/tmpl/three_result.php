@@ -64,14 +64,13 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
             <span>&nbsp;to&nbsp;</span>
             <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
               <span
-                class="rate-per "
-                data-original-title="Additional information"
+                class="rate-per"
                 data-toggle="popover"
                 data-placement="bottom"
-                data-trigger="focus"
-                viewport="{ selector: 'body', padding: 0 }"
-                title=""
-                data-content="<p><?php echo $this->result->tariff_based_on; ?></p>">
+                data-trigger="hover"
+                title="Additional information"
+
+                data-content="<?php echo $this->result->tariff_based_on; ?>">
           <i class="glyphicon glyphicon-info-sign"></i></span>
         <?php else : ?>
             <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>

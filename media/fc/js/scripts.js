@@ -15270,6 +15270,9 @@ window.twttr = (function (d, s, id) {
 var infowindow;
 jQuery(document).ready(function () {
 
+    jQuery('[data-toggle="popover"]').popover()
+
+
   jQuery('.lastminute-date-search-link').each(function () {
 
     jQuery(this).on('click', function (event) {
@@ -15395,7 +15398,7 @@ function getPath(event) {
   var arrival = inputs.filter('#arrival').prop('value');
   var departure = inputs.filter('#departure').prop('value');
   path = path + '/' + stripVowelAccent(s_kwds);
-  // Loop over the path aray 
+  // Loop over the path aray
   for (i = 0; i < pathArray.length; i++) {
 
     if (pathArray[i].indexOf('property_') >= 0) {
@@ -15530,10 +15533,11 @@ function stripVowelAccent(str) {
   return s;
 }
 
-// Pulls out the value of the query paramter sVar 
+// Pulls out the value of the query paramter sVar
 function loadPageVar(sVar) {
   return decodeURI(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURI(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 }
+
 jQuery(window).load(function() {
   if (jQuery('#property_map_canvas').length) {
     loadGoogleMaps('initPropertyMap');
