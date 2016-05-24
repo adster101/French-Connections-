@@ -58,7 +58,7 @@ $thumb = ($item->thumbnail) ? '/images/property/' . $item->unit_id . '/thumb/' .
         <div class="col-xs-12">
           <p class="offer">
             <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
-            <?php echo $this->escape($item->offer); ?>
+            <?php echo $item->offer; ?>
           </p>
         </div>
       </div>
