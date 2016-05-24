@@ -57,21 +57,15 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
       </h3>
     </div>
     <div class="col-xs-12 col-sm-3">
-      <p class="rates">
+      <p class="rates" style="margin-bottom:0">
         <?php if ($this->result->price) : ?>
             <?php //echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead"><?php echo '&pound;' . round($this->result->price); ?></span>
-            <span>&nbsp;to&nbsp;</span>
-            <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
-              <span
-                class="rate-per"
-                data-toggle="popover"
-                data-placement="bottom"
-                data-trigger="hover"
-                title="Additional information"
-
-                data-content="<?php echo $this->result->tariff_based_on; ?>">
-          <i class="glyphicon glyphicon-info-sign"></i></span>
+            <span class="lead">&dash;</span>
+                        <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
+              <a class="price-info" data-toggle="tooltip" data-placement="left" title="<?php echo JText::sprintf('COM_ACCOMMODATION_RATES_FROM_TO_DETAIL', $this->result->tariff_based_on); ?>">
+                <i class="glyphicon glyphicon-info-sign"></i>
+              </a>
         <?php else : ?>
             <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
         <?php endif; ?>

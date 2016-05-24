@@ -15270,7 +15270,7 @@ window.twttr = (function (d, s, id) {
 var infowindow;
 jQuery(document).ready(function () {
 
-    jQuery('[data-toggle="popover"]').popover()
+    jQuery('[data-toggle="tooltip"]').tooltip()
 
 
   jQuery('.lastminute-date-search-link').each(function () {

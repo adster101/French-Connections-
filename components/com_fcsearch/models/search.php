@@ -1625,13 +1625,13 @@ class FcSearchModelSearch extends JModelList
 
         if ($max_price)
         {
-            $query = $query->where('from_price <= ' . (int) $max_price);
+            $query = $query->where('to_price <= ' . (int) $max_price);
         }
 
         // If we have both min and max filter on both
         if ($min_price && $max_price)
         {
-            $query = $query->where('from_price >= ' . (int) $min_price . ' AND from_price <= ' . (int) $max_price);
+            $query = $query->where('from_price >= ' . (int) $min_price . ' AND to_price <= ' . (int) $max_price);
         }
 
         return $query;
