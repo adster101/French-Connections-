@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 Class Sitemap extends JApplicationCli
 {
 
@@ -54,11 +57,11 @@ Class Sitemap extends JApplicationCli
             mail($to, $subject, $message, $headers);
         }
     }
-    
-    
+
+
     /*
      * Get a list of locations
-     * 
+     *
      */
     protected function _getLocations($level = 4)
     {
@@ -69,7 +72,7 @@ Class Sitemap extends JApplicationCli
 
         $query->select('a.*');
 
-        // Select from the property table 
+        // Select from the property table
         $query->from('#__classifications a');
         $query->where('level <=' . $level);
         $query->where('a.parent_id > 0');

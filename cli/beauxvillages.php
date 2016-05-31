@@ -25,6 +25,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.realestateimport');
 
@@ -44,7 +47,7 @@ class BeauxVillages extends RealestateImport {
 
         $this->out('About to get feed...');
 
-        // Get and parse out the feed 
+        // Get and parse out the feed
         $props = $this->parseFeed('http://xml.beauxvillages.com/gre.xml', 'Envelope');
 
         $this->out('Got feed...');
@@ -128,21 +131,21 @@ class BeauxVillages extends RealestateImport {
 
                         // Get the last two parts and implode it to make the name
                         $image_name = trim(implode('-', array_slice($image_parts, -1, 1)));
-                        
+
                         // The ultimate file path where we want to store the image
                         $filepath = JPATH_SITE . '/images/property/' . $property_id . '/' . $image_name;
-                        
+
                         // Check the property directory exists...
                         if (!file_exists(JPATH_SITE . '/images/property/' . $property_id)) {
                             JFolder::create(JPATH_SITE . '/images/property/' . $property_id);
                         }
 
                         if (!file_exists($filepath)) {
-                            
+
                             // Copy the image url directly to where we want it
                             // Need to trim whitespace...
                             copy(trim($image), $filepath);
-                           
+
                             // Generate the profiles
                             $model->generateImageProfile($filepath, (int) $property_id, $image_name, 'gallery', 578, 435);
                             $model->generateImageProfile($filepath, (int) $property_id, $image_name, 'thumbs', 100, 100);
@@ -156,7 +159,7 @@ class BeauxVillages extends RealestateImport {
 
                     $this->out('Updating expiry date...');
 
-                    // Update the expiry date 
+                    // Update the expiry date
                     $this->updateProperty($db, $id);
 
                     $this->out('Updating version details...');
@@ -178,13 +181,13 @@ class BeauxVillages extends RealestateImport {
 
                     // Yep, we have it already!
                     // Update expiry date
-                    // Update version to shut down any unpublished versions? Need to deal with this somehow? 
+                    // Update version to shut down any unpublished versions? Need to deal with this somehow?
                     // $ref = $this->updateProperty($realestate_property_version->id);
                 }
 
                 // Done so commit all the inserts and what have you...
                 $db->transactionCommit();
-               
+
 
                 $this->out('Done processing... ' . $prop->agency_reference);
             } catch (Exception $e) {

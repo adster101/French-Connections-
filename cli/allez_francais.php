@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.realestateimport');
 

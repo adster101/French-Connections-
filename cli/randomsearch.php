@@ -27,6 +27,10 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
+
 /**
  * Cron job to trash expired cache data
  *
@@ -109,7 +113,7 @@ class RandomSearchCron extends JApplicationCli
 
     $db = JFactory::getDBO();
     /**
-     * Get the date 
+     * Get the date
      */
     $date = JFactory::getDate();
 
@@ -119,13 +123,13 @@ class RandomSearchCron extends JApplicationCli
       b.id'
     );
 
-    // Select from the property table 
+    // Select from the property table
     $query->from('#__property a');
 
     // Join the unit table
     $query->leftJoin('#__unit b ON b.property_id = a.id');
 
-    // Live properties, that are published 
+    // Live properties, that are published
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
     $query->where('a.published = 1');
     $query->where('b.published = 1');

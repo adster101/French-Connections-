@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 require_once JPATH_BASE . '/administrator/components/com_fcadmin/models/noavailability.php';
 require_once JPATH_BASE . '/administrator/components/com_notes/models/note.php';
 

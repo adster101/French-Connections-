@@ -27,6 +27,10 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.realestateimport');
 
@@ -49,9 +53,9 @@ class FreddyRueda extends RealestateImport
 
     (JDEBUG) ? $this->out('About to get feed...') : '';
 
-    // Get and parse out the feed 
+    // Get and parse out the feed
     $props = $this->parseFeed('http://www.xml2u.com/Xml/Sarl%20Freddy%20Rueda_483/794_Default.xml');
-    
+
     (JDEBUG) ? $this->out('Got feed...') : '';
 
     // Add the realestate property models
@@ -124,7 +128,7 @@ class FreddyRueda extends RealestateImport
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
 
-          
+
           $this->out('Adding property version...');
 
           $property_version_id = $this->createPropertyVersion($db, $data);
@@ -170,7 +174,7 @@ class FreddyRueda extends RealestateImport
 
           $this->out('Updating expiry date...');
 
-          // Update the expiry date 
+          // Update the expiry date
           $this->updateProperty($db, $id);
 
           $this->out('Updating version details...');
@@ -192,7 +196,7 @@ class FreddyRueda extends RealestateImport
 
           // Yep, we have it already!
           // Update expiry date
-          // Update version to shut down any unpublished versions? Need to deal with this somehow? 
+          // Update version to shut down any unpublished versions? Need to deal with this somehow?
           // $ref = $this->updateProperty($realestate_property_version->id);
         }
 

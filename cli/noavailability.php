@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 require_once JPATH_BASE . '/administrator/components/com_fcadmin/models/noavailability.php';
 require_once JPATH_BASE . '/administrator/components/com_notes/models/note.php';
 jimport('clickatell.SendSMS');
@@ -96,13 +99,13 @@ class NoAvailabilityCron extends JApplicationCli
           {
 
             $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
-            // If the login return 0, means that login failed, you cant send sms after this 
+            // If the login return 0, means that login failed, you cant send sms after this
             if (!$sms->login())
             {
               continue;
             }
 
-            // Send sms using the simple send() call 
+            // Send sms using the simple send() call
             if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_FCADMIN_NO_AVAILABILITY_CRON_SMS', $item->firstname, $item->unit_title)))
             {
               continue;

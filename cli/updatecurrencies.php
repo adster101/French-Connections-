@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 require_once JPATH_BASE . '/administrator/components/com_fcadmin/models/noavailability.php';
 require_once JPATH_BASE . '/administrator/components/com_notes/models/note.php';
 
@@ -53,8 +56,8 @@ class UpdateCurrenciesCron extends JApplicationCli
     $conversionsArr = array('EUR' => '', 'GBP' => '', 'USD' => '');
 
     //This is a PHP(4/5) script example on how eurofxref-daily.xml can be parsed
-    //Read eurofxref-daily.xml file in memory 
-    //For this command you will need the config 
+    //Read eurofxref-daily.xml file in memory
+    //For this command you will need the config
     //option allow_url_fopen=On (default)
     $XMLContent = file("http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml");
     //the file is updated daily between 2.15 p.m. and 3.00 p.m. CET
