@@ -48,14 +48,14 @@ class AllezFrancais extends RealestateImport
 
     $this->out('About to get feed...');
 
-    // Get and parse out the feed 
+    // Get and parse out the feed
     $props = $this->parseFeed('http://www.allez-francais.com/allez-francais.xml');
 
     $this->out('Got feed...');
 
      // Add realestate and rental tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables');
-    
+
     // Add the realestate property models
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
     $model = JModelLegacy::getInstance('Image', 'RealEstateModel');
@@ -65,7 +65,7 @@ class AllezFrancais extends RealestateImport
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
 
     $this->out('About to process feed results...');
-    
+
     jimport('joomla.filesystem.folder');
 
     // Loop over each of the $props returned from parseFeed above
@@ -79,9 +79,9 @@ class AllezFrancais extends RealestateImport
 
         // Check whether this property agency reference already exists in the versions table
         $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
-        
+
         $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
-        
+
         $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
 
         if (!$id)
@@ -119,7 +119,7 @@ class AllezFrancais extends RealestateImport
           $data['published_on'] = $db->quote(JFactory::getDate());
 
           $this->out('Adding property version...');
-          
+
           JTable::getInstance('PropertyVersions', 'RealestateTable');
           $property_version_id = $this->createPropertyVersion($db, $data);
 
@@ -132,12 +132,12 @@ class AllezFrancais extends RealestateImport
 
             // Split the URL into an array
             $image_url = explode('?', $image);
-            
+
             $image_parts = explode('/', $image_url[0]);
 
             // Get the last two parts and implode it to make the name
             $image_name = implode('-', array_slice($image_parts, -2, 2));
-            
+
             // The ultimate file path where we want to store the image
             $filepath = JPATH_SITE . '/images/property/' . $property_id . '/' . $image_name;
 
@@ -167,7 +167,7 @@ class AllezFrancais extends RealestateImport
 
           $this->out('Updating expiry date...');
 
-          // Update the expiry date 
+          // Update the expiry date
           $this->updateProperty($db, $id);
 
           $this->out('Updating version details...');
@@ -190,7 +190,7 @@ class AllezFrancais extends RealestateImport
 
           // Yep, we have it already!
           // Update expiry date
-          // Update version to shut down any unpublished versions? Need to deal with this somehow? 
+          // Update version to shut down any unpublished versions? Need to deal with this somehow?
           // $ref = $this->updateProperty($realestate_property_version->id);
         }
 
@@ -198,7 +198,7 @@ class AllezFrancais extends RealestateImport
         $db->transactionCommit();
 
         $this->out('Done processing... ' . $prop->agency_reference);
-        
+
       }
       catch (Exception $e)
       {
