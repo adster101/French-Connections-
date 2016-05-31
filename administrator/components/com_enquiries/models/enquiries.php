@@ -61,7 +61,7 @@ class EnquiriesModelEnquiries extends JModelList
 
     $user = JFactory::getUser();
 
-    $delete = $user->authorise('core.delete', $this->option);
+    $delete = $user->authorise('core.edit', $this->option);
 
     if ($delete)
     {
@@ -152,10 +152,10 @@ class EnquiriesModelEnquiries extends JModelList
       $search = $db->Quote('%' . $db->escape($search, true) . '%');
       $query->where('(e.message LIKE ' . $search . ') OR (CONCAT(e.guest_forename," ",e.guest_surname) LIKE ' . $search . ') OR (e.guest_email LIKE ' . $search . ')');
     }
-    
+
     $listOrdering = $this->getState('list.ordering', 'date_created');
     $listDirn = $db->escape($this->getState('list.direction', 'desc'));
-    
+
     // Need to ensure that owners only see reviews assigned to their properties
     if (!$user->authorise('core.edit', 'com_enquiries') && $user->authorise('core.edit.own', 'com_enquiries'))
     {
@@ -192,4 +192,3 @@ class EnquiriesModelEnquiries extends JModelList
   }
 
 }
-

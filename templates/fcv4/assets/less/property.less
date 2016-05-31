@@ -6,12 +6,18 @@
 
 **/
 
-/** 
+/**
 
 A/B testing styles for new advertise with us page
 
 **/
 
+.price-info {
+  white-space: nowrap;
+  &:hover {
+    cursor: pointer;
+  }
+}
 
 .jumbotron.advertise-with-us {
   text-align:center;
@@ -93,8 +99,8 @@ A/B testing styles for new advertise with us page
   > footer {
     background:transparent;
     color:@white;
-    border:none; 
-    font-weight:bold; 
+    border:none;
+    font-weight:bold;
   }
 }
 
@@ -114,11 +120,11 @@ A/B testing styles for new advertise with us page
   border-radius:0;
   color:@gray-darker;
   .panel-variant(none; @panel-default-text; white; none);
-  margin: @line-height-computed; 
+  margin: @line-height-computed;
   padding:@line-height-computed;
 
   @media (min-width: @screen-tablet) {
-    margin: @line-height-computed * 2 @line-height-computed * 4 ; 
+    margin: @line-height-computed * 2 @line-height-computed * 4 ;
     padding:@line-height-computed * 2;
 
   }
@@ -143,12 +149,12 @@ A/B testing styles for new advertise with us page
       font-family:District Thin;
 
     }
-  }   
+  }
 }
 
 .panel-pricing.recommended {
   background-color: #d6dae3;
-  box-shadow: 0 10px 15px rgba(0,0,0,.25);  
+  box-shadow: 0 10px 15px rgba(0,0,0,.25);
   border-top: 5px solid @gray-darker;
 
 }
@@ -177,13 +183,13 @@ A/B testing styles for new advertise with us page
       margin-top:-10px;
       margin-right:10px;
     }
-  }  
+  }
 }
 
 .why-advertise-with-us {
   background: @white;
   padding-top:@line-height-computed * 2;
-  padding-bottom:@line-height-computed * 2;   
+  padding-bottom:@line-height-computed * 2;
 }
 
 .why-advertise-with-us-header {
@@ -197,7 +203,7 @@ A/B testing styles for new advertise with us page
   padding: @line-height-computed * 2;
 }
 
-// Dotted underline 
+// Dotted underline
 .dotted {
   border-bottom: 1px dotted;
 }
@@ -212,7 +218,7 @@ A/B testing styles for new advertise with us page
   padding: 0;
 }
 
-.overthrow ul > li 
+.overthrow ul > li
 {
   width:260px;
   float:left;
@@ -263,7 +269,7 @@ A/B testing styles for new advertise with us page
   right: 0em;
 }
 
-.sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-next:before { 
+.sidescroll-nextprev .sidescroll-nextprev-links a.sidescroll-next:before {
   font-family: 'Glyphicons Halflings';
   content:'\e080';
   line-height:1.5;
@@ -283,7 +289,7 @@ A/B testing styles for new advertise with us page
 
 .offscreen {
   position:absolute;
-  left:-10000px; 
+  left:-10000px;
   top:auto;
   width:1px;
   height:1px;
@@ -298,12 +304,12 @@ A/B testing styles for new advertise with us page
 
   .panel-group
 
-  a {     
+  a {
     text-decoration:none;
     display:block;
 
-    &.collapsible:after 
-      { 
+    &.collapsible:after
+      {
       font-family: 'Glyphicons Halflings';
       vertical-align:top;
       content:"\e113";
@@ -325,19 +331,19 @@ A/B testing styles for new advertise with us page
     }
   }
 
-  .special-offer { 
+  .special-offer {
 
     background-color: @yellow-lighter;
     border-color: @yellow;
     color: @brown;
     > h4 {
-      &:before { 
+      &:before {
         font-family: 'Glyphicons Halflings';
         vertical-align:top;
         content:"\e006";
         color: @orange;
       }
-    } 
+    }
   }
 }
 
@@ -348,7 +354,7 @@ A/B testing styles for new advertise with us page
   width: 100%;
   z-index: 999;
   left:0;
-  right:0; 
+  right:0;
   box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.2);
   border-top:5px solid @red;
   background-color: @taupe-lighter;
@@ -368,17 +374,17 @@ A/B testing styles for new advertise with us page
 @media (max-width: @screen-tablet) {
   .navbar-property-navigator > ul > li > a {
     padding:10px 10px;
-  }    
+  }
 }
 
 
-.slick-slider, 
+.slick-slider,
 .carousel-ribbon {
   visibility:hidden;
   margin-bottom:20px;
 }
 
-.slick-slider.slick-initialized , 
+.slick-slider.slick-initialized ,
 .carousel-ribbon.slick-initialized {
   visibility:visible;
   transition: visibility 0.3s ease-in;
@@ -436,7 +442,7 @@ A/B testing styles for new advertise with us page
 .booking-steps {
   background:  @blue-light;
   font-size:@font-size-large;
-  font-family:District Thin; 
+  font-family:District Thin;
   text-transform:uppercase;
   font-weight:700;
   padding:10px 0;
@@ -444,7 +450,7 @@ A/B testing styles for new advertise with us page
   margin-bottom:20px;
 
   p {
-    margin:0; 
+    margin:0;
     opacity:0.6;
 
   }
@@ -462,7 +468,7 @@ A/B testing styles for new advertise with us page
     border-radius:15px;
     padding:0 10px;
     margin:0;
-    background: @blue-lighter; 
+    background: @blue-lighter;
 
   }
 }
@@ -489,7 +495,7 @@ A/B testing styles for new advertise with us page
     margin-bottom:20px;
 }
 
-@media (min-width: 768px) { 
+@media (min-width: 768px) {
 	.payment-btn-group div:first-child {
 	   border-radius:6px 0 0 6px;
 	}
@@ -530,7 +536,7 @@ A/B testing styles for new advertise with us page
     font-weight:600;
     color:#333;
 }
-@media (max-width: 450px) { 
+@media (max-width: 450px) {
 	#select-amount div .amount {
 	   font-size:21px;
 	}
@@ -638,7 +644,7 @@ A/B testing styles for new advertise with us page
     border-radius:6px;
     padding:12px;
 }
-@media (min-width: 992px) { 
+@media (min-width: 992px) {
 	#stay {
 	   width:224px;
 	}

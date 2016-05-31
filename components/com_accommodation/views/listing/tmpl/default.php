@@ -615,9 +615,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         </div>
       </div>
       <div id="top" class="container hidden-sm hidden-lg hidden-md">
-        <h4><?php echo JText::_('COM_ACCOMMODATION_MULTIPLE_UNIT_RENTALS'); ?></h4>
-        <!-- End breadcrumbs -->
         <?php if (count($this->units) > 1) : ?>
+          <!-- End breadcrumbs -->
+          <h4><?php echo JText::_('COM_ACCOMMODATION_MULTIPLE_UNIT_RENTALS'); ?></h4>
             <ul class="nav nav-pills nav-stacked" style="margin-bottom:20px">
               <?php echo $this->loadTemplate('units'); ?>
             </ul>

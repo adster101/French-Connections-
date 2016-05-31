@@ -150,7 +150,7 @@ RewriteRule .* index.php [F]
 #
 ## End - Custom redirects
 
-# Forbids any uri containing the pipe separated gubbins 
+# Forbids any uri containing the pipe separated gubbins
 RewriteCond %{REQUEST_URI} [^a-z](declare|char|set|cast|convert|delete|drop|exec|insert|meta|script|select|truncate|update)[^a-z] [NC]
 RewriteRule (.*) - [F]
 
@@ -161,8 +161,6 @@ RewriteRule (.*) - [F]
 ##
 
 RewriteBase /
-#
-
 
 ## Begin - Joomla! core SEF Section.
 #

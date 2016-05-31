@@ -33,11 +33,12 @@ $location_title = $this->result->location_title;
 $property_type = $this->result->property_type;
 $thumb = ($this->result->thumbnail) ? '/images/property/' . $this->result->unit_id . '/thumb/' . $this->result->thumbnail : $uri->getScheme() . '://' . $this->result->url_thumb;
 $tagline = JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
-$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency, '', '')
+$from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency, '', '');
+$to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_currency, '', '');
 ?>
 
-<div class="search-result" 
-     data-url='<?php echo $route ?>' 
+<div class="search-result"
+     data-url='<?php echo $route ?>'
      data-unit-title='<?php echo $unit_title ?>'
      data-price='<?php echo $this->result->price ?>'
      data-property-type='<?php echo $this->result->property_type ?>'
@@ -56,20 +57,19 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
       </h3>
     </div>
     <div class="col-xs-12 col-sm-3">
-      <p class="rates">
+      <p class="rates" style="margin-bottom:0">
         <?php if ($this->result->price) : ?>
-            <?php echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
-            <span class="lead">
-              <?php //echo '&pound;' . $from_price['GBP'] ?>
-              <?php echo '&pound;' . round($this->result->price); ?>
-            </span>
-            <span class="rate-per">
-              <?php echo $this->result->tariff_based_on; ?>
-            </span>
+            <?php //echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
+            <span class="lead"><?php echo '&pound;' . round($this->result->price); ?></span>
+            <span class="lead">&dash;</span>
+                        <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
+              <a class="price-info" data-toggle="tooltip" data-placement="left" title="<?php echo JText::sprintf('COM_ACCOMMODATION_RATES_FROM_TO_DETAIL', $this->result->tariff_based_on); ?>">
+                <i class="glyphicon glyphicon-info-sign"></i>
+              </a>
         <?php else : ?>
             <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
         <?php endif; ?>
-      </p> 
+      </p>
     </div>
   </div>
   <?php if (!empty($this->result->offer)) : ?>
@@ -78,7 +78,7 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
           <p class="offer">
             <strong><span class="glyphicon glyphicon-tags"></span></strong>&nbsp;
             <?php echo $this->escape($this->result->offer); ?>
-          </p>       
+          </p>
         </div>
       </div>
   <?php endif; ?>
@@ -91,7 +91,7 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
           <?php else: ?>
               <img width="210" class="img-responsive" src="<?php echo $uri->getScheme() . '://' . $this->result->url_thumb ?>" />
           <?php endif; ?>
-        </a>  
+        </a>
       </p>
     </div>
     <div class="col-xs-12 col-sm-9">
@@ -110,7 +110,7 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
           </p>
           <p class=""><?php echo JText::sprintf('COM_FCSEARCH_REF', $this->result->id); ?></p>
         </div>
-        <div class="col-md-3 col-sm-3">  
+        <div class="col-md-3 col-sm-3">
           <p class="view-property-button visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <a href="<?php echo $route ?>" class="btn btn-warning">
               <?php echo JText::_('COM_FCSEARCH_VIEW_PROPERTY') ?>
@@ -123,16 +123,16 @@ $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_curr
             <?php else : ?>
                 <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                   <i class="glyphicon glyphicon-heart"></i>
-                </a>    
+                </a>
             <?php endif; ?>
-          </p> 
+          </p>
           <?php if ($this->result->reviews) : ?>
               <p class="listing-reviews visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
                 <a href="<?php echo $route . '#reviews' ?>">
                   <?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_HAS_NUMBER_OF_REVIEWS', $this->result->reviews); ?>
                 </a>
               </p>
-          <?php endif; ?> 
+          <?php endif; ?>
           <?php if ($this->result->is_bookable) : ?>
               <p>
                 <span class="glyphicon glyphicon-credit-card lead pull-left"></span>&nbsp;Book online securely
