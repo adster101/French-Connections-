@@ -47,7 +47,7 @@ class RealEstateModelListing extends JModelList
 
   /**
    * Controller action to publish a listing. Activated from the PFR 'approve' view
-   * 
+   *
    * @param type $items
    * @return boolean
    */
@@ -62,7 +62,7 @@ class RealEstateModelListing extends JModelList
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
 
-      // Update the property versions 
+      // Update the property versions
       if ($items[0]->review)
       {
 
@@ -77,7 +77,7 @@ class RealEstateModelListing extends JModelList
         $db->setQuery($query);
         $db->execute();
 
-        // Clear the query 
+        // Clear the query
         $query->clear();
 
         // Publish the current draft version
@@ -100,8 +100,8 @@ class RealEstateModelListing extends JModelList
               ->set('checked_out_time = \'\'')
               ->set('value = null');
 
-      // If the expiry date is empty, and the property is being approved then implicity assume it's 
-      // a new property and set the renewal date accordingly. 
+      // If the expiry date is empty, and the property is being approved then implicity assume it's
+      // a new property and set the renewal date accordingly.
       if (empty($items[0]->expiry_date))
       {
         $expiry_date = JFactory::getDate('+1 year');
@@ -128,7 +128,7 @@ class RealEstateModelListing extends JModelList
 
   /**
    * Below can be moved into a generic helper class method
-   * 
+   *
    * @param type $listing
    * @param type $body
    * @param type $subject
@@ -147,13 +147,13 @@ class RealEstateModelListing extends JModelList
     $mail = JFactory::getMailer();
 
     $mail->addRecipient($owner_email, $owner_name);
-    $mail->addReplyTo(array($mailfrom, $fromname));
-    $mail->setSender(array($mailfrom, $fromname));
+    $mail->addReplyTo($mailfrom, $fromname);
+    $mail->setSender($mailfrom, $fromname);
     $mail->setSubject($subject);
     $mail->setBody($body);
     $mail->isHtml(true);
 
-    // If this is a new property then CC a copy to an admin email (e.g. sales@) 
+    // If this is a new property then CC a copy to an admin email (e.g. sales@)
     if (empty($listing[0]->expiry_date))
     {
       $mail->addCC($mailfrom);
@@ -231,7 +231,7 @@ class RealEstateModelListing extends JModelList
         b.phone_1,
         b.email_1,
         CONCAT(d.firstname, \' \', d.surname) as account_name,
-        d.vat_status,  
+        d.vat_status,
         (select count(*) from qitz3_realestate_property_images_library where version_id = b.id) as images,
         e.email
       ');
@@ -290,12 +290,12 @@ class RealEstateModelListing extends JModelList
   }
 
   /**
-   * 
+   *
    * Method takes an array of units and determines the overall status / progress of the listing.
-   * Listing needs location, unit, images, availability, tariffs and 
-   * 
+   * Listing needs location, unit, images, availability, tariffs and
+   *
    * @param array   An array of units associated making up a listing
-   *  
+   *
    */
   public function getProgress($listing = array())
   {
@@ -341,7 +341,7 @@ class RealEstateModelListing extends JModelList
       $state->complete = false;
     }
 
-    // Determine any notices to show to the owner 
+    // Determine any notices to show to the owner
     if ($state->complete && $state->review == 1 && !empty($state->expiry_date))
     {
       $state->notice = JText::sprintf('COM_PROPERTY_NON_SUBMITTED_CHANGES', $listing[0]->id);
@@ -361,8 +361,7 @@ class RealEstateModelListing extends JModelList
 
     return $state;
   }
-  
-  
-  
-}
 
+
+
+}

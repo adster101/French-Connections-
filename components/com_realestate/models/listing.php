@@ -20,7 +20,7 @@ class RealestateModelListing extends JModelForm
    * The Item ID of the menu item
    */
   public $itemid = '';
-  
+
   /**
    * @var boolean review
    */
@@ -34,7 +34,7 @@ class RealestateModelListing extends JModelForm
     $input = JFactory::getApplication()->input;
 
     $this->preview = ($input->get('preview', 0, 'boolean')) ? true : false;
-    
+
     $this->itemid = SearchHelper::getItemid(array('component', 'com_realestatesearch'));
   }
 
@@ -46,7 +46,7 @@ class RealestateModelListing extends JModelForm
    * @param	array	Configuration array for model. Optional.
    * @return	JTable	A database object
    * @since	1.6
-   * 
+   *
    */
   public function getTable($type = 'Enquiry', $prefix = 'EnquiriesTable', $config = array())
   {
@@ -173,8 +173,8 @@ class RealestateModelListing extends JModelForm
         air.name as airport,
         air.code as airport_code,
         air.id as airport_id,
-        ufc.phone_1, 
-        ufc.phone_2, 
+        ufc.phone_1,
+        ufc.phone_2,
         ufc.phone_3,
         ufc.firstname,
         ufc.surname,
@@ -246,7 +246,7 @@ class RealestateModelListing extends JModelForm
 
     if (empty($this->item))
     {
-      // This property has expired or is otherwise unavailable.                
+      // This property has expired or is otherwise unavailable.
       return false;
     }
 
@@ -262,7 +262,7 @@ class RealestateModelListing extends JModelForm
   /**
    * Function to get maps items to show on the location map.
    * At present, is only 'places of interest'
-   * 
+   *
    */
   public function getMapItems($lat = '', $lon = '')
   {
@@ -300,7 +300,7 @@ class RealestateModelListing extends JModelForm
 
   /**
    * Gets a list of related properties based on the property someone has just enquired on.
-   * 
+   *
    * @return boolean
    */
   public function getRelatedProps()
@@ -489,14 +489,14 @@ class RealestateModelListing extends JModelForm
 
   /**
    * Function to process and send an enquiry onto an owner...
-   * 
+   *
    * Also need to send an email to the holiday maker as an acknowledgement
-   * 
+   *
    * Filter the message based on the banned text phrases and banned email addresses. This seems futile.
-   * How easy is it to generate a new email address or alter the phrasing. 
-   * More robust would be to require a user account, keep a track of how many email a user is sending in a 
-   * certain timeframe and trap any for manual review above that number. Similar to what happens now. 
-   * 
+   * How easy is it to generate a new email address or alter the phrasing.
+   * More robust would be to require a user account, keep a track of how many email a user is sending in a
+   * certain timeframe and trap any for manual review above that number. Similar to what happens now.
+   *
    * @param array $data
    * @param type $params
    * @return boolean
@@ -526,7 +526,7 @@ class RealestateModelListing extends JModelForm
     // Add enquiries paths
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_enquiries/tables');
 
-    // Check the banned email list     
+    // Check the banned email list
     if (in_array($data['guest_email'], $banned_emails))
     {
       $valid = false; // Naughty!
@@ -540,7 +540,7 @@ class RealestateModelListing extends JModelForm
       $data['state'] = -3;
     }
 
-    // Check the number of enquiries from this email address    
+    // Check the number of enquiries from this email address
     if ($this->enquiryCount($data['guest_email']) >= $params->get('enqs_per_day', 10))
     {
       $valid = false; //Naughty!!!
@@ -554,7 +554,7 @@ class RealestateModelListing extends JModelForm
     $data['property_id'] = $id;
     $data['unit_id'] = $unit_id;
 
-    // Override flag to ensure that email will get sent even if not valid. 
+    // Override flag to ensure that email will get sent even if not valid.
     // For example, from enquiry manager admin wants to sent a failed enquiry
     if ($override)
     {
@@ -575,7 +575,7 @@ class RealestateModelListing extends JModelForm
       $item = $this->getItem();
 
       // If the property is set to use invoice details
-      // Override anything set in the property version 
+      // Override anything set in the property version
       if ($item->use_invoice_details)
       {
 
@@ -608,8 +608,8 @@ class RealestateModelListing extends JModelForm
 
       $mail = JFactory::getMailer();
       $mail->addRecipient($owner_email, $owner_name);
-      $mail->addReplyTo(array($mailfrom, $fromname));
-      $mail->setSender(array($mailfrom, $fromname));
+      $mail->addReplyTo($mailfrom, $fromname);
+      $mail->setSender($mailfrom, $fromname);
       $mail->addBCC($mailfrom, $fromname);
       $mail->setSubject($sitename . ': ' . JText::sprintf('COM_REALESTATE_NEW_ENQUIRY_RECEIVED', $item->title, $id));
       $mail->setBody($body);
@@ -623,12 +623,12 @@ class RealestateModelListing extends JModelForm
 
       if (!$mail->Send())
       {
-        
+
         return false;
       }
 
       // Prepare email body for the holidaymaker email
-      // TO DO - Make the property link not hard coded 
+      // TO DO - Make the property link not hard coded
       $property_link = JUri::base() . 'forsale/' . (int) $id;
       $body = JText::sprintf($params->get('buyer_realestate_email_enquiry_template'), $firstname, $property_link, $property_link, $car_hire_link, $currency_link, $ferry_link);
 
@@ -650,7 +650,7 @@ class RealestateModelListing extends JModelForm
 
         $sms = new SendSMS($sms_params->get('username'), $sms_params->get('password'), $sms_params->get('id'));
         /*
-         *  if the login return 0, means that login failed, you cant send sms after this 
+         *  if the login return 0, means that login failed, you cant send sms after this
          */
         if (!$sms->login())
         {
@@ -658,7 +658,7 @@ class RealestateModelListing extends JModelForm
         }
 
         // Get minutes between now and midnight
-        // If minutes less than 240 
+        // If minutes less than 240
         // Schedule for tomorrow at eight
         // Else schedule for today at eight
         // Set default timezone so we can work out the correct time now
@@ -687,7 +687,7 @@ class RealestateModelListing extends JModelForm
         }
 
         /*
-         * Send sms using the simple send() call 
+         * Send sms using the simple send() call
          */
         if (!$sms->send($item->sms_alert_number, JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED_SMS_ALERT', $id, $full_name, $phone, $email), $minutes_until_safe_to_send))
         {
@@ -702,9 +702,9 @@ class RealestateModelListing extends JModelForm
   }
 
   /**
-   * Check through the list of banned phrases and return true if one found 
+   * Check through the list of banned phrases and return true if one found
    * http://stackoverflow.com/questions/6228581/how-to-search-array-of-string-in-another-string-in-php
-   * 
+   *
    * @param type $string
    * @param array $search
    * @param type $caseInsensitive
@@ -751,7 +751,7 @@ class RealestateModelListing extends JModelForm
     }
     catch (Exception $e)
     {
-      
+
     }
 
     return $row->count;

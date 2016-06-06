@@ -25,9 +25,9 @@ class RentalModelListing extends JModelList
     if (empty($config['filter_fields']))
     {
       $config['filter_fields'] = array(
-         
+
           'published', 'a.published',
-          
+
       );
     }
     parent::__construct($config);
@@ -82,7 +82,7 @@ class RentalModelListing extends JModelList
 
   /**
    * Controller action to publish a listing. Activated from the PFR 'approve' view
-   * 
+   *
    * @param type $items
    * @return boolean
    */
@@ -97,7 +97,7 @@ class RentalModelListing extends JModelList
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
 
-      // Update the property versions 
+      // Update the property versions
       if ($items[0]->property_review)
       {
 
@@ -112,7 +112,7 @@ class RentalModelListing extends JModelList
         $db->setQuery($query);
         $db->execute();
 
-        // Clear the query 
+        // Clear the query
         $query->clear();
 
         // Publish the current draft version
@@ -164,8 +164,8 @@ class RentalModelListing extends JModelList
               //->set('snooze_until = \'\'')
               ->set('value = null');
 
-      // If the expiry date is empty, and the property is being approved then implicity assume it's 
-      // a new property and set the renewal date accordingly. 
+      // If the expiry date is empty, and the property is being approved then implicity assume it's
+      // a new property and set the renewal date accordingly.
       if (empty($items[0]->expiry_date))
       {
         $expiry_date = JFactory::getDate('+1 year');
@@ -197,7 +197,7 @@ class RentalModelListing extends JModelList
 
   /**
    * Controller action to publish a listing. Activated from the PFR 'approve' view
-   * 
+   *
    * @param type $items
    * @return boolean
    */
@@ -241,7 +241,7 @@ class RentalModelListing extends JModelList
 
   /**
    * Below can be moved into a generic helper class method
-   * 
+   *
    * @param type $listing
    * @param type $body
    * @param type $subject
@@ -260,13 +260,13 @@ class RentalModelListing extends JModelList
     $mail = JFactory::getMailer();
 
     $mail->addRecipient($owner_email, $owner_name);
-    $mail->addReplyTo(array($mailfrom, $fromname));
-    $mail->setSender(array($mailfrom, $fromname));
+    $mail->addReplyTo($mailfrom, $fromname);
+    $mail->setSender($mailfrom, $fromname);
     $mail->setSubject($subject);
     $mail->setBody($body);
     $mail->isHtml(true);
 
-    // If this is a new property then CC a copy to an admin email (e.g. sales@) 
+    // If this is a new property then CC a copy to an admin email (e.g. sales@)
     if (empty($listing[0]->expiry_date))
     {
       $mail->addCC($mailfrom);
@@ -319,7 +319,7 @@ class RentalModelListing extends JModelList
     $canDo = RentalHelper::getActions();
     $id = $this->getState($this->context . '.id', '');
 
-    // If $latest true then we only get the latest version of a property 
+    // If $latest true then we only get the latest version of a property
     // otherwise we retrive latest published and draft version (e.g. for a PFR)
     $latest = $this->getState('com_rental.listing.latest', true);
 
@@ -333,7 +333,7 @@ class RentalModelListing extends JModelList
         a.expiry_date,
         a.review,
         b.review as property_review,
-        b.latitude, 
+        b.latitude,
         b.longitude,
         b.department,
         b.city,
@@ -354,13 +354,13 @@ class RentalModelListing extends JModelList
         e.accommodation_type,
         e.property_type,
         e.created_on,
-        g.vat_status,  
+        g.vat_status,
         CONCAT(g.firstname, \' \', g.surname) as account_name,
         h.email,
         b.phone_1,
         b.email_1,
-        b.video_url, 
-        b.lwl, 
+        b.video_url,
+        b.lwl,
         b.frtranslation,
         b.email_2,
         base_currency,
@@ -462,12 +462,12 @@ class RentalModelListing extends JModelList
   }
 
   /**
-   * 
+   *
    * Method takes an array of units and determines the overall status / progress of the listing.
-   * Listing needs location, unit, images, availability, tariffs and 
-   * 
+   * Listing needs location, unit, images, availability, tariffs and
+   *
    * @param array   An array of units associated making up a listing
-   *  
+   *
    */
   public function getProgress($units = array())
   {
@@ -483,7 +483,7 @@ class RentalModelListing extends JModelList
     $listing->contact_detail = true; // Assume we have all property details
 
     $listing->id = $units[0]->id; // The main listing ID
-    // Set a 'default' unit ID 
+    // Set a 'default' unit ID
     // TO DO - Expand this for when there are multiple units, e.g. using a 'unit switcher'
     $listing->unit_id = ($input->get('unit_id', '', 'int')) ? $input->get('unit_id', '', 'int') : $units[0]->unit_id;
 
@@ -510,13 +510,13 @@ class RentalModelListing extends JModelList
       if (!$unit->availability && $unit->published)
       {
         $unit_state->availability = false; // Assume we have some images
-        $listing->complete = false; // Should allow existing props to submit without 
+        $listing->complete = false; // Should allow existing props to submit without
       }
 
       if (!$unit->tariffs && $unit->published)
       {
         $unit_state->tariffs = false; // Assume we have some images
-        $listing->complete = false; // Should allow existing props to submit without 
+        $listing->complete = false; // Should allow existing props to submit without
       }
 
       if (!$unit->images)
@@ -545,4 +545,3 @@ class RentalModelListing extends JModelList
   }
 
 }
-
