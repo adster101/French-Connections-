@@ -27,7 +27,10 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
-// Require the additional model needed for processing. 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
+// Require the additional model needed for processing.
 require_once JPATH_ADMINISTRATOR . '/components/com_realestate/models/listing.php';
 
 // Register the Helloworld helper method
@@ -60,7 +63,7 @@ class RealestateRenewals extends JApplicationCli
     // Get the debug setting
     $debug = (bool) $app->getCfg('debug');
 
-    // Get the renewal template emails 
+    // Get the renewal template emails
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
     // Process the manual renewals
     $this->_manualrenewals($debug, $renewal_templates);
@@ -93,7 +96,7 @@ class RealestateRenewals extends JApplicationCli
       // Get an instance of the listing model
       $listing_model = JModelLegacy::getInstance('Listing', 'RealEstateModel', $config = array('ignore_request' => true));
 
-      // Set the listing ID we are sending the reminder to 
+      // Set the listing ID we are sending the reminder to
       $listing_model->setState('com_realestate.listing.id', $v->id);
       $listing_model->setState('com_realestate.listing.latest', true);
 
@@ -199,8 +202,8 @@ class RealestateRenewals extends JApplicationCli
 
     $query = $db->getQuery(true);
     $query->select('
-      a.id, 
-      datediff(a.expiry_date, now()) as days, 
+      a.id,
+      datediff(a.expiry_date, now()) as days,
       a.expiry_date'
     );
 

@@ -17,7 +17,7 @@ class EnquiriesViewEnquiries extends JViewLegacy
   protected $pagination;
 
   function display($tpl = null)
-  {    // Gets the info from the model and displays the template 
+  {    // Gets the info from the model and displays the template
 
     /*
      * Get the permissions for this component
@@ -96,12 +96,12 @@ class EnquiriesViewEnquiries extends JViewLegacy
       JToolBarHelper::deleteList('Are you sure?', 'enquiries.delete', 'JTOOLBAR_DELETE');
     }
 
-    if ($canDo->get('core.admin'))
+    if ($canDo->get('core.edit'))
     {
       JToolBarHelper::custom('enquiries.resend', 'refresh', '', 'COM_ENQUIRIES_RESEND_FAILED', true);
       JToolBarHelper::preferences('com_enquiries');
     }
-    
+
     $help = JToolbar::getInstance('fchelp');
     $help->appendButton('Help', 'COM_SPECIALOFFERS_COMPONENT_HELP_VIEW', true);
   }

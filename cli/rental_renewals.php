@@ -27,7 +27,10 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
-// Require the additional model needed for processing. 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
+// Require the additional model needed for processing.
 require_once JPATH_LIBRARIES . '/frenchconnections/models/payment.php';
 require_once JPATH_ADMINISTRATOR . '/components/com_rental/models/listing.php';
 
@@ -69,7 +72,7 @@ class Renewals extends JApplicationCli
     // This layout is used for the payment summary bit on pro forma invoices and renewal reminders/invoices etc
     $payment_summary_layout = new JLayoutFile('payment_summary', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
 
-    // Get the renewal template emails 
+    // Get the renewal template emails
     $renewal_templates = JComponentHelper::getParams('com_autorenewals'); // These are the renewal reminder email templates
     // Process the manual renewals
     $manualrenewals = $this->_manualrenewals($debug, $payment_summary_layout, $renewal_templates);
@@ -105,7 +108,7 @@ class Renewals extends JApplicationCli
       // Get an instance of the listing model
       $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
 
-      // Set the listing ID we are sending the reminder to 
+      // Set the listing ID we are sending the reminder to
       $listing_model->setState('com_rental.listing.id', $v->id);
       $listing_model->setState('com_rental.listing.latest', true);
 
@@ -218,7 +221,7 @@ class Renewals extends JApplicationCli
       // Get an instance of the listing model
       $listing_model = JModelLegacy::getInstance('Listing', 'RentalModel', $config = array('ignore_request' => true));
 
-      // Set the listing ID we are sending the reminder to 
+      // Set the listing ID we are sending the reminder to
       $listing_model->setState('com_rental.listing.id', $v->id);
       $listing_model->setState('com_rental.listing.latest', true);
 
@@ -246,7 +249,7 @@ class Renewals extends JApplicationCli
 
         case ($v->days == "7"):
 
-          // Attempt to take shadow payment... 
+          // Attempt to take shadow payment...
           $shadowPayment = $payment_model->processRepeatPayment($v->VendorTxCode, $v->VPSTxId, $v->SecurityKey, $v->TxAuthNo, 'REPEATDEFERRED', $payment_summary, $v->id);
 
           if (!$shadowPayment)
@@ -311,7 +314,7 @@ class Renewals extends JApplicationCli
 
             $payment_model->sendEmail('accounts@frenchconnections.co.uk', $recipient, $receipt_subject, $receipt_body, false);
 
-            // TO DO - Write this out into the protx payment tables...            
+            // TO DO - Write this out into the protx payment tables...
           }
 
           break;
@@ -394,15 +397,15 @@ class Renewals extends JApplicationCli
     $query = $db->getQuery(true);
 
     $query->select('
-      a.id, 
-      datediff(a.expiry_date, now()) as days, 
-      a.expiry_date, 
-      b.id as TxID, 
+      a.id,
+      datediff(a.expiry_date, now()) as days,
+      a.expiry_date,
+      b.id as TxID,
       b.VendorTxCode,
-      b.VPSTxId, 
+      b.VPSTxId,
       b.SecurityKey,
-      b.TxAuthNo, 
-      b.user_id, 
+      b.TxAuthNo,
+      b.user_id,
       b.property_id,
       b.Billingfirstnames,
       b.BillingSurname,

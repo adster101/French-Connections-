@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.realestateimport');
 
@@ -34,13 +37,13 @@ class ABRealestate extends RealestateImport
 {
 
   /**
-   * 
+   *
    * Entry point for the script
    *
    * @return  void
    *
    * @since   2.5
-   * 
+   *
    */
   public function doExecute()
   {
@@ -50,14 +53,14 @@ class ABRealestate extends RealestateImport
 
     $this->out('About to get feed...');
 
-    // Get and parse out the feed 
+    // Get and parse out the feed
     $props = $this->parseFeed('http://www.ab-real-estate.com/xml/xmlfc.xml', 'Properties');
-        
+
     $this->out('Got feed...');
 
      // Add realestate and rental tables to the include path
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/tables');
-    
+
     // Add the realestate property models
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_realestate/models');
     $model = JModelLegacy::getInstance('Image', 'RealEstateModel');
@@ -79,9 +82,9 @@ class ABRealestate extends RealestateImport
 
         // Check whether this property agency reference already exists in the versions table
         $property_version = $this->getPropertyVersion('#__realestate_property_versions', 'agency_reference', $prop->agency_reference, $db);
-        
+
         $id = ($property_version->realestate_property_id) ? $property_version->realestate_property_id : '';
-        
+
         $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
 
         if (!$id)
@@ -119,7 +122,7 @@ class ABRealestate extends RealestateImport
           $data['published_on'] = $db->quote(JFactory::getDate());
 
           $this->out('Adding property version...');
-          
+
           JTable::getInstance('PropertyVersions', 'RealestateTable');
           $property_version_id = $this->createPropertyVersion($db, $data);
 
@@ -166,7 +169,7 @@ class ABRealestate extends RealestateImport
 
           $this->out('Updating expiry date...');
 
-          // Update the expiry date 
+          // Update the expiry date
           $this->updateProperty($db, $id);
 
           $this->out('Updating version details...');
@@ -189,7 +192,7 @@ class ABRealestate extends RealestateImport
 
           // Yep, we have it already!
           // Update expiry date
-          // Update version to shut down any unpublished versions? Need to deal with this somehow? 
+          // Update version to shut down any unpublished versions? Need to deal with this somehow?
           // $ref = $this->updateProperty($realestate_property_version->id);
         }
 
@@ -205,7 +208,7 @@ class ABRealestate extends RealestateImport
 
         // Send an email, woot!
         $this->email($e);
-        
+
       }
     }
   }

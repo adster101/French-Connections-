@@ -1208,8 +1208,8 @@ class AccommodationModelListing extends JModelForm
 
             $mail = JFactory::getMailer();
             $mail->addRecipient($owner_email, $owner_name);
-            $mail->addReplyTo(array($mailfrom, $fromname));
-            $mail->setSender(array($mailfrom, $fromname));
+            $mail->addReplyTo($mailfrom, $fromname);
+            $mail->setSender($mailfrom, $fromname);
             $mail->addBCC($mailfrom, $fromname);
             $mail->setSubject($sitename . ': ' . JText::sprintf('COM_ACCOMMODATION_NEW_ENQUIRY_RECEIVED', $item->unit_title, $id));
             $mail->setBody($body);
@@ -1350,7 +1350,7 @@ class AccommodationModelListing extends JModelForm
         }
         catch (Exception $e)
         {
-            
+
         }
 
         return $row->count;

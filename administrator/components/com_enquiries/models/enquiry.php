@@ -179,14 +179,14 @@ class EnquiriesModelEnquiry extends JModelAdmin
 
   public function processFailedEnquiries($enqs = array(), $state = '0')
   {
-    // Set up the bits and pieces 
+    // Set up the bits and pieces
     $user = JFactory::getUser();
     $params = JComponentHelper::getParams('com_enquiries');
     JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_accommodation/models');
     $lang = JFactory::getLanguage();
     $lang->load('com_accommodation', JPATH_SITE);
 
-    if (!$user->authorise('core.admin', 'com_enquiries'))
+    if (!$user->authorise('core.edit', 'com_enquiries'))
     {
       return false;
     }
@@ -273,31 +273,31 @@ class EnquiriesModelEnquiry extends JModelAdmin
       $user = JFactory::getUser();
 
       /*
-       * ATM the account detail doesn't hold a separate email address. 
+       * ATM the account detail doesn't hold a separate email address.
        * This is consistent with the current system, although they are able to update their invoice
        * email address if they wish. Basically means that email address on the invoice screen
        * needs to be taken from the joomla user account field and update there also.
-       * 
+       *
        * Account edit screen (non-Joomla account).
        * This needs to allow the user to update all aspects of their billing details (email, VAT status etc)
-       * 
+       *
        * Account edit screen (Joomla)
-       * Needs to allow the user to only update their password. 
-       * Need to supress the email address from showing on the user edit profile screen. 
-       * 
-       * 
+       * Needs to allow the user to only update their password.
+       * Need to supress the email address from showing on the user edit profile screen.
+       *
+       *
        * Or merge the account management into one screen including their login details etc...
-       * 
+       *
        * Above also holds for the name. We will want to take firstname and surname from the sign up
        * and populate the basic invoice details. This will override the default Joomla account details.
-       * 
-       * Or surpress the account edit screen from the owner... 
-       * 
+       *
+       * Or surpress the account edit screen from the owner...
+       *
        * $account_table = $this->getTable('UserProfileFc', 'RentalTable');
        * if (!$account_table->load($user->id)) {
        *   return false;
        * }
-       * 
+       *
        */
 
       $data['from_email'] = $user->email;
@@ -317,7 +317,7 @@ class EnquiriesModelEnquiry extends JModelAdmin
      * Get the component params
      */
     $params = JComponentHelper::getParams('com_enquiries');
-    // From details are taken from the owners user account 
+    // From details are taken from the owners user account
     $from = ($data['from_email']) ? $data['from_email'] : '';
     $from_name = ($data['from_name']) ? $data['from_name'] : '';
     // To is the holiday maker who made the initial enquiry
@@ -362,7 +362,7 @@ class EnquiriesModelEnquiry extends JModelAdmin
     }
 
     /*
-     * It's all gravy 
+     * It's all gravy
      */
     $reply = array();
     $reply['id'] = $data['id'];

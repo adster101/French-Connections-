@@ -14,7 +14,7 @@ class PropertyModelListing extends JModelList
 {
 
   /**
-   * 
+   *
    * Method to auto-populate the model state.
    * Note. Calling getState in this method will result in recursion.
    *
@@ -23,7 +23,7 @@ class PropertyModelListing extends JModelList
    *
    * @return	void
    * @since	1.6
-   * 
+   *
    */
   public function populateState($ordering = null, $direction = null)
   {
@@ -64,7 +64,7 @@ class PropertyModelListing extends JModelList
 
   /**
    * Controller action to publish a listing. Activated from the PFR 'approve' view
-   * 
+   *
    * @param type $items
    * @return boolean
    */
@@ -79,7 +79,7 @@ class PropertyModelListing extends JModelList
       // Start a db transaction so we can roll back if necessary
       $db->transactionStart();
 
-      // Update the property versions 
+      // Update the property versions
       if ($items[0]->property_review)
       {
 
@@ -135,8 +135,8 @@ class PropertyModelListing extends JModelList
       $query->set('published = 1');
       $query->set('value = ' . $db->quote('0.00'));
 
-      // If the expiry date is empty, and the property is being approved then implicity assume it's 
-      // a new property and set the renewal date accordingly. 
+      // If the expiry date is empty, and the property is being approved then implicity assume it's
+      // a new property and set the renewal date accordingly.
       if (empty($items[0]->expiry_date))
       {
         $expiry_date = JFactory::getDate('+1 year');
@@ -174,8 +174,8 @@ class PropertyModelListing extends JModelList
     $mail = JFactory::getMailer();
 
     $mail->addRecipient($owner_email, $owner_name);
-    $mail->addReplyTo(array($mailfrom, $fromname));
-    $mail->setSender(array($mailfrom, $fromname));
+    $mail->addReplyTo($mailfrom, $fromname);
+    $mail->setSender($mailfrom, $fromname);
     $mail->setSubject($subject);
     $mail->setBody($body);
     $mail->isHtml(true);
@@ -237,12 +237,12 @@ class PropertyModelListing extends JModelList
   }
 
   /**
-   * 
+   *
    * Method takes an array of units and determines the overall status / progress of the listing.
-   * Listing needs location, unit, images, availability, tariffs and 
-   * 
+   * Listing needs location, unit, images, availability, tariffs and
+   *
    * @param array   An array of units associated making up a listing
-   *  
+   *
    */
   public function getProgress($units = array())
   {
@@ -280,4 +280,3 @@ class PropertyModelListing extends JModelList
   }
 
 }
-

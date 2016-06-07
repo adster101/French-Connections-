@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
 
@@ -53,7 +56,7 @@ class AtLeisure extends Import
     // Get DB instance
     $db = JFactory::getDbo();
 
-    // Get the affiliate user id to use to pull out the properties which 
+    // Get the affiliate user id to use to pull out the properties which
     $user = JFactory::getUser('atleisure')->id;
 
     $params = array(
@@ -61,13 +64,13 @@ class AtLeisure extends Import
         "Items" => array("AvailabilityPeriodV1")
     );
 
-    // 
+    //
     $interval = new DateInterval('P1D');
 
     $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
 
     $props = $this->getProps($user);
-        
+
     $this->out('Got houses...');
 
     // Chunk up the house codes baby!
@@ -152,16 +155,16 @@ class AtLeisure extends Import
 
           // Woot, put some availability back
           $availabilityTable->save($unit_id, $availability);
-          
+
           // Set the pk to unit_id as we want to delete all tariffs for this property
           $tariffsTable->set('_tbl_keys', array('unit_id'));
-          
+
           $tariffsTable->delete($unit_id);
 
           // Reset the table pk to id so we can insert new tariffs
           $tariffsTable->set('_tbl_keys', array('id'));
 
-          
+
           foreach ($tariffs as $price => $dates)
           {
             $tariff = array();
@@ -205,7 +208,7 @@ class AtLeisure extends Import
 
   private function getAvailability()
   {
-    
+
   }
 
   private function getProps($user = '')
@@ -239,12 +242,12 @@ class AtLeisure extends Import
 
   /**
    * Private function __getPeriod
-   * 
+   *
    * defines a periodid depending on arrivaldate and number of nights
-   * 
+   *
    * @param	DateTime		the arrivaldate
    * @param	integer			the number of nights
-   * @return 	string 
+   * @return 	string
    */
   private function __getPeriod($a_date, $nights)
   {

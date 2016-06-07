@@ -27,6 +27,9 @@ require_once JPATH_LIBRARIES . '/import.legacy.php';
 // Bootstrap the CMS libraries.
 require_once JPATH_LIBRARIES . '/cms.php';
 
+// Import the configuration.
+require_once JPATH_CONFIGURATION . '/configuration.php';
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
 
@@ -98,8 +101,8 @@ class AtLeisure extends Import
                 "LanguagePackENV4",
                 "LayoutExtendedV2",
                 "DistancesV1")
-        );        
-        
+        );
+
         // Load up 100 property details at a time.
         foreach ($accocode_chunks as $chunk => $acco_chunk)
         {
@@ -148,7 +151,7 @@ class AtLeisure extends Import
                         // Create an entry in the #__property table
                         $property_detail = $this->save($property_table, $property);
 
-                        // Be aware that the table primary key is updated 
+                        // Be aware that the table primary key is updated
                         $this->out('Created new property ID: ' . $property_detail->id);
                     } else
                     {
@@ -166,13 +169,13 @@ class AtLeisure extends Import
                         // Here we know we have the full property version detail
                         $property_detail = $property_table->load($property_version_table->property_id);
                     }
-                    
+
                     // Get the nearest city
                     $city_id = $this->nearestcity($acco->BasicInformationV3->WGS84Latitude, $acco->BasicInformationV3->WGS84Longitude);
-                    
+
                     // Get the location details for this property
                     $classification = JTable::getInstance('Classification', 'ClassificationTable');
-                    
+
                     $location = $classification->getPath($city_id);
 
                     $data['property_version']['id'] = $property_version_table->id;
@@ -198,7 +201,7 @@ class AtLeisure extends Import
 
                     $this->out('Saving property version details for ' . $property_table->id);
 
-                    // Set the table key back to version id. This ensures a new version is created 
+                    // Set the table key back to version id. This ensures a new version is created
                     // if there isn't one already
                     $property_version_table->set('_tbl_keys', array('id'));
 
@@ -219,7 +222,7 @@ class AtLeisure extends Import
                         // Create an entry in the #__property table
                         $unit_detail = $this->save($unit_table, $unit);
 
-                        // Be aware that the table primary key is updated 
+                        // Be aware that the table primary key is updated
                         $this->out('Created new unit ID: ' . $unit_detail->id);
                     } else
                     {
@@ -418,7 +421,7 @@ class AtLeisure extends Import
             $db->execute();
         } catch (Exception $e)
         {
-            
+
         }
 
         // Clear the query and start the insert
@@ -491,7 +494,7 @@ class AtLeisure extends Import
                 {
                     foreach ($room_layout as $beds)
                     {
-                        // If there is more than one type of bed in the room 
+                        // If there is more than one type of bed in the room
                         $bed = key($beds);
                         $quantity = $beds[$bed];
 
@@ -733,7 +736,7 @@ class AtLeisure extends Import
 
     /**
      * Works through the extended layout details and returns a nested array keyed by layout items
-     * 
+     *
      * @param type $acco
      * @param type $reference_layout
      * @param type $reference_items_detail
@@ -763,7 +766,7 @@ class AtLeisure extends Import
                 {
                     $detailArr = array();
 
-                    // Add each details as an array element          
+                    // Add each details as an array element
                     foreach ($layout->Details as $detail)
                     {
                         $detailArr[] = $reference_items_detail[$detail];
@@ -779,7 +782,7 @@ class AtLeisure extends Import
                 $layoutStr[$parentItem][$item][$layout->SequenceNumber] = array();
             }
         }
-        // Loop over the layourStr array 
+        // Loop over the layourStr array
         // $k is the floor
         // $v is the room type (e.g. bedroom)
         // for each floor as room type
@@ -801,7 +804,7 @@ class AtLeisure extends Import
                 if (!empty($layout->ParentItem) && array_key_exists($parentItem, $v))
                 {
                     // If there are a sequence number that means there is more than one item in this room
-                    // Presumabely this always adds at least an empty array 
+                    // Presumabely this always adds at least an empty array
                     if (empty($layoutStr[$k][$parentItem][$layout->ParentSequenceNumber]))
                     {
                         //$layoutStr[$k][$parentItem][$layout->ParentSequenceNumber] = array();
@@ -838,11 +841,11 @@ class AtLeisure extends Import
 
     /**
      * Private function __generate_ReferenceLayoutItemsV1
-     * 
+     *
      * calls ReferenceLayoutItemsV1 and creates a txt file to import into out database
-     * 
+     *
      * @param	string		The name of the RPC call
-     * @return 	void 
+     * @return 	void
      */
     private function _getReferenceLayoutItemsV1($rpc)
     {
@@ -878,11 +881,11 @@ class AtLeisure extends Import
 
     /**
      * Private function __generate_ReferenceLayoutItemsV1
-     * 
+     *
      * calls ReferenceLayoutItemsV1 and creates a txt file to import into out database
-     * 
+     *
      * @param	string		The name of the RPC call
-     * @return 	void 
+     * @return 	void
      */
     private function _getReferenceLayoutDetailsV1($rpc)
     {
