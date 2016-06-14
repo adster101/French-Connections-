@@ -368,15 +368,28 @@ class PropertyControllerImages extends JControllerForm
 
     if (!$this->status->gallery)
     {
-      
+
       $this->setMessage(JText::_('COM_REALESTATE_PLEASE_UPLOAD_AT_LEAST_ONE_IMAGE'), 'error');
-      
+
       $this->setRedirect(
               JRoute::_(
                       'index.php?option=' . $this->option . '&task=images.manage&realestate_property_id=' . (int) $property_id, false
               )
       );
-      
+
+      return false;
+    }
+
+    if (!$this->status->complete)
+    {
+      $this->setMessage(JText::_('COM_REALESTATE_PLEASE_COMPLETE_ALL_FIELDS'), 'error');
+
+      $this->setRedirect(
+              JRoute::_(
+                      'index.php?option=' . $this->option . '&task=images.manage&realestate_property_id=' . (int) $property_id, false
+              )
+      );
+
       return false;
     }
 

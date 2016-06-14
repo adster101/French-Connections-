@@ -38,8 +38,8 @@ class plgSystemDisable_mootools extends JPlugin {
           $relativePath = trim(str_replace($uri->getPath(), '', JUri::root()), '/');
           $relativeScript = trim(str_replace($uri->getPath(), '', $url), '/');
           $relativeUrl = str_replace($relativePath, '', $url);
-          
-          if (strpos($url, 'html5fallback') === false) 
+
+          if (strpos($url, 'html5fallback') === false)
 					{
 						$headers['scripts'][$url] = $type;
 					}
@@ -51,7 +51,7 @@ class plgSystemDisable_mootools extends JPlugin {
         }
 
 
-        
+
         //	set the new head data
         $doc->setHeadData($headers);
         //JHTML::_('behavior.preventmootools');

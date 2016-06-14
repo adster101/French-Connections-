@@ -36,7 +36,7 @@ class RealEstateControllerImages extends PropertyControllerImages {
 
         $this->folder = JPATH_SITE . '/images/property/' . $this->property_id . '/';
 
-        // Get the version id 
+        // Get the version id
         $this->id = $input->get('id', '', 'int');
 
         // Get the review state for the property
@@ -50,13 +50,13 @@ class RealEstateControllerImages extends PropertyControllerImages {
     }
 
     /**
-     * Checks whether the owner is allowed to edit this property version via the PropertyHelper class 
-     * 
+     * Checks whether the owner is allowed to edit this property version via the PropertyHelper class
+     *
      * @param type $data
      * @param type $key
      * @return type boolean
      */
-    public function allowEdit($data = array()) {
+     protected function allowEdit($data = array(), $key = 'id') {
         // Get the property id we're trying to edit
         $id = $data['realestate_property_id'];
 
@@ -80,7 +80,7 @@ class RealEstateControllerImages extends PropertyControllerImages {
 
         // Check that this user is authorised to 'edit' this property
         if (!$this->allowEdit($data)) {
-            
+
         }
 
         if (!$model->delete($id)) {
@@ -185,7 +185,7 @@ class RealEstateControllerImages extends PropertyControllerImages {
         // If we are happy to save and have something to save
         // Also, need to amend the save method so that it triggers a new version
         if (!$model->save($validData)) {
-            
+
         }
 
         $this->setRedirect(

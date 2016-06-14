@@ -186,7 +186,7 @@ class RentalModelImage extends JModelAdmin
 
     /**
      * Save method to save an newly upload image file, taking into account a new version if necessary.
-     * 
+     *
      * @param type $data
      */
     public function save($data)
@@ -249,7 +249,7 @@ class RentalModelImage extends JModelAdmin
 
     /**
      * Given a version ID gets the max ordering for a given unit
-     * 
+     *
      * @param type $version_id
      * @return boolean
      */
@@ -323,7 +323,7 @@ class RentalModelImage extends JModelAdmin
             $height = $imgObj->getHeight();
 
             // If the width is greater than the height just create it
-            if (($width > $height) && $width > $max_width)
+            if (($width > $height) && $width >= $max_width)
             {
 
                 // This image is roughly landscape orientated with a width greater than max width allowed
@@ -395,7 +395,7 @@ class RentalModelImage extends JModelAdmin
                     $profile->tofile($file_path);
                 }
             }
-            else if ((($width > $height) && $width < $max_width) || (($width < $height) && $height < $max_height))
+            else if ((($width > $height) && $width <= $max_width) || (($width < $height) && $height <= $max_height))
             {
 
                 // This image is landscape orientated with a width less than 500px
@@ -429,12 +429,12 @@ class RentalModelImage extends JModelAdmin
 
                 // Put it out to a file
                 $profile->tofile($file_path);
-                
+
             }
         }
         catch (Exception $e)
         {
-            
+
         }
     }
 

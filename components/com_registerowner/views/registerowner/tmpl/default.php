@@ -7,7 +7,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
-JHtml::_('behavior.formvalidator');
+//JHtml::_('behavior.formvalidator');
 JHtml::_('bootstrap.tooltip');
 
 
@@ -37,7 +37,7 @@ JHtml::_('bootstrap.tooltip');
       <div class="col-md-4 col-lg-4 col-xs-12 col-sm-8">
         <?php echo $this->form->getInput('surname'); ?>
       </div>
-    </div>    
+    </div>
 
     <div class="form-group">
       <?php echo $this->form->getLabel('email1'); ?>
@@ -55,7 +55,7 @@ JHtml::_('bootstrap.tooltip');
       <?php echo $this->form->getLabel('phone_1'); ?>
       <div class="col-md-4 col-lg-3 col-xs-12 col-sm-8">
         <?php echo $this->form->getInput('dialling_code'); ?>
-      </div> 
+      </div>
       <div class="col-md-4 col-lg-5 col-xs-12 col-sm-8">
         <?php echo $this->form->getInput('phone_1'); ?>
       </div>
