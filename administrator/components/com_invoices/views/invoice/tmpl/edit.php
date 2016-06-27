@@ -91,14 +91,12 @@ $userId = $user->get('id');
               <td><?php echo $this->escape($item->line_value) ?></td>
               <td><?php echo number_format($this->escape($item->line_value * $item->quantity),2) ?></td>
             </tr>
-
           <?php endforeach; ?>
-
           <tr>
             <td colspan="3">
               <strong>VAT</strong>
             </td>
-            <td><?php echo $this->escape($item->vat) ?></td>
+            <td><?php echo $this->escape($item->vat); ?></td>
           </tr>
           <tr>
             <td colspan="3">&nbsp;</td>
@@ -122,6 +120,3 @@ $userId = $user->get('id');
     <input type="hidden" name="task" value="" />
 
 </form>
-
-
-
