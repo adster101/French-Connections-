@@ -160,7 +160,7 @@ RewriteRule (.*) - [F]
 # Update Your Joomla! Directory (just / for root).
 ##
 
-RewriteBase /
+#RewriteBase /
 #
 
 

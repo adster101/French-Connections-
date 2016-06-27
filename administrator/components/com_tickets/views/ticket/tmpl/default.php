@@ -36,7 +36,7 @@ $userId = $user->get('id');
             </div>
           </div>
         <?php endforeach; ?>
-      </fieldset>     
+      </fieldset>
   </div>
   <div class="span4">
     <h3 class="page-header">Notes</h3>
@@ -57,15 +57,6 @@ $userId = $user->get('id');
 </form>
 </div>
 
-<script type="text/javascript">
-  Joomla.submitbutton = function(task)
-  {
-    if (task == 'ticket.cancel' || document.formvalidator.isValid(document.id('adminForm')))
-    {
-      Joomla.submitform(task, document.getElementById('adminForm'));
-    }
-  }
-</script>
+
 
 </div>
-
