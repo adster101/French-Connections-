@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
   <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
-    <field 
+    <field
       name="guest_forename"
       type="text"
       id="first-name"
@@ -16,8 +16,8 @@
       message="COM_ACCOMMODATION_ENQUIRY_FIRST_NAME_VALIDATION_MESSAGE"
       validate="name"
     />
-    
-    <field 
+
+    <field
       name="guest_surname"
       type="text"
       id="last-name"
@@ -31,9 +31,9 @@
       labelclass="control-label"
       message="COM_ACCOMMODATION_ENQUIRY_LAST_NAME_VALIDATION_MESSAGE"
       validate="name"
-    />   
-    
-    <field 
+    />
+
+    <field
       name="guest_email"
       type="email"
       maxlength="75"
@@ -47,8 +47,8 @@
       message="COM_ACCOMMODATION_ENQUIRY_EMAIL_VALIDATION_MESSAGE"
       validate="email"
     />
-    
-    <field 
+
+    <field
       name="guest_phone"
       type="tel"
       id="guest-telephone"
@@ -62,22 +62,22 @@
       validate="telephone"
       labelclass="control-label"
     />
-      
-    <field 
+
+    <field
       name="message"
       type="textarea"
       id="review-text"
       class="validate-message form-control "
       description="COM_ACCOMMODATION_ENQUIRY_MESSAGE_DESC"
       label="COM_ACCOMMODATION_ENQUIRY_MESSAGE_LABEL"
-      hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"      
+      hint="COM_ACCOMMODATION_ENQUIRY_MESSAGE_PLACEHOLDER"
       filter="string"
       validate="message"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
-    
-    <field 
+
+    <field
       name="start_date"
       type="text"
       id="start_date"
@@ -90,8 +90,8 @@
       message="COM_ACCOMMODATION_ENQUIRY_START_DATE_VALIDATION_MESSAGE"
       labelclass="control-label"
     />
-    
-    <field 
+
+    <field
       name="end_date"
       type="text"
       id="end_date"
@@ -103,9 +103,9 @@
       message="COM_ACCOMMODATION_ENQUIRY_END_DATE_VALIDATION_MESSAGE"
       hint="COM_ACCOMMODATION_ENQUIRY_END_DATE_PLACEHOLDER"
       labelclass="control-label"
-    />  
- 
-    <field 
+    />
+
+    <field
       name="adults"
       type="integer"
       id="enquiry-adults"
@@ -121,8 +121,8 @@
       step="1">
       <option value=""></option>
     </field>
-     
-    <field 
+
+    <field
       name="children"
       type="integer"
       id="enquiry-children"
@@ -139,8 +139,12 @@
       default="">
       <option value=""></option>
     </field>
-        
+    <field
+      name="next"
+      type="hidden"
+      filter="string"
+    />
   </fieldset>
-  
-  
+
+
 </form>

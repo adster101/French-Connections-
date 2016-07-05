@@ -32,26 +32,45 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
+jimport('joomla.filesystem.folder');
 
 require_once(__DIR__ . '/leisure/codebase/classes/belvilla_jsonrpc_curl_gz.class.php');
 
 class OliversTravels extends Import
 {
 
-    public $bathroomnumbers = array(1031, 1042);
-    public $bedroomnumbers = array(1028, 1030, 1031, 1032, 1033, 1035, 1038, 1040);
     protected $property_types = array(160 => 1, 150 => 4, 60 => 5, 20 => 6, 30 => 7, 40 => 9, 70 => 10, 130 => 11, 100 => 11, 90 => 12, 140 => 9, 50 => 20);
-    protected $kitchen_facilities = array('Fridge freezer' => 486, 'Aga' => 737, 'Oven' => 466, 'Ceramic hob' => 464, 'Tumble dryer' => 109, 'Dishwasher' => 103, 'Washing machine' => 110, 'Microwave' => 108);
-    protected $external_facilities = array('Roof terrace' => 329, 'BBQ' => 474, 'Garden' => 98, 'Tennis court' => 75);
-    protected $internal_facilities = array();
+    protected $facilities = array(
+      'Fridge freezer' => 486,
+      'Aga' => 737,
+      'Oven' => 466,
+      'Ceramic hob' => 464,
+      'Tumble dryer' => 109,
+      'Dishwasher' => 103,
+      'Washing machine' => 110,
+      'Microwave' => 108,
+      'Roof terrace' => 329,
+      'BBQ' => 474,
+      'Garden' => 98,
+      'Tennis court on site' => 75,
+      'Private pool' => 100,
+      'Shared pool' => 101,
+      'Wi-Fi/Internet access' => 539,
+      'Air conditioning' => 74,
+      'Pets allowed' => 21,
+      'Caretaker/owner lives on site' => 89,
+      'Cable TV' => 3123,
+      'DVD' => 80,
+      'Indoor games' => 533,
+      'Working fireplace' => 95,
+      'Wheelchair Access' => 115);
+
     public $expiry_date;
-    protected $location_types = array(360 => 133, 370 => 753, 380 => 135, 385 => 131);
     public $date;
     private $property_version_detail;
     private $unit_version_detail;
 
     public $api_key = 'f078696cef4c8976971f13b0bbf0e79d086ac8c6';
-
 
     /**
      * Entry point for the script
@@ -65,6 +84,12 @@ class OliversTravels extends Import
       // Add the classification table so we can get the location details
       JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
       JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
+
+      // Add the realestate property models
+      JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
+      $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'RentalTable');
+
+      define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
       // Set a reasonable expiry date...
       $expiry_date = JFactory::getDate('+7 day')->calendar('Y-m-d');
@@ -97,7 +122,6 @@ class OliversTravels extends Import
         $propertyObj = $property_data_json->data[0];
 
 
-
         try
         {
 
@@ -114,6 +138,7 @@ class OliversTravels extends Import
 
           $property_version_table = JTable::getInstance('PropertyVersions', 'RentalTable');
           $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
+
 
           // Reset the data array
           $data = array();
@@ -188,6 +213,7 @@ class OliversTravels extends Import
             $data['property_version']['use_invoice_details'] = 1;
             $data['property_version']['location_details'] = $propertyObj->descriptions->location_description;
             $data['property_version']['getting_there'] = $propertyObj->descriptions->getting_there;
+            $data['property_version']['booking_url'] = 'http://scripts.affiliatefuture.com/AFClick.asp?affiliateID=340247&merchantID=6436&programmeID=20995&mediaID=0&tracking=&url=';
 
             // TO DO - See about adding nearby activities and access options if possible
             // Likely append text field to description. Also, add languages spoken (e.g. English)
@@ -231,22 +257,27 @@ class OliversTravels extends Import
             // Add the description, if there is one
             if (!empty($propertyObj->descriptions->dwelling_description))
             {
-              $data['unit_version']['description'] = '<p>' . strip_tags($propertyObj->descriptions->dwelling_description) . '</p>';
+              $data['unit_version']['description'] = '<p>' . strip_tags($propertyObj->descriptions->dwelling_description, '<p><br><b>') . '</p>';
             }
 
             if (!empty($propertyObj->descriptions->capacity_info))
             {
-              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->capacity_info) . '</p>';
+              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->capacity_info, '<p><br><b>') . '</p>';
             }
 
             if (!empty($propertyObj->descriptions->interior_grounds))
             {
-              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->interior_grounds) . '</p>';
+              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->interior_grounds, '<p><br><b>') . '</p>';
             }
 
             if (!empty($propertyObj->descriptions->terms_and_conditions))
             {
-              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->terms_and_conditions) . '</p>';
+              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->terms_and_conditions, '<p><br><b>') . '</p>';
+            }
+
+            if (!empty($propertyObj->descriptions->special_offers))
+            {
+              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->special_offers, '<p><br><b>') . '</p>';
             }
 
             // if (!empty($propertyObj->descriptions->catering_services))
@@ -271,17 +302,42 @@ class OliversTravels extends Import
 
             $this->save($unit_version_table, $data['unit_version']);
 
-            $this->out('Working through images...');
-
             // Work out the facilities and save them against this unit and version
-            //$facilities = $this->_getFacilities($propertyObj, $unit_version_table->id, $unit_table->id);
+            $facilities = $this->_getFacilities($propertyObj->amenities);
 
-            //$this->_saveFacilities($facilities, $unit_version_table->id, $unit_table->id);
+            if (!empty($facilities))
+            {
+              $this->_saveFacilities($facilities, $unit_version_table->id, $unit_table->id);
+            }
+
+            $this->out('Working through images...');
 
             if (!$this->unit_version_detail)
             {
-              // Woot
-              $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $unit_table->id);
+              $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
+            }
+
+            $this->out('Updating tariff info');
+
+            $tariffs = $this->getTariffs($propertyObj->rates);
+
+            $unit_id = $unit_table->id;
+
+            // Set the pk to unit_id as we want to delete all tariffs for this property
+            $tariffsTable->set('_tbl_keys', array('unit_id'));
+
+            $tariffsTable->delete($unit_id);
+
+            // Reset the table pk to id so we can insert new tariffs
+            $tariffsTable->set('_tbl_keys', array('id'));
+
+            foreach ($tariffs as $tariff)
+            {
+
+              $tariff['id'] = '';
+              $tariff['unit_id'] = $unit_id;
+
+              $tariffsTable->save($tariff);
             }
 
             // Done so commit all the inserts and what have you...
@@ -299,6 +355,30 @@ class OliversTravels extends Import
             //$this->email($e);
           }
       }
+    }
+
+    public function getTariffs($tariffs = array())
+    {
+      $tariffsArr = array();
+
+
+
+      foreach($tariffs as $key => $tariff)
+      {
+
+        $tariffsArr[$key]['start_date'] = $tariff->on_sale_from;
+
+        if ($key > 0)
+        {
+          $tariffsArr[$key-1]['end_date'] = $tariff->on_sale_from;
+        } else {
+          $tariffsArr[$key]['end_date'] = '';
+
+        }
+        $tariffsArr[$key]['tariff'] = $tariff->weekly_price[0]->price / 100;
+
+      }
+      return $tariffsArr;
     }
 
     // Wrapper function to get the feed data via CURL
@@ -319,12 +399,18 @@ class OliversTravels extends Import
       return $result;
     }
 
-    private function _getFacilities($propertyObj, $layout = array(), $unit_version_id = '', $unit_id = '')
+    private function _getFacilities($amenities = array())
     {
 
         $facilities = array();
 
-
+        foreach($amenities as $key => $value)
+        {
+          if (array_key_exists($value, $this->facilities))
+          {
+            $facilities[] = $this->facilities[$value];
+          }
+        }
 
         return $facilities;
     }
@@ -392,26 +478,92 @@ class OliversTravels extends Import
   * Should we generate thumbs and gallery images for each? Probably.
   *
   */
-  public function getImages($db, $images, $unit_version_id, $unit_id)
+  public function getImages($db, $images, $unit_version_id, $property_id, $unit_id)
   {
     $i = 1;
+
+    $model = JModelLegacy::getInstance('Image', 'RentalModel');
+
     foreach ($images as $image)
     {
 
-      $url = str_replace('http://', '', $image->url);
+      // Get the last two parts and implode it to make the name
+      $image_name = $property_id . '-' . $i . '.jpg';
 
-      if (!empty($url))
+      // Check the property directory exists...
+      if (!file_exists(JPATH_SITE . '/images/property/' . $unit_id))
       {
-          $data = array($unit_version_id, $unit_id, $db->quote($url), $db->quote($url), $db->quote(''), $i);
-
-          // Save the image data out to the database...
-          $this->createImage($db, $data);
+        JFolder::create(JPATH_SITE . '/images/property/' . $unit_id);
       }
+
+      // The ultimate file path where we want to store the image
+      $filepath = JPATH_SITE . '/images/property/' . $unit_id . '/' . $image_name;
+
+      $uri = new JURI($image->url);
+      $path = str_replace(' ', '%20', $uri->getPath());
+
+      $uri->setPath($path);
+      $uri->setQuery(false);
+
+
+      if (!file_exists($filepath))
+      {
+        // Copy the image url directly to where we want it
+        copy($uri->tostring(), $filepath);
+
+        // Generate the profiles
+        $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'gallery', 578, 435);
+        $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumbs', 100, 100);
+        $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumb', 210, 120);
+      }
+
+      $data = array($unit_version_id, $unit_id, $db->quote($image_name), $i);
+
+      // Save the image data out to the database...
+      $this->createImage($db, $data);
+
 
       $i++;
 
     }
   }
+
+  /**
+   * TO DO - Make re-usable
+   *
+   * @param type $db
+   * @param type $data
+   * @return type
+   * @throws Exception
+   */
+  public function createImage($db, $data)
+  {
+    $query = $db->getQuery(true);
+
+    $query->insert('#__property_images_library')
+            ->columns(
+                    array(
+                        $db->quoteName('version_id'), $db->quoteName('unit_id'),
+                        $db->quoteName('image_file_name'), $db->quoteName('ordering')
+                    )
+            )
+            ->values(implode(',', $data));
+
+    $db->setQuery($query);
+
+    try
+    {
+      $db->execute();
+    }
+    catch (RuntimeException $e)
+    {
+      throw new Exception($e->getMessage());
+    }
+
+    return $db->insertid();
+  }
+
+
 }
 
 JApplicationCli::getInstance('OliversTravels')->execute();

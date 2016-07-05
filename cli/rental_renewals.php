@@ -382,6 +382,7 @@ class Renewals extends JApplicationCli
     // Could just as easily be done with comma separated list as a param on the rental component
     $users_to_ignore = array();
     $users_to_ignore[] = JUser::getInstance('atleisure')->id;
+    $users_to_ignore[] = JUser::getInstance('oliverstravels')->id;
 
     $db = JFactory::getDBO();
     /**

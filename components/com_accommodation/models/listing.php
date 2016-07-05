@@ -81,8 +81,6 @@ class AccommodationModelListing extends JModelForm
         // Get the form.
         $form = $this->loadForm('com_accommodation.enquiry', 'enquiry', array('control' => 'jform', 'load_data' => $loadData));
 
-
-
         if (empty($form))
         {
             return false;
@@ -207,6 +205,7 @@ class AccommodationModelListing extends JModelForm
         c.city as city_id,
         c.lwl,
         c.languages_spoken,
+        c.booking_url,
         k.title as changeover_day,
         d.toilets,
         (bathrooms) as bathrooms,
@@ -944,7 +943,7 @@ class AccommodationModelListing extends JModelForm
         require_once(JPATH_BASE . '/cli/leisure/codebase/classes/belvilla_jsonrpc_curl_gz.class.php');
 
         // Get instance of the curl class
-        $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+        $rpc = new belvilla_jsonrpcCall('glynis', 'ka8s6db3');
 
         $affiliate_property_id = $this->getAffiliateCode($id);
 
@@ -954,7 +953,7 @@ class AccommodationModelListing extends JModelForm
         // First up we have to check the price for this period...
         $check_availability_params = array(
             "WebpartnerCode" => "glynis",
-            "WebpartnerPassword" => "gironde",
+            "WebpartnerPassword" => "ka8s6db3",
             "HouseCode" => "$affiliate_property_id",
             "ArrivalDate" => "$arrival_date",
             "DepartureDate" => "$departure_date",
@@ -963,7 +962,7 @@ class AccommodationModelListing extends JModelForm
 
         $booking_params = array(
             "WebpartnerCode" => "glynis",
-            "WebpartnerPassword" => "gironde",
+            "WebpartnerPassword" => "ka8s6db3",
             "BookingOrOption" => "Booking",
             "HouseCode" => "$affiliate_property_id",
             "ArrivalDate" => "$arrival_date",
@@ -1041,7 +1040,7 @@ class AccommodationModelListing extends JModelForm
         require_once(JPATH_BASE . '/cli/leisure/codebase/classes/belvilla_jsonrpc_curl_gz.class.php');
 
         // Get instance of the curl class
-        $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+        $rpc = new belvilla_jsonrpcCall('glynis', 'ka8s6db3');
 
         $affiliate_property_id = $this->getAffiliateCode($id);
 
@@ -1051,7 +1050,7 @@ class AccommodationModelListing extends JModelForm
         // First up we have to check the price for this period...
         $check_availability_params = array(
             "WebpartnerCode" => "glynis",
-            "WebpartnerPassword" => "gironde",
+            "WebpartnerPassword" => "ka8s6db3",
             "HouseCode" => "$affiliate_property_id",
             "ArrivalDate" => "$arrival_date",
             "DepartureDate" => "$departure_date",
@@ -1421,11 +1420,22 @@ class AccommodationModelListing extends JModelForm
                 $form->setFieldAttribute('start_date', 'type', 'hidden');
                 $form->setFieldAttribute('end_date', 'type', 'hidden');
                 $form->setFieldAttribute('guest_phone', 'required', 'true');
-                $payment = JForm::getInstance('tos', 'tos');
 
+                $payment = JForm::getInstance('tos', 'tos');
                 $form->load($payment->getXml(), true);
             }
         }
+        elseif ($owner == 'oliverstravels')
+        {
+
+          $form->removeField('guest_phone');
+          $form->removeField('message');
+          $form->removeField('adults');
+          $form->removeField('children');
+          $form->removeField('start_date');
+          $form->removeField('end_date');
+        }
+
 
         parent::preprocessForm($form, $data, $group);
     }

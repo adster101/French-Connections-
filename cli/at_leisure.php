@@ -63,7 +63,7 @@ class AtLeisure extends Import
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
-        $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+        $rpc = new belvilla_jsonrpcCall('glynis', 'ka8s6db3');
 
         // Set a reasonable expiry date...
         $expiry_date = JFactory::getDate('+1 day')->calendar('Y-m-d');
