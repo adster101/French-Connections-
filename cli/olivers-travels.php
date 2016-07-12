@@ -64,6 +64,7 @@ class OliversTravels extends Import
       'Indoor games' => 533,
       'Working fireplace' => 95,
       'Wheelchair Access' => 115);
+    protected $region_maps = array();
 
     public $expiry_date;
     public $date;
@@ -121,7 +122,6 @@ class OliversTravels extends Import
 
         $propertyObj = $property_data_json->data[0];
 
-
         try
         {
 
@@ -131,6 +131,8 @@ class OliversTravels extends Import
             continue;
           }
 
+
+
           $this->out('Processing accommodation id ' . $propertyObj->id);
 
           $property_table = JTable::getInstance('Property', 'RentalTable');
@@ -138,6 +140,8 @@ class OliversTravels extends Import
 
           $property_version_table = JTable::getInstance('PropertyVersions', 'RentalTable');
           $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
+
+          $propertyURL = $this->getURL($propertyObj->urls[0]->url);
 
 
           // Reset the data array
@@ -191,6 +195,7 @@ class OliversTravels extends Import
             // Get the nearest city
             $city_id = $this->nearestcity($propertyObj->address->latitude, $propertyObj->address->longitude);
 
+
             // Get the location details for this property
             $classification = JTable::getInstance('Classification', 'ClassificationTable');
 
@@ -213,7 +218,7 @@ class OliversTravels extends Import
             $data['property_version']['use_invoice_details'] = 1;
             $data['property_version']['location_details'] = $propertyObj->descriptions->location_description;
             $data['property_version']['getting_there'] = $propertyObj->descriptions->getting_there;
-            $data['property_version']['booking_url'] = 'http://scripts.affiliatefuture.com/AFClick.asp?affiliateID=340247&merchantID=6436&programmeID=20995&mediaID=0&tracking=&url=';
+            $data['property_version']['booking_url'] = 'http://scripts.affiliatefuture.com/AFClick.asp?affiliateID=340247&merchantID=6436&programmeID=20995&mediaID=0&tracking=&url=' . $propertyURL;
 
             // TO DO - See about adding nearby activities and access options if possible
             // Likely append text field to description. Also, add languages spoken (e.g. English)
@@ -563,7 +568,18 @@ class OliversTravels extends Import
     return $db->insertid();
   }
 
+  public function getURL($url = '')
+  {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_Setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    $response = curl_exec($ch);
 
+    $info = curl_getinfo($ch);
+    return $info['url'];
+  }
 }
 
 JApplicationCli::getInstance('OliversTravels')->execute();

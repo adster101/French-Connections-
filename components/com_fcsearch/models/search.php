@@ -298,7 +298,7 @@ class FcSearchModelSearch extends JModelList
                 j.path,
                 left(d.description,500) as description,
                 j.title as location_title,
-                (single_bedrooms + double_bedrooms + triple_bedrooms + quad_bedrooms + twin_bedrooms) as bedrooms,
+                bedrooms,
                 (select count(unit_id) from qitz3_reviews where unit_id = d.unit_id ) as reviews,
                 (select title from qitz3_special_offers k where k.published = 1 AND k.start_date <= ' . $db->quote($this->date) . 'AND k.end_date >= ' . $db->quote($this->date) . ' and k.unit_id = d.unit_id limit 0,1) as offer,
                 h.title as accommodation_type,
