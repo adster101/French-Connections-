@@ -5,44 +5,46 @@ Contains styles that apply at the global level, or can be applied to any section
 
 **/
 
+
+
 // FC styles
 @media print {
   .print-button-bar {
     display:none;
   }
 
-  a[href]:after { 
-    content: none !important;  
+  a[href]:after {
+    content: none !important;
   }
 }
 
-#stlivechat21 a { 
-  z-index: 999; 
-  position: fixed; 
-  border-radius: 3px 3px 0px 0px; 
-  -moz-border-radius: 0 0 3px 3px; 
-  font-size: 14px; 
-  right: -122px; 
+#stlivechat21 a {
+  z-index: 999;
+  position: fixed;
+  border-radius: 3px 3px 0px 0px;
+  -moz-border-radius: 0 0 3px 3px;
+  font-size: 14px;
+  right: -122px;
   top: 50%;
-  text-decoration: none; 
-  -webkit-transform: rotate(-90deg); 
-  -moz-transform: rotate(-90deg); 
-  -o-transform: rotate(-90deg); 
-  -ms-transform: rotate(-90deg); 
-  transform: rotate(-90deg); 
-  -webkit-transform-origin: top left; 
-  -moz-transform-origin: top left; 
-  -o-transform-origin: top left; 
-  -ms-transform-origin: top left; 
-  transform-origin: top left; 
-  box-shadow: -3px -3px 3px rgba(0,0,0,0.30);  
-  background-color: @brand-primary; 
+  text-decoration: none;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  -webkit-transform-origin: top left;
+  -moz-transform-origin: top left;
+  -o-transform-origin: top left;
+  -ms-transform-origin: top left;
+  transform-origin: top left;
+  box-shadow: -3px -3px 3px rgba(0,0,0,0.30);
+  background-color: @brand-primary;
   padding:10px 25px 10px;
 }
 
 #stlivechat21 a {
   color:white;
-} 
+}
 
 .container {
   .container-fixed();
@@ -94,7 +96,7 @@ Contains styles that apply at the global level, or can be applied to any section
 }
 
 
-  // Offer 'ribbon'  
+  // Offer 'ribbon'
   span.offer
     {
       position: absolute;
@@ -105,7 +107,7 @@ Contains styles that apply at the global level, or can be applied to any section
       background-color: fade(#cd3e3f, 60%);
       #gradient > .vertical(lighten(#cd3e3f, 5% ),#cd3e3f);
       font-weight:600;
-    } 
+    }
 
     span.offer:after
     {
@@ -129,26 +131,26 @@ Contains styles that apply at the global level, or can be applied to any section
         }
       }
   h1.page-header {
-    
+
     font-size:@font-size-h5;
     margin-top:20px;
-    
+
     @media (max-width: @screen-phone) {
       margin-top:0;
     }
 
     @media (min-width: @screen-tablet) {
-      font-size:@font-size-h4; 
+      font-size:@font-size-h4;
     }
 
     @media (min-width: @screen-desktop) {
-      font-size:@font-size-h3; 
+      font-size:@font-size-h3;
     }
 
     @media (min-width: @screen-lg-desktop) {
-      font-size:@font-size-h2; 
+      font-size:@font-size-h2;
     }
-  }  
+  }
 }
 
 .breadcrumb {
@@ -159,7 +161,7 @@ Contains styles that apply at the global level, or can be applied to any section
   padding-left:0;
   margin:0px 0px 20px;
   font-size: 85%;
-  
+
   @media (min-width: @screen-md-min) {
     font-size: 100%;
   }
@@ -195,10 +197,10 @@ h1, h2, h3, h4, h5, h6 {
   text-transform:uppercase;
 }
 
-// Additional well styles 
+// Additional well styles
 .well {
-  
-  // Remove the border radius 
+
+  // Remove the border radius
   border-radius:0;
 
   // Do these need top margins?
