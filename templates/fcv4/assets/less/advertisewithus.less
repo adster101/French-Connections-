@@ -11,8 +11,6 @@ Advertise with us pages including landind specific styles.
   }
 }
 
-
-
 .jumbotron.advertise-with-us {
   text-align:center;
   border-radius:0;
@@ -31,14 +29,24 @@ Advertise with us pages including landind specific styles.
 .item-page-welcome-home {
 
   h1,h2,h3,h4,h5,h6 {
-    font-family: sans-serif;
+    font-family: Helvetica, sans-serif;
     text-transform: none;
     font-weight:bold;
+  }
 
+  .btn-default {
+    background: #583297;
+    color:@white;
+    border:none;
+    font-weight: bold;
   }
 
   .light-blue {
     color: #8cc6ec;
+  }
+
+  .lime-green {
+    color: #d9d23b;
   }
 
   .light-blue-bg {
@@ -77,10 +85,10 @@ Advertise with us pages including landind specific styles.
     font-weight: bold;
     margin-top: 0;
     margin-bottom: 24px;
-    font-family: sans-serif;
+    font-family: Helvetica, sans-serif;;
     padding:12px 6px;
     @media (max-width: @screen-tablet) {
-      font-size:18px;
+      font-size:16px;
     }
 
   }
@@ -93,18 +101,23 @@ Advertise with us pages including landind specific styles.
       font-size:52px;
       text-transform: none;
       color: #583297;
+      @media (max-width: @screen-tablet) {
+        font-size:24px;
+      }
     }
 
     .btn-default {
       background: #583297;
       color:@white;
       border:none;
+      font-weight: bold;
     }
+
   }
   .panel-pricing {
-
-    background-color:583297;
-    border-radius: 6px
+    border-top:none;
+    background-color: #583297;
+    border-radius: 6px;
     color:white;
     .panel-variant(none; @panel-default-text; white; none);
     margin: @line-height-computed;
@@ -112,13 +125,27 @@ Advertise with us pages including landind specific styles.
 
     @media (min-width: @screen-tablet) {
       //margin: @line-height-computed * 2 @line-height-computed * 4 ;
-      padding:@line-height-computed * 2;
+      //padding:@line-height-computed * 2;
+    }
 
+    .glyphicon-ok::before {
+      float:right;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: @line-height-computed * 2;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 9;
     }
 
     > .panel-body {
       font-size:16px;
     }
+
     > .panel-heading {
       background-color:transparent;
       color:white;
@@ -126,10 +153,9 @@ Advertise with us pages including landind specific styles.
 
       > p > span {
         font-size: 18px;
-        font-family: sans-serif;
+        font-family: Helvetica, sans-serif;;
 
       }
-
     }
 
     .btn-primary {
@@ -137,10 +163,58 @@ Advertise with us pages including landind specific styles.
       color:@white;
       border:none;
       font-weight:bold;
-      font-family: sans-serif;
+      font-family: Helvetica, sans-serif;;
+    }
+
+    .btn-big-round-lime-green {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 48px;
+      line-height: 48px;
+      padding-top: 24px;
+      color: #583297;
+      border-radius: 50%;
+      font-weight:bold;
+      width:200px;
+      height:200px;
+      box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
+      background-color: #d9d23b;
+
+      @media (min-width: @screen-md-min) {
+        font-size: 62px;
+        line-height: 62px;
+        width:250px;
+        height:250px;
+      }
+
+      @media (min-width: @screen-lg-min) {
+        font-size: 72px;
+        line-height: 72px;
+        width:300px;
+        height:300px;
+        padding-top:36px;
+      }
+    }
+
+  .btn-medium-round-lime-green {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 32px;
+    line-height: 32px;
+    padding-top: 72px;
+    color: #583297;
+    border-radius: 50%;
+    font-weight:bold;
+    width:200px;
+    height:200px;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
+    background-color: #d9d23b;
 
     }
-  }
+}
+
   blockquote {
     border:none;
     margin-bottom:0;
