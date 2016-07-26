@@ -26,12 +26,16 @@ class RentalViewListings extends JViewLegacy
     $user = JFactory::getUser();
     $userID = $user->id;
 
-    // Get data from the model  
-    $this->pagination = $this->get('Pagination');
+    // Get data from the model
     $this->items = $this->get('Items');
     $this->state = $this->get('State');
     $this->filterForm = $this->get('FilterForm');
     $this->activeFilters = $this->get('ActiveFilters');
+
+    // Only do the pagination bit if there are items (e.g. a filter has been applied)
+    if ($this->items) {
+      $this->pagination = $this->get('Pagination');
+    }
 
     // Check for errors.
     if (count($errors = $this->get('Errors')))
@@ -102,8 +106,8 @@ class RentalViewListings extends JViewLegacy
       // Add a back button.
       $bar->appendButton('Link', 'download', 'COM_RENTAL_DOWNLOAD_CSV' , 'index.php?option=com_rental&format=raw');
     }
-    
-    if ($canDo->get('rental.listing.snooze24')) 
+
+    if ($canDo->get('rental.listing.snooze24'))
     {
       JToolbarHelper::custom('listing.snooze24', 'clock', '', 'COM_RENTAL_SNOOZE_24', true );
     }

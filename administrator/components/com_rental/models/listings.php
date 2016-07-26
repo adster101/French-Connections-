@@ -108,12 +108,66 @@ class RentalModelListings extends JModelList
   }
 
   /**
+	 * Method to get an array of data items.
+	 *
+	 * @return  mixed  An array of data items on success, false on failure.
+	 *
+	 * @since   12.2
+	 */
+	public function getItems()
+	{
+
+    if (
+      empty($this->getState('filter.search')) &&
+      empty($this->getState('filter.published')) &&
+      empty($this->getState('filter.review')) &&
+      empty($this->getState('filter.snoozed')) &&
+      empty($this->getState('filter.start_date')) &&
+      empty($this->getState('filter.end_date'))
+    )
+    {
+      return false;
+    }
+
+		// Get a storage key.
+		$store = $this->getStoreId();
+
+		// Try to load the data from internal storage.
+		if (isset($this->cache[$store]))
+		{
+			return $this->cache[$store];
+		}
+
+		// Load the list items.
+		$query = $this->_getListQuery();
+
+		try
+		{
+			$items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
+		}
+		catch (RuntimeException $e)
+		{
+			$this->setError($e->getMessage());
+
+			return false;
+		}
+
+		// Add the items to the internal cache.
+		$this->cache[$store] = $items;
+
+		return $this->cache[$store];
+	}
+
+  /**
    * Method to build an SQL query to load the list data.
    *
    * @return	string	An SQL query
    */
   protected function getListQuery()
   {
+
+
+
     // Get the user ID
     $user = JFactory::getUser();
     $userId = $user->get('id');
@@ -217,7 +271,7 @@ class RentalModelListings extends JModelList
     {
       // This filter includes any properties with snooze dates between the dates being filtered on.
       // This allows us to show properties that expired outside the dates being filtered on but
-      // have been snoozed to appear between the dated being filtered. We also, exlude properties that 
+      // have been snoozed to appear between the dated being filtered. We also, exlude properties that
       // are no longer expired. That is, they have been renewed since they were snoozed...
       $query->where('((a.' . $db->escape($date_filter) . ' >=' . $db->quote($start_date) . ' and a.'
               . $db->escape($date_filter) . ' <=' . $db->quote($end_date) . ')' .

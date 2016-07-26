@@ -3,7 +3,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 //JHtml::_('bootstrap.tooltip');
-//JHtml::_('behavior.formvalidator');
+JHtml::_('behavior.formvalidator');
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 
@@ -53,8 +53,8 @@ $data = array('progress' => $this->progress, 'status' => $this->status);
                         <?php else: ?>
                             <div class="alert alert-info">
                                 <?php echo JText::_('COM_RENTAL_RENTAL_IMAGE_GALLERY_EMPTY'); ?>
-                            </div> 
-                        <?php endif; ?>    
+                            </div>
+                        <?php endif; ?>
                     </div>
                     <input type="hidden" name="extension" value="<?php echo 'com_rental'; ?>" />
                     <input type="hidden" name="task" value="" />
