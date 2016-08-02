@@ -65,8 +65,7 @@ class JFormFieldInlineCheckbox extends JFormField
 		// Initialize JavaScript field attributes.
 		$onclick = $this->element['onclick'] ? ' onclick="' . (string) $this->element['onclick'] . '"' : '';
 
-		return '<label class="checkbox"><input type="checkbox" name="' . $this->name . '" id="' . $this->id . '"' . ' value="'
+		return '<label><input type="checkbox" name="' . $this->name . '" id="' . $this->id . '"' . ' value="'
 			. htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '"' . $class . $checked . $disabled . $onclick . ' />' . htmlspecialchars($label, ENT_COMPAT, 'UTF-8') . '</label>';
 	}
 }
-

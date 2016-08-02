@@ -86,6 +86,14 @@ $owner = JFactory::getUser($this->item->created_by);
       <button type="submit" class="btn btn-danger btn-lg btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
         <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_SEE_PRICES_AND_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>
       </button>
+      <hr />
+      <div class="row">
+        <div class="col-lg-12 col-sm-12">
+          <div class="checkbox">
+            <?php echo $this->form->getInput('newsletter_yn'); ?>
+          </div>
+        </div>
+      </div>
       <input type="hidden" name="option" value="com_accommodation" />
       <input type="hidden" name="task" value="listing.enquiry" />
       <input type="hidden" name="next" value="<?php echo $this->item->booking_url ?>" />

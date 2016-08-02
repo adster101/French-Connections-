@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
-  <fieldset name="enquiry" addrulepath="/components/com_accommodation/models/rules" label="">
+  <fieldset name="enquiry" addfieldpath="/libraries/frenchconnections/forms/fields" addrulepath="/components/com_accommodation/models/rules" label="">
     <field
       name="guest_forename"
       type="text"
@@ -139,6 +139,18 @@
       default="">
       <option value=""></option>
     </field>
+
+    <field
+      name="newsletter_yn"
+      type="inlinecheckbox"
+      filter="string"
+      value="Y"
+      checked="checked"
+      message="Please confirm that you accept the terms and conditions"
+      label="COM_ACCOMMODATION_ENQUIRY_NEWSLETTER_YN_LABEL">
+    </field>
+
+
     <field
       name="next"
       type="hidden"

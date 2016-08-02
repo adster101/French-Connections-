@@ -1109,7 +1109,12 @@ class AccommodationModelListing extends JModelForm
         $uri = JUri::getInstance();
         $domain = $uri->toString(array('scheme', 'host'));
 
+        // Import libs
+        // Clickatel SMS class
         jimport('clickatell.SendSMS');
+
+
+
         $sms_params = JComponentHelper::getParams('com_rental');
         $banned_emails = explode(',', $params->get('banned_email'));
         $banned_phrases = explode(',', $params->get('banned_text'));
@@ -1292,6 +1297,43 @@ class AccommodationModelListing extends JModelForm
                     return false;
                 }
             }
+
+            // Attempt to add the email to CampaignMonitor if they haven't opted out
+            if ($data['newsletter_yn'] == 'Y')
+            {
+
+              // Require the subscriber class
+              require_once (JPATH_LIBRARIES . '/createsend/csrest_subscribers.php');
+
+              // The API KEY for this list
+              $api_key = $params->get('createsend_api_key', 'c151240434d33ec21ed6752290e1fe2b');
+              $list_id = $params->get('list_id', 'ffc3602b2f836d173559b9242d0035c0');
+              $auth = array(
+                  'api_key' => $api_key);
+
+              // Get the wrapper object
+              $wrap = new CS_REST_Subscribers($list_id, $auth);
+
+              $result = $wrap->add(array(
+                  'EmailAddress' => $data['guest_email'],
+                  'Name' => $data['guest_forname'] . ' ' . $data['guest_surname'],
+                  'Resubscribe' => true
+              ));
+
+              /*
+              TO DO - Log this if not successfully added....
+
+              echo "Result of POST /api/v3.1/subscribers/{list id}.{format}\n<br />";
+              if($result->was_successful()) {
+                  echo "Subscribed with code ".$result->http_status_code;die;
+              } else {
+                  echo 'Failed with code '.$result->http_status_code."\n<br /><pre>";
+                  var_dump($result->response);
+                  echo '</pre>';
+                  die;
+              }*/
+            }
+
         }
 
         // We are done.
