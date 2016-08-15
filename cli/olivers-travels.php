@@ -122,6 +122,8 @@ class OliversTravels extends Import
 
         $propertyObj = $property_data_json->data[0];
 
+        var_dump($propertyObj->descriptions->special_offers);
+
         try
         {
 

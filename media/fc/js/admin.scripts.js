@@ -10,20 +10,18 @@ jQuery(document).ready(function () {
           }
   );
 
-  (function () {
-    var _fbq = window._fbq || (window._fbq = []);
-    if (!_fbq.loaded) {
-      var fbds = document.createElement('script');
-      fbds.async = true;
-      fbds.src = '//connect.facebook.net/en_US/fbds.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(fbds, s);
-      _fbq.loaded = true;
-    }
-    _fbq.push(['addPixelId', '528120040655478']);
-  })();
-  window._fbq = window._fbq || [];
-  window._fbq.push(['track', 'PixelInitialized', {}]);
+
+  <!-- Facebook Pixel Code -->
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '1060605103975489');
+  fbq('track', "PageView");
+  <!-- End Facebook Pixel Code -->
+
 
   // This is purely to accommodate A/B testing of an alternative search layout
   // This or the above would need to be removed once the 'experiment' is finished.
@@ -148,7 +146,7 @@ jQuery(document).ready(function () {
     jQuery('#map_canvas').show();
   });
 
-  // Get the selected tab, if any 
+  // Get the selected tab, if any
   var selectedTab = localStorage['selectedTab'];
 
   // Default to show the list tab if nothing saved in localStorage
@@ -175,7 +173,7 @@ jQuery(document).ready(function () {
   });
 
 
-  // Event tracking for enquiry form 
+  // Event tracking for enquiry form
   jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function (event) {
     var target = jQuery(event.target);
     var input = '';
@@ -265,7 +263,7 @@ jQuery(document).ready(function () {
       // Get the start (arrival) date
       var date = new Date(ev.date);
 
-      // If the calendar is set to highlight days add seven days 
+      // If the calendar is set to highlight days add seven days
       // Assumes that this property is highlighting one day and that booking period
       // is for a seven night stay
       if (data.highlight) {
@@ -308,7 +306,7 @@ jQuery(document).ready(function () {
     }).click(function (event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      jQuery(this).popover('toggle'); // Manually open the popover 
+      jQuery(this).popover('toggle'); // Manually open the popover
     })
   })
 
@@ -356,7 +354,7 @@ jQuery(document).ready(function () {
   });
 
   // TO DO -make the below into a encapsulated function and reduce code here
-  // e.g. the show_contact method below is too similar to this functionality 
+  // e.g. the show_contact method below is too similar to this functionality
   // so should be made generic (and reusable)
   var use_invoice = jQuery('#jform_use_invoice_address');
   if (use_invoice.length)
@@ -489,7 +487,7 @@ jQuery(document).ready(function () {
     // what to do!?
   }
 
-  // Add special offer counter... 
+  // Add special offer counter...
   jQuery('#jform_offer_description').each(function () {
 
     // Assign this to that so we can use this later...
@@ -672,7 +670,7 @@ var show_vat = function (vatID) {
 
   } else if (vatID === 'ECS') {
 
-    // Add hidden input field for company number 
+    // Add hidden input field for company number
     vat_number.show();
     toggle('#jform_vat_number', true);
     toggle('#jform_company_number', false);
@@ -688,7 +686,7 @@ var show_vat = function (vatID) {
   }
 };
 
-/* 
+/*
  * Simple function which adds or removed the required class and toggles the required attribute
  */
 var toggle = function (elem, show) {

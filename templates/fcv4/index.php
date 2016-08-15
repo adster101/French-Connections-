@@ -127,8 +127,7 @@ if ($this->countModules('position-7'))
 <jdoc:include type="modules" name="debug" style="html5" />
 
 <noscript>
-<img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=528120040655478&amp;ev=PixelInitialized" />
-<img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=l526m&p_id=Twitter" />
+  <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1060605103975489&ev=PageView&noscript=1" /><img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=l526m&p_id=Twitter" />
 <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=l526m&p_id=Twitter" />
 </noscript>
 
