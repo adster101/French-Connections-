@@ -465,8 +465,6 @@ class OliversTravels extends Import
             $db->execute();
         } catch (Exception $e)
         {
-            var_dump($e);
-            die;
         }
 
         return true;

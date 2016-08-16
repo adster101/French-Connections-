@@ -12,7 +12,7 @@ $route = JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id
 
 $accordion_navigator = new JLayoutFile('frenchconnections.property.accordion');
 $accordion_data = new StdClass;
-?> 
+?>
 <div id="reviews" class="panel panel-default">
     <?php if ($this->item->unit_title) : ?>
         <div class="panel-heading">
@@ -23,8 +23,8 @@ $accordion_data = new StdClass;
             echo $accordion_navigator->render($accordion_data);
             ?>
         </div>
-    <?php endif; ?>  
-    <div class="panel-collpase collapse in" id="reviews-panel"> 
+    <?php endif; ?>
+    <div class="panel-collpase collapse in" id="reviews-panel">
         <div class="panel-body">
             <?php
             $Itemid_review = SearchHelper::getItemid(array('component', 'com_reviews'));
@@ -46,7 +46,7 @@ $accordion_data = new StdClass;
                 <p>
                     <a class="login" href="<?php echo $login_route . '?return=' . base64_encode($review_route) ?>">
                         <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW') ?>
-                    </a>    
+                    </a>
                 </p>
             <?php endif; ?>
 
@@ -55,16 +55,16 @@ $accordion_data = new StdClass;
                     <?php foreach ($this->reviews as $review) : ?>
                         <figure>
                             <blockquote class="quote">
-                                <?php echo strip_tags($review->review_text, '<p>,<br>'); ?> 
+                                <?php echo strip_tags($review->review_text, '<p>,<br>'); ?>
                                 <p>
                                     <?php echo JText::sprintf('COM_ACCOMMODATION_GUEST_RATING', JHtmlProperty::rating($review->rating)); ?>
                                 </p>
-                            </blockquote>  
+                            </blockquote>
                             <figcaption>
-                                <cite>  
+                                <cite>
                                     <?php echo $review->guest_name; ?>
                                     <?php echo JFactory::getDate($review->date)->calendar('D, d M Y'); ?>
-                                </cite> 
+                                </cite>
                             </figcaption>
                         </figure>
                     <?php endforeach; ?>
@@ -79,4 +79,3 @@ $accordion_data = new StdClass;
         </div>
     </div>
 </div>
-
