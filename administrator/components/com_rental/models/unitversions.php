@@ -251,7 +251,7 @@ class RentalModelUnitVersions extends JModelAdmin
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
 
-    // Total up the number of bedrooms 
+    // Total up the number of bedrooms
     $data['bedrooms'] = $data['single_bedrooms'] + $data['double_bedrooms'] + $data['triple_bedrooms'] + $data['quad_bedrooms'] + $data['twin_bedrooms'];
 
     // Generate a logger instance for reviews

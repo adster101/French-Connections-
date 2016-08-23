@@ -28,7 +28,7 @@
       default=""
       id="2">
       <option value="">JSELECT</option>
-    </field>     
+    </field>
 
     <field
       labelclass="control-label"
@@ -72,7 +72,7 @@
       validate="nonzero"
       filter="int">
       <option value="">JSELECT</option>
-    </field> 
+    </field>
     <field
       name="single_bedrooms"
       type="integer"
@@ -87,7 +87,7 @@
       filter="int">
       <option value="">JSELECT</option>
     </field>
-    
+
     <field
       name="double_bedrooms"
       type="integer"
@@ -147,7 +147,7 @@
       default=""
       filter="int">
       <option value="">JSELECT</option>
-      
+
     </field>
     <field
       name="childrens_beds"
@@ -162,7 +162,7 @@
       labelclass="control-label"
       filter="int">
       <option value="">JSELECT</option>
-    
+
     </field>
     <field
       name="cots"
@@ -195,7 +195,7 @@
       filter="int">
       <option value="">JSELECT</option>
     </field>
- 
+
   </fieldset>
   <fieldset name="douches">
     <field
@@ -212,8 +212,8 @@
       required="true"
       filter="int">
       <option value="">JSELECT</option>
-    </field> 
-   
+    </field>
+
     <field
       name="toilets"
       type="integer"
@@ -228,7 +228,7 @@
       filter="int">
       <option value="">JSELECT</option>
     </field>
- 
+
   </fieldset>
 
 
@@ -243,9 +243,9 @@
       multiple="true"
       id="9">
     </field>
-   
+
   </fieldset>
-  
+
   <fieldset name="external_facilities" description="COM_RENTAL_ACCOMMODATION_EXTERNAL_FACILITIES">
     <field
       class="checkbox required pull-left"
@@ -269,7 +269,7 @@
       id="11">
     </field>
   </fieldset>
- 
+
   <fieldset name="suitability" description="COM_RENTAL_ACCOMMODATION_SUITABILITY">
     <field
       class="checkbox inline"
@@ -299,6 +299,11 @@
     />
     <field
       name="property_id"
+      type="hidden"
+      filter="int"
+    />
+    <field
+      name="bedrooms"
       type="hidden"
       filter="int"
     />
@@ -352,16 +357,3 @@
       readonly="true" />
   </fieldset>
 </form>
-
-
-
-
-
-
-
-
-
-
-
-
-

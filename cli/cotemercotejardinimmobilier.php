@@ -169,6 +169,8 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                     $data['title'] = $db->quote($prop->title);
                     $data['description'] = $db->quote($prop->description, true);
                     $data['bedrooms'] = (int) $prop->bedrooms;
+                    $data['latitude'] = $prop->latitude;
+                    $data['longitude'] = $prop->longitude;
                     $data['bathrooms'] = (int) $prop->bathrooms;
                     $data['base_currency'] = $db->quote('EUR');
                     $data['price'] = (int) $prop->price;

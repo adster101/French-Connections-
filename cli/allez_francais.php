@@ -100,6 +100,7 @@ class AllezFrancais extends RealestateImport
           $classification = JTable::getInstance('Classification', 'ClassificationTable');
           $location = $classification->getPath($prop->city);
 
+
           $data = array();
           $data['realestate_property_id'] = $property_id;
           $data['agency_reference'] = $db->quote($prop->agency_reference);
@@ -187,7 +188,9 @@ class AllezFrancais extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
-
+          $data['latitude'] = $prop->latitude;
+          $data['longitude'] = $prop->longitude;
+    
           $this->updatePropertyVersion($db, $data);
 
 

@@ -172,6 +172,8 @@ class BeauxVillages extends RealestateImport {
                     $data['description'] = $db->quote($prop->description, true);
                     $data['bedrooms'] = $prop->bedrooms;
                     $data['bathrooms'] = $prop->bathrooms;
+                    $data['latitude'] = $prop->latitude;
+                    $data['longitude'] = $prop->longitude;
                     $data['base_currency'] = $db->quote('EUR');
                     $data['price'] = (int) $prop->price;
                     $data['review'] = 0;
