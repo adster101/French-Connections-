@@ -119,7 +119,6 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
                 <?php echo $shortlist->render($displayData); ?>
-
             <?php else : ?>
                 <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                   <i class="glyphicon glyphicon-heart"></i>

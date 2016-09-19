@@ -259,7 +259,7 @@ class AtLeisure extends Import
                     $data['unit_version']['additional_price_notes'] = $this->additionalCosts($acco);
                     $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
                     $data['unit_version']['base_currency'] = 'EUR';
-                    $data['unit_version'] = $this->getBedrooms($layoutArr, $data['unit_version']);
+                    $data['unit_version']['bedrooms'] = $this->getBedrooms($layoutArr, $data['unit_version']);
 
                     $unit_version_table->set('_tbl_keys', array('id'));
 

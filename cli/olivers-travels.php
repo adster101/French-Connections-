@@ -122,8 +122,6 @@ class OliversTravels extends Import
 
         $propertyObj = $property_data_json->data[0];
 
-        var_dump($propertyObj->descriptions->special_offers);
-
         try
         {
 
@@ -357,9 +355,8 @@ class OliversTravels extends Import
             // Roll back any batched inserts etc
             $db->transactionRollback();
 
-            print_r($e->getMessage());die;
             // Send an email, woot!
-            //$this->email($e);
+            $this->email($e);
           }
       }
     }
@@ -433,14 +430,7 @@ class OliversTravels extends Import
 
         $db->setQuery($query);
 
-        try
-        {
-
-            $db->execute();
-        } catch (Exception $e)
-        {
-
-        }
+        $db->execute();
 
         // Clear the query and start the insert
         $query->clear();
@@ -457,15 +447,9 @@ class OliversTravels extends Import
             $insert[] = $facility;
             $query->values(implode(',', $insert));
         }
+
         $db->setQuery($query);
-
-        try
-        {
-
-            $db->execute();
-        } catch (Exception $e)
-        {
-        }
+        $db->execute();
 
         return true;
     }

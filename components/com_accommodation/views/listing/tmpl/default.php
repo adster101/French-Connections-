@@ -19,12 +19,11 @@ $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
 
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
-$inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
+
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
 $search_route = 'index.php?option=com_fcsearch&Itemid=' . (int) $searchID . '&s_kwds=france';
 
 $average_rating = JHtmlProperty::averageRating($this->reviews);
-
 
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
@@ -69,13 +68,6 @@ $amenities = ($this->item->local_amenities) ? json_decode($this->item->local_ame
 $accordion_navigator = new JLayoutFile('frenchconnections.property.accordion');
 $accordion_data = new StdClass;
 
-// Shortlist button thingy
-$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
-$displayData = new StdClass;
-$displayData->action = $action;
-$displayData->inShortlist = $inShortlist;
-$displayData->unit_id = $this->item->unit_id;
-$displayData->class = ' btn btn-default';
 
 // Add the reviews to item for the above layout.
 // TO DO - refactor so that $this->item contains all elements of the listing for use in layouts?

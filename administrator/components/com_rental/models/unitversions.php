@@ -250,9 +250,11 @@ class RentalModelUnitVersions extends JModelAdmin
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
-
     // Total up the number of bedrooms
-    $data['bedrooms'] = $data['single_bedrooms'] + $data['double_bedrooms'] + $data['triple_bedrooms'] + $data['quad_bedrooms'] + $data['twin_bedrooms'];
+    if (isset($data['single_bedrooms']) || isset($data['double_bedrooms']) || isset($data['triple_bedrooms']) || isset($data['quad_bedrooms']) || isset($data['twin_bedrooms']))
+    {
+      $data['bedrooms'] = $data['single_bedrooms'] + $data['double_bedrooms'] + $data['triple_bedrooms'] + $data['quad_bedrooms'] + $data['twin_bedrooms'];
+    }
 
     // Generate a logger instance for reviews
     JLog::addLogger(array('text_file' => 'unitversions.update.php'), 'DEBUG', array('unitversions'));

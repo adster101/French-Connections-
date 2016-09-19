@@ -412,7 +412,6 @@ class RentalModelListings extends JModelList
 
       try {
         $items = $this->_getList($query, $this->getStart(), $this->getState('list.limit'));
-        var_dump($items);
       }
       catch (RuntimeException $e) {
         $this->setError($e->getMessage());

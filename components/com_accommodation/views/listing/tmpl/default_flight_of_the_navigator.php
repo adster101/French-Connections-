@@ -3,6 +3,21 @@
 defined('_JEXEC') or die('Restricted access');
 $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
+
+$inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
+
+$HolidayMakerLogin = SearchHelper::getItemid(array('component', 'com_users'));
+$action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
+
+// Shortlist button thingy
+$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
+$displayData = new StdClass;
+$displayData->action = $action;
+$displayData->inShortlist = $inShortlist;
+$displayData->unit_id = $this->item->unit_id;
+$displayData->class = ' btn btn-default';
+
+
 ?>
 
   <a class="btn btn-sm btn-default" href="<?php echo $this->route ?>#top">
