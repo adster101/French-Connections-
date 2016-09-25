@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form>
-  <fieldset 
-    name="review" 
-    addrulepath="/administrator/components/com_reviews/models/rules" 
-    addfieldpath="/libraries/frenchconnections/forms/fields" 
+  <fieldset
+    name="review"
+    addrulepath="/administrator/components/com_reviews/models/rules"
+    addfieldpath="/libraries/frenchconnections/forms/fields"
     label="COM_CONTACT_FORM_LABEL">
-    
-    <field 
+
+    <field
       name="guest_name"
       type="text"
       id="review-name"
@@ -18,7 +18,7 @@
       labelclass="control-label"
       maxlength="30"
     />
-    <field 
+    <field
       name="guest_email"
       type="email"
       id="review-email"
@@ -32,14 +32,14 @@
 
     />
 
-    <field 
+    <field
       name="review_text"
       type="editor"
       id="review-text"
       description="COM_REVIEW_TEXT_DESC"
       label="COM_REVIEW_TEXT_LABEL"
-      filter="htmlsafe"
       validate="reviewtext"
+      filter="JComponentHelper::filterText"
       required="true"
       message="COM_REVIEW_TEXT_VALIDATION_MESSAGE"
       class="input-xxlarge"
@@ -47,7 +47,7 @@
 
     />
 
-    <field 
+    <field
       name="date"
       type="calendar"
       id="review-date"
@@ -86,29 +86,29 @@
       type="unit"
       filter="int"
       default=""
-      component="com_reviews" 
+      component="com_reviews"
       required="true"
       message="Please supply a property ID"
       labelclass="control-label"
       label="Unit ID for review"
     />
-    
+
     <field
       name="property_id"
       type="hidden"
       filter="int"
     />
 
-    <field 
-      name="published" 
-      type="list" 
+    <field
+      name="published"
+      type="list"
       label="JSTATUS"
-      description="JFIELD_PUBLISHED_DESC" 
+      description="JFIELD_PUBLISHED_DESC"
       class="input-medium"
-      filter="intval" 
+      filter="intval"
       labelclass="control-label"
-      size="1" 
-      default="" 
+      size="1"
+      default=""
       required="true">
       <option value="">JSELECT</option>
       <option value="1">
@@ -121,17 +121,17 @@
         JTRASHED</option>
     </field>
 
-    <field 
-      name="date_created" 
-      type="calendar" 
+    <field
+      name="date_created"
+      type="calendar"
       label="Date created"
-      description="COM_CONTENT_FIELD_CREATED_DESC" 
-      class="inputbox readonly" 
+      description="COM_CONTENT_FIELD_CREATED_DESC"
+      class="inputbox readonly"
       size="22"
-      format="%Y-%m-%d %H:%M:%S" 
-      filter="user_utc" 
-      labelclass="control-label" 
-      default="NOW" 
+      format="%Y-%m-%d %H:%M:%S"
+      filter="user_utc"
+      labelclass="control-label"
+      default="NOW"
       readonly="false"
     />
   </fieldset>

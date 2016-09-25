@@ -55,7 +55,7 @@ $accordion_data = new StdClass;
                     <?php foreach ($this->reviews as $review) : ?>
                         <figure>
                             <blockquote class="quote">
-                                <?php echo strip_tags($review->review_text, '<p>,<br>'); ?>
+                                <?php echo strip_tags($review->review_text, '<p>,<br>,<strong>,<em>,<i>'); ?>
                                 <p>
                                     <?php echo JText::sprintf('COM_ACCOMMODATION_GUEST_RATING', JHtmlProperty::rating($review->rating)); ?>
                                 </p>

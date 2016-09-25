@@ -293,7 +293,7 @@ class OliversTravels extends Import
             // etc ...
 
             $data['unit_version']['occupancy'] = $propertyObj->details->maximum_capacity;
-            $data['unit_version']['changeover_day'] = 445;
+            $data['unit_version']['changeover_day'] = 1521;
             $data['unit_version']['unit_title'] = addslashes($propertyObj->details->dwelling_name);
             $data['unit_version']['property_type'] = $this->getPropertyType($propertyObj->details->dwelling_type);
             $data['unit_version']['property_type'] = 11;

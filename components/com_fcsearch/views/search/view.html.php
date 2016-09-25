@@ -82,7 +82,7 @@ class FcSearchViewSearch extends JViewLegacy
         }
         else
         {
-            // Check whether the URL is caninical based on the order of the
+            // Check whether the URL is canonical based on the order of the
             // filters. SEO related fix requested by Sagittarius.
             // https://www.frenchconnections.co.uk/administrator/index.php?option=com_tickets&task=ticket.edit&id=1068
             SearchHelper::isCanonical($this->localinfo->alias);
