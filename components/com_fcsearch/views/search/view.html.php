@@ -93,6 +93,7 @@ class FcSearchViewSearch extends JViewLegacy
 
             // Has to be done after getState, as with all really.
             $this->attribute_options = $this->get('RefineAttributeOptions');
+            $this->activity_options = $this->get('RefineActivityOptions');
             $this->location_options = $this->get('RefineLocationOptions');
             $this->property_options = $this->get('RefinePropertyOptions');
             $this->accommodation_options = $this->get('RefineAccommodationOptions');

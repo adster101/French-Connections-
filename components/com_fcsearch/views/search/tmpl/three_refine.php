@@ -9,7 +9,6 @@
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.core');
-
 $app = JFactory::getApplication();
 $pathway = $app->getPathway();
 $items = $pathway->getPathWay();
@@ -32,10 +31,23 @@ $refine_type_layout = new JLayoutFile('refinetype_two', $basePath = JPATH_SITE .
 
 $suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598);
 $facilities_filters = array(74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
+$activity_filters = array(48,50,52,62,319,68);
 
 $suitabilityArr = array();
 $propertyArr = array();
 $facilitiesArr = array();
+$activitiesArr = array();
+
+foreach($this->activity_options as $values)
+{
+  foreach ($values as $key => $value)
+  {
+    if (in_array($value[id], $activity_filters))
+    {
+        $activitiesArr[] = (array) $value;
+    }
+  }
+}
 
 foreach ($this->attribute_options as $values)
 {
@@ -50,6 +62,7 @@ foreach ($this->attribute_options as $values)
         {
             $facilitiesArr[] = (array) $value;
         }
+
     }
 }
 
@@ -161,7 +174,7 @@ $longitude = $this->state->get('search.longitude', '');
               </a>
             </p>
         <?php endif; ?>
-    <?php endif; ?> 
+    <?php endif; ?>
 
     <?php if ($this->localinfo->level) : ?>
         <div class="">
@@ -273,6 +286,18 @@ $longitude = $this->state->get('search.longitude', '');
                 'lwl' => $lwl
     ));
     ?>
-
+    <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_ACTIVITES'); ?></h4>
+    <?php
+    echo $refine_type_layout->render(
+            array(
+                'data' => $activitiesArr,
+                'location' => $this->localinfo->title,
+                'itemid' => $Itemid_search,
+                'uri' => $uri,
+                'lang' => $lang,
+                'offers' => $offers,
+                'lwl' => $lwl
+    ));
+    ?>
   </div>
 </div>

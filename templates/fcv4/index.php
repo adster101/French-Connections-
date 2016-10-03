@@ -130,7 +130,21 @@ if ($this->countModules('position-7'))
   <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1060605103975489&ev=PageView&noscript=1" /><img height="1" width="1" style="display:none;" alt="" src="https://analytics.twitter.com/i/adsct?txn_id=l526m&p_id=Twitter" />
 <img height="1" width="1" style="display:none;" alt="" src="//t.co/i/adsct?txn_id=l526m&p_id=Twitter" />
 </noscript>
-
+<!-- Google Code for Remarketing Tag -->
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1070690964;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1070690964/?value=0&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
 <?php
 // Include styles - async loads the main CSS file
 include_once JPATH_THEMES . '/' . $this->template . '/inc/styles.php';

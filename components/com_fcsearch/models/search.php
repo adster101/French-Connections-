@@ -428,7 +428,7 @@ class FcSearchModelSearch extends JModelList
             //$query = $this->getFilterState('property_type', $query);
             //$query = $this->getFilterState('accommodation_type', $query);
             //$query = $this->getFilterState('kitchen', $query);
-            $query = $this->getFilterState('activities', $query, '#__property_attributes');
+            $query = $this->getFilterState('activities', $query, '#__property_attributes', $alias = 'c');
             $query = $this->getFilterState('suitability', $query);
             $query = $this->getFilterState('external_facilities', $query);
             $query = $this->getFilterState('property_facilities', $query);
@@ -734,7 +734,7 @@ class FcSearchModelSearch extends JModelList
             //$query = $this->getFilterPropertyType($query, $property_type, $db);
             //}
 
-            $query = $this->getFilterState('activities', $query, '#__property_attributes');
+            $query = $this->getFilterState('activities', $query, '#__property_attributes', $alias = 'c');
             $query = $this->getFilterState('suitability', $query);
             $query = $this->getFilterState('external_facilities', $query);
             $query = $this->getFilterState('property_facilities', $query);
@@ -900,7 +900,7 @@ class FcSearchModelSearch extends JModelList
         //$query = $this->getFilterState('property_type', $query);
         //$query = $this->getFilterState('accommodation_type', $query);
         //$query = $this->getFilterState('kitchen', $query);
-        $query = $this->getFilterState('activities', $query, '#__property_attributes');
+        $query = $this->getFilterState('activities', $query, '#__property_attributes', $alias = 'c');
         $query = $this->getFilterState('suitability', $query);
         $query = $this->getFilterState('external_facilities', $query);
         $query = $this->getFilterState('property_facilities', $query);
@@ -941,15 +941,21 @@ class FcSearchModelSearch extends JModelList
         return $locations;
     }
 
+    public function getRefineActivityOptions()
+    {
+      $activities = $this->getRefineAttributeOptions($type = 'property');
+      return $activities;
+    }
+
     /**
      * Method to retrieve a list of 'refinement options' for display on the search page
-     *
+     * @type - string - determines the unit attribute type to return (e.g. unit or property)
      */
-    public function getRefineAttributeOptions()
+    public function getRefineAttributeOptions($type = 'unit')
     {
 
         // Create a store ID to get the actual options, if they are already cached, which they might be
-        $store = $this->getStoreId('getRefineAttributeOptions');
+        $store = $this->getStoreId('getRefineAttributeOptions' . $type);
 
         // Get the cached data for this method
         if ($this->retrieve($store))
@@ -979,7 +985,13 @@ class FcSearchModelSearch extends JModelList
             $query->innerJoin('#__unit b on b.property_id = a.id');
             $query->innerJoin('#__property_versions c on c.property_id = a.id');
             $query->innerJoin('#__unit_versions d on d.unit_id = b.id');
-            $query->innerJoin('#__unit_attributes e on e.version_id = d.id');
+
+            if ($type == 'unit')
+            {
+              $query->innerJoin('#__unit_attributes e on e.version_id = d.id');
+            } else {
+              $query->innerJoin('#__property_attributes e on e.version_id = c.id');
+            }
 
             if ($this->getState('search.level') == 1)
             { // Country level
@@ -1069,7 +1081,7 @@ class FcSearchModelSearch extends JModelList
             //$query = $this->getFilterState('property_type', $query);
             //$query = $this->getFilterState('accommodation_type', $query);
             //$query = $this->getFilterState('kitchen', $query);
-            $query = $this->getFilterState('activities', $query, '#__property_attributes');
+            $query = $this->getFilterState('activities', $query, '#__property_attributes', $alias = 'c');
             $query = $this->getFilterState('suitability', $query);
             $query = $this->getFilterState('external_facilities', $query);
             $query = $this->getFilterState('property_facilities', $query);
@@ -1096,7 +1108,7 @@ class FcSearchModelSearch extends JModelList
             $property_attributes = $db->loadObjectList($key = 'attribute_id');
 
             // Lists all the attributes available
-            $attributes = $this->getAttributes(array(9, 10, 12));
+            $attributes = $this->getAttributes(array(8,9, 10, 12));
 
 
             $filter_attributes = array();
@@ -1125,7 +1137,7 @@ class FcSearchModelSearch extends JModelList
                 2 => 'external_facilities',
                 3 => 'suitability',
                 4 => 'internal_facilities',
-                    //6 => 'Activities nearby',
+                6 => 'activities',
                     //7 => 'Kitchen features',
                     //8 => 'Location Type'
             );
@@ -1645,7 +1657,7 @@ class FcSearchModelSearch extends JModelList
      * @return  query  The search query being built
      */
 
-    private function getFilterState($filter = '', JDatabaseQueryMysqli $query, $attributes_table = '#__unit_attributes')
+    private function getFilterState($filter = '', JDatabaseQueryMysqli $query, $attributes_table = '#__unit_attributes', $alias = 'd')
     {
 
         if (empty($filter))
@@ -1669,13 +1681,20 @@ class FcSearchModelSearch extends JModelList
 
                 foreach ($filters as $key => $value)
                 {
-                    $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.version_id = d.id');
+                    $query->join('left', $attributes_table . ' ap' . $value . ' ON ap' . $value . '.version_id = ' . $alias . '.id');
                     $query->where('ap' . $value . '.attribute_id = ' . (int) $value);
+
+                    // Filter the query based on the property ID otherwise it grinds to a bleeding halt!
+                    if ($attributes_table == '#__property_attributes')
+                    {
+                      $query->where('ap' . $value . '.property_id = a.id');
+                    }
+
                 }
             }
             else
             {
-                $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.version_id = d.id');
+                $query->join('left', $attributes_table . ' ' . $filter . ' ON apact.version_id = ' . $alias . '.id');
                 $query->where($filter . '.attribute_id = ' . $this->getState('list. ' . $filter));
             }
         }
