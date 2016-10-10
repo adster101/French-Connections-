@@ -61,8 +61,10 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
         <?php if ($this->result->price) : ?>
             <?php //echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead"><?php echo '&pound;' . round($this->result->price); ?></span>
+            <?php if ($this->result->price !== $this->result->to_price) : ?>
             <span class="lead">&dash;</span>
                         <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
+                      <?php endif; ?>
               <a class="price-info" data-toggle="tooltip" data-placement="left" title="<?php echo JText::sprintf('COM_ACCOMMODATION_RATES_FROM_TO_DETAIL', $this->result->tariff_based_on); ?>">
                 <i class="glyphicon glyphicon-info-sign"></i>
               </a>

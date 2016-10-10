@@ -550,8 +550,10 @@ abstract class RentalHelper
         $yesterday = date('d-m-Y', gmmktime(0, 0, 0, $month, $day - 1, $year));
 
         // Check whether availability status is set for the preceeding day
-        $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
-        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
+        // Here we set the availability to 'true' e.g. available unless the day
+        // is explicitly set as unavailable (i.e. false)
+        $status = (array_key_exists($today, $availability)) ? $availability[$today] : true;
+        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : true;
 
         if ($status)
         { // Availability is true, i.e. available
@@ -670,8 +672,8 @@ abstract class RentalHelper
         $yesterday = date('d-m-Y', gmmktime(0, 0, 0, $month, $day - 1, $year));
 
         // Check whether availability status is set for the preceeding day
-        $status = (array_key_exists($today, $availability)) ? $availability[$today] : false;
-        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : false;
+        $status = (array_key_exists($today, $availability)) ? $availability[$today] : true;
+        $status_yesterday = (array_key_exists($yesterday, $availability)) ? $availability[$yesterday] : true;
 
         if ($status)
         { // Availability is true, i.e. available
@@ -794,7 +796,6 @@ abstract class RentalHelper
         $raw_availability[date_format($date, 'd-m-Y')] = $availability_period->availability;
       }
     }
-
     // If additional availability has been added then we need to add that to the array as well.
     if ($start_date && $end_date)
     {
@@ -810,14 +811,21 @@ abstract class RentalHelper
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
       for ($i = 0; $i <= $availability_period_length->days; $i++)
       {
+        // Only set the day as unavailable if the status is
+        if (!$availability_status)
+        {
+          $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = $availability_status;
 
-        $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = $availability_status;
-
-        // Add one day to the start date for each day of availability
-        $date = $availability_period_start_date->add($DateInterval);
+          // Add one day to the start date for each day of availability
+          $date = $availability_period_start_date->add($DateInterval);
+        }
+        else
+        {
+          unset($raw_availability[date_format($availability_period_start_date, 'd-m-Y')]);
+          $date = $availability_period_start_date->add($DateInterval);
+        }
       }
     }
-
     return $raw_availability;
   }
 

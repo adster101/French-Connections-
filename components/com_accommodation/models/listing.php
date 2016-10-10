@@ -670,7 +670,6 @@ class AccommodationModelListing extends JModelForm
     {
         // Get availability as an array of days
         $availability = $this->getAvailability();
-
         $availability_by_day = RentalHelper::getAvailabilityByDay($availability);
 
         // Build the calendar taking into account current availability...

@@ -1488,17 +1488,17 @@ class FcSearchModelSearch extends JModelList
 
         // Join the availability table
         $query->join('inner', '#__availability arr on d.unit_id = arr.unit_id');
-        $query->where('arr.availability = 1');
+        $query->where('arr.availability = 0');
 
         if ($arrival)
         {
-            $query->where('arr.start_date <= ' . $db->quote($arrival));
+            $query->where('arr.start_date >= ' . $db->quote($arrival));
         }
 
         if ($departure)
         {
             // Take one day of departure date to ensure we check a 7 day period rather than an eight day period
-            $query->where('arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY'));
+            $query->where('arr.end_date <= ' . $query->dateAdd($departure, '-1', 'DAY'));
         }
 
         /*
