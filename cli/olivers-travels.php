@@ -365,11 +365,8 @@ class OliversTravels extends Import
     {
       $tariffsArr = array();
 
-
-
       foreach($tariffs as $key => $tariff)
       {
-
         $tariffsArr[$key]['start_date'] = $tariff->on_sale_from;
 
         if ($key > 0)
@@ -377,11 +374,11 @@ class OliversTravels extends Import
           $tariffsArr[$key-1]['end_date'] = $tariff->on_sale_from;
         } else {
           $tariffsArr[$key]['end_date'] = '';
-
         }
         $tariffsArr[$key]['tariff'] = $tariff->weekly_price[0]->price / 100;
 
       }
+
       return $tariffsArr;
     }
 

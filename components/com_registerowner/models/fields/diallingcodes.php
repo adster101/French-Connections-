@@ -39,7 +39,7 @@ class JFormFieldDiallingcodes extends JFormFieldList {
   protected function getOptions() {
     $options = array();
     // Initialize variables.
-    
+
     $options = array();
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -47,7 +47,6 @@ class JFormFieldDiallingcodes extends JFormFieldList {
     $query->select('a.lang_string, dialling_code');
     $query->from('#__countries AS a');
     $query->order('a.id asc');
-
 
     $db->setQuery($query);
     $items = $db->loadObjectList();
@@ -67,5 +66,4 @@ class JFormFieldDiallingcodes extends JFormFieldList {
     $options = array_merge(parent::getOptions(), $options);
     return $options;
   }
-
 }
