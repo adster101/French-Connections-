@@ -178,9 +178,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                     (&euro;<?php echo $min_prices['EUR']; ?>)
                     <br />
                     <?php if ($this->item->tariffs_based_on) : ?>
-                        <span class="small">
-                          <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
-                        </span>
+                      <span class="small">
+                        <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
+                      </span>
                     <?php endif; ?>
                   </p>
               <?php else: ?>
@@ -208,19 +208,22 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <?php endif; ?>
 
 
+          <hr />
           <?php if ($this->reviews) : ?>
-              <hr />
               <p>
                 <span class="orange">
                   <?php echo JHtmlProperty::rating($average_rating); ?>
                 </span>
                 <a href="<?php echo $link . '#reviews' ?>">Read all <?php echo count($this->reviews) ?> reviews</a>
               </p>
-          <?php else: ?>
-            <hr />
+            <?php else: ?>
+              <p>
+                <span class="glyphicon glyphicon-star orange"></span>
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_NO_REVIEWS') ?>
+              </p>
+          <?php endif; ?>
             <p>
-              <span class="glyphicon glyphicon-star orange"></span>
-              <?php echo JText::_('COM_ACCOMMODATION_SITE_NO_REVIEWS') ?>
+
               <?php if ($logged_in) : ?>
                 <a href="<?php echo $review_route ?>">
                     <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
@@ -231,7 +234,6 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                 </a>
                 <?php endif; ?>
             </p>
-          <?php endif; ?>
 
           <div class="visible-xs">
             <hr />

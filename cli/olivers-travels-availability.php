@@ -116,14 +116,6 @@ class OliversTravelsAvailability extends Import
           // Woot, put some availability back
           $availabilityTable->save($unit_id, $availabilityArr);
 
-          // Set the pk to unit_id as we want to delete all tariffs for this property
-          $tariffsTable->set('_tbl_keys', array('unit_id'));
-
-          $tariffsTable->delete($unit_id);
-
-          // Reset the table pk to id so we can insert new tariffs
-          $tariffsTable->set('_tbl_keys', array('id'));
-
           // Set the data and save the from price against the unit
           $unit_data['availability_last_updated_on'] = JHtml::_('date', 'now', 'Y-m-d');
           $unit_data['id'] = $unit_id;

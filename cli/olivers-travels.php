@@ -65,12 +65,10 @@ class OliversTravels extends Import
       'Working fireplace' => 95,
       'Wheelchair Access' => 115);
     protected $region_maps = array();
-
     public $expiry_date;
     public $date;
     private $property_version_detail;
     private $unit_version_detail;
-
     public $api_key = 'f078696cef4c8976971f13b0bbf0e79d086ac8c6';
 
     /**
@@ -111,10 +109,8 @@ class OliversTravels extends Import
       $this->out('Got property list...');
 
       // Process
-
       foreach ($property_list->data as $property)
       {
-
 
         $property_data = $this->getData('http://feeds.oliverstravels.com/v1/dwellings/' . $property->id . '.json', $this->api_key);
 
@@ -131,8 +127,6 @@ class OliversTravels extends Import
             continue;
           }
 
-
-
           $this->out('Processing accommodation id ' . $propertyObj->id);
 
           $property_table = JTable::getInstance('Property', 'RentalTable');
@@ -142,7 +136,6 @@ class OliversTravels extends Import
           $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
 
           $propertyURL = $this->getURL($propertyObj->urls[0]->url);
-
 
           // Reset the data array
           $data = array();
