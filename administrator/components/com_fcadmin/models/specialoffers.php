@@ -81,6 +81,10 @@ class FcadminModelSpecialOffers extends JModelForm
 
           // Insert the offer directly
           $db->insertObject('#__special_offers', $obj);
+        } else {
+
+          $this->setError(JText::_('COM_FCADMIN_SPECIALOFFER_BULK_OFFER_EXISTS'));
+          return false;
         }
       }
       catch (Exception $e)

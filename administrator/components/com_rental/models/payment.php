@@ -27,7 +27,7 @@ class RentalModelPayment extends JModelAdmin
     }
 
     // TO DO - This is a bit messy - most likely should remove this method simply use
-    // if then else logic in getForm to determine the form to use. A separate 
+    // if then else logic in getForm to determine the form to use. A separate
     // method could be called to determine form to load based on layout etc
     $data = JFactory::getApplication()->getUserState('com_rental.renewal.data', array());
     $data['id'] = $id = $this->getState($this->getName() . '.id', '');
@@ -57,7 +57,7 @@ class RentalModelPayment extends JModelAdmin
     $model = JModelLegacy::getInstance('Property', 'RentalModel', array('ignore_request' => true));
 
     $property_id = $data['id'];
-    
+
     $property = $model->getItem($property_id);
 
     $owner_id = $property->created_by;
@@ -95,7 +95,7 @@ class RentalModelPayment extends JModelAdmin
 
   private function _getOWnerID(int $property_id = null)
   {
-    
+
   }
 
   public function loadFormData()
@@ -111,7 +111,7 @@ class RentalModelPayment extends JModelAdmin
     // In particular, we need the property listing id.
     if ($layout == 'payment')
     {
-      
+
     }
 
     return $data;
@@ -128,7 +128,7 @@ class RentalModelPayment extends JModelAdmin
   protected function preprocessForm(JForm $form, $data)
   {
 
-    // Get the input form data 
+    // Get the input form data
     $input = JFactory::getApplication()->input;
 
     // And tease out whether the use_invoice_address field is ticked or not

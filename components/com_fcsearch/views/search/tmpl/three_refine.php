@@ -30,7 +30,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 $refine_type_layout = new JLayoutFile('refinetype_two', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 
 $suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598);
-$facilities_filters = array(74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
+$facilities_filters = array(97, 74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
 $activity_filters = array(48,50,52,62,319,68);
 
 $suitabilityArr = array();
