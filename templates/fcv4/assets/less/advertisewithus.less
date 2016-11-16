@@ -26,6 +26,324 @@ Advertise with us pages including landind specific styles.
   }
 }
 
+.item-page-risk-free {
+
+  h1,h2,h3,h4,h5,h6 {
+    //font-family: Helvetica, sans-serif;
+    text-transform: none;
+    //font-weight:bold;
+  }
+
+  .strong {
+    font-weight: bold;
+  }
+
+  .btn-default {
+    background: #583297;
+    color:@white;
+    border:none;
+    font-weight: bold;
+  }
+
+  .white {
+    color: white;
+  }
+
+  .light-blue {
+    color: #8cc6ec;
+  }
+
+  .lime-green {
+    color: #5cd5e7;
+  }
+
+  .green-bg {
+    background-color: #e0e7de;
+  }
+
+  .light-blue-bg {
+    background-color: #225ea4;
+  }
+
+  .btn-purple {
+    border:none;
+    background-color: #583297;
+    color:white;
+  }
+
+  hr.blue {
+    border-top: 1px solid #8cc6ec;
+  }
+
+  hr.purple {
+    border-top: 1px solid #583297;
+  }
+
+  .padding-lg {
+    padding: 20px;
+    @media (min-width: @screen-md-min) {
+      padding: 40px;
+    }
+  }
+
+
+  .blue {
+    color: #1f6099;
+  }
+
+  .deep-blue-bg {
+    background: #154167;
+  }
+
+  .strapline {
+    width:100%;
+    @media (min-width: @screen-md-min) {
+      max-width:80%;
+    }
+  }
+
+  .tagline {
+    color: white;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 40px;
+    @media (max-width: @screen-tablet) {
+      font-size:16px;
+    }
+
+  }
+  .jumbotron.risk-free-offer {
+    border-radius:0;
+    margin-bottom:0;
+    padding-left: 0;
+    @media (min-width: @screen-md-min) {
+      padding-right:300px;
+    }
+    h1 {
+      font-size:52px;
+      text-transform: none;
+      color: #583297;
+      @media (max-width: @screen-tablet) {
+        font-size:24px;
+      }
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom:0;
+    }
+
+    h2 {
+      margin-top:0;
+    }
+
+
+
+    .btn-default {
+      background: #583297;
+      color:@white;
+      border:none;
+      font-weight: bold;
+    }
+
+  }
+
+  .panel--offer {
+    text-align:center;
+    font-weight: bold;
+    position: relative;
+
+    > .panel-body {
+
+      h3 {
+        margin-top: 0;
+      }
+    }
+
+    .number {
+        font-size: 220px;
+        line-height: 1;
+        color: #1f6099;
+        font-weight:bold;
+    }
+
+    .btn-primary {
+      background: #e75444;
+      color:@white;
+      border:none;
+      font-weight:bold;
+      font-family: Helvetica, sans-serif;
+
+    }
+
+  }
+
+  .why {
+    max-width:80%;
+    @media (min-width: @screen-md-min) {
+      max-width:60%;
+    }
+    margin:0 auto;
+    font-size:16px;
+    margin-top: 40px;
+    p {
+      margin-bottom: 20px;
+      line-height: 2;
+    }
+  }
+
+  .panel-pricing {
+    border-top:none;
+    background-color: #583297;
+    border-radius: 6px;
+    color:white;
+    .panel-variant(none; @panel-default-text; white; none);
+    margin: @line-height-computed;
+    padding:@line-height-computed;
+
+    @media (min-width: @screen-tablet) {
+      //margin: @line-height-computed * 2 @line-height-computed * 4 ;
+      //padding:@line-height-computed * 2;
+    }
+
+    .glyphicon-ok::before {
+      float:right;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: @line-height-computed * 2;
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 9;
+    }
+
+    > .panel-body {
+      font-size:16px;
+    }
+
+    > .panel-heading {
+      background-color:transparent;
+      color:white;
+      text-align:center;
+
+      > p > span {
+        font-size: 18px;
+        font-family: Helvetica, sans-serif;;
+
+      }
+    }
+
+
+
+    .btn-big-round-lime-green {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 48px;
+      line-height: 48px;
+      padding-top: 24px;
+      color: #583297;
+      border-radius: 50%;
+      font-weight:bold;
+      width:200px;
+      height:200px;
+      box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
+      background-color: #d9d23b;
+
+      @media (min-width: @screen-md-min) {
+        font-size: 62px;
+        line-height: 62px;
+        width:250px;
+        height:250px;
+      }
+
+      @media (min-width: @screen-lg-min) {
+        font-size: 72px;
+        line-height: 72px;
+        width:300px;
+        height:300px;
+        padding-top:36px;
+      }
+    }
+
+  .btn-medium-round-lime-green {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 32px;
+    line-height: 32px;
+    padding-top: 72px;
+    color: #583297;
+    border-radius: 50%;
+    font-weight:bold;
+    width:200px;
+    height:200px;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.5);
+    background-color: #d9d23b;
+
+    }
+}
+
+  blockquote {
+    border:none;
+    margin-bottom:0;
+    color:@gray-darker;
+    > p {
+      margin-bottom: 20px;
+      font-weight: 400;
+      line-height: 1.4;
+      font-size:@font-size-large;
+      display:inline;
+    }
+    > footer {
+      background:transparent;
+      color:@gray-darker;
+      border:none;
+      font-weight:bold;
+    }
+  }
+
+  blockquote:after{
+    content:'\201D';
+    font-size: 200px;
+    text-align:right;
+    color:#583297;
+    font-style:italic;
+    position:absolute;
+    top:40%;
+    right: -5%;
+    line-height:60px;
+  }
+
+  blockquote:before{
+    content:'\201C';
+    font-size: 200px;
+    text-align:right;
+    color:#583297;
+    font-style:italic;
+    position:absolute;
+    top:40%;
+    left: -10%;
+    line-height:60px;
+  }
+  .carousel-indicators li {
+  	border: 1px solid #583297;
+  }
+
+  .carousel-indicators .active {
+	  background-color: #583297;
+  }
+
+  .carousel-control {
+    background-image: none;
+    color: #583297;
+  }
+
+}
+
 .item-page-welcome-home {
 
   h1,h2,h3,h4,h5,h6 {

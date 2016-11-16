@@ -93,6 +93,7 @@
       <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_NEWSPAPER</option>
       <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_MAGAZINE</option>
       <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_RECCOMMENDATION</option>
+      <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_COLD_CALL</option>
     </field>
     <field
       name="captcha"
