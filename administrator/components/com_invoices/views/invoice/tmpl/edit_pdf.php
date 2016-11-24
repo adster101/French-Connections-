@@ -20,13 +20,16 @@ $userId = $user->get('id');
 
 
 
-<p>VAT Reg. Number: GB 801 2299 61<br>Company Registration Number: 3216862
-    French Connections <br />
-    Bracon House <br />
-    High Street <br />
-    Etchingham <br />
-    E Sussex <br />
-    TN19 7AJ
+<p class="small">
+  VAT Reg. Number: GB 801 2299 61<br />
+  Company Registration Number: 3216862<br />
+  French Connections <br />
+  Suite 3,<br />
+  5 Battalion Court,<br />
+  Colburn Business Park,<br />
+  Catterick Garrison,<br />
+  North Yorkshire.<br />
+  DL9 4QN.
 </p>
 <p><strong>INVOICE <?php echo $this->escape($this->id); ?></strong></p>
 <hr />
@@ -70,12 +73,12 @@ $userId = $user->get('id');
                 <td align="right" width="15%"><?php echo number_format($this->escape($item->line_value * $item->quantity), 2) ?></td>
             </tr>
         <?php endforeach; ?>
-        <tr>  
-            <td colspan="3">VAT</td>            
+        <tr>
+            <td colspan="3">VAT</td>
             <td align="right"><?php echo $this->escape($item->vat) ?></td>
         </tr>
         <tr>
-            <td colspan="3">&nbsp;</td>            
+            <td colspan="3">&nbsp;</td>
             <td align="right">
                 <strong><?php echo number_format($this->escape($this->items[0]->total_net) + $this->escape($this->items[0]->vat), 2) ?></strong>
             </td>
@@ -83,8 +86,3 @@ $userId = $user->get('id');
     </tbody>
 
 </table>
-
-
-
-
-

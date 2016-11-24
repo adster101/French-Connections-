@@ -31,14 +31,17 @@ $userId = $user->get('id');
         <img alt="French Connections Logo" src="/images/general/logo-3.png">
       </p>
       <p class="small">
-        VAT Reg. Number: GB 801 2299 61<br>Company Registration Number: 3216862
+        VAT Reg. Number: GB 801 2299 61<br />
+        Company Registration Number: 3216862<br />
         French Connections <br />
-        Bracon House <br />
-        High Street <br />
-        Etchingham <br />
-        E Sussex <br />
-        TN19 7AJ
+        Suite 3,<br />
+        5 Battalion Court,<br />
+        Colburn Business Park,<br />
+        Catterick Garrison,<br />
+        North Yorkshire.<br />
+        DL9 4QN.
       </p>
+
       <p class="large">
         <strong>
           INVOICE <?php echo $this->escape($this->id); ?>
