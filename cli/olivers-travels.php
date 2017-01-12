@@ -112,12 +112,19 @@ class OliversTravels extends Import
       foreach ($property_list->data as $property)
       {
 
+
         $property_data = $this->getData('http://feeds.oliverstravels.com/v1/dwellings/' . $property->id . '.json', $this->api_key);
 
         $property_data_json = json_decode($property_data);
 
         $propertyObj = $property_data_json->data[0];
 
+        if ($propertyObj->id != 4171)
+        {
+          continue;
+        } else {
+          var_dump($propertyObj);die;
+        }
         try
         {
 
@@ -187,7 +194,6 @@ class OliversTravels extends Import
 
             // Get the nearest city
             $city_id = $this->nearestcity($propertyObj->address->latitude, $propertyObj->address->longitude);
-
 
             // Get the location details for this property
             $classification = JTable::getInstance('Classification', 'ClassificationTable');
@@ -308,12 +314,12 @@ class OliversTravels extends Import
               $this->_saveFacilities($facilities, $unit_version_table->id, $unit_table->id);
             }
 
-            $this->out('Working through images...');
-
-            if (!$this->unit_version_detail)
-            {
-              $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
-            }
+            // $this->out('Working through images...');
+            //
+            // if (!$this->unit_version_detail)
+            // {
+            //   $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
+            // }
 
             $this->out('Updating tariff info');
 

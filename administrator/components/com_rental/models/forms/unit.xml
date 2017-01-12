@@ -202,7 +202,7 @@
       name="bathrooms"
       type="integer"
       first="0"
-      last="10"
+      last="15"
       step="1"
       label="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_LABEL"
       description="COM_RENTAL_HELLOWORLD_FIELD_BATHSHOWER_ROOMS_DESC"

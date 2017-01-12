@@ -30,15 +30,15 @@ defined('_JEXEC') or die;
       <?php echo $form->getInput('name'); ?>
     </div>
     <div class="form-group">
-      <?php echo $form->getLabel('email'); ?> 
+      <?php echo $form->getLabel('email'); ?>
       <?php echo $form->getInput('email'); ?>
     </div>
     <div class="form-group">
-      <?php echo $form->getLabel('tel'); ?> 
+      <?php echo $form->getLabel('tel'); ?>
       <?php echo $form->getInput('tel'); ?>
     </div>
     <div class="form-group">
-      <?php echo $form->getLabel('message'); ?> 
+      <?php echo $form->getLabel('message'); ?>
       <?php echo $form->getInput('message'); ?>
     </div>
     <?php echo $form->getLabel('nature'); ?>

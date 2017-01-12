@@ -60,7 +60,7 @@ class FcContactModelContact extends JModelAdmin
   }
 
   /**
-   * 
+   *
    * @param JForm $form
    * @param type $data
    * @param type $group
@@ -71,15 +71,11 @@ class FcContactModelContact extends JModelAdmin
 
     $input = JFactory::getApplication()->input;
 
+    // Flag to determine whether or not to modify for the ask us form
     $askus = $input->get('askus', false, 'boolean');
 
-    /* This was used when coming to the contact form from the advertise page, i.e. the 'sane' way
-    $presales = $input->get('pre-sales', false, 'boolean');
-    if ($presales)
-    {
-      $form->setFieldAttribute('nature', 'default', 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES');
-    }
-    */
+    // Flag to determine whether or not to modify for the competirion form
+    $competition = $input->get('competition', false, 'boolean');
 
     if ($askus)
     {
@@ -92,6 +88,14 @@ class FcContactModelContact extends JModelAdmin
       $form->setFieldAttribute('prn', 'required', 'false');
       $form->removeField('captcha');
     }
+
+    if ($competition)
+    {
+      $form->removeField('captcha');
+      $form->setFieldAttribute('message', 'required', 'false');
+      $form->setFieldAttribute('nature', 'required', 'false');
+    }
+
   }
 
   /**
@@ -108,11 +112,11 @@ class FcContactModelContact extends JModelAdmin
    */
   protected function populateState()
   {
-    
+
   }
 
   /**
-   * 
+   *
    * @param type $data
    * @return boolean
    */
@@ -120,6 +124,8 @@ class FcContactModelContact extends JModelAdmin
   {
 
     $Itemid = SearchHelper::getItemid(array('component', 'com_fccontact'));
+
+    $input = JFactory::getApplication()->input;
 
     $menu = JMenu::getInstance('site');
     $params = $menu->getParams($Itemid);
@@ -130,36 +136,70 @@ class FcContactModelContact extends JModelAdmin
 
     $from = $data['email'];
     $name = $data['name'];
+    $tel = $data['tel'];
 
     $to = $params->get('contact', 'fchelpdesk@frenchconnections.co.uk');
 
 
+    // Flag to determine whether or not to modify for the competirion form
+    $competition = $input->get('competition', false, 'boolean');
+    $competition_name = $input->get('name', false, 'string');
+    $optout = $input->get('optout', false, 'boolean');
 
-    // Send the registration email. the true argument means it will go as HTML
-    $send = JFactory::getMailer()
-            ->sendMail($from, $name, $to, $subject, $body, true);
 
-    if (!$send)
-    {
-      // Log out to file that email wasn't sent for what ever reason;
-      // Trigger email to admin / office user. e.g. as per registration.php
-      Throw new Exception('Problem sending email for contact form.');
+//var_dump($optout);die;
+
+
+
+    if ($competition) {
+      /*
+       * Save the contact out to db or log file
+       */
+       JLog::addLogger(
+           array(
+                // Sets file name
+                'text_file' => 'entries.php'
+           ),
+           // Sets messages of all log levels to be sent to the file
+           JLog::INFO,
+           // The log category/categories which should be recorded in this file
+           // In this case, it's just the one category from our extension, still
+           // we need to put it inside an array
+           array('com_fccontact')
+       );
+
+       JLog::add(JText::sprintf('COM_FCCONTACT_COMPTETITION_LOG', $name, $from, $tel, $competition_name, $optout), JLog::INFO, 'com_fccontact');
     }
 
-    // Send another email directly to Nick from no-reply@
-    if ($data['nature'] == 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES')
-    {
-      $cc = $params->get('additional_email');
+    // Don't send any email if this a competition.
+    if (!$competition) {
 
       // Send the registration email. the true argument means it will go as HTML
       $send = JFactory::getMailer()
-              ->sendMail('no-reply@frenchconnections.co.uk', $name, $cc, $subject, $body, true);
+              ->sendMail($from, $name, $to, $subject, $body, true);
 
       if (!$send)
       {
         // Log out to file that email wasn't sent for what ever reason;
         // Trigger email to admin / office user. e.g. as per registration.php
         Throw new Exception('Problem sending email for contact form.');
+      }
+
+      // Send another email directly to Nick from no-reply@
+      if ($data['nature'] == 'COM_FCCONTACT_NATURE_OF_ENQUIRY_PRE_SALES')
+      {
+        $cc = $params->get('additional_email');
+
+        // Send the registration email. the true argument means it will go as HTML
+        $send = JFactory::getMailer()
+                ->sendMail('no-reply@frenchconnections.co.uk', $name, $cc, $subject, $body, true);
+
+        if (!$send)
+        {
+          // Log out to file that email wasn't sent for what ever reason;
+          // Trigger email to admin / office user. e.g. as per registration.php
+          Throw new Exception('Problem sending email for contact form.');
+        }
       }
     }
 

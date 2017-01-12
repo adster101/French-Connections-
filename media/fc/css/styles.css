@@ -7633,6 +7633,63 @@ Advertise with us pages including landind specific styles.
   color: #ffffff;
   border: 2px solid #ffffff;
 }
+.item-page-win-2k-euro .jumbotron.item-page-win-2k-euro {
+  border-radius: 0;
+  margin-bottom: 0;
+  text-align: center;
+  text-transform: uppercase;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+@media (min-width: 992px) {
+  .item-page-win-2k-euro .jumbotron.item-page-win-2k-euro {
+    padding-left: 150px;
+    padding-right: 150px;
+  }
+}
+@media (min-width: 1200px) {
+  .item-page-win-2k-euro .jumbotron.item-page-win-2k-euro {
+    padding-left: 300px;
+    padding-right: 300px;
+  }
+}
+.item-page-win-2k-euro .jumbotron.item-page-win-2k-euro h1 {
+  font-size: 72px;
+  color: #fff;
+  font-family: Helvetica, sans-serif;
+  text-shadow: 2px 2px 0px black;
+  font-weight: bold;
+  margin-top: 120px;
+}
+@media (max-width: 768px) {
+  .item-page-win-2k-euro .jumbotron.item-page-win-2k-euro h1 {
+    font-size: 36px;
+    margin-top: 60px;
+  }
+}
+.item-page-win-2k-euro .jumbotron.item-page-win-2k-euro h2 {
+  margin-top: 0;
+  font-family: Helvetica, sans-serif;
+}
+.item-page-win-2k-euro .jumbotron.item-page-win-2k-euro p {
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  font-family: Helvetica, sans-serif;
+  text-shadow: 2px 2px 0px black;
+  font-weight: bold;
+  padding: 10px 0;
+}
+.item-page-win-2k-euro .blurb {
+  background: #525f79;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+}
+.item-page-win-2k-euro .blurb h3 {
+  font-weight: bold;
+  margin-top: 0;
+}
 .item-page-risk-free h1,
 .item-page-risk-free h2,
 .item-page-risk-free h3,

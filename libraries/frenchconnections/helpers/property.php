@@ -4,12 +4,12 @@
 defined('_JEXEC') or die;
 
 /**
- * A set of helper functions for the property components for working out days until renewal 
+ * A set of helper functions for the property components for working out days until renewal
  * general filters etc etc
- * 
+ *
  * @package frenchconnections
  * @subpackage library
- * 
+ *
  */
 abstract class PropertyHelper
 {
@@ -123,7 +123,7 @@ abstract class PropertyHelper
    * TO DO - Generically could be renamed to getDateDiff or similar
    *
    * @param type $expiry_date
-   * 
+   *
    */
   public static function getDaysToExpiry($expiry_date = '')
   {
@@ -145,7 +145,7 @@ abstract class PropertyHelper
    * Given a property ID checks both realestate and rental tables to determine
    * property type.
    * @param type $id
-   * @return boolean 
+   * @return boolean
    */
   public static function getPropertyType($id = '')
   {
@@ -159,7 +159,7 @@ abstract class PropertyHelper
     // Most likely this is a rental property
     $rental->load($id);
 
-    // If we have and ID then return rental 
+    // If we have and ID then return rental
     if ($rental->property_id)
     {
       return 'rental';
@@ -168,7 +168,7 @@ abstract class PropertyHelper
     // Okay, perhaps we have a realestate property
     $realestate->load($id);
 
-    // 
+    //
     if ($realestate->property_id)
     {
       return 'realestate';
