@@ -119,12 +119,6 @@ class OliversTravels extends Import
 
         $propertyObj = $property_data_json->data[0];
 
-        if ($propertyObj->id != 4171)
-        {
-          continue;
-        } else {
-          var_dump($propertyObj);die;
-        }
         try
         {
 
@@ -314,16 +308,16 @@ class OliversTravels extends Import
               $this->_saveFacilities($facilities, $unit_version_table->id, $unit_table->id);
             }
 
-            // $this->out('Working through images...');
-            //
-            // if (!$this->unit_version_detail)
-            // {
-            //   $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
-            // }
+            $this->out('Working through images...');
+
+            if (!$this->unit_version_detail)
+            {
+              $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
+            }
 
             $this->out('Updating tariff info');
 
-            $tariffs = $this->getTariffs($propertyObj->rates);
+            $tariffs = $this->getTariffs($propertyObj->rates, $propertyObj->details->currency);
 
             $unit_id = $unit_table->id;
 
@@ -360,8 +354,9 @@ class OliversTravels extends Import
       }
     }
 
-    public function getTariffs($tariffs = array())
+    public function getTariffs($tariffs = array(), $base_currency = '')
     {
+
       $tariffsArr = array();
 
       foreach($tariffs as $key => $tariff)
@@ -374,12 +369,28 @@ class OliversTravels extends Import
         } else {
           $tariffsArr[$key]['end_date'] = '';
         }
-        $tariffsArr[$key]['tariff'] = $tariff->weekly_price[0]->price / 100;
+
+        $priceArr = $this->_getPriceArray($tariff->weekly_price);
+
+        $tariffsArr[$key]['tariff'] = $priceArr[$base_currency] / 100;
 
       }
 
       return $tariffsArr;
     }
+
+    private function _getPriceArray($weeklyTariffs)
+    {
+      $prices = array();
+
+      foreach ($weeklyTariffs as $key => $value)
+      {
+        $prices[$value->currency] = $value->price;
+      }
+
+      return $prices;
+    }
+
 
     // Wrapper function to get the feed data via CURL
     public function getData($uri = '', $api_key = '')

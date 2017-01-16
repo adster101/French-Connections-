@@ -286,7 +286,7 @@ $longitude = $this->state->get('search.longitude', '');
                 'lwl' => $lwl
     ));
     ?>
-    <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_ACTIVITES'); ?></h4>
+    <!-- <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_ACTIVITES'); ?></h4>
     <?php
     echo $refine_type_layout->render(
             array(
@@ -298,6 +298,6 @@ $longitude = $this->state->get('search.longitude', '');
                 'offers' => $offers,
                 'lwl' => $lwl
     ));
-    ?>
+    ?> -->
   </div>
 </div>

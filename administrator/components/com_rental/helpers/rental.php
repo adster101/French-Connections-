@@ -68,7 +68,7 @@ abstract class RentalHelper
     }
     elseif (!empty($unit_id) && $controller == 'availability')
     {
-      $progress_icon = ($item->availability > 0) ? $okay_icon : $progress_icon;
+      $progress_icon = ($item->availability > 0) ? $okay_icon : $okay_icon;
     }
     elseif (!empty($unit_id) && $controller == 'unitversions' && !empty($listing_id))
     {
@@ -488,7 +488,7 @@ abstract class RentalHelper
    * @param type $first_day
    * @return string False on failure or error, true otherwise.
    */
-  public static function getAvailabilityCalendar($months = 18, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
+  public static function getAvailabilityCalendar($months = 24, $availability = array(), $day_name_length = 2, $first_day = 0, $link = true)
   {
     // String to hold the calendar HTML
     $calendar = '';
