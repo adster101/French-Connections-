@@ -48,7 +48,7 @@ class BeauxVillages extends RealestateImport {
         $this->out('About to get feed...');
 
         // Get and parse out the feed
-        $props = $this->parseFeed('http://xml.beauxvillages.com/gre.xml', 'Envelope');
+        $props = $this->parseFeed('http://xml.beauxvillages.com/frc.xml', 'Envelope');
 
         $this->out('Got feed...');
 

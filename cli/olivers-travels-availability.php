@@ -33,6 +33,8 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
 
+require_once JPATH_BASE . '/administrator/components/com_rental/helpers/rental.php';
+
 class OliversTravelsAvailability extends Import
 {
 
@@ -82,7 +84,7 @@ class OliversTravelsAvailability extends Import
 
       $availability = $this->getData('http://feeds.oliverstravels.com/v1/dwellings/' . $property->id . '/availability.json', $this->api_key);
 
-        try
+      try
         {
           $availabilityArr = array();
           $availability = json_decode($availability);
@@ -92,17 +94,27 @@ class OliversTravelsAvailability extends Import
           {
             foreach ($avper as $period)
             {
+              $availabilityObj = new stdClass;
               // Start date of the availability period
-              $availabilityArr[$counter]['start_date'] = $period->start_date;
+              $availabilityObj->start_date = JFactory::getDate($period->start_date)->calendar('d-m-Y');
 
               // Adjust the end date so it's the Friday rather than the following satrday
-              $availabilityArr[$counter]['end_date'] = $period->end_date;
+              $availabilityObj->end_date = JFactory::getDate($period->end_date)->calendar('d-m-Y');
 
               // Status is true, i.e. available
-              $availabilityArr[$counter]['status'] = $period->bookable;
+              $availabilityObj->availability = (int) $period->bookable;
+
+              $availabilityArr[$counter] = $availabilityObj;
+
               $counter++;
             }
           }
+
+          // Add this here to pad out the availability with availability periods
+          $availability_by_day = RentalHelper::getAvailabilityByDay($availabilityArr);
+
+          //
+          $availabilityArr = RentalHelper::getAvailabilityByPeriod($availability_by_day);
 
           $db->transactionStart();
 

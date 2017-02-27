@@ -909,7 +909,7 @@ class AccommodationModelListing extends JModelForm
 
             $query->columns(array('property_id', 'date_created'));
 
-            $date = JFactory::getDate()->toSql();
+            $date = JFactory::getDate()->calendar('Y-m-d');
 
             $query->values("$pk, '$date'");
 

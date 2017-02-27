@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form 
+<form
   addfieldpath="/administrator/components/com_specialoffers/models/fields"
-  addrulepath="/administrator/components/com_enquiries/models/rules"> 
-    
-  <fieldset  name="requestor" label="">
-    <field 
-      name="unit_title" 
-      type="text" 
+  addrulepath="/administrator/components/com_enquiries/models/rules">
+
+  <fieldset name="requestor" label="">
+    <field
+      name="unit_title"
+      type="text"
       filter="string"
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
       readonly="true"
       labelclass="control-label"
     />
-    <field 
+    <field
       description="COM_ENQUIRIES_ENQUIRY_FORENAME_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_FORENAME_LABEL"    
+      label="COM_ENQUIRIES_ENQUIRY_FORENAME_LABEL"
       name="guest_forename"
       labelclass="control-label"
       readonly="true"
       filter="unset">
     </field>
-    <field 
+    <field
       description="COM_ENQUIRIES_ENQUIRY_SURNAME_DESC"
       label="COM_ENQUIRIES_ENQUIRY_SURNAME_LABEL"
       name="guest_surname"
       labelclass="control-label"
       readonly="true"
       filter="unset">
-    </field>    
-    <field 
+    </field>
+    <field
       description="COM_ENQUIRIES_ENQUIRY_EMAIL_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"    
+      label="COM_ENQUIRIES_ENQUIRY_EMAIL_LABEL"
       name="guest_email"
       filter="email"
-      labelclass="control-label"     
+      labelclass="control-label"
       readonly="true">
-    </field>    
-    <field 
+    </field>
+    <field
       description="COM_ENQUIRIES_ENQUIRY_DATE_CREATEED_DESC"
       label="COM_ENQUIRIES_ENQUIRY_DATE_CREATED_LABEL"
       name="date_created"
@@ -45,20 +45,20 @@
       readonly="true"
       filter="unset"
       type="text">
-    </field>        
-    <field 
+    </field>
+    <field
       description="COM_ENQUIRIES_ENQUIRY_PHONE_DESC"
-      label="COM_ENQUIRIES_ENQUIRY_PHONE_LABEL"    
+      label="COM_ENQUIRIES_ENQUIRY_PHONE_LABEL"
       name="guest_phone"
       filter="unset"
-      labelclass="control-label"     
+      labelclass="control-label"
       readonly="true">
-    </field>        
+    </field>
   </fieldset>
 
-  
+
   <fieldset name="details">
-    <field 
+    <field
       name="message"
       type="textarea"
       description="COM_ENQUIRIES_ENQUIRY_DESCRIPTION_DESC"
@@ -68,47 +68,44 @@
       rows="10"
       maxlength="150"
       labelclass="control-label"
-      readonly="true"  
+      readonly="true"
       disabled="true"
-    />        
-    <field 
+    />
+    <field
       name="start_date"
       type="text"
       id="start-date"
-      class="input-small"
+      class="input-large"
       description="COM_ENQUIRIES_ENQUIRY_START_DATE_DESC"
       label="COM_ENQUIRIES_ENQUIRY_START_DATE_LABEL"
-      filter="unset"
       field="end_date"
       labelclass="control-label"
       readonly="true"
     />
-      
-    <field 
+
+    <field
       name="end_date"
       type="text"
       id="end-date"
-      class="input-small"
+      class="input-large"
       description="COM_ENQUIRIES_ENQUIRY_END_DATE_DESC"
       label="COM_ENQUIRIES_ENQUIRY_END_DATE_LABEL"
-      filter="unset"
-      labelclass="control-label"          
+      labelclass="control-label"
       readonly="true"
     />
-    
-    <field 
+
+    <field
       name="adults"
       type="text"
       id="adults"
       class="input-small"
       description="COM_ENQUIRIES_ENQUIRY_ADULTS_DESC"
       label="COM_ENQUIRIES_ENQUIRY_ADULTS_LABEL"
-      filter="unset"
-      labelclass="control-label"          
+      labelclass="control-label"
       readonly="true"
     />
-    
-    <field 
+
+    <field
       name="children"
       type="text"
       id="children"
@@ -116,13 +113,13 @@
       description="COM_ENQUIRIES_ENQUIRY_CHILDREN_DESC"
       label="COM_ENQUIRIES_ENQUIRY_CHILDREN_LABEL"
       filter="unset"
-      labelclass="control-label"          
+      labelclass="control-label"
       readonly="true"
-    />      
-    
-    <field 
-      name="unit_title" 
-      type="text" 
+    />
+
+    <field
+      name="unit_title"
+      type="text"
       filter="string"
       description="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_DESC"
       label="COM_ENQUIRIES_ENQUIRY_PROPERTY_ID_LABEL"
@@ -130,7 +127,7 @@
       labelclass="control-label"
     />
   </fieldset>
-  
+
   <fieldset name="reply">
     <field
       name="reply_subject"
@@ -153,23 +150,23 @@
       labelclass="control-label">
     </field>
 
-  </fieldset>      
-  <field 
+  </fieldset>
+  <field
     name="cc_message"
     type="checkbox"
     label="Send me a copy of this message"
-    required="false" 
+    required="false"
     labelclass="checkbox"
     default="1"
   />
-  
+
   <fieldset name="hidden">
-    <field 
+    <field
       name="property_id"
-      type="hidden" 
+      type="hidden"
       filter="int"
     />
-  
+
     <field
       name="id"
       type="hidden"

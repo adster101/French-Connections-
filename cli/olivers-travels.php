@@ -265,7 +265,11 @@ class OliversTravels extends Import
 
             if (!empty($propertyObj->descriptions->interior_grounds))
             {
-              $data['unit_version']['description'] .= '<p>' . strip_tags($propertyObj->descriptions->interior_grounds, '<p><br><b>') . '</p>';
+              // Strip all tags except p br and b
+              $interior_grounds = strip_tags($propertyObj->descriptions->interior_grounds, '<p><br><b>');
+
+              // Replace new lines with two line breaks for formatting purposes...
+              $data['unit_version']['description'] .= '<p>' . preg_replace("/\r\n|\r|\n/",'<br /><br />', $interior_grounds) . '</p>';
             }
 
             if (!empty($propertyObj->descriptions->terms_and_conditions))

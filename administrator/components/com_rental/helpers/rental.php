@@ -762,12 +762,32 @@ abstract class RentalHelper
    */
   public static function getAvailabilityByDay($availability_by_day = array(), $start_date = '', $end_date = '', $availability_status = false)
   {
+
     // Array to hold availability per day for each day that availability has been set for.
     // This is needed as availability is stored by period, but displayed by day.
+
+    // To correct availability issue default raw availability to 1
     $raw_availability = array();
+
+    $DateInterval = new DateInterval('P2Y');
+
+    $now = new DateTime();
+    $then = new DateTime();
+    $then->add($DateInterval);
+
+    $availability_period_length = date_diff($now, $then);
 
     // Generate a DateInterval object which is re-used in the below loop
     $DateInterval = new DateInterval('P1D');
+
+    // Loop from the start date to the end date adding an available day to the availability array for each availalable day
+    for ($i = 1; $i <= $availability_period_length->days; $i++)
+    {
+      $date = $now->add($DateInterval);
+
+      $raw_availability[date_format($now, 'd-m-Y')] = 1;
+    }
+
 
     // For each availability period passed in
     foreach ($availability_by_day as $availability_period)
@@ -796,6 +816,7 @@ abstract class RentalHelper
         $raw_availability[date_format($date, 'd-m-Y')] = $availability_period->availability;
       }
     }
+
     // If additional availability has been added then we need to add that to the array as well.
     if ($start_date && $end_date)
     {
@@ -811,21 +832,18 @@ abstract class RentalHelper
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
       for ($i = 0; $i <= $availability_period_length->days; $i++)
       {
-        // Only set the day as unavailable if the status is
-        if (!$availability_status)
-        {
+
           $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = $availability_status;
 
           // Add one day to the start date for each day of availability
           $date = $availability_period_start_date->add($DateInterval);
-        }
-        else
-        {
-          unset($raw_availability[date_format($availability_period_start_date, 'd-m-Y')]);
-          $date = $availability_period_start_date->add($DateInterval);
-        }
+
       }
     }
+
+    // Add function to pad unset raw availability to 'available'
+    // $this->addAvailability($raw_availability);
+
     return $raw_availability;
   }
 

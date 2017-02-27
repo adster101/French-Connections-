@@ -1480,37 +1480,31 @@ class FcSearchModelSearch extends JModelList
      */
     private function getFilterAvailability(JDatabaseQueryMysqli $query, $arrival = '', $departure = '', $db = '')
     {
-
-        if (empty($arrival) || empty($departure))
-        {
-            return $query;
-        }
-
-        // Join the availability table
-        $query->join('inner', '#__availability arr on d.unit_id = arr.unit_id');
-        $query->where('arr.availability = 0');
-
-        if ($arrival)
-        {
-            $query->where('arr.start_date >= ' . $db->quote($arrival));
-        }
-
-        if ($departure)
-        {
-            // Take one day of departure date to ensure we check a 7 day period rather than an eight day period
-            $query->where('arr.end_date <= ' . $query->dateAdd($departure, '-1', 'DAY'));
-        }
-
-        /*
-         * Possible fix for availabilty search
-         *
-
-          $query->where('((arr.start_date <= ' . $query->dateAdd($arrival, '-1', 'DAY')
-          . 'AND arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY') . ')'
-          . ' OR (arr.start_date <= ' . $query->dateAdd($arrival, '1', 'DAY')
-          . 'AND arr.end_date >= ' . $query->dateAdd($departure, '1', 'DAY') . '))');
-         */
-        return $query;
+      if (empty($arrival) || empty($departure))
+      {
+          return $query;
+      }
+      // Join the availability table
+      $query->join('inner', '#__availability arr on d.unit_id = arr.unit_id');
+      $query->where('arr.availability = 1');
+      if ($arrival)
+      {
+          $query->where('arr.start_date <= ' . $db->quote($arrival));
+      }
+      if ($departure)
+      {
+          // Take one day of departure date to ensure we check a 7 day period rather than an eight day period
+          $query->where('arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY'));
+      }
+      /*
+       * Possible fix for availabilty search
+       *
+        $query->where('((arr.start_date <= ' . $query->dateAdd($arrival, '-1', 'DAY')
+        . 'AND arr.end_date >= ' . $query->dateAdd($departure, '-1', 'DAY') . ')'
+        . ' OR (arr.start_date <= ' . $query->dateAdd($arrival, '1', 'DAY')
+        . 'AND arr.end_date >= ' . $query->dateAdd($departure, '1', 'DAY') . '))');
+       */
+      return $query;
     }
 
     /**

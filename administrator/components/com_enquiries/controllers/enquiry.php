@@ -13,8 +13,8 @@ class EnquiriesControllerEnquiry extends JControllerForm
 {
 
   /**
-   * allowEdit - 
-   * 
+   * allowEdit -
+   *
    * @param type $data
    * @param type $key
    * @return boolean
@@ -50,7 +50,7 @@ class EnquiriesControllerEnquiry extends JControllerForm
     }
 
     // TO DO - This is clunky. We probably don't need this controller at least for enquiry and invocie
-    // views. Would probably be enough to add the below into the 'property' helper class and call it 
+    // views. Would probably be enough to add the below into the 'property' helper class and call it
     // from each controller.
     // Fallback on edit.own.
     // First test if the permission is available.
@@ -68,14 +68,14 @@ class EnquiriesControllerEnquiry extends JControllerForm
         {
           // No record found against the property list so perhaps it a realestate enquiry...
           $record = $this->getModel('Property', 'RealestateModel')->getItem($recordId);
-          
+
           // If still no record then bail!
           if (empty($record))
           {
             return false;
           }
         }
-        
+
         // Carry on!
         $ownerId = $record->created_by;
       }
@@ -91,7 +91,7 @@ class EnquiriesControllerEnquiry extends JControllerForm
 
   /**
    * This method extends the edit method and updates the state to 'read'
-   * 
+   *
    * @param type $key
    * @param type $urlVar
    * @return boolean

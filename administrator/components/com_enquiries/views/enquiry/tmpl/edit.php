@@ -34,7 +34,7 @@ JForm::addFieldPath(JPATH_SITE . '/libraries/frenchconnections/fields');
           <div class="control-group">
             <?php echo $field->label; ?>
             <div class="controls">
-              <?php echo $field->value; ?>
+              <?php echo $field->input; ?>
             </div>
           </div>
         <?php endforeach; ?>

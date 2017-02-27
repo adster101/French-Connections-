@@ -35,11 +35,11 @@ class RentalModelAvailability extends JModelAdmin
     {
       return false;
     }
-    
+
     return true;
-   
+
   }
-  
+
   /**
    * Overrideen Method to save the form data.
    *
@@ -51,6 +51,7 @@ class RentalModelAvailability extends JModelAdmin
    */
   public function save($data)
   {
+
 
     // Format the dates back to the MySQL Format and assign other vatiables...
     $start_date = $data['start_date'];
@@ -81,8 +82,8 @@ class RentalModelAvailability extends JModelAdmin
       }
 
       // Update the availability last updated on field
-      // TO DO - This would probably be better done with a loop for each of the periods 
-      // binding, checking and storing each one in turn, inside a transaction. 
+      // TO DO - This would probably be better done with a loop for each of the periods
+      // binding, checking and storing each one in turn, inside a transaction.
       $table = $this->getTable('Unit', 'RentalTable');
 
       $data = array();

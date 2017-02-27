@@ -88,7 +88,7 @@ class JFeedParserEnvelope extends JFeedParser {
 
         $images = array();
         $listing = new stdClass();
-        
+
         $listing->agency_reference = (string) $el->reference;
         $listing->price = (string) $el->price;
         $listing->title = JHtml::_('string.truncate', $el->title_en, 125, true, false);
@@ -97,21 +97,21 @@ class JFeedParserEnvelope extends JFeedParser {
         $listing->bathrooms = $el->n_baths;
         $listing->latitude = (string) str_replace(',', '.', $el->latitude);
         $listing->longitude = (string) str_replace(',', '.', $el->longitude);
-        
+
         // This is needed because we don't have lat and long for some feeds
         if (!empty($listing->latitude) && !empty($listing->latitude)) {
             $city = $this->nearestcity((string) $listing->latitude, (string) $listing->longitude);
             $listing->city = (int) $city;
         }
-        
-        // Get the images as an array. 
+
+        // Get the images as an array.
         foreach ((array) $el as $index => $node){
-           if (strpos($index, 'pic_') !== false) 
+           if (strpos($index, 'pic_') !== false)
            {
-             $images[] = (string) $el->$index;  
+             $images[] = (string) $el->$index;
            }
         }
-        
+
         $listing->images = $images;
         $feed->properties[] = $listing;
 
@@ -119,7 +119,7 @@ class JFeedParserEnvelope extends JFeedParser {
     }
 
     /*
-     * 
+     *
      * Get the nearest town or city based on the town/city given and department
      */
 
@@ -138,7 +138,7 @@ class JFeedParserEnvelope extends JFeedParser {
           cos(radians(a.latitude)) *
           cos(radians(a.longitude) - radians(' . $longitude . '))
           + sin(radians(' . $latitude . '))
-          * sin(radians(a.latitude))) ) 
+          * sin(radians(a.latitude))) )
         ');
 
             $db->setQuery($query, 0, 1);
