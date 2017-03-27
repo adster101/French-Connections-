@@ -177,7 +177,7 @@ class JHtmlProperty {
 
     /**
      * Generates an button group for editing a property
-     * 
+     *
      * @param type $days
      * @param type $id
      * @param type $unit_id
@@ -297,9 +297,9 @@ class JHtmlProperty {
     }
 
     /**
-     * This helper method simply displays a button on the property listings view based on the review 
+     * This helper method simply displays a button on the property listings view based on the review
      * state and the number of days until renewal.
-     * 
+     *
      * @param	int $days	The number of days until the property expires, or null if a new sign up
      * @param	int $i
      */
@@ -441,7 +441,7 @@ class JHtmlProperty {
 
     /**
      * Adds a link type affair to the page
-     * 
+     *
      * @param type $id
      * @param type $title
      * @param type $task
@@ -518,7 +518,7 @@ class JHtmlProperty {
 
     /**
      * Simply outputs a button with an indication of whether the section has been completed or not
-     * 
+     *
      * @param type $action
      * @param type $state
      * @return type
@@ -542,7 +542,7 @@ class JHtmlProperty {
 
     /**
      * Simply outputs a li item with an indication of whether the section has been complete or not
-     * 
+     *
      * @param type $action
      * @param type $state
      * @return type

@@ -17,15 +17,13 @@ $preview = $input->get('preview', '', 'int');
 $append = '';
 $user = JFactory::getUser();
 $logged_in = ($user->guest) ? false : true;
-$uri = JUri::getInstance()->toString();
 
 $action = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 'remove' : 'add';
-$inShortlist = (array_key_exists($this->item->unit_id, $this->shortlist)) ? 1 : 0;
+
 $link = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id;
 $search_route = 'index.php?option=com_fcsearch&Itemid=' . (int) $searchID . '&s_kwds=france';
 
 $average_rating = JHtmlProperty::averageRating($this->reviews);
-
 
 // TO DO - Should also add a
 $owner = JFactory::getUser($this->item->created_by)->username;
@@ -70,13 +68,6 @@ $amenities = ($this->item->local_amenities) ? json_decode($this->item->local_ame
 $accordion_navigator = new JLayoutFile('frenchconnections.property.accordion');
 $accordion_data = new StdClass;
 
-// Shortlist button thingy
-$shortlist = new JLayoutFile('frenchconnections.general.shortlist');
-$displayData = new StdClass;
-$displayData->action = $action;
-$displayData->inShortlist = $inShortlist;
-$displayData->unit_id = $this->item->unit_id;
-$displayData->class = ' btn btn-default';
 
 // Add the reviews to item for the above layout.
 // TO DO - refactor so that $this->item contains all elements of the listing for use in layouts?
@@ -91,28 +82,48 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $search_url = $app->getUserState('user.search');
+
+$Itemid_review = SearchHelper::getItemid(array('component', 'com_reviews'));
+$review_route = JRoute::_('index.php?option=com_reviews&task=review.add&Itemid=' . $Itemid_review . '&unit_id=' . $this->item->unit_id, false);
+
+// Get the review item id and set the review route (only works if user logged in)
+$Itemid_login = SearchHelper::getItemid(array('component', 'com_reviews'));
+$login_route = JRoute::_('index.php?option=com_users&view=login&Itemid=' . $Itemid_login);
+
 $crumbs = JModuleHelper::getModules('breadcrumbs'); //If you want to use a different position for the modules, change the name here in your override.
 $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.
+
 ?>
 
-<div id="top" class="container hidden-xs">
+<div id="top" class="container">
   <h1 class="page-header">
     <?php echo $this->document->title; ?>
   </h1>
-  <!-- Begin breadcrumbs -->
-  <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc     ?>
-      <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
-  <?php endforeach; ?>
-  <!-- End breadcrumbs -->
+  <div class="row">
+    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-6">
+      <!-- Begin breadcrumbs -->
+      <?php foreach ($crumbs as $module) : // Render the cross-sell modules etc     ?>
+        <?php echo JModuleHelper::renderModule($module, array('style' => 'no', 'id' => 'section-box')); ?>
+      <?php endforeach; ?>
+      <!-- End breadcrumbs -->
+
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+      <?php echo $this->loadTemplate('social_icons'); ?>
+    </div>
+  </div>
   <?php if (count($this->units) > 1) : ?>
+    <div class="hidden-xs">
       <ul class="nav nav-tabs" style="margin-bottom:20px">
         <?php echo $this->loadTemplate('units'); ?>
       </ul>
+    </div>
   <?php endif; ?>
 </div>
+<div data-spy="affix" data-offset-top="250">
 <div class="container">
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
       <div class="property-buttons-row clearfix">
         <?php if (!empty($search_url)) : ?>
             <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">
@@ -125,56 +136,20 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
               <?php echo JText::_('COM_ACCOMMODATION_BROWSE_SEARCH_RESULTS'); ?>
             </a>
         <?php endif; ?>
-        <div class="pull-right">
-          <?php if ($logged_in) : ?>
-              <?php echo $shortlist->render($displayData); ?>
-          <?php else : ?>
-              <a class="btn btn-default btn-sm" href="<?php echo JRoute::_('index.php?option=com_users&Itemid=' . (int) $HolidayMakerLogin) ?>">
-                <span class="glyphicon glyphicon-heart muted"></span>
-                <span class=""><?php echo JText::_('COM_ACCOMMODATION_SHORTLIST') ?></span>
-              </a>
-          <?php endif; ?>
-          <button class='btn btn-default hidden-xs btn-sm' type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-share-alt"></span>
-            <?php echo JText::_('COM_ACCOMMODATION_SHARE') ?>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li>
-              <a target="_blank" href="<?php
-              echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
-              . urlencode($uri)
-              . '&redirect_uri='
-              . urlencode($uri)
-              . '&picture='
-              . JURI::root() . 'images/property/'
-              . $this->item->unit_id
-              . '/thumbs/'
-              . urlencode($this->images[0]->image_file_name)
-              . '&name=' . urlencode($this->item->unit_title)
-              . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
-              ?>">
-                <span class="glyphicon social-icon facebook"></span>
-                <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
-              </a>
-            </li>
-            <li>
-              <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
-                <span class="glyphicon social-icon twitter"></span>
-                <?php echo JText::_('COM_ACCOMMODATION_TWITTER') ?>
-              </a>
-            </li>
-            <li>
-              <a target="_blank" href="<?php echo 'https://plus.google.com/share?url=' . $uri ?>">
-                <span class="glyphicon social-icon google-plus"></span>
-                <?php echo JText::_('COM_ACCOMMODATION_GOOGLE_PLUS') ?>
-              </a>
-            </li>
-          </ul>
-        </div>
+      </div>
+    </div>
+    <div class="col-lg-10 col-md-10 col-sm-9">
+      <div class="hidden-xs">
+        <!-- Begin page navigator -->
+        <?php echo $this->loadTemplate('flight_of_the_navigator'); ?>
+        <!-- End page navigator -->
+      </div>
+      <div class="hidden-lg hidden-md hidden-sm">
+        <?php echo $this->loadTemplate('social_icons'); ?>
       </div>
     </div>
   </div>
+</div>
 </div>
 <div class="container">
   <?php if (count($this->offer)) : ?>
@@ -203,9 +178,9 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                     (&euro;<?php echo $min_prices['EUR']; ?>)
                     <br />
                     <?php if ($this->item->tariffs_based_on) : ?>
-                        <span class="small">
-                          <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
-                        </span>
+                      <span class="small">
+                        <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
+                      </span>
                     <?php endif; ?>
                   </p>
               <?php else: ?>
@@ -233,17 +208,35 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <?php endif; ?>
 
 
+          <hr />
           <?php if ($this->reviews) : ?>
-              <hr />
               <p>
                 <span class="orange">
                   <?php echo JHtmlProperty::rating($average_rating); ?>
                 </span>
                 <a href="<?php echo $link . '#reviews' ?>">Read all <?php echo count($this->reviews) ?> reviews</a>
               </p>
+            <?php else: ?>
+              <p>
+                <span class="glyphicon glyphicon-star orange"></span>
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_NO_REVIEWS') ?>
+              </p>
           <?php endif; ?>
+            <p>
+
+              <?php if ($logged_in) : ?>
+                <a href="<?php echo $review_route ?>">
+                    <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW'); ?>
+                </a>
+              <?php else: ?>
+                <a class="login" href="<?php echo $login_route . '?return=' . base64_encode($review_route) ?>">
+                  <?php echo JText::_('COM_ACCOMMODATION_SITE_ADD_REVIEW') ?>
+                </a>
+                <?php endif; ?>
+            </p>
 
           <div class="visible-xs">
+            <hr />
             <p>
               <a class="btn btn-danger btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
                 <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>
@@ -390,8 +383,8 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             </div>
           </div>
         </div>
-        <!-- Begin reviews -->
 
+        <!-- Begin reviews -->
         <?php echo $this->loadTemplate('reviews'); ?>
         <!-- End reviews -->
 
@@ -623,9 +616,6 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             </ul>
         <?php endif; ?>
       </div>
-      <!-- Begin page navigator -->
-      <?php echo $this->loadTemplate('navigator'); ?>
-      <!-- End page navigator -->
       <div class="hidden-md hidden-sm hidden-lg">
         <div id="email">
           <?php if ($this->item->unit_title) : ?>

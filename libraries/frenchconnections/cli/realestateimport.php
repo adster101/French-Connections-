@@ -34,8 +34,8 @@ class RealestateImport extends Import
   }
 
   /**
-   * Creates new entry in $table 
-   * 
+   * Creates new entry in $table
+   *
    * @param type string - The table to create a new record in
    * @param type $db
    * @param type $user
@@ -122,7 +122,9 @@ class RealestateImport extends Import
                     . 'bathrooms = ' . $data['bathrooms'] . ','
                     . 'base_currency = ' . $data['base_currency'] . ','
                     . 'price = ' . $data['price'] . ','
-                    . 'published_on = ' . $data['published_on'])
+                    . 'published_on = ' . $data['published_on'] . ','
+                    . 'latitude = ' . $data['latitude'] . ','
+                    . 'longitude = ' . $data['longitude'])
             ->where('realestate_property_id = ' . $data['id']);
 
     $db->setQuery($query);
@@ -141,7 +143,7 @@ class RealestateImport extends Import
 
   /**
    * TO DO - Make reusable
-   * 
+   *
    * @param type $db
    * @param type $id
    * @throws Exception
@@ -167,7 +169,7 @@ class RealestateImport extends Import
   }
  /**
    * TO DO - Make re-usable
-   * 
+   *
    * @param type $db
    * @param type $data
    * @return type

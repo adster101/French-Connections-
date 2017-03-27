@@ -367,6 +367,9 @@ class EnquiriesModelEnquiry extends JModelAdmin
     $reply = array();
     $reply['id'] = $data['id'];
     $reply['replied'] = 1;
+    // Clear the start and end date to avoid validating empty dates
+    $reply['start_date'] = ($data['start_date']) ? $data['start_date'] : '';
+    $reply['end_date'] = ($data['end_date']) ? $data['end_date'] : '';;
     $reply['date_replied'] = JFactory::getDate()->toSql();
 
     // Make this a bit more elegant

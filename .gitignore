@@ -74,10 +74,14 @@ robots.txt
 /administrator/language/en-GB/en-GB.plg_system_betterpreview.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_nnframework.sys.ini
 /administrator/language/en-GB/en-GB.plg_system_betterpreview.ini
+/administrator/language/en-GB/en-GB.plg_content_jce.ini
+/administrator/language/en-GB/en-GB.plg_content_jce.sys.ini
+
 /media/nnframework/
 /media/betterpreview/
 /plugins/editors-xtd/betterpreview/
 /plugins/system/betterpreview/
+/plugins/content/jce/
 /plugins/system/nnframework/
 /cli/leisure/json2db/json2txt/
 /cli/leisure/json2db/errors/
@@ -92,6 +96,8 @@ robots.txt
 /composer.json
 /composer.lock
 /libraries/tcpdf_6_2_12/
+/libraries/createsend
+/libraries/createsend/
 /libraries/PHPCrawl/
 /cli/beauxvillages_cleanup.php
 /plugins/system/tjminifyhtml/

@@ -1,4 +1,5 @@
-Joomla=window.Joomla||{},Joomla.editors=Joomla.editors||{},Joomla.editors.instances=Joomla.editors.instances||{},function(e,t){"use strict";e.submitform=function(e,n,r){n||(n=t.getElementById("adminForm")),e&&(n.task.value=e),n.noValidate=!r;var i=t.createElement("input");i.style.display="none",i.type="submit",n.appendChild(i).click(),n.removeChild(i)},e.submitbutton=function(t){e.submitform(t)},e.JText={strings:{},_:function(e,t){return typeof this.strings[e.toUpperCase()]!="undefined"?this.strings[e.toUpperCase()]:t},load:function(e){for(var t in e){if(!e.hasOwnProperty(t))continue;this.strings[t.toUpperCase()]=e[t]}return this}},e.replaceTokens=function(e){if(!/^[0-9A-F]{32}$/i.test(e))return;var n=t.getElementsByTagName("input"),r,i,s;for(r=0,s=n.length;r<s;r++)i=n[r],i.type=="hidden"&&i.value=="1"&&i.name.length==32&&(i.name=e)},e.isEmail=function(e){var t=/^[\w.!#$%&‚Äô*+\/=?^`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]{2,})+$/i;return t.test(e)},e.checkAll=function(e,t){if(!e.form)return!1;t=t?t:"cb";var n=0,r,i,s;for(r=0,s=e.form.elements.length;r<s;r++)i=e.form.elements[r],i.type==e.type&&i.id.indexOf(t)===0&&(i.checked=e.checked,n+=i.checked?1:0);return e.form.boxchecked&&(e.form.boxchecked.value=n),!0},e.renderMessages=function(n){e.removeMessages();var r=t.getElementById("system-message-container"),i,s,o,u,a,f,l;for(i in n){if(!n.hasOwnProperty(i))continue;s=n[i],o=t.createElement("div"),o.className="alert alert-"+i,u=e.JText._(i),typeof u!="undefined"&&(a=t.createElement("h4"),a.className="alert-heading",a.innerHTML=e.JText._(i),o.appendChild(a));for(f=s.length-1;f>=0;f--)l=t.createElement("p"),l.innerHTML=s[f],o.appendChild(l);r.appendChild(o)}},e.removeMessages=function(){var e=t.getElementById("system-message-container");while(e.firstChild)e.removeChild(e.firstChild);e.style.display="none",e.offsetHeight,e.style.display=""},e.isChecked=function(e,n){typeof n=="undefined"&&(n=t.getElementById("adminForm")),n.boxchecked.value+=e?1:-1;if(!n.elements["checkall-toggle"])return;var r=!0,i,s,o;for(i=0,o=n.elements.length;i<o;i++){s=n.elements[i];if(s.type=="checkbox"&&s.name!="checkall-toggle"&&!s.checked){r=!1;break}}n.elements["checkall-toggle"].checked=r},e.popupWindow=function(e,t,n,r,i){var s=(screen.width-n)/2,o=(screen.height-r)/2,u="height="+r+",width="+n+",top="+o+",left="+s+",scrollbars="+i+",resizable";window.open(e,t,u).window.focus()},e.tableOrdering=function(n,r,i,s){typeof s=="undefined"&&(s=t.getElementById("adminForm")),s.filter_order.value=n,s.filter_order_Dir.value=r,e.submitform(i,s)},window.writeDynaList=function(e,n,r,i,s){var o="<select "+e+">",u=r==i,a=0,f,l,c;for(l in n){if(!n.hasOwnProperty(l))continue;c=n[l];if(c[0]!=r)continue;f="";if(u&&s==c[1]||!u&&a===0)f='selected="selected"';o+='<option value="'+c[1]+'" '+f+">"+c[2]+"</option>",a++}o+="</select>",t.writeln(o)},window.changeDynaList=function(e,n,r,i,s){var o=t.adminForm[e],u=r==i,a,f,l,c;while(o.firstChild)o.removeChild(o.firstChild);a=0;for(f in n){if(!n.hasOwnProperty(f))continue;l=n[f];if(l[0]!=r)continue;c=new Option,c.value=l[1],c.text=l[2];if(u&&s==c.value||!u&&a===0)c.selected=!0;o.options[a++]=c}o.length=a},window.radioGetCheckedValue=function(e){if(!e)return"";var t=e.length,n;if(t===undefined)return e.checked?e.value:"";for(n=0;n<t;n++)if(e[n].checked)return e[n].value;return""},window.getSelectedValue=function(e,n){var r=t[e][n],i=r.selectedIndex;return i!==null&&i>-1?r.options[i].value:null},window.listItemTask=function(e,n){var r=t.adminForm,i=0,s,o=r[e];if(!o)return!1;for(;;){s=r["cb"+i];if(!s)break;s.checked=!1,i++}return o.checked=!0,r.boxchecked.value=1,window.submitform(n),!1},window.submitbutton=function(t){e.submitbutton(t)},window.submitform=function(t){e.submitform(t)},window.saveorder=function(e,t){window.checkAll_button(e,t)},window.checkAll_button=function(n,r){r=r?r:"saveorder";var i,s;for(i=0;i<=n;i++){s=t.adminForm["cb"+i];if(!s){alert("You cannot change the order of items, as an item in the list is `Checked Out`");return}s.checked=!0}e.submitform(r)}}(Joomla,document);
+Joomla=window.Joomla||{},Joomla.editors=Joomla.editors||{},Joomla.editors.instances=Joomla.editors.instances||{},function(e,t){"use strict";e.submitform=function(e,n,i){n||(n=t.getElementById("adminForm")),e&&(n.task.value=e),n.noValidate=!i;var o=t.createElement("input");o.style.display="none",o.type="submit",n.appendChild(o).click(),n.removeChild(o)},e.submitbutton=function(t){e.submitform(t)},e.JText={strings:{},_:function(e,t){return"undefined"!=typeof this.strings[e.toUpperCase()]?this.strings[e.toUpperCase()]:t},load:function(e){for(var t in e)e.hasOwnProperty(t)&&(this.strings[t.toUpperCase()]=e[t]);return this}},e.replaceTokens=function(e){if(/^[0-9A-F]{32}$/i.test(e)){var n,i,o,r=t.getElementsByTagName("input");for(n=0,o=r.length;o>n;n++)i=r[n],"hidden"==i.type&&"1"==i.value&&32==i.name.length&&(i.name=e)}},e.isEmail=function(e){var t=/^[\w.!#$%&‚Äô*+\/=?^`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]{2,})+$/i;return t.test(e)},e.checkAll=function(e,t){if(!e.form)return!1;t=t?t:"cb";var n,i,o,r=0;for(n=0,o=e.form.elements.length;o>n;n++)i=e.form.elements[n],i.type==e.type&&0===i.id.indexOf(t)&&(i.checked=e.checked,r+=i.checked?1:0);return e.form.boxchecked&&(e.form.boxchecked.value=r),!0},e.renderMessages=function(n){e.removeMessages();var i,o,r,a,l,s,c,d=t.getElementById("system-message-container");for(i in n)if(n.hasOwnProperty(i)){for(o=n[i],r=t.createElement("div"),r.className="alert alert-"+i,a=e.JText._(i),"undefined"!=typeof a&&(l=t.createElement("h4"),l.className="alert-heading",l.innerHTML=e.JText._(i),r.appendChild(l)),s=o.length-1;s>=0;s--)c=t.createElement("p"),c.innerHTML=o[s],r.appendChild(c);d.appendChild(r)}},e.removeMessages=function(){for(var e=t.getElementById("system-message-container");e.firstChild;)e.removeChild(e.firstChild);e.style.display="none",e.offsetHeight,e.style.display=""},e.isChecked=function(e,n){if("undefined"==typeof n&&(n=t.getElementById("adminForm")),n.boxchecked.value=e?parseInt(n.boxchecked.value)+1:parseInt(n.boxchecked.value)-1,n.elements["checkall-toggle"]){var i,o,r,a=!0;for(i=0,r=n.elements.length;r>i;i++)if(o=n.elements[i],"checkbox"==o.type&&"checkall-toggle"!=o.name&&!o.checked){a=!1;break}n.elements["checkall-toggle"].checked=a}},e.popupWindow=function(e,t,n,i,o){var r=(screen.width-n)/2,a=(screen.height-i)/2,l="height="+i+",width="+n+",top="+a+",left="+r+",scrollbars="+o+",resizable";window.open(e,t,l).window.focus()},e.tableOrdering=function(n,i,o,r){"undefined"==typeof r&&(r=t.getElementById("adminForm")),r.filter_order.value=n,r.filter_order_Dir.value=i,e.submitform(o,r)},window.writeDynaList=function(e,n,i,o,r){var a,l,s,c="<select "+e+">",d=i==o,u=0;for(l in n)n.hasOwnProperty(l)&&(s=n[l],s[0]==i&&(a="",(d&&r==s[1]||!d&&0===u)&&(a='selected="selected"'),c+='<option value="'+s[1]+'" '+a+">"+s[2]+"</option>",u++));c+="</select>",t.writeln(c)},window.changeDynaList=function(e,n,i,o,r){for(var a,l,s,c,d=t.adminForm[e],u=i==o;d.firstChild;)d.removeChild(d.firstChild);a=0;for(l in n)n.hasOwnProperty(l)&&(s=n[l],s[0]==i&&(c=new Option,c.value=s[1],c.text=s[2],(u&&r==c.value||!u&&0===a)&&(c.selected=!0),d.options[a++]=c));d.length=a},window.radioGetCheckedValue=function(e){if(!e)return"";var t,n=e.length;if(void 0===n)return e.checked?e.value:"";for(t=0;n>t;t++)if(e[t].checked)return e[t].value;return""},window.getSelectedValue=function(e,n){var i=t[e][n],o=i.selectedIndex;return null!==o&&o>-1?i.options[o].value:null},window.listItemTask=function(e,n){var i,o=t.adminForm,r=0,a=o[e];if(!a)return!1;for(;;){if(i=o["cb"+r],!i)break;i.checked=!1,r++}return a.checked=!0,o.boxchecked.value=1,window.submitform(n),!1},window.submitbutton=function(t){e.submitbutton(t)},window.submitform=function(t){e.submitform(t)},window.saveorder=function(e,t){window.checkAll_button(e,t)},window.checkAll_button=function(n,i){i=i?i:"saveorder";var o,r;for(o=0;n>=o;o++){if(r=t.adminForm["cb"+o],!r)return void alert("You cannot change the order of items, as an item in the list is `Checked Out`");r.checked=!0}e.submitform(i)}}(Joomla,document);
+
 var markers = [];
 
 jQuery(document).ready(function () {
@@ -9,20 +10,18 @@ jQuery(document).ready(function () {
           }
   );
 
-  (function () {
-    var _fbq = window._fbq || (window._fbq = []);
-    if (!_fbq.loaded) {
-      var fbds = document.createElement('script');
-      fbds.async = true;
-      fbds.src = '//connect.facebook.net/en_US/fbds.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(fbds, s);
-      _fbq.loaded = true;
-    }
-    _fbq.push(['addPixelId', '528120040655478']);
-  })();
-  window._fbq = window._fbq || [];
-  window._fbq.push(['track', 'PixelInitialized', {}]);
+
+  <!-- Facebook Pixel Code -->
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '1060605103975489');
+  fbq('track', "PageView");
+  <!-- End Facebook Pixel Code -->
+
 
   // This is purely to accommodate A/B testing of an alternative search layout
   // This or the above would need to be removed once the 'experiment' is finished.
@@ -147,7 +146,7 @@ jQuery(document).ready(function () {
     jQuery('#map_canvas').show();
   });
 
-  // Get the selected tab, if any 
+  // Get the selected tab, if any
   var selectedTab = localStorage['selectedTab'];
 
   // Default to show the list tab if nothing saved in localStorage
@@ -174,7 +173,7 @@ jQuery(document).ready(function () {
   });
 
 
-  // Event tracking for enquiry form 
+  // Event tracking for enquiry form
   jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function (event) {
     var target = jQuery(event.target);
     var input = '';
@@ -264,7 +263,7 @@ jQuery(document).ready(function () {
       // Get the start (arrival) date
       var date = new Date(ev.date);
 
-      // If the calendar is set to highlight days add seven days 
+      // If the calendar is set to highlight days add seven days
       // Assumes that this property is highlighting one day and that booking period
       // is for a seven night stay
       if (data.highlight) {
@@ -307,7 +306,7 @@ jQuery(document).ready(function () {
     }).click(function (event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      jQuery(this).popover('toggle'); // Manually open the popover 
+      jQuery(this).popover('toggle'); // Manually open the popover
     })
   })
 
@@ -355,7 +354,7 @@ jQuery(document).ready(function () {
   });
 
   // TO DO -make the below into a encapsulated function and reduce code here
-  // e.g. the show_contact method below is too similar to this functionality 
+  // e.g. the show_contact method below is too similar to this functionality
   // so should be made generic (and reusable)
   var use_invoice = jQuery('#jform_use_invoice_address');
   if (use_invoice.length)
@@ -488,7 +487,7 @@ jQuery(document).ready(function () {
     // what to do!?
   }
 
-  // Add special offer counter... 
+  // Add special offer counter...
   jQuery('#jform_offer_description').each(function () {
 
     // Assign this to that so we can use this later...
@@ -671,7 +670,7 @@ var show_vat = function (vatID) {
 
   } else if (vatID === 'ECS') {
 
-    // Add hidden input field for company number 
+    // Add hidden input field for company number
     vat_number.show();
     toggle('#jform_vat_number', true);
     toggle('#jform_company_number', false);
@@ -687,7 +686,7 @@ var show_vat = function (vatID) {
   }
 };
 
-/* 
+/*
  * Simple function which adds or removed the required class and toggles the required attribute
  */
 var toggle = function (elem, show) {

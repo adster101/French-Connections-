@@ -63,7 +63,7 @@ class AtLeisure extends Import
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
-        $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+        $rpc = new belvilla_jsonrpcCall('glynis', 'ka8s6db3');
 
         // Set a reasonable expiry date...
         $expiry_date = JFactory::getDate('+1 day')->calendar('Y-m-d');
@@ -259,7 +259,7 @@ class AtLeisure extends Import
                     $data['unit_version']['additional_price_notes'] = $this->additionalCosts($acco);
                     $data['unit_version']['bathrooms'] = $this->getBathrooms($acco);
                     $data['unit_version']['base_currency'] = 'EUR';
-                    $data['unit_version'] = $this->getBedrooms($layoutArr, $data['unit_version']);
+                    $data['unit_version']['bedrooms'] = $this->getBedrooms($layoutArr, $data['unit_version']);
 
                     $unit_version_table->set('_tbl_keys', array('id'));
 

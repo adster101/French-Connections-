@@ -82,13 +82,13 @@ class RentalModelUnitVersions extends JModelAdmin
 
   /**
    * This method returns an array of facilities (attributes) stored against a unit version.
-   * Called from getItem the returned data is then bound to the form before it's displayed to the 
+   * Called from getItem the returned data is then bound to the form before it's displayed to the
    * owner for editing.
-   * 
+   *
    * @param type $id
    * @param type $version
    * @return type array
-   * 
+   *
    */
   public function getFacilities($id, $version)
   {
@@ -250,6 +250,11 @@ class RentalModelUnitVersions extends JModelAdmin
     $key = $table->getKeyName();
     $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
     $isNew = true;
+    // Total up the number of bedrooms
+    if (isset($data['single_bedrooms']) || isset($data['double_bedrooms']) || isset($data['triple_bedrooms']) || isset($data['quad_bedrooms']) || isset($data['twin_bedrooms']))
+    {
+      $data['bedrooms'] = $data['single_bedrooms'] + $data['double_bedrooms'] + $data['triple_bedrooms'] + $data['quad_bedrooms'] + $data['twin_bedrooms'];
+    }
 
     // Generate a logger instance for reviews
     JLog::addLogger(array('text_file' => 'unitversions.update.php'), 'DEBUG', array('unitversions'));
@@ -374,7 +379,7 @@ class RentalModelUnitVersions extends JModelAdmin
       {
 
         // Here we have created a new version or a new unit
-        // Update the existing property listing to indicate that it has been modified and that it 
+        // Update the existing property listing to indicate that it has been modified and that it
         // requires a review
         $property = $this->getTable('Property', 'RentalTable');
 
@@ -405,7 +410,7 @@ class RentalModelUnitVersions extends JModelAdmin
 
 
         // Actually, here we need to create a completely new version of this property
-        // Otherwise, we might not have a previous version to compare to when generating payment etc.        
+        // Otherwise, we might not have a previous version to compare to when generating payment etc.
         //$property_version = $this->getTable('PropertyVersions', 'RentalTable');
         //if (!$property_version->load($table->property_id))
         //{
@@ -414,7 +419,7 @@ class RentalModelUnitVersions extends JModelAdmin
         //}
         // Unset the version id, to ensure a new version is created.
         //unset($property_version->id);
-        // Logger 
+        // Logger
         //JLog::add('About to create new property version for ' . $property->id, 'DEBUG', 'unitversions');
         // Attempt to save the new property details against the property id
         //if (!$property_version->store())
@@ -619,9 +624,9 @@ class RentalModelUnitVersions extends JModelAdmin
     // No attributes means that we're saving from the tariffs screen...or the units screen
     if (empty($attributes))
     {
-      // We're saving a unit either from the images or tariffs screen. 
+      // We're saving a unit either from the images or tariffs screen.
       // If this is a new version for an existing unit create a copy of the
-      // facilities against the new version 
+      // facilities against the new version
       if (($old_version_id != $new_version_id) && !$isNew)
       {
         $this->copyUnitFacilities($old_version_id, $new_version_id);
@@ -653,13 +658,13 @@ class RentalModelUnitVersions extends JModelAdmin
   /**
    * Method to create a 'unit' entry into the #__unit table.
    * This needs to be done prior to saving the version into #__unit_versions for new props
-   * 
-   * TO DO: This method isn't really needed. The unit model has a save method 
-   * which could be as follows: 
-   * 
+   *
+   * TO DO: This method isn't really needed. The unit model has a save method
+   * which could be as follows:
+   *
    * $unit = JModelLegacy::GetInstance etc
    * $unit->save($data);
-   * public function save($data){  
+   * public function save($data){
    * $return = true;
    * if (parent::save($data)){
    * $id =  (int) $this->getState($this->getName().'.id');
@@ -681,7 +686,7 @@ class RentalModelUnitVersions extends JModelAdmin
     }
 
     $unit_table = $this->getTable('Unit', 'RentalTable');
-   
+
     if (!$unit_table->save($data))
     {
       return false;
@@ -745,13 +750,13 @@ class RentalModelUnitVersions extends JModelAdmin
         }
       }
     }
-    
+
     // Check if we're uploading an image...
     if (array_key_exists('image_file_name', $data) || array_key_exists('caption', $data))
     {
       return true;
     }
-    
+
     return false;
   }
 

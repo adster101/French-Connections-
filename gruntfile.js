@@ -1,6 +1,6 @@
 module.exports = function (grunt) {
 
-  // 1. All configuration goes here 
+  // 1. All configuration goes here
   grunt.initConfig({
     // Add a 'global' opts object that we can access in each task...
     opts: {

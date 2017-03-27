@@ -82,7 +82,7 @@ class FcSearchViewSearch extends JViewLegacy
         }
         else
         {
-            // Check whether the URL is caninical based on the order of the
+            // Check whether the URL is canonical based on the order of the
             // filters. SEO related fix requested by Sagittarius.
             // https://www.frenchconnections.co.uk/administrator/index.php?option=com_tickets&task=ticket.edit&id=1068
             SearchHelper::isCanonical($this->localinfo->alias);
@@ -93,6 +93,7 @@ class FcSearchViewSearch extends JViewLegacy
 
             // Has to be done after getState, as with all really.
             $this->attribute_options = $this->get('RefineAttributeOptions');
+            // $this->activity_options = $this->get('RefineActivityOptions');
             $this->location_options = $this->get('RefineLocationOptions');
             $this->property_options = $this->get('RefinePropertyOptions');
             $this->accommodation_options = $this->get('RefineAccommodationOptions');

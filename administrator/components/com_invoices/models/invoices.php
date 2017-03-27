@@ -155,7 +155,7 @@ class InvoicesModelinvoices extends JModelList
     {
       if ((int) $search)
       {
-        $query->where('a.property_id = ' . (int) $search);
+        $query->where('a.user_id = ' . (int) $search);
       }
       else
       {
@@ -175,7 +175,7 @@ class InvoicesModelinvoices extends JModelList
     {
       $query->where("a.due_date <= '" . $db->escape($filter_due_date_to) . "'");
     }
-    
+
     // Add the list ordering clause.
     $orderCol = $this->state->get('list.ordering');
     $orderDirn = $this->state->get('list.direction');
@@ -187,4 +187,3 @@ class InvoicesModelinvoices extends JModelList
     return $query;
   }
 }
-

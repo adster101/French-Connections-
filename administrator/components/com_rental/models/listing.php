@@ -498,8 +498,8 @@ class RentalModelListing extends JModelList
 
       $unit_state->unit_detail = true; // Assume we have all property details
       $unit_state->gallery = true; // Assume we have some images
-      $unit_state->tariffs = true; // Assume we have some images
-      $unit_state->availability = true; // Assume we have some images
+      $unit_state->tariffs = true; // Assume we have some tariffs
+      $unit_state->availability = true; // Assume we have some availability
 
       if (empty($unit->unit_title) || empty($unit->description) || empty($unit->accommodation_type) || empty($unit->property_type))
       {
@@ -507,11 +507,11 @@ class RentalModelListing extends JModelList
         $listing->complete = false; // Listing isn't complete...
       }
 
-      if (!$unit->availability && $unit->published)
-      {
-        $unit_state->availability = false; // Assume we have some images
-        $listing->complete = false; // Should allow existing props to submit without
-      }
+      // if (!$unit->availability && $unit->published)
+      // {
+      //   $unit_state->availability = false; // Assume we have some images
+      //   $listing->complete = false; // Should allow existing props to submit without
+      // }
 
       if (!$unit->tariffs && $unit->published)
       {

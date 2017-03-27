@@ -11441,6 +11441,7 @@ return jQuery;
 	// Picker object
 
 	var Datepicker = function(element, options){
+		$(element).data('datepicker', this);
 		this._process_options(options);
 
 		this.dates = new DateArray();
@@ -11473,7 +11474,7 @@ return jQuery;
 		this.viewMode = this.o.startView;
 
 		if (this.o.calendarWeeks)
-			this.picker.find('tfoot .today, tfoot .clear')
+			this.picker.find('thead .datepicker-title, tfoot .today, tfoot .clear')
 						.attr('colspan', function(i, val){
 							return parseInt(val) + 1;
 						});
@@ -11569,7 +11570,7 @@ return jQuery;
 			o.multidateSeparator = String(o.multidateSeparator);
 
 			o.weekStart %= 7;
-			o.weekEnd = ((o.weekStart + 6) % 7);
+			o.weekEnd = (o.weekStart + 6) % 7;
 
 			var format = DPGlobal.parseFormat(o.format);
 			if (o.startDate !== -Infinity){
@@ -11658,8 +11659,6 @@ return jQuery;
 			} else {
 				o.defaultViewDate = UTCToday();
 			}
-			o.showOnFocus = o.showOnFocus !== undefined ? o.showOnFocus : true;
-			o.zIndexOffset = o.zIndexOffset !== undefined ? o.zIndexOffset : 10;
 		},
 		_events: [],
 		_secondaryEvents: [],
@@ -11815,7 +11814,8 @@ return jQuery;
 		},
 
 		show: function(){
-			if (this.element.attr('readonly') && this.o.enableOnReadonly === false)
+      var element = this.component ? this.element.find('input') : this.element;
+			if (element.attr('readonly') && this.o.enableOnReadonly === false)
 				return;
 			if (!this.isInline)
 				this.picker.appendTo(this.o.container);
@@ -12019,7 +12019,7 @@ return jQuery;
 				visualPadding = 10,
 				container = $(this.o.container),
 				windowWidth = container.width(),
-				scrollTop = container.scrollTop(),
+				scrollTop = this.o.container === 'body' ? $(document).scrollTop() : container.scrollTop(),
 				appendOffset = container.offset();
 
 			var parentsZindex = [];
@@ -12033,6 +12033,10 @@ return jQuery;
 			var width = this.component ? this.component.outerWidth(true) : this.element.outerWidth(false);
 			var left = offset.left - appendOffset.left,
 				top = offset.top - appendOffset.top;
+
+			if (this.o.container !== 'body') {
+				top += scrollTop;
+			}
 
 			this.picker.removeClass(
 				'datepicker-orient-top datepicker-orient-bottom '+
@@ -12054,7 +12058,7 @@ return jQuery;
 				} else if (left + calendarWidth > windowWidth) {
 					// the calendar passes the widow right edge. Align it to component right side
 					this.picker.addClass('datepicker-orient-right');
-					left = offset.left + width - calendarWidth;
+					left += width - calendarWidth;
 				} else {
 					// Default to left
 					this.picker.addClass('datepicker-orient-left');
@@ -12125,8 +12129,7 @@ return jQuery;
 			}, this));
 			dates = $.grep(dates, $.proxy(function(date){
 				return (
-					date < this.o.startDate ||
-					date > this.o.endDate ||
+					!this.dateWithinRange(date) ||
 					!date
 				);
 			}, this), true);
@@ -12216,17 +12219,11 @@ return jQuery;
 			}
 			if (this.dates.contains(date) !== -1)
 				cls.push('active');
-			if (date.valueOf() < this.o.startDate || date.valueOf() > this.o.endDate ||
-				$.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1){
+			if (!this.dateWithinRange(date) || this.dateIsDisabled(date)){
 				cls.push('disabled');
 			}
 			if ($.inArray(date.getUTCDay(), this.o.daysOfWeekHighlighted) !== -1){
 				cls.push('highlighted');
-			}
-			if (this.o.datesDisabled.length > 0 &&
-				$.grep(this.o.datesDisabled, function(d){
-					return isUTCEquals(date, d); }).length > 0) {
-				cls.push('disabled', 'disabled-date');
 			}
 
 			if (this.range){
@@ -12333,9 +12330,10 @@ return jQuery;
 			}
 			this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
 
+			var monthsTitle = dates[this.o.language].monthsTitle || dates['en'].monthsTitle || 'Months';
 			var months = this.picker.find('.datepicker-months')
 						.find('.datepicker-switch')
-							.text(this.o.maxViewMode < 2 ? 'Months' : year)
+							.text(this.o.maxViewMode < 2 ? monthsTitle : year)
 							.end()
 						.find('span').removeClass('active');
 
@@ -12483,12 +12481,9 @@ return jQuery;
 								this.fill();
 								break;
 							case 'today':
-								var date = new Date();
-								date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-
 								this.showMode(-2);
 								var which = this.o.todayBtn === 'linked' ? null : 'view';
-								this._setDate(date, which);
+								this._setDate(UTCToday(), which);
 								break;
 							case 'clear':
 								this.clearDates();
@@ -12585,12 +12580,12 @@ return jQuery;
 		_setDate: function(date, which){
 			if (!which || which === 'date')
 				this._toggle_multidate(date && new Date(date));
-			if (!which || which  === 'view')
+			if (!which || which === 'view')
 				this.viewDate = date && new Date(date);
 
 			this.fill();
 			this.setValue();
-			if (!which || which  !== 'view') {
+			if (!which || which !== 'view') {
 				this._trigger('changeDate');
 			}
 			var element;
@@ -12606,6 +12601,17 @@ return jQuery;
 			if (this.o.autoclose && (!which || which === 'date')){
 				this.hide();
 			}
+		},
+
+		moveDay: function(date, dir){
+			var newDate = new Date(date);
+			newDate.setUTCDate(date.getUTCDate() + dir);
+
+			return newDate;
+		},
+
+		moveWeek: function(date, dir){
+			return this.moveDay(date, dir * 7);
 		},
 
 		moveMonth: function(date, dir){
@@ -12662,6 +12668,33 @@ return jQuery;
 			return this.moveMonth(date, dir*12);
 		},
 
+		moveAvailableDate: function(date, dir, fn){
+			do {
+				date = this[fn](date, dir);
+
+				if (!this.dateWithinRange(date))
+					return false;
+
+				fn = 'moveDay';
+			}
+			while (this.dateIsDisabled(date));
+
+			return date;
+		},
+
+		weekOfDateIsDisabled: function(date){
+			return $.inArray(date.getUTCDay(), this.o.daysOfWeekDisabled) !== -1;
+		},
+
+		dateIsDisabled: function(date){
+			return (
+				this.weekOfDateIsDisabled(date) ||
+				$.grep(this.o.datesDisabled, function(d){
+					return isUTCEquals(date, d);
+				}).length > 0
+			);
+		},
+
 		dateWithinRange: function(date){
 			return date >= this.o.startDate && date <= this.o.endDate;
 		},
@@ -12675,7 +12708,7 @@ return jQuery;
 				return;
 			}
 			var dateChanged = false,
-				dir, newDate, newViewDate,
+				dir, newViewDate,
 				focusDate = this.focusDate || this.viewDate;
 			switch (e.keyCode){
 				case 27: // escape
@@ -12690,69 +12723,40 @@ return jQuery;
 					e.stopPropagation();
 					break;
 				case 37: // left
-				case 39: // right
-					if (!this.o.keyboardNavigation)
-						break;
-					dir = e.keyCode === 37 ? -1 : 1;
-					if (e.ctrlKey){
-						newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveYear(focusDate, dir);
-						this._trigger('changeYear', this.viewDate);
-					}
-					else if (e.shiftKey){
-						newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveMonth(focusDate, dir);
-						this._trigger('changeMonth', this.viewDate);
-					}
-					else {
-						newDate = new Date(this.dates.get(-1) || UTCToday());
-						newDate.setUTCDate(newDate.getUTCDate() + dir);
-						newViewDate = new Date(focusDate);
-						newViewDate.setUTCDate(focusDate.getUTCDate() + dir);
-					}
-					if (this.dateWithinRange(newViewDate)){
-						this.focusDate = this.viewDate = newViewDate;
-						this.setValue();
-						this.fill();
-						e.preventDefault();
-					}
-					break;
 				case 38: // up
+				case 39: // right
 				case 40: // down
-					if (!this.o.keyboardNavigation)
+					if (!this.o.keyboardNavigation || this.o.daysOfWeekDisabled.length === 7)
 						break;
-					dir = e.keyCode === 38 ? -1 : 1;
+					dir = e.keyCode === 37 || e.keyCode === 38 ? -1 : 1;
 					if (e.ctrlKey){
-						newDate = this.moveYear(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveYear(focusDate, dir);
-						this._trigger('changeYear', this.viewDate);
+						newViewDate = this.moveAvailableDate(focusDate, dir, 'moveYear');
+
+						if (newViewDate)
+							this._trigger('changeYear', this.viewDate);
 					}
 					else if (e.shiftKey){
-						newDate = this.moveMonth(this.dates.get(-1) || UTCToday(), dir);
-						newViewDate = this.moveMonth(focusDate, dir);
-						this._trigger('changeMonth', this.viewDate);
+						newViewDate = this.moveAvailableDate(focusDate, dir, 'moveMonth');
+
+						if (newViewDate)
+							this._trigger('changeMonth', this.viewDate);
 					}
-					else {
-						newDate = new Date(this.dates.get(-1) || UTCToday());
-						newDate.setUTCDate(newDate.getUTCDate() + dir * 7);
-						newViewDate = new Date(focusDate);
-						newViewDate.setUTCDate(focusDate.getUTCDate() + dir * 7);
+					else if (e.keyCode === 37 || e.keyCode === 39){
+						newViewDate = this.moveAvailableDate(focusDate, dir, 'moveDay');
 					}
-					if (this.dateWithinRange(newViewDate)){
+					else if (!this.weekOfDateIsDisabled(focusDate)){
+						newViewDate = this.moveAvailableDate(focusDate, dir, 'moveWeek');
+					}
+					if (newViewDate){
 						this.focusDate = this.viewDate = newViewDate;
 						this.setValue();
 						this.fill();
 						e.preventDefault();
 					}
-					break;
-				case 32: // spacebar
-					// Spacebar is used in manually typing dates in some formats.
-					// As such, its behavior should not be hijacked.
 					break;
 				case 13: // enter
-					if (!this.o.forceParse) {
-							break;
-					}
+					if (!this.o.forceParse)
+						break;
 					focusDate = this.focusDate || this.dates.get(-1) || this.viewDate;
 					if (this.o.keyboardNavigation) {
 						this._toggle_multidate(focusDate);
@@ -12764,11 +12768,7 @@ return jQuery;
 					this.fill();
 					if (this.picker.is(':visible')){
 						e.preventDefault();
-						if (typeof e.stopPropagation === 'function') {
-							e.stopPropagation(); // All modern browsers, IE9+
-						} else {
-							e.cancelBubble = true; // IE6,7,8 ignore "stopPropagation"
-						}
+						e.stopPropagation();
 						if (this.o.autoclose)
 							this.hide();
 					}
@@ -12812,6 +12812,7 @@ return jQuery;
 	};
 
 	var DateRangePicker = function(element, options){
+		$(element).data('datepicker', this);
 		this.element = $(element);
 		this.inputs = $.map(options.inputs, function(i){
 			return i.jquery ? i[0] : i;
@@ -12942,14 +12943,15 @@ return jQuery;
 					// Options priority: js args, data-attrs, locales, defaults
 					opts = $.extend({}, defaults, locopts, elopts, options);
 				if ($this.hasClass('input-daterange') || opts.inputs){
-					var ropts = {
+					$.extend(opts, {
 						inputs: opts.inputs || $this.find('input').toArray()
-					};
-					$this.data('datepicker', (data = new DateRangePicker(this, $.extend(opts, ropts))));
+					});
+					data = new DateRangePicker(this, opts);
 				}
 				else {
-					$this.data('datepicker', (data = new Datepicker(this, opts)));
+					data = new Datepicker(this, opts);
 				}
+				$this.data('datepicker', data);
 			}
 			if (typeof option === 'string' && typeof data[option] === 'function'){
 				internal_return = data[option].apply(data, args);
@@ -12999,6 +13001,8 @@ return jQuery;
 		weekStart: 0,
 		disableTouchKeyboard: false,
 		enableOnReadonly: true,
+		showOnFocus: true,
+		zIndexOffset: 10,
 		container: 'body',
 		immediateUpdates: false,
 		title: ''
@@ -13070,28 +13074,22 @@ return jQuery;
                 return format.toValue(date, format, language);
             var part_re = /([\-+]\d+)([dmwy])/,
 				parts = date.match(/([\-+]\d+)([dmwy])/g),
-				part, dir, i;
+				fn_map = {
+					d: 'moveDay',
+					m: 'moveMonth',
+					w: 'moveWeek',
+					y: 'moveYear'
+				},
+				part, dir, i, fn;
 			if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)){
 				date = new Date();
 				for (i=0; i < parts.length; i++){
 					part = part_re.exec(parts[i]);
 					dir = parseInt(part[1]);
-					switch (part[2]){
-						case 'd':
-							date.setUTCDate(date.getUTCDate() + dir);
-							break;
-						case 'm':
-							date = Datepicker.prototype.moveMonth.call(Datepicker.prototype, date, dir);
-							break;
-						case 'w':
-							date.setUTCDate(date.getUTCDate() + dir * 7);
-							break;
-						case 'y':
-							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
-							break;
-					}
+					fn = fn_map[part[2]];
+					date = Datepicker.prototype[fn](date, dir);
 				}
-				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 			}
 			parts = date && date.match(this.nonpunctuation) || [];
 			date = new Date();
@@ -13122,7 +13120,7 @@ return jQuery;
 				val, filtered;
 			setters_map['M'] = setters_map['MM'] = setters_map['mm'] = setters_map['m'];
 			setters_map['dd'] = setters_map['d'];
-			date = UTCDate(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+			date = UTCToday();
 			var fparts = format.parts.slice();
 			// Remove noop parts
 			if (parts.length !== fparts.length){
@@ -13253,7 +13251,7 @@ return jQuery;
 
 	/* DATEPICKER VERSION
 	 * =================== */
-	$.fn.datepicker.version = '1.5.0';
+	$.fn.datepicker.version = '1.5.1';
 
 	/* DATEPICKER DATA-API
 	* ================== */
@@ -13276,27 +13274,6 @@ return jQuery;
 
 }));
 
-(function(){var d=null;function e(a){return function(b){this[a]=b}}function h(a){return function(){return this[a]}}var j;
-function k(a,b,c){this.extend(k,google.maps.OverlayView);this.c=a;this.a=[];this.f=[];this.ca=[53,56,66,78,90];this.j=[];this.A=!1;c=c||{};this.g=c.gridSize||60;this.l=c.minimumClusterSize||2;this.J=c.maxZoom||d;this.j=c.styles||[];this.X=c.imagePath||this.Q;this.W=c.imageExtension||this.P;this.O=!0;if(c.zoomOnClick!=void 0)this.O=c.zoomOnClick;this.r=!1;if(c.averageCenter!=void 0)this.r=c.averageCenter;l(this);this.setMap(a);this.K=this.c.getZoom();var f=this;google.maps.event.addListener(this.c,
-"zoom_changed",function(){var a=f.c.getZoom();if(f.K!=a)f.K=a,f.m()});google.maps.event.addListener(this.c,"idle",function(){f.i()});b&&b.length&&this.C(b,!1)}j=k.prototype;j.Q="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m";j.P="png";j.extend=function(a,b){return function(a){for(var b in a.prototype)this.prototype[b]=a.prototype[b];return this}.apply(a,[b])};j.onAdd=function(){if(!this.A)this.A=!0,n(this)};j.draw=function(){};
-function l(a){if(!a.j.length)for(var b=0,c;c=a.ca[b];b++)a.j.push({url:a.X+(b+1)+"."+a.W,height:c,width:c})}j.S=function(){for(var a=this.o(),b=new google.maps.LatLngBounds,c=0,f;f=a[c];c++)b.extend(f.getPosition());this.c.fitBounds(b)};j.z=h("j");j.o=h("a");j.V=function(){return this.a.length};j.ba=e("J");j.I=h("J");j.G=function(a,b){for(var c=0,f=a.length,g=f;g!==0;)g=parseInt(g/10,10),c++;c=Math.min(c,b);return{text:f,index:c}};j.$=e("G");j.H=h("G");
-j.C=function(a,b){for(var c=0,f;f=a[c];c++)q(this,f);b||this.i()};function q(a,b){b.s=!1;b.draggable&&google.maps.event.addListener(b,"dragend",function(){b.s=!1;a.L()});a.a.push(b)}j.q=function(a,b){q(this,a);b||this.i()};function r(a,b){var c=-1;if(a.a.indexOf)c=a.a.indexOf(b);else for(var f=0,g;g=a.a[f];f++)if(g==b){c=f;break}if(c==-1)return!1;b.setMap(d);a.a.splice(c,1);return!0}j.Y=function(a,b){var c=r(this,a);return!b&&c?(this.m(),this.i(),!0):!1};
-j.Z=function(a,b){for(var c=!1,f=0,g;g=a[f];f++)g=r(this,g),c=c||g;if(!b&&c)return this.m(),this.i(),!0};j.U=function(){return this.f.length};j.getMap=h("c");j.setMap=e("c");j.w=h("g");j.aa=e("g");
-j.v=function(a){var b=this.getProjection(),c=new google.maps.LatLng(a.getNorthEast().lat(),a.getNorthEast().lng()),f=new google.maps.LatLng(a.getSouthWest().lat(),a.getSouthWest().lng()),c=b.fromLatLngToDivPixel(c);c.x+=this.g;c.y-=this.g;f=b.fromLatLngToDivPixel(f);f.x-=this.g;f.y+=this.g;c=b.fromDivPixelToLatLng(c);b=b.fromDivPixelToLatLng(f);a.extend(c);a.extend(b);return a};j.R=function(){this.m(!0);this.a=[]};
-j.m=function(a){for(var b=0,c;c=this.f[b];b++)c.remove();for(b=0;c=this.a[b];b++)c.s=!1,a&&c.setMap(d);this.f=[]};j.L=function(){var a=this.f.slice();this.f.length=0;this.m();this.i();window.setTimeout(function(){for(var b=0,c;c=a[b];b++)c.remove()},0)};j.i=function(){n(this)};
-function n(a){if(a.A)for(var b=a.v(new google.maps.LatLngBounds(a.c.getBounds().getSouthWest(),a.c.getBounds().getNorthEast())),c=0,f;f=a.a[c];c++)if(!f.s&&b.contains(f.getPosition())){for(var g=a,u=4E4,o=d,v=0,m=void 0;m=g.f[v];v++){var i=m.getCenter();if(i){var p=f.getPosition();if(!i||!p)i=0;else var w=(p.lat()-i.lat())*Math.PI/180,x=(p.lng()-i.lng())*Math.PI/180,i=Math.sin(w/2)*Math.sin(w/2)+Math.cos(i.lat()*Math.PI/180)*Math.cos(p.lat()*Math.PI/180)*Math.sin(x/2)*Math.sin(x/2),i=6371*2*Math.atan2(Math.sqrt(i),
-Math.sqrt(1-i));i<u&&(u=i,o=m)}}o&&o.F.contains(f.getPosition())?o.q(f):(m=new s(g),m.q(f),g.f.push(m))}}function s(a){this.k=a;this.c=a.getMap();this.g=a.w();this.l=a.l;this.r=a.r;this.d=d;this.a=[];this.F=d;this.n=new t(this,a.z(),a.w())}j=s.prototype;
-j.q=function(a){var b;a:if(this.a.indexOf)b=this.a.indexOf(a)!=-1;else{b=0;for(var c;c=this.a[b];b++)if(c==a){b=!0;break a}b=!1}if(b)return!1;if(this.d){if(this.r)c=this.a.length+1,b=(this.d.lat()*(c-1)+a.getPosition().lat())/c,c=(this.d.lng()*(c-1)+a.getPosition().lng())/c,this.d=new google.maps.LatLng(b,c),y(this)}else this.d=a.getPosition(),y(this);a.s=!0;this.a.push(a);b=this.a.length;b<this.l&&a.getMap()!=this.c&&a.setMap(this.c);if(b==this.l)for(c=0;c<b;c++)this.a[c].setMap(d);b>=this.l&&a.setMap(d);
-a=this.c.getZoom();if((b=this.k.I())&&a>b)for(a=0;b=this.a[a];a++)b.setMap(this.c);else if(this.a.length<this.l)z(this.n);else{b=this.k.H()(this.a,this.k.z().length);this.n.setCenter(this.d);a=this.n;a.B=b;a.ga=b.text;a.ea=b.index;if(a.b)a.b.innerHTML=b.text;b=Math.max(0,a.B.index-1);b=Math.min(a.j.length-1,b);b=a.j[b];a.da=b.url;a.h=b.height;a.p=b.width;a.M=b.textColor;a.e=b.anchor;a.N=b.textSize;a.D=b.backgroundPosition;this.n.show()}return!0};
-j.getBounds=function(){for(var a=new google.maps.LatLngBounds(this.d,this.d),b=this.o(),c=0,f;f=b[c];c++)a.extend(f.getPosition());return a};j.remove=function(){this.n.remove();this.a.length=0;delete this.a};j.T=function(){return this.a.length};j.o=h("a");j.getCenter=h("d");function y(a){a.F=a.k.v(new google.maps.LatLngBounds(a.d,a.d))}j.getMap=h("c");
-function t(a,b,c){a.k.extend(t,google.maps.OverlayView);this.j=b;this.fa=c||0;this.u=a;this.d=d;this.c=a.getMap();this.B=this.b=d;this.t=!1;this.setMap(this.c)}j=t.prototype;
-j.onAdd=function(){this.b=document.createElement("DIV");if(this.t)this.b.style.cssText=A(this,B(this,this.d)),this.b.innerHTML=this.B.text;this.getPanes().overlayMouseTarget.appendChild(this.b);var a=this;google.maps.event.addDomListener(this.b,"click",function(){var b=a.u.k;google.maps.event.trigger(b,"clusterclick",a.u);b.O&&a.c.fitBounds(a.u.getBounds())})};function B(a,b){var c=a.getProjection().fromLatLngToDivPixel(b);c.x-=parseInt(a.p/2,10);c.y-=parseInt(a.h/2,10);return c}
-j.draw=function(){if(this.t){var a=B(this,this.d);this.b.style.top=a.y+"px";this.b.style.left=a.x+"px"}};function z(a){if(a.b)a.b.style.display="none";a.t=!1}j.show=function(){if(this.b)this.b.style.cssText=A(this,B(this,this.d)),this.b.style.display="";this.t=!0};j.remove=function(){this.setMap(d)};j.onRemove=function(){if(this.b&&this.b.parentNode)z(this),this.b.parentNode.removeChild(this.b),this.b=d};j.setCenter=e("d");
-function A(a,b){var c=[];c.push("background-image:url("+a.da+");");c.push("background-position:"+(a.D?a.D:"0 0")+";");typeof a.e==="object"?(typeof a.e[0]==="number"&&a.e[0]>0&&a.e[0]<a.h?c.push("height:"+(a.h-a.e[0])+"px; padding-top:"+a.e[0]+"px;"):c.push("height:"+a.h+"px; line-height:"+a.h+"px;"),typeof a.e[1]==="number"&&a.e[1]>0&&a.e[1]<a.p?c.push("width:"+(a.p-a.e[1])+"px; padding-left:"+a.e[1]+"px;"):c.push("width:"+a.p+"px; text-align:center;")):c.push("height:"+a.h+"px; line-height:"+a.h+
-"px; width:"+a.p+"px; text-align:center;");c.push("cursor:pointer; top:"+b.y+"px; left:"+b.x+"px; color:"+(a.M?a.M:"black")+"; position:absolute; font-size:"+(a.N?a.N:11)+"px; font-family:Arial,sans-serif; font-weight:bold");return c.join("")}window.MarkerClusterer=k;k.prototype.addMarker=k.prototype.q;k.prototype.addMarkers=k.prototype.C;k.prototype.clearMarkers=k.prototype.R;k.prototype.fitMapToMarkers=k.prototype.S;k.prototype.getCalculator=k.prototype.H;k.prototype.getGridSize=k.prototype.w;
-k.prototype.getExtendedBounds=k.prototype.v;k.prototype.getMap=k.prototype.getMap;k.prototype.getMarkers=k.prototype.o;k.prototype.getMaxZoom=k.prototype.I;k.prototype.getStyles=k.prototype.z;k.prototype.getTotalClusters=k.prototype.U;k.prototype.getTotalMarkers=k.prototype.V;k.prototype.redraw=k.prototype.i;k.prototype.removeMarker=k.prototype.Y;k.prototype.removeMarkers=k.prototype.Z;k.prototype.resetViewport=k.prototype.m;k.prototype.repaint=k.prototype.L;k.prototype.setCalculator=k.prototype.$;
-k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.prototype.onAdd=k.prototype.onAdd;k.prototype.draw=k.prototype.draw;s.prototype.getCenter=s.prototype.getCenter;s.prototype.getSize=s.prototype.T;s.prototype.getMarkers=s.prototype.o;t.prototype.onAdd=t.prototype.onAdd;t.prototype.draw=t.prototype.draw;t.prototype.onRemove=t.prototype.onRemove;
-})();
 /*!
  * mustache.js - Logic-less {{mustache}} templates with JavaScript
  * http://github.com/janl/mustache.js
@@ -13311,7 +13288,7 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
     define(['exports'], factory); // AMD
   } else {
     global.Mustache = {};
-    factory(Mustache); // script, wsh, asp
+    factory(global.Mustache); // script, wsh, asp
   }
 }(this, function mustacheFactory (mustache) {
 
@@ -13362,11 +13339,13 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
     '>': '&gt;',
     '"': '&quot;',
     "'": '&#39;',
-    '/': '&#x2F;'
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
   };
 
   function escapeHtml (string) {
-    return String(string).replace(/[&<>"'\/]/g, function fromEntityMap (s) {
+    return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
       return entityMap[s];
     });
   }
@@ -13566,19 +13545,19 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
       token = tokens[i];
 
       switch (token[0]) {
-      case '#':
-      case '^':
-        collector.push(token);
-        sections.push(token);
-        collector = token[4] = [];
-        break;
-      case '/':
-        section = sections.pop();
-        section[5] = token[2];
-        collector = sections.length > 0 ? sections[sections.length - 1][4] : nestedTokens;
-        break;
-      default:
-        collector.push(token);
+        case '#':
+        case '^':
+          collector.push(token);
+          sections.push(token);
+          collector = token[4] = [];
+          break;
+        case '/':
+          section = sections.pop();
+          section[5] = token[2];
+          collector = sections.length > 0 ? sections[sections.length - 1][4] : nestedTokens;
+          break;
+        default:
+          collector.push(token);
       }
     }
 
@@ -13628,16 +13607,16 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
     var index = this.tail.search(re), match;
 
     switch (index) {
-    case -1:
-      match = this.tail;
-      this.tail = '';
-      break;
-    case 0:
-      match = '';
-      break;
-    default:
-      match = this.tail.substring(0, index);
-      this.tail = this.tail.substring(index);
+      case -1:
+        match = this.tail;
+        this.tail = '';
+        break;
+      case 0:
+        match = '';
+        break;
+      default:
+        match = this.tail.substring(0, index);
+        this.tail = this.tail.substring(index);
     }
 
     this.pos += match.length;
@@ -13864,7 +13843,7 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
   };
 
   mustache.name = 'mustache.js';
-  mustache.version = '2.2.0';
+  mustache.version = '2.2.1';
   mustache.tags = [ '{{', '}}' ];
 
   // All high-level mustache.* functions use this writer.
@@ -13945,7 +13924,7 @@ k.prototype.setGridSize=k.prototype.aa;k.prototype.setMaxZoom=k.prototype.ba;k.p
 }else b.touchObject.startX!==b.touchObject.curX&&(b.slideHandler(b.currentSlide),b.touchObject={})},b.prototype.swipeHandler=function(a){var b=this;if(!(b.options.swipe===!1||"ontouchend"in document&&b.options.swipe===!1||b.options.draggable===!1&&-1!==a.type.indexOf("mouse")))switch(b.touchObject.fingerCount=a.originalEvent&&void 0!==a.originalEvent.touches?a.originalEvent.touches.length:1,b.touchObject.minSwipe=b.listWidth/b.options.touchThreshold,b.options.verticalSwiping===!0&&(b.touchObject.minSwipe=b.listHeight/b.options.touchThreshold),a.data.action){case"start":b.swipeStart(a);break;case"move":b.swipeMove(a);break;case"end":b.swipeEnd(a)}},b.prototype.swipeMove=function(a){var d,e,f,g,h,b=this;return h=void 0!==a.originalEvent?a.originalEvent.touches:null,!b.dragging||h&&1!==h.length?!1:(d=b.getLeft(b.currentSlide),b.touchObject.curX=void 0!==h?h[0].pageX:a.clientX,b.touchObject.curY=void 0!==h?h[0].pageY:a.clientY,b.touchObject.swipeLength=Math.round(Math.sqrt(Math.pow(b.touchObject.curX-b.touchObject.startX,2))),b.options.verticalSwiping===!0&&(b.touchObject.swipeLength=Math.round(Math.sqrt(Math.pow(b.touchObject.curY-b.touchObject.startY,2)))),e=b.swipeDirection(),"vertical"!==e?(void 0!==a.originalEvent&&b.touchObject.swipeLength>4&&a.preventDefault(),g=(b.options.rtl===!1?1:-1)*(b.touchObject.curX>b.touchObject.startX?1:-1),b.options.verticalSwiping===!0&&(g=b.touchObject.curY>b.touchObject.startY?1:-1),f=b.touchObject.swipeLength,b.touchObject.edgeHit=!1,b.options.infinite===!1&&(0===b.currentSlide&&"right"===e||b.currentSlide>=b.getDotCount()&&"left"===e)&&(f=b.touchObject.swipeLength*b.options.edgeFriction,b.touchObject.edgeHit=!0),b.swipeLeft=b.options.vertical===!1?d+f*g:d+f*(b.$list.height()/b.listWidth)*g,b.options.verticalSwiping===!0&&(b.swipeLeft=d+f*g),b.options.fade===!0||b.options.touchMove===!1?!1:b.animating===!0?(b.swipeLeft=null,!1):(b.setCSS(b.swipeLeft),void 0)):void 0)},b.prototype.swipeStart=function(a){var c,b=this;return 1!==b.touchObject.fingerCount||b.slideCount<=b.options.slidesToShow?(b.touchObject={},!1):(void 0!==a.originalEvent&&void 0!==a.originalEvent.touches&&(c=a.originalEvent.touches[0]),b.touchObject.startX=b.touchObject.curX=void 0!==c?c.pageX:a.clientX,b.touchObject.startY=b.touchObject.curY=void 0!==c?c.pageY:a.clientY,b.dragging=!0,void 0)},b.prototype.unfilterSlides=b.prototype.slickUnfilter=function(){var a=this;null!==a.$slidesCache&&(a.unload(),a.$slideTrack.children(this.options.slide).detach(),a.$slidesCache.appendTo(a.$slideTrack),a.reinit())},b.prototype.unload=function(){var b=this;a(".slick-cloned",b.$slider).remove(),b.$dots&&b.$dots.remove(),b.$prevArrow&&"object"!=typeof b.options.prevArrow&&b.$prevArrow.remove(),b.$nextArrow&&"object"!=typeof b.options.nextArrow&&b.$nextArrow.remove(),b.$slides.removeClass("slick-slide slick-active slick-visible").attr("aria-hidden","true").css("width","")},b.prototype.unslick=function(a){var b=this;b.$slider.trigger("unslick",[b,a]),b.destroy()},b.prototype.updateArrows=function(){var b,a=this;b=Math.floor(a.options.slidesToShow/2),a.options.arrows===!0&&a.options.infinite!==!0&&a.slideCount>a.options.slidesToShow&&(a.$prevArrow.removeClass("slick-disabled"),a.$nextArrow.removeClass("slick-disabled"),0===a.currentSlide?(a.$prevArrow.addClass("slick-disabled"),a.$nextArrow.removeClass("slick-disabled")):a.currentSlide>=a.slideCount-a.options.slidesToShow&&a.options.centerMode===!1?(a.$nextArrow.addClass("slick-disabled"),a.$prevArrow.removeClass("slick-disabled")):a.currentSlide>=a.slideCount-1&&a.options.centerMode===!0&&(a.$nextArrow.addClass("slick-disabled"),a.$prevArrow.removeClass("slick-disabled")))},b.prototype.updateDots=function(){var a=this;null!==a.$dots&&(a.$dots.find("li").removeClass("slick-active").attr("aria-hidden","true"),a.$dots.find("li").eq(Math.floor(a.currentSlide/a.options.slidesToScroll)).addClass("slick-active").attr("aria-hidden","false"))},b.prototype.visibility=function(){var a=this;document[a.hidden]?(a.paused=!0,a.autoPlayClear()):a.options.autoplay===!0&&(a.paused=!1,a.autoPlay())},a.fn.slick=function(){var g,a=this,c=arguments[0],d=Array.prototype.slice.call(arguments,1),e=a.length,f=0;for(f;e>f;f++)if("object"==typeof c||"undefined"==typeof c?a[f].slick=new b(a[f],c):g=a[f].slick[c].apply(a[f].slick,d),"undefined"!=typeof g)return g;return a}});
 
 /**
- * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -13965,6 +13944,7 @@ Joomla.editors.instances = Joomla.editors.instances || {};
 	 * Generic submit form
 	 */
 	Joomla.submitform = function(task, form, validate) {
+
 		if (!form) {
 			form = document.getElementById('adminForm');
 		}
@@ -14165,7 +14145,7 @@ Joomla.editors.instances = Joomla.editors.instances || {};
 			form = document.getElementById( 'adminForm' );
 		}
 
-		form.boxchecked.value += isitchecked ? 1 : -1;
+		form.boxchecked.value = isitchecked ? parseInt(form.boxchecked.value) + 1 : parseInt(form.boxchecked.value) - 1;
 
 		// If we don't have a checkall-toggle, done.
 		if ( !form.elements[ 'checkall-toggle' ] ) return;
@@ -14318,9 +14298,9 @@ Joomla.editors.instances = Joomla.editors.instances || {};
 	 * @param radioObj
 	 * @return
 	 */
-	// return the value of the radio button that is checked
-	// return an empty string if none are checked, or
-	// there are no radio buttons
+		// return the value of the radio button that is checked
+		// return an empty string if none are checked, or
+		// there are no radio buttons
 	window.radioGetCheckedValue = function ( radioObj ) {
 		if ( !radioObj ) { return ''; }
 
@@ -14447,9 +14427,9 @@ Joomla.editors.instances = Joomla.editors.instances || {};
 
 }( Joomla, document ));
 
-/*! overthrow - An overflow:auto polyfill for responsive design. - v0.7.0 - 2015-10-05
-* Copyright (c) 2015 Scott Jehl, Filament Group, Inc.; Licensed MIT */
-!function(a,b){var c=a.document,d=c.documentElement,e="overthrow-enabled",f="ontouchmove"in c,g="WebkitOverflowScrolling"in d.style||"msOverflowStyle"in d.style||!f&&a.screen.width>800||function(){var b=a.navigator.userAgent,c=b.match(/AppleWebKit\/([0-9]+)/),d=c&&c[1],e=c&&d>=534;return b.match(/Android ([0-9]+)/)&&RegExp.$1>=3&&e||b.match(/ Version\/([0-9]+)/)&&RegExp.$1>=0&&a.blackberry&&e||b.indexOf("PlayBook")>-1&&e&&-1===!b.indexOf("Android 2")||b.match(/Firefox\/([0-9]+)/)&&RegExp.$1>=4||b.match(/wOSBrowser\/([0-9]+)/)&&RegExp.$1>=233&&e||b.match(/NokiaBrowser\/([0-9\.]+)/)&&7.3===parseFloat(RegExp.$1)&&c&&d>=533}();a.overthrow={},a.overthrow.enabledClassName=e,a.overthrow.addClass=function(){-1===d.className.indexOf(a.overthrow.enabledClassName)&&(d.className+=" "+a.overthrow.enabledClassName)},a.overthrow.removeClass=function(){d.className=d.className.replace(a.overthrow.enabledClassName,"")},a.overthrow.set=function(){g&&a.overthrow.addClass()},a.overthrow.canBeFilledWithPoly=f,a.overthrow.forget=function(){a.overthrow.removeClass()},a.overthrow.support=g?"native":"none"}(this),function(a,b,c){if(b!==c){b.easing=function(a,b,c,d){return c*((a=a/d-1)*a*a+1)+b},b.tossing=!1;var d;b.toss=function(a,e){b.intercept();var f,g,h=0,i=a.scrollLeft,j=a.scrollTop,k={top:"+0",left:"+0",duration:50,easing:b.easing,finished:function(){}},l=!1;if(e)for(var m in k)e[m]!==c&&(k[m]=e[m]);return"string"==typeof k.left?(k.left=parseFloat(k.left),f=k.left+i):(f=k.left,k.left=k.left-i),"string"==typeof k.top?(k.top=parseFloat(k.top),g=k.top+j):(g=k.top,k.top=k.top-j),b.tossing=!0,d=setInterval(function(){h++<k.duration?(a.scrollLeft=k.easing(h,i,k.left,k.duration),a.scrollTop=k.easing(h,j,k.top,k.duration)):(f!==a.scrollLeft?a.scrollLeft=f:(l&&k.finished(),l=!0),g!==a.scrollTop?a.scrollTop=g:(l&&k.finished(),l=!0),b.intercept())},1),{top:g,left:f,duration:b.duration,easing:b.easing}},b.intercept=function(){clearInterval(d),b.tossing=!1}}}(this,this.overthrow),function(a,b,c){if(b!==c){b.scrollIndicatorClassName="overthrow";var d=a.document,e=d.documentElement,f="native"===b.support,g=b.canBeFilledWithPoly,h=(b.configure,b.set),i=b.forget,j=b.scrollIndicatorClassName;b.closest=function(a,c){return!c&&a.className&&a.className.indexOf(j)>-1&&a||b.closest(a.parentNode)};var k=!1;b.set=function(){if(h(),!k&&!f&&g){a.overthrow.addClass(),k=!0,b.support="polyfilled",b.forget=function(){i(),k=!1,d.removeEventListener&&d.removeEventListener("touchstart",u,!1)};var j,l,m,n,o=[],p=[],q=function(){o=[],l=null},r=function(){p=[],m=null},s=function(a){n=j.querySelectorAll("textarea, input");for(var b=0,c=n.length;c>b;b++)n[b].style.pointerEvents=a},t=function(a,b){if(d.createEvent){var e,f=(!b||b===c)&&j.parentNode||j.touchchild||j;f!==j&&(e=d.createEvent("HTMLEvents"),e.initEvent("touchend",!0,!0),j.dispatchEvent(e),f.touchchild=j,j=f,f.dispatchEvent(a))}},u=function(a){if(b.intercept&&b.intercept(),q(),r(),j=b.closest(a.target),j&&j!==e&&!(a.touches.length>1)){s("none");var c=a,d=j.scrollTop,f=j.scrollLeft,g=j.offsetHeight,h=j.offsetWidth,i=a.touches[0].pageY,k=a.touches[0].pageX,n=j.scrollHeight,u=j.scrollWidth,v=function(a){var b=d+i-a.touches[0].pageY,e=f+k-a.touches[0].pageX,s=b>=(o.length?o[0]:0),v=e>=(p.length?p[0]:0);b>0&&n-g>b||e>0&&u-h>e?a.preventDefault():t(c),l&&s!==l&&q(),m&&v!==m&&r(),l=s,m=v,j.scrollTop=b,j.scrollLeft=e,o.unshift(b),p.unshift(e),o.length>3&&o.pop(),p.length>3&&p.pop()},w=function(a){s("auto"),setTimeout(function(){s("none")},450),j.removeEventListener("touchmove",v,!1),j.removeEventListener("touchend",w,!1)};j.addEventListener("touchmove",v,!1),j.addEventListener("touchend",w,!1)}};d.addEventListener("touchstart",u,!1)}}}}(this,this.overthrow),function(a,b){a.overthrow.set()}(this),function(a,b){function c(b,c,d,e){if(document.createEvent){var f=document.createEvent("Event");f.initEvent(c,!0,!0),f.overthrow=d,b.dispatchEvent(f)}else a.document.documentElement[e][c]={e:c,overthrow:d},a.document.documentElement[c]++}if(b&&!(!1 in a.document)){if(b.sidescroller=function(d,e){var f=d,g="overthrow",h=g+"-next",i=g+"-prev",j=g+"-method",k=g+"-refresh",l=g+"-resize",m=e&&e.snapScroll,n=e&&e.skipLinks,o=e&&e.rewind,p=e&&void 0!==e.snapTolerance?e.snapTolerance:30,q=arguments;e=e||{};for(var r=0;r<f.length;r++)!function(){function d(){for(var a=C.querySelectorAll("li"),b=100/a.length+"%",c=0;c<a.length;c++)a[c].style.width=b}function s(){var a=C.querySelectorAll("li"),b=C.querySelector("ul");b.style.width=a[0].offsetWidth*a.length+"px"}function t(a){a&&a.fixedItemWidth?s():d(),c(B,k,{},B.ieID)}function u(a){var b=C.querySelectorAll("li"),c=b.length,d=C.offsetWidth,e=b[0].offsetWidth,f=void 0!==a?a:C.scrollLeft,g=Math.round(f/e),h=10,i=[];g=Math.max(0,g),g=Math.min(c,g),i.push(g);for(var j=2;c>j;j++)d+h>j*e&&i.push(g+j-1);return E=g,i}function v(a,b){var c=1;return b&&b.slideLength&&(c="all"===b.slideLength?a.length:parseInt(b.slideLength,10)),isNaN(c)&&(c=1),c}function w(d){var f=d||a.event;if(f.preventDefault?f.preventDefault():f.returnValue=!1,"keydown"===f.type||G===!1||G===f.type){G=f.type,b.intercept();var g=C.querySelectorAll("li"),j=f.target||f.srcElement,k=C.offsetWidth,l=g[0].offsetWidth,m=C.scrollLeft,n=Math.round(m/l),p=j.className.indexOf("ff")>-1,q=j.className.indexOf("rwd")>-1,r="keydown"!==f.type&&j.className.indexOf("next")>-1||39===f.keyCode,s=v(u(),e),t=n+(r?s:-s),w=l*t,x=C.scrollWidth-k;if(j&&"A"!==j.nodeName)return;q&&(w=0),p&&(w=x),o?0>w?w=x:w>x&&(w=0):0>w?w=0:w>x&&(w=x);var y=u(w);y[y.length-1]==g.length-1&&(w=C.querySelector("ul").offsetWidth-k),(y[0]!==n||w!==m)&&(b.toss(C,{left:w,easing:e.easing}),c(B,r?h:i,{active:y,originalEvent:f},F)),setTimeout(function(){G=!1},900)}}function x(a){b.intercept();var d=C.querySelector("li").offsetWidth,f=C.scrollLeft,g=Math.round(f/d);if(L!==!1){var j=f-L;Math.abs(j)>p&&(g=E+(j>0?1:-1))}var k=d*g;b.toss(C,{left:k,duration:20,easing:e.easing}),E!==g&&(c(B,g>E?h:i,{active:u(k),originalEvent:a},F),E=g)}function y(a){clearTimeout(J),J=setTimeout(function(){c(B,g+"-resize",{},B.ieID),x(a)},100)}function z(a){overthrow.tossing||(clearTimeout(K),K=setTimeout(function(){L===!1&&(L=C.scrollLeft),m?x(a):c(B,g+"-scroll",{},F),L=!1},200))}function A(a){(39===a.keyCode||37===a.keyCode)&&w(a)}var B=f[r],C=f[r].querySelector(".overthrow"),D=a.document.createElement("div"),E=0,F="overthrow"+(new Date).getTime(),G=!1,H="<a href='#' class='sidescroll-prev'><span class='sr-only'>Previous</span></a><a href='#' class='sidescroll-next'><span class='sr-only'>Next</span></a>",I="<a href='#' class='sidescroll-rwd'>First</a><a href='#' class='sidescroll-ff'>Last</a>";if("string"==typeof e&&B.options)return c(B,j,{name:e,arguments:Array.prototype.slice.call(q,2)},B.ieID),void t(B.options);if(!B.initialized){B.initialized=!0,B.options=e,B.setAttribute("tabindex","0"),a.document.attachEvent&&(a.document.documentElement[i]=0,a.document.documentElement[h]=0,a.document.documentElement[j]=0,a.document.documentElement[k]=0,a.document.documentElement[l]=0,a.document.documentElement[F]={},a.document.documentElement[F][i]={},a.document.documentElement[F][h]={},a.document.documentElement[F][j]={},a.document.documentElement[F][k]={},a.document.documentElement[F][l]={},B.ieID=F),D.className="sidescroll-nextprev-links",n&&(H+=I),D.innerHTML=H,B.getActiveSlides=u;var J,K,L=!1;a.document.addEventListener?(D.addEventListener("click",w,!1),D.addEventListener("touchend",w,!1),a.addEventListener("resize",y,!1),f[r].addEventListener("keydown",A,!1),C.addEventListener("scroll",z,!1)):a.document.attachEvent&&(D.attachEvent("onclick",w,!1),a.attachEvent("onresize",y,!1),f[r].attachEvent("onkeydown",A,!1),C.attachEvent("onscroll",z,!1)),B.insertBefore(D,C),t(e),c(a.document.documentElement,g+"-init",{sideScroll:B,options:e},a.document.documentElement.ieID)}}()},a.document.attachEvent){var d="overthrow-init"+(new Date).getTime();a.document.documentElement[d]={},a.document.documentElement[d]["overthrow-init"]=0,a.document.documentElement.ieID=d}b.sidescroller.onEvent=function(b,c,d){function e(a){var e={type:b,target:c,overthrow:a.overthrow};d(e)}a.document.addEventListener?c.addEventListener(b,e):a.document.attachEvent&&a.document.documentElement.attachEvent("onpropertychange",function(d){d.propertyName===b&&e(a.document.documentElement[c.ieID][b])})}}}(this,this.overthrow);
+/*! overthrow - An overflow:auto polyfill for responsive design. - v0.6.5 - 2013-08-13
+* Copyright (c) 2013 Scott Jehl, Filament Group, Inc.; Licensed MIT */
+!function(a){var b=a.document,c=b.documentElement,d="overthrow-enabled",e="ontouchmove"in b,f="WebkitOverflowScrolling"in c.style||"msOverflowStyle"in c.style||!e&&a.screen.width>800||function(){var b=a.navigator.userAgent,c=b.match(/AppleWebKit\/([0-9]+)/),d=c&&c[1],e=c&&d>=534;return b.match(/Android ([0-9]+)/)&&RegExp.$1>=3&&e||b.match(/ Version\/([0-9]+)/)&&RegExp.$1>=0&&a.blackberry&&e||b.indexOf("PlayBook")>-1&&e&&-1===!b.indexOf("Android 2")||b.match(/Firefox\/([0-9]+)/)&&RegExp.$1>=4||b.match(/wOSBrowser\/([0-9]+)/)&&RegExp.$1>=233&&e||b.match(/NokiaBrowser\/([0-9\.]+)/)&&7.3===parseFloat(RegExp.$1)&&c&&d>=533}();a.overthrow={},a.overthrow.enabledClassName=d,a.overthrow.addClass=function(){-1===c.className.indexOf(a.overthrow.enabledClassName)&&(c.className+=" "+a.overthrow.enabledClassName)},a.overthrow.removeClass=function(){c.className=c.className.replace(a.overthrow.enabledClassName,"")},a.overthrow.set=function(){f&&a.overthrow.addClass()},a.overthrow.canBeFilledWithPoly=e,a.overthrow.forget=function(){a.overthrow.removeClass()},a.overthrow.support=f?"native":"none"}(this),function(a,b,c){if(b!==c){b.easing=function(a,b,c,d){return c*((a=a/d-1)*a*a+1)+b};var d;b.toss=function(a,e){var f,g,h=0,i=a.scrollLeft,j=a.scrollTop,k={top:"+0",left:"+0",duration:50,easing:b.easing};if(e)for(var l in k)e[l]!==c&&(k[l]=e[l]);return"string"==typeof k.left?(k.left=parseFloat(k.left),f=k.left+i):(f=k.left,k.left=k.left-i),"string"==typeof k.top?(k.top=parseFloat(k.top),g=k.top+j):(g=k.top,k.top=k.top-j),b.intercept(),d=setInterval(function(){h++<k.duration?(a.scrollLeft=k.easing(h,i,k.left,k.duration),a.scrollTop=k.easing(h,j,k.top,k.duration)):(f!==a.scrollLeft&&(a.scrollLeft=f),g!==a.scrollTop&&(a.scrollTop=g),b.intercept())},1),{top:g,left:f,duration:b.duration,easing:b.easing}},b.intercept=function(){clearInterval(d)}}}(this,this.overthrow),function(a,b,c){if(b!==c){b.scrollIndicatorClassName="overthrow";var d=a.document,e=d.documentElement,f="native"===b.support,g=b.canBeFilledWithPoly,h=(b.configure,b.set),i=b.forget,j=b.scrollIndicatorClassName;b.closest=function(a,c){return!c&&a.className&&a.className.indexOf(j)>-1&&a||b.closest(a.parentNode)};var k=!1;b.set=function(){if(h(),!k&&!f&&g){a.overthrow.addClass(),k=!0,b.support="polyfilled",b.forget=function(){i(),k=!1,d.removeEventListener&&d.removeEventListener("touchstart",u,!1)};var j,l,m,n,o=[],p=[],q=function(){o=[],l=null},r=function(){p=[],m=null},s=function(a){n=j.querySelectorAll("textarea, input");for(var b=0,c=n.length;c>b;b++)n[b].style.pointerEvents=a},t=function(a,b){if(d.createEvent){var e,f=(!b||b===c)&&j.parentNode||j.touchchild||j;f!==j&&(e=d.createEvent("HTMLEvents"),e.initEvent("touchend",!0,!0),j.dispatchEvent(e),f.touchchild=j,j=f,f.dispatchEvent(a))}},u=function(a){if(b.intercept&&b.intercept(),q(),r(),j=b.closest(a.target),j&&j!==e&&!(a.touches.length>1)){s("none");var c=a,d=j.scrollTop,f=j.scrollLeft,g=j.offsetHeight,h=j.offsetWidth,i=a.touches[0].pageY,k=a.touches[0].pageX,n=j.scrollHeight,u=j.scrollWidth,v=function(a){var b=d+i-a.touches[0].pageY,e=f+k-a.touches[0].pageX,s=b>=(o.length?o[0]:0),v=e>=(p.length?p[0]:0);b>0&&n-g>b||e>0&&u-h>e?a.preventDefault():t(c),l&&s!==l&&q(),m&&v!==m&&r(),l=s,m=v,j.scrollTop=b,j.scrollLeft=e,o.unshift(b),p.unshift(e),o.length>3&&o.pop(),p.length>3&&p.pop()},w=function(){s("auto"),setTimeout(function(){s("none")},450),j.removeEventListener("touchmove",v,!1),j.removeEventListener("touchend",w,!1)};j.addEventListener("touchmove",v,!1),j.addEventListener("touchend",w,!1)}};d.addEventListener("touchstart",u,!1)}}}}(this,this.overthrow),function(a){a.overthrow.set()}(this),function(a,b){function c(b,c,d,e){if(document.createEvent){var f=document.createEvent("Event");f.initEvent(c,!0,!0),f.overthrow=d,b.dispatchEvent(f)}else a.document.documentElement[e][c]={e:c,overthrow:d},a.document.documentElement[c]++}!b||!1 in a.document||(b.sidescroller=function(d,e){for(var f=d,g="overthrow",h=g+"-next",i=g+"-prev",j=e&&e.snapScroll,k=e&&e.rewind,l=0;l<f.length;l++)!function(){function d(){for(var a=s.querySelectorAll("li"),b=100/a.length+"%",c=0;c<a.length;c++)a[c].style.width=b}function e(a){var b=s.querySelectorAll("li"),c=b.length,d=s.offsetWidth,e=b[0].offsetWidth,f=void 0!==a?a:s.scrollLeft,g=Math.round(f/e),h=!0,i=[];g=Math.max(0,g),g=Math.min(c,g),i[0]=g;for(var j=1;c>j;j++)d>g+j*e?i.push(g+j):h=!1;return u=g,i}function g(d){var f=d||a.event;if(f.preventDefault?f.preventDefault():f.returnValue=!1,"keydown"===f.type||!q){q=!0,b.intercept();var g=s.querySelectorAll("li"),j=f.target||f.srcElement,l=s.offsetWidth,m=g[0].offsetWidth,n=s.scrollLeft,o=Math.round(n/m),p="keydown"!==f.type&&j.className.indexOf("next")>-1||39===f.keyCode,t=o+(p?1:-1),u=m*t,w=s.scrollWidth-l;k?0>u?u=w:u>w&&(u=0):0>u?u=0:u>w&&(u=w);var x=e(u);x[0]!==o&&(b.toss(s,{left:u}),c(r,p?h:i,{active:x,originalEvent:f},v)),setTimeout(function(){q=!1},100)}}function m(a){b.intercept();var d=s.querySelector("li").offsetWidth,f=s.scrollLeft,g=Math.round(f/d),j=d*g;b.toss(s,{left:j,duration:20}),u!==g&&(c(r,g>u?h:i,{active:e(j),originalEvent:a},v),u=g)}function n(a){clearTimeout(w),w=setTimeout(function(){m(a)},100)}function o(a){clearTimeout(x),x=setTimeout(function(){m(a)},200)}function p(a){(39===a.keyCode||37===a.keyCode)&&g(a)}var q,r=f[l],s=f[l].querySelector(".overthrow"),t=a.document.createElement("div"),u=0,v="overthrow"+(new Date).getTime();if(!r.initialized){r.initialized=!0,r.setAttribute("tabindex","0"),a.document.attachEvent&&(a.document.documentElement[i]=0,a.document.documentElement[h]=0,a.document.documentElement[v]={},a.document.documentElement[v][i]={},a.document.documentElement[v][h]={},r.ieID=v),t.className="sidescroll-nextprev-links",t.innerHTML="<a href='#' class='sidescroll-prev'>Previous</a><a href='#' class='sidescroll-next'>Next</a>",r.getActiveSlides=e;var w,x;a.document.addEventListener?(t.addEventListener("click",g,!1),t.addEventListener("touchend",g,!1),a.addEventListener("resize",n,!1),f[l].addEventListener("keydown",p,!1),j&&s.addEventListener("scroll",o,!1)):a.document.attachEvent&&(t.attachEvent("onclick",g,!1),a.attachEvent("onresize",n,!1),f[l].attachEvent("onkeydown",p,!1),j&&s.attachEvent("onscroll",o,!1)),r.insertBefore(t,s),d()}}()},b.sidescroller.onEvent=function(b,c,d){function e(a){var e={type:b,target:c,overthrow:a.overthrow};d(e)}a.document.addEventListener?c.addEventListener(b,e):a.document.attachEvent&&a.document.documentElement.attachEvent("onpropertychange",function(d){d.propertyName===b&&e(a.document.documentElement[c.ieID][b])})})}(this,this.overthrow);
 /*!
  * jQuery Cookie Plugin v1.2
  * https://github.com/carhartl/jquery-cookie
@@ -14477,20 +14457,18 @@ jQuery(document).ready(function () {
           }
   );
 
-  (function () {
-    var _fbq = window._fbq || (window._fbq = []);
-    if (!_fbq.loaded) {
-      var fbds = document.createElement('script');
-      fbds.async = true;
-      fbds.src = '//connect.facebook.net/en_US/fbds.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(fbds, s);
-      _fbq.loaded = true;
-    }
-    _fbq.push(['addPixelId', '528120040655478']);
-  })();
-  window._fbq = window._fbq || [];
-  window._fbq.push(['track', 'PixelInitialized', {}]);
+
+  <!-- Facebook Pixel Code -->
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '1060605103975489');
+  fbq('track', "PageView");
+  <!-- End Facebook Pixel Code -->
+
 
   // This is purely to accommodate A/B testing of an alternative search layout
   // This or the above would need to be removed once the 'experiment' is finished.
@@ -14615,7 +14593,7 @@ jQuery(document).ready(function () {
     jQuery('#map_canvas').show();
   });
 
-  // Get the selected tab, if any 
+  // Get the selected tab, if any
   var selectedTab = localStorage['selectedTab'];
 
   // Default to show the list tab if nothing saved in localStorage
@@ -14642,7 +14620,7 @@ jQuery(document).ready(function () {
   });
 
 
-  // Event tracking for enquiry form 
+  // Event tracking for enquiry form
   jQuery('#rental-contact-form :input').not(':input[type=submit]').on('focus', function (event) {
     var target = jQuery(event.target);
     var input = '';
@@ -14732,7 +14710,7 @@ jQuery(document).ready(function () {
       // Get the start (arrival) date
       var date = new Date(ev.date);
 
-      // If the calendar is set to highlight days add seven days 
+      // If the calendar is set to highlight days add seven days
       // Assumes that this property is highlighting one day and that booking period
       // is for a seven night stay
       if (data.highlight) {
@@ -14775,7 +14753,7 @@ jQuery(document).ready(function () {
     }).click(function (event) {
       event.preventDefault(); // Prevent the default click behaviour
       jQuery('.shortlist').not(this).popover('hide'); // Hide any other popovers that are open
-      jQuery(this).popover('toggle'); // Manually open the popover 
+      jQuery(this).popover('toggle'); // Manually open the popover
     })
   })
 
@@ -14823,7 +14801,7 @@ jQuery(document).ready(function () {
   });
 
   // TO DO -make the below into a encapsulated function and reduce code here
-  // e.g. the show_contact method below is too similar to this functionality 
+  // e.g. the show_contact method below is too similar to this functionality
   // so should be made generic (and reusable)
   var use_invoice = jQuery('#jform_use_invoice_address');
   if (use_invoice.length)
@@ -14956,7 +14934,7 @@ jQuery(document).ready(function () {
     // what to do!?
   }
 
-  // Add special offer counter... 
+  // Add special offer counter...
   jQuery('#jform_offer_description').each(function () {
 
     // Assign this to that so we can use this later...
@@ -15139,7 +15117,7 @@ var show_vat = function (vatID) {
 
   } else if (vatID === 'ECS') {
 
-    // Add hidden input field for company number 
+    // Add hidden input field for company number
     vat_number.show();
     toggle('#jform_vat_number', true);
     toggle('#jform_company_number', false);
@@ -15155,7 +15133,7 @@ var show_vat = function (vatID) {
   }
 };
 
-/* 
+/*
  * Simple function which adds or removed the required class and toggles the required attribute
  */
 var toggle = function (elem, show) {

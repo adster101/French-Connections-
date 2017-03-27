@@ -61,7 +61,7 @@ class RentalModelTariffs extends JModelAdmin
 
         // loadFormData is called by JModelForm when loadForm is called with load_date => true.
         // That is, it gets called when the item is being loaded or when the user is being redirected after a failed save attempt.
-        // Yes, it doesn't look pretty, but it seems necessary to put the submitted form data back into 
+        // Yes, it doesn't look pretty, but it seems necessary to put the submitted form data back into
         // the format required by the getTariffsXml method below.
         // TO DO - Make this a bit prettier, neater or more elegent...use JInput here...
         if (array_key_exists('start_date', $data) && array_key_exists('end_date', $data) && array_key_exists('tariff', $data))
@@ -96,7 +96,7 @@ class RentalModelTariffs extends JModelAdmin
      *
      * @param type $pk
      * @return boolean
-     * 
+     *
      */
     public function getItem($pk = null)
     {
@@ -129,9 +129,9 @@ class RentalModelTariffs extends JModelAdmin
 
         $query = $this->_db->getQuery(true);
         $query->select("
-        date_format(start_date, '%d-%m-%Y') as start_date, 
-        date_format(end_date, '%d-%m-%Y') 
-        as end_date, 
+        date_format(start_date, '%d-%m-%Y') as start_date,
+        date_format(end_date, '%d-%m-%Y')
+        as end_date,
         tariff
       ");
         $query->from('#__tariffs');
@@ -210,7 +210,7 @@ class RentalModelTariffs extends JModelAdmin
           description=""
           class="inputbox tariff_date input-small">
         </field>
-        
+
         <field
           id="tariff_end_date_' . $counter . '"
           name="end_date"
@@ -221,7 +221,7 @@ class RentalModelTariffs extends JModelAdmin
           description=""
           class="inputbox tariff_date input-small">
         </field>
-        
+
         <field
           id="tariff_price_' . $counter . '"
           name="tariff"
@@ -248,20 +248,20 @@ class RentalModelTariffs extends JModelAdmin
           type="tariff"
           multiple="true"
           label="COM_RENTAL_AVAILABILITY_FIELD_START_DATE_LABEL"
-          class="inputbox tariff_date input-small"         
+          class="inputbox tariff_date input-small"
           hint="dd-mm-yyyy">
         </field>
-        
+
         <field
           id="tariff_end_date_' . $i . '"
           name="end_date"
           type="tariff"
           multiple="true"
           label="COM_RENTAL_AVAILABILITY_FIELD_END_DATE_LABEL"
-          class="inputbox tariff_date input-small"         
+          class="inputbox tariff_date input-small"
           hint="dd-mm-yyyy">
         </field>
-        
+
         <field
           id="tariff_price_' . $i . '"
           name="tariff"
@@ -280,7 +280,7 @@ class RentalModelTariffs extends JModelAdmin
 
     /**
      * Method to save tariffs and additional tariff info.
-     * 
+     *
      * @param type $data
      */
     public function save($data = array())
@@ -288,7 +288,7 @@ class RentalModelTariffs extends JModelAdmin
 
         // Get the relevant data up front
         $table = $this->getTable('Tariffs', 'RentalTable');
-        
+
         // Get the date time now
         $now = new DateTime();
 
@@ -309,6 +309,8 @@ class RentalModelTariffs extends JModelAdmin
         $tariff_periods = RentalHelper::getAvailabilityByPeriod($tariffs_by_day, 'tariff');
         $unit_data = array(); // An array to hold data about the base unit to update
         $from_price = false; // Holds the minimum price for a unit based on the set of tariffs being saved.
+        $to_price = false; // Holds the maximum price for a unit based on the set of tariffs being saved.
+
         // We've checked all tariffs, need to save 'em
         // Generate a logger instance for tariffs
         JLog::addLogger(array('text_file' => 'tariffs.update.php'), 'DEBUG', array('tariffs'));
@@ -357,24 +359,27 @@ class RentalModelTariffs extends JModelAdmin
                 }
 
                 // This bit compares checks that the tariff end date
-                // is not expired. There's no point showing a tariff that is 
+                // is not expired. There's no point showing a tariff that is
                 // no longer current.
                 $end_date = new DateTime($tariff_period['end_date']);
-                
+
 
                 if ($end_date < $now)
                 {
                     continue;
                 }
-                
+
                 if (!$from_price)
                 {
                     $from_price = $tariff_period['tariff'];
+                    $to_price = $tariff_period['tariff'];
                 }
                 else
                 {
                     $from_price = ($tariff_period['tariff'] < $from_price) ? $tariff_period['tariff'] : $from_price;
+                    $to_price = ($tariff_period['tariff'] > $to_price) ? $tariff_period['tariff'] : $to_price;
                 }
+
 
                 // Flush the table ready for the next lot...
                 $table->reset();
@@ -404,15 +409,18 @@ class RentalModelTariffs extends JModelAdmin
         // If the base currency is EUR then calculate the correct price in sterling
         if ($data['base_currency'] == 'EUR')
         {
-            $prices = (!empty($from_price)) ? JHtmlGeneral::price($from_price, 'EUR') : '';
+            $from_prices = (!empty($from_price)) ? JHtmlGeneral::price($from_price, 'EUR') : '';
+            $to_prices = (!empty($to_price)) ? JHtmlGeneral::price($to_price, 'EUR') : '';
 
-            $from_price = $prices['GBP'];
+            $from_price = $from_prices['GBP'];
+            $to_price = $to_prices['GBP'];
         }
         // Get an instance of the unit model
         $unit = JModelLegacy::getInstance('Unit', 'RentalModel');
 
         // Set the data and save the from price against the unit
         $unit_data['from_price'] = $from_price;
+        $unit_data['to_price'] = $to_price;
         $unit_data['id'] = $pk;
 
         $unit->save($unit_data);
@@ -439,15 +447,15 @@ class RentalModelTariffs extends JModelAdmin
     }
 
     /*
-     * 
-     * 
+     *
+     *
      */
 
     protected function saveTariffs($unit_id = '', $data = array())
     {
 
         // Similar could be considered to the facilities as well.
-        // We need to extract tariff information here, because the tariffs are filtered via the 
+        // We need to extract tariff information here, because the tariffs are filtered via the
         // controller validation method. Perhaps need to override the validation method for this model?
 
         if (!array_key_exists('start_date', $data))
@@ -463,7 +471,7 @@ class RentalModelTariffs extends JModelAdmin
         $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'RentalTable', $config = array());
 
 
-        // Bind the translated fields to the JTable instance	
+        // Bind the translated fields to the JTable instance
         if (!$tariffsTable->save($unit_id, $tariff_periods))
         {
 
@@ -478,10 +486,10 @@ class RentalModelTariffs extends JModelAdmin
      * merged into the data before saving.
      *
      * Returns an array of tariffs per days based on tariff periods.
-     * 
+     *
      * @param array $tariffs An array of tariffs periods as passed in via the tariffs admin screen
      * @return array An array of availability, by day. If new start and end dates are passed then these are included in the returned array
-     * 
+     *
      */
     protected function getTariffsByDay($tariffs = array())
     {
@@ -511,7 +519,7 @@ class RentalModelTariffs extends JModelAdmin
                     // Convert the availability period start date to a PHP date object
                     $tariff_period_start_date = new DateTime($tariff->start_date);
 
-                    // Convert the availability period end date to a date 
+                    // Convert the availability period end date to a date
                     $tariff_period_end_date = new DateTime($tariff->end_date);
 
                     // Calculate the length of the availability period in days
@@ -542,7 +550,7 @@ class RentalModelTariffs extends JModelAdmin
 
     /**
      * Function to extract the tariffs POSTed from the tariffs screen into a neater data format.
-     * 
+     *
      * @param type $data
      * @return boolean
      */

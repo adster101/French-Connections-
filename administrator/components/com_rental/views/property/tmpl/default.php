@@ -14,7 +14,7 @@ JHtml::_('behavior.formvalidator');
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_rental&view=admin&id=' . (int) $this->id) ?>" method="post" name="adminForm" id="adminForm" class="form-validate">
-  <?php foreach ($this->form->getFieldsets() as $fieldset) : ?> 
+  <?php foreach ($this->form->getFieldsets() as $fieldset) : ?>
     <fieldset class="panelform">
       <legend>
         <?php echo JText::_($fieldset->label) ?>

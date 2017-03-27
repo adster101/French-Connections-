@@ -9,7 +9,6 @@
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.core');
-
 $app = JFactory::getApplication();
 $pathway = $app->getPathway();
 $items = $pathway->getPathWay();
@@ -31,11 +30,24 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 $refine_type_layout = new JLayoutFile('refinetype_two', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 
 $suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598);
-$facilities_filters = array(74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
+$facilities_filters = array(97, 74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
+$activity_filters = array(48,50,52,62,319,68);
 
 $suitabilityArr = array();
 $propertyArr = array();
 $facilitiesArr = array();
+$activitiesArr = array();
+
+foreach($this->activity_options as $values)
+{
+  foreach ($values as $key => $value)
+  {
+    if (in_array($value[id], $activity_filters))
+    {
+        $activitiesArr[] = (array) $value;
+    }
+  }
+}
 
 foreach ($this->attribute_options as $values)
 {
@@ -50,6 +62,7 @@ foreach ($this->attribute_options as $values)
         {
             $facilitiesArr[] = (array) $value;
         }
+
     }
 }
 
@@ -89,10 +102,10 @@ $longitude = $this->state->get('search.longitude', '');
                     <i class="glyphicon glyphicon-map-marker"></i>
 
             <?php echo JText::_('COM_FCSEARCH_VIEW_RESULTS_ON_MAP'); ?>
-  
+
                    <hr />
             <img class="img-responsive map" src="<?php echo '//maps.googleapis.com/maps/api/staticmap?center=' . $latitude . ',' . $longitude . '&size=300x150&zoom=7&scale=2key=AIzaSyBudTxPamz_W_Ou72m2Q8onEh10k_yCwYI' ?>" />
-                    
+
         </a>
       </li>
     </ul>
@@ -112,14 +125,63 @@ $longitude = $this->state->get('search.longitude', '');
     <div class="search-field">
       <button class="property-search-button btn btn-warning btn-sm" href="#">
         <?php echo JText::_('COM_FCSEARCH_UPDATE') ?>
-      </button>     
+      </button>
     </div>
+    <?php if (!empty($this->lwl) || !empty($this->so)) : ?>
+        <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_EXTRAS'); ?></h4>
+        <?php
+        $link = JURI::getInstance();
+        $query_string_original = $link->getQuery(true);
+        $query_string_new = $query_string_original;
+        ?>
+        <?php
+        if (!empty($this->lwl)) :
+            if ($query_string_new['lwl'])
+            {
+                unset($query_string_new['lwl']);
+            }
+            else
+            {
+                $query_string_new['lwl'] = 'true';
+            }
+            $link->setQuery($query_string_new);
+            ?>
+            <p>
+              <a href="<?php echo JRoute::_($link->toString()) ?>">
+                <i class="muted <?php echo (($lwl) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+                <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_LWL); ?> (<?php echo $this->lwl; ?>)
+              </a>
+            </p>
+        <?php endif; ?>
+        <?php
+        if (!empty($this->so)) :
+            $query_string_new = $query_string_original;
+
+            if ($query_string_new['offers'])
+            {
+                unset($query_string_new['offers']);
+            }
+            else
+            {
+                $query_string_new['offers'] = 'true';
+            }
+            $link->setQuery($query_string_new);
+            ?>
+            <p>
+              <a href="<?php echo JRoute::_($link->toString()) ?>">
+                <i class="muted <?php echo (($offers) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
+                <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_OFFERS); ?> (<?php echo $this->so; ?>)
+              </a>
+            </p>
+        <?php endif; ?>
+    <?php endif; ?>
+
     <?php if ($this->localinfo->level) : ?>
         <div class="">
 
           <h4 class="page-header"><?php echo JText::_($this->escape($this->localinfo->title)); ?></h4>
           <div class="">
-            <?php foreach ($items as $key => $value) : ?> 
+            <?php foreach ($items as $key => $value) : ?>
                 <?php if ($key > 0) : ?>
                     <?php
                     // TO DO - Make this into a function or sommat as it's repeated below.
@@ -132,7 +194,7 @@ $longitude = $this->state->get('search.longitude', '');
                         <span class="close"> &times;</span>
                         <?php echo $value->name = stripslashes(htmlspecialchars($value->name, ENT_COMPAT, 'UTF-8')); ?>
                       </a>
-                    </p> 
+                    </p>
                     <?php if (($key + 1) == count($items)) : ?>
                         <hr />
                     <?php endif; ?>
@@ -162,7 +224,7 @@ $longitude = $this->state->get('search.longitude', '');
                             <a href="<?php echo JRoute::_($route) ?>">
                               <?php echo $this->escape($value->title); ?> (<?php echo $value->count; ?>)
                             </a>
-                          </p>      
+                          </p>
                           <?php $counter++; ?>
                           <?php if ($counter == count($this->location_options) && !$hide) : ?>
                             </div>
@@ -177,7 +239,7 @@ $longitude = $this->state->get('search.longitude', '');
                     <?php endforeach ?>
                 <?php else : ?>
                     <?php echo '...'; ?>
-                <?php endif; ?> 
+                <?php endif; ?>
             <?php endif; ?>
           </div>
         </div>
@@ -224,54 +286,18 @@ $longitude = $this->state->get('search.longitude', '');
                 'lwl' => $lwl
     ));
     ?>
-
-    <?php if (!empty($this->lwl) || !empty($this->so)) : ?>  
-        <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_EXTRAS'); ?></h4>
-        <?php
-        $link = JURI::getInstance();
-        $query_string_original = $link->getQuery(true);
-        $query_string_new = $query_string_original;
-        ?>
-        <?php
-        if (!empty($this->lwl)) :
-            if ($query_string_new['lwl'])
-            {
-                unset($query_string_new['lwl']);
-            }
-            else
-            {
-                $query_string_new['lwl'] = 'true';
-            }
-            $link->setQuery($query_string_new);
-            ?>
-            <p>
-              <a href="<?php echo JRoute::_($link->toString()) ?>">
-                <i class="muted <?php echo (($lwl) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
-                <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_LWL); ?> (<?php echo $this->lwl; ?>)
-              </a>
-            </p>  
-        <?php endif; ?>
-        <?php
-        if (!empty($this->so)) :
-            $query_string_new = $query_string_original;
-
-            if ($query_string_new['offers'])
-            {
-                unset($query_string_new['offers']);
-            }
-            else
-            {
-                $query_string_new['offers'] = 'true';
-            }
-            $link->setQuery($query_string_new);
-            ?>
-            <p>
-              <a href="<?php echo JRoute::_($link->toString()) ?>">
-                <i class="muted <?php echo (($offers) ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-unchecked'); ?>"> </i>
-                <?php echo JText::_(COM_FCSEARCH_SEARCH_FILTER_OFFERS); ?> (<?php echo $this->so; ?>)
-              </a>
-            </p>  
-        <?php endif; ?>        
-    <?php endif; ?> 
+    <!-- <h4 class="page-header"><?php echo JText::_('COM_FCSEARCH_REFINE_ACTIVITES'); ?></h4>
+    <?php
+    echo $refine_type_layout->render(
+            array(
+                'data' => $activitiesArr,
+                'location' => $this->localinfo->title,
+                'itemid' => $Itemid_search,
+                'uri' => $uri,
+                'lang' => $lang,
+                'offers' => $offers,
+                'lwl' => $lwl
+    ));
+    ?> -->
   </div>
 </div>

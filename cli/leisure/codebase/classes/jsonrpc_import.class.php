@@ -14,7 +14,7 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 {
 
   private $webpartnercode = "glynis"; //your partnercode
-  private $webpartnerpassword = "gironde"; //your partnerpassword
+  private $webpartnerpassword = "ka8s6db3"; //your partnerpassword
   private $docroot = __DIR__; //the document root of your server
   private $txt_location; //the location of the generated txtfiles that will be imported later
   private $serverlocation = "http://demo.leisure-partners.net"; //the url of your website
@@ -53,9 +53,9 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function setJsonRpcList
-   * 
+   *
    * Sets all calls/textsfiles needed for this import. If list is made manual, the list is reduced
-   * 		
+   *
    * @return void
    */
   public function setJsonRpcList()
@@ -85,9 +85,9 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function handleErrors
-   * 
+   *
    * Saves all errors to a logfile and emails them to a specific emailadress
-   * 		
+   *
    * @return void
    */
   public function handleErrors()
@@ -125,9 +125,9 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function handleImportCompleted
-   * 
+   *
    * Calculates the duration of the complete import and sends an email with the complete log of this import.
-   * 		
+   *
    * @return void
    */
   public function handleImportCompleted($starttime = "")
@@ -148,9 +148,9 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function switchDatabaseReference
-   * 
+   *
    * Generates a phpfile with 2 defined variables. The current database to use and the firstdate that is used for the nightprices
-   * 		
+   *
    * @return void
    */
   public function switchDatabaseReference()
@@ -169,9 +169,9 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __getMailLog
-   * 
+   *
    * Generates a phpfile with 2 defined variables. The current database to use and the firstdate that is used for the nightprices
-   * 		
+   *
    * @return string The complete emaillog
    */
   private function __getMailLog()
@@ -181,10 +181,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function errorsOccured
-   * 
+   *
    * Checks if errors occured
-   * 		
-   * @return 	boolean 
+   *
+   * @return 	boolean
    */
   public function errorsOccured()
   {
@@ -193,12 +193,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function calculateTime
-   * 
+   *
    * calculates time between the 2 given params
-   * 
+   *
    * @param	integer		The starttime
    * @param	integer		The endtime
-   * @return 	integer 
+   * @return 	integer
    */
   public function calculateTime($t1, $t2 = "")
   {
@@ -209,9 +209,9 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __doCompleteImport
-   * 
+   *
    * Checks if there are sections defined to do a part of the import
-   * 		
+   *
    * @return 	boolean
    */
   private function __doCompleteImport()
@@ -221,12 +221,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __addTextFileLine
-   * 
+   *
    * saves text to a file
-   * 
+   *
    * @param	string		the line of text to be saved
    * @param	string		the filename where it has to be saved to
-   * @return 	void 
+   * @return 	void
    */
   private function __addTextFileLine($line, $textfile)
   {
@@ -236,11 +236,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __as
-   * 
+   *
    * adds slashes to a string
-   * 
+   *
    * @param	string		the inputstring without slashes
-   * @return 	string 
+   * @return 	string
    */
   private function __as($str)
   {
@@ -249,10 +249,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generateTxtFiles
-   * 
+   *
    * generate textfiles from data source
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __generateTxtFiles()
   {
@@ -267,10 +267,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __openFileHandlers
-   * 
+   *
    * opens file handlers for the requested files, prepare files for writing
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __openFileHandlers()
   {
@@ -284,10 +284,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __openFileHandler
-   * 
+   *
    * opens a file handlers, prepare the file for writing
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __openFileHandler($txtfile)
   {
@@ -300,10 +300,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __closeAllFileHandlers
-   * 
+   *
    * close file handlers, writing to file has ended
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __closeAllFileHandlers()
   {
@@ -320,10 +320,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generateTxtFile
-   * 
+   *
    * generates a textfile, which will be used to bulk insert into mysql database
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __generateTxtFile($jsonrpc_call, $name)
   {
@@ -336,10 +336,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function goParse
-   * 
+   *
    * parses jsonrpc data into textfiles
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   public function goParse()
   {
@@ -350,12 +350,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __echolog
-   * 
+   *
    * logs a string to the maillog and outputs that string is showprocess is on
-   * 
+   *
    * @param	string		the string to be logged
    * @param	Boolean		add breaks?
-   * @return 	void 
+   * @return 	void
    */
   private function __echolog($text, $addbreak = true)
   {
@@ -369,12 +369,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __setImportDatabaseTruncateTables
-   * 
+   *
    * sets the database for this importroutine
    * if empty it will check it there is a database defined to be used after the current live database
-   * 
+   *
    * @param	string		the databasename used for this import
-   * @return 	void 
+   * @return 	void
    */
   private function __setImportDatabaseTruncateTables($dbname)
   {
@@ -397,10 +397,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __truncateAllTables
-   * 
+   *
    * gets all tabled of the current database used for this import and truncated them all
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __truncateAllTables()
   {
@@ -411,10 +411,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __truncateTable
-   * 
+   *
    * truncates one table
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __truncateTable($table)
   {
@@ -431,12 +431,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __addError
-   * 
+   *
    * adds an error to the errors array and puts it into the errorlog
-   * 
+   *
    * @param	string		the error title
    * @param	string		the error message
-   * @return 	void 
+   * @return 	void
    */
   private function __addError($message, $error)
   {
@@ -446,10 +446,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function importFilesToMySQL
-   * 
+   *
    * imports all generated txt files
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   public function importFilesToMySQL()
   {
@@ -484,10 +484,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __disableKeys
-   * 
+   *
    * disables the keys of a table
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __disableKeys($table)
   {
@@ -500,10 +500,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __enableKeys
-   * 
+   *
    * enables the keys of a table
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   private function __enableKeys($table)
   {
@@ -515,11 +515,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __optimizeTable
-   * 
+   *
    * optimizes all tables in the param
-   * 
+   *
    * @param	array or string		the tables to be optimized
-   * @return 	void 
+   * @return 	void
    */
   private function __optimizeTable($tables)
   {
@@ -536,10 +536,10 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Public function removeAccosWithNoNightplanning
-   * 
+   *
    * removes all accos that don't have planningNight
-   * 
-   * @return 	void 
+   *
+   * @return 	void
    */
   public function removeAccosWithNoNightplanning()
   {
@@ -550,11 +550,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ListOfHousesV1
-   * 
+   *
    * calls ListOfHousesV1 and fills an array with all returned housecodes
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ListOfHousesV1($jsonrpc_call)
   {
@@ -591,11 +591,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_DataOfHousesV1
-   * 
+   *
    * calls DataOfHousesV1 in chunks of 100 for each housecode in the all_accos_array
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_DataOfHousesV1($jsonrpc_call)
   {
@@ -610,12 +610,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __loadAccoChunc
-   * 
+   *
    * calls DataOfHousesV1 in chunks of 100 for each housecode in the all_accos_array
-   * 
+   *
    * @param	string		The name of the RPC call
    * @param	array		an array with housecodes to be requested
-   * @return 	void 
+   * @return 	void
    */
   private function __loadAccoChunc($jsonrpc_call, $acco_chunk)
   {
@@ -956,11 +956,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ReferenceLayoutItemsV1
-   * 
+   *
    * calls ReferenceLayoutItemsV1 and creates a txt file to import into out database
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ReferenceLayoutItemsV1($jsonrpc_call)
   {
@@ -996,11 +996,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ReferenceLayoutDetailsV1
-   * 
+   *
    * calls ReferenceLayoutDetailsV1 and creates a txt file to import into out database
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ReferenceLayoutDetailsV1($jsonrpc_call)
   {
@@ -1028,11 +1028,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ReferencePropertiesV1
-   * 
+   *
    * calls ReferencePropertiesV1 and creates a txt file to import into out database
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ReferencePropertiesV1($jsonrpc_call)
   {
@@ -1070,11 +1070,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ReferenceRegionsV1
-   * 
+   *
    * calls ReferenceRegionsV1 and creates a txt file to import into out database
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ReferenceRegionsV1($jsonrpc_call)
   {
@@ -1111,11 +1111,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ReferenceSkiAreasV1
-   * 
+   *
    * calls ReferenceSkiAreasV1 and creates a txt file to import into out database
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ReferenceSkiAreasV1($jsonrpc_call)
   {
@@ -1146,11 +1146,11 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __generate_ReferenceParksV1
-   * 
+   *
    * calls ReferenceParksV1 and creates a txt file to import into out database
-   * 
+   *
    * @param	string		The name of the RPC call
-   * @return 	void 
+   * @return 	void
    */
   private function __generate_ReferenceParksV1($jsonrpc_call)
   {
@@ -1224,12 +1224,12 @@ class jsonRpcImport extends belvilla_jsonrpcCall
 
   /**
    * Private function __getPeriod
-   * 
+   *
    * defines a periodid depending on arrivaldate and number of nights
-   * 
+   *
    * @param	DateTime		the arrivaldate
    * @param	integer			the number of nights
-   * @return 	string 
+   * @return 	string
    */
   private function __getPeriod($a_date, $nights)
   {

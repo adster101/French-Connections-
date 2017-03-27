@@ -14,7 +14,7 @@ abstract class FcadminHelper {
   public static function addSubmenu($submenu) {
     // Get the ID of the item we are editing
     $id = JRequest::getVar('id');
-    
+
     JHtmlSidebar::addEntry(JText::_('Menu'), '#');
     JHtmlSidebar::addEntry(JText::_('Admin'), 'index.php?option=com_fcadmin', $submenu == 'fcadmin');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_IMPORT_INVOICES'), 'index.php?option=com_fcadmin&view=myobsync', $submenu == 'myobsync');
@@ -23,6 +23,7 @@ abstract class FcadminHelper {
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_IMAGES'), 'index.php?option=com_fcadmin&view=images', $submenu == 'images');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NOTIFICATIONS'), 'index.php?option=com_fcadmin&view=notification', $submenu == 'notification');
     JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_NOPROPERTY'), 'index.php?option=com_fcadmin&view=noproperty&format=raw', $submenu == 'noproperty');
+    JHtmlSidebar::addEntry(JText::_('COM_FCADMIN_SPECIALOFFER_BULK'), 'index.php?option=com_fcadmin&view=specialoffers', $submenu == 'specialoffers');
   }
 
 }

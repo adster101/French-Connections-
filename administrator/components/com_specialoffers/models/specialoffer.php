@@ -40,11 +40,11 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
   /*
    * Function get offer
-   * Gets one special offer for a property 
-   * 
+   * Gets one special offer for a property
+   *
    * params
    * @id; property id
-   * 
+   *
    */
 
   public function getActiveOffer($unit_id = null, $start_date = '', $end_date = '', $pk = 0)
@@ -54,12 +54,12 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $query->from($this->_db->quoteName('#__special_offers'));
     $query->where('unit_id = ' . (int) $unit_id);
     // Removed the below which prevents owners from scheduling two offers with overlapping dates
-    // $query->where('published = 1'); 
+    // $query->where('published = 1');
     // If new start date falls between any eisting start and end dates then it can't be valid
     // http://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap
     $query->where('(start_date <= ' . $this->_db->Quote($end_date) . ') AND (end_date >= ' . $this->_db->Quote($start_date) . ')');
     $query->where('id <> ' . (int) $pk);
-    // Get the offer 
+    // Get the offer
     $this->_db->setQuery($query);
 
     try
@@ -116,8 +116,8 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
     $query->where('property_id = ' . (int) $property_id);
     $query->where('published = 1');
     $query->where('start_date BETWEEN SUBDATE(' . $this->_db->Quote($expiry_date) . ', INTERVAL 1 YEAR) AND ' . $this->_db->Quote($expiry_date));
-    
-    // Get the offers 
+
+    // Get the offers
     $this->_db->setQuery($query);
 
     try
@@ -126,7 +126,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       $result = $this->_db->loadObject();
 
       $total = $result->count;
-      
+
       return $total;
     }
     catch (RuntimeException $e)
@@ -153,7 +153,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
   /**
    * Method to get some basic unit details for use in the confirmation email
-   *  
+   *
    * @param int $id
    * @return Object on success, false on failure.
    */
@@ -278,9 +278,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
   }
 
   /**
-   * Updates the status and then checks the status of the offer and if being published for the first 
+   * Updates the status and then checks the status of the offer and if being published for the first
    * time triggers and email to the owner.
-   * 
+   *
    * @param type $pks
    * @param type $value
    * @return boolean
@@ -334,10 +334,10 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
 
   /**
    * Method to save the form data.
-   * TO DO - Move getActiveOffer() and getAvailableOffers() to the table class 
-   * and implement them in check() method. Although the above method will then call those checks 
+   * TO DO - Move getActiveOffer() and getAvailableOffers() to the table class
+   * and implement them in check() method. Although the above method will then call those checks
    * again?
-   * 
+   *
    * @param	array	The form data.
    *
    * @return	boolean	True on success.
@@ -368,7 +368,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         return false;
       }
 
-      // Set the parent property id for the unit the offer is being added to 
+      // Set the parent property id for the unit the offer is being added to
       $data['property_id'] = $unit_detail->property_id;
 
       // Only allow one active offer per unit
@@ -379,7 +379,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         return false;
       }
 
-      // If owner on basic package then they get two special offers only...  
+      // If owner on basic package then they get two special offers only...
       $offer_count = $this->getTotalOffers($unit_detail->property_id, $unit_detail->expiry_date);
 
       JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
@@ -394,9 +394,9 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
         $message = JText::_('COM_SPECIALOFFERS_PROBLEM_GETTING_PROPERTY_LISTING_DETAIL');
         Throw new Exception($message);
       }
-      
+
       if ($images < 8 && $offer_count >= 2)
-      {    
+      {
         $message = JText::sprintf('COM_SPECIALOFFERS_UPGRADE_REQUIRED_BEFORE_ADDING_MORE_OFFERS', $unit_detail->property_id);
         $app->enqueueMessage($message, 'notice');
         $app->redirect('index.php?option=com_specialoffers');
@@ -408,7 +408,7 @@ class SpecialOffersModelSpecialOffer extends JModelAdmin
       $data['start_date'] = JFactory::getDate($data['start_date'])->calendar('Y-m-d');
       $data['end_date'] = JFactory::getDate($data['end_date'])->calendar('Y-m-d');
 
-      // Load the row if saving an existing record. 
+      // Load the row if saving an existing record.
       if ($pk > 0)
       {
         $offer = $this->getItem($pk);

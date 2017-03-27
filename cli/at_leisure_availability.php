@@ -67,7 +67,7 @@ class AtLeisure extends Import
     //
     $interval = new DateInterval('P1D');
 
-    $rpc = new belvilla_jsonrpcCall('glynis', 'gironde');
+    $rpc = new belvilla_jsonrpcCall('glynis', 'ka8s6db3');
 
     $props = $this->getProps($user);
 

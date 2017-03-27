@@ -61,8 +61,10 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
         <?php if ($this->result->price) : ?>
             <?php //echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
             <span class="lead"><?php echo '&pound;' . round($this->result->price); ?></span>
+            <?php if ($this->result->price !== $this->result->to_price) : ?>
             <span class="lead">&dash;</span>
                         <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
+                      <?php endif; ?>
               <a class="price-info" data-toggle="tooltip" data-placement="left" title="<?php echo JText::sprintf('COM_ACCOMMODATION_RATES_FROM_TO_DETAIL', $this->result->tariff_based_on); ?>">
                 <i class="glyphicon glyphicon-info-sign"></i>
               </a>
@@ -119,7 +121,6 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
           <p class="shortlist-button visible-xs-inline-block visible-xs-inline-block visible-sm-block visible-md-block visible-lg-block">
             <?php if ($logged_in) : ?>
                 <?php echo $shortlist->render($displayData); ?>
-
             <?php else : ?>
                 <a class="lead" href="<?php echo JRoute::_($login_route); ?>" title="<?php echo JText::_('COM_FCSEARCH_LOGIN_TO_MANAGE_SHORTLIST') ?>">
                   <i class="glyphicon glyphicon-heart"></i>

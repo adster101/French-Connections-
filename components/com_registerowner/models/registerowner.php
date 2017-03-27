@@ -92,7 +92,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
   }
 
   /**
-   * 
+   *
    * @param type $data
    * @return boolean
    */
@@ -102,14 +102,14 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_messages/tables');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_messages/models');
-    
+
     $message_data = array();
-    
+
     $Itemid = SearchHelper::getItemid(array('component', 'com_registerowner'));
 
     $menu = JMenu::getInstance('site');
     $params = $menu->getParams($Itemid);
-    
+
     try
     {
 
@@ -167,9 +167,9 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       $data['fromname'] = $config->get('fromname');
       $data['mailfrom'] = $config->get('mailfrom');
       $data['sitename'] = $config->get('sitename');
-      
+
       $data['siteurl'] = JUri::root() . 'administrator';
-      
+
       //$data['activate'] = $base . JRoute::_('index.php?option=com_users&task=registration.activate&token=' . $data['activation'] . '&advertiser=true', false);
 
       $emailSubject = JText::sprintf(
@@ -181,18 +181,18 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
       );
 
       // Send the registration email. the true argument means it will go as HTML
-      $return = JFactory::getMailer()->sendMail(
-              $data['mailfrom'], 
-              $data['fromname'], 
-              $data['email'], 
-              $emailSubject, 
-              $emailBody, 
-              true, 
-              '', 
-              $config->get('bcc','accounts@frenchconnections.co.uk'));
+      $mail = JFactory::getMailer();
+
+      $mail->setSender($data['mailfrom'],$data['fromname']);
+      $mail->addRecipient($data['email'], $data['fromname']);
+      $mail->setSubject($emailSubject);
+      $mail->setBody($emailBody);
+      $mail->isHtml(true);
+
+      $mail->addBCC($config->get('bcc','accounts@frenchconnections.co.uk'));
 
       // TO DO - Send a copy of this email to accounts@ as well.
-      if (!$return)
+      if (!$mail->send())
       {
         // Log out to file that email wasn't sent for what ever reason;
         // Trigger email to admin / office user. e.g. as per registration.php
@@ -242,7 +242,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
   }
 
   /*
-   * 
+   *
    */
 
   public function setLoginCookie($user)
@@ -286,7 +286,7 @@ class RegisterOwnerModelRegisterOwner extends JModelAdmin
             $cookieName, $cookieValue, time() + $lifetime, $input->get('cookie_path', '/'), $input->get('cookie_domain'), $app->isSSLConnection()
     );
 
-    // Update the user keys table 
+    // Update the user keys table
     $query = $this->_db->getQuery(true);
     $query
             ->insert($this->_db->quoteName('#__user_keys'))

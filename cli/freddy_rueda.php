@@ -189,8 +189,11 @@ class FreddyRueda extends RealestateImport
           $data['bathrooms'] = (int) $prop->bathrooms;
           $data['base_currency'] = $db->quote($prop->base_currency);
           $data['price'] = (int) $prop->price;
+          $data['latitude'] = $property_version->latitude;
+          $data['longitude'] = $property_version->longitude;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
+
           $this->updatePropertyVersion($db, $data);
 
 

@@ -6,6 +6,7 @@
 defined('_JEXEC') or die;
 
 JHtml::_('behavior.core');
+var_dump($this->attribute_options);die;
 
 $app = JFactory::getApplication();
 $pathway = $app->getPathway();

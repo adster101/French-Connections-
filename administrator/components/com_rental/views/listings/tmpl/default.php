@@ -75,7 +75,7 @@ $canDo = RentalHelper::getActions();
                             <th>
                                 <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_HELLOWORLD_HEADING_DATE_CREATED', 'a.created_on', $listDirn, $listOrder); ?>
                             </th>
-                            <?php if ($canDo->get('rental.listing.review')) : ?>  
+                            <?php if ($canDo->get('rental.listing.review')) : ?>
                                 <th width="10%">
                                     <?php echo JText::_('COM_RENTAL_HELLOWORLD_HEADING_REVIEW_STATUS'); ?>
                                 </th>
@@ -86,7 +86,7 @@ $canDo = RentalHelper::getActions();
                                 </th>
                             <?php endif; ?>
                             <?php if (property_exists($this->items[0], 'value')) : ?>
-                                <th>    
+                                <th>
                                     <?php echo JHtml::_('searchtools.sort', 'COM_RENTAL_LISTING_HEADING_VALUE', 'a.value', $listDirn, $listOrder); ?>
                                 </th>
                             <?php endif; ?>
@@ -148,7 +148,7 @@ $canDo = RentalHelper::getActions();
                                                 <?php else: ?>
                                                     <?php echo JText::_('COM_RENTAL_HELLOWORLD_MORE_THAN_7_DAYS_TO_RENEWAL'); ?>
                                                 <?php endif; ?>
-                                            </a>                        
+                                            </a>
                                         <?php endif; ?>
                                     </td>
                                     <td>
@@ -194,7 +194,7 @@ $canDo = RentalHelper::getActions();
                                                 <?php echo JHtml::_('jgrid.state', JHtmlProperty::reviewStates(), $item->review, $i, 'listing.', $enabled); ?>
                                             <?php endif; ?>
                                         </td>
-                                    <?php endif ?>                        
+                                    <?php endif ?>
                                     <?php if ($canDo->get('rental.listings.showowner')) : ?>
                                         <td>
                                             <a href="<?php echo JRoute::_('index.php?option=com_users&task=user.edit&id=' . (int) $item->created_by); ?>">
@@ -228,7 +228,7 @@ $canDo = RentalHelper::getActions();
                                     <?php endif; ?>
                                     <?php if (property_exists($item, 'value')) : ?>
                                         <td>
-                                            <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?> 
+                                            <?php echo (round($item->value > 0)) ? '&pound;' . round($item->value, 2) : '' ?>
                                         </td>
                                     <?php endif; ?>
                                 </tr>
@@ -264,16 +264,11 @@ $canDo = RentalHelper::getActions();
                 <input type="hidden" name="boxchecked" value="" />
                 <?php echo JHtml::_('form.token'); ?>
             </div>
-        </div>      
+        </div>
         <?php
         $layout = new JLayoutFile('modal', $basePath = JPATH_ADMINISTRATOR . '/components/com_rental/layouts');
         echo $layout->render($data = array('title' => 'Snooze a property', 'id' => 'snooze'));
         echo $layout->render($data = array('title' => 'Change owner', 'id' => 'changeowner'));
         echo $layout->render($data = array('title' => 'Change expiry date', 'id' => 'expirydate'));
         ?>
-</form>  
-
-
-
-
-
+</form>

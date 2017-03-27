@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form >
-  <fieldset 
-    name="register" 
+  <fieldset
+    name="register"
     label="">
-    <field 
-      name="firstname" 
+    <field
+      name="firstname"
       type="text"
       description="COM_USERS_REGISTER_FIRST_NAME_DESC"
       filter="string"
@@ -14,8 +14,8 @@
       size="10"
       labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
-    <field 
-      name="surname" 
+    <field
+      name="surname"
       type="text"
       class="form-control"
       description="COM_USERS_REGISTER_SURNAME_DESC"
@@ -26,8 +26,8 @@
       labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
 
-    <field 
-      name="email1" 
+    <field
+      name="email1"
       type="email"
       description="COM_USERS_REGISTER_EMAIL1_DESC"
       field="id"
@@ -41,8 +41,8 @@
       validate="email"
       labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
-    <field 
-      name="email2" 
+    <field
+      name="email2"
       type="email"
       description="COM_USERS_REGISTER_EMAIL2_DESC"
       field="email1"
@@ -55,7 +55,7 @@
       validate="equals"
       labelclass="control-label col-md-4 col-lg-3 col-xs-12 col-sm-4"
     />
-    <field 
+    <field
       name="dialling_code"
       type="diallingcodes"
       required="true"
@@ -93,6 +93,7 @@
       <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_NEWSPAPER</option>
       <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_MAGAZINE</option>
       <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_RECCOMMENDATION</option>
+      <option	value="WHERE_HEARD_FRIEND">WHERE_HEARD_COLD_CALL</option>
     </field>
     <field
       name="captcha"
@@ -103,6 +104,6 @@
       labelclass="control-label col-md-4 col-lg-3 col-sm-4"
     />
   </fieldset>
-  
-  
+
+
 </form>

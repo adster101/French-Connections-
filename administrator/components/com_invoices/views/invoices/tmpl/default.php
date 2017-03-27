@@ -113,9 +113,7 @@ if (!empty($this->extra_sidebar))
                 <?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
               </th>
             <?php endif; ?>
-            <th class='left'>
-              <?php echo JHtml::_('grid.sort', 'COM_INVOICES_INVOICES_PROPERTY_ID', 'a.property_id', $listDirn, $listOrder); ?>
-            </th>
+
             <th class='left'>
               <?php echo JHtml::_('grid.sort', 'COM_INVOICES_INVOICES_DATE_CREATED', 'a.date_created', $listDirn, $listOrder); ?>
             </th>
@@ -171,21 +169,13 @@ if (!empty($this->extra_sidebar))
 
               <?php if (isset($this->items[0]->id)): ?>
                 <td class="">
-                  <?php echo (int) $item->id; ?>
-                  <br />
-                  <?php if ($item->due_date != '0000-00-00'): ?>
-                    For Advertising on Internet site French Connections for 1 year commencing <?php echo $item->due_date; ?>
-                  <?php else: ?>
-                    Sundries
-                  <?php endif; ?>
+
                   <a href="<?php echo JRoute::_('index.php?option=com_invoices&task=invoice.edit&id=' . (int) $item->id) ?>">
-                    <?php echo JText::_('COM_INVOICES_INVOICES_VIEW_DETAIL'); ?>
+                    <?php echo JText::sprintf('COM_INVOICES_INVOICES_VIEW_DETAIL', $item->id); ?>
                   </a>
                 </td>
               <?php endif; ?>
-              <td>
-                <?php echo $item->property_id; ?>
-              </td>
+
               <td>
                 <?php echo JHtml::date($item->date_created, 'd-m-Y'); ?>
               </td>
@@ -212,7 +202,7 @@ if (!empty($this->extra_sidebar))
       <input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>" />
       <input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>" />
       <?php echo JHtml::_('form.token'); ?>
-    </div> 
+    </div>
 
 </form>
 <?php
@@ -223,4 +213,3 @@ if ($user->authorise('com_invoices.import.view', 'com_invoices'))
   echo $layout->render(array('title' => 'COM_INVOICES_IMPORT_FROM_MYOB', 'id' => '', 'task' => 'invoices.import'));
 }
 ?>
-

@@ -15,6 +15,8 @@
 # it has been set by your server administrator and you do not need it set here.
 ##
 
+DirectoryIndex index.php
+
 ## Fix Font error for Chrome
 AddType application/x-font-woff woff
 AddType application/x-font-ttf ttf
@@ -151,8 +153,8 @@ RewriteRule .* index.php [F]
 ## End - Custom redirects
 
 # Forbids any uri containing the pipe separated gubbins
-RewriteCond %{REQUEST_URI} [^a-z](declare|char|set|cast|convert|delete|drop|exec|insert|meta|script|select|truncate|update)[^a-z] [NC]
-RewriteRule (.*) - [F]
+# RewriteCond %{REQUEST_URI} [^a-z](declare|char|set|cast|convert|delete|drop|exec|insert|meta|script|select|truncate|update)[^a-z] [NC]
+# RewriteRule (.*) - [F]
 
 ##
 # Uncomment following line if your webserver's URL
@@ -160,7 +162,7 @@ RewriteRule (.*) - [F]
 # Update Your Joomla! Directory (just / for root).
 ##
 
-RewriteBase /
+#RewriteBase /
 #
 
 
@@ -181,6 +183,11 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 # internally rewrite the request to the index.php script
 RewriteRule .* index.php [L]
+
+# AuthType Basic
+# AuthName "Restricted Content"
+# AuthUserFile /etc/apache2/.htpasswd
+# Require valid-user
 
 #
 ## End - Joomla! core SEF Section.

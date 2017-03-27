@@ -48,7 +48,7 @@ class BeauxVillages extends RealestateImport {
         $this->out('About to get feed...');
 
         // Get and parse out the feed
-        $props = $this->parseFeed('http://xml.beauxvillages.com/gre.xml', 'Envelope');
+        $props = $this->parseFeed('http://xml.beauxvillages.com/frc.xml', 'Envelope');
 
         $this->out('Got feed...');
 
@@ -172,6 +172,8 @@ class BeauxVillages extends RealestateImport {
                     $data['description'] = $db->quote($prop->description, true);
                     $data['bedrooms'] = $prop->bedrooms;
                     $data['bathrooms'] = $prop->bathrooms;
+                    $data['latitude'] = $prop->latitude;
+                    $data['longitude'] = $prop->longitude;
                     $data['base_currency'] = $db->quote('EUR');
                     $data['price'] = (int) $prop->price;
                     $data['review'] = 0;

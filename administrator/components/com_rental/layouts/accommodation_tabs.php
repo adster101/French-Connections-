@@ -33,7 +33,7 @@ $unit_id = ($view == 'propertyversions' || $view == 'contactdetails' ) ? key($un
 // Set the item which is used below to output the tabs
 $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($listing_id);
 
-// TODO - The multi drop down mark up needs to be moved into a separate function. 
+// TODO - The multi drop down mark up needs to be moved into a separate function.
 // JHtmlProperty::progressMultiTabs($data['progress'], $view);
 // The above function in turn calls progressButton with the same values as below.
 ?>
@@ -46,11 +46,19 @@ $item = (!empty($unit_id)) ? $units[$unit_id] : RentalHelper::getEmptyUnit($list
 <ul class="<?php echo $class ?>" id="propertyState">
   <?php
   echo JHtml::_('property.progressTab', $status->location_detail, true, $status->expiry_date, 'COM_RENTAL_HELLOWORLD_PROPERTY_DETAILS', 'index.php?option=com_rental&task=propertyversions.edit&property_id=' . (int) $status->id, $property_message, $view, 'propertyversions');
+
   echo JHtml::_('property.progressTab', $status->units[$unit_id]->unit_detail, $status->location_detail,$status->expiry_date, 'COM_RENTAL_HELLOWORLD_ACCOMMODATION_DETAILS', 'index.php?option=com_rental&task=unitversions.edit&unit_id=' . (int) $status->unit_id, $unit_message, $view, 'unitversions');
+
   echo JHtml::_('property.progressTab', $status->units[$unit_id]->gallery, $status->units[$unit_id]->unit_detail,$status->expiry_date, 'IMAGE_GALLERY', 'index.php?option=com_rental&task=images.manage&unit_id=' . (int) $status->unit_id, $image_message, $view, 'images');
+
   echo JHtml::_('property.progressTab', $status->units[$unit_id]->tariffs, $status->units[$unit_id]->gallery,$status->expiry_date, 'COM_RENTAL_SUBMENU_MANAGE_TARIFFS', 'index.php?option=com_rental&task=tariffs.edit&unit_id=' . (int) $status->unit_id, $tariff_message, $view, 'tariffs');
-  echo JHtml::_('property.progressTab', $status->units[$unit_id]->availability, $status->units[$unit_id]->tariffs,$status->expiry_date, 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', 'index.php?option=com_rental&task=availability.manage&unit_id=' . (int) $status->unit_id, $availability_message, $view, 'availability');
-  echo JHtml::_('property.progressTab', $status->contact_detail, $status->units[$unit_id]->availability,$status->expiry_date, 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', 'index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $status->id, $contact_message, $view, 'contactdetails');
+
+  // Hack to let availability always be true
+  $availability_is_true = (empty($status->expiry_date) && $status->review < 2) ? $status->units[$unit_id]->tariffs : true;
+
+  echo JHtml::_('property.progressTab', $availability_is_true, $status->units[$unit_id]->tariffs, $status->expiry_date, 'COM_RENTAL_SUBMENU_MANAGE_AVAILABILITY', 'index.php?option=com_rental&task=availability.manage&unit_id=' . (int) $status->unit_id, $availability_message, $view, 'availability');
+
+  echo JHtml::_('property.progressTab', $status->contact_detail, $status->units[$unit_id]->tariffs,$status->expiry_date, 'COM_RENTAL_SUBMENU_MANAGE_CONTACT_DETAILS', 'index.php?option=com_rental&task=contactdetails.edit&property_id=' . (int) $status->id, $contact_message, $view, 'contactdetails');
 
   if (empty($status->expiry_date) && $status->review < 2)
   {

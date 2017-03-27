@@ -28,7 +28,7 @@ class InvoicesTableInvoice extends JTable
 
   /**
    * Override this puppy
-   * 
+   *
    * Method to store a row in the database from the JTable instance properties.
    * If a primary key value is set the row with that primary key value will be
    * updated with the instance property values.  If no primary key value is set
@@ -71,36 +71,6 @@ class InvoicesTableInvoice extends JTable
     $this->_errors = array();
   }
 
-  /**
-   * Method to perform sanity checks on the JTable instance properties to ensure
-   * they are safe to store in the database.  Child classes should override this
-   * method to make sure the data they are storing in the database is safe and
-   * as expected before storage.
-   *
-   * @return  boolean  True if the instance is sane and able to be stored in the database.
-   *
-   * @link    http://docs.joomla.org/JTable/check
-   * @since   11.1
-   */
-  public function check()
-  {
 
-    // Do a quick check that the owner and the property match up.
-    $query = $this->_db->getQuery(true)
-            ->select($this->_db->quoteName('id'))
-            ->from($this->_db->quoteName('#__property'))
-            ->where($this->_db->quoteName('created_by') . ' = ' . (int) $this->user_id)
-            ->where($this->_db->quoteName('id') . ' = ' . (int) $this->property_id);
-    $this->_db->setQuery($query);
-
-    $id = (int) $this->_db->loadResult();
-    if (empty($id))
-    {
-      $this->setError(JText::_('COM_INVOICES_OWNER_NOT_MATCHING_PROPERTY_ID'));
-      return false;
-    }
-
-    return true;
-  }
 
 }

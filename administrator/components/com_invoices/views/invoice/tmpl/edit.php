@@ -31,14 +31,17 @@ $userId = $user->get('id');
         <img alt="French Connections Logo" src="/images/general/logo-3.png">
       </p>
       <p class="small">
-        VAT Reg. Number: GB 801 2299 61<br>Company Registration Number: 3216862
+        VAT Reg. Number: GB 801 2299 61<br />
+        Company Registration Number: 3216862<br />
         French Connections <br />
-        Bracon House <br />
-        High Street <br />
-        Etchingham <br />
-        E Sussex <br />
-        TN19 7AJ
+        Suite 3,<br />
+        5 Battalion Court,<br />
+        Colburn Business Park,<br />
+        Catterick Garrison,<br />
+        North Yorkshire.<br />
+        DL9 4QN.
       </p>
+
       <p class="large">
         <strong>
           INVOICE <?php echo $this->escape($this->id); ?>
@@ -62,11 +65,6 @@ $userId = $user->get('id');
         </strong>
       </p>
 
-      <?php if (!empty($this->items[0]->due_date)): ?>
-        <p>For Advertising on Internet site French Connections for 1 year commencing <?php echo $this->items[0]->due_date; ?> reference: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
-      <?php else: ?>
-        <p>PRN: <strong><?php echo $this->escape($this->items[0]->property_id) ?></strong></p>
-      <?php endif; ?>
       <p>
         Date issued
         <strong>
@@ -91,14 +89,12 @@ $userId = $user->get('id');
               <td><?php echo $this->escape($item->line_value) ?></td>
               <td><?php echo number_format($this->escape($item->line_value * $item->quantity),2) ?></td>
             </tr>
-
           <?php endforeach; ?>
-
           <tr>
             <td colspan="3">
               <strong>VAT</strong>
             </td>
-            <td><?php echo $this->escape($item->vat) ?></td>
+            <td><?php echo $this->escape($item->vat); ?></td>
           </tr>
           <tr>
             <td colspan="3">&nbsp;</td>
@@ -122,6 +118,3 @@ $userId = $user->get('id');
     <input type="hidden" name="task" value="" />
 
 </form>
-
-
-

@@ -5,8 +5,9 @@
     "bootstrap-datepicker": "~1.5",
     "echojs": "~1",
     "mustache.js": "mustache#~2.2.0",
-    "overthrow": "0.7.0",
+    "overthrow": "0.6.5",
     "slick-carousel": "1.5.5",
-    "typeahead.js": "0.10.5"
+    "typeahead.js": "0.10.5",
+    "jquery": "~2.1.4"
   }
 }
