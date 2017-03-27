@@ -68,7 +68,6 @@ class Renewals extends JApplicationCli
 
     $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
 
-
     foreach($properties as $key => $property)
     {
       // Get the existing availability for this property/unit

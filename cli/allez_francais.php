@@ -52,7 +52,7 @@ class AllezFrancais extends RealestateImport
     $this->out('About to get feed...');
 
     // Get and parse out the feed
-    $props = $this->parseFeed('http://www.allez-francais.com/allez-francais.xml');
+    $props = $this->parseFeed('https://www.allez-francais.com/allez-francais.xml');
 
     $this->out('Got feed...');
 
@@ -190,7 +190,7 @@ class AllezFrancais extends RealestateImport
           $data['published_on'] = $db->quote(JFactory::getDate());
           $data['latitude'] = $prop->latitude;
           $data['longitude'] = $prop->longitude;
-    
+
           $this->updatePropertyVersion($db, $data);
 
 
