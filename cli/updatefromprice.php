@@ -64,7 +64,7 @@ class UpdateFromPriceCron extends JApplicationCli
 
     $query = $db->getQuery(true);
 
-    $query->select('min(tariff) * 0.7032')
+    $query->select('min(tariff)')
             ->from($db->quoteName('#__tariffs', 't'))
             ->where($db->quoteName('t.unit_id') . ' = ' . $db->quoteName('b.id'))
             ->where($db->quoteName('end_date') . ' > ' . $db->quote($date));
@@ -75,7 +75,7 @@ class UpdateFromPriceCron extends JApplicationCli
     $query->clear('select');
 
     // And do the same query with a max instead of min
-    $query->select('max(tariff) * 0.7032');
+    $query->select('max(tariff)');
 
     // Set the query to string var
     $euro_max_sub_query = $query->__toString();
