@@ -94,7 +94,7 @@ class BeauxVillages extends RealestateImport {
                     $location = $classification->getPath($prop->city);
 
                     if (empty($location)) {
-                        throw new Exception('Incorrect location detail for ' . $prop->agency_reference . 'cotemercotejardin');
+                        throw new Exception('Incorrect location detail for ' . $prop->agency_reference . 'beauxvillage');
                     }
 
                     $data = array();

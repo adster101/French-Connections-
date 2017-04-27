@@ -122,7 +122,8 @@ class FcSearchViewSearch extends JViewLegacy
             }
         }
 
-        $this->get('LogSearch');
+        // Disable search log - 27-04-2017 - AR
+        // $this->get('LogSearch');
 
         // Include the component HTML helpers.
         JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
@@ -136,9 +137,6 @@ class FcSearchViewSearch extends JViewLegacy
 
         $this->prepareDocument();
         $this->sidebar = JHtmlSidebar::render();
-
-        // Log the search
-        JSearchHelper::logSearch('Log some useful search information...', 'com_fcsearch');
 
         // Check for layout override only if this is not the active menu item
         // If it is the active menu item, then the view and category id will match

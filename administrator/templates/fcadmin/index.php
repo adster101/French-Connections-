@@ -24,7 +24,7 @@ $livechat_js = "(function(){
   s.parentNode.insertBefore(c,s);
 })();";
 
-$doc->addScriptDeclaration($livechat_js);
+//$doc->addScriptDeclaration($livechat_js);
 
 // Add JavaScript Frameworks
 JHtml::_('bootstrap.framework');

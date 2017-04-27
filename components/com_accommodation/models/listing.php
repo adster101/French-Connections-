@@ -1466,7 +1466,7 @@ class AccommodationModelListing extends JModelForm
                 $form->load($payment->getXml(), true);
             }
         }
-        elseif ($owner == 'oliverstravels')
+        elseif ($owner == 'oliverstravels' || $owner == 'mimozascannes')
         {
 
           $form->removeField('guest_phone');

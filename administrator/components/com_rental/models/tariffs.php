@@ -406,15 +406,15 @@ class RentalModelTariffs extends JModelAdmin
         unset($data['end_date']);
         unset($data['tariff']);
 
-        // If the base currency is EUR then calculate the correct price in sterling
-        if ($data['base_currency'] == 'EUR')
-        {
-            $from_prices = (!empty($from_price)) ? JHtmlGeneral::price($from_price, 'EUR') : '';
-            $to_prices = (!empty($to_price)) ? JHtmlGeneral::price($to_price, 'EUR') : '';
-
-            $from_price = $from_prices['GBP'];
-            $to_price = $to_prices['GBP'];
-        }
+        // // If the base currency is EUR then calculate the correct price in sterling
+        // if ($data['base_currency'] == 'EUR')
+        // {
+        //     $from_prices = (!empty($from_price)) ? JHtmlGeneral::price($from_price, 'EUR') : '';
+        //     $to_prices = (!empty($to_price)) ? JHtmlGeneral::price($to_price, 'EUR') : '';
+        //
+        //     $from_price = $from_prices['GBP'];
+        //     $to_price = $to_prices['GBP'];
+        // }
         // Get an instance of the unit model
         $unit = JModelLegacy::getInstance('Unit', 'RentalModel');
 
