@@ -358,7 +358,6 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                       <img src="/images/mapicons/iconplaceofinterest.png" />&nbsp;<?php echo JText::_('COM_ACCOMMODATION_PLACEOFINTEREST_MARKER_KEY') ?>
                     </span>
                   </p>
-              <?php endif; ?>
 
               <?php if (!empty($this->item->getting_there)) : ?>
                   <?php if ($this->item->unit_title) : ?>
@@ -374,15 +373,18 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                       <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
                       <p><?php echo implode(', ', $this->property_facilities['Location access']) ?></p>
                   <?php endif; ?>
-                  <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
-                  <p>
-                    <?php $airport_route = JRoute::_(ContentHelperRoute::getArticleRoute((int) $this->item->airport_id)); ?>
-                    <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
-                  </p>
+                  <?php if (!empty($this->item->airport_id)) : ?>
+                    <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
+                    <p>
+                      <?php $airport_route = JRoute::_(ContentHelperRoute::getArticleRoute((int) $this->item->airport_id)); ?>
+                      <?php echo Jtext::sprintf('COM_ACCOMMODATION_NEAREST_AIRPORT_DETAIL', $airport_route, $this->item->airport, $this->item->airport_code) ?>
+                    </p>
+                  <?php endif; ?>
               <?php endif; ?>
             </div>
           </div>
         </div>
+      <?php endif; ?>
 
         <!-- Begin reviews -->
         <?php echo $this->loadTemplate('reviews'); ?>

@@ -12,27 +12,6 @@ jimport('frenchconnections.cli.import');
 class RealestateImport extends Import
 {
 
-  public function parseFeed($uri = '', $parser = 'document')
-  {
-    // Fetch and parse the feed.
-    // Throw exception if feed not parsed/available.
-    // Import the document Feed parser.
-    // The parser name is determined by the name of the root XML node...
-    // not sure if this needs to be the case but appears to be the way it works...
-    jimport('frenchconnections.feed.' . $parser);
-
-    // Get an instance of JFeedFactory
-    $feed = new JFeedFactory;
-
-    // Register the parser, this bit that seems like overkill
-    $feed->registerParser($parser, 'JFeedParser' . $parser);
-
-    // Get and parse the feed, returns a parsed list of items.
-    $data = $feed->getFeed($uri);
-
-    return $data;
-  }
-
   /**
    * Creates new entry in $table
    *

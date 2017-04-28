@@ -358,6 +358,7 @@ class OliversTravels extends Import
       }
     }
 
+
     public function getTariffs($tariffs = array(), $base_currency = '')
     {
 
@@ -414,56 +415,7 @@ class OliversTravels extends Import
       return $result;
     }
 
-    private function _getFacilities($amenities = array())
-    {
 
-        $facilities = array();
-
-        foreach($amenities as $key => $value)
-        {
-          if (array_key_exists($value, $this->facilities))
-          {
-            $facilities[] = $this->facilities[$value];
-          }
-        }
-
-        return $facilities;
-    }
-
-    private function _saveFacilities($facilities = array(), $unit_version_id, $unit_id)
-    {
-        $db = JFactory::getDBO();
-
-        $query = $db->getQuery(true);
-
-        $query->delete('#__unit_attributes')
-                ->where('version_id = ' . (int) $unit_version_id);
-
-        $db->setQuery($query);
-
-        $db->execute();
-
-        // Clear the query and start the insert
-        $query->clear();
-        $query->insert('#__unit_attributes');
-        $query->columns('version_id,property_id,attribute_id');
-
-        foreach ($facilities as $facility)
-        {
-
-            $insert = array();
-
-            $insert[] = $unit_version_id;
-            $insert[] = $unit_id;
-            $insert[] = $facility;
-            $query->values(implode(',', $insert));
-        }
-
-        $db->setQuery($query);
-        $db->execute();
-
-        return true;
-    }
 
 
 
@@ -473,95 +425,8 @@ class OliversTravels extends Import
     }
 
 
-/**
-  * Get the images and save each into the database...
-  * Should we generate thumbs and gallery images for each? Probably.
-  *
-  */
-  public function getImages($db, $images, $unit_version_id, $property_id, $unit_id)
-  {
-    $i = 1;
-
-    $model = JModelLegacy::getInstance('Image', 'RentalModel');
-
-    foreach ($images as $image)
-    {
-
-      // Get the last two parts and implode it to make the name
-      $image_name = $property_id . '-' . $i . '.jpg';
-
-      // Check the property directory exists...
-      if (!file_exists(JPATH_SITE . '/images/property/' . $unit_id))
-      {
-        JFolder::create(JPATH_SITE . '/images/property/' . $unit_id);
-      }
-
-      // The ultimate file path where we want to store the image
-      $filepath = JPATH_SITE . '/images/property/' . $unit_id . '/' . $image_name;
-
-      $uri = new JURI($image->url);
-      $path = str_replace(' ', '%20', $uri->getPath());
-
-      $uri->setPath($path);
-      $uri->setQuery(false);
 
 
-      if (!file_exists($filepath))
-      {
-        // Copy the image url directly to where we want it
-        copy($uri->tostring(), $filepath);
-
-        // Generate the profiles
-        $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'gallery', 578, 435);
-        $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumbs', 100, 100);
-        $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumb', 210, 120);
-      }
-
-      $data = array($unit_version_id, $unit_id, $db->quote($image_name), $i);
-
-      // Save the image data out to the database...
-      $this->createImage($db, $data);
-
-
-      $i++;
-
-    }
-  }
-
-  /**
-   * TO DO - Make re-usable
-   *
-   * @param type $db
-   * @param type $data
-   * @return type
-   * @throws Exception
-   */
-  public function createImage($db, $data)
-  {
-    $query = $db->getQuery(true);
-
-    $query->insert('#__property_images_library')
-            ->columns(
-                    array(
-                        $db->quoteName('version_id'), $db->quoteName('unit_id'),
-                        $db->quoteName('image_file_name'), $db->quoteName('ordering')
-                    )
-            )
-            ->values(implode(',', $data));
-
-    $db->setQuery($query);
-
-    try
-    {
-      $db->execute();
-    }
-    catch (RuntimeException $e)
-    {
-      throw new Exception($e->getMessage());
-    }
-
-    return $db->insertid();
-  }
 
   public function getURL($url = '')
   {
