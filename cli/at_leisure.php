@@ -337,7 +337,7 @@ class AtLeisure extends Import
         return $distances;
     }
 
-    private function _getFacilities($acco, $layout = array(), $unit_version_id = '', $unit_id = '')
+    public function _getFacilities($acco, $layout = array(), $unit_version_id = '', $unit_id = '')
     {
 
         $facilities = array();
@@ -404,7 +404,7 @@ class AtLeisure extends Import
         return $facilities;
     }
 
-    private function _saveFacilities($facilities = array(), $unit_version_id, $unit_id)
+    public function _saveFacilities($facilities = array(), $unit_version_id, $unit_id)
     {
         $db = JFactory::getDBO();
 
