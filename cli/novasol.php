@@ -33,9 +33,16 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
 jimport('joomla.filesystem.folder');
+// Import our base real estate cli bit
+jimport('frenchconnections.cli.import');
+
 
 class Novasol extends Import
 {
+
+  public $api_key = 'yII1NTvYnWpLQAK7D9X1G8j42f6LaS';
+
+
   /**
    * Entry point for the script
    *
@@ -66,6 +73,34 @@ class Novasol extends Import
     $user = JFactory::getUser('novasol')->id;
 
     $this->out('About to get property list...');
+
+    // 1. Schedule a job to generate a batch file on the novasol server - this would be to pull out availability and tariffs
+    // 2. Schedule a job for an hour later to process the above batch file (or to process a ping)
+    // 3. Use this cli to periodically import any new properties
+
+    // $properties = $this->getData('https://safe.novasol.com/api/batches?country=250&company=NOV&season=2017&replyTo=http://asdasd.co.uk', $this->api_key);
+    // $properties = $this->getData('https://safe.novasol.com/api/batches/319101494945383051253', $this->api_key);
+    // $properties = $this->getData('https://safe.novasol.com/api/translate?salesmarket=826', $this->api_key);
+
+    // Get and parse out the feed
+    $props = $this->parseFeed('http://dev.frenchconnections.co.uk/cli/novasol/products.xml', 'products');
+
+    var_dump($props);
+  }
+
+  // Wrapper function to get the feed data via CURL
+  public function getData($uri = '', $api_key = '')
+  {
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Key: ' . $api_key));
+    curl_setopt($ch, CURLOPT_URL, $uri);
+    $result = curl_exec($ch);
+
+    curl_close($ch);
+
+    return $result;
   }
 }
 
