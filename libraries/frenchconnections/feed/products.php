@@ -92,53 +92,199 @@ class JFeedParserproducts extends JFeedParser
   protected function processElement(stdClass $feed, SimpleXMLElement $el)
   {
 
-    $images = array();
+    $facilities = array();
     $listing = new stdClass();
 
-
     $listing->affiliate_property_id = (string) $el->propertyID;
-    $listing->description = JHtml::_('string.truncate', $el->media->texts->text, 3000, true, false);
-    //$listing->single_bedrooms = (int) $el->single_bedrooms;
-    //$listing->double_bedrooms = (int) $el->double_bedrooms;
-    //$listing->triple_bedrooms = (int) $el->triple_bedrooms;
-    //$listing->quad_bedrooms = (int) $el->quad_bedrooms;
-    //$listing->twin_bedrooms = (int) $el->twin_bedrooms;
-    //$listing->property_type = (int) $el->property_type;
+    $listing->description = (isset($el->media->texts->text)) ? JHtml::_('string.truncate', $el->media->texts->text, 3000, true, false) : '';
+    $listing->unit_title = (isset($el->media->texts->text)) ? JHtml::_('string.truncate', $el->media->texts->text, 50, true, false) : '';
+    $listing->changeover_day = 1521;
     $listing->latitude = (string) $el->address->coordinates->latitude;
     $listing->longitude = (string) $el->address->coordinates->longitude;
+
+    // Get the nearest city detail based on lat and long
+    //$city = $this->nearestcity((string) $el->address->coordinates->latitude, (string) $el->address->coordinates->longitude);
+    //$listing->city = (int) $city;
+
     $listing->base_currency = 'EUR';
-    //$listing->location_details = (string) $el->location_details;
+    $listing->occupancy = (string) $el->information->adultCount + $el->information->childrenCount;
+    $listing->booking_url = 'https://booking.novasol.com/?opendocument=&V=EUR&NA=1&NC=0&H=' . $el->propertyID . '&C=191&L=999&COM=nov&PR=&U=whitelabel.novasol.com&theme=wl&wt_si_n=NormalSearchBookingFlow';
+
     //$listing->additional_price_notes = (string) $el->additional_price_notes;
-    //$listing->changeover_day = (string) $el->changeover_day;
-    //$listing->bathrooms = (string) $el->bathrooms;
-    $listing->occupancy = (string) $el->adultCount + $el->childrenCount;
-    //$listing->unit_title = (string) $el->unit_title;
-    //$listing->booking_url = (string) $el->booking_url;
 
-    $city = $this->nearestcity((string) $el->latitude, (string) $el->longitude);
-    $listing->city = (int) $city;
+    $listing->property_type = $this->getPropertyType($el->features->feature[0]);
+    $listing->facilities = $this->getFacilities($el->features);
+    $listing->images = $this->getImages($el->pictures);
 
-    $facilities = array();
-    $images = array();
+    // Get list of rooms as an array
+    $rooms = $this->getrooms($el->buildings);
 
-    foreach($el->pictures as $key => $value)
-    {
-      foreach ($value as $x => $image) {
+    $listing->tariffs = $this->getTariffs($el->prices->price);
 
+    // Add the rooms to the listing
+    $listing->single_bedrooms = $rooms['single_bedrooms'];
+    $listing->double_bedrooms = $rooms['double_bedrooms'];
+    $listing->triple_bedrooms = $rooms['triple_bedrooms'];
+    $listing->twin_bedrooms = $rooms['twin_bedrooms'];
+    $listing->bathrooms = $rooms['bathrooms'];
 
-          $images[] = $image->domain . $image->path . $image->file;
+    $listing->availability = (isset($el->availabilities->availability->days)) ? (string) $el->availabilities->availability->days : '';
 
-
-      }
-    }
-
-
-    $listing->images = $images;
-
-    var_dump($listing);die;
     $feed->properties[] = $listing;
 
     return $feed;
+  }
+
+  public function getPropertyType($featuresXml = '') {
+
+    $propertyType = '';
+
+      switch ($featuresXml->subgroup)
+      {
+        case 1: // Apartment
+          $propertyType = 1;
+          break;
+        case 2: // Farmhouse
+          $propertyType = 10;
+          break;
+        default:
+          $propertyType = 11;
+          break;
+      }
+
+
+    return $propertyType;
+  }
+
+  public function getTariffs($tariffsXml = '') {
+
+    $tariffs = array();
+
+    if ($tariffsXml == '') {
+      return $tariffs;
+    }
+
+    $counter = 0;
+
+    foreach ($tariffsXml as $key => $value) {
+      $tariffs[$counter]['start_date'] = (int) $value->from;
+      $tariffs[$counter]['end_date'] = (int) $value->to;
+      $tariffs[$counter]['tariff'] = (int) $value->price->salesMarket;
+
+      $counter++;
+    }
+
+    return $tariffs;
+
+  }
+
+  public function getFacilities($facilitiesXml = '') {
+
+    $facilities = array();
+
+      foreach($facilitiesXml as $key => $value) {
+        foreach ($value as $x=>$y) {
+
+          $facilities[] = (string) $y->group;
+        }
+      }
+
+      return $facilities;
+  }
+
+  public function getrooms($buildingsXml = '') {
+
+    $bedrooms = array('double_bedrooms' => '', 'single_bedrooms' => '', 'twin_bedrooms' => '', 'triple_bedrooms' => '', 'bathrooms' => '');
+
+    // Gah!
+    foreach($buildingsXml as $building) {
+      // Building has rooms
+      foreach($building as $rooms) {
+
+        // Loop over the rooms
+        foreach($rooms as $room) {
+          // Get the room attributes (e.g. double, single etc)
+          $attributes = $room->attributes();
+
+          // 101 is a bedroom
+          if ((int) $attributes->type == 101) {
+
+            foreach($room as $object)
+            {
+              // Get the room attributes (e.g. double bed, count etc)
+              $bedroom = $object->attributes();
+
+              // 202 is a double bedroom
+              if ((int) $bedroom->type == 202 ) {
+                $bedrooms['double_bedrooms'] += 1;
+              }
+
+              // 201 is a single bed
+              if ((int) $bedroom->type == 201) {
+
+                if ((int) $bedroom->count == 2 ) {
+                  // A twin room
+                  $bedrooms['twin_bedrooms'] += 1;
+                }
+
+                if ((int) $bedroom->count == 1) {
+                  // A single room
+                  $bedrooms['single_bedrooms'] += 1;
+                }
+
+                if ((int) $bedroom->count == 3) {
+                  // A triple room
+                  $bedrooms['triple_bedrooms'] += 1;
+                }
+              }
+            }
+
+          }
+          // Room type is a Bathroom
+          if ((int) $attributes->type == 131) {
+
+            // Hello bathroom
+            $bedrooms['bathrooms'] += 1;
+          }
+        }
+      }
+    }
+    return $bedrooms;
+  }
+
+  public function getImages($imageXml = '')
+  {
+    // Init array to hold images
+    $images = array();
+
+    // Loop over each image and add them to the array...
+    foreach($imageXml as $key => $value)
+    {
+      foreach ($value as $x => $image) {
+
+        // Get image attributes
+        $attributes = $image->attributes();
+
+        if ($attributes->sequenceNumber) {
+
+          $bits = explode('/' , $image->path);
+
+          array_splice($bits, 2, 0, '600');
+
+          $bits = implode($bits,'/');
+
+          $obj = new StdClass;
+          $obj->url = (string) $image->domain . $bits . $image->file;
+          $images[(int) $attributes->sequenceNumber] = $obj;
+
+        }
+      }
+    }
+
+    // Sort based on the 'sequenceNumber'
+    ksort($images);
+
+    return $images;
   }
 
   /*

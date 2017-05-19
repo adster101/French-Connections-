@@ -336,6 +336,7 @@ class AccommodationControllerListing extends JControllerForm
         // Get the data from POST
         $data = $this->input->post->get('jform', array(), 'array');
 
+
         // Get the property details we are adding an enquiry for.
         // Check for a valid session cookie
         if ($params->get('validate_session', 0))
@@ -422,6 +423,8 @@ class AccommodationControllerListing extends JControllerForm
         // If next blah blah blah
         if ($next)
         {
+          // 
+
           $app->redirect($next);
         }
 

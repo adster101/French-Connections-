@@ -42,6 +42,24 @@ class Novasol extends Import
 
   public $api_key = 'yII1NTvYnWpLQAK7D9X1G8j42f6LaS';
 
+  protected $facilities = array(
+    '044' => 486, // Freezer
+    '049' => 109, // Tumble drier
+    '050' => 103, // Dishwasher
+    '048' => 110, // Washing machine
+    '047' => 108, // Microwave
+    '016' => 474, // BBQ
+    '011' => 98, // Garden
+    'Private pool' => 100,
+    'Shared pool' => 101,
+    '111' => 539, // Wi-Fi/Internet access
+    '009' => 74, //Air conditioning
+    'Pets allowed' => 21,
+    'Caretaker/owner lives on site' => 89,
+    '112' => 3123, // Cable TV/english channels
+    '057' => 80, // DVD
+    '058' => 95, // Working fireplace
+  );
 
   /**
    * Entry point for the script
@@ -85,7 +103,209 @@ class Novasol extends Import
     // Get and parse out the feed
     $props = $this->parseFeed('http://dev.frenchconnections.co.uk/cli/novasol/products.xml', 'products');
 
-    var_dump($props);
+    $this->out('Got property list...');
+    // Process
+    foreach ($props->properties as $propertyObj)
+    {
+
+      $this->out('Processing affiliate property id ' . $propertyObj->affiliate_property_id);
+
+      $property_table = JTable::getInstance('Property', 'RentalTable');
+      $unit_table = JTable::getInstance('Unit', 'RentalTable');
+
+      $property_version_table = JTable::getInstance('PropertyVersions', 'RentalTable');
+      $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
+
+      // Array to hold the 'data' for this listing
+      $data = array();
+
+      try
+      {
+        // Start a transaction
+        $db->transactionStart();
+
+        // Check whether this affiliate property reference already exists in the versions table
+        $this->property_version_detail = $property_version_table->load(array('affiliate_property_id' => $propertyObj->affiliate_property_id), false);
+
+        // Only create new property stub if version ID not already existsing
+        if (!$this->property_version_detail)
+        {
+          $this->out('Property not found in versions table, adding property entry...');
+
+          // Array of property details to create
+          $property = array(
+            'expiry_date' => $expiry_date,
+            'created_on' => $date,
+            'review' => 0,
+            'created_by' => $user,
+            'is_bookable' => 1,
+            'published' => 0
+          );
+
+          // Create an entry in the #__property table
+          $property_detail = $this->save($property_table, $property);
+
+          // Be aware that the table primary key is updated
+            $this->out('Created new property ID: ' . $property_detail->id);
+          }
+          else
+          {
+            // Array of property details to create
+            $property = array(
+              'id' => $property_version_table->property_id,
+              'expiry_date' => $expiry_date
+            );
+
+            // Update the property expiry date
+            // N.B. If we wanted to amend the process to update on each import
+            // this would be the place to do it.
+            $this->save($property_table, $property);
+
+            // Here we know we have the full property version detail
+            $property_detail = $property_table->load($property_version_table->property_id);
+          }
+
+          // Get the nearest city
+          $city_id = $this->nearestcity($propertyObj->latitude, $propertyObj->longitude);
+
+          // Get the location details for this property
+          $classification = JTable::getInstance('Classification', 'ClassificationTable');
+
+          $location = $classification->getPath($city_id);
+
+          $data['property_version']['id'] = $property_version_table->id;
+          $data['property_version']['property_id'] = $property_table->id;
+          $data['property_version']['affiliate_property_id'] = $propertyObj->affiliate_property_id;
+          $data['property_version']['country'] = (int) $location[1]->id;
+          $data['property_version']['area'] = (int) $location[2]->id;
+          $data['property_version']['region'] = (int) $location[3]->id;
+          $data['property_version']['department'] = (int) $location[4]->id;
+          $data['property_version']['city'] = (int) $location[5]->id;
+          $data['property_version']['latitude'] = $propertyObj->latitude;
+          $data['property_version']['longitude'] = $propertyObj->longitude;
+          $data['property_version']['created_by'] = $user; // TO DO get Allez Francais added to system - surpress renewal reminders
+          $data['property_version']['created_on'] = $db->quote($date);
+          $data['property_version']['review'] = 0;
+          $data['property_version']['published_on'] = $db->quote(JFactory::getDate());
+          $data['property_version']['use_invoice_details'] = 1;
+          $data['property_version']['booking_url'] = $propertyObj->booking_url;
+
+          $this->out('Saving property version details for ' . $property_table->id);
+
+          // Set the table key back to version id. This ensures a new version is created
+          // if there isn't one already
+          $property_version_table->set('_tbl_keys', array('id'));
+
+          $this->save($property_version_table, $data['property_version']);
+
+          // Same again, but this time for the unit...
+          // Check whether this affiliate property reference already exists in the versions table
+          $this->unit_version_detail = $unit_version_table->load(array('property_id' => $property_table->id), false);
+
+          // Only create new property stub if version ID not already existsing
+          if (!$this->unit_version_detail)
+          {
+            $this->out('Unit not found in versions table, adding unit entry...');
+
+            // Array of property details to create
+            $unit = array('property_id' => $property_table->id, 'created_by' => $user, 'published' => 1, 'ordering' => 1, 'review' => 0);
+
+            // Create an entry in the #__property table
+            $unit_detail = $this->save($unit_table, $unit);
+
+            // Be aware that the table primary key is updated
+            $this->out('Created new unit ID: ' . $unit_detail->id);
+          }
+          else
+          {
+            // Load the unit details
+            $unit_detail = $unit_table->load(array('property_id' => $property_table->id));
+          }
+
+          $data['unit_version']['id'] = $unit_version_table->id;
+          $data['unit_version']['unit_id'] = $unit_detail->id;
+          $data['unit_version']['property_id'] = $property_table->id;
+
+          // Add the description, if there is one
+          if (!empty($propertyObj->description))
+          {
+            $data['unit_version']['description'] = $propertyObj->description;
+          }
+
+          $data['unit_version']['occupancy'] = $propertyObj->occupancy;
+          $data['unit_version']['changeover_day'] = 1521;
+          $data['unit_version']['unit_title'] = $propertyObj->unit_title;
+          $data['unit_version']['property_type'] = $propertyObj->property_type;
+          $data['unit_version']['accommodation_type'] = 25;
+          $data['unit_version']['bathrooms'] = $propertyObj->bathrooms;
+          $data['unit_version']['base_currency'] = $propertyObj->base_currency;
+          $data['unit_version']['single_bedrooms'] = $propertyObj->single_bedrooms;
+          $data['unit_version']['double_bedrooms'] = $propertyObj->double_bedrooms;
+          $data['unit_version']['twin_bedrooms'] = $propertyObj->twin_bedrooms;
+          $data['unit_version']['triple_bedrooms'] = $propertyObj->triple_bedrooms;
+          $data['unit_version']['bedrooms'] = $propertyObj->single_bedrooms + $propertyObj->double_bedrooms + $propertyObj->twin_bedrooms + $propertyObj->triple_bedrooms;
+
+          $unit_version_table->set('_tbl_keys', array('id'));
+
+          $this->save($unit_version_table, $data['unit_version']);
+
+          if (!empty($propertyObj->facilities))
+          {
+            $this->_saveFacilities($propertyObj->facilities, $unit_version_table->id, $unit_table->id);
+          }
+
+          $this->out('Updating tariff info');
+
+          $unit_id = $unit_table->id;
+
+          // Set the pk to unit_id as we want to delete all tariffs for this property
+          $tariffsTable->set('_tbl_keys', array('unit_id'));
+
+          $tariffsTable->delete($unit_id);
+
+          // Reset the table pk to id so we can insert new tariffs
+          $tariffsTable->set('_tbl_keys', array('id'));
+
+          foreach ($propertyObj->tariffs as $tariff)
+          {
+
+            $tariff['id'] = '';
+            $tariff['unit_id'] = $unit_id;
+
+            $tariffsTable->save($tariff);
+          }
+
+          $this->out('Working through images...');
+
+          if (!$this->unit_version_detail)
+          {
+            $this->getImages($db, $propertyObj->images, $unit_version_table->id, $property_table->id, $unit_table->id);
+          }
+
+
+          // Update the availability
+          //$availabilityLength = strlen($propertyObj->availability);
+
+          //for ($i=0;$i<$availabilityLength;$i++) {
+              //echo $propertyObj->availability[$i];
+          //}
+
+          // Done so commit all the inserts and what have you...
+          // $db->transactionCommit();
+
+          $this->out('Done processing... ' . $propertyObj->affiliate_property_id);
+
+        }
+        catch (Exception $e)
+        {
+          // Roll back any batched inserts etc
+          $db->transactionRollback();
+
+          var_dump($e);die;
+          // Send an email, woot!
+          $this->email($e);
+        }
+    }
   }
 
   // Wrapper function to get the feed data via CURL

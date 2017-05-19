@@ -76,7 +76,8 @@ robots.txt
 /administrator/language/en-GB/en-GB.plg_system_betterpreview.ini
 /administrator/language/en-GB/en-GB.plg_content_jce.ini
 /administrator/language/en-GB/en-GB.plg_content_jce.sys.ini
-
+/cli/novasol/
+/cli/translations.xml
 /media/nnframework/
 /media/betterpreview/
 /plugins/editors-xtd/betterpreview/
