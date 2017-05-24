@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -108,7 +109,7 @@ class JFeedParserproducts extends JFeedParser
 
     $listing->base_currency = 'EUR';
     $listing->occupancy = (string) $el->information->adultCount + $el->information->childrenCount;
-    $listing->booking_url = 'https://booking.novasol.com/?opendocument=&V=EUR&NA=1&NC=0&H=' . $el->propertyID . '&C=191&L=999&COM=nov&PR=&U=whitelabel.novasol.com&theme=wl&wt_si_n=NormalSearchBookingFlow';
+    $listing->booking_url = 'https://booking.novasol.com/?opendocument=&V=EUR&H=' . $el->propertyID . '&C=191&L=999&COM=nov&PR=&U=whitelabel.novasol.com&theme=wl&wt_si_n=NormalSearchBookingFlow';
 
     //$listing->additional_price_notes = (string) $el->additional_price_notes;
 

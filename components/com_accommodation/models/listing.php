@@ -1482,6 +1482,7 @@ class AccommodationModelListing extends JModelForm
           $form->setFieldAttribute('adults', 'required', 'true');
           $form->setFieldAttribute('start_date', 'required', 'true');
           $form->setFieldAttribute('end_date', 'required', 'true');
+
         }
 
 

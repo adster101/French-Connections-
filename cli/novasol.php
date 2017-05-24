@@ -30,6 +30,9 @@ require_once JPATH_LIBRARIES . '/cms.php';
 // Import the configuration.
 require_once JPATH_CONFIGURATION . '/configuration.php';
 
+require_once JPATH_BASE . '/administrator/components/com_rental/helpers/rental.php';
+
+
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
 jimport('joomla.filesystem.folder');
@@ -41,6 +44,9 @@ class Novasol extends Import
 {
 
   public $api_key = 'yII1NTvYnWpLQAK7D9X1G8j42f6LaS';
+
+  // Numeric region codes - ignore property if not in one of these regions
+  public $regions = array(139,141, 144, 147,137, 142,149, 145, 148);
 
   protected $facilities = array(
     '044' => 486, // Freezer
@@ -74,9 +80,12 @@ class Novasol extends Import
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
     JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/tables');
 
-    // Add the realestate property models
+    // Add the rental property models
     JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_rental/models');
     $tariffsTable = JTable::getInstance($type = 'Tariffs', $prefix = 'RentalTable');
+
+    $availabilityTable = JTable::getInstance($type = 'Availability', $prefix = 'RentalTable', $config = array());
+
 
     define('COM_IMAGE_BASE', JPATH_ROOT . '/images/property/');
 
@@ -101,7 +110,7 @@ class Novasol extends Import
     // $properties = $this->getData('https://safe.novasol.com/api/translate?salesmarket=826', $this->api_key);
 
     // Get and parse out the feed
-    $props = $this->parseFeed('http://dev.frenchconnections.co.uk/cli/novasol/products.xml', 'products');
+    $props = $this->parseFeed('http://preproduction.frenchconnections.co.uk/cli/novasol/products.xml', 'products');
 
     $this->out('Got property list...');
     // Process
@@ -116,11 +125,31 @@ class Novasol extends Import
       $property_version_table = JTable::getInstance('PropertyVersions', 'RentalTable');
       $unit_version_table = JTable::getInstance('UnitVersions', 'RentalTable');
 
+      $unit_model = JModelLegacy::getInstance('Unit', 'RentalModel');
+
+
       // Array to hold the 'data' for this listing
       $data = array();
 
       try
       {
+        // Get the nearest city
+        $city_id = $this->nearestcity($propertyObj->latitude, $propertyObj->longitude);
+
+        // Get the location details for this property
+        $classification = JTable::getInstance('Classification', 'ClassificationTable');
+
+        $location = $classification->getPath($city_id);
+
+        // Ignore properties not in the relevant regions
+        if (!in_array($location[3]->id, $this->regions))
+        {
+          $db->transactionRollback();
+          //$this->out('Skipping import of ' . $propertyObj->affiliate_property_id . ' not in a region of interest');
+
+          continue;
+        }
+
         // Start a transaction
         $db->transactionStart();
 
@@ -165,13 +194,7 @@ class Novasol extends Import
             $property_detail = $property_table->load($property_version_table->property_id);
           }
 
-          // Get the nearest city
-          $city_id = $this->nearestcity($propertyObj->latitude, $propertyObj->longitude);
 
-          // Get the location details for this property
-          $classification = JTable::getInstance('Classification', 'ClassificationTable');
-
-          $location = $classification->getPath($city_id);
 
           $data['property_version']['id'] = $property_version_table->id;
           $data['property_version']['property_id'] = $property_table->id;
@@ -284,14 +307,51 @@ class Novasol extends Import
 
 
           // Update the availability
-          //$availabilityLength = strlen($propertyObj->availability);
+          $availabilityLength = strlen($propertyObj->availability);
+          var_dump($propertyObj->availability);
+          $availability_by_day = array();
 
-          //for ($i=0;$i<$availabilityLength;$i++) {
-              //echo $propertyObj->availability[$i];
-          //}
+          $DateInterval = new DateInterval('P1D');
+          $date = new DateTime('01-01-2017');
+
+          for ($i=1;$i<$availabilityLength;$i++) {
+
+            // First day of year
+            // Add one day to the start date for each day of availability
+            $date = $date->add($DateInterval);
+
+            // Add the day as an array key storing the availability status as the value
+            if ($propertyObj->availability[$i] == 'A') {
+              $availability_by_day[date_format($date, 'd-m-Y')] = 1;
+            }
+            else
+            {
+              $availability_by_day[date_format($date, 'd-m-Y')] = 0;
+            }
+          }
+
+          $availabilityArr = RentalHelper::getAvailabilityByPeriod($availability_by_day);
+
+
+          $availabilityTable->reset();
+
+          // Delete existing availability
+          $availabilityTable->delete($unit_id);
+
+          // Woot, put some availability back
+          $availabilityTable->save($unit_id, $availabilityArr);
+
+          // Set the data and save the from price against the unit
+          $unit_data['availability_last_updated_on'] = JHtml::_('date', 'now', 'Y-m-d');
+          $unit_data['id'] = $unit_id;
+
+          if (!$unit_model->save($unit_data))
+          {
+            throw new Exception('Problem saving the unit from price/availability date');
+          }
 
           // Done so commit all the inserts and what have you...
-          // $db->transactionCommit();
+          $db->transactionCommit();
 
           $this->out('Done processing... ' . $propertyObj->affiliate_property_id);
 

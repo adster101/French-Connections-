@@ -91,7 +91,7 @@ $owner = JFactory::getUser($this->item->created_by);
         <div class="form-group row">
           <div class="col-lg-6">
             <?php echo $this->form->getLabel('start_date'); ?>
-            <div class="input-group start_date date" data-changeover="[0,1,2,3,4,5,7]" data-highlight="[6]">
+            <div class="input-group start_date date">
               <?php echo $this->form->getInput('start_date'); ?>
               <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" for="start_date"></i></span>
             </div>
@@ -120,7 +120,7 @@ $owner = JFactory::getUser($this->item->created_by);
       <input type="hidden" name="option" value="com_accommodation" />
       <input type="hidden" name="task" value="listing.enquiry" />
       <input type="hidden" name="next" value="<?php echo $this->item->booking_url ?>" />
-      <input type="hidden" name="affiliate" value="<?php echo $owner; ?>" />
+      <input type="hidden" name="affiliate" value="<?php echo $owner->username; ?>" />
     </form>
   </div>
 </div>
