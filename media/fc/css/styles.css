@@ -6330,6 +6330,9 @@ Contains styles that apply at the global level, or can be applied to any section
 19/08/2014 Adam Rifat FCV4
 
 **/
+img {
+  max-width: 100%;
+}
 @media print {
   .print-button-bar {
     display: none;

@@ -35,7 +35,9 @@ $thumb = ($this->result->thumbnail) ? '/images/property/' . $this->result->unit_
 $tagline = JText::sprintf('COM_FCSEARCH_SITE_OCCUPANCY_DETAIL', $this->result->accommodation_type, $this->result->property_type, $this->result->bedrooms, $this->result->bathrooms, $this->result->occupancy);
 $from_price = JHtmlGeneral::price($this->result->price, $this->result->base_currency, '', '');
 $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_currency, '', '');
+
 ?>
+
 
 <div class="search-result"
      data-url='<?php echo $route ?>'
@@ -59,11 +61,10 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
     <div class="col-xs-12 col-sm-3">
       <p class="rates" style="margin-bottom:0">
         <?php if ($this->result->price) : ?>
-            <?php //echo JText::_('COM_FCSEARCH_SEARCH_FROM'); ?>
-            <span class="lead"><?php echo '&pound;' . round($this->result->price); ?></span>
+            <span class="lead"><?php echo '&pound;' . round($from_price['GBP']); ?></span>
             <?php if ($this->result->price !== $this->result->to_price) : ?>
             <span class="lead">&dash;</span>
-                        <span class="lead"><?php echo '&pound;' . round($this->result->to_price); ?></span>
+                        <span class="lead"><?php echo '&pound;' . round($to_price['GBP']); ?></span>
                       <?php endif; ?>
               <a class="price-info" data-toggle="tooltip" data-placement="left" title="<?php echo JText::sprintf('COM_ACCOMMODATION_RATES_FROM_TO_DETAIL', $this->result->tariff_based_on); ?>">
                 <i class="glyphicon glyphicon-info-sign"></i>
@@ -104,7 +105,7 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
             echo $tagline;
             echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
             echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
-            echo (!empty($this->result->coast) && ((int) $this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (float) $this->result->coast) : '';
+            echo (!empty($this->result->coast) && ((float) $this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (string) $this->result->coast) : '';
             ?>
           </p>
           <p>

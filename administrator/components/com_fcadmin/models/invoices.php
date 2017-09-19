@@ -97,6 +97,19 @@ class FcadminModelInvoices extends JModelForm
           $table_invoice_lines->reset();
         }
 
+        // Add the discount line
+        if (!empty($invoice['discount']))
+        {
+          $line = $invoice['discount'];
+
+          if (!$table_invoice_lines->save($line))
+          {
+            $message = JText::sprintf('COM_INVOICE_LINE_IMPORT_PROBLEM', $invoice['id']);
+            Throw new Exception($message);
+          }
+          $table_invoice_lines->reset();
+        }
+
         $table->reset();
       }
     }
@@ -199,8 +212,19 @@ class FcadminModelInvoices extends JModelForm
       $invoice_line['total_net'] = $item_cost;
       $invoice_line['vat'] = $vat_line;
       $invoices[$invoice_id]['lines'][] = $invoice_line;
-    }
 
+      // Generate a discount line, if one has been applied...
+      if (round(($line[19])) && round(($line[20])) and !array_key_exists('discount', $invoices[$invoice_id]))
+      {
+        $discount_line = array();
+        $discount_line['invoice_id'] = $invoice_id;
+        $discount_line['item_description'] = JText::sprintf('COM_FCADMIN_INVOICE_DISCOUNT_PERCENT', (int) $line[19], '%');
+        $discount_line['quantity'] = 1;
+        $discount_line['total_net'] = -$line[20];
+        $discount_line['vat'] = $vat_line;
+        $invoices[$invoice_id]['discount'] = $discount_line;
+      }
+    }
     return $invoices;
   }
 

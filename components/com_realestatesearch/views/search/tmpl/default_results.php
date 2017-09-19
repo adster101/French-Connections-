@@ -43,19 +43,19 @@ $max_budget = $this->state->get('list.max_price');
   <h1 class="small-h1 page-header">
     <?php echo $this->escape(str_replace(' - French Connections', '', $this->document->title)); ?>
   </h1>
-  <div class="well well-sm well-light-blue clearfix form-inline">  
+  <div class="well well-sm well-light-blue clearfix form-inline">
     <?php echo JHtml::_('form.token'); ?>
     <div class="form-group">
       <label class="sr-only" for="q">
         <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
       </label>
-      <input id="s_kwds" 
-             class="typeahead search-box form-control" 
+      <input id="s_kwds"
+             class="typeahead search-box form-control"
              type="text"
-             name="s_kwds" 
-             autocomplete="Off" 
+             name="s_kwds"
+             autocomplete="Off"
              size="40"
-             value="<?php echo $s_kwds ?>" 
+             value="<?php echo $s_kwds ?>"
              placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>" />
     </div>
     <div class="form-group">
@@ -63,7 +63,7 @@ $max_budget = $this->state->get('list.max_price');
         <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
       </label>
       <select id="bedrooms" name="bedrooms" class="form-control" >
-        <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
+        <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 11 => 11, 12 => 12, 13 => 13, 14 => 14, 15 => 15, 16 => 16, 17 => 17, 18 => 18, 19 => 19, 20 => 20), 'value', 'text', $bedrooms); ?>
       </select>
     </div>
     <div class="form-group">
@@ -93,7 +93,7 @@ $max_budget = $this->state->get('list.max_price');
         <li><a href="#mapsearch" data-toggle="tab"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;Map</a></li>
         <li><a href="#localinfo" data-toggle="tab"><i class="glyphicon glyphicon-paperclip"></i>&nbsp;Info</a></li>
         <li class="visible-sm-inline-block visible-xs-inline-block pull-right">
-          <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="">  
+          <a href="<?php echo JUri::getInstance()->toString() . '#refine' ?>" class="">
             <span class="glyphicon glyphicon-filter"></span>
             <span class="hidden-xs">
               <?php echo JText::_('COM_FCSEARCH_FILTER_RESULTS'); ?>
@@ -141,11 +141,11 @@ $max_budget = $this->state->get('list.max_price');
           </p>
           <p><?php echo JText::_('COM_REALESTATE_SEARCH_SEARCH_NO_RESULTS_BODY'); ?></p>
           <?php
-          // Load the most popular search module 
+          // Load the most popular search module
           $module = JModuleHelper::getModule('mod_popular_realestate_search');
           echo JModuleHelper::renderModule($module);
           ?>
-        <?php endif; ?> 
+        <?php endif; ?>
         <?php echo $this->pagination->getPagesLinks(); ?>
 
       </div>
@@ -168,4 +168,3 @@ $max_budget = $this->state->get('list.max_price');
   </div>
 </form>
 <?php JDEBUG ? $_PROFILER->mark('End process search results template') : null; ?>
-

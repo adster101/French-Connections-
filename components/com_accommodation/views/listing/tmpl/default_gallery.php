@@ -9,12 +9,12 @@ defined('_JEXEC') or die('Restricted access');
     <div class="slick-slider">
       <?php if (!empty($this->item->video_url)) : ?>
         <div>
-          <div class="embed-responsive embed-responsive-16by9">   
+          <div class="embed-responsive embed-responsive-16by9">
             <iframe class="embed-responsive-item" id="player_1" src="<?php echo $this->escape($this->item->video_url) ?>"></iframe>
           </div>
         </div>
       <?php endif; ?>
-      <?php foreach ($this->images as $images => $image) : ?> 
+      <?php foreach ($this->images as $images => $image) : ?>
         <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url; ?>
         <div>
           <?php if ($images == 0) : ?>
@@ -39,11 +39,11 @@ defined('_JEXEC') or die('Restricted access');
           </p>
         </div>
       <?php endif; ?>
-      <?php foreach ($this->images as $images => $image) : ?> 
+      <?php foreach ($this->images as $images => $image) : ?>
         <?php $src = (!empty($image->image_file_name)) ? JURI::root() . 'images/property/' . $this->item->unit_id . '/thumbs/' . $image->image_file_name : JURI::getInstance()->toString(array('scheme')) . $image->url_thumb; ?>
         <div>
-          <img src="<?php echo $src ?>" /> 
-        </div>     
+          <img src="<?php echo $src ?>" />
+        </div>
       <?php endforeach; ?>
     </div>
   <?php else : ?>
@@ -54,7 +54,7 @@ defined('_JEXEC') or die('Restricted access');
             <img src="<?php JURI::root() . '/images/general/medium-sunflower.png' ?>" />
           </div>
         <?php endif; ?>
-        <?php foreach ($this->images as $images => $image) : ?> 
+        <?php foreach ($this->images as $images => $image) : ?>
           <div>
             <img src="<?php echo JURI::root() . 'images/property/' . $this->item->unit_id . '/gallery/' . $image->image_file_name; ?>" />
             <p>

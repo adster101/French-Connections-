@@ -345,7 +345,7 @@ class EnquiriesModelEnquiry extends JModelAdmin
     if (!empty($data['cc_message']))
     {
       // If the owner wants a copy then this is 'cced' to the owner in a separate email.
-      $cc_email_from = $params->get('admin_enquiry_no_reply', 'adamrifat@frenchconnections.co.uk');
+      $cc_email_from = $params->get('admin_enquiry_email_no_reply', 'adamrifat@frenchconnections.co.uk');
       $cc_recipient = (JDEBUG) ? $params->get('admin_enquiry_email', 'adamrifat@frenchconnections.co.uk') : $from;
 
       // Assemble the email data...

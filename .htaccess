@@ -1,3 +1,10 @@
+Order Deny,Allow
+Deny from 54.234.218.30
+Deny from 54.234.0.0
+Deny from 89.45.110.80
+Deny from 85.172.55.183
+Deny from 46.229.168.80
+
 ##
 # @package		Joomla
 # @copyright	Copyright (C) 2005 - 2012 Open Source Matters. All rights reserved.

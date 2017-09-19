@@ -383,6 +383,7 @@ class Renewals extends JApplicationCli
     $users_to_ignore = array();
     $users_to_ignore[] = JUser::getInstance('atleisure')->id;
     $users_to_ignore[] = JUser::getInstance('oliverstravels')->id;
+    $users_to_ignore[] = JUser::getInstance('novasol')->id;
 
     $db = JFactory::getDBO();
     /**

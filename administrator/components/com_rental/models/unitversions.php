@@ -70,7 +70,9 @@ class RentalModelUnitVersions extends JModelAdmin
 
       foreach ($attributes as $key => $values)
       {
-        $item->$key = $values;
+        if (!empty($key)) {
+          $item->$key = $values;
+        }
       }
       // Add any tariffs to the unit data for display on the view
     }

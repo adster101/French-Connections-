@@ -327,6 +327,8 @@ class AccommodationControllerListing extends JControllerForm
         $model = $this->getModel();
         $params = JComponentHelper::getParams('com_enquiries');
         $id = $this->input->get('id', '', 'int');
+        $affiliate = $this->input->get('affiliate', '', 'string');
+
         $unit_id = $this->input->get('unit_id', '', 'int');
         $next = $this->input->get('next', '', 'string');
         // Get the itemID of the accommodation component.
@@ -335,6 +337,7 @@ class AccommodationControllerListing extends JControllerForm
 
         // Get the data from POST
         $data = $this->input->post->get('jform', array(), 'array');
+
 
         // Get the property details we are adding an enquiry for.
         // Check for a valid session cookie
@@ -422,6 +425,18 @@ class AccommodationControllerListing extends JControllerForm
         // If next blah blah blah
         if ($next)
         {
+          // if novasol we need to add additional parameters to the booknig form...
+          switch ($affiliate)
+          {
+            case 'novasol': // Apartment
+              $next .= '&SD=' . $data['start_date'] . '&ED=' . $data['end_date'] . '&NA=' . $data['adults'] . '&NC' . $data['children'];
+              break;
+            default:
+              break;
+          }
+
+
+
           $app->redirect($next);
         }
 

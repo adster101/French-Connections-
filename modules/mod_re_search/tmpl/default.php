@@ -17,7 +17,7 @@ $bedrooms = '';
 $refine_budget_min = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, 'min_');
 $refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, 'max_','COM_FCSEARCH_SEARCH_MAXIMUM_PRICE_RANGE');
 ?>
-<div class="well well-light-blue">  
+<div class="well well-light-blue">
   <h4><?php echo JText::_('COM_REALESTATESEARCH_PROPERTY_SEARCH') ?></h4>
   <form class="form-inline" id="property-search" method="POST" action="<?php echo JRoute::_('index.php?option=com_realestatesearch&Itemid=' . (int) $Itemid . '&s_kwds=' . JText::_('COM_FCSEARCH_S_KWDS_DEFAULT')) ?>">
     <?php echo JHtml::_('form.token'); ?>
@@ -25,13 +25,13 @@ $refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, '
       <label class="sr-only" for="q">
         <?php echo JText::_('COM_FCSEARCH_SEARCH_QUERY_LABEL'); ?>
       </label>
-      <input id="s_kwds" 
-             class="typeahead search-box form-control" 
+      <input id="s_kwds"
+             class="typeahead search-box form-control"
              type="text"
-             name="s_kwds" 
-             autocomplete="Off" 
+             name="s_kwds"
+             autocomplete="Off"
              size="40"
-             value="" 
+             value=""
              placeholder="<?php echo JText::_('COM_FCSEARCH_ACCOMMODATION_DESTINATION_OR_PROPERTY') ?>" />
     </div>
     <div class="form-group">
@@ -39,7 +39,7 @@ $refine_budget_max = modReSearchHelper::getBudgetFields(25000, 1500000, 50000, '
         <?php echo JText::_('COM_FCSEARCH_SEARCH_BEDROOMS') ?>
       </label>
       <select id="bedrooms" name="bedrooms" class="form-control" >
-        <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10), 'value', 'text', $bedrooms); ?>
+        <?php echo JHtml::_('select.options', array('' => JText::_('COM_FCSEARCH_ACCOMMODATION_BEDROOMS'), 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 11 => 11, 12 => 12, 13 => 13, 14 => 14, 15 => 15, 16 => 16, 17 => 17, 18 => 18, 19 => 19, 20 => 20), 'value', 'text', $bedrooms); ?>
       </select>
     </div>
     <div class="form-group">

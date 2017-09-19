@@ -141,8 +141,8 @@ class PropertyControllerListing extends JControllerForm
   }
 
   /**
-   * Approve updates controller action 
-   * 
+   * Approve updates controller action
+   *
    */
   public function approve()
   {
@@ -166,7 +166,7 @@ class PropertyControllerListing extends JControllerForm
   }
 
   /**
-   * 
+   *
    */
   public function publish()
   {
@@ -193,7 +193,7 @@ class PropertyControllerListing extends JControllerForm
     $input = $app->input;
     $recordId = $input->get('id', '', 'int');
     $data = $input->get('jform', '', array());
-    // Get the task 
+    // Get the task
     $task = $this->getTask();
 
     // Get the various models we will be using
@@ -267,8 +267,8 @@ class PropertyControllerListing extends JControllerForm
 
   /**
    * review controller action - handles the case when a user wants to review the changes to a listing.
-   * 
-   * 
+   *
+   *
    */
   public function review()
   {
@@ -341,7 +341,7 @@ class PropertyControllerListing extends JControllerForm
   }
 
   /**
-   * 
+   *
    * @return boolean
    */
   public function release()

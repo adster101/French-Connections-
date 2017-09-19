@@ -337,7 +337,7 @@ class AtLeisure extends Import
         return $distances;
     }
 
-    private function _getFacilities($acco, $layout = array(), $unit_version_id = '', $unit_id = '')
+    public function _getFacilities($acco, $layout = array(), $unit_version_id = '', $unit_id = '')
     {
 
         $facilities = array();
@@ -404,7 +404,7 @@ class AtLeisure extends Import
         return $facilities;
     }
 
-    private function _saveFacilities($facilities = array(), $unit_version_id, $unit_id)
+    public function _saveFacilities($facilities = array(), $unit_version_id, $unit_id)
     {
         $db = JFactory::getDBO();
 
@@ -447,8 +447,7 @@ class AtLeisure extends Import
             $db->execute();
         } catch (Exception $e)
         {
-            var_dump($e);
-            die;
+          // Tumbles weeds
         }
 
         return true;
@@ -686,6 +685,43 @@ class AtLeisure extends Import
             }
         }
     }
+
+    /**
+     * Overridden as we use the images directly from the @leisure CDN - why?
+     *
+     * @param type $db
+     * @param type $data
+     * @return type
+     * @throws Exception
+     */
+    public function createImage($db, $data)
+    {
+      $query = $db->getQuery(true);
+
+      $query->insert('#__property_images_library')
+              ->columns(
+                      array(
+                          $db->quoteName('version_id'), $db->quoteName('unit_id'),
+                          $db->quoteName('url'), $db->quoteName('url_thumb'),
+                          $db->quoteName('caption'), $db->quoteName('ordering')
+                      )
+              )
+              ->values(implode(',', $data));
+
+      $db->setQuery($query);
+
+      try
+      {
+        $db->execute();
+      }
+      catch (RuntimeException $e)
+      {
+        throw new Exception($e->getMessage());
+      }
+
+      return $db->insertid();
+    }
+
 
     public function getLayout($layoutArr)
     {

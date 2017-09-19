@@ -1466,15 +1466,23 @@ class AccommodationModelListing extends JModelForm
                 $form->load($payment->getXml(), true);
             }
         }
-        elseif ($owner == 'oliverstravels')
+        elseif ($owner == 'oliverstravels' || $owner == 'mimozascannes')
         {
-
           $form->removeField('guest_phone');
           $form->removeField('message');
           $form->removeField('adults');
           $form->removeField('children');
           $form->removeField('start_date');
           $form->removeField('end_date');
+        }
+        elseif ($owner == 'novasol')
+        {
+          $form->removeField('guest_phone');
+          $form->removeField('message');
+          $form->setFieldAttribute('adults', 'required', 'true');
+          $form->setFieldAttribute('start_date', 'required', 'true');
+          $form->setFieldAttribute('end_date', 'required', 'true');
+
         }
 
 
