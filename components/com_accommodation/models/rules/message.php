@@ -39,7 +39,7 @@ class JFormRuleMessage extends JFormRule {
             return true;
         }
 
-        if (strlen($value) > 750) {
+        if (strlen($value) > 1500) {
             return false;
         }
 

@@ -48,7 +48,7 @@ class BeauxVillages extends RealestateImport {
         $this->out('About to get feed...');
 
         // Get and parse out the feed
-        $props = $this->parseFeed('http://xml.beauxvillages.com/frc.xml', 'Envelope');
+        $props = $this->parseFeed('http://epn.group/_conn/exports/feeds/frc.xml', 'Envelope');
 
         $this->out('Got feed...');
 
@@ -70,6 +70,7 @@ class BeauxVillages extends RealestateImport {
         // Loop over each of the $props returned from parseFeed above
         foreach ($props->properties as $prop) {
             try {
+
                 $db->transactionStart();
 
                 $this->out('Processing... ' . $prop->agency_reference);

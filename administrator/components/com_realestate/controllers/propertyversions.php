@@ -25,6 +25,8 @@ class RealEstateControllerPropertyVersions extends JControllerForm
         // Get the property id we're trying to edit
         $id = (!empty($data['realestate_property_id'])) ? $data['realestate_property_id'] : $input->get('id', '', 'int');
 
+        $this->holdEditId('com_realestate.edit.listing', $id);
+
         // Test whether this user is allowed to edit it.
         return PropertyHelper::allowEditRealestate($id);
     }

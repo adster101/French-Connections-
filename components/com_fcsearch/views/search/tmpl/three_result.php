@@ -105,7 +105,7 @@ $to_price = JHtmlGeneral::price($this->result->to_price, $this->result->base_cur
             echo $tagline;
             echo ($this->result->changeover_day) ? '&nbsp;' . JText::sprintf('COM_FCSEARCH_CHANGEOVER_DAY', $this->result->changeover_day) : '';
             echo (!empty($this->result->distance)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE', (float) $this->result->distance, $this->escape($location)) : '';
-            echo (!empty($this->result->coast) && ((int) $this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (float) $this->result->coast) : '';
+            echo (!empty($this->result->coast) && ((float) $this->result->coast)) ? JText::sprintf('COM_FCSEARCH_SITE_DISTANCE_TO_COAST', (string) $this->result->coast) : '';
             ?>
           </p>
           <p>

@@ -75,6 +75,7 @@
       validate="message"
       message="COM_ACCOMMODATION_ENQUIRY_MESSAGE_VALIDATION_MESSAGE"
       labelclass="control-label"
+      rows="4"
     />
 
     <field

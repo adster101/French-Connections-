@@ -26,15 +26,13 @@ class PaymentsModelPayment extends JModelList
      */
     public function __construct($config = array())
     {
-        if (empty($config['filter_fields'])) {
-            $config['filter_fields'] = array(
-
-            );
+        if (empty($config['filter_fields']))
+        {
+          $config['filter_fields'] = array();
         }
 
         parent::__construct($config);
     }
-
 
 	/**
 	 * Method to auto-populate the model state.
@@ -55,8 +53,6 @@ class PaymentsModelPayment extends JModelList
 
 		$published = $app->getUserStateFromRequest($this->context.'.filter.state', 'filter_published', '', 'string');
 		$this->setState('filter.state', $published);
-
-
 
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_payments');
@@ -107,6 +103,7 @@ class PaymentsModelPayment extends JModelList
     $query->leftJoin('#__item_costs ic on ic.code = ptl.code');
     $query->leftJoin('#__users u on u.id = pt.user_id');
     $query->where('pt.id = ' . (int) $this->getState($this->context.'.payment.id',''));
+    $query->where('ic.state != -2');
 
 		$canDo	= PaymentsHelper::getActions();
 

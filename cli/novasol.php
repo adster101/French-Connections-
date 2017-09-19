@@ -110,7 +110,7 @@ class Novasol extends Import
     // $properties = $this->getData('https://safe.novasol.com/api/translate?salesmarket=826', $this->api_key);
 
     // Get and parse out the feed
-    $props = $this->parseFeed('http://preproduction.frenchconnections.co.uk/cli/novasol/products.xml', 'products');
+    $props = $this->parseFeed('file:///var/www/html/cli/novasol/products.xml');
 
     $this->out('Got property list...');
     // Process

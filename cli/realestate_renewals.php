@@ -126,7 +126,6 @@ class RealestateRenewals extends JApplicationCli
         // Assemble the email data...
         $mail = JFactory::getMailer()
                 ->setSender('accounts@frenchconnections.co.uk')
-                ->addBCC('adamrifat@frenchconnections.co.uk')
                 ->addBCC('accounts@frenchconnections.co.uk')
                 ->addRecipient($recipient)
                 ->setSubject($subject)

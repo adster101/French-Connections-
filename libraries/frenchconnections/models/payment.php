@@ -1152,7 +1152,6 @@ class FrenchConnectionsModelPayment extends JModelLegacy
 
         // If debug is off then we should have a $cc, at least for the renewals.
         $mail->addBCC('accounts@frenchconnections.co.uk');
-        $mail->addBCC('adamrifat@frenchconnections.co.uk');
 
         if (!$mail->Send())
         {

@@ -55,7 +55,6 @@ abstract class ModListingHelper
         b.longitude,
         f.image_file_name as thumbnail,
         (select count(*) from #__vouchers v where a.created_by = ' . (int) $user->id . ' and v.property_id = a.id and v.state = 1' . ' and v.end_date >= ' . $db->quote($date) . ' and v.item_cost_id = ' . $db->quote("1006-002") . ' ) as payment
-
       ');
     $query->from('#__realestate_property as a');
     $query->join('inner', '#__realestate_property_versions as b on (a.id = b.realestate_property_id and b.id = (select max(c.id) from #__realestate_property_versions as c where c.realestate_property_id = a.id))');
@@ -65,7 +64,7 @@ abstract class ModListingHelper
     $query->where('(f.ordering = (select min(ordering) from #__realestate_property_images_library g where g.version_id = b.id) or f.ordering is null)');
 
     $query->where('a.created_by=' . (int) $user->id);
-    $query->where('a.published !=-2');
+    $query->where('a.published != -2');
     $db->setQuery($query);
 
     try

@@ -447,8 +447,7 @@ class AtLeisure extends Import
             $db->execute();
         } catch (Exception $e)
         {
-            var_dump($e);
-            die;
+          // Tumbles weeds
         }
 
         return true;
