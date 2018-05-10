@@ -31,7 +31,14 @@ class JFormRuleAdults extends JFormRule
 	 * @return  boolean  True if the value is valid, false otherwise.
 	 */
 	public function test(& $element, $value, $group = null, &$input = null, &$form = null)
-	{     
+	{
+
+		// If the field is empty and not required, the field is valid.
+    $required = ((string) $element['required'] == 'true' || (string) $element['required'] == 'required');
+
+    if (!$required && empty($value)) {
+      return true;
+    }
 
     // $value is prefiltered by Jform and will only contain alpha numeric chars (+ and spaces are stripped).
     // Test that the string matches the pattern
@@ -43,5 +50,5 @@ class JFormRuleAdults extends JFormRule
       return false;
     }
 
-	}  
+	}
 }

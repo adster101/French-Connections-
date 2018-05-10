@@ -24,7 +24,10 @@ $livechat_js = "(function(){
   s.parentNode.insertBefore(c,s);
 })();";
 
-//$doc->addScriptDeclaration($livechat_js);
+$doc->addScriptDeclaration($livechat_js);
+
+$groups = JAccess::getGroupsByUser($user->id, false);
+
 
 // Add JavaScript Frameworks
 JHtml::_('bootstrap.framework');
@@ -138,7 +141,17 @@ $uri->setQuery('');
                 <a class="brand hidden-desktop hidden-tablet" href="<?php echo (string) $uri ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
                   <span class="icon-out-2 small"></span></a>
                 <div<?php echo ($this->params->get('admin_menus') != '0') ? ' class="nav-collapse pull-right"' : ''; ?>>
-                  <jdoc:include type="modules" name="menu" style="none" />
+                  <?php
+                    // User group logic as Office admin inherits owner permissions
+                    // and so get owner menu by default as well their own...
+                  if (in_array(10, $groups)) : ?>
+                    <jdoc:include type="modules" name="owner-admin-menu" style="none" />
+                  <?php elseif (in_array(11, $groups)) : ?>
+                    <jdoc:include type="modules" name="office-admin-menu" style="none" />
+                  <?php else : ?>
+                    <jdoc:include type="modules" name="menu" style="none" />
+                  <?php endif; ?>
+
                   <ul class="nav nav-user">
                     <li>
                       <a class="" href="<?php echo (string) $uri; ?>" title="<?php echo JText::sprintf('TPL_ISIS_PREVIEW', $sitename); ?>" target="_blank"><?php echo JHtml::_('string.truncate', $sitename, 14, false, false); ?>
@@ -156,10 +169,10 @@ $uri->setQuery('');
                           </span>
                         </li>
                         <li class="divider"></li>
-                        <!--<li class="">
-                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php //echo $user->id;                 ?>"><?php //echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                          ?></a>
+                        <li class="">
+                          <a href="index.php?option=com_admin&task=profile.edit&id=<?php echo $user->id; ?>"><?php echo JText::_('TPL_ISIS_EDIT_ACCOUNT');                          ?></a>
                         </li>
-                        <li class="divider"></li>-->
+                        <li class="divider"></li>
                         <li class="">
                           <a href="<?php echo JRoute::_('index.php?option=com_login&task=logout&' . JSession::getFormToken() . '=1'); ?>">
                             <?php echo JText::_('TPL_FRENCHCONNECTIONS_LOGOUT'); ?>

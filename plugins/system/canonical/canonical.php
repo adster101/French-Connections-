@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @version		$Id: canonical.php 3 2014-01-07 16:31:21Z grigormihov $ 
- * @package		Joomla/StyleWare 
- * @subpackage	Content * @copyright	Copyright (C) 2011 StyleWare.EU. All rights reserved. 
+ * @version		$Id: canonical.php 3 2014-01-07 16:31:21Z grigormihov $
+ * @package		Joomla/StyleWare
+ * @subpackage	Content * @copyright	Copyright (C) 2011 StyleWare.EU. All rights reserved.
  * @license		GNU/GPL, see LICENSE.php
  */
 // Check to ensure this file is included in Joomla!
@@ -40,9 +40,9 @@ class plgSystemCanonical extends JPlugin
 
         $link = new JURI($uri);
 
-        if ($link->getScheme() == 'https')
+        if ($link->getScheme() == 'http')
         {
-            $link->setScheme('http');
+            $link->setScheme('https');
             $doc->addHeadLink(htmlspecialchars($link->toString()), 'canonical');
         }
     }

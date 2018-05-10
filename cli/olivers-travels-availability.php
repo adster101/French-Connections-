@@ -129,7 +129,8 @@ class OliversTravelsAvailability extends Import
           $availabilityTable->save($unit_id, $availabilityArr);
 
           // Set the data and save the from price against the unit
-          $unit_data['availability_last_updated_on'] = JHtml::_('date', 'now', 'Y-m-d');
+          $unit_data['availability_last_updated_on'] = JFactory::getDate()->calendar('Y-m-d');
+
           $unit_data['id'] = $unit_id;
 
           if (!$unit_model->save($unit_data))
@@ -148,7 +149,7 @@ class OliversTravelsAvailability extends Import
           // Roll back any batched inserts etc
           $db->transactionRollback();
 
-          var_dump($e->getMessage());
+          var_dump($e);die;
           // Send an email, woot!
           //$this->email($e);
         }

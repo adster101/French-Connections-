@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
- 
+
   <name>com_specialoffers</name>
         <!-- The following elements are optional and free of formatting constraints -->
   <creationDate>September 2012</creationDate>
@@ -15,18 +15,27 @@
   <description>
     This component is intended to provide admin users with a way to administer special offers added by property owners
   </description>
- 
-        
- 
+
+
+
   <!-- Site Main File Copy Section -->
   <!-- Note the folder attribute: This attribute describes the folder
   to copy FROM in the package to install therefore files copied
   in this section are copied from /site/ in the package -->
   <files folder="site"></files>
- 
+
   <administration>
     <!-- Administration Menu Section -->
 		<menu>COM_SPECIALOFFERS_MENU</menu>
+    <submenu>
+      <menu
+        link="option=com_specialoffers"
+        view="specialoffers"
+        img="class:banners"
+        alt="Special offers">
+        com_specialoffers
+      </menu>
+    </submenu>
   </administration>
- 
+
 </extension>

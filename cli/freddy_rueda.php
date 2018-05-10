@@ -84,6 +84,22 @@ class FreddyRueda extends RealestateImport
 
         $dept = JStringNormalise::toDashSeparated(JApplication::stringURLSafe($prop->department));
 
+        // Set the towns for the property dependent on the department
+        if ($dept == 'herault')
+        {
+          $prop->city = 112674;
+        }
+        elseif ($dept == 'aude')
+        {
+          $prop->city = 140038;
+        }
+
+        // Get the location details for this property
+        $classification = JTable::getInstance('Classification', 'ClassificationTable');
+
+        $location = $classification->getPath($prop->city);
+
+
         if (!$id)
         {
           // TO DO - Make this a function used by FR and AF
@@ -91,21 +107,6 @@ class FreddyRueda extends RealestateImport
 
           // Create an entry in the #__realestate_property table
           $property_id = $this->createProperty($db, $user);
-
-          // Set the towns for the property dependent on the department
-          if ($dept == 'herault')
-          {
-            $prop->city = 112674;
-          }
-          elseif ($dept == 'aude')
-          {
-            $prop->city = 140038;
-          }
-
-          // Get the location details for this property
-          $classification = JTable::getInstance('Classification', 'ClassificationTable');
-
-          $location = $classification->getPath($prop->city);
 
           $data = array();
           $data['realestate_property_id'] = $property_id;
@@ -127,7 +128,6 @@ class FreddyRueda extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
-
 
           $this->out('Adding property version...');
 
@@ -191,6 +191,8 @@ class FreddyRueda extends RealestateImport
           $data['price'] = (int) $prop->price;
           $data['latitude'] = $property_version->latitude;
           $data['longitude'] = $property_version->longitude;
+          $data['city'] = (int) $location[5]->id;
+
           $data['review'] = 0;
           $data['published_on'] = $db->quote(JFactory::getDate());
 

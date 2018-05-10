@@ -18,7 +18,7 @@ $app = JFactory::getApplication();
 $doc = JDocument::getInstance();
 
 // Include the JDocumentRendererMessage class file
-require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+//require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
 ?>
 

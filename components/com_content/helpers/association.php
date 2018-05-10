@@ -3,7 +3,7 @@
  * @package     Joomla.Site
  * @subpackage  com_content
  *
- * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -33,10 +33,12 @@ abstract class ContentHelperAssociation extends CategoryHelperAssociation
 	public static function getAssociations($id = 0, $view = null)
 	{
 		$jinput = JFactory::getApplication()->input;
-		$view   = is_null($view) ? $jinput->get('view') : $view;
+		$view   = $view === null ? $jinput->get('view') : $view;
 		$id     = empty($id) ? $jinput->getInt('id') : $id;
+		$user   = JFactory::getUser();
+		$groups = implode(',', $user->getAuthorisedViewLevels());
 
-		if ($view == 'article')
+		if ($view === 'article')
 		{
 			if ($id)
 			{
@@ -46,18 +48,88 @@ abstract class ContentHelperAssociation extends CategoryHelperAssociation
 
 				foreach ($associations as $tag => $item)
 				{
-					$return[$tag] = ContentHelperRoute::getArticleRoute($item->id, (int) $item->catid, $item->language);
+					if ($item->language != JFactory::getLanguage()->getTag())
+					{
+						$arrId   = explode(':', $item->id);
+						$assocId = $arrId[0];
+
+						$db    = JFactory::getDbo();
+						$query = $db->getQuery(true)
+							->select($db->qn('state'))
+							->from($db->qn('#__content'))
+							->where($db->qn('id') . ' = ' . (int) ($assocId))
+							->where('access IN (' . $groups . ')');
+						$db->setQuery($query);
+
+						$result = (int) $db->loadResult();
+
+						if ($result > 0)
+						{
+							$return[$tag] = ContentHelperRoute::getArticleRoute($item->id, (int) $item->catid, $item->language);
+						}
+					}
 				}
 
 				return $return;
 			}
 		}
 
-		if ($view == 'category' || $view == 'categories')
+		if ($view === 'category' || $view === 'categories')
 		{
 			return self::getCategoryAssociations($id, 'com_content');
 		}
 
 		return array();
+	}
+
+	/**
+	 * Method to display in frontend the associations for a given article
+	 *
+	 * @param   integer  $id  Id of the article
+	 *
+	 * @return  array   An array containing the association URL and the related language object
+	 *
+	 * @since  3.7.0
+	 */
+	public static function displayAssociations($id)
+	{
+		$return = array();
+
+		if ($associations = self::getAssociations($id, 'article'))
+		{
+			$levels    = JFactory::getUser()->getAuthorisedViewLevels();
+			$languages = JLanguageHelper::getLanguages();
+
+			foreach ($languages as $language)
+			{
+				// Do not display language when no association
+				if (empty($associations[$language->lang_code]))
+				{
+					continue;
+				}
+
+				// Do not display language without frontend UI
+				if (!array_key_exists($language->lang_code, JLanguageHelper::getInstalledLanguages(0)))
+				{
+					continue;
+				}
+
+				// Do not display language without specific home menu
+				if (!array_key_exists($language->lang_code, JLanguageMultilang::getSiteHomePages()))
+				{
+					continue;
+				}
+
+				// Do not display language without authorized access level
+				if (isset($language->access) && $language->access && !in_array($language->access, $levels))
+				{
+					continue;
+				}
+
+				$return[$language->lang_code] = array('item' => $associations[$language->lang_code], 'language' => $language);
+			}
+		}
+
+		return $return;
 	}
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
- 
+
   <name>com_reviews</name>
         <!-- The following elements are optional and free of formatting constraints -->
   <creationDate>September 2012</creationDate>
@@ -16,20 +16,28 @@
     This component is intended to provide admin users with a way to administer the various
     classifications within the site. E.g. property type, accommodation type, area etc
   </description>
- 
-        
- 
+
+
+
   <!-- Site Main File Copy Section -->
   <!-- Note the folder attribute: This attribute describes the folder
   to copy FROM in the package to install therefore files copied
   in this section are copied from /site/ in the package -->
   <files folder="site"></files>
- 
+
   <administration>
     <!-- Administration Menu Section -->
 		<menu>COM_REVIEWS_MENU</menu>
+    <submenu>
+    <menu
+      link="option=com_reviews"
+      view="reviews"
+      img="class:add"
+      alt="Testimonials/Reviews">COM_REVIEWS
+    </menu>
+  </submenu>
     <!-- Administration Main File Copy Section -->
-    <!-- Note the folder attribute: This attribute describes the folder 
+    <!-- Note the folder attribute: This attribute describes the folder
     to copy FROM in the package to install therefore files copied
     in this section are copied from /admin/ in the package -->
     <files folder="admin"></files>
@@ -37,5 +45,5 @@
       <language tag="en-GB">language/en-GB/en-GB.com_reviews.ini</language>
     </languages>
   </administration>
- 
+
 </extension>

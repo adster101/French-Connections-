@@ -3,7 +3,7 @@
  * @package     Joomla.Site
  * @subpackage  com_mailto
  *
- * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -43,7 +43,7 @@ class MailtoController extends JControllerLegacy
 	public function send()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$this->checkToken();
 
 		$app     = JFactory::getApplication();
 		$session = JFactory::getSession();
@@ -104,13 +104,13 @@ class MailtoController extends JControllerLegacy
 		/*
 		 * Free up memory
 		 */
-		unset ($headers, $fields);
+		unset($headers, $fields);
 
 		$email           = $this->input->post->getString('mailto', '');
 		$sender          = $this->input->post->getString('sender', '');
 		$from            = $this->input->post->getString('from', '');
 		$subject_default = JText::sprintf('COM_MAILTO_SENT_BY', $sender);
-		$subject         = $this->input->post->getString('subject', $subject_default);
+		$subject         = $this->input->post->getString('subject', '') !== '' ? $this->input->post->getString('subject') : $subject_default;
 
 		// Check for a valid to address
 		$error = false;
@@ -135,7 +135,6 @@ class MailtoController extends JControllerLegacy
 
 		// Build the message to send
 		$msg  = JText::_('COM_MAILTO_EMAIL_MSG');
-		$link = $link;
 		$body = sprintf($msg, $SiteName, $sender, $from, $link);
 
 		// Clean the email data

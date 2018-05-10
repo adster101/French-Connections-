@@ -81,7 +81,8 @@ module.exports = function (grunt) {
           'media/fc/js/general.js',
           'media/fc/js/search.js',
           'media/fc/js/property.js',
-          'media/fc/js/atleisure.pay.js'
+          'media/fc/js/atleisure.pay.js',
+
         ],
         dest: 'media/fc/js/scripts.js'
       },
