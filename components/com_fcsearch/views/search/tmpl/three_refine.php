@@ -29,7 +29,7 @@ $Itemid_search = SearchHelper::getItemid(array('component', 'com_fcsearch'));
 // The layout for the anchor based navigation on the property listing
 $refine_type_layout = new JLayoutFile('refinetype_two', $basePath = JPATH_SITE . '/components/com_fcsearch/layouts');
 
-$suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598);
+$suitability_filters = array(24, 25, 111, 113, 115, 117, 118, 121, 598, 490, 276);
 $facilities_filters = array(97, 74, 81, 85, 88, 89, 95, 98, 100, 428, 474, 480, 76, 77, 91, 533, 539, 101, 515);
 $activity_filters = array(48,50,52,62,319,68);
 

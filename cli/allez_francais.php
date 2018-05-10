@@ -74,6 +74,7 @@ class AllezFrancais extends RealestateImport
     // Loop over each of the $props returned from parseFeed above
     foreach ($props->properties as $prop)
     {
+
       try
       {
         $db->transactionStart();
@@ -87,6 +88,23 @@ class AllezFrancais extends RealestateImport
 
         $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
 
+        $location = $this->getLocation($prop->location);
+
+        $classification = JTable::getInstance('Classification', 'ClassificationTable');
+        // Use the location from the feed if it's picked it up
+        if (!empty($location)) {
+
+          $location = $classification->getPath($location);
+
+        } else {
+          // Otherwise fall back to the near town cityy
+          $location = $classification->getPath($prop->city);
+        }
+
+        // Get the location details for this property
+
+
+
         if (!$id)
         {
 
@@ -94,12 +112,6 @@ class AllezFrancais extends RealestateImport
 
           // Create an entry in the #__realestate_property table
           $property_id = $this->createProperty($db, $user);
-
-          // Get the location details for this property
-          // TO DO - This should be using the $prop lat and long using the getNearestCity base method
-          $classification = JTable::getInstance('Classification', 'ClassificationTable');
-          $location = $classification->getPath($prop->city);
-
 
           $data = array();
           $data['realestate_property_id'] = $property_id;
@@ -190,6 +202,7 @@ class AllezFrancais extends RealestateImport
           $data['published_on'] = $db->quote(JFactory::getDate());
           $data['latitude'] = $prop->latitude;
           $data['longitude'] = $prop->longitude;
+          $data['city'] = (int) $location[5]->id;
 
           $this->updatePropertyVersion($db, $data);
 
@@ -216,6 +229,45 @@ class AllezFrancais extends RealestateImport
       }
     }
   }
+
+  /*
+   * Get a list of properties due to expire and are set to manual renewal
+   */
+
+
+     /*
+      * Get the nearest town or city based on the town/city given and department
+      */
+
+     public function getLocation($department = '')
+     {
+       try
+       {
+         $db = JFactory::getDbo();
+         $query = $db->getQuery(true);
+
+         $query->select("a.id");
+
+         $query->from('#__classifications a');
+         $query->where('a.alias like(\'' . JStringNormalise::toDashSeparated(JApplication::stringURLSafe($department)) . '%\')');
+
+         $db->setQuery($query, 0, 1);
+         $rows = $db->loadObject();
+       }
+       catch (Exception $e)
+       {
+         return false;
+       }
+
+       // If there's a nearest city then return it.
+       if (!empty($rows))
+       {
+         return $rows->id;
+       }
+
+       return false;
+     }
+
 
 }
 

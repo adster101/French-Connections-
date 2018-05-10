@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="1.6.0" method="upgrade">
- 
+
 	<name>com_realestate</name>
 	<!-- The following elements are optional and free of formatting conttraints -->
 	<creationDate>November 2009</creationDate>
@@ -13,7 +13,7 @@
 	<version>0.0.14</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>COM_REALESTATE_DESCRIPTION</description>
- 
+
 
 	<!-- Site Main File Copy Section -->
 	<!-- Note the folder attribute: This attribute describes the folder
@@ -27,13 +27,23 @@
 		<folder>models</folder>
 		<folder>language</folder>
 	</files>
- 
+
 	<media destination="com_realestate" folder="media">
 		<filename>index.html</filename>
 		<folder>images</folder>
 	</media>
- 
+
 	<administration>
+    <menu>COM_REALESTATE</menu>
+
+    <submenu>
+      <menu
+        link="option=com_realestate"
+        view="realestate"
+        alt="Realestate listings">
+        COM_REALESTATE
+      </menu>
+    </submenu>
       <!-- Note the folder attribute: This attribute describes the folder
 			to copy FROM in the package to install therefore files copied
 			in this section are copied from /admin/ in the package -->
@@ -61,5 +71,5 @@
 			<language tag="en-GB">language/en-GB/en-GB.com_realestate.sys.ini</language>
 		</languages>
 	</administration>
- 
+
 </extension>

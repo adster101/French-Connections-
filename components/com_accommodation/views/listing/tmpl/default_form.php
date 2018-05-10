@@ -18,7 +18,7 @@ $app = JFactory::getApplication();
 $doc = JDocument::getInstance();
 
 // Include the JDocumentRendererMessage class file
-require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+//require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
 
 ?>
@@ -91,18 +91,18 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
       </div>
       <div class="form-group">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
-          <?php echo $this->form->getLabel('start_date'); ?>  
+          <?php echo $this->form->getLabel('start_date'); ?>
           <div class="input-group start_date date">
-            <?php echo $this->form->getInput('start_date'); ?> 
+            <?php echo $this->form->getInput('start_date'); ?>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" for="arrival"></i></span>
           </div>
         </div>
       </div>
       <div class="form-group">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-6">
-          <?php echo $this->form->getLabel('end_date'); ?>  
+          <?php echo $this->form->getLabel('end_date'); ?>
           <div class="input-group start_date date">
-            <?php echo $this->form->getInput('end_date'); ?> 
+            <?php echo $this->form->getInput('end_date'); ?>
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" for="arrival"></i></span>
           </div>
         </div>
@@ -128,5 +128,3 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
   </form>
 
 </div>
-
-

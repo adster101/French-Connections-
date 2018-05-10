@@ -51,7 +51,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('surname'); ?>
       </div>
-    </div>        
+    </div>
   </fieldset>
   <fieldset>
     <legend>Login Details</legend>
@@ -62,7 +62,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('username'); ?>
       </div>
-    </div>            
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('password2'); ?>
@@ -70,7 +70,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('password2'); ?>
       </div>
-    </div>  
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('password'); ?>
@@ -78,7 +78,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('password'); ?>
       </div>
-    </div>  
+    </div>
   </fieldset>
   <fieldset>
     <legend>Contact Details</legend>
@@ -113,7 +113,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('phone_2'); ?>
       </div>
-    </div>       
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('phone_3'); ?>
@@ -121,7 +121,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('phone_3'); ?>
       </div>
-    </div>               
+    </div>
   </fieldset>
   <fieldset>
     <legend>VAT Status</legend>
@@ -134,8 +134,8 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('vat_status'); ?>
       </div>
-    </div>          
-    <div id="vat_number" class="<?php echo ($show_vat_number) ? '' : 'hide' ?> "> 
+    </div>
+    <div id="vat_number" class="<?php echo ($show_vat_number) ? '' : 'hide' ?> ">
       <div class="control-group">
         <div class="control-label">
           <?php echo $this->form->getLabel('vat_number'); ?>
@@ -145,7 +145,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
         </div>
       </div>
     </div>
-    <div id="company_number" class="<?php echo ($show_company_number) ? '' : 'hide' ?> "> 
+    <div id="company_number" class="<?php echo ($show_company_number) ? '' : 'hide' ?> ">
       <div class="control-group">
         <div class="control-label">
           <?php echo $this->form->getLabel('company_number'); ?>
@@ -153,9 +153,8 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
         <div class="controls">
           <?php echo $this->form->getInput('company_number'); ?>
         </div>
-      </div>    
+      </div>
     </div>
-
   </fieldset>
   <fieldset>
     <legend>Invoice Address</legend>
@@ -166,7 +165,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('address1'); ?>
       </div>
-    </div>            
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('address2'); ?>
@@ -174,7 +173,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('address2'); ?>
       </div>
-    </div>   
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('city'); ?>
@@ -182,7 +181,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('city'); ?>
       </div>
-    </div>   
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('region'); ?>
@@ -190,7 +189,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('region'); ?>
       </div>
-    </div>   
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('postal_code'); ?>
@@ -198,7 +197,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('postal_code'); ?>
       </div>
-    </div> 
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('country'); ?>
@@ -206,8 +205,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('country'); ?>
       </div>
-    </div> 
-
+    </div>
   </fieldset>
   <fieldset>
     <legend><?php echo JText::_('COM_ADMIN_OVERRIDE_EXCHANGE_RATE') ?></legend>
@@ -218,7 +216,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('exchange_rate_eur'); ?>
       </div>
-    </div> 
+    </div>
     <div class="control-group">
       <div class="control-label">
         <?php echo $this->form->getLabel('exchange_rate_usd'); ?>
@@ -226,13 +224,13 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
       <div class="controls">
         <?php echo $this->form->getInput('exchange_rate_usd'); ?>
       </div>
-    </div> 
+    </div>
   </fieldset>
   <?php echo JHtml::_('bootstrap.endTab'); ?>
   <?php echo JHtml::_('bootstrap.addTab', 'account', 'sms', JText::_('COM_ADMIN_VIEW_PROFILE_SMS_SETTINGS', true)); ?>
 
   <fieldset class="adminform form-horizontal">
-    <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend> 
+    <legend><?php echo JText::_('COM_RENTAL_HELLOWORLD_LISTING_SMS_CONTACT_DETAILS'); ?></legend>
     <?php echo $this->form->getLabel('smsprefs'); ?>
     <div class="control-group">
       <?php echo $this->form->getLabel('sms_alert_number'); ?>
@@ -256,7 +254,7 @@ $show_company_number = (!empty($company_number) && $vat_status == 'ZA') ? true :
         <?php echo $this->form->getInput('sms_nightwatchman'); ?>
       </div>
     </div>
-  </fieldset> 
+  </fieldset>
   <?php echo JHtml::_('bootstrap.endTabSet'); ?>
 
   <?php echo $this->form->getInput('sms_valid'); ?>

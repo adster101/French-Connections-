@@ -384,6 +384,7 @@ class Renewals extends JApplicationCli
     $users_to_ignore[] = JUser::getInstance('atleisure')->id;
     $users_to_ignore[] = JUser::getInstance('oliverstravels')->id;
     $users_to_ignore[] = JUser::getInstance('novasol')->id;
+    $users_to_ignore[] = JUser::getInstance('SquareBreak')->id;
 
     $db = JFactory::getDBO();
     /**
@@ -423,7 +424,7 @@ class Renewals extends JApplicationCli
 
     $query->from('#__property a');
     $query->where('expiry_date >= ' . $db->quote($date->calendar('Y-m-d')));
-    $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,30)');
+    $query->where('datediff(expiry_date, now()) in (-1,0,1,7,14,21,28)');
     $query->join('left', '#__protx_transactions b on b.id = a.VendorTxCode');
     $query->join('left', '#__user_profile_fc c on c.user_id = a.created_by');
     $query->where('a.created_by not in (' . implode(',', $users_to_ignore) . ')');

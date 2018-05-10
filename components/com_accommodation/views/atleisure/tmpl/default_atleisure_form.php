@@ -18,7 +18,7 @@ $app = JFactory::getApplication();
 $doc = JDocument::getInstance();
 
 // Include the JDocumentRendererMessage class file
-require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+//require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
 
 $id = $this->item->property_id ? $this->item->property_id : '';
@@ -70,8 +70,8 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
           <?php echo $this->form->getInput('guest_phone'); ?>
         </div>
       </div>
-    </div> 
-  </fieldset>  
+    </div>
+  </fieldset>
   <hr />
   <fieldset>
     <legend>
@@ -88,7 +88,7 @@ $Itemid = SearchHelper::getItemid(array('component', 'com_accommodation'));
       <?php foreach ($this->form->getFieldset('tos') as $field): ?>
           <?php echo $field->label; ?>
           <?php echo $field->input; ?>
-      <?php endforeach; ?>   
+      <?php endforeach; ?>
     </div>
     <hr />
     <p><?php echo JText::_('COM_ACCOMMODATION_BOOKING_FC_TERMS_AND_CONDITIONS_AGREE'); ?></p>

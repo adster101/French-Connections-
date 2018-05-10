@@ -110,7 +110,7 @@ class Novasol extends Import
     // $properties = $this->getData('https://safe.novasol.com/api/translate?salesmarket=826', $this->api_key);
 
     // Get and parse out the feed
-    $props = $this->parseFeed('file:///var/www/html/cli/novasol/products.xml');
+    $props = $this->parseFeed('http://dev.frenchconnections.co.uk/cli/novasol/products.xml', 'products');
 
     $this->out('Got property list...');
     // Process
@@ -308,10 +308,13 @@ class Novasol extends Import
 
           // Update the availability
           $availabilityLength = strlen($propertyObj->availability);
-          var_dump($propertyObj->availability);
+
           $availability_by_day = array();
 
           $DateInterval = new DateInterval('P1D');
+
+          // Start date to populate the availability array.
+          // This feed only supplies availability for a year...
           $date = new DateTime('01-01-2017');
 
           for ($i=1;$i<$availabilityLength;$i++) {
@@ -342,7 +345,8 @@ class Novasol extends Import
           $availabilityTable->save($unit_id, $availabilityArr);
 
           // Set the data and save the from price against the unit
-          $unit_data['availability_last_updated_on'] = JHtml::_('date', 'now', 'Y-m-d');
+          $unit_data['availability_last_updated_on'] = JFactory::getDate()->calendar('Y-m-d');
+
           $unit_data['id'] = $unit_id;
 
           if (!$unit_model->save($unit_data))
@@ -360,10 +364,7 @@ class Novasol extends Import
         {
           // Roll back any batched inserts etc
           $db->transactionRollback();
-
-          var_dump($e);die;
-          // Send an email, woot!
-          $this->email($e);
+          var_dump($e->getMessage());
         }
     }
   }

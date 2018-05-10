@@ -18,7 +18,6 @@ $app = JFactory::getApplication();
 $doc = JDocument::getInstance();
 
 // Include the JDocumentRendererMessage class file
-require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
 ?>
 
@@ -58,10 +57,10 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
           <?php echo $field->label; ?>
             <?php echo $field->input; ?>
           </div>
-        </div>         
-      <?php endforeach; ?> 
+        </div>
+      <?php endforeach; ?>
     </fieldset>
-    
+
     <div class="form-actions"><button class="btn btn-primary btn-large validate" type="submit"><?php echo JText::_('COM_ACCOMMODATION_SEND_ENQUIRY'); ?></button>
       <input type="hidden" name="option" value="com_realestate" />
       <input type="hidden" name="task" value="listing.enquiry" />
@@ -69,5 +68,3 @@ $errors = $app->getUserState('com_accommodation.enquiry.messages');
   </form>
 
 </div>
-
-

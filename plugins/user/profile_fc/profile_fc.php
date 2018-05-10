@@ -85,8 +85,9 @@ class plgUserProfile_fc extends JPlugin
    */
   function onContentPrepareData($context, $data)
   {
+
     // Check we are manipulating a valid form.
-    if (!in_array($context, array('com_admin.profile', 'com_users.user')))
+    if (!in_array($context, array('com_admin.profile', 'com_users.user', 'com_users.profile')))
     {
       return true;
     }
@@ -128,7 +129,7 @@ class plgUserProfile_fc extends JPlugin
           sms_status,
           sms_valid,
           sms_inactive,
-          sms_nightwatchman      
+          sms_nightwatchman
         ');
         $query->from('#__user_profile_fc');
         $query->where('user_id = ' . (int) $userId);
@@ -314,7 +315,7 @@ class plgUserProfile_fc extends JPlugin
           $sendsms = new SendSMS($params->get('username'), $params->get('password'), $params->get('id'));
 
           /*
-           *  if the login return 0, means that login failed, you cant send sms after this 
+           *  if the login return 0, means that login failed, you cant send sms after this
            */
           if (($sendsms->login()))
           {
@@ -322,7 +323,7 @@ class plgUserProfile_fc extends JPlugin
           }
 
           /*
-           * Send sms using the simple send() call 
+           * Send sms using the simple send() call
            */
           if ($login)
           {

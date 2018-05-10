@@ -9,7 +9,7 @@
 defined('_JEXEC') or die;
 
 // Load template settings
-$app = JFactory::getApplication();
+$app = JFactory::getApplication('site');
 $option = $app->input->getCmd('option', '');
 $view = $app->input->getCmd('view', '');
 $itemid = $app->input->getCmd('Itemid', '');
@@ -28,7 +28,14 @@ if ($active)
     $listing = ($active->component == 'com_accommodation') ? true : false;
 }
 // Remove all JS from the initial page load...
-$this->_scripts = array();
+foreach ($this->_scripts as $url => $type) {
+  if (strpos($url, 'recaptcha') === false)
+  {
+    unset($this->_scripts[$url]);
+  }
+}
+
+//$this->_scripts = array();
 $this->_script = array();
 
 // Adjusting content width

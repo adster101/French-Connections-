@@ -81,6 +81,11 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
 
                 $this->out('Version ID: ' . $id . ' for ' . $prop->agency_reference);
 
+                // Get the location details for this property
+                // TO DO - This should be using the $prop lat and long using the getNearestCity base method
+                $classification = JTable::getInstance('Classification', 'ClassificationTable');
+                $location = $classification->getPath($prop->city);
+
                 if (!$id) {
 
                     $this->out('Adding property entry...');
@@ -88,10 +93,7 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                     // Create an entry in the #__realestate_property table
                     $property_id = $this->createProperty($db, $user);
 
-                    // Get the location details for this property
-                    // TO DO - This should be using the $prop lat and long using the getNearestCity base method
-                    $classification = JTable::getInstance('Classification', 'ClassificationTable');
-                    $location = $classification->getPath($prop->city);
+
 
                     if (empty($location)) {
                         throw new Exception('Incorrect location detail for ' . $prop->agency_reference . 'cotemercotejardin');
@@ -176,6 +178,7 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
                     $data['price'] = (int) $prop->price;
                     $data['review'] = 0;
                     $data['published_on'] = $db->quote(JFactory::getDate());
+                    $data['city'] = (int) $location[5]->id;
 
                     $this->updatePropertyVersion($db, $data);
 

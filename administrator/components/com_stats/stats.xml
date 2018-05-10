@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="2.5.0" method="upgrade">
- 
+
   <name>com_stats</name>
         <!-- The following elements are optional and free of formatting constraints -->
   <creationDate>September 2012</creationDate>
@@ -15,18 +15,27 @@
   <description>
     This component is intended to provide users with a view of the stats for a property etc
   </description>
- 
-        
- 
+
+
+
   <!-- Site Main File Copy Section -->
   <!-- Note the folder attribute: This attribute describes the folder
   to copy FROM in the package to install therefore files copied
   in this section are copied from /site/ in the package -->
   <files folder="site"></files>
- 
+
   <administration>
     <!-- Administration Menu Section -->
 		<menu>COM_STATS_MENU</menu>
+    <submenu>
+      <menu
+        link="option=com_stats"
+        view="stats"
+        img="class:"
+        alt="Listing Statistics">
+        COM_STATS
+      </menu>
+    </submenu>
   </administration>
- 
+
 </extension>

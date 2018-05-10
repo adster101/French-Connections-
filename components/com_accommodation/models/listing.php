@@ -850,7 +850,7 @@ class AccommodationModelListing extends JModelForm
         JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_classification/tables');
         $table = JTable::getInstance('Classification', 'ClassificationTable');
         $pathArr = new stdClass(); // An array to hold the paths for the breadcrumbs trail.
-
+        
         try
         {
             $path = $table->getPath($pk = $this->item->city_id);

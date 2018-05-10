@@ -114,6 +114,11 @@ class JFeedParserdocument extends JFeedParser
       $listing->city = (int) $city;
     }
 
+    if (!empty($el->Address->location))
+    {
+      $listing->location = (string) $el->Address->location;
+    }
+
     if (!empty($el->Address->subRegion))
     {
       $listing->department = (string) $el->Address->subRegion;
@@ -134,7 +139,7 @@ class JFeedParserdocument extends JFeedParser
     $listing->images = $images;
 
     $feed->properties[] = $listing;
-    
+
   }
 
   /*
@@ -172,7 +177,7 @@ class JFeedParserdocument extends JFeedParser
   }
 
   /*
-   * 
+   *
    * Get the nearest town or city based on the town/city given and department
    */
 
@@ -194,7 +199,7 @@ class JFeedParserdocument extends JFeedParser
           cos(radians(a.latitude)) *
           cos(radians(a.longitude) - radians(' . $longitude . '))
           + sin(radians(' . $latitude . '))
-          * sin(radians(a.latitude))) ) 
+          * sin(radians(a.latitude))) )
         ');
 
       $db->setQuery($query, 0, 1);
@@ -215,4 +220,3 @@ class JFeedParserdocument extends JFeedParser
   }
 
 }
-

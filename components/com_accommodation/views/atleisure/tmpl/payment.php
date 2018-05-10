@@ -7,7 +7,7 @@ $app = JFactory::getApplication();
 $doc = JDocument::getInstance();
 
 // Include the JDocumentRendererMessage class file
-require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+//require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
 
 $enquiry_data = $app->getUserState('com_accommodation.enquiry.data');
@@ -66,11 +66,11 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
     var woordcreditcard = "Credit card";
 </script>
 
-<?php echo $this->loadTemplate('steps'); ?> 
+<?php echo $this->loadTemplate('steps'); ?>
 
 <div class="container">
-  <div class="row"> 
-    <div class="col-lg-4 col-md-4 col-sm-5 col-lg-push-8 col-md-push-8 col-sm-push-7"> 
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-5 col-lg-push-8 col-md-push-8 col-sm-push-7">
       <?php echo $this->loadTemplate('summary'); ?>
     </div>
     <div class="col-lg-8 col-md-8 col-sm-7 col-lg-pull-4 col-md-pull-4 col-sm-pull-5">
@@ -105,7 +105,7 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
         <div id="creditcard" class="col-sm-6 payment-method">
           <span class="payment-sprite icn-creditcard"></span>
           <span class="label">Creditcard</span>
-        </div>        
+        </div>
       </div>
       <div class="row">
         <div id="nomainpaymentmethodwarning" class="col-md-12" style="display:none;margin-top:10px;">
@@ -117,12 +117,12 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
       <div id="costsWarning" class="alert alert-warning" style="margin-bottom: 0px; margin-top: 25px; display: none;">
         <strong>
             <?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PLEASE_NOTE'); ?>
-        </strong>&nbsp;<span class="costMessage"></span>        
+        </strong>&nbsp;<span class="costMessage"></span>
       </div>
       <div id="selectCreditCard" class="row subpayment" style="margin-top: 25px; display: none;">
         <div class="col-md-12">
           <div id="costsWarning-creditcard" class="alert alert-warning" style="margin-bottom: 25px;">
-            <strong><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PLEASE_NOTE'); ?></strong>&nbsp;<span class="costMessageCC"></span>      
+            <strong><?php echo JText::_('COM_ACCOMMODATION_AT_LEISURE_PLEASE_NOTE'); ?></strong>&nbsp;<span class="costMessageCC"></span>
           </div>
         </div>
         <div class="col-sm-4">
@@ -133,14 +133,14 @@ $success = 'index.php?option=com_accommodation&Itemid=' . (int) $Itemid_property
             <option value="" class="bs-title-option">- Select -</option>
             <option value="A">American Express</option><option value="M">Maestro</option>
             <option value="E">Mastercard</option>
-            <option value="V">VISA</option>    
+            <option value="V">VISA</option>
           </select>
         </div>
-        
+
       </div>
       <div id="pay-now" class="alignc">
           <a href="JavaScript:;" id="payment-button" class="butn butn-large">Pay now</a>
         </div>
     </div>
-  </div> 
+  </div>
 </div>

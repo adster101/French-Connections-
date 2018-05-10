@@ -18,7 +18,7 @@ $app = JFactory::getApplication();
 $doc = JDocument::getInstance();
 
 // Include the JDocumentRendererMessage class file
-require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
+//require_once JPATH_ROOT . '/libraries/joomla/document/html/renderer/message.php';
 $render = new JDocumentRendererMessage($doc);
 ?>
 
@@ -60,8 +60,8 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h5>
             <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?>
-          </h5> 
-        <?php endif; ?>   
+          </h5>
+        <?php endif; ?>
       </div>
       <div class="modal-body">
         <form class="form-validate form-vertical small" id="contact-form" action="" method="post">
@@ -99,18 +99,18 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
             </div>
             <div class="form-group row">
               <div class="col-lg-10 col-sm-8">
-                <?php echo $this->form->getLabel('start_date'); ?> 
+                <?php echo $this->form->getLabel('start_date'); ?>
                 <div class="input-group start_date date">
-                  <?php echo $this->form->getInput('start_date'); ?> 
+                  <?php echo $this->form->getInput('start_date'); ?>
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" for="start_date"></i></span>
                 </div>
               </div>
             </div>
             <div class="form-group row">
               <div class="col-lg-10 col-sm-8">
-                <?php echo $this->form->getLabel('end_date'); ?>  
+                <?php echo $this->form->getLabel('end_date'); ?>
                 <div class="input-group end_date date">
-                  <?php echo $this->form->getInput('end_date'); ?> 
+                  <?php echo $this->form->getInput('end_date'); ?>
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" for="end_date"></i></span>
                 </div>
               </div>
@@ -130,7 +130,7 @@ $task = ($owner->username == 'atleisure') ? 'listing.bookatleisure' : 'listing.e
           </fieldset>
 
           <button type="submit" class="btn btn-danger btn-lg btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
-            <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
+            <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>
           </button>
           <input type="hidden" name="option" value="com_accommodation" />
           <input type="hidden" name="task" value="<?php echo $task ?>" />

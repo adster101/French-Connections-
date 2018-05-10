@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_fields
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 defined('_JEXEC') or die;
@@ -184,10 +184,12 @@ class FieldsModelField extends JModelAdmin
 			if (is_object($oldParams) && is_object($newParams) && $oldParams != $newParams)
 			{
 				$names = array();
+
 				foreach ($newParams as $param)
 				{
 					$names[] = $db->q($param['value']);
 				}
+
 				$query = $db->getQuery(true);
 				$query->delete('#__fields_values')->where('field_id = ' . (int) $field->id)
 					->where('value NOT IN (' . implode(',', $names) . ')');
@@ -195,6 +197,8 @@ class FieldsModelField extends JModelAdmin
 				$db->execute();
 			}
 		}
+
+		FieldsHelper::clearFieldsCache();
 
 		return true;
 	}
@@ -575,32 +579,26 @@ class FieldsModelField extends JModelAdmin
 		$needsInsert = false;
 		$needsUpdate = false;
 
-		if ($field->default_value == $value)
+		$oldValue = $this->getFieldValue($fieldId, $itemId);
+		$value    = (array) $value;
+
+		if ($oldValue === null)
 		{
-			$needsDelete = true;
+			// No records available, doing normal insert
+			$needsInsert = true;
+		}
+		elseif (count($value) == 1 && count((array) $oldValue) == 1)
+		{
+			// Only a single row value update can be done when not empty
+			$needsUpdate = is_array($value[0]) ? count($value[0]) : strlen($value[0]);
+			$needsDelete = !$needsUpdate;
 		}
 		else
 		{
-			$oldValue = $this->getFieldValue($fieldId, $itemId);
-			$value    = (array) $value;
-
-			if ($oldValue === null)
-			{
-				// No records available, doing normal insert
-				$needsInsert = true;
-			}
-			elseif (count($value) == 1 && count((array) $oldValue) == 1)
-			{
-				// Only a single row value update can be done
-				$needsUpdate = true;
-			}
-			else
-			{
-				// Multiple values, we need to purge the data and do a new
-				// insert
-				$needsDelete = true;
-				$needsInsert = true;
-			}
+			// Multiple values, we need to purge the data and do a new
+			// insert
+			$needsDelete = true;
+			$needsInsert = true;
 		}
 
 		if ($needsDelete)
@@ -642,6 +640,7 @@ class FieldsModelField extends JModelAdmin
 		}
 
 		$this->valueCache = array();
+		FieldsHelper::clearFieldsCache();
 
 		return true;
 	}
@@ -940,15 +939,23 @@ class FieldsModelField extends JModelAdmin
 
 			// Allow to override the default value label and description through the plugin
 			$key = 'PLG_FIELDS_' . strtoupper($dataObject->type) . '_DEFAULT_VALUE_LABEL';
+
 			if (JFactory::getLanguage()->hasKey($key))
 			{
 				$form->setFieldAttribute('default_value', 'label', $key);
 			}
 
 			$key = 'PLG_FIELDS_' . strtoupper($dataObject->type) . '_DEFAULT_VALUE_DESC';
+
 			if (JFactory::getLanguage()->hasKey($key))
 			{
 				$form->setFieldAttribute('default_value', 'description', $key);
+			}
+
+			// Remove placeholder field on list fields
+			if ($dataObject->type == 'list')
+			{
+				$form->removeField('hint', 'params');
 			}
 		}
 

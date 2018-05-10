@@ -1,0 +1,346 @@
+
+// Core variables and mixins
+@import "variables.less"; // Custom for this template
+@import "../../../../media/jui/less/mixins.less";
+@import "../../../../templates/frenchconnections_1/less/mixins.less";
+
+@import "nav-wizard.less";
+
+.label,
+.badge {
+
+  // Notification(white)
+  &-notification{ background-color: #031b5a;font-size:14px; padding:9px;margin-right:9px;}
+  &-notification a     { color:#f2f5f1; }
+}
+
+.notification-icon {
+  vertical-align:middle;
+  font-size:21px;
+  margin-right:10px;
+  font-weight:200;
+}
+
+.view-message {
+
+  #toolbar-redo {
+    display:none;
+  }
+}
+
+.view-enquiry {
+  label{
+    font-weight: bold;
+  }
+}
+
+
+
+#stlivechat21 a {
+  z-index: 999;
+  position: fixed;
+  border-radius: 3px 0 0 3px;
+  font-size: 14px;
+  right: 0px;
+  top: 40%;
+  text-decoration: none;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.30);
+  background-color: @blue;
+  padding:10px;
+}
+
+#stlivechat21 a:before {
+  font-family: 'IcoMoon';
+  content: "\25\00a0";
+}
+
+#stlivechat21 a {
+  color:white;
+}
+
+.view-listings {
+  .table-striped {
+    & tr.alert-success {
+      td {
+        background:#dff0d8;
+        color:#333;
+      }
+    }
+  }
+}
+
+.icon-back {
+  &:before {
+    content: "\e206";
+  }
+}
+
+
+.nav-wizard > li > a {
+  padding:10px 15px;
+  position:relative;
+}
+
+#toolbar #toolbar-preview {
+  float: right;
+}
+
+#toolbar #toolbar-plus {
+  float:right;
+}
+
+// Icon Font
+//@import "icomoon.less";
+
+.navbar .nav > li > a[href*="index.php?option=com_enquiries"]:before, a[href*="index.php?option=com_enquiries"]:before {
+  font-family:icomoon;
+  content:"\4d  ";
+}
+
+a[href*="index.php?option=com_stats"]:before {
+  font-family:icomoon;
+  content:"\76  ";
+}
+
+a[href*="index.php?option=com_rental&task=marketing.edit"]:before {
+  font-family:icomoon;
+  content:"k";
+
+}
+
+
+.media > .pull-left {
+  margin-right: 10px;
+}
+
+del, ins {
+  color:#fff;
+  text-decoration:none;
+}
+
+del {
+  background:#C03233;
+  text-decoration:line-through;
+}
+
+ins {
+  background:green;
+}
+
+.nav-tabs .icon-warning {
+  color:@red;
+}
+
+
+
+// Applies to any screen width above 1024px, I think
+fieldset .checkboxes > ul li, .tariffs-container, .bedrooms-container {
+  float:left;
+  width:33%;
+}
+
+.js-stools-container-filters > fieldset > .filter-container {
+  display:inline-block;
+  margin-right: 25px;
+}
+
+.js-stools-container-filters input, .js-stools-container-filters select {
+  margin-bottom:0;
+}
+
+.listing-container-wide,
+.listing-image-container
+{
+
+  float:left;
+  margin:0 10px 10px 0;
+}
+
+.listing-container-narrow-links
+{
+  float:right;
+}
+
+// Applies to screen widths up to 1024px
+@media screen and (max-width: 1024px)
+{
+  fieldset .checkboxes > ul li, .js-stools-container-filters > .filter-container
+  {
+    float:left;
+    width:33%;
+  }
+
+}
+
+@media screen and (max-width: 720px)
+{
+  fieldset .checkboxes > ul li, .bedrooms-container
+  {
+    float:left;
+    width:50%;
+  }
+
+  .listing-container-narrow-links
+  {
+    float:left;
+    width:100%;
+    border-top:1px solid @grayLighter;
+    padding-top:10px;
+
+    p > {
+      display:inline-block;
+      width:30%;
+    }
+  }
+}
+
+@media screen and (max-width: 480px)
+{
+  fieldset .checkboxes > ul li, .bedrooms-container
+  {
+    float:none;
+    width:100%;
+  }
+
+  .listing-container-narrow-links,
+  .listing-image-container,
+  .listing-container-wide
+  {
+    float:none;
+    width:100%;
+  }
+}
+
+
+/* Panel styles */
+
+.panel-default {
+  .panel-variant(@defaultBorder; @textColor; @grayLighter; @defaultBorder);
+}
+
+.panel-property-listing {
+  .panel-variant(#647cb6, #f2f5f1, #647cb6, @defaultBorder);
+}
+
+.align-right {
+  text-align:right;
+}
+
+/* Body */
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+/* Login */
+
+/* Header */
+
+.view-login{
+
+
+
+  padding-top: 0;
+  background: #f2f5f1;
+
+  .header {
+    padding-bottom: 9px;
+    .border-radius(@borderRadiusLarge);
+    background: url( '/templates/frenchconnections/images/header-bg.jpg' ) center no-repeat;
+    padding:0 0 9px 0;
+  }
+
+  .container{
+    @media(min-width: 1200px) {
+      width:940px;
+    }
+    background-color: #FFF;
+    border-radius: 4px;
+    padding: 18px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
+  }
+  .navbar-fixed-bottom{
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+  }
+  .navbar-fixed-bottom,
+  .navbar-fixed-bottom a{
+    color: #FCFCFC;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  .navbar-fixed-bottom{
+    position: absolute;
+  }
+  .input-medium{
+    width: 184px;
+  }
+}
+.login {
+
+  .btn-large {
+    margin-top: 10px;
+  }
+}
+/* Typography */
+.small{
+  font-size: 11px;
+}
+.row-even .small,
+.row-odd .small,
+.row-even .small a,
+.row-odd .small a{
+  color: #888;
+}
+/* Navbar */
+body .navbar,
+body .navbar-fixed-top{
+  margin-bottom: 0;
+}
+.navbar-inner{
+  min-height: 0;
+  .container-fluid {
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: 15px;
+  }
+}
+.navbar {
+  .navbar-text {
+    line-height: 30px;
+  }
+  .admin-logo {
+    float: left;
+    padding: 7px 12px 0px 15px;
+    font-size: 16px;
+    color: #d9d9d9;
+    &:hover {
+      color: #ffffff;
+    }
+  }
+  .brand {
+    float: left;
+    display: block;
+    padding: 6px 10px;
+    margin-left: 0px;
+    background-color:#324c87;
+    font-size: inherit;
+    font-weight: normal;
+    &:hover,
+      &:focus {
+      text-decoration: none;
+    }
+  }
+  .nav > li > a {
+    padding: 24px 15px 23px 15px;
+    font-size:16px;
+    border-right:1px solid #525f79;
+  }
+  .dropdown-menu,
+  .nav-user {
+    font-size: 13px;
+  }
+}

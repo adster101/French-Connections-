@@ -1534,7 +1534,7 @@ class FcSearchModelSearch extends JModelList
 
     private function getFilterOffers(JDatabaseQueryMysqli $query, $db = '')
     {
-      //$query->where('(select title from qitz3_special_offers so left join qitz3_property kk on kk.id = so.property_id where so.published = 1 AND so.start_date <= ' . $db->quote($this->date) . 'AND so.end_date >= ' . $db->quote($this->date) . ' and kk.created_by != 11052 and so.unit_id = d.unit_id limit 0,1) is not null');
+      $query->where('(select title from qitz3_special_offers so left join qitz3_property kk on kk.id = so.property_id where so.published = 1 AND so.start_date <= ' . $db->quote($this->date) . 'AND so.end_date >= ' . $db->quote($this->date) . ' and so.unit_id = d.unit_id limit 0,1) is not null');
 
       return $query;
     }

@@ -103,7 +103,8 @@ class RealestateImport extends Import
                     . 'price = ' . $data['price'] . ','
                     . 'published_on = ' . $data['published_on'] . ','
                     . 'latitude = ' . $data['latitude'] . ','
-                    . 'longitude = ' . $data['longitude'])
+                    . 'longitude = ' . $data['longitude'] . ','
+                    . 'city = ' . $data['city'])
             ->where('realestate_property_id = ' . $data['id']);
 
     $db->setQuery($query);

@@ -293,14 +293,14 @@ class RentalControllerImages extends RentalControllerBase
         $file['error'][] = JText::_('COM_RENTAL_IMAGES_IMAGE_NAME_NOT_VALID');
       }
 
-      // The file is valid at this point
-      $err = null;
+
+      $mediaHelper = new JHelperMedia;
 
       // canUpload does a further raft of checks to ensure that the image is 'safe' (i.e. checks mime type and that it is an image file etc
-      if (!MediaHelper::canUpload($file, $err))
+      if (!$mediaHelper->canUpload($file, 'com_media'))
       {
         // The file can't be uploaded
-        $file['error'][] = JText::_($err);
+        $file['error'][] = JText::_('There was a problem uploading your image. Please try a different image.');
       }
 
       // If there are no errors recorded for this file, we move it to the relevant folder for this property
@@ -481,7 +481,7 @@ class RentalControllerImages extends RentalControllerBase
 
     JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-    // Get the property ID from the form data and redirect 
+    // Get the property ID from the form data and redirect
     $input = JFactory::getApplication()->input;
 
     $property_id = $input->get('property_id', '', 'int');
@@ -499,4 +499,3 @@ class RentalControllerImages extends RentalControllerBase
   }
 
 }
-

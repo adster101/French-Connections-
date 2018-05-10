@@ -723,7 +723,7 @@ abstract class RentalHelper
     return $calendar;
   }
 
-  public function generateDateCell($today = '', $day = '', $classes = array(), $showlinks = false)
+  public static function generateDateCell($today = '', $day = '', $classes = array(), $showlinks = false)
   {
 
     $return = '';
