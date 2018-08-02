@@ -45,6 +45,8 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
         $db = JFactory::getDbo();
         $user = JFactory::getUser('contact@cotemercotejardinimmobilier.com')->id;
 
+        $ignore = array(3878, 3428);
+
         $this->out('About to get feed...');
 
         // Get and parse out the feed
@@ -70,6 +72,11 @@ class CoteMerCotejardinImmobilier extends RealestateImport {
         // Loop over each of the $props returned from parseFeed above
         foreach ($props->properties as $prop) {
             try {
+
+              if (in_array($prop->agency_reference, $ignore)) {
+                continue;
+              }
+
                 $db->transactionStart();
 
                 $this->out('Processing... ' . $prop->agency_reference);

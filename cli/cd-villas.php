@@ -30,6 +30,7 @@ require_once JPATH_CONFIGURATION . '/configuration.php';
 
 // Import our base real estate cli bit
 jimport('frenchconnections.cli.import');
+jimport('joomla.filesystem.folder');
 
 class CDVillas extends Import {
 
@@ -92,11 +93,7 @@ class CDVillas extends Import {
       // Get and parse out the feed
       $props = $this->parseFeed('http://www.cotedazurvillarentals.com/Xml/FConnect', 'villas');
 
-
-
       $this->out('Got feed...');
-
-
 
       $this->out('About to process feed results...');
 
