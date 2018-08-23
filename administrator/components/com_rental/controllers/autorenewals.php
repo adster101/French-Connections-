@@ -98,20 +98,16 @@ class RentalControllerAutoRenewals extends JControllerForm
   {
 
     $app = JFactory::getApplication();
-    $model = $this->getModel();
-    $table = $model->getTable();
-
 
     $context = "$this->option.edit.$this->context";
+
     // Determine the name of the primary key for the data.
     if (empty($key))
     {
-      $key = $table->getKeyName();
+      $key = 'id';
     }
 
     $recordId = $this->input->get('id', '', 'int');
-
-    //$recordId = (int) (count($cid) ? $cid[0] : $this->input->getInt($urlVar));
 
     if (!$this->allowEdit(array($key => $recordId), $key))
     {
@@ -212,5 +208,34 @@ class RentalControllerAutoRenewals extends JControllerForm
             )
     );
   }
+
+  public function setDefault()
+	{
+		// Check for request forgeries.
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+		$cid = $this->input->get('cid', '');
+    $id = $this->input->get('id');
+
+    $data = array('id'=> $id, 'VendorTxCode' => $cid[0]);
+
+		$model = $this->getModel('autorenewal');
+
+		if ($model->save($data))
+		{
+
+			$msg = JText::_('COM_LANGUAGES_MSG_DEFAULT_LANGUAGE_SAVED');
+			$type = 'message';
+		}
+		else
+		{
+			$msg = $this->getError();
+			$type = 'error';
+		}
+
+		$clientId = $model->getState('client_id');
+		$this->setredirect('index.php?option=com_rental&view=autorenewals&id=105713');
+	}
+
 
 }

@@ -11,7 +11,9 @@ jimport('joomla.application.component.view');
  */
 class RentalViewAutorenewals extends JViewLegacy
 {
-
+  protected $items;
+  protected $state;
+  protected $pagination;
   /**
    * HelloWorld raw view display method
    * This is used to check how many properties the user has
@@ -30,11 +32,8 @@ class RentalViewAutorenewals extends JViewLegacy
     $this->id = $input->get('id', '', 'int');
 
     // Get the property listing details...
-    $this->item = $this->get('Item');
-
-    // Get the auto renewal options for this listing
-    $this->form = $this->get('Form');
-
+    $this->items = $this->get('Items');
+    
     // Set the document
     $this->setDocument();
 
