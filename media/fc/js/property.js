@@ -1,22 +1,28 @@
 jQuery(window).load(function() {
   if (jQuery('#property_map_canvas').length) {
-    loadGoogleMaps('initPropertyMap');
+    //loadGoogleMaps('initPropertyMap');
   }
 })
 
 jQuery(document).ready(function() {
 
-  // Get a handle to a jQuery collection 
+  if (jQuery('#property_map_canvas').length) {
+    jQuery('#property_map_canvas').on('click', function(){
+      loadGoogleMaps('initPropertyMap');
+    })
+  }
+
+  // Get a handle to a jQuery collection
   var collapse = jQuery('.panel-group .collapse');
-  
-  // If the collection contains ought 
+
+  // If the collection contains ought
   if (collapse && window.innerWidth < 768 ) {
-    
+
     // Init the collapse plugin
     collapse.collapse();
-    
+
     jQuery('.collapsible').addClass('collapsed');
-    
+
   }
 
   jQuery('.slick-slider').slick({
@@ -135,4 +141,4 @@ function initPropertyMap() {
   });
 
 
-}  
+}

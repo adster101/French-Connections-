@@ -1025,7 +1025,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             // Update the expiry date
             $expiry_date = $this->getNewExpiryDate();
 
-            if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id, true))
+            if (!$this->updateProperty($listing_id, $total, 0, $expiry_date, $published = 1, $autorenewal = $transaction_id, true, true))
             {
                 // TO DO - Log this
                 return false;
@@ -1054,7 +1054,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
             $expiry_date = $this->getNewExpiryDate();
 
             // Renewal with amendments, update the total and review state.
-            $this->updateProperty($listing_id, $total, $review = 2, $expiry_date, '', '', $autorenewal = $transaction_id, true);
+            $this->updateProperty($listing_id, $total, $review = 2, $expiry_date, '', '', $autorenewal = $transaction_id, true, true);
 
             // Send payment receipt
             $receipt_subject = JText::sprintf('COM_RENTAL_HELLOWORLD_PAYMENT_RECEIPT_SUBJECT', $billing_name, $total, $listing_id);
@@ -1173,7 +1173,7 @@ class FrenchConnectionsModelPayment extends JModelLegacy
      * @param type $reset_snooze - boolean whether to reset the snooze date or not.
      * @return boolean
      */
-    public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '', $reset_snooze = false)
+    public function updateProperty($listing_id = '', $cost = '', $review = 1, $expiry_date = '', $published = '', $autorenewal = '', $reset_snooze = false, $reset_non_renewal_status = false)
     {
 
         // Initialise some variable
@@ -1217,6 +1217,11 @@ class FrenchConnectionsModelPayment extends JModelLegacy
         if ($reset_snooze)
         {
             $data['snooze_until'] = '';
+        }
+
+        if ($reset_non_renewal_status)
+        {
+          $data['renewalreason'] = '';
         }
 
         $table = JTable::getInstance('Property', 'RentalTable');

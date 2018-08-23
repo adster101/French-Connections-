@@ -146,7 +146,6 @@
       type="inlinecheckbox"
       filter="string"
       value="Y"
-      checked="checked"
       message="Please confirm that you accept the terms and conditions"
       label="COM_ACCOMMODATION_ENQUIRY_NEWSLETTER_YN_LABEL">
     </field>

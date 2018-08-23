@@ -85,8 +85,8 @@ JLoader::register('JHtmlGeneral', JPATH_SITE . '/libraries/frenchconnections/hel
 $min_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(min($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $max_prices = (!empty($this->tariffs)) ? JHtmlGeneral::price(max($price_range), $this->item->base_currency, $this->item->exchange_rate_eur, $this->item->exchange_rate_usd) : '';
 $search_url = $app->getUserState('user.search');
-$crumbs = JModuleHelper::getModules('breadcrumbs-tmp'); //If you want to use a different position for the modules, change the name here in your override.  
-$mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.  
+$crumbs = JModuleHelper::getModules('breadcrumbs-tmp'); //If you want to use a different position for the modules, change the name here in your override.
+$mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a different position for the modules, change the name here in your override.
 ?>
 
 <div class="container hidden-xs">
@@ -107,15 +107,15 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
     <div class="col-xs-12">
       <div class="property-buttons-row clearfix">
         <?php if (!empty($search_url)) : ?>
-          <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">    
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_url ?>" title="">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_ACCOMMODATION_BACK_TO_SEARCH_RESULTS'); ?>
           </a>
         <?php else: ?>
-          <a class="btn btn-primary btn-sm" href="<?php echo $search_route ?>" title="">    
+          <a class="btn btn-primary btn-sm" href="<?php echo $search_route ?>" title="">
             <span class="glyphicon glyphicon-circle-arrow-left"></span>
             <?php echo JText::_('COM_ACCOMMODATION_BROWSE_SEARCH_RESULTS'); ?>
-          </a>          
+          </a>
         <?php endif; ?>
         <div class="pull-right">
           <?php if ($logged_in) : ?>
@@ -132,7 +132,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-            <li> 
+            <li>
               <a target="_blank" href="<?php
               echo 'https://www.facebook.com/dialog/feed?app_id=612921288819888&display=page&href='
               . urlencode($uri)
@@ -146,10 +146,10 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
               . '&name=' . urlencode($this->item->unit_title)
               . '&description=' . urlencode(JHtml::_('string.truncate', $this->item->description, 100, true, false));
               ?>">
-                <span class="glyphicon social-icon facebook"></span>  
+                <span class="glyphicon social-icon facebook"></span>
                 <?php echo JText::_('COM_ACCOMMODATION_FACEBOOK') ?>
               </a>
-            </li> 
+            </li>
             <li>
               <a target="_blank" href="<?php echo 'http://twitter.com/share?url=' . $uri . '&amp;text=' . $this->escape($this->item->unit_title) ?>" >
                 <span class="glyphicon social-icon twitter"></span>
@@ -171,11 +171,11 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 <div class="container">
   <?php if (count($this->offer)) : ?>
     <div class="well well-small special-offer">
-      <h4>   
+      <h4>
         <?php echo $this->escape($this->offer->title); ?>
       </h4>
       <p>
-        <?php echo $this->escape($this->offer->description); ?>  
+        <?php echo $this->escape($this->offer->description); ?>
       </p>
       <p>
         <?php echo JText::sprintf('COM_ACCOMMODATION_OFFER_ENDS', $this->offer->days, $route . '#email'); ?>
@@ -186,7 +186,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
     <div class="col-lg-4 col-lg-push-8 col-md-4 col-md-push-8 col-sm-5 col-sm-push-7 col-xs-12 key-facts">
       <div class="panel panel-default">
         <div class="panel-body">
-          <?php if ($this->tariffs) : ?> 
+          <?php if ($this->tariffs) : ?>
             <?php if (min($price_range) == max($price_range)) : ?>
               <p>
                 <span class="lead">
@@ -199,7 +199,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                     <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
                   </span>
                 <?php endif; ?>
-              </p>             
+              </p>
             <?php else: ?>
               <p>
                 <span class="lead"><strong>&pound;<?php echo $min_prices['GBP'] . ' - &pound;' . $max_prices['GBP']; ?></strong></span>
@@ -210,7 +210,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                     <?php echo htmlspecialchars($this->item->tariffs_based_on); ?>
                   </span>
                 <?php endif; ?>
-              </p> 
+              </p>
             <?php endif; ?>
           <?php else: ?>
             <?php echo JText::_('COM_ACCOMMODATION_RATES_AVAILABLE_ON_REQUEST'); ?>
@@ -226,12 +226,12 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <div class="visible-xs">
             <p>
               <a class="btn btn-danger btn-block" id="enquiry" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#email">
-                <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>  
+                <?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_SITE_BOOK_NOW') : JText::_('COM_ACCOMMODATION_SITE_CONTACT_OWNER'); ?>
               </a>
             </p>
             <p>
               <a class="btn btn-warning btn-block" href="<?php echo JRoute::_('index.php?option=com_accommodation&Itemid=' . $Itemid . '&id=' . (int) $this->item->property_id . '&unit_id=' . (int) $this->item->unit_id . $append); ?>#availability">
-                <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>  
+                <?php echo JText::_('COM_ACCOMMODATION_SITE_CHECK_AVAILABILITY'); ?>
               </a>
             </p>
           </div>
@@ -254,10 +254,10 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <div class="text-center hidden-xs">
           <?php foreach ($mpu as $item) : // Render the cross-sell modules etc   ?>
             <?php echo JModuleHelper::renderModule($item, array('style' => 'no', 'id' => 'section-box')); ?>
-          <?php endforeach; ?> 
+          <?php endforeach; ?>
         </div>
       </div>
-    </div> 
+    </div>
     <div class="col-lg-8 col-lg-pull-4 col-md-8 col-md-pull-4 col-sm-pull-5 col-sm-7 col-xs-12">
       <!-- Start gallery -->
       <?php echo $this->loadTemplate('gallery'); ?>
@@ -268,12 +268,12 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
         <!-- External facilities inc. pool type-->
         <?php if (array_key_exists('External Facilities', $this->unit_facilities) || (array_key_exists('Suitability', $this->unit_facilities))) : ?>
           <p class="">
-            <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?> 
+            <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?>
               <strong>
                 <?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL'); ?>
               </strong>
               <?php echo implode(', ', $this->unit_facilities['External Facilities']) ?>
-            <?php endif; ?>  
+            <?php endif; ?>
           </p>
           <p>
             <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
@@ -281,8 +281,8 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                 <?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY'); ?>
               </strong>
               <?php echo implode(', ', $this->unit_facilities['Suitability']) ?>
-            <?php endif; ?>      
-          </p>   
+            <?php endif; ?>
+          </p>
         <?php endif; ?>
         <!-- LWL Bullshine -->
         <?php if ($this->item->lwl) : ?>
@@ -290,7 +290,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             <?php echo Jtext::_('COM_ACCOMMODATION_THIS_PROPERTY_OFFERS_LONG_WINTER_LETS'); ?>
           </p>
         <?php endif; ?>
-      </div> 
+      </div>
 
       <!-- Begin page navigator -->
       <?php echo $this->loadTemplate('navigator'); ?>
@@ -298,7 +298,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 
       <div id="about">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>  
+          <h2 class="page-header"><?php echo $this->escape($this->item->unit_title) ?></h2>
         <?php endif; ?>
         <?php if ($this->item->description) : ?>
           <?php echo $this->item->description; ?>
@@ -308,11 +308,11 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       <?php if (!empty($this->item->location_details)) : ?>
         <div id="location">
           <?php if ($this->item->unit_title) : ?>
-            <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h2>  
+            <h2 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ACCOMMODATION_IN', $this->item->city, $this->item->department, $this->item->region) ?></h2>
           <?php endif; ?>
           <?php if ($this->item->location_details) : ?>
             <?php echo $this->item->location_details; ?>
-          <?php endif; ?> 
+          <?php endif; ?>
           <?php if (!empty($amenities)) : ?>
             <h4>Local amenities</h4>
             <?php foreach ($amenities as $k => $v) : ?>
@@ -320,8 +320,12 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                 <?php echo JString::ucwords($this->escape($v)); ?></p>
             <?php endforeach; ?>
           <?php endif; ?>
-          <h3 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?></h3>  
-          <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+          <h3 class="page-header"><?php echo JText::sprintf('COM_ACCOMMODATION_ABOUT_ON_THE_MAP_IN', $this->item->city) ?></h3>
+          <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;background:#333;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>">
+            <h3>
+              Click to show map
+            </h3>
+          </div>
           <p class="key text-right">
             <span>
               <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
@@ -337,7 +341,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <?php if ($this->item->unit_title) : ?>
             <h3 class="page-header" >
               <?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_HOW_TO_GET_TO_ACCOMMODATION_IN', $this->item->unit_title)) ?>
-            </h3>  
+            </h3>
           <?php endif; ?>
           <?php if ($this->item->getting_there) : ?>
             <?php echo $this->item->getting_there; ?>
@@ -345,7 +349,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <!-- Access options -->
           <?php if (array_key_exists('Location access', $this->property_facilities)) : ?>
             <h4><?php echo JText::_('COM_ACCOMMODATION_SITE_ACCESS_OPTIONS') ?></h4>
-            <p><?php echo implode(', ', $this->property_facilities['Location access']) ?></p>         
+            <p><?php echo implode(', ', $this->property_facilities['Location access']) ?></p>
           <?php endif; ?>
           <h4><?php echo JText::_('COM_ACCOMMODATION_NEAREST_AIRPORT') ?></h4>
           <p>
@@ -361,21 +365,21 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 
       <div id="facilities">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h2> 
+          <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_FACILITIES_AT', $this->item->unit_title)) ?></h2>
         <?php endif; ?>
         <table class="table table-striped table-responsive">
           <tbody>
             <?php if ($this->item->property_type && $this->item->accommodation_type) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_PROPERTY_TYPE') ?></td>
-                <td><?php echo $this->item->property_type . ' (' . $this->item->accommodation_type . ')'; ?></td>        
+                <td><?php echo $this->item->property_type . ' (' . $this->item->accommodation_type . ')'; ?></td>
               </tr>
             <?php endif; ?>
 
-            <?php if ($this->item->bathrooms) : ?>    
+            <?php if ($this->item->bathrooms) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_BATHROOMS') ?></td>
-                <td><?php echo $this->item->bathrooms; ?></td>        
+                <td><?php echo $this->item->bathrooms; ?></td>
               </tr>
             <?php endif; ?>
 
@@ -383,7 +387,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             <?php
             if ($this->item->bedrooms && $this->item->bedrooms > 0)
             {
-              ?>    
+              ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_BEDROOMS') ?></td>
                 <td>
@@ -419,7 +423,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                   if ($this->item->cots) : echo JText::sprintf('COM_ACCOMMODATION_SITE_COTS', $this->item->cots);
                   endif;
                   ?>
-                </td>        
+                </td>
               </tr>
             <?php } ?>
 
@@ -427,7 +431,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             <?php if ($this->item->occupancy) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_OCCUPANCY') ?></td>
-                <td><?php echo $this->item->occupancy; ?></td>        
+                <td><?php echo $this->item->occupancy; ?></td>
               </tr>
             <?php endif; ?>
 
@@ -435,7 +439,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             <?php if (array_key_exists('Suitability', $this->unit_facilities)) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_SUITABILITY') ?></td>
-                <td><?php echo implode(', ', $this->unit_facilities['Suitability']) ?></td>         
+                <td><?php echo implode(', ', $this->unit_facilities['Suitability']) ?></td>
               </tr>
             <?php endif; ?>
 
@@ -452,41 +456,41 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
             <?php if ($this->item->linen_costs) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_LINEN_COSTS') ?></td>
-                <td><?php echo $this->item->linen_costs; ?></td>        
+                <td><?php echo $this->item->linen_costs; ?></td>
               </tr>
-            <?php endif; ?>       
+            <?php endif; ?>
             <?php if (array_key_exists('Kitchen features', $this->unit_facilities)) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_KITCHEN_FEATURES') ?></td>
-                <td><?php echo implode(', ', $this->unit_facilities['Kitchen features']) ?></td>         
-              </tr>      
-            <?php endif; ?>   
+                <td><?php echo implode(', ', $this->unit_facilities['Kitchen features']) ?></td>
+              </tr>
+            <?php endif; ?>
             <?php if (array_key_exists('Property Facilities', $this->unit_facilities)) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_INTERNAL') ?></td>
-                <td><?php echo implode(', ', $this->unit_facilities['Property Facilities']) ?></td>         
-              </tr>      
-            <?php endif; ?>    
+                <td><?php echo implode(', ', $this->unit_facilities['Property Facilities']) ?></td>
+              </tr>
+            <?php endif; ?>
 
             <?php if (array_key_exists('External Facilities', $this->unit_facilities)) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_EXTERNAL') ?></td>
-                <td><?php echo implode(', ', $this->unit_facilities['External Facilities']) ?></td>         
-              </tr>      
-            <?php endif; ?>   
+                <td><?php echo implode(', ', $this->unit_facilities['External Facilities']) ?></td>
+              </tr>
+            <?php endif; ?>
             <?php if (array_key_exists('Activities nearby', $this->property_facilities)) : ?>
               <tr>
                 <td><?php echo JText::_('COM_ACCOMMODATION_SITE_FACILITITES_ACTIVITIES_NEARBY') ?></td>
-                <td><?php echo implode(', ', $this->property_facilities['Activities nearby']) ?></td>         
-              </tr>      
-            <?php endif; ?> 
+                <td><?php echo implode(', ', $this->property_facilities['Activities nearby']) ?></td>
+              </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
       <div id="availability">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2> 
-        <?php endif; ?> 
+          <h2 class="page-header" ><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_AT', $this->item->unit_title)) ?></h2>
+        <?php endif; ?>
         <div class="row">
           <div class="col-lg-7 col-md-7 col-sm-7">
             <?php if ($this->item->changeover_day) : ?>
@@ -496,14 +500,14 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                 </strong>
                 <?php echo htmlspecialchars($this->item->changeover_day) ?>
               </p>
-            <?php endif; ?>   
+            <?php endif; ?>
             <p>
               <?php echo JText::sprintf('COM_ACCOMMODATION_AVAILABILITY_LAST_UPDATED_ON', $this->item->availability_last_updated_on) ?>
             </p>
           </div>
           <div class="col-lg-5 col-md-5 col-sm-5">
             <table class="table table-condensed availability-key">
-              <thead> 
+              <thead>
                 <tr>
                   <th class="available">&nbsp;</th>
                   <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_AVAILABLE') ?></th>
@@ -512,7 +516,7 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
                   <th><?php echo JText::_('COM_ACCOMMODATION_AVAILABILITY_KEY_UNAVAILABLE') ?></th>
                 </tr>
               </thead>
-            </table>    
+            </table>
           </div>
         </div>
         <div class="row">
@@ -530,8 +534,8 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
       </div>
       <div id="tariffs">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h2> 
-        <?php endif; ?>    
+          <h2 class="page-header"><?php echo htmlspecialchars(JText::sprintf('COM_ACCOMMODATION_TARIFFS_AT', $this->item->unit_title)) ?></h2>
+        <?php endif; ?>
         <?php if ($this->tariffs) : ?>
           <?php echo $this->loadTemplate('tariffs'); ?>
         <?php else: ?>
@@ -542,14 +546,14 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
           <h3><?php echo JText::_('COM_ACCOMMODATION_ADDITIONAL_PRICE_NOTES') ?></h3>
           <?php echo $this->item->additional_price_notes ?>
         <?php endif; ?>
-      </div>  
+      </div>
     </div>
   </div>
   <div class="hidden-md hidden-sm hidden-lg">
     <div class="row" id="email">
       <div class="col-lg-12">
         <?php if ($this->item->unit_title) : ?>
-          <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2> 
+          <h2 class="page-header"><?php echo ($this->item->is_bookable) ? JText::_('COM_ACCOMMODATION_BOOK_THIS_PROPERTY') : JText::_('COM_ACCOMMODATION_EMAIL_THE_OWNER') ?></h2>
         <?php endif; ?>
       </div>
     </div>
@@ -568,4 +572,3 @@ $mpu = JModuleHelper::getModules('property-mpu'); //If you want to use a differe
 
   </div>
 </div>
-

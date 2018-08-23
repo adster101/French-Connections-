@@ -803,7 +803,7 @@ abstract class RentalHelper
       $availability_period_length = date_diff($availability_period_start_date, $availability_period_end_date);
 
       // Set the first day of the availability period to available/unavailable
-      $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = $availability_period->availability;
+      $raw_availability[date_format($availability_period_start_date, 'd-m-Y')] = (int) $availability_period->availability;
 
       // Loop from the start date to the end date adding an available day to the availability array for each availalable day
       for ($i = 1; $i <= $availability_period_length->days; $i++)
@@ -813,7 +813,7 @@ abstract class RentalHelper
         $date = $availability_period_start_date->add($DateInterval);
 
         // Add the day as an array key storing the availability status as the value
-        $raw_availability[date_format($date, 'd-m-Y')] = $availability_period->availability;
+        $raw_availability[date_format($date, 'd-m-Y')] = (int) $availability_period->availability;
       }
     }
 

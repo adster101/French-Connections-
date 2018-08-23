@@ -314,10 +314,15 @@ class OliversTravels extends Import
 
             $this->out('Working through images...');
 
-            if (!$this->unit_version_detail)
-            {
-              $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
+            $images = $this->getImages($db, $propertyObj->photos, $unit_version_table->id, $property_table->id, $unit_table->id);
+
+            $this->deleteImages($db, $unit_version_table->id);
+
+            foreach ($images as $key => $data) {
+              // Save the image data out to the database...
+              $this->createImage($db, $data);
             }
+
 
             $this->out('Updating tariff info');
 
@@ -355,9 +360,121 @@ class OliversTravels extends Import
             // Send an email, woot!
             $this->email($e);
           }
+
       }
     }
 
+    /*
+     * Delete function, used to delete images from the images table prior to resinsertion
+     */
+    public function deleteImages($db, $unit_version_id = null ) {
+      // Delete images
+      // Delete the row by primary key.
+      $query = $db->getQuery(true);
+
+      $query->delete('`#__property_images_library`');
+      $query->where(' version_id = ' . (int) $unit_version_id);
+
+      $db->setQuery($query);
+
+      try
+      {
+        $db->execute();
+      }
+      catch (RuntimeException $e)
+      {
+        throw new Exception($e->getMessage());
+      }
+
+      return true;
+    }
+
+  /**
+    * Get the images and save each into the database...
+    * Should we generate thumbs and gallery images for each? Probably.
+    *
+    */
+    public function getImages($db, $images, $unit_version_id, $property_id, $unit_id)
+    {
+      $imageArray = array();
+
+      $model = JModelLegacy::getInstance('Image', 'RentalModel');
+
+      foreach ($images as $image)
+      {
+
+        $uri = new JURI($image->url);
+        $image_parts = explode('/',$uri->getPath());
+
+        // Get the last part of the array as the image name
+        $image_name = array_pop($image_parts);
+
+
+        // Check the property directory exists...
+        if (!file_exists(JPATH_SITE . '/images/property/' . $unit_id))
+        {
+          JFolder::create(JPATH_SITE . '/images/property/' . $unit_id);
+        }
+
+        // The ultimate file path where we want to store the image
+        $filepath = JPATH_SITE . '/images/property/' . $unit_id . '/' . $image_name;
+
+        // Remove the query string gubbins
+        $uri->setQuery(false);
+
+        // If the file doesn't exist locally then we need to download it
+        if (!file_exists($filepath))
+        {
+
+          // Copy the image url directly to where we want it
+          copy($uri->tostring(), $filepath);
+
+          // Generate the profiles
+          $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'gallery', 760, 465);
+          $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumbs', 100, 100);
+          $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumb', 210, 120);
+        } else {
+
+          $last_modified_remote = $this->getLastModified($uri);
+
+          $last_modified = date ("F d Y H:i:s.", filemtime($filepath));
+
+          $last_modified_local = new DateTime($last_modified);
+
+          $interval = $last_modified_local->diff($last_modified_remote);
+          $age = $interval->format('%R%a days');
+
+          if ($age > 0) {
+
+            // Copy the image url directly to where we want it
+            copy($uri->tostring(), $filepath);
+
+            // Generate the profiles
+            $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'gallery');
+            $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumbs', 100, 100);
+            $model->generateImageProfile($filepath, (int) $unit_id, $image_name, 'thumb', 210, 120);
+          }
+        }
+
+        $order = $image->order + 1;
+        $imageArray[] = array($unit_version_id, $unit_id, $db->quote($image_name), $order);
+
+      }
+      return $imageArray;
+    }
+
+    public function getLastModified($uri = '') {
+
+      $h = get_headers($uri->toString(), 1);
+
+      $dt = NULL;
+
+      if ($h && (strstr($h[0], '200') !== FALSE)) {
+        $dt = new \DateTime($h['Last-Modified']);//php 5.3
+      }
+
+      return $dt;
+    }
 
     public function getTariffs($tariffs = array(), $base_currency = '')
     {
