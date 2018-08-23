@@ -195,7 +195,12 @@ if (!empty($this->item->languages_spoken))
   <div class="col-lg-5 col-md-5 col-sm-12 key-facts">
     <?php if ((round($this->item->latitude, 2) <> 0) && (round($this->item->longitude, 2) <> 0)) : ?>
         <h3><?php echo JText::_('COM_REALESTATE_PROPERTY_LOCATION'); ?></h3>
-        <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>"></div>
+        <div id="property_map_canvas" style="width:100%; height:370px;margin-bottom: 9px;" class="clearfix" data-hash="<?php echo JSession::getFormToken() ?>" data-lat="<?php echo $this->escape($this->item->latitude) ?>" data-lon="<?php echo $this->escape($this->item->longitude) ?>">
+          <button class="btn btn-lg btn-primary">
+            <span class="glyphicon glyphicon-map-marker"></span>
+            <?php echo JText::_('COM_ACCOMMODATION_CLICK_TO_SHOW_MAP') ?>
+          </button>
+        </div>
         <p class="key text-right">
           <span>
             <img src="/images/mapicons/iconflower.png" />&nbsp;<?php echo JText::sprintf('COM_ACCOMMODATION_PROPERTY_MARKER_KEY', $this->item->property_id) ?>
