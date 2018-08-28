@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<form	addrulepath="/administrator/components/com_rental/models/rules">
-    <field
-			name="VendorTxCode"
-			type="radio"
-			label="COM_RENTAL_HELLOWORLD_AUTO_RENEWAL_CAPTION"
-			description=""
-      size="80"
-      required="true"
-      class="validate"
-      filter="string"
-    />
-  <field
-      name="id"
-      filter="int"
-      required="true"
-      type="hidden"
-      />
+
 </form>

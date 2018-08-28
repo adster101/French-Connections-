@@ -19,30 +19,23 @@ $canChange = 1;
         <?php else : ?>
           <div id="j-main-container">
           <?php endif; ?>
-          <?php
-          // Search tools bar
-          //echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
-          ?>
+          <?php echo JText::_('COM_RENTAL_HELLOWORLD_AUTORENEWAL_BLURB'); ?>
           <table class="table table-striped" id="articleList">
             <thead>
               <tr>
                 <th width="1%" class="nowrap center hidden-phone">
                   <?php echo JHtml::_('grid.checkall'); ?>
                 </th>
-                <th>
+                <th class="nowrap center">
                   <?php echo JText::_('COM_RENTAL_AUTORENEWAL_DEFAULT'); ?>
                 </th>
-                <th>
-                  <?php echo JText::_('COM_RENTAL_AUTORENEWAL_PROPERTY_ID'); ?>
-                </th>
-
-                <th>
+                <th class="center">
                   <?php echo JText::_('COM_RENTAL_AUTORENEWAL_CARD_TYPE'); ?>
                 </th>
-                <th>
+                <th class="center">
                   <?php echo JText::_('COM_RENTAL_AUTORENEWAL_LAST_FOUR_DIGITS_OF_CARD'); ?>
                 </th>
-                <th>
+                <th class="center">
                   <?php echo JText::_('COM_RENTAL_AUTORENEWAL_CARD_EXPIRY_DATE'); ?>
                 </th>
               </tr>
@@ -55,20 +48,16 @@ $canChange = 1;
                     <td>
                       <?php echo JHtml::_('grid.id', $i, $item->id); ?>
                     </td>
-                    <td>
+                    <td class="center">
                       <?php echo JHtml::_('jgrid.isdefault', ($item->current) ? 1 :0, $i, 'autorenewals.',1 ); ?>
                     </td>
-                    <td>
-                      <?php echo $this->escape($item->id); ?>
-                    </td>
-
-                    <td>
+                    <td class="center">
                       <?php echo $this->escape($item->CardType); ?>
                     </td>
-                    <td>
+                    <td class="center">
                       <?php echo $this->escape($item->CardLastFourDigits); ?>
                     </td>
-                    <td>
+                    <td class="center">
                       <?php echo $this->escape(JFactory::getDate($item->CardExpiryDate)->calendar('d M Y')); ?>
                     </td>
                   </tr>

@@ -27,6 +27,70 @@ class RentalModelAutoRenewal extends JModelAdmin {
   }
 
   /**
+	 * Method to delete one or more records.
+	 *
+	 * @param   array  &$pks  An array of record primary keys.
+	 *
+	 * @return  boolean  True if successful, false if an error occurs.
+	 *
+	 * @since   1.6
+	 */
+	public function delete(&$pks)
+	{
+		$pks = (array) $pks;
+		$table = $this->getTable('AutoRenewal','RentalTable');
+
+		// Iterate the items to delete each one.
+		foreach ($pks as $i => $pk)
+		{
+			if ($table->load($pk))
+			{
+				if ($this->canDelete($table))
+				{
+
+					if (!$table->delete($pk))
+					{
+						$this->setError($table->getError());
+
+						return false;
+					}
+				}
+				else
+				{
+					// Prune items that you can't change.
+					unset($pks[$i]);
+					$error = $this->getError();
+
+					if ($error)
+					{
+						\JLog::add($error, \JLog::WARNING, 'jerror');
+
+						return false;
+					}
+					else
+					{
+						\JLog::add(\JText::_('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED'), \JLog::WARNING, 'jerror');
+
+						return false;
+					}
+				}
+			}
+			else
+			{
+				$this->setError($table->getError());
+
+				return false;
+			}
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+
+  /**
    * Abstract method for getting the form from the model.
    *
    * @param   array    $data      Data for the form.
@@ -36,84 +100,11 @@ class RentalModelAutoRenewal extends JModelAdmin {
    *
    * @since   12.2
    */
-  public function getForm($data = array(), $loadData = true) {
+   public function getForm($data = array(), $loadData = true) {
 
-  }
+   }
 
-  /**
-   * Method to save the form data.
-   *
-   * @param   array  $data  The form data.
-   *
-   * @return  boolean  True on success, False on error.
-   *
-   * @since   12.2
-   */
-  public function save($data)
-  {
-    $dispatcher = JEventDispatcher::getInstance();
-    $table = $this->getTable('Property', 'RentalTable');
-    $key = $table->getKeyName();
-    $pk = (!empty($data[$key])) ? $data[$key] : (int) $this->getState($this->getName() . '.id');
-    $isNew = true;
 
-    // Include the content plugins for the on save events.
-    JPluginHelper::importPlugin('content');
 
-    // Allow an exception to be thrown.
-    try
-    {
-      // Load the row if saving an existing record.
-      if ($pk > 0)
-      {
-        $table->load($pk);
-        $isNew = false;
-      }
 
-      // Bind the data.
-      if (!$table->bind($data))
-      {
-        $this->setError($table->getError());
-        return false;
-      }
-
-      // Prepare the row for saving
-      $this->prepareTable($table);
-
-      // Check the data.
-      if (!$table->check())
-      {
-        $this->setError($table->getError());
-        return false;
-      }
-
-      // Store the data.
-      if (!$table->store())
-      {
-        $this->setError($table->getError());
-        return false;
-      }
-
-      // Clean the cache.
-      $this->cleanCache();
-
-      // Trigger the onContentAfterSave event.
-      $dispatcher->trigger($this->event_after_save, array($this->option . '.' . $this->name, $table, $isNew));
-    }
-    catch (Exception $e)
-    {
-      $this->setError($e->getMessage());
-      return false;
-    }
-
-    $pkName = $table->getKeyName();
-
-    if (isset($table->$pkName))
-    {
-      $this->setState($this->getName() . '.id', $table->$pkName);
-    }
-    $this->setState($this->getName() . '.new', $isNew);
-
-    return true;
-  }
 }

@@ -9,10 +9,65 @@ jimport('joomla.application.component.controllerform');
 /**
  * HelloWorld Controller
  */
-class RentalControllerAutoRenewals extends JControllerForm
+class RentalControllerAutoRenewals extends JControllerAdmin
 {
 
   protected $extension;
+
+  /**
+   * Constructor.
+   *
+   * @param  array  $config  An optional associative array of configuration settings.
+   *
+   * @since  1.6
+   * @see    JController
+   */
+  public function __construct($config = array())
+  {
+    parent::__construct($config);
+
+    // Guess the JText message prefix. Defaults to the option.
+    if (empty($this->extension))
+    {
+      $this->extension = JRequest::getCmd('extension', 'com_rental');
+    }
+  }
+
+  /**
+	 * Function that allows child controller access to model data
+	 * after the item has been deleted.
+	 *
+	 * @param   \JModelLegacy  $model  The data model object.
+	 * @param   integer        $id     The validated data.
+	 *
+	 * @return  void
+	 *
+	 * @since   3.1
+	 */
+	protected function postDeleteHook(\JModelLegacy $model, $id = null)
+	{
+    $app = JFactory::getApplication();
+
+    // Get the contents of the request data
+    $input = $app->input;
+    $id = $input->get('id', 'int');
+
+    $app->enqueueMessage(JText::_('COM_CONFIG_SAVE_SUCCESS'), 'message');
+
+    $app->redirect('index.php?option=com_rental&view=autorenewals&id=' . $id);
+
+	}
+
+  /**
+	 * Proxy for getModel.
+	 * @since	1.6
+	 */
+	public function getModel($name = 'AutoRenewal', $prefix = 'RentalModel')
+	{
+		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
+		return $model;
+	}
+
 
   /**
    * Method to check if you can edit a record.
@@ -70,25 +125,6 @@ class RentalControllerAutoRenewals extends JControllerForm
     return false;
   }
 
-  /**
-   * Constructor.
-   *
-   * @param  array  $config  An optional associative array of configuration settings.
-   *
-   * @since  1.6
-   * @see    JController
-   */
-  public function __construct($config = array())
-  {
-    parent::__construct($config);
-
-    // Guess the JText message prefix. Defaults to the option.
-    if (empty($this->extension))
-    {
-      $this->extension = JRequest::getCmd('extension', 'com_rental');
-    }
-  }
-
   /*
    * Autorenewal controller action - checks ownership of record and redirects to listing view
    *
@@ -99,7 +135,7 @@ class RentalControllerAutoRenewals extends JControllerForm
 
     $app = JFactory::getApplication();
 
-    $context = "$this->option.edit.$this->context";
+    $context = "$this->option.edit.$this->view_list";
 
     // Determine the name of the primary key for the data.
     if (empty($key))
@@ -123,72 +159,11 @@ class RentalControllerAutoRenewals extends JControllerForm
 
     // Set holdEditID etc
     $this->holdEditId($context, $recordId);
-    $app->setUserState($context . '.data', null);
+    //$app->setUserState($context . '.data', null);
 
     $this->setRedirect(
             JRoute::_(
                     'index.php?option=' . $this->option . '&view=autorenewals&id=' . (int) $recordId, false)
-    );
-
-    return true;
-  }
-
-  /**
-   * Method to cancel an edit.
-   *
-   * @param   string  $key  The name of the primary key of the URL variable.
-   *
-   * @return  boolean  True if access level checks pass, false otherwise.
-   *
-   * @since   12.2
-   */
-  public function cancel($key = null)
-  {
-    JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-    $app = JFactory::getApplication();
-    $model = $this->getModel();
-    $table = $model->getTable();
-    $checkin = property_exists($table, 'checked_out');
-    $context = "$this->option.edit.$this->context";
-
-    if (empty($key))
-    {
-      $key = $table->getKeyName();
-    }
-
-    $recordId = $app->input->getInt($key);
-
-    // Attempt to check-in the current record.
-    if ($recordId)
-    {
-      // Check we are holding the id in the edit list.
-      if (!$this->checkEditId($context, $recordId))
-      {
-
-        // Somehow the person just went to the form - we don't allow that.
-        $this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $recordId));
-        $this->setMessage($this->getError(), 'error');
-
-        $this->setRedirect(
-                JRoute::_(
-                        'index.php?option=' . $this->option . '&view=' . $this->view_list
-                        . $this->getRedirectToListAppend(), false
-                )
-        );
-
-        return false;
-      }
-    }
-
-
-    // Clean the session data and redirect.
-    $this->releaseEditId($context, $recordId);
-    $app->setUserState($context . '.data', null);
-
-    $this->setRedirect(
-            JRoute::_(
-                    'index.php?option=' . $this->option)
     );
 
     return true;
@@ -233,9 +208,44 @@ class RentalControllerAutoRenewals extends JControllerForm
 			$type = 'error';
 		}
 
-		$clientId = $model->getState('client_id');
-		$this->setredirect('index.php?option=com_rental&view=autorenewals&id=105713');
+    $this->setMessage(
+            JText::sprintf('COM_RENTAL_HELLOWORLD_UPDATED_AUTORENEWAL_DETAILS', $id)
+    );
+
+		$this->setredirect('index.php?option=com_rental&view=autorenewals&id=' . (int) $id);
 	}
+
+
+    public function unsetDefault()
+  	{
+  		// Check for request forgeries.
+  		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+  		$cid = $this->input->get('cid', '');
+      $id = $this->input->get('id');
+
+      $data = array('id'=> $id, 'VendorTxCode' => '');
+
+  		$model = $this->getModel('autorenewal');
+
+  		if ($model->save($data))
+  		{
+
+  			$msg = JText::_('COM_LANGUAGES_MSG_DEFAULT_LANGUAGE_SAVED');
+  			$type = 'message';
+  		}
+  		else
+  		{
+  			$msg = $this->getError();
+  			$type = 'error';
+  		}
+
+      $this->setMessage(
+              JText::sprintf('COM_RENTAL_HELLOWORLD_UPDATED_AUTORENEWAL_DETAILS', $id)
+      );
+
+  		$this->setredirect('index.php?option=com_rental&view=autorenewals&id=' . (int) $id);
+  	}
 
 
 }

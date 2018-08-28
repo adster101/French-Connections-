@@ -33,7 +33,7 @@ class RentalViewAutorenewals extends JViewLegacy
 
     // Get the property listing details...
     $this->items = $this->get('Items');
-    
+
     // Set the document
     $this->setDocument();
 
@@ -63,8 +63,23 @@ class RentalViewAutorenewals extends JViewLegacy
   protected function addToolBar()
   {
 
+    // Get component level permissions
+    $canDo = RentalHelper::getActions();
+
     JToolBarHelper::title(($this->id) ? JText::sprintf('COM_RENTAL_HELLOWORLD_MANAGE_AUTO_RENEWAL', $this->id) : JText::_('COM_RENTAL_MANAGER_HELLOWORLD_NEW'));
-    JToolBarHelper::custom('autorenewals.cancel', 'arrow-left-2', '', 'JTOOLBAR_BACK', false);
+    // TO DO - For owners back should be to OA homepage, probably taken care of by permissions settings
+    JToolBarHelper::back('JTOOLBAR_BACK', '/administrator/index.php?option=com_rental');
+
+    if ($canDo->get('core.edit.state'))
+		{
+			JToolbarHelper::makeDefault('autorenewals.setDefault');
+			JToolbarHelper::divider();
+		}
+
+    if ($canDo->get('core.delete'))
+    {
+      JToolBarHelper::deleteList('Are you sure?', 'autorenewals.delete', 'JTOOLBAR_DELETE');
+    }
 
     $bar = JToolbar::getInstance('actions');
 

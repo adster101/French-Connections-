@@ -14,6 +14,20 @@ class RentalModelAutoRenewals extends JModelList
 
   public $extension = 'com_rental';
 
+  public function __construct($config = array())
+  {
+    if (empty($config['filter_fields']))
+    {
+      $config['filter_fields'] = array(
+          'a.id', 'a.id'
+      );
+    }
+    parent::__construct($config);
+
+  }
+
+
+
   /**
 	 * Method to auto-populate the model state.
 	 *
@@ -24,15 +38,8 @@ class RentalModelAutoRenewals extends JModelList
 	 */
 	protected function populateState($ordering = null, $direction = null)
 	{
-
-		$app = JFactory::getApplication();
-
-    $id = $app->input->get('id', int);
-
-
-
-    // List state information.
-		parent::populateState('a.start_date','desc');
+	    // List state information.
+		parent::populateState('a.id','desc');
 	}
 
   /**
@@ -57,17 +64,17 @@ class RentalModelAutoRenewals extends JModelList
     $query->from('#__protx_transactions a');
     $query->where('property_id = ' . (int) $id);
     $query->join('left', '#__property b on a.id = b.VendorTxCode');
-
+    //$query->group('CardLastFourDigits');
     $query->where($db->quoteName('Status') . ' = ' . $db->quote('OK'));
-    $query->order('a.VendorTxCode', 'DESC');
+    $listOrdering = $this->getState('list.ordering', 'a.id');
+    $listDirn = $db->escape($this->getState('list.direction', 'desc'));
 
+    // Order if we have a specific ordering.
+    if ($listOrdering)
+    {
+      $query->order($db->escape($listOrdering) . ' ' . $listDirn);
+    }
     return $query;
 
   }
-
-  protected function getDefault()
-  {
-
-  }
-
 }
